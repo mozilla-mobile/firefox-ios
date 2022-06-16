@@ -8,12 +8,12 @@ import XCTest
 
 class FirefoxHomeViewModelTests: XCTestCase {
 
-    var reloadSectionCompleted: ((FXHomeViewModelProtocol) -> Void)?
+    var reloadSectionCompleted: ((HomepageViewModelProtocol) -> Void)?
 
     // MARK: Number of sections
     func testNumberOfSection_withoutUpdatingData() {
         let profile = MockProfile()
-        let viewModel = FirefoxHomeViewModel(profile: profile,
+        let viewModel = HomepageViewModel(profile: profile,
                                              isPrivate: false)
         XCTAssertEqual(viewModel.shownSections.count, 2)
     }
@@ -45,72 +45,72 @@ class FirefoxHomeViewModelTests: XCTestCase {
     // MARK: Orders of sections
     func testSectionOrder_addingJumpBackIn() {
         let profile = MockProfile()
-        let viewModel = FirefoxHomeViewModel(profile: profile,
+        let viewModel = HomepageViewModel(profile: profile,
                                              isPrivate: false)
 
-        viewModel.addShownSection(section: FirefoxHomeSectionType.jumpBackIn)
+        viewModel.addShownSection(section: HomepageSectionType.jumpBackIn)
         XCTAssertEqual(viewModel.shownSections.count, 3)
-        XCTAssertEqual(viewModel.shownSections[0], FirefoxHomeSectionType.logoHeader)
-        XCTAssertEqual(viewModel.shownSections[1], FirefoxHomeSectionType.jumpBackIn)
-        XCTAssertEqual(viewModel.shownSections[2], FirefoxHomeSectionType.customizeHome)
+        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
+        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.jumpBackIn)
+        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.customizeHome)
     }
 
     func testSectionOrder_addingTwoSections() {
         let profile = MockProfile()
-        let viewModel = FirefoxHomeViewModel(profile: profile,
+        let viewModel = HomepageViewModel(profile: profile,
                                              isPrivate: false)
 
-        viewModel.addShownSection(section: FirefoxHomeSectionType.jumpBackIn)
-        viewModel.addShownSection(section: FirefoxHomeSectionType.pocket)
+        viewModel.addShownSection(section: HomepageSectionType.jumpBackIn)
+        viewModel.addShownSection(section: HomepageSectionType.pocket)
         XCTAssertEqual(viewModel.shownSections.count, 4)
-        XCTAssertEqual(viewModel.shownSections[0], FirefoxHomeSectionType.logoHeader)
-        XCTAssertEqual(viewModel.shownSections[1], FirefoxHomeSectionType.jumpBackIn)
-        XCTAssertEqual(viewModel.shownSections[2], FirefoxHomeSectionType.pocket)
-        XCTAssertEqual(viewModel.shownSections[3], FirefoxHomeSectionType.customizeHome)
+        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
+        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.jumpBackIn)
+        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.pocket)
+        XCTAssertEqual(viewModel.shownSections[3], HomepageSectionType.customizeHome)
     }
 
     func testSectionOrder_addingAndRemovingSections() {
         let profile = MockProfile()
-        let viewModel = FirefoxHomeViewModel(profile: profile,
+        let viewModel = HomepageViewModel(profile: profile,
                                              isPrivate: false)
 
-        viewModel.addShownSection(section: FirefoxHomeSectionType.jumpBackIn)
-        viewModel.addShownSection(section: FirefoxHomeSectionType.pocket)
-        viewModel.removeShownSection(section: FirefoxHomeSectionType.customizeHome)
+        viewModel.addShownSection(section: HomepageSectionType.jumpBackIn)
+        viewModel.addShownSection(section: HomepageSectionType.pocket)
+        viewModel.removeShownSection(section: HomepageSectionType.customizeHome)
         XCTAssertEqual(viewModel.shownSections.count, 3)
-        XCTAssertEqual(viewModel.shownSections[0], FirefoxHomeSectionType.logoHeader)
-        XCTAssertEqual(viewModel.shownSections[1], FirefoxHomeSectionType.jumpBackIn)
-        XCTAssertEqual(viewModel.shownSections[2], FirefoxHomeSectionType.pocket)
+        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
+        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.jumpBackIn)
+        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.pocket)
     }
 
     func testSectionOrder_addingAndRemovingMoreSections() {
         let profile = MockProfile()
-        let viewModel = FirefoxHomeViewModel(profile: profile,
+        let viewModel = HomepageViewModel(profile: profile,
                                              isPrivate: false)
 
-        viewModel.addShownSection(section: FirefoxHomeSectionType.jumpBackIn)
-        viewModel.addShownSection(section: FirefoxHomeSectionType.pocket)
-        viewModel.addShownSection(section: FirefoxHomeSectionType.historyHighlights)
-        viewModel.removeShownSection(section: FirefoxHomeSectionType.customizeHome)
+        viewModel.addShownSection(section: HomepageSectionType.jumpBackIn)
+        viewModel.addShownSection(section: HomepageSectionType.pocket)
+        viewModel.addShownSection(section: HomepageSectionType.historyHighlights)
+        viewModel.removeShownSection(section: HomepageSectionType.customizeHome)
         XCTAssertEqual(viewModel.shownSections.count, 4)
-        XCTAssertEqual(viewModel.shownSections[0], FirefoxHomeSectionType.logoHeader)
-        XCTAssertEqual(viewModel.shownSections[1], FirefoxHomeSectionType.jumpBackIn)
-        XCTAssertEqual(viewModel.shownSections[2], FirefoxHomeSectionType.historyHighlights)
-        XCTAssertEqual(viewModel.shownSections[3], FirefoxHomeSectionType.pocket)
+        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
+        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.jumpBackIn)
+        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.historyHighlights)
+        XCTAssertEqual(viewModel.shownSections[3], HomepageSectionType.pocket)
 
-        viewModel.removeShownSection(section: FirefoxHomeSectionType.historyHighlights)
+        viewModel.removeShownSection(section: HomepageSectionType.historyHighlights)
 
         XCTAssertEqual(viewModel.shownSections.count, 3)
-        XCTAssertEqual(viewModel.shownSections[0], FirefoxHomeSectionType.logoHeader)
-        XCTAssertEqual(viewModel.shownSections[1], FirefoxHomeSectionType.jumpBackIn)
-        XCTAssertEqual(viewModel.shownSections[2], FirefoxHomeSectionType.pocket)
+        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
+        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.jumpBackIn)
+        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.pocket)
     }
 }
 
 // MARK: - FirefoxHomeViewModelDelegate
-extension FirefoxHomeViewModelTests: FirefoxHomeViewModelDelegate {
+extension FirefoxHomeViewModelTests: HomepageViewModelDelegate {
 
-    func reloadSection(section: FXHomeViewModelProtocol) {
+    func reloadSection(section: HomepageViewModelProtocol) {
         reloadSectionCompleted?(section)
     }
 }

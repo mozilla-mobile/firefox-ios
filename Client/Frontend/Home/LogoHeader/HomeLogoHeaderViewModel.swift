@@ -5,62 +5,62 @@
 import Foundation
 import Shared
 
-class FxHomeLogoHeaderViewModel {
-
+class HomeLogoHeaderViewModel {
+    
     struct UX {
         static let botttomSpacing: CGFloat = 12
     }
-
+    
     private let profile: Profile
     var onTapAction: ((UIButton) -> Void)?
-
+    
     init(profile: Profile) {
         self.profile = profile
     }
 }
 
-// MARK: FXHomeViewModelProtocol
-extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
-
-    var sectionType: FirefoxHomeSectionType {
+// MARK: HomeViewModelProtocol
+extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
+    
+    var sectionType: HomepageSectionType {
         return .logoHeader
     }
-
-    var headerViewModel: ASHeaderViewModel {
+    
+    var headerViewModel: LabelButtonHeaderViewModel {
         return .emptyHeader
     }
-
+    
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
+        
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                heightDimension: .estimated(100))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
-
+        
         let section = NSCollectionLayoutSection(group: group)
-
-        let leadingInset = FirefoxHomeViewModel.UX.leadingInset(traitCollection: traitCollection)
+        
+        let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset,
                                                         bottom: UX.botttomSpacing, trailing: 0)
-
+        
         return section
     }
-
+    
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
         return 1
     }
-
+    
     var isEnabled: Bool {
         return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
     }
 }
 
-extension FxHomeLogoHeaderViewModel: FxHomeSectionHandler {
-
+extension HomeLogoHeaderViewModel: HomepageSectionHandler {
+    
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let logoHeaderCell = cell as? FxHomeLogoHeaderCell else { return UICollectionViewCell() }
+        guard let logoHeaderCell = cell as? HomeLogoHeaderCell else { return UICollectionViewCell() }
         logoHeaderCell.configure(onTapAction: onTapAction)
         return logoHeaderCell
     }

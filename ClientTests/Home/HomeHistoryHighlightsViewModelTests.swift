@@ -8,7 +8,7 @@ import XCTest
 
 class HomeHistoryHighlightsViewModelTests: XCTestCase {
 
-    private var sut: FxHomeHistoryHightlightsViewModel!
+    private var sut: HistoryHightlightsViewModel!
     private var profile: MockProfile!
     private var tabManager: TabManager!
     private var entryProvider: HistoryHighlightsTestEntryProvider!
@@ -20,7 +20,7 @@ class HomeHistoryHighlightsViewModelTests: XCTestCase {
         profile._reopen()
         tabManager = TabManager(profile: profile, imageStore: nil)
         entryProvider = HistoryHighlightsTestEntryProvider(with: profile, and: tabManager)
-        sut = FxHomeHistoryHightlightsViewModel(with: profile,
+        sut = HistoryHightlightsViewModel(with: profile,
                                                 isPrivate: false,
                                                 tabManager: tabManager)
     }

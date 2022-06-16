@@ -45,33 +45,33 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
     var notificationCenter: NotificationCenter
     var contextualHintViewController: ContextualHintViewController
-
+    
     // This is an optional variable used if we wish to focus a tab that is not the
     // currently selected tab. This allows us to force the scroll behaviour to move
     // whereever we need to focus the user's attention.
     var tabToFocus: Tab?
-
+    
     override var canBecomeFirstResponder: Bool {
         return true
     }
-
+    
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
         emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
         return emptyView
     }()
-
+    
     fileprivate lazy var tabLayoutDelegate: TabLayoutDelegate = {
         let delegate = TabLayoutDelegate(tabDisplayManager: self.tabDisplayManager, traitCollection: self.traitCollection, scrollView: self.collectionView)
         delegate.tabSelectionDelegate = self
         delegate.tabPeekDelegate = self
         return delegate
     }()
-
+    
     var numberOfColumns: Int {
         return tabLayoutDelegate.numberOfColumns
     }
-
+    
     // MARK: - Inits
     init(tabManager: TabManager,
          profile: Profile,
@@ -84,15 +84,15 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         self.delegate = tabTrayDelegate
         self.tabToFocus = tabToFocus
         self.notificationCenter = notificationCenter
-
+        
         let contextualViewModel = ContextualHintViewModel(forHintType: .inactiveTabs,
                                                           with: profile)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
-
+        
         super.init(nibName: nil, bundle: nil)
         collectionViewSetup()
     }
-
+    
     private func collectionViewSetup() {
         collectionView = UICollectionView(frame: .zero,
                                           collectionViewLayout: UICollectionViewFlowLayout())
@@ -100,7 +100,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         collectionView.register(cellType: GroupedTabCell.self)
         collectionView.register(cellType: InactiveTabCell.self)
         collectionView.register(
-            ASHeaderView.self,
+            LabelButtonHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier)
         tabDisplayManager = TabDisplayManager(collectionView: self.collectionView,
@@ -112,81 +112,81 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
                                               cfrDelegate: self)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
-
+        
         tabDisplayManager.tabDisplayCompletionDelegate = self
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tabManager.addDelegate(self)
         view.accessibilityLabel = .TabTrayViewAccessibilityLabel
-
+        
         webViewContainerBackdrop.alpha = 0
-
+        
         collectionView.alwaysBounceVertical = true
         collectionView.keyboardDismissMode = .onDrag
-
+        
         collectionView.dragInteractionEnabled = true
         collectionView.dragDelegate = tabDisplayManager
         collectionView.dropDelegate = tabDisplayManager
-
+        
         setupView()
-
+        
         if let tab = tabManager.selectedTab, tab.isPrivate {
             tabDisplayManager.togglePrivateMode(isOn: true, createTabOnEmptyPrivateMode: false)
         }
-
+        
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
-
+        
         applyTheme()
-
+        
         setupNotifications(forObserver: self, observing: [
             UIApplication.willResignActiveNotification,
             UIApplication.didBecomeActiveNotification,
             .DisplayThemeChanged
         ])
     }
-
+    
     private func setupView() {
         // TODO: Remove SNAPKIT - this will require some work as the layouts
         // are using other snapkit constraints and this will require modification
         // in several places.
         [webViewContainerBackdrop, collectionView].forEach { view.addSubview($0) }
         setupConstraints()
-
+        
         view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
         emptyPrivateTabsView.snp.makeConstraints { make in
             make.top.bottom.left.right.equalTo(self.collectionView)
         }
     }
-
+    
     private func setupConstraints() {
         webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
-
+        
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.view.layoutIfNeeded()
         focusItem()
     }
-
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         // When the app enters split screen mode we refresh the collection view layout to show the proper grid
         collectionView.collectionViewLayout.invalidateLayout()
     }
-
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         guard let flowlayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
         flowlayout.invalidateLayout()
     }
-
+    
     deinit {
         tabManager.removeDelegate(self.tabDisplayManager)
         tabManager.removeDelegate(self)
@@ -194,11 +194,11 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         contextualHintViewController.stopTimer()
         notificationCenter.removeObserver(self)
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: - Scrolling helper methods
     /// The main interface for scrolling to an item, whether that is a group or an individual tab
     ///
@@ -211,17 +211,17 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         guard let selectedTab = tabManager.selectedTab else { return }
         if tabToFocus == nil { tabToFocus = selectedTab }
         guard let tabToFocus = tabToFocus else { return }
-
+        
         if let tabGroups = tabDisplayManager.tabGroups,
            tabGroups.count > 0,
            tabGroups.contains(where: { $0.groupedItems.contains(where: { $0 == tabToFocus }) }) {
             focusGroup(from: tabGroups, with: tabToFocus)
-
+            
         } else {
             focusTab(tabToFocus)
         }
     }
-
+    
     func focusGroup(from tabGroups: [ASGroup<Tab>], with tabToFocus: Tab) {
         if let tabIndex = tabDisplayManager.indexOfGroupTab(tab: tabToFocus) {
             let groupName = tabIndex.groupName
@@ -233,7 +233,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
             }
         }
     }
-
+    
     func focusTab(_ selectedTab: Tab) {
         if let indexOfRegularTab = tabDisplayManager.indexOfRegularTab(tab: selectedTab) {
             let indexPath = IndexPath(item: indexOfRegularTab, section: TabDisplaySection.regularTabs.rawValue)
@@ -248,36 +248,36 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
             }
         }
     }
-
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         // Update the trait collection we reference in our layout delegate
         tabLayoutDelegate.traitCollection = traitCollection
     }
-
+    
     @objc func didTogglePrivateMode() {
         tabManager.willSwitchTabMode(leavingPBM: tabDisplayManager.isPrivate)
-
+        
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
-
+        
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
     }
-
+    
     fileprivate func privateTabsAreEmpty() -> Bool {
         return tabDisplayManager.isPrivate && tabManager.privateTabs.isEmpty
     }
-
+    
     func openNewTab(_ request: URLRequest? = nil, isPrivate: Bool) {
         if tabDisplayManager.isDragging {
             return
         }
-
+        
         // Ensure Firefox home page is refreshed if privacy mode was changed
         if tabManager.selectedTab?.isPrivate != isPrivate {
             let notificationObject = [Tab.privateModeKey: isPrivate]
             NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
         }
-
+        
         tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
 }
@@ -289,11 +289,11 @@ extension GridTabViewController: TabManagerDelegate {
         NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
     }
     func tabManagerDidAddTabs(_ tabManager: TabManager) {}
-
+    
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
     }
-
+    
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         // No need to handle removeAll toast in TabTray.
         // When closing all normal tabs we automatically focus a tab and show the BVC. Which will handle the Toast.
@@ -302,11 +302,11 @@ extension GridTabViewController: TabManagerDelegate {
 }
 
 extension GridTabViewController: TabDisplayer {
-
+    
     func focusSelectedTab() {
         self.focusItem()
     }
-
+    
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
         guard let tabCell = cell as? TabCell else { return cell }
         tabCell.animator?.delegate = self
@@ -318,7 +318,7 @@ extension GridTabViewController: TabDisplayer {
 }
 
 extension GridTabViewController {
-
+    
     @objc func didTapLearnMore() {
         let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
         if let langID = Locale.preferredLanguages.first {
@@ -326,13 +326,13 @@ extension GridTabViewController {
             openNewTab(learnMoreRequest, isPrivate: tabDisplayManager.isPrivate)
         }
     }
-
+    
     func closeTabsTrayBackground() {
         tabDisplayManager.removeAllTabsFromView()
-
+        
         tabManager.backgroundRemoveAllTabs(isPrivate: tabDisplayManager.isPrivate) {
             recentlyClosedTabs, isPrivateState, previousTabUUID in
-
+            
             DispatchQueue.main.async { [unowned self] in
                 if isPrivateState {
                     let previousTab = self.tabManager.tabs.filter { $0.tabUUID == previousTabUUID }.first
@@ -341,14 +341,14 @@ extension GridTabViewController {
                                                       isPrivate: isPrivateState)
                 } else {
                     self.tabManager.makeToastFromRecentlyClosedUrls(recentlyClosedTabs,
-                        isPrivate: isPrivateState,
-                        previousTabUUID: previousTabUUID)
+                                                                    isPrivate: isPrivateState,
+                                                                    previousTabUUID: previousTabUUID)
                 }
                 closeTabsTrayHelper()
             }
         }
     }
-
+    
     func closeTabsTrayHelper() {
         if self.tabDisplayManager.isPrivate {
             self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
@@ -364,18 +364,18 @@ extension GridTabViewController {
             self.dismissTabTray()
         }
     }
-
+    
     func didTogglePrivateMode(_ togglePrivateModeOn: Bool) {
         if togglePrivateModeOn != tabDisplayManager.isPrivate {
             didTogglePrivateMode()
         }
     }
-
+    
     func dismissTabTray() {
         self.navigationController?.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
-
+    
 }
 
 // MARK: - App Notifications
@@ -388,7 +388,7 @@ extension GridTabViewController {
             emptyPrivateTabsView.alpha = 0
         }
     }
-
+    
     @objc func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
@@ -424,20 +424,20 @@ extension GridTabViewController: UIScrollViewAccessibilityDelegate {
         bounds.size.height -= collectionView.contentInset.top + collectionView.contentInset.bottom
         // visible cells do sometimes return also not visible cells when attempting to go past the last cell with VoiceOver right-flick gesture; so make sure we have only visible cells (yeah...)
         visibleCells = visibleCells.filter { !$0.frame.intersection(bounds).isEmpty }
-
+        
         let cells = visibleCells.map { self.collectionView.indexPath(for: $0)! }
         let indexPaths = cells.sorted { (a: IndexPath, b: IndexPath) -> Bool in
             return a.section < b.section || (a.section == b.section && a.row < b.row)
         }
-
+        
         guard !indexPaths.isEmpty else {
             return .TabTrayNoTabsAccessibilityHint
         }
-
+        
         let firstTab = indexPaths.first!.row + 1
         let lastTab = indexPaths.last!.row + 1
         let tabCount = collectionView.numberOfItems(inSection: 1)
-
+        
         if firstTab == lastTab {
             let format: String = .TabTrayVisibleTabRangeAccessibilityHint
             return String(format: format, NSNumber(value: firstTab as Int), NSNumber(value: tabCount as Int))
@@ -457,7 +457,7 @@ extension GridTabViewController: SwipeAnimatorDelegate {
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.TabTrayClosingTabAccessibilityMessage)
         }
     }
-
+    
     // Disable swipe delete while drag reordering
     func swipeAnimatorIsAnimateAwayEnabled(_ animator: SwipeAnimator) -> Bool {
         return !tabDisplayManager.isDragging
@@ -473,25 +473,25 @@ extension GridTabViewController: TabCellDelegate {
 }
 
 extension GridTabViewController: TabPeekDelegate {
-
+    
     func tabPeekDidAddBookmark(_ tab: Tab) {
         delegate?.tabTrayDidAddBookmark(tab)
     }
-
+    
     func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? {
         return delegate?.tabTrayDidAddToReadingList(tab)
     }
-
+    
     func tabPeekDidCloseTab(_ tab: Tab) {
         // Tab peek is only available on regular tabs
         if let index = tabDisplayManager.dataStore.index(of: tab),
-            let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)) as? TabCell {
-
+           let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)) as? TabCell {
+            
             cell.close()
             NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
         }
     }
-
+    
     func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {
         present(viewController, animated: true, completion: nil)
     }
@@ -505,17 +505,17 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
         delegate?.tabTrayOpenRecentlyClosedTab(url)
         dismissTabTray()
     }
-
+    
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedTab, extras: nil)
         openNewTab(URLRequest(url: url), isPrivate: isPrivate)
         dismissTabTray()
     }
-
+    
     // TabDisplayCompletionDelegate
     func completedAnimation(for type: TabAnimationType) {
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
-
+        
         switch type {
         case .addTab:
             dismissTabTray()
@@ -549,19 +549,19 @@ extension GridTabViewController {
             didTapToolbarDelete(sender)
         }
     }
-
+    
     func didTapToolbarAddTab() {
         if tabDisplayManager.isDragging {
             return
         }
         openNewTab(isPrivate: tabDisplayManager.isPrivate)
     }
-
+    
     func didTapToolbarDelete(_ sender: UIBarButtonItem) {
         if tabDisplayManager.isDragging {
             return
         }
-
+        
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: .AppMenu.AppMenuCloseAllTabsTitleString,
                                            style: .default,
@@ -583,16 +583,16 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     let scrollView: UIScrollView
     var lastYOffset: CGFloat = 0
     var tabDisplayManager: TabDisplayManager
-
+    
     var sectionHeaderSize: CGSize {
         CGSize(width: 50, height: 40)
     }
-
+    
     enum ScrollDirection {
         case up
         case down
     }
-
+    
     fileprivate var scrollDirection: ScrollDirection = .down
     fileprivate var traitCollection: UITraitCollection
     fileprivate var numberOfColumns: Int {
@@ -603,17 +603,17 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             return GridTabTrayControllerUX.NumberOfColumnsWide
         }
     }
-
+    
     init(tabDisplayManager: TabDisplayManager, traitCollection: UITraitCollection, scrollView: UIScrollView) {
         self.tabDisplayManager = tabDisplayManager
         self.scrollView = scrollView
         self.traitCollection = traitCollection
         super.init()
     }
-
+    
     fileprivate func cellHeightForCurrentDevice() -> CGFloat {
         let shortHeight = GridTabTrayControllerUX.TextBoxHeight * 6
-
+        
         if self.traitCollection.verticalSizeClass == .compact {
             return shortHeight
         } else if self.traitCollection.horizontalSizeClass == .compact {
@@ -622,7 +622,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             return GridTabTrayControllerUX.TextBoxHeight * 8
         }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         switch TabDisplaySection(rawValue: section) {
         case .regularTabs:
@@ -631,39 +631,39 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             }
         default: return .zero
         }
-
+        
         return .zero
     }
-
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
-
+    
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return GridTabTrayControllerUX.Margin
     }
-
+    
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = floor((collectionView.bounds.width - collectionView.safeAreaInsets.left - collectionView.safeAreaInsets.right - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .inactiveTabs:
             return calculateInactiveTabSizeHelper(collectionView)
-
+            
         case .groupedTabs:
             let width = collectionView.frame.size.width
             if let groupCount = tabDisplayManager.tabGroups?.count, groupCount > 0 {
                 let height: CGFloat = GroupedTabCellProperties.CellUX.defaultCellHeight * CGFloat(groupCount)
-                    return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
+                return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
             } else {
                 return CGSize(width: 0, height: 0)
             }
-
+            
         case .regularTabs, .none:
             guard tabDisplayManager.filteredTabs.count > 0 else { return CGSize(width: 0, height: 0) }
             return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
         }
     }
-
+    
     private func calculateInactiveTabSizeHelper(_ collectionView: UICollectionView) -> CGSize {
         guard !tabDisplayManager.isPrivate, let inactiveTabViewModel = tabDisplayManager.inactiveViewModel, inactiveTabViewModel.activeTabs.count > 0 else {
             return CGSize(width: 0, height: 0)
@@ -673,19 +673,19 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         var totalHeight = headerHeightWithRoundedCorner
         let width: CGFloat = collectionView.frame.size.width - InactiveTabCell.UX.InactiveTabTrayWidthPadding
         let inactiveTabs = inactiveTabViewModel.inactiveTabs
-
+        
         // Calculate height based on number of tabs in the inactive tab section section
         let calculatedInactiveTabsTotalHeight = InactiveTabCell.UX.HeaderAndRowHeight*CGFloat(inactiveTabs.count) + InactiveTabCell.UX.RoundedContainerPaddingClosed + InactiveTabCell.UX.RoundedContainerAdditionalPaddingOpened + closeAllButtonHeight
-
+        
         totalHeight = tabDisplayManager.isInactiveViewExpanded ? calculatedInactiveTabsTotalHeight : headerHeightWithRoundedCorner
-
+        
         if UIDevice.current.userInterfaceIdiom == .pad {
             return CGSize(width: collectionView.frame.size.width/1.5, height: totalHeight)
         } else {
             return CGSize(width: width >= 0 ? width : 0, height: totalHeight)
         }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         switch TabDisplaySection(rawValue: section) {
         case .regularTabs, .none:
@@ -694,42 +694,42 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
                 left: GridTabTrayControllerUX.Margin + collectionView.safeAreaInsets.left,
                 bottom: GridTabTrayControllerUX.Margin,
                 right: GridTabTrayControllerUX.Margin + collectionView.safeAreaInsets.right)
-
+            
         case .inactiveTabs:
             guard !tabDisplayManager.isPrivate,
-                    tabDisplayManager.inactiveViewModel?.inactiveTabs.count ?? 0 > 0
+                  tabDisplayManager.inactiveViewModel?.inactiveTabs.count ?? 0 > 0
             else { return .zero }
-
+            
             return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
-
+            
         case .groupedTabs:
             guard tabDisplayManager.shouldEnableGroupedTabs,
                   tabDisplayManager.tabGroups?.count ?? 0 > 0
             else { return .zero }
-
+            
             return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
         }
     }
-
+    
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return GridTabTrayControllerUX.Margin
     }
-
+    
     @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         tabSelectionDelegate?.didSelectTabAtIndex(indexPath.row)
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         guard TabDisplaySection(rawValue: indexPath.section) == .regularTabs,
               let tab = tabDisplayManager.dataStore.at(indexPath.row)
         else { return nil }
-
+        
         let tabVC = TabPeekViewController(tab: tab, delegate: tabPeekDelegate)
         if let browserProfile = tabDisplayManager.profile as? BrowserProfile,
            let pickerDelegate = tabPeekDelegate as? DevicePickerViewControllerDelegate {
             tabVC.setState(withProfile: browserProfile, clientPickerDelegate: pickerDelegate)
         }
-
+        
         return UIContextMenuConfiguration(identifier: nil, previewProvider: { return tabVC }, actionProvider: tabVC.contextActions(defaultActions:))
     }
 }
@@ -742,7 +742,7 @@ extension GridTabViewController: DevicePickerViewControllerDelegate {
         }
         devicePickerViewController.dismiss(animated: true, completion: nil)
     }
-
+    
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
         devicePickerViewController.dismiss(animated: true, completion: nil)
     }
@@ -800,18 +800,18 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
     func setupCFR(with view: UILabel) {
         prepareJumpBackInContextualHint(on: view)
     }
-
+    
     func presentCFR() {
         contextualHintViewController.startTimer()
     }
-
+    
     func presentCFROnView() {
         present(contextualHintViewController, animated: true, completion: nil)
     }
-
+    
     private func prepareJumpBackInContextualHint(on title: UILabel) {
         guard contextualHintViewController.shouldPresentHint() else { return }
-
+        
         contextualHintViewController.configure(
             anchor: title,
             withArrowDirection: .up,

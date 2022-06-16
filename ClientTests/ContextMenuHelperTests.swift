@@ -24,9 +24,9 @@ class ContextMenuHelperTests: XCTestCase {
     }
 
     func testHistoryHighlightsTelemetry() {
-        let viewModel = FirefoxHomeViewModel(profile: profile,
+        let viewModel = HomepageViewModel(profile: profile,
                                              isPrivate: false)
-        let helper = FirefoxHomeContextMenuHelper(viewModel: viewModel)
+        let helper = HomepageContextMenuHelper(viewModel: viewModel)
 
         helper.sendHistoryHighlightContextualTelemetry(type: .remove)
 

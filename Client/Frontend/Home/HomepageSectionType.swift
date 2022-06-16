@@ -4,7 +4,7 @@
 
 import Foundation
 
-enum FirefoxHomeSectionType: Int, CaseIterable {
+enum HomepageSectionType: Int, CaseIterable {
     case logoHeader
     case topSites
     case jumpBackIn
@@ -12,7 +12,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
     case historyHighlights
     case pocket
     case customizeHome
-
+    
     var title: String? {
         switch self {
         case .pocket: return .FirefoxHomepage.Pocket.SectionTitle
@@ -23,32 +23,32 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         default: return nil
         }
     }
-
+    
     var cellIdentifier: String {
         switch self {
-        case .logoHeader: return FxHomeLogoHeaderCell.cellIdentifier
+        case .logoHeader: return HomeLogoHeaderCell.cellIdentifier
         case .topSites: return "" // Top sites has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .pocket: return "" // Pocket has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
-        case .jumpBackIn: return FxHomeHorizontalCell.cellIdentifier
-        case .recentlySaved: return FxHomeRecentlySavedCell.cellIdentifier
+        case .jumpBackIn: return HomeHorizontalCell.cellIdentifier
+        case .recentlySaved: return RecentlySavedCell.cellIdentifier
         case .historyHighlights: return HistoryHighlightsCell.cellIdentifier
-        case .customizeHome: return FxHomeCustomizeHomeView.cellIdentifier
+        case .customizeHome: return CustomizeHomepageSectionView.cellIdentifier
         }
     }
-
+    
     static var cellTypes: [ReusableCell.Type] {
-        return [FxHomeLogoHeaderCell.self,
+        return [HomeLogoHeaderCell.self,
                 TopSiteItemCell.self,
                 EmptyTopSiteCell.self,
-                FxHomeHorizontalCell.self,
-                FxHomePocketDiscoverMoreCell.self,
-                FxPocketHomeHorizontalCell.self,
-                FxHomeRecentlySavedCell.self,
+                HomeHorizontalCell.self,
+                PocketDiscoverCell.self,
+                PocketStandardCell.self,
+                RecentlySavedCell.self,
                 HistoryHighlightsCell.self,
-                FxHomeCustomizeHomeView.self,
+                CustomizeHomepageSectionView.self,
         ]
     }
-
+    
     init(_ section: Int) {
         self.init(rawValue: section)!
     }

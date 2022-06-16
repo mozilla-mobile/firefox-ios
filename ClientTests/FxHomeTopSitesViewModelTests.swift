@@ -24,7 +24,7 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testDeletionOfSingleSuggestedSite() {
-        let viewModel = FxHomeTopSitesViewModel(profile: self.profile,
+        let viewModel = TopSitesViewModel(profile: self.profile,
                                                 isZeroSearch: false)
 
         let siteToDelete = TopSitesHelper.defaultTopSites(profile)[0]
@@ -38,7 +38,7 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testDeletionOfAllDefaultSites() {
-        let viewModel = FxHomeTopSitesViewModel(profile: self.profile,
+        let viewModel = TopSitesViewModel(profile: self.profile,
                                                 isZeroSearch: false)
 
         let defaultSites = TopSitesHelper.defaultTopSites(profile)
@@ -170,8 +170,8 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
 // MARK: Helper methods
 extension FxHomeTopSitesViewModelTests {
 
-    func createViewModel(overridenSiteCount: Int = 40, overridenNumberOfRows: Int = 2) -> FxHomeTopSitesViewModel {
-        let viewModel = FxHomeTopSitesViewModel(profile: self.profile,
+    func createViewModel(overridenSiteCount: Int = 40, overridenNumberOfRows: Int = 2) -> TopSitesViewModel {
+        let viewModel = TopSitesViewModel(profile: self.profile,
                                                 isZeroSearch: false)
 
         let managerStub = FxHomeTopSitesManagerStub(profile: profile)
@@ -203,7 +203,7 @@ class FakeTraitCollection: UITraitCollection {
 }
 
 // MARK: FxHomeTopSitesManagerStub
-private class FxHomeTopSitesManagerStub: FxHomeTopSitesManager {
+private class FxHomeTopSitesManagerStub: TopSitesManager {
 
     var overridenSiteCount = 40
     override var siteCount: Int {

@@ -14,16 +14,16 @@ extension HistoryHighlight {
 }
 
 class HistoryHighlightsManager {
-
+    
     // MARK: - Variables
-
+    
     // These variables are defined by PM and Design and will be tweaked based on
     // their requirements or input.
     private static let defaultViewTimeWeight = 10.0
     private static let defaultFrequencyWeight = 4.0
     private static let defaultHighlightCount = 9
     private static let searchLimit = 1000
-
+    
     static func searchHighlightsData(searchQuery: String,
                                      profile: Profile,
                                      tabs: [Tab],
@@ -32,9 +32,9 @@ class HistoryHighlightsManager {
         getHighlightsData(with: profile,
                           and: tabs,
                           resultCount: HistoryHighlightsManager.searchLimit) { results in
-
+            
             var searchResults = [HighlightItem]()
-
+            
             guard let results = results else {
                 completion(searchResults)
                 return
@@ -50,7 +50,7 @@ class HistoryHighlightsManager {
         }
     }
     // MARK: - Public interface
-
+    
     /// Fetches HistoryHighlight from A~S, and then filters currently open
     /// tabs against history highlights in order to avoid duplicated items. Then,
     /// if `shouldGroupHighlights` is set to true, applies group logic and finally, 
@@ -69,18 +69,18 @@ class HistoryHighlightsManager {
                                          shouldGroupHighlights: Bool = false,
                                          resultCount: Int = HistoryHighlightsManager.defaultHighlightCount,
                                          completion: @escaping ([HighlightItem]?) -> Void) {
-
+        
         fetchHighlights(with: profile) { highlights in
-
+            
             guard let highlights = highlights, !highlights.isEmpty else {
                 completion(nil)
                 return
             }
-
+            
             let filterHighlights = highlights.filter { highlights in
                 !tabs.contains { highlights.urlFromString == $0.lastKnownUrl }
             }
-
+            
             if shouldGroupHighlights {
                 buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
                     let collatedHighlights = collateForRecentlySaved(from: groups, and: filterHighlights)
@@ -91,38 +91,38 @@ class HistoryHighlightsManager {
             }
         }
     }
-
+    
     // MARK: - Data fetching functions
-
+    
     private static func fetchHighlights(with profile: Profile,
                                         andLimit limit: Int32 = Int32(HistoryHighlightsManager.searchLimit),
                                         completion: @escaping ([HistoryHighlight]?) -> Void) {
-
+        
         profile.places.getHighlights(weights: HistoryHighlightWeights(viewTime: self.defaultViewTimeWeight,
                                                                       frequency: self.defaultFrequencyWeight),
                                      limit: limit).uponQueue(.main) { result in
-
+            
             guard let ASHighlights = result.successValue, !ASHighlights.isEmpty else { return completion(nil) }
-
+            
             completion(ASHighlights)
         }
     }
-
+    
     // MARK: - Helper functions
-
+    
     private static func buildSearchGroups(
         with profile: Profile,
         and highlights: [HistoryHighlight],
         completion: @escaping ([ASGroup<HistoryHighlight>]?, [HistoryHighlight]) -> Void
     ) {
-
+        
         SearchTermGroupsUtility.getHighlightGroups(with: profile,
                                                    from: highlights,
                                                    using: .orderedAscending) { groups, filteredItems in
             completion(groups, filteredItems)
         }
     }
-
+    
     /// Collate `HistoryHighlight` groups and individual `HistoryHighlight` items, such that
     /// the resulting array alternates between them, starting with individual highlights.
     /// Because groups could be nil, the `HighlightItem` array gets initialized with the 
@@ -137,9 +137,9 @@ class HistoryHighlightsManager {
     private static func collateForRecentlySaved(from groups: [ASGroup<HistoryHighlight>]?,
                                                 and highlights: [HistoryHighlight]) -> [HighlightItem] {
         guard let groups = groups, !groups.isEmpty else { return highlights }
-
+        
         var highlightItems: [HighlightItem] = highlights
-
+        
         for (index, group) in groups.enumerated() {
             let insertIndex = (index * 2) + 1
             if insertIndex <= highlightItems.count {
@@ -151,7 +151,7 @@ class HistoryHighlightsManager {
                 break
             }
         }
-
+        
         return highlightItems
     }
 }

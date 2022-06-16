@@ -421,12 +421,12 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         } else {
             // case: Group has more than 2 tabs, we are good to remove just one tab from group
             tabGroups?[indexOfGroup].groupedItems.remove(at: tabIndexInGroup)
-                groupedCell.tabDisplayManagerDelegate = self
-                groupedCell.tabGroups = self.tabGroups
-                groupedCell.hasExpanded = true
-                groupedCell.selectedTab = tabManager.selectedTab
-                groupedCell.tableView.reloadRows(at: [IndexPath(row: indexOfGroup, section: 0)], with: .automatic)
-                groupedCell.scrollToSelectedGroup()
+            groupedCell.tabDisplayManagerDelegate = self
+            groupedCell.tabGroups = self.tabGroups
+            groupedCell.hasExpanded = true
+            groupedCell.selectedTab = tabManager.selectedTab
+            groupedCell.tableView.reloadRows(at: [IndexPath(row: indexOfGroup, section: 0)], with: .automatic)
+            groupedCell.scrollToSelectedGroup()
         }
     }
 
@@ -457,16 +457,16 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
         UIView.animate(withDuration: 0.2,
                        animations: {
-                            cells.forEach {
-                                $0.alpha = 0
-                            }
-                        }, completion: { _ in
-                            cells.forEach {
-                                $0.alpha = 1
-                                $0.isHidden = true
-                            }
-                            completion()
-                        })
+            cells.forEach {
+                $0.alpha = 0
+            }
+        }, completion: { _ in
+            cells.forEach {
+                $0.alpha = 1
+                $0.isHidden = true
+            }
+            completion()
+        })
     }
 
     private func recordEventAndBreadcrumb(object: TelemetryWrapper.EventObject, method: TelemetryWrapper.EventMethod) {
@@ -523,12 +523,12 @@ extension TabDisplayManager: UICollectionViewDataSource {
         if let _ = tabGroups,
            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
                                                                       withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier,
-                                                                      for: indexPath) as? ASHeaderView {
+                                                                      for: indexPath) as? LabelButtonHeaderView {
 
-            let viewModel = ASHeaderViewModel(leadingInset: 15,
-                                              title: .TabTrayOtherTabsSectionHeader,
-                                              titleA11yIdentifier: AccessibilityIdentifiers.TabTray.filteredTabs,
-                                              isButtonHidden: true)
+            let viewModel = LabelButtonHeaderViewModel(leadingInset: 15,
+                                                       title: .TabTrayOtherTabsSectionHeader,
+                                                       titleA11yIdentifier: AccessibilityIdentifiers.TabTray.filteredTabs,
+                                                       isButtonHidden: true)
 
             view.configure(viewModel: viewModel)
             view.title = .TabTrayOtherTabsSectionHeader
@@ -998,10 +998,10 @@ extension TabDisplayManager: TabManagerDelegate {
             // Baseline animation speed is 1.0, which is too slow, this (odd) code sets it to 3x
             self?.collectionView.forFirstBaselineLayout.layer.speed = 3.0
             operation()
-            }, completion: { [weak self] (done) in
-                self?.performingChainedOperations = false
-                self?.tabDisplayCompletionDelegate?.completedAnimation(for: type)
-                self?.performChainedOperations()
+        }, completion: { [weak self] (done) in
+            self?.performingChainedOperations = false
+            self?.tabDisplayCompletionDelegate?.completedAnimation(for: type)
+            self?.performChainedOperations()
         })
     }
 

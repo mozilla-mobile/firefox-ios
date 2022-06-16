@@ -32,7 +32,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func test_topSiteContextualMenu_GleanIsCalled() {
-        let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: FirefoxHomeContextMenuHelper.ContextualActionType.settings.rawValue]
+        let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: HomepageContextMenuHelper.ContextualActionType.settings.rawValue]
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: extras)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.TopSites.contextualMenu)

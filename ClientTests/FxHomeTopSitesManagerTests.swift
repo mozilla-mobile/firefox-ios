@@ -32,13 +32,13 @@ class FxHomeTopSitesManagerTests: XCTestCase, FeatureFlaggable {
     }
 
     func testEmptyData_whenNotLoaded() {
-        let manager = FxHomeTopSitesManager(profile: profile)
+        let manager = TopSitesManager(profile: profile)
         XCTAssertFalse(manager.hasData)
         XCTAssertEqual(manager.siteCount, 0)
     }
 
     func testEmptyData_getSites() {
-        let manager = FxHomeTopSitesManager(profile: profile)
+        let manager = TopSitesManager(profile: profile)
         XCTAssertNil(manager.getSite(index: 0))
         XCTAssertNil(manager.getSite(index: -1))
         XCTAssertNil(manager.getSite(index: 10))
@@ -48,13 +48,13 @@ class FxHomeTopSitesManagerTests: XCTestCase, FeatureFlaggable {
     }
 
     func testNumberOfRows_default() {
-        let manager = FxHomeTopSitesManager(profile: profile)
+        let manager = TopSitesManager(profile: profile)
         XCTAssertEqual(manager.numberOfRows, 2)
     }
 
     func testNumberOfRows_userChangedDefault() {
         profile.prefs.setInt(3, forKey: PrefsKeys.NumberOfTopSiteRows)
-        let manager = FxHomeTopSitesManager(profile: profile)
+        let manager = TopSitesManager(profile: profile)
         XCTAssertEqual(manager.numberOfRows, 3)
     }
 
@@ -434,7 +434,7 @@ class FxHomeTopSitesManagerTests: XCTestCase, FeatureFlaggable {
     }
 
     func testTopSiteManager_hasNoLeaks() {
-        let topSitesManager = FxHomeTopSitesManager(profile: profile)
+        let topSitesManager = TopSitesManager(profile: profile)
         let historyStub = TopSiteHistoryManagerStub(profile: profile)
         historyStub.addPinnedSiteCount = 0
         topSitesManager.topSiteHistoryManager = historyStub
@@ -538,9 +538,9 @@ extension FxHomeTopSitesManagerTests {
                        duplicatePinnedSiteURL: Bool = false,
                        expectedContileResult: ContileResult = .success([]),
                        file: StaticString = #file,
-                       line: UInt = #line) -> FxHomeTopSitesManager {
+                       line: UInt = #line) -> TopSitesManager {
 
-        let topSitesManager = FxHomeTopSitesManager(profile: profile)
+        let topSitesManager = TopSitesManager(profile: profile)
 
         let historyStub = TopSiteHistoryManagerStub(profile: profile)
         historyStub.siteCount = siteCount
@@ -558,7 +558,7 @@ extension FxHomeTopSitesManagerTests {
         return topSitesManager
     }
 
-    func testLoadData(manager: FxHomeTopSitesManager, numberOfTilesPerRow: Int?, completion: @escaping () -> Void) {
+    func testLoadData(manager: TopSitesManager, numberOfTilesPerRow: Int?, completion: @escaping () -> Void) {
         let expectation = expectation(description: "Top sites data should be loaded")
 
         manager.loadTopSitesData {

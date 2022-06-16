@@ -7,42 +7,42 @@ import Storage
 import Shared
 
 // Top site UI class, used in the home top site section
-final class HomeTopSite {
-
+final class TopSite {
+    
     var site: Site
     var title: String
-
+    
     var sponsoredText: String {
         return .FirefoxHomepage.Shortcuts.Sponsored
     }
-
+    
     var accessibilityLabel: String? {
         return isSponsoredTile ? "\(title), \(sponsoredText)" : title
     }
-
+    
     var isPinned: Bool {
         return (site as? PinnedSite) != nil
     }
-
+    
     var isSuggested: Bool {
         return (site as? SuggestedSite) != nil
     }
-
+    
     var isSponsoredTile: Bool {
         return (site as? SponsoredTile) != nil
     }
-
+    
     var isGoogleGUID: Bool {
         return site.guid == GoogleTopSiteManager.Constants.googleGUID
     }
-
+    
     var isGoogleURL: Bool {
         return site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
     }
-
+    
     var imageLoaded: ((UIImage?) -> Void)?
     var identifier = UUID().uuidString
-
+    
     init(site: Site) {
         self.site = site
         if let provider = site.metadata?.providerName {
@@ -51,16 +51,16 @@ final class HomeTopSite {
             title = site.title
         }
     }
-
+    
     // MARK: Telemetry
-
+    
     func impressionTracking(position: Int) {
         // Only sending sponsored tile impressions for now
         guard let tile = site as? SponsoredTile else { return }
-
+        
         SponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position)
     }
-
+    
     func getTelemetrySiteType() -> String {
         if isPinned && isGoogleGUID {
             return "google"
@@ -71,7 +71,7 @@ final class HomeTopSite {
         } else if isSponsoredTile {
             return "sponsored"
         }
-
+        
         return "history-based"
     }
 }
