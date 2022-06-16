@@ -24,7 +24,7 @@ public struct Strings {
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 fileprivate enum StringLastUpdatedAppVersion {
-    case v39, v96, v97, v98, v99, v100, v101, v102
+    case v39, v96, v97, v98, v99, v100, v101, v102, v103
 
     // Used for all cases before version 39.
     case unknown
@@ -434,6 +434,7 @@ extension String {
         public static let OtherTabsLabelTitle = MZLocalizedString("TabTray.OtherTabs.Title", value: "Other tabs", comment: "In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs", lastUpdated: .v39)
 
         public struct InactiveTabs {
+            public static let TabsTrayInactiveTabsSectionTitle = MZLocalizedString("TabsTray.InactiveTabs.SectionTitle.v103", value: "View Inactive Tabs", comment: "Title for the inactive tabs section button. This section groups all tabs that haven't been used in a while.", lastUpdated: .v103)
             public static let CloseAllInactiveTabsButton = MZLocalizedString("InactiveTabs.TabTray.CloseButtonTitle", value: "Close All Inactive Tabs", comment: "In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs.", lastUpdated: .v39)
 
             public struct AutoClose {
@@ -1824,7 +1825,6 @@ extension String {
     public static let FirefoxHomeJumpBackInSectionTitle = MZLocalizedString("ActivityStream.JumpBackIn.SectionTitle", value: "Jump Back In", comment: "Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab", lastUpdated: .unknown)
     public static let FirefoxHomeRecentlySavedSectionTitle = MZLocalizedString("ActivityStream.RecentlySaved.SectionTitle", value: "Recently Saved", comment: "Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future.", lastUpdated: .unknown)
     public static let FirefoxHomeShowAll = MZLocalizedString("ActivityStream.RecentlySaved.ShowAll", value: "Show all", comment: "This button will open the library showing all the users bookmarks", lastUpdated: .unknown)
-    public static let TabsTrayInactiveTabsSectionTitle = MZLocalizedString("TabTray.InactiveTabs.SectionTitle", value: "Inactive Tabs", comment: "Title for the inactive tabs section. This section groups all tabs that haven't been used in a while.", lastUpdated: .unknown)
     public static let TabsTrayRecentlyCloseTabsSectionTitle = MZLocalizedString("TabTray.RecentlyClosed.SectionTitle", value: "Recently closed", comment: "Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed.", lastUpdated: .unknown)
     public static let TabsTrayRecentlyClosedTabsDescritpion = MZLocalizedString("TabTray.RecentlyClosed.Description", value: "Tabs are available here for 30 days. After that time, tabs will be automatically closed.", comment: "Describes what the Recently Closed tabs behavior is for users unfamiliar with it.", lastUpdated: .unknown)
 }

@@ -190,12 +190,15 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         case .inactive, .none:
             guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: InactiveTabHeader.cellIdentifier) as? InactiveTabHeader else { return nil }
             headerView.state = hasExpanded ? .down : .right
-            headerView.title = String.TabsTrayInactiveTabsSectionTitle
+            headerView.title = .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionTitle
             headerView.moreButton.isHidden = false
             headerView.moreButton.addTarget(self,
                                             action: #selector(toggleInactiveTabSection),
                                             for: .touchUpInside)
             headerView.contentView.backgroundColor = .clear
+
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleInactiveTabSection))
+            headerView.addGestureRecognizer(tapGesture)
 
             delegate?.setupCFR(with: headerView.titleLabel)
 
