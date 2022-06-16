@@ -5,54 +5,54 @@
 import Foundation
 
 /// Customize button is always present at the bottom of the page
-class FxHomeCustomizeButtonViewModel {
+class CustomizeHomepageSectionViewModel {
     var onTapAction: ((UIButton) -> Void)?
 }
 
-// MARK: FXHomeViewModelProtocol
-extension FxHomeCustomizeButtonViewModel: FXHomeViewModelProtocol {
-
-    var sectionType: FirefoxHomeSectionType {
+// MARK: HomeViewModelProtocol
+extension CustomizeHomepageSectionViewModel: HomepageViewModelProtocol {
+    
+    var sectionType: HomepageSectionType {
         return .customizeHome
     }
-
-    var headerViewModel: ASHeaderViewModel {
+    
+    var headerViewModel: LabelButtonHeaderViewModel {
         return .emptyHeader
     }
-
+    
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
+        
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                heightDimension: .estimated(100))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
-
-        let leadingInset = FirefoxHomeViewModel.UX.leadingInset(traitCollection: traitCollection)
+        
+        let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset,
-                                                        bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, trailing: 0)
+                                                        bottom: HomepageViewModel.UX.spacingBetweenSections, trailing: 0)
         return section
     }
-
+    
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
         return 1
     }
-
+    
     var isEnabled: Bool {
         return true
     }
 }
 
 // MARK: FxHomeSectionHandler
-extension FxHomeCustomizeButtonViewModel: FxHomeSectionHandler {
-
+extension CustomizeHomepageSectionViewModel: HomepageSectionHandler {
+    
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let customizeHomeCell = cell as? FxHomeCustomizeHomeView else { return UICollectionViewCell() }
+        guard let customizeHomeCell = cell as? CustomizeHomepageSectionView else { return UICollectionViewCell() }
         customizeHomeCell.configure(onTapAction: onTapAction)
         return customizeHomeCell
     }
-
+    
 }
