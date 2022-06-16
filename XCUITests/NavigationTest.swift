@@ -317,9 +317,11 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testPopUpBlocker() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+        navigator.performAction(Action.CloseURLBarOpen)
         // Check that it is enabled by default
+        navigator.nowAt(BrowserTab)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.goto(SettingsScreen)
         waitForExistence(app.tables["AppSettingsTableViewController.tableView"])
         let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
@@ -352,8 +354,9 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
      func testSSL() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
+         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+         navigator.performAction(Action.CloseURLBarOpen)
+
         navigator.openURL("https://expired.badssl.com/")
         waitForExistence(app.buttons["Advanced"], timeout: 10)
         app.buttons["Advanced"].tap()
@@ -384,7 +387,7 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testVerifyBrowserTabMenu() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
@@ -408,7 +411,7 @@ class NavigationTest: BaseTestCase {
     // Smoketest
     func testURLBar() {
         let urlBar = app.textFields["url"]
-        waitForExistence(urlBar, timeout: 5)
+        waitForExistence(urlBar, timeout: 15)
         urlBar.tap()
         
         let addressBar = app.textFields["address"]

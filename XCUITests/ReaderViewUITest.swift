@@ -43,8 +43,9 @@ class ReaderViewTest: BaseTestCase {
 
     // Smoketest
     func testAddToReadingList() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 25)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // Navigate to reading list
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
@@ -224,7 +225,8 @@ class ReaderViewTest: BaseTestCase {
 
     // Smoketest
     func testAddToReaderListOptions() {
-        sleep(3)
+        sleep(10)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 25)
         addContentToReaderView()
         // Check that Settings layouts options are shown
         waitForExistence(app.buttons["ReaderModeBarView.settingsButton"], timeout: 10)
