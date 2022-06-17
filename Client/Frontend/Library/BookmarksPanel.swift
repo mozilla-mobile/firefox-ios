@@ -25,7 +25,7 @@ let LocalizedRootBookmarkFolderStrings = [
     BookmarkRoots.MobileFolderGUID: String.BookmarksFolderTitleMobile
 ]
 
-fileprivate class SeparatorTableViewCell: OneLineTableViewCell {
+private class SeparatorTableViewCell: OneLineTableViewCell {
     override func applyTheme() {
         super.applyTheme()
 

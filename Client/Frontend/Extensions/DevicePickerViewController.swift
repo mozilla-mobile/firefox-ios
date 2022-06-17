@@ -25,7 +25,7 @@ private struct DevicePickerViewControllerUX {
     static let DeviceRowTextPaddingRight = CGFloat(50)
 }
 
-fileprivate enum LoadingState {
+private enum LoadingState {
     case loading
     case loaded
 }

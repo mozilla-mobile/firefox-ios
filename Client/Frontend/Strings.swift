@@ -23,7 +23,7 @@ public struct Strings {
 
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
-fileprivate enum StringLastUpdatedAppVersion {
+private enum StringLastUpdatedAppVersion {
     case v39, v96, v97, v98, v99, v100, v101, v102
 
     // Used for all cases before version 39.
@@ -31,7 +31,7 @@ fileprivate enum StringLastUpdatedAppVersion {
 }
 
 // MARK: - Localization helper function
-fileprivate func MZLocalizedString(_ key: String,
+private func MZLocalizedString(_ key: String,
                                    tableName: String? = nil,
                                    value: String = "",
                                    comment: String,

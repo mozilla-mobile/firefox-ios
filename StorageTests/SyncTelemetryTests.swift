@@ -9,7 +9,7 @@ import Shared
 
 import XCTest
 
-fileprivate class MockFailure<T: CleartextPayloadJSON>: MaybeErrorType {
+private class MockFailure<T: CleartextPayloadJSON>: MaybeErrorType {
     let record: Record<T>
 
     var description: String {
