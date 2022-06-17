@@ -526,7 +526,7 @@ extension String {
     public static let RemovePinTopsiteActionTitle = MZLocalizedString("ActivityStream.ContextMenu.RemovePinTopsite", value: "Remove Pinned Site", comment: "The title for removing a pinned topsite action", lastUpdated: .unknown)
 }
 
-//  MARK: - PhotonActionSheet String
+// MARK: - PhotonActionSheet String
 extension String {
     public static let CloseButtonTitle = MZLocalizedString("PhotonMenu.close", value: "Close", comment: "Button for closing the menu action sheet", lastUpdated: .unknown)
 }
