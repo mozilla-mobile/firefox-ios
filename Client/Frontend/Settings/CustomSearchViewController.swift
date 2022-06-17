@@ -224,7 +224,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
 
         textField.textContainer.lineFragmentPadding = 0
         textField.keyboardType = keyboardType
-        if (keyboardType == .default) {
+        if keyboardType == .default {
             textField.autocapitalizationType = .words
         }
         textField.autocorrectionType = .no

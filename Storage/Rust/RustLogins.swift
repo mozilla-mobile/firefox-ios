@@ -747,7 +747,7 @@ public class RustLogins {
         let sqlCipherLoginsSalt: String? = keychain.string(forKey: rustKeys.loginsSaltKeychainKey)
 
         // If the sqlcipher salt or key are missing don't migrate
-        if ((sqlCipherLoginsKey ?? "").isEmpty || (sqlCipherLoginsSalt ?? "").isEmpty) {
+        if (sqlCipherLoginsKey ?? "").isEmpty || (sqlCipherLoginsSalt ?? "").isEmpty {
             return
         }
 

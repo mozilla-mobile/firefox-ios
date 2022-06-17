@@ -13,7 +13,7 @@ struct LabelButtonHeaderViewModel {
     var buttonTitle: String?
     var buttonAction: ((UIButton) -> Void)?
     var buttonA11yIdentifier: String?
-    
+
     static var emptyHeader: LabelButtonHeaderViewModel {
         return LabelButtonHeaderViewModel(title: nil, isButtonHidden: true)
     }
@@ -21,7 +21,7 @@ struct LabelButtonHeaderViewModel {
 
 // Firefox home view controller header view
 class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
-    
+
     struct UX {
         static let maxTitleLabelTextSize: CGFloat = 55 // Style title3 - AX5
         static let maxMoreButtonTextSize: CGFloat = 49 // Style subheadline - AX5
@@ -29,7 +29,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         static let bottomSpace: CGFloat = 10
         static let bottomButtonSpace: CGFloat = 6
     }
-    
+
     // MARK: - UIElements
     lazy var titleLabel: UILabel = .build { label in
         label.text = self.title
@@ -38,7 +38,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
-    
+
     lazy var moreButton: ActionButton = .build { button in
         button.isHidden = true
         button.titleLabel?.adjustsFontForContentSizeCategory = true
@@ -48,51 +48,51 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
         button.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
     }
-    
+
     // MARK: - Variables
     var title: String? {
         willSet(newTitle) {
             titleLabel.text = newTitle
         }
     }
-    
+
     private var viewModel: LabelButtonHeaderViewModel?
     var notificationCenter: NotificationCenter = NotificationCenter.default
-    
+
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(titleLabel)
         addSubview(moreButton)
-        
+
         applyTheme()
         setupNotifications(forObserver: self,
                            observing: [.DisplayThemeChanged])
     }
-    
+
     func setConstraints(viewModel: LabelButtonHeaderViewModel) {
         NSLayoutConstraint.activate([
             moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomButtonSpace),
             moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -viewModel.trailingInset),
-            
+
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: viewModel.leadingInset),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: moreButton.leadingAnchor, constant: -UX.inBetweenSpace),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace)
         ])
-        
+
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
         notificationCenter.removeObserver(self)
     }
-    
+
     // MARK: - Helper functions
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -102,20 +102,20 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         titleLabel.text = nil
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
     }
-    
+
     func configure(viewModel: LabelButtonHeaderViewModel) {
         self.viewModel = viewModel
-        
+
         title = viewModel.title
         titleLabel.accessibilityIdentifier = viewModel.titleA11yIdentifier
-        
+
         moreButton.isHidden = viewModel.isButtonHidden
         if !viewModel.isButtonHidden {
             moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
             moreButton.touchUpAction = viewModel.buttonAction
             moreButton.accessibilityIdentifier = viewModel.buttonA11yIdentifier
         }
-        
+
         setConstraints(viewModel: viewModel)
     }
 }

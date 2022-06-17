@@ -17,7 +17,7 @@ open class Bytes {
             guard let p = p.bindMemory(to: UInt8.self).baseAddress else {
                 fatalError("Random byte generation failed.")
             }
-            if (SecRandomCopyBytes(kSecRandomDefault, len, p) != errSecSuccess) {
+            if SecRandomCopyBytes(kSecRandomDefault, len, p) != errSecSuccess {
                 fatalError("Random byte generation failed.")
             }
         }

@@ -764,7 +764,7 @@ class Tab: NSObject {
             return .none
         }
         for provider in SearchEngine.allCases {
-            if (url.absoluteString.contains(provider.rawValue)) {
+            if url.absoluteString.contains(provider.rawValue) {
                 return provider
             }
         }
