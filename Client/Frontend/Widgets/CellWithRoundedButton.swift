@@ -7,6 +7,8 @@ import Foundation
 struct CellWithRoundedButtonUX {
     static let ImageSize: CGFloat = 29
     static let BorderViewMargin: CGFloat = 16
+    static let ButtonInset: CGFloat = 14
+    static let ButtonImagePadding: CGFloat = 11
 }
 
 class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCell {
@@ -58,8 +60,11 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
 
         contentView.addSubview(roundedButton)
 
-        roundedButton.setInsets(forContentPadding: UIEdgeInsets(top: 14, left: 14, bottom: 14, right: 14),
-                                imageTitlePadding: 11)
+        roundedButton.setInsets(forContentPadding: UIEdgeInsets(top: CellWithRoundedButtonUX.ButtonInset,
+                                                                left: CellWithRoundedButtonUX.ButtonInset,
+                                                                bottom: CellWithRoundedButtonUX.ButtonInset,
+                                                                right: CellWithRoundedButtonUX.ButtonInset),
+                                imageTitlePadding: CellWithRoundedButtonUX.ButtonImagePadding)
 
         let trailingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
         let leadingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
