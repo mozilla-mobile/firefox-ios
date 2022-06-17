@@ -44,7 +44,6 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
     var title: String? {
         willSet(newTitle) {
             titleLabel.text = newTitle
-            accessibilityLabel = newTitle
         }
     }
 
