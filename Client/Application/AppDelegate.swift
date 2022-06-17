@@ -172,7 +172,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         browserViewController.edgesForExtendedLayout = []
 
         let navigationController = UINavigationController(rootViewController: browserViewController)
-        navigationController.delegate = self
         navigationController.isNavigationBarHidden = true
         navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
         rootViewController = navigationController
@@ -560,19 +559,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         return self.orientationLock
-    }
-}
-
-// MARK: - Root View Controller Animations
-extension AppDelegate: UINavigationControllerDelegate {
-    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        switch operation {
-        case .push:
-            return BrowserToTrayAnimator()
-        case .pop:
-            return TrayToBrowserAnimator()
-        default:
-            return nil
-        }
     }
 }
