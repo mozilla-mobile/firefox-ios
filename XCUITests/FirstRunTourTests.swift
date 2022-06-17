@@ -21,7 +21,7 @@ class FirstRunTourTests: BaseTestCase {
     func testFirstRunTour() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
-        waitForExistence(app.staticTexts["Welcome to Firefox"])
+        waitForExistence(app.staticTexts["Welcome to Firefox"], timeout: 15)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].exists)
         XCTAssertTrue(app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"].exists)
@@ -65,6 +65,7 @@ class FirstRunTourTests: BaseTestCase {
 
     // MARK: Private
     private func goToNextScreen() {
+        waitForExistence(app.buttons["\(rootA11yId)PrimaryButton"], timeout: 10)
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
     }

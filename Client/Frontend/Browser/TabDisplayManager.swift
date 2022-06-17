@@ -268,9 +268,19 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                 return
             }
 
-            let selectedTab = tabManager.selectedTab
+            var selectedTab = tabManager.selectedTab
             // Make sure selected tab has latest time
             selectedTab?.lastExecutedTime = Date.now()
+
+            // Special Case: When toggling from Private to Regular
+            // mode none of the regular tabs are selected,
+            // this is because toggling from one mode to another a user still
+            // has to tap on a tab to select in order to fully switch modes
+
+            if let firstTab = allTabs.first, firstTab.isPrivate != selectedTab?.isPrivate {
+                selectedTab = mostRecentTab(inTabs: tabManager.normalTabs)
+            }
+
             // update model
             inactiveViewModel.updateInactiveTabs(with: selectedTab, tabs: allTabs)
 
@@ -300,29 +310,34 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         return filteredTabs.firstIndex(of: tab)
     }
 
-    func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool) {
+    func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool,
+                           shouldSelectMostRecentTab: Bool = false) {
         guard isPrivate != isOn else { return }
 
         isPrivate = isOn
+
         UserDefaults.standard.set(isPrivate, forKey: "wasLastSessionPrivate")
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
 
-        refreshStore()
-
         if createTabOnEmptyPrivateMode {
             // if private tabs is empty and we are transitioning to it add a tab
             if tabManager.privateTabs.isEmpty && isPrivate {
-                tabManager.addTab(isPrivate: true)
+                let privateTabToSelect = tabManager.addTab(isPrivate: true)
+                self.tabManager.selectTab(privateTabToSelect)
             }
         }
 
-        getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
-            let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
-            if let tab = tab {
-                self.tabManager.selectTab(tab)
+        if shouldSelectMostRecentTab {
+            getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+                let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
+                if let tab = tab {
+                    self.tabManager.selectTab(tab)
+                }
             }
         }
+
+        refreshStore(evenIfHidden: false, shouldAnimate: true)
 
         let notificationObject = [Tab.privateModeKey: isPrivate]
         NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
@@ -351,15 +366,26 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         return nil
     }
 
-    func refreshStore(evenIfHidden: Bool = false) {
+    func refreshStore(evenIfHidden: Bool = false, shouldAnimate: Bool = false) {
         operations.removeAll()
         dataStore.removeAll()
 
-        getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+        getTabsAndUpdateInactiveState {
+            tabGroup, tabsToDisplay in
+
             tabsToDisplay.forEach {
                 self.dataStore.insert($0)
             }
-            self.collectionView.reloadData()
+
+            if shouldAnimate {
+                UIView.transition(with: self.collectionView, duration: 0.27,
+                                  options: .transitionCrossDissolve, animations: {
+                    self.collectionView.reloadData()
+                })
+            } else {
+                self.collectionView.reloadData()
+            }
+
             if evenIfHidden {
                 // reloadData() will reset the data for the collection view,
                 // but if called when offscreen it will not render properly,
@@ -372,6 +398,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                 }
                 self.collectionView.reloadItems(at: indexPaths)
             }
+
             self.tabDisplayer?.focusSelectedTab()
         }
     }
@@ -394,12 +421,12 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         } else {
             // case: Group has more than 2 tabs, we are good to remove just one tab from group
             tabGroups?[indexOfGroup].groupedItems.remove(at: tabIndexInGroup)
-                groupedCell.tabDisplayManagerDelegate = self
-                groupedCell.tabGroups = self.tabGroups
-                groupedCell.hasExpanded = true
-                groupedCell.selectedTab = tabManager.selectedTab
-                groupedCell.tableView.reloadRows(at: [IndexPath(row: indexOfGroup, section: 0)], with: .automatic)
-                groupedCell.scrollToSelectedGroup()
+            groupedCell.tabDisplayManagerDelegate = self
+            groupedCell.tabGroups = self.tabGroups
+            groupedCell.hasExpanded = true
+            groupedCell.selectedTab = tabManager.selectedTab
+            groupedCell.tableView.reloadRows(at: [IndexPath(row: indexOfGroup, section: 0)], with: .automatic)
+            groupedCell.scrollToSelectedGroup()
         }
     }
 
@@ -430,16 +457,16 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
         UIView.animate(withDuration: 0.2,
                        animations: {
-                            cells.forEach {
-                                $0.alpha = 0
-                            }
-                        }, completion: { _ in
-                            cells.forEach {
-                                $0.alpha = 1
-                                $0.isHidden = true
-                            }
-                            completion()
-                        })
+            cells.forEach {
+                $0.alpha = 0
+            }
+        }, completion: { _ in
+            cells.forEach {
+                $0.alpha = 1
+                $0.isHidden = true
+            }
+            completion()
+        })
     }
 
     private func recordEventAndBreadcrumb(object: TelemetryWrapper.EventObject, method: TelemetryWrapper.EventMethod) {
@@ -496,12 +523,12 @@ extension TabDisplayManager: UICollectionViewDataSource {
         if let _ = tabGroups,
            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
                                                                       withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier,
-                                                                      for: indexPath) as? ASHeaderView {
+                                                                      for: indexPath) as? LabelButtonHeaderView {
 
-            let viewModel = ASHeaderViewModel(leadingInset: 15,
-                                              title: .TabTrayOtherTabsSectionHeader,
-                                              titleA11yIdentifier: AccessibilityIdentifiers.TabTray.filteredTabs,
-                                              isButtonHidden: true)
+            let viewModel = LabelButtonHeaderViewModel(leadingInset: 15,
+                                                       title: .TabTrayOtherTabsSectionHeader,
+                                                       titleA11yIdentifier: AccessibilityIdentifiers.TabTray.filteredTabs,
+                                                       isButtonHidden: true)
 
             view.configure(viewModel: viewModel)
             view.title = .TabTrayOtherTabsSectionHeader
@@ -971,10 +998,10 @@ extension TabDisplayManager: TabManagerDelegate {
             // Baseline animation speed is 1.0, which is too slow, this (odd) code sets it to 3x
             self?.collectionView.forFirstBaselineLayout.layer.speed = 3.0
             operation()
-            }, completion: { [weak self] (done) in
-                self?.performingChainedOperations = false
-                self?.tabDisplayCompletionDelegate?.completedAnimation(for: type)
-                self?.performChainedOperations()
+        }, completion: { [weak self] (done) in
+            self?.performingChainedOperations = false
+            self?.tabDisplayCompletionDelegate?.completedAnimation(for: type)
+            self?.performChainedOperations()
         })
     }
 

@@ -153,6 +153,7 @@ class SearchTests: BaseTestCase {
     }
 
     private func changeSearchEngine(searchEngine: String) {
+        sleep(2)
         navigator.goto(SearchSettings)
         // Open the list of default search engines and select the desired
         app.tables.cells.element(boundBy: 0).tap()
@@ -167,7 +168,7 @@ class SearchTests: BaseTestCase {
 
     // Smoketest
     func testSearchEngine() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // Change to the each search engine and verify the search uses it

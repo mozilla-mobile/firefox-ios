@@ -24,7 +24,12 @@
         "ETPCoverSheetTests",
         "TabManagerTests\/testDeleteSelectedTab()",
         "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
-        "TestFavicons\/testFaviconFetcherParse()"
+        "TestFavicons\/testFaviconFetcherParse()",
+        "UIPasteboardExtensionsTests",
+        "UIPasteboardExtensionsTests\/testAddGIFImage()",
+        "UIPasteboardExtensionsTests\/testAddPNGImage()",
+        "VersionSettingTests",
+        "VersionSettingTests\/testCopyAppVersion()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

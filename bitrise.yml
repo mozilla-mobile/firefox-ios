@@ -311,6 +311,10 @@ workflows:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: Unit Test
     - deploy-to-bitrise-io@2.0: {}
+    meta:
+        bitrise.io:
+            stack: osx-xcode-13.2.x
+            machine_type_id: g2-m1.8core
   just_build_fennec_to_get_warnings:
     before_run:
     - 1_git_clone_and_post_clone
@@ -371,6 +375,10 @@ workflows:
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+    meta:
+        bitrise.io:
+            stack: osx-xcode-13.2.x
+            machine_type_id: g2.4core
   send_slack_notification:
     steps:
     - slack@3.1:
@@ -1343,10 +1351,10 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '101.1'
+    BITRISE_RELEASE_VERSION: '102.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '101.1'
+    BITRISE_BETA_VERSION: '102.0'
 
 meta:
   bitrise.io:
@@ -1358,7 +1366,7 @@ trigger_map:
   pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   workflow: RunUnitTests
-- push_branch: v101.1
+- push_branch: v102.0
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
   pipeline: pipeline_multiple_shards
