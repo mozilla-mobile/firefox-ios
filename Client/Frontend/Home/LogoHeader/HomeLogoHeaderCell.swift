@@ -6,12 +6,12 @@ import Foundation
 import Shared
 import UIKit
 
-fileprivate struct LogoViewUX {
-    static let imageHeight: CGFloat = 40
-    static let imageWidth: CGFloat = 214.74
-}
-
 class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
+    private struct UX {
+        static let imageHeight: CGFloat = 40
+        static let imageWidth: CGFloat = 214.74
+    }
+
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     // MARK: - UI Elements
@@ -50,8 +50,8 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 
         NSLayoutConstraint.activate([
             logoButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 32),
-            logoButton.widthAnchor.constraint(equalToConstant: LogoViewUX.imageWidth),
-            logoButton.heightAnchor.constraint(equalToConstant: LogoViewUX.imageHeight),
+            logoButton.widthAnchor.constraint(equalToConstant: UX.imageWidth),
+            logoButton.heightAnchor.constraint(equalToConstant: UX.imageHeight),
             logoButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             logoButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])

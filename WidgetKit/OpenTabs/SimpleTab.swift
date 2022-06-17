@@ -4,7 +4,7 @@
 
 import Shared
 
-fileprivate let userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
+private let userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
 struct SimpleTab: Hashable, Codable {
     var title: String?

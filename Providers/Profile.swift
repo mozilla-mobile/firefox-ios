@@ -216,7 +216,7 @@ extension Profile {
     }
 }
 
-fileprivate let PrefKeyClientID = "PrefKeyClientID"
+private let PrefKeyClientID = "PrefKeyClientID"
 extension Profile {
     var clientID: String {
         let clientID: String

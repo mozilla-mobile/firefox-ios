@@ -577,7 +577,7 @@ extension GridTabViewController {
 }
 
 // MARK: TabLayoutDelegate
-fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
+private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     weak var tabSelectionDelegate: TabSelectionDelegate?
     weak var tabPeekDelegate: TabPeekDelegate?
     let scrollView: UIScrollView

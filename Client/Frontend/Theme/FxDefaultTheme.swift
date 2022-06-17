@@ -13,7 +13,7 @@ struct FxDefaultTheme: Theme {
     var fonts: ThemeFontPalette = FxDefaultFontPalette()
 }
 
-fileprivate struct FxDefaultColourPalette: ThemeColourPalette {
+private struct FxDefaultColourPalette: ThemeColourPalette {
     // Generally, force unwrapping should be avoided. However,
     // because we expect to ship these colours, we should force
     // unwrap to force a crash in case that these colours aren't found.
@@ -48,6 +48,6 @@ fileprivate struct FxDefaultColourPalette: ThemeColourPalette {
     var textWarning: UIColor { return UIColor(named: "TextWarning")! }
 }
 
-fileprivate struct FxDefaultFontPalette: ThemeFontPalette {
+private struct FxDefaultFontPalette: ThemeFontPalette {
 
 }

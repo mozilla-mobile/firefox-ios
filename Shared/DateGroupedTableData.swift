@@ -4,7 +4,7 @@
 
 import Foundation
 
-fileprivate func getDate(dayOffset: Int) -> Date {
+private func getDate(dayOffset: Int) -> Date {
     let calendar = Calendar(identifier: .gregorian)
     let components = calendar.dateComponents([.year, .month, .day], from: Date())
     let today = calendar.date(from: components)!

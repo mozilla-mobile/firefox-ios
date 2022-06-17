@@ -12,7 +12,7 @@ let ETLD_NAMES_LIST: [String] = {
     return combined
 }()
 
-fileprivate var ETLD_NAMES_LIST_PART_1: [String]? = [
+private var ETLD_NAMES_LIST_PART_1: [String]? = [
    "ac",
    "com.ac",
    "edu.ac",
@@ -5009,7 +5009,7 @@ fileprivate var ETLD_NAMES_LIST_PART_1: [String]? = [
    "com.om"
 ]
 
-fileprivate var ETLD_NAMES_LIST_PART_2: [String]? = [
+private var ETLD_NAMES_LIST_PART_2: [String]? = [
    "edu.om",
    "gov.om",
    "med.om",

@@ -10,8 +10,6 @@ import Storage
 import SwiftyJSON
 import SyncTelemetry
 
-fileprivate let log = Logger.syncLogger
-
 public enum SyncReason: String {
     case startup = "startup"
     case scheduled = "scheduled"

@@ -16,7 +16,7 @@ enum FxAPageType {
 
 // See https://mozilla.github.io/ecosystem-platform/docs/fxa-engineering/fxa-webchannel-protocol
 // For details on message types.
-fileprivate enum RemoteCommand: String {
+private enum RemoteCommand: String {
     // case canLinkAccount = "can_link_account"
     // case loaded = "fxaccounts:loaded"
     case status = "fxaccounts:fxa_status"
