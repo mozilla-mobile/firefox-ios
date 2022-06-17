@@ -31,7 +31,7 @@ fileprivate enum StringLastUpdatedAppVersion {
 }
 
 // MARK: - Localization helper function
-fileprivate func MZLocalizedString(_ key: String,
+private func MZLocalizedString(_ key: String,
                                    tableName: String? = nil,
                                    value: String = "",
                                    comment: String,

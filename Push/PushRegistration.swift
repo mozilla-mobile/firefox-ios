@@ -59,7 +59,7 @@ public class PushRegistration: NSObject, NSCoding {
     }
 }
 
-fileprivate let defaultSubscriptionID = "defaultSubscription"
+private let defaultSubscriptionID = "defaultSubscription"
 /// Small NSCodable class for persisting a channel subscription.
 /// We use NSCoder because we expect it to be stored in the profile.
 public class PushSubscription: NSObject, NSCoding {
