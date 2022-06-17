@@ -9,30 +9,30 @@ protocol HomepageViewModelDelegate: AnyObject {
 }
 
 class HomepageViewModel: FeatureFlaggable {
-    
+
     struct UX {
         static let spacingBetweenSections: CGFloat = 32
         static let standardInset: CGFloat = 18
         static let iPadInset: CGFloat = 50
         static let iPadTopSiteInset: CGFloat = 25
-        
+
         static func leadingInset(traitCollection: UITraitCollection) -> CGFloat {
             guard UIDevice.current.userInterfaceIdiom != .phone else { return standardInset }
-            
+
             // Handles multitasking on iPad
             return traitCollection.horizontalSizeClass == .regular ? iPadInset : standardInset
         }
-        
+
         static func topSiteLeadingInset(traitCollection: UITraitCollection) -> CGFloat {
             guard UIDevice.current.userInterfaceIdiom != .phone else { return 0 }
-            
+
             // Handles multitasking on iPad
             return traitCollection.horizontalSizeClass == .regular ? iPadTopSiteInset : 0
         }
     }
-    
+
     // MARK: - Properties
-    
+
     // Privacy of home page is controlled throught notifications since tab manager selected tab
     // isn't always the proper privacy mode that should be reflected on the home page
     var isPrivate: Bool {
@@ -42,13 +42,13 @@ class HomepageViewModel: FeatureFlaggable {
             }
         }
     }
-    
+
     let nimbus: FxNimbus
     let profile: Profile
     var isZeroSearch: Bool
     var shownSections = [HomepageSectionType]()
     weak var delegate: HomepageViewModelDelegate?
-    
+
     // Child View models
     private var childViewModels: [HomepageViewModelProtocol]
     var headerViewModel: HomeLogoHeaderViewModel
@@ -58,7 +58,7 @@ class HomepageViewModel: FeatureFlaggable {
     var historyHighlightsViewModel: HistoryHightlightsViewModel
     var pocketViewModel: PocketViewModel
     var customizeButtonViewModel: CustomizeHomepageSectionViewModel
-    
+
     // MARK: - Initializers
     init(profile: Profile,
          isZeroSearch: Bool = false,
@@ -66,7 +66,7 @@ class HomepageViewModel: FeatureFlaggable {
          nimbus: FxNimbus = FxNimbus.shared) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
-        
+
         self.headerViewModel = HomeLogoHeaderViewModel(profile: profile)
         self.topSiteViewModel = TopSitesViewModel(
             profile: profile,
@@ -92,16 +92,16 @@ class HomepageViewModel: FeatureFlaggable {
                                 pocketViewModel,
                                 customizeButtonViewModel]
         self.isPrivate = isPrivate
-        
+
         self.nimbus = nimbus
         topSiteViewModel.delegate = self
         historyHighlightsViewModel.delegate = self
-        
+
         updateEnabledSections()
     }
-    
+
     // MARK: - Interfaces
-    
+
     func recordViewAppeared() {
         nimbus.features.homescreenFeature.recordExposure()
         TelemetryWrapper.recordEvent(category: .action,
@@ -110,33 +110,33 @@ class HomepageViewModel: FeatureFlaggable {
                                      value: .fxHomepageOrigin,
                                      extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
     }
-    
+
     // MARK: - Fetch section data
-    
+
     func updateData() {
         childViewModels.forEach { section in
             guard section.isEnabled else { return }
             self.updateData(section: section)
         }
     }
-    
+
     private func updateData(section: HomepageViewModelProtocol) {
         section.updateData {
             self.delegate?.reloadSection(section: section)
         }
     }
-    
+
     // MARK: - Manage sections and order
-    
+
     /// Add the section if it doesn't
     func reloadSection(_ section: HomepageViewModelProtocol, with collectionView: UICollectionView) {
         if !shownSections.contains(section.sectionType) {
             addShownSection(section: section.sectionType)
         }
-        
+
         collectionView.reloadData()
     }
-    
+
     func addShownSection(section: HomepageSectionType) {
         let positionToInsert = getPositionToInsert(section: section)
         if positionToInsert >= shownSections.count {
@@ -145,28 +145,28 @@ class HomepageViewModel: FeatureFlaggable {
             shownSections.insert(section, at: positionToInsert)
         }
     }
-    
+
     func removeShownSection(section: HomepageSectionType) {
         if let index = shownSections.firstIndex(of: section) {
             shownSections.remove(at: index)
         }
     }
-    
+
     func getPositionToInsert(section: HomepageSectionType) -> Int {
         let indexes = shownSections.filter { $0.rawValue < section.rawValue }
         return indexes.count
     }
-    
+
     func updateEnabledSections() {
         shownSections.removeAll()
-        
+
         childViewModels.forEach {
             if $0.shouldShow { shownSections.append($0.sectionType) }
         }
     }
-    
+
     // MARK: - Section ViewModel helper
-    
+
     func getSectionViewModel(shownSection: Int) -> HomepageViewModelProtocol? {
         guard let actualSectionNumber = shownSections[safe: shownSection]?.rawValue else { return nil }
         return childViewModels[safe: actualSectionNumber]

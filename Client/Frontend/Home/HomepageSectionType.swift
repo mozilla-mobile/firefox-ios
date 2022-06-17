@@ -12,7 +12,7 @@ enum HomepageSectionType: Int, CaseIterable {
     case historyHighlights
     case pocket
     case customizeHome
-    
+
     var title: String? {
         switch self {
         case .pocket: return .FirefoxHomepage.Pocket.SectionTitle
@@ -23,7 +23,7 @@ enum HomepageSectionType: Int, CaseIterable {
         default: return nil
         }
     }
-    
+
     var cellIdentifier: String {
         switch self {
         case .logoHeader: return HomeLogoHeaderCell.cellIdentifier
@@ -35,7 +35,7 @@ enum HomepageSectionType: Int, CaseIterable {
         case .customizeHome: return CustomizeHomepageSectionView.cellIdentifier
         }
     }
-    
+
     static var cellTypes: [ReusableCell.Type] {
         return [HomeLogoHeaderCell.self,
                 TopSiteItemCell.self,
@@ -48,7 +48,7 @@ enum HomepageSectionType: Int, CaseIterable {
                 CustomizeHomepageSectionView.self,
         ]
     }
-    
+
     init(_ section: Int) {
         self.init(rawValue: section)!
     }

@@ -6,17 +6,17 @@ import Foundation
 
 // An empty cell to show when a row is incomplete
 class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
-    
+
     lazy private var emptyBG: UIView = .build { view in
         view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
         view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
         view.layer.borderColor = TopSiteItemCell.UX.borderColor.cgColor
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(emptyBG)
-        
+
         NSLayoutConstraint.activate([
             emptyBG.topAnchor.constraint(equalTo: contentView.topAnchor),
             emptyBG.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -25,7 +25,7 @@ class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
             emptyBG.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
