@@ -128,8 +128,7 @@ class BookmarkingTests: BaseTestCase {
     }
 
     func testBookmarksAwesomeBar() {
-        navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarOpen)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         typeOnSearchBar(text: "www.ebay")
         waitForExistence(app.tables["SiteTable"])
         waitForExistence(app.tables["SiteTable"].cells.staticTexts["www.ebay"], timeout: 5)
@@ -152,6 +151,7 @@ class BookmarkingTests: BaseTestCase {
 
         // Add page to bookmarks
         waitForTabsButton()
+        sleep(2)
         bookmark()
 
         // Now the site should be suggested

@@ -112,7 +112,7 @@ private extension RemoteTabsPanelTests {
             completion()
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 1.0, handler: nil)
+        waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func createPanel(hasAccount: Bool = true,
