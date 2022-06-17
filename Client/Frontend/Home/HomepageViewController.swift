@@ -362,7 +362,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     }
 }
 
-// MARK: -  CollectionView Data Source
+// MARK: - CollectionView Data Source
 
 extension HomepageViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
