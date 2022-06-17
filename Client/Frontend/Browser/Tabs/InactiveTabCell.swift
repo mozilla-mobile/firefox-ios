@@ -26,7 +26,7 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let HeaderAndRowHeight: CGFloat = 48
-        static let CloseAllTabRowHeight: CGFloat = 100
+        static let CloseAllTabRowHeight: CGFloat = 88
         static let RoundedContainerPaddingClosed: CGFloat = 30
         static let RoundedContainerAdditionalPaddingOpened: CGFloat  = 40
         static let InactiveTabTrayWidthPadding: CGFloat = 30
@@ -122,7 +122,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         case .inactive, .none:
             return InactiveTabCell.UX.HeaderAndRowHeight
         case .closeAllTabsButton:
-            return InactiveTabCell.UX.CloseAllTabRowHeight
+            return UITableView.automaticDimension
         }
     }
 
