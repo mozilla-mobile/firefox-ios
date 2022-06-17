@@ -5,6 +5,7 @@
 import Foundation
 import Adjust
 import Shared
+import Glean
 
 private let log = Logger.browserLogger
 
@@ -65,15 +66,38 @@ final class AdjustHelper: FeatureFlaggable {
         return profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
     }
 
+    private func setAttribution(_ attribution: ADJAttribution) {
+        // TODO: add logic to get values for existing users
+        // with Adjust.attribution()
+        guard let campaign = attribution.campaign,
+              let adgroup = attribution.adgroup,
+              let creative = attribution.creative,
+              let network = attribution.network else {
+                  return
+        }
+
+        GleanMetrics.Adjust.campaign.set(campaign)
+        GleanMetrics.Adjust.adGroup.set(adgroup)
+        GleanMetrics.Adjust.creative.set(creative)
+        GleanMetrics.Adjust.network.set(network)
+        hasSetAttributionData = true
+    }
+
     // MARK: - UserDefaults
 
     private enum UserDefaultsKey: String {
         case hasAttribution = "com.moz.adjust.hasAttribution.key"
+        case hasSetAttributionData = "com.moz.adjust.hasSetAttributionData.key"
     }
 
     private var hasAttribution: Bool {
         get { UserDefaults.standard.object(forKey: UserDefaultsKey.hasAttribution.rawValue) as? Bool ?? false }
         set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.hasAttribution.rawValue) }
+    }
+
+    private var hasSetAttributionData: Bool {
+        get { UserDefaults.standard.object(forKey: UserDefaultsKey.hasSetAttributionData.rawValue) as? Bool ?? false }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.hasSetAttributionData.rawValue) }
     }
 }
 
@@ -90,5 +114,30 @@ extension AdjustHelper: AdjustDelegate {
         if !shouldEnable {
             AdjustHelper.setEnabled(false)
         }
+
+        guard let attribution = attribution, !hasSetAttributionData else {
+            return
+        }
+
+        setAttribution(attribution)
+    }
+
+    func adjustDeeplinkResponse(_ deeplink: URL?) -> Bool {
+        // Either way we want to handle the deeplink
+        // but we will send telemetry only if url is not nil
+        guard let url = deeplink else { return true }
+
+        sendTelemetry(url: url)
+        return true
+    }
+
+    private func sendTelemetry(url: URL) {
+        let extra = [TelemetryWrapper.EventExtraKey.deeplinkURL.rawValue: url]
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .applicationOpenUrl,
+                                     object: .deeplinkReceived,
+                                     value: nil,
+                                     extras: extra)
     }
 }

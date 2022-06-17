@@ -2701,3 +2701,89 @@ messaging:
     data_sensitivity:
       - technical
     expires: "2023-10-17"
+adjust:
+  deeplink_received:
+    type: event
+    description: |
+      Send for Adjust callback for deeplink.
+    extra_keys:
+      received_url:
+        description: The deeplink url
+        type: string
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10417
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - technical
+    expires: "2023-01-01"
+  campaign:
+    type: string
+    lifetime: application
+    description: |
+      A string containing the Adjust campaign ID from which the user installed
+      Firefox-iOS.
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
+    data_reviews:
+      - https://github.com/mozilla-mobile/fenix/pull/5579
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+  ad_group:
+    type: string
+    lifetime: application
+    description: |
+      A string containing the Adjust ad group ID from which the user installed
+      Firefox-iOS.
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
+    data_reviews:
+      - https://github.com/mozilla-mobile/fenix/pull/9253
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+  creative:
+    type: string
+    lifetime: application
+    description: |
+      A string containing the Adjust creative ID from which the user installed
+      Firefox-iOS.
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
+    data_reviews:
+      - https://github.com/mozilla-mobile/fenix/pull/9253
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+  network:
+    type: string
+    lifetime: application
+    description: |
+      A string containing the Adjust network ID from which the user installed
+      Firefox-iOS.
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
+    data_reviews:
+      - https://github.com/mozilla-mobile/fenix/pull/9253
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
