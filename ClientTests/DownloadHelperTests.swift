@@ -70,6 +70,15 @@ class DownloadHelperTests: XCTestCase {
         XCTAssertNil(downloadViewModel)
     }
 
+    func test_downloadViewModel_deliversCorrectTitle() {
+        let response = anyResponse(urlString: "http://some-domain.com/some-image.jpg")
+        let sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
+
+        let downloadViewModel = sut?.downloadViewModel(okAction: { _ in })
+
+        XCTAssertEqual(downloadViewModel!.title!, "some-image.jpg")
+    }
+
     // MARK: - Helpers
 
     private func anyRequest(urlString: String = "http://any-url.com") -> URLRequest {
@@ -78,6 +87,10 @@ class DownloadHelperTests: XCTestCase {
 
     private func anyResponse(mimeType: String?) -> URLResponse {
         return URLResponse(url: URL(string: "http://any-url.com")!, mimeType: mimeType, expectedContentLength: 10, textEncodingName: nil)
+    }
+
+    private func anyResponse(urlString: String) -> URLResponse {
+        return URLResponse(url: URL(string: urlString)!, mimeType: nil, expectedContentLength: 10, textEncodingName: nil)
     }
 
     private func cookieStore() -> WKHTTPCookieStore {
