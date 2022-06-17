@@ -166,15 +166,11 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(TabTray)
-        waitForExistence(app.cells.staticTexts.element(boundBy: 0))
-        if !app.collectionViews["Apple"].exists {
-            app.cells.staticTexts.element(boundBy: 0).tap()
-            waitForValueContains(app.textFields["url"], value: "apple")
-            app.buttons["Show Tabs"].tap()
-        }
+        waitForExistence(app.cells.staticTexts.element(boundBy: 0), timeout: 10)
+
         navigator.nowAt(TabTray)
         waitForExistence(app.collectionViews.cells.staticTexts["Apple"], timeout: 5)
-        app.cells.staticTexts["Apple"].firstMatch.tap()
+        app.collectionViews.element(boundBy: 1).cells.staticTexts["Apple"].tap()
 
         // The website is open
         XCTAssertFalse(TopSiteCellgroup.exists)
@@ -204,7 +200,7 @@ class ActivityStreamTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
-        var numTabsOpen = app.collectionViews.element(boundBy: 0).cells.count
+        var numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
         if iPad() {
             navigator.goto(TabTray)
             numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
