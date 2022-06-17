@@ -65,7 +65,7 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
         moreButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 
         isAccessibilityElement = true
-        accessibilityTraits = [ .button ]
+        accessibilityTraits = .button
         accessibilityIdentifier = AccessibilityIdentifiers.TabTray.inactiveTabHeader
 
         NSLayoutConstraint.activate([

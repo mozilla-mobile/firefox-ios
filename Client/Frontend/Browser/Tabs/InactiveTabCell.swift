@@ -190,7 +190,9 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         case .inactive, .none:
             guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: InactiveTabHeader.cellIdentifier) as? InactiveTabHeader else { return nil }
             headerView.state = hasExpanded ? .down : .right
-            headerView.title = .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionTitle
+            headerView.title = hasExpanded ?
+                .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionOpenedTitle :
+                .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionClosedTitle
             headerView.moreButton.isHidden = false
             headerView.moreButton.addTarget(self,
                                             action: #selector(toggleInactiveTabSection),
