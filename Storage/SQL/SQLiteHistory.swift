@@ -73,7 +73,7 @@ func getLocalFrecencySQL() -> String {
     return "\(visitCountExpression) * max(2, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
 }
 
-fileprivate func escapeFTSSearchString(_ search: String) -> String {
+private func escapeFTSSearchString(_ search: String) -> String {
     // Remove double-quotes, split search string on whitespace
     // and remove any empty strings
     let words = search.replacingOccurrences(of: "\"", with: "").components(separatedBy: .whitespaces).filter({ !$0.isEmpty })
@@ -163,7 +163,7 @@ private let topSitesQuery = "SELECT cached_top_sites.*, page_metadata.provider_n
  * >75% of the query time.
  * The scope/lifetime of this object is important as the data is 'frozen' until a new instance is created.
  */
-fileprivate struct SQLiteFrecentHistory: FrecentHistory {
+private struct SQLiteFrecentHistory: FrecentHistory {
     private let db: BrowserDB
     private let prefs: Prefs
 

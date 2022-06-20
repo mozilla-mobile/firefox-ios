@@ -821,7 +821,7 @@ fileprivate extension String {
 /**
  * UIScrollView that prevents buttons from interfering with scroll.
  */
-fileprivate class ButtonScrollView: UIScrollView {
+private class ButtonScrollView: UIScrollView {
     override func touchesShouldCancel(in view: UIView) -> Bool {
         return true
     }
