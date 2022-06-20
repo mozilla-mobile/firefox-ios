@@ -33,7 +33,7 @@ final class AdjustHelper: FeatureFlaggable {
         // If adjust should be enabled and attribution is not yet set
         // edge case to set attribution data for existing users
         if shouldEnable {
-            _ = telemetryHelper.setAttribution(Adjust.attribution())
+            telemetryHelper.setAttribution(Adjust.attribution())
         }
     }
 
@@ -101,7 +101,7 @@ extension AdjustHelper: AdjustDelegate {
             AdjustHelper.setEnabled(false)
         }
 
-        _ = telemetryHelper.setAttribution(attribution)
+        telemetryHelper.setAttribution(attribution)
     }
 
     func adjustDeeplinkResponse(_ deeplink: URL?) -> Bool {

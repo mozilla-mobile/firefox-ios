@@ -6972,6 +6972,7 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				2165B2BF2860BB41004C0786 /* AdjustTelemetryHelperTests.swift */,
 				CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */,
 				8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */,
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
@@ -7050,7 +7051,6 @@
 				C8501F5028510DA1003B09AB /* WallpaperMigrationUtilityTests.swift */,
 				E4CD9F1C1A6D9C2800318571 /* WebServerTests.swift */,
 				D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */,
-				2165B2BF2860BB41004C0786 /* AdjustTelemetryHelperTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";

@@ -29,20 +29,15 @@ class AdjustTelemetryHelperTests: XCTestCase {
 
     func testShouldSetAttribution() {
         telemetryHelper.hasSetAttributionData = false
-        let savedState = telemetryHelper.setAttribution(MockAdjustTelemetryData())
-        XCTAssertTrue(savedState)
+        telemetryHelper.setAttribution(MockAdjustTelemetryData())
+        XCTAssertTrue(telemetryHelper.hasSetAttributionData)
     }
 
     func testFailSetAttribution_WithNilData() {
+        telemetryHelper.hasSetAttributionData = false
         let attribution = MockAdjustTelemetryData(campaign: nil)
-        let savedState = telemetryHelper.setAttribution(attribution)
-        XCTAssertFalse(savedState)
-    }
-
-    func testFailSetAttribution_AlreadySet() {
-        telemetryHelper.hasSetAttributionData = true
-        let savedState = telemetryHelper.setAttribution(MockAdjustTelemetryData())
-        XCTAssertFalse(savedState)
+        telemetryHelper.setAttribution(attribution)
+        XCTAssertFalse(telemetryHelper.hasSetAttributionData)
     }
 
     func testHandleDeeplink() {
