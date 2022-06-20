@@ -18,6 +18,7 @@ let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
 class TopTabsTest: BaseTestCase {
     func testAddTabFromTabTray() {
+        XCTExpectFailure("The app was not launched")
         sleep(15)
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 45)
         navigator.performAction(Action.CloseURLBarOpen)

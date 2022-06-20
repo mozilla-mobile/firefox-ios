@@ -50,6 +50,7 @@ class ActivityStreamTest: BaseTestCase {
 
     // Smoketest
     func testDefaultSites() {
+        XCTExpectFailure("The app was not launched")
         sleep(15)
         waitForExistence(TopSiteCellgroup, timeout: 60)
         XCTAssertTrue(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].exists)
@@ -153,6 +154,7 @@ class ActivityStreamTest: BaseTestCase {
 
     // Smoketest
     func testTopSitesOpenInNewPrivateTab() {
+        XCTExpectFailure("The app was not launched")
         sleep(3)
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 35)
         navigator.performAction(Action.CloseURLBarOpen)
