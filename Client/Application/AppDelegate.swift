@@ -35,10 +35,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var applicationCleanlyBackgrounded = true
     var receivedURLs = [URL]()
     var orientationLock = UIInterfaceOrientationMask.all
-    
     weak var profile: Profile?
     weak var application: UIApplication?
-
     private var shutdownWebServer: DispatchSourceTimer?
     private var launchOptions: [AnyHashable: Any]?
     private var telemetry: TelemetryWrapper?
