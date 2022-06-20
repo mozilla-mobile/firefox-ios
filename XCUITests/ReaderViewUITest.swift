@@ -224,10 +224,10 @@ class ReaderViewTest: BaseTestCase {
     }
 
     // Smoketest
-    func testAddToReaderListOptions() {
-        XCTExpectFailure("The app was not launched")
+    func testAddToReaderListOptions() throws {
         sleep(15)
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 45)
+        XCTExpectFailure("The app was not launched")
         addContentToReaderView()
         // Check that Settings layouts options are shown
         waitForExistence(app.buttons["ReaderModeBarView.settingsButton"], timeout: 10)
