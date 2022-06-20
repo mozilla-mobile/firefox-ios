@@ -26,7 +26,7 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let HeaderAndRowHeight: CGFloat = 48
-        static let CloseAllTabRowHeight: CGFloat = 100
+        static let CloseAllTabRowHeight: CGFloat = 88
         static let RoundedContainerPaddingClosed: CGFloat = 30
         static let RoundedContainerAdditionalPaddingOpened: CGFloat  = 40
         static let InactiveTabTrayWidthPadding: CGFloat = 30
@@ -122,7 +122,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         case .inactive, .none:
             return InactiveTabCell.UX.HeaderAndRowHeight
         case .closeAllTabsButton:
-            return InactiveTabCell.UX.CloseAllTabRowHeight
+            return UITableView.automaticDimension
         }
     }
 
@@ -191,11 +191,17 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: InactiveTabHeader.cellIdentifier) as? InactiveTabHeader else { return nil }
             headerView.state = hasExpanded ? .down : .right
             headerView.title = String.TabsTrayInactiveTabsSectionTitle
+            headerView.accessibilityLabel = hasExpanded ?
+                .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionOpenedAccessibilityTitle :
+                .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionClosedAccessibilityTitle
             headerView.moreButton.isHidden = false
             headerView.moreButton.addTarget(self,
                                             action: #selector(toggleInactiveTabSection),
                                             for: .touchUpInside)
             headerView.contentView.backgroundColor = .clear
+
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleInactiveTabSection))
+            headerView.addGestureRecognizer(tapGesture)
 
             delegate?.setupCFR(with: headerView.titleLabel)
 
@@ -233,16 +239,14 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         tableView.reloadData()
         delegate?.toggleInactiveTabSection(hasExpanded: hasExpanded)
 
+        // Post accessibility notification when the section was opened/closed
+        UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
+
         if hasExpanded { delegate?.presentCFR() }
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch InactiveTabSection(rawValue: section) {
-        case .inactive, .none:
-            return InactiveTabCell.UX.HeaderAndRowHeight
-        case .closeAllTabsButton:
-            return CGFloat.leastNormalMagnitude
-        }
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {

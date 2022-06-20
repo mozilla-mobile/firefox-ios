@@ -24,7 +24,7 @@ public struct Strings {
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 private enum StringLastUpdatedAppVersion {
-    case v39, v96, v97, v98, v99, v100, v101, v102
+    case v39, v96, v97, v98, v99, v100, v101, v102, v103
 
     // Used for all cases before version 39.
     case unknown
@@ -443,6 +443,8 @@ extension String {
         public static let OtherTabsLabelTitle = MZLocalizedString("TabTray.OtherTabs.Title", value: "Other tabs", comment: "In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs", lastUpdated: .v39)
 
         public struct InactiveTabs {
+            public static let TabsTrayInactiveTabsSectionClosedAccessibilityTitle = MZLocalizedString("TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103", value: "View Inactive Tabs", comment: "Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while.", lastUpdated: .v103)
+            public static let TabsTrayInactiveTabsSectionOpenedAccessibilityTitle = MZLocalizedString("TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103", value: "Hide Inactive Tabs", comment: "Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while.", lastUpdated: .v103)
             public static let CloseAllInactiveTabsButton = MZLocalizedString("InactiveTabs.TabTray.CloseButtonTitle", value: "Close All Inactive Tabs", comment: "In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs.", lastUpdated: .v39)
 
             public struct AutoClose {
