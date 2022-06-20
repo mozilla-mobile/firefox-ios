@@ -41,6 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var launchOptions: [AnyHashable: Any]?
     private var telemetry: TelemetryWrapper?
     private var adjustHelper: AdjustHelper?
+    private var webServerUtil: WebServerUtil?
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         //
@@ -119,7 +120,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ThemeManager.shared.updateProfile(with: profile)
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
-        setUpWebServer(profile)
+        webServerUtil = WebServerUtil(profile: profile)
+        webServerUtil?.setUpWebServer()
 
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
 
@@ -132,9 +134,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         setupRootViewController()
 
-        // Add restoration class, the factory that will return the ViewController we
-        // will restore with.
-
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
                 let title = (userInfo["Title"] as? String) ?? ""
@@ -142,13 +141,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
-        NotificationCenter.default.addObserver(forName: .DisplayThemeChanged, object: nil, queue: .main) { (notification) -> Void in
-            if !LegacyThemeManager.instance.systemThemeIsOn {
-                self.window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
-            } else {
-                self.window?.overrideUserInterfaceStyle = .unspecified
-            }
-        }
+        startListeningForThemeUpdates()
 
         adjustHelper = AdjustHelper(profile: profile)
         SystemUtils.onFirstRun()
@@ -333,8 +326,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
 
             profile.syncManager.applicationDidBecomeActive()
-
-            setUpWebServer(profile)
+            webServerUtil?.setUpWebServer()
         }
 
         browserViewController.firefoxHomeViewController?.reloadAll()
@@ -420,36 +412,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         profile?._shutdown()
     }
 
-    fileprivate func setUpWebServer(_ profile: Profile) {
-        let server = WebServer.sharedInstance
-        guard !server.server.isRunning else { return }
-
-        ReaderModeHandlers.register(server, profile: profile)
-
-        let responders: [(String, InternalSchemeResponse)] =
-            [ (AboutHomeHandler.path, AboutHomeHandler()),
-              (AboutLicenseHandler.path, AboutLicenseHandler()),
-              (SessionRestoreHandler.path, SessionRestoreHandler()),
-              (ErrorPageHandler.path, ErrorPageHandler())]
-        responders.forEach { (path, responder) in
-            InternalSchemeHandler.responders[path] = responder
-        }
-
-        if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {
-            registerHandlersForTestMethods(server: server.server)
-        }
-
-        // Bug 1223009 was an issue whereby CGDWebserver crashed when moving to a background task
-        // catching and handling the error seemed to fix things, but we're not sure why.
-        // Either way, not implicitly unwrapping a try is not a great way of doing things
-        // so this is better anyway.
-        do {
-            try server.start()
-        } catch let err as NSError {
-            print("Error: Unable to start WebServer \(err)")
-        }
-    }
-
     fileprivate func setUserAgent() {
         let firefoxUA = UserAgent.getUserAgent()
 
@@ -467,6 +429,67 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Some sites will only serve HTML that points to .ico files.
         // The FaviconFetcher is explicitly for getting high-res icons, so use the desktop user agent.
         FaviconFetcher.userAgent = UserAgent.desktopUserAgent()
+    }
+
+    /// When a user presses and holds the app icon from the Home Screen, we present quick actions / shortcut items (see QuickActions).
+    ///
+    /// This method can handle a quick action from both app launch and when the app becomes active. However, the system calls launch methods first if the app `launches`
+    /// and gives you a chance to handle the shortcut there. If it's not handled there, this method is called in the activation process with the shortcut item.
+    ///
+    /// Quick actions / shortcut items are handled here as long as our two launch methods return `true`. If either of them return `false`, this method
+    /// won't be called to handle shortcut items.
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(shortcutItem, withBrowserViewController: browserViewController)
+
+        completionHandler(handledShortCutItem)
+    }
+
+    private func scheduleBGSync(application: UIApplication) {
+        if profile?.syncManager.isSyncing ?? false {
+            // If syncing, create a bg task because _shutdown() is blocking and might take a few seconds to complete
+            var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
+            taskId = application.beginBackgroundTask(expirationHandler: {
+                self.shutdownProfileWhenNotActive(application)
+                application.endBackgroundTask(taskId)
+            })
+
+            DispatchQueue.main.async {
+                self.shutdownProfileWhenNotActive(application)
+                application.endBackgroundTask(taskId)
+            }
+        } else {
+            // Blocking call, however without sync running it should be instantaneous
+            profile?._shutdown()
+
+            let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part1")
+            request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
+            request.requiresNetworkConnectivity = true
+            do {
+                try BGTaskScheduler.shared.submit(request)
+            } catch {
+                NSLog(error.localizedDescription)
+            }
+        }
+    }
+}
+
+// This functionality will need to be moved to the SceneDelegate when the time comes
+extension AppDelegate {
+
+    func startListeningForThemeUpdates() {
+        NotificationCenter.default.addObserver(forName: .DisplayThemeChanged, object: nil, queue: .main) { (notification) -> Void in
+            if !LegacyThemeManager.instance.systemThemeIsOn {
+                self.window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
+            } else {
+                self.window?.overrideUserInterfaceStyle = .unspecified
+            }
+        }
+    }
+
+    // Orientation lock for views that use new modal presenter
+    func application(_ application: UIApplication,
+                     supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return self.orientationLock
     }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
@@ -510,52 +533,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         return false
-    }
-
-    /// When a user presses and holds the app icon from the Home Screen, we present quick actions / shortcut items (see QuickActions).
-    ///
-    /// This method can handle a quick action from both app launch and when the app becomes active. However, the system calls launch methods first if the app `launches`
-    /// and gives you a chance to handle the shortcut there. If it's not handled there, this method is called in the activation process with the shortcut item.
-    ///
-    /// Quick actions / shortcut items are handled here as long as our two launch methods return `true`. If either of them return `false`, this method
-    /// won't be called to handle shortcut items.
-    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(shortcutItem, withBrowserViewController: browserViewController)
-
-        completionHandler(handledShortCutItem)
-    }
-
-    private func scheduleBGSync(application: UIApplication) {
-        if profile?.syncManager.isSyncing ?? false {
-            // If syncing, create a bg task because _shutdown() is blocking and might take a few seconds to complete
-            var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
-            taskId = application.beginBackgroundTask(expirationHandler: {
-                self.shutdownProfileWhenNotActive(application)
-                application.endBackgroundTask(taskId)
-            })
-
-            DispatchQueue.main.async {
-                self.shutdownProfileWhenNotActive(application)
-                application.endBackgroundTask(taskId)
-            }
-        } else {
-            // Blocking call, however without sync running it should be instantaneous
-            profile?._shutdown()
-
-            let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part1")
-            request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
-            request.requiresNetworkConnectivity = true
-            do {
-                try BGTaskScheduler.shared.submit(request)
-            } catch {
-                NSLog(error.localizedDescription)
-            }
-        }
-    }
-
-    // Orientation lock for views that use new modal presenter
-    func application(_ application: UIApplication,
-                     supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        return self.orientationLock
     }
 }
