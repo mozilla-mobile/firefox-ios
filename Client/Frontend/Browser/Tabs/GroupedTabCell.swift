@@ -146,7 +146,7 @@ class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDa
         tableView.reloadData()
     }
 
-    // Mark: Grouped Tabs Delegate
+    // MARK: Grouped Tabs Delegate
 
     func didSelectGroupedTab(tab: Tab?) {
         if let tab = tab {
