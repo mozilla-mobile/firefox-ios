@@ -225,7 +225,7 @@ class DynamicFontHelper: NSObject {
         if let weight = weight {
             font = UIFont.systemFont(ofSize: fontDescriptor.pointSize, weight: weight)
         } else {
-            font = UIFont.systemFont(ofSize: fontDescriptor.pointSize)
+            font = UIFont(descriptor: fontDescriptor, size: fontDescriptor.pointSize)
         }
 
         guard let maxSize = maxSize else {
