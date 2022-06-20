@@ -155,13 +155,13 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Portrait orientation: lock enable
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Portrait orientation: lock disable
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.all)
+        OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.all)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
