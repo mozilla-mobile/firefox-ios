@@ -26,6 +26,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
     }
 
+    var isPocketSectionEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.pocket, checking: .buildOnly)
+    }
+
     var isHistoryHighlightsSectionEnabled: Bool {
         return featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly)
     }
@@ -137,8 +141,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             sectionItems.append(historyHighlightsSetting)
         }
 
-        sectionItems.append(pocketSetting)
-        sectionItems.append(pocketSponsoredSetting)
+        if isPocketSectionEnabled {
+            sectionItems.append(pocketSetting)
+            sectionItems.append(pocketSponsoredSetting)
+        }
 
         if isWallpaperSectionEnabled {
             sectionItems.append(wallpaperSetting)
