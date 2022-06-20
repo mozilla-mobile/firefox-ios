@@ -346,6 +346,9 @@
    Title for default search engine settings section. */
 "Default Search Engine" = "ნაგულისხმევი საძიებო სისტემა";
 
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "დახურვა";
+
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "ეკრანის პარამეტრები";
 
@@ -1075,13 +1078,13 @@
 "Menu.RemovePin.Confirm" = "მოცილება რჩეული საიტებიდან";
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2.v99" = "მოცილდა მალსახმობებიდან";
+"Menu.RemovePin.Confirm2.v99" = "მოცილებულია მალსახმობებიდან";
 
 /* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
 "Menu.RemoveReadingList.AlternateLabel.v99" = "წასაკითხებიდან მოცილება";
 
 /* Toast displayed to confirm to the user that his reading list item was correctly removed. */
-"Menu.RemoveReadingList.Confirm.v99" = "მოცილდა წასაკითხებიდან";
+"Menu.RemoveReadingList.Confirm.v99" = "მოცილებულია წასაკითხებიდან";
 
 /* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
 "Menu.RemoveReadingList.Label.v99" = "მოცილება";
@@ -1224,6 +1227,33 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "კარგი";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
+"Onboarding.IntroAction.v102" = "დაიწყეთ";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
+"Onboarding.IntroDescriptionPart1.v102" = "დამოუკიდებელი. არამომგებიანი. მუდამ.";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v102" = "ერთგული საკუთარი პირობისა და საყოველთაო ინტერნეტის გაუმჯობესებისა.";
+
+/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
+"Onboarding.LaterAction.v102" = "ახლა არა";
+
+/* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
+"Onboarding.SyncAction.v102" = "შექმენით ან შედით ანგარიშზე";
+
+/* Description for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. */
+"Onboarding.SyncDescription.v102" = "ჩანართებისა და სანიშნების თვითდასინქრონება მოწყობილობებზე შეუფერხებლად გადასვლისთვის.";
+
+/* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
+"Onboarding.SyncTitle.v102" = "დაასინქრონეთ საქმისგან მოუცდენლად";
+
+/* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
+"Onboarding.WallpaperAction.v102" = "ფონის დაყენება";
+
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
+"Onboarding.WallpaperTitle.v102" = "აირჩიეთ Firefox-ფონი";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "დაიწყეთ მოგზაურობა";
@@ -1392,6 +1422,9 @@
 
 /* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
 "Search.Awesomebar.SwitchToTab" = "ჩანართზე გადასვლა";
+
+/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
+"Search.SuggestSectionTitle.v102" = "Firefox-შეთავაზება";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "ახალი საძიებო სისტემა გამოჩნდება, სწრაფი ძიების ველში.";
