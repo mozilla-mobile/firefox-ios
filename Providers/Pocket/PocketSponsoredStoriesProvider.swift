@@ -4,37 +4,7 @@
 
 import Shared
 
-class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviderInterface, FeatureFlaggable {
-
-    enum Error: Swift.Error {
-        case failure
-    }
-
-    func fetchSponsoredStories(completion: @escaping (SponsoredStoryResult) -> Void) {
-        guard let request = sponsoredFeedRequest else {
-            completion(.failure(Error.failure))
-            return
-        }
-
-        // TODO: Get from cache
-        // if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["recommendations"] as? Array<[String: Any]> {
-        //     deferred.fill(PocketFeedStory.parseJSON(list: items))
-        //     return deferred
-        // }
-
-        urlSession.dataTask(with: request) { (data, response, error) in
-            guard let _ = validatedHTTPResponse(response, contentType: "application/json"), let data = data else {
-                completion(.failure(Error.failure))
-                return
-            }
-
-            // TODO: store in cache
-            // self.cache(response: response, for: request, with: data)
-
-            let decodedResponse = try? JSONDecoder().decode(PocketSponsoredRequest.self, from: data)
-            completion(.success(decodedResponse?.spocs ?? []))
-        }.resume()
-    }
+class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviderInterface, FeatureFlaggable, URLCaching, Loggable {
 
     var endpoint: URL {
         if featureFlags.isCoreFeatureEnabled(.useStagingSponsoredPocketStoriesAPI) {
@@ -44,10 +14,12 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviderInterface, F
         }
     }
 
-    lazy private var urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
-
+    lazy var urlSession: URLSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
     private lazy var pocketKey: String = {
         return Bundle.main.object(forInfoDictionaryKey: PocketSponsoredConstants.pocketEnvAPIKey) as? String ?? ""
+    }()
+    lazy var urlCache: URLCache = {
+        return URLCache.shared
     }()
 
     private lazy var pocketId: String = {
@@ -84,6 +56,57 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviderInterface, F
         request?.httpBody = bodyData
         request?.httpMethod = .post
         return request
+    }
+    
+    func fetchSponsoredStories(timestamp: Timestamp = Date.now(), completion: @escaping (SponsoredStoryResult) -> Void) {
+        guard let request = sponsoredFeedRequest else {
+            completion(.failure(Error.requestCreationFailure))
+            return
+        }
+
+        if let cachedData = findCachedData(for: request, timestamp: timestamp) {
+            decode(data: cachedData, completion: completion)
+        } else {
+            fetchSponsoredStories(request: request, completion: completion)
+        }
+    }
+    
+    func fetchSponsoredStories(request: URLRequest, completion: @escaping (SponsoredStoryResult) -> Void) {
+        urlSession.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                self.browserLog.debug("An error occurred while fetching data: \(error)")
+                completion(.failure(Error.failure))
+                return
+            }
+            
+            guard let response = validatedHTTPResponse(response, statusCode: 200..<300), let data = data, !data.isEmpty else {
+                self.browserLog.debug("Response isn't proper: \(response.debugDescription), with data \(String(describing: data))")
+                completion(.failure(Error.invalidHTTPResponse))
+                return
+            }
+            
+            self.cache(response: response, for: request, with: data)
+            self.decode(data: data, completion: completion)
+        }.resume()
+    }
+    
+    private func decode(data: Data, completion: @escaping (SponsoredStoryResult) -> Void) {
+        do {
+            let decodedResponse = try JSONDecoder().decode(PocketSponsoredRequest.self, from: data)
+            completion(.success(decodedResponse.spocs))
+        } catch {
+            self.browserLog.error("Unable to parse with error: \(error)")
+            completion(.failure(Error.decodingFailure))
+        }
+    }
+}
+
+extension PocketSponsoredStoriesProvider {
+    enum Error: Swift.Error {
+        case failure
+        case decodingFailure
+        case requestCreationFailure
+        case invalidHTTPResponse
     }
 }
 

@@ -5,17 +5,22 @@
 import Shared
 
 protocol PocketSponsoredStoriesProviderInterface {
+    
     typealias SponsoredStoryResult = Swift.Result<[PocketSponsoredStory], Error>
-    func fetchSponsoredStories(completion: @escaping (SponsoredStoryResult) -> Void)
-    func fetchSponsoredStories() async throws -> [PocketSponsoredStory]
+    
+    func fetchSponsoredStories(timestamp: Timestamp, completion: @escaping (SponsoredStoryResult) -> Void)
+    func fetchSponsoredStories(timestamp: Timestamp) async throws -> [PocketSponsoredStory]
 }
 
 extension PocketSponsoredStoriesProviderInterface {
-    func fetchSponsoredStories() async throws -> [PocketSponsoredStory] {
+    func fetchSponsoredStories(timestamp: Timestamp = Date.now()) async throws -> [PocketSponsoredStory] {
         return try await withCheckedThrowingContinuation { continuation in
-            fetchSponsoredStories { result in
+            fetchSponsoredStories(timestamp: timestamp) { result in
                 continuation.resume(with: result)
             }
         }
+    }
+    func fetchSponsoredStories(timestamp: Timestamp = Date.now(), completion: @escaping (SponsoredStoryResult) -> Void) {
+        fetchSponsoredStories(timestamp: timestamp, completion: completion)
     }
 }
