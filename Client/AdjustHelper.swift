@@ -13,9 +13,12 @@ final class AdjustHelper: FeatureFlaggable {
 
     private static let adjustAppTokenKey = "AdjustAppToken"
     private let profile: Profile
+    private let telemetryHelper: AdjustTelemetryProtocol
 
-    init(profile: Profile) {
+    init(profile: Profile,
+         telemetryHelper: AdjustTelemetryProtocol = AdjustTelemetryHelper()) {
         self.profile = profile
+        self.telemetryHelper = telemetryHelper
     }
 
     func setupAdjust() {
@@ -29,8 +32,8 @@ final class AdjustHelper: FeatureFlaggable {
 
         // If adjust should be enabled and attribution is not yet set
         // edge case to set attribution data for existing users
-        if shouldEnable && !hasSetAttributionData {
-            setAttribution(Adjust.attribution())
+        if shouldEnable {
+            _ = telemetryHelper.setAttribution(Adjust.attribution())
         }
     }
 
@@ -76,17 +79,11 @@ final class AdjustHelper: FeatureFlaggable {
 
     private enum UserDefaultsKey: String {
         case hasAttribution = "com.moz.adjust.hasAttribution.key"
-        case hasSetAttributionData = "com.moz.adjust.hasSetAttributionData.key"
     }
 
     private var hasAttribution: Bool {
         get { UserDefaults.standard.object(forKey: UserDefaultsKey.hasAttribution.rawValue) as? Bool ?? false }
         set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.hasAttribution.rawValue) }
-    }
-
-    private var hasSetAttributionData: Bool {
-        get { UserDefaults.standard.object(forKey: UserDefaultsKey.hasSetAttributionData.rawValue) as? Bool ?? false }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.hasSetAttributionData.rawValue) }
     }
 }
 
@@ -104,40 +101,14 @@ extension AdjustHelper: AdjustDelegate {
             AdjustHelper.setEnabled(false)
         }
 
-        setAttribution(attribution)
+        _ = telemetryHelper.setAttribution(attribution)
     }
 
     func adjustDeeplinkResponse(_ deeplink: URL?) -> Bool {
         guard let url = deeplink else { return true }
 
         // Send telemetry if url is not nil
-        sendDeeplinkTelemetry(url: url)
+        telemetryHelper.sendDeeplinkTelemetry(url: url)
         return true
-    }
-}
-
-// MARK: - Telemetry functions
-extension AdjustHelper {
-    private func sendDeeplinkTelemetry(url: URL) {
-        let extra = [TelemetryWrapper.EventExtraKey.deeplinkURL.rawValue: url]
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .applicationOpenUrl,
-                                     object: .deeplinkReceived,
-                                     value: nil,
-                                     extras: extra)
-    }
-
-    private func setAttribution(_ attribution: ADJAttribution?) {
-        guard let campaign = attribution?.campaign,
-              let adgroup = attribution?.adgroup,
-              let creative = attribution?.creative,
-              let network = attribution?.network else { return }
-
-        GleanMetrics.Adjust.campaign.set(campaign)
-        GleanMetrics.Adjust.adGroup.set(adgroup)
-        GleanMetrics.Adjust.creative.set(creative)
-        GleanMetrics.Adjust.network.set(network)
-        hasSetAttributionData = true
     }
 }

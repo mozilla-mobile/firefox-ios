@@ -208,6 +208,18 @@ class TelemetryWrapperTests: XCTestCase {
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.closeTap)
     }
+
+    func test_handleDeeplinkWithExtra_GleanIsCalled() {
+        let deeplinkUrlKey = TelemetryWrapper.EventExtraKey.deeplinkURL.rawValue
+        let extras = [deeplinkUrlKey: "https://testURL.com"]
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .applicationOpenUrl,
+                                     object: .deeplinkReceived,
+                                     value: nil,
+                                     extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Adjust.deeplinkReceived)
+    }
 }
 
 // MARK: - Helper functions to test telemetry
