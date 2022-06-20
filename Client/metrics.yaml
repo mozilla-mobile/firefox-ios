@@ -2352,6 +2352,18 @@ wallpaper_analytics:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
+  themed_wallpaper:
+    type: labeled_counter
+    description: |
+      Recorded when the user enters the background. This reports
+      the currently selected wallpaper if it's not the default.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10669
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
 
 # CFR Metrics
 cfr_analytics:
