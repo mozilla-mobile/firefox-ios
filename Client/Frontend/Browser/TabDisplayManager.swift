@@ -1006,7 +1006,6 @@ extension TabDisplayManager: TabManagerDelegate {
     }
 
     private func updateWith(animationType: TabAnimationType, operation: (() -> Void)?) {
-        self.collectionView.reloadData()
         if let op = operation {
             operations.insert((animationType, op), at: 0)
         }
