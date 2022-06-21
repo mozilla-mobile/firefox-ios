@@ -17,46 +17,31 @@ extension ADJAttribution: AdjustTelemetryData {
 }
 
 protocol AdjustTelemetryProtocol {
-    func setAttribution(_ attribution: AdjustTelemetryData?)
-    func sendDeeplinkTelemetry(url: URL)
+    func setAttributionData(_ attribution: AdjustTelemetryData?) -> Bool
+    func sendDeeplinkTelemetry(url: URL, attribution: AdjustTelemetryData?)
 }
 
 class AdjustTelemetryHelper: AdjustTelemetryProtocol {
 
-    // MARK: - UserDefaults
+    func sendDeeplinkTelemetry(url: URL, attribution: AdjustTelemetryData?) {
+        let extra = GleanMetrics.Adjust.DeeplinkReceivedExtra(receivedUrl: url.absoluteString)
+        GleanMetrics.Adjust.deeplinkReceived.record(extra)
 
-    private enum UserDefaultsKey: String {
-        case hasSetAttributionData = "com.moz.adjust.hasSetAttributionData.key"
+        _ = setAttributionData(attribution)
     }
 
-    var hasSetAttributionData: Bool {
-        get { UserDefaults.standard.object(forKey: UserDefaultsKey.hasSetAttributionData.rawValue) as? Bool ?? false }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.hasSetAttributionData.rawValue) }
-    }
-
-    func sendDeeplinkTelemetry(url: URL) {
-        let extra = [TelemetryWrapper.EventExtraKey.deeplinkURL.rawValue: url.absoluteString]
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .applicationOpenUrl,
-                                     object: .deeplinkReceived,
-                                     value: nil,
-                                     extras: extra)
-    }
-
-    func setAttribution(_ attribution: AdjustTelemetryData?) {
-        guard !hasSetAttributionData else { return }
-
+    func setAttributionData(_ attribution: AdjustTelemetryData?) -> Bool {
         guard let campaign = attribution?.campaign,
               let adgroup = attribution?.adgroup,
               let creative = attribution?.creative,
-              let network = attribution?.network else { return }
+              let network = attribution?.network else { return false }
 
         GleanMetrics.Adjust.campaign.set(campaign)
         GleanMetrics.Adjust.adGroup.set(adgroup)
         GleanMetrics.Adjust.creative.set(creative)
         GleanMetrics.Adjust.network.set(network)
+        GleanMetrics.Pings.shared.firstSession.submit()
 
-        hasSetAttributionData = true
+        return true
     }
 }

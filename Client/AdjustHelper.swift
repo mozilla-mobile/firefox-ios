@@ -29,12 +29,6 @@ final class AdjustHelper: FeatureFlaggable {
         Adjust.appDidLaunch(config)
 
         AdjustHelper.setEnabled(shouldEnable)
-
-        // If adjust should be enabled and attribution is not yet set
-        // edge case to set attribution data for existing users
-        if shouldEnable {
-            telemetryHelper.setAttribution(Adjust.attribution())
-        }
     }
 
     /// Used to enable or disable Adjust SDK and it's features. We disable third party sharing by default.
@@ -101,14 +95,15 @@ extension AdjustHelper: AdjustDelegate {
             AdjustHelper.setEnabled(false)
         }
 
-        telemetryHelper.setAttribution(attribution)
+        _ = telemetryHelper.setAttributionData(attribution)
     }
 
     func adjustDeeplinkResponse(_ deeplink: URL?) -> Bool {
         guard let url = deeplink else { return true }
 
         // Send telemetry if url is not nil
-        telemetryHelper.sendDeeplinkTelemetry(url: url)
+        let attribution = Adjust.attribution()
+        telemetryHelper.sendDeeplinkTelemetry(url: url, attribution: attribution)
         return true
     }
 }

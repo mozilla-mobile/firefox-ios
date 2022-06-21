@@ -2710,6 +2710,9 @@ adjust:
       received_url:
         description: The deeplink url
         type: string
+    send_in_pings:
+      - first-session
+      - events
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
     data_reviews:
@@ -2721,12 +2724,12 @@ adjust:
     expires: "2023-01-01"
   campaign:
     type: string
-    lifetime: application
+    lifetime: ping
     description: |
       A string containing the Adjust campaign ID from which the user installed
       Firefox-iOS.
     send_in_pings:
-      - metrics
+      - first-session
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
     data_reviews:
@@ -2738,12 +2741,12 @@ adjust:
     expires: "2023-01-01"
   ad_group:
     type: string
-    lifetime: application
+    lifetime: ping
     description: |
       A string containing the Adjust ad group ID from which the user installed
       Firefox-iOS.
     send_in_pings:
-      - metrics
+      - first-session
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
     data_reviews:
@@ -2755,12 +2758,12 @@ adjust:
     expires: "2023-01-01"
   creative:
     type: string
-    lifetime: application
+    lifetime: ping
     description: |
       A string containing the Adjust creative ID from which the user installed
       Firefox-iOS.
     send_in_pings:
-      - metrics
+      - first-session
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
     data_reviews:
@@ -2772,12 +2775,12 @@ adjust:
     expires: "2023-01-01"
   network:
     type: string
-    lifetime: application
+    lifetime: ping
     description: |
       A string containing the Adjust network ID from which the user installed
       Firefox-iOS.
     send_in_pings:
-      - metrics
+      - first-session
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
     data_reviews:

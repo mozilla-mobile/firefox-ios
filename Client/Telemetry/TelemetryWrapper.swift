@@ -423,7 +423,6 @@ extension TelemetryWrapper {
         case fxaConfirmSignInToken = "fxa-confirm-signin-token"
         case awesomebarLocation = "awesomebar-position"
         case searchHighlights = "search-highlights"
-        case deeplinkReceived = "deeplink_received"
     }
 
     public enum EventValue: String {
@@ -548,9 +547,6 @@ extension TelemetryWrapper {
 
         // Onboarding
         case cardType = "card-type"
-
-        // Adjust
-        case deeplinkURL = "deeplink-url"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
@@ -1110,12 +1106,6 @@ extension TelemetryWrapper {
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
                 GleanMetrics.Messaging.malformed.record(
                     GleanMetrics.Messaging.MalformedExtra(messageKey: messageId)
-                )
-            }
-        case(.action, .applicationOpenUrl, .deeplinkReceived, _, let extras):
-            if let url = extras?[EventExtraKey.deeplinkURL.rawValue] as? String {
-                GleanMetrics.Adjust.deeplinkReceived.record(
-                    GleanMetrics.Adjust.DeeplinkReceivedExtra(receivedUrl: url)
                 )
             }
 
