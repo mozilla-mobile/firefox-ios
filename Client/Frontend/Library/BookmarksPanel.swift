@@ -11,7 +11,6 @@ private let log = Logger.browserLogger
 
 private let BookmarkNodeCellIdentifier = "BookmarkNodeCellIdentifier"
 private let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorCellIdentifier"
-private let BookmarkSectionHeaderIdentifier = "BookmarkSectionHeaderIdentifier"
 
 private struct BookmarksPanelUX {
     static let FolderIconSize = CGSize(width: 24, height: 24)
@@ -22,7 +21,8 @@ let LocalizedRootBookmarkFolderStrings = [
     BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
     BookmarkRoots.ToolbarFolderGUID: String.BookmarksFolderTitleToolbar,
     BookmarkRoots.UnfiledFolderGUID: String.BookmarksFolderTitleUnsorted,
-    BookmarkRoots.MobileFolderGUID: String.BookmarksFolderTitleMobile
+    BookmarkRoots.MobileFolderGUID: String.BookmarksFolderTitleMobile,
+    LocalDesktopFolder.localDesktopFolderGuid: String.Bookmarks.Menu.DesktopBookmarks
 ]
 
 private class SeparatorTableViewCell: OneLineTableViewCell {
@@ -34,24 +34,23 @@ private class SeparatorTableViewCell: OneLineTableViewCell {
 }
 
 class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActionBookmark {
-    enum BookmarksSection: Int, CaseIterable {
+
+    private enum BookmarksSection: Int, CaseIterable {
         case bookmarks
-        case recent
     }
 
+    // MARK: - Properties
     var libraryPanelDelegate: LibraryPanelDelegate?
 
-    let bookmarkFolderGUID: GUID
+    private let bookmarkFolderGUID: GUID
+    private var bookmarkFolder: BookmarkFolderData?
+    private var bookmarkNodes = [FxBookmarkNode]()
+    private var chevronImage = UIImage(named: ImageIdentifiers.menuChevron)
+    private var flashLastRowOnNextReload = false
 
-    var bookmarkFolder: BookmarkFolderData?
-    var bookmarkNodes = [BookmarkNodeData]()
-    var recentBookmarks = [BookmarkNodeData]()
-    var chevronImage = UIImage(named: ImageIdentifiers.menuChevron)
-
-    fileprivate var flashLastRowOnNextReload = false
-
-    fileprivate lazy var bookmarkFolderIconNormal = UIImage(named: "bookmarkFolder")?.createScaled(BookmarksPanelUX.FolderIconSize).tinted(withColor: UIColor.Photon.Grey90)
-    fileprivate lazy var bookmarkFolderIconDark = UIImage(named: "bookmarkFolder")?.createScaled(BookmarksPanelUX.FolderIconSize).tinted(withColor: UIColor.Photon.Grey10)
+    // TODO: Laurie - images
+    private lazy var bookmarkFolderIconNormal = UIImage(named: "bookmarkFolder")?.createScaled(BookmarksPanelUX.FolderIconSize).tinted(withColor: UIColor.Photon.Grey90)
+    private lazy var bookmarkFolderIconDark = UIImage(named: "bookmarkFolder")?.createScaled(BookmarksPanelUX.FolderIconSize).tinted(withColor: UIColor.Photon.Grey10)
 
     init(profile: Profile, bookmarkFolderGUID: GUID = BookmarkRoots.RootGUID) {
         self.bookmarkFolderGUID = bookmarkFolderGUID
@@ -65,7 +64,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
         self.tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: BookmarkNodeCellIdentifier)
         self.tableView.register(SeparatorTableViewCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
-        self.tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: BookmarkSectionHeaderIdentifier)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -81,6 +79,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
         let tableViewLongPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTableView))
         tableView.addGestureRecognizer(tableViewLongPressRecognizer)
+        // TODO: Laurie - a11y
         tableView.accessibilityIdentifier = "Bookmarks List"
         tableView.allowsSelectionDuringEditing = true
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
@@ -154,38 +153,133 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     override func reloadData() {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         if profile.isShutdown { return }
-        profile.places.getBookmarksTree(rootGUID: bookmarkFolderGUID, recursive: false).uponQueue(.main) { result in
 
+        if bookmarkFolderGUID == BookmarkRoots.RootGUID {
+            setupRootFolderData()
+        } else if bookmarkFolderGUID == LocalDesktopFolder.localDesktopFolderGuid {
+            setupLocalDesktopFolderData()
+        } else {
+            setupSubfolderData()
+        }
+    }
+
+    private func setupRootFolderData() {
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
             guard let folder = result.successValue as? BookmarkFolderData else {
                 // TODO: Handle error case?
                 self.bookmarkFolder = nil
                 self.bookmarkNodes = []
-                self.recentBookmarks = []
                 return
             }
 
             self.bookmarkFolder = folder
             self.bookmarkNodes = folder.children ?? []
 
-            if folder.guid == BookmarkRoots.RootGUID {
-                self.profile.places.getRecentBookmarks(limit: 20).uponQueue(.main) { result in
-                    self.recentBookmarks = result.successValue ?? []
-                    self.tableView.reloadData()
-                }
-            } else {
-                self.recentBookmarks = []
-                self.tableView.reloadData()
-            }
+            // TODO: Laurie - Maybe dont insert? will insert more than once?
+            let desktopFolder = LocalDesktopFolder()
+            self.bookmarkNodes.insert(desktopFolder, at: 0)
 
-            if self.flashLastRowOnNextReload {
-                self.flashLastRowOnNextReload = false
+            self.tableView.reloadData()
 
-                let lastIndexPath = IndexPath(row: self.bookmarkNodes.count - 1, section: BookmarksSection.bookmarks.rawValue)
-                DispatchQueue.main.asyncAfter(deadline: .now() + BookmarksPanelUX.RowFlashDelay) {
-                    self.flashRow(at: lastIndexPath)
-                }
-            }
+//            self.bookmarkNodes.append(desktopFolder)
+
+//            // TODO: Laurie - what is flash row?
+//            if self.flashLastRowOnNextReload {
+//                self.flashLastRowOnNextReload = false
+//
+//                let lastIndexPath = IndexPath(row: self.bookmarkNodes.count - 1, section: BookmarksSection.bookmarks.rawValue)
+//                DispatchQueue.main.asyncAfter(deadline: .now() + BookmarksPanelUX.RowFlashDelay) {
+//                    self.flashRow(at: lastIndexPath)
+//                }
+//            }
         }
+    }
+
+    // TODO: Laurie - put this elsewhere
+    private var unfiledBookmarks: BookmarkNodeData?
+    private var menuBookmarks: BookmarkNodeData?
+    private var toolbarBookmarks: BookmarkNodeData?
+
+    private func setupLocalDesktopFolderData() {
+        let group = DispatchGroup()
+        group.enter()
+        // TODO: Laurie - Je pense pas qu'on peut faire mieux que ca pour l'instant?
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.UnfiledFolderGUID, recursive: false).uponQueue(.main) { result in
+            guard let folder = result.successValue as? BookmarkFolderData else {
+                group.leave()
+                return
+            }
+            self.unfiledBookmarks = folder
+            group.leave()
+        }
+
+        group.enter()
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MenuFolderGUID, recursive: false).uponQueue(.main) { result in
+            guard let folder = result.successValue as? BookmarkFolderData else {
+                group.leave()
+                return
+            }
+            self.menuBookmarks = folder
+            group.leave()
+        }
+
+        group.enter()
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.ToolbarFolderGUID, recursive: false).uponQueue(.main) { result in
+            guard let folder = result.successValue as? BookmarkFolderData else {
+                group.leave()
+                return
+            }
+            self.toolbarBookmarks = folder
+            group.leave()
+        }
+
+        // TODO: Laurie - Dont append. Doesnt work
+        group.notify(queue: DispatchQueue.global(qos: .userInitiated)) {
+            // Laurie - mets les bookmarks des trois folders dans celui la
+            // TODO: I need a way to retrieve the parent folder.. damn it. Dictinnary? Might be dump
+            // Do I have the parent directly on the node data?
+            self.bookmarkFolder = nil
+            if let bookmarks = self.unfiledBookmarks {
+                self.bookmarkNodes.append(bookmarks)
+            }
+
+            if let bookmarks = self.menuBookmarks {
+                self.bookmarkNodes.append(bookmarks)
+            }
+
+            if let bookmarks = self.toolbarBookmarks {
+                self.bookmarkNodes.append(bookmarks)
+            }
+
+            self.tableView.reloadData()
+        }
+    }
+
+    private func setupSubfolderData() {
+        profile.places.getBookmarksTree(rootGUID: bookmarkFolderGUID, recursive: false).uponQueue(.main) { result in
+            guard let folder = result.successValue as? BookmarkFolderData else {
+                // TODO: Handle error case?
+                self.bookmarkFolder = nil
+                self.bookmarkNodes = []
+                return
+            }
+
+            self.bookmarkFolder = folder
+            self.bookmarkNodes = folder.children ?? []
+
+            self.tableView.reloadData()
+
+//            // TODO: Laurie - what is flash row?
+//            if self.flashLastRowOnNextReload {
+//                self.flashLastRowOnNextReload = false
+//
+//                let lastIndexPath = IndexPath(row: self.bookmarkNodes.count - 1, section: BookmarksSection.bookmarks.rawValue)
+//                DispatchQueue.main.asyncAfter(deadline: .now() + BookmarksPanelUX.RowFlashDelay) {
+//                    self.flashRow(at: lastIndexPath)
+//                }
+//            }
+        }
+
     }
 
     func enableEditMode() {
@@ -212,7 +306,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     fileprivate func deleteBookmarkNodeAtIndexPath(_ indexPath: IndexPath) {
-        guard let bookmarkNode = indexPath.section == BookmarksSection.bookmarks.rawValue ? bookmarkNodes[safe: indexPath.row] : recentBookmarks[safe: indexPath.row] else {
+        guard let bookmarkNode = bookmarkNodes[safe: indexPath.row]else {
             return
         }
 
@@ -222,11 +316,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             _ = profile.places.deleteBookmarkNode(guid: bookmarkNode.guid)
 
             tableView.beginUpdates()
-            if indexPath.section == BookmarksSection.recent.rawValue {
-                recentBookmarks.remove(at: indexPath.row)
-            } else {
-                bookmarkNodes.remove(at: indexPath.row)
-            }
+            bookmarkNodes.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .left)
             tableView.endUpdates()
             removeBookmarkShortcut()
@@ -300,13 +390,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        let node: BookmarkNodeData?
-
-        if indexPath.section == BookmarksSection.recent.rawValue {
-            node = recentBookmarks[safe: indexPath.row]
-        } else {
-            node = bookmarkNodes[safe: indexPath.row]
-        }
+        let node = bookmarkNodes[safe: indexPath.row]
 
         guard let bookmarkNode = node else {
             return
@@ -321,6 +405,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             return
         }
 
+        // TODO: Laurie - Same, needs protocol so we dont have to use switch
         switch bookmarkNode {
         case let bookmarkFolder as BookmarkFolderData:
             let nextController = BookmarksPanel(profile: profile, bookmarkFolderGUID: bookmarkFolder.guid)
@@ -334,13 +419,21 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         case let bookmarkItem as BookmarkItemData:
             libraryPanelDelegate?.libraryPanel(didSelectURLString: bookmarkItem.url, visitType: .bookmark)
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .bookmarksPanel)
+        case let bookmarkFolder as LocalDesktopFolder:
+            let nextController = BookmarksPanel(profile: profile, bookmarkFolderGUID: bookmarkFolder.guid)
+            if let localizedString = LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid] {
+                nextController.title = localizedString
+            }
+            nextController.libraryPanelDelegate = libraryPanelDelegate
+            navigationController?.pushViewController(nextController, animated: true)
         default:
             return // Likely a separator was selected so do nothing.
         }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == BookmarksSection.recent.rawValue ? recentBookmarks.count : bookmarkNodes.count
+        print("Laurie - numberOfRowsInSection \(bookmarkNodes.count)")
+        return bookmarkNodes.count
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -356,12 +449,13 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let bookmarkNode = indexPath.section == BookmarksSection.recent.rawValue ? recentBookmarks[safe: indexPath.row] : bookmarkNodes[safe: indexPath.row] else {
+        guard let bookmarkNode = bookmarkNodes[safe: indexPath.row] else {
             return super.tableView(tableView, cellForRowAt: indexPath)
         }
 
         let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkNodeCellIdentifier, for: indexPath) as! OneLineTableViewCell
 
+        // TODO: Laurie - create configure method for those cell, with protocol so we dont have to unwrap cases
         switch bookmarkNode {
         case let bookmarkFolder as BookmarkFolderData:
             if bookmarkFolder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid] {
@@ -376,6 +470,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             cell.accessoryView = imageView
             cell.editingAccessoryType = .disclosureIndicator
             return cell
+
         case let bookmarkItem as BookmarkItemData:
             if bookmarkItem.title.isEmpty {
                 cell.titleLabel.text = bookmarkItem.url
@@ -399,44 +494,32 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             cell.accessoryView = nil
             cell.editingAccessoryType = .disclosureIndicator
             return cell
+
         case is BookmarkSeparatorData:
             let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkSeparatorCellIdentifier, for: indexPath)
             return cell
+
+        case let bookmarkFolder as LocalDesktopFolder:
+            if let localizedString = LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid] {
+                cell.titleLabel.text = localizedString
+            }
+
+            cell.leftImageView.image = LegacyThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
+            cell.leftImageView.contentMode = .center
+            let imageView = UIImageView(image: chevronImage)
+            cell.accessoryView = imageView
+            cell.editingAccessoryType = .disclosureIndicator
+            return cell
+
         default:
             return super.tableView(tableView, cellForRowAt: indexPath) // Should not happen.
         }
     }
 
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section == BookmarksSection.recent.rawValue, !recentBookmarks.isEmpty,
-              let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookmarkSectionHeaderIdentifier) as? SiteTableViewHeader else {
-                  return nil
-              }
-
-        headerView.titleLabel.text = .RecentlyBookmarkedTitle
-        headerView.showBorder(for: .top, true)
-        headerView.showBorder(for: .bottom, true)
-
-        return headerView
-    }
-
-    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        guard let headerView = view as? ThemedTableSectionHeaderFooterView else {
-            return
-        }
-
-        headerView.applyTheme()
-    }
-
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == BookmarksSection.recent.rawValue && !recentBookmarks.isEmpty ? SiteTableViewControllerUX.HeaderHeight : 0
-    }
-
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Root folders cannot be edited.
         guard let bookmarkFolder = self.bookmarkFolder, bookmarkFolder.guid != BookmarkRoots.RootGUID else {
-            // Allow delete of recent BMs
-            return indexPath.section == BookmarksSection.recent.rawValue
+            return false
         }
 
         return true
@@ -487,10 +570,11 @@ extension BookmarksPanel: LibraryPanelContextMenu {
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        guard let bookmarkNode = indexPath.section == BookmarksSection.recent.rawValue ? recentBookmarks[safe: indexPath.row] : bookmarkNodes[safe: indexPath.row],
-              let bookmarkItem = bookmarkNode as? BookmarkItemData else {
-                  return nil
-              }
+        guard let bookmarkNode = bookmarkNodes[safe: indexPath.row],
+              let bookmarkItem = bookmarkNode as? BookmarkItemData
+        else {
+            return nil
+        }
 
         return Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
     }

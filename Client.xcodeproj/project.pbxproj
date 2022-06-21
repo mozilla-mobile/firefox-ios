@@ -481,6 +481,8 @@
 		8A2B1A5E28216C4D0061216B /* Common.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5B28216C4C0061216B /* Common.xcconfig */; };
 		8A2B1A5F28216C4D0061216B /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5C28216C4D0061216B /* Release.xcconfig */; };
 		8A2D593E27DC0AA100713EC9 /* TopSite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2D593D27DC0AA100713EC9 /* TopSite.swift */; };
+		8A3233FC286270CF003E1C33 /* FxBookmarkNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3233FB286270CF003E1C33 /* FxBookmarkNode.swift */; };
+		8A3233FE28627446003E1C33 /* LocalDesktopFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3233FD28627446003E1C33 /* LocalDesktopFolder.swift */; };
 		8A33221F27DFE318008F809E /* FxHomeTopSitesManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A33221E27DFE318008F809E /* FxHomeTopSitesManagerTests.swift */; };
 		8A33222227DFE658008F809E /* NimbusMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A33222127DFE658008F809E /* NimbusMock.swift */; };
 		8A35497227BD672700534A65 /* ToggleSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A35497127BD672700534A65 /* ToggleSwitch.swift */; };
@@ -2871,6 +2873,8 @@
 		8A2B1A5B28216C4C0061216B /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Common.xcconfig; path = Configuration/Common.xcconfig; sourceTree = "<group>"; };
 		8A2B1A5C28216C4D0061216B /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Configuration/Release.xcconfig; sourceTree = "<group>"; };
 		8A2D593D27DC0AA100713EC9 /* TopSite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSite.swift; sourceTree = "<group>"; };
+		8A3233FB286270CF003E1C33 /* FxBookmarkNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxBookmarkNode.swift; sourceTree = "<group>"; };
+		8A3233FD28627446003E1C33 /* LocalDesktopFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDesktopFolder.swift; sourceTree = "<group>"; };
 		8A33221E27DFE318008F809E /* FxHomeTopSitesManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeTopSitesManagerTests.swift; sourceTree = "<group>"; };
 		8A33222127DFE658008F809E /* NimbusMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusMock.swift; sourceTree = "<group>"; };
 		8A35497127BD672700534A65 /* ToggleSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleSwitch.swift; sourceTree = "<group>"; };
@@ -5650,6 +5654,15 @@
 			path = Menu;
 			sourceTree = "<group>";
 		};
+		8A3233FF28627451003E1C33 /* Bookmarks */ = {
+			isa = PBXGroup;
+			children = (
+				8A3233FB286270CF003E1C33 /* FxBookmarkNode.swift */,
+				8A3233FD28627446003E1C33 /* LocalDesktopFolder.swift */,
+			);
+			path = Bookmarks;
+			sourceTree = "<group>";
+		};
 		8A33222027DFE64C008F809E /* TestingHelperClasses */ = {
 			isa = PBXGroup;
 			children = (
@@ -6166,11 +6179,12 @@
 				F84B22261A09127C00AAB793 /* Library.xcassets */,
 				D0B9483322A03468002F4AA1 /* BookmarkDetailPanel.swift */,
 				59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */,
+				8A3233FF28627451003E1C33 /* Bookmarks */,
+				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
 				D0E89A2820910917001CE5C7 /* DownloadsPanel.swift */,
 				8A01891B275E9C2A00923EFE /* ClearHistoryHelper.swift */,
 				D30B101D1AA7F9C600C01CA3 /* LibraryPanels.swift */,
 				274A36D1239EBAD600A21587 /* LibraryViewController */,
-				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
 				745DAB2F1CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift */,
 				274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */,
 			);
@@ -9484,6 +9498,7 @@
 				C8656D79270F866700E199EA /* CustomizeHomepageSectionView.swift in Sources */,
 				6025B10D267B6C5400F59F6B /* LoginRecordExtension.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
+				8A3233FC286270CF003E1C33 /* FxBookmarkNode.swift in Sources */,
 				A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */,
 				433396C827ACE92500491049 /* CellWithRoundedButton.swift in Sources */,
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
@@ -9633,6 +9648,7 @@
 				4390F7FF246DAFBE00570811 /* FirefoxColors.swift in Sources */,
 				D04CD74C216CF86B004FF5B0 /* InstructionsViewController.swift in Sources */,
 				C8501F4F2850FB72003B09AB /* WallpaperMigrationUtility.swift in Sources */,
+				8A3233FE28627446003E1C33 /* LocalDesktopFolder.swift in Sources */,
 				C8954A532729AD9D001C7283 /* ThemeManager.swift in Sources */,
 				8AD40FCA27BADC4B00672675 /* ReaderModeButton.swift in Sources */,
 				8AB5958C28414DF60090F4AE /* ActionButton.swift in Sources */,
