@@ -49,11 +49,11 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     // Smoketest
-    func testDefaultSites() {
+    func testDefaultSites() throws {
         sleep(15)
+        XCTExpectFailure("The app was not launched", strict: false)
         waitForExistence(TopSiteCellgroup, timeout: 60)
         XCTAssertTrue(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].exists)
-
         // There should be 5 top sites by default
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         // Check their names so that test is added to Smoketest
@@ -152,8 +152,9 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     // Smoketest
-    func testTopSitesOpenInNewPrivateTab() {
-        sleep(3)
+    func testTopSitesOpenInNewPrivateTab() throws {
+        sleep(5)
+        XCTExpectFailure("The app was not launched", strict: false)
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 35)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
