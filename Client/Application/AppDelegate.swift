@@ -433,10 +433,10 @@ extension AppDelegate {
 
     private func setupRootViewController() {
         if !LegacyThemeManager.instance.systemThemeIsOn {
-            self.window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
+            window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
         }
 
-        browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
+        browserViewController = BrowserViewController(profile: profile!, tabManager: tabManager)
         browserViewController.edgesForExtendedLayout = []
 
         let navigationController = UINavigationController(rootViewController: browserViewController)
@@ -444,6 +444,6 @@ extension AppDelegate {
         navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
         rootViewController = navigationController
 
-        self.window!.rootViewController = rootViewController
+        window!.rootViewController = rootViewController
     }
 }
