@@ -136,6 +136,7 @@ extension SponsoredTileTelemetryTests {
 
     func clearTest() {
         Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.enableTestingMode()
         SponsoredTileTelemetry.clearUserDefaults()
     }
 }
