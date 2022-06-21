@@ -5,10 +5,20 @@
 import Foundation
 import GCDWebServers
 
-struct ReaderModeHandlers {
+protocol ReaderModeHandlersProtocol {
+    func register(_ webServer: WebServerProtocol, profile: Profile)
+}
+
+struct ReaderModeHandlers: ReaderModeHandlersProtocol {
     static let ReaderModeStyleHash = "sha256-L2W8+0446ay9/L1oMrgucknQXag570zwgQrHwE68qbQ="
 
     static var readerModeCache: ReaderModeCache = DiskReaderModeCache.sharedInstance
+
+    func register(_ webServer: WebServerProtocol, profile: Profile) {
+        // Temporary hacky casting to allow for gradual movement to protocol oriented programming
+        guard let webServer = webServer as? WebServer else { return }
+        ReaderModeHandlers.register(webServer, profile: profile)
+    }
 
     static func register(_ webServer: WebServer, profile: Profile) {
         // Register our fonts and css, which we want to expose to web content that we present in the WebView
