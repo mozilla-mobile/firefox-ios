@@ -810,7 +810,6 @@ class BrowserViewController: UIViewController {
         return SentryIntegration.shared.crashedLastLaunch
     }
 
-
     fileprivate func showRestoreTabsAlert() {
         guard tabManager.hasTabsToRestoreAtStartup() else {
             tabManager.selectTab(tabManager.addTab())
