@@ -21,10 +21,10 @@ topsites-impression:
 first-session:
   description: |
     Recorded on first_session when the user installs the app.
-  include_client_id: false
+  include_client_id: true
   bugs:
     - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
   data_reviews:
-    - https://github.com/mozilla-mobile/firefox-ios/pull/10696
+    - https://github.com/mozilla-mobile/firefox-ios/pull/11089
   notification_emails:
     - fx-ios-data-stewards@mozilla.com

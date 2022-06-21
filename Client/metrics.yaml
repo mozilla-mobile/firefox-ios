@@ -2716,7 +2716,7 @@ adjust:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10417
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     data_sensitivity:
@@ -2733,7 +2733,7 @@ adjust:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
     data_reviews:
-      - https://github.com/mozilla-mobile/fenix/pull/5579
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_sensitivity:
       - technical
     notification_emails:
@@ -2750,7 +2750,7 @@ adjust:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
     data_reviews:
-      - https://github.com/mozilla-mobile/fenix/pull/9253
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_sensitivity:
       - interaction
     notification_emails:
@@ -2767,7 +2767,7 @@ adjust:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
     data_reviews:
-      - https://github.com/mozilla-mobile/fenix/pull/9253
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_sensitivity:
       - interaction
     notification_emails:
@@ -2784,7 +2784,7 @@ adjust:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
     data_reviews:
-      - https://github.com/mozilla-mobile/fenix/pull/9253
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_sensitivity:
       - interaction
     notification_emails:
