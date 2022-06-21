@@ -6214,6 +6214,7 @@
 				EBA3B2CE2268F3E700728BDB /* PhotonActionSheet */,
 				D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */,
 				EBA3B2D12268F57E00728BDB /* BadgeIcon.swift */,
+				433396C727ACE92500491049 /* CellWithRoundedButton.swift */,
 				7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */,
 				D0EAE0E1228B3762001C875A /* DrawerViewController.swift */,
 				E6927EBF1C7B6FB800D03F75 /* ErrorToast.swift */,
@@ -6221,6 +6222,7 @@
 				745DAB3E1CDAB09E00D44181 /* HistoryBackButton.swift */,
 				E660BE051BB0666D009AC090 /* InnerStrokedView.swift */,
 				0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */,
+				23A50957253F782E008FEBD9 /* NewTabButton.swift */,
 				D0152244229855A8009DE753 /* OneLineCellAndFooter.swift */,
 				E65607601C08B4E200534B02 /* SearchInputView.swift */,
 				D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */,
@@ -6228,12 +6230,10 @@
 				E660BDD81BB06521009AC090 /* TabsButton.swift */,
 				C4E3984B1D21F2FD004E89BA /* TabTrayButtonExtensions.swift */,
 				D0B9483C22A18B78002F4AA1 /* TextFieldTableViewCell.swift */,
+				F018F84B2719AE8300B9A52D /* ThemedDefaultNavigationController.swift */,
 				E663D5771BB341C4001EF30E /* ToggleButton.swift */,
 				8AFA263127B6E9AB00D0C33B /* ToolbarBadge.swift */,
 				59A68B1F857A8638598A63A0 /* TwoLineCellAndFooter.swift */,
-				23A50957253F782E008FEBD9 /* NewTabButton.swift */,
-				F018F84B2719AE8300B9A52D /* ThemedDefaultNavigationController.swift */,
-				433396C727ACE92500491049 /* CellWithRoundedButton.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
