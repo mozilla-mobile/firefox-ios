@@ -72,7 +72,7 @@ class OnboardingCardViewController: UIViewController {
         label.numberOfLines = 0
         label.textAlignment = .center
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
-            withTextStyle: .body,
+            withTextStyle: .title3,
             maxSize: 53)
         label.isHidden = true
         label.adjustsFontForContentSizeCategory = true
