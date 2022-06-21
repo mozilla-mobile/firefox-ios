@@ -449,6 +449,8 @@ class BrowserViewController: UIViewController {
 
         // Awesomebar Location Telemetry
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
+
+//        tabManager.startAtHomeCheck()
     }
 
     private func setupNotifications() {

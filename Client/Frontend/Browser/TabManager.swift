@@ -263,7 +263,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             _selectedIndex = -1
         }
 
-        store.preserveTabs(tabs, selectedTab: selectedTab)
+//        store.preserveTabs(tabs, selectedTab: selectedTab)
 
         assert(tab === selectedTab, "Expected tab is selected")
         selectedTab?.createWebview()
@@ -278,6 +278,8 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             tab.applyTheme()
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
+    
+        preserveTabs()
     }
 
     func preserveTabs() {
@@ -828,20 +830,20 @@ extension TabManager {
     }
 
     func storeChanges(writeCompletion: (() -> Void)? = nil) {
-        let group = DispatchGroup()
-        group.enter()
+//        let group = DispatchGroup()
+//        group.enter()
         saveTabs(toProfile: profile, normalTabs) {
-            group.leave()
+//            group.leave()
         }
 
-        group.enter()
+//        group.enter()
         store.preserveTabs(tabs, selectedTab: selectedTab) {
-            group.leave()
+//            group.leave()
         }
 
-        group.notify(queue: .main) {
-            writeCompletion?()
-        }
+//        group.notify(queue: .main) {
+//            writeCompletion?()
+//        }
     }
 
     func hasTabsToRestoreAtStartup() -> Bool {

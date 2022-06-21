@@ -38,13 +38,13 @@ class StartAtHomeHelper: FeatureFlaggable {
         var timeSinceLastActivity = 0
         var timeToOpenNewHome = 0
 
-        if setting == .afterFourHours {
-            timeSinceLastActivity = dateComponents.hour ?? 0
-            timeToOpenNewHome = 4
-        } else if setting == .always {
+//        if setting == .afterFourHours {
+//            timeSinceLastActivity = dateComponents.hour ?? 0
+//            timeToOpenNewHome = 4
+//        } else if setting == .always {
             timeSinceLastActivity = dateComponents.second ?? 0
             timeToOpenNewHome = 5
-        }
+//        }
 
         return timeSinceLastActivity >= timeToOpenNewHome
     }
@@ -63,9 +63,13 @@ class StartAtHomeHelper: FeatureFlaggable {
 
         switch pagePreferences {
         case .homePage:
-            return tabs.first { $0.isCustomHomeTab }
+            return tabs.first {
+                $0.isCustomHomeTab
+            }
         case .topSites:
-            return tabs.first { $0.isFxHomeTab }
+            return tabs.first {
+                $0.isFxHomeTab
+            }
         case .blankPage:
             return nil
         }
