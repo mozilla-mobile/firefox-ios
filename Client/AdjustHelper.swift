@@ -95,7 +95,7 @@ extension AdjustHelper: AdjustDelegate {
             AdjustHelper.setEnabled(false)
         }
 
-        _ = telemetryHelper.setAttributionData(attribution)
+        telemetryHelper.setAttributionData(attribution)
     }
 
     func adjustDeeplinkResponse(_ deeplink: URL?) -> Bool {

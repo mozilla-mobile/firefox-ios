@@ -17,7 +17,7 @@ extension ADJAttribution: AdjustTelemetryData {
 }
 
 protocol AdjustTelemetryProtocol {
-    func setAttributionData(_ attribution: AdjustTelemetryData?) -> Bool
+    func setAttributionData(_ attribution: AdjustTelemetryData?)
     func sendDeeplinkTelemetry(url: URL, attribution: AdjustTelemetryData?)
 }
 
@@ -27,21 +27,19 @@ class AdjustTelemetryHelper: AdjustTelemetryProtocol {
         let extra = GleanMetrics.Adjust.DeeplinkReceivedExtra(receivedUrl: url.absoluteString)
         GleanMetrics.Adjust.deeplinkReceived.record(extra)
 
-        _ = setAttributionData(attribution)
+        setAttributionData(attribution)
     }
 
-    func setAttributionData(_ attribution: AdjustTelemetryData?) -> Bool {
+    func setAttributionData(_ attribution: AdjustTelemetryData?) {
         guard let campaign = attribution?.campaign,
               let adgroup = attribution?.adgroup,
               let creative = attribution?.creative,
-              let network = attribution?.network else { return false }
+              let network = attribution?.network else { return }
 
         GleanMetrics.Adjust.campaign.set(campaign)
         GleanMetrics.Adjust.adGroup.set(adgroup)
         GleanMetrics.Adjust.creative.set(creative)
         GleanMetrics.Adjust.network.set(network)
         GleanMetrics.Pings.shared.firstSession.submit()
-
-        return true
     }
 }

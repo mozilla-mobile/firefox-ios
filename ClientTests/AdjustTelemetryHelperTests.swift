@@ -27,31 +27,30 @@ class AdjustTelemetryHelperTests: XCTestCase {
         self.profile = nil
     }
 
-    func testShouldSetAttribution() {
-        let savedAttribution = telemetryHelper.setAttributionData(MockAdjustTelemetryData())
-        XCTAssertTrue(savedAttribution)
-    }
-
     func testFailSetAttribution_WithNilData() {
+        // Submit the ping.
         let attribution = MockAdjustTelemetryData(campaign: nil)
-        let savedAttribution = telemetryHelper.setAttributionData(attribution)
-        XCTAssertFalse(savedAttribution)
+        telemetryHelper.setAttributionData(attribution)
+
+        XCTAssertFalse(GleanMetrics.Adjust.campaign.testHasValue())
+        XCTAssertFalse(GleanMetrics.Adjust.adGroup.testHasValue())
+        XCTAssertFalse(GleanMetrics.Adjust.creative.testHasValue())
+        XCTAssertFalse(GleanMetrics.Adjust.network.testHasValue())
     }
 
     func testFirstSessionPing() {
         let expectation = expectation(description: "The first session ping was sent")
 
         GleanMetrics.Pings.shared.firstSession.testBeforeNextSubmit { _ in
-            XCTAssert(GleanMetrics.Adjust.campaign.testHasValue())
-            XCTAssert(GleanMetrics.Adjust.adGroup.testHasValue())
-            XCTAssert(GleanMetrics.Adjust.creative.testHasValue())
-            XCTAssert(GleanMetrics.Adjust.network.testHasValue())
+            XCTAssertTrue(GleanMetrics.Adjust.campaign.testHasValue())
+            XCTAssertTrue(GleanMetrics.Adjust.adGroup.testHasValue())
+            XCTAssertTrue(GleanMetrics.Adjust.creative.testHasValue())
+            XCTAssertTrue(GleanMetrics.Adjust.network.testHasValue())
             expectation.fulfill()
         }
 
         // Submit the ping.
-        let attributionSet = telemetryHelper.setAttributionData(MockAdjustTelemetryData())
-        XCTAssertTrue(attributionSet)
+        telemetryHelper.setAttributionData(MockAdjustTelemetryData())
         waitForExpectations(timeout: 5.0)
     }
 
