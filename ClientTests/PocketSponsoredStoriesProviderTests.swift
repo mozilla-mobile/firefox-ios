@@ -100,6 +100,38 @@ class PocketSponsoredStoriesProviderTests: XCTestCase {
             }
         }
     }
+
+    func testCachingExpires_failsIfCacheIsTooOld() {
+        stubResponse(response: validSpocResponse, statusCode: 200, error: nil)
+        let provider = getProvider()
+        let expectation = expectation(description: "Wait for completion")
+        provider.fetchSponsoredStories { result in
+            self.stubResponse(response: nil, statusCode: 403, error: nil)
+            provider.fetchSponsoredStories(timestamp: Date.tomorrow.toTimestamp()) { result in
+                switch result {
+                case let .failure(error as PocketSponsoredStoriesProvider.Error):
+                    XCTAssertEqual(error, PocketSponsoredStoriesProvider.Error.invalidHTTPResponse)
+                default:
+                    XCTFail("Expected failure, got \(result) instead")
+                }
+                expectation.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
+    
+    func testNoStubbing_doesntComplete() {
+        let provider = getProvider()
+        let expectation = expectation(description: "Wait for completion")
+        expectation.isInverted = true
+        provider.fetchSponsoredStories { result in
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
+
 }
 
 // MARK: - Helper functions

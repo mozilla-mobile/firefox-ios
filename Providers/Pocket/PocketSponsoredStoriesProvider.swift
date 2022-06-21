@@ -58,7 +58,7 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviderInterface, F
         return request
     }
     
-    func fetchSponsoredStories(timestamp: Timestamp = Date.now(), completion: @escaping (SponsoredStoryResult) -> Void) {
+    func fetchSponsoredStories(timestamp: Timestamp, completion: @escaping (SponsoredStoryResult) -> Void) {
         guard let request = sponsoredFeedRequest else {
             completion(.failure(Error.requestCreationFailure))
             return
@@ -72,7 +72,7 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviderInterface, F
     }
     
     func fetchSponsoredStories(request: URLRequest, completion: @escaping (SponsoredStoryResult) -> Void) {
-        urlSession.dataTask(with: request) { (data, response, error) in
+        urlSession.dataTask(with: request) { [unowned self] (data, response, error) in
             if let error = error {
                 self.browserLog.debug("An error occurred while fetching data: \(error)")
                 completion(.failure(Error.failure))
