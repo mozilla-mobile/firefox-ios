@@ -88,7 +88,7 @@ class LoginListViewController: SensitiveViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = .LoginsAndPasswordsTitle
+        self.title = .Settings.Passwords.LoginsAndPasswordsTitle
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: CellReuseIdentifier)
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderId)
