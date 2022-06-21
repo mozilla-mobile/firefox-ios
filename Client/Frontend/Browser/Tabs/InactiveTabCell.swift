@@ -138,7 +138,6 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             guard let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] else { return cell }
             cell.titleLabel.text = tab.getTabTrayTitle()
             cell.leftImageView.setImageAndBackground(forIcon: tab.displayFavicon, website: getTabDomainUrl(tab: tab)) {}
-            cell.shouldLeftAlignTitle = false
             cell.updateMidConstraint()
             cell.accessoryType = .none
             return cell
