@@ -394,6 +394,7 @@
 		59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */; };
 		5A271ABD2860B0D700471CE4 /* WebServerUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A271ABC2860B0D700471CE4 /* WebServerUtil.swift */; };
 		5A430D792853DFDD00782BFF /* OrientationLockUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A430D782853DFDD00782BFF /* OrientationLockUtility.swift */; };
+		5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */; };
 		5F130D2E2483508E00B0F7D0 /* FxAWebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F130D2D2483508E00B0F7D0 /* FxAWebViewModel.swift */; };
 		5F97DD5F27FB0FE800AD3C60 /* GleanTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F97DD5E27FB0FE800AD3C60 /* GleanTelemetryTests.swift */; };
 		5FA2233C27F74071005B3D87 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA2233B27F74071005B3D87 /* Glean */; };
@@ -2452,6 +2453,7 @@
 		5A1D409EB92D8E6AB8FC8813 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		5A271ABC2860B0D700471CE4 /* WebServerUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServerUtil.swift; sourceTree = "<group>"; };
 		5A430D782853DFDD00782BFF /* OrientationLockUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationLockUtility.swift; sourceTree = "<group>"; };
+		5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
 		5ABD40B68B3D03806BC6819C /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/LoginManager.strings"; sourceTree = "<group>"; };
 		5AC24B85BF0D2FCC2F1EB6D3 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		5AC549C0BA565EB2B08B87EC /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -7084,6 +7086,7 @@
 				D8EFFA0B1FF5B1FA001D3A09 /* NavigationRouter.swift */,
 				C84266742728462900382274 /* AccessibilityIdentifiers.swift */,
 				8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */,
+				5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -9117,6 +9120,7 @@
 			files = (
 				602A2B9827F6256200C3CB78 /* FxNimbus.swift in Sources */,
 				602A2B9727F6243A00C3CB78 /* Metrics.swift in Sources */,
+				5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */,
 				C8B0F5ED283B7C9F007AE65D /* PocketStandardCell.swift in Sources */,
 				D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */,
 				EB9A179F20E6C1A200B12184 /* ThemedWidgets.swift in Sources */,
