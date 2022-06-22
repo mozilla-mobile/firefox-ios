@@ -41,11 +41,12 @@ class AdjustTelemetryHelperTests: XCTestCase {
     func testFirstSessionPing() {
         let expectation = expectation(description: "The first session ping was sent")
 
+        let pingName = "first-session"
         GleanMetrics.Pings.shared.firstSession.testBeforeNextSubmit { _ in
-            XCTAssertTrue(GleanMetrics.Adjust.campaign.testHasValue())
-            XCTAssertTrue(GleanMetrics.Adjust.adGroup.testHasValue())
-            XCTAssertTrue(GleanMetrics.Adjust.creative.testHasValue())
-            XCTAssertTrue(GleanMetrics.Adjust.network.testHasValue())
+            XCTAssertTrue(GleanMetrics.Adjust.campaign.testHasValue(pingName))
+            XCTAssertTrue(GleanMetrics.Adjust.adGroup.testHasValue(pingName))
+            XCTAssertTrue(GleanMetrics.Adjust.creative.testHasValue(pingName))
+            XCTAssertTrue(GleanMetrics.Adjust.network.testHasValue(pingName))
             expectation.fulfill()
         }
 
