@@ -12,7 +12,6 @@ trigger_map:
 - tag: "*"
   workflow: release
 
-
 workflows:
 
   clone-and-build-dependencies:
@@ -515,3 +514,8 @@ app:
   - opts:
       is_expand: false
     BITRISE_EXPORT_METHOD: app-store
+
+meta:
+  bitrise.io:
+    stack: osx-xcode-13.3.x
+    machine_type_id: g2.4core

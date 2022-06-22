@@ -15,6 +15,7 @@
     {
       "skippedTests" : [
         "AsianLocaleTest",
+        "BasicBrowsing\/testLaunchExternalApp()",
         "CollapsedURLTest",
         "CopyTest",
         "DragAndDropTest",
