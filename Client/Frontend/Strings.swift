@@ -100,10 +100,6 @@ extension String {
 
             }
 
-            public struct ThreeDot {
-
-            }
-
             public struct LongPressGesture {
 
             }
@@ -175,7 +171,7 @@ extension String {
             public static let SectionTitle = MZLocalizedString("FirefoxHome.Pocket.SectionTitle", value: "Thought-Provoking Stories", comment: "This is the title of the Pocket section on Firefox Homepage.", lastUpdated: .v98)
             public static let DiscoverMore = MZLocalizedString("FirefoxHome.Pocket.DiscoverMore", value: "Discover more", comment: "At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories.", lastUpdated: .v98)
             public static let NumberOfMinutes = MZLocalizedString("FirefoxHome.Pocket.Minutes.v99", value: "%d min", comment: "On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes", lastUpdated: .v99)
-            public static let Sponsored = MZLocalizedString("FirefoxHomepage.Pocket.Sponsored.v102", value: "Sponsored", comment: "This string will show under the description on pocket story, indicating that the story is sponsored.", lastUpdated: .v102)
+            public static let Sponsored = MZLocalizedString("FirefoxHomepage.Pocket.Sponsored.v103", value: "Sponsored", comment: "This string will show under the description on pocket story, indicating that the story is sponsored.", lastUpdated: .v103)
         }
 
         public struct RecentlySaved {
@@ -349,7 +345,7 @@ extension String {
                 public static let RecentlySaved = MZLocalizedString("Settings.Home.Option.RecentlySaved", value: "Recently Saved", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off", lastUpdated: .v39)
                 public static let Shortcuts = MZLocalizedString("Settings.Home.Option.Shortcuts", value: "Shortcuts", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off", lastUpdated: .v39)
                 public static let Pocket = MZLocalizedString("Settings.Home.Option.Pocket", value: "Recommended by Pocket", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off", lastUpdated: .v39)
-                public static let SponsoredPocket = MZLocalizedString("Settings.Home.Option.SponsoredPocket", value: "Sponsored stories", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off", lastUpdated: .v102)
+                public static let SponsoredPocket = MZLocalizedString("Settings.Home.Option.SponsoredPocket.v103", value: "Sponsored stories", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off", lastUpdated: .v103)
                 public static let Title = MZLocalizedString("Settings.Home.Option.Title.v101", value: "Include on Homepage", comment: "In the settings menu, this is the title of the Firefox Homepage customization settings section", lastUpdated: .v101)
                 public static let Description = MZLocalizedString("Settings.Home.Option.Description.v101", value: "Choose what’s included on the Firefox homepage.", comment: "In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for.", lastUpdated: .v101)
                 public static let Wallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper", value: "Wallpaper", comment: "In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application.", lastUpdated: .v98)
@@ -411,6 +407,41 @@ extension String {
 
         public struct Toggle {
             public static let NoImageMode = MZLocalizedString("Settings.NoImageModeBlockImages.Label.v99", value: "Block Images", comment: "Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits.", lastUpdated: .v99)
+        }
+
+        public struct Passwords {
+            // TODO: Delete LoginsAndPasswordsTitle string with FXIOS-4254 since we'll be using Title
+            public static let LoginsAndPasswordsTitle = MZLocalizedString("Settings.LoginsAndPasswordsTitle", value: "Logins & Passwords", comment: "Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long", lastUpdated: .unknown)
+            public static let Title = MZLocalizedString("Settings.Passwords.Title.v103", value: "Passwords", comment: "Title for the passwords screen.", lastUpdated: .v103)
+
+            // TODO: Delete SettingToSaveLogins string with FXIOS-4254 since we'll be using SettingToSavePasswords
+            public static let SettingToSaveLogins = MZLocalizedString("Settings.SaveLogins.Title", value: "Save Logins", comment: "Setting to enable the built-in password manager", lastUpdated: .unknown)
+            public static let SavePasswords = MZLocalizedString("Settings.Passwords.SavePasswords.v103", value: "Save Passwords", comment: "Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords.", lastUpdated: .v103)
+
+            // TODO: Delete LoginsOnboardingMessage string with FXIOS-4254 since we'll be using OnboardingMessage
+            public static let LoginsOnboardingMessage = MZLocalizedString("Logins.Onboarding.Message", value: "Your logins and passwords are now protected by Face ID, Touch ID or a device passcode.", comment: "Message shown when you enter Logins & Passwords for the first time.", lastUpdated: .unknown)
+            public static let OnboardingMessage = MZLocalizedString("Settings.Passwords.OnboardingMessage.v103", value: "Your passwords are now protected by Face ID, Touch ID or a device passcode.", comment: "Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application.", lastUpdated: .v103)
+
+            // TODO: Delete AuthenticationLoginsTouchReason string with FXIOS-4254 since we'll be using AuthenticationLoginsFingerPrintReason
+            public static let AuthenticationLoginsTouchReason = MZLocalizedString("Use your fingerprint to access Logins now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing logins", lastUpdated: .unknown)
+            public static let FingerPrintReason = MZLocalizedString("Settings.Passwords.FingerPrintReason.v103", value: "Use your fingerprint to access passwords now.", comment: "Touch ID prompt subtitle when accessing logins and passwords", lastUpdated: .v103)
+        }
+
+        public struct Sync {
+            // TODO: Delete FxASignInToSync string with FXIOS-4392 since we'll be using ButtonTitle
+            public static let FxASignInToSync = MZLocalizedString("FxA.SignIntoSync", value: "Sign in to Sync", comment: "Button label to sign into Sync", lastUpdated: .unknown)
+            public static let ButtonTitle = MZLocalizedString("Settings.Sync.ButtonTitle.v103", value: "Sync and Save Data", comment: "Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data.", lastUpdated: .v103)
+
+            // TODO: Delete FxASyncUsageDetails string with FXIOS-4392 since we'll be using ButtonDescription
+            public static let FxASyncUsageDetails = MZLocalizedString("FxA.SyncExplain", value: "Get your tabs, bookmarks, and passwords from your other devices.", comment: "Label explaining what sync does", lastUpdated: .unknown)
+            public static let ButtonDescription = MZLocalizedString("Settings.Sync.ButtonDescription.v103", value: "Sign in to sync tabs, bookmarks, passwords, and more.", comment: "Ddescription that appears in the settings screen to explain what Firefox Sync is useful for.", lastUpdated: .unknown)
+
+            public struct SignInView {
+                // TODO: Delete FxASignInTitle string with FXIOS-4392 since we'll be using Title
+                public static let FxASignInTitle = MZLocalizedString("fxa.signin.turn-on-sync", value: "Turn on Sync", comment: "FxA sign in view title", lastUpdated: .unknown)
+                public static let Title = MZLocalizedString("Settings.Sync.SignInView.Title.v103", value: "Sync and Save Data", comment: "Title for the page where the user sign in to their Firefox Sync account.", lastUpdated: .v103)
+            }
+
         }
     }
 }
@@ -670,7 +701,6 @@ extension String {
 
 // MARK: - Firefox Logins
 extension String {
-    public static let LoginsAndPasswordsTitle = MZLocalizedString("Settings.LoginsAndPasswordsTitle", value: "Logins & Passwords", comment: "Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long", lastUpdated: .unknown)
 
     // Prompts
     public static let SaveLoginUsernamePrompt = MZLocalizedString("LoginsHelper.PromptSaveLogin.Title", value: "Save login %@ for %@?", comment: "Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site.", lastUpdated: .unknown)
@@ -679,7 +709,6 @@ extension String {
     public static let UpdateLoginPrompt = MZLocalizedString("LoginsHelper.PromptUpdateLogin.Title.OneArg", value: "Update login for %@?", comment: "Prompt for updating a login. The first parameter is the hostname for which the password will be updated for.", lastUpdated: .unknown)
 
     // Setting
-    public static let SettingToSaveLogins = MZLocalizedString("Settings.SaveLogins.Title", value: "Save Logins", comment: "Setting to enable the built-in password manager", lastUpdated: .unknown)
     public static let SettingToShowLoginsInAppMenu = MZLocalizedString("Settings.ShowLoginsInAppMenu.Title", value: "Show in Application Menu", comment: "Setting to show Logins & Passwords quick access in the application menu", lastUpdated: .unknown)
 
     // List view
@@ -705,7 +734,6 @@ extension String {
     public static let LoginsDevicePasscodeRequiredLearnMoreButtonTitle = MZLocalizedString("Logins.DevicePasscodeRequired.LearnMoreButtonTitle", value: "Learn More", comment: "Title of the Learn More button that links to a support page about device passcode requirements.", lastUpdated: .unknown)
 
     // For the LoginOnboardingViewController
-    public static let LoginsOnboardingMessage = MZLocalizedString("Logins.Onboarding.Message", value: "Your logins and passwords are now protected by Face ID, Touch ID or a device passcode.", comment: "Message shown when you enter Logins & Passwords for the first time.", lastUpdated: .unknown)
     public static let LoginsOnboardingLearnMoreButtonTitle = MZLocalizedString("Logins.Onboarding.LearnMoreButtonTitle", value: "Learn More", comment: "Title of the Learn More button that links to a support page about device passcode requirements.", lastUpdated: .unknown)
     public static let LoginsOnboardingContinueButtonTitle = MZLocalizedString("Logins.Onboarding.ContinueButtonTitle", value: "Continue", comment: "Title of the Continue button.", lastUpdated: .unknown)
 }
@@ -714,9 +742,7 @@ extension String {
 extension String {
     // Settings strings
     public static let FxAFirefoxAccount = MZLocalizedString("FxA.FirefoxAccount", value: "Firefox Account", comment: "Settings section title for Firefox Account", lastUpdated: .unknown)
-    public static let FxASignInToSync = MZLocalizedString("FxA.SignIntoSync", value: "Sign in to Sync", comment: "Button label to sign into Sync", lastUpdated: .unknown)
     public static let FxATakeYourWebWithYou = MZLocalizedString("FxA.TakeYourWebWithYou", value: "Take Your Web With You", comment: "Call to action for sign into sync button", lastUpdated: .unknown)
-    public static let FxASyncUsageDetails = MZLocalizedString("FxA.SyncExplain", value: "Get your tabs, bookmarks, and passwords from your other devices.", comment: "Label explaining what sync does", lastUpdated: .unknown)
     public static let FxAAccountVerificationRequired = MZLocalizedString("FxA.AccountVerificationRequired", value: "Account Verification Required", comment: "Label stating your account is not verified", lastUpdated: .unknown)
     public static let FxAAccountVerificationDetails = MZLocalizedString("FxA.AccountVerificationDetails", value: "Wrong email? Disconnect below to start over.", comment: "Label stating how to disconnect account", lastUpdated: .unknown)
     public static let FxAManageAccount = MZLocalizedString("FxA.ManageAccount", value: "Manage Account & Devices", comment: "Button label to go to Firefox Account settings", lastUpdated: .unknown)
@@ -1005,7 +1031,6 @@ extension String {
         public static let AppMenuHistory = MZLocalizedString("Menu.History.Label", value: "History", comment: "Label for the button, displayed in the menu, takes you to to History screen when pressed.", lastUpdated: .unknown)
         public static let AppMenuDownloads = MZLocalizedString("Menu.Downloads.Label", value: "Downloads", comment: "Label for the button, displayed in the menu, takes you to to Downloads screen when pressed.", lastUpdated: .unknown)
         public static let AppMenuPasswords = MZLocalizedString("Menu.Passwords.Label", value: "Passwords", comment: "Label for the button, displayed in the menu, takes you to to passwords screen when pressed.", lastUpdated: .unknown)
-        public static let AppMenuBackUpAndSyncData = MZLocalizedString("Menu.SignInToSync.Label.v99", value: "Sign in to Sync", comment: "Label for the button, displayed in the menu, takes you to sync sign in when pressed.", lastUpdated: .v99)
         public static let AppMenuCopyURLConfirmMessage = MZLocalizedString("Menu.CopyURL.Confirm", value: "URL Copied To Clipboard", comment: "Toast displayed to user after copy url pressed.", lastUpdated: .unknown)
         public static let AppMenuTabSentConfirmMessage = MZLocalizedString("Menu.TabSent.Confirm", value: "Tab Sent", comment: "Toast displayed to the user after a tab has been sent successfully.", lastUpdated: .unknown)
         public static let WhatsNewString = MZLocalizedString("Menu.WhatsNew.Title", value: "What's New", comment: "The title for the option to view the What's new page.", lastUpdated: .unknown)
@@ -1013,6 +1038,10 @@ extension String {
         public static let NewTab = MZLocalizedString("Menu.NewTab.v99", value: "New Tab", comment: "Label for the new tab button in the menu page. Pressing this button opens a new tab.", lastUpdated: .v99)
         public static let Help = MZLocalizedString("Menu.Help.v99", value: "Help", comment: "Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios", lastUpdated: .v99)
         public static let Share = MZLocalizedString("Menu.Share.v99", value: "Share", comment: "Label for the share button in the menu page. Pressing this button open the share menu to share the current website.", lastUpdated: .v99)
+
+        // TODO: Delete AppMenuBackUpAndSyncData string with FXIOS-4392 since we'll be using SyncAndSaveData
+        public static let AppMenuBackUpAndSyncData = MZLocalizedString("Menu.SignInToSync.Label.v99", value: "Sign in to Sync", comment: "Label for the button, displayed in the menu, takes you to sync sign in when pressed.", lastUpdated: .v99)
+        public static let SyncAndSaveData = MZLocalizedString("Menu.SyncAndSaveData.v103", value: "Sync and Save Data", comment: "Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data.", lastUpdated: .v103)
 
         // Shortcuts
         public static let AddToShortcuts = MZLocalizedString("Menu.AddToShortcuts.v99", value: "Add to Shortcuts", comment: "Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page.", lastUpdated: .v99)
@@ -1325,7 +1354,6 @@ extension String {
 
 // MARK: - FxA Signin screen
 extension String {
-    public static let FxASignin_Title = MZLocalizedString("fxa.signin.turn-on-sync", value: "Turn on Sync", comment: "FxA sign in view title", lastUpdated: .unknown)
     public static let FxASignin_Subtitle = MZLocalizedString("fxa.signin.camera-signin", value: "Sign In with Your Camera", comment: "FxA sign in view subtitle", lastUpdated: .unknown)
     public static let FxASignin_QRInstructions = MZLocalizedString("fxa.signin.qr-link-instruction", value: "On your computer open Firefox and go to firefox.com/pair", comment: "FxA sign in view qr code instructions", lastUpdated: .unknown)
     public static let FxASignin_QRScanSignin = MZLocalizedString("fxa.signin.ready-to-scan", value: "Ready to Scan", comment: "FxA sign in view qr code scan button", lastUpdated: .unknown)
@@ -1491,7 +1519,6 @@ extension String {
 // MARK: - Strings used in multiple areas within the Authentication Manager
 extension String {
     public static let AuthenticationEnterPasscode = MZLocalizedString("Enter passcode", tableName: "AuthenticationManager", comment: "Text displayed above the input field when changing the existing passcode", lastUpdated: .unknown)
-    public static let AuthenticationLoginsTouchReason = MZLocalizedString("Use your fingerprint to access Logins now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing logins", lastUpdated: .unknown)
 }
 
 // MARK: - Authenticator strings

@@ -123,7 +123,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .systemBackground
-        title = .FxASignin_Title
+        title = .Settings.Sync.SignInView.FxASignInTitle
         accessibilityLabel = "FxASingin.navBar"
 
         setupLayout()
