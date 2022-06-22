@@ -13,6 +13,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
         super.setUp()
 
         Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.enableTestingMode()
     }
 
     func testTrackTabsQuantity_withNormalTab_gleanIsCalled() {

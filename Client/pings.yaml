@@ -18,3 +18,13 @@ topsites-impression:
     - https://github.com/mozilla-mobile/firefox-ios/pull/10696
   notification_emails:
     - fx-ios-data-stewards@mozilla.com
+first-session:
+  description: |
+    Recorded on first_session when the user installs the app.
+  include_client_id: true
+  bugs:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/11089
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/11089
+  notification_emails:
+    - fx-ios-data-stewards@mozilla.com

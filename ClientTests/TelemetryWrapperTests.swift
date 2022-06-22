@@ -13,6 +13,7 @@ class TelemetryWrapperTests: XCTestCase {
         super.setUp()
 
         Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.enableTestingMode()
     }
 
     // MARK: - Top Site
