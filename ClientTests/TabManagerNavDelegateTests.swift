@@ -61,6 +61,19 @@ class TabManagerNavDelegateTests: XCTestCase {
         XCTAssertEqual(delegate1.receivedMessages, [.didFinish])
         XCTAssertEqual(delegate2.receivedMessages, [.didFinish])
     }
+
+    func test_webViewWebContentProcessDidTerminate_sendsCorrectMessage() {
+        let sut = TabManagerNavDelegate()
+        let delegate1 = WKNavigationDelegateSpy()
+        let delegate2 = WKNavigationDelegateSpy()
+
+        sut.insert(delegate1)
+        sut.insert(delegate2)
+        sut.webViewWebContentProcessDidTerminate(anyWebView())
+
+        XCTAssertEqual(delegate1.receivedMessages, [.webViewWebContentProcessDidTerminate])
+        XCTAssertEqual(delegate2.receivedMessages, [.webViewWebContentProcessDidTerminate])
+    }
 }
 
 // MARK: - Helpers
@@ -79,6 +92,7 @@ private class WKNavigationDelegateSpy: WKNavigationDelegate {
         case webViewDidFail
         case didFailProvisionalNavigation
         case didFinish
+        case webViewWebContentProcessDidTerminate
     }
 
     var receivedMessages = [Message]()
@@ -143,5 +157,9 @@ private class WKNavigationDelegateSpy: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         receivedMessages.append(.didFinish)
+    }
+
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        receivedMessages.append(.webViewWebContentProcessDidTerminate)
     }
 }
