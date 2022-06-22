@@ -2714,7 +2714,7 @@ adjust:
       - first-session
       - events
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     notification_emails:
@@ -2731,7 +2731,7 @@ adjust:
     send_in_pings:
       - first-session
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_sensitivity:
@@ -2748,7 +2748,7 @@ adjust:
     send_in_pings:
       - first-session
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_sensitivity:
@@ -2765,7 +2765,7 @@ adjust:
     send_in_pings:
       - first-session
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_sensitivity:
@@ -2782,7 +2782,7 @@ adjust:
     send_in_pings:
       - first-session
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4225
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_sensitivity:
