@@ -6,14 +6,14 @@ import Foundation
 import Shared
 import Storage
 
-protocol PocketStoriesProviderInterface {
+protocol PocketStoriesProviding {
     typealias StoryResult = Swift.Result<[PocketFeedStory], Error>
     
     func fetchStories(items: Int, completion: @escaping (StoryResult) -> Void)
     func fetchStories(items: Int) async throws -> [PocketFeedStory]
 }
 
-extension PocketStoriesProviderInterface {
+extension PocketStoriesProviding {
     func fetchStories(items: Int) async throws -> [PocketFeedStory] {
         return try await withCheckedThrowingContinuation { continuation in
             fetchStories(items: items) { result in
@@ -23,7 +23,7 @@ extension PocketStoriesProviderInterface {
     }
 }
 
-class Pocket: PocketStoriesProviderInterface, FeatureFlaggable, URLCaching {
+class Pocket: PocketStoriesProviding, FeatureFlaggable, URLCaching {
 
     private class PocketError: MaybeErrorType {
         var description = "Failed to load from API"

@@ -14,14 +14,18 @@ class StoryProvider {
     private let indexOfFirstSponsoredItem = 1
     private let indexOfSecondSponsoredItem = 9
     
-    init(pocketAPI: Pocket, pocketSponsoredAPI: PocketSponsoredStoriesProviderInterface, showSponsoredStories: @escaping () -> Bool) {
+    init(
+        pocketAPI: PocketStoriesProviding,
+        pocketSponsoredAPI: PocketSponsoredStoriesProviding,
+        showSponsoredStories: @escaping () -> Bool
+    ) {
         self.pocketAPI = pocketAPI
         self.pocketSponsoredAPI = pocketSponsoredAPI
         self.showSponsoredStories = showSponsoredStories
     }
     
-    private let pocketAPI: PocketStoriesProviderInterface
-    private let pocketSponsoredAPI: PocketSponsoredStoriesProviderInterface
+    private let pocketAPI: PocketStoriesProviding
+    private let pocketSponsoredAPI: PocketSponsoredStoriesProviding
     private var showSponsoredStories: () -> Bool
     
     private func insert(sponsored: inout [PocketStory], into globalFeed: inout [PocketStory], indexes: [Int]) {
@@ -35,7 +39,7 @@ class StoryProvider {
         }
     }
     
-    func updatePocketSites() async -> [PocketStory] {
+    func fetchPocketStories() async -> [PocketStory] {
         do {
             let storyCount = showSponsoredStories() ? numberOfPocketStoriesWithSponsoredContent : numberOfPocketStories
             let global = try await pocketAPI.fetchStories(items: storyCount)
@@ -74,7 +78,7 @@ class PocketViewModel {
     // MARK: - Properties
 
     private let pocketAPI: Pocket
-    private let pocketSponsoredAPI: PocketSponsoredStoriesProviderInterface
+    private let pocketSponsoredAPI: PocketSponsoredStoriesProviding
 
     private let isZeroSearch: Bool
     private var hasSentPocketSectionEvent = false
@@ -91,7 +95,7 @@ class PocketViewModel {
 
     private(set) var pocketStoriesViewModels: [PocketStandardCellViewModel] = []
 
-    init(pocketAPI: Pocket, pocketSponsoredAPI: PocketSponsoredStoriesProviderInterface, isZeroSearch: Bool) {
+    init(pocketAPI: Pocket, pocketSponsoredAPI: PocketSponsoredStoriesProviding, isZeroSearch: Bool) {
         self.isZeroSearch = isZeroSearch
         self.pocketAPI = pocketAPI
         self.pocketSponsoredAPI = pocketSponsoredAPI
@@ -163,7 +167,7 @@ class PocketViewModel {
     // MARK: - Private
     
     private func updatePocketSites() async {
-        let stories = await storyProvider.updatePocketSites()
+        let stories = await storyProvider.fetchPocketStories()
         pocketStoriesViewModels = []
         // Add the story in the view models list
         for story in stories {

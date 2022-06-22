@@ -138,7 +138,7 @@ class PocketSponsoredStoriesProviderTests: XCTestCase {
 
 private extension PocketSponsoredStoriesProviderTests {
 
-    func getProvider(file: StaticString = #filePath, line: UInt = #line) -> PocketSponsoredStoriesProviderInterface {
+    func getProvider(file: StaticString = #filePath, line: UInt = #line) -> PocketSponsoredStoriesProviding {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [URLProtocolStub.self]
         let session = URLSession(configuration: configuration)

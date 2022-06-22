@@ -4,7 +4,7 @@
 
 import Shared
 
-class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviderInterface, FeatureFlaggable, URLCaching, Loggable {
+class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFlaggable, URLCaching, Loggable {
 
     var endpoint: URL {
         if featureFlags.isCoreFeatureEnabled(.useStagingSponsoredPocketStoriesAPI) {

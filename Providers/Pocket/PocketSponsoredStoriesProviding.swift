@@ -4,7 +4,7 @@
 
 import Shared
 
-protocol PocketSponsoredStoriesProviderInterface {
+protocol PocketSponsoredStoriesProviding {
     
     typealias SponsoredStoryResult = Swift.Result<[PocketSponsoredStory], Error>
     
@@ -12,7 +12,7 @@ protocol PocketSponsoredStoriesProviderInterface {
     func fetchSponsoredStories(timestamp: Timestamp) async throws -> [PocketSponsoredStory]
 }
 
-extension PocketSponsoredStoriesProviderInterface {
+extension PocketSponsoredStoriesProviding {
     func fetchSponsoredStories(timestamp: Timestamp = Date.now()) async throws -> [PocketSponsoredStory] {
         return try await withCheckedThrowingContinuation { continuation in
             fetchSponsoredStories(timestamp: timestamp) { result in
