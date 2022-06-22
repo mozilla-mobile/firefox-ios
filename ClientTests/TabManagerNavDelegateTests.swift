@@ -45,8 +45,8 @@ class TabManagerNavDelegateTests: XCTestCase {
         sut.insert(delegate2)
         sut.webView(anyWebView(), didFailProvisionalNavigation: navigation, withError: anyError())
 
-        XCTAssertEqual(delegate1.receivedMessages, [.didFailProvisionalNavigation])
-        XCTAssertEqual(delegate2.receivedMessages, [.didFailProvisionalNavigation])
+        XCTAssertEqual(delegate1.receivedMessages, [.webViewDidFailProvisionalNavigation])
+        XCTAssertEqual(delegate2.receivedMessages, [.webViewDidFailProvisionalNavigation])
     }
 
     func test_webViewDidFinish_sendsCorrectMessage() {
@@ -58,8 +58,8 @@ class TabManagerNavDelegateTests: XCTestCase {
         sut.insert(delegate2)
         sut.webView(anyWebView(), didFinish: navigation)
 
-        XCTAssertEqual(delegate1.receivedMessages, [.didFinish])
-        XCTAssertEqual(delegate2.receivedMessages, [.didFinish])
+        XCTAssertEqual(delegate1.receivedMessages, [.webViewDidFinish])
+        XCTAssertEqual(delegate2.receivedMessages, [.webViewDidFinish])
     }
 
     func test_webViewWebContentProcessDidTerminate_sendsCorrectMessage() {
@@ -84,8 +84,8 @@ class TabManagerNavDelegateTests: XCTestCase {
         sut.insert(delegate2)
         sut.webView(anyWebView(), didReceiveServerRedirectForProvisionalNavigation: navigation)
 
-        XCTAssertEqual(delegate1.receivedMessages, [.didReceiveServerRedirectForProvisionalNavigation])
-        XCTAssertEqual(delegate2.receivedMessages, [.didReceiveServerRedirectForProvisionalNavigation])
+        XCTAssertEqual(delegate1.receivedMessages, [.webViewDidReceiveServerRedirectForProvisionalNavigation])
+        XCTAssertEqual(delegate2.receivedMessages, [.webViewDidReceiveServerRedirectForProvisionalNavigation])
     }
 
     func test_webViewDidStartProvisionalNavigation_sendsCorrectMessage() {
@@ -97,8 +97,8 @@ class TabManagerNavDelegateTests: XCTestCase {
         sut.insert(delegate2)
         sut.webView(anyWebView(), didStartProvisionalNavigation: navigation)
 
-        XCTAssertEqual(delegate1.receivedMessages, [.didStartProvisionalNavigation])
-        XCTAssertEqual(delegate2.receivedMessages, [.didStartProvisionalNavigation])
+        XCTAssertEqual(delegate1.receivedMessages, [.webViewDidStartProvisionalNavigation])
+        XCTAssertEqual(delegate2.receivedMessages, [.webViewDidStartProvisionalNavigation])
     }
 
     func test_webViewDecidePolicyFor_actionPolicy_sendsCorrectMessage() {
@@ -146,11 +146,11 @@ private class WKNavigationDelegateSpy: WKNavigationDelegate {
     enum Message {
         case webViewDidCommit
         case webViewDidFail
-        case didFailProvisionalNavigation
-        case didFinish
+        case webViewDidFailProvisionalNavigation
+        case webViewDidFinish
         case webViewWebContentProcessDidTerminate
-        case didReceiveServerRedirectForProvisionalNavigation
-        case didStartProvisionalNavigation
+        case webViewDidReceiveServerRedirectForProvisionalNavigation
+        case webViewDidStartProvisionalNavigation
         case webViewDecidePolicyWithActionPolicy
         case webViewDecidePolicyWithResponsePolicy
     }
@@ -212,11 +212,11 @@ private class WKNavigationDelegateSpy: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        receivedMessages.append(.didFailProvisionalNavigation)
+        receivedMessages.append(.webViewDidFailProvisionalNavigation)
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        receivedMessages.append(.didFinish)
+        receivedMessages.append(.webViewDidFinish)
     }
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
@@ -224,11 +224,11 @@ private class WKNavigationDelegateSpy: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-        receivedMessages.append(.didReceiveServerRedirectForProvisionalNavigation)
+        receivedMessages.append(.webViewDidReceiveServerRedirectForProvisionalNavigation)
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        receivedMessages.append(.didStartProvisionalNavigation)
+        receivedMessages.append(.webViewDidStartProvisionalNavigation)
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
