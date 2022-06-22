@@ -3,8 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import UIKit
 import Fuzi
-import SDWebImage
 import SwiftyJSON
 import Shared
 import XCGLogger
@@ -160,7 +160,7 @@ extension SQLiteHistory: Favicons {
                                 return self.generateDefaultFaviconImage(forSite: site)
                             }
                             // Try to get the favicon from the URL scraped from the web page.
-                            return self.downloadFaviconImage(faviconURL: faviconURL).bind { result in
+                            return self.retrieveTopSiteSQLiteHistoryFaviconImage(faviconURL: faviconURL).bind { result in
                                 // If the favicon could not be downloaded, use the generated "default" favicon.
                                 guard let image = result.successValue else {
                                     return self.generateDefaultFaviconImage(forSite: site)
@@ -172,7 +172,7 @@ extension SQLiteHistory: Favicons {
                     }
 
                     // Attempt to download the favicon from the URL found in the database.
-                    return self.downloadFaviconImage(faviconURL: faviconURL).bind { result in
+                    return self.retrieveTopSiteSQLiteHistoryFaviconImage(faviconURL: faviconURL).bind { result in
                         // If the favicon could not be downloaded, use the generated "default" favicon.
                         guard let image = result.successValue else {
                             return self.generateDefaultFaviconImage(forSite: site)
@@ -188,14 +188,17 @@ extension SQLiteHistory: Favicons {
     }
 
     // Downloads a favicon image from the web or retrieves it from the cache.
-    fileprivate func downloadFaviconImage(faviconURL: URL) -> Deferred<Maybe<UIImage>> {
+    fileprivate func retrieveTopSiteSQLiteHistoryFaviconImage(faviconURL: URL) -> Deferred<Maybe<UIImage>> {
         let deferred = CancellableDeferred<Maybe<UIImage>>()
 
-        SDWebImageManager.shared.loadImage(with: faviconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+        ImageLoadingHandler.getImageFromCacheOrDownload(with: faviconURL, limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
+            if error != error || image == nil {
+                deferred.fill(Maybe(failure:
+                                    FaviconDownloadError(faviconURL: faviconURL.absoluteString)))
+            }
+            
             if let image = image {
                 deferred.fill(Maybe(success: image))
-            } else {
-                deferred.fill(Maybe(failure: FaviconDownloadError(faviconURL: faviconURL.absoluteString)))
             }
         }
 

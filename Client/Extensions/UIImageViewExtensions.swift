@@ -4,8 +4,8 @@
 
 import UIKit
 import Storage
-import SDWebImage
 import Shared
+import Kingfisher
 
 extension UIColor {
     var components: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
@@ -38,7 +38,6 @@ public extension UIImageView {
         }
 
         backgroundColor = nil
-        sd_setImage(with: nil) // cancels any pending SDWebImage operations.
 
         if let url = website, let bundledIcon = FaviconFetcher.getBundledIcon(forUrl: url) {
             self.image = UIImage(contentsOfFile: bundledIcon.filePath)
@@ -46,13 +45,21 @@ public extension UIImageView {
         } else {
             let imageURL = URL(string: icon?.url ?? "")
             let defaults = fallbackFavicon(forUrl: website)
-            self.sd_setImage(with: imageURL, placeholderImage: defaults.image, options: []) {(img, err, _, _) in
-                guard err == nil else {
+            
+            // TODO: Wrap this part of KF under our umbrella image loading handler
+            // This is fine for now but if in future we decide to move away from Kingfisher
+            // or replace it then this will need to be fixed and updated
+
+            self.kf.setImage(with: imageURL, placeholder: defaults.image,
+                             options: []) { result in
+                switch result {
+                case .success(_):
                     finish(bgColor: defaults.color)
-                    return
+                case .failure(_):
+                    finish(bgColor: nil)
                 }
-                finish(bgColor: nil)
             }
+
         }
     }
 
@@ -86,18 +93,6 @@ public extension UIImageView {
         let templateImage = self.image?.withRenderingMode(.alwaysTemplate)
         self.image = templateImage
         self.tintColor = color
-    }
-}
-
-open class ImageOperation: NSObject, SDWebImageOperation {
-    open var cacheOperation: Operation?
-
-    var cancelled: Bool {
-        return cacheOperation?.isCancelled ?? false
-    }
-
-    @objc open func cancel() {
-        cacheOperation?.cancel()
     }
 }
 

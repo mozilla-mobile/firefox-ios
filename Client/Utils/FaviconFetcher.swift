@@ -4,7 +4,7 @@
 
 import Shared
 import XCGLogger
-import SDWebImage
+import UIKit
 import Fuzi
 
 private let log = Logger.browserLogger
@@ -25,10 +25,7 @@ class FaviconFetcherErrorType: MaybeErrorType {
 open class FaviconFetcher: NSObject, XMLParserDelegate {
     internal let queue = DispatchQueue(label: "FaviconFetcher", attributes: DispatchQueue.Attributes.concurrent)
 
-    static let MaximumFaviconSize = 1 * 1024 * 1024 // 1 MiB file size limit
-
     public static var userAgent: String = ""
-    static let ExpirationTime = TimeInterval(60*60*24*7) // Only check for icons once a week
 
     private static var characterToFaviconCache = [String: UIImage]()
     static var defaultFavicon: UIImage = {
@@ -161,23 +158,30 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     class func downloadFaviconAndCache(imageURL: URL?, imageKey: String) {
         guard let imageURL = imageURL, !imageURL.absoluteString.starts(with: "internal://"), !imageKey.isEmpty else { return }
         // cache found, don't download
-        guard !checkImageCache(imageKey: imageKey) else { return }
-        // no cache found, download image
-        SDWebImageDownloader.shared.downloadImage(with: imageURL) { image, data, err, value in
-            guard err == nil else { return }
+        guard !checkWidgetKitImageCache(imageKey: imageKey) else { return }
+        
+        ImageLoadingHandler.getImageFromCacheOrDownload(with: imageURL, limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
+            guard error == nil, let image = image else {
+                return
+            }
+
+            // save image to disk cache
             do {
-                // save image to disk cache
                 if let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier) {
                     let imageKeyDirectoryUrl = container.appendingPathComponent("Library/Caches/fxfavicon/\(imageKey)")
-                    try data?.write(to: imageKeyDirectoryUrl)
+                    guard let data = image.jpegData(compressionQuality: 1) ?? image.pngData() else {
+                        return
+                    }
+                    
+                    try data.write(to: imageKeyDirectoryUrl)
                 }
-            } catch let err as NSError {
-                print(err.description)
+            } catch {
+                print("unable to write image data")
             }
         }
     }
 
-    class func checkImageCache(imageKey: String) -> Bool {
+    class func checkWidgetKitImageCache(imageKey: String) -> Bool {
         let fileManager = FileManager.default
         guard let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier) else {
             return false
@@ -213,7 +217,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     }
 
     class func getFaviconFromDiskCache(imageKey: String) -> UIImage? {
-        guard checkImageCache(imageKey: imageKey) else { return nil }
+        guard checkWidgetKitImageCache(imageKey: imageKey) else { return nil }
         // image cache found now we retrive image
         let fileManager = FileManager.default
         guard let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier) else {

@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import SDWebImage
 import Shared
 import Storage
 import XCGLogger
@@ -71,22 +70,12 @@ class MediaImageLoader: TabEventHandler {
     }
 
     fileprivate func prepareCache(_ url: URL) {
-        let manager = SDWebImageManager.shared
-        if manager.cacheKey(for: url) == nil {
-            self.downloadAndCache(fromURL: url)
+        if !ImageLoadingHandler.isImageInCache(url: url) {
+            downloadAndCache(fromURL: url)
         }
     }
 
     fileprivate func downloadAndCache(fromURL webUrl: URL) {
-        let manager = SDWebImageManager.shared
-        manager.loadImage(with: webUrl, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
-            if let image = image {
-                self.cache(image: image, forURL: webUrl)
-            }
-        }
-    }
-
-    fileprivate func cache(image: UIImage, forURL url: URL) {
-        SDImageCache.shared.storeImageData(toDisk: image.sd_imageData(), forKey: url.absoluteString)
+        ImageLoadingHandler.downloadAndCacheImage(with: webUrl) { _, _ in }
     }
 }
