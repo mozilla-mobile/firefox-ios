@@ -2713,3 +2713,92 @@ messaging:
     data_sensitivity:
       - technical
     expires: "2023-10-17"
+adjust:
+  deeplink_received:
+    type: event
+    description: |
+      Send for Adjust callback for deeplink.
+    extra_keys:
+      received_url:
+        description: The deeplink url
+        type: string
+    send_in_pings:
+      - first-session
+      - events
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - technical
+    expires: "2023-01-01"
+  campaign:
+    type: string
+    lifetime: ping
+    description: |
+      A string containing the Adjust campaign ID from which the user installed
+      Firefox-iOS.
+    send_in_pings:
+      - first-session
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+  ad_group:
+    type: string
+    lifetime: ping
+    description: |
+      A string containing the Adjust ad group ID from which the user installed
+      Firefox-iOS.
+    send_in_pings:
+      - first-session
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+  creative:
+    type: string
+    lifetime: ping
+    description: |
+      A string containing the Adjust creative ID from which the user installed
+      Firefox-iOS.
+    send_in_pings:
+      - first-session
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+  network:
+    type: string
+    lifetime: ping
+    description: |
+      A string containing the Adjust network ID from which the user installed
+      Firefox-iOS.
+    send_in_pings:
+      - first-session
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11089
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
