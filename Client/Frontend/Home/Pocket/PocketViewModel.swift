@@ -20,7 +20,7 @@ class StoryProvider {
         self.showSponsoredStories = showSponsoredStories
     }
     
-    private let pocketAPI: Pocket
+    private let pocketAPI: PocketStoriesProviderInterface
     private let pocketSponsoredAPI: PocketSponsoredStoriesProviderInterface
     private var showSponsoredStories: () -> Bool
     
@@ -38,7 +38,7 @@ class StoryProvider {
     func updatePocketSites() async -> [PocketStory] {
         do {
             let storyCount = showSponsoredStories() ? numberOfPocketStoriesWithSponsoredContent : numberOfPocketStories
-            let global = try await pocketAPI.globalFeed(items: storyCount)
+            let global = try await pocketAPI.fetchStories(items: storyCount)
             // Convert global feed to PocketStory
             var globalTemp = global.map(PocketStory.init)
             

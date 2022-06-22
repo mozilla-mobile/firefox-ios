@@ -6,7 +6,24 @@ import Foundation
 import Shared
 import Storage
 
-class Pocket: FeatureFlaggable, URLCaching {
+protocol PocketStoriesProviderInterface {
+    typealias StoryResult = Swift.Result<[PocketFeedStory], Error>
+    
+    func fetchStories(items: Int, completion: @escaping (StoryResult) -> Void)
+    func fetchStories(items: Int) async throws -> [PocketFeedStory]
+}
+
+extension PocketStoriesProviderInterface {
+    func fetchStories(items: Int) async throws -> [PocketFeedStory] {
+        return try await withCheckedThrowingContinuation { continuation in
+            fetchStories(items: items) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+}
+
+class Pocket: PocketStoriesProviderInterface, FeatureFlaggable, URLCaching {
 
     private class PocketError: MaybeErrorType {
         var description = "Failed to load from API"
@@ -40,7 +57,7 @@ class Pocket: FeatureFlaggable, URLCaching {
     }
 
     // Fetch items from the global pocket feed
-    func globalFeed(items: Int = 2, completion: @escaping (Result<[PocketFeedStory], Error>) -> Void) {
+    func fetchStories(items: Int, completion: @escaping (StoryResult) -> Void) {
         if shouldUseMockData {
             return getMockDataFeed(count: items, completion: completion)
         } else {
@@ -48,18 +65,10 @@ class Pocket: FeatureFlaggable, URLCaching {
         }
     }
 
-    func globalFeed(items: Int = 2) async throws -> [PocketFeedStory] {
-        return try await withCheckedThrowingContinuation { continuation in
-            globalFeed(items: items) { result in
-                continuation.resume(with: result)
-            }
-        }
-    }
-
-    private func getGlobalFeed(items: Int = 2, completion: @escaping (Result<[PocketFeedStory], Error>) -> Void) {
+    private func getGlobalFeed(items: Int = 2, completion: @escaping (StoryResult) -> Void) {
 
         guard let request = createGlobalFeedRequest(items: items) else {
-            return completion(.failure(.failure))
+            return completion(.failure(Error.failure))
         }
 
         if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["recommendations"] as? [[String: Any]] {
@@ -68,14 +77,14 @@ class Pocket: FeatureFlaggable, URLCaching {
 
         urlSession.dataTask(with: request) { (data, response, error) in
             guard let response = validatedHTTPResponse(response, contentType: "application/json"), let data = data else {
-                return completion(.failure(.failure))
+                return completion(.failure(Error.failure))
             }
 
             self.cache(response: response, for: request, with: data)
 
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
             guard let items = json?["recommendations"] as? [[String: Any]] else {
-                return completion(.failure(.failure))
+                return completion(.failure(Error.failure))
             }
 
             return completion(.success(PocketFeedStory.parseJSON(list: items)))
@@ -111,13 +120,13 @@ class Pocket: FeatureFlaggable, URLCaching {
         return featureFlags.isCoreFeatureEnabled(.useMockData) && (pocketKey == "" || pocketKey == nil)
     }
 
-    private func getMockDataFeed(count: Int = 2, completion: (Result<[PocketFeedStory], Error>) -> Void) {
+    private func getMockDataFeed(count: Int = 2, completion: (StoryResult) -> Void) {
         let path = Bundle(for: type(of: self)).path(forResource: "pocketglobalfeed", ofType: "json")
         let data = try! Data(contentsOf: URL(fileURLWithPath: path!))
 
         let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
         guard let items = json?["recommendations"] as? [[String: Any]] else {
-            return completion(.failure(.failure))
+            return completion(.failure(Error.failure))
         }
 
         return completion(.success(Array(PocketFeedStory.parseJSON(list: items).prefix(count))))
