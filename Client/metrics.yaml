@@ -2747,7 +2747,7 @@ adjust:
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_sensitivity:
-      - technical
+      - interaction
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
