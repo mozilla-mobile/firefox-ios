@@ -10,21 +10,15 @@ import MessageUI
 import SDWebImage
 import SyncTelemetry
 import LocalAuthentication
-import SyncTelemetry
 import Sync
 import CoreSpotlight
 import UserNotifications
 import Account
-
-#if canImport(BackgroundTasks)
- import BackgroundTasks
-#endif
+import BackgroundTasks
 
 private let log = Logger.browserLogger
 
 let LatestAppVersionProfileKey = "latestAppVersion"
-let AllowThirdPartyKeyboardsKey = "settings.allowThirdPartyKeyboards"
-private let InitialPingSentKey = "initialPingSent"
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -32,76 +26,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var browserViewController: BrowserViewController!
     var rootViewController: UIViewController!
     var tabManager: TabManager!
-    var applicationCleanlyBackgrounded = true
     var receivedURLs = [URL]()
     var orientationLock = UIInterfaceOrientationMask.all
     weak var profile: Profile?
-    weak var application: UIApplication?
     private var shutdownWebServer: DispatchSourceTimer?
-    private var launchOptions: [AnyHashable: Any]?
     private var telemetry: TelemetryWrapper?
     private var adjustHelper: AdjustHelper?
     private var webServerUtil: WebServerUtil?
+    private var appLaunchUtil: AppLaunchUtil?
 
-    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        //
-        // Determine if the application cleanly exited last time it was used. We default to true in
-        // case we have never done this before. Then check if the "ApplicationCleanlyBackgrounded" user
-        // default exists and whether was properly set to true on app exit.
-        //
-        // Then we always set the user default to false. It will be set to true when we the application
-        // is backgrounded.
-        //
+    func application(_ application: UIApplication,
+                     willFinishLaunchingWithOptions
+                     launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        self.applicationCleanlyBackgrounded = true
+        log.info("startApplication begin")
 
-        let defaults = UserDefaults()
-        if defaults.object(forKey: "ApplicationCleanlyBackgrounded") != nil {
-            self.applicationCleanlyBackgrounded = defaults.bool(forKey: "ApplicationCleanlyBackgrounded")
-        }
-        defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
-
-        // Hold references to willFinishLaunching parameters for delayed app launch
-        self.application = application
-        self.launchOptions = launchOptions
+        appLaunchUtil = AppLaunchUtil()
+        appLaunchUtil?.setUpAppLaunchDependencies()
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
-        // If the 'Save logs to Files app on next launch' toggle
-        // is turned on in the Settings app, copy over old logs.
-        if DebugSettingsBundleOptions.saveLogsToDocuments {
-            Logger.copyPreviousLogsToDocuments()
-        }
-
-        return startApplication(application, withLaunchOptions: launchOptions)
-    }
-
-    private func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
-        log.info("startApplication begin")
-
-        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
-        // before getting the Profile.
-        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
-        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
-
-        // Set the Firefox UA for browsing.
-        setUserAgent()
-
-        // Start the keyboard helper to monitor and cache keyboard state.
-        KeyboardHelper.defaultHelper.startObserving()
-
-        DynamicFontHelper.defaultHelper.startObserving()
-
-        MenuHelper.defaultHelper.setItems()
-
-        let logDate = Date()
-        // Create a new sync log file on cold app launch. Note that this doesn't roll old logs.
-        Logger.syncLogger.newLogWithDate(logDate)
-
-        Logger.browserLogger.newLogWithDate(logDate)
-
         let profile = getProfile(application)
-
         telemetry = TelemetryWrapper(profile: profile)
 
         // Initialize the feature flag subsytem.
@@ -149,25 +94,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
             print("RustFirefoxAccounts started")
         }
+
         log.info("startApplication end")
+
         return true
-    }
-
-    // TODO: Move to scene controller for iOS 13
-    private func setupRootViewController() {
-        if !LegacyThemeManager.instance.systemThemeIsOn {
-            self.window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
-        }
-
-        browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
-        browserViewController.edgesForExtendedLayout = []
-
-        let navigationController = UINavigationController(rootViewController: browserViewController)
-        navigationController.isNavigationBarHidden = true
-        navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
-        rootViewController = navigationController
-
-        self.window!.rootViewController = rootViewController
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -310,14 +240,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         shutdownWebServer?.cancel()
         shutdownWebServer = nil
 
-        //
-        // We are back in the foreground, so set CleanlyBackgrounded to false so that we can detect that
-        // the application was cleanly backgrounded later.
-        //
-
-        let defaults = UserDefaults()
-        defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
-
         if let profile = self.profile {
             profile._reopen()
 
@@ -363,15 +285,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        //
-        // At this point we are happy to mark the app as CleanlyBackgrounded. If a crash happens in background
-        // sync then that crash will still be reported. But we won't bother the user with the Restore Tabs
-        // dialog. We don't have to because at this point we already saved the tab state properly.
-        //
-
-        let defaults = UserDefaults()
-        defaults.set(true, forKey: "ApplicationCleanlyBackgrounded")
-
         // Pause file downloads.
         // TODO: iOS 13 needs to iterate all the BVCs.
         browserViewController.downloadQueue.pauseAll()
@@ -410,25 +323,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         profile?._shutdown()
-    }
-
-    fileprivate func setUserAgent() {
-        let firefoxUA = UserAgent.getUserAgent()
-
-        // Set the UA for WKWebView (via defaults), the favicon fetcher, and the image loader.
-        // This only needs to be done once per runtime. Note that we use defaults here that are
-        // readable from extensions, so they can just use the cached identifier.
-
-        SDWebImageDownloader.shared.setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
-        // SDWebImage is setting accept headers that report we support webp. We don't
-        SDWebImageDownloader.shared.setValue("image/*;q=0.8", forHTTPHeaderField: "Accept")
-
-        // Record the user agent for use by search suggestion clients.
-        SearchViewController.userAgent = firefoxUA
-
-        // Some sites will only serve HTML that points to .ico files.
-        // The FaviconFetcher is explicitly for getting high-res icons, so use the desktop user agent.
-        FaviconFetcher.userAgent = UserAgent.desktopUserAgent()
     }
 
     /// When a user presses and holds the app icon from the Home Screen, we present quick actions / shortcut items (see QuickActions).
@@ -492,7 +386,9 @@ extension AppDelegate {
         return self.orientationLock
     }
 
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+    func application(_ application: UIApplication,
+                     continue userActivity: NSUserActivity,
+                     restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
             browserViewController.openBlankNewTab(focusLocationField: false)
             return true
@@ -533,5 +429,21 @@ extension AppDelegate {
         }
 
         return false
+    }
+
+    private func setupRootViewController() {
+        if !LegacyThemeManager.instance.systemThemeIsOn {
+            window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
+        }
+
+        browserViewController = BrowserViewController(profile: profile!, tabManager: tabManager)
+        browserViewController.edgesForExtendedLayout = []
+
+        let navigationController = UINavigationController(rootViewController: browserViewController)
+        navigationController.isNavigationBarHidden = true
+        navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
+        rootViewController = navigationController
+
+        window!.rootViewController = rootViewController
     }
 }

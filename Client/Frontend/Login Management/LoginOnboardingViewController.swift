@@ -11,7 +11,7 @@ class LoginOnboardingViewController: SettingsViewController {
     private var onboardingMessageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = .LoginsOnboardingMessage
+        label.text = .Settings.Passwords.LoginsOnboardingMessage
         label.font = DynamicFontHelper().DeviceFontExtraLarge
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -58,7 +58,7 @@ class LoginOnboardingViewController: SettingsViewController {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(doneButtonTapped))
         }
 
-        self.title = .LoginsAndPasswordsTitle
+        self.title = .Settings.Passwords.LoginsAndPasswordsTitle
 
         self.view.addSubviews(onboardingMessageLabel, learnMoreButton, continueButton)
 

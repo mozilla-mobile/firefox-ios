@@ -43,7 +43,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(doneButtonTapped))
         }
 
-        self.title = .LoginsAndPasswordsTitle
+        self.title = .Settings.Passwords.LoginsAndPasswordsTitle
 
         self.view.addSubviews(warningLabel, learnMoreButton)
 
