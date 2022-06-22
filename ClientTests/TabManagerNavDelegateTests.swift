@@ -35,6 +35,19 @@ class TabManagerNavDelegateTests: XCTestCase {
         XCTAssertEqual(delegate1.receivedMessages, [.webViewDidFail])
         XCTAssertEqual(delegate2.receivedMessages, [.webViewDidFail])
     }
+
+    func test_didFailProvisionalNavigation_sendsCorrectMessage() {
+        let sut = TabManagerNavDelegate()
+        let delegate1 = WKNavigationDelegateSpy()
+        let delegate2 = WKNavigationDelegateSpy()
+
+        sut.insert(delegate1)
+        sut.insert(delegate2)
+        sut.webView(anyWebView(), didFailProvisionalNavigation: navigation, withError: anyError())
+
+        XCTAssertEqual(delegate1.receivedMessages, [.didFailProvisionalNavigation])
+        XCTAssertEqual(delegate2.receivedMessages, [.didFailProvisionalNavigation])
+    }
 }
 
 // MARK: - Helpers
@@ -51,6 +64,7 @@ private class WKNavigationDelegateSpy: WKNavigationDelegate {
     enum Message {
         case webViewDidCommit
         case webViewDidFail
+        case didFailProvisionalNavigation
     }
 
     var receivedMessages = [Message]()
@@ -107,5 +121,9 @@ private class WKNavigationDelegateSpy: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         receivedMessages.append(.webViewDidFail)
+    }
+
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        receivedMessages.append(.didFailProvisionalNavigation)
     }
 }
