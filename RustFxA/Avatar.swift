@@ -17,7 +17,8 @@ open class Avatar {
     private func downloadAvatar() {
         guard let url = url else { return }
 
-        ImageLoadingHandler.getImageFromCacheOrDownload(with: url, limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+        ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
+                                                               limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
             if error != nil || image == nil {
                 self.image.fill(UIImage(named: ImageIdentifiers.placeholderAvatar)!)
             }

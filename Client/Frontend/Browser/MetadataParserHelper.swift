@@ -70,12 +70,12 @@ class MediaImageLoader: TabEventHandler {
     }
 
     fileprivate func prepareCache(_ url: URL) {
-        if !ImageLoadingHandler.isImageInCache(url: url) {
+        if !ImageLoadingHandler.shared.isImageInCache(url: url) {
             downloadAndCache(fromURL: url)
         }
     }
 
     fileprivate func downloadAndCache(fromURL webUrl: URL) {
-        ImageLoadingHandler.downloadAndCacheImage(with: webUrl) { _, _ in }
+        ImageLoadingHandler.shared.downloadAndCacheImage(with: webUrl) { _, _ in }
     }
 }

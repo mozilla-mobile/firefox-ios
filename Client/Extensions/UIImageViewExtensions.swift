@@ -38,28 +38,28 @@ public extension UIImageView {
         }
 
         backgroundColor = nil
+        let defaults = fallbackFavicon(forUrl: website)
 
         if let url = website, let bundledIcon = FaviconFetcher.getBundledIcon(forUrl: url) {
             self.image = UIImage(contentsOfFile: bundledIcon.filePath)
             finish(bgColor: bundledIcon.bgcolor)
-        } else {
-            let imageURL = URL(string: icon?.url ?? "")
-            let defaults = fallbackFavicon(forUrl: website)
-            
+        } else if let imageURL = URL(string: icon?.url ?? "") {
             // TODO: Wrap this part of KF under our umbrella image loading handler
             // This is fine for now but if in future we decide to move away from Kingfisher
             // or replace it then this will need to be fixed and updated
-
-            self.kf.setImage(with: imageURL, placeholder: defaults.image,
-                             options: []) { result in
-                switch result {
-                case .success(_):
-                    finish(bgColor: defaults.color)
-                case .failure(_):
+            ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: imageURL,
+                                       limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+                guard error == nil, let image = image else {
+                    self.image = defaults.image
                     finish(bgColor: nil)
+                    return
                 }
+                self.image = image
+                finish(bgColor: defaults.color)
             }
-
+        } else {
+            self.image = defaults.image
+            finish(bgColor: nil)
         }
     }
 

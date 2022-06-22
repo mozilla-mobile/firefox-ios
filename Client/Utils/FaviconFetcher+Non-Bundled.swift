@@ -119,7 +119,8 @@ extension FaviconFetcher {
         var fav = Favicon(url: url)
 
         if let url = url.asURL {
-            ImageLoadingHandler.getImageFromCacheOrDownload(with: url, limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
+            ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
+                                                            limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
                 
                 guard error == nil else {
                     deferred.fill(Maybe(failure: FaviconError()))
@@ -160,7 +161,7 @@ extension FaviconFetcher {
             }
 
             if let iconURL = iconURL {
-                ImageLoadingHandler.getImageFromCacheOrDownload(with: iconURL, limit: 0) { image, error in
+                ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: iconURL, limit: 0) { image, error in
                     if error != nil || image == nil {
                         deferred.fill(Maybe(failure: FaviconError()))
                     }

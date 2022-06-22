@@ -191,7 +191,8 @@ extension SQLiteHistory: Favicons {
     fileprivate func retrieveTopSiteSQLiteHistoryFaviconImage(faviconURL: URL) -> Deferred<Maybe<UIImage>> {
         let deferred = CancellableDeferred<Maybe<UIImage>>()
 
-        ImageLoadingHandler.getImageFromCacheOrDownload(with: faviconURL, limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
+        ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: faviconURL,
+                                                               limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
             if error != error || image == nil {
                 deferred.fill(Maybe(failure:
                                     FaviconDownloadError(faviconURL: faviconURL.absoluteString)))

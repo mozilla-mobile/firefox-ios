@@ -159,8 +159,9 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         guard let imageURL = imageURL, !imageURL.absoluteString.starts(with: "internal://"), !imageKey.isEmpty else { return }
         // cache found, don't download
         guard !checkWidgetKitImageCache(imageKey: imageKey) else { return }
-        
-        ImageLoadingHandler.getImageFromCacheOrDownload(with: imageURL, limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
+
+        ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: imageURL,
+                                                               limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
             guard error == nil, let image = image else {
                 return
             }
@@ -172,7 +173,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
                     guard let data = image.jpegData(compressionQuality: 1) ?? image.pngData() else {
                         return
                     }
-                    
+
                     try data.write(to: imageKeyDirectoryUrl)
                 }
             } catch {
