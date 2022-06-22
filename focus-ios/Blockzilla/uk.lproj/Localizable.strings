@@ -710,7 +710,7 @@
 "URL.cancelLabel" = "Скасувати";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Уставити й перейти";
+"URL.contextMenu" = "Вставити і перейти";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "СТЕРТИ";
