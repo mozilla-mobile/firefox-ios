@@ -43,7 +43,9 @@ class ReaderViewTest: BaseTestCase {
 
     // Smoketest
     func testAddToReadingList() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 25)
+        XCTExpectFailure("The app was not launched", strict: false) {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 25)
+        }
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // Navigate to reading list
@@ -225,9 +227,9 @@ class ReaderViewTest: BaseTestCase {
 
     // Smoketest
     func testAddToReaderListOptions() throws {
-        sleep(15)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 45)
-        XCTExpectFailure("The app was not launched", strict: false)
+        XCTExpectFailure("The app was not launched", strict: false) {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 45)
+        }
         addContentToReaderView()
         // Check that Settings layouts options are shown
         waitForExistence(app.buttons["ReaderModeBarView.settingsButton"], timeout: 10)

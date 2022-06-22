@@ -81,9 +81,9 @@ class HistoryTests: BaseTestCase {
 
     // Smoketest
     func testClearPrivateDataButtonDisabled() throws {
-        sleep(15)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 35)
-        XCTExpectFailure("The app was not launched", strict: false)
+        XCTExpectFailure("The app was not launched", strict: false) {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 45)
+        }
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
