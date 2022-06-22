@@ -2194,6 +2194,12 @@
 /* The placeholder text for the tab search bar */
 "Tabs.Search.PlaceholderText" = "Rejtariki pśepytaś";
 
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Inaktiwne rejtariki pokazaś";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Inaktiwne rejtariki schowaś";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Rejtarik pśidaś";
 
