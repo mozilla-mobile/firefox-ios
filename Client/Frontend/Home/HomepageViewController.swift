@@ -415,10 +415,7 @@ extension HomepageViewController {
 
     /// Reload all data including refreshing cells content and fetching data from backend
     func reloadAll() {
-
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            self?.viewModel.updateData()
-        }
+        viewModel.updateData()
     }
 }
 

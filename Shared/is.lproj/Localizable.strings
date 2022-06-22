@@ -207,7 +207,7 @@
 "BookmarksPanel.EmptyState.Title" = "Bókamerkin sem þú vistar verða sýnd hér.";
 
 /* Describes the date on which the breach occurred */
-"BreachAlerts.BreachDate" = "Þetta innbrot átti sér stað þann";
+"BreachAlerts.BreachDate" = "Þetta gagnarán átti sér stað þann";
 
 /* Description of what a breach is */
 "BreachAlerts.Description" = "Lykilorðum var lekið eða þeim stolið síðan þú breyttir lykilorðinu þínu síðast. Til að vernda þennan reikning skaltu skrá þig inn á vefsvæðið og breyta lykilorðinu þínu.";
@@ -632,7 +632,7 @@
 "HistoryPanel.SyncedTabsCell.Title" = "Samstillt tæki";
 
 /* Accessibility label for the tab toolbar indicating the Home button. */
-"Home" = "Upphafssíða";
+"Home" = "Heim";
 
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "Hætta við";
@@ -1102,7 +1102,7 @@
 "Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "Bókamerki";
 
 /* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
-"Menu.Toolbar.Home.AccessibilityLabel.v99" = "Upphafssíða";
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "Heim";
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Lokað á";

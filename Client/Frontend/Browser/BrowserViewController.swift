@@ -511,7 +511,7 @@ class BrowserViewController: UIViewController {
             self.view.alpha = (profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil) ? 1.0 : 0.0
         }
 
-        if !displayedRestoreTabsAlert && !cleanlyBackgrounded() && crashedLastLaunch() {
+        if !displayedRestoreTabsAlert && crashedLastLaunch() {
             displayedRestoreTabsAlert = true
             showRestoreTabsAlert()
         } else {
@@ -808,13 +808,6 @@ class BrowserViewController: UIViewController {
 
     fileprivate func crashedLastLaunch() -> Bool {
         return SentryIntegration.shared.crashedLastLaunch
-    }
-
-    fileprivate func cleanlyBackgrounded() -> Bool {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return false
-        }
-        return appDelegate.applicationCleanlyBackgrounded
     }
 
     fileprivate func showRestoreTabsAlert() {
