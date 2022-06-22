@@ -36,7 +36,7 @@ class TabManagerNavDelegateTests: XCTestCase {
         XCTAssertEqual(delegate2.receivedMessages, [.webViewDidFail])
     }
 
-    func test_didFailProvisionalNavigation_sendsCorrectMessage() {
+    func test_webViewDidFailProvisionalNavigation_sendsCorrectMessage() {
         let sut = TabManagerNavDelegate()
         let delegate1 = WKNavigationDelegateSpy()
         let delegate2 = WKNavigationDelegateSpy()
@@ -49,7 +49,7 @@ class TabManagerNavDelegateTests: XCTestCase {
         XCTAssertEqual(delegate2.receivedMessages, [.didFailProvisionalNavigation])
     }
 
-    func test_didFinish_sendsCorrectMessage() {
+    func test_webViewDidFinish_sendsCorrectMessage() {
         let sut = TabManagerNavDelegate()
         let delegate1 = WKNavigationDelegateSpy()
         let delegate2 = WKNavigationDelegateSpy()
@@ -75,7 +75,7 @@ class TabManagerNavDelegateTests: XCTestCase {
         XCTAssertEqual(delegate2.receivedMessages, [.webViewWebContentProcessDidTerminate])
     }
 
-    func test_didReceiveServerRedirectForProvisionalNavigation_sendsCorrectMessage() {
+    func test_webViewDidReceiveServerRedirectForProvisionalNavigation_sendsCorrectMessage() {
         let sut = TabManagerNavDelegate()
         let delegate1 = WKNavigationDelegateSpy()
         let delegate2 = WKNavigationDelegateSpy()
@@ -88,7 +88,7 @@ class TabManagerNavDelegateTests: XCTestCase {
         XCTAssertEqual(delegate2.receivedMessages, [.didReceiveServerRedirectForProvisionalNavigation])
     }
 
-    func test_didStartProvisionalNavigation_sendsCorrectMessage() {
+    func test_webViewDidStartProvisionalNavigation_sendsCorrectMessage() {
         let sut = TabManagerNavDelegate()
         let delegate1 = WKNavigationDelegateSpy()
         let delegate2 = WKNavigationDelegateSpy()
