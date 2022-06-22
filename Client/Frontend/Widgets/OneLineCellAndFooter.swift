@@ -79,11 +79,16 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
     private var leftImageViewLeadingConstraint: NSLayoutConstraint!
     private var midViewTrailingConstraint: NSLayoutConstraint!
 
+    private var defaultSeparatorInset: UIEdgeInsets {
+        return UIEdgeInsets(top: 0,
+                            left: OneLineCellViewModel.UX.ImageSize + 2 *
+                            OneLineCellViewModel.UX.BorderViewMargin,
+                            bottom: 0,
+                            right: 0)
+    }
+
     func initialViewSetup() {
-        separatorInset = UIEdgeInsets(top: 0,
-                                      left: OneLineCellUX.ImageSize + 2 * OneLineCellUX.BorderViewMargin,
-                                      bottom: 0,
-                                      right: 0)
+        separatorInset = defaultSeparatorInset
         self.selectionStyle = .default
         midView.addSubview(titleLabel)
         containerView.addSubviews(bottomSeparatorView)
@@ -162,10 +167,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
     override func prepareForReuse() {
         super.prepareForReuse()
         self.selectionStyle = .default
-        separatorInset = UIEdgeInsets(top: 0,
-                                      left: OneLineCellUX.ImageSize + 2 * OneLineCellUX.BorderViewMargin,
-                                      bottom: 0,
-                                      right: 0)
+        separatorInset = defaultSeparatorInset
         applyTheme()
     }
 }
