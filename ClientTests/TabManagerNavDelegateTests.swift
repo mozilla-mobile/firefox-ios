@@ -100,6 +100,36 @@ class TabManagerNavDelegateTests: XCTestCase {
         XCTAssertEqual(delegate1.receivedMessages, [.didStartProvisionalNavigation])
         XCTAssertEqual(delegate2.receivedMessages, [.didStartProvisionalNavigation])
     }
+
+    func test_webViewDecidePolicyFor_actionPolicy_sendsCorrectMessage() {
+        let sut = TabManagerNavDelegate()
+        let delegate1 = WKNavigationDelegateSpy()
+        let delegate2 = WKNavigationDelegateSpy()
+
+        sut.insert(delegate1)
+        sut.insert(delegate2)
+        sut.webView(anyWebView(),
+                    decidePolicyFor: WKNavigationAction(),
+                    decisionHandler: { _ in })
+
+        XCTAssertEqual(delegate1.receivedMessages, [.webViewDecidePolicyWithActionPolicy])
+        XCTAssertEqual(delegate2.receivedMessages, [.webViewDecidePolicyWithActionPolicy])
+    }
+
+    func test_webViewDecidePolicyFor_responsePolicy_sendsCorrectMessage() {
+        let sut = TabManagerNavDelegate()
+        let delegate1 = WKNavigationDelegateSpy()
+        let delegate2 = WKNavigationDelegateSpy()
+
+        sut.insert(delegate1)
+        sut.insert(delegate2)
+        sut.webView(anyWebView(),
+                    decidePolicyFor: WKNavigationResponse(),
+                    decisionHandler: { _ in })
+
+        XCTAssertEqual(delegate1.receivedMessages, [.webViewDecidePolicyWithResponsePolicy])
+        XCTAssertEqual(delegate2.receivedMessages, [.webViewDecidePolicyWithResponsePolicy])
+    }
 }
 
 // MARK: - Helpers
@@ -121,6 +151,8 @@ private class WKNavigationDelegateSpy: WKNavigationDelegate {
         case webViewWebContentProcessDidTerminate
         case didReceiveServerRedirectForProvisionalNavigation
         case didStartProvisionalNavigation
+        case webViewDecidePolicyWithActionPolicy
+        case webViewDecidePolicyWithResponsePolicy
     }
 
     var receivedMessages = [Message]()
@@ -197,5 +229,13 @@ private class WKNavigationDelegateSpy: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         receivedMessages.append(.didStartProvisionalNavigation)
+    }
+
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        receivedMessages.append(.webViewDecidePolicyWithActionPolicy)
+    }
+
+    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        receivedMessages.append(.webViewDecidePolicyWithResponsePolicy)
     }
 }
