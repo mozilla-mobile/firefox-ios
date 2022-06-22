@@ -74,6 +74,19 @@ class TabManagerNavDelegateTests: XCTestCase {
         XCTAssertEqual(delegate1.receivedMessages, [.webViewWebContentProcessDidTerminate])
         XCTAssertEqual(delegate2.receivedMessages, [.webViewWebContentProcessDidTerminate])
     }
+
+    func test_didReceiveServerRedirectForProvisionalNavigation_sendsCorrectMessage() {
+        let sut = TabManagerNavDelegate()
+        let delegate1 = WKNavigationDelegateSpy()
+        let delegate2 = WKNavigationDelegateSpy()
+
+        sut.insert(delegate1)
+        sut.insert(delegate2)
+        sut.webView(anyWebView(), didReceiveServerRedirectForProvisionalNavigation: navigation)
+
+        XCTAssertEqual(delegate1.receivedMessages, [.didReceiveServerRedirectForProvisionalNavigation])
+        XCTAssertEqual(delegate2.receivedMessages, [.didReceiveServerRedirectForProvisionalNavigation])
+    }
 }
 
 // MARK: - Helpers
@@ -93,6 +106,7 @@ private class WKNavigationDelegateSpy: WKNavigationDelegate {
         case didFailProvisionalNavigation
         case didFinish
         case webViewWebContentProcessDidTerminate
+        case didReceiveServerRedirectForProvisionalNavigation
     }
 
     var receivedMessages = [Message]()
@@ -161,5 +175,9 @@ private class WKNavigationDelegateSpy: WKNavigationDelegate {
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
         receivedMessages.append(.webViewWebContentProcessDidTerminate)
+    }
+
+    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+        receivedMessages.append(.didReceiveServerRedirectForProvisionalNavigation)
     }
 }
