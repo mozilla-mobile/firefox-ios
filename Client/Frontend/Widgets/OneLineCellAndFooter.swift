@@ -4,13 +4,6 @@
 
 import UIKit
 
-struct OneLineCellUX {
-    static let ImageSize: CGFloat = 28
-    static let BorderViewMargin: CGFloat = 16
-    static let LabelTopBottomMargin: CGFloat = 11
-    static let ImageTopBottomMargin: CGFloat = 10
-}
-
 enum OneLineTableViewCustomization {
     case regular
     case inactiveCell
@@ -115,22 +108,24 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
             containerViewLeadingConstraint,
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            leftImageView.heightAnchor.constraint(equalToConstant: OneLineCellUX.ImageSize),
-            leftImageView.widthAnchor.constraint(equalToConstant: OneLineCellUX.ImageSize),
+            leftImageView.heightAnchor.constraint(equalToConstant: OneLineCellViewModel.UX.ImageSize),
+            leftImageView.widthAnchor.constraint(equalToConstant: OneLineCellViewModel.UX.ImageSize),
             leftImageViewLeadingConstraint,
             leftImageView.centerYAnchor.constraint(equalTo: midView.centerYAnchor),
             leftImageView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor,
-                                               constant: OneLineCellUX.ImageTopBottomMargin),
+                                               constant: OneLineCellViewModel.UX.ImageTopBottomMargin),
             leftImageView.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor,
-                                                  constant: OneLineCellUX.ImageTopBottomMargin),
+                                                  constant: OneLineCellViewModel.UX.ImageTopBottomMargin),
 
             midView.topAnchor.constraint(equalTo: containerView.topAnchor),
             midView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             midView.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 13),
             midViewTrailingConstraint,
 
-            titleLabel.topAnchor.constraint(equalTo: midView.topAnchor, constant: OneLineCellUX.LabelTopBottomMargin),
-            titleLabel.bottomAnchor.constraint(equalTo: midView.bottomAnchor, constant: -OneLineCellUX.LabelTopBottomMargin),
+            titleLabel.topAnchor.constraint(equalTo: midView.topAnchor,
+                                            constant: OneLineCellViewModel.UX.LabelTopBottomMargin),
+            titleLabel.bottomAnchor.constraint(equalTo: midView.bottomAnchor,
+                                               constant: -OneLineCellViewModel.UX.LabelTopBottomMargin),
             titleLabel.leadingAnchor.constraint(equalTo: midView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: midView.trailingAnchor),
 
