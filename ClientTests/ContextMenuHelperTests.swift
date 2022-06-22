@@ -16,6 +16,7 @@ class ContextMenuHelperTests: XCTestCase {
         profile = MockProfile()
 
         Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.enableTestingMode()
     }
 
     override func tearDown() {
