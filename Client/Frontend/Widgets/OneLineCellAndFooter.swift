@@ -32,13 +32,6 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
         return imgView
     }()
 
-    var leftOverlayImageView: UIImageView = {
-        let imgView = UIImageView()
-        imgView.contentMode = .scaleAspectFit
-        imgView.clipsToBounds = true
-        return imgView
-    }()
-
     var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
