@@ -6,18 +6,69 @@ import Foundation
 import Storage
 import Shared
 
+class StoryProvider {
+    
+    private let numberOfPocketStories = 11
+    private let numberOfPocketStoriesWithSponsoredContent = 9
+    private let numberOfSponsoredItemsInSection = 2
+    private let indexOfFirstSponsoredItem = 1
+    private let indexOfSecondSponsoredItem = 9
+    
+    init(pocketAPI: Pocket, pocketSponsoredAPI: PocketSponsoredStoriesProviderInterface, showSponsoredStories: @escaping () -> Bool) {
+        self.pocketAPI = pocketAPI
+        self.pocketSponsoredAPI = pocketSponsoredAPI
+        self.showSponsoredStories = showSponsoredStories
+    }
+    
+    private let pocketAPI: Pocket
+    private let pocketSponsoredAPI: PocketSponsoredStoriesProviderInterface
+    private var showSponsoredStories: () -> Bool
+    
+    private func insert(sponsored: inout [PocketStory], into globalFeed: inout [PocketStory], indexes: [Int]) {
+        for index in indexes {
+            // Making sure we insert a sponsored story at a valid index
+            let normalisedIndex = min(index, globalFeed.endIndex)
+            if let first = sponsored.first {
+                globalFeed.insert(first, at: normalisedIndex)
+                sponsored.removeAll(where: { $0 == first })
+            }
+        }
+    }
+    
+    func updatePocketSites() async -> [PocketStory] {
+        do {
+            let storyCount = showSponsoredStories() ? numberOfPocketStoriesWithSponsoredContent : numberOfPocketStories
+            let global = try await pocketAPI.globalFeed(items: storyCount)
+            // Convert global feed to PocketStory
+            var globalTemp = global.map(PocketStory.init)
+            
+            if showSponsoredStories() {
+                let sponsored = try await pocketSponsoredAPI.fetchSponsoredStories()
+                // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
+                var sponsoredTemp = Array(sponsored.map(PocketStory.init).prefix(numberOfSponsoredItemsInSection))
+                insert(
+                    sponsored: &sponsoredTemp,
+                    into: &globalTemp,
+                    indexes: [indexOfFirstSponsoredItem, indexOfSecondSponsoredItem]
+                )
+            }
+            
+            return globalTemp
+            
+        } catch {
+            print(error)
+            return []
+        }
+    }
+}
+
 class PocketViewModel {
     
     struct UX {
         static let numberOfItemsInColumn = 3
         static let discoverMoreMaxFontSize: CGFloat = 55 // Title 3 xxxLarge
-        static let numberOfPocketStories = 11
-        static let numberOfPocketStoriesWithSponsoredContent = 9
         static let fractionalWidthiPhonePortrait: CGFloat = 0.93
         static let fractionalWidthiPhoneLanscape: CGFloat = 0.46
-        static let numberOfSponsoredItemsInSection = 2
-        static let indexOfFirstSponsoredItem = 1
-        static let indexOfSecondSponsoredItem = 9
     }
     
     // MARK: - Properties
@@ -27,6 +78,12 @@ class PocketViewModel {
 
     private let isZeroSearch: Bool
     private var hasSentPocketSectionEvent = false
+    
+    private lazy var storyProvider: StoryProvider = {
+        StoryProvider(pocketAPI: pocketAPI, pocketSponsoredAPI: pocketSponsoredAPI) {
+            self.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly) == true
+        }
+    }()
     
     var onTapTileAction: ((URL) -> Void)?
     var onLongPressTileAction: ((Site, UIView?) -> Void)?
@@ -104,44 +161,14 @@ class PocketViewModel {
     }
     
     // MARK: - Private
-
-    private func insert(sponsored: inout [PocketStory], into globalFeed: inout [PocketStory], indexes: [Int]) {
-        for index in indexes {
-            // Making sure we insert a sponsored story at a valid index
-            let normalisedIndex = min(index, globalFeed.endIndex)
-            if let first = sponsored.first {
-                globalFeed.insert(first, at: normalisedIndex)
-                sponsored.removeAll(where: { $0 == first })
-            }
-        }
-    }
     
-    private var showSponsoredStories: Bool { self.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly) == true }
-
     private func updatePocketSites() async {
-        do {
-            let storyCount = showSponsoredStories ? UX.numberOfPocketStoriesWithSponsoredContent : UX.numberOfPocketStories
-            let global = try await pocketAPI.globalFeed(items: storyCount)
-            // Convert global feed to PocketStory
-            var globalTemp = global.map(PocketStory.init)
-            
-            if showSponsoredStories {
-                let sponsored = try await pocketSponsoredAPI.fetchSponsoredStories()
-                // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
-                var sponsoredTemp = Array(sponsored.map(PocketStory.init).prefix(UX.numberOfSponsoredItemsInSection))
-                insert(
-                    sponsored: &sponsoredTemp,
-                    into: &globalTemp,
-                    indexes: [UX.indexOfFirstSponsoredItem, UX.indexOfSecondSponsoredItem]
-                )
-            }
-            
-            pocketStoriesViewModels = []
-            // Add the story in the view models list
-            for story in globalTemp {
-                bind(pocketStoryViewModel: .init(story: story))
-            }
-        } catch { }
+        let stories = await storyProvider.updatePocketSites()
+        pocketStoriesViewModels = []
+        // Add the story in the view models list
+        for story in stories {
+            bind(pocketStoryViewModel: .init(story: story))
+        }
     }
     
     func showDiscoverMore() {
