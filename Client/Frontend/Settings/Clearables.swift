@@ -48,7 +48,7 @@ class HistoryClearable: Clearable {
             // Clear image cache - SDWebImage
             SDImageCache.shared.clearDisk()
             SDImageCache.shared.clearMemory()
-            
+
             // Clear image cache - Kingfisher
             KingfisherManager.shared.cache.clearMemoryCache()
             KingfisherManager.shared.cache.clearDiskCache()

@@ -197,7 +197,7 @@ extension SQLiteHistory: Favicons {
                 deferred.fill(Maybe(failure:
                                     FaviconDownloadError(faviconURL: faviconURL.absoluteString)))
             }
-            
+
             if let image = image {
                 deferred.fill(Maybe(success: image))
             }

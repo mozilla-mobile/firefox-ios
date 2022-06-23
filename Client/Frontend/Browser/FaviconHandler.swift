@@ -77,7 +77,7 @@ class FaviconHandler {
 
         let domainLevelIconUrl = currentUrl.domainURL.appendingPathComponent("favicon.ico")
         let site = Site(url: currentUrl.absoluteString, title: "")
-    
+
         let onSuccess: (Favicon) -> Void = { [weak tab] (favicon) -> Void in
             tab?.favicons.append(favicon)
 

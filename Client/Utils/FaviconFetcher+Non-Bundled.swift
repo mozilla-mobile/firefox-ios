@@ -121,7 +121,7 @@ extension FaviconFetcher {
         if let url = url.asURL {
             ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
                                                             limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
-                
+
                 guard error == nil else {
                     deferred.fill(Maybe(failure: FaviconError()))
                     return

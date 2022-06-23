@@ -84,7 +84,7 @@ public class ImageLoadingHandler: ImageFetcher {
             switch result {
             case .success(let value):
                 completion(value.image, nil)
-            case .failure(_):
+            case .failure:
                 completion(nil, ImageLoadingError.unableToFetchImage)
             }
         }
@@ -101,7 +101,7 @@ public class ImageLoadingHandler: ImageFetcher {
             case .success(let value):
                 self.saveImageToCache(img: value.image, key: url.absoluteString)
                 completion(value.image, nil)
-            case .failure(_):
+            case .failure:
                 completion(nil, ImageLoadingError.unableToFetchImage)
             }
         }
@@ -116,7 +116,7 @@ public class ImageLoadingHandler: ImageFetcher {
             case .success(let value):
                 self.saveImageToCache(img: value.image, key: url.absoluteString)
                 completion(value.image, nil)
-            case .failure(_):
+            case .failure:
                 completion(nil, ImageLoadingError.unableToFetchImage)
             }
         }
@@ -146,7 +146,7 @@ public class ImageLoadingHandler: ImageFetcher {
             switch result {
             case .success(let value):
                 completion(value.image, value.originalData, nil)
-            case .failure(_):
+            case .failure:
                 completion(nil, nil, ImageLoadingError.unableToFetchImage)
             }
         }
@@ -160,7 +160,7 @@ public class ImageLoadingHandler: ImageFetcher {
             switch result {
             case .success(let value):
                 completion(value.image, value.originalData, nil)
-            case .failure(_):
+            case .failure:
                 completion(nil, nil, ImageLoadingError.unableToFetchImage)
             }
         }
