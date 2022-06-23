@@ -116,8 +116,8 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         return TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }()
 
-    var didChangedPanelSelection: Bool = false
-    var didAddNewTab: Bool = false
+    var didChangedPanelSelection: Bool = true
+    var didAddNewTab: Bool = true
 
     var selectedIndex: Int { return _selectedIndex }
 
