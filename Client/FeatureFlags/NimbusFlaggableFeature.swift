@@ -94,7 +94,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         let nimbusValue = nimbusLayer.checkNimbusConfigFor(featureID)
 
         switch featureID {
-        case .pocket:
+        case .pocket, .sponsoredPocket:
             return nimbusValue && Pocket.IslocaleSupported(Locale.current.identifier)
         default:
             return nimbusValue

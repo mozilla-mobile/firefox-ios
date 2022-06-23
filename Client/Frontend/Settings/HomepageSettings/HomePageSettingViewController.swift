@@ -30,6 +30,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         return featureFlags.isFeatureEnabled(.pocket, checking: .buildOnly)
     }
 
+    var isPocketSponsoredStoriesEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .buildOnly)
+    }
+
     var isHistoryHighlightsSectionEnabled: Bool {
         return featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly)
     }
@@ -105,7 +109,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
         let pocketSponsoredSetting = BoolSetting(with: .sponsoredPocket,
                                         titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.SponsoredPocket))
-        pocketSponsoredSetting.enabled = featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser)
+        // This sets whether the cell is enabled or not, and not the setting itself.
+        pocketSponsoredSetting.enabled = featureFlags.isFeatureEnabled(
+            .pocket,
+            checking: .buildAndUser)
 
         let pocketSetting = BoolSetting(
             with: .pocket,
@@ -143,7 +150,11 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
         if isPocketSectionEnabled {
             sectionItems.append(pocketSetting)
-            sectionItems.append(pocketSponsoredSetting)
+
+            // Only show the sponsored stories setting if the Pocket setting is showing
+            if isPocketSponsoredStoriesEnabled {
+                sectionItems.append(pocketSponsoredSetting)
+            }
         }
 
         if isWallpaperSectionEnabled {
