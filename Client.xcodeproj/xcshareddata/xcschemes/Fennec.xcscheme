@@ -328,9 +328,6 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "AdjustTelemetryHelperTests/testFirstSessionPing()">
-               </Test>
-               <Test
                   Identifier = "ETPCoverSheetTests">
                </Test>
                <Test

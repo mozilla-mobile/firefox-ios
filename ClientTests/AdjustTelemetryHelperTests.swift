@@ -39,19 +39,25 @@ class AdjustTelemetryHelperTests: XCTestCase {
     }
 
     func testFirstSessionPing() {
+        GleanMetrics.Adjust.campaign.set("campaign")
+        GleanMetrics.Adjust.adGroup.set("adGroup")
+        GleanMetrics.Adjust.creative.set("creative")
+        GleanMetrics.Adjust.network.set("network")
+
         let expectation = expectation(description: "The first session ping was sent")
 
-        let pingName = "first-session"
         GleanMetrics.Pings.shared.firstSession.testBeforeNextSubmit { _ in
-            XCTAssertTrue(GleanMetrics.Adjust.campaign.testHasValue(pingName))
-            XCTAssertTrue(GleanMetrics.Adjust.adGroup.testHasValue(pingName))
-            XCTAssertTrue(GleanMetrics.Adjust.creative.testHasValue(pingName))
-            XCTAssertTrue(GleanMetrics.Adjust.network.testHasValue(pingName))
+
+            XCTAssertEqual("campaign", try GleanMetrics.Adjust.campaign.testGetValue())
+            XCTAssertEqual("adGroup", try GleanMetrics.Adjust.adGroup.testGetValue())
+            XCTAssertEqual("creative", try GleanMetrics.Adjust.creative.testGetValue())
+            XCTAssertEqual("network", try GleanMetrics.Adjust.network.testGetValue())
             expectation.fulfill()
         }
 
         // Submit the ping.
-        telemetryHelper.setAttributionData(MockAdjustTelemetryData())
+        GleanMetrics.Pings.shared.firstSession.submit()
+
         waitForExpectations(timeout: 5.0)
     }
 
