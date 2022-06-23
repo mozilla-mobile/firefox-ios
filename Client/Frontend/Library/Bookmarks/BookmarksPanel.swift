@@ -127,30 +127,23 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     private func setupRootFolderData() {
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID,
                                         recursive: false).uponQueue(.main) { result in
-            guard let folder = result.successValue as? BookmarkFolderData else {
+            guard let mobileFolder = result.successValue as? BookmarkFolderData else {
                 // TODO: Handle error case?
                 self.bookmarkFolder = nil
                 self.bookmarkNodes = []
                 return
             }
 
-            self.bookmarkFolder = folder
-            self.bookmarkNodes = folder.children ?? []
+            self.bookmarkFolder = mobileFolder
+            // Reversed since we want the newest mobile bookmarks at the top
+            self.bookmarkNodes = mobileFolder.children?.reversed() ?? []
 
             let desktopFolder = LocalDesktopFolder()
             self.bookmarkNodes.insert(desktopFolder, at: 0)
 
             self.tableView.reloadData()
 
-            if self.flashLastRowOnNextReload {
-                self.flashLastRowOnNextReload = false
-
-                let lastIndexPath = IndexPath(row: self.bookmarkNodes.count - 1,
-                                              section: BookmarksSection.bookmarks.rawValue)
-                DispatchQueue.main.asyncAfter(deadline: .now() + UX.RowFlashDelay) {
-                    self.flashRow(at: lastIndexPath)
-                }
-            }
+            self.flashRowIfNeeded()
         }
     }
 
@@ -159,6 +152,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     private var menuBookmarks: BookmarkNodeData?
     private var toolbarBookmarks: BookmarkNodeData?
 
+    // TODO: Laurie - Preload this so clicking on desktop folder is fast? Where to save this so we load it once only?
     private func setupLocalDesktopFolderData() {
         let group = DispatchGroup()
         group.enter()
@@ -215,15 +209,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             self.bookmarkNodes = temp
             self.tableView.reloadData()
 
-            if self.flashLastRowOnNextReload {
-                self.flashLastRowOnNextReload = false
-
-                let lastIndexPath = IndexPath(row: self.bookmarkNodes.count - 1,
-                                              section: BookmarksSection.bookmarks.rawValue)
-                DispatchQueue.main.asyncAfter(deadline: .now() + UX.RowFlashDelay) {
-                    self.flashRow(at: lastIndexPath)
-                }
-            }
+            self.flashRowIfNeeded()
         }
     }
 
@@ -241,15 +227,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
             self.tableView.reloadData()
 
-            if self.flashLastRowOnNextReload {
-                self.flashLastRowOnNextReload = false
-
-                let lastIndexPath = IndexPath(row: self.bookmarkNodes.count - 1,
-                                              section: BookmarksSection.bookmarks.rawValue)
-                DispatchQueue.main.asyncAfter(deadline: .now() + UX.RowFlashDelay) {
-                    self.flashRow(at: lastIndexPath)
-                }
-            }
+            self.flashRowIfNeeded()
         }
     }
 
@@ -385,6 +363,17 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         }
 
         return 1
+    }
+
+    private func flashRowIfNeeded() {
+        guard flashLastRowOnNextReload else { return }
+        flashLastRowOnNextReload = false
+
+        let lastIndexPath = IndexPath(row: bookmarkNodes.count - 1,
+                                      section: BookmarksSection.bookmarks.rawValue)
+        DispatchQueue.main.asyncAfter(deadline: .now() + UX.RowFlashDelay) {
+            self.flashRow(at: lastIndexPath)
+        }
     }
 
     private func flashRow(at indexPath: IndexPath) {
