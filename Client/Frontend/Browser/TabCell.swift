@@ -216,6 +216,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
     override func prepareForReuse() {
         // Reset any close animations.
         super.prepareForReuse()
+        screenshotView.image = nil
         backgroundHolder.transform = .identity
         backgroundHolder.alpha = 1
         self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
