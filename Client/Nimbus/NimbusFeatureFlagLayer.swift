@@ -23,16 +23,14 @@ final class NimbusFeatureFlagLayer {
 
         case .jumpBackIn,
                 .pocket,
+                .sponsoredPocket,
                 .recentlySaved,
                 .historyHighlights,
                 .topSites:
-            return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
+            return checkHomescreenFeature(for: featureID, from: nimbus)
 
         case .wallpapers:
             return checkNimbusForWallpapersFeature(using: nimbus)
-
-        case .sponsoredPocket:
-            return checkNimbusForPocketSponsoredStoriesFeature(using: nimbus)
 
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
@@ -86,8 +84,8 @@ final class NimbusFeatureFlagLayer {
         }
     }
 
-    private func checkHomescreenSectionsFeature(for featureID: NimbusFeatureFlagID,
-                                                from nimbus: FxNimbus
+    private func checkHomescreenFeature(for featureID: NimbusFeatureFlagID,
+                                        from nimbus: FxNimbus
     ) -> Bool {
         let config = nimbus.features.homescreenFeature.value()
         var nimbusID: HomeScreenSection
@@ -111,12 +109,9 @@ final class NimbusFeatureFlagLayer {
         return config.wallpaperFeature.status
     }
 
-    private func checkNimbusForPocketSponsoredStoriesFeature(using nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homescreenFeature.value().pocketSponsoredStories
-    }
-
     private func checkSponsoredTilesFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.homescreenFeature.value()
+
         return config.sponsoredTiles.status
     }
 
