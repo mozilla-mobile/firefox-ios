@@ -38,6 +38,8 @@ protocol ImageFetcher {
                            completion: @escaping (UIImage?, Data?, ImageLoadingError?) -> Void)
     func downloadImageOnly(with url: URL,
                            completion: @escaping (UIImage?, Data?, ImageLoadingError?) -> Void)
+    func downloadAndCacheImageWithAuthentication(with url: URL,
+                                                 completion: @escaping (UIImage?, ImageLoadingError?) -> Void)
 }
 
 public class ImageLoadingHandler: ImageFetcher {
@@ -104,7 +106,7 @@ public class ImageLoadingHandler: ImageFetcher {
             }
         }
     }
-    
+
     public func downloadAndCacheImageWithAuthentication(with url: URL,
                                                         completion: @escaping (UIImage?, ImageLoadingError?) -> Void) {
         let imageDownloader = ImageDownloader.default
@@ -119,7 +121,7 @@ public class ImageLoadingHandler: ImageFetcher {
             }
         }
     }
-    
+
     public func downloadImageOnly(with url: URL,
                                          limit maxSize: Int,
                                          completion: @escaping (UIImage?, Data?, ImageLoadingError?) -> Void) {
