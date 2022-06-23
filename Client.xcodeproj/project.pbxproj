@@ -5657,6 +5657,8 @@
 		8A3233FF28627451003E1C33 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
+				D0B9483322A03468002F4AA1 /* BookmarkDetailPanel.swift */,
+				59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */,
 				8A3233FB286270CF003E1C33 /* FxBookmarkNode.swift */,
 				8A3233FD28627446003E1C33 /* LocalDesktopFolder.swift */,
 			);
@@ -6177,8 +6179,6 @@
 			children = (
 				96EB6C3627D821A400A9D159 /* HistoryPanel */,
 				F84B22261A09127C00AAB793 /* Library.xcassets */,
-				D0B9483322A03468002F4AA1 /* BookmarkDetailPanel.swift */,
-				59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */,
 				8A3233FF28627451003E1C33 /* Bookmarks */,
 				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
 				D0E89A2820910917001CE5C7 /* DownloadsPanel.swift */,
