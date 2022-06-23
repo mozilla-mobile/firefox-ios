@@ -93,8 +93,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     // Called when the user receives a tab (or any other notification) while in foreground.
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
 
-        if profile?.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
-            profile?.removeAccount()
+        if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
+            profile.removeAccount()
 
             // show the notification
             completionHandler([.alert, .sound])
