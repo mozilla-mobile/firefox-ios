@@ -10,17 +10,17 @@ class StoryProvider {
     
     private let numberOfPocketStories = 11
     private let numberOfPocketStoriesWithSponsoredContent = 9
-    private let numberOfSponsoredItemsInSection = 2
-    private let indexOfFirstSponsoredItem = 1
-    private let indexOfSecondSponsoredItem = 9
+    let sponsoredIndices: [Int]
     
     init(
         pocketAPI: PocketStoriesProviding,
         pocketSponsoredAPI: PocketSponsoredStoriesProviding,
+        sponsoredIndices: [Int] = [1, 9],
         showSponsoredStories: @escaping () -> Bool
     ) {
         self.pocketAPI = pocketAPI
         self.pocketSponsoredAPI = pocketSponsoredAPI
+        self.sponsoredIndices = sponsoredIndices
         self.showSponsoredStories = showSponsoredStories
     }
     
@@ -28,8 +28,8 @@ class StoryProvider {
     private let pocketSponsoredAPI: PocketSponsoredStoriesProviding
     private var showSponsoredStories: () -> Bool
     
-    private func insert(sponsored: inout [PocketStory], into globalFeed: inout [PocketStory], indexes: [Int]) {
-        for index in indexes {
+    private func insert(sponsored: inout [PocketStory], into globalFeed: inout [PocketStory], indices: [Int]) {
+        for index in indices {
             // Making sure we insert a sponsored story at a valid index
             let normalisedIndex = min(index, globalFeed.endIndex)
             if let first = sponsored.first {
@@ -49,11 +49,11 @@ class StoryProvider {
             if showSponsoredStories() {
                 let sponsored = try await pocketSponsoredAPI.fetchSponsoredStories()
                 // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
-                var sponsoredTemp = Array(sponsored.map(PocketStory.init).prefix(numberOfSponsoredItemsInSection))
+                var sponsoredTemp = Array(sponsored.map(PocketStory.init).prefix(sponsoredIndices.count))
                 insert(
                     sponsored: &sponsoredTemp,
                     into: &globalTemp,
-                    indexes: [indexOfFirstSponsoredItem, indexOfSecondSponsoredItem]
+                    indices: sponsoredIndices
                 )
             }
             

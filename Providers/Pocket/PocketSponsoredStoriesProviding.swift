@@ -20,7 +20,8 @@ extension PocketSponsoredStoriesProviding {
             }
         }
     }
-    func fetchSponsoredStories(timestamp: Timestamp = Date.now(), completion: @escaping (SponsoredStoryResult) -> Void) {
-        fetchSponsoredStories(timestamp: timestamp, completion: completion)
+    
+    func fetchSponsoredStories(completion: @escaping (SponsoredStoryResult) -> Void) {
+        fetchSponsoredStories(timestamp: Date.now(), completion: completion)
     }
 }

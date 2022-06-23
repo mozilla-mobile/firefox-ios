@@ -3,11 +3,164 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Shared
 @testable import Client
 
 class PocketStoryProviderTests: XCTestCase {
+    var sut: StoryProvider!
+
+    func testIfSponsoredAreDisabled_FetchingStories_ReturnsTheNonSponsoredList() async {
+        let stories: [PocketFeedStory] = [
+            .make(title: "feed1"),
+            .make(title: "feed2"),
+            .make(title: "feed3"),
+        ]
+        
+        sut = StoryProvider(
+            pocketAPI: MockPocketAPI(stories: stories),
+            pocketSponsoredAPI: MockSponsoredPocketAPI(stories: []),
+            showSponsoredStories: { false }
+        )
+        
+        let fetched = await sut.fetchPocketStories()
+        XCTAssertEqual(fetched, stories.map(PocketStory.init))
+    }
     
+    func testIfSponsoredAreEnabled_FetchingStoriesWithZeroSponsors_ReturnsTheNonSponsoredList() async {
+        let stories: [PocketFeedStory] = [
+            .make(title: "feed1"),
+            .make(title: "feed2"),
+            .make(title: "feed3"),
+        ]
+        
+        sut = StoryProvider(
+            pocketAPI: MockPocketAPI(stories: stories),
+            pocketSponsoredAPI: MockSponsoredPocketAPI(stories: []),
+            showSponsoredStories: { true }
+        )
+        
+        let fetched = await sut.fetchPocketStories()
+        XCTAssertEqual(fetched, stories.map(PocketStory.init))
+    }
     
+    func testIfSponsoredAreEnabled_FetchingStoriesWithSponsors_ReturnsStoryList() async {
+        let stories: [PocketFeedStory] = [
+            .make(title: "feed1"),
+            .make(title: "feed2"),
+            .make(title: "feed3"),
+        ]
+        
+        let sponsoredStories: [PocketSponsoredStory] = [
+            .make(title: "sponsored1"),
+            .make(title: "sponsored2"),
+            .make(title: "sponsored3"),
+        ]
+        
+        sut = StoryProvider(
+            pocketAPI: MockPocketAPI(stories: stories),
+            pocketSponsoredAPI: MockSponsoredPocketAPI(stories: sponsoredStories),
+            sponsoredIndices: [3, 4, 5],
+            showSponsoredStories: { true }
+        )
+        
+        let expected = (stories.map(PocketStory.init) + sponsoredStories.map(PocketStory.init))
+        let fetched = await sut.fetchPocketStories()
+        
+        XCTAssertEqual(fetched, expected)
+    }
+    
+    func testIfSponsoredAreEnabled_FetchingStoriesWithSponsors_ReturnsInCorrectOrder() async {
+        let stories: [PocketFeedStory] = [
+            .make(title: "feed1"),
+            .make(title: "feed2"),
+            .make(title: "feed3"),
+        ]
+        
+        let sponsoredStories: [PocketSponsoredStory] = [
+            .make(title: "sponsored1"),
+            .make(title: "sponsored2"),
+            .make(title: "sponsored3"),
+        ]
+        
+        sut = StoryProvider(
+            pocketAPI: MockPocketAPI(stories: stories),
+            pocketSponsoredAPI: MockSponsoredPocketAPI(stories: sponsoredStories),
+            sponsoredIndices: [1, 3, 5],
+            showSponsoredStories: { true }
+        )
+        
+        let extected: [PocketStory] = [
+            .init(pocketFeedStory: .make(title: "feed1")),
+            .init(pocketSponsoredStory: .make(title: "sponsored1")),
+            .init(pocketFeedStory: .make(title: "feed2")),
+            .init(pocketSponsoredStory: .make(title: "sponsored2")),
+            .init(pocketFeedStory: .make(title: "feed3")),
+            .init(pocketSponsoredStory: .make(title: "sponsored3"))
+        ]
+        
+        let fetched = await sut.fetchPocketStories()
+        XCTAssertEqual(fetched, extected)
+    }
+    
+    func testReturningMoreSponsores_ShowsOnlyTheCountFromIndeces() async {
+        let stories: [PocketFeedStory] = [
+            .make(title: "feed1"),
+            .make(title: "feed2"),
+        ]
+        
+        let sponsoredStories: [PocketSponsoredStory] = [
+            .make(title: "sponsored1"),
+            .make(title: "sponsored2"),
+            .make(title: "sponsored3"),
+            .make(title: "sponsored4"),
+            .make(title: "sponsored5"),
+        ]
+        
+        sut = StoryProvider(
+            pocketAPI: MockPocketAPI(stories: stories),
+            pocketSponsoredAPI: MockSponsoredPocketAPI(stories: sponsoredStories),
+            sponsoredIndices: [0, 1],
+            showSponsoredStories: { true }
+        )
+        
+        let extected: [PocketStory] = [
+            .init(pocketSponsoredStory: .make(title: "sponsored1")),
+            .init(pocketSponsoredStory: .make(title: "sponsored2")),
+            .init(pocketFeedStory: .make(title: "feed1")),
+            .init(pocketFeedStory: .make(title: "feed2"))
+        ]
+        
+        let fetched = await sut.fetchPocketStories()
+        XCTAssertEqual(fetched, extected)
+    }
+    
+    func testReturningEmptyFeed_ShowsOnlyTheSponsoredStories() async {
+        let sponsoredStories: [PocketSponsoredStory] = [
+            .make(title: "sponsored1"),
+            .make(title: "sponsored2"),
+            .make(title: "sponsored3"),
+            .make(title: "sponsored4"),
+            .make(title: "sponsored5"),
+        ]
+        
+        sut = StoryProvider(
+            pocketAPI: MockPocketAPI(stories: []),
+            pocketSponsoredAPI: MockSponsoredPocketAPI(stories: sponsoredStories),
+            sponsoredIndices: [0, 1],
+            showSponsoredStories: { true }
+        )
+        
+        let extected: [PocketStory] = [
+            .init(pocketSponsoredStory: .make(title: "sponsored1")),
+            .init(pocketSponsoredStory: .make(title: "sponsored2"))
+        ]
+        
+        let fetched = await sut.fetchPocketStories()
+        XCTAssertEqual(fetched, extected)
+    }
+}
+
+extension PocketStoryProviderTests {
     class MockPocketAPI: PocketStoriesProviding {
         init(stories: [PocketFeedStory]) {
             self.stories = stories
@@ -23,59 +176,18 @@ class PocketStoryProviderTests: XCTestCase {
     }
     
     class MockSponsoredPocketAPI: PocketSponsoredStoriesProviding {
+        
         init(stories: [PocketSponsoredStory]) {
             self.stories = stories
         }
         
         var stories: [PocketSponsoredStory]
         
-        func fetchStories(items: Int, completion: @escaping (SponsoredStoryResult) -> Void) {
+        func fetchSponsoredStories(timestamp: Timestamp, completion: @escaping (SponsoredStoryResult) -> Void) {
             completion(.success(stories))
-            return
         }
-        
-    }
-    
-    var sut: StoryProvider!
-
-    func testIfSponsoredAreDisabled_FetchingStories_ReturnsTheNonSponsoredList() async {
-        let stories: [PocketFeedStory] = [
-            .make(title: "title1"),
-            .make(title: "title2"),
-            .make(title: "title3"),
-        ]
-        
-        sut = StoryProvider(
-            pocketAPI: MockPocketAPI(stories: stories),
-            pocketSponsoredAPI: MockSponsoredPocketAPI(stories: []),
-            showSponsoredStories: { false }
-        )
-        
-        let fetched = await sut.fetchPocketStories()
-        XCTAssertEqual(fetched, stories.map(PocketStory.init))
     }
 }
-
-extension PocketStoryProviderTests {
-    
-    func makePocketStories() -> [PocketFeedStory] {
-        [
-            .make(title: "title1"),
-            .make(title: "title2"),
-            .make(title: "title3"),
-        ]
-    }
-    
-    func makeSponsoredPocketStories() -> [PocketSponsoredStory] {
-        [
-            .make(title: "title1"),
-            .make(title: "title2"),
-            .make(title: "title3"),
-        ]
-    }
-    
-}
-
 
 fileprivate extension PocketFeedStory {
     static func make(title: String) -> PocketFeedStory {

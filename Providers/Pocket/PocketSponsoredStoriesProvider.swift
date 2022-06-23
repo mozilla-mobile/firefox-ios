@@ -58,7 +58,7 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFl
         return request
     }
     
-    func fetchSponsoredStories(timestamp: Timestamp, completion: @escaping (SponsoredStoryResult) -> Void) {
+    func fetchSponsoredStories(timestamp: Timestamp = Date.now(), completion: @escaping (SponsoredStoryResult) -> Void) {
         guard let request = sponsoredFeedRequest else {
             completion(.failure(Error.requestCreationFailure))
             return
