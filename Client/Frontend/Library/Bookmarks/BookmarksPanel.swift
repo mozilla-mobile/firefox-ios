@@ -188,7 +188,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             group.leave()
         }
 
-        group.notify(queue: DispatchQueue.global(qos: .userInitiated)) {
+        group.notify(queue: DispatchQueue.main) {
             // TODO: Laurie - I need a way to retrieve the parent folder?
             // Do I have the parent directly on the node data?
             self.bookmarkFolder = nil

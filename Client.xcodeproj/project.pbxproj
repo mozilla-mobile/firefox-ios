@@ -6177,9 +6177,9 @@
 		D05434F3225FDA3400FDE4EF /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				8A3233FF28627451003E1C33 /* Bookmarks */,
 				96EB6C3627D821A400A9D159 /* HistoryPanel */,
 				F84B22261A09127C00AAB793 /* Library.xcassets */,
-				8A3233FF28627451003E1C33 /* Bookmarks */,
 				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
 				D0E89A2820910917001CE5C7 /* DownloadsPanel.swift */,
 				8A01891B275E9C2A00923EFE /* ClearHistoryHelper.swift */,
