@@ -23,10 +23,6 @@ struct InactiveTabItemCellModel {
         return DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 17)
     }
 
-    var backgroundColor: UIColor = .clear
-    var accessoryView: UIView?
-    var accessoryType: UITableViewCell.AccessoryType = .none
-
     var title: String?
     var icon: Favicon?
     var website: URL?
