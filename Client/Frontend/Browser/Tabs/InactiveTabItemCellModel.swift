@@ -15,10 +15,6 @@ struct InactiveTabItemCellModel {
         static let ImageViewLeadingConstant: CGFloat = 16
     }
 
-    var imageLeadingConstant: CGFloat {
-        return UX.ImageViewLeadingConstant
-    }
-
     var fontForLabel: UIFont {
         return DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 17)
     }
