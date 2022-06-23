@@ -5,8 +5,6 @@
 struct OneLineCellUX {
     static let ImageSize: CGFloat = 29
     static let BorderViewMargin: CGFloat = 16
-    static let LabelTopBottomMargin: CGFloat = 11
-    static let ImageTopBottomMargin: CGFloat = 10
 }
 
 enum OneLineTableViewCustomization {
