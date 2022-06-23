@@ -17,8 +17,10 @@ let urlValueLongExample = "localhost:\(serverPort)/test-fixture/test-example.htm
 let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
 class TopTabsTest: BaseTestCase {
-    func testAddTabFromTabTray() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+    func testAddTabFromTabTray() throws {
+        XCTExpectFailure("The app was not launched", strict: false) {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 45)
+        }
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()

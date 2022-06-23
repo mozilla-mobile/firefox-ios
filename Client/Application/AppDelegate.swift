@@ -10,21 +10,15 @@ import MessageUI
 import SDWebImage
 import SyncTelemetry
 import LocalAuthentication
-import SyncTelemetry
 import Sync
 import CoreSpotlight
 import UserNotifications
 import Account
-
-#if canImport(BackgroundTasks)
- import BackgroundTasks
-#endif
+import BackgroundTasks
 
 private let log = Logger.browserLogger
 
 let LatestAppVersionProfileKey = "latestAppVersion"
-let AllowThirdPartyKeyboardsKey = "settings.allowThirdPartyKeyboards"
-private let InitialPingSentKey = "initialPingSent"
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -32,77 +26,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var browserViewController: BrowserViewController!
     var rootViewController: UIViewController!
     var tabManager: TabManager!
-    var applicationCleanlyBackgrounded = true
     var receivedURLs = [URL]()
-
+    var orientationLock = UIInterfaceOrientationMask.all
     weak var profile: Profile?
-    weak var application: UIApplication?
-
     private var shutdownWebServer: DispatchSourceTimer?
-    private var orientationLock = UIInterfaceOrientationMask.all
-    private var launchOptions: [AnyHashable: Any]?
     private var telemetry: TelemetryWrapper?
     private var adjustHelper: AdjustHelper?
+    private var webServerUtil: WebServerUtil?
+    private var appLaunchUtil: AppLaunchUtil?
 
-    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        //
-        // Determine if the application cleanly exited last time it was used. We default to true in
-        // case we have never done this before. Then check if the "ApplicationCleanlyBackgrounded" user
-        // default exists and whether was properly set to true on app exit.
-        //
-        // Then we always set the user default to false. It will be set to true when we the application
-        // is backgrounded.
-        //
+    func application(_ application: UIApplication,
+                     willFinishLaunchingWithOptions
+                     launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        self.applicationCleanlyBackgrounded = true
+        log.info("startApplication begin")
 
-        let defaults = UserDefaults()
-        if defaults.object(forKey: "ApplicationCleanlyBackgrounded") != nil {
-            self.applicationCleanlyBackgrounded = defaults.bool(forKey: "ApplicationCleanlyBackgrounded")
-        }
-        defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
-
-        // Hold references to willFinishLaunching parameters for delayed app launch
-        self.application = application
-        self.launchOptions = launchOptions
+        appLaunchUtil = AppLaunchUtil()
+        appLaunchUtil?.setUpAppLaunchDependencies()
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
-        // If the 'Save logs to Files app on next launch' toggle
-        // is turned on in the Settings app, copy over old logs.
-        if DebugSettingsBundleOptions.saveLogsToDocuments {
-            Logger.copyPreviousLogsToDocuments()
-        }
-
-        return startApplication(application, withLaunchOptions: launchOptions)
-    }
-
-    private func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
-        log.info("startApplication begin")
-
-        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
-        // before getting the Profile.
-        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
-        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
-
-        // Set the Firefox UA for browsing.
-        setUserAgent()
-
-        // Start the keyboard helper to monitor and cache keyboard state.
-        KeyboardHelper.defaultHelper.startObserving()
-
-        DynamicFontHelper.defaultHelper.startObserving()
-
-        MenuHelper.defaultHelper.setItems()
-
-        let logDate = Date()
-        // Create a new sync log file on cold app launch. Note that this doesn't roll old logs.
-        Logger.syncLogger.newLogWithDate(logDate)
-
-        Logger.browserLogger.newLogWithDate(logDate)
-
         let profile = getProfile(application)
-
         telemetry = TelemetryWrapper(profile: profile)
 
         // Initialize the feature flag subsytem.
@@ -121,7 +65,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ThemeManager.shared.updateProfile(with: profile)
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
-        setUpWebServer(profile)
+        webServerUtil = WebServerUtil(profile: profile)
+        webServerUtil?.setUpWebServer()
 
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
 
@@ -134,9 +79,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         setupRootViewController()
 
-        // Add restoration class, the factory that will return the ViewController we
-        // will restore with.
-
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
                 let title = (userInfo["Title"] as? String) ?? ""
@@ -144,13 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
-        NotificationCenter.default.addObserver(forName: .DisplayThemeChanged, object: nil, queue: .main) { (notification) -> Void in
-            if !LegacyThemeManager.instance.systemThemeIsOn {
-                self.window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
-            } else {
-                self.window?.overrideUserInterfaceStyle = .unspecified
-            }
-        }
+        startListeningForThemeUpdates()
 
         adjustHelper = AdjustHelper(profile: profile)
         SystemUtils.onFirstRun()
@@ -158,26 +94,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
             print("RustFirefoxAccounts started")
         }
+
         log.info("startApplication end")
+
         return true
-    }
-
-    // TODO: Move to scene controller for iOS 13
-    private func setupRootViewController() {
-        if !LegacyThemeManager.instance.systemThemeIsOn {
-            self.window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
-        }
-
-        browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
-        browserViewController.edgesForExtendedLayout = []
-
-        let navigationController = UINavigationController(rootViewController: browserViewController)
-        navigationController.delegate = self
-        navigationController.isNavigationBarHidden = true
-        navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
-        rootViewController = navigationController
-
-        self.window!.rootViewController = rootViewController
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -320,14 +240,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         shutdownWebServer?.cancel()
         shutdownWebServer = nil
 
-        //
-        // We are back in the foreground, so set CleanlyBackgrounded to false so that we can detect that
-        // the application was cleanly backgrounded later.
-        //
-
-        let defaults = UserDefaults()
-        defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
-
         if let profile = self.profile {
             profile._reopen()
 
@@ -336,8 +248,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
 
             profile.syncManager.applicationDidBecomeActive()
-
-            setUpWebServer(profile)
+            webServerUtil?.setUpWebServer()
         }
 
         browserViewController.firefoxHomeViewController?.reloadAll()
@@ -374,15 +285,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        //
-        // At this point we are happy to mark the app as CleanlyBackgrounded. If a crash happens in background
-        // sync then that crash will still be reported. But we won't bother the user with the Restore Tabs
-        // dialog. We don't have to because at this point we already saved the tab state properly.
-        //
-
-        let defaults = UserDefaults()
-        defaults.set(true, forKey: "ApplicationCleanlyBackgrounded")
-
         // Pause file downloads.
         // TODO: iOS 13 needs to iterate all the BVCs.
         browserViewController.downloadQueue.pauseAll()
@@ -421,98 +323,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         profile?._shutdown()
-    }
-
-    fileprivate func setUpWebServer(_ profile: Profile) {
-        let server = WebServer.sharedInstance
-        guard !server.server.isRunning else { return }
-
-        ReaderModeHandlers.register(server, profile: profile)
-
-        let responders: [(String, InternalSchemeResponse)] =
-            [ (AboutHomeHandler.path, AboutHomeHandler()),
-              (AboutLicenseHandler.path, AboutLicenseHandler()),
-              (SessionRestoreHandler.path, SessionRestoreHandler()),
-              (ErrorPageHandler.path, ErrorPageHandler())]
-        responders.forEach { (path, responder) in
-            InternalSchemeHandler.responders[path] = responder
-        }
-
-        if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {
-            registerHandlersForTestMethods(server: server.server)
-        }
-
-        // Bug 1223009 was an issue whereby CGDWebserver crashed when moving to a background task
-        // catching and handling the error seemed to fix things, but we're not sure why.
-        // Either way, not implicitly unwrapping a try is not a great way of doing things
-        // so this is better anyway.
-        do {
-            try server.start()
-        } catch let err as NSError {
-            print("Error: Unable to start WebServer \(err)")
-        }
-    }
-
-    fileprivate func setUserAgent() {
-        let firefoxUA = UserAgent.getUserAgent()
-
-        // Set the UA for WKWebView (via defaults), the favicon fetcher, and the image loader.
-        // This only needs to be done once per runtime. Note that we use defaults here that are
-        // readable from extensions, so they can just use the cached identifier.
-
-        SDWebImageDownloader.shared.setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
-        // SDWebImage is setting accept headers that report we support webp. We don't
-        SDWebImageDownloader.shared.setValue("image/*;q=0.8", forHTTPHeaderField: "Accept")
-
-        // Record the user agent for use by search suggestion clients.
-        SearchViewController.userAgent = firefoxUA
-
-        // Some sites will only serve HTML that points to .ico files.
-        // The FaviconFetcher is explicitly for getting high-res icons, so use the desktop user agent.
-        FaviconFetcher.userAgent = UserAgent.desktopUserAgent()
-    }
-
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
-            browserViewController.openBlankNewTab(focusLocationField: false)
-            return true
-        }
-
-        // If the `NSUserActivity` has a `webpageURL`, it is either a deep link or an old history item
-        // reached via a "Spotlight" search before we began indexing visited pages via CoreSpotlight.
-        if let url = userActivity.webpageURL {
-            let query = url.getQuery()
-
-            // Check for fxa sign-in code and launch the login screen directly
-            if query["signin"] != nil {
-                // bvc.launchFxAFromDeeplinkURL(url) // Was using Adjust. Consider hooking up again when replacement system in-place.
-                return true
-            }
-
-            // Per Adjust documenation, https://docs.adjust.com/en/universal-links/#running-campaigns-through-universal-links,
-            // it is recommended that links contain the `deep_link` query parameter. This link will also
-            // be url encoded.
-            if let deepLink = query["deep_link"]?.removingPercentEncoding, let url = URL(string: deepLink) {
-                browserViewController.switchToTabForURLOrOpen(url)
-                return true
-            }
-
-            browserViewController.switchToTabForURLOrOpen(url)
-            return true
-        }
-
-        // Otherwise, check if the `NSUserActivity` is a CoreSpotlight item and switch to its tab or
-        // open a new one.
-        if userActivity.activityType == CSSearchableItemActionType {
-            if let userInfo = userActivity.userInfo,
-                let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
-                let url = URL(string: urlString) {
-                browserViewController.switchToTabForURLOrOpen(url)
-                return true
-            }
-        }
-
-        return false
     }
 
     /// When a user presses and holds the app icon from the Home Screen, we present quick actions / shortcut items (see QuickActions).
@@ -557,45 +367,83 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-// MARK: - Root View Controller Animations
-extension AppDelegate: UINavigationControllerDelegate {
-    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        switch operation {
-        case .push:
-            return BrowserToTrayAnimator()
-        case .pop:
-            return TrayToBrowserAnimator()
-        default:
-            return nil
+// This functionality will need to be moved to the SceneDelegate when the time comes
+extension AppDelegate {
+
+    func startListeningForThemeUpdates() {
+        NotificationCenter.default.addObserver(forName: .DisplayThemeChanged, object: nil, queue: .main) { (notification) -> Void in
+            if !LegacyThemeManager.instance.systemThemeIsOn {
+                self.window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
+            } else {
+                self.window?.overrideUserInterfaceStyle = .unspecified
+            }
         }
     }
-}
 
-extension AppDelegate: MFMailComposeViewControllerDelegate {
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        // Dismiss the view controller and start the app up
-        controller.dismiss(animated: true, completion: nil)
-        _ = startApplication(application!, withLaunchOptions: self.launchOptions)
-    }
-}
-
-// Orientation lock for views that use new modal presenter
-extension AppDelegate {
-    /// ref: https://stackoverflow.com/questions/28938660/
-    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+    // Orientation lock for views that use new modal presenter
+    func application(_ application: UIApplication,
+                     supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         return self.orientationLock
     }
 
-    struct AppUtility {
-        static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
-            if let delegate = UIApplication.shared.delegate as? AppDelegate {
-                delegate.orientationLock = orientation
+    func application(_ application: UIApplication,
+                     continue userActivity: NSUserActivity,
+                     restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
+            browserViewController.openBlankNewTab(focusLocationField: false)
+            return true
+        }
+
+        // If the `NSUserActivity` has a `webpageURL`, it is either a deep link or an old history item
+        // reached via a "Spotlight" search before we began indexing visited pages via CoreSpotlight.
+        if let url = userActivity.webpageURL {
+            let query = url.getQuery()
+
+            // Check for fxa sign-in code and launch the login screen directly
+            if query["signin"] != nil {
+                // bvc.launchFxAFromDeeplinkURL(url) // Was using Adjust. Consider hooking up again when replacement system in-place.
+                return true
+            }
+
+            // Per Adjust documenation, https://docs.adjust.com/en/universal-links/#running-campaigns-through-universal-links,
+            // it is recommended that links contain the `deep_link` query parameter. This link will also
+            // be url encoded.
+            if let deepLink = query["deep_link"]?.removingPercentEncoding, let url = URL(string: deepLink) {
+                browserViewController.switchToTabForURLOrOpen(url)
+                return true
+            }
+
+            browserViewController.switchToTabForURLOrOpen(url)
+            return true
+        }
+
+        // Otherwise, check if the `NSUserActivity` is a CoreSpotlight item and switch to its tab or
+        // open a new one.
+        if userActivity.activityType == CSSearchableItemActionType {
+            if let userInfo = userActivity.userInfo,
+                let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
+                let url = URL(string: urlString) {
+                browserViewController.switchToTabForURLOrOpen(url)
+                return true
             }
         }
 
-        static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation: UIInterfaceOrientation) {
-            self.lockOrientation(orientation)
-            UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
+        return false
+    }
+
+    private func setupRootViewController() {
+        if !LegacyThemeManager.instance.systemThemeIsOn {
+            window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
         }
+
+        browserViewController = BrowserViewController(profile: profile!, tabManager: tabManager)
+        browserViewController.edgesForExtendedLayout = []
+
+        let navigationController = UINavigationController(rootViewController: browserViewController)
+        navigationController.isNavigationBarHidden = true
+        navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
+        rootViewController = navigationController
+
+        window!.rootViewController = rootViewController
     }
 }

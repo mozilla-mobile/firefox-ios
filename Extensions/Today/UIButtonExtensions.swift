@@ -18,4 +18,23 @@ extension UIButton {
 
         self.setBackgroundImage(colorImage, for: state)
     }
+
+    func setInsets(forContentPadding contentPadding: UIEdgeInsets,
+                   imageTitlePadding: CGFloat) {
+        let isLTR = effectiveUserInterfaceLayoutDirection == .leftToRight
+
+        self.contentEdgeInsets = UIEdgeInsets(
+            top: contentPadding.top,
+            left: isLTR ? contentPadding.left : contentPadding.right + imageTitlePadding,
+            bottom: contentPadding.bottom,
+            right: isLTR ? contentPadding.right + imageTitlePadding : contentPadding.left
+        )
+
+        self.titleEdgeInsets = UIEdgeInsets(
+            top: 0,
+            left: isLTR ? imageTitlePadding : -imageTitlePadding,
+            bottom: 0,
+            right: isLTR ? -imageTitlePadding: imageTitlePadding
+        )
+    }
 }

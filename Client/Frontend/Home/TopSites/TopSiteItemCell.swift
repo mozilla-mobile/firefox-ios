@@ -13,7 +13,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
 
-    private var homeTopSite: HomeTopSite?
+    private var homeTopSite: TopSite?
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
     struct UX {
@@ -154,7 +154,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Public methods
 
-    func configure(_ topSite: HomeTopSite, position: Int) {
+    func configure(_ topSite: TopSite, position: Int) {
         homeTopSite = topSite
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
@@ -215,13 +215,13 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         ])
     }
 
-    private func configurePinnedSite(_ topSite: HomeTopSite) {
+    private func configurePinnedSite(_ topSite: TopSite) {
         guard topSite.isPinned else { return }
         pinViewHolder.isHidden = false
         pinImageView.isHidden = false
     }
 
-    private func configureSponsoredSite(_ topSite: HomeTopSite) {
+    private func configureSponsoredSite(_ topSite: TopSite) {
         guard topSite.isSponsoredTile else { return }
 
         sponsoredLabel.text = topSite.sponsoredText

@@ -192,6 +192,15 @@ extension IntroViewController: OnboardingCardDelegate {
         }
     }
 
+    // Extra step to make sure pageControl.currentPage is the right index card
+    // because UIPageViewControllerDataSource call fails
+    func pageChanged(_ cardType: IntroViewModel.OnboardingCards) {
+        if let cardIndex = viewModel.enabledCards.firstIndex(of: cardType),
+           cardIndex != pageControl.currentPage {
+            pageControl.currentPage = cardIndex
+        }
+    }
+
     private func presentSignToSync(_ fxaOptions: FxALaunchParams? = nil,
                                   flowType: FxAPageType = .emailLoginFlow,
                                   referringPage: ReferringPage = .onboarding) {
@@ -206,15 +215,11 @@ extension IntroViewController: OnboardingCardDelegate {
                                          action: #selector(dismissSignInViewController))
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
-        controller.onViewDismissed = {
-            self.closeOnboarding()
-        }
         self.present(controller, animated: true)
     }
 
     @objc func dismissSignInViewController() {
-        self.dismiss(animated: false, completion: nil)
-        closeOnboarding()
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

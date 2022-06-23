@@ -54,7 +54,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.textAlignment = .left
+        label.textAlignment = .natural
         label.numberOfLines = 1
         return label
     }()
@@ -176,7 +176,7 @@ class OneLineFooterView: UITableViewHeaderFooterView, NotificationThemeable {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-        label.textAlignment = .left
+        label.textAlignment = .natural
         label.numberOfLines = 1
         return label
     }()

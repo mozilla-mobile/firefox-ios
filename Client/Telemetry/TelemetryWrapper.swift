@@ -251,6 +251,14 @@ class TelemetryWrapper {
         GleanMetrics.InstalledMozillaProducts.klar.set(UIApplication.shared.canOpenURL(URL(string: "firefox-klar://")!))
         // Device Authentication
         GleanMetrics.Device.authentication.set(AppAuthenticator.canAuthenticateDeviceOwner())
+
+        // Wallpapers
+        let currentWallpaper = WallpaperManager().currentWallpaper
+
+        if case .themed = currentWallpaper.type {
+            GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.name].add()
+        }
+
     }
 
     @objc func uploadError(notification: NSNotification) {
@@ -373,6 +381,7 @@ extension TelemetryWrapper {
         case mediumTopSitesWidget = "medium-top-sites-widget"
         case topSiteTile = "top-site-tile"
         case topSiteContextualMenu = "top-site-contextual-menu"
+        case historyHighlightContextualMenu = "history-highlights-contextual-menu"
         case pocketStory = "pocket-story"
         case pocketSectionImpression = "pocket-section-impression"
         case library = "library"
@@ -600,8 +609,16 @@ extension TelemetryWrapper {
 
         // MARK: Preferences
         case (.action, .change, .setting, _, let extras):
-            if let preference = extras?[EventExtraKey.preference.rawValue] as? String, let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? String {
-                GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to, preference: preference))
+            if let preference = extras?[EventExtraKey.preference.rawValue] as? String,
+                let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? String {
+                GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to,
+                                                                                              preference: preference))
+
+            } else if let preference = extras?[EventExtraKey.preference.rawValue] as? String,
+                        let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? Bool {
+                GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to.description,
+                                                                                              preference: preference))
+
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
@@ -614,7 +631,7 @@ extension TelemetryWrapper {
                                             value: value, extras: extras)
             }
 
-        // MARK: QR Codes
+        // MARK: - QR Codes
         case (.action, .scan, .qrCodeText, _, _),
              (.action, .scan, .qrCodeURL, _, _):
             GleanMetrics.QrCode.scanned.add()
@@ -992,6 +1009,13 @@ extension TelemetryWrapper {
             GleanMetrics.FirefoxHomePage.historyHighlightsGroupOpen.record()
         case (.action, .view, .historyImpressions, _, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+        case (.action, .view, .historyHighlightContextualMenu, _, let extras):
+            if let type = extras?[EventExtraKey.contextualMenuType.rawValue] as? String {
+                let contextExtra = GleanMetrics.FirefoxHomePage.HistoryHighlightsContextExtra(type: type)
+                GleanMetrics.FirefoxHomePage.historyHighlightsContext.record(contextExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
 
         // MARK: - Wallpaper related
         case (.action, .tap, .firefoxHomepage, .cycleWallpaperButton, let extras):

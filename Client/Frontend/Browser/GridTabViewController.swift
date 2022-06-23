@@ -100,7 +100,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         collectionView.register(cellType: GroupedTabCell.self)
         collectionView.register(cellType: InactiveTabCell.self)
         collectionView.register(
-            ASHeaderView.self,
+            LabelButtonHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier)
         tabDisplayManager = TabDisplayManager(collectionView: self.collectionView,
@@ -256,67 +256,11 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     }
 
     @objc func didTogglePrivateMode() {
-        let scaleDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-
-        let newOffset = CGPoint(x: 0.0, y: collectionView.contentOffset.y)
-        if self.otherBrowsingModeOffset.y > 0 {
-            collectionView.setContentOffset(self.otherBrowsingModeOffset, animated: false)
-        }
-        self.otherBrowsingModeOffset = newOffset
-        let fromView: UIView
-        if !privateTabsAreEmpty(), let snapshot = collectionView.snapshotView(afterScreenUpdates: false) {
-            snapshot.frame = collectionView.frame
-            view.insertSubview(snapshot, aboveSubview: collectionView)
-            fromView = snapshot
-        } else {
-            fromView = emptyPrivateTabsView
-        }
-
         tabManager.willSwitchTabMode(leavingPBM: tabDisplayManager.isPrivate)
 
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
 
-        tabDisplayManager.refreshStore()
-
-        // If we are exiting private mode and we have the close private tabs option selected, make sure
-        // we clear out all of the private tabs
-        let exitingPrivateMode = !tabDisplayManager.isPrivate && tabManager.shouldClearPrivateTabs()
-
-        collectionView.setNeedsLayout()
-        collectionView.layoutIfNeeded()
-
-        let toView: UIView
-        if !privateTabsAreEmpty(), let newSnapshot = collectionView.snapshotView(afterScreenUpdates: !exitingPrivateMode) {
-            emptyPrivateTabsView.isHidden = true
-            // when exiting private mode don't screenshot the collectionview (causes the UI to hang)
-            newSnapshot.frame = collectionView.frame
-            view.insertSubview(newSnapshot, aboveSubview: fromView)
-            collectionView.alpha = 0
-            toView = newSnapshot
-        } else {
-            emptyPrivateTabsView.isHidden = false
-            toView = emptyPrivateTabsView
-        }
-        toView.alpha = 0
-        toView.transform = scaleDownTransform
-
-        UIView.animate(withDuration: 0.2, delay: 0, options: [], animations: { () -> Void in
-            fromView.transform = scaleDownTransform
-            fromView.alpha = 0
-            toView.transform = .identity
-            toView.alpha = 1
-        }) { finished in
-            if fromView != self.emptyPrivateTabsView {
-                fromView.removeFromSuperview()
-            }
-            if toView != self.emptyPrivateTabsView {
-                toView.removeFromSuperview()
-            }
-            self.collectionView.alpha = 1
-
-            // A final reload to ensure no animations happen while completing the transition.
-            self.tabDisplayManager.refreshStore()
-        }
+        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
     }
 
     fileprivate func privateTabsAreEmpty() -> Bool {
@@ -397,8 +341,8 @@ extension GridTabViewController {
                                                       isPrivate: isPrivateState)
                 } else {
                     self.tabManager.makeToastFromRecentlyClosedUrls(recentlyClosedTabs,
-                        isPrivate: isPrivateState,
-                        previousTabUUID: previousTabUUID)
+                                                                    isPrivate: isPrivateState,
+                                                                    previousTabUUID: previousTabUUID)
                 }
                 closeTabsTrayHelper()
             }
@@ -541,7 +485,7 @@ extension GridTabViewController: TabPeekDelegate {
     func tabPeekDidCloseTab(_ tab: Tab) {
         // Tab peek is only available on regular tabs
         if let index = tabDisplayManager.dataStore.index(of: tab),
-            let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)) as? TabCell {
+           let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)) as? TabCell {
 
             cell.close()
             NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
@@ -578,6 +522,7 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
         case .removedLastTab:
             // when removing the last tab (only in normal mode) we will automatically open a new tab.
             // When that happens focus it by dismissing the tab tray
+            notificationCenter.post(name: .TabsTrayDidClose, object: nil)
             if !tabDisplayManager.isPrivate {
                 self.dismissTabTray()
             }
@@ -632,7 +577,7 @@ extension GridTabViewController {
 }
 
 // MARK: TabLayoutDelegate
-fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
+private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     weak var tabSelectionDelegate: TabSelectionDelegate?
     weak var tabPeekDelegate: TabPeekDelegate?
     let scrollView: UIScrollView
@@ -708,7 +653,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             let width = collectionView.frame.size.width
             if let groupCount = tabDisplayManager.tabGroups?.count, groupCount > 0 {
                 let height: CGFloat = GroupedTabCellProperties.CellUX.defaultCellHeight * CGFloat(groupCount)
-                    return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
+                return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
             } else {
                 return CGSize(width: 0, height: 0)
             }
@@ -752,7 +697,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
 
         case .inactiveTabs:
             guard !tabDisplayManager.isPrivate,
-                    tabDisplayManager.inactiveViewModel?.inactiveTabs.count ?? 0 > 0
+                  tabDisplayManager.inactiveViewModel?.inactiveTabs.count ?? 0 > 0
             else { return .zero }
 
             return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)

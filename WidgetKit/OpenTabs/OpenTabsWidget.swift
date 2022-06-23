@@ -31,7 +31,7 @@ struct OpenTabsView: View {
         VStack(alignment: .leading) {
             Link(destination: linkToContainingApp("?uuid=\(tab.uuid)", query: query)) {
                 HStack(alignment: .center, spacing: 15) {
-                    if (entry.favicons[tab.imageKey] != nil) {
+                    if entry.favicons[tab.imageKey] != nil {
                         (entry.favicons[tab.imageKey])!.resizable().frame(width: 16, height: 16)
                     } else {
                         Image("placeholderFavicon")
@@ -88,7 +88,7 @@ struct OpenTabsView: View {
                         lineItemForTab(tab)
                     }
 
-                    if (entry.tabs.count > numberOfTabsToDisplay) {
+                    if entry.tabs.count > numberOfTabsToDisplay {
                         HStack(alignment: .center, spacing: 15) {
                             Image("openFirefox").foregroundColor(Color.white).frame(width: 16, height: 16)
                             Text(String.localizedStringWithFormat(String.MoreTabsLabel, (entry.tabs.count - numberOfTabsToDisplay)))

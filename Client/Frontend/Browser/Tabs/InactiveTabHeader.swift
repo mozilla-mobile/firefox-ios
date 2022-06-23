@@ -11,7 +11,7 @@ enum ExpandButtonState {
     var image: UIImage? {
         switch self {
         case .right:
-            return UIImage(named: ImageIdentifiers.menuChevron)
+            return UIImage(named: ImageIdentifiers.menuChevron)?.imageFlippedForRightToLeftLayoutDirection()
         case .down:
             return UIImage(named: ImageIdentifiers.findNext)
         }
@@ -28,7 +28,8 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
     lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.text = self.title
         titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-        titleLabel.font = UIFont.systemFont(ofSize: GroupedTabCellProperties.CellUX.titleFontSize, weight: .semibold)
+        titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline, maxSize: 17)
+        titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
@@ -37,7 +38,7 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
     lazy var moreButton: UIButton = .build { button in
         button.isHidden = true
         button.setImage(self.state?.image, for: .normal)
-        button.contentHorizontalAlignment = .right
+        button.contentHorizontalAlignment = .trailing
     }
 
     var title: String? {
@@ -60,14 +61,20 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
 
         contentView.addSubview(titleLabel)
         contentView.addSubview(moreButton)
-        moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        moreButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+
+        isAccessibilityElement = true
+        accessibilityTraits = .button
+        accessibilityIdentifier = AccessibilityIdentifiers.TabTray.inactiveTabHeader
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 17),
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 19),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -19),
             titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -16),
 
-            moreButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            moreButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 17),
+            moreButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -28),
         ])
 

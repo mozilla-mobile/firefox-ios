@@ -113,6 +113,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "ঠিকানা এবং অনুসন্ধান";
 
+/* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
+"Address.Bar.v99" = "এড্রেস বার";
+
 /* Used as a button label for crash dialog prompt */
 "Always Send" = "সর্বদা পাঠানো হবে";
 
@@ -286,6 +289,15 @@
 
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "লিঙ্ক শেয়ার করুন";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.Homepage.PersonalizedHome" = "আপনার পারসোনালাইজ Firefox হোমপেজ আপনি পূর্বের অবস্থান থেকে শুরু করা আরো সহজতর করেছে। আপনার সাম্প্রতিক ট্যাব, বুকমার্ক, এবং অনুসন্ধান ফলাফল খুঁজুন।";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "টুলবার সেটিংস";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "আপনি যেসকল ট্যাব গত দুই সপ্তাহে দেখেননি, সেগুলো এখানে সরিয়ে আনা হয়েছে।";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "সেটিংসে বন্ধ করুন";
@@ -658,6 +670,9 @@
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
 "InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Auto Close চালু করুন";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox ট্যাবগুলি বন্ধ করবে, যা আপনি গত মাসে দেখেননি।";
+
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
 "InactiveTabs.TabTray.AutoClosePrompt.Title" = "এক মাস পর স্বয়ংক্রিয়ভাবে বন্ধ?";
 
@@ -684,6 +699,9 @@
 
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "আবার খুঁজুন";
+
+/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.NewNormalTab" = "নতুন সাধারণ ট্যাব";
 
 /* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.OpenLinkInBackground" = "ব্যাকগ্রাউন্ডে লিঙ্ক খুলুন";
@@ -771,6 +789,9 @@
 
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "আরও জানুন";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "লগইন এবং পাসওয়ার্ড সংরক্ষণ এবং স্বয়ংক্রিয়ভাবে পূরণ করতে, ফেস আইডি, টাচ আইডি বা একটি ডিভাইস পাসকোড সক্রিয় করুন।";
 
 /* Title of the Continue button. */
 "Logins.Onboarding.ContinueButtonTitle" = "চালিয়ে যান";

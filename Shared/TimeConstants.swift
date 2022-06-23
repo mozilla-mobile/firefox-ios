@@ -17,7 +17,7 @@ public let OneHourInMilliseconds = 60 * OneMinuteInMilliseconds
 public let OneMinuteInMilliseconds = 60 * OneSecondInMilliseconds
 public let OneSecondInMilliseconds: UInt64 = 1000
 
-fileprivate let rfc822DateFormatter: DateFormatter = {
+private let rfc822DateFormatter: DateFormatter = {
     let dateFormatter = DateFormatter()
     dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
     dateFormatter.dateFormat = "EEE',' dd MMM yyyy HH':'mm':'ss 'GMT'"

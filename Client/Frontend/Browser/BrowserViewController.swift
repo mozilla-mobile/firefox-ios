@@ -52,7 +52,7 @@ class BrowserViewController: UIViewController {
         .title,
     ]
 
-    var firefoxHomeViewController: FirefoxHomeViewController?
+    var firefoxHomeViewController: HomepageViewController?
     var libraryViewController: LibraryViewController?
     var libraryDrawerViewController: DrawerViewController?
     var webViewContainer: UIView!
@@ -309,7 +309,7 @@ class BrowserViewController: UIViewController {
         view.layoutSubviews()
 
         if let tab = tabManager.selectedTab,
-               let webView = tab.webView {
+           let webView = tab.webView {
             updateURLBarDisplayURL(tab)
             navigationToolbar.updateBackStatus(webView.canGoBack)
             navigationToolbar.updateForwardStatus(webView.canGoForward)
@@ -511,7 +511,7 @@ class BrowserViewController: UIViewController {
             self.view.alpha = (profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil) ? 1.0 : 0.0
         }
 
-        if !displayedRestoreTabsAlert && !cleanlyBackgrounded() && crashedLastLaunch() {
+        if !displayedRestoreTabsAlert && crashedLastLaunch() {
             displayedRestoreTabsAlert = true
             showRestoreTabsAlert()
         } else {
@@ -810,13 +810,6 @@ class BrowserViewController: UIViewController {
         return SentryIntegration.shared.crashedLastLaunch
     }
 
-    fileprivate func cleanlyBackgrounded() -> Bool {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return false
-        }
-        return appDelegate.applicationCleanlyBackgrounded
-    }
-
     fileprivate func showRestoreTabsAlert() {
         guard tabManager.hasTabsToRestoreAtStartup() else {
             tabManager.selectTab(tabManager.addTab())
@@ -875,7 +868,7 @@ class BrowserViewController: UIViewController {
             let trackingValue: TelemetryWrapper.EventValue = inline ? .openHomeFromPhotonMenuButton : .openHomeFromAwesomebar
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .firefoxHomepage, value: trackingValue, extras: nil)
 
-            let firefoxHomeViewController = FirefoxHomeViewController(
+            let firefoxHomeViewController = HomepageViewController(
                 profile: profile,
                 tabManager: tabManager,
                 isZeroSearch: !inline)
@@ -1190,14 +1183,14 @@ class BrowserViewController: UIViewController {
         }
         guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
             SentryIntegration.shared.send(message: "BVC observeValue webpage unhandled KVO", tag: .general,
-                               severity: .error,
-                               description: "Unhandled KVO key: \(keyPath ?? "nil")")
+                                          severity: .error,
+                                          description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }
 
         if let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper {
             // This is zero-cost if already installed. It needs to be checked frequently (hence every event here triggers this function), as when a new tab is created it requires multiple attempts to setup the handler correctly.
-             helper.replaceGestureHandlerIfNeeded()
+            helper.replaceGestureHandlerIfNeeded()
         }
 
         switch path {
@@ -1884,7 +1877,7 @@ extension BrowserViewController: TabManagerDelegate {
         // Reset the scroll position for the ActivityStreamPanel so that it
         // is always presented scrolled to the top when switching tabs.
         if !isRestoring, selected != previous,
-            let activityStreamPanel = firefoxHomeViewController {
+           let activityStreamPanel = firefoxHomeViewController {
             activityStreamPanel.scrollToTop()
         }
 
@@ -2121,8 +2114,8 @@ extension BrowserViewController {
         }
         etpCoverSheetViewController.viewModel.startBrowsing = {
             etpCoverSheetViewController.dismiss(animated: true) {
-            if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                _ = self.navigationController?.popToRootViewController(animated: true)
+                if self.navigationController?.viewControllers.count ?? 0 > 1 {
+                    _ = self.navigationController?.popToRootViewController(animated: true)
                 }
             }
         }
@@ -2172,8 +2165,8 @@ extension BrowserViewController {
 
             updateViewController.viewModel.startBrowsing = {
                 updateViewController.dismiss(animated: true) {
-                if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                    _ = self.navigationController?.popToRootViewController(animated: true)
+                    if self.navigationController?.viewControllers.count ?? 0 > 1 {
+                        _ = self.navigationController?.popToRootViewController(animated: true)
                     }
                 }
             }
@@ -2255,17 +2248,17 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             screenshotHelper.takeDelayedScreenshot(currentTab)
 
             let addTab = { (rURL: URL, isPrivate: Bool) in
-                    let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
-                    guard !self.topTabsVisible else {
-                        return
+                let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
+                guard !self.topTabsVisible else {
+                    return
+                }
+                // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
+                let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+                    if buttonPressed {
+                        self.tabManager.selectTab(tab)
                     }
-                    // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-                    let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
-                        if buttonPressed {
-                            self.tabManager.selectTab(tab)
-                        }
-                    })
-                    self.show(toast: toast)
+                })
+                self.show(toast: toast)
             }
 
             if !isPrivate {
@@ -2597,8 +2590,8 @@ extension BrowserViewController: FeatureFlaggable {
 
     func homePanelDidRequestToRestoreClosedTab(_ motion: UIEvent.EventSubtype) {
         guard motion == .motionShake, !topTabsVisible, !urlBar.inOverlayMode,
-            let lastClosedURL = profile.recentlyClosedTabs.tabs.first?.url,
-            let selectedTab = tabManager.selectedTab else { return }
+              let lastClosedURL = profile.recentlyClosedTabs.tabs.first?.url,
+              let selectedTab = tabManager.selectedTab else { return }
 
         let alertTitleText: String = .ReopenLastTabAlertTitle
         let reopenButtonText: String = .ReopenLastTabButtonText

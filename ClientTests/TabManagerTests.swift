@@ -39,7 +39,7 @@ struct MethodSpy {
     }
 }
 
-fileprivate let spyDidSelectedTabChange = "tabManager(_:didSelectedTabChange:previous:isRestoring:)"
+private let spyDidSelectedTabChange = "tabManager(_:didSelectedTabChange:previous:isRestoring:)"
 
 open class MockTabManagerDelegate: TabManagerDelegate {
     // This array represents the order in which delegate methods should be called.
@@ -632,6 +632,6 @@ private extension TabManagerTests {
             completion()
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations(timeout: 10.0, handler: nil)
     }
 }

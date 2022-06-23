@@ -32,7 +32,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0), timeout: 10)
         app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0).press(forDuration: 1)
         snapshot("LongPressTextOptions-01")
-        if(app.menuItems["show.next.items.menu.button"].exists) {
+        if app.menuItems["show.next.items.menu.button"].exists {
             app.menuItems["show.next.items.menu.button"].tap()
             snapshot("LongPressTextOptions-02")
         }

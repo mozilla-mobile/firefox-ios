@@ -130,8 +130,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         view.layoutIfNeeded()
 
         // Portrait orientation: lock enable
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait,
-                                               andRotateTo: UIInterfaceOrientation.portrait)
+        OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.portrait,
+                                              andRotateTo: UIInterfaceOrientation.portrait)
     }
 
     override func viewDidLayoutSubviews() {
@@ -147,7 +147,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Portrait orientation: lock disable
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.all)
+        OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.all)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
