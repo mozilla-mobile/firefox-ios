@@ -2,7 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import UIKit
+struct OneLineCellUX {
+    static let ImageSize: CGFloat = 28
+    static let BorderViewMargin: CGFloat = 16
+    static let LabelTopBottomMargin: CGFloat = 11
+    static let ImageTopBottomMargin: CGFloat = 10
+}
 
 enum OneLineTableViewCustomization {
     case regular
@@ -67,8 +72,8 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
 
     private var defaultSeparatorInset: UIEdgeInsets {
         return UIEdgeInsets(top: 0,
-                            left: OneLineCellViewModel.UX.ImageSize + 2 *
-                            OneLineCellViewModel.UX.BorderViewMargin,
+                            left: OneLineCellUX.ImageSize + 2 *
+                            OneLineCellUX.BorderViewMargin,
                             bottom: 0,
                             right: 0)
     }
@@ -101,14 +106,14 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
             containerViewLeadingConstraint,
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            leftImageView.heightAnchor.constraint(equalToConstant: OneLineCellViewModel.UX.ImageSize),
-            leftImageView.widthAnchor.constraint(equalToConstant: OneLineCellViewModel.UX.ImageSize),
+            leftImageView.heightAnchor.constraint(equalToConstant: OneLineCellUX.ImageSize),
+            leftImageView.widthAnchor.constraint(equalToConstant: OneLineCellUX.ImageSize),
             leftImageViewLeadingConstraint,
             leftImageView.centerYAnchor.constraint(equalTo: midView.centerYAnchor),
             leftImageView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor,
-                                               constant: OneLineCellViewModel.UX.ImageTopBottomMargin),
+                                               constant: OneLineCellUX.ImageTopBottomMargin),
             leftImageView.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor,
-                                                  constant: OneLineCellViewModel.UX.ImageTopBottomMargin),
+                                                  constant: OneLineCellUX.ImageTopBottomMargin),
 
             midView.topAnchor.constraint(equalTo: containerView.topAnchor),
             midView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
@@ -116,9 +121,9 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
             midViewTrailingConstraint,
 
             titleLabel.topAnchor.constraint(equalTo: midView.topAnchor,
-                                            constant: OneLineCellViewModel.UX.LabelTopBottomMargin),
+                                            constant: OneLineCellUX.LabelTopBottomMargin),
             titleLabel.bottomAnchor.constraint(equalTo: midView.bottomAnchor,
-                                               constant: -OneLineCellViewModel.UX.LabelTopBottomMargin),
+                                               constant: -OneLineCellUX.LabelTopBottomMargin),
             titleLabel.leadingAnchor.constraint(equalTo: midView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: midView.trailingAnchor),
 
