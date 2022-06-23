@@ -18,6 +18,9 @@ homescreenFeature:
   hasExposure: true
   exposureDescription: ""
   variables:
+    pocket-sponsored-stories:
+      type: boolean
+      description: "This property defines whether pocket sponsored stories appear on the homepage.\n"
     sections-enabled:
       type: json
       description: "This property provides a lookup table of whether or not the given section should be enabled. If the section is enabled, it should be toggleable in the settings screen, and on by default.\n"
