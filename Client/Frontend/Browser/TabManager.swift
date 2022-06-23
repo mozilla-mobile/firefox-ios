@@ -116,6 +116,9 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         return TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }()
 
+    var didChangedPanelSelection: Bool = false
+    var didAddNewTab: Bool = false
+
     var selectedIndex: Int { return _selectedIndex }
 
     // Enables undo of recently closed tabs
@@ -277,7 +280,6 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             TabEvent.post(.didGainFocus, for: tab)
             tab.applyTheme()
         }
-        closure?()
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
     }
 

@@ -279,6 +279,7 @@ class TabTrayViewController: UIViewController {
     }
 
     private func switchBetweenLocalPanels(withPrivateMode privateMode: Bool) {
+        viewModel.tabManager.didChangedPanelSelection = true
         if children.first != viewModel.tabTrayView {
             hideCurrentPanel()
             showPanel(viewModel.tabTrayView)

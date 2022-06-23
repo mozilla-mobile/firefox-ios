@@ -1991,7 +1991,13 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
             if tab.url == nil, !tab.isRestoring {
-                urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
+                if tabManager.didChangedPanelSelection && !tabManager.didAddNewTab {
+                    tabManager.didChangedPanelSelection = false
+                    urlBar.leaveOverlayMode()
+                } else {
+                    tabManager.didAddNewTab = false
+                    urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
+                }
             } else {
                 urlBar.leaveOverlayMode()
             }
@@ -2000,6 +2006,7 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
         // If we are restoring tabs then we update the count once at the end
+        tabManager.didAddNewTab = true
         if !isRestoring {
             updateTabCountUsingTabManager(tabManager)
         }
@@ -2007,6 +2014,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
+        tabManager.didChangedPanelSelection = true
         if let url = tab.lastKnownUrl, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
             profile.recentlyClosedTabs.addTab(url as URL, title: tab.lastTitle, faviconURL: tab.displayFavicon?.url, lastExecutedTime: tab.lastExecutedTime)
         }
@@ -2015,6 +2023,7 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
+        tabManager.didChangedPanelSelection = true
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
