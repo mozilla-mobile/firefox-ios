@@ -7,8 +7,6 @@ import Storage
 import Shared
 import XCGLogger
 
-private let log = Logger.browserLogger
-
 let LocalizedRootBookmarkFolderStrings = [
     BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
     BookmarkRoots.ToolbarFolderGUID: String.BookmarksFolderTitleToolbar,
@@ -25,7 +23,7 @@ private class SeparatorTableViewCell: OneLineTableViewCell {
     }
 }
 
-class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActionBookmark {
+class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActionBookmark, Loggable {
 
     private struct UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
@@ -123,7 +121,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             self.profile.places.createSeparator(parentGUID: self.bookmarkFolderGUID,
                                                 position: UInt32(centerVisibleRow)) >>== { guid in
                 self.profile.places.getBookmark(guid: guid).uponQueue(.main) { result in
-                    guard let bookmarkNode = result.successValue, let bookmarkSeparator = bookmarkNode as? BookmarkSeparatorData else {
+                    guard let bookmarkNode = result.successValue,
+                            let bookmarkSeparator = bookmarkNode as? BookmarkSeparatorData else {
                         return
                     }
 
@@ -178,7 +177,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     private func setupRootFolderData() {
-        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID,
+                                        recursive: false).uponQueue(.main) { result in
             guard let folder = result.successValue as? BookmarkFolderData else {
                 // TODO: Handle error case?
                 self.bookmarkFolder = nil
@@ -197,7 +197,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             if self.flashLastRowOnNextReload {
                 self.flashLastRowOnNextReload = false
 
-                let lastIndexPath = IndexPath(row: self.bookmarkNodes.count - 1, section: BookmarksSection.bookmarks.rawValue)
+                let lastIndexPath = IndexPath(row: self.bookmarkNodes.count - 1,
+                                              section: BookmarksSection.bookmarks.rawValue)
                 DispatchQueue.main.asyncAfter(deadline: .now() + UX.RowFlashDelay) {
                     self.flashRow(at: lastIndexPath)
                 }
@@ -213,7 +214,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     private func setupLocalDesktopFolderData() {
         let group = DispatchGroup()
         group.enter()
-        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.UnfiledFolderGUID, recursive: false).uponQueue(.main) { result in
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.UnfiledFolderGUID,
+                                        recursive: false).uponQueue(.main) { result in
             guard let folder = result.successValue as? BookmarkFolderData else {
                 group.leave()
                 return
@@ -223,7 +225,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         }
 
         group.enter()
-        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MenuFolderGUID, recursive: false).uponQueue(.main) { result in
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MenuFolderGUID,
+                                        recursive: false).uponQueue(.main) { result in
             guard let folder = result.successValue as? BookmarkFolderData else {
                 group.leave()
                 return
@@ -233,7 +236,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         }
 
         group.enter()
-        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.ToolbarFolderGUID, recursive: false).uponQueue(.main) { result in
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.ToolbarFolderGUID,
+                                        recursive: false).uponQueue(.main) { result in
             guard let folder = result.successValue as? BookmarkFolderData else {
                 group.leave()
                 return
@@ -266,7 +270,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             if self.flashLastRowOnNextReload {
                 self.flashLastRowOnNextReload = false
 
-                let lastIndexPath = IndexPath(row: self.bookmarkNodes.count - 1, section: BookmarksSection.bookmarks.rawValue)
+                let lastIndexPath = IndexPath(row: self.bookmarkNodes.count - 1,
+                                              section: BookmarksSection.bookmarks.rawValue)
                 DispatchQueue.main.asyncAfter(deadline: .now() + UX.RowFlashDelay) {
                     self.flashRow(at: lastIndexPath)
                 }
@@ -291,7 +296,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             if self.flashLastRowOnNextReload {
                 self.flashLastRowOnNextReload = false
 
-                let lastIndexPath = IndexPath(row: self.bookmarkNodes.count - 1, section: BookmarksSection.bookmarks.rawValue)
+                let lastIndexPath = IndexPath(row: self.bookmarkNodes.count - 1,
+                                              section: BookmarksSection.bookmarks.rawValue)
                 DispatchQueue.main.asyncAfter(deadline: .now() + UX.RowFlashDelay) {
                     self.flashRow(at: lastIndexPath)
                 }
@@ -309,8 +315,13 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     fileprivate func backButtonView() -> UIView? {
-        let navigationBarContentView = navigationController?.navigationBar.subviews.find({ $0.description.starts(with: "<_UINavigationBarContentView:") })
-        return navigationBarContentView?.subviews.find({ $0.description.starts(with: "<_UIButtonBarButton:") })
+        let navigationBarContentView = navigationController?.navigationBar.subviews.find {
+            $0.description.starts(with: "<_UINavigationBarContentView:")
+        }
+
+        return navigationBarContentView?.subviews.find {
+            $0.description.starts(with: "<_UIButtonBarButton:")
+        }
     }
 
     fileprivate func centerVisibleRow() -> Int {
@@ -560,7 +571,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         bookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
     }
 
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    func tableView(_ tableView: UITableView,
+                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive,
                                               title: .BookmarksPanelDeleteTableAction) { [weak self] (_, _, completion) in
             guard let strongSelf = self else { completion(false); return }
@@ -641,7 +653,7 @@ extension BookmarksPanel: Notifiable {
         case .FirefoxAccountChanged:
             reloadData()
         default:
-            log.warning("Received unexpected notification \(notification.name)")
+            browserLog.warning("Received unexpected notification \(notification.name)")
             break
         }
     }
