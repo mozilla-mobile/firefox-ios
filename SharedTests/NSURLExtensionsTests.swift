@@ -243,7 +243,8 @@ class NSURLExtensionsTests: XCTestCase {
     func testoriginalURLFromErrorURL() {
         let goodurls = [
             ("\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage)?url=http%3A//mozilla.com", URL(string: "http://mozilla.com")),
-            ("\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage)?url=http%3A//localhost%3A\(AppInfo.webserverPort)/about/home/%23panel%3D1", URL(string: "http://localhost:\(AppInfo.webserverPort)/about/home/#panel=1")),
+            ("\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage)?url=http%3A//localhost%3A\(AppInfo.webserverPort)/about/home/%23panel%3D1",
+             URL(string: "http://localhost:\(AppInfo.webserverPort)/about/home/#panel=1")),
             ]
 
         goodurls.forEach {
@@ -287,11 +288,13 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testdecodeReaderModeURL() {
+        // swiftlint:disable line_length
         let goodurls = [
             ("http://localhost:\(AppInfo.webserverPort)/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage&uuidkey=AAAAA", URL(string: "https://en.m.wikipedia.org/wiki/Main_Page")),
             ("about:reader?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage&uuidkey=AAAAA", URL(string: "https://en.m.wikipedia.org/wiki/Main_Page")),
             ("about:reader?url=http%3A%2F%2Fexample%2Ecom%3Furl%3Dparam%26key%3Dvalue&uuidkey=AAAAA", URL(string: "http://example.com?url=param&key=value"))
         ]
+        // swiftlint:enable line_length
         let badurls = [
             "http://google.com",
             "http://localhost:\(AppInfo.webserverPort)/sessionrestore.html",
@@ -363,6 +366,7 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testdisplayURL() {
+        // swiftlint:disable line_length
         let goodurls = [
             ("http://localhost:\(AppInfo.webserverPort)/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2F", "https://en.m.wikipedia.org/wiki/"),
             ("\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage)?url=http%3A//mozilla.com", "http://mozilla.com"),
@@ -370,6 +374,7 @@ class NSURLExtensionsTests: XCTestCase {
             ("\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage)?url=http%3A%2F%2Flocalhost%3A\(AppInfo.webserverPort)%2Freader-mode%2Fpage%3Furl%3Dhttps%253A%252F%252Fen%252Em%252Ewikipedia%252Eorg%252Fwiki%252F", "https://en.m.wikipedia.org/wiki/"),
             ("https://mail.example.co.uk/index.html", "https://mail.example.co.uk/index.html"),
         ]
+        // swiftlint:enable line_length
         let badurls = [
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html?url=http%3A//localhost%3A\(AppInfo.webserverPort)/about/home/%23panel%3D1",
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html",

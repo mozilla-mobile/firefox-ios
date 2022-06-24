@@ -176,7 +176,9 @@ class RecordTests: XCTestCase {
         let expectedSortIndex = 131
         let expectedLastModified: Timestamp = 1326254123650
 
+        // swiftlint:disable line_length
         let inputString = "{\"sortindex\": 131, \"payload\": \"{\\\"ciphertext\\\":\\\"YJB4dr0vZEIWPirfU2FCJvfzeSLiOP5QWasol2R6ILUxdHsJWuUuvTZVhxYQfTVNou6hVV67jfAvi5Cs+bqhhQsv7icZTiZhPTiTdVGt+uuMotxauVA5OryNGVEZgCCTvT3upzhDFdDbJzVd9O3/gU/b7r/CmAHykX8bTlthlbWeZ8oz6gwHJB5tPRU15nM/m/qW1vyKIw5pw/ZwtAy630AieRehGIGDk+33PWqsfyuT4EUFY9/Ly+8JlnqzxfiBCunIfuXGdLuqTjJOxgrK8mI4wccRFEdFEnmHvh5x7fjl1ID52qumFNQl8zkB75C8XK25alXqwvRR6/AQSP+BgQ==\\\",\\\"IV\\\":\\\"v/0BFgicqYQsd70T39rraA==\\\",\\\"hmac\\\":\\\"59605ed696f6e0e6e062a03510cff742bf6b50d695c042e8372a93f4c2d37dac\\\"}\", \"id\": \"0-P9fabp9vJD\", \"modified\": 1326254123.65}"
+        // swiftlint:enable line_length
 
         let keyBundle = KeyBundle(encKeyB64: b64E, hmacKeyB64: b64H)!
         let decryptClient = keysPayloadFactory(keyBundle: keyBundle, { CleartextPayloadJSON($0) })
@@ -213,7 +215,9 @@ class RecordTests: XCTestCase {
         }
 
         // Test invalid Base64.
+        // swiftlint:disable line_length
         let badInputString = "{\"sortindex\": 131, \"payload\": \"{\\\"ciphertext\\\":\\\"~~~YJB4dr0vZEIWPirfU2FCJvfzeSLiOP5QWasol2R6ILUxdHsJWuUuvTZVhxYQfTVNou6hVV67jfAvi5Cs+bqhhQsv7icZTiZhPTiTdVGt+uuMotxauVA5OryNGVEZgCCTvT3upzhDFdDbJzVd9O3/gU/b7r/CmAHykX8bTlthlbWeZ8oz6gwHJB5tPRU15nM/m/qW1vyKIw5pw/ZwtAy630AieRehGIGDk+33PWqsfyuT4EUFY9/Ly+8JlnqzxfiBCunIfuXGdLuqTjJOxgrK8mI4wccRFEdFEnmHvh5x7fjl1ID52qumFNQl8zkB75C8XK25alXqwvRR6/AQSP+BgQ==\\\",\\\"IV\\\":\\\"v/0BFgicqYQsd70T39rraA==\\\",\\\"hmac\\\":\\\"59605ed696f6e0e6e062a03510cff742bf6b50d695c042e8372a93f4c2d37dac\\\"}\", \"id\": \"0-P9fabp9vJD\", \"modified\": 1326254123.65}"
+        // swiftlint:enable line_length
         let badEnvelope = EnvelopeJSON(badInputString)
         XCTAssertTrue(badEnvelope.isValid())      // It's a valid envelope containing nonsense ciphertext.
         XCTAssertNil(toRecord(badEnvelope))       // Even though the envelope is valid, the payload is invalid, so we can't construct a record.
@@ -258,7 +262,9 @@ class RecordTests: XCTestCase {
     }
 
     func testHistoryPayload() {
+        // swiftlint:disable line_length
         let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":\"https://bugzilla.mozilla.org/show_bug.cgi?id=1154549\",\"title\":\"1154549 – Encapsulate synced profile data within an account-centric object\",\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
+        // swiftlint:enable line_length
         let json = JSON(parseJSON: payloadJSON)
         if let payload = HistoryPayload.fromJSON(json) {
             XCTAssertEqual("--DzSJTCw-zb", payload["id"].stringValue)

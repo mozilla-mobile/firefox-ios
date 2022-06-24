@@ -144,8 +144,17 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     private func fetchData() -> [DownloadedFile] {
         var downloadedFiles: [DownloadedFile] = []
         do {
-            let downloadsPath = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Downloads")
-            let files = try FileManager.default.contentsOfDirectory(at: downloadsPath, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants])
+            let downloadsPath = try FileManager.default.url(
+                for: .documentDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil,
+                create: false).appendingPathComponent("Downloads")
+            let files = try FileManager.default.contentsOfDirectory(
+                at: downloadsPath,
+                includingPropertiesForKeys: nil,
+                options: [.skipsHiddenFiles,
+                          .skipsPackageDescendants,
+                          .skipsSubdirectoryDescendants])
 
             for file in files {
                 let attributes = try FileManager.default.attributesOfItem(atPath: file.path) as NSDictionary
@@ -206,7 +215,15 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return icon
     }
 
-    private func roundRectImageWithLabel(_ label: String, width: CGFloat, height: CGFloat, radius: CGFloat = 5.0, strokeWidth: CGFloat = 1.0, strokeColor: UIColor = UIColor.theme.homePanel.downloadedFileIcon, fontSize: CGFloat = 9.0) -> UIImage? {
+    private func roundRectImageWithLabel(
+        _ label: String,
+        width: CGFloat,
+        height: CGFloat,
+        radius: CGFloat = 5.0,
+        strokeWidth: CGFloat = 1.0,
+        strokeColor: UIColor = UIColor.theme.homePanel.downloadedFileIcon,
+        fontSize: CGFloat = 9.0
+    ) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, 0.0)
         let context = UIGraphicsGetCurrentContext()
         context?.setStrokeColor(strokeColor.cgColor)

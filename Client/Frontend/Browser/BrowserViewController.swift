@@ -1188,7 +1188,9 @@ class BrowserViewController: UIViewController {
         }
 
         if let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper {
-            // This is zero-cost if already installed. It needs to be checked frequently (hence every event here triggers this function), as when a new tab is created it requires multiple attempts to setup the handler correctly.
+            // This is zero-cost if already installed. It needs to be checked frequently
+            // (hence every event here triggers this function), as when a new tab is
+            // created it requires multiple attempts to setup the handler correctly.
             helper.replaceGestureHandlerIfNeeded()
         }
 
@@ -2097,7 +2099,9 @@ extension BrowserViewController {
         }
         let etpCoverSheetViewController = ETPCoverSheetViewController()
         if topTabsVisible {
-            etpCoverSheetViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.UpdateViewController.width, height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
+            etpCoverSheetViewController.preferredContentSize = CGSize(
+                width: ViewControllerConsts.PreferredSize.UpdateViewController.width,
+                height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
             etpCoverSheetViewController.modalPresentationStyle = .formSheet
         } else {
             etpCoverSheetViewController.modalPresentationStyle = .fullScreen
@@ -2132,7 +2136,9 @@ extension BrowserViewController {
         }
         let dBOnboardingViewController = DefaultBrowserOnboardingViewController()
         if topTabsVisible {
-            dBOnboardingViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.DBOnboardingViewController.width, height: ViewControllerConsts.PreferredSize.DBOnboardingViewController.height)
+            dBOnboardingViewController.preferredContentSize = CGSize(
+                width: ViewControllerConsts.PreferredSize.DBOnboardingViewController.width,
+                height: ViewControllerConsts.PreferredSize.DBOnboardingViewController.height)
             dBOnboardingViewController.modalPresentationStyle = .formSheet
         } else {
             dBOnboardingViewController.modalPresentationStyle = .popover
@@ -2162,7 +2168,9 @@ extension BrowserViewController {
             }
 
             if topTabsVisible {
-                updateViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.UpdateViewController.width, height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
+                updateViewController.preferredContentSize = CGSize(
+                    width: ViewControllerConsts.PreferredSize.UpdateViewController.width,
+                    height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
                 updateViewController.modalPresentationStyle = .formSheet
             } else {
                 updateViewController.modalPresentationStyle = .fullScreen
@@ -2171,7 +2179,8 @@ extension BrowserViewController {
             // On iPad we present it modally in a controller
             present(updateViewController, animated: animated) {
                 // On first run (and forced) open up the homepage in the background.
-                if let homePageURL = NewTabHomePageAccessors.getHomePage(self.profile.prefs), let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
+                if let homePageURL = NewTabHomePageAccessors.getHomePage(self.profile.prefs),
+                   let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
                     tab.loadRequest(URLRequest(url: homePageURL))
                 }
             }
@@ -2195,14 +2204,17 @@ extension BrowserViewController {
     private func introVCPresentHelper(introViewController: UIViewController) {
         // On iPad we present it modally in a controller
         if topTabsVisible {
-            introViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.IntroViewController.width, height: ViewControllerConsts.PreferredSize.IntroViewController.height)
+            introViewController.preferredContentSize = CGSize(
+                width: ViewControllerConsts.PreferredSize.IntroViewController.width,
+                height: ViewControllerConsts.PreferredSize.IntroViewController.height)
             introViewController.modalPresentationStyle = .formSheet
         } else {
             introViewController.modalPresentationStyle = .fullScreen
         }
         present(introViewController, animated: true) {
             // On first run (and forced) open up the homepage in the background.
-            if let homePageURL = NewTabHomePageAccessors.getHomePage(self.profile.prefs), let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
+            if let homePageURL = NewTabHomePageAccessors.getHomePage(self.profile.prefs),
+               let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
                 tab.loadRequest(URLRequest(url: homePageURL))
             }
         }
@@ -2272,7 +2284,9 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let downloadAction = UIAlertAction(title: .ContextMenuDownloadLink, style: .default) { _ in
                 // This checks if download is a blob, if yes, begin blob download process
                 if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
-                    // if not a blob, set pendingDownloadWebView and load the request in the webview, which will trigger the WKWebView navigationResponse delegate function and eventually downloadHelper.open()
+                    // if not a blob, set pendingDownloadWebView and load the request in
+                    // the webview, which will trigger the WKWebView navigationResponse
+                    // delegate function and eventually downloadHelper.open()
                     self.pendingDownloadWebView = currentTab.webView
                     let request = URLRequest(url: url)
                     currentTab.webView?.load(request)
@@ -2286,7 +2300,11 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             actionSheetController.addAction(copyAction, accessibilityIdentifier: "linkContextMenu.copyLink")
 
             let shareAction = UIAlertAction(title: .ContextMenuShareLink, style: .default) { _ in
-                self.presentActivityViewController(url as URL, sourceView: self.view, sourceRect: CGRect(origin: touchPoint, size: touchSize), arrowDirection: .any)
+                self.presentActivityViewController(url as URL,
+                                                   sourceView: self.view,
+                                                   sourceRect: CGRect(origin: touchPoint,
+                                                                      size: touchSize),
+                                                   arrowDirection: .any)
             }
             actionSheetController.addAction(shareAction, accessibilityIdentifier: "linkContextMenu.share")
         }

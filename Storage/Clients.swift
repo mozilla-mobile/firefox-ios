@@ -70,6 +70,8 @@ public func == (lhs: RemoteClient, rhs: RemoteClient) -> Bool {
 
 extension RemoteClient: CustomStringConvertible {
     public var description: String {
+        // swiftlint:disable line_length
         return "<RemoteClient GUID: \(guid ?? "nil"), name: \(name), modified: \(modified), type: \(type ?? "nil"), formfactor: \(formfactor ?? "nil"), OS: \(os ?? "nil"), version: \(version ?? "nil"), fxaDeviceId: \(fxaDeviceId ?? "nil")>"
+        // swiftlint:enable line_length
     }
 }

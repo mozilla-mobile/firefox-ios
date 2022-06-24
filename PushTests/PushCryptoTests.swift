@@ -42,6 +42,7 @@ class PushCryptoTests: XCTestCase {
     }
 
     func testDecrypt_aes128gcm() {
+        // swiftlint:disable line_length
         let tests = [
             Aes128GcmTest(
                 payload: "SVzmyN6TpFOehi6GNJk8uwAAABhBBDwzeKLAq5VOFJhxjoXwi7cj-30l4TWmY_44WITrgZIza_kKVO1yDxwEXAtAXpu8OiFCsWyJCGc0w3Trr3CZ5kJ-LTLIraUBhwPFSxC0geECfXIJ2Ma0NVP6Ezr6WX8t3EWluoFAlE5kkLuNbZm6HQLmDZX0jOZER3wXIx2VuXpPld0",
@@ -56,6 +57,7 @@ class PushCryptoTests: XCTestCase {
                 plaintext: "When I grow up, I want to be a watermelon"
             ),
         ]
+        // swiftlint:enable line_length
 
         for test in tests {
             if let deciphered = try? push.aes128gcm(payload: test.payload,
@@ -76,12 +78,14 @@ class PushCryptoTests: XCTestCase {
                 authSecret: "mW-ti1CqLQK4PyZBKy4q7g",
                 plaintext: "bad base64"
             ),
+            // swiftlint:disable line_length
             Aes128GcmTest(
                 payload: "DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIgDll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A_yl95bQpu6cVPTpK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN",
                 recvPrivKey: "badkey",
                 authSecret: "BTBZMqHH6r4Tts7J_aSIgg",
                 plaintext: "bad key"
             ),
+            // swiftlint:enable line_length
         ]
 
         for test in tests {
@@ -141,6 +145,7 @@ class PushCryptoTests: XCTestCase {
                 cryptoKey: "keyid=\"dhkey\"; dh=\"BNoRDbb84JGm8g5Z5CFxurSqsXWJ11ItfXEWYVLE85Y7CYkDjXsIEc4aqxYaQ1G8BqkXCJ6DPpDrWtdWj_mugHU\"",
                 encryption: "keyid=\"dhkey\"; salt=\"lngarbyKfMoi9Z75xYXmkg\""
             ),
+            // swiftlint:disable line_length
             AesGcmTest(
                 plaintext: "Small record size",
                 recvPrivKey: "4h23G_KkXC9TvBSK2v0Q7ImpS2YAuRd8hQyN0rFAwBg",
@@ -157,6 +162,7 @@ class PushCryptoTests: XCTestCase {
                 cryptoKey: "dh=BEaA4gzA3i0JDuirGhiLgymS4hfFX7TNTdEhSk_HBlLpkjgCpjPL5c-GL9uBGIfa_fhGNKKFhXz1k9Kyens2ZpQ",
                 encryption: "salt=ZFhzj0S-n29g9P2p4-I7tA; rs=8"
             ),
+            // swiftlint:enable line_length
             AesGcmTest(
                 plaintext: "Some message",
                 recvPrivKey: "4h23G_KkXC9TvBSK2v0Q7ImpS2YAuRd8hQyN0rFAwBg",

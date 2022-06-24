@@ -50,12 +50,18 @@ class LoginListViewController: SensitiveViewController {
         return prefs.boolForKey(PrefsKeys.LoginsShowShortcutMenuItem) ?? true
     }
 
-    static func create(authenticateInNavigationController navigationController: UINavigationController, profile: Profile, settingsDelegate: SettingsDelegate, webpageNavigationHandler: ((_ url: URL?) -> Void)?) -> Deferred<LoginListViewController?> {
+    static func create(
+        authenticateInNavigationController navigationController: UINavigationController,
+        profile: Profile,
+        settingsDelegate: SettingsDelegate,
+        webpageNavigationHandler: ((_ url: URL?) -> Void)?
+    ) -> Deferred<LoginListViewController?> {
         let deferred = Deferred<LoginListViewController?>()
 
         func fillDeferred(ok: Bool) {
             if ok {
-                let viewController = LoginListViewController(profile: profile, webpageNavigationHandler: webpageNavigationHandler)
+                let viewController = LoginListViewController(profile: profile,
+                                                             webpageNavigationHandler: webpageNavigationHandler)
                 viewController.settingsDelegate = settingsDelegate
                 deferred.fill(viewController)
             } else {

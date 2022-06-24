@@ -147,10 +147,24 @@ public extension EncryptedLogin {
         let password = dict["password"] as? String ?? ""
         let username = dict["username"] as? String ?? ""
 
-        let fields = LoginFields.init(origin: dict["hostname"] as? String ?? "", httpRealm: dict["httpRealm"] as? String, formActionOrigin: dict["formSubmitUrl"] as? String, usernameField: dict["usernameField"] as? String ?? "", passwordField: dict["passwordField"] as? String ?? "")
+        let fields = LoginFields.init(
+            origin: dict["hostname"] as? String ?? "",
+            httpRealm: dict["httpRealm"] as? String,
+            formActionOrigin: dict["formSubmitUrl"] as? String,
+            usernameField: dict["usernameField"] as? String ?? "",
+            passwordField: dict["passwordField"] as? String ?? "")
 
-        let record = RecordFields.init(id: dict["id"] as? String ?? "", timesUsed: (dict["timesUsed"] as? Int64) ?? 0, timeCreated: (dict["timeCreated"] as? Int64) ?? 0, timeLastUsed: (dict["timeLastUsed"] as? Int64) ?? 0, timePasswordChanged: (dict["timePasswordChanged"] as? Int64) ?? 0)
-        let login = Login.init(record: record, fields: fields, secFields: SecureLoginFields.init(password: password, username: username))
+        let record = RecordFields.init(
+            id: dict["id"] as? String ?? "",
+            timesUsed: (dict["timesUsed"] as? Int64) ?? 0,
+            timeCreated: (dict["timeCreated"] as? Int64) ?? 0,
+            timeLastUsed: (dict["timeLastUsed"] as? Int64) ?? 0,
+            timePasswordChanged: (dict["timePasswordChanged"] as? Int64) ?? 0)
+        let login = Login.init(
+            record: record,
+            fields: fields,
+            secFields: SecureLoginFields.init(password: password,
+                                              username: username))
 
         self.init(
             record: record,
@@ -240,7 +254,12 @@ public extension LoginEntry {
         let password = dict["password"] as? String ?? ""
         let username = dict["username"] as? String ?? ""
 
-        let fields = LoginFields.init(origin: dict["hostname"] as? String ?? "", httpRealm: dict["httpRealm"] as? String, formActionOrigin: dict["formSubmitUrl"] as? String, usernameField: dict["usernameField"] as? String ?? "", passwordField: dict["passwordField"] as? String ?? "")
+        let fields = LoginFields.init(
+            origin: dict["hostname"] as? String ?? "",
+            httpRealm: dict["httpRealm"] as? String,
+            formActionOrigin: dict["formSubmitUrl"] as? String,
+            usernameField: dict["usernameField"] as? String ?? "",
+            passwordField: dict["passwordField"] as? String ?? "")
 
         self.init(
             fields: fields,
@@ -428,9 +447,17 @@ public class RustLogins {
                 // This is an unrecoverable
                 // state unless we can move the existing file to a backup
                 // location and start over.
-                SentryIntegration.shared.sendWithStacktrace(message: "Unspecified or other error when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
+                SentryIntegration.shared.sendWithStacktrace(
+                    message: "Unspecified or other error when opening Rust Logins database",
+                    tag: SentryTag.rustLogins,
+                    severity: .error,
+                    description: loginsStoreError.localizedDescription)
             } else {
-                SentryIntegration.shared.sendWithStacktrace(message: "Unknown error when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
+                SentryIntegration.shared.sendWithStacktrace(
+                    message: "Unknown error when opening Rust Logins database",
+                    tag: SentryTag.rustLogins,
+                    severity: .error,
+                    description: err.localizedDescription)
             }
 
             if !didAttemptToMoveToBackup {
@@ -490,9 +517,17 @@ public class RustLogins {
                 if let loginsStoreError = err as? LoginsStoreError {
                     switch loginsStoreError {
                     case let .SyncAuthInvalid(message):
-                        SentryIntegration.shared.sendWithStacktrace(message: "Panicked when syncing Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
+                        SentryIntegration.shared.sendWithStacktrace(
+                            message: "Panicked when syncing Logins database",
+                            tag: SentryTag.rustLogins,
+                            severity: .error,
+                            description: message)
                     default:
-                        SentryIntegration.shared.sendWithStacktrace(message: "Unspecified or other error when syncing Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
+                        SentryIntegration.shared.sendWithStacktrace(
+                            message: "Unspecified or other error when syncing Logins database",
+                            tag: SentryTag.rustLogins,
+                            severity: .error,
+                            description: loginsStoreError.localizedDescription)
                     }
                 }
 
@@ -751,15 +786,24 @@ public class RustLogins {
             return
         }
 
-        let migrationSucceeded = migrateLoginsWithMetrics(path: self.perFieldDatabasePath, newEncryptionKey: key, sqlcipherPath: self.sqlCipherDatabasePath, sqlcipherKey: sqlCipherLoginsKey!, salt: sqlCipherLoginsSalt!)
+        let migrationSucceeded = migrateLoginsWithMetrics(
+            path: self.perFieldDatabasePath,
+            newEncryptionKey: key,
+            sqlcipherPath: self.sqlCipherDatabasePath,
+            sqlcipherKey: sqlCipherLoginsKey!,
+            salt: sqlCipherLoginsSalt!)
 
         // If the migration fails, move the old database file and store the old key and salt for
         // potential data restore
         if !migrationSucceeded {
             RustShared.moveDatabaseFileToBackupLocation(databasePath: self.sqlCipherDatabasePath)
 
-            keychain.set(sqlCipherLoginsSalt!, forKey: rustKeys.loginsPostMigrationSalt, withAccessibility: .afterFirstUnlock)
-            keychain.set(sqlCipherLoginsKey!, forKey: rustKeys.loginsPostMigrationKey, withAccessibility: .afterFirstUnlock)
+            keychain.set(sqlCipherLoginsSalt!,
+                         forKey: rustKeys.loginsPostMigrationSalt,
+                         withAccessibility: .afterFirstUnlock)
+            keychain.set(sqlCipherLoginsKey!,
+                         forKey: rustKeys.loginsPostMigrationKey,
+                         withAccessibility: .afterFirstUnlock)
         }
 
         keychain.removeObject(forKey: rustKeys.loginsUnlockKeychainKey, withAccessibility: .afterFirstUnlock)

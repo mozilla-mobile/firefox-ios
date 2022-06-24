@@ -74,7 +74,12 @@ extension BrowserViewController: WKUIDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        runJavaScriptConfirmPanelWithMessage message: String,
+        initiatedByFrame frame: WKFrameInfo,
+        completionHandler: @escaping (Bool) -> Void
+    ) {
         let confirmAlert = ConfirmPanelAlert(message: message, frame: frame, completionHandler: completionHandler)
         if shouldDisplayJSAlertForWebView(webView) {
             present(confirmAlert.alertController(), animated: true, completion: nil)
@@ -85,7 +90,13 @@ extension BrowserViewController: WKUIDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (String?) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        runJavaScriptTextInputPanelWithPrompt prompt: String,
+        defaultText: String?,
+        initiatedByFrame frame: WKFrameInfo,
+        completionHandler: @escaping (String?) -> Void
+    ) {
         let textInputAlert = TextInputAlert(message: prompt, frame: frame, completionHandler: completionHandler, defaultText: defaultText)
         if shouldDisplayJSAlertForWebView(webView) {
             present(textInputAlert.alertController(), animated: true, completion: nil)
@@ -180,7 +191,9 @@ extension BrowserViewController: WKUIDelegate {
             }
 
             let getImageData = { (_ url: URL, success: @escaping (Data) -> Void) in
-                makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
+                makeURLSession(
+                    userAgent: UserAgent.fxaUserAgent,
+                    configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
                     if let _ = validatedHTTPResponse(response, statusCode: 200..<300), let data = data {
                         success(data)
                     }
@@ -190,23 +203,47 @@ extension BrowserViewController: WKUIDelegate {
             var actions = [UIAction]()
 
             if !isPrivate {
-                actions.append(UIAction(title: .ContextMenuOpenInNewTab, image: UIImage.templateImageNamed("menu-NewTab"), identifier: UIAction.Identifier(rawValue: "linkContextMenu.openInNewTab")) {_ in
-                    addTab(url, false)
+                actions.append(
+                    UIAction(
+                        title: .ContextMenuOpenInNewTab,
+                        image: UIImage.templateImageNamed("menu-NewTab"),
+                        identifier: UIAction.Identifier(rawValue: "linkContextMenu.openInNewTab")
+                    ) { _ in
+                        addTab(url, false)
                 })
             }
 
-            actions.append(UIAction(title: .ContextMenuOpenInNewPrivateTab, image: UIImage.templateImageNamed("menu-NewPrivateTab"), identifier: UIAction.Identifier("linkContextMenu.openInNewPrivateTab")) { _ in
-                addTab(url, true)
+            actions.append(
+                UIAction(
+                    title: .ContextMenuOpenInNewPrivateTab,
+                    image: UIImage.templateImageNamed("menu-NewPrivateTab"),
+                    identifier: UIAction.Identifier("linkContextMenu.openInNewPrivateTab")
+                ) { _ in
+                    addTab(url, true)
             })
 
-            let addBookmarkAction = UIAction(title: .ContextMenuBookmarkLink, image: UIImage.templateImageNamed(ImageIdentifiers.addToBookmark), identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")) { _ in
+            let addBookmarkAction = UIAction(
+                title: .ContextMenuBookmarkLink,
+                image: UIImage.templateImageNamed(ImageIdentifiers.addToBookmark),
+                identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
+            ) { _ in
                 self.addBookmark(url: url.absoluteString, title: elements.title)
-                TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .contextMenu)
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .add,
+                                             object: .bookmark,
+                                             value: .contextMenu)
             }
 
-            let removeAction = UIAction(title: .RemoveBookmarkContextMenuTitle, image: UIImage.templateImageNamed(ImageIdentifiers.actionRemoveBookmark), identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")) { _ in
+            let removeAction = UIAction(
+                title: .RemoveBookmarkContextMenuTitle,
+                image: UIImage.templateImageNamed(ImageIdentifiers.actionRemoveBookmark),
+                identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
+            ) { _ in
                 self.removeBookmark(url: url.absoluteString)
-                TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .contextMenu)
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .delete,
+                                             object: .bookmark,
+                                             value: .contextMenu)
             }
 
             let isBookmarkedSite = profile.places.isBookmarked(url: url.absoluteString).value.successValue ?? false
@@ -215,14 +252,20 @@ extension BrowserViewController: WKUIDelegate {
             actions.append(UIAction(title: .ContextMenuDownloadLink, image: UIImage.templateImageNamed(ImageIdentifiers.downloads), identifier: UIAction.Identifier("linkContextMenu.download")) { _ in
                 // This checks if download is a blob, if yes, begin blob download process
                 if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
-                    // if not a blob, set pendingDownloadWebView and load the request in the webview, which will trigger the WKWebView navigationResponse delegate function and eventually downloadHelper.open()
+                    // if not a blob, set pendingDownloadWebView and load the request in
+                    // the webview, which will trigger the WKWebView navigationResponse
+                    // delegate function and eventually downloadHelper.open()
                     self.pendingDownloadWebView = currentTab.webView
                     let request = URLRequest(url: url)
                     currentTab.webView?.load(request)
                 }
             })
 
-            actions.append(UIAction(title: .ContextMenuCopyLink, image: UIImage.templateImageNamed(ImageIdentifiers.copyLink), identifier: UIAction.Identifier("linkContextMenu.copyLink")) { _ in
+            actions.append(UIAction(
+                title: .ContextMenuCopyLink,
+                image: UIImage.templateImageNamed(ImageIdentifiers.copyLink),
+                identifier: UIAction.Identifier("linkContextMenu.copyLink")
+            ) { _ in
                 UIPasteboard.general.url = url
             })
 
@@ -582,7 +625,13 @@ extension BrowserViewController: WKNavigationDelegate {
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
 
         // Check if this response should be handed off to Passbook.
-        if let passbookHelper = OpenPassBookHelper(request: request, response: response, cookieStore: cookieStore, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self) {
+        if let passbookHelper = OpenPassBookHelper(
+            request: request,
+            response: response,
+            cookieStore: cookieStore,
+            canShowInWebView: canShowInWebView,
+            forceDownload: forceDownload,
+            browserViewController: self) {
             // Open our helper and cancel this response from the webview.
             passbookHelper.open()
             decisionHandler(.cancel)
@@ -592,7 +641,8 @@ extension BrowserViewController: WKNavigationDelegate {
         // Check if this response should be displayed in a QuickLook for USDZ files.
         if let previewHelper = OpenQLPreviewHelper(request: request, response: response, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self) {
 
-            // Certain files are too large to download before the preview presents, block and use a temporary document instead
+            // Certain files are too large to download before the preview presents,
+            // block and use a temporary document instead
             if let tab = tabManager[webView] {
                 if navigationResponse.isForMainFrame, response.mimeType != MIMEType.HTML, let request = request {
                     tab.temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
@@ -611,7 +661,13 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         // Check if this response should be downloaded.
-        if let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self) {
+        if let downloadHelper = DownloadHelper(
+            request: request,
+            response: response,
+            cookieStore: cookieStore,
+            canShowInWebView: canShowInWebView,
+            forceDownload: forceDownload,
+            browserViewController: self) {
             // Clear the pending download web view so that subsequent navigations from the same
             // web view don't invoke another download.
             pendingDownloadWebView = nil

@@ -238,6 +238,7 @@ private extension ContileProviderTests {
         return "{\"tiles\":[\(secondTileWithPosition),\(oneTileWithPosition)]}"
     }
 
+    // swiftlint:disable line_length
     var oneTileEmptyPosition: String {
         return "{\"id\":1,\"name\":\"TileNilPosition\",\"url\":\"https://www.website.com\",\"click_url\":\"https://www.website.com\",\"image_url\":\"https://www.website.com\",\"image_size\":200,\"impression_url\":\"https://www.website.com\"}"
     }
@@ -249,6 +250,7 @@ private extension ContileProviderTests {
     var secondTileWithPosition: String {
         return "{\"id\":2,\"name\":\"Tile2\",\"url\":\"https://www.website2.com\",\"click_url\":\"https://www.website2.com\",\"image_url\":\"https://www.website2.com\",\"image_size\":200,\"impression_url\":\"https://www.website2.com\",\"position\":2}"
     }
+    // swiftlint:enable line_length
 
     var anError: NSError {
         return NSError(domain: "test error", code: 0)

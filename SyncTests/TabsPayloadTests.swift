@@ -52,11 +52,14 @@ class TabsPayloadTests: XCTestCase {
         XCTAssert(tabs2.count == 0)
     }
 
+
     func testTabWithCorrectTabLastUsed() {
+        // swiftlint:disable line_length
         let payloads = [
             "{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": null, \"lastUsed\": 1492649651}]}",
             "{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": null, \"lastUsed\": \"1492316843992\"}]}"
         ]
+        // swiftlint:enable line_length
 
         for payload in payloads {
             let tabsPayload = TabsPayload(payload)
@@ -67,6 +70,7 @@ class TabsPayloadTests: XCTestCase {
     }
 
     func testTabWithBadTabLastUsed() {
+        // swiftlint:disable line_length
         let payloads = [
             "{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": null, \"lastUsed\": null}]}",
             "{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": null, \"lastUsed\": \"\"}]}",
@@ -79,6 +83,7 @@ class TabsPayloadTests: XCTestCase {
             "{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": null, \"lastUsed\": \"123456789012345678901234567890\"}]}",
             "{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": null, \"lastUsed\": \"-1\"}]}"
         ]
+        // swiftlint:enable line_length
 
         for payload in payloads {
             let tabsPayload = TabsPayload(payload)

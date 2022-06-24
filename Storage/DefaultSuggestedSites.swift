@@ -118,7 +118,9 @@ open class DefaultSuggestedSites {
                 title: "淘宝"
             ),
             SuggestedSiteData(
+            // swiftlint:disable line_length
                 url: "http://union.click.jd.com/jdc?e=0&p=AyIHVCtaJQMiQwpDBUoyS0IQWlALHE4YDk5ER1xONwdJKVxASgI%2BeDkWfGJ6HEAOUmkbcjUXVyUBEQZRG1IXARQ3VhhaEQETBVweayVkbzcedVolBxIEUBxdFAoQN1UeXRQLGwFXHlsUABs3UisnS0lKWghLWBQCFzdlK2s%3D&t=W1dCFBBFC14NXAAECUte",
+            // swiftlint:enable line_length
                 bgColor: "0xc71622",
                 imageUrl: "asset://suggestedsites_jd",
                 faviconUrl: "asset://jdLogo",

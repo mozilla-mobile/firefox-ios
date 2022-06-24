@@ -82,16 +82,23 @@ class SyncNowSetting: WithAccountSetting {
             )
         }
 
+        let syncText = UIColor.theme.tableView.syncText
+        let headerLightText = UIColor.theme.tableView.headerTextLight
         return NSAttributedString(
             string: .FxASyncNow,
             attributes: [
-                NSAttributedString.Key.foregroundColor: self.enabled ? UIColor.theme.tableView.syncText : UIColor.theme.tableView.headerTextLight,
+                NSAttributedString.Key.foregroundColor: self.enabled ? syncText : headerLightText,
                 NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFont
             ]
         )
     }
 
-    fileprivate let syncingTitle = NSAttributedString(string: .SyncingMessageWithEllipsis, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText, NSAttributedString.Key.font: UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFont.Weight.regular)])
+    fileprivate let syncingTitle = NSAttributedString(
+        string: .SyncingMessageWithEllipsis,
+        attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText,
+                     NSAttributedString.Key.font: UIFont.systemFont(
+                        ofSize: DynamicFontHelper.defaultHelper.DefaultStandardFontSize,
+                        weight: UIFont.Weight.regular)])
 
     func startRotateSyncIcon() {
         DispatchQueue.main.async {
@@ -128,9 +135,17 @@ class SyncNowSetting: WithAccountSetting {
         switch syncStatus {
         case .bad(let message):
             guard let message = message else { return syncNowTitle }
-            return NSAttributedString(string: message, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.errorText, NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFont])
+            return NSAttributedString(
+                string: message,
+                attributes: [
+                    NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.errorText,
+                    NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFont])
         case .warning(let message):
-            return  NSAttributedString(string: message, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.warningText, NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFont])
+            return  NSAttributedString(
+                string: message,
+                attributes: [
+                    NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.warningText,
+                    NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFont])
         case .inProgress:
             return syncingTitle
         default:
@@ -302,11 +317,19 @@ class AccountStatusSetting: WithAccountSetting {
 
     override var title: NSAttributedString? {
         if let displayName = RustFirefoxAccounts.shared.userProfile?.displayName {
-            return NSAttributedString(string: displayName, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
+            return NSAttributedString(
+                string: displayName,
+                attributes: [
+                    NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold,
+                    NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
         }
 
         if let email = RustFirefoxAccounts.shared.userProfile?.email {
-            return NSAttributedString(string: email, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
+            return NSAttributedString(
+                string: email,
+                attributes: [
+                    NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold,
+                    NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
         }
 
         return nil
@@ -494,7 +517,9 @@ class SlowTheDatabase: HiddenSetting {
 
 class ForgetSyncAuthStateDebugSetting: HiddenSetting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: forget Sync auth state", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(
+            string: "Debug: forget Sync auth state",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -506,7 +531,11 @@ class ForgetSyncAuthStateDebugSetting: HiddenSetting {
 class SentryIDSetting: HiddenSetting {
     let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: "SentryDeviceAppHash") ?? "0000000000000000000000000000000000000000"
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Sentry ID: \(deviceAppHash)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)])
+        return NSAttributedString(
+            string: "Sentry ID: \(deviceAppHash)",
+            attributes: [
+                NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText,
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -920,13 +949,17 @@ class LoginsSetting: Setting {
                 }
 
                 loginOnboardingViewController.proceedHandler = {
-                    LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                        guard let loginsVC = loginsVC else { return }
-                        navController.pushViewController(loginsVC, animated: true)
-                        // Remove the onboarding from the navigation stack so that we go straight back to settings
-                        navController.viewControllers.removeAll { viewController in
-                            viewController == loginOnboardingViewController
-                        }
+                    LoginListViewController.create(
+                        authenticateInNavigationController: navController,
+                        profile: self.profile,
+                        settingsDelegate: BrowserViewController.foregroundBVC(),
+                        webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                            guard let loginsVC = loginsVC else { return }
+                            navController.pushViewController(loginsVC, animated: true)
+                            // Remove the onboarding from the navigation stack so that we go straight back to settings
+                            navController.viewControllers.removeAll { viewController in
+                                viewController == loginOnboardingViewController
+                            }
                     }
                 }
 
@@ -934,9 +967,13 @@ class LoginsSetting: Setting {
 
                 LoginOnboarding.setShown()
             } else {
-                LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                    guard let loginsVC = loginsVC else { return }
-                    navController.pushViewController(loginsVC, animated: true)
+                LoginListViewController.create(
+                    authenticateInNavigationController: navController,
+                    profile: profile,
+                    settingsDelegate: BrowserViewController.foregroundBVC(),
+                    webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                        guard let loginsVC = loginsVC else { return }
+                        navController.pushViewController(loginsVC, animated: true)
                 }
             }
         } else {
