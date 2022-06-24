@@ -145,19 +145,6 @@ public class ImageLoadingHandler: ImageFetcher {
             }
         }
     }
-
-//    public func downloadImageOnly(with url: URL, completion: @escaping (UIImage?, Data?, ImageLoadingError?) -> Void) {
-//
-//        let imgDownloader = ImageDownloader.default
-//        imgDownloader.downloadImage(with: url, options: nil, progressBlock: nil) { result in
-//            switch result {
-//            case .success(let value):
-//                completion(value.image, value.originalData, nil)
-//            case .failure:
-//                completion(nil, nil, ImageLoadingError.unableToFetchImage)
-//            }
-//        }
-//    }
 }
 
 extension ImageLoadingHandler: AuthenticationChallengeResponsible {
