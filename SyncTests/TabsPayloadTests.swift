@@ -52,7 +52,6 @@ class TabsPayloadTests: XCTestCase {
         XCTAssert(tabs2.count == 0)
     }
 
-
     func testTabWithCorrectTabLastUsed() {
         // swiftlint:disable line_length
         let payloads = [

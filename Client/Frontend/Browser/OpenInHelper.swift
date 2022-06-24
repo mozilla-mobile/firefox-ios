@@ -41,7 +41,7 @@ struct MIMEType {
     }
 
     static func mimeTypeFromFileExtension(_ fileExtension: String) -> String {
-        if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension as CFString, nil)? .takeRetainedValue(),
+        if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension as CFString, nil)?.takeRetainedValue(),
            let mimeType = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?.takeRetainedValue() {
             return mimeType as String
         }
@@ -70,10 +70,15 @@ class DownloadHelper: NSObject {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
     }
 
-    required init?(request: URLRequest?, response: URLResponse, cookieStore: WKHTTPCookieStore, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
-        guard let request = request else {
-            return nil
-        }
+    required init?(
+        request: URLRequest?,
+        response: URLResponse,
+        cookieStore: WKHTTPCookieStore,
+        canShowInWebView: Bool,
+        forceDownload: Bool,
+        browserViewController: BrowserViewController
+    ) {
+        guard let request = request else { return nil }
 
         let mimeType = response.mimeType ?? MIMEType.OctetStream
         let isAttachment = mimeType == MIMEType.OctetStream

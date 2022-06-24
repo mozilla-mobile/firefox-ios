@@ -43,11 +43,11 @@ class HawkHelperTests: XCTestCase {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
 
-        XCTAssertEqual(HawkHelper.getRequestStringFor( request,
-                                                       timestampString: String(timestamp),
-                                                       nonce: nonce,
-                                                       hash: "",
-                                                       extra: extra).components(separatedBy: "\n"),
+        XCTAssertEqual(HawkHelper.getRequestStringFor(request,
+                                                      timestampString: String(timestamp),
+                                                      nonce: nonce,
+                                                      hash: "",
+                                                      extra: extra).components(separatedBy: "\n"),
                        expected.components(separatedBy: "\n"))
     }
 

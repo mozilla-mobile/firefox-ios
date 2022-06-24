@@ -927,7 +927,7 @@ extension TabDisplayManager: TabManagerDelegate {
         // pending operations are reloads data, so we don't want functions that rely on
         // any assumption of previous state of the view. Passing a previous tab (and
         // relying on that to redraw the previous tab as unselected) would be making
-        //this assumption about the state of the view.
+        // this assumption about the state of the view.
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {

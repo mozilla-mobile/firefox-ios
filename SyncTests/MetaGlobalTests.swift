@@ -344,13 +344,13 @@ class MetaGlobalTests: XCTestCase {
         let expectation = self.expectation(description: "Waiting on value.")
         stateMachine.toReady(authState).upon { result in
             XCTAssertEqual(
-                self.stateMachine.stateLabelSequence.map { $0.rawValue }, 
-                ["initialWithLiveToken", 
-                 "initialWithLiveTokenAndInfo", 
-                 "needsFreshMetaGlobal", 
-                 "resolveMetaGlobalVersion", 
-                 "resolveMetaGlobalContent", 
-                 "hasMetaGlobal", 
+                self.stateMachine.stateLabelSequence.map { $0.rawValue },
+                ["initialWithLiveToken",
+                 "initialWithLiveTokenAndInfo",
+                 "needsFreshMetaGlobal",
+                 "resolveMetaGlobalVersion",
+                 "resolveMetaGlobalContent",
+                 "hasMetaGlobal",
                  "needsFreshCryptoKeys",
                  "hasFreshCryptoKeys",
                  "ready"])
