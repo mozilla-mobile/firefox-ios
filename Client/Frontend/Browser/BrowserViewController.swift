@@ -12,7 +12,6 @@ import SnapKit
 import XCGLogger
 import Account
 import MobileCoreServices
-import SDWebImage
 import Telemetry
 import Sentry
 

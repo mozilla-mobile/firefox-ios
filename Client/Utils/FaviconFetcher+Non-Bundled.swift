@@ -114,37 +114,32 @@ extension FaviconFetcher {
     func getFavicon(_ siteUrl: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let url = icon.url
-        let manager = SDWebImageManager.shared
         let site = Site(url: siteUrl.absoluteString, title: "")
 
         var fav = Favicon(url: url)
+
         if let url = url.asURL {
-            var fetch: SDWebImageOperation?
-            fetch = manager.loadImage(with: url,
-                options: .lowPriority,
-                progress: { (receivedSize, expectedSize, _) in
-                    if receivedSize > FaviconFetcher.MaximumFaviconSize || expectedSize > FaviconFetcher.MaximumFaviconSize {
-                        fetch?.cancel()
-                    }
-                },
-                completed: { (img, _, _, _, _, url) in
-                    guard let url = url else {
-                        deferred.fill(Maybe(failure: FaviconError()))
-                        return
-                    }
-                    fav = Favicon(url: url.absoluteString)
+            ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
+                                                            limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
 
-                    if let img = img {
-                        fav.width = Int(img.size.width)
-                        fav.height = Int(img.size.height)
-                        profile.favicons.addFavicon(fav, forSite: site)
-                    } else {
-                        fav.width = 0
-                        fav.height = 0
-                    }
+                guard error == nil else {
+                    deferred.fill(Maybe(failure: FaviconError()))
+                    return
+                }
 
-                    deferred.fill(Maybe(success: fav))
-            })
+                fav = Favicon(url: url.absoluteString)
+                fav.width = 0
+                fav.height = 0
+
+                if let image = image {
+                    fav.width = Int(image.size.width)
+                    fav.height = Int(image.size.height)
+                    profile.favicons.addFavicon(fav, forSite: site)
+                    deferred.fill(Maybe(failure: FaviconError()))
+                }
+
+                deferred.fill(Maybe(success: fav))
+            }
         } else {
             return deferMaybe(FaviconFetcherErrorType(description: "Invalid URL \(url)"))
         }
@@ -164,11 +159,14 @@ extension FaviconFetcher {
             } else {
                 return deferred.fill(Maybe(failure: FaviconError()))
             }
-            SDWebImageManager.shared.loadImage(with: iconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
-                if let image = image {
+
+            if let iconURL = iconURL {
+                ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: iconURL, limit: 0) { image, error in
+                    guard error == nil, let image = image else {
+                        deferred.fill(Maybe(failure: FaviconError()))
+                        return
+                    }
                     deferred.fill(Maybe(success: image))
-                } else {
-                    deferred.fill(Maybe(failure: FaviconError()))
                 }
             }
         }

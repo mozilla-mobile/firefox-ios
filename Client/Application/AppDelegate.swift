@@ -7,7 +7,6 @@ import Storage
 import AVFoundation
 import XCGLogger
 import MessageUI
-import SDWebImage
 import SyncTelemetry
 import LocalAuthentication
 import Sync
