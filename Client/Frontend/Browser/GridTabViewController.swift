@@ -655,9 +655,8 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        // swiftlint:disable line_length
-        let cellWidth = floor((collectionView.bounds.width - collectionView.safeAreaInsets.left - collectionView.safeAreaInsets.right - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
-        // swiftlint:enable line_length
+        let calculatedWidth = collectionView.bounds.width - collectionView.safeAreaInsets.left - collectionView.safeAreaInsets.right - GridTabTrayControllerUX.Margin
+        let cellWidth = floor((calculatedWidth * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .inactiveTabs:
             return calculateInactiveTabSizeHelper(collectionView)
@@ -688,9 +687,9 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
         let inactiveTabs = inactiveTabViewModel.inactiveTabs
 
         // Calculate height based on number of tabs in the inactive tab section section
-        // swiftlint:disable line_length
-        let calculatedInactiveTabsTotalHeight = InactiveTabCell.UX.HeaderAndRowHeight*CGFloat(inactiveTabs.count) + InactiveTabCell.UX.RoundedContainerPaddingClosed + InactiveTabCell.UX.RoundedContainerAdditionalPaddingOpened + closeAllButtonHeight
-        // swiftlint:enable line_length
+        let calculatedInactiveTabsTotalHeight = (InactiveTabCell.UX.HeaderAndRowHeight * CGFloat(inactiveTabs.count)) +
+        InactiveTabCell.UX.RoundedContainerPaddingClosed +
+        InactiveTabCell.UX.RoundedContainerAdditionalPaddingOpened + closeAllButtonHeight
 
         totalHeight = tabDisplayManager.isInactiveViewExpanded ? calculatedInactiveTabsTotalHeight : headerHeightWithRoundedCorner
 

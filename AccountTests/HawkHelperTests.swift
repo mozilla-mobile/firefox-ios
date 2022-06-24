@@ -75,9 +75,11 @@ class HawkHelperTests: XCTestCase {
         let timestamp = Int64(1353832234)
         let nonce = "j4h3g2"
         let extra = "some-app-ext-data"
-        // swiftlint:disable line_length
-        let expected = "Hawk id=\"dh37fgj492je\", ts=\"1353832234\", nonce=\"j4h3g2\", hash=\"Yi9LfIIFRtBEPt74PVmbTF/xVAwPn7ub15ePICfgnuY=\", ext=\"some-app-ext-data\", mac=\"aSe1DERmZuRl3pI36/9BdZmnErTw3sNzOOAUlfeKjVw=\""
-        // swiftlint:enable line_length
+        let expected = """
+Hawk id=\"dh37fgj492je\", ts=\"1353832234\", nonce=\"j4h3g2\", \
+hash=\"Yi9LfIIFRtBEPt74PVmbTF/xVAwPn7ub15ePICfgnuY=\", ext=\"some-app-ext-data\", \
+mac=\"aSe1DERmZuRl3pI36/9BdZmnErTw3sNzOOAUlfeKjVw=\"
+"""
 
         let value = helper.getAuthorizationValueFor(request, at: timestamp, nonce: nonce, extra: extra)
             XCTAssertEqual(value, expected)
