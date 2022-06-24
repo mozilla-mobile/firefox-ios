@@ -27,7 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var tabManager: TabManager!
     var receivedURLs = [URL]()
     var orientationLock = UIInterfaceOrientationMask.all
-    weak var profile: Profile?
+    lazy var profile: Profile = BrowserProfile(localName: "profile",
+                                               syncDelegate: UIApplication.shared.syncDelegate)
     private var shutdownWebServer: DispatchSourceTimer?
     private var telemetry: TelemetryWrapper?
     private var adjustHelper: AdjustHelper?
@@ -45,7 +46,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
-        let profile = getProfile(application)
         telemetry = TelemetryWrapper(profile: profile)
 
         // Initialize the feature flag subsytem.
@@ -81,7 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
                 let title = (userInfo["Title"] as? String) ?? ""
-                profile.readingList.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.current.name)
+                self.profile.readingList.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.current.name)
             }
         }
 
@@ -101,32 +101,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // We have only five seconds here, so let's hope this doesn't take too long.
-        profile?._shutdown()
+        profile._shutdown()
 
         // Allow deinitializers to close our database connections.
-        profile = nil
         tabManager = nil
         browserViewController = nil
         rootViewController = nil
-    }
-
-    /**
-     * We maintain a weak reference to the profile so that we can pause timed
-     * syncs when we're backgrounded.
-     *
-     * The long-lasting ref to the profile lives in BrowserViewController,
-     * which we set in application:willFinishLaunchingWithOptions:.
-     *
-     * If that ever disappears, we won't be able to grab the profile to stop
-     * syncing... but in that case the profile's deinit will take care of things.
-     */
-    func getProfile(_ application: UIApplication) -> Profile {
-        if let profile = self.profile {
-            return profile
-        }
-        let p = BrowserProfile(localName: "profile", syncDelegate: application.syncDelegate)
-        self.profile = p
-        return p
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -142,38 +122,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         pushNotificationSetup()
 
-        if let profile = self.profile {
-            let persistedCurrentVersion = InstallType.persistedCurrentVersion()
-            let introScreen = profile.prefs.intForKey(PrefsKeys.IntroSeen)
-            // upgrade install - Intro screen shown & persisted current version does not match
-            if introScreen != nil && persistedCurrentVersion != AppInfo.appVersion {
-                InstallType.set(type: .upgrade)
-                InstallType.updateCurrentVersion(version: AppInfo.appVersion)
-            }
+        let persistedCurrentVersion = InstallType.persistedCurrentVersion()
+        let introScreen = profile.prefs.intForKey(PrefsKeys.IntroSeen)
+        // upgrade install - Intro screen shown & persisted current version does not match
+        if introScreen != nil && persistedCurrentVersion != AppInfo.appVersion {
+            InstallType.set(type: .upgrade)
+            InstallType.updateCurrentVersion(version: AppInfo.appVersion)
+        }
 
-            // We need to check if the app is a clean install to use for
-            // preventing the What's New URL from appearing.
-            if introScreen == nil {
-                // fresh install - Intro screen not yet shown
-                InstallType.set(type: .fresh)
-                InstallType.updateCurrentVersion(version: AppInfo.appVersion)
-                // Profile setup
-                profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+        // We need to check if the app is a clean install to use for
+        // preventing the What's New URL from appearing.
+        if introScreen == nil {
+            // fresh install - Intro screen not yet shown
+            InstallType.set(type: .fresh)
+            InstallType.updateCurrentVersion(version: AppInfo.appVersion)
+            // Profile setup
+            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
 
-            } else if profile.prefs.boolForKey(PrefsKeys.KeySecondRun) == nil {
-                profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
-            }
+        } else if profile.prefs.boolForKey(PrefsKeys.KeySecondRun) == nil {
+            profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
         }
 
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
-            guard self.profile?.hasSyncableAccount() ?? false else {
+            guard self.profile.hasSyncableAccount() else {
                 self.shutdownProfileWhenNotActive(application)
                 return
             }
 
             NSLog("background sync part 1") // NSLog to see in device console
             let collection = ["bookmarks", "history"]
-            self.profile?.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
+            self.profile.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
                 task.setTaskCompleted(success: true)
                 let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part2")
                 request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
@@ -191,7 +169,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part2", using: DispatchQueue.global()) { task in
             NSLog("background sync part 2") // NSLog to see in device console
             let collection = ["tabs", "logins", "clients"]
-            self.profile?.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
+            self.profile.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
                 self.shutdownProfileWhenNotActive(application)
                 task.setTaskCompleted(success: true)
             }
@@ -206,11 +184,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var sessionCount: Int32 = 0
 
         // Get the session count from preferences
-        if let currentSessionCount = profile?.prefs.intForKey(PrefsKeys.SessionCount) {
+        if let currentSessionCount = profile.prefs.intForKey(PrefsKeys.SessionCount) {
             sessionCount = currentSessionCount
         }
         // increase session count value
-        profile?.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.SessionCount)
+        profile.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.SessionCount)
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
@@ -218,7 +196,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return false
         }
 
-        if let profile = profile, let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
+        if let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
             profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
             var object = TelemetryWrapper.EventObject.url
             if case .text = routerpath {
@@ -239,16 +217,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         shutdownWebServer?.cancel()
         shutdownWebServer = nil
 
-        if let profile = self.profile {
-            profile._reopen()
+        profile._reopen()
 
-            if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
-                profile.removeAccount()
-            }
-
-            profile.syncManager.applicationDidBecomeActive()
-            webServerUtil?.setUpWebServer()
+        if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
+            profile.removeAccount()
         }
+
+        profile.syncManager.applicationDidBecomeActive()
+        webServerUtil?.setUpWebServer()
 
         browserViewController.firefoxHomeViewController?.reloadAll()
 
@@ -273,7 +249,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-            self.profile?.cleanupHistoryIfNeeded()
+            self.profile.cleanupHistoryIfNeeded()
             self.browserViewController.ratingPromptManager.updateData()
         }
     }
@@ -310,7 +286,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Since we only need the topSites data in the archiver, let's write it
         // only if iOS 14 is available.
         if #available(iOS 14.0, *) {
-            guard let profile = profile else { return }
             TopSitesHelper.writeWidgetKitTopSites(profile: profile)
         }
     }
@@ -321,7 +296,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return
         }
 
-        profile?._shutdown()
+        profile._shutdown()
     }
 
     /// When a user presses and holds the app icon from the Home Screen, we present quick actions / shortcut items (see QuickActions).
@@ -338,7 +313,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func scheduleBGSync(application: UIApplication) {
-        if profile?.syncManager.isSyncing ?? false {
+        if profile.syncManager.isSyncing {
             // If syncing, create a bg task because _shutdown() is blocking and might take a few seconds to complete
             var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
             taskId = application.beginBackgroundTask(expirationHandler: {
@@ -352,7 +327,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         } else {
             // Blocking call, however without sync running it should be instantaneous
-            profile?._shutdown()
+            profile._shutdown()
 
             let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part1")
             request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
@@ -435,7 +410,7 @@ extension AppDelegate {
             window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
         }
 
-        browserViewController = BrowserViewController(profile: profile!, tabManager: tabManager)
+        browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         browserViewController.edgesForExtendedLayout = []
 
         let navigationController = UINavigationController(rootViewController: browserViewController)

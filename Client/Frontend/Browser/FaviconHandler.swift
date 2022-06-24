@@ -76,12 +76,16 @@ class FaviconHandler {
         let onSuccess: (Favicon) -> Void = { [weak tab] (favicon) -> Void in
             tab?.favicons.append(favicon)
 
-            guard !(tab?.isPrivate ?? true), let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile else {
+            guard !(tab?.isPrivate ?? true),
+                  let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
                 completion(favicon, nil)
                 return
             }
 
-            profile.favicons.addFavicon(favicon, forSite: site) >>> {                completion(favicon, nil)
+            let profile = appDelegate.profile
+
+            profile.favicons.addFavicon(favicon, forSite: site) >>> {
+                completion(favicon, nil)
             }
         }
 
