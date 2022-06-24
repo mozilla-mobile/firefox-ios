@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "Dip",
+        "repositoryURL": "https://github.com/AliSoftware/Dip.git",
+        "state": {
+          "branch": null,
+          "revision": "7ec008a5c09520b67f07669ad5a753d757f05bbe",
+          "version": null
+        }
+      },
+      {
         "package": "Fuzi",
         "repositoryURL": "https://github.com/nbhasin2/Fuzi.git",
         "state": {
@@ -87,8 +96,8 @@
         "repositoryURL": "https://github.com/SDWebImage/SDWebImage.git",
         "state": {
           "branch": null,
-          "revision": "d6367439527663d2038ca445a3c3c4e4bac40d60",
-          "version": "5.12.0"
+          "revision": "2e63d0061da449ad0ed130768d05dceb1496de44",
+          "version": "5.12.5"
         }
       },
       {

@@ -578,6 +578,9 @@
 		9699F77326F39E5100C5FA47 /* SiteImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9699F77226F39E5100C5FA47 /* SiteImageHelper.swift */; };
 		96A562A027D6D0E80045144A /* ContileProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A5629F27D6D0E80045144A /* ContileProvider.swift */; };
 		96A562A327D7B32A0045144A /* Contile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A562A227D7B32A0045144A /* Contile.swift */; };
+		96C11E962863985E00840E7C /* Dip in Frameworks */ = {isa = PBXBuildFile; productRef = 96C11E952863985E00840E7C /* Dip */; };
+		96C11E992864BA2C00840E7C /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C11E982864BA2C00840E7C /* ServiceProvider.swift */; };
+		96C11E9B2864C2DD00840E7C /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C11E9A2864C2DD00840E7C /* AppContainer.swift */; };
 		96D95016270238500079D39D /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D95015270238500079D39D /* Throttler.swift */; };
 		96EB6C3827D821B800A9D159 /* HistoryPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3727D821B800A9D159 /* HistoryPanelViewModel.swift */; };
 		96EB6C3C27D82AEA00A9D159 /* HistoryPanel+ContextMenuExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3B27D82AEA00A9D159 /* HistoryPanel+ContextMenuExtensions.swift */; };
@@ -3075,6 +3078,8 @@
 		96A562A227D7B32A0045144A /* Contile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contile.swift; sourceTree = "<group>"; };
 		96A6ACD4276BDD8D00087A51 /* en-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-US"; path = "en-US.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		96B14F71BAAD012EA8852135 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/LoginManager.strings"; sourceTree = "<group>"; };
+		96C11E982864BA2C00840E7C /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
+		96C11E9A2864C2DD00840E7C /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		96D95015270238500079D39D /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
 		96EB6C3727D821B800A9D159 /* HistoryPanelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelViewModel.swift; sourceTree = "<group>"; };
 		96EB6C3B27D82AEA00A9D159 /* HistoryPanel+ContextMenuExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryPanel+ContextMenuExtensions.swift"; sourceTree = "<group>"; };
@@ -4684,6 +4689,7 @@
 			files = (
 				43AFC0F327967C1C0039DDF4 /* Fuzi.framework in Frameworks */,
 				4326A3DC2849C34B00550F73 /* KingfisherDynamic.framework in Frameworks */,
+				96C11E962863985E00840E7C /* Dip in Frameworks */,
 				4368F84E279669A60013419B /* Snapkit.framework in Frameworks */,
 				4368F82C279665C20013419B /* Sentry.framework in Frameworks */,
 				8A08EC6427EBDCAD00E119C7 /* AdServices.framework in Frameworks */,
@@ -5773,6 +5779,15 @@
 				96F8DA48280452CA00E53239 /* GleanPlumbContextProvider.swift */,
 			);
 			path = Messaging;
+			sourceTree = "<group>";
+		};
+		96C11E972864BA1700840E7C /* DependencyInjection */ = {
+			isa = PBXGroup;
+			children = (
+				96C11E982864BA2C00840E7C /* ServiceProvider.swift */,
+				96C11E9A2864C2DD00840E7C /* AppContainer.swift */,
+			);
+			name = DependencyInjection;
 			sourceTree = "<group>";
 		};
 		96EB6C3627D821A400A9D159 /* HistoryPanel */ = {
@@ -7124,6 +7139,7 @@
 		F84B21E41A0910F600AAB793 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				96C11E972864BA1700840E7C /* DependencyInjection */,
 				5A271ABB2860B0BD00471CE4 /* WebServer */,
 				E652F6F91BF66A79007FFDD6 /* Delegates */,
 				D81E377D2242FF61006AC72D /* Client-Bridging-Header.h */,
@@ -7873,6 +7889,7 @@
 				433F87CD2788EAB600693368 /* GCDWebServers */,
 				435C85EF2788F4D00072B526 /* Glean */,
 				432BD0232790EBD000A0F3C3 /* Adjust */,
+				96C11E952863985E00840E7C /* Dip */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -8210,6 +8227,7 @@
 				43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */,
 				43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */,
 				4326A3C22849B8E500550F73 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				96C11E942863985E00840E7C /* XCRemoteSwiftPackageReference "Dip" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -9311,6 +9329,7 @@
 				D314E7F71A37B98700426A76 /* TabToolbar.swift in Sources */,
 				CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */,
 				048B4C7924A53E7B001B56E8 /* TodayModel.swift in Sources */,
+				96C11E9B2864C2DD00840E7C /* AppContainer.swift in Sources */,
 				2386E4E624F8358E0072EF17 /* HomepageTabBanner.swift in Sources */,
 				C8954A542729AD9D001C7283 /* CustomTheme.swift in Sources */,
 				43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */,
@@ -9587,6 +9606,7 @@
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
 				8AE1E1CB27B18F560024C45E /* SearchBarSettingsViewController.swift in Sources */,
 				8AD40FC527BADC1F00672675 /* TabToolbarHelper.swift in Sources */,
+				96C11E992864BA2C00840E7C /* ServiceProvider.swift in Sources */,
 				9609F4CA26B57CE800F81493 /* CalendarExtensions.swift in Sources */,
 				E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */,
 				DFA51481275FFEE500266AA0 /* HistoryHighlightsManager.swift in Sources */,
@@ -14868,6 +14888,14 @@
 				kind = branch;
 			};
 		};
+		96C11E942863985E00840E7C /* XCRemoteSwiftPackageReference "Dip" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AliSoftware/Dip.git";
+			requirement = {
+				kind = revision;
+				revision = 7ec008a5c09520b67f07669ad5a753d757f05bbe;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -14974,6 +15002,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */;
 			productName = Glean;
+		};
+		96C11E952863985E00840E7C /* Dip */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96C11E942863985E00840E7C /* XCRemoteSwiftPackageReference "Dip" */;
+			productName = Dip;
 		};
 		D433852B27ABC8150069DD33 /* MappaMundi */ = {
 			isa = XCSwiftPackageProductDependency;
