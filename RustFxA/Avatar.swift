@@ -19,14 +19,13 @@ open class Avatar {
 
         ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
                                                                limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
-            if error != nil || image == nil {
+            guard error == nil, let image = image else {
                 self.image.fill(UIImage(named: ImageIdentifiers.placeholderAvatar)!)
+                NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
+                return
             }
 
-            if let image = image {
-                self.image.fill(image)
-            }
-
+            self.image.fill(image)
             NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         }
     }

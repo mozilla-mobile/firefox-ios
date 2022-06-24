@@ -193,14 +193,12 @@ extension SQLiteHistory: Favicons {
 
         ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: faviconURL,
                                                                limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
-            if error != error || image == nil {
-                deferred.fill(Maybe(failure:
-                                    FaviconDownloadError(faviconURL: faviconURL.absoluteString)))
+            guard error == nil, let image = image else {
+                deferred.fill(Maybe(failure: FaviconDownloadError(faviconURL: faviconURL.absoluteString)))
+                return
             }
 
-            if let image = image {
-                deferred.fill(Maybe(success: image))
-            }
+            deferred.fill(Maybe(success: image))
         }
 
         return deferred

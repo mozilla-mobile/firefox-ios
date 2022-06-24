@@ -43,9 +43,6 @@ class FaviconHandler {
                                           date: Date())
                     favicon.width = Int(image.size.width)
                     favicon.height = Int(image.size.height)
-
-                    ImageLoadingHandler.shared.saveImageToCache(img: image,
-                                                    key: domainLevelIconUrl.absoluteString)
                     completion(favicon, nil)
                 }
 
@@ -60,8 +57,6 @@ class FaviconHandler {
             let favicon = Favicon(url: faviconUrl.absoluteString, date: Date())
             favicon.width = Int(image.size.width)
             favicon.height = Int(image.size.height)
-            ImageLoadingHandler.shared.saveImageToCache(img: image,
-                                            key: domainLevelIconUrl.absoluteString)
             completion(favicon, nil)
         }
 

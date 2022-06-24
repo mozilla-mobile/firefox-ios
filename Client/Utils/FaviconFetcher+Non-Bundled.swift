@@ -162,13 +162,11 @@ extension FaviconFetcher {
 
             if let iconURL = iconURL {
                 ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: iconURL, limit: 0) { image, error in
-                    if error != nil || image == nil {
+                    guard error == nil, let image = image else {
                         deferred.fill(Maybe(failure: FaviconError()))
+                        return
                     }
-
-                    if let image = image {
-                        deferred.fill(Maybe(success: image))
-                    }
+                    deferred.fill(Maybe(success: image))
                 }
             }
         }

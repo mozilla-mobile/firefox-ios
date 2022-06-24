@@ -176,8 +176,8 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
                     try data.write(to: imageKeyDirectoryUrl)
                 }
-            } catch {
-                print("unable to write image data")
+            } catch let err {
+                log.error("unable to write image data \(err)")
             }
         }
     }

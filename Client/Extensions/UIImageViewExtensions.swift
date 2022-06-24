@@ -44,9 +44,6 @@ public extension UIImageView {
             self.image = UIImage(contentsOfFile: bundledIcon.filePath)
             finish(bgColor: bundledIcon.bgcolor)
         } else if let imageURL = URL(string: icon?.url ?? "") {
-            // TODO: Wrap this part of KF under our umbrella image loading handler
-            // This is fine for now but if in future we decide to move away from Kingfisher
-            // or replace it then this will need to be fixed and updated
             ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: imageURL,
                                        limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
                 guard error == nil, let image = image else {

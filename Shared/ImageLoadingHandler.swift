@@ -36,8 +36,6 @@ protocol ImageFetcher {
     func downloadImageOnly(with url: URL,
                            limit maxSize: Int,
                            completion: @escaping (UIImage?, Data?, ImageLoadingError?) -> Void)
-    func downloadImageOnly(with url: URL,
-                           completion: @escaping (UIImage?, Data?, ImageLoadingError?) -> Void)
     func downloadAndCacheImageWithAuthentication(with url: URL,
                                                  completion: @escaping (UIImage?, ImageLoadingError?) -> Void)
 }
@@ -54,18 +52,17 @@ public class ImageLoadingHandler: ImageFetcher {
 
     public func getImageFromCacheOrDownload(with url: URL, limit maxSize: Int,
                                             completion: @escaping (UIImage?, ImageLoadingError?) -> Void) {
-
         // Check if image is in cache
         guard isImageInCache(url: url) else {
 
             // Download image as its not in cache
             downloadImageOnly(with: url, limit: maxSize) { [unowned self] image, _, error in
                 completion(image, error)
-
-                if error == nil, let image = image {
-                    // cache downloaded image for future
-                    self.saveImageToCache(img: image, key: url.absoluteString)
+                guard error == nil, let image = image else {
+                    return
                 }
+                // cache downloaded image for future
+                self.saveImageToCache(img: image, key: url.absoluteString)
             }
 
             return
@@ -79,7 +76,6 @@ public class ImageLoadingHandler: ImageFetcher {
     }
 
     public func getImageFromCache(url: URL, completion: @escaping (UIImage?, ImageLoadingError?) -> Void) {
-
         ImageCache.default.retrieveImage(forKey: url.absoluteString) { result in
             switch result {
             case .success(let value):
@@ -122,10 +118,8 @@ public class ImageLoadingHandler: ImageFetcher {
         }
     }
 
-    public func downloadImageOnly(with url: URL,
-                                         limit maxSize: Int,
-                                         completion: @escaping (UIImage?, Data?, ImageLoadingError?) -> Void) {
-
+    public func downloadImageOnly(with url: URL, limit maxSize: Int,
+                                  completion: @escaping (UIImage?, Data?, ImageLoadingError?) -> Void) {
         let imgDownloader = ImageDownloader.default
         var onProgress: DownloadProgressBlock?
 
@@ -152,19 +146,18 @@ public class ImageLoadingHandler: ImageFetcher {
         }
     }
 
-    public func downloadImageOnly(with url: URL,
-                                         completion: @escaping (UIImage?, Data?, ImageLoadingError?) -> Void) {
-
-        let imgDownloader = ImageDownloader.default
-        imgDownloader.downloadImage(with: url, options: nil, progressBlock: nil) { result in
-            switch result {
-            case .success(let value):
-                completion(value.image, value.originalData, nil)
-            case .failure:
-                completion(nil, nil, ImageLoadingError.unableToFetchImage)
-            }
-        }
-    }
+//    public func downloadImageOnly(with url: URL, completion: @escaping (UIImage?, Data?, ImageLoadingError?) -> Void) {
+//
+//        let imgDownloader = ImageDownloader.default
+//        imgDownloader.downloadImage(with: url, options: nil, progressBlock: nil) { result in
+//            switch result {
+//            case .success(let value):
+//                completion(value.image, value.originalData, nil)
+//            case .failure:
+//                completion(nil, nil, ImageLoadingError.unableToFetchImage)
+//            }
+//        }
+//    }
 }
 
 extension ImageLoadingHandler: AuthenticationChallengeResponsible {
