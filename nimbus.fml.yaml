@@ -191,7 +191,7 @@ features:
           "wallpaper-feature": {
             "status": true
           },
-          "pocket-sponsored-stories": true
+          "pocket-sponsored-stories": false
         }
       - channel: beta
         value: {
