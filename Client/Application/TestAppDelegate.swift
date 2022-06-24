@@ -13,8 +13,19 @@ class TestAppDelegate: AppDelegate, FeatureFlaggable {
 
     lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
 
-    override func getProfile(_ application: UIApplication) -> Profile {
-        if let profile = self.profile {
+    private var internalProfile: Profile?
+
+    override var profile: Profile {
+        get {
+            getProfile(UIApplication.shared)
+        }
+        set {
+            internalProfile = newValue
+        }
+    }
+
+    func getProfile(_ application: UIApplication) -> Profile {
+        if let profile = self.internalProfile {
             return profile
         }
 
