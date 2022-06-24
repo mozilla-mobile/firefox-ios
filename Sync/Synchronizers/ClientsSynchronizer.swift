@@ -111,6 +111,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     }
 
     var localClients: RemoteClientsAndTabs?
+    var clientGuidIsMigrated: Bool = false
 
     override var storageVersion: Int {
         return ClientsStorageVersion
@@ -133,12 +134,12 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     }
 
     open func getOurClientRecord() -> Record<ClientPayload> {
-        let guid = self.scratchpad.clientGUID
+        let fxaDeviceId = self.scratchpad.fxaDeviceId
         let formfactor = formFactorString()
 
         let json = JSON([
-            "id": guid,
-            "fxaDeviceId": self.scratchpad.fxaDeviceId,
+            "id": fxaDeviceId,
+            "fxaDeviceId": fxaDeviceId,
             "version": AppInfo.appVersion,
             "protocols": ["1.5"],
             "name": self.scratchpad.clientName,
@@ -151,7 +152,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             "formfactor": formfactor])
 
         let payload = ClientPayload(json)
-        return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
+        return Record(id: fxaDeviceId, payload: payload, ttl: ThreeWeeksInSeconds)
     }
 
     fileprivate func formFactorString() -> String {
@@ -310,6 +311,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         log.debug("Got \(records.count) client records.")
 
         let ourGUID = self.scratchpad.clientGUID
+        let ourFxaDeviceId = self.scratchpad.fxaDeviceId
         var toInsert = [RemoteClient]()
         var ours: Record<ClientPayload>?
 
@@ -320,6 +322,12 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             }
 
             if rec.id == ourGUID {
+                if self.clientGuidIsMigrated {
+                    log.debug("Skipping our own client records since the guid is not the fxa device ID")
+                } else {
+                    SentryIntegration.shared.send(message: "An unmigrated client record was found with a GUID for an ID", tag: SentryTag.clientSynchronizer, severity: .error)
+                }
+            } else if rec.id == ourFxaDeviceId {
                 if rec.modified == self.clientRecordLastUpload {
                     log.debug("Skipping our own unmodified record.")
                 } else {
@@ -347,7 +355,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             >>== { (shouldUpload, commands) in
                 let isFirstSync = self.lastFetched == 0
                 let ourRecordDidChange = self.why == .didLogin || self.why == .clientNameChanged
-                return self.maybeUploadOurRecord(shouldUpload || ourRecordDidChange, ifUnmodifiedSince: ours?.modified, toServer: storageClient)
+                return self.maybeUploadOurRecord(shouldUpload || ourRecordDidChange || self.clientGuidIsMigrated, ifUnmodifiedSince: ours?.modified, toServer: storageClient)
                     >>> { self.uploadClientCommands(toLocalClients: localClients, withServer: storageClient) }
                     >>> {
                         log.debug("Running \(commands.count) commands.")
@@ -398,9 +406,44 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         // clients since the beginning of time instead of looking at `self.lastFetched`.
         return clientsClient.getSince(0)
             >>== { response in
-                return self.wipeIfNecessary(localClients)
-                    >>> { self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient, notifier: notifier) }
+                return self.maybeDeleteClients(response: response, withServer: storageClient)
+                    >>> { self.wipeIfNecessary(localClients)
+                                >>> { self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient, notifier: notifier) }
+                    }
+
             }
             >>> { deferMaybe(self.completedWithStats) }
+    }
+
+    private func maybeDeleteClients(response: StorageResponse<[Record<ClientPayload>]>, withServer storageClient: Sync15StorageClient) -> Success {
+        let hasOldClientId = response.value.contains { $0.id == self.scratchpad.clientGUID }
+        self.clientGuidIsMigrated = false
+
+        if hasOldClientId {
+            // Here we are deleting the old client record with the client GUID as the sync ID record. If the browser schema,
+            // needs to be reverted from version 41, the client record with an FxA device ID as the record ID will need to
+            // be deleted in a similar manner.
+            return storageClient.deleteObject(collection: "clients", guid: self.scratchpad.clientGUID).bind { result in
+                if result.isSuccess {
+                    self.clientGuidIsMigrated = true
+                    return succeed()
+                } else {
+                    if let error = result.failureValue {
+                        log.debug("Unable to delete records from client engine")
+                        return deferMaybe(error as MaybeErrorType)
+                    } else {
+                        log.debug("Unable to delete records from client engine with unknown error")
+                        return deferMaybe(UnknownError() as MaybeErrorType)
+                    }
+                }
+            }
+        }
+        return succeed()
+    }
+
+    public static func resetClientsWithStorage(_ storage: ResettableSyncStorage, basePrefs: Prefs) -> Success {
+        let clientPrefs = BaseCollectionSynchronizer.prefsForCollection("clients", withBasePrefs: basePrefs)
+        clientPrefs.removeObjectForKey("lastFetched")
+        return storage.resetClient()
     }
 }

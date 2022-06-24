@@ -49,6 +49,8 @@
 		0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */; };
 		0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
+		158241282820698B00956B39 /* RustRemoteTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158241272820698B00956B39 /* RustRemoteTabsTests.swift */; };
+		15DE98FD27FCED4F00F1ECDB /* RustRemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DE98FC27FCED4F00F1ECDB /* RustRemoteTabs.swift */; };
 		1B0DFD25274856D60008EB0A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD24274856D60008EB0A /* SwiftyJSON */; };
 		1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F0270E89D0006E1264 /* Telemetry */; };
 		1BE9ECCA27176FEA00D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC927176FEA00D729BB /* SwiftyJSON */; };
@@ -126,7 +128,6 @@
 		28926B371AC0F0DD009C0B1D /* EnvelopeJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28926B361AC0F0DD009C0B1D /* EnvelopeJSON.swift */; };
 		28926B3A1AC0F128009C0B1D /* CleartextPayloadJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28926B391AC0F128009C0B1D /* CleartextPayloadJSON.swift */; };
 		2894C1431AE89D8900F1F92F /* HistorySynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2894C1421AE89D8900F1F92F /* HistorySynchronizer.swift */; };
-		2894C1661AE89DD200F1F92F /* TabsSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2894C1651AE89DD200F1F92F /* TabsSynchronizer.swift */; };
 		2894C1691AE89DDC00F1F92F /* ClientsSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2894C1681AE89DDC00F1F92F /* ClientsSynchronizer.swift */; };
 		2894C16C1AE89FD500F1F92F /* HistoryPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2894C16B1AE89FD500F1F92F /* HistoryPayload.swift */; };
 		289A4C131C4EB90600A460E3 /* StorageTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289A4C121C4EB90600A460E3 /* StorageTestUtils.swift */; };
@@ -1706,8 +1707,10 @@
 		15254CBD8097A4D7D7F65915 /* hy-AM */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hy-AM"; path = "hy-AM.lproj/Shared.strings"; sourceTree = "<group>"; };
 		1526475E8A109ACA902F5F3B /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		1557469CAE272A7CFED68EE3 /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/Shared.strings; sourceTree = "<group>"; };
+		158241272820698B00956B39 /* RustRemoteTabsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustRemoteTabsTests.swift; sourceTree = "<group>"; };
 		159D4CC38F41CC03315BEC6E /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		15B7471483FF81285A2322B4 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/HistoryPanel.strings"; sourceTree = "<group>"; };
+		15DE98FC27FCED4F00F1ECDB /* RustRemoteTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustRemoteTabs.swift; sourceTree = "<group>"; };
 		15E24CE8B6869FA4F86B3FF5 /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		15E44C4F9623C474235CFCC3 /* or */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = or; path = or.lproj/Intro.strings; sourceTree = "<group>"; };
 		15F34FBFBBCB48D37E77AEC6 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/Search.strings"; sourceTree = "<group>"; };
@@ -1890,7 +1893,6 @@
 		28926B361AC0F0DD009C0B1D /* EnvelopeJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnvelopeJSON.swift; sourceTree = "<group>"; };
 		28926B391AC0F128009C0B1D /* CleartextPayloadJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CleartextPayloadJSON.swift; sourceTree = "<group>"; };
 		2894C1421AE89D8900F1F92F /* HistorySynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HistorySynchronizer.swift; path = Synchronizers/HistorySynchronizer.swift; sourceTree = "<group>"; };
-		2894C1651AE89DD200F1F92F /* TabsSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TabsSynchronizer.swift; path = Synchronizers/TabsSynchronizer.swift; sourceTree = "<group>"; };
 		2894C1681AE89DDC00F1F92F /* ClientsSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientsSynchronizer.swift; path = Synchronizers/ClientsSynchronizer.swift; sourceTree = "<group>"; };
 		2894C16B1AE89FD500F1F92F /* HistoryPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPayload.swift; sourceTree = "<group>"; };
 		289A4C121C4EB90600A460E3 /* StorageTestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageTestUtils.swift; sourceTree = "<group>"; };
@@ -5036,7 +5038,6 @@
 				2894C1421AE89D8900F1F92F /* HistorySynchronizer.swift */,
 				28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */,
 				2F3724E41ABF3C19007607FA /* Synchronizer.swift */,
-				2894C1651AE89DD200F1F92F /* TabsSynchronizer.swift */,
 			);
 			name = Synchronizers;
 			sourceTree = "<group>";
@@ -5244,6 +5245,7 @@
 				D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */,
 				2FCAE22B1ABB51F800877008 /* Supporting Files */,
 				D980063C26D8308700321BC1 /* RustPlacesTests.swift */,
+				158241272820698B00956B39 /* RustRemoteTabsTests.swift */,
 			);
 			path = StorageTests;
 			sourceTree = "<group>";
@@ -6131,6 +6133,7 @@
 				D05434D8225BAA6200FDE4EF /* RustPlaces.swift */,
 				D057B2AA220103BC000614E0 /* RustLogins.swift */,
 				D05434E2225BBC4100FDE4EF /* RustShared.swift */,
+				15DE98FC27FCED4F00F1ECDB /* RustRemoteTabs.swift */,
 			);
 			path = Rust;
 			sourceTree = "<group>";
@@ -8632,7 +8635,6 @@
 				28926B3A1AC0F128009C0B1D /* CleartextPayloadJSON.swift in Sources */,
 				2827319D1ABC9C2F00AA1954 /* SyncMeta.swift in Sources */,
 				D0BE845520E1660F006A1282 /* Keys.swift in Sources */,
-				2894C1661AE89DD200F1F92F /* TabsSynchronizer.swift in Sources */,
 				282731991ABC9C2F00AA1954 /* ClientPayload.swift in Sources */,
 				E67D57031D527449003917B1 /* BatchingClient.swift in Sources */,
 				2894C1431AE89D8900F1F92F /* HistorySynchronizer.swift in Sources */,
@@ -8807,6 +8809,7 @@
 				D057B2AB220103BC000614E0 /* RustLogins.swift in Sources */,
 				7BF5A1EA1B41640500EA9DD8 /* SyncQueue.swift in Sources */,
 				E677F0541D94247300ECF1FB /* Metadata.swift in Sources */,
+				15DE98FD27FCED4F00F1ECDB /* RustRemoteTabs.swift in Sources */,
 				28E08C991AF44EF9009BA2FA /* SQLiteHistory.swift in Sources */,
 				285D3B901B4386520035FD22 /* SQLiteQueue.swift in Sources */,
 				394CF6CF1BAA493C00906917 /* DefaultSuggestedSites.swift in Sources */,
@@ -8842,6 +8845,7 @@
 				D0B693D5206C5BB9008A8B11 /* TestSQLiteReadingList.swift in Sources */,
 				E63F71881DB7FBE200A995C9 /* TestSQLiteMetadata.swift in Sources */,
 				2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */,
+				158241282820698B00956B39 /* RustRemoteTabsTests.swift in Sources */,
 				D0148A02220C8C93008A6EEF /* RustLoginsTests.swift in Sources */,
 				289A4C131C4EB90600A460E3 /* StorageTestUtils.swift in Sources */,
 				D37DE2C71CA356D800A5EC69 /* CertTests.swift in Sources */,
@@ -14616,7 +14620,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 93.1.0;
+				version = 93.2.2;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
