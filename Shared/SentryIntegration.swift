@@ -10,6 +10,7 @@ public enum SentryTag: String {
     case browserDB = "BrowserDB"
     case rustPlaces = "RustPlaces"
     case rustLogins = "RustLogins"
+    case rustRemoteTabs = "RustRemoteTabs"
     case rustLog = "RustLog"
     case notificationService = "NotificationService"
     case unifiedTelemetry = "UnifiedTelemetry"
@@ -18,6 +19,7 @@ public enum SentryTag: String {
     case bookmarks = "Bookmarks"
     case nimbus = "Nimbus"
     case tabDisplayManager = "TabDisplayManager"
+    case clientSynchronizer = "clientSynchronizer"
 }
 
 public protocol SentryProtocol {

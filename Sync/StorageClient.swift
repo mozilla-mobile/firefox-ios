@@ -506,7 +506,6 @@ open class Sync15StorageClient {
             url = self.serverURI // No trailing slash.
         } else {
             url = self.serverURI.appendingPathComponent(path)
-
         }
 
         op(url) { (data, response, error) in
@@ -579,6 +578,10 @@ open class Sync15StorageClient {
     func wipeStorage() -> Deferred<Maybe<StorageResponse<JSON>>> {
         // In Sync 1.5 it's preferred that we delete the root, not /storage.
         return deleteResource("", f: { $0 })
+    }
+
+    func deleteObject(collection: String, guid: String) -> Deferred<Maybe<StorageResponse<JSON>>> {
+        return deleteResource("storage/\(collection)/\(guid)", f: { $0 })
     }
 
     func getInfoCollections() -> Deferred<Maybe<StorageResponse<InfoCollections>>> {

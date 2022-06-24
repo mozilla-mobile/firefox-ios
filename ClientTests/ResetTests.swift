@@ -65,6 +65,8 @@ class ResetTests: XCTestCase {
         let e = MockEngineStateChanges()
         e.collections.append("clients")
 
+        _ = profile.tabs.reopenIfClosed()
+
         XCTAssertTrue(profile.peekSyncManager.takeActionsOnEngineStateChanges(e).value.isSuccess)
 
         // We threw away the command.

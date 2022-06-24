@@ -39,15 +39,6 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             availableCommands: availableCommands)
     }
 
-    class func remoteTabFactory(_ row: SDRow) -> RemoteTab {
-        let clientGUID = row["client_guid"] as? String
-        let url = URL(string: row["url"] as! String)! // TODO: find a way to make this less dangerous.
-        let title = row["title"] as! String
-        let history = SQLiteRemoteClientsAndTabs.convertStringToHistory(row["history"] as? String)
-        let lastUsed = row.getTimestamp("last_used")!
-        return RemoteTab(clientGUID: clientGUID, URL: url, title: title, history: history, lastUsed: lastUsed, icon: nil)
-    }
-
     class func convertStringToHistory(_ history: String?) -> [URL] {
         guard let data = history?.data(using: .utf8),
             let decoded = try? JSONSerialization.jsonObject(with: data, options: [JSONSerialization.ReadingOptions.allowFragments]),
@@ -68,54 +59,6 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     open func wipeClients() -> Success {
         return db.run("DELETE FROM clients")
-    }
-
-    open func wipeRemoteTabs() -> Success {
-        return db.run("DELETE FROM tabs WHERE client_guid IS NOT NULL")
-    }
-
-    open func wipeTabs() -> Success {
-        return db.run("DELETE FROM tabs")
-    }
-
-    open func insertOrUpdateTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
-        return self.insertOrUpdateTabsForClientGUID(nil, tabs: tabs)
-    }
-
-    open func insertOrUpdateTabsForClientGUID(_ clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
-        let deleteQuery = "DELETE FROM tabs WHERE client_guid IS ?"
-        let deleteArgs: Args = [clientGUID]
-
-        return db.transaction { connection -> Int in
-            // Delete any existing tabs.
-            try connection.executeChange(deleteQuery, withArgs: deleteArgs)
-
-            // Insert replacement tabs.
-            var inserted = 0
-            for tab in tabs {
-                let args: Args = [
-                    tab.clientGUID,
-                    tab.URL.absoluteString,
-                    tab.title,
-                    SQLiteRemoteClientsAndTabs.convertHistoryToString(tab.history),
-                    NSNumber(value: tab.lastUsed)
-                ]
-
-                let lastInsertedRowID = connection.lastInsertedRowID
-
-                // We trust that each tab's clientGUID matches the supplied client!
-                // Really tabs shouldn't have a GUID at all. Future cleanup!
-                try connection.executeChange("INSERT INTO tabs (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", withArgs: args)
-
-                if connection.lastInsertedRowID == lastInsertedRowID {
-                    log.debug("Unable to INSERT RemoteTab!")
-                } else {
-                    inserted += 1
-                }
-            }
-
-            return inserted
-        }
     }
 
     open func insertOrUpdateClients(_ clients: [RemoteClient]) -> Deferred<Maybe<Int>> {
@@ -192,17 +135,6 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return self.db.runQuery("SELECT * FROM clients WHERE fxaDeviceId = ?", args: [fxaDeviceId], factory: factory) >>== { deferMaybe($0[0]) }
     }
 
-    open func getRemoteDevices() -> Deferred<Maybe<[RemoteDevice]>> {
-        return db.withConnection { connection -> [RemoteDevice] in
-            let cursor = connection.executeQuery("SELECT * FROM remote_devices", factory: SQLiteRemoteClientsAndTabs.remoteDeviceFactory)
-            defer {
-                cursor.close()
-            }
-
-            return cursor.asArray()
-        }
-    }
-
     open func getClients() -> Deferred<Maybe<[RemoteClient]>> {
         return db.withConnection { connection -> [RemoteClient] in
             let cursor = connection.executeQuery("SELECT * FROM clients WHERE EXISTS (SELECT 1 FROM remote_devices rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC", factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)
@@ -219,63 +151,6 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return c >>== { cursor in
             let guids = Set<GUID>(cursor.asArray())
             return deferMaybe(guids)
-        }
-    }
-
-    open func getTabsForClientWithGUID(_ guid: GUID?) -> Deferred<Maybe<[RemoteTab]>> {
-        let tabsSQL: String
-        let clientArgs: Args?
-        if let _ = guid {
-            tabsSQL = "SELECT * FROM tabs WHERE client_guid = ?"
-            clientArgs = [guid]
-        } else {
-            tabsSQL = "SELECT * FROM tabs WHERE client_guid IS NULL"
-            clientArgs = nil
-        }
-
-        log.debug("Looking for tabs for client with guid: \(guid ?? "nil")")
-        return db.runQuery(tabsSQL, args: clientArgs, factory: SQLiteRemoteClientsAndTabs.remoteTabFactory) >>== {
-            let tabs = $0.asArray()
-            log.debug("Found \(tabs.count) tabs for client with guid: \(guid ?? "nil")")
-            return deferMaybe(tabs)
-        }
-    }
-
-    open func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
-        return db.withConnection { conn -> ([RemoteClient], [RemoteTab]) in
-            let clientsCursor = conn.executeQuery("SELECT * FROM clients WHERE EXISTS (SELECT 1 FROM remote_devices rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC", factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)
-            let tabsCursor = conn.executeQuery("SELECT * FROM tabs WHERE client_guid IS NOT NULL ORDER BY client_guid DESC, last_used DESC", factory: SQLiteRemoteClientsAndTabs.remoteTabFactory)
-
-            defer {
-                clientsCursor.close()
-                tabsCursor.close()
-            }
-
-            return (clientsCursor.asArray(), tabsCursor.asArray())
-        } >>== { clients, tabs in
-            var acc = [String: [RemoteTab]]()
-            for tab in tabs {
-                if let guid = tab.clientGUID {
-                    if acc[guid] == nil {
-                        acc[guid] = [tab]
-                    } else {
-                        acc[guid]!.append(tab)
-                    }
-                } else {
-                    log.error("RemoteTab (\(tab)) has a nil clientGUID")
-                }
-            }
-
-            // Most recent first.
-            let fillTabs: (RemoteClient) -> ClientAndTabs = { client in
-                var tabs: [RemoteTab]?
-                if let guid: String = client.guid {
-                    tabs = acc[guid]
-                }
-                return ClientAndTabs(client: client, tabs: tabs ?? [])
-            }
-
-            return deferMaybe(clients.map(fillTabs))
         }
     }
 

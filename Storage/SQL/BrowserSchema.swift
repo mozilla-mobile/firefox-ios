@@ -143,7 +143,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 40    // Issue #4776.
+    static let DefaultVersion = 41    // PR #10553.
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -1416,6 +1416,17 @@ open class BrowserSchema: Schema {
             // Create indices on the bookmarks tables for the `keyword` column.
             if !self.run(db, queries: [
                 faviconSiteURLsCreate,
+                ]) {
+                return false
+            }
+        }
+
+        if from < 41 && to >= 41 {
+            // As a part of the appservices tabs component integration, remove tabs records from the
+            // browserDB tabs table to prevent issues with the `client_guid` foreign key to the clients
+            // table. In the event that this migration is reverted, the table will be repopulated by sync data.
+            if !self.run(db, queries: [
+                "DELETE FROM tabs",
                 ]) {
                 return false
             }
