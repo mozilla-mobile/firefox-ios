@@ -56,6 +56,15 @@
         }
       },
       {
+        "package": "Kingfisher",
+        "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
+        "state": {
+          "branch": null,
+          "revision": "59eb199fdb8dd47733624e8b0277822d0232579e",
+          "version": "7.2.2"
+        }
+      },
+      {
         "package": "MappaMundi",
         "repositoryURL": "https://github.com/nbhasin2/MappaMundi.git",
         "state": {
