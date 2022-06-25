@@ -28,7 +28,7 @@ extension LibraryViewController {
 
         case .inFolderEditMode:
             guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
-            bookmarksPanel.addNewBookmarkItemAction()
+            bookmarksPanel.presentInFolderActions()
 
         case .itemEditMode:
             viewModel.currentPanelState = .bookmarks(state: .inFolderEditMode)

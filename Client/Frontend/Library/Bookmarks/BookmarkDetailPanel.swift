@@ -88,7 +88,6 @@ class BookmarkDetailPanel: SiteTableViewController {
         self.init(profile: profile, bookmarkNodeGUID: bookmarkNode.guid, bookmarkNodeType: bookmarkNode.type, parentBookmarkFolder: parentBookmarkFolder)
 
         self.isPresentedFromToast = fromToast
-        // TODO: Laurie, override position?
         self.bookmarkItemPosition = bookmarkNode.position
 
         if let bookmarkItem = bookmarkNode as? BookmarkItemData {
