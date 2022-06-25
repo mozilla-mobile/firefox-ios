@@ -4,7 +4,6 @@
 
 import Foundation
 import Dip
-import os.log
 
 /// We follow the Dependency Injection pattern with containers, currently tied to `Dip` framework.
 ///
@@ -17,5 +16,5 @@ import os.log
 /// used - that detail can be kept out of here. However, every service provider is expected
 /// to resolve services. 
 protocol ServiceProvider {
-    func resolve(type: Any.Type) -> Any
+    func resolve<T>(type: T.Type) -> T
 }

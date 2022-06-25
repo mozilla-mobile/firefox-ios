@@ -24,9 +24,9 @@ class AppContainer: ServiceProvider {
     }
 
     /// Any services needed by the client can be resolved by calling this and passing the type.
-    func resolve(type: Any.Type) -> Any {
+    func resolve<T>(type: T.Type) -> T {
         do {
-            return try container?.resolve(type.self) as Any
+            return try container?.resolve(T.self) as! T
         } catch {
             /// If a service we've thought was registered but can't be resolved, this is likely an issue within
             /// bootstrapping. Double check your registrations and their types.

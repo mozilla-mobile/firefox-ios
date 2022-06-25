@@ -20,7 +20,7 @@ class TabMetadataManager {
         tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openURLOnly.rawValue
     }
 
-    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self) as! Profile) {
+    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
         self.profile = profile
     }
 
