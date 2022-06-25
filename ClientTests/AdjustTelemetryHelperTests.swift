@@ -10,21 +10,20 @@ import Glean
 class AdjustTelemetryHelperTests: XCTestCase {
 
     var telemetryHelper: AdjustTelemetryHelper!
-    var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
 
+        Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.enableTestingMode()
+
         // Setup mock profile
-        profile = MockProfile(databasePrefix: "adjust-helper-test")
         telemetryHelper = AdjustTelemetryHelper()
     }
 
     override func tearDown() {
         super.tearDown()
-
-        self.profile._shutdown()
-        self.profile = nil
+        telemetryHelper = nil
     }
 
     func testFailSetAttribution_WithNilData() {
@@ -36,6 +35,7 @@ class AdjustTelemetryHelperTests: XCTestCase {
         XCTAssertFalse(GleanMetrics.Adjust.adGroup.testHasValue())
         XCTAssertFalse(GleanMetrics.Adjust.creative.testHasValue())
         XCTAssertFalse(GleanMetrics.Adjust.network.testHasValue())
+        XCTAssertFalse(GleanMetrics.Adjust.deeplinkReceived.testHasValue())
     }
 
     func testFirstSessionPing() {
