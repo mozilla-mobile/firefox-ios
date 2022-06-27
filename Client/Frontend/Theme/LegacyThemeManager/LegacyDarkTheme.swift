@@ -72,6 +72,7 @@ private class DarkEnhancedTrackingProtectionMenuColor: EnhancedTrackingProtectio
     override var sectionColor: UIColor { return UIColor.Photon.DarkGrey65 }
     override var switchAndButtonTint: UIColor { return UIColor.Photon.Blue20 }
     override var subtextColor: UIColor { return UIColor.Photon.LightGrey05 }
+    override var closeButtonColor: UIColor { return UIColor.Photon.DarkGrey65 }
 }
 
 private class DarkTopTabsColor: TopTabsColor {
