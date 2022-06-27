@@ -50,7 +50,7 @@ class GleanTelemetryTests: XCTestCase {
 
         _ = syncManager.syncNamedCollections(
             why: SyncReason.didLogin,
-            names: ["tabs", "logins", "bookmarks", "history"]
+            names: ["tabs", "logins", "bookmarks", "history", "clients"]
         )
 
         waitForExpectations(timeout: 5.0)
