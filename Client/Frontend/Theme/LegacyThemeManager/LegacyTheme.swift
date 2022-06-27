@@ -129,6 +129,7 @@ class EnhancedTrackingProtectionMenuColor {
     var sectionColor: UIColor { return .white }
     var switchAndButtonTint: UIColor { return UIColor.Photon.Blue50 }
     var subtextColor: UIColor { return UIColor.Photon.Grey75A60}
+    var closeButtonColor: UIColor { return UIColor.Photon.LightGrey30 }
 }
 
 class TopTabsColor {
