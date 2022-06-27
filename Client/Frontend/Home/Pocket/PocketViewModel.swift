@@ -119,7 +119,7 @@ class PocketViewModel {
                 var globalTemp = pocketStory.map(PocketStory.init)
 
                 // Check if sponsored stories are enabled, otherwise drop api call
-                guard self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly)  == true else {
+                guard self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .buildAndUser)  == true else {
                     self?.updatePocketStoryViewModels(with: globalTemp)
                     completion()
                     return
