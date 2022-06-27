@@ -417,3 +417,185 @@ tabs_sync:
       - sync-core@mozilla.com
     expires: 2023-01-01
     lifetime: ping
+
+rust_tabs_sync:
+  uid:
+    type: string
+    description: >
+      The user's hashed Firefox Account ID.
+    send_in_pings:
+      - temp-rust-tabs-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3170
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10915#issuecomment-1155681760
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-07
+    lifetime: ping
+  incoming:
+    type: labeled_counter
+    labels:
+      - applied
+      - failed_to_apply
+      - reconciled
+    description: >
+      Records incoming tabs record counts. `applied` is the number of
+      incoming records that were successfully stored or updated in the
+      local database. `failed_to_apply` is the number of records that were
+      ignored due to errors. `reconciled` is the number of merged records.
+    send_in_pings:
+      - temp-rust-tabs-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3170
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10915#issuecomment-1155681760
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-07
+    lifetime: ping
+  outgoing:
+    type: labeled_counter
+    labels:
+      - uploaded
+      - failed_to_upload
+    description: >
+      Records outgoing tabs record counts. `uploaded` is the number of
+      records that were successfully sent to the server. `failed_to_upload`
+      is the number of records that weren't uploaded, and will be retried
+      on the next sync.
+    send_in_pings:
+      - temp-rust-tabs-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3170
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10915#issuecomment-1155681760
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-07
+    lifetime: ping
+  failure_reason:
+    type: labeled_counter
+    labels:
+      - no_account
+      - offline
+      - backoff
+      - remotely_not_enabled
+      - format_outdated
+      - format_too_new
+      - storage_format_outdated
+      - storage_format_too_new
+      - state_machine_not_ready
+      - red_light
+      - unknown
+    description: >
+      Records why the tabs sync failed.
+    send_in_pings:
+      - temp-rust-tabs-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3170
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10915#issuecomment-1155681760
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-07
+    lifetime: ping
+
+clients_sync:
+  uid:
+    type: string
+    description: >
+      The user's hashed Firefox Account ID.
+    send_in_pings:
+      - temp-clients-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3170
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10915#issuecomment-1155681760
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-07
+    lifetime: ping
+  incoming:
+    type: labeled_counter
+    labels:
+      - applied
+      - failed_to_apply
+      - reconciled
+    description: >
+      Records incoming clients record counts. `applied` is the number of
+      incoming records that were successfully stored or updated in the
+      local database. `failed_to_apply` is the number of records that were
+      ignored due to errors. `reconciled` is the number of merged records.
+    send_in_pings:
+      - temp-clients-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3170
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10915#issuecomment-1155681760
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-07
+    lifetime: ping
+  outgoing:
+    type: labeled_counter
+    labels:
+      - uploaded
+      - failed_to_upload
+    description: >
+      Records outgoing clients record counts. `uploaded` is the number of
+      records that were successfully sent to the server. `failed_to_upload`
+      is the number of records that weren't uploaded, and will be retried
+      on the next sync.
+    send_in_pings:
+      - temp-clients-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3170
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10915#issuecomment-1155681760
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-07
+    lifetime: ping
+  failure_reason:
+    type: labeled_counter
+    labels:
+      - no_account
+      - offline
+      - backoff
+      - remotely_not_enabled
+      - format_outdated
+      - format_too_new
+      - storage_format_outdated
+      - storage_format_too_new
+      - state_machine_not_ready
+      - red_light
+      - unknown
+    description: >
+      Records why the clients sync failed.
+    send_in_pings:
+      - temp-clients-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3170
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10915#issuecomment-1155681760
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-07
+    lifetime: ping

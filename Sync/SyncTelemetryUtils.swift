@@ -438,8 +438,8 @@ public class GleanSyncOperationHelper {
 
         switch engineName {
         case "tabs":
-            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.TabsSync.incoming[l].add(Int32(v))}
-            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.TabsSync.outgoing[l].add(Int32(v)) }
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.RustTabsSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.RustTabsSync.outgoing[l].add(Int32(v)) }
         case "bookmarks":
             incomingLabelsToValue.forEach { (l, v) in GleanMetrics.BookmarksSync.incoming[l].add(Int32(v))}
             outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.BookmarksSync.outgoing[l].add(Int32(v)) }
@@ -449,6 +449,9 @@ public class GleanSyncOperationHelper {
         case "logins":
             incomingLabelsToValue.forEach { (l, v) in GleanMetrics.LoginsSync.incoming[l].add(Int32(v))}
             outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.LoginsSync.outgoing[l].add(Int32(v)) }
+        case "clients":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.ClientsSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.ClientsSync.outgoing[l].add(Int32(v)) }
         default:
             break
         }
@@ -458,10 +461,11 @@ public class GleanSyncOperationHelper {
         let correctedReson = String(reason.dropFirst("sync.not_started.reason.".count))
 
         switch engineName {
-        case "tabs": GleanMetrics.TabsSync.failureReason[correctedReson].add()
+        case "tabs": GleanMetrics.RustTabsSync.failureReason[correctedReson].add()
         case "bookmarks": GleanMetrics.BookmarksSync.failureReason[correctedReson].add()
         case "history": GleanMetrics.HistorySync.failureReason[correctedReson].add()
         case "logins": GleanMetrics.LoginsSync.failureReason[correctedReson].add()
+        case "clients": GleanMetrics.ClientsSync.failureReason[correctedReson].add()
         default:
             break
         }
@@ -469,10 +473,11 @@ public class GleanSyncOperationHelper {
 
     private func submitSyncEnginePing(_ engineName: String) {
         switch engineName {
-        case "tabs": GleanMetrics.Pings.shared.tempTabsSync.submit()
+        case "tabs": GleanMetrics.Pings.shared.tempRustTabsSync.submit()
         case "bookmarks": GleanMetrics.Pings.shared.tempBookmarksSync.submit()
         case "history": GleanMetrics.Pings.shared.tempHistorySync.submit()
         case "logins": GleanMetrics.Pings.shared.tempLoginsSync.submit()
+        case "clients": GleanMetrics.Pings.shared.tempClientsSync.submit()
         default:
             break
         }
