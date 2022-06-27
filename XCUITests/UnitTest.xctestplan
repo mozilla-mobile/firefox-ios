@@ -9,8 +9,7 @@
     }
   ],
   "defaultOptions" : {
-    "codeCoverage" : false,
-    "testRepetitionMode" : "retryOnFailure"
+    "codeCoverage" : false
   },
   "testTargets" : [
     {
@@ -22,6 +21,8 @@
     },
     {
       "skippedTests" : [
+        "AdjustTelemetryHelperTests\/testDeeplinkHandleEvent_GleanCalled()",
+        "AdjustTelemetryHelperTests\/testFirstSessionPing()",
         "ETPCoverSheetTests",
         "TabManagerTests\/testDeleteSelectedTab()",
         "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
