@@ -8,32 +8,33 @@ class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell 
 
     private var viewModel: InactiveTabItemCellModel?
 
-    var selectedView: UIView = {
+    private var selectedView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.theme.tableView.selectedBackground
         return view
     }()
 
-    var leftImageView: UIImageView = {
-        let imgView = UIImageView()
-        imgView.contentMode = .scaleAspectFit
-        imgView.layer.cornerRadius = 5.0
-        imgView.clipsToBounds = true
-        return imgView
-    }()
+    private lazy var leftImageView: UIImageView = .build { imageView in
+        imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = 5.0
+        imageView.clipsToBounds = true
+    }
 
-    var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.textAlignment = .natural
-        label.numberOfLines = 1
-        label.contentMode = .center
-        return label
-    }()
+    private lazy var titleLabel: UILabel = .build { label in
+           label.textColor = .black
+           label.textAlignment = .natural
+           label.numberOfLines = 1
+           label.contentMode = .center
+    }
 
-    lazy var bottomSeparatorView: UIView = .build { separatorLine in
+    private lazy var bottomSeparatorView: UIView = .build { separatorLine in
         separatorLine.backgroundColor = UIColor.Photon.Grey40
     }
+
+    private var containerViewLeadingConstraint: NSLayoutConstraint!
+
+    private lazy var containerView: UIView = .build { _ in }
+    private lazy var midView: UIView = .build { _ in }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -59,11 +60,6 @@ class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell 
         backgroundColor = .clear
     }
 
-    let containerView = UIView()
-    let midView = UIView()
-
-    private var containerViewLeadingConstraint: NSLayoutConstraint!
-
     func initialViewSetup() {
         self.selectionStyle = .default
         midView.addSubview(titleLabel)
@@ -73,12 +69,6 @@ class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell 
 
         contentView.addSubview(containerView)
         bringSubviewToFront(containerView)
-
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        bottomSeparatorView.translatesAutoresizingMaskIntoConstraints = false
-        leftImageView.translatesAutoresizingMaskIntoConstraints = false
-        midView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.translatesAutoresizingMaskIntoConstraints = false
 
         containerViewLeadingConstraint = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
 
