@@ -83,7 +83,6 @@ class FaviconHandler {
             }
 
             let profile = appDelegate.profile
-
             profile.favicons.addFavicon(favicon, forSite: site) >>> {
                 completion(favicon, nil)
             }
