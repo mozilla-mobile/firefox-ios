@@ -74,7 +74,7 @@
 "Autocomplete.addCustomUrlWithPlus" = "+ Legg til tilpassa adresse";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Legg til og handter tilpassa autofullførte nettadressesr.";
+"Autocomplete.customDescriptoin" = "Legg til og handsam tilpassa autofullførte nettadressesr.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "Tilpassa nettadresser";
@@ -107,7 +107,7 @@
 "Autocomplete.enabled" = "Slått på";
 
 /* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.manageSites" = "Handter nettsider";
+"Autocomplete.manageSites" = "Handsam nettsider";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "Mine nettsider";
