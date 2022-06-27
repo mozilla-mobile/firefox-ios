@@ -15,8 +15,6 @@ import UserNotifications
 import Account
 import BackgroundTasks
 
-private let log = Logger.browserLogger
-
 let LatestAppVersionProfileKey = "latestAppVersion"
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -29,70 +27,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var orientationLock = UIInterfaceOrientationMask.all
     lazy var profile: Profile = BrowserProfile(localName: "profile",
                                                syncDelegate: UIApplication.shared.syncDelegate)
+    private let log = Logger.browserLogger
     private var shutdownWebServer: DispatchSourceTimer?
-    private var telemetry: TelemetryWrapper?
-    private var adjustHelper: AdjustHelper?
     private var webServerUtil: WebServerUtil?
     private var appLaunchUtil: AppLaunchUtil?
-
     func application(_ application: UIApplication,
                      willFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
         log.info("startApplication begin")
-
-        appLaunchUtil = AppLaunchUtil()
-        appLaunchUtil?.setUpAppLaunchDependencies()
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
-        telemetry = TelemetryWrapper(profile: profile)
-
-        // Initialize the feature flag subsytem.
-        // Among other things, it toggles on and off Nimbus, Contile, Adjust.
-        // i.e. this must be run before initializing those systems.
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
-
-        // Migrate wallpaper folder
-        WallpaperMigrationUtility(with: profile).attemptMigration()
-
-        // Start intialzing the Nimbus SDK. This should be done after Glean
-        // has been started.
-        initializeExperiments()
-
-        ThemeManager.shared.updateProfile(with: profile)
+        appLaunchUtil = AppLaunchUtil(profile: profile)
+        appLaunchUtil?.setUpPreLaunchDependencies()
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         webServerUtil = WebServerUtil(profile: profile)
         webServerUtil?.setUpWebServer()
 
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
-
-        // Temporary fix for Bug 1390871 - NSInvalidArgumentException: -[WKContentView menuHelperFindInPage]: unrecognized selector
-        if let clazz = NSClassFromString("WKCont" + "ent" + "View"), let swizzledMethod = class_getInstanceMethod(TabWebViewMenuHelper.self, #selector(TabWebViewMenuHelper.swizzledMenuHelperFindInPage)) {
-            class_addMethod(clazz, MenuHelper.SelectorFindInPage, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
-        }
-
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
 
         setupRootViewController()
-
-        NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
-            if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
-                let title = (userInfo["Title"] as? String) ?? ""
-                self.profile.readingList.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.current.name)
-            }
-        }
-
         startListeningForThemeUpdates()
-
-        adjustHelper = AdjustHelper(profile: profile)
-        SystemUtils.onFirstRun()
-
-        RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
-            print("RustFirefoxAccounts started")
-        }
 
         log.info("startApplication end")
 
@@ -109,47 +66,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         rootViewController = nil
     }
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        UIScrollView.doBadSwizzleStuff()
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions
+                     launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         window!.makeKeyAndVisible()
-
-        // Now roll logs.
-        DispatchQueue.global(qos: DispatchQoS.background.qosClass).async {
-            Logger.syncLogger.deleteOldLogsDownToSizeLimit()
-            Logger.browserLogger.deleteOldLogsDownToSizeLimit()
-        }
-
         pushNotificationSetup()
+        appLaunchUtil?.setUpPostLaunchDependencies()
+        setUpBackgroundSync(with: application)
 
-        let persistedCurrentVersion = InstallType.persistedCurrentVersion()
-        let introScreen = profile.prefs.intForKey(PrefsKeys.IntroSeen)
-        // upgrade install - Intro screen shown & persisted current version does not match
-        if introScreen != nil && persistedCurrentVersion != AppInfo.appVersion {
-            InstallType.set(type: .upgrade)
-            InstallType.updateCurrentVersion(version: AppInfo.appVersion)
-        }
+        return true
+    }
 
-        // We need to check if the app is a clean install to use for
-        // preventing the What's New URL from appearing.
-        if introScreen == nil {
-            // fresh install - Intro screen not yet shown
-            InstallType.set(type: .fresh)
-            InstallType.updateCurrentVersion(version: AppInfo.appVersion)
-            // Profile setup
-            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-
-        } else if profile.prefs.boolForKey(PrefsKeys.KeySecondRun) == nil {
-            profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
-        }
-
+    private func setUpBackgroundSync(with application: UIApplication) {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
             guard self.profile.hasSyncableAccount() else {
                 self.shutdownProfileWhenNotActive(application)
                 return
             }
-
-            NSLog("background sync part 1") // NSLog to see in device console
             let collection = ["bookmarks", "history"]
             self.profile.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
                 task.setTaskCompleted(success: true)
@@ -167,48 +101,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Split up the sync tasks so each can get maximal time for a bg task.
         // This task runs after the bookmarks+history sync.
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part2", using: DispatchQueue.global()) { task in
-            NSLog("background sync part 2") // NSLog to see in device console
             let collection = ["tabs", "logins", "clients"]
             self.profile.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
                 self.shutdownProfileWhenNotActive(application)
                 task.setTaskCompleted(success: true)
             }
         }
-        updateSessionCount()
-        adjustHelper?.setupAdjust()
-
-        return true
-    }
-
-    private func updateSessionCount() {
-        var sessionCount: Int32 = 0
-
-        // Get the session count from preferences
-        if let currentSessionCount = profile.prefs.intForKey(PrefsKeys.SessionCount) {
-            sessionCount = currentSessionCount
-        }
-        // increase session count value
-        profile.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.SessionCount)
-    }
-
-    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        guard let routerpath = NavigationPath(url: url) else {
-            return false
-        }
-
-        if let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
-            profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
-            var object = TelemetryWrapper.EventObject.url
-            if case .text = routerpath {
-                object = .searchText
-            }
-            TelemetryWrapper.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
-        }
-
-        DispatchQueue.main.async {
-            NavigationPath.handle(nav: routerpath, with: self.browserViewController)
-        }
-        return true
     }
 
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
@@ -290,7 +188,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    fileprivate func shutdownProfileWhenNotActive(_ application: UIApplication) {
+    private func shutdownProfileWhenNotActive(_ application: UIApplication) {
         // Only shutdown the profile if we are not in the foreground
         guard application.applicationState != .active else {
             return
@@ -403,6 +301,28 @@ extension AppDelegate {
         }
 
         return false
+    }
+
+    func application(_ application: UIApplication,
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+        guard let routerpath = NavigationPath(url: url) else {
+            return false
+        }
+
+        if let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
+            profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
+            var object = TelemetryWrapper.EventObject.url
+            if case .text = routerpath {
+                object = .searchText
+            }
+            TelemetryWrapper.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
+        }
+
+        DispatchQueue.main.async {
+            NavigationPath.handle(nav: routerpath, with: self.browserViewController)
+        }
+        return true
     }
 
     private func setupRootViewController() {
