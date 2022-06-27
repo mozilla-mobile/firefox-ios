@@ -71,8 +71,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
 
     private var defaultSeparatorInset: UIEdgeInsets {
         return UIEdgeInsets(top: 0,
-                            left: OneLineCellUX.ImageSize + 2 *
-                            OneLineCellUX.BorderViewMargin,
+                            left: OneLineCellUX.ImageSize + 2 * OneLineCellUX.BorderViewMargin,
                             bottom: 0,
                             right: 0)
     }
