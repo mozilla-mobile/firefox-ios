@@ -129,7 +129,11 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch InactiveTabSection(rawValue: indexPath.section) {
         case .inactive:
-            let cell = tableView.dequeueReusableCell(withIdentifier: InactiveTabItemCell.cellIdentifier, for: indexPath) as! InactiveTabItemCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: InactiveTabItemCell.cellIdentifier,
+                                                           for: indexPath) as? InactiveTabItemCell
+            else {
+                return UITableViewCell()
+            }
 
             guard let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] else { return cell }
 
@@ -140,15 +144,24 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             return cell
 
         case .closeAllTabsButton:
-            if let closeAllButtonCell = tableView.dequeueReusableCell(withIdentifier: CellWithRoundedButton.cellIdentifier, for: indexPath) as? CellWithRoundedButton {
-                closeAllButtonCell.buttonClosure = {
-                    self.delegate?.didTapCloseAllTabs()
-                }
-                return closeAllButtonCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CellWithRoundedButton.cellIdentifier,
+                                                           for: indexPath) as? CellWithRoundedButton
+            else {
+                return UITableViewCell()
             }
-            return tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as! OneLineTableViewCell
+
+            cell.buttonClosure = {
+                self.delegate?.didTapCloseAllTabs()
+            }
+
+            return cell
         case .none:
-            return tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as! OneLineTableViewCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
+                                                           for: indexPath) as? OneLineTableViewCell
+            else {
+                return UITableViewCell()
+            }
+            return cell
         }
     }
 
