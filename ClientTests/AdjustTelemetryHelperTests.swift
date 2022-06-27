@@ -35,7 +35,6 @@ class AdjustTelemetryHelperTests: XCTestCase {
         XCTAssertFalse(GleanMetrics.Adjust.adGroup.testHasValue())
         XCTAssertFalse(GleanMetrics.Adjust.creative.testHasValue())
         XCTAssertFalse(GleanMetrics.Adjust.network.testHasValue())
-        XCTAssertFalse(GleanMetrics.Adjust.deeplinkReceived.testHasValue())
     }
 
     func testFirstSessionPing() {
