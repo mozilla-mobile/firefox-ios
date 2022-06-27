@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 // MARK: - UISearchBarDelegate
-extension HistoryPanelWithGroups: UISearchBarDelegate {
+extension HistoryPanel: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text, !searchText.isEmpty else {
             return
@@ -74,7 +74,7 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
 }
 
 // MARK: - KeyboardHelperDelegate
-extension HistoryPanelWithGroups: KeyboardHelperDelegate {
+extension HistoryPanel: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
         updateLayoutForKeyboard()

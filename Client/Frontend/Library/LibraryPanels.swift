@@ -96,7 +96,7 @@ class LibraryPanels: FeatureFlaggable {
 
         LibraryPanelDescriptor(
             makeViewController: { profile, tabManager in
-                return HistoryPanelWithGroups(profile: profile, tabManager: tabManager)
+                return HistoryPanel(profile: profile, tabManager: tabManager)
             },
             profile: profile,
             tabManager: tabManager,
