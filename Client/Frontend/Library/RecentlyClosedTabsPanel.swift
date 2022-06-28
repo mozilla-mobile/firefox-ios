@@ -22,7 +22,13 @@ protocol RecentlyClosedPanelDelegate: AnyObject {
 }
 
 class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
+
+    func bottomToolbarItems() -> [UIBarButtonItem] {
+        return [UIBarButtonItem]()
+    }
+
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    var state: LibraryPanelMainState = .history(state: .inFolder)
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     let profile: Profile
 

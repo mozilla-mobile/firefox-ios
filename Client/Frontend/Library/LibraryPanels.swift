@@ -6,8 +6,21 @@ import UIKit
 import Shared
 import Storage
 
-protocol LibraryPanel: NotificationThemeable {
+protocol LibraryPanel: UIViewController, NotificationThemeable {
     var libraryPanelDelegate: LibraryPanelDelegate? { get set }
+    var state: LibraryPanelMainState { get set }
+
+    func bottomToolbarItems() -> [UIBarButtonItem]
+}
+
+extension LibraryPanel {
+    var flexibleSpace: UIBarButtonItem {
+        return UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+    }
+
+    func updatePanelState(newState: LibraryPanelMainState) {
+        state = newState
+    }
 }
 
 struct LibraryPanelUX {
@@ -49,7 +62,6 @@ class LibraryPanelDescriptor {
     var viewController: UIViewController?
     var navigationController: UINavigationController?
 
-    fileprivate let makeViewController: (_ profile: Profile, _ tabManager: TabManager) -> UIViewController
     fileprivate let profile: Profile
     fileprivate let tabManager: TabManager
 
@@ -57,15 +69,8 @@ class LibraryPanelDescriptor {
     let accessibilityIdentifier: String
     let panelType: LibraryPanelType
 
-    init(
-        makeViewController: @escaping ((_ profile: Profile, _ tabManager: TabManager) -> UIViewController),
-        profile: Profile,
-        tabManager: TabManager,
-        accessibilityLabel: String,
-        accessibilityIdentifier: String,
-        panelType: LibraryPanelType
-    ) {
-        self.makeViewController = makeViewController
+    init(viewController: LibraryPanel?, profile: Profile, tabManager: TabManager, accessibilityLabel: String, accessibilityIdentifier: String, panelType: LibraryPanelType) {
+        self.viewController = viewController
         self.profile = profile
         self.tabManager = tabManager
         self.accessibilityLabel = accessibilityLabel
@@ -74,10 +79,7 @@ class LibraryPanelDescriptor {
     }
 
     func setup() {
-        guard viewController == nil else { return }
-        let viewController = makeViewController(profile, tabManager)
-        self.viewController = viewController
-        navigationController = ThemedNavigationController(rootViewController: viewController)
+        navigationController = ThemedNavigationController(rootViewController: viewController!)
     }
 }
 
@@ -92,9 +94,7 @@ class LibraryPanels: FeatureFlaggable {
 
     lazy var enabledPanels = [
         LibraryPanelDescriptor(
-            makeViewController: { profile, tabManager  in
-                return BookmarksPanel(profile: profile)
-            },
+            viewController: BookmarksPanel(profile: profile),
             profile: profile,
             tabManager: tabManager,
             accessibilityLabel: .LibraryPanelBookmarksAccessibilityLabel,
@@ -102,9 +102,7 @@ class LibraryPanels: FeatureFlaggable {
             panelType: .bookmarks),
 
         LibraryPanelDescriptor(
-            makeViewController: { profile, tabManager in
-                return HistoryPanel(profile: profile, tabManager: tabManager)
-            },
+            viewController: HistoryPanel(profile: profile, tabManager: tabManager),
             profile: profile,
             tabManager: tabManager,
             accessibilityLabel: .LibraryPanelHistoryAccessibilityLabel,
@@ -112,9 +110,7 @@ class LibraryPanels: FeatureFlaggable {
             panelType: .history),
 
         LibraryPanelDescriptor(
-            makeViewController: { profile, tabManager in
-                return DownloadsPanel(profile: profile)
-            },
+            viewController: DownloadsPanel(profile: profile),
             profile: profile,
             tabManager: tabManager,
             accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
@@ -122,9 +118,7 @@ class LibraryPanels: FeatureFlaggable {
             panelType: .downloads),
 
         LibraryPanelDescriptor(
-            makeViewController: { profile, tabManager in
-                return ReadingListPanel(profile: profile)
-            },
+            viewController: ReadingListPanel(profile: profile),
             profile: profile,
             tabManager: tabManager,
             accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,

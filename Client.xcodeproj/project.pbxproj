@@ -5050,9 +5050,9 @@
 			isa = PBXGroup;
 			children = (
 				F84B22221A09122500AAB793 /* LibraryViewController.swift */,
+				C8417D212657F0600010B877 /* LibraryViewModel.swift */,
 				21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */,
 				274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */,
-				C8417D212657F0600010B877 /* LibraryViewModel.swift */,
 				C8445A13264428DC00B83F53 /* LibraryPanelViewState.swift */,
 			);
 			path = LibraryViewController;

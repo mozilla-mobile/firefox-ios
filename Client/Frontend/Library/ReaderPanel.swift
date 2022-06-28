@@ -162,8 +162,13 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
 }
 
 class ReadingListPanel: UITableViewController, LibraryPanel {
+    func bottomToolbarItems() -> [UIBarButtonItem] {
+        return [UIBarButtonItem]()
+    }
+
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     let profile: Profile
+    var state: LibraryPanelMainState
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
@@ -173,6 +178,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
     init(profile: Profile) {
         self.profile = profile
+        self.state = .readingList
         super.init(nibName: nil, bundle: nil)
 
         [ Notification.Name.FirefoxAccountChanged,

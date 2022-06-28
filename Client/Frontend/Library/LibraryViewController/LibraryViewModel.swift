@@ -4,20 +4,18 @@
 
 import Foundation
 
-class LibraryViewModel: FeatureFlaggable {
+class LibraryViewModel {
 
     let profile: Profile
     let tabManager: TabManager
     let panelDescriptors: [LibraryPanelDescriptor]
-
-    fileprivate var panelState = LibraryPanelViewState()
+    var selectedPanel: LibraryPanelType?
     var currentPanelState: LibraryPanelMainState {
-        get { return panelState.currentState }
-        set { panelState.currentState = newValue }
-    }
+        guard let panel = getCurrentPanel() else {
+            return .bookmarks(state: .mainView)
+        }
 
-    var shouldShowSearch: Bool {
-        return featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) && currentPanelState == .history(state: .mainView) || currentPanelState == .history(state: .search)
+        return panel.state
     }
 
     var segmentedControlItems: [UIImage] {
@@ -31,5 +29,11 @@ class LibraryViewModel: FeatureFlaggable {
         self.profile = profile
         self.tabManager = tabManager
         self.panelDescriptors = LibraryPanels(profile: profile, tabManager: tabManager).enabledPanels
+    }
+
+    func getCurrentPanel() -> LibraryPanel? {
+        guard let index = selectedPanel?.rawValue else { return nil }
+
+        return panelDescriptors[index].viewController as? LibraryPanel
     }
 }

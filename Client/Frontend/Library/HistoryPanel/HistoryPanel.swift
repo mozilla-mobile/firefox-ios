@@ -26,6 +26,15 @@ private class FetchInProgressError: MaybeErrorType {
 
 @objcMembers
 class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemeable {
+    func bottomToolbarItems() -> [UIBarButtonItem] {
+        print("YRD history bottomToolbarItems")
+        switch state {
+        case .bookmarks, .downloads, .readingList:
+            return  [UIBarButtonItem]()
+        case .history:
+            return toolbarButtonItems
+        }
+    }
 
     // MARK: - Properties
 
@@ -34,6 +43,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
 
     var libraryPanelDelegate: LibraryPanelDelegate?
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
+    var state: LibraryPanelMainState
 
     let profile: Profile
     let viewModel: HistoryPanelViewModel
@@ -44,11 +54,52 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
 
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
-
     var diffableDatasource: UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>?
-    private var hasRecentlyClosed: Bool { profile.recentlyClosedTabs.tabs.count > 0 }
+
+    var shouldShowToolBar: Bool {
+        return state == .history(state: .mainView) || state == .history(state: .search)
+    }
+
+    var shouldShowSearch: Bool {
+        guard viewModel.featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) else {
+            return false
+        }
+
+        return state == .history(state: .mainView) || state == .history(state: .search)
+    }
 
     // UI
+    private lazy var bottomSearchButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.libraryPanelSearch),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(bottomSearchButtonAction))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomSearchButton
+        return button
+    }()
+
+    private lazy var bottomDeleteButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.libraryPanelDelete),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(bottomDeleteButtonAction))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomDeleteButton
+        return button
+    }()
+
+    private var toolbarButtonItems: [UIBarButtonItem] {
+        print("YRD toolbarButtonItems")
+        guard shouldShowToolBar else {
+            return [UIBarButtonItem]()
+        }
+
+        guard shouldShowSearch else {
+            return [bottomDeleteButton, flexibleSpace]
+        }
+
+        return [bottomDeleteButton, flexibleSpace, bottomSearchButton, flexibleSpace]
+    }
+
     var bottomStackView: BaseAlphaStackView = .build { _ in }
 
     lazy var searchbar: UISearchBar = .build { searchbar in
@@ -96,6 +147,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         self.clearHistoryHelper = ClearHistoryHelper(profile: profile, tabManager: tabManager)
         self.viewModel = HistoryPanelViewModel(profile: profile)
         self.profile = profile
+        self.state = .history(state: .mainView)
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -182,7 +234,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
             case .clearHistory:
                 isEnabled = !viewModel.groupedSites.isEmpty
             case .recentlyClosed:
-                isEnabled = hasRecentlyClosed
+                isEnabled = viewModel.hasRecentlyClosed
                 recentlyClosedCell = cell
             default: break
             }
@@ -481,6 +533,17 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         searchbar.setImage(searchBarImage, for: .search, state: .normal)
         searchbar.tintColor = UIColor.theme.textField.textAndTint
 
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            bottomSearchButton.tintColor = .white
+            bottomDeleteButton.tintColor = .white
+        } else {
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+            bottomSearchButton.tintColor = .black
+            bottomDeleteButton.tintColor = .black
+        }
+
         tableView.reloadData()
     }
 }
@@ -529,6 +592,8 @@ extension HistoryPanel: UITableViewDelegate {
     }
 
     private func handleHistoryActionableTapped(historyActionable: HistoryActionablesModel) {
+        updatePanelState(newState: .history(state: .inFolder))
+
         switch historyActionable.itemIdentity {
         case .clearHistory:
             showClearRecentHistory()
@@ -540,6 +605,7 @@ extension HistoryPanel: UITableViewDelegate {
 
     private func handleASGroupItemTapped(asGroupItem: ASGroup<Site>) {
         exitSearchState()
+        updatePanelState(newState: .history(state: .inFolder))
 
         let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: asGroupItem, presenter: .historyPanel)
         let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: profile)
@@ -637,6 +703,20 @@ extension HistoryPanel {
 
 /// User actions helpers
 extension HistoryPanel {
+    @objc func bottomSearchButtonAction() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .searchHistory)
+        startSearchState()
+    }
+
+    @objc func bottomDeleteButtonAction() {
+        // Leave search mode when clearing history
+        updatePanelState(newState: .history(state: .mainView))
+
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .deleteHistory)
+        // TODO: Yoana remove notification and handle directly
+        NotificationCenter.default.post(name: .OpenClearRecentHistory, object: nil)
+    }
+
     // MARK: - User Interactions
 
     /// When long pressed, a menu appears giving the choice of pinning as a Top Site.
@@ -649,7 +729,7 @@ extension HistoryPanel {
     }
 
     private func navigateToRecentlyClosed() {
-        guard hasRecentlyClosed else { return }
+        guard viewModel.hasRecentlyClosed else { return }
 
         let nextController = RecentlyClosedTabsPanel(profile: profile)
         nextController.title = .RecentlyClosedTabsPanelTitle

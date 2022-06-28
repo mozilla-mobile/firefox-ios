@@ -44,10 +44,16 @@ struct DownloadedFile: Equatable {
 }
 
 class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, LibraryPanel {
+    func bottomToolbarItems() -> [UIBarButtonItem] {
+        return [UIBarButtonItem]()
+    }
+
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     let TwoLineImageOverlayCellIdentifier = "TwoLineImageOverlayCellIdentifier"
     let SiteTableViewHeaderIdentifier = "SiteTableViewHeaderIdentifier"
     let profile: Profile
+    var state: LibraryPanelMainState
+
     lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
         tableView.delegate = self
@@ -73,6 +79,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     // MARK: - Lifecycle
     init(profile: Profile) {
         self.profile = profile
+        self.state = .downloads
         super.init(nibName: nil, bundle: nil)
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
     }
