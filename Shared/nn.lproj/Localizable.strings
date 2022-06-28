@@ -494,7 +494,7 @@
 "FxA.FirefoxAccount" = "Firefox-konto";
 
 /* Button label to go to Firefox Account settings */
-"FxA.ManageAccount" = "Handter kontoen og einingar";
+"FxA.ManageAccount" = "Handsam kontoen og einingar";
 
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Ikkje noko internettsamband";
@@ -1027,7 +1027,7 @@
 "Menu.Library.StopReload" = "Stopp";
 
 /* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
-"Menu.ManageAccount.Label" = "Handter kontoen %@";
+"Menu.ManageAccount.Label" = "Handsam kontoen %@";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Ny fane";
