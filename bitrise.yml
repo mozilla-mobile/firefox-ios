@@ -1142,7 +1142,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.1.x
+        stack: osx-xcode-13.4.x
         machine_type_id: g2.8core
   SPM_Deploy_Beta_Only:
     steps:
@@ -1239,7 +1239,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.1.x
+        stack: osx-xcode-13.4.x
         machine_type_id: g2.8core
   SPM_Nightly_Beta_Only:
     steps:
@@ -1336,7 +1336,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.4.x
         machine_type_id: g2.8core
 app:
   envs:
