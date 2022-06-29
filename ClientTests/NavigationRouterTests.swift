@@ -47,23 +47,49 @@ class NavigationRouterTests: XCTestCase {
 
     // Test EVERY deep link
     func testDeepLinks() {
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/clear-private-data")!), NavigationPath.deepLink(DeepLink.settings(.clearPrivateData)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/newTab")!), NavigationPath.deepLink(DeepLink.settings(.newtab)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/newTab/")!), NavigationPath.deepLink(DeepLink.settings(.newtab)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/homePage")!), NavigationPath.deepLink(DeepLink.settings(.homepage)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/mailto")!), NavigationPath.deepLink(DeepLink.settings(.mailto)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/search")!), NavigationPath.deepLink(DeepLink.settings(.search)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/fxa")!), NavigationPath.deepLink(DeepLink.settings(.fxa)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/bookmarks")!), NavigationPath.deepLink(DeepLink.homePanel(.bookmarks)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/top-sites")!), NavigationPath.deepLink(DeepLink.homePanel(.topSites)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/history")!), NavigationPath.deepLink(DeepLink.homePanel(.history)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/reading-list")!), NavigationPath.deepLink(DeepLink.homePanel(.readingList)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/default-browser/system-settings")!), NavigationPath.deepLink(DeepLink.defaultBrowser(.systemSettings)))
+        XCTAssertEqual(
+            NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/clear-private-data")!),
+            NavigationPath.deepLink(DeepLink.settings(.clearPrivateData)))
+        XCTAssertEqual(
+            NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/newTab")!),
+            NavigationPath.deepLink(DeepLink.settings(.newtab)))
+        XCTAssertEqual(
+            NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/newTab/")!),
+            NavigationPath.deepLink(DeepLink.settings(.newtab)))
+        XCTAssertEqual(
+            NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/homePage")!),
+            NavigationPath.deepLink(DeepLink.settings(.homepage)))
+        XCTAssertEqual(
+            NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/mailto")!),
+            NavigationPath.deepLink(DeepLink.settings(.mailto)))
+        XCTAssertEqual(
+            NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/search")!),
+            NavigationPath.deepLink(DeepLink.settings(.search)))
+        XCTAssertEqual(
+            NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/fxa")!),
+            NavigationPath.deepLink(DeepLink.settings(.fxa)))
+        XCTAssertEqual(
+            NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/bookmarks")!),
+            NavigationPath.deepLink(DeepLink.homePanel(.bookmarks)))
+        XCTAssertEqual(
+            NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/top-sites")!),
+            NavigationPath.deepLink(DeepLink.homePanel(.topSites)))
+        XCTAssertEqual(
+            NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/history")!),
+            NavigationPath.deepLink(DeepLink.homePanel(.history)))
+        XCTAssertEqual(
+            NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/reading-list")!),
+            NavigationPath.deepLink(DeepLink.homePanel(.readingList)))
+        XCTAssertEqual(
+            NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/default-browser/system-settings")!),
+            NavigationPath.deepLink(DeepLink.defaultBrowser(.systemSettings)))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/badbad")!), nil)
     }
 
     func testFxALinks() {
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://fxa-signin?signin=coolcodes&user=foo&email=bar")!), NavigationPath.fxa(params: FxALaunchParams(query: ["user": "foo", "email": "bar", "signin": "coolcodes"])))
+        XCTAssertEqual(
+            NavigationPath(url: URL(string: "\(appScheme)://fxa-signin?signin=coolcodes&user=foo&email=bar")!),
+            NavigationPath.fxa(params: FxALaunchParams(query: ["user": "foo", "email": "bar", "signin": "coolcodes"])))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://fxa-signin?user=foo&email=bar")!), nil)
     }
 
@@ -80,7 +106,10 @@ class NavigationRouterTests: XCTestCase {
         XCTAssertNil(NavigationPath(url: URL(string: "\(appScheme)://deep-links-are-fun?url=/settings/newTab/")!))
 
         // http[s] URLs stay as NavigationPath.url, even if their non-scheme components would match another type of NavigationPath
-        XCTAssertEqual(NavigationPath(url: URL(string: "https://deep-link?url=/settings/newTab")!), NavigationPath.url(webURL: URL(string: "https://deep-link?url=/settings/newTab")!, isPrivate: false))
+        XCTAssertEqual(
+            NavigationPath(url: URL(string: "https://deep-link?url=/settings/newTab")!),
+            NavigationPath.url(webURL: URL(string: "https://deep-link?url=/settings/newTab")!,
+                               isPrivate: false))
 
     }
 

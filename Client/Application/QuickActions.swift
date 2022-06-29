@@ -52,7 +52,11 @@ class QuickActions: NSObject {
         QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(type, withUserData: userData, toApplication: application)
     }
 
-    @discardableResult func addDynamicApplicationShortcutItemOfType(_ type: ShortcutType, withUserData userData: [String: String] = [String: String](), toApplication application: UIApplication) -> Bool {
+    @discardableResult func addDynamicApplicationShortcutItemOfType(
+        _ type: ShortcutType,
+        withUserData userData: [String: String] = [String: String](),
+        toApplication application: UIApplication
+    ) -> Bool {
         // add the quick actions version so that it is always in the user info
         var userData: [String: String] = userData
         userData[QuickActions.QuickActionsVersionKey] = QuickActions.QuickActionsVersion

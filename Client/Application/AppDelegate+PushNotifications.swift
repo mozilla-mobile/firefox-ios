@@ -28,7 +28,11 @@ enum SentTabAction: String {
         let viewAction = UNNotificationAction(identifier: SentTabAction.view.rawValue, title: .SentTabViewActionTitle, options: .foreground)
 
         // Register ourselves to handle the notification category set by NotificationService for APNS notifications
-        let sentTabCategory = UNNotificationCategory(identifier: "org.mozilla.ios.SentTab.placeholder", actions: [viewAction], intentIdentifiers: [], options: UNNotificationCategoryOptions(rawValue: 0))
+        let sentTabCategory = UNNotificationCategory(
+            identifier: "org.mozilla.ios.SentTab.placeholder",
+            actions: [viewAction],
+            intentIdentifiers: [],
+            options: UNNotificationCategoryOptions(rawValue: 0))
         UNUserNotificationCenter.current().setNotificationCategories([sentTabCategory])
     }
 }
@@ -91,7 +95,11 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
 
     // Called when the user receives a tab (or any other notification) while in foreground.
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
 
         if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
             profile.removeAccount()

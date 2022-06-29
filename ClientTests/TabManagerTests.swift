@@ -43,8 +43,9 @@ private let spyDidSelectedTabChange = "tabManager(_:didSelectedTabChange:previou
 
 open class MockTabManagerDelegate: TabManagerDelegate {
     // This array represents the order in which delegate methods should be called.
-    // each delegate method will pop the first struct from the array. If the method name doesn't match the struct then the order is incorrect
-    // Then it evaluates the method closure which will return true/false depending on if the tabs are correct
+    // each delegate method will pop the first struct from the array. If the method
+    // name doesn't match the struct then the order is incorrect, then it evaluates
+    // the method closure which will return true/false depending on if the tabs are correct.
     var methodCatchers: [MethodSpy] = []
 
     func expect(_ methods: [MethodSpy]) {

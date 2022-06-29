@@ -26,14 +26,23 @@ struct MIMEType {
     static let USDZ = "model/vnd.usdz+zip"
     static let Reality = "model/vnd.reality"
 
-    private static let webViewViewableTypes: [String] = [MIMEType.Bitmap, MIMEType.GIF, MIMEType.JPEG, MIMEType.HTML, MIMEType.PDF, MIMEType.PlainText, MIMEType.PNG, MIMEType.WebP]
+    private static let webViewViewableTypes: [String] = [
+        MIMEType.Bitmap,
+        MIMEType.GIF,
+        MIMEType.JPEG,
+        MIMEType.HTML,
+        MIMEType.PDF,
+        MIMEType.PlainText,
+        MIMEType.PNG,
+        MIMEType.WebP]
 
     static func canShowInWebView(_ mimeType: String) -> Bool {
         return webViewViewableTypes.contains(mimeType.lowercased())
     }
 
     static func mimeTypeFromFileExtension(_ fileExtension: String) -> String {
-        if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension as CFString, nil)?.takeRetainedValue(), let mimeType = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?.takeRetainedValue() {
+        if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension as CFString, nil)?.takeRetainedValue(),
+           let mimeType = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?.takeRetainedValue() {
             return mimeType as String
         }
 
@@ -41,7 +50,8 @@ struct MIMEType {
     }
 
     static func fileExtensionFromMIMEType(_ mimeType: String) -> String? {
-        if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, mimeType as CFString, nil)?.takeRetainedValue(), let fileExtension = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension)?.takeRetainedValue() {
+        if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, mimeType as CFString, nil)?.takeRetainedValue(),
+            let fileExtension = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension)?.takeRetainedValue() {
             return fileExtension as String
         }
         return nil
@@ -60,10 +70,15 @@ class DownloadHelper: NSObject {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
     }
 
-    required init?(request: URLRequest?, response: URLResponse, cookieStore: WKHTTPCookieStore, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
-        guard let request = request else {
-            return nil
-        }
+    required init?(
+        request: URLRequest?,
+        response: URLResponse,
+        cookieStore: WKHTTPCookieStore,
+        canShowInWebView: Bool,
+        forceDownload: Bool,
+        browserViewController: BrowserViewController
+    ) {
+        guard let request = request else { return nil }
 
         let mimeType = response.mimeType ?? MIMEType.OctetStream
         let isAttachment = mimeType == MIMEType.OctetStream

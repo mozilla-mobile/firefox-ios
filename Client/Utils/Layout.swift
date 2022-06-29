@@ -15,8 +15,15 @@ extension NSLayoutConstraint {
 }
 
 extension NSLayoutAnchor where AnchorType == NSLayoutXAxisAnchor {
-    /// Similar to `constraint(equalTo:)` except that it also takes an optional multipllier, constant and priority. This makes it really easy to inline constraints in a call to `NSLayoutConstraint.activate()`.
-    func constraint(equalTo anchor: NSLayoutAnchor<AnchorType>, multiplier: CGFloat = 1.0, constant: CGFloat = 0.0, priority: UILayoutPriority = .required) -> NSLayoutConstraint {
+    /// Similar to `constraint(equalTo:)` except that it also takes an optional
+    /// multipllier, constant and priority. This makes it really easy to inline
+    /// constraints in a call to `NSLayoutConstraint.activate()`.
+    func constraint(
+        equalTo anchor: NSLayoutAnchor<AnchorType>,
+        multiplier: CGFloat = 1.0,
+        constant: CGFloat = 0.0,
+        priority: UILayoutPriority = .required
+    ) -> NSLayoutConstraint {
         let constraint = self.constraint(equalTo: anchor)
         return NSLayoutConstraint(
             item: constraint.firstItem!,
@@ -31,8 +38,15 @@ extension NSLayoutAnchor where AnchorType == NSLayoutXAxisAnchor {
 }
 
 extension NSLayoutAnchor where AnchorType == NSLayoutYAxisAnchor {
-    /// Similar to `constraint(equalTo:)` except that it also takes an optional multipllier, constant and priority. This makes it really easy to inline constraints in a call to `NSLayoutConstraint.activate()`.
-    func constraint(equalTo anchor: NSLayoutAnchor<AnchorType>, multiplier: CGFloat = 1.0, constant: CGFloat = 0.0, priority: UILayoutPriority = .required) -> NSLayoutConstraint {
+    /// Similar to `constraint(equalTo:)` except that it also takes an optional
+    /// multipllier, constant and priority. This makes it really easy to inline
+    /// constraints in a call to `NSLayoutConstraint.activate()`.
+    func constraint(
+        equalTo anchor: NSLayoutAnchor<AnchorType>,
+        multiplier: CGFloat = 1.0,
+        constant: CGFloat = 0.0,
+        priority: UILayoutPriority = .required
+    ) -> NSLayoutConstraint {
         let constraint = self.constraint(equalTo: anchor)
         return NSLayoutConstraint(
             item: constraint.firstItem!,

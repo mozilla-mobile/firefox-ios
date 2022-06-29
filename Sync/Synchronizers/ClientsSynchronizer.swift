@@ -300,7 +300,12 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         }
     }
 
-    fileprivate func applyStorageResponse(_ response: StorageResponse<[Record<ClientPayload>]>, toLocalClients localClients: RemoteClientsAndTabs, withServer storageClient: Sync15CollectionClient<ClientPayload>, notifier: CollectionChangedNotifier?) -> Success {
+    fileprivate func applyStorageResponse(
+        _ response: StorageResponse<[Record<ClientPayload>]>,
+        toLocalClients localClients: RemoteClientsAndTabs,
+        withServer storageClient: Sync15CollectionClient<ClientPayload>,
+        notifier: CollectionChangedNotifier?
+    ) -> Success {
         log.debug("Applying clients response.")
 
         var downloadStats = SyncDownloadStats()

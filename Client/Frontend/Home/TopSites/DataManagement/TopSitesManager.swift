@@ -128,7 +128,8 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
         guard shouldShowSponsoredTiles else { return }
 
         // Google tile has precedence over Sponsored Tiles, if Google tile is present
-        let sponsoredTileSpaces = googleTopSiteManager.shouldAddGoogleTopSite(availableSpacesCount: availableSpacesCount) ? availableSpacesCount - GoogleTopSiteManager.Constants.reservedSpaceCount : availableSpacesCount
+        let shouldAddGoogleTopSite = googleTopSiteManager.shouldAddGoogleTopSite(availableSpacesCount: availableSpacesCount)
+        let sponsoredTileSpaces = shouldAddGoogleTopSite ? availableSpacesCount - GoogleTopSiteManager.Constants.reservedSpaceCount : availableSpacesCount
         if sponsoredTileSpaces > 0 {
             let maxNumberOfTiles = nimbusSponoredTiles.getMaxNumberOfTiles()
             sites.addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces,

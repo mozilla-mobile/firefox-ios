@@ -21,12 +21,20 @@ class TelemetryWrapper {
     private var profile: Profile?
 
     private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
-        guard let oldPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(pathComponent).path, FileManager.default.fileExists(atPath: oldPath) else {
-            return
-        }
+        guard let oldPath = try? FileManager.default.url(
+            for: .documentDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: false).appendingPathComponent(pathComponent).path,
+              FileManager.default.fileExists(atPath: oldPath) else { return }
 
         print("Migrating \(pathComponent) from ~/Documents to \(destinationSearchPath)")
-        guard let newPath = try? FileManager.default.url(for: destinationSearchPath, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(pathComponent).path else {
+        guard let newPath = try? FileManager.default.url(
+            for: destinationSearchPath,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: true).appendingPathComponent(pathComponent).path
+        else {
             print("Unable to get destination path \(destinationSearchPath) to move \(pathComponent)")
             return
         }

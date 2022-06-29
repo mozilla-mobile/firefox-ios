@@ -137,7 +137,9 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     open func getClients() -> Deferred<Maybe<[RemoteClient]>> {
         return db.withConnection { connection -> [RemoteClient] in
-            let cursor = connection.executeQuery("SELECT * FROM clients WHERE EXISTS (SELECT 1 FROM remote_devices rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC", factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)
+            let cursor = connection.executeQuery(
+                "SELECT * FROM clients WHERE EXISTS (SELECT 1 FROM remote_devices rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC",
+                factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)
             defer {
                 cursor.close()
             }

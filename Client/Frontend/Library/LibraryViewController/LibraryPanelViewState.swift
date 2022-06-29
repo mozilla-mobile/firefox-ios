@@ -142,7 +142,13 @@ class LibraryPanelViewState {
         }
     }
 
-    private func updateStateVariables(for newState: LibraryPanelMainState, andCategory category: LibraryPanelMainState, with newSubviewState: LibraryPanelSubState, and oldSubviewState: LibraryPanelSubState, isChangingPanels: Bool) {
+    private func updateStateVariables(
+        for newState: LibraryPanelMainState,
+        andCategory category: LibraryPanelMainState,
+        with newSubviewState: LibraryPanelSubState,
+        and oldSubviewState: LibraryPanelSubState,
+        isChangingPanels: Bool
+    ) {
         if isChangingPanels {
             self.state = category
         } else if newSubviewState.isChildState(of: oldSubviewState) || newSubviewState.isParentState(of: oldSubviewState) || oldSubviewState == newSubviewState {

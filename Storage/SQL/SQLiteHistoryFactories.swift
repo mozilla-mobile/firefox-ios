@@ -51,7 +51,14 @@ extension SQLiteHistory {
             return nil
         }
 
-        return PageMetadata(id: row["metadata_id"] as? Int, siteURL: siteURL, mediaURL: row["media_url"] as? String, title: row["metadata_title"] as? String, description: row["description"] as? String, type: row["type"] as? String, providerName: row["provider_name"] as? String)
+        return PageMetadata(
+            id: row["metadata_id"] as? Int,
+            siteURL: siteURL,
+            mediaURL: row["media_url"] as? String,
+            title: row["metadata_title"] as? String,
+            description: row["description"] as? String,
+            type: row["type"] as? String,
+            providerName: row["provider_name"] as? String)
     }
 
     class func iconHistoryColumnFactory(_ row: SDRow) -> Site {

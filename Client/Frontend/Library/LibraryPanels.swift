@@ -57,7 +57,14 @@ class LibraryPanelDescriptor {
     let accessibilityIdentifier: String
     let panelType: LibraryPanelType
 
-    init(makeViewController: @escaping ((_ profile: Profile, _ tabManager: TabManager) -> UIViewController), profile: Profile, tabManager: TabManager, accessibilityLabel: String, accessibilityIdentifier: String, panelType: LibraryPanelType) {
+    init(
+        makeViewController: @escaping ((_ profile: Profile, _ tabManager: TabManager) -> UIViewController),
+        profile: Profile,
+        tabManager: TabManager,
+        accessibilityLabel: String,
+        accessibilityIdentifier: String,
+        panelType: LibraryPanelType
+    ) {
         self.makeViewController = makeViewController
         self.profile = profile
         self.tabManager = tabManager

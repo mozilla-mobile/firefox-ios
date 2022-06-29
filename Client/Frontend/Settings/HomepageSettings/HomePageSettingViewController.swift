@@ -86,14 +86,26 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             self.tableView.reloadData()
         }
 
-        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: .SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isChecked: {return self.currentNewTabChoice == NewTabPage.topSites}, onChecked: {
-            self.currentNewTabChoice = NewTabPage.topSites
-            onFinished()
+        let showTopSites = CheckmarkSetting(
+            title: NSAttributedString(string: .SettingsNewTabTopSites),
+            subtitle: nil,
+            accessibilityIdentifier: "HomeAsFirefoxHome",
+            isChecked: { return self.currentNewTabChoice == NewTabPage.topSites },
+            onChecked: {
+                self.currentNewTabChoice = NewTabPage.topSites
+                onFinished()
         })
-        let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: .CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", isChecked: {return !showTopSites.isChecked()}, settingDidChange: { (string) in
-            self.currentNewTabChoice = NewTabPage.homePage
-            self.prefs.setString(self.currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
-            self.tableView.reloadData()
+        let showWebPage = WebPageSetting(
+            prefs: prefs,
+            prefKey: PrefsKeys.HomeButtonHomePageURL,
+            defaultValue: nil,
+            placeholder: .CustomNewPageURL,
+            accessibilityIdentifier: "HomeAsCustomURL",
+            isChecked: { return !showTopSites.isChecked() },
+            settingDidChange: { (string) in
+                self.currentNewTabChoice = NewTabPage.homePage
+                self.prefs.setString(self.currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+                self.tableView.reloadData()
         })
         showWebPage.textField.textAlignment = .natural
 

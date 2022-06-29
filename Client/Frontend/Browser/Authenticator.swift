@@ -97,7 +97,12 @@ class Authenticator {
         }
     }
 
-    fileprivate static func promptForUsernamePassword(_ viewController: UIViewController, credentials: URLCredential?, protectionSpace: URLProtectionSpace, loginsHelper: LoginsHelper?) -> Deferred<Maybe<LoginEntry>> {
+    fileprivate static func promptForUsernamePassword(
+        _ viewController: UIViewController,
+        credentials: URLCredential?,
+        protectionSpace: URLProtectionSpace,
+        loginsHelper: LoginsHelper?
+    ) -> Deferred<Maybe<LoginEntry>> {
         if protectionSpace.host.isEmpty {
             print("Unable to show a password prompt without a hostname")
             return deferMaybe(LoginRecordError(description: "Unable to show a password prompt without a hostname"))
@@ -119,7 +124,12 @@ class Authenticator {
         // Add a button to log in.
         let action = UIAlertAction(title: .AuthenticatorLogin,
             style: .default) { (action) -> Void in
-                guard let user = alert.textFields?[0].text, let pass = alert.textFields?[1].text else { deferred.fill(Maybe(failure: LoginRecordError(description: "Username and Password required"))); return }
+            guard let user = alert.textFields?[0].text,
+                  let pass = alert.textFields?[1].text
+            else {
+                deferred.fill(Maybe(failure: LoginRecordError(description: "Username and Password required")))
+                return
+            }
 
                 let login = LoginEntry(credentials: URLCredential(user: user, password: pass, persistence: .forSession), protectionSpace: protectionSpace)
                 deferred.fill(Maybe(success: login))

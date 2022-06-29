@@ -159,23 +159,35 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
         let strengthSetting: [CheckmarkSetting] = BlockingStrength.allOptions.map { option in
             let id = BlockingStrength.accessibilityId(for: option)
-            let setting = CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), style: .leftSide, subtitle: NSAttributedString(string: option.settingSubtitle), accessibilityIdentifier: id, isChecked: {
-                return option == self.currentBlockingStrength
-            }, onChecked: {
-                self.currentBlockingStrength = option
-                self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: ContentBlockingConfig.Prefs.StrengthKey)
-                TabContentBlocker.prefsChanged()
-                self.tableView.reloadData()
+            let setting = CheckmarkSetting(
+                title: NSAttributedString(string: option.settingTitle),
+                style: .leftSide,
+                subtitle: NSAttributedString(string: option.settingSubtitle),
+                accessibilityIdentifier: id,
+                isChecked: { return option == self.currentBlockingStrength },
+                onChecked: {
+                    self.currentBlockingStrength = option
+                    self.prefs.setString(self.currentBlockingStrength.rawValue,
+                                         forKey: ContentBlockingConfig.Prefs.StrengthKey)
+                    TabContentBlocker.prefsChanged()
+                    self.tableView.reloadData()
 
-                let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
-                              TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue]
-                TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
+                    let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
+                                  TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue]
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .change,
+                                                 object: .setting,
+                                                 extras: extras)
 
-                if option == .strict {
-                    let alert = UIAlertController(title: .TrackerProtectionAlertTitle, message: .TrackerProtectionAlertDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: .TrackerProtectionAlertButton, style: .default, handler: nil))
-                    self.present(alert, animated: true)
-                }
+                    if option == .strict {
+                        let alert = UIAlertController(title: .TrackerProtectionAlertTitle,
+                                                      message: .TrackerProtectionAlertDescription,
+                                                      preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: .TrackerProtectionAlertButton,
+                                                      style: .default,
+                                                      handler: nil))
+                        self.present(alert, animated: true)
+                    }
             })
 
             setting.onAccessoryButtonTapped = {
@@ -187,12 +199,16 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             return setting
         }
 
-        let enabledSetting = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.EnabledKey, defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing, attributedTitleText: NSAttributedString(string: .TrackingProtectionEnableTitle)) { [weak self] enabled in
-            TabContentBlocker.prefsChanged()
-            strengthSetting.forEach { item in
-                item.enabled = enabled
-            }
-            self?.tableView.reloadData()
+        let enabledSetting = BoolSetting(
+            prefs: profile.prefs,
+            prefKey: ContentBlockingConfig.Prefs.EnabledKey,
+            defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing,
+            attributedTitleText: NSAttributedString(string: .TrackingProtectionEnableTitle)) { [weak self] enabled in
+                TabContentBlocker.prefsChanged()
+                strengthSetting.forEach { item in
+                    item.enabled = enabled
+                }
+                self?.tableView.reloadData()
         }
 
         let firstSection = SettingSection(title: nil, footerTitle: NSAttributedString(string: .TrackingProtectionCellFooter), children: [enabledSetting])

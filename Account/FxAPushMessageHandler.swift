@@ -77,7 +77,12 @@ extension FxAPushMessageHandler {
                 }
                 if events.count > 1 {
                     // Log to the console for debugging release builds
-                    os_log("%{public}@", log: OSLog(subsystem: "org.mozilla.firefox", category: "firefoxnotificationservice"), type: OSLogType.debug, "Multiple events arrived, only handling the first event.")
+                    os_log(
+                        "%{public}@",
+                        log: OSLog(subsystem: "org.mozilla.firefox",
+                                   category: "firefoxnotificationservice"),
+                        type: OSLogType.debug,
+                        "Multiple events arrived, only handling the first event.")
                 }
                 switch firstEvent {
                 case .commandReceived(let deviceCommand):
