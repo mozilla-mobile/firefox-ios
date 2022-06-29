@@ -92,13 +92,13 @@
 "TodayWidget.QuickViewGalleryDescription" = "Доступ до відкритих вкладок безпосередньо з головного екрана.";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewGalleryDescriptionV2" = "Додати ярлики до відкритих вкладок.";
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Додайте ярлики для відкритих вкладок.";
 
 /* Title for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryTitle" = "Швидкий перегляд";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewLargeGalleryDescription" = "Додати ярлики до відкритих вкладок.";
+"TodayWidget.QuickViewLargeGalleryDescription" = "Додайте ярлики для відкритих вкладок.";
 
 /* Sub label for Top Sites widget */
 "TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - Відкриті вкладки";
@@ -116,13 +116,13 @@
 "TodayWidget.TopSitesGalleryDescription" = "Додайте ярлики для частих і недавніх сайтів.";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryTitle" = "Часті сайти";
+"TodayWidget.TopSitesGalleryTitle" = "Популярні сайти";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitleV2" = "Ярлики вебсайтів";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - Часті сайти";
+"TodayWidget.TopSitesSubLabel" = "Firefox - Популярні сайти";
 
 /* Sub label for Shortcuts widget */
 "TodayWidget.TopSitesSubLabel2" = "Firefox — ярлики вебсайтів";
