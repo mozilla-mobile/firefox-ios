@@ -313,7 +313,7 @@ workflows:
     - deploy-to-bitrise-io@2.0: {}
     meta:
         bitrise.io:
-            stack: osx-xcode-13.2.x
+            stack: osx-xcode-14.0.x
             machine_type_id: g2.8core
   just_build_fennec_to_get_warnings:
     before_run:
@@ -377,7 +377,7 @@ workflows:
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
     meta:
         bitrise.io:
-            stack: osx-xcode-13.2.x
+            stack: osx-xcode-14.0.x
             machine_type_id: g2.4core
   send_slack_notification:
     steps:
@@ -1358,7 +1358,7 @@ app:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-13.2.x
+    stack: osx-xcode-14.0.x
     machine_type_id: g2.4core
 
 trigger_map:
