@@ -261,17 +261,16 @@ class BookmarkingTests: BaseTestCase {
 
     // Smoketest
     func testBookmarkLibraryAddDeleteBookmark() {
-        // Verify that there are only 4 cells without recent bookmarks
+        // Verify that there are only 1 cell (desktop bookmark folder)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)
-        waitForNoExistence(app.otherElements["Recent Bookmarks"])
-        // There are 4 rows for the default folders
+        // There is only one row in the bookmarks panel, which is the desktop folder
         waitForExistence(app.tables["Bookmarks List"], timeout: 5)
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 4)
+        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 1)
 
-        //Add a bookmark
+        // Add a bookmark
         navigator.nowAt(LibraryPanel_Bookmarks)
         navigator.goto(NewTabScreen)
 
@@ -287,5 +286,21 @@ class BookmarkingTests: BaseTestCase {
         app.buttons["Delete"].tap()
         waitForNoExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeoutValue: 10)
         XCTAssertFalse(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].exists, "Bookmark not removed successfully")
+    }
+
+    func testDesktopFoldersArePresent() {
+        // Verify that there are only 1 cell (desktop bookmark folder)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        navigator.goto(LibraryPanel_Bookmarks)
+        // There is only one folder at the root of the bookmarks
+        waitForExistence(app.tables["Bookmarks List"], timeout: 5)
+        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 1)
+
+        // There is only three folders inside the desktop bookmarks
+        app.tables["Bookmarks List"].cells.firstMatch.tap()
+        waitForExistence(app.tables["Bookmarks List"], timeout: 5)
+        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 3)
     }
 }
