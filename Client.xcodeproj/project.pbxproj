@@ -6518,6 +6518,14 @@
 			path = WallpaperSettings;
 			sourceTree = "<group>";
 		};
+		E15A8B2B286CFD48004BB2B8 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				E69DB0831E97DEAA008A67E6 /* SyncTelemetryTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 		E40A18F61EDC73D5006B7F28 /* Entitlements */ = {
 			isa = PBXGroup;
 			children = (
@@ -6960,10 +6968,10 @@
 				28CE83B91A1D1D3200576538 /* Sync */,
 				28C077911A3B05C200834FE5 /* SyncTests */,
 				E69DB0761E97DEA9008A67E6 /* SyncTelemetry */,
-				E69DB0831E97DEAA008A67E6 /* SyncTelemetryTests */,
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				D39FA1601A83E0EC00EE869C /* UITests */,
 				3BFE4B081D342FB900DDF53F /* XCUITests */,
+				E15A8B2B286CFD48004BB2B8 /* Tests */,
 				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
 				4368F829279665220013419B /* Sentry-Info.plist */,
 				4368F84B279669740013419B /* Snapkit-Info.plist */,
@@ -13577,7 +13585,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				INFOPLIST_FILE = SyncTelemetryTests/Info.plist;
+				INFOPLIST_FILE = Tests/SyncTelemetryTests/Info.plist;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
@@ -13586,7 +13594,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SyncTelemetryTests/Info.plist;
+				INFOPLIST_FILE = Tests/SyncTelemetryTests/Info.plist;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec_Enterprise;
@@ -13595,7 +13603,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SyncTelemetryTests/Info.plist;
+				INFOPLIST_FILE = Tests/SyncTelemetryTests/Info.plist;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
@@ -13604,7 +13612,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SyncTelemetryTests/Info.plist;
+				INFOPLIST_FILE = Tests/SyncTelemetryTests/Info.plist;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
