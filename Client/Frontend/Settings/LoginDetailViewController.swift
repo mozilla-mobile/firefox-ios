@@ -402,9 +402,7 @@ extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
     }
 
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell) {
-        guard let url = (login.formSubmitUrl?.asURL ?? login.hostname.asURL) else {
-            return
-        }
+        guard let url = (login.formSubmitUrl?.asURL ?? login.hostname.asURL) else { return }
 
         navigationController?.dismiss(animated: true, completion: {
             self.settingsDelegate?.settingsOpenURLInNewTab(url)

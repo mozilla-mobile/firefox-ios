@@ -87,9 +87,7 @@ class DownloadHelper: NSObject {
         // let contentDisposition = (response as? HTTPURLResponse)?.allHeaderFields["Content-Disposition"] as? String
         // let isAttachment = contentDisposition?.starts(with: "attachment") ?? (mimeType == MIMEType.OctetStream)
 
-        guard isAttachment || !canShowInWebView || forceDownload else {
-            return nil
-        }
+        guard isAttachment || !canShowInWebView || forceDownload else { return nil }
 
         self.cookieStore = cookieStore
         self.request = request
@@ -97,13 +95,12 @@ class DownloadHelper: NSObject {
     }
 
     func downloadViewModel(okAction: @escaping (HTTPDownload) -> Void) -> PhotonActionSheetViewModel? {
-        guard let host = request.url?.host else {
-            return nil
-        }
+        guard let host = request.url?.host else { return nil }
 
-        guard let download = HTTPDownload(cookieStore: cookieStore, preflightResponse: preflightResponse, request: request) else {
-            return nil
-        }
+        guard let download = HTTPDownload(cookieStore: cookieStore,
+                                          preflightResponse: preflightResponse,
+                                          request: request)
+        else { return nil }
 
         let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
 
@@ -146,8 +143,13 @@ class OpenPassBookHelper: NSObject {
     fileprivate lazy var session = makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: .ephemeral)
 
     required init?(request: URLRequest?, response: URLResponse, cookieStore: WKHTTPCookieStore, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
-        guard let mimeType = response.mimeType, mimeType == MIMEType.Passbook, PKAddPassesViewController.canAddPasses(),
-              let responseURL = response.url, !forceDownload else { return nil }
+        guard let mimeType = response.mimeType,
+              mimeType == MIMEType.Passbook,
+              PKAddPassesViewController.canAddPasses(),
+              let responseURL = response.url,
+              !forceDownload
+        else { return nil }
+
         self.url = responseURL
         self.browserViewController = browserViewController
         self.cookieStore = cookieStore
@@ -162,7 +164,9 @@ class OpenPassBookHelper: NSObject {
                 self.session.configuration.httpCookieStorage?.setCookie(cookie)
             }
             self.session.dataTask(with: self.url) { (data, response, error) in
-                guard let _ = validatedHTTPResponse(response, statusCode: 200..<300), let data = data else {
+                guard let _ = validatedHTTPResponse(response, statusCode: 200..<300),
+                      let data = data
+                else {
                     self.presentErrorAlert()
                     return
                 }

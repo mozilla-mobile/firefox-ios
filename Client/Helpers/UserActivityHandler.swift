@@ -23,7 +23,9 @@ class UserActivityHandler {
     }
 
     fileprivate func setUserActivityForTab(_ tab: Tab, url: URL) {
-        guard !tab.isPrivate, url.isWebPage(includeDataURIs: false), !InternalURL.isValid(url: url) else {
+        guard !tab.isPrivate, url.isWebPage(includeDataURIs: false),
+              !InternalURL.isValid(url: url)
+        else {
             tab.userActivity?.resignCurrent()
             tab.userActivity = nil
             return
@@ -53,9 +55,7 @@ extension UserActivityHandler: TabEventHandler {
     }
 
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
-        guard let url = URL(string: metadata.siteURL) else {
-            return
-        }
+        guard let url = URL(string: metadata.siteURL) else { return }
 
         setUserActivityForTab(tab, url: url)
     }
@@ -65,9 +65,7 @@ extension UserActivityHandler: TabEventHandler {
     }
 
     func tabDidClose(_ tab: Tab) {
-        guard let userActivity = tab.userActivity else {
-            return
-        }
+        guard let userActivity = tab.userActivity else { return }
         tab.userActivity = nil
         userActivity.invalidate()
     }
@@ -77,13 +75,14 @@ private let log = Logger.browserLogger
 
 extension UserActivityHandler {
     func spotlightIndex(_ page: ReadabilityResult, for tab: Tab) {
-        guard let url = tab.url, !tab.isPrivate, url.isWebPage(includeDataURIs: false), !InternalURL.isValid(url: url) else {
-            return
-        }
+        guard let url = tab.url,
+              !tab.isPrivate,
+              url.isWebPage(includeDataURIs: false),
+              !InternalURL.isValid(url: url)
+        else { return }
+
         let spotlightConfig = FxNimbus.shared.features.spotlightSearch.value()
-        if !spotlightConfig.enabled {
-            return
-        }
+        if !spotlightConfig.enabled { return }
 
         let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
         attributeSet.title = page.title

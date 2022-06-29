@@ -47,9 +47,7 @@ extension SQLiteHistory {
     }
 
     class func pageMetadataColumnFactory(_ row: SDRow) -> PageMetadata? {
-        guard let siteURL = row["url"] as? String else {
-            return nil
-        }
+        guard let siteURL = row["url"] as? String else { return nil }
 
         return PageMetadata(
             id: row["metadata_id"] as? Int,

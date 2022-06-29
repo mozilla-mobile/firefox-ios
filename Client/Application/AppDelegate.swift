@@ -190,9 +190,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func shutdownProfileWhenNotActive(_ application: UIApplication) {
         // Only shutdown the profile if we are not in the foreground
-        guard application.applicationState != .active else {
-            return
-        }
+        guard application.applicationState != .active else { return }
 
         profile._shutdown()
     }
@@ -306,9 +304,7 @@ extension AppDelegate {
     func application(_ application: UIApplication,
                      open url: URL,
                      options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        guard let routerpath = NavigationPath(url: url) else {
-            return false
-        }
+        guard let routerpath = NavigationPath(url: url) else { return false }
 
         if let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
             profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)

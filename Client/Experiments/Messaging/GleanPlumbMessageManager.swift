@@ -99,7 +99,9 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             guard let nextTriggeredMessage = handleMessageUnderExperiment(message,
                                                                           messages,
                                                                           gleanPlumbHelper,
-                                                                          feature.onControl) else { return nil }
+                                                                          feature.onControl)
+            else { return nil }
+
             return nextTriggeredMessage
         }
 

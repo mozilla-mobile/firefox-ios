@@ -135,8 +135,12 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
     // MARK: - Migration
     func migrateResources(completion: (Bool) -> Void) {
         let fileManager = FileManager.default
-        guard let documentPath = fileManager.urls(for: .documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first,
-              let appSupportPath = fileManager.urls(for: .applicationSupportDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first
+        guard let documentPath = fileManager.urls(
+            for: .documentDirectory,
+            in: FileManager.SearchPathDomainMask.userDomainMask).first,
+              let appSupportPath = fileManager.urls(
+                for: .applicationSupportDirectory,
+                in: FileManager.SearchPathDomainMask.userDomainMask).first
         else {
             browserLog.debug("Wallpaper migration error: could not fetch paths")
             return
