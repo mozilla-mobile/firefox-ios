@@ -91,8 +91,8 @@ class LibraryPanelDescriptor {
 }
 
 class LibraryPanels: FeatureFlaggable {
-    fileprivate let profile: Profile
-    fileprivate let tabManager: TabManager
+    private let profile: Profile
+    private let tabManager: TabManager
 
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile

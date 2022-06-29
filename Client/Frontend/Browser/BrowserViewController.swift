@@ -976,7 +976,7 @@ class BrowserViewController: UIViewController {
         libraryViewController.delegate = self
         self.libraryViewController = libraryViewController
 
-        libraryViewController.viewModel.selectedPanel = panel ?? . bookmarks
+        libraryViewController.setupOpenPanel(panelType: panel ?? . bookmarks)
 
         // Reset history panel pagination to get latest history visit
         if let historyPanel = libraryViewController.viewModel.panelDescriptors.first(where: {$0.panelType == .history}),

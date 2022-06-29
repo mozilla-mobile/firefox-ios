@@ -34,16 +34,21 @@ private class SeparatorTableViewCell: OneLineTableViewCell {
 }
 
 class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActionBookmark {
+    // TODO: YRD Improve
     private var toolbarButtonItems: [UIBarButtonItem] {
-        if state == .bookmarks(state: .inFolder) {
+        switch state {
+        case .bookmarks(state: .inFolder):
             bottomRightButton.title = .BookmarksEdit
             return [flexibleSpace, bottomRightButton]
-        } else if state == .bookmarks(state: .inFolderEditMode) {
+        case .bookmarks(state: .inFolderEditMode):
             bottomRightButton.title = String.AppSettingsDone
             return [bottomLeftButton, flexibleSpace, bottomRightButton]
+        case .bookmarks(state: .itemEditMode):
+            bottomRightButton.title = String.AppSettingsDone
+            return [flexibleSpace, bottomRightButton]
+        default:
+            return [UIBarButtonItem]()
         }
-
-        return [UIBarButtonItem]()
     }
 
     private lazy var bottomLeftButton: UIBarButtonItem = {
@@ -102,6 +107,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("YRD bookmarks viewDidLoad")
 
         let tableViewLongPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTableView))
         tableView.addGestureRecognizer(tableViewLongPressRecognizer)
@@ -156,8 +162,9 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         present(sheet, animated: true)
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("YRD bookmarks viewWillAppear")
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -213,11 +220,25 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     func enableEditMode() {
+        print("YRD enableEditMode")
+        updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
         self.tableView.setEditing(true, animated: true)
+
+        let userInfo: [String: Any] = [
+            "state": state,
+        ]
+        NotificationCenter.default.post(name: .LibraryPanelStateDidChange, object: nil, userInfo: userInfo)
     }
 
     func disableEditMode() {
+        print("YRD disableEditMode")
+        updatePanelState(newState: .bookmarks(state: .inFolder))
         self.tableView.setEditing(false, animated: true)
+
+        let userInfo: [String: Any] = [
+            "state": state,
+        ]
+        NotificationCenter.default.post(name: .LibraryPanelStateDidChange, object: nil, userInfo: userInfo)
     }
 
     fileprivate func backButtonView() -> UIView? {
@@ -310,7 +331,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         navigationController?.popToRootViewController(animated: true)
     }
 
-    @objc fileprivate func notificationReceived(_ notification: Notification) {
+    @objc private func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .DynamicFontChanged:
             reloadData()
@@ -321,7 +342,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     // MARK: UITableViewDataSource | UITableViewDelegate
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         let node: BookmarkNodeData?
@@ -500,7 +520,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 }
 
 // MARK: LibraryPanelContextMenu
-
 extension BookmarksPanel: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else {
@@ -546,33 +565,9 @@ extension BookmarksPanel: LibraryPanelContextMenu {
 // MARK: - Toolbar button actions
 extension BookmarksPanel {
     @objc func bottomLeftButtonAction() {
-        switch state {
-        case .bookmarks(state: let state):
-            leftButtonBookmarkActions(for: state)
-        default:
-            return
-        }
-    }
-
-    func leftButtonBookmarkActions(for state: LibraryPanelSubState) {
-
-        switch state {
-        case .inFolder:
-            guard let navController = navigationController,
-                  navController.viewControllers.count > 1 else {
-                      return
-            }
-            navController.popViewController(animated: true)
-
-        case .inFolderEditMode:
-           addNewBookmarkItemAction()
-
-        case .itemEditMode:
-            navigationController?.popViewController(animated: true)
-            break
-
-        default:
-            return
+        if state == .bookmarks(state: .inFolderEditMode) {
+            updatePanelState(newState: .bookmarks(state: .itemEditMode))
+            addNewBookmarkItemAction()
         }
     }
 
@@ -594,7 +589,9 @@ extension BookmarksPanel {
     }
 
     func handleDoneButton() {
-        rightButtonActions()
+        if state == .bookmarks(state: .itemEditMode) {
+            handleItemEditMode()
+        }
     }
 
     func bottomToolbarItems() -> [UIBarButtonItem] {
@@ -607,10 +604,6 @@ extension BookmarksPanel {
     }
 
     @objc func bottomRightButtonAction() {
-        rightButtonActions()
-    }
-
-    func rightButtonActions() {
         guard case .bookmarks(let subState) = state else { return }
 
         switch subState {
@@ -619,15 +612,21 @@ extension BookmarksPanel {
         case .inFolderEditMode:
             disableEditMode()
         case .itemEditMode:
-            guard let bookmarkEditView = navigationController?.viewControllers.last as? BookmarkDetailPanel else { return }
-            bookmarkEditView.save().uponQueue(.main) { _ in
-                self.navigationController?.popViewController(animated: true)
-                if bookmarkEditView.isNew {
-                    self.didAddBookmarkNode()
-                }
-            }
+            handleItemEditMode()
         default:
             return
+        }
+    }
+
+    func handleItemEditMode() {
+        guard let bookmarkEditView = navigationController?.viewControllers.last as? BookmarkDetailPanel else { return }
+
+        updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+        bookmarkEditView.save().uponQueue(.main) { _ in
+            self.navigationController?.popViewController(animated: true)
+            if bookmarkEditView.isNew {
+                self.didAddBookmarkNode()
+            }
         }
     }
 }

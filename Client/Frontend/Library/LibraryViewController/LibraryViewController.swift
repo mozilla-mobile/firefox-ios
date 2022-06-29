@@ -137,10 +137,15 @@ class LibraryViewController: UIViewController {
     }
 
     private func setupNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(applyTheme), name: .DisplayThemeChanged, object: nil)
+        [Notification.Name.DisplayThemeChanged,
+         Notification.Name.LibraryPanelStateDidChange].forEach {
+            NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil)
+        }
     }
 
     func updateViewWithState() {
+        print("YRD updateViewWithState")
+        setupPanel()
         setupButtons()
     }
 
@@ -151,14 +156,12 @@ class LibraryViewController: UIViewController {
     }
 
     private func shouldHideBottomToolbar(panel: LibraryPanel) -> Bool {
-        print("YRD LVC shouldHideBottomToolbar")
         return panel.bottomToolbarItems().isEmpty
     }
 
     func setupLibraryPanel(_ panel: UIViewController,
                            accessibilityLabel: String,
                            accessibilityIdentifier: String) {
-        print("YRD setupLibraryPanel with segment \(librarySegmentControl.selectedSegmentIndex)")
         (panel as? LibraryPanel)?.libraryPanelDelegate = self
         panel.view.accessibilityNavigationStyle = .combined
         panel.view.accessibilityLabel = accessibilityLabel
@@ -169,7 +172,6 @@ class LibraryViewController: UIViewController {
     }
 
     @objc func panelChanged() {
-        print("YRD panelChanged with segment \(librarySegmentControl.selectedSegmentIndex)")
         var eventValue: TelemetryWrapper.EventValue
 
         switch librarySegmentControl.selectedSegmentIndex {
@@ -193,8 +195,11 @@ class LibraryViewController: UIViewController {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: eventValue)
     }
 
+    func setupOpenPanel(panelType: LibraryPanelType) {
+        viewModel.selectedPanel = panelType
+    }
+
     private func setupPanel() {
-        print("YRD setupPanel")
         guard let index = viewModel.selectedPanel?.rawValue,
               index < viewModel.panelDescriptors.count else { return }
 
@@ -243,12 +248,13 @@ class LibraryViewController: UIViewController {
 
     // MARK: - Buttons setup
     private func setupButtons() {
+        print("YRD setupButtons")
         topLeftButtonSetup()
         topRightButtonSetup()
         bottomToolbarButtonSetup()
     }
 
-    fileprivate func topLeftButtonSetup() {
+    private func topLeftButtonSetup() {
         switch viewModel.currentPanelState {
         case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
@@ -262,7 +268,7 @@ class LibraryViewController: UIViewController {
         }
     }
 
-    fileprivate func topRightButtonSetup() {
+    private func topRightButtonSetup() {
         switch viewModel.currentPanelState {
         case .bookmarks(state: .inFolderEditMode):
             navigationItem.rightBarButtonItem = nil
@@ -286,6 +292,18 @@ class LibraryViewController: UIViewController {
 
 // MARK: UIAppearance
 extension LibraryViewController: NotificationThemeable {
+
+    @objc func notificationReceived(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        case .LibraryPanelStateDidChange:
+            setupButtons()
+        default:
+            break
+        }
+    }
+
     @objc func applyTheme() {
         viewModel.panelDescriptors.forEach { item in
             (item.viewController as? NotificationThemeable)?.applyTheme()

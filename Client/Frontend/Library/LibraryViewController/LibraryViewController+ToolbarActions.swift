@@ -7,19 +7,15 @@ import Foundation
 // MARK: - Toolbar Button Actions
 extension LibraryViewController {
 
-    // MARK: - Nav bar button actions
     @objc func topLeftButtonAction() {
-        print("YRD topLeftButtonAction")
         guard let navController = children.first as? UINavigationController,
               let panel = viewModel.getCurrentPanel() else { return }
 
         panel.handleBackButton()
         navController.popViewController(animated: true)
-        updateViewWithState()
     }
 
     @objc func topRightButtonAction() {
-        print("YRD topRightButtonAction")
         guard let panel = viewModel.getCurrentPanel() else { return }
 
         if panel.shouldDismissOnDone() {
@@ -27,6 +23,5 @@ extension LibraryViewController {
         }
 
         panel.handleDoneButton()
-        updateViewWithState()
     }
 }
