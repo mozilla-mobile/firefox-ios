@@ -54,6 +54,10 @@ extension Date {
         return UInt64(1000 * Date().timeIntervalSince1970)
     }
 
+    public func millisecondsSince1970() -> Int64 {
+        return Int64((self.timeIntervalSince1970 * 1000.0).rounded())
+    }
+
     public func toMicrosecondTimestamp() -> MicrosecondTimestamp {
         return UInt64(1_000_000 * timeIntervalSince1970)
     }
