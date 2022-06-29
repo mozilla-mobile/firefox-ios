@@ -73,9 +73,17 @@ public class RustRemoteTabs {
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 if let tabsError = err as? TabsError {
-                    SentryIntegration.shared.sendWithStacktrace(message: "Tabs error when syncing Tabs database", tag: SentryTag.rustRemoteTabs, severity: .error, description: tabsError.localizedDescription)
+                    SentryIntegration.shared.sendWithStacktrace(
+                        message: "Tabs error when syncing Tabs database",
+                        tag: SentryTag.rustRemoteTabs,
+                        severity: .error,
+                        description: tabsError.localizedDescription)
                 } else {
-                    SentryIntegration.shared.sendWithStacktrace(message: "Unknown error when opening Rust Tabs database", tag: SentryTag.rustRemoteTabs, severity: .error, description: err.localizedDescription)
+                    SentryIntegration.shared.sendWithStacktrace(
+                        message: "Unknown error when opening Rust Tabs database",
+                        tag: SentryTag.rustRemoteTabs,
+                        severity: .error,
+                        description: err.localizedDescription)
                 }
 
                 deferred.fill(Maybe(failure: err))

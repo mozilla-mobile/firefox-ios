@@ -99,19 +99,26 @@ class TabLocationView: UIView {
     private lazy var readerModeButton: ReaderModeButton = {
         let readerModeButton = ReaderModeButton()
         readerModeButton.addTarget(self, action: #selector(tapReaderModeButton), for: .touchUpInside)
-        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPressReaderModeButton)))
+        readerModeButton.addGestureRecognizer(
+            UILongPressGestureRecognizer(target: self,
+                                         action: #selector(longPressReaderModeButton)))
         readerModeButton.isAccessibilityElement = true
         readerModeButton.isHidden = true
         readerModeButton.accessibilityLabel = .TabLocationReaderModeAccessibilityLabel
         readerModeButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.readerModeButton
-        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: .TabLocationReaderModeAddToReadingListAccessibilityLabel, target: self, selector: #selector(readerModeCustomAction))]
+        readerModeButton.accessibilityCustomActions = [
+            UIAccessibilityCustomAction(
+                name: .TabLocationReaderModeAddToReadingListAccessibilityLabel,
+                target: self,
+                selector: #selector(readerModeCustomAction))]
         return readerModeButton
     }()
 
     lazy var reloadButton: StatefulButton = {
         let reloadButton = StatefulButton(frame: .zero, state: .disabled)
         reloadButton.addTarget(self, action: #selector(tapReloadButton), for: .touchUpInside)
-        reloadButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPressReloadButton)))
+        reloadButton.addGestureRecognizer(
+            UILongPressGestureRecognizer(target: self, action: #selector(longPressReloadButton)))
         reloadButton.tintColor = UIColor.Photon.Grey50
         reloadButton.imageView?.contentMode = .scaleAspectFit
         reloadButton.contentHorizontalAlignment = .left

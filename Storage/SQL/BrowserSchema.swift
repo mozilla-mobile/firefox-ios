@@ -597,10 +597,14 @@ open class BrowserSchema: Schema {
 
     fileprivate let localBookmarksView = """
         CREATE VIEW view_bookmarksLocal_on_mirror AS
-        SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, NULL AS local_modified, server_modified, 0 AS is_overridden
+        SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, \
+        feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, \
+        NULL AS local_modified, server_modified, 0 AS is_overridden
         FROM bookmarksMirror WHERE is_overridden IS NOT 1
         UNION ALL
-        SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, local_modified, NULL AS server_modified, 1 AS is_overridden
+        SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, \
+        feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, \
+        local_modified, NULL AS server_modified, 1 AS is_overridden
         FROM bookmarksLocal WHERE is_deleted IS NOT 1
         """
 
@@ -674,7 +678,9 @@ open class BrowserSchema: Schema {
 
     fileprivate let awesomebarBookmarksWithIconsView = """
         CREATE VIEW view_awesomebar_bookmarks_with_favicons AS
-        SELECT b.guid AS guid, b.url AS url, b.title AS title, b.description AS description, b.visitDate AS visitDate, f.id AS iconID, f.url AS iconURL, f.date AS iconDate, f.type AS iconType, f.width AS iconWidth
+        SELECT b.guid AS guid, b.url AS url, b.title AS title, b.description AS \
+        description, b.visitDate AS visitDate, f.id AS iconID, f.url AS iconURL, \
+        f.date AS iconDate, f.type AS iconType, f.width AS iconWidth
         FROM view_awesomebar_bookmarks b LEFT JOIN favicons f ON f.id = b.faviconID
         """
 

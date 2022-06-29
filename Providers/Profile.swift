@@ -1073,7 +1073,13 @@ open class BrowserProfile: Profile {
                             return
                         }
 
-                        syncUnlockInfo.fill(Maybe(success: SyncUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: tokenServerEndpointURL.absoluteString, loginEncryptionKey: encryptionKey, tabsLocalId: deviceId)))
+                        syncUnlockInfo.fill( Maybe(success: SyncUnlockInfo(
+                            kid: key.kid,
+                            fxaAccessToken: accessTokenInfo.token,
+                            syncKey: key.k,
+                            tokenserverURL: tokenServerEndpointURL.absoluteString,
+                            loginEncryptionKey: encryptionKey,
+                            tabsLocalId: deviceId)))
                     }
                 }
             }

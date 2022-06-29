@@ -25,7 +25,10 @@ class TestSQLiteReadingList: XCTestCase {
     }
 
     func testCreateRecord() {
-        let result = readingList.createRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone").value
+        let result = readingList.createRecordWithURL(
+            "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance",
+            title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma",
+            addedBy: "Stefan's iPhone").value
         switch result {
         case .failure(let error):
             XCTFail(error.description)
@@ -40,7 +43,10 @@ class TestSQLiteReadingList: XCTestCase {
     }
 
     func testGetRecordWithURL() {
-        let result1 = readingList.createRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone").value
+        let result1 = readingList.createRecordWithURL(
+            "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance",
+            title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma",
+            addedBy: "Stefan's iPhone").value
         switch result1 {
         case .failure(let error):
             XCTFail(error.description)
@@ -83,7 +89,10 @@ class TestSQLiteReadingList: XCTestCase {
     }
 
     func testDeleteRecord() {
-        let result1 = readingList.createRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone").value
+        let result1 = readingList.createRecordWithURL(
+            "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance",
+            title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma",
+            addedBy: "Stefan's iPhone").value
         switch result1 {
         case .failure(let error):
             XCTFail(error.description)
@@ -127,7 +136,10 @@ class TestSQLiteReadingList: XCTestCase {
     }
 
     func testUpdateRecord() {
-        let result = createRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone")
+        let result = createRecordWithURL(
+            "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance",
+            title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma",
+            addedBy: "Stefan's iPhone")
         if let record = result.successValue {
             XCTAssertEqual(record.url, "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance")
             XCTAssertEqual(record.title, "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma")
