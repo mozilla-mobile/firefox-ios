@@ -18,7 +18,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
 
         let shouldFilter = navigationHandler.shouldFilterDataScheme(url: URL(string: "www.testURL.com")!)
-        XCTAssertTrue(shouldFilter)
+        XCTAssertFalse(shouldFilter, "Should not filter non data scheme URL")
     }
 
     func testShouldHandleDataSchemeURL() {
@@ -28,7 +28,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
 
         let shouldFilter = navigationHandler.shouldFilterDataScheme(url: URL(string: "data:text/html,")!)
-        XCTAssertTrue(shouldFilter)
+        XCTAssertTrue(shouldFilter, "Should filter data scheme URL")
     }
 
     func testAllowsSubframes() {
