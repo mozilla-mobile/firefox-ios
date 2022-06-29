@@ -311,6 +311,15 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         let downloadedFilesInSection = groupedDownloadedFiles.itemsForSection(indexPath.section)
         return downloadedFilesInSection[safe: indexPath.row]
     }
+
+    func handleBackButton() {
+        // no implementation needed
+    }
+
+    func handleDoneButton() {
+        // no implementation needed
+    }
+
     // MARK: - TableView Delegate / DataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCellIdentifier, for: indexPath) as! TwoLineImageOverlayCell

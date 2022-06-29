@@ -36,6 +36,12 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         }
     }
 
+    func shouldDismissOnDone() -> Bool {
+        guard state != .history(state: .search) else { return false }
+
+        return true
+    }
+
     // MARK: - Properties
 
     typealias HistoryPanelSections = HistoryPanelViewModel.Sections
@@ -88,7 +94,6 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     }()
 
     private var toolbarButtonItems: [UIBarButtonItem] {
-        print("YRD toolbarButtonItems")
         guard shouldShowToolBar else {
             return [UIBarButtonItem]()
         }
@@ -701,8 +706,19 @@ extension HistoryPanel {
     }
 }
 
-/// User actions helpers
+// MARK: - User action helpers
 extension HistoryPanel {
+    func handleBackButton() {
+        updatePanelState(newState: .history(state: .mainView))
+    }
+
+    func handleDoneButton() {
+        if state == .history(state: .search) {
+            exitSearchState()
+            updatePanelState(newState: .history(state: .mainView))
+        }
+    }
+
     @objc func bottomSearchButtonAction() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .searchHistory)
         startSearchState()

@@ -331,6 +331,14 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         presentContextMenu(for: indexPath)
     }
 
+    func handleBackButton() {
+        // no implementation needed
+    }
+
+    func handleDoneButton() {
+        // no implementation needed
+    }
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -464,4 +472,8 @@ extension ReadingListPanel: NotificationThemeable {
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
         refreshReadingList()
     }
+}
+
+extension ReadingListPanel {
+
 }

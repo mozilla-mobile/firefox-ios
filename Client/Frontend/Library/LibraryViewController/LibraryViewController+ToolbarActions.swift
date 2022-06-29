@@ -7,68 +7,26 @@ import Foundation
 // MARK: - Toolbar Button Actions
 extension LibraryViewController {
 
-    func leftButtonBookmarkActions(for state: LibraryPanelSubState, onPanel panel: UINavigationController) {
-        print("YRD LibraryViewController leftButtonBookmarkActions")
+    // MARK: - Nav bar button actions
+    @objc func topLeftButtonAction() {
+        print("YRD topLeftButtonAction")
+        guard let navController = children.first as? UINavigationController,
+              let panel = viewModel.getCurrentPanel() else { return }
 
-        switch state {
-        case .inFolder:
-            if panel.viewControllers.count > 1 {
-                // TODO: Yoana update state
-//                viewModel.currentPanelState = .bookmarks(state: .mainView)
-                panel.popViewController(animated: true)
-            }
-
-        case .inFolderEditMode:
-            guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
-            bookmarksPanel.presentInFolderActions()
-
-        case .itemEditMode:
-            // TODO: Yoana update state
-//            viewModel.currentPanelState = .bookmarks(state: .inFolderEditMode)
-            panel.popViewController(animated: true)
-
-        default:
-            return
-        }
+        panel.handleBackButton()
+        navController.popViewController(animated: true)
+        updateViewWithState()
     }
 
-    func topRightButtonBookmarkActions(for state: LibraryPanelSubState) {
-        print("YRD LibraryViewController rightButtonBookmarkActions")
-        guard let panel = children.first as? UINavigationController else { return }
-        switch state {
-        case .inFolder:
-            guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
-//            viewModel.currentPanelState = .bookmarks(state: .inFolderEditMode)
-            bookmarksPanel.enableEditMode()
+    @objc func topRightButtonAction() {
+        print("YRD topRightButtonAction")
+        guard let panel = viewModel.getCurrentPanel() else { return }
 
-        case .inFolderEditMode:
-            guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
-            // TODO: Yoana update state
-//            viewModel.currentPanelState = .bookmarks(state: .inFolder)
-            bookmarksPanel.disableEditMode()
-
-        case .itemEditMode:
-            guard let bookmarkEditView = panel.viewControllers.last as? BookmarkDetailPanel else { return }
-            bookmarkEditView.save().uponQueue(.main) { _ in
-                // TODO: Yoana update state
-//                self.viewModel.currentPanelState = .bookmarks(state: .inFolderEditMode)
-                panel.popViewController(animated: true)
-                if bookmarkEditView.isNew,
-                   let bookmarksPanel = panel.navigationController?.visibleViewController as? BookmarksPanel {
-                    bookmarksPanel.didAddBookmarkNode()
-                }
-            }
-        default:
-            return
+        if panel.shouldDismissOnDone() {
+            dismiss(animated: true, completion: nil)
         }
-    }
 
-    func topRightButtonHistoryActions(for state: LibraryPanelSubState) {
-        guard let panel = children.first as? UINavigationController,
-              let historyPanel = panel.viewControllers.last as? HistoryPanel else { return }
-
-        historyPanel.exitSearchState()
-//        viewModel.currentPanelState = .history(state: .mainView)
-        historyPanel.updatePanelState(newState: .history(state: .mainView))
+        panel.handleDoneButton()
+        updateViewWithState()
     }
 }

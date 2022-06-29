@@ -13,7 +13,6 @@ extension LibraryViewController: UIToolbarDelegate {
 }
 
 class LibraryViewController: UIViewController {
-
     struct UX {
         struct NavigationMenu {
             static let height: CGFloat = 32
@@ -22,11 +21,7 @@ class LibraryViewController: UIViewController {
     }
 
     var viewModel: LibraryViewModel
-
-    // Delegate
     weak var delegate: LibraryPanelDelegate?
-
-    // Variables
     var onViewDismissed: (() -> Void)?
 
     // Views
@@ -49,7 +44,7 @@ class LibraryViewController: UIViewController {
         toolbar.setItems([UIBarButtonItem(customView: self.librarySegmentControl)], animated: false)
     }
 
-    fileprivate lazy var topLeftButton: UIBarButtonItem =  {
+    private lazy var topLeftButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed("goBack")?.imageFlippedForRightToLeftLayoutDirection(),
                                      style: .plain,
                                      target: self,
@@ -58,7 +53,7 @@ class LibraryViewController: UIViewController {
         return button
     }()
 
-    fileprivate lazy var topRightButton: UIBarButtonItem =  {
+    private lazy var topRightButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(title: String.AppSettingsDone, style: .done, target: self, action: #selector(topRightButtonAction))
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.topRightButton
         return button
@@ -146,7 +141,6 @@ class LibraryViewController: UIViewController {
     }
 
     func updateViewWithState() {
-        print("YRD updateViewWithState")
         setupButtons()
     }
 
@@ -230,8 +224,6 @@ class LibraryViewController: UIViewController {
 
     private func showPanel(_ libraryPanel: UIViewController) {
         print("YRD showPanel")
-        // TODO: missing initial setup
-//        updateStateOnShowPanel(to: selectedPanel)
         addChild(libraryPanel)
         libraryPanel.beginAppearanceTransition(true, animated: false)
         controllerContainerView.addSubview(libraryPanel.view)
@@ -289,31 +281,6 @@ class LibraryViewController: UIViewController {
         let shouldHideBar = shouldHideBottomToolbar(panel: panel)
         navigationController?.setToolbarHidden(shouldHideBar, animated: true)
         setToolbarItems(panel.bottomToolbarItems(), animated: true)
-    }
-
-    // MARK: - Nav bar button actions
-    @objc func topLeftButtonAction() {
-        guard let panel = children.first as? UINavigationController else { return }
-        switch viewModel.currentPanelState {
-        case .bookmarks(state: let subState):
-            leftButtonBookmarkActions(for: subState, onPanel: panel)
-        default:
-            panel.popViewController(animated: true)
-        }
-        updateViewWithState()
-    }
-
-    @objc func topRightButtonAction() {
-        print("YRD topRightButtonAction")
-        switch viewModel.currentPanelState {
-        case .bookmarks(state: .itemEditMode):
-            topRightButtonBookmarkActions(for: .itemEditMode)
-        case .history(state: .search):
-            topRightButtonHistoryActions(for: .search)
-        default:
-            self.dismiss(animated: true, completion: nil)
-        }
-        updateViewWithState()
     }
 }
 

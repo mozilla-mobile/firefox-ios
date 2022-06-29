@@ -11,6 +11,9 @@ protocol LibraryPanel: UIViewController, NotificationThemeable {
     var state: LibraryPanelMainState { get set }
 
     func bottomToolbarItems() -> [UIBarButtonItem]
+    func handleBackButton()
+    func handleDoneButton()
+    func shouldDismissOnDone() -> Bool
 }
 
 extension LibraryPanel {
@@ -20,6 +23,10 @@ extension LibraryPanel {
 
     func updatePanelState(newState: LibraryPanelMainState) {
         state = newState
+    }
+
+    func shouldDismissOnDone() -> Bool {
+        return true
     }
 }
 

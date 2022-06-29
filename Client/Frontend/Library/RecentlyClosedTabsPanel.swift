@@ -22,7 +22,6 @@ protocol RecentlyClosedPanelDelegate: AnyObject {
 }
 
 class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
-
     func bottomToolbarItems() -> [UIBarButtonItem] {
         return [UIBarButtonItem]()
     }
@@ -63,6 +62,14 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
             tableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+    }
+
+    func handleBackButton() {
+        // no implementation needed
+    }
+
+    func handleDoneButton() {
+        // no implementation needed
     }
 }
 
@@ -130,6 +137,15 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.recentlyClosedTabs.count
+    }
+
+    // MARK: - Libray Toolbar actions
+    func handleBackButton() {
+        // no implementation needed
+    }
+
+    func handleDoneButton() {
+        // no implementation needed
     }
 
 }

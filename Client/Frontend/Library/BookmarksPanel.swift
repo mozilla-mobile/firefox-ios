@@ -34,6 +34,30 @@ private class SeparatorTableViewCell: OneLineTableViewCell {
 }
 
 class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActionBookmark {
+    private var toolbarButtonItems: [UIBarButtonItem] {
+        if state == .bookmarks(state: .inFolder) {
+            bottomRightButton.title = .BookmarksEdit
+            return [flexibleSpace, bottomRightButton]
+        } else if state == .bookmarks(state: .inFolderEditMode) {
+            bottomRightButton.title = String.AppSettingsDone
+            return [bottomLeftButton, flexibleSpace, bottomRightButton]
+        }
+
+        return [UIBarButtonItem]()
+    }
+
+    private lazy var bottomLeftButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-add"), style: .plain, target: self, action: #selector(bottomLeftButtonAction))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomLeftButton
+        return button
+    }()
+
+    private lazy var bottomRightButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: .BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomRightButton
+        return button
+    }()
+
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
         case recent
@@ -516,5 +540,94 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         actions.append(removeAction)
 
         return actions
+    }
+}
+
+// MARK: - Toolbar button actions
+extension BookmarksPanel {
+    @objc func bottomLeftButtonAction() {
+        switch state {
+        case .bookmarks(state: let state):
+            leftButtonBookmarkActions(for: state)
+        default:
+            return
+        }
+    }
+
+    func leftButtonBookmarkActions(for state: LibraryPanelSubState) {
+
+        switch state {
+        case .inFolder:
+            guard let navController = navigationController,
+                  navController.viewControllers.count > 1 else {
+                      return
+            }
+            navController.popViewController(animated: true)
+
+        case .inFolderEditMode:
+           addNewBookmarkItemAction()
+
+        case .itemEditMode:
+            navigationController?.popViewController(animated: true)
+            break
+
+        default:
+            return
+        }
+    }
+
+    func handleBackButton() {
+        guard case .bookmarks(let subState) = state else { return }
+
+        switch subState {
+        case .inFolder:
+            updatePanelState(newState: .bookmarks(state: .mainView))
+
+       case .inFolderEditMode:
+           addNewBookmarkItemAction()
+
+       case .itemEditMode:
+            updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+       default:
+           return
+       }
+    }
+
+    func handleDoneButton() {
+        rightButtonActions()
+    }
+
+    func bottomToolbarItems() -> [UIBarButtonItem] {
+        switch state {
+        case .history, .downloads, .readingList:
+            return  [UIBarButtonItem]()
+        case .bookmarks(let subState):
+            return subState == .mainView ? [UIBarButtonItem]() : toolbarButtonItems
+        }
+    }
+
+    @objc func bottomRightButtonAction() {
+        rightButtonActions()
+    }
+
+    func rightButtonActions() {
+        guard case .bookmarks(let subState) = state else { return }
+
+        switch subState {
+        case .inFolder:
+            enableEditMode()
+        case .inFolderEditMode:
+            disableEditMode()
+        case .itemEditMode:
+            guard let bookmarkEditView = navigationController?.viewControllers.last as? BookmarkDetailPanel else { return }
+            bookmarkEditView.save().uponQueue(.main) { _ in
+                self.navigationController?.popViewController(animated: true)
+                if bookmarkEditView.isNew {
+                    self.didAddBookmarkNode()
+                }
+            }
+        default:
+            return
+        }
     }
 }
