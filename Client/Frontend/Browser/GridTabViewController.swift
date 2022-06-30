@@ -655,8 +655,9 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let calculatedWidth = collectionView.bounds.width - collectionView.safeAreaInsets.left - collectionView.safeAreaInsets.right - GridTabTrayControllerUX.Margin
-        let cellWidth = floor((calculatedWidth * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
+        let margin = GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)
+        let calculatedWidth = collectionView.bounds.width - collectionView.safeAreaInsets.left - collectionView.safeAreaInsets.right - margin
+        let cellWidth = floor(calculatedWidth / CGFloat(numberOfColumns))
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .inactiveTabs:
             return calculateInactiveTabSizeHelper(collectionView)
