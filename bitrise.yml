@@ -133,8 +133,8 @@ workflows:
             set -ex 
 
             ls -la
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/XCUITests
+            cp ./Users/vagrant/git/Tests/XCUITests/* .
             mv ./Users/vagrant/git/* .
             echo "-- test-without-building --"
 
@@ -171,8 +171,8 @@ workflows:
             set -ex 
 
             ls -la
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/XCUITests
+            cp ./Users/vagrant/git/Tests/XCUITests/* .
             mv ./Users/vagrant/git/* .
 
             echo "-- test-without-building --"
@@ -207,8 +207,8 @@ workflows:
         - content: |
             #!/usr/bin/env bash
             set -ex 
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/XCUITests
+            cp ./Users/vagrant/git/Tests/XCUITests/* .
             mv ./Users/vagrant/git/* .
             ls -la
 
@@ -245,8 +245,8 @@ workflows:
             #!/usr/bin/env bash
             set -ex 
 
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/XCUITests
+            cp ./Users/vagrant/git/Tests/XCUITests/* .
             mv ./Users/vagrant/git/* .
             ls -la
 
@@ -284,8 +284,8 @@ workflows:
             set -ex 
 
             ls -la
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/XCUITests
+            cp ./Users/vagrant/git/Tests/XCUITests/* .
             mv ./Users/vagrant/git/* .
             ls -la
 
