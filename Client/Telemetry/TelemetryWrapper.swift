@@ -21,12 +21,20 @@ class TelemetryWrapper {
     private var profile: Profile?
 
     private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
-        guard let oldPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(pathComponent).path, FileManager.default.fileExists(atPath: oldPath) else {
-            return
-        }
+        guard let oldPath = try? FileManager.default.url(
+            for: .documentDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: false).appendingPathComponent(pathComponent).path,
+              FileManager.default.fileExists(atPath: oldPath) else { return }
 
         print("Migrating \(pathComponent) from ~/Documents to \(destinationSearchPath)")
-        guard let newPath = try? FileManager.default.url(for: destinationSearchPath, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(pathComponent).path else {
+        guard let newPath = try? FileManager.default.url(
+            for: destinationSearchPath,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: true).appendingPathComponent(pathComponent).path
+        else {
             print("Unable to get destination path \(destinationSearchPath) to move \(pathComponent)")
             return
         }
@@ -251,6 +259,14 @@ class TelemetryWrapper {
         GleanMetrics.InstalledMozillaProducts.klar.set(UIApplication.shared.canOpenURL(URL(string: "firefox-klar://")!))
         // Device Authentication
         GleanMetrics.Device.authentication.set(AppAuthenticator.canAuthenticateDeviceOwner())
+
+        // Wallpapers
+        let currentWallpaper = WallpaperManager().currentWallpaper
+
+        if case .themed = currentWallpaper.type {
+            GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.name].add()
+        }
+
     }
 
     @objc func uploadError(notification: NSNotification) {
@@ -601,8 +617,16 @@ extension TelemetryWrapper {
 
         // MARK: Preferences
         case (.action, .change, .setting, _, let extras):
-            if let preference = extras?[EventExtraKey.preference.rawValue] as? String, let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? String {
-                GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to, preference: preference))
+            if let preference = extras?[EventExtraKey.preference.rawValue] as? String,
+                let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? String {
+                GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to,
+                                                                                              preference: preference))
+
+            } else if let preference = extras?[EventExtraKey.preference.rawValue] as? String,
+                        let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? Bool {
+                GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to.description,
+                                                                                              preference: preference))
+
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }

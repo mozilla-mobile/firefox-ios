@@ -8,14 +8,14 @@ import GCDWebServers
 import Shared
 import Storage
 
-fileprivate let MozDomain = "mozilla"
-fileprivate let MozErrorDownloadsNotEnabled = 100
-fileprivate let MessageOpenInSafari = "openInSafari"
-fileprivate let MessageCertVisitOnce = "certVisitOnce"
+private let MozDomain = "mozilla"
+private let MozErrorDownloadsNotEnabled = 100
+private let MessageOpenInSafari = "openInSafari"
+private let MessageCertVisitOnce = "certVisitOnce"
 
 // Regardless of cause, NSURLErrorServerCertificateUntrusted is currently returned in all cases.
 // Check the other cases in case this gets fixed in the future.
-fileprivate let CertErrors = [
+private let CertErrors = [
     NSURLErrorServerCertificateUntrusted,
     NSURLErrorServerCertificateHasBadDate,
     NSURLErrorServerCertificateHasUnknownRoot,
@@ -24,13 +24,13 @@ fileprivate let CertErrors = [
 
 // Error codes copied from Gecko. The ints corresponding to these codes were determined
 // by inspecting the NSError in each of these cases.
-fileprivate let CertErrorCodes = [
+private let CertErrorCodes = [
     -9813: "SEC_ERROR_UNKNOWN_ISSUER",
     -9814: "SEC_ERROR_EXPIRED_CERTIFICATE",
     -9843: "SSL_ERROR_BAD_CERT_DOMAIN",
 ]
 
-fileprivate func certFromErrorURL(_ url: URL) -> SecCertificate? {
+private func certFromErrorURL(_ url: URL) -> SecCertificate? {
     func getCert(_ url: URL) -> SecCertificate? {
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         if let encodedCert = components?.queryItems?.filter({ $0.name == "badcert" }).first?.value,
@@ -54,7 +54,7 @@ fileprivate func certFromErrorURL(_ url: URL) -> SecCertificate? {
     return nil
 }
 
-fileprivate func cfErrorToName(_ err: CFNetworkErrors) -> String {
+private func cfErrorToName(_ err: CFNetworkErrors) -> String {
     switch err {
     case .cfHostErrorHostNotFound: return "CFHostErrorHostNotFound"
     case .cfHostErrorUnknown: return "CFHostErrorUnknown"
@@ -270,7 +270,10 @@ class ErrorPageHelper {
                 // A session restore page is already on the history stack, so don't load another page on the history stack.
                 webView.replaceLocation(with: page)
             } else {
-                // A new page needs to be added to the history stack (i.e. the simple case of trying to navigate to an url for the first time and it fails, without pushing a page on the history stack, the webview will just show the current page).
+                // A new page needs to be added to the history stack (i.e. the simple case
+                // of trying to navigate to an url for the first time and it fails, withou
+                // pushing a page on the history stack, the webview will just show the
+                // current page).
                 webView.load(PrivilegedRequest(url: urlWithQuery) as URLRequest)
             }
         }

@@ -54,8 +54,16 @@ class TabsPayloadTests: XCTestCase {
 
     func testTabWithCorrectTabLastUsed() {
         let payloads = [
-            "{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": null, \"lastUsed\": 1492649651}]}",
-            "{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": null, \"lastUsed\": \"1492316843992\"}]}"
+"""
+{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": \
+[{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \
+\"icon\": null, \"lastUsed\": 1492649651}]}
+""",
+"""
+{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"\
+title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": \
+null, \"lastUsed\": \"1492316843992\"}]}
+"""
         ]
 
         for payload in payloads {

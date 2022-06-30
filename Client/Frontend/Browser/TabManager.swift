@@ -116,6 +116,9 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         return TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }()
 
+    var didChangedPanelSelection: Bool = true
+    var didAddNewTab: Bool = true
+
     var selectedIndex: Int { return _selectedIndex }
 
     // Enables undo of recently closed tabs
@@ -897,11 +900,12 @@ extension TabManager {
         guard !startAtHomeManager.shouldSkipStartHome else { return }
 
         if startAtHomeManager.shouldStartAtHome() {
-            let scannableTabs = lastSessionWasPrivate ? privateTabs : normalTabs
+            let wasLastSessionPrivate = selectedTab?.isPrivate ?? lastSessionWasPrivate
+            let scannableTabs = wasLastSessionPrivate ? privateTabs : normalTabs
             let existingHomeTab = startAtHomeManager.scanForExistingHomeTab(in: scannableTabs,
                                                                             with: profile.prefs)
             let tabToSelect = createStartAtHomeTab(withExistingTab: existingHomeTab,
-                                                   inPrivateMode: lastSessionWasPrivate,
+                                                   inPrivateMode: wasLastSessionPrivate,
                                                    and: profile.prefs)
             selectTab(tabToSelect)
         }

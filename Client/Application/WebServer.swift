@@ -6,7 +6,12 @@ import Foundation
 import GCDWebServers
 import Shared
 
-class WebServer {
+protocol WebServerProtocol {
+    var server: GCDWebServer { get }
+    @discardableResult func start() throws -> Bool
+}
+
+class WebServer: WebServerProtocol {
     private let log = Logger.browserLogger
 
     static let WebServerSharedInstance = WebServer()

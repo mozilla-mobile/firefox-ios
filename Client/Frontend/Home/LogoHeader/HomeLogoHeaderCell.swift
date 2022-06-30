@@ -6,14 +6,14 @@ import Foundation
 import Shared
 import UIKit
 
-fileprivate struct LogoViewUX {
-    static let imageHeight: CGFloat = 40
-    static let imageWidth: CGFloat = 214.74
-}
-
 class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
+    private struct UX {
+        static let imageHeight: CGFloat = 40
+        static let imageWidth: CGFloat = 214.74
+    }
+
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
-    
+
     // MARK: - UI Elements
     lazy var logoButton: ActionButton = .build { button in
         button.setTitle("", for: .normal)
@@ -21,11 +21,11 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         button.accessibilityIdentifier = a11y.logoButton
         button.accessibilityLabel = .Settings.Homepage.Wallpaper.AccessibilityLabels.FxHomepageWallpaperButton
     }
-    
+
     // MARK: - Variables
     var notificationCenter: NotificationCenter = NotificationCenter.default
     private var userDefaults: UserDefaults = UserDefaults.standard
-    
+
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,29 +34,29 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         setupNotifications(forObserver: self,
                            observing: [.DisplayThemeChanged])
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
         notificationCenter.removeObserver(self)
     }
-    
+
     // MARK: - UI Setup
     func setupView() {
         contentView.backgroundColor = .clear
         contentView.addSubview(logoButton)
-        
+
         NSLayoutConstraint.activate([
             logoButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 32),
-            logoButton.widthAnchor.constraint(equalToConstant: LogoViewUX.imageWidth),
-            logoButton.heightAnchor.constraint(equalToConstant: LogoViewUX.imageHeight),
+            logoButton.widthAnchor.constraint(equalToConstant: UX.imageWidth),
+            logoButton.heightAnchor.constraint(equalToConstant: UX.imageHeight),
             logoButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             logoButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
     }
-    
+
     func configure(onTapAction: ((UIButton) -> Void)?) {
         logoButton.touchUpAction = onTapAction
     }

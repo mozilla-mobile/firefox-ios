@@ -49,11 +49,11 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     // Smoketest
-    func testDefaultSites() {
-        sleep(15)
-        waitForExistence(TopSiteCellgroup, timeout: 60)
+    func testDefaultSites() throws {
+        XCTExpectFailure("The app was not launched", strict: false) {
+            waitForExistence(TopSiteCellgroup, timeout: 60)
+        }
         XCTAssertTrue(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].exists)
-
         // There should be 5 top sites by default
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         // Check their names so that test is added to Smoketest
@@ -152,9 +152,10 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     // Smoketest
-    func testTopSitesOpenInNewPrivateTab() {
-        sleep(3)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 35)
+    func testTopSitesOpenInNewPrivateTab() throws {
+        XCTExpectFailure("The app was not launched", strict: false) {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 35)
+        }
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         // Long tap on apple top site, second cell
@@ -166,15 +167,11 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(TabTray)
-        waitForExistence(app.cells.staticTexts.element(boundBy: 0))
-        if !app.collectionViews["Apple"].exists {
-            app.cells.staticTexts.element(boundBy: 0).tap()
-            waitForValueContains(app.textFields["url"], value: "apple")
-            app.buttons["Show Tabs"].tap()
-        }
+        waitForExistence(app.cells.staticTexts.element(boundBy: 0), timeout: 10)
+
         navigator.nowAt(TabTray)
         waitForExistence(app.collectionViews.cells.staticTexts["Apple"], timeout: 5)
-        app.cells.staticTexts["Apple"].firstMatch.tap()
+        app.collectionViews.element(boundBy: 1).cells.staticTexts["Apple"].tap()
 
         // The website is open
         XCTAssertFalse(TopSiteCellgroup.exists)
@@ -184,8 +181,9 @@ class ActivityStreamTest: BaseTestCase {
 
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
-        sleep(3)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 35)
+        XCTExpectFailure("The app was not launched", strict: false) {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 35)
+        }
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
@@ -204,7 +202,7 @@ class ActivityStreamTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
-        var numTabsOpen = app.collectionViews.element(boundBy: 0).cells.count
+        var numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
         if iPad() {
             navigator.goto(TabTray)
             numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count

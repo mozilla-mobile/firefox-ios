@@ -53,7 +53,11 @@ public class RustShared {
 
             log.debug("Finished moving Rust database (\(baseFilename)) successfully.")
         } catch let error as NSError {
-            SentryIntegration.shared.sendWithStacktrace(message: "Unable to move Rust database to backup location", tag: SentryTag.rustLogins, severity: .error, description: "Attempted to move to '\(bakBaseFilename)'. \(error.localizedDescription)")
+            SentryIntegration.shared.sendWithStacktrace(
+                message: "Unable to move Rust database to backup location",
+                tag: SentryTag.rustLogins,
+                severity: .error,
+                description: "Attempted to move to '\(bakBaseFilename)'. \(error.localizedDescription)")
         }
     }
 }

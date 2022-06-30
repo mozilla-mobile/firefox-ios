@@ -70,6 +70,10 @@ public func == (lhs: RemoteClient, rhs: RemoteClient) -> Bool {
 
 extension RemoteClient: CustomStringConvertible {
     public var description: String {
-        return "<RemoteClient GUID: \(guid ?? "nil"), name: \(name), modified: \(modified), type: \(type ?? "nil"), formfactor: \(formfactor ?? "nil"), OS: \(os ?? "nil"), version: \(version ?? "nil"), fxaDeviceId: \(fxaDeviceId ?? "nil")>"
+        return """
+<RemoteClient GUID: \(guid ?? "nil"), name: \(name), modified: \(modified), \
+type: \(type ?? "nil"), formfactor: \(formfactor ?? "nil"), OS: \(os ?? "nil"), \
+version: \(version ?? "nil"), fxaDeviceId: \(fxaDeviceId ?? "nil")>
+"""
     }
 }

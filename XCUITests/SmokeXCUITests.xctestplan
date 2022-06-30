@@ -9,7 +9,8 @@
     }
   ],
   "defaultOptions" : {
-    "codeCoverage" : false
+    "codeCoverage" : false,
+    "testRepetitionMode" : "retryOnFailure"
   },
   "testTargets" : [
     {

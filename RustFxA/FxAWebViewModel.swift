@@ -16,7 +16,7 @@ enum FxAPageType {
 
 // See https://mozilla.github.io/ecosystem-platform/docs/fxa-engineering/fxa-webchannel-protocol
 // For details on message types.
-fileprivate enum RemoteCommand: String {
+private enum RemoteCommand: String {
     // case canLinkAccount = "can_link_account"
     // case loaded = "fxaccounts:loaded"
     case status = "fxaccounts:fxa_status"
@@ -185,7 +185,9 @@ extension FxAWebViewModel {
         webView.evaluateJavascriptInDefaultContentWorld(msg)
     }
 
-    /// Respond to the webpage session status notification by either passing signed in user info (for settings), or by passing CWTS setup info (in case the user is signing up for an account). This latter case is also used for the sign-in state.
+    /// Respond to the webpage session status notification by either passing signed in
+    /// user info (for settings), or by passing CWTS setup info (in case the user is
+    /// signing up for an account). This latter case is also used for the sign-in state.
     private func onSessionStatus(id: Int, webView: WKWebView) {
         guard let fxa = profile.rustFxA.accountManager.peek() else { return }
         let cmd = "fxaccounts:fxa_status"

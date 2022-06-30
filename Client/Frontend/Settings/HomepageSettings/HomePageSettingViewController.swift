@@ -26,6 +26,14 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
     }
 
+    var isPocketSectionEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.pocket, checking: .buildOnly)
+    }
+
+    var isPocketSponsoredStoriesEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .buildOnly)
+    }
+
     var isHistoryHighlightsSectionEnabled: Bool {
         return featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly)
     }
@@ -78,14 +86,26 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             self.tableView.reloadData()
         }
 
-        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: .SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isChecked: {return self.currentNewTabChoice == NewTabPage.topSites}, onChecked: {
-            self.currentNewTabChoice = NewTabPage.topSites
-            onFinished()
+        let showTopSites = CheckmarkSetting(
+            title: NSAttributedString(string: .SettingsNewTabTopSites),
+            subtitle: nil,
+            accessibilityIdentifier: "HomeAsFirefoxHome",
+            isChecked: { return self.currentNewTabChoice == NewTabPage.topSites },
+            onChecked: {
+                self.currentNewTabChoice = NewTabPage.topSites
+                onFinished()
         })
-        let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: .CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", isChecked: {return !showTopSites.isChecked()}, settingDidChange: { (string) in
-            self.currentNewTabChoice = NewTabPage.homePage
-            self.prefs.setString(self.currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
-            self.tableView.reloadData()
+        let showWebPage = WebPageSetting(
+            prefs: prefs,
+            prefKey: PrefsKeys.HomeButtonHomePageURL,
+            defaultValue: nil,
+            placeholder: .CustomNewPageURL,
+            accessibilityIdentifier: "HomeAsCustomURL",
+            isChecked: { return !showTopSites.isChecked() },
+            settingDidChange: { (string) in
+                self.currentNewTabChoice = NewTabPage.homePage
+                self.prefs.setString(self.currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+                self.tableView.reloadData()
         })
         showWebPage.textField.textAlignment = .natural
 
@@ -101,7 +121,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
         let pocketSponsoredSetting = BoolSetting(with: .sponsoredPocket,
                                         titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.SponsoredPocket))
-        pocketSponsoredSetting.enabled = featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser)
+        // This sets whether the cell is enabled or not, and not the setting itself.
+        pocketSponsoredSetting.enabled = featureFlags.isFeatureEnabled(
+            .pocket,
+            checking: .buildAndUser)
 
         let pocketSetting = BoolSetting(
             with: .pocket,
@@ -137,8 +160,14 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             sectionItems.append(historyHighlightsSetting)
         }
 
-        sectionItems.append(pocketSetting)
-        sectionItems.append(pocketSponsoredSetting)
+        if isPocketSectionEnabled {
+            sectionItems.append(pocketSetting)
+
+            // Only show the sponsored stories setting if the Pocket setting is showing
+            if isPocketSponsoredStoriesEnabled {
+                sectionItems.append(pocketSponsoredSetting)
+            }
+        }
 
         if isWallpaperSectionEnabled {
             sectionItems.append(wallpaperSetting)

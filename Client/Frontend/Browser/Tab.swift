@@ -8,8 +8,7 @@ import Storage
 import Shared
 import XCGLogger
 
-fileprivate var debugTabCount = 0
-fileprivate let log = Logger.browserLogger
+private var debugTabCount = 0
 
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
     var recent = tabs.first
@@ -373,7 +372,7 @@ class Tab: NSObject {
         self.nightMode = false
         self.noImageMode = false
         self.browserViewController = bvc
-        self.metadataManager = TabMetadataManager(profile: bvc.profile)
+        self.metadataManager = TabMetadataManager()
         super.init()
         self.isPrivate = isPrivate
         debugTabCount += 1
@@ -550,7 +549,9 @@ class Tab: NSObject {
     @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {
         if let webView = webView {
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
-            if let url = request.url, let syncedReaderModeURL = url.decodeReaderModeURL, let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
+            if let url = request.url,
+               let syncedReaderModeURL = url.decodeReaderModeURL,
+               let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
                 let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
                 lastRequest = readerModeRequest
                 return webView.load(readerModeRequest)
@@ -764,7 +765,7 @@ class Tab: NSObject {
             return .none
         }
         for provider in SearchEngine.allCases {
-            if (url.absoluteString.contains(provider.rawValue)) {
+            if url.absoluteString.contains(provider.rawValue) {
                 return provider
             }
         }
@@ -786,7 +787,7 @@ class Tab: NSObject {
     }
 }
 
-extension Tab: UIGestureRecognizerDelegate {
+extension Tab: UIGestureRecognizerDelegate, Loggable {
     // This prevents the recognition of one gesture recognizer from blocking another
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
@@ -794,7 +795,7 @@ extension Tab: UIGestureRecognizerDelegate {
 
     func configureEdgeSwipeGestureRecognizers() {
         guard let webView = webView else {
-            log.info("Tab's edge swipe gesture recognizer was never added. This will affect Tab navigation telemetry!")
+            browserLog.info("Tab's edge swipe gesture recognizer was never added. This will affect Tab navigation telemetry!")
             return
         }
 

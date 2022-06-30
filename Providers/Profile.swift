@@ -216,7 +216,7 @@ extension Profile {
     }
 }
 
-fileprivate let PrefKeyClientID = "PrefKeyClientID"
+private let PrefKeyClientID = "PrefKeyClientID"
 extension Profile {
     var clientID: String {
         let clientID: String
@@ -371,6 +371,7 @@ open class BrowserProfile: Profile {
         db.reopenIfClosed()
         _ = logins.reopenIfClosed()
         _ = places.reopenIfClosed()
+        _ = tabs.reopenIfClosed()
     }
 
     func _shutdown() {
@@ -380,6 +381,7 @@ open class BrowserProfile: Profile {
         db.forceClose()
         _ = logins.forceClose()
         _ = places.forceClose()
+        _ = tabs.forceClose()
     }
 
     @objc
@@ -464,6 +466,10 @@ open class BrowserProfile: Profile {
 
     lazy var places = RustPlaces(databasePath: placesDbPath)
 
+    lazy var tabsDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("tabs.db").path
+
+    lazy var tabs = RustRemoteTabs(databasePath: tabsDbPath)
+
     lazy var searchEngines: SearchEngines = {
         return SearchEngines(prefs: self.prefs, files: self.files)
     }()
@@ -505,13 +511,52 @@ open class BrowserProfile: Profile {
         return self.remoteClientsAndTabs.getClients()
     }
 
+    func getTabsWithNativeClients() -> Deferred<Maybe<[ClientAndTabs]>> {
+        // Because we are now using the application services tabs component with
+        // the iOS clients component (which has additional client data), we need
+        // to ensure that the clients we get from the tabs `getAll` call also
+        // exists in the clients BrowserDB table. This function will be obsolete
+        // once the sync manager component has been integrated into iOS and the
+        // iOS client synchronizer has been removed.
+
+        return self.tabs.getAll().bind { tabsResult in
+            if let tabsError = tabsResult.failureValue { return deferMaybe(tabsError) }
+
+            guard let clientRemoteTabs = tabsResult.successValue else { return
+                deferMaybe([])
+            }
+
+            return self.remoteClientsAndTabs.getClients().bind { result in
+                if let error = result.failureValue { return deferMaybe(error) }
+
+                guard let clients = result.successValue else { return deferMaybe([]) }
+
+                let clientAndTabs: [ClientAndTabs] = clientRemoteTabs.map { record in
+                    // We check if the application services clientId matches any client
+                    // GUID. If a client is found we return a record, otherwise we
+                    // continue to the next application services record.
+                    let localClient = clients.first(where: { $0.guid == record.clientId })
+
+                    if let client = localClient {
+                        return record.toClientAndTabs(client: client)
+                    }
+
+                    log.debug("Could not find client data for appservices client ID \(record.clientId).")
+                    return nil
+                }.compactMap { $0 }
+
+                return deferMaybe(clientAndTabs)
+            }
+        }
+    }
+
     public func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
         return self.syncManager.syncClientsThenTabs()
-           >>> { self.remoteClientsAndTabs.getClientsAndTabs() }
+        >>> { self.getTabsWithNativeClients() }
     }
 
     public func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
-        return self.remoteClientsAndTabs.getClientsAndTabs()
+        return self.getTabsWithNativeClients()
     }
 
     public func cleanupHistoryIfNeeded() {
@@ -537,7 +582,7 @@ open class BrowserProfile: Profile {
     }
 
     func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
-        return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
+        return self.tabs.setLocalTabs(localTabs: tabs)
     }
 
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
@@ -686,15 +731,7 @@ open class BrowserProfile: Profile {
             }
         }
 
-        /**
-         * Locking is managed by syncSeveral. Make sure you take and release these
-         * whenever you do anything Sync-ey.
-         */
-        fileprivate let syncLock = NSRecursiveLock()
-
         public var isSyncing: Bool {
-            syncLock.lock()
-            defer { syncLock.unlock() }
             return syncDisplayState != nil && syncDisplayState! == .inProgress
         }
 
@@ -715,8 +752,6 @@ open class BrowserProfile: Profile {
 
         fileprivate func endSyncing(_ result: SyncOperationResult) {
             // loop through statuses and fill sync state
-            syncLock.lock()
-            defer { syncLock.unlock() }
             log.info("Ending all queued syncs.")
 
             syncDisplayState = SyncStatusResolver(engineResults: result.engineResults).resolveResults()
@@ -797,8 +832,6 @@ open class BrowserProfile: Profile {
             }
 
             self.doInBackgroundAfter(300) {
-                self.syncLock.lock()
-                defer { self.syncLock.unlock() }
                 // If we're syncing already, then wait for sync to end,
                 // then reset the database on the same serial queue.
                 if let reducer = self.syncReducer, !reducer.isFilled {
@@ -846,14 +879,10 @@ open class BrowserProfile: Profile {
         }
 
         @objc func onStartSyncing(_ notification: NSNotification) {
-            syncLock.lock()
-            defer { syncLock.unlock() }
             syncDisplayState = .inProgress
         }
 
         @objc func onFinishSyncing(_ notification: NSNotification) {
-            syncLock.lock()
-            defer { syncLock.unlock() }
             if let syncState = syncDisplayState, syncState == .good {
                 self.lastSyncFinishTime = Date.now()
             }
@@ -882,9 +911,10 @@ open class BrowserProfile: Profile {
             case "clients":
                 fallthrough
             case "tabs":
-                // Because clients and tabs share storage, and thus we wipe data for both if we reset either,
-                // we reset the prefs for both at the same time.
-                return TabsSynchronizer.resetClientsAndTabsWithStorage(self.profile.remoteClientsAndTabs, basePrefs: self.prefsForSync)
+                // When tabs and clients were managed in the same database, we reset them together so we're
+                // continuting to do that here although it may no longer be necessary
+
+                return self.profile.tabs.resetSync() >>> { ClientsSynchronizer.resetClientsWithStorage(self.profile.remoteClientsAndTabs, basePrefs: self.prefsForSync) }
 
             case "history":
                 return HistorySynchronizer.resetSynchronizerWithStorage(self.profile.history, basePrefs: self.prefsForSync, collection: "history")
@@ -994,12 +1024,6 @@ open class BrowserProfile: Profile {
             }
         }
 
-        fileprivate func syncTabsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
-            let storage = self.profile.remoteClientsAndTabs
-            let tabSynchronizer = ready.synchronizer(TabsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
-            return tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
-        }
-
         fileprivate func syncHistoryWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Syncing history to storage.")
             let historySynchronizer = ready.synchronizer(HistorySynchronizer.self, delegate: delegate, prefs: prefs, why: why)
@@ -1018,32 +1042,48 @@ open class BrowserProfile: Profile {
             public var description = "Failed to get stored key."
         }
 
+        public class DeviceIdError: MaybeErrorType {
+            public var description = "Failed to get deviceId."
+        }
+
         fileprivate func syncUnlockInfo() -> Deferred<Maybe<SyncUnlockInfo>> {
-            let d = Deferred<Maybe<SyncUnlockInfo>>()
+            let syncUnlockInfo = Deferred<Maybe<SyncUnlockInfo>>()
             profile.rustFxA.accountManager.uponQueue(.main) { accountManager in
+                guard let deviceId = accountManager.deviceConstellation()?.state()?.localDevice?.id else {
+                    SentryIntegration.shared.sendWithStacktrace(message: "Device Id could not be retrieved", tag: SentryTag.rustRemoteTabs, severity: .warning)
+                    syncUnlockInfo.fill(Maybe(failure: DeviceIdError()))
+                    return
+                }
+
                 accountManager.getAccessToken(scope: OAuthScope.oldSync) { result in
                     guard let accessTokenInfo = try? result.get(), let key = accessTokenInfo.key else {
-                        d.fill(Maybe(failure: ScopedKeyError()))
+                        syncUnlockInfo.fill(Maybe(failure: ScopedKeyError()))
                         return
                     }
 
                     accountManager.getTokenServerEndpointURL { result in
                         guard case .success(let tokenServerEndpointURL) = result else {
-                            d.fill(Maybe(failure: SyncUnlockGetURLError()))
+                            syncUnlockInfo.fill(Maybe(failure: SyncUnlockGetURLError()))
                             return
                         }
 
                         guard let encryptionKey = try? self.profile.logins.getStoredKey() else {
                             SentryIntegration.shared.sendWithStacktrace(message: "Stored logins encryption could not be retrieved", tag: SentryTag.rustLogins, severity: .warning)
-                            d.fill(Maybe(failure: EncryptionKeyError()))
+                            syncUnlockInfo.fill(Maybe(failure: EncryptionKeyError()))
                             return
                         }
 
-                        d.fill(Maybe(success: SyncUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: tokenServerEndpointURL.absoluteString, loginEncryptionKey: encryptionKey)))
+                        syncUnlockInfo.fill( Maybe(success: SyncUnlockInfo(
+                            kid: key.kid,
+                            fxaAccessToken: accessTokenInfo.token,
+                            syncKey: key.k,
+                            tokenserverURL: tokenServerEndpointURL.absoluteString,
+                            loginEncryptionKey: encryptionKey,
+                            tabsLocalId: deviceId)))
                     }
                 }
             }
-            return d
+            return syncUnlockInfo
         }
 
         fileprivate func syncLoginsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
@@ -1080,6 +1120,24 @@ open class BrowserProfile: Profile {
                     }
 
                     let syncEngineStatsSession = SyncEngineStatsSession(collection: "bookmarks")
+                    return deferMaybe(SyncStatus.completed(syncEngineStatsSession))
+                })
+            })
+        }
+
+        fileprivate func syncTabsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
+            log.debug("Syncing tabs to storage.")
+            return syncUnlockInfo().bind({ result in
+                guard let syncUnlockInfo = result.successValue else {
+                    return deferMaybe(SyncStatus.notStarted(.unknown))
+                }
+
+                return self.profile.tabs.sync(unlockInfo: syncUnlockInfo).bind({ result in
+                    guard result.isSuccess else {
+                        return deferMaybe(SyncStatus.notStarted(.unknown))
+                    }
+
+                    let syncEngineStatsSession = SyncEngineStatsSession(collection: "tabs")
                     return deferMaybe(SyncStatus.completed(syncEngineStatsSession))
                 })
             })
@@ -1140,8 +1198,6 @@ open class BrowserProfile: Profile {
          * While a sync is ongoing, each engine from successive calls to this method will only be called once.
          */
         fileprivate func syncSeveral(why: SyncReason, synchronizers: [(EngineIdentifier, SyncFunction)]) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
-            syncLock.lock()
-            defer { syncLock.unlock() }
 
             guard let (profile, deviceID) = self.getProfileAndDeviceId() else {
                 return deferMaybe(NoAccountError())
@@ -1339,14 +1395,8 @@ open class BrowserProfile: Profile {
         }
 
         public func syncClientsThenTabs() -> SyncResult {
-            return self.syncSeveral(
-                why: .user,
-                synchronizers:
-                ("clients", self.syncClientsWithDelegate),
-                ("tabs", self.syncTabsWithDelegate)) >>== { statuses in
-                let status = statuses.find { "tabs" == $0.0 }
-                return deferMaybe(status!.1)
-            }
+            return self.sync("clients", function: self.syncClientsWithDelegate)
+            >>> { self.sync("tabs", function: self.syncTabsWithDelegate) }
         }
 
         @discardableResult public func syncBookmarks() -> SyncResult {

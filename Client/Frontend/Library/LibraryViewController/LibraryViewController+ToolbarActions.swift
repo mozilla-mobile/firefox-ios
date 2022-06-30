@@ -79,7 +79,7 @@ extension LibraryViewController {
 
     func rightButtonHistoryActions(for state: LibraryPanelSubState) {
         guard let panel = children.first as? UINavigationController,
-              let historyPanel = panel.viewControllers.last as? HistoryPanelWithGroups else { return }
+              let historyPanel = panel.viewControllers.last as? HistoryPanel else { return }
 
         historyPanel.exitSearchState()
         viewModel.currentPanelState = .history(state: .mainView)
@@ -87,7 +87,7 @@ extension LibraryViewController {
 
     @objc func bottomSearchButtonAction() {
         guard let panel = children.first as? UINavigationController,
-              let historyPanel = panel.viewControllers.last as? HistoryPanelWithGroups else { return }
+              let historyPanel = panel.viewControllers.last as? HistoryPanel else { return }
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .searchHistory)
 
