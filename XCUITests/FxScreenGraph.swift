@@ -863,7 +863,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.press(reloadButton, to: ReloadLongPressMenu)
         screenState.tap(reloadButton, forAction: Action.ReloadURL, transitionTo: WebPageLoading) { _ in }
         } else {
-            let reloadButton = app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton]
+            let reloadButton = app.buttons["Reload"]
         screenState.press(reloadButton, to: ReloadLongPressMenu)
         screenState.tap(reloadButton, forAction: Action.ReloadURL, transitionTo: WebPageLoading) { _ in }
         }
