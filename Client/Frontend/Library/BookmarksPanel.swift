@@ -595,6 +595,12 @@ extension BookmarksPanel {
         }
     }
 
+    func shouldDismissOnDone() -> Bool {
+        guard state != .bookmarks(state: .itemEditMode) else { return false }
+
+        return true
+    }
+
     func bottomToolbarItems() -> [UIBarButtonItem] {
         switch state {
         case .history, .downloads, .readingList:

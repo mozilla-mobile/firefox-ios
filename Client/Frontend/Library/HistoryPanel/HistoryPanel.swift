@@ -27,13 +27,11 @@ private class FetchInProgressError: MaybeErrorType {
 @objcMembers
 class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemeable {
     func bottomToolbarItems() -> [UIBarButtonItem] {
-        print("YRD history bottomToolbarItems")
-        switch state {
-        case .bookmarks, .downloads, .readingList:
-            return  [UIBarButtonItem]()
-        case .history:
-            return toolbarButtonItems
+        guard case .history = state else {
+            return [UIBarButtonItem]()
         }
+
+        return toolbarButtonItems
     }
 
     func shouldDismissOnDone() -> Bool {

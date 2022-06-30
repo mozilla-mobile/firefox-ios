@@ -85,10 +85,12 @@ class LibraryPanelDescriptor {
         self.panelType = panelType
     }
 
-    func setup() {
+    // Create navigation controller if it doesn't exist
+    func setupNavigationController() {
         guard let viewController = viewController else { return }
 
-        navigationController = ThemedNavigationController(rootViewController: viewController)
+        // Don't create a new NavigationController every time
+        navigationController = navigationController ?? ThemedNavigationController(rootViewController: viewController)
     }
 }
 
