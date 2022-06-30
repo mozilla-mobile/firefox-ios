@@ -1138,7 +1138,7 @@ firefox_home_page:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/8709
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11171
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-29"
