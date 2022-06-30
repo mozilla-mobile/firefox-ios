@@ -197,9 +197,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         return SingleActionViewModel(title: .BookmarksNewBookmark,
                                      iconString: ImageIdentifiers.actionAddBookmark,
                                      tapHandler: { _ in
-            guard let bookmarkFolder = self.bookmarkFolder else {
-                return
-            }
+            guard let bookmarkFolder = self.bookmarkFolder else { return }
 
             let detailController = BookmarkDetailPanel(profile: self.profile,
                                                        withNewBookmarkNodeType: .bookmark,
@@ -212,9 +210,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         return SingleActionViewModel(title: .BookmarksNewFolder,
                                      iconString: ImageIdentifiers.bookmarkFolder,
                                      tapHandler: { _ in
-            guard let bookmarkFolder = self.bookmarkFolder else {
-                return
-            }
+            guard let bookmarkFolder = self.bookmarkFolder else { return }
 
             let detailController = BookmarkDetailPanel(profile: self.profile,
                                                        withNewBookmarkNodeType: .folder,
@@ -233,9 +229,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
                                                 position: UInt32(centerVisibleRow)) >>== { guid in
                 self.profile.places.getBookmark(guid: guid).uponQueue(.main) { result in
                     guard let bookmarkNode = result.successValue,
-                          let bookmarkSeparator = bookmarkNode as? BookmarkSeparatorData else {
-                              return
-                          }
+                          let bookmarkSeparator = bookmarkNode as? BookmarkSeparatorData 
+                    else { return }
 
                     let indexPath = IndexPath(row: centerVisibleRow, section: BookmarksSection.bookmarks.rawValue)
                     self.tableView.beginUpdates()

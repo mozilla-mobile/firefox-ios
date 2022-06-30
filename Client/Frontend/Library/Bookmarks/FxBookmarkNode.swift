@@ -8,11 +8,8 @@ import MozillaAppServices
 // For instance, this enables us to have the LocalDesktopFolder.
 protocol FxBookmarkNode {
     var type: BookmarkNodeType { get }
-
     var guid: String { get }
-
     var parentGUID: String? { get }
-
     var position: UInt32 { get }
 }
 
