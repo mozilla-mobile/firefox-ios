@@ -13,7 +13,6 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-
         navigator.goto(ReloadLongPressMenu)
         navigator.performAction(Action.ToggleRequestDesktopSite)
         waitUntilPageLoad()
