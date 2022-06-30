@@ -178,7 +178,6 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.cells.staticTexts.element(boundBy: 0), timeout: 10)
 
         navigator.nowAt(TabTray)
-        print(app.debugDescription)
         if iPad() {
             waitForExistence(app.collectionViews.element(boundBy: 1).cells.staticTexts["Apple"], timeout: 15)
             app/*@START_MENU_TOKEN@*/.otherElements["Tabs Tray"].collectionViews/*[[".otherElements[\"Tabs Tray\"].collectionViews",".collectionViews"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.cells["Apple"].tap()
