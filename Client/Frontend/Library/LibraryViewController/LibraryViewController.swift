@@ -120,10 +120,6 @@ class LibraryViewController: UIViewController {
             controllerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        if viewModel.selectedPanel == nil {
-            viewModel.selectedPanel = .bookmarks
-        }
-        setupPanel()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -145,7 +141,6 @@ class LibraryViewController: UIViewController {
 
     func updateViewWithState() {
         print("YRD updateViewWithState")
-        setupPanel()
         setupButtons()
     }
 
@@ -173,33 +168,40 @@ class LibraryViewController: UIViewController {
 
     @objc func panelChanged() {
         var eventValue: TelemetryWrapper.EventValue
+        var selectedPanel: LibraryPanelType
 
         switch librarySegmentControl.selectedSegmentIndex {
         case 0:
-            viewModel.selectedPanel = .bookmarks
+            selectedPanel = .bookmarks
             eventValue = .bookmarksPanel
         case 1:
-            viewModel.selectedPanel = .history
+            selectedPanel = .history
             eventValue = .historyPanel
         case 2:
-            viewModel.selectedPanel = .downloads
+            selectedPanel = .downloads
             eventValue = .downloadsPanel
         case 3:
-            viewModel.selectedPanel = .readingList
+            selectedPanel = .readingList
             eventValue = .readingListPanel
         default:
             return
         }
 
-        setupPanel()
+        setupOpenPanel(panelType: selectedPanel)
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: eventValue)
     }
 
     func setupOpenPanel(panelType: LibraryPanelType) {
+        // Prevent flicker, allocations, and disk access: avoid duplicate view controllers.
+        guard viewModel.selectedPanel != panelType else { return }
+
         viewModel.selectedPanel = panelType
+        hideCurrentPanel()
+        setupPanel()
     }
 
     private func setupPanel() {
+        print("YRD setupPanel")
         guard let index = viewModel.selectedPanel?.rawValue,
               index < viewModel.panelDescriptors.count else { return }
 
@@ -218,6 +220,7 @@ class LibraryViewController: UIViewController {
     }
 
     private func hideCurrentPanel() {
+        print("YRD hideCurrentPanel")
         if let panel = children.first {
             panel.willMove(toParent: nil)
             panel.beginAppearanceTransition(false, animated: false)
