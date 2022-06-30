@@ -63,7 +63,9 @@ class URLBarColor {
 
     // This text selection color is used in two ways:
     // 1) <UILabel>.background = textSelectionHighlight.withAlphaComponent(textSelectionHighlightAlpha)
-    // To simulate text highlighting when the URL bar is tapped once, this is a background color to create a simulated selected text effect. The color will have an alpha applied when assigning it to the background.
+    // To simulate text highlighting when the URL bar is tapped once, this is a background
+    // color to create a simulated selected text effect. The color will have an alpha
+    // applied when assigning it to the background.
     // 2) <UITextField>.tintColor = textSelectionHighlight.
     // When the text is in edit mode (tapping URL bar second time), this is assigned to the to set the selection (and cursor) color. The color is assigned directly to the tintColor.
     typealias TextSelectionHighlight = (labelMode: UIColor, textFieldMode: UIColor?)
@@ -129,6 +131,7 @@ class EnhancedTrackingProtectionMenuColor {
     var sectionColor: UIColor { return .white }
     var switchAndButtonTint: UIColor { return UIColor.Photon.Blue50 }
     var subtextColor: UIColor { return UIColor.Photon.Grey75A60}
+    var closeButtonColor: UIColor { return UIColor.Photon.LightGrey30 }
 }
 
 class TopTabsColor {

@@ -6,7 +6,6 @@ import UIKit
 import Shared
 import SnapKit
 import Storage
-import SDWebImage
 
 private let log = Logger.browserLogger
 
@@ -198,7 +197,14 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     let placeholderLabel = UILabel()
     var keyboardType: UIKeyboardType = .default
 
-    init(defaultValue: String? = nil, placeholder: String, height: CGFloat = 44, keyboardType: UIKeyboardType = .default, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
+    init(
+        defaultValue: String? = nil,
+        placeholder: String,
+        height: CGFloat = 44,
+        keyboardType: UIKeyboardType = .default,
+        settingIsValid isValueValid: ((String?) -> Bool)? = nil,
+        settingDidChange: ((String?) -> Void)? = nil
+    ) {
         self.defaultValue = defaultValue
         self.TextFieldHeight = height
         self.settingDidChange = settingDidChange

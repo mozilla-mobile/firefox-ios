@@ -676,6 +676,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         case .searchHighlights:
             let highlightItem = searchHighlights[indexPath.row]
             let urlString = highlightItem.siteUrl?.absoluteString ?? ""
+            let site = Site(url: urlString, title: highlightItem.displayTitle)
             cell = twoLineCell
             twoLineCell.descriptionLabel.isHidden = false
             twoLineCell.titleLabel.text = highlightItem.displayTitle
@@ -683,7 +684,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
             twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
             twoLineCell.leftImageView.contentMode = .center
-            twoLineCell.leftImageView.setImageAndBackground(forIcon: Favicon(url: urlString), website: highlightItem.siteUrl) { [weak twoLineCell] in
+            profile.favicons.getFaviconImage(forSite: site).uponQueue(.main) {
+                [weak twoLineCell] result in
+                // Check that we successfully retrieved an image (should always happen)
+                // and ensure that the cell we were fetching for is still on-screen.
+                guard let image = result.successValue else { return }
+                twoLineCell?.leftImageView.image = image
                 twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
             }
             twoLineCell.accessoryView = nil

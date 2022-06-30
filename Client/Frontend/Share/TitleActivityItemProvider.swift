@@ -6,13 +6,19 @@ import Foundation
 
 /// This Activity Item Provider subclass does two things that are non-standard behaviour:
 ///
-/// * We return NSNull if the calling activity is not supposed to see the title. For example the Copy action, which should only paste the URL. We also include Message and Mail to have parity with what Safari exposes.
-/// * We set the subject of the item to the title, this means it will correctly be used when sharing to for example Mail. Again parity with Safari.
+/// * We return NSNull if the calling activity is not supposed to see the title. For
+/// example the Copy action, which should only paste the URL. We also include Message
+/// and Mail to have parity with what Safari exposes.
+/// * We set the subject of the item to the title, this means it will correctly be used
+/// when sharing to for example Mail. Again parity with Safari.
 ///
 /// Note that not all applications use the Subject. For example OmniFocus ignores it, so we need to do both.
 
 class TitleActivityItemProvider: UIActivityItemProvider {
-    static let activityTypesToIgnore = [UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.message, UIActivity.ActivityType.mail]
+    static let activityTypesToIgnore = [
+        UIActivity.ActivityType.copyToPasteboard,
+        UIActivity.ActivityType.message,
+        UIActivity.ActivityType.mail]
 
     init(title: String) {
         super.init(placeholderItem: title)

@@ -4,8 +4,9 @@
 
 import Foundation
 import Shared
-import SDWebImage
 import XCGLogger
+import SDWebImage
+import Kingfisher
 
 private let log = Logger.browserLogger
 
@@ -13,8 +14,19 @@ class TestAppDelegate: AppDelegate, FeatureFlaggable {
 
     lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
 
-    override func getProfile(_ application: UIApplication) -> Profile {
-        if let profile = self.profile {
+    private var internalProfile: Profile?
+
+    override var profile: Profile {
+        get {
+            getProfile(UIApplication.shared)
+        }
+        set {
+            internalProfile = newValue
+        }
+    }
+
+    func getProfile(_ application: UIApplication) -> Profile {
+        if let profile = self.internalProfile {
             return profile
         }
 
@@ -149,9 +161,14 @@ class TestAppDelegate: AppDelegate, FeatureFlaggable {
     func resetApplication() {
         log.debug("Wiping everything for a clean start.")
 
-        // Clear image cache
+        // TODO: Remove clear cache for SDWebImage when we are ready to remove library
+        // Clear image cache - SDWebImage
         SDImageCache.shared.clearDisk()
         SDImageCache.shared.clearMemory()
+
+        // Clear image cache - Kingfisher
+        KingfisherManager.shared.cache.clearMemoryCache()
+        KingfisherManager.shared.cache.clearDiskCache()
 
         // Clear the cookie/url cache
         URLCache.shared.removeAllCachedResponses()

@@ -50,7 +50,12 @@ class SessionRestoreHandler: InternalSchemeResponse {
 
         // From here on, handle 'history=' query param
         let response = InternalSchemeHandler.response(forUrl: url.url)
-        guard let sessionRestorePath = Bundle.main.path(forResource: "SessionRestore", ofType: "html"), let html = try? String(contentsOfFile: sessionRestorePath).replacingOccurrences(of: "%INSERT_UUID_VALUE%", with: InternalURL.uuid), let data = html.data(using: .utf8) else {
+        guard let sessionRestorePath = Bundle.main.path(forResource: "SessionRestore", ofType: "html"),
+              let html = try? String(contentsOfFile: sessionRestorePath).replacingOccurrences(
+                of: "%INSERT_UUID_VALUE%",
+                with: InternalURL.uuid),
+              let data = html.data(using: .utf8)
+        else {
             assert(false)
             return nil
         }
