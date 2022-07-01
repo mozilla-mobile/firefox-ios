@@ -11,9 +11,7 @@ class TabManagerNavDelegateTests: XCTestCase {
     let navigation = WKNavigation()
 
     func test_webViewDidCommit_sendsCorrectMessage() {
-        let sut = TabManagerNavDelegate()
-        let delegate1 = WKNavigationDelegateSpy()
-        let delegate2 = WKNavigationDelegateSpy()
+        let (sut, delegate1, delegate2) = makeSUT()
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -24,9 +22,7 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewDidFail_sendsCorrectMessage() {
-        let sut = TabManagerNavDelegate()
-        let delegate1 = WKNavigationDelegateSpy()
-        let delegate2 = WKNavigationDelegateSpy()
+        let (sut, delegate1, delegate2) = makeSUT()
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -37,9 +33,7 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewDidFailProvisionalNavigation_sendsCorrectMessage() {
-        let sut = TabManagerNavDelegate()
-        let delegate1 = WKNavigationDelegateSpy()
-        let delegate2 = WKNavigationDelegateSpy()
+        let (sut, delegate1, delegate2) = makeSUT()
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -50,9 +44,7 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewDidFinish_sendsCorrectMessage() {
-        let sut = TabManagerNavDelegate()
-        let delegate1 = WKNavigationDelegateSpy()
-        let delegate2 = WKNavigationDelegateSpy()
+        let (sut, delegate1, delegate2) = makeSUT()
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -63,9 +55,7 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewWebContentProcessDidTerminate_sendsCorrectMessage() {
-        let sut = TabManagerNavDelegate()
-        let delegate1 = WKNavigationDelegateSpy()
-        let delegate2 = WKNavigationDelegateSpy()
+        let (sut, delegate1, delegate2) = makeSUT()
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -76,9 +66,7 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewDidReceiveServerRedirectForProvisionalNavigation_sendsCorrectMessage() {
-        let sut = TabManagerNavDelegate()
-        let delegate1 = WKNavigationDelegateSpy()
-        let delegate2 = WKNavigationDelegateSpy()
+        let (sut, delegate1, delegate2) = makeSUT()
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -89,9 +77,7 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewDidStartProvisionalNavigation_sendsCorrectMessage() {
-        let sut = TabManagerNavDelegate()
-        let delegate1 = WKNavigationDelegateSpy()
-        let delegate2 = WKNavigationDelegateSpy()
+        let (sut, delegate1, delegate2) = makeSUT()
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -102,9 +88,7 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewDecidePolicyFor_actionPolicy_sendsCorrectMessage() {
-        let sut = TabManagerNavDelegate()
-        let delegate1 = WKNavigationDelegateSpy()
-        let delegate2 = WKNavigationDelegateSpy()
+        let (sut, delegate1, delegate2) = makeSUT()
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -117,9 +101,7 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewDecidePolicyFor_responsePolicy_sendsCorrectMessage() {
-        let sut = TabManagerNavDelegate()
-        let delegate1 = WKNavigationDelegateSpy()
-        let delegate2 = WKNavigationDelegateSpy()
+        let (sut, delegate1, delegate2) = makeSUT()
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -133,6 +115,14 @@ class TabManagerNavDelegateTests: XCTestCase {
 }
 
 // MARK: - Helpers
+
+private func makeSUT() -> (sut: TabManagerNavDelegate, delegate1: WKNavigationDelegateSpy, delegate2: WKNavigationDelegateSpy) {
+    let sut = TabManagerNavDelegate()
+    let delegate1 = WKNavigationDelegateSpy()
+    let delegate2 = WKNavigationDelegateSpy()
+
+    return (sut, delegate1, delegate2)
+}
 
 private func anyWebView() -> WKWebView {
     return WKWebView(frame: CGRect(width: 100, height: 100))
