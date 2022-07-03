@@ -58,7 +58,10 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         return userPrefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap(BlockingStrength.init) ?? .basic
     }
 
-    init(tab: ContentBlockerTab, prefs: Prefs) {
+    init(
+        tab: ContentBlockerTab,
+        prefs: Prefs = AppContainer.shared.resolve(type: Profile.self).prefs
+    ) {
         userPrefs = prefs
         super.init(tab: tab)
         setupForTab()

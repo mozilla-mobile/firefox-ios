@@ -21,7 +21,7 @@ class RecentlySavedCellViewModel {
     var isZeroSearch: Bool
     private let profile: Profile
 
-    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
+    private lazy var siteImageHelper = SiteImageHelper()
     private var readingListItems = [ReadingListItem]()
     private var recentBookmarks = [BookmarkItemData]()
     private let recentItemsHelper = RecentItemsHelper()
@@ -29,7 +29,10 @@ class RecentlySavedCellViewModel {
 
     var headerButtonAction: ((UIButton) -> Void)?
 
-    init(isZeroSearch: Bool, profile: Profile) {
+    init(
+        isZeroSearch: Bool,
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self)
+    ) {
         self.isZeroSearch = isZeroSearch
         self.profile = profile
     }

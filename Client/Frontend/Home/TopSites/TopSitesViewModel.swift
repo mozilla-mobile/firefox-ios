@@ -40,10 +40,13 @@ class TopSitesViewModel {
     weak var delegate: TopSitesViewModelDelegate?
 
     lazy var tileManager: TopSitesManager = {
-        return TopSitesManager(profile: profile)
+        return TopSitesManager()
     }()
 
-    init(profile: Profile, isZeroSearch: Bool) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        isZeroSearch: Bool
+    ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         tileManager.delegate = self

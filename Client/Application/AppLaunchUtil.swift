@@ -13,11 +13,13 @@ class AppLaunchUtil {
     private var adjustHelper: AdjustHelper
     private var profile: Profile
 
-    init(log: RollingFileLogger = Logger.browserLogger,
-         profile: Profile) {
+    init(
+        log: RollingFileLogger = Logger.browserLogger,
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self)
+    ) {
         self.log = log
         self.profile = profile
-        self.adjustHelper = AdjustHelper(profile: profile)
+        self.adjustHelper = AdjustHelper()
     }
 
     func setUpPreLaunchDependencies() {
@@ -33,7 +35,7 @@ class AppLaunchUtil {
             Logger.browserLogger.deleteOldLogsDownToSizeLimit()
         }
 
-        _ = TelemetryWrapper(profile: profile)
+        _ = TelemetryWrapper()
 
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
         // before getting the Profile.
@@ -54,17 +56,15 @@ class AppLaunchUtil {
         // Initialize the feature flag subsytem.
         // Among other things, it toggles on and off Nimbus, Contile, Adjust.
         // i.e. this must be run before initializing those systems.
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
+        FeatureFlagsManager.shared.initializeDeveloperFeatures()
+        FeatureFlagUserPrefsMigrationUtility().attemptMigration()
 
         // Migrate wallpaper folder
-        WallpaperMigrationUtility(with: profile).attemptMigration()
+        WallpaperMigrationUtility().attemptMigration()
 
         // Start intialzing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
-
-        ThemeManager.shared.updateProfile(with: profile)
 
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {

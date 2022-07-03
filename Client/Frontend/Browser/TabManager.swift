@@ -169,13 +169,15 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     }
 
     // MARK: - Initializer
-    init(profile: Profile, imageStore: DiskImageStore?) {
-
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        imageStore: DiskImageStore?
+    ) {
         self.profile = profile
         self.navDelegate = TabManagerNavDelegate()
         self.tabEventHandlers = TabEventHandlers.create(with: profile.prefs)
 
-        self.store = TabManagerStore(imageStore: imageStore, prefs: profile.prefs)
+        self.store = TabManagerStore(imageStore: imageStore)
         super.init()
 
         register(self, forTabEvents: .didLoadFavicon, .didSetScreenshot)
@@ -820,14 +822,14 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 }
 
 extension TabManager {
-    fileprivate func saveTabs(toProfile profile: Profile, _ tabs: [Tab], writeCompletion: (() -> Void)? = nil) {
+    fileprivate func saveTabs(_ tabs: [Tab], writeCompletion: (() -> Void)? = nil) {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
         let storedTabs: [RemoteTab] = tabs.compactMap( Tab.toRemoteTab )
 
         // Don't insert into the DB immediately. We tend to contend with more important
         // work like querying for top sites.
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-            profile.storeTabs(storedTabs)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) { [weak self] in
+            self?.profile.storeTabs(storedTabs)
             writeCompletion?()
         }
     }
@@ -835,7 +837,7 @@ extension TabManager {
     func storeChanges(writeCompletion: (() -> Void)? = nil) {
         let group = DispatchGroup()
         group.enter()
-        saveTabs(toProfile: profile, normalTabs) {
+        saveTabs(normalTabs) {
             group.leave()
         }
 
@@ -904,8 +906,7 @@ extension TabManager {
         if startAtHomeManager.shouldStartAtHome() {
             let wasLastSessionPrivate = selectedTab?.isPrivate ?? lastSessionWasPrivate
             let scannableTabs = wasLastSessionPrivate ? privateTabs : normalTabs
-            let existingHomeTab = startAtHomeManager.scanForExistingHomeTab(in: scannableTabs,
-                                                                            with: profile.prefs)
+            let existingHomeTab = startAtHomeManager.scanForExistingHomeTab(in: scannableTabs)
             let tabToSelect = createStartAtHomeTab(withExistingTab: existingHomeTab,
                                                    inPrivateMode: wasLastSessionPrivate,
                                                    and: profile.prefs)

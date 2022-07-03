@@ -60,41 +60,49 @@ class HomepageViewModel: FeatureFlaggable {
     var customizeButtonViewModel: CustomizeHomepageSectionViewModel
 
     // MARK: - Initializers
-    init(profile: Profile,
-         isZeroSearch: Bool = false,
-         isPrivate: Bool,
-         nimbus: FxNimbus = FxNimbus.shared) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        isZeroSearch: Bool = false,
+        isPrivate: Bool,
+        nimbus: FxNimbus = FxNimbus.shared
+    ) {
         self.profile = profile
+
         self.isZeroSearch = isZeroSearch
 
-        self.headerViewModel = HomeLogoHeaderViewModel(profile: profile)
-        self.topSiteViewModel = TopSitesViewModel(
-            profile: profile,
-            isZeroSearch: isZeroSearch)
+        self.headerViewModel = HomeLogoHeaderViewModel()
+
+        self.topSiteViewModel = TopSitesViewModel(isZeroSearch: isZeroSearch)
+
         self.jumpBackInViewModel = JumpBackInViewModel(
             isZeroSearch: isZeroSearch,
-            profile: profile,
-            isPrivate: isPrivate)
-        self.recentlySavedViewModel = RecentlySavedCellViewModel(
-            isZeroSearch: isZeroSearch,
-            profile: profile)
-        self.historyHighlightsViewModel = HistoryHightlightsViewModel(
-            with: profile,
-            isPrivate: isPrivate)
-        self.pocketViewModel = PocketViewModel(
-            isZeroSearch: isZeroSearch)
+            isPrivate: isPrivate
+        )
+
+        self.recentlySavedViewModel = RecentlySavedCellViewModel(isZeroSearch: isZeroSearch)
+
+        self.historyHighlightsViewModel = HistoryHightlightsViewModel(isPrivate: isPrivate)
+
+        self.pocketViewModel = PocketViewModel(isZeroSearch: isZeroSearch)
+
         self.customizeButtonViewModel = CustomizeHomepageSectionViewModel()
-        self.childViewModels = [headerViewModel,
-                                topSiteViewModel,
-                                jumpBackInViewModel,
-                                recentlySavedViewModel,
-                                historyHighlightsViewModel,
-                                pocketViewModel,
-                                customizeButtonViewModel]
+
+        self.childViewModels = [
+            headerViewModel,
+            topSiteViewModel,
+            jumpBackInViewModel,
+            recentlySavedViewModel,
+            historyHighlightsViewModel,
+            pocketViewModel,
+            customizeButtonViewModel
+        ]
+
         self.isPrivate = isPrivate
 
         self.nimbus = nimbus
+
         topSiteViewModel.delegate = self
+
         historyHighlightsViewModel.delegate = self
 
         updateEnabledSections()

@@ -11,9 +11,9 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
     let prefs: Prefs
     var currentChoice: NewTabPage!
     var hasHomePage = false
-    init(prefs: Prefs) {
+    init(prefs: Prefs = AppContainer.shared.resolve(type: Profile.self).prefs) {
         self.prefs = prefs
-        super.init(style: .grouped)
+        super.init()
 
         self.title = .SettingsNewTabTitle
     }

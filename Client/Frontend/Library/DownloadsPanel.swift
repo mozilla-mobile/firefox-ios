@@ -47,7 +47,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     let TwoLineImageOverlayCellIdentifier = "TwoLineImageOverlayCellIdentifier"
     let SiteTableViewHeaderIdentifier = "SiteTableViewHeaderIdentifier"
-    let profile: Profile
+
     lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
         tableView.delegate = self
@@ -71,8 +71,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     private var fileExtensionIcons: [String: UIImage] = [:]
 
     // MARK: - Lifecycle
-    init(profile: Profile) {
-        self.profile = profile
+    init() {
         super.init(nibName: nil, bundle: nil)
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
     }

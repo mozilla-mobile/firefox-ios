@@ -22,7 +22,6 @@ class SearchSettingsTableViewController: ThemedTableViewController {
 
     fileprivate var showDeletion = false
 
-    var profile: Profile?
     var tabManager: TabManager?
 
     var updateSearchIcon: (() -> Void)?
@@ -157,7 +156,6 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             navigationController?.pushViewController(searchEnginePicker, animated: true)
         } else if indexPath.item + 1 == model.orderedEngines.count {
             let customSearchEngineForm = CustomSearchViewController()
-            customSearchEngineForm.profile = self.profile
             customSearchEngineForm.successCallback = {
                 guard let window = self.view.window else { return }
                 SimpleToast().showAlertWithText(.ThirdPartySearchEngineAdded, bottomContainer: window)

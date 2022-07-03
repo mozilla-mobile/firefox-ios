@@ -58,7 +58,7 @@ class GoogleTopSiteManager {
         }
     }
 
-    init(prefs: Prefs) {
+    init(prefs: Prefs = AppContainer.shared.resolve(type: Profile.self).prefs) {
         self.prefs = prefs
     }
 

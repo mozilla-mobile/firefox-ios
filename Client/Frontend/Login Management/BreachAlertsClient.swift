@@ -11,8 +11,8 @@ struct BreachAlertsError: MaybeErrorType {
 }
 /// For mocking and testing BreachAlertsClient.
 protocol BreachAlertsClientProtocol {
-    func fetchEtag(endpoint: BreachAlertsClient.Endpoint, profile: Profile, completion: @escaping (_ etag: String?) -> Void)
-    func fetchData(endpoint: BreachAlertsClient.Endpoint, profile: Profile, completion: @escaping (_ result: Maybe<Data>) -> Void)
+    func fetchEtag(endpoint: BreachAlertsClient.Endpoint, completion: @escaping (_ etag: String?) -> Void)
+    func fetchData(endpoint: BreachAlertsClient.Endpoint, completion: @escaping (_ result: Maybe<Data>) -> Void)
 }
 
 /// Handles all network requests for BreachAlertsManager.
@@ -24,8 +24,14 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
     static let etagKey = "BreachAlertsDataEtag"
     static let etagDateKey = "BreachAlertsDataDate"
 
+    private let profile: Profile
+
+    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
+        self.profile = profile
+    }
+
     /// Makes a header-only request to an endpoint and hands off the endpoint's etag to a completion handler.
-    func fetchEtag(endpoint: Endpoint, profile: Profile, completion: @escaping (_ etag: String?) -> Void) {
+    func fetchEtag(endpoint: Endpoint, completion: @escaping (_ etag: String?) -> Void) {
         guard let url = URL(string: endpoint.rawValue) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "HEAD"
@@ -51,11 +57,11 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
     }
 
     /// Makes a network request to an endpoint and hands off the result to a completion handler.
-    func fetchData(endpoint: Endpoint, profile: Profile, completion: @escaping (_ result: Maybe<Data>) -> Void) {
+    func fetchData(endpoint: Endpoint, completion: @escaping (_ result: Maybe<Data>) -> Void) {
         guard let url = URL(string: endpoint.rawValue) else { return }
 
         dataTask?.cancel()
-        dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
+        dataTask = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             guard let response = response as? HTTPURLResponse else { return }
             guard response.statusCode < 400 else {
                 SentryIntegration.shared.send(message: "BreachAlerts: fetchData: HTTP status code: \(response.statusCode)")
@@ -76,11 +82,11 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
             guard let etag = response.allHeaderFields["Etag"] as Any as? String else { return }
             let date = Date.now()
 
-            if profile.prefs.stringForKey(BreachAlertsClient.etagKey) != etag {
-                profile.prefs.setString(etag, forKey: BreachAlertsClient.etagKey)
+            if self?.profile.prefs.stringForKey(BreachAlertsClient.etagKey) != etag {
+                self?.profile.prefs.setString(etag, forKey: BreachAlertsClient.etagKey)
             }
-            if profile.prefs.timestampForKey(BreachAlertsClient.etagDateKey) != date {
-                profile.prefs.setTimestamp(date, forKey: BreachAlertsClient.etagDateKey)
+            if self?.profile.prefs.timestampForKey(BreachAlertsClient.etagDateKey) != date {
+                self?.profile.prefs.setTimestamp(date, forKey: BreachAlertsClient.etagDateKey)
             }
             DispatchQueue.main.async {
                 completion(Maybe(success: data))

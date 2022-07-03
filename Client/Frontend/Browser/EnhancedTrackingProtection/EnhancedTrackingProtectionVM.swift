@@ -51,7 +51,11 @@ class EnhancedTrackingProtectionMenuVM {
 
     // MARK: - Initializers
 
-    init(tab: Tab, profile: Profile, tabManager: TabManager) {
+    init(
+        tab: Tab,
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        tabManager: TabManager
+    ) {
         self.tab = tab
         self.profile = profile
         self.tabManager = tabManager

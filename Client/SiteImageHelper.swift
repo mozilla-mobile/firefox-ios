@@ -25,11 +25,7 @@ class SiteImageHelper {
     private let throttler = Throttler(seconds: 0.5, on: .main)
     private let faviconFetcher: Favicons
 
-    convenience init(profile: Profile) {
-        self.init(faviconFetcher: profile.favicons)
-    }
-
-    init(faviconFetcher: Favicons) {
+    init(faviconFetcher: Favicons = AppContainer.shared.resolve(type: Profile.self).favicons) {
         self.faviconFetcher = faviconFetcher
     }
 

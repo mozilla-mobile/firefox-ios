@@ -22,7 +22,10 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
 
     private var skipNextAutocomplete: Bool
 
-    init(profile: Profile, urlBar: URLBarView) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        urlBar: URLBarView
+    ) {
         self.profile = profile
         self.urlBar = urlBar
         self.frecentHistory = profile.history.getFrecentHistory()

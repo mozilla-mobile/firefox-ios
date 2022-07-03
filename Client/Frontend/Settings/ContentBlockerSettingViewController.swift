@@ -142,12 +142,12 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     let prefs: Prefs
     var currentBlockingStrength: BlockingStrength
 
-    init(prefs: Prefs) {
+    init(prefs: Prefs = AppContainer.shared.resolve(type: Profile.self).prefs) {
         self.prefs = prefs
 
         currentBlockingStrength = prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({BlockingStrength(rawValue: $0)}) ?? .basic
 
-        super.init(style: .grouped)
+        super.init()
 
         self.title = .SettingsTrackingProtectionSectionName
     }
@@ -200,15 +200,15 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         }
 
         let enabledSetting = BoolSetting(
-            prefs: profile.prefs,
             prefKey: ContentBlockingConfig.Prefs.EnabledKey,
             defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing,
-            attributedTitleText: NSAttributedString(string: .TrackingProtectionEnableTitle)) { [weak self] enabled in
-                TabContentBlocker.prefsChanged()
-                strengthSetting.forEach { item in
-                    item.enabled = enabled
-                }
-                self?.tableView.reloadData()
+            attributedTitleText: NSAttributedString(string: .TrackingProtectionEnableTitle)
+        ) { [weak self] enabled in
+            TabContentBlocker.prefsChanged()
+            strengthSetting.forEach { item in
+                item.enabled = enabled
+            }
+            self?.tableView.reloadData()
         }
 
         let firstSection = SettingSection(title: nil, footerTitle: NSAttributedString(string: .TrackingProtectionCellFooter), children: [enabledSetting])

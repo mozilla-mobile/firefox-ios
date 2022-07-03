@@ -47,26 +47,33 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     }
 
     // MARK: - Initializers
-    init(profile: Profile,
-         tabManager: TabManager,
-         isZeroSearch: Bool = false,
-         wallpaperManager: WallpaperManager = WallpaperManager()
+    init(
+        tabManager: TabManager,
+        isZeroSearch: Bool = false,
+        wallpaperManager: WallpaperManager = WallpaperManager()
     ) {
         self.isZeroSearch = isZeroSearch
-        self.tabManager = tabManager
-        self.wallpaperManager = wallpaperManager
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? true
-        self.viewModel = HomepageViewModel(profile: profile,
-                                           isZeroSearch: isZeroSearch,
-                                           isPrivate: isPrivate)
 
-        let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
-                                                          with: viewModel.profile)
+        self.tabManager = tabManager
+
+        self.wallpaperManager = wallpaperManager
+
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? true
+
+        self.viewModel = HomepageViewModel(
+            isZeroSearch: isZeroSearch,
+            isPrivate: isPrivate)
+
+        let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn)
+
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
+
         self.contextMenuHelper = HomepageContextMenuHelper(viewModel: viewModel)
+
         super.init(nibName: nil, bundle: nil)
 
         contextMenuHelper.delegate = self
+
         contextMenuHelper.getPopoverSourceRect = { [weak self] popoverView in
             guard let self = self else { return CGRect() }
             return self.getPopoverSourceRect(sourceView: popoverView)
@@ -509,7 +516,7 @@ private extension HomepageViewController {
         let groupSite = ASGroup<Site>(searchTerm: item.displayTitle, groupedItems: groupedSites, timestamp: Date.now())
 
         let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: groupSite, presenter: .recentlyVisited)
-        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: viewModel.profile)
+        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel)
 
         let dismissableController: DismissableNavigationViewController
         dismissableController = DismissableNavigationViewController(rootViewController: asGroupListVC)

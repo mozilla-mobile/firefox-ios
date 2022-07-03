@@ -21,10 +21,12 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
     var deeplinkTo: AppSettingsDeeplinkOption?
 
     // MARK: - Initializers
-    init(with profile: Profile,
-         and tabManager: TabManager,
-         delegate: SettingsDelegate?,
-         deeplinkingTo destination: AppSettingsDeeplinkOption? = nil) {
+    init(
+        with profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        and tabManager: TabManager,
+        delegate: SettingsDelegate?,
+        deeplinkingTo destination: AppSettingsDeeplinkOption? = nil
+    ) {
         self.deeplinkTo = destination
 
         super.init()
@@ -63,17 +65,17 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
 
         switch deeplink {
         case .contentBlocker:
-            viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
+            viewController = ContentBlockerSettingViewController()
             viewController.tabManager = tabManager
 
         case .customizeHomepage:
-            viewController = HomePageSettingViewController(prefs: profile.prefs)
+            viewController = HomePageSettingViewController()
 
         case .customizeTabs:
             viewController = TabsSettingsViewController()
 
         case .customizeToolbar:
-            let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
+            let viewModel = SearchBarSettingsViewModel()
             viewController = SearchBarSettingsViewController(viewModel: viewModel)
 
         case .wallpaper:
@@ -87,7 +89,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             viewController = TopSitesSettingsViewController()
         }
 
-        viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: false)
         // Add a done button from this view
         viewController.navigationItem.rightBarButtonItem = navigationItem.rightBarButtonItem
@@ -154,7 +155,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         settings += [
             SettingSection(title: accountSectionTitle, footerTitle: footerText, children: [
                 // Without a Firefox Account:
-                ConnectSetting(settings: self),
+                ConnectSetting(),
                 AdvancedAccountSetting(settings: self),
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),

@@ -551,6 +551,8 @@ extension TopSitesManagerTests {
                        line: UInt = #line) -> TopSitesManager {
 
         let topSitesManager = TopSitesManager(profile: profile)
+        let googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
+        topSitesManager.googleTopSiteManager = googleTopSiteManager
 
         let historyStub = TopSiteHistoryManagerStub(profile: profile)
         historyStub.siteCount = siteCount

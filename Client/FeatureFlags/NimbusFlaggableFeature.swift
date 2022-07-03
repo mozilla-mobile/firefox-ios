@@ -86,7 +86,10 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
     }
 
     // MARK: - Initializers
-    init(withID featureID: NimbusFeatureFlagID, and profile: Profile) {
+    init(
+        withID featureID: NimbusFeatureFlagID,
+        and profile: Profile = AppContainer.shared.resolve(type: Profile.self)
+    ) {
         self.featureID = featureID
         self.profile = profile
     }

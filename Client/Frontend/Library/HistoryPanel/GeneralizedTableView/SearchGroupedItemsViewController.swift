@@ -21,10 +21,9 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
         case main
     }
 
-    let profile: Profile
     let viewModel: SearchGroupedItemsViewModel
     var libraryPanelDelegate: LibraryPanelDelegate? // Set this at the creation site!
-    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
+    private let siteImageHelper = SiteImageHelper()
 
     lazy private var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
@@ -49,9 +48,8 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
 
     // MARK: - Inits
 
-    init(viewModel: SearchGroupedItemsViewModel, profile: Profile) {
+    init(viewModel: SearchGroupedItemsViewModel) {
         self.viewModel = viewModel
-        self.profile = profile
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -110,7 +108,10 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
             guard let self = self else { return nil }
 
             if let site = item as? Site {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
+                    for: indexPath
+                ) as? TwoLineImageOverlayCell else {
                     self.browserLog.error("GeneralizedHistoryItems - Could not dequeue a TwoLineImageOverlayCell!")
                     return nil
                 }
@@ -190,11 +191,13 @@ extension SearchGroupedItemsViewController: UITableViewDelegate {
 
         libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .typed)
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .selectedHistoryItem,
-                                     value: .historyPanelGroupedItem,
-                                     extras: nil)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .selectedHistoryItem,
+            value: .historyPanelGroupedItem,
+            extras: nil
+        )
 
         if viewModel.presenter == .recentlyVisited {
             dismiss(animated: true, completion: nil)

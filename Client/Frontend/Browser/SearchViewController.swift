@@ -97,7 +97,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         self.viewModel = viewModel
         self.tabManager = tabManager
         self.searchFeature = featureConfig
-        super.init(profile: profile)
+        super.init()
 
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0

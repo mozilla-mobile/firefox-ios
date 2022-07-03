@@ -31,7 +31,10 @@ class HistoryClearable: Clearable {
     let profile: Profile
     let tabManager: TabManager
 
-    init(profile: Profile, tabManager: TabManager) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        tabManager: TabManager
+    ) {
         self.profile = profile
         self.tabManager = tabManager
     }

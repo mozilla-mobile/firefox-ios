@@ -287,10 +287,9 @@ enum NavigationPath {
     }
 
     private static func handleSettings(settings: SettingsPage, with rootNav: UINavigationController, baseSettingsVC: AppSettingsTableViewController, and bvc: BrowserViewController) {
+        let profile = baseSettingsVC.profile
 
-        guard let profile = baseSettingsVC.profile,
-              let tabManager = baseSettingsVC.tabManager
-        else { return }
+        guard let tabManager = baseSettingsVC.tabManager else { return }
 
         let controller = ThemedNavigationController(rootViewController: baseSettingsVC)
         controller.presentingModalViewControllerDelegate = bvc
@@ -305,24 +304,22 @@ enum NavigationPath {
             viewController.profile = profile
             controller.pushViewController(viewController, animated: true)
         case .homepage:
-            let viewController = HomePageSettingViewController(prefs: baseSettingsVC.profile.prefs)
+            let viewController = HomePageSettingViewController()
             viewController.profile = profile
             controller.pushViewController(viewController, animated: true)
         case .mailto:
-            let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
+            let viewController = OpenWithSettingsViewController()
             controller.pushViewController(viewController, animated: true)
         case .search:
             let viewController = SearchSettingsTableViewController()
             viewController.model = profile.searchEngines
-            viewController.profile = profile
             controller.pushViewController(viewController, animated: true)
         case .clearPrivateData:
             let viewController = ClearPrivateDataTableViewController()
-            viewController.profile = profile
             viewController.tabManager = tabManager
             controller.pushViewController(viewController, animated: true)
         case .fxa:
-            let viewController = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(flowType: .emailLoginFlow, referringPage: .settings, profile: bvc.profile)
+            let viewController = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(flowType: .emailLoginFlow, referringPage: .settings)
             controller.pushViewController(viewController, animated: true)
         case .theme:
             controller.pushViewController(ThemeSettingsController(), animated: true)

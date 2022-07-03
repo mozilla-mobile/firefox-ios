@@ -35,7 +35,8 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
     weak var delegate: SearchBarPreferenceDelegate?
 
     private let prefs: Prefs
-    init(prefs: Prefs) {
+
+    init(prefs: Prefs = AppContainer.shared.resolve(type: Profile.self).prefs) {
         self.prefs = prefs
     }
 

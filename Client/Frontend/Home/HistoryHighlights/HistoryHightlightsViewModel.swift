@@ -26,7 +26,7 @@ class HistoryHightlightsViewModel {
     private var isPrivate: Bool
     private var tabManager: TabManager
     private var foregroundBVC: BrowserViewController
-    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
+    private lazy var siteImageHelper = SiteImageHelper()
     private var hasSentSectionEvent = false
 
     var onTapItem: ((HighlightItem) -> Void)?
@@ -66,10 +66,12 @@ class HistoryHightlightsViewModel {
     }
 
     // MARK: - Inits
-    init(with profile: Profile,
-         isPrivate: Bool,
-         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
-         foregroundBVC: BrowserViewController = BrowserViewController.foregroundBVC()) {
+    init(
+        with profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        isPrivate: Bool,
+        tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
+        foregroundBVC: BrowserViewController = BrowserViewController.foregroundBVC()
+    ) {
         self.profile = profile
         self.isPrivate = isPrivate
         self.tabManager = tabManager
@@ -115,7 +117,7 @@ class HistoryHightlightsViewModel {
     }
 
     func delete(_ item: HighlightItem) {
-        let deletionUtility = HistoryDeletionUtility(with: profile)
+        let deletionUtility = HistoryDeletionUtility()
         let urls = extractDeletableURLs(from: item)
 
         deletionUtility.delete(urls) { [weak self] success in

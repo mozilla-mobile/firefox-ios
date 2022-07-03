@@ -128,7 +128,7 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
     ///
     /// This should ONLY be called when instatiating the feature flag system,
     /// and never again.
-    public func initializeDeveloperFeatures(with profile: Profile) {
+    public func initializeDeveloperFeatures(with profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
         self.profile = profile
 
         coreFeatures.removeAll()

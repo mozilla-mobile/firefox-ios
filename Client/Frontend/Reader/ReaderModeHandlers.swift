@@ -6,15 +6,21 @@ import Foundation
 import GCDWebServers
 
 protocol ReaderModeHandlersProtocol {
-    func register(_ webServer: WebServerProtocol, profile: Profile)
+    func register(_ webServer: WebServerProtocol)
 }
 
 struct ReaderModeHandlers: ReaderModeHandlersProtocol {
+    private var profile: Profile
+
     static let ReaderModeStyleHash = "sha256-L2W8+0446ay9/L1oMrgucknQXag570zwgQrHwE68qbQ="
 
     static var readerModeCache: ReaderModeCache = DiskReaderModeCache.sharedInstance
 
-    func register(_ webServer: WebServerProtocol, profile: Profile) {
+    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
+        self.profile = profile
+    }
+
+    func register(_ webServer: WebServerProtocol) {
         // Temporary hacky casting to allow for gradual movement to protocol oriented programming
         guard let webServer = webServer as? WebServer else { return }
         ReaderModeHandlers.register(webServer, profile: profile)

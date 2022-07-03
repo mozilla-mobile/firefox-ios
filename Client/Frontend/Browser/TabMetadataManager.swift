@@ -6,7 +6,7 @@ import MozillaAppServices
 
 class TabMetadataManager {
 
-    let profile: Profile?
+    let profile: Profile
 
     // Tab Groups
     var tabGroupData = TabGroupData()
@@ -93,11 +93,11 @@ class TabMetadataManager {
 
     // MARK: - Private
 
-    private func updateObservationForKey(key: HistoryMetadataKey,
-                                         observation: HistoryMetadataObservation,
-                                         completion: (() -> Void)?) {
-        guard let profile = profile else { return }
-
+    private func updateObservationForKey(
+        key: HistoryMetadataKey,
+        observation: HistoryMetadataObservation,
+        completion: (() -> Void)?
+    ) {
         guard !key.url.isEmpty else { return }
 
         profile.places.noteHistoryMetadataObservation(key: key, observation: observation).uponQueue(.main) { _ in

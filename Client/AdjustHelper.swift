@@ -15,8 +15,10 @@ final class AdjustHelper: FeatureFlaggable {
     private let profile: Profile
     private let telemetryHelper: AdjustTelemetryProtocol
 
-    init(profile: Profile,
-         telemetryHelper: AdjustTelemetryProtocol = AdjustTelemetryHelper()) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        telemetryHelper: AdjustTelemetryProtocol = AdjustTelemetryHelper()
+    ) {
         self.profile = profile
         self.telemetryHelper = telemetryHelper
     }

@@ -30,7 +30,7 @@ final class LoginListViewModel {
     }
     fileprivate let helper = LoginListDataSourceHelper()
     private(set) lazy var breachAlertsManager: BreachAlertsManager = {
-        return BreachAlertsManager(profile: self.profile)
+        return BreachAlertsManager()
     }()
     private(set) var userBreaches: Set<LoginRecord>?
     private(set) var breachIndexPath = Set<IndexPath>() {
@@ -39,7 +39,11 @@ final class LoginListViewModel {
         }
     }
     var hasLoadedBreaches: Bool = false
-    init(profile: Profile, searchController: UISearchController) {
+
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        searchController: UISearchController
+    ) {
         self.profile = profile
         self.searchController = searchController
     }
@@ -159,7 +163,7 @@ final class LoginListViewModel {
     }
 
     func setBreachAlertsManager(_ client: BreachAlertsClientProtocol) {
-        self.breachAlertsManager = BreachAlertsManager(client, profile: profile)
+        self.breachAlertsManager = BreachAlertsManager(client)
     }
 
     // MARK: - UX Constants

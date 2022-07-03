@@ -49,7 +49,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     var mostRecentSyncedTab: JumpBackInSyncedTab?
 
     private var recentTabs: [Tab] = [Tab]()
-    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
+    private lazy var siteImageHelper = SiteImageHelper()
 
     private var recentGroups: [ASGroup<Tab>]?
 
@@ -61,7 +61,7 @@ class JumpBackInViewModel: FeatureFlaggable {
 
     init(
         isZeroSearch: Bool = false,
-        profile: Profile,
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
         isPrivate: Bool,
         tabManager: TabManagerProtocol = BrowserViewController.foregroundBVC().tabManager
     ) {

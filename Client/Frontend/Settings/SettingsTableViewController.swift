@@ -196,7 +196,7 @@ class BoolSetting: Setting, FeatureFlaggable {
     fileprivate let featureFlagName: NimbusFeatureFlagID?
 
     init(
-        prefs: Prefs?,
+        prefs: Prefs? = AppContainer.shared.resolve(type: Profile.self).prefs,
         prefKey: String? = nil,
         defaultValue: Bool?,
         attributedTitleText: NSAttributedString,
@@ -639,22 +639,18 @@ class ButtonSetting: Setting {
 // A helper class for prefs that deal with sync. Handles reloading the tableView data if changes to
 // the fxAccount happen.
 class AccountSetting: Setting {
-    unowned var settings: SettingsTableViewController
-
-    var profile: Profile {
-        return settings.profile
-    }
+    var profile: Profile
 
     override var title: NSAttributedString? { return nil }
 
-    init(settings: SettingsTableViewController) {
-        self.settings = settings
+    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
+        self.profile = profile
         super.init(title: nil)
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        if settings.profile.rustFxA.userProfile != nil {
+        if profile.rustFxA.userProfile != nil {
             cell.selectionStyle = .none
         }
     }
@@ -686,7 +682,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
     weak var settingsDelegate: SettingsDelegate?
 
-    var profile: Profile!
+    var profile: Profile
     var tabManager: TabManager!
 
     /// Used to calculate cell heights.
@@ -695,6 +691,16 @@ class SettingsTableViewController: ThemedTableViewController {
         cell.accessoryView = UISwitchThemed()
         return cell
     }()
+
+    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
+        self.profile = profile
+
+        super.init(style: .grouped)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

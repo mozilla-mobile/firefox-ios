@@ -77,7 +77,6 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     fileprivate weak var tabDisplayer: TabDisplayer?
     private let tabReuseIdentifer: String
     private var hasSentInactiveTabShownEvent: Bool = false
-    var profile: Profile
     var cfrDelegate: InactiveTabsCFRProtocol?
     private var nimbus: FxNimbus?
     var notificationCenter: NotificationCenter
@@ -177,7 +176,6 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
          tabDisplayer: TabDisplayer,
          reuseID: String,
          tabDisplayType: TabDisplayType,
-         profile: Profile,
          cfrDelegate: InactiveTabsCFRProtocol? = nil,
          nimbus: FxNimbus = FxNimbus.shared
     ) {
@@ -187,7 +185,6 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
         self.tabReuseIdentifer = reuseID
         self.tabDisplayType = tabDisplayType
-        self.profile = profile
         self.cfrDelegate = cfrDelegate
         self.nimbus = nimbus
         self.notificationCenter = NotificationCenter.default
@@ -228,7 +225,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
         // build groups
         if shouldEnableGroupedTabs {
-            SearchTermGroupsUtility.getTabGroups(with: profile,
+            SearchTermGroupsUtility.getTabGroups(with: AppContainer.shared.resolve(type: Profile.self),
                                                  from: tabsToBuildFrom,
                                                  using: .orderedAscending) { tabGroups, filteredActiveTabs  in
 

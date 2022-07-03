@@ -25,7 +25,10 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
     private weak var firstTab: Tab?
     var clipboardToast: ButtonToast?
 
-    init(prefs: Prefs, tabManager: TabManager) {
+    init(
+        prefs: Prefs = AppContainer.shared.resolve(type: Profile.self).prefs,
+        tabManager: TabManager
+    ) {
         self.prefs = prefs
         self.tabManager = tabManager
 

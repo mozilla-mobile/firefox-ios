@@ -5,13 +5,20 @@
 import Shared
 
 class StartAtHomeHelper: FeatureFlaggable {
+
+    private let profile: Profile
     private var isRestoringTabs: Bool
+
     // Override only for unit test to test `shouldSkipStartHome` logic
     private var isRunningTest: Bool
     lazy var startAtHomeSetting: StartAtHomeSetting? = featureFlags.getCustomState(for: .startAtHome)
 
-    init(isRestoringTabs: Bool,
-         isRunnigTest: Bool = AppConstants.IsRunningTest) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        isRestoringTabs: Bool,
+        isRunnigTest: Bool = AppConstants.IsRunningTest
+    ) {
+        self.profile = profile
         self.isRestoringTabs = isRestoringTabs
         self.isRunningTest = isRunnigTest
     }
@@ -57,9 +64,8 @@ class StartAtHomeHelper: FeatureFlaggable {
     ///   - tabs: The tabs to be scanned, either private, or normal, based on the last session
     ///   - profilePreferences: Preferences stored in the user's `Profile`
     /// - Returns: An optional tab, that matches the user's new tab preferences.
-    public func scanForExistingHomeTab(in tabs: [Tab],
-                                       with profilePreferences: Prefs) -> Tab? {
-        let pagePreferences = NewTabAccessors.getHomePage(profilePreferences)
+    public func scanForExistingHomeTab(in tabs: [Tab]) -> Tab? {
+        let pagePreferences = NewTabAccessors.getHomePage(profile.prefs)
 
         switch pagePreferences {
         case .homePage:

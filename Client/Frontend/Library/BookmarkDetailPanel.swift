@@ -84,7 +84,12 @@ class BookmarkDetailPanel: SiteTableViewController {
     }()
 
     // MARK: - Initializers
-    convenience init(profile: Profile, bookmarkNode: BookmarkNodeData, parentBookmarkFolder: BookmarkFolderData, presentedFromToast fromToast: Bool = false) {
+
+    convenience init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        bookmarkNode: BookmarkNodeData, parentBookmarkFolder: BookmarkFolderData,
+        presentedFromToast fromToast: Bool = false
+    ) {
         self.init(profile: profile, bookmarkNodeGUID: bookmarkNode.guid, bookmarkNodeType: bookmarkNode.type, parentBookmarkFolder: parentBookmarkFolder)
 
         self.isPresentedFromToast = fromToast
@@ -102,7 +107,11 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
     }
 
-    convenience init(profile: Profile, withNewBookmarkNodeType bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: BookmarkFolderData) {
+    convenience init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        withNewBookmarkNodeType bookmarkNodeType: BookmarkNodeType,
+        parentBookmarkFolder: BookmarkFolderData
+    ) {
         self.init(profile: profile, bookmarkNodeGUID: nil, bookmarkNodeType: bookmarkNodeType, parentBookmarkFolder: parentBookmarkFolder)
 
         if bookmarkNodeType == .bookmark {
@@ -117,7 +126,7 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
     }
 
-    private init(profile: Profile, bookmarkNodeGUID: GUID?, bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: BookmarkFolderData) {
+    private init(profile: Profile = AppContainer.shared.resolve(type: Profile.self), bookmarkNodeGUID: GUID?, bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: BookmarkFolderData) {
         self.bookmarkNodeGUID = bookmarkNodeGUID
         self.bookmarkNodeType = bookmarkNodeType
         self.parentBookmarkFolder = parentBookmarkFolder

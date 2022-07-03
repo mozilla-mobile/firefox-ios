@@ -29,7 +29,10 @@ final class FeatureFlagUserPrefsMigrationUtility {
     }
 
     // MARK: - Initializers
-    init(with profile: Profile, and userDefaults: UserDefaults = .standard) {
+    init(
+        with profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        and userDefaults: UserDefaults = .standard
+    ) {
         self.profile = profile
         self.userDefaults = userDefaults
     }

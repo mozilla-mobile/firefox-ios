@@ -8,6 +8,7 @@ import Shared
 
 class IntroViewController: UIViewController, OnViewDismissable {
     var onViewDismissed: (() -> Void)?
+
     private var viewModel: IntroViewModel
     private let profile: Profile
     private var onboardingCards = [OnboardingCardViewController]()
@@ -48,7 +49,10 @@ class IntroViewController: UIViewController, OnViewDismissable {
     var didFinishClosure: ((IntroViewController, FxAPageType?) -> Void)?
 
     // MARK: Initializer
-    init(viewModel: IntroViewModel, profile: Profile) {
+    init(
+        viewModel: IntroViewModel,
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self)
+    ) {
         self.viewModel = viewModel
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
@@ -64,6 +68,10 @@ class IntroViewController: UIViewController, OnViewDismissable {
         view.backgroundColor = UIColor.theme.browser.background
         setupPageController()
         setupLayout()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -204,8 +212,7 @@ extension IntroViewController: OnboardingCardDelegate {
                                   referringPage: ReferringPage = .onboarding) {
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions,
                                                                                       flowType: flowType,
-                                                                                      referringPage: referringPage,
-                                                                                      profile: profile)
+                                                                                      referringPage: referringPage)
         let controller: DismissableNavigationViewController
         let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
                                          style: .plain,

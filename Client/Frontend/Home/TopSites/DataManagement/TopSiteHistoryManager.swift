@@ -17,7 +17,7 @@ class TopSiteHistoryManager: DataObserver, Loggable {
     private let events: [Notification.Name] = [.FirefoxAccountChanged, .ProfileDidFinishSyncing, .PrivateDataClearedHistory]
     private let dataQueue = DispatchQueue(label: "com.moz.topSiteHistory.queue")
 
-    init(profile: Profile) {
+    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
         self.profile = profile
         self.profile.history.setTopSitesCacheSize(ActivityStreamTopSiteCacheSize)
 

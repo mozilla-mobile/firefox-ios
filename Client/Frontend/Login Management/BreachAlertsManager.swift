@@ -25,19 +25,27 @@ struct BreachRecord: Codable, Equatable, Hashable {
 
 /// A manager for the user's breached login information, if any.
 final public class BreachAlertsManager {
+
     static let icon = UIImage(named: "Breached Website")?.withRenderingMode(.alwaysTemplate)
     static let lightMode = UIColor(red: 0.77, green: 0.00, blue: 0.26, alpha: 1.00)
     static let darkMode = UIColor(red: 1.00, green: 0.02, blue: 0.35, alpha: 1.00)
     static let monitorAboutUrl = URL(string: "https://monitor.firefox.com/about")
+
     var breaches = Set<BreachRecord>()
     var client: BreachAlertsClientProtocol
-    var profile: Profile!
+    var profile: Profile
+
     private lazy var cacheURL: URL? = {
         guard let path = try? self.profile.files.getAndEnsureDirectory() else { return nil }
         return URL(fileURLWithPath: path, isDirectory: true).appendingPathComponent("breaches.json")
     }()
+
     private let dateFormatter = DateFormatter()
-    init(_ client: BreachAlertsClientProtocol = BreachAlertsClient(), profile: Profile) {
+
+    init(
+        _ client: BreachAlertsClientProtocol = BreachAlertsClient(),
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self)
+    ) {
         self.client = client
         self.profile = profile
     }
@@ -84,7 +92,7 @@ final public class BreachAlertsManager {
         }
 
         // 3b. should update - check if the etag is different
-        client.fetchEtag(endpoint: .breachedAccounts, profile: self.profile) { etag in
+        client.fetchEtag(endpoint: .breachedAccounts) { etag in
             guard let etag = etag else {
                 self.profile.prefs.removeObjectForKey(BreachAlertsClient.etagKey) // bad key, so delete it
                 self.fetchAndSaveBreaches(completion)
@@ -177,7 +185,7 @@ final public class BreachAlertsManager {
 
     private func fetchAndSaveBreaches(_ completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
         guard let cacheURL = self.cacheURL else { return }
-        self.client.fetchData(endpoint: .breachedAccounts, profile: self.profile) { maybeData in
+        self.client.fetchData(endpoint: .breachedAccounts) { maybeData in
             guard let fetchedData = maybeData.successValue else { return }
             try? FileManager.default.removeItem(atPath: cacheURL.path)
             FileManager.default.createFile(atPath: cacheURL.path, contents: fetchedData, attributes: nil)

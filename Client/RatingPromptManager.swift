@@ -31,9 +31,11 @@ final class RatingPromptManager {
     ///   - profile: User's profile data
     ///   - daysOfUseCounter: Counter for the cumulative days of use of the application by the user
     ///   - sentry: Sentry protocol to override in Unit test
-    init(profile: Profile,
-         daysOfUseCounter: CumulativeDaysOfUseCounter = CumulativeDaysOfUseCounter(),
-         sentry: SentryProtocol = SentryIntegration.shared) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        daysOfUseCounter: CumulativeDaysOfUseCounter = CumulativeDaysOfUseCounter(),
+        sentry: SentryProtocol = SentryIntegration.shared
+    ) {
         self.profile = profile
         self.daysOfUseCounter = daysOfUseCounter
         self.sentry = sentry

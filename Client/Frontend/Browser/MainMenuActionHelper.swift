@@ -62,11 +62,12 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     ///   - tabManager: the tab manager
     ///   - buttonView: the view from which the menu will be shown
     ///   - showFXASyncAction: the closure that will be executed for the sync action in the library section
-    init(profile: Profile,
-         tabManager: TabManager,
-         buttonView: UIButton,
-         showFXASyncAction: @escaping (FXASyncClosure) -> Void) {
-
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        tabManager: TabManager,
+        buttonView: UIButton,
+        showFXASyncAction: @escaping (FXASyncClosure) -> Void
+    ) {
         self.profile = profile
         self.tabManager = tabManager
         self.buttonView = buttonView
@@ -805,12 +806,15 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
 
     private func showLoginListVC(navigationHandler: @escaping NavigationHandlerType, navigationController: UINavigationController) {
         guard let menuActionDelegate = menuActionDelegate else { return }
-        LoginListViewController.create(authenticateInNavigationController: navigationController,
-                                       profile: self.profile,
-                                       settingsDelegate: menuActionDelegate,
-                                       webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+
+        LoginListViewController.create(
+            authenticateInNavigationController: navigationController,
+            settingsDelegate: menuActionDelegate,
+            webpageNavigationHandler: navigationHandler
+        ).uponQueue(.main) { loginsVC in
             self.presentLoginList(loginsVC)
         }
+
     }
 
     private func presentLoginList(_ loginsVC: LoginListViewController?) {

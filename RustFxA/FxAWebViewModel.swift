@@ -55,7 +55,11 @@ class FxAWebViewModel {
     - parameter profile: a Profile.
     - parameter deepLinkParams: url parameters that originate from a deep link
     */
-    required init(pageType: FxAPageType, profile: Profile, deepLinkParams: FxALaunchParams?) {
+    required init(
+        pageType: FxAPageType,
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        deepLinkParams: FxALaunchParams?
+    ) {
         self.pageType = pageType
         self.profile = profile
         self.deepLinkParams = deepLinkParams

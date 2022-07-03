@@ -8,22 +8,21 @@ import Shared
 
 class WebServerUtil {
 
-    private var readerModeHander: ReaderModeHandlersProtocol
+    private var readerModeHandler: ReaderModeHandlersProtocol
     private var webServer: WebServerProtocol
-    private var profile: Profile
 
-    init(readerModeHander: ReaderModeHandlersProtocol = ReaderModeHandlers(),
-         webServer: WebServer = WebServer.sharedInstance,
-         profile: Profile) {
-        self.readerModeHander = readerModeHander
+    init(
+        readerModeHander: ReaderModeHandlersProtocol = ReaderModeHandlers(),
+        webServer: WebServer = WebServer.sharedInstance
+    ) {
+        self.readerModeHandler = readerModeHander
         self.webServer = webServer
-        self.profile = profile
     }
 
     func setUpWebServer() {
         guard !webServer.server.isRunning else { return }
 
-        readerModeHander.register(webServer, profile: profile)
+        readerModeHandler.register(webServer)
 
         let responders: [(String, InternalSchemeResponse)] =
              [(AboutHomeHandler.path, AboutHomeHandler()),

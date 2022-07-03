@@ -36,7 +36,6 @@ class TopTabsViewController: UIViewController {
     weak var delegate: TopTabsDelegate?
     fileprivate var topTabDisplayManager: TabDisplayManager!
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.cellIdentifier
-    var profile: Profile
 
     // MARK: - UI ELements
     lazy var collectionView: UICollectionView = {
@@ -91,17 +90,17 @@ class TopTabsViewController: UIViewController {
     }()
 
     // MARK: - Inits
-    init(tabManager: TabManager, profile: Profile) {
+    init(tabManager: TabManager) {
         self.tabManager = tabManager
-        self.profile = profile
         super.init(nibName: nil, bundle: nil)
 
-        topTabDisplayManager = TabDisplayManager(collectionView: self.collectionView,
-                                                 tabManager: self.tabManager,
-                                                 tabDisplayer: self,
-                                                 reuseID: TopTabCell.cellIdentifier,
-                                                 tabDisplayType: .TopTabTray,
-                                                 profile: profile)
+        topTabDisplayManager = TabDisplayManager(
+            collectionView: self.collectionView,
+            tabManager: self.tabManager,
+            tabDisplayer: self,
+            reuseID: TopTabCell.cellIdentifier,
+            tabDisplayType: .TopTabTray)
+
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
     }

@@ -33,7 +33,7 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessibilityIdentifier: String? { return "SignInToSync" }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
+        let viewController = FirefoxAccountSignInViewController(parentType: .settings, deepLinkParams: nil)
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -49,6 +49,7 @@ class ConnectSetting: WithoutAccountSetting {
 
 // MARK: - SyncNowSetting
 class SyncNowSetting: WithAccountSetting {
+    let settingsViewController: SettingsTableViewController
     let imageView = UIImageView(frame: CGRect(width: 30, height: 30))
     let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
     let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")
@@ -60,8 +61,9 @@ class SyncNowSetting: WithAccountSetting {
     // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
     let continuousRotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
 
-    override init(settings: SettingsTableViewController) {
-        super.init(settings: settings)
+    init(settings: SettingsTableViewController) {
+        self.settingsViewController = settings
+        super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidFinishSyncing, object: nil)
     }
 
@@ -205,7 +207,7 @@ class SyncNowSetting: WithAccountSetting {
     @objc fileprivate func troubleshoot() {
         let viewController = SettingsContentViewController()
         viewController.url = syncSUMOURL
-        settings.navigationController?.pushViewController(viewController, animated: true)
+        settingsViewController.navigationController?.pushViewController(viewController, animated: true)
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -298,14 +300,17 @@ class SyncNowSetting: WithAccountSetting {
 // MARK: - AccountStatusSetting
 // Sync setting that shows the current Firefox Account status.
 class AccountStatusSetting: WithAccountSetting {
-    override init(settings: SettingsTableViewController) {
-        super.init(settings: settings)
+    let settingsViewController: SettingsTableViewController
+
+    init(settings: SettingsTableViewController) {
+        self.settingsViewController = settings
+        super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(updateAccount), name: .FirefoxAccountProfileChanged, object: nil)
     }
 
     @objc func updateAccount(notification: Notification) {
         DispatchQueue.main.async {
-            self.settings.tableView.reloadData()
+            self.settingsViewController.tableView.reloadData()
         }
     }
 
@@ -348,7 +353,7 @@ class AccountStatusSetting: WithAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
-            let vc = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
+            let vc = FirefoxAccountSignInViewController(parentType: .settings, deepLinkParams: nil)
             TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
             navigationController?.pushViewController(vc, animated: true)
             return
@@ -897,7 +902,6 @@ class SearchSetting: Setting {
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = SearchSettingsTableViewController()
         viewController.model = profile.searchEngines
-        viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -940,7 +944,7 @@ class LoginsSetting: Setting {
 
         if AppAuthenticator.canAuthenticateDeviceOwner() {
             if LoginOnboarding.shouldShow() {
-                let loginOnboardingViewController = LoginOnboardingViewController(profile: profile, tabManager: tabManager)
+                let loginOnboardingViewController = LoginOnboardingViewController(tabManager: tabManager)
 
                 loginOnboardingViewController.doneHandler = {
                     loginOnboardingViewController.dismiss(animated: true)
@@ -949,15 +953,15 @@ class LoginsSetting: Setting {
                 loginOnboardingViewController.proceedHandler = {
                     LoginListViewController.create(
                         authenticateInNavigationController: navController,
-                        profile: self.profile,
                         settingsDelegate: BrowserViewController.foregroundBVC(),
-                        webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                            guard let loginsVC = loginsVC else { return }
-                            navController.pushViewController(loginsVC, animated: true)
-                            // Remove the onboarding from the navigation stack so that we go straight back to settings
-                            navController.viewControllers.removeAll { viewController in
-                                viewController == loginOnboardingViewController
-                            }
+                        webpageNavigationHandler: navigationHandler
+                    ).uponQueue(.main) { loginsVC in
+                        guard let loginsVC = loginsVC else { return }
+                        navController.pushViewController(loginsVC, animated: true)
+                        // Remove the onboarding from the navigation stack so that we go straight back to settings
+                        navController.viewControllers.removeAll { viewController in
+                            viewController == loginOnboardingViewController
+                        }
                     }
                 }
 
@@ -967,16 +971,15 @@ class LoginsSetting: Setting {
             } else {
                 LoginListViewController.create(
                     authenticateInNavigationController: navController,
-                    profile: profile,
                     settingsDelegate: BrowserViewController.foregroundBVC(),
-                    webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                        guard let loginsVC = loginsVC else { return }
-                        navController.pushViewController(loginsVC, animated: true)
+                    webpageNavigationHandler: navigationHandler
+                ).uponQueue(.main) { loginsVC in
+                    guard let loginsVC = loginsVC else { return }
+                    navController.pushViewController(loginsVC, animated: true)
                 }
             }
         } else {
             let viewController = DevicePasscodeRequiredViewController()
-            viewController.profile = profile
             viewController.tabManager = tabManager
             navigationController?.pushViewController(viewController, animated: true)
         }
@@ -996,7 +999,7 @@ class ContentBlockerSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
+        let viewController = ContentBlockerSettingViewController()
         viewController.profile = profile
         viewController.tabManager = tabManager
         navigationController?.pushViewController(viewController, animated: true)
@@ -1021,7 +1024,6 @@ class ClearPrivateDataSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = ClearPrivateDataTableViewController()
-        viewController.profile = profile
         viewController.tabManager = tabManager
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -1118,7 +1120,7 @@ class NewTabPageSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
+        let viewController = NewTabContentSettingsViewController()
         viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -1144,7 +1146,7 @@ class HomeSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = HomePageSettingViewController(prefs: profile.prefs)
+        let viewController = HomePageSettingViewController()
         viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -1180,7 +1182,7 @@ class SiriPageSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = SiriSettingsViewController(prefs: profile.prefs)
+        let viewController = SiriSettingsViewController()
         viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -1197,7 +1199,6 @@ class NoImageModeSetting: BoolSetting {
         }
 
         super.init(
-            prefs: settings.profile.prefs,
             prefKey: NoImageModePrefsKey.NoImageModeStatus,
             defaultValue: noImageEnabled,
             attributedTitleText: NSAttributedString(string: .Settings.Toggle.NoImageMode),
@@ -1254,7 +1255,7 @@ class OpenWithSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
+        let viewController = OpenWithSettingsViewController()
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -1327,7 +1328,7 @@ class SearchBarSetting: Setting {
     override var style: UITableViewCell.CellStyle { return .value1 }
 
     init(settings: SettingsTableViewController) {
-        self.viewModel = SearchBarSettingsViewModel(prefs: settings.profile.prefs)
+        self.viewModel = SearchBarSettingsViewModel()
         super.init(title: NSAttributedString(string: viewModel.title,
                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }

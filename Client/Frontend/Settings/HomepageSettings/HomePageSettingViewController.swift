@@ -39,9 +39,9 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     // MARK: - Initializers
-    init(prefs: Prefs) {
+    init(prefs: Prefs = AppContainer.shared.resolve(type: Profile.self).prefs) {
         self.prefs = prefs
-        super.init(style: .grouped)
+        super.init()
 
         self.title = .SettingsHomePageSectionName
         self.navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar
@@ -143,10 +143,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         let historyHighlightsSetting = BoolSetting(with: .historyHighlights,
                                                    titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlyVisited))
 
-        let wallpaperSetting = WallpaperSettings(settings: self)
+        let wallpaperSetting = WallpaperSettings()
 
         // Section ordering
-        sectionItems.append(TopSitesSettings(settings: self))
+        sectionItems.append(TopSitesSettings())
 
         if isJumpBackInSectionEnabled {
             sectionItems.append(jumpBackInSetting)
@@ -247,8 +247,8 @@ extension HomePageSettingViewController {
             return NSAttributedString(string: String(format: status))
         }
 
-        init(settings: SettingsTableViewController) {
-            self.profile = settings.profile
+        init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
+            self.profile = profile
             super.init(title: NSAttributedString(string: .Settings.Homepage.Shortcuts.ShortcutsPageTitle))
         }
 
@@ -271,11 +271,13 @@ extension HomePageSettingViewController {
         override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.wallpaper }
         override var style: UITableViewCell.CellStyle { return .value1 }
 
-        init(settings: SettingsTableViewController,
-             and tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager
+        init(
+            profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+            and tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager
         ) {
-            self.profile = settings.profile
+            self.profile = profile
             self.tabManager = tabManager
+
             super.init(title: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Wallpaper))
         }
 

@@ -24,6 +24,7 @@ class TabEventHandlerTests: XCTestCase {
         XCTAssertFalse(handler.isFocused!)
     }
 
+    // TODO: Need help fixing this!
     func testBlankPopupURL() {
         let manager = BrowserViewController.foregroundBVC().tabManager
         let prefs = BrowserViewController.foregroundBVC().profile.prefs

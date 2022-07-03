@@ -199,13 +199,13 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         }
     }
 
-    var profile: Profile
+    private let profile: Profile
 
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
     fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
 
-    init(profile: Profile) {
+    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
         self.profile = profile
         self.searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
         super.init(frame: CGRect())
@@ -222,7 +222,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
 
     private func isBottomSearchBar() -> Bool {
         guard SearchBarSettingsViewModel.isEnabled else { return false }
-        return SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom
+        return SearchBarSettingsViewModel().searchBarPosition == .bottom
     }
 
     fileprivate func commonInit() {

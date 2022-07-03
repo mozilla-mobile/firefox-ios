@@ -49,8 +49,7 @@ class LibraryPanelDescriptor {
     var viewController: UIViewController?
     var navigationController: UINavigationController?
 
-    fileprivate let makeViewController: (_ profile: Profile, _ tabManager: TabManager) -> UIViewController
-    fileprivate let profile: Profile
+    fileprivate let makeViewController: (_ tabManager: TabManager) -> UIViewController
     fileprivate let tabManager: TabManager
 
     let accessibilityLabel: String
@@ -58,15 +57,13 @@ class LibraryPanelDescriptor {
     let panelType: LibraryPanelType
 
     init(
-        makeViewController: @escaping ((_ profile: Profile, _ tabManager: TabManager) -> UIViewController),
-        profile: Profile,
+        makeViewController: @escaping ((_ tabManager: TabManager) -> UIViewController),
         tabManager: TabManager,
         accessibilityLabel: String,
         accessibilityIdentifier: String,
         panelType: LibraryPanelType
     ) {
         self.makeViewController = makeViewController
-        self.profile = profile
         self.tabManager = tabManager
         self.accessibilityLabel = accessibilityLabel
         self.accessibilityIdentifier = accessibilityIdentifier
@@ -75,57 +72,51 @@ class LibraryPanelDescriptor {
 
     func setup() {
         guard viewController == nil else { return }
-        let viewController = makeViewController(profile, tabManager)
+        let viewController = makeViewController(tabManager)
         self.viewController = viewController
         navigationController = ThemedNavigationController(rootViewController: viewController)
     }
 }
 
 class LibraryPanels: FeatureFlaggable {
-    fileprivate let profile: Profile
     fileprivate let tabManager: TabManager
 
-    init(profile: Profile, tabManager: TabManager) {
-        self.profile = profile
+    init(tabManager: TabManager) {
         self.tabManager = tabManager
     }
 
     lazy var enabledPanels = [
         LibraryPanelDescriptor(
-            makeViewController: { profile, tabManager  in
-                return BookmarksPanel(profile: profile)
+            makeViewController: { tabManager  in
+                return BookmarksPanel()
             },
-            profile: profile,
             tabManager: tabManager,
             accessibilityLabel: .LibraryPanelBookmarksAccessibilityLabel,
             accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.bookmarksView,
             panelType: .bookmarks),
 
         LibraryPanelDescriptor(
-            makeViewController: { profile, tabManager in
-                return HistoryPanel(profile: profile, tabManager: tabManager)
+            makeViewController: { tabManager in
+                return HistoryPanel(tabManager: tabManager)
             },
-            profile: profile,
             tabManager: tabManager,
             accessibilityLabel: .LibraryPanelHistoryAccessibilityLabel,
             accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.historyView,
             panelType: .history),
 
         LibraryPanelDescriptor(
-            makeViewController: { profile, tabManager in
-                return DownloadsPanel(profile: profile)
+            makeViewController: { tabManager in
+                return DownloadsPanel()
             },
-            profile: profile,
             tabManager: tabManager,
             accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
             accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.downloadsView,
             panelType: .downloads),
 
         LibraryPanelDescriptor(
-            makeViewController: { profile, tabManager in
-                return ReadingListPanel(profile: profile)
+            makeViewController: { tabManager in
+                return ReadingListPanel()
             },
-            profile: profile,
             tabManager: tabManager,
             accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,
             accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.readingListView,

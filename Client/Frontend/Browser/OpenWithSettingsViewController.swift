@@ -12,7 +12,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
     fileprivate let prefs: Prefs
     fileprivate var currentChoice: String = "mailto"
 
-    init(prefs: Prefs) {
+    init(prefs: Prefs = AppContainer.shared.resolve(type: Profile.self).prefs) {
         self.prefs = prefs
         super.init()
     }

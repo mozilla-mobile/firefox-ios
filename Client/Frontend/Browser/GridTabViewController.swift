@@ -73,11 +73,12 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     }
 
     // MARK: - Inits
-    init(tabManager: TabManager,
-         profile: Profile,
-         tabTrayDelegate: TabTrayDelegate? = nil,
-         tabToFocus: Tab? = nil,
-         notificationCenter: NotificationCenter = NotificationCenter.default
+    init(
+        tabManager: TabManager,
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        tabTrayDelegate: TabTrayDelegate? = nil,
+        tabToFocus: Tab? = nil,
+        notificationCenter: NotificationCenter = NotificationCenter.default
     ) {
         self.tabManager = tabManager
         self.profile = profile
@@ -85,8 +86,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         self.tabToFocus = tabToFocus
         self.notificationCenter = notificationCenter
 
-        let contextualViewModel = ContextualHintViewModel(forHintType: .inactiveTabs,
-                                                          with: profile)
+        let contextualViewModel = ContextualHintViewModel(forHintType: .inactiveTabs)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
 
         super.init(nibName: nil, bundle: nil)
@@ -103,13 +103,15 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
             LabelButtonHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier)
-        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView,
-                                              tabManager: self.tabManager,
-                                              tabDisplayer: self,
-                                              reuseID: TabCell.cellIdentifier,
-                                              tabDisplayType: .TabGrid,
-                                              profile: profile,
-                                              cfrDelegate: self)
+
+        tabDisplayManager = TabDisplayManager(
+            collectionView: self.collectionView,
+            tabManager: self.tabManager,
+            tabDisplayer: self,
+            reuseID: TabCell.cellIdentifier,
+            tabDisplayType: .TabGrid,
+            cfrDelegate: self)
+
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
 
@@ -745,9 +747,8 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
         else { return nil }
 
         let tabVC = TabPeekViewController(tab: tab, delegate: tabPeekDelegate)
-        if let browserProfile = tabDisplayManager.profile as? BrowserProfile,
-           let pickerDelegate = tabPeekDelegate as? DevicePickerViewControllerDelegate {
-            tabVC.setState(withProfile: browserProfile, clientPickerDelegate: pickerDelegate)
+        if let pickerDelegate = tabPeekDelegate as? DevicePickerViewControllerDelegate {
+            tabVC.setState(clientPickerDelegate: pickerDelegate)
         }
 
         return UIContextMenuConfiguration(identifier: nil, previewProvider: { return tabVC }, actionProvider: tabVC.contextActions(defaultActions:))

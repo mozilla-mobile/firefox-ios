@@ -21,11 +21,9 @@ protocol RemotePanelDelegate: AnyObject {
 class RemoteTabsPanel: UIViewController, NotificationThemeable, Loggable {
 
     var remotePanelDelegate: RemotePanelDelegate?
-    var profile: Profile
     lazy var tableViewController = RemoteTabsTableViewController()
 
-    init(profile: Profile) {
-        self.profile = profile
+    init() {
         super.init(nibName: nil, bundle: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .ProfileDidFinishSyncing, object: nil)
@@ -37,7 +35,6 @@ class RemoteTabsPanel: UIViewController, NotificationThemeable, Loggable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableViewController.profile = profile
         tableViewController.remoteTabsPanel = self
         addChild(tableViewController)
         self.view.addSubview(tableViewController.view)
@@ -117,10 +114,10 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     var hiddenSections = Set<Int>()
     private let siteImageHelper: SiteImageHelper
 
-    init(remoteTabPanel: RemoteTabsPanel, clientAndTabs: [ClientAndTabs], profile: Profile) {
+    init(remoteTabPanel: RemoteTabsPanel, clientAndTabs: [ClientAndTabs]) {
         self.remoteTabPanel = remoteTabPanel
         self.clientAndTabs = clientAndTabs
-        self.siteImageHelper = SiteImageHelper(profile: profile)
+        self.siteImageHelper = SiteImageHelper()
     }
 
     @objc private func sectionHeaderTapped(sender: UIGestureRecognizer) {
@@ -509,7 +506,7 @@ class RemoteTabsTableViewController: UITableViewController {
     }
 
     weak var remoteTabsPanel: RemoteTabsPanel?
-    var profile: Profile!
+    var profile: Profile
     var tableViewDelegate: RemoteTabsPanelDataSource? {
         didSet {
             tableView.dataSource = tableViewDelegate
@@ -520,6 +517,16 @@ class RemoteTabsTableViewController: UITableViewController {
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
+
+    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
+        self.profile = profile
+
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -598,8 +605,7 @@ class RemoteTabsTableViewController: UITableViewController {
                 self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel, error: .noTabs)
             } else {
                 let tabsPanelDataSource = RemoteTabsPanelClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel,
-                                                                                 clientAndTabs: nonEmptyClientAndTabs,
-                                                                                 profile: profile)
+                                                                                 clientAndTabs: nonEmptyClientAndTabs)
                 tabsPanelDataSource.collapsibleSectionDelegate = self
                 self.tableViewDelegate = tabsPanelDataSource
             }

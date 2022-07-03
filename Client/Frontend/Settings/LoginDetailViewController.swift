@@ -73,7 +73,11 @@ class LoginDetailViewController: SensitiveViewController {
         }
     }
 
-    init(profile: Profile, login: LoginRecord, webpageNavigationHandler: ((_ url: URL?) -> Void)?) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        login: LoginRecord,
+        webpageNavigationHandler: ((_ url: URL?) -> Void)?
+    ) {
         self.login = login
         self.profile = profile
         self.webpageNavigationHandler = webpageNavigationHandler

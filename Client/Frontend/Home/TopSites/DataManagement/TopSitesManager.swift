@@ -21,11 +21,11 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
     private var contiles: [Contile] = []
 
     weak var delegate: TopSitesManagerDelegate?
-    lazy var topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
-    lazy var googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
+    lazy var topSiteHistoryManager = TopSiteHistoryManager()
+    lazy var googleTopSiteManager = GoogleTopSiteManager()
     lazy var contileProvider: ContileProviderInterface = ContileProvider()
 
-    init(profile: Profile) {
+    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
         self.profile = profile
         topSiteHistoryManager.delegate = self
     }

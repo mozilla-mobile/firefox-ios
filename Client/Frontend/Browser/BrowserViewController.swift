@@ -101,7 +101,7 @@ class BrowserViewController: UIViewController {
 
     lazy var isBottomSearchBar: Bool = {
         guard SearchBarSettingsViewModel.isEnabled else { return false }
-        return SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom
+        return SearchBarSettingsViewModel().searchBarPosition == .bottom
     }()
 
     // Alert content that appears on top of the footer should be added to this view.
@@ -165,14 +165,16 @@ class BrowserViewController: UIViewController {
 
     fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
 
-    init(profile: Profile, tabManager: TabManager) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        tabManager: TabManager
+    ) {
         self.profile = profile
         self.tabManager = tabManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
-        self.ratingPromptManager = RatingPromptManager(profile: profile)
+        self.ratingPromptManager = RatingPromptManager()
 
-        let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
-                                                       with: profile)
+        let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation)
         self.contextHintVC = ContextualHintViewController(with: contextViewModel)
 
         super.init(nibName: nil, bundle: nil)
@@ -287,7 +289,7 @@ class BrowserViewController: UIViewController {
         appMenuBadgeUpdate()
 
         if showTopTabs, topTabsViewController == nil {
-            let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+            let topTabsViewController = TopTabsViewController(tabManager: tabManager)
             topTabsViewController.delegate = self
             addChild(topTabsViewController)
             header.addArrangedViewToTop(topTabsViewController.view)
@@ -424,7 +426,7 @@ class BrowserViewController: UIViewController {
             return true
         })
 
-        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
+        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(tabManager: tabManager)
         clipboardBarDisplayHandler?.delegate = self
 
         scrollController.header = header
@@ -487,7 +489,7 @@ class BrowserViewController: UIViewController {
         view.addSubview(statusBarOverlay)
 
         // Setup the URL bar, wrapped in a view to get transparency effect
-        urlBar = URLBarView(profile: profile)
+        urlBar = URLBarView()
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
@@ -870,7 +872,6 @@ class BrowserViewController: UIViewController {
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .firefoxHomepage, value: trackingValue, extras: nil)
 
             let firefoxHomeViewController = HomepageViewController(
-                profile: profile,
                 tabManager: tabManager,
                 isZeroSearch: !inline)
             firefoxHomeViewController.homePanelDelegate = self
@@ -972,7 +973,7 @@ class BrowserViewController: UIViewController {
         }
 
         // We should not set libraryViewController to nil because the library panel losses the currentState
-        let libraryViewController = self.libraryViewController ?? LibraryViewController(profile: profile, tabManager: tabManager)
+        let libraryViewController = self.libraryViewController ?? LibraryViewController(tabManager: tabManager)
         libraryViewController.delegate = self
         self.libraryViewController = libraryViewController
 
@@ -1002,11 +1003,11 @@ class BrowserViewController: UIViewController {
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         let searchViewModel = SearchViewModel(isPrivate: isPrivate, isBottomSearchBar: isBottomSearchBar)
-        let searchController = SearchViewController(profile: profile, viewModel: searchViewModel, tabManager: tabManager)
+        let searchController = SearchViewController(viewModel: searchViewModel, tabManager: tabManager)
         searchController.searchEngines = profile.searchEngines
         searchController.searchDelegate = self
 
-        let searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
+        let searchLoader = SearchLoader(urlBar: urlBar)
         searchLoader.addListener(searchController)
 
         self.searchController = searchController
@@ -1116,15 +1117,18 @@ class BrowserViewController: UIViewController {
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
 
             guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
-                  let bookmarkNode = bookmarkFolder.children?.last
+                  let bookmarkNode = bookmarkFolder.children?.last 
             else { return }
 
-            let detailController = BookmarkDetailPanel(profile: self.profile,
-                                                       bookmarkNode: bookmarkNode,
-                                                       parentBookmarkFolder: bookmarkFolder,
-                                                       presentedFromToast: true)
+            let detailController = BookmarkDetailPanel(
+                bookmarkNode: bookmarkNode,
+                parentBookmarkFolder: bookmarkFolder,
+                presentedFromToast: true
+            )
+
             let controller: DismissableNavigationViewController
             controller = DismissableNavigationViewController(rootViewController: detailController)
+
             self.present(controller, animated: true, completion: nil)
         }
     }
@@ -1425,7 +1429,6 @@ class BrowserViewController: UIViewController {
         }
 
         let settingsTableViewController = AppSettingsTableViewController(
-            with: profile,
             and: tabManager,
             delegate: self)
 
@@ -1510,7 +1513,6 @@ class BrowserViewController: UIViewController {
 
     func showSettingsWithDeeplink(to destination: AppSettingsDeeplinkOption) {
         let settingsTableViewController = AppSettingsTableViewController(
-            with: profile,
             and: tabManager,
             delegate: self,
             deeplinkingTo: destination)
@@ -1618,7 +1620,7 @@ extension BrowserViewController: TabDelegate {
 
         // only add the logins helper if the tab is not a private browsing tab
         if !tab.isPrivate {
-            let logins = LoginsHelper(tab: tab, profile: profile)
+            let logins = LoginsHelper(tab: tab)
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
@@ -1626,7 +1628,7 @@ extension BrowserViewController: TabDelegate {
         contextMenuHelper.delegate = self
         tab.addContentScript(contextMenuHelper, name: ContextMenuHelper.name())
 
-        let errorHelper = ErrorPageHelper(certStore: profile.certStore)
+        let errorHelper = ErrorPageHelper()
         tab.addContentScript(errorHelper, name: ErrorPageHelper.name())
 
         let sessionRestoreHelper = SessionRestoreHelper(tab: tab)
@@ -1658,7 +1660,7 @@ extension BrowserViewController: TabDelegate {
 
         tab.addContentScript(LocalRequestHelper(), name: LocalRequestHelper.name())
 
-        let blocker = FirefoxTabContentBlocker(tab: tab, prefs: profile.prefs)
+        let blocker = FirefoxTabContentBlocker(tab: tab)
         tab.contentBlocker = blocker
         tab.addContentScript(blocker, name: FirefoxTabContentBlocker.name())
 
@@ -1846,7 +1848,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
     func presentSearchSettingsController() {
         let searchSettingsTableViewController = SearchSettingsTableViewController()
         searchSettingsTableViewController.model = self.profile.searchEngines
-        searchSettingsTableViewController.profile = self.profile
+
         // Update saerch icon when the searchengine changes
         searchSettingsTableViewController.updateSearchIcon = {
             self.urlBar.updateSearchEngineImage()
@@ -2191,9 +2193,8 @@ extension BrowserViewController {
 
     private func showProperIntroVC() {
         let introViewModel = IntroViewModel()
-        let introViewController = IntroViewController(viewModel: introViewModel, profile: profile)
+        let introViewController = IntroViewController(viewModel: introViewModel)
         introViewController.didFinishClosure = { controller, fxaLoginFlow in
-            self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
             controller.dismiss(animated: true)
         }
         self.introVCPresentHelper(introViewController: introViewController)
@@ -2219,7 +2220,7 @@ extension BrowserViewController {
     }
 
     func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
-        let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage, profile: profile)
+        let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage)
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 

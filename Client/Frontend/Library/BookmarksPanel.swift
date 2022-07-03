@@ -53,7 +53,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     fileprivate lazy var bookmarkFolderIconNormal = UIImage(named: "bookmarkFolder")?.createScaled(BookmarksPanelUX.FolderIconSize).tinted(withColor: UIColor.Photon.Grey90)
     fileprivate lazy var bookmarkFolderIconDark = UIImage(named: "bookmarkFolder")?.createScaled(BookmarksPanelUX.FolderIconSize).tinted(withColor: UIColor.Photon.Grey10)
 
-    init(profile: Profile, bookmarkFolderGUID: GUID = BookmarkRoots.RootGUID) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        bookmarkFolderGUID: GUID = BookmarkRoots.RootGUID
+    ) {
         self.bookmarkFolderGUID = bookmarkFolderGUID
 
         super.init(profile: profile)
@@ -90,14 +93,14 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         let newBookmark = SingleActionViewModel(title: .BookmarksNewBookmark, iconString: ImageIdentifiers.actionAddBookmark, tapHandler: { _ in
             guard let bookmarkFolder = self.bookmarkFolder else { return }
 
-            let detailController = BookmarkDetailPanel(profile: self.profile, withNewBookmarkNodeType: .bookmark, parentBookmarkFolder: bookmarkFolder)
+            let detailController = BookmarkDetailPanel(withNewBookmarkNodeType: .bookmark, parentBookmarkFolder: bookmarkFolder)
             self.navigationController?.pushViewController(detailController, animated: true)
         }).items
 
         let newFolder = SingleActionViewModel(title: .BookmarksNewFolder, iconString: "bookmarkFolder", tapHandler: { _ in
             guard let bookmarkFolder = self.bookmarkFolder else { return }
 
-            let detailController = BookmarkDetailPanel(profile: self.profile, withNewBookmarkNodeType: .folder, parentBookmarkFolder: bookmarkFolder)
+            let detailController = BookmarkDetailPanel(withNewBookmarkNodeType: .folder, parentBookmarkFolder: bookmarkFolder)
             self.navigationController?.pushViewController(detailController, animated: true)
         }).items
 
@@ -301,7 +304,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         guard !tableView.isEditing else {
             TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
             if let bookmarkFolder = self.bookmarkFolder, !(bookmarkNode is BookmarkSeparatorData) {
-                let detailController = BookmarkDetailPanel(profile: profile, bookmarkNode: bookmarkNode, parentBookmarkFolder: bookmarkFolder)
+                let detailController = BookmarkDetailPanel(bookmarkNode: bookmarkNode, parentBookmarkFolder: bookmarkFolder)
                 navigationController?.pushViewController(detailController, animated: true)
             }
             return
@@ -309,7 +312,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
         switch bookmarkNode {
         case let bookmarkFolder as BookmarkFolderData:
-            let nextController = BookmarksPanel(profile: profile, bookmarkFolderGUID: bookmarkFolder.guid)
+            let nextController = BookmarksPanel(bookmarkFolderGUID: bookmarkFolder.guid)
             if bookmarkFolder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid] {
                 nextController.title = localizedString
             } else {

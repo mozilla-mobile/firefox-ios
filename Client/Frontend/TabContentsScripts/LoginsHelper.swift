@@ -24,7 +24,10 @@ class LoginsHelper: TabContentScript {
         return "LoginsHelper"
     }
 
-    required init(tab: Tab, profile: Profile) {
+    required init(
+        tab: Tab,
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self)
+    ) {
         self.tab = tab
         self.profile = profile
     }

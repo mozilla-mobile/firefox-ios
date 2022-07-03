@@ -26,24 +26,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var tabManager: TabManager!
     var receivedURLs = [URL]()
     var orientationLock = UIInterfaceOrientationMask.all
-    lazy var profile: Profile = BrowserProfile(localName: "profile",
-                                               syncDelegate: UIApplication.shared.syncDelegate)
-    private let log = Logger.browserLogger
+    var profile: Profile = AppContainer.shared.resolve(type: Profile.self)
+
     private var shutdownWebServer: DispatchSourceTimer?
     private var webServerUtil: WebServerUtil?
     private var appLaunchUtil: AppLaunchUtil?
-    func application(_ application: UIApplication,
-                     willFinishLaunchingWithOptions
-                     launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+    private let log = Logger.browserLogger
+
+    func application(
+        _ application: UIApplication,
+        willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
         log.info("startApplication begin")
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
-        appLaunchUtil = AppLaunchUtil(profile: profile)
+        appLaunchUtil = AppLaunchUtil()
         appLaunchUtil?.setUpPreLaunchDependencies()
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
-        webServerUtil = WebServerUtil(profile: profile)
+        webServerUtil = WebServerUtil()
         webServerUtil?.setUpWebServer()
 
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
@@ -333,7 +336,7 @@ extension AppDelegate {
             window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
         }
 
-        browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
+        browserViewController = BrowserViewController(tabManager: tabManager)
         browserViewController.edgesForExtendedLayout = []
 
         let navigationController = UINavigationController(rootViewController: browserViewController)

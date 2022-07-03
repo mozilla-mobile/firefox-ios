@@ -171,7 +171,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
     fileprivate var records: [ReadingListItem]?
 
-    init(profile: Profile) {
+    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
 

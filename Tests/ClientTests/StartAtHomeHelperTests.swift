@@ -75,7 +75,7 @@ class StartAtHomeHelperTests: XCTestCase {
 
     func testScanForExistingHomeTab_ForEmptyTabs() {
         setupHelper()
-        let homeTab = helper.scanForExistingHomeTab(in: [], with: profile.prefs)
+        let homeTab = helper.scanForExistingHomeTab(in: [])
         XCTAssertNil(homeTab, "Expected to fail for disabled state")
     }
 
@@ -87,7 +87,7 @@ class StartAtHomeHelperTests: XCTestCase {
         let urlRequest = URLRequest(url: url!)
         let tab = tabManager.addTab(urlRequest)
 
-        let homeTab = helper.scanForExistingHomeTab(in: [tab], with: profile.prefs)
+        let homeTab = helper.scanForExistingHomeTab(in: [tab])
         XCTAssertNotNil(homeTab, "Expected to have a existing tab")
     }
 
@@ -99,14 +99,18 @@ class StartAtHomeHelperTests: XCTestCase {
         let urlRequest = URLRequest(url: url!)
         let tab = tabManager.addTab(urlRequest)
 
-        let homeTab = helper.scanForExistingHomeTab(in: [tab], with: profile.prefs)
+        let homeTab = helper.scanForExistingHomeTab(in: [tab])
         XCTAssertNil(homeTab, "Expected to fail for disabled state")
     }
 
     // MARK: - Private
     private func setupHelper(isRestoringTabs: Bool = false) {
-        helper = StartAtHomeHelper(isRestoringTabs: isRestoringTabs,
-                                   isRunnigTest: false)
+        helper = StartAtHomeHelper(
+            profile: profile,
+            isRestoringTabs: isRestoringTabs,
+            isRunnigTest: false
+        )
+
         helper.startAtHomeSetting = .afterFourHours
     }
 

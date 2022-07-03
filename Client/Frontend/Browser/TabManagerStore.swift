@@ -21,7 +21,11 @@ class TabManagerStore: FeatureFlaggable {
         return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
     }()
 
-    init(imageStore: DiskImageStore?, _ fileManager: FileManager = FileManager.default, prefs: Prefs) {
+    init(
+        imageStore: DiskImageStore?,
+        _ fileManager: FileManager = FileManager.default,
+        prefs: Prefs = AppContainer.shared.resolve(type: Profile.self).prefs
+    ) {
         self.fileManager = fileManager
         self.imageStore = imageStore
         self.prefs = prefs

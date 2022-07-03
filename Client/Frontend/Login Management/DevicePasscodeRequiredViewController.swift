@@ -27,8 +27,8 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         return button
     }()
 
-    init(profile: Profile? = nil, tabManager: TabManager? = nil, shownFromAppMenu: Bool = false) {
-        super.init(profile: profile, tabManager: tabManager)
+    init(tabManager: TabManager? = nil, shownFromAppMenu: Bool = false) {
+        super.init(tabManager: tabManager)
         self.shownFromAppMenu = shownFromAppMenu
     }
 

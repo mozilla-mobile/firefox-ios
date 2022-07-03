@@ -61,7 +61,10 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
 
     var snappedToBottom: Bool = true
 
-    init(profile: Profile, backForwardList: WKBackForwardList) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        backForwardList: WKBackForwardList
+    ) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
 

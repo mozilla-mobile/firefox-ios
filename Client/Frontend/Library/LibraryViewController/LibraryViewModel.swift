@@ -27,9 +27,12 @@ class LibraryViewModel: FeatureFlaggable {
          UIImage(named: ImageIdentifiers.libraryReadingList) ?? UIImage()]
     }
 
-    init(withProfile profile: Profile, tabManager: TabManager) {
+    init(
+        withProfile profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        tabManager: TabManager
+    ) {
         self.profile = profile
         self.tabManager = tabManager
-        self.panelDescriptors = LibraryPanels(profile: profile, tabManager: tabManager).enabledPanels
+        self.panelDescriptors = LibraryPanels(tabManager: tabManager).enabledPanels
     }
 }

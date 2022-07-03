@@ -9,7 +9,7 @@ class HistoryDeletionUtility {
 
     private var profile: Profile
 
-    init(with profile: Profile) {
+    init(with profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
         self.profile = profile
     }
 

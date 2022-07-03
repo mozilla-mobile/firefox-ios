@@ -52,16 +52,15 @@ class LoginListViewController: SensitiveViewController {
 
     static func create(
         authenticateInNavigationController navigationController: UINavigationController,
-        profile: Profile,
         settingsDelegate: SettingsDelegate,
         webpageNavigationHandler: ((_ url: URL?) -> Void)?
     ) -> Deferred<LoginListViewController?> {
+
         let deferred = Deferred<LoginListViewController?>()
 
         func fillDeferred(ok: Bool) {
             if ok {
-                let viewController = LoginListViewController(profile: profile,
-                                                             webpageNavigationHandler: webpageNavigationHandler)
+                let viewController = LoginListViewController(webpageNavigationHandler: webpageNavigationHandler)
                 viewController.settingsDelegate = settingsDelegate
                 deferred.fill(viewController)
             } else {
@@ -81,10 +80,11 @@ class LoginListViewController: SensitiveViewController {
         return deferred
     }
 
-    private init(profile: Profile, webpageNavigationHandler: ((_ url: URL?) -> Void)?) {
-        self.viewModel = LoginListViewModel(profile: profile, searchController: searchController)
+    private init(webpageNavigationHandler: ((_ url: URL?) -> Void)?) {
+        self.viewModel = LoginListViewModel(searchController: searchController)
         self.loginDataSource = LoginDataSource(viewModel: self.viewModel)
         self.webpageNavigationHandler = webpageNavigationHandler
+
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -393,7 +393,7 @@ extension LoginListViewController: UITableViewDelegate {
             toggleDeleteBarButton()
         } else if let login = viewModel.loginAtIndexPath(indexPath) {
             tableView.deselectRow(at: indexPath, animated: true)
-            let detailViewController = LoginDetailViewController(profile: viewModel.profile, login: login, webpageNavigationHandler: webpageNavigationHandler)
+            let detailViewController = LoginDetailViewController(login: login, webpageNavigationHandler: webpageNavigationHandler)
             if viewModel.breachIndexPath.contains(indexPath) {
                 guard let login = viewModel.loginAtIndexPath(indexPath) else { return }
                 let breach = viewModel.breachAlertsManager.breachRecordForLogin(login)

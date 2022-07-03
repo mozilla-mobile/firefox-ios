@@ -39,7 +39,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     let viewModel: HistoryPanelViewModel
     private let clearHistoryHelper: ClearHistoryHelper
     var keyboardState: KeyboardState?
-    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
+    private lazy var siteImageHelper = SiteImageHelper()
     var chevronImage = UIImage(named: ImageIdentifiers.menuChevron)
 
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
@@ -92,9 +92,12 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
 
     // MARK: - Inits
 
-    init(profile: Profile, tabManager: TabManager) {
-        self.clearHistoryHelper = ClearHistoryHelper(profile: profile, tabManager: tabManager)
-        self.viewModel = HistoryPanelViewModel(profile: profile)
+    init(
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        tabManager: TabManager
+    ) {
+        self.clearHistoryHelper = ClearHistoryHelper(tabManager: tabManager)
+        self.viewModel = HistoryPanelViewModel()
         self.profile = profile
 
         super.init(nibName: nil, bundle: nil)
@@ -542,7 +545,7 @@ extension HistoryPanel: UITableViewDelegate {
         exitSearchState()
 
         let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: asGroupItem, presenter: .historyPanel)
-        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: profile)
+        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel)
         asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
         asGroupListVC.title = asGroupItem.displayTitle
 
@@ -651,7 +654,7 @@ extension HistoryPanel {
     private func navigateToRecentlyClosed() {
         guard hasRecentlyClosed else { return }
 
-        let nextController = RecentlyClosedTabsPanel(profile: profile)
+        let nextController = RecentlyClosedTabsPanel()
         nextController.title = .RecentlyClosedTabsPanelTitle
         nextController.libraryPanelDelegate = libraryPanelDelegate
         nextController.recentlyClosedTabsDelegate = BrowserViewController.foregroundBVC()

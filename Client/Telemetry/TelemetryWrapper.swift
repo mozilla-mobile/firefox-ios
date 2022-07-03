@@ -48,7 +48,7 @@ class TelemetryWrapper {
         }
     }
 
-    init(profile: Profile) {
+    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
         crashedLastLaunch = SentryIntegration.shared.crashedLastLaunch
 
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-core", to: .cachesDirectory)

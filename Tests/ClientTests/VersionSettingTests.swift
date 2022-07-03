@@ -9,7 +9,7 @@ class VersionSettingTests: XCTestCase {
 
     func testCopyAppVersion() {
         // MARK: - given
-        let settingsTable = SettingsTableViewController(style: .grouped)
+        let settingsTable = SettingsTableViewController()
         let navigationController = UINavigationController(rootViewController: settingsTable)
         let versionSetting = VersionSetting(settings: settingsTable)
 

@@ -42,8 +42,8 @@ class LoginOnboardingViewController: SettingsViewController {
     var doneHandler: () -> Void = {}
     var proceedHandler: () -> Void = {}
 
-    init(profile: Profile? = nil, tabManager: TabManager? = nil, shownFromAppMenu: Bool = false) {
-        super.init(profile: profile, tabManager: tabManager)
+    init(tabManager: TabManager? = nil, shownFromAppMenu: Bool = false) {
+        super.init(tabManager: tabManager)
         self.shownFromAppMenu = shownFromAppMenu
     }
 

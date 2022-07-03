@@ -21,7 +21,6 @@ class FirefoxAccountSignInViewController: UIViewController {
 
     var shouldReload: (() -> Void)?
 
-    private let profile: Profile
     private var deepLinkParams: FxALaunchParams?
 
     /// This variable is used to track parent page that launched this sign in VC.
@@ -92,12 +91,11 @@ class FirefoxAccountSignInViewController: UIViewController {
     // MARK: - Inits
 
     /// - Parameters:
-    ///   - profile: User Profile info
     ///   - parentType: FxASignInParentType is an enum parent page that presented this VC. Parameter used in telemetry button events.
     ///   - parameter: deepLinkParams: URL args passed in from deep link that propagate to FxA web view
-    init(profile: Profile, parentType: FxASignInParentType, deepLinkParams: FxALaunchParams?) {
+    init(parentType: FxASignInParentType, deepLinkParams: FxALaunchParams?) {
         self.deepLinkParams = deepLinkParams
-        self.profile = profile
+
         switch parentType {
         case .appMenu:
             self.telemetryObject = .appMenu
@@ -113,6 +111,7 @@ class FirefoxAccountSignInViewController: UIViewController {
             self.fxaDismissStyle = .popToTabTray
 
         }
+
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -174,7 +173,7 @@ class FirefoxAccountSignInViewController: UIViewController {
 
     /// Use email login button tapped
     @objc func emailLoginTapped(_ sender: UIButton) {
-        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
+        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
         fxaWebVC.shouldDismissFxASignInViewController = { [weak self] in
             self?.shouldReload?()
             self?.dismissVC()
@@ -187,7 +186,7 @@ class FirefoxAccountSignInViewController: UIViewController {
 // MARK: QRCodeViewControllerDelegate Functions
 extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
+        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
         navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -204,7 +203,13 @@ extension FirefoxAccountSignInViewController {
     ///     - deepLinkParams: FxALaunchParams from deeplink query
     ///     - flowType: FxAPageType is used to determine if email login, qr code login, or user settings page should be presented
     ///     - referringPage: ReferringPage enum is used to handle telemetry events correctly for the view event and the FxA sign in tap events, need to know which route we took to get to them
-    static func getSignInOrFxASettingsVC(_ deepLinkParams: FxALaunchParams? = nil, flowType: FxAPageType, referringPage: ReferringPage, profile: Profile) -> UIViewController {
+    ///     - Profile: The profile 
+    static func getSignInOrFxASettingsVC(
+        _ deepLinkParams: FxALaunchParams? = nil,
+        flowType: FxAPageType,
+        referringPage: ReferringPage,
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self)
+    ) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         let parentType: FxASignInParentType
         let object: TelemetryWrapper.EventObject
@@ -224,7 +229,7 @@ extension FirefoxAccountSignInViewController {
                 object = .tabTray
             }
 
-            let signInVC = FirefoxAccountSignInViewController(profile: profile, parentType: parentType, deepLinkParams: deepLinkParams)
+            let signInVC = FirefoxAccountSignInViewController(parentType: parentType, deepLinkParams: deepLinkParams)
             TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: object)
             return signInVC
         }

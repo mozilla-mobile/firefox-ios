@@ -8,18 +8,78 @@ import Storage
 @testable import Client
 
 class RemoteTabsPanelTests: XCTestCase {
+    private var profile: MockProfile!
 
-    // MARK: States of panel
+    private var remoteClient: RemoteClient {
+        return RemoteClient(
+            guid: nil,
+            name: "Fake client",
+            modified: 1,
+            type: nil,
+            formfactor: nil,
+            os: nil,
+            version: nil,
+            fxaDeviceId: nil
+        )
+    }
+    private var remoteTabs: [RemoteTab] {
+        return [RemoteTab(
+            clientGUID: nil,
+            URL: URL(string: "www.mozilla.org")!,
+            title: "Mozilla",
+            history: [],
+            lastUsed: 1,
+            icon: nil
+        )]
+    }
+
+    func getMockProfileWithAttributes(
+        hasAccount: Bool = true,
+        clientAndTabs: [ClientAndTabs] = []
+    ) -> MockProfile {
+        profile = MockProfile()
+        profile.hasSyncableAccountMock = hasAccount
+        profile.mockClientAndTabs = clientAndTabs
+
+        return profile
+    }
+
+    func subject(
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> RemoteTabsPanel {
+        let remoteTabsPanel = RemoteTabsPanel()
+        remoteTabsPanel.loadViewIfNeeded()
+
+        trackForMemoryLeaks(remoteTabsPanel, file: file, line: line)
+
+        return remoteTabsPanel
+    }
+
+    func panelRefreshWithExpectation(panel: RemoteTabsPanel, completion: @escaping () -> Void) {
+        let expectation = expectation(description: "Tabs should be refreshed")
+        panel.tableViewController.refreshTabs {
+            completion()
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5.0, handler: nil)
+    }
+
+}
+
+/// Test panel states based on a varying of clients, tabs, and login state.
+extension RemoteTabsPanelTests {
 
     func testHasNoSyncAccount() throws {
-        let panel = createPanel(hasAccount: false)
+        let panel = subject()
 
         let dataSource = try XCTUnwrap(panel.tableViewController.tableViewDelegate as? RemoteTabsPanelErrorDataSource)
         XCTAssertEqual(dataSource.error, .notLoggedIn)
     }
 
     func testHasNoClients() {
-        let panel = createPanel()
+        let panel = subject()
+        panel.tableViewController.profile = getMockProfileWithAttributes()
 
         panelRefreshWithExpectation(panel: panel) {
             guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelErrorDataSource else {
@@ -32,9 +92,10 @@ class RemoteTabsPanelTests: XCTestCase {
     }
 
     func testHasNoTabs() {
-        let clientAndTabs = ClientAndTabs(client: remoteClient,
-                                          tabs: [])
-        let panel = createPanel(clientAndTabs: [clientAndTabs])
+        let clientAndTabs = ClientAndTabs(client: remoteClient, tabs: [])
+
+        let panel = subject()
+        panel.tableViewController.profile = getMockProfileWithAttributes(clientAndTabs: [clientAndTabs])
 
         panelRefreshWithExpectation(panel: panel) {
             guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelErrorDataSource else {
@@ -47,9 +108,10 @@ class RemoteTabsPanelTests: XCTestCase {
     }
 
     func testHasTabs() {
-        let clientAndTabs = ClientAndTabs(client: remoteClient,
-                                          tabs: remoteTabs)
-        let panel = createPanel(clientAndTabs: [clientAndTabs])
+        let clientAndTabs = ClientAndTabs(client: remoteClient, tabs: remoteTabs)
+
+        let panel = subject()
+        panel.tableViewController.profile = getMockProfileWithAttributes(clientAndTabs: [clientAndTabs])
 
         panelRefreshWithExpectation(panel: panel) {
             guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource else {
@@ -65,10 +127,10 @@ class RemoteTabsPanelTests: XCTestCase {
     // MARK: Collapsing of section
 
     func testSectionCanCollapseAndReopen() {
-        let clientAndTabs = ClientAndTabs(client: remoteClient,
-                                          tabs: remoteTabs)
+        let clientAndTabs = ClientAndTabs(client: remoteClient, tabs: remoteTabs)
 
-        let panel = createPanel(clientAndTabs: [clientAndTabs])
+        let panel = subject()
+        panel.tableViewController.profile = getMockProfileWithAttributes(clientAndTabs: [clientAndTabs])
 
         panelRefreshWithExpectation(panel: panel) {
             guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource else {
@@ -83,51 +145,5 @@ class RemoteTabsPanelTests: XCTestCase {
             XCTAssertEqual(dataSource.hiddenSections.count, 0, "Has been reopened")
         }
     }
-}
 
-private extension RemoteTabsPanelTests {
-    var remoteClient: RemoteClient {
-        return RemoteClient(guid: nil,
-                            name: "Fake client",
-                            modified: 1,
-                            type: nil,
-                            formfactor: nil,
-                            os: nil,
-                            version: nil,
-                            fxaDeviceId: nil)
-    }
-
-    var remoteTabs: [RemoteTab] {
-        return [RemoteTab(clientGUID: nil,
-                          URL: URL(string: "www.mozilla.org")!,
-                          title: "Mozilla",
-                          history: [],
-                          lastUsed: 1,
-                          icon: nil)]
-    }
-
-    func panelRefreshWithExpectation(panel: RemoteTabsPanel, completion: @escaping () -> Void) {
-        let expectation = expectation(description: "Tabs should be refreshed")
-        panel.tableViewController.refreshTabs {
-            completion()
-            expectation.fulfill()
-        }
-        waitForExpectations(timeout: 5.0, handler: nil)
-    }
-
-    func createPanel(hasAccount: Bool = true,
-                     clientAndTabs: [ClientAndTabs] = [],
-                     file: StaticString = #file,
-                     line: UInt = #line) -> RemoteTabsPanel {
-
-        let profile = MockProfile()
-        profile.hasSyncableAccountMock = hasAccount
-        profile.mockClientAndTabs = clientAndTabs
-        let panel = RemoteTabsPanel(profile: profile)
-        panel.viewDidLoad()
-
-        trackForMemoryLeaks(panel, file: file, line: line)
-
-        return panel
-    }
 }

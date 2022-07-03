@@ -7,14 +7,12 @@ import UIKit
 class SettingsViewController: UIViewController {
     weak var settingsDelegate: SettingsDelegate?
 
-    var profile: Profile!
     var tabManager: TabManager!
 
     let theme = LegacyThemeManager.instance
 
-    init(profile: Profile? = nil, tabManager: TabManager? = nil) {
+    init(tabManager: TabManager? = nil) {
         super.init(nibName: nil, bundle: nil)
-        self.profile = profile
         self.tabManager = tabManager
     }
 

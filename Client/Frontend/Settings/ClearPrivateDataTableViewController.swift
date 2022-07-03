@@ -19,7 +19,7 @@ private let HistoryClearableIndex = 0
 class ClearPrivateDataTableViewController: ThemedTableViewController {
     fileprivate var clearButton: UITableViewCell?
 
-    var profile: Profile!
+    var profile: Profile
     var tabManager: TabManager!
 
     fileprivate typealias DefaultCheckedState = Bool
@@ -30,7 +30,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     // Bug 1445687 -- https://bugzilla.mozilla.org/show_bug.cgi?id=1445687
     fileprivate lazy var clearables: [(clearable: Clearable, checked: DefaultCheckedState)] = {
         var items: [(clearable: Clearable, checked: DefaultCheckedState)] = [
-            (HistoryClearable(profile: self.profile, tabManager: tabManager), true),
+            (HistoryClearable(tabManager: tabManager), true),
             (CacheClearable(tabManager: self.tabManager), true),
             (CookiesClearable(tabManager: self.tabManager), true),
             (SiteDataClearable(tabManager: self.tabManager), true),
@@ -60,6 +60,16 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         didSet {
             clearButton?.textLabel?.textColor = clearButtonEnabled ? UIColor.theme.general.destructiveRed : UIColor.theme.tableView.disabledRowText
         }
+    }
+
+    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
+        self.profile = profile
+
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {

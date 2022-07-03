@@ -26,7 +26,7 @@ final class ThemeManager {
     static let shared = ThemeManager()
 
     // MARK: - Variables
-    private var profile: Profile!
+    private var profile: Profile
 
     /// The theme key of the current set theme. If no custom theme is set, then
     /// this will return the `defaultThemeKey`
@@ -36,6 +36,10 @@ final class ThemeManager {
     }
 
     private let defaultThemeKey = "FxDefaultThemeThemeManagerKey"
+
+    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
+        self.profile = profile
+    }
 
     /// The current theme set in the application.
     ///
@@ -51,14 +55,6 @@ final class ThemeManager {
     }
 
     // MARK: - Public methods
-
-    /// This is `ThemeManager`s initializer, essentially, as we require the profile
-    /// to save custom themes to disk.
-    ///
-    /// This should only be called in AppDelegate.
-    public func updateProfile(with profile: Profile) {
-        self.profile = profile
-    }
 
     // IMPORTANT NOTE:
     // The methods below are not finished. They are sketches for how updating themes

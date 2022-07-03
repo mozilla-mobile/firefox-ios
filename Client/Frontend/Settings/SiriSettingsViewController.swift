@@ -10,9 +10,9 @@ import IntentsUI
 class SiriSettingsViewController: SettingsTableViewController {
     let prefs: Prefs
 
-    init(prefs: Prefs) {
+    init(prefs: Prefs = AppContainer.shared.resolve(type: Profile.self).prefs) {
         self.prefs = prefs
-        super.init(style: .grouped)
+        super.init()
 
         self.title = .SettingsSiriSectionName
     }

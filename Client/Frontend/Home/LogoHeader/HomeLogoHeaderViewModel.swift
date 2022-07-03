@@ -11,12 +11,7 @@ class HomeLogoHeaderViewModel {
         static let botttomSpacing: CGFloat = 12
     }
 
-    private let profile: Profile
     var onTapAction: ((UIButton) -> Void)?
-
-    init(profile: Profile) {
-        self.profile = profile
-    }
 }
 
 // MARK: HomeViewModelProtocol

@@ -247,12 +247,14 @@ extension TabDisplayManagerTests {
     }
 
     func createTabDisplayManager(useMockDataStore: Bool = true) -> TabDisplayManager {
-        let tabDisplayManager = TabDisplayManager(collectionView: collectionView,
-                                                  tabManager: manager,
-                                                  tabDisplayer: self,
-                                                  reuseID: TopTabCell.cellIdentifier,
-                                                  tabDisplayType: .TopTabTray,
-                                                  profile: profile)
+        let tabDisplayManager = TabDisplayManager(
+            collectionView: collectionView,
+            tabManager: manager,
+            tabDisplayer: self,
+            reuseID: TopTabCell.cellIdentifier,
+            tabDisplayType: .TopTabTray
+        )
+
         collectionView.dataSource = tabDisplayManager
         tabDisplayManager.dataStore = useMockDataStore ? mockDataStore : dataStore
         return tabDisplayManager

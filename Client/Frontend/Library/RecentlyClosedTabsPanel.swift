@@ -26,9 +26,9 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     let profile: Profile
 
-    fileprivate lazy var tableViewController = RecentlyClosedTabsPanelSiteTableViewController(profile: profile)
+    fileprivate lazy var tableViewController = RecentlyClosedTabsPanelSiteTableViewController()
 
-    init(profile: Profile) {
+    init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
     }

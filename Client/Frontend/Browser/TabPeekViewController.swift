@@ -16,6 +16,7 @@ protocol TabPeekDelegate: AnyObject {
 
 class TabPeekViewController: UIViewController, WKNavigationDelegate {
     weak var tab: Tab?
+    private var profile: BrowserProfile
 
     fileprivate weak var delegate: TabPeekDelegate?
     fileprivate var fxaDevicePicker: UINavigationController?
@@ -103,7 +104,12 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         return UIMenu(title: "", children: actions)
     }
 
-    init(tab: Tab, delegate: TabPeekDelegate?) {
+    init(
+        profile: BrowserProfile = AppContainer.shared.resolve(type: Profile.self) as! BrowserProfile,
+        tab: Tab,
+        delegate: TabPeekDelegate?
+    ) {
+        self.profile = profile
         self.tab = tab
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
@@ -165,24 +171,24 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         clonedWebView.load(URLRequest(url: url))
     }
 
-    func setState(withProfile browserProfile: BrowserProfile, clientPickerDelegate: DevicePickerViewControllerDelegate) {
+    func setState(clientPickerDelegate: DevicePickerViewControllerDelegate) {
         assert(Thread.current.isMainThread)
 
         guard let tab = self.tab else { return }
 
         guard let displayURL = tab.url?.absoluteString, !displayURL.isEmpty else { return }
 
-        browserProfile.places.isBookmarked(url: displayURL) >>== { isBookmarked in
+        self.profile.places.isBookmarked(url: displayURL) >>== { isBookmarked in
             self.isBookmarked = isBookmarked
         }
 
-        browserProfile.remoteClientsAndTabs.getClientGUIDs().uponQueue(.main) {
+        self.profile.remoteClientsAndTabs.getClientGUIDs().uponQueue(.main) {
             guard let clientGUIDs = $0.successValue else { return }
 
             self.hasRemoteClients = !clientGUIDs.isEmpty
             let clientPickerController = DevicePickerViewController()
             clientPickerController.pickerDelegate = clientPickerDelegate
-            clientPickerController.profile = browserProfile
+            clientPickerController.profile = self.profile
             clientPickerController.profileNeedsShutdown = false
             if let url = tab.url?.absoluteString {
                 clientPickerController.shareItem = ShareItem(url: url, title: tab.title, favicon: nil)
@@ -191,7 +197,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             self.fxaDevicePicker = UINavigationController(rootViewController: clientPickerController)
         }
 
-        let result = browserProfile.readingList.getRecordWithURL(displayURL).value.successValue
+        let result = self.profile.readingList.getRecordWithURL(displayURL).value.successValue
 
         self.isInReadingList = !(result?.url.isEmpty ?? true)
         self.ignoreURL = isIgnoredURL(displayURL)

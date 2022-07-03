@@ -33,9 +33,13 @@ class FxAWebViewController: UIViewController {
      - parameter dismissalStyle: depending on how this was presented, it uses modal dismissal, or if part of a UINavigationController stack it will pop to the root.
      - parameter deepLinkParams: URL args passed in from deep link that propagate to FxA web view
      */
-    init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType, deepLinkParams: FxALaunchParams?) {
-        self.viewModel = FxAWebViewModel(pageType: pageType, profile: profile, deepLinkParams: deepLinkParams)
-
+    init(
+        pageType: FxAPageType,
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self),
+        dismissalStyle: DismissType,
+        deepLinkParams: FxALaunchParams?
+    ) {
+        self.viewModel = FxAWebViewModel(pageType: pageType, deepLinkParams: deepLinkParams)
         self.dismissType = dismissalStyle
 
         let contentController = WKUserContentController()

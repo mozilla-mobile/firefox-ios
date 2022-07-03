@@ -63,7 +63,10 @@ class ContextualHintViewModel {
     }
 
     // MARK: - Initializers
-    init(forHintType hintType: ContextualHintViewType, with profile: Profile) {
+    init(
+        forHintType hintType: ContextualHintViewType,
+        with profile: Profile = AppContainer.shared.resolve(type: Profile.self)
+    ) {
         self.hintType = hintType
         self.profile = profile
     }
@@ -180,7 +183,7 @@ class ContextualHintViewModel {
 
     private func getToolbarLocation() -> String {
         guard SearchBarSettingsViewModel.isEnabled,
-              SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom
+              SearchBarSettingsViewModel().searchBarPosition == .bottom 
         else { return "ToolbarLocationTop" }
 
         return "ToolbarLocationBottom"

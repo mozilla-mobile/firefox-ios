@@ -19,14 +19,14 @@ class TabTrayViewModel {
     }
 
     init(tabTrayDelegate: TabTrayDelegate? = nil,
-         profile: Profile,
+         profile: Profile = AppContainer.shared.resolve(type: Profile.self),
          tabToFocus: Tab? = nil,
          tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
 
-        self.tabTrayView = GridTabViewController(tabManager: self.tabManager, profile: profile, tabTrayDelegate: tabTrayDelegate, tabToFocus: tabToFocus)
-        self.syncedTabsController = RemoteTabsPanel(profile: self.profile)
+        self.tabTrayView = GridTabViewController(tabManager: self.tabManager, tabTrayDelegate: tabTrayDelegate, tabToFocus: tabToFocus)
+        self.syncedTabsController = RemoteTabsPanel()
     }
 
     func navTitle(for segmentIndex: Int, foriPhone: Bool) -> String? {

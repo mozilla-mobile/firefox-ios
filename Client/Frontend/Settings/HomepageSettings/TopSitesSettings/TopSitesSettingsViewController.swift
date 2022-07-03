@@ -9,7 +9,7 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
 
     // MARK: - Initializers
     init() {
-        super.init(style: .grouped)
+        super.init()
 
         self.title = .Settings.Homepage.Shortcuts.ShortcutsPageTitle
         self.navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage
@@ -41,7 +41,7 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
         let toggleSection = SettingSection(title: nil,
                                            children: sections)
 
-        let rowSetting = RowSettings(settings: self)
+        let rowSetting = RowSettings()
         let rowSection = SettingSection(title: nil, children: [rowSetting])
 
         return [toggleSection, rowSection]
@@ -62,14 +62,19 @@ extension TopSitesSettingsViewController {
         override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.topSitesRows }
         override var style: UITableViewCell.CellStyle { return .value1 }
 
-        init(settings: SettingsTableViewController) {
-            self.profile = settings.profile
-            super.init(title: NSAttributedString(string: .Settings.Homepage.Shortcuts.Rows,
-                                                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        init(profile: Profile = AppContainer.shared.resolve(type: Profile.self)) {
+            self.profile = profile
+
+            super.init(
+                title: NSAttributedString(
+                    string: .Settings.Homepage.Shortcuts.Rows,
+                    attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+            )
+
         }
 
         override func onClick(_ navigationController: UINavigationController?) {
-            let viewController = TopSitesRowCountSettingsController(prefs: profile.prefs)
+            let viewController = TopSitesRowCountSettingsController()
             viewController.profile = profile
             navigationController?.pushViewController(viewController, animated: true)
         }

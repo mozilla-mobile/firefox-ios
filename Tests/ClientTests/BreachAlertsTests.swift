@@ -32,10 +32,10 @@ let unbreachedLogin = LoginRecord(fromJSONDict: ["hostname": "http://unbreached.
 let breachedLogin = LoginRecord(fromJSONDict: ["hostname": "http://blockbuster.com", "timePasswordChanged": 46800000])
 
 class MockBreachAlertsClient: BreachAlertsClientProtocol {
-    func fetchEtag(endpoint: BreachAlertsClient.Endpoint, profile: Client.Profile, completion: @escaping (String?) -> Void) {
+    func fetchEtag(endpoint: BreachAlertsClient.Endpoint, completion: @escaping (String?) -> Void) {
         completion("33a64df551425fcc55e4d42a148795d9f25f89d4")
     }
-    func fetchData(endpoint: BreachAlertsClient.Endpoint, profile: Client.Profile, completion: @escaping (Maybe<Data>) -> Void) {
+    func fetchData(endpoint: BreachAlertsClient.Endpoint, completion: @escaping (Maybe<Data>) -> Void) {
         guard let mockData = try? JSONEncoder().encode([blockbusterBreach, longBreach, lipsumBreach].self) else {
             completion(Maybe(failure: BreachAlertsError(description: "failed to encode mockRecord")))
             return

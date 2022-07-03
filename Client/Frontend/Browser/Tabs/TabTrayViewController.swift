@@ -155,7 +155,6 @@ class TabTrayViewController: UIViewController {
 
     // MARK: - Initializers
     init(tabTrayDelegate: TabTrayDelegate? = nil,
-         profile: Profile,
          tabToFocus: Tab? = nil,
          tabManager: TabManager,
          and notificationCenter: NotificationCenter = NotificationCenter.default,
@@ -164,7 +163,6 @@ class TabTrayViewController: UIViewController {
         self.nimbus = nimbus
         self.notificationCenter = notificationCenter
         self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate,
-                                          profile: profile,
                                           tabToFocus: tabToFocus,
                                           tabManager: tabManager)
 
@@ -467,7 +465,7 @@ extension TabTrayViewController: RemotePanelDelegate {
     // Sign In and Create Account Helper
     func fxaSignInOrCreateAccountHelper() {
         let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
-        let controller = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaParams, flowType: .emailLoginFlow, referringPage: .tabTray, profile: viewModel.profile)
+        let controller = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaParams, flowType: .emailLoginFlow, referringPage: .tabTray)
         (controller as? FirefoxAccountSignInViewController)?.shouldReload = { [weak self] in
             self?.viewModel.reloadRemoteTabs()
         }

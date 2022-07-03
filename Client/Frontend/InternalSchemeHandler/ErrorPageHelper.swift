@@ -226,7 +226,7 @@ class ErrorPageHelper {
 
     fileprivate weak var certStore: CertStore?
 
-    init(certStore: CertStore?) {
+    init(certStore: CertStore? = AppContainer.shared.resolve(type: Profile.self).certStore) {
         self.certStore = certStore
     }
 

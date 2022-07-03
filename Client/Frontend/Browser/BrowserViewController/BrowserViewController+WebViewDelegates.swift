@@ -707,7 +707,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
-            ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
+            ErrorPageHelper().loadPage(error, forUrl: url, inWebView: webView)
         }
     }
 

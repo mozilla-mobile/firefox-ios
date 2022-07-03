@@ -8,20 +8,23 @@ import Sync
 import Account
 
 class ManageFxAccountSetting: Setting {
-    let profile: Profile
-
     override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
-
     override var accessibilityIdentifier: String? { return "Manage" }
 
     init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-
-        super.init(title: NSAttributedString(string: .FxAManageAccount, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        super.init(title: NSAttributedString(
+            string: .FxAManageAccount,
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]
+        ))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAWebViewController(pageType: .settingsPage, profile: profile, dismissalStyle: .popToRootVC, deepLinkParams: nil)
+        let viewController = FxAWebViewController(
+            pageType: .settingsPage,
+            dismissalStyle: .popToRootVC,
+            deepLinkParams: nil
+        )
+
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -36,9 +39,12 @@ class DisconnectSetting: Setting {
         return NSAttributedString(string: .SettingsDisconnectSyncButton, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.destructiveRed])
     }
 
-    init(settings: SettingsTableViewController) {
+    init(
+        settings: SettingsTableViewController,
+        profile: Profile = AppContainer.shared.resolve(type: Profile.self)
+    ) {
         self.settingsVC = settings
-        self.profile = settings.profile
+        self.profile = profile
     }
 
     override var accessibilityIdentifier: String? { return "SignOut" }
@@ -121,8 +127,7 @@ class SyncContentSettingsViewController: SettingsTableViewController {
     fileprivate var enginesToSyncOnExit: Set<String> = Set()
 
     init() {
-        super.init(style: .grouped)
-
+        super.init()
         self.title = .FxASettingsTitle
 
         RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation()?.refreshState()
@@ -158,28 +163,24 @@ class SyncContentSettingsViewController: SettingsTableViewController {
         let manageSection = SettingSection(title: nil, footerTitle: nil, children: [manage])
 
         let bookmarks = BoolSetting(
-            prefs: profile.prefs,
             prefKey: "sync.engine.bookmarks.enabled",
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .FirefoxSyncBookmarksEngine),
             attributedStatusText: nil,
             settingDidChange: engineSettingChanged("bookmarks"))
         let history = BoolSetting(
-            prefs: profile.prefs,
             prefKey: "sync.engine.history.enabled",
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .FirefoxSyncHistoryEngine),
             attributedStatusText: nil,
             settingDidChange: engineSettingChanged("history"))
         let tabs = BoolSetting(
-            prefs: profile.prefs,
             prefKey: "sync.engine.tabs.enabled",
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .FirefoxSyncTabsEngine),
             attributedStatusText: nil,
             settingDidChange: engineSettingChanged("tabs"))
         let passwords = BoolSetting(
-            prefs: profile.prefs,
             prefKey: "sync.engine.passwords.enabled",
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .FirefoxSyncLoginsEngine),
