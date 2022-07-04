@@ -7,19 +7,19 @@ import Storage
 import Shared
 
 class StoryProvider {
-
-    private let numberOfPocketStories = 11
-    private let numberOfPocketStoriesWithSponsoredContent = 9
-    let sponsoredIndices: [Int]
+    private let numberOfPocketStories: Int
+    private let sponsoredIndices: [Int]
 
     init(
         pocketAPI: PocketStoriesProviding,
         pocketSponsoredAPI: PocketSponsoredStoriesProviding,
+        numberOfPocketStories: Int = 11,
         sponsoredIndices: [Int] = [1, 9],
         showSponsoredStories: @escaping () -> Bool
     ) {
         self.pocketAPI = pocketAPI
         self.pocketSponsoredAPI = pocketSponsoredAPI
+        self.numberOfPocketStories = numberOfPocketStories
         self.sponsoredIndices = sponsoredIndices
         self.showSponsoredStories = showSponsoredStories
     }
@@ -43,14 +43,14 @@ class StoryProvider {
     }
 
     func fetchPocketStories() async -> [PocketStory] {
-        let storyCount = showSponsoredStories() ? numberOfPocketStoriesWithSponsoredContent : numberOfPocketStories
-        let global = (try? await pocketAPI.fetchStories(items: storyCount)) ?? []
+        let global = (try? await pocketAPI.fetchStories(items: numberOfPocketStories)) ?? []
         // Convert global feed to PocketStory
         var globalTemp = global.map(PocketStory.init)
 
         if showSponsoredStories(), let sponsored = try? await pocketSponsoredAPI.fetchSponsoredStories() {
             // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
             let sponsoredTemp = Array(sponsored.map(PocketStory.init).prefix(sponsoredIndices.count))
+            globalTemp = Array(globalTemp.prefix(numberOfPocketStories - sponsoredIndices.count))
             globalTemp = insert(
                 sponsoredStories: sponsoredTemp,
                 into: globalTemp,

@@ -150,13 +150,13 @@ class PocketStoryProviderTests: XCTestCase {
             showSponsoredStories: { true }
         )
 
-        let extected: [PocketStory] = [
+        let expected: [PocketStory] = [
             .init(pocketSponsoredStory: .make(title: "sponsored1")),
             .init(pocketSponsoredStory: .make(title: "sponsored2"))
         ]
 
         let fetched = await sut.fetchPocketStories()
-        XCTAssertEqual(fetched, extected)
+        XCTAssertEqual(fetched, expected)
     }
 
     func testReturningFailureForSponsoredStories_ShowsOnlyTheFeed() async {
@@ -173,14 +173,15 @@ class PocketStoryProviderTests: XCTestCase {
             showSponsoredStories: { true }
         )
 
-        let extected: [PocketStory] = [
+        let expected: [PocketStory] = [
             .init(pocketFeedStory: .make(title: "feed1")),
             .init(pocketFeedStory: .make(title: "feed2")),
             .init(pocketFeedStory: .make(title: "feed3")),
         ]
 
         let fetched = await sut.fetchPocketStories()
-        XCTAssertEqual(fetched, extected)
+        XCTAssertEqual(fetched.count, 3)
+        XCTAssertEqual(fetched, expected)
     }
 
     func testReturningFailureForFeedStories_ShowsOnlyTheSponsored() async {
@@ -197,10 +198,38 @@ class PocketStoryProviderTests: XCTestCase {
             showSponsoredStories: { true }
         )
 
-        let extected: [PocketStory] = stories.map(PocketStory.init)
+        let expected: [PocketStory] = stories.map(PocketStory.init)
 
         let fetched = await sut.fetchPocketStories()
-        XCTAssertEqual(fetched, extected)
+        XCTAssertEqual(fetched, expected)
+    }
+
+    func testReturningFailureForSponsoredStories_ShowsOnlyTheRequestedNumberInFeed() async {
+        let stories: [PocketFeedStory] = [
+            .make(title: "feed1"),
+            .make(title: "feed2"),
+            .make(title: "feed3"),
+            .make(title: "feed4"),
+            .make(title: "feed5")
+        ]
+
+        sut = StoryProvider(
+            pocketAPI: MockPocketAPI(result: .success(stories)),
+            pocketSponsoredAPI: MockSponsoredPocketAPI(result: .failure(TestError.default)),
+            numberOfPocketStories: 3,
+            sponsoredIndices: [0, 1],
+            showSponsoredStories: { true }
+        )
+
+        let expected: [PocketStory] = [
+            .init(pocketFeedStory: .make(title: "feed1")),
+            .init(pocketFeedStory: .make(title: "feed2")),
+            .init(pocketFeedStory: .make(title: "feed3")),
+        ]
+
+        let fetched = await sut.fetchPocketStories()
+        XCTAssertEqual(fetched.count, 3)
+        XCTAssertEqual(fetched, expected)
     }
 }
 
@@ -218,7 +247,12 @@ extension PocketStoryProviderTests {
         var result: Result<[PocketFeedStory], Error>
 
         func fetchStories(items: Int, completion: @escaping (StoryResult) -> Void) {
-            completion(result)
+            switch result {
+            case .success(let value):
+                completion(.success(Array(value.prefix(items))))
+            case .failure(let error):
+                completion(.failure(error))
+            }
             return
         }
 
