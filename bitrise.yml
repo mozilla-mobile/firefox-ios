@@ -132,10 +132,10 @@ workflows:
             #!/usr/bin/env bash
             set -ex 
 
-            ls -la
             ls ./Users/vagrant/git/Tests/
-            cp ./Users/vagrant/git/Tests/* .
-            mv ./Users/vagrant/git/Tests/* .
+            cp -r ./Users/vagrant/git/Tests/* .
+            mv ./Users/vagrant/git/* .
+            ls -la
             echo "-- test-without-building --"
 
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" test-without-building
@@ -170,10 +170,10 @@ workflows:
             #!/usr/bin/env bash
             set -ex 
 
-            ls -la
             ls ./Users/vagrant/git/Tests/
-            cp ./Users/vagrant/git/Tests/* .
-            mv ./Users/vagrant/git/Tests/* .
+            cp -r ./Users/vagrant/git/Tests/* .
+            mv ./Users/vagrant/git/* .
+            ls -la
 
             echo "-- test-without-building --"
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "SmokeXCUITests" "test-without-building"
@@ -208,8 +208,8 @@ workflows:
             #!/usr/bin/env bash
             set -ex 
             ls ./Users/vagrant/git/Tests/
-            cp ./Users/vagrant/git/Tests/* .
-            mv ./Users/vagrant/git/Tests/* .
+            cp -r ./Users/vagrant/git/Tests/* .
+            mv ./Users/vagrant/git/* .
             ls -la
 
             echo "-- test-without-building --"
@@ -246,8 +246,8 @@ workflows:
             set -ex 
 
             ls ./Users/vagrant/git/Tests/
-            cp ./Users/vagrant/git/Tests/* .
-            mv ./Users/vagrant/git/Tests/* .
+            cp -r ./Users/vagrant/git/Tests/* .
+            mv ./Users/vagrant/git/* .
             ls -la
 
             echo "-- test-without-building --"
@@ -285,8 +285,8 @@ workflows:
 
             ls -la
             ls ./Users/vagrant/git/Tests/
-            cp ./Users/vagrant/git/Tests/* .
-            mv ./Users/vagrant/git/Tests/* .
+            cp -r ./Users/vagrant/git/Tests/* .
+            mv ./Users/vagrant/git/* .
             ls -la
 
             pwd
