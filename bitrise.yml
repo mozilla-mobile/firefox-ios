@@ -133,9 +133,9 @@ workflows:
             set -ex 
 
             ls -la
-            ls ./Users/vagrant/git/Tests/XCUITests
-            cp ./Users/vagrant/git/Tests/XCUITests/* .
-            mv ./Users/vagrant/git/* .
+            ls /Users/vagrant/git/Tests/XCUITests
+            cp /Users/vagrant/git/Tests/XCUITests/* .
+            mv /Users/vagrant/git/Tests/* .
             echo "-- test-without-building --"
 
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" test-without-building
@@ -171,9 +171,9 @@ workflows:
             set -ex 
 
             ls -la
-            ls ./Users/vagrant/git/Tests/XCUITests
-            cp ./Users/vagrant/git/Tests/XCUITests/* .
-            mv ./Users/vagrant/git/* .
+            ls /Users/vagrant/git/Tests/XCUITests
+            cp /Users/vagrant/git/Tests/XCUITests/* .
+            mv /Users/vagrant/git/Tests/* .
 
             echo "-- test-without-building --"
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "SmokeXCUITests" "test-without-building"
@@ -207,9 +207,9 @@ workflows:
         - content: |
             #!/usr/bin/env bash
             set -ex 
-            ls ./Users/vagrant/git/Tests/XCUITests
-            cp ./Users/vagrant/git/Tests/XCUITests/* .
-            mv ./Users/vagrant/git/* .
+            ls /Users/vagrant/git/Tests/XCUITests
+            cp /Users/vagrant/git/Tests/XCUITests/* .
+            mv /Users/vagrant/git/Tests/* .
             ls -la
 
             echo "-- test-without-building --"
@@ -245,9 +245,9 @@ workflows:
             #!/usr/bin/env bash
             set -ex 
 
-            ls ./Users/vagrant/git/Tests/XCUITests
-            cp ./Users/vagrant/git/Tests/XCUITests/* .
-            mv ./Users/vagrant/git/* .
+            ls /Users/vagrant/git/Tests/XCUITests
+            cp /Users/vagrant/git/Tests/XCUITests/* .
+            mv /Users/vagrant/git/Tests/* .
             ls -la
 
             echo "-- test-without-building --"
@@ -284,9 +284,9 @@ workflows:
             set -ex 
 
             ls -la
-            ls ./Users/vagrant/git/Tests/XCUITests
-            cp ./Users/vagrant/git/Tests/XCUITests/* .
-            mv ./Users/vagrant/git/* .
+            ls /Users/vagrant/git/Tests/XCUITests
+            cp /Users/vagrant/git/Tests/XCUITests/* .
+            mv /Users/vagrant/git/Tests/* .
             ls -la
 
             pwd
