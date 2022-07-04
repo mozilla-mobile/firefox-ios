@@ -68,7 +68,6 @@ class SyncUITests: BaseTestCase {
         userState.fxaPassword = "foo"
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
-        print(app.debugDescription)
         waitForExistence(app.webViews.staticTexts["At least 8 characters"])
 
         // Enter valid but incorrect, it does not exists, password
