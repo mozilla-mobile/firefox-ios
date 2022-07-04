@@ -88,7 +88,7 @@ class PocketSponsoredStoriesProviderTests: XCTestCase {
             }
         }
     }
-    
+
     func testValidResponse_succeedsWithValidSponsoredStories() {
         stubResponse(response: validSpocResponse, statusCode: 200, error: nil)
         testProvider { result in
@@ -120,7 +120,7 @@ class PocketSponsoredStoriesProviderTests: XCTestCase {
 
         waitForExpectations(timeout: 1.0, handler: nil)
     }
-    
+
     func testNoStubbing_doesntComplete() {
         let provider = getProvider()
         let expectation = expectation(description: "Wait for completion")
@@ -143,7 +143,7 @@ private extension PocketSponsoredStoriesProviderTests {
         configuration.protocolClasses = [URLProtocolStub.self]
         let session = URLSession(configuration: configuration)
         let cache = URLCache(memoryCapacity: 100000, diskCapacity: 1000, directory: URL(string: "/dev/null"))
-        
+
         let provider = PocketSponsoredStoriesProvider()
         provider.urlSession = session
         provider.urlCache = cache
@@ -199,7 +199,7 @@ private extension PocketSponsoredStoriesProviderTests {
     var emptyResponse: String {
         return "{}"
     }
-    
+
     var validSpocResponse: String {
         """
         {
@@ -245,7 +245,7 @@ private extension PocketSponsoredStoriesProviderTests {
         }
         """
     }
-    
+
     var spoc2: String {
         """
         {

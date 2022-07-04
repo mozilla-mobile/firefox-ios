@@ -8,7 +8,7 @@ import Storage
 
 protocol PocketStoriesProviding {
     typealias StoryResult = Swift.Result<[PocketFeedStory], Error>
-    
+
     func fetchStories(items: Int, completion: @escaping (StoryResult) -> Void)
     func fetchStories(items: Int) async throws -> [PocketFeedStory]
 }

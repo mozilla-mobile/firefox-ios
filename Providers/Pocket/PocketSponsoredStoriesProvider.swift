@@ -57,7 +57,7 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFl
         request?.httpMethod = .post
         return request
     }
-    
+
     func fetchSponsoredStories(timestamp: Timestamp = Date.now(), completion: @escaping (SponsoredStoryResult) -> Void) {
         guard let request = sponsoredFeedRequest else {
             completion(.failure(Error.requestCreationFailure))
@@ -70,7 +70,7 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFl
             fetchSponsoredStories(request: request, completion: completion)
         }
     }
-    
+
     func fetchSponsoredStories(request: URLRequest, completion: @escaping (SponsoredStoryResult) -> Void) {
         urlSession.dataTask(with: request) { [unowned self] (data, response, error) in
             if let error = error {
@@ -78,18 +78,18 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFl
                 completion(.failure(Error.failure))
                 return
             }
-            
+
             guard let response = validatedHTTPResponse(response, statusCode: 200..<300), let data = data, !data.isEmpty else {
                 self.browserLog.debug("Response isn't proper: \(response.debugDescription), with data \(String(describing: data))")
                 completion(.failure(Error.invalidHTTPResponse))
                 return
             }
-            
+
             self.cache(response: response, for: request, with: data)
             self.decode(data: data, completion: completion)
         }.resume()
     }
-    
+
     private func decode(data: Data, completion: @escaping (SponsoredStoryResult) -> Void) {
         do {
             let decodedResponse = try JSONDecoder().decode(PocketSponsoredRequest.self, from: data)
