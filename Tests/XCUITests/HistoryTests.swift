@@ -357,15 +357,6 @@ class HistoryTests: BaseTestCase {
         XCTAssertFalse(app.tables.cells.staticTexts["Google"].exists)
     }*/
     
-    func testAllOptionsArePresent(){
-        // Go to 'goolge.com' to create a recent history entry.
-        navigateToGoogle()
-        navigator.performAction(Action.ClearRecentHistory)
-        for option in clearRecentHistoryOptions {
-            XCTAssertTrue(app.sheets.buttons[option].exists)
-        }
-    }
-
     // Smoketest
     func testDeleteHistoryEntryBySwiping() {
         navigateToGoogle()

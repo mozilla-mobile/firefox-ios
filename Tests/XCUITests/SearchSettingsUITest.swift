@@ -49,7 +49,7 @@ class SearchSettingsUITests: BaseTestCase {
 
         app.tables.cells.textViews["customEngineUrl"].tap()
         app.tables.cells.textViews["customEngineUrl"].typeText(customSearchEngine["url"]!)
-
+        waitForExistence(app.buttons["Save"], timeout: 5)
         app.buttons["Save"].tap()
         // Check that custom engine has been added successfully
         waitForExistence(app.tables.cells.staticTexts[customSearchEngine["name"]!])

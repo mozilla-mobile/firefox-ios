@@ -26,7 +26,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
         XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[url1And3Label].exists)
         // History without counting Clear Recent History and Recently Closed
-        let history = app.tables[HistoryPanelA11y.tableView].cells.count - 2
+        let history = app.tables[HistoryPanelA11y.tableView].cells.count - 1
 
         XCTAssertEqual(history, 1, "History entries in regular browsing do not match")
 
@@ -41,7 +41,7 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertFalse(app.tables[HistoryPanelA11y.tableView].staticTexts[url2Label].exists)
 
         // Open one tab in private browsing and check the total number of tabs
-        let privateHistory = app.tables[HistoryPanelA11y.tableView].cells.count - 2
+        let privateHistory = app.tables[HistoryPanelA11y.tableView].cells.count - 1
         XCTAssertEqual(privateHistory, 1, "History entries in private browsing do not match")
     }
 

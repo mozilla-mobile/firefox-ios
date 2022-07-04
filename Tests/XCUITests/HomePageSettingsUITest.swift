@@ -40,8 +40,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(HomeSettings)
         XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
         XCTAssertTrue(app.tables.cells["HomeAsCustomURL"].exists)
-        waitForExistence(app.tables.cells["TopSitesRows"])
-        XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Shortcuts, Rows: 2")
+        XCTAssert(app.tables.cells["WallpaperSettings"].exists)
         XCTAssertTrue(app.cells.switches["Recommended by Pocket"].exists)
     }
 
@@ -128,43 +127,6 @@ class HomePageSettingsUITests: BaseTestCase {
         // Lets check only that website is open
         waitForExistence(app.textFields["url"], timeout: 5)
         waitForValueContains(app.textFields["url"], value: "mozilla")
-    }
-    
-    func testTopSitesCustomNumberOfRows() {
-        navigator.performAction(Action.CloseURLBarOpen)
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
-        var topSitesPerRow:Int
-        //Ensure testing in portrait mode
-        XCUIDevice.shared.orientation = .portrait
-        //Run test for both iPhone and iPad devices as behavior differs between the two
-        if iPad() {
-            // On iPad, 6 top sites per row are displayed
-            topSitesPerRow = 8
-            //Test each of the custom row options from 1-4
-            for n in 1...4 {
-                userState.numTopSitesRows = n
-                navigator.goto(HomeSettings)
-                app.tables.cells.element(boundBy: 3).tap()
-                app.tables.cells.element(boundBy: n-1).tap()
-                navigator.goto(SettingsScreen)
-                app.buttons["Settings"].tap()
-                navigator.goto(NewTabScreen)
-                checkNumberOfExpectedTopSites(numberOfExpectedTopSites: (n * topSitesPerRow))
-            }
-        } else {
-            // On iPhone, 4 top sites per row are displayed
-            topSitesPerRow = 4
-            //Test each of the custom row options from 1-4
-            for n in 1...4 {
-                userState.numTopSitesRows = n
-                navigator.performAction(Action.SelectTopSitesRows)
-                XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Shortcuts, Rows: " + String(n))
-                navigator.goto(HomePanelsScreen)
-                navigator.nowAt(NewTabScreen)
-                checkNumberOfExpectedTopSites(numberOfExpectedTopSites: (n * topSitesPerRow))
-            }
-        }
     }
 
     func testDisableTopSitesSettingsRemovesSection() {

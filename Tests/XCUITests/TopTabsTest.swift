@@ -109,7 +109,7 @@ class TopTabsTest: BaseTestCase {
 
         // After removing only one tab it automatically goes to HomepanelView
         waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        XCTAssert(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
+        XCTAssert(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
     }
 
     private func openNtabsFromTabTray(numTabs: Int) {
@@ -224,7 +224,7 @@ class TopTabsTest: BaseTestCase {
             waitForExistence(app.buttons["TabToolbar.tabsButton"])
         }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        waitForNoExistence(app.cells.staticTexts[urlLabel])
+        waitForExistence(app.cells.staticTexts["Homepage"])
     }
 
     func testCloseAllTabsPrivateMode() {
