@@ -112,7 +112,7 @@ final class LoginListViewModel {
         guard let section = self.titles.firstIndex(of: title),
               let row = self.loginRecordSections[title]?.firstIndex(of: login)
         else { return nil }
-        
+
         return IndexPath(row: row, section: section+1)
     }
 
@@ -137,7 +137,7 @@ final class LoginListViewModel {
                 self.loginRecordSections = [:]
                 return
             }
-            
+
             self.count = logins.count
             self.titles = titles
             self.loginRecordSections = sections

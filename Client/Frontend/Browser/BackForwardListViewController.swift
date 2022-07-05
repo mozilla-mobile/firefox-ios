@@ -234,7 +234,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             guard let url = InternalURL(item.url),
                   let extracted = url.extractedUrlParam
             else { return item.url.absoluteString }
-            
+
             return extracted.absoluteString
         }()
 

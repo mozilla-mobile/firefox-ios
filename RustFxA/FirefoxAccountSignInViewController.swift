@@ -57,7 +57,7 @@ class FirefoxAccountSignInViewController: UIViewController {
                 guard let url = try? result.get(),
                       let host = url.host
                 else { return }
-                
+
                 let shortUrl = host + url.path // "firefox.com" + "/pair"
                 let msg: String = .FxASignin_QRInstructions.replaceFirstOccurrence(of: placeholder, with: shortUrl)
                 label.attributedText = msg.attributedText(boldString: shortUrl, font: DynamicFontHelper().MediumSizeRegularWeightAS)

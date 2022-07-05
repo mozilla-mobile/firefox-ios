@@ -25,7 +25,7 @@ enum InstallType: String, Codable {
 
     static func persistedCurrentVersion() -> String {
         guard let currentVersion = UserDefaults.standard.string(forKey: PrefsKeys.KeyCurrentInstallVersion) else { return "" }
-        
+
         return currentVersion
     }
 

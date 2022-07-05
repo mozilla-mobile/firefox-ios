@@ -52,7 +52,7 @@ class DownloadContentScript: TabContentScript {
               let base64String = dictionary["base64String"] as? String,
               let data = Bytes.decodeBase64(base64String)
         else { return }
-        
+
         defer {
             browserViewController.pendingDownloadWebView = nil
             DownloadContentScript.blobUrlForDownload = nil

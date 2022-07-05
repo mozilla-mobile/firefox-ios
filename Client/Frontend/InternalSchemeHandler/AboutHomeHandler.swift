@@ -32,7 +32,7 @@ class AboutLicenseHandler: InternalSchemeResponse {
               let html = try? String(contentsOfFile: path, encoding: .utf8),
               let data = html.data(using: .utf8)
         else { return nil }
-        
+
         return (response, data)
     }
 }

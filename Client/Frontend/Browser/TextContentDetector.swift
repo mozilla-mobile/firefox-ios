@@ -23,7 +23,7 @@ class TextContentDetector {
             options: [],
             range: NSRange(location: 0, length: content.count))
         else { return nil }
-        
+
         switch match.resultType {
         case .link:
             return .link(match.url!)

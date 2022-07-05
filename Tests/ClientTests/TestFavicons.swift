@@ -36,7 +36,7 @@ class TestFavicons: ProfileTest {
                 XCTFail("Favicons were not found.")
                 return expectation.fulfill()
             }
-            
+
             XCTAssertEqual(favicons.count, 1, "Instagram should have a Favicon.")
             SDWebImageManager.shared.loadImage(with: url, options: .retryFailed, progress: nil, completed: { (img, _, _, _, _, _) in
                 guard let image = img else {

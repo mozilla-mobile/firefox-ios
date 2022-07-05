@@ -241,7 +241,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate {
 
     func startListeningForThemeUpdates() {
-        NotificationCenter.default.addObserver(forName: .DisplayThemeChanged, object: nil, queue: .main) { (notification) -> Void in
+        NotificationCenter.default.addObserver(forName: .DisplayThemeChanged, object: nil, queue: .main) { (_) -> Void in
             if !LegacyThemeManager.instance.systemThemeIsOn {
                 self.window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
             } else {

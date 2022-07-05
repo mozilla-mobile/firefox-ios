@@ -74,7 +74,7 @@ enum NewTabPage: String {
               internalUrl.isAboutHomeURL,
               let panelNumber = url.fragment?.split(separator: "=").last
         else { return nil }
-        
+
         switch panelNumber {
         case "0":
             return NewTabPage.topSites
