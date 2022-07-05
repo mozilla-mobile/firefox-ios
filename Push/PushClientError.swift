@@ -14,7 +14,7 @@ public enum PushClientError: MaybeErrorType {
         case let .Remote(error):
             let errorString = error.error
             let messageString = error.message ?? ""
-            return "<FxAClientError.Remote \(error.code)/\(error.errno): \(errorString) (\(messageString))>"
+            return "<FxAClientError.Remote \(error.code)/\(error.errorNumber): \(errorString) (\(messageString))>"
         case let .Local(error):
             return "<FxAClientError.Local Error \"\(error.localizedDescription)\">"
         }

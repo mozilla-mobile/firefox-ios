@@ -22,18 +22,17 @@ import SwiftyJSON
 
 public struct PushRemoteError {
     let code: Int
-    let errno: Int
+    let errorNumber: Int
     let error: String
     let message: String?
 
     public static func from(json: JSON) -> PushRemoteError? {
         guard let code = json["code"].int,
-              let errno = json["errno"].int,
-              let error = json["error"].string else {
-            return nil
-        }
+              let errorNumber = json["errno"].int,
+              let error = json["error"].string
+        else { return nil }
 
         let message = json["message"].string
-        return PushRemoteError(code: code, errno: errno, error: error, message: message)
+        return PushRemoteError(code: code, errorNumber: errorNumber, error: error, message: message)
     }
 }
