@@ -2174,7 +2174,7 @@
 "Sync.SyncingEllipsis.Label" = "Đang đồng bộ hóa…";
 
 /* Panel accessibility label */
-"Synced Tabs" = "Các thẻ đã đồng bộ";
+"Synced Tabs" = "Thẻ đã đồng bộ hóa";
 
 /* The Bookmark sync component, used in SyncState.Partial.Title */
 "SyncState.Bookmark.Title" = "Dấu trang";
