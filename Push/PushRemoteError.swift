@@ -30,7 +30,7 @@ public struct PushRemoteError {
         guard let code = json["code"].int,
               let errorNumber = json["errno"].int,
               let error = json["error"].string
-        else {  return nil }
+        else { return nil }
 
         let message = json["message"].string
         return PushRemoteError(code: code, errorNumber: errorNumber, error: error, message: message)
