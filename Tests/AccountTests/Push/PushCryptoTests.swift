@@ -123,13 +123,19 @@ class PushCryptoTests: XCTestCase {
 
         let plaintext = "I am the egg man!"
 
-        guard let payload = try? push.aes128gcm(plaintext: plaintext, encryptWith: keys.p256dhPublicKey, authenticateWith: keys.auth, rs: 1024, padLen: 2) else {
-            return XCTFail("Encryption should not fail")
-        }
+        guard let payload = try? push.aes128gcm(
+            plaintext: plaintext,
+            encryptWith: keys.p256dhPublicKey,
+            authenticateWith: keys.auth,
+            rs: 1024,
+            padLen: 2)
+        else { return XCTFail("Encryption should not fail") }
 
-        guard let deciphered = try? push.aes128gcm(payload: payload, decryptWith: keys.p256dhPrivateKey, authenticateWith: keys.auth) else {
-            return XCTFail("Decryption should not fail")
-        }
+        guard let deciphered = try? push.aes128gcm(
+            payload: payload,
+            decryptWith: keys.p256dhPrivateKey,
+            authenticateWith: keys.auth)
+        else { return XCTFail("Decryption should not fail") }
 
         XCTAssertEqual(deciphered, plaintext)
     }
@@ -254,20 +260,20 @@ class PushCryptoTests: XCTestCase {
 
         let plaintext = "While I'm away, I'll write home every day"
 
-        guard let (headers, ciphertext) = try? push.aesgcm(plaintext: plaintext,
-                                                           encryptWith: keys.p256dhPublicKey,
-                                                           authenticateWith: keys.auth,
-                                                           rs: 28,
-                                                           padLen: 16) else {
-            return XCTFail("Encryption should not fail")
-        }
+        guard let (headers, ciphertext) = try? push.aesgcm(
+            plaintext: plaintext,
+            encryptWith: keys.p256dhPublicKey,
+            authenticateWith: keys.auth,
+            rs: 28,
+            padLen: 16)
+        else { return XCTFail("Encryption should not fail") }
 
-        guard let deciphered = try? push.aesgcm(ciphertext: ciphertext,
-                                                withHeaders: headers,
-                                                decryptWith: keys.p256dhPrivateKey,
-                                                authenticateWith: keys.auth) else {
-            return XCTFail("Decryption should not fail")
-        }
+        guard let deciphered = try? push.aesgcm(
+            ciphertext: ciphertext,
+            withHeaders: headers,
+            decryptWith: keys.p256dhPrivateKey,
+            authenticateWith: keys.auth)
+        else { return XCTFail("Decryption should not fail") }
 
         XCTAssertEqual(deciphered, plaintext)
     }

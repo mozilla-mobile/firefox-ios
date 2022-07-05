@@ -38,13 +38,19 @@ class TPStatsBlocklistChecker {
     func isBlocked(url: URL, mainDocumentURL: URL) -> Deferred<BlocklistCategory?> {
         let deferred = Deferred<BlocklistCategory?>()
 
-        guard let blockLists = blockLists, let host = url.host, !host.isEmpty else {
+        guard let blockLists = blockLists,
+              let host = url.host,
+              !host.isEmpty
+        else {
             // TP Stats init isn't complete yet
             deferred.fill(nil)
             return deferred
         }
 
-        guard let domain = url.baseDomain, let docDomain = mainDocumentURL.baseDomain, domain != docDomain else {
+        guard let domain = url.baseDomain,
+              let docDomain = mainDocumentURL.baseDomain,
+              domain != docDomain
+        else {
             deferred.fill(nil)
             return deferred
         }
@@ -192,9 +198,10 @@ class TPStatsBlocklists {
     func urlIsInList(_ url: URL, mainDocumentURL: URL, safelistedDomains: [String]) -> BlocklistCategory? {
         let resourceString = url.absoluteString
 
-        guard let firstPartyDomain = mainDocumentURL.baseDomain, let baseDomain = url.baseDomain, let rules = blockRules[baseDomain] else {
-            return nil
-        }
+        guard let firstPartyDomain = mainDocumentURL.baseDomain,
+              let baseDomain = url.baseDomain,
+              let rules = blockRules[baseDomain]
+        else { return nil }
 
         domainSearch: for rule in rules {
             // First, test the top-level filters to see if this URL might be blocked.

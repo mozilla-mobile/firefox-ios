@@ -678,9 +678,13 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
     }
 
     private func calculateInactiveTabSizeHelper(_ collectionView: UICollectionView) -> CGSize {
-        guard !tabDisplayManager.isPrivate, let inactiveTabViewModel = tabDisplayManager.inactiveViewModel, inactiveTabViewModel.activeTabs.count > 0 else {
+        guard !tabDisplayManager.isPrivate,
+              let inactiveTabViewModel = tabDisplayManager.inactiveViewModel,
+              inactiveTabViewModel.activeTabs.count > 0
+        else {
             return CGSize(width: 0, height: 0)
         }
+
         let closeAllButtonHeight = InactiveTabCell.UX.CloseAllTabRowHeight
         let headerHeightWithRoundedCorner = InactiveTabCell.UX.HeaderAndRowHeight + InactiveTabCell.UX.RoundedContainerPaddingClosed
         var totalHeight = headerHeightWithRoundedCorner

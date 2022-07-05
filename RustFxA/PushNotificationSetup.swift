@@ -13,9 +13,7 @@ open class PushNotificationSetup {
         // If we've already registered this push subscription, we don't need to do it again.
         let apnsToken = deviceToken.hexEncodedString
         let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
-        guard keychain.string(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock) != apnsToken else {
-            return
-        }
+        guard keychain.string(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock) != apnsToken else { return }
 
         RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
             let config = PushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()

@@ -148,9 +148,7 @@ class ErrorPageHandler: InternalSchemeResponse {
     static let path = InternalURL.Path.errorpage.rawValue
 
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
-        guard let requestUrl = request.url, let originalUrl = InternalURL(requestUrl)?.originalURLFromErrorPage else {
-            return nil
-        }
+        guard let requestUrl = request.url, let originalUrl = InternalURL(requestUrl)?.originalURLFromErrorPage else { return nil }
 
         guard let url = request.url,
             let c = URLComponents(url: url, resolvingAgainstBaseURL: false),
@@ -186,7 +184,10 @@ class ErrorPageHandler: InternalSchemeResponse {
             }
             errDomain = ""
         } else if CertErrors.contains(errCode) {
-            guard let url = request.url, let comp = URLComponents(url: url, resolvingAgainstBaseURL: false), let certError = comp.valueForQuery("certerror") else {
+            guard let url = request.url,
+                  let comp = URLComponents(url: url, resolvingAgainstBaseURL: false),
+                  let certError = comp.valueForQuery("certerror")
+            else {
                 assert(false)
                 return nil
             }
@@ -230,9 +231,7 @@ class ErrorPageHelper {
     }
 
     func loadPage(_ error: NSError, forUrl url: URL, inWebView webView: WKWebView) {
-        guard var components = URLComponents(string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)"), let webViewUrl = webView.url else {
-            return
-        }
+        guard var components = URLComponents(string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)"), let webViewUrl = webView.url else { return }
 
         // Page has failed to load again, just return and keep showing the existing error page.
         if let internalUrl = InternalURL(webViewUrl), internalUrl.originalURLFromErrorPage == url {
