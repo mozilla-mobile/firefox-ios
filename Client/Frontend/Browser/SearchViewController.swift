@@ -69,6 +69,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
     private var searchHighlights = [HighlightItem]()
+    private let LibraryResultsSectionHeaderIdentifier = "LibraryResultsSectionHeaderIdentifier"
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -88,6 +89,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     var savedQuery: String = ""
     var searchFeature: FeatureHolder<Search>
     static var userAgent: String?
+
+    var hasFirefoxSuggestions: Bool {
+        return data.count != 0 || !filteredOpenedTabs.isEmpty || !filteredRemoteClientTabs.isEmpty || !searchHighlights.isEmpty
+    }
 
     init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager, featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search ) {
         self.viewModel = viewModel
@@ -112,6 +117,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         super.viewDidLoad()
         getCachedTabs()
         KeyboardHelper.defaultHelper.addDelegate(self)
+
+        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: LibraryResultsSectionHeaderIdentifier)
 
         searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
         searchEngineContainerView.layer.shadowRadius = 0
@@ -536,8 +543,30 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         return super.tableView(tableView, heightForRowAt: indexPath)
     }
 
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let headerView = view as? ThemedTableSectionHeaderFooterView else { return }
+
+        headerView.applyTheme()
+    }
+
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
+        guard section == SearchListSection.remoteTabs.rawValue,
+              hasFirefoxSuggestions else { return 0 }
+
+        return SiteTableViewControllerUX.HeaderHeight
+    }
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard section == SearchListSection.remoteTabs.rawValue,
+              hasFirefoxSuggestions else { return nil }
+
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: LibraryResultsSectionHeaderIdentifier)
+
+        headerView?.textLabel?.textColor = UIColor.Photon.DarkGrey05
+        headerView?.contentView.backgroundColor = .white
+        headerView?.textLabel?.text = .Search.SuggestSectionTitle
+
+        return headerView
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
