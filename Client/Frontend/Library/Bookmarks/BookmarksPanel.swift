@@ -36,7 +36,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     // MARK: - Properties
     var libraryPanelDelegate: LibraryPanelDelegate?
-    var notificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationCenter
 
     private let bookmarkFolderGUID: GUID
     private var bookmarkFolder: BookmarkFolderData?
@@ -59,9 +59,11 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     // MARK: - Init
 
     init(profile: Profile,
-         bookmarkFolderGUID: GUID = BookmarkRoots.RootGUID) {
+         bookmarkFolderGUID: GUID = BookmarkRoots.RootGUID
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
 
         self.bookmarkFolderGUID = bookmarkFolderGUID
+        self.notificationCenter = notificationCenter
 
         super.init(profile: profile)
 
