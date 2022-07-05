@@ -163,9 +163,10 @@ extension ContentBlocker {
     private func loadJsonFromBundle(forResource file: String, completion: @escaping (_ jsonString: String) -> Void) {
         DispatchQueue.global().async {
             guard let path = Bundle.main.path(forResource: file, ofType: "json"),
-                let source = try? String(contentsOfFile: path, encoding: .utf8) else {
-                    assert(false)
-                    return
+                  let source = try? String(contentsOfFile: path, encoding: .utf8)
+            else {
+                assert(false)
+                return
             }
 
             DispatchQueue.main.async {

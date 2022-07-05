@@ -30,9 +30,9 @@ struct PocketFeedStory {
                       return nil
                   }
 
-            guard let url = URL(string: urlS), let imageURL = URL(string: imageURLS) else {
-                return nil
-            }
+            guard let url = URL(string: urlS),
+                  let imageURL = URL(string: imageURLS)
+            else { return nil }
 
             return PocketFeedStory(
                 title: title,

@@ -545,7 +545,8 @@ class SearchUtils {
     static func mockSearchEngine(_ name: String, template: String, icon: String) -> OpenSearchEngine? {
         guard let imagePath = Bundle(for: self).path(forResource: icon, ofType: "ico"),
               let imageData = Data(contentsOfFile: imagePath),
-              let image = UIImage(data: imageData) else {
+              let image = UIImage(data: imageData)
+        else {
             XCTFail("Unable to load search engine image named \(icon).ico")
             return nil
         }
