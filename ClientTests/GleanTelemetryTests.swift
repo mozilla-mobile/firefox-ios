@@ -34,6 +34,7 @@ class MockBrowserSyncManager: BrowserProfile.BrowserSyncManager {
 class GleanTelemetryTests: XCTestCase {
     override func setUpWithError() throws {
         Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.enableTestingMode()
     }
 
     let profile = MockBrowserProfile(localName: "GleanTelemetryTests")
@@ -49,7 +50,7 @@ class GleanTelemetryTests: XCTestCase {
 
         _ = syncManager.syncNamedCollections(
             why: SyncReason.didLogin,
-            names: ["tabs", "logins", "bookmarks", "history"]
+            names: ["tabs", "logins", "bookmarks", "history", "clients"]
         )
 
         waitForExpectations(timeout: 5.0)

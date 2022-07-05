@@ -55,7 +55,11 @@ class CredentialProviderPresenter {
 
                     var sortedLogins = loginRecords.sorted(by: <)
                     for (index, element) in sortedLogins.enumerated() {
-                        if let identifier = serviceIdentifiers.first?.identifier.asURL?.domainURL.absoluteString.titleFromHostname, element.passwordCredentialIdentity.serviceIdentifier.identifier.contains(identifier) {
+                        if let identifier = serviceIdentifiers
+                            .first?
+                            .identifier.asURL?.domainURL
+                            .absoluteString.titleFromHostname,
+                            element.passwordCredentialIdentity.serviceIdentifier.identifier.contains(identifier) {
                             sortedLogins.remove(at: index)
                             sortedLogins.insert(element, at: 0)
                         }

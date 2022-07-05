@@ -163,7 +163,10 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         collectionView.cancelInteractiveMovement()
         collectionView.endInteractiveMovement()
 
-        // Long-pressing a cell to initiate dragging, but not actually moving the cell, will not trigger the collectionView's internal 'interactive movement' vars/funcs, and cancelInteractiveMovement() will not work. The gesture recognizer needs to be cancelled in this case.
+        // Long-pressing a cell to initiate dragging, but not actually moving the cell,
+        // will not trigger the collectionView's internal 'interactive movement'
+        // vars/funcs, and cancelInteractiveMovement() will not work. The gesture
+        // recognizer needs to be cancelled in this case.
         collectionView.gestureRecognizers?.forEach { $0.cancel() }
 
         return isActive
@@ -777,9 +780,11 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        guard collectionView.hasActiveDrag, let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = dataStore.index(of: tab) else {
-            return
-        }
+        guard collectionView.hasActiveDrag,
+              let destinationIndexPath = coordinator.destinationIndexPath,
+              let dragItem = coordinator.items.first?.dragItem,
+              let tab = dragItem.localObject as? Tab,
+              let sourceIndex = dataStore.index(of: tab) else { return }
 
         // This enforces that filtered tabs, and tabs manager are in sync
         if tab.isPrivate {
@@ -917,9 +922,12 @@ extension TabDisplayManager: TabManagerDelegate {
             updateCellFor(tab: selected, selectedTabChanged: changed)
         }
 
-        // Rather than using 'previous' Tab to deselect, just check if the selected tab is different, and update the required cells.
-        // The refreshStore() cancels pending operations are reloads data, so we don't want functions that rely on
-        // any assumption of previous state of the view. Passing a previous tab (and relying on that to redraw the previous tab as unselected) would be making this assumption about the state of the view.
+        // Rather than using 'previous' Tab to deselect, just check if the selected tab
+        // is different, and update the required cells. The refreshStore() cancels
+        // pending operations are reloads data, so we don't want functions that rely on
+        // any assumption of previous state of the view. Passing a previous tab (and
+        // relying on that to redraw the previous tab as unselected) would be making
+        // this assumption about the state of the view.
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {

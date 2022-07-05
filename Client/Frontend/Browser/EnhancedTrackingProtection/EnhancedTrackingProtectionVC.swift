@@ -66,7 +66,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     private var closeButton: UIButton = .build { button in
-        button.backgroundColor = .Photon.LightGrey50
         button.layer.cornerRadius = 0.5 * ETPMenuUX.UX.closeButtonSize
         button.clipsToBounds = true
         button.setImage(UIImage(named: "close-medium"), for: .normal)
@@ -429,6 +428,7 @@ extension EnhancedTrackingProtectionMenuVC: NotificationThemeable {
     @objc func applyTheme() {
         overrideUserInterfaceStyle =  LegacyThemeManager.instance.userInterfaceStyle
         view.backgroundColor = UIColor.theme.etpMenu.background
+        closeButton.backgroundColor = UIColor.theme.etpMenu.closeButtonColor
         connectionView.backgroundColor = UIColor.theme.etpMenu.sectionColor
         connectionImage.image = viewModel.connectionStatusImage
         connectionDetailArrow.tintColor = UIColor.theme.etpMenu.defaultImageTints

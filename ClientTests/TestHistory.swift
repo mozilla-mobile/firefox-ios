@@ -226,7 +226,11 @@ class TestHistory: ProfileTest {
     // the results. Just look for crashes.
     func testRandomThreading() {
         withTestProfile { profile -> Void in
-            let queue = DispatchQueue(label: "My Queue", qos: DispatchQoS.default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit, target: nil)
+            let queue = DispatchQueue(label: "My Queue",
+                                      qos: DispatchQoS.default,
+                                      attributes: DispatchQueue.Attributes.concurrent,
+                                      autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit,
+                                      target: nil)
             var counter = 0
 
             let expectation = self.expectation(description: "Wait for history")
@@ -247,7 +251,11 @@ class TestHistory: ProfileTest {
     // Same as testRandomThreading, but uses one history connection for all threads
     func testRandomThreading2() {
         withTestProfile { profile -> Void in
-            let queue = DispatchQueue(label: "My Queue", qos: DispatchQoS.default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit, target: nil)
+            let queue = DispatchQueue(label: "My Queue",
+                                      qos: DispatchQoS.default,
+                                      attributes: DispatchQueue.Attributes.concurrent,
+                                      autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit,
+                                      target: nil)
             var history = profile.history as BrowserHistory
             var counter = 0
 

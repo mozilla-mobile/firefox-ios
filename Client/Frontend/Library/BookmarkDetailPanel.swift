@@ -270,9 +270,18 @@ class BookmarkDetailPanel: SiteTableViewController {
             }
 
             if bookmarkNodeType == .bookmark {
-                return profile.places.updateBookmarkNode(guid: bookmarkNodeGUID, parentGUID: parentBookmarkFolder.guid, position: bookmarkItemPosition, title: bookmarkItemOrFolderTitle, url: bookmarkItemURL)
+                return profile.places.updateBookmarkNode(
+                    guid: bookmarkNodeGUID,
+                    parentGUID: parentBookmarkFolder.guid,
+                    position: bookmarkItemPosition,
+                    title: bookmarkItemOrFolderTitle,
+                    url: bookmarkItemURL)
             } else if bookmarkNodeType == .folder {
-                return profile.places.updateBookmarkNode(guid: bookmarkNodeGUID, parentGUID: parentBookmarkFolder.guid, position: bookmarkItemPosition, title: bookmarkItemOrFolderTitle)
+                return profile.places.updateBookmarkNode(
+                    guid: bookmarkNodeGUID,
+                    parentGUID: parentBookmarkFolder.guid,
+                    position: bookmarkItemPosition,
+                    title: bookmarkItemOrFolderTitle)
             }
         }
 

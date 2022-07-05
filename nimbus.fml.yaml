@@ -168,6 +168,12 @@ features:
           {
             "status": true,
           }
+      pocket-sponsored-stories:
+        description: >
+          This property defines whether pocket sponsored
+          stories appear on the homepage.
+        type: Boolean
+        default: false
     defaults:
       - channel: developer
         value: {
@@ -184,7 +190,8 @@ features:
           },
           "wallpaper-feature": {
             "status": true
-          }
+          },
+          "pocket-sponsored-stories": false
         }
       - channel: beta
         value: {
@@ -201,7 +208,8 @@ features:
           },
           "wallpaper-feature": {
             "status": true
-          }
+          },
+          "pocket-sponsored-stories": false
         }
   search-term-groups-feature:
     description: The feature that controls whether or not search term groups are enabled.
