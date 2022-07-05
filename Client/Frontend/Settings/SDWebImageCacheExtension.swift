@@ -22,10 +22,10 @@ extension SDImageCache {
         }
 
         SDImageCache.shared.clear(with: .disk) {
-            //Send glean telemetry when cache is cleared
+            // Send glean telemetry when cache is cleared
             TelemetryWrapper.recordEvent(category: .information, method: .delete, object: .clearSDWebImageCache)
 
-            //Set the userdefaults value so we don't clear disk cache again once cleared
+            // Set the userdefaults value so we don't clear disk cache again once cleared
             defaults.set(true, forKey: SDWebImageCacheKey.hasClearedCacheKey)
 
             completion(true)
