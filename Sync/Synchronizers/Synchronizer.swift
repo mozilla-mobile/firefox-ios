@@ -13,7 +13,7 @@ private let log = Logger.syncLogger
  * This exists to pass in external context: e.g., the UIApplication can
  * expose notification functionality in this way.
  */
-public protocol SyncDelegate {
+public protocol SyncDelegate: AnyObject {
     func displaySentTab(for url: URL, title: String, from deviceName: String?)
     // TODO: storage.
 }

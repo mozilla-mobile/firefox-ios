@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 
-protocol DownloadDelegate {
+protocol DownloadDelegate: AnyObject {
     func download(_ download: Download, didCompleteWithError error: Error?)
     func download(_ download: Download, didDownloadBytes bytesDownloaded: Int64)
     func download(_ download: Download, didFinishDownloadingTo location: URL)
@@ -190,7 +190,7 @@ class BlobDownload: Download {
     }
 }
 
-protocol DownloadQueueDelegate {
+protocol DownloadQueueDelegate: AnyObject {
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download)
     func downloadQueue(_ downloadQueue: DownloadQueue, didDownloadCombinedBytes combinedBytesDownloaded: Int64, combinedTotalBytesExpected: Int64?)
     func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL)
