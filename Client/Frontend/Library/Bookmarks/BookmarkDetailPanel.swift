@@ -84,7 +84,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     }()
 
     // MARK: - Initializers
-    convenience init(profile: Profile, bookmarkNode: BookmarkNodeData, parentBookmarkFolder: BookmarkFolderData, presentedFromToast fromToast: Bool = false) {
+    convenience init(profile: Profile, bookmarkNode: FxBookmarkNode, parentBookmarkFolder: BookmarkFolderData, presentedFromToast fromToast: Bool = false) {
         self.init(profile: profile, bookmarkNodeGUID: bookmarkNode.guid, bookmarkNodeType: bookmarkNode.type, parentBookmarkFolder: parentBookmarkFolder)
 
         self.isPresentedFromToast = fromToast
