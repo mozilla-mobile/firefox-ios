@@ -130,24 +130,25 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     /// "Root" folder is showing mobile bookmarks with a local desktop folder
     private func setupRootFolderData() {
-        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID,
-                                        recursive: false).uponQueue(.main) { result in
-            guard let mobileFolder = result.successValue as? BookmarkFolderData else {
-                self.setErrorCase()
-                return
+        profile.places
+            .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false)
+            .uponQueue(.main) { result in
+                guard let mobileFolder = result.successValue as? BookmarkFolderData else {
+                    self.setErrorCase()
+                    return
+                }
+
+                self.bookmarkFolder = mobileFolder
+                // Reversed since we want the newest mobile bookmarks at the top
+                self.bookmarkNodes = mobileFolder.children?.reversed() ?? []
+
+                let desktopFolder = LocalDesktopFolder()
+                self.bookmarkNodes.insert(desktopFolder, at: 0)
+
+                self.tableView.reloadData()
+
+                self.flashRowIfNeeded()
             }
-
-            self.bookmarkFolder = mobileFolder
-            // Reversed since we want the newest mobile bookmarks at the top
-            self.bookmarkNodes = mobileFolder.children?.reversed() ?? []
-
-            let desktopFolder = LocalDesktopFolder()
-            self.bookmarkNodes.insert(desktopFolder, at: 0)
-
-            self.tableView.reloadData()
-
-            self.flashRowIfNeeded()
-        }
     }
 
     /// Local desktop folder data is a folder that only exists locally in the application
