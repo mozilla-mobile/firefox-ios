@@ -151,7 +151,7 @@ class LibraryViewController: UIViewController {
     }
 
     private func shouldHideBottomToolbar(panel: LibraryPanel) -> Bool {
-        return panel.bottomToolbarItems().isEmpty
+        return panel.bottomToolbarItems.isEmpty
     }
 
     func setupLibraryPanel(_ panel: UIViewController,
@@ -289,7 +289,7 @@ class LibraryViewController: UIViewController {
 
         let shouldHideBar = shouldHideBottomToolbar(panel: panel)
         navigationController?.setToolbarHidden(shouldHideBar, animated: true)
-        setToolbarItems(panel.bottomToolbarItems(), animated: true)
+        setToolbarItems(panel.bottomToolbarItems, animated: true)
     }
 }
 

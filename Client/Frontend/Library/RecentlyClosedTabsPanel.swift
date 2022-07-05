@@ -22,14 +22,12 @@ protocol RecentlyClosedPanelDelegate: AnyObject {
 }
 
 class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
-    func bottomToolbarItems() -> [UIBarButtonItem] {
-        return [UIBarButtonItem]()
-    }
 
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     var state: LibraryPanelMainState = .history(state: .inFolder)
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     let profile: Profile
+    var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
 
     fileprivate lazy var tableViewController = RecentlyClosedTabsPanelSiteTableViewController(profile: profile)
 
@@ -64,11 +62,11 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
         ])
     }
 
-    func handleBackButton() {
+    func handleLeftTopButton() {
         // no implementation needed
     }
 
-    func handleDoneButton() {
+    func handleRightTopButton() {
         // no implementation needed
     }
 }

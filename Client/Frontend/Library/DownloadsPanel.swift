@@ -44,15 +44,13 @@ struct DownloadedFile: Equatable {
 }
 
 class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, LibraryPanel {
-    func bottomToolbarItems() -> [UIBarButtonItem] {
-        return [UIBarButtonItem]()
-    }
 
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     let TwoLineImageOverlayCellIdentifier = "TwoLineImageOverlayCellIdentifier"
     let SiteTableViewHeaderIdentifier = "SiteTableViewHeaderIdentifier"
     let profile: Profile
     var state: LibraryPanelMainState
+    var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
 
     lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
@@ -312,11 +310,11 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return downloadedFilesInSection[safe: indexPath.row]
     }
 
-    func handleBackButton() {
+    func handleLeftTopButton() {
         // no implementation needed
     }
 
-    func handleDoneButton() {
+    func handleRightTopButton() {
         // no implementation needed
     }
 

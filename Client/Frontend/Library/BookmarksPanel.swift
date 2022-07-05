@@ -34,7 +34,16 @@ private class SeparatorTableViewCell: OneLineTableViewCell {
 }
 
 class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActionBookmark {
-    // TODO: YRD Improve
+
+    var bottomToolbarItems: [UIBarButtonItem] {
+        // Return empty toolbar when bookmarks is in root node
+        guard case .bookmarks(let subState) = state, subState != .mainView else {
+            return [UIBarButtonItem]()
+        }
+
+        return toolbarButtonItems
+    }
+
     private var toolbarButtonItems: [UIBarButtonItem] {
         switch state {
         case .bookmarks(state: .inFolder):
@@ -185,7 +194,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     override func reloadData() {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         guard !profile.isShutdown else { return }
-        
+
         profile.places.getBookmarksTree(rootGUID: bookmarkFolderGUID, recursive: false).uponQueue(.main) { result in
 
             guard let folder = result.successValue as? BookmarkFolderData else {
@@ -572,11 +581,12 @@ extension BookmarksPanel {
         }
     }
 
-    func handleBackButton() {
+    func handleLeftTopButton() {
         guard case .bookmarks(let subState) = state else { return }
 
         switch subState {
         case .inFolder:
+            // TODO: After rebase create isRoot in new FxBookmarkNode protocol
             updatePanelState(newState: .bookmarks(state: .mainView))
 
        case .inFolderEditMode:
@@ -589,7 +599,7 @@ extension BookmarksPanel {
        }
     }
 
-    func handleDoneButton() {
+    func handleRightTopButton() {
         if state == .bookmarks(state: .itemEditMode) {
             handleItemEditMode()
         }
@@ -599,15 +609,6 @@ extension BookmarksPanel {
         guard state != .bookmarks(state: .itemEditMode) else { return false }
 
         return true
-    }
-
-    func bottomToolbarItems() -> [UIBarButtonItem] {
-        switch state {
-        case .history, .downloads, .readingList:
-            return  [UIBarButtonItem]()
-        case .bookmarks(let subState):
-            return subState == .mainView ? [UIBarButtonItem]() : toolbarButtonItems
-        }
     }
 
     @objc func bottomRightButtonAction() {

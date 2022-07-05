@@ -28,7 +28,7 @@ class LibraryViewModel {
     init(withProfile profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
-        self.panelDescriptors = LibraryPanels(profile: profile, tabManager: tabManager).enabledPanels
+        self.panelDescriptors = LibraryPanelHelper(profile: profile, tabManager: tabManager).enabledPanels
     }
 
     func getCurrentPanel() -> LibraryPanel? {

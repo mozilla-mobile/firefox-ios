@@ -6,13 +6,21 @@ import UIKit
 import Shared
 import Storage
 
+protocol LibraryPanelDelegate: AnyObject {
+    func libraryPanelDidRequestToSignIn()
+    func libraryPanelDidRequestToCreateAccount()
+    func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
+    func libraryPanel(didSelectURL url: URL, visitType: VisitType)
+    func libraryPanel(didSelectURLString url: String, visitType: VisitType)
+}
+
 protocol LibraryPanel: UIViewController, NotificationThemeable {
     var libraryPanelDelegate: LibraryPanelDelegate? { get set }
     var state: LibraryPanelMainState { get set }
+    var bottomToolbarItems: [UIBarButtonItem] { get }
 
-    func bottomToolbarItems() -> [UIBarButtonItem]
-    func handleBackButton()
-    func handleDoneButton()
+    func handleLeftTopButton()
+    func handleRightTopButton()
     func shouldDismissOnDone() -> Bool
 }
 
@@ -32,14 +40,6 @@ extension LibraryPanel {
 
 struct LibraryPanelUX {
     static let EmptyTabContentOffset: CGFloat = -180
-}
-
-protocol LibraryPanelDelegate: AnyObject {
-    func libraryPanelDidRequestToSignIn()
-    func libraryPanelDidRequestToCreateAccount()
-    func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
-    func libraryPanel(didSelectURL url: URL, visitType: VisitType)
-    func libraryPanel(didSelectURLString url: String, visitType: VisitType)
 }
 
 enum LibraryPanelType: Int, CaseIterable {
@@ -62,39 +62,7 @@ enum LibraryPanelType: Int, CaseIterable {
     }
 }
 
-/**
- * Data for identifying and constructing a LibraryPanel.
- */
-class LibraryPanelDescriptor {
-    var viewController: UIViewController?
-    var navigationController: UINavigationController?
-
-    fileprivate let profile: Profile
-    fileprivate let tabManager: TabManager
-
-    let accessibilityLabel: String
-    let accessibilityIdentifier: String
-    let panelType: LibraryPanelType
-
-    init(viewController: LibraryPanel?, profile: Profile, tabManager: TabManager, accessibilityLabel: String, accessibilityIdentifier: String, panelType: LibraryPanelType) {
-        self.viewController = viewController
-        self.profile = profile
-        self.tabManager = tabManager
-        self.accessibilityLabel = accessibilityLabel
-        self.accessibilityIdentifier = accessibilityIdentifier
-        self.panelType = panelType
-    }
-
-    // Create navigation controller if it doesn't exist
-    func setupNavigationController() {
-        guard let viewController = viewController else { return }
-
-        // Don't create a new NavigationController every time
-        navigationController = navigationController ?? ThemedNavigationController(rootViewController: viewController)
-    }
-}
-
-class LibraryPanels: FeatureFlaggable {
+class LibraryPanelHelper {
     private let profile: Profile
     private let tabManager: TabManager
 

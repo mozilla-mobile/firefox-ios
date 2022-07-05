@@ -162,19 +162,17 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
 }
 
 class ReadingListPanel: UITableViewController, LibraryPanel {
-    func bottomToolbarItems() -> [UIBarButtonItem] {
-        return [UIBarButtonItem]()
-    }
 
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     let profile: Profile
     var state: LibraryPanelMainState
+    var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
 
-    fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
-    fileprivate var records: [ReadingListItem]?
+    private var records: [ReadingListItem]?
 
     init(profile: Profile) {
         self.profile = profile
@@ -331,11 +329,11 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         presentContextMenu(for: indexPath)
     }
 
-    func handleBackButton() {
+    func handleLeftTopButton() {
         // no implementation needed
     }
 
-    func handleDoneButton() {
+    func handleRightTopButton() {
         // no implementation needed
     }
 

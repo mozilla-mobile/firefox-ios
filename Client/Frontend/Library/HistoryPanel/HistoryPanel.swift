@@ -26,22 +26,8 @@ private class FetchInProgressError: MaybeErrorType {
 
 @objcMembers
 class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemeable {
-    func bottomToolbarItems() -> [UIBarButtonItem] {
-        guard case .history = state else {
-            return [UIBarButtonItem]()
-        }
-
-        return toolbarButtonItems
-    }
-
-    func shouldDismissOnDone() -> Bool {
-        guard state != .history(state: .search) else { return false }
-
-        return true
-    }
 
     // MARK: - Properties
-
     typealias HistoryPanelSections = HistoryPanelViewModel.Sections
     typealias a11yIds = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
@@ -72,6 +58,26 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         return state == .history(state: .mainView) || state == .history(state: .search)
     }
 
+    var bottomToolbarItems: [UIBarButtonItem] {
+        guard case .history = state else {
+            return [UIBarButtonItem]()
+        }
+
+        return toolbarButtonItems
+    }
+
+    private var toolbarButtonItems: [UIBarButtonItem] {
+        guard shouldShowToolBar else {
+            return [UIBarButtonItem]()
+        }
+
+        guard shouldShowSearch else {
+            return [bottomDeleteButton, flexibleSpace]
+        }
+
+        return [bottomDeleteButton, flexibleSpace, bottomSearchButton, flexibleSpace]
+    }
+
     // UI
     private lazy var bottomSearchButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.libraryPanelSearch),
@@ -90,18 +96,6 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomDeleteButton
         return button
     }()
-
-    private var toolbarButtonItems: [UIBarButtonItem] {
-        guard shouldShowToolBar else {
-            return [UIBarButtonItem]()
-        }
-
-        guard shouldShowSearch else {
-            return [bottomDeleteButton, flexibleSpace]
-        }
-
-        return [bottomDeleteButton, flexibleSpace, bottomSearchButton, flexibleSpace]
-    }
 
     var bottomStackView: BaseAlphaStackView = .build { _ in }
 
@@ -226,6 +220,12 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         let spacerHeight = keyboardHeight - UIConstants.BottomToolbarHeight
         bottomStackView.addKeyboardSpacer(spacerHeight: spacerHeight)
         bottomStackView.isHidden = false
+    }
+
+    func shouldDismissOnDone() -> Bool {
+        guard state != .history(state: .search) else { return false }
+
+        return true
     }
 
     // Use to enable/disable the additional history action rows. `HistoryActionablesModel`
@@ -706,11 +706,11 @@ extension HistoryPanel {
 
 // MARK: - User action helpers
 extension HistoryPanel {
-    func handleBackButton() {
+    func handleLeftTopButton() {
         updatePanelState(newState: .history(state: .mainView))
     }
 
-    func handleDoneButton() {
+    func handleRightTopButton() {
         if state == .history(state: .search) {
             exitSearchState()
             updatePanelState(newState: .history(state: .mainView))
