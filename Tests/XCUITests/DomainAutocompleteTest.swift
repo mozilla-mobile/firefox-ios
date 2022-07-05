@@ -4,7 +4,7 @@
 
 import XCTest
 
-let website = ["url": "www.mozilla.org", "value": "www.mozilla.org", "subDomain": "https://www.mozilla.org/en-US/firefox/products"]
+let website = ["url": "mozilla.org", "value": "mozilla.org", "subDomain": "https://www.mozilla.org/en-US/firefox/products"]
 
 let websiteExample = ["url": "www.example.com", "value": "www.example.com"]
 
@@ -34,11 +34,11 @@ class DomainAutocompleteTest: BaseTestCase {
 
     func test1Autocomplete() {
         // Basic autocompletion cases
-            // The autocomplete does not display the history item from the DB. Workaroud is to manually visit "mozilla.org".
-        navigator.openURL("www.mozilla.org")
+        // The autocomplete does not display the history item from the DB. Workaroud is to manually visit "mozilla.org".
+        navigator.openURL("mozilla.org")
         waitUntilPageLoad()
         navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
-        app.textFields["address"].typeText("w")
+        app.textFields["address"].typeText("moz")
 
         waitForValueContains(app.textFields["address"], value: website["value"]!)
         let value = app.textFields["address"].value
@@ -54,10 +54,14 @@ class DomainAutocompleteTest: BaseTestCase {
     // Test that deleting characters works correctly with autocomplete
     func test3AutocompleteDeletingChars() {
         // The autocomplete does not display the history item from the DB. Workaroud is to manually visit "mozilla.org".
-        navigator.openURL("www.mozilla.org")
+        navigator.openURL("mozilla.org")
         waitUntilPageLoad()
-        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
-        app.textFields["address"].typeText("www.moz")
+
+        navigator.goto(TabTray)
+        navigator.goto(CloseTabMenu)
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+        waitForExistence(app.textFields["address"])
+        app.textFields["address"].typeText("moz")
 
         // First delete the autocompleted part
         app.textFields["address"].typeText("\u{0008}")
