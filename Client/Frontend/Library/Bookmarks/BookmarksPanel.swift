@@ -59,7 +59,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     // MARK: - Init
 
     init(profile: Profile,
-         bookmarkFolderGUID: GUID = BookmarkRoots.RootGUID
+         bookmarkFolderGUID: GUID = BookmarkRoots.RootGUID,
          notificationCenter: NotificationCenter = NotificationCenter.default) {
 
         self.bookmarkFolderGUID = bookmarkFolderGUID
@@ -232,7 +232,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
                                                 position: UInt32(centerVisibleRow)) >>== { guid in
                 self.profile.places.getBookmark(guid: guid).uponQueue(.main) { result in
                     guard let bookmarkNode = result.successValue,
-                          let bookmarkSeparator = bookmarkNode as? BookmarkSeparatorData 
+                          let bookmarkSeparator = bookmarkNode as? BookmarkSeparatorData
                     else { return }
 
                     let indexPath = IndexPath(row: centerVisibleRow, section: BookmarksSection.bookmarks.rawValue)
