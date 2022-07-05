@@ -12,10 +12,6 @@ protocol PushClient {
 
     func unregister(_ credentials: PushRegistration,
                     completion: @escaping () -> Void)
-
-    func updateUAID(_ apnsToken: String,
-                    withRegistration creds: PushRegistration,
-                    completion: @escaping (PushRegistration) -> Void)
 }
 
 public class PushClientImplementation: PushClient {
@@ -77,27 +73,6 @@ public extension PushClientImplementation {
             } else {
                 completion(nil)
             }
-        }
-    }
-
-    func updateUAID(_ apnsToken: String,
-                    withRegistration creds: PushRegistration,
-                    completion: @escaping (PushRegistration) -> Void) {
-        // PUT /v1/{type}/{app_id}/registration/{uaid}
-        let registerURL = endpointURL.appendingPathComponent("registration/\(creds.uaid)")!
-        var mutableURLRequest = URLRequest(url: registerURL)
-
-        mutableURLRequest.httpMethod = HTTPMethod.put.rawValue
-        mutableURLRequest.addValue("Bearer \(creds.secret)", forHTTPHeaderField: "Authorization")
-
-        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        let parameters = ["token": apnsToken]
-        mutableURLRequest.httpBody = JSON(parameters).stringify()?.utf8EncodedData
-
-        api.fetchPushRegistration(request: mutableURLRequest) { _ in
-            KeychainStore.shared.setString(apnsToken, forKey: KeychainKey.apnsToken,
-                                           withAccessibility: .afterFirstUnlock)
-            completion(creds)
         }
     }
 

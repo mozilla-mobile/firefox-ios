@@ -40,36 +40,6 @@ class PushClientTests: XCTestCase {
 
         wait(for: [registrationExpectation, unregistrationExpectation], timeout: 0.1)
     }
-
-    func testClientUpdate() {
-        let client = PushClientImplementation(endpointURL: endpointURL,
-                                              pushRegistrationAPI: PushRegistrationAPIMock())
-
-        let registrationExpectation = XCTestExpectation()
-        let updateExpectation = XCTestExpectation()
-        let unregistrationExpectation = XCTestExpectation()
-
-        client.register(generateDeviceID()) { ogRegistration in
-            registrationExpectation.fulfill()
-
-            guard let ogRegistration = ogRegistration else {
-                XCTFail("Registration should be present")
-                return
-            }
-
-            client.updateUAID(self.generateDeviceID(),
-                              withRegistration: ogRegistration) { registration in
-                updateExpectation.fulfill()
-                XCTAssertEqual(ogRegistration, registration)
-
-                client.unregister(registration) {
-                    unregistrationExpectation.fulfill()
-                }
-            }
-        }
-
-        wait(for: [registrationExpectation, updateExpectation, unregistrationExpectation], timeout: 0.1)
-    }
 }
 
 // MARK: PushRegistrationAPIMock
