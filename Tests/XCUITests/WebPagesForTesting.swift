@@ -23,9 +23,8 @@ func registerHandlersForTestMethods(server: GCDWebServer) {
 }
 
 // Make sure to add files to '/test-fixtures' directory in the source tree
-fileprivate func addHTMLFixture(name: String, server: GCDWebServer) {
+private func addHTMLFixture(name: String, server: GCDWebServer) {
     if let path = Bundle.main.path(forResource: "test-fixtures/\(name)", ofType: "html") {
         server.addGETHandler(forPath: "/test-fixture/\(name).html", filePath: path, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
     }
 }
-

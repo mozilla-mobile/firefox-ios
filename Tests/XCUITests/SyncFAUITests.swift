@@ -107,7 +107,7 @@ class SyncUITests: BaseTestCase {
         app.secureTextFields.element(boundBy: 0).typeText(XCUIKeyboardKey.delete.rawValue)
         waitForNoExistence(app.webViews.staticTexts["Show password"])
     }
-    
+
     func testQRPairing() {
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()

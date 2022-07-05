@@ -8,10 +8,9 @@ let website = ["url": "mozilla.org", "value": "mozilla.org", "subDomain": "https
 
 let websiteExample = ["url": "www.example.com", "value": "www.example.com"]
 
-
 class DomainAutocompleteTest: BaseTestCase {
 
-    let testWithDB = ["test1Autocomplete","test3AutocompleteDeletingChars","test5NoMatches","testMixedCaseAutocompletion", "testDeletingCharsUpdateTheResults"]
+    let testWithDB = ["test1Autocomplete", "test3AutocompleteDeletingChars", "test5NoMatches", "testMixedCaseAutocompletion", "testDeletingCharsUpdateTheResults"]
 
     // This DB contains 3 entries mozilla.com/github.com/git.es
     let historyDB = "browserAutocomplete.db"
@@ -188,8 +187,8 @@ class DomainAutocompleteTest: BaseTestCase {
 
     // This test is disabled for general schema due to bug 1494269
     func testDeletingCharsUpdateTheResults() {
-        let url1 = ["url" : "git.es", "label" : "git.es - Dominio premium en venta"]
-        let url2 = ["url" : "github.com", "label" : "The world's leading software development platform · GitHub"]
+        let url1 = ["url": "git.es", "label": "git.es - Dominio premium en venta"]
+        let url2 = ["url": "github.com", "label": "The world's leading software development platform · GitHub"]
 
         navigator.goto(URLBarOpen)
         app.typeText("gith")

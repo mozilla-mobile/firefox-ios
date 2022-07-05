@@ -41,7 +41,7 @@ class TabCounterTests: BaseTestCase {
 
         navigator.createNewTab()
         navigator.nowAt(NewTabScreen)
-        
+
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
 

@@ -97,7 +97,7 @@ class SearchSettingsUITests: BaseTestCase {
         XCTAssertTrue(app.buttons["Edit"].isEnabled)
         waitForNoExistence(app.buttons["Done"])
 
-        //Make sure switches are there
+        // Make sure switches are there
         XCTAssertEqual(app.tables.cells.switches.count, app.tables.cells.count - 2)
     }
 

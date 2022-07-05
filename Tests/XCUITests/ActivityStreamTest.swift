@@ -11,7 +11,7 @@ let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "Twitter
 class ActivityStreamTest: BaseTestCase {
     let TopSiteCellgroup = XCUIApplication().cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
 
-    let testWithDB = ["testActivityStreamPages","testTopSites2Add", "testTopSitesOpenInNewPrivateTab", "testContextMenuInLandscape", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
+    let testWithDB = ["testActivityStreamPages", "testTopSites2Add", "testTopSitesOpenInNewPrivateTab", "testContextMenuInLandscape", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
 
     // Using the DDDBBs created for these tests containing enough entries for the tests that used them listed above
     let pagesVisitediPad = "browserActivityStreamPagesiPad.db"
@@ -116,7 +116,7 @@ class ActivityStreamTest: BaseTestCase {
             navigator.openURL("mozilla.org")
         }
         waitUntilPageLoad()
-        
+
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         app.otherElements[ImageIdentifiers.addShortcut].tap()
         // Workaround to have visited website in top sites
@@ -156,7 +156,7 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.collectionViews.cells.element(boundBy: 1))
         let topSiteCells = app.collectionViews.cells.staticTexts
         let topSiteFirstCellAfter = app.collectionViews.cells.element(boundBy: 1).label
-        XCTAssertTrue(topSiteFirstCellAfter == topSiteCells[allDefaultTopSites[1]].label, "First top site does not match")
+        XCTAssertTrue(topSiteFirstCellAfter == topSiteCells[allDefaultTopSites[1]].label,"First top site does not match")
     }
 
     // Smoketest

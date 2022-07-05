@@ -13,9 +13,9 @@ let url1And3Label = "Example Domain"
 let url2Label = "Internet for people, not profit — Mozilla"
 
 class PrivateBrowsingTest: BaseTestCase {
-    
+
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
-    
+
     func testPrivateTabDoesNotTrackHistory() {
         navigator.openURL(url1)
         waitForTabsButton()
@@ -109,7 +109,7 @@ class PrivateBrowsingTest: BaseTestCase {
         checkOpenTabsBeforeClosingPrivateMode()
 
         // Now the enable the Close Private Tabs when closing the Private Browsing Button
-        if !iPad(){
+        if !iPad() {
             app.cells.staticTexts[url2Label].tap()
         } else {
             app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts[url2Label].tap()
@@ -146,7 +146,7 @@ class PrivateBrowsingTest: BaseTestCase {
             XCTAssertTrue(app.webViews.staticTexts["DB_CREATED_PAGE"].exists)
             XCTAssertTrue(app.webViews.staticTexts["DB_CREATED_WORKER"].exists)
         }
-        
+
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         checkIndexedDBIsCreated()
 
@@ -169,7 +169,7 @@ class PrivateBrowsingTest: BaseTestCase {
         // If a private tab is open Private Browsing screen is not shown anymore
 
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        //Wait until the page loads and go to regular browser
+        // Wait until the page loads and go to regular browser
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
@@ -212,9 +212,9 @@ fileprivate extension BaseTestCase {
 }
 
 class PrivateBrowsingTestIpad: IpadOnlyTestCase {
-    
+
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
-    
+
     // This test is only enabled for iPad. Shortcut does not exists on iPhone
     func testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad() {
         if skipPlatform { return }

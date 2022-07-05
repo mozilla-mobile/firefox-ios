@@ -132,12 +132,11 @@ class TopTabsTest: BaseTestCase {
             app.buttons["TopTabsViewController.tabsButton"].tap()
             waitForExistence(app.buttons["newTabButtonTabTray"], timeout: 10)
             app.buttons["newTabButtonTabTray"].tap()
-        }
-        else {
+        } else {
             navigator.performAction(Action.OpenNewTabFromTabTray)
-            waitForExistence(app.buttons["TabToolbar.tabsButton"],timeout: 5)
+            waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 5)
         }
-        
+
         if iPad() {
             navigator.goto(TabTray)
         } else {
@@ -181,10 +180,9 @@ class TopTabsTest: BaseTestCase {
             app.buttons["TopTabsViewController.tabsButton"].tap()
             waitForExistence(app.buttons["newTabButtonTabTray"], timeout: 10)
             app.buttons["newTabButtonTabTray"].tap()
-        }
-        else {
+        } else {
             navigator.performAction(Action.OpenNewTabFromTabTray)
-            waitForExistence(app.buttons["TabToolbar.tabsButton"],timeout: 5)
+            waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 5)
         }
 
         navigator.goto(URLBarOpen)
@@ -244,7 +242,7 @@ class TopTabsTest: BaseTestCase {
         navigator.performAction(Action.AcceptRemovingAllTabs)
         XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
     }
-    
+
     // Smoketest
     func testOpenNewTabLandscape() {
         navigator.performAction(Action.CloseURLBarOpen)
@@ -419,7 +417,6 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTab)
 
-
         // Go to Private mode and do the same
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(urlExample)
@@ -467,8 +464,8 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // Tests to check if Tab Counter is updating correctly after opening three tabs by tapping on '+' button and closing the tabs by tapping 'x' button
 class TopTabsTestIpad: IpadOnlyTestCase {
 
-    func testUpdateTabCounter(){
-        if skipPlatform {return}
+    func testUpdateTabCounter() {
+        if skipPlatform { return }
         // Open three tabs by tapping on '+' button
         app.buttons["TopTabsViewController.newTabButton"].tap()
         app.buttons["TopTabsViewController.newTabButton"].tap()

@@ -7,13 +7,13 @@ import XCTest
 class ClipBoardTests: BaseTestCase {
     let url = "www.example.com"
 
-    //Check for test url in the browser
+    // Check for test url in the browser
     func checkUrl() {
         let urlTextField = app.textFields["url"]
         waitForValueContains(urlTextField, value: "www.example")
     }
 
-    //Copy url from the browser
+    // Copy url from the browser
     func copyUrl() {
         navigator.goto(URLBarOpen)
         waitForExistence(app.textFields["address"])
@@ -24,7 +24,7 @@ class ClipBoardTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
     }
 
-    //Check copied url is same as in browser
+    // Check copied url is same as in browser
     func checkCopiedUrl() {
         if let myString = UIPasteboard.general.string {
             var value = app.textFields["url"].value as! String

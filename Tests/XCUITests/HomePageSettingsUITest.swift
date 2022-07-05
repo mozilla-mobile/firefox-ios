@@ -62,7 +62,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
 
-        //Now check open home page should load the previously saved home page
+        // Now check open home page should load the previously saved home page
         let homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.homeButton]
         waitForExistence(homePageMenuItem, timeout: 5)
         homePageMenuItem.tap()
@@ -150,22 +150,22 @@ class HomePageSettingsUITests: BaseTestCase {
     func testChangeHomeSettingsLabel() {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
-        //Go to New Tab settings and select Custom URL option
+        // Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectHomeAsCustomURL)
         navigator.nowAt(HomeSettings)
-        //Enter a custom URL
+        // Enter a custom URL
         enterWebPageAsHomepage(text: websiteUrl1)
         waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         navigator.goto(SettingsScreen)
         XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Homepage")
-        //Switch to FXHome and check label
+        // Switch to FXHome and check label
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
         navigator.nowAt(HomeSettings)
         navigator.goto(SettingsScreen)
         XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Firefox Home")
     }
 
-    //Function to check the number of top sites shown given a selected number of rows
+    // Function to check the number of top sites shown given a selected number of rows
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
         waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)

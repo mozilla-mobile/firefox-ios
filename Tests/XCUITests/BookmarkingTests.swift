@@ -76,7 +76,7 @@ class BookmarkingTests: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
-        
+
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         checkUnbookmarked()
@@ -113,7 +113,7 @@ class BookmarkingTests: BaseTestCase {
     }
 
     func testAccessBookmarksFromContextMenu() {
-        //Add a bookmark
+        // Add a bookmark
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
@@ -122,7 +122,7 @@ class BookmarkingTests: BaseTestCase {
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         bookmark()
 
-        //There should be a bookmark
+        // There should be a bookmark
         navigator.goto(MobileBookmarks)
         checkItemInBookmarkList()
     }
@@ -137,7 +137,7 @@ class BookmarkingTests: BaseTestCase {
         typeOnSearchBar(text: "\r")
         navigator.nowAt(BrowserTab)
 
-         //Clear text and enter new url
+        // Clear text and enter new url
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(URLBarOpen)
@@ -271,7 +271,7 @@ class BookmarkingTests: BaseTestCase {
         waitForExistence(app.tables["Bookmarks List"], timeout: 5)
         XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 4)
 
-        //Add a bookmark
+        // Add a bookmark
         navigator.nowAt(LibraryPanel_Bookmarks)
         navigator.goto(NewTabScreen)
 
