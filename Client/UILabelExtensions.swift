@@ -7,7 +7,10 @@ import Foundation
 extension UILabel {
 
     var isTruncated: Bool {
-        guard frame.size.width != 0, let text = text, let font = font else { return false }
+        guard frame.size.width != 0,
+              let text = text,
+              let font = font
+        else { return false }
 
         let maxSize = CGSize(width: frame.size.width, height: CGFloat(Float.infinity))
         let charSize = font.lineHeight

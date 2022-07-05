@@ -217,9 +217,11 @@ class TopTabsViewController: UIViewController {
     func scrollToCurrentTab(_ animated: Bool = true, centerCell: Bool = false) {
         assertIsMainThread("Only animate on the main thread")
 
-        guard let currentTab = tabManager.selectedTab, let index = topTabDisplayManager.dataStore.index(of: currentTab), !collectionView.frame.isEmpty else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab,
+              let index = topTabDisplayManager.dataStore.index(of: currentTab),
+              !collectionView.frame.isEmpty
+        else { return }
+
         if let frame = collectionView.layoutAttributesForItem(at: IndexPath(row: index, section: 0))?.frame {
             if centerCell {
                 collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: false)
@@ -238,9 +240,10 @@ class TopTabsViewController: UIViewController {
     }
 
     private func handleFadeOutAfterTabSelection() {
-        guard let currentTab = tabManager.selectedTab, let index = topTabDisplayManager.dataStore.index(of: currentTab), !collectionView.frame.isEmpty else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab,
+              let index = topTabDisplayManager.dataStore.index(of: currentTab),
+              !collectionView.frame.isEmpty
+        else { return }
 
         // Check wether first or last tab is being selected.
         if index == 0 {

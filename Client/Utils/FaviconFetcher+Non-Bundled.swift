@@ -57,10 +57,11 @@ extension FaviconFetcher {
     fileprivate func parseHTMLForFavicons(_ url: URL) -> Deferred<Maybe<[Favicon]>> {
         return fetchDataForURL(url).bind({ result -> Deferred<Maybe<[Favicon]>> in
             var icons = [Favicon]()
-            guard let data = result.successValue, result.isSuccess,
-                let root = try? HTMLDocument(data: data as Data) else {
-                    return deferMaybe([])
-            }
+            guard let data = result.successValue,
+                  result.isSuccess,
+                  let root = try? HTMLDocument(data: data as Data)
+            else { return deferMaybe([]) }
+
             var reloadUrl: URL?
             for meta in root.xpath("//head/meta") {
                 if let refresh = meta["http-equiv"], refresh == "Refresh",

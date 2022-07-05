@@ -88,28 +88,23 @@ enum NavigationPath {
          */
         func sanitizedURL(for unsanitized: URL) -> URL {
             guard var components = URLComponents(url: unsanitized, resolvingAgainstBaseURL: true),
-                  let scheme = components.scheme, !scheme.isEmpty else {
-                return unsanitized
-            }
+                  let scheme = components.scheme, !scheme.isEmpty
+            else { return unsanitized }
 
             components.scheme = scheme.lowercased()
             return components.url ?? unsanitized
         }
 
         let url = sanitizedURL(for: url)
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            return nil
-        }
-
-        guard let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [AnyObject],
-            let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String] else {
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [AnyObject],
+              let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String]
+        else {
             // Something very strange has happened; org.mozilla.Client should be the zeroeth URL type.
             return nil
         }
 
-        guard let scheme = components.scheme, urlSchemes.contains(scheme) else {
-            return nil
-        }
+        guard let scheme = components.scheme, urlSchemes.contains(scheme) else { return nil }
 
         let isOurScheme = [URL.mozPublicScheme, URL.mozInternalScheme].contains(scheme)
         if isOurScheme, let host = components.host?.lowercased(), !host.isEmpty {
@@ -179,9 +174,7 @@ enum NavigationPath {
     }
 
     private static func handleWidgetKitQuery(components: URLComponents) -> NavigationPath? {
-        guard let host = components.host?.lowercased(), !host.isEmpty else {
-            return nil
-        }
+        guard let host = components.host?.lowercased(), !host.isEmpty else { return nil }
         switch host {
         case "widget-medium-topsites-open-url":
             // Widget Top sites - open url

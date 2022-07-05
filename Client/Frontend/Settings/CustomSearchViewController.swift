@@ -126,18 +126,14 @@ class CustomSearchViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
 
         func URLFromString(_ string: String?) -> URL? {
-            guard let string = string else {
-                return nil
-            }
+            guard let string = string else { return nil }
             return URL(string: string)
         }
 
         let titleField = CustomSearchEngineTextView(placeholder: .SettingsAddCustomEngineTitlePlaceholder, settingIsValid: { text in
             return text != nil && text != ""
         }, settingDidChange: {fieldText in
-            guard let title = fieldText else {
-                return
-            }
+            guard let title = fieldText else { return }
             self.engineTitle = title
             self.updateSaveButton()
         })

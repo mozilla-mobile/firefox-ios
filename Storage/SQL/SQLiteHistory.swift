@@ -979,9 +979,7 @@ extension SQLiteHistory: SyncableHistory {
         } >>== { visits in
             // Join up the places map we received as input with our visits map.
             let placesAndVisits: [(Place, [Visit])] = places.compactMap { id, place in
-                guard let visitsList = visits[id], !visitsList.isEmpty else {
-                    return nil
-                }
+                guard let visitsList = visits[id], !visitsList.isEmpty else { return nil }
                 return (place, visitsList)
             }
 

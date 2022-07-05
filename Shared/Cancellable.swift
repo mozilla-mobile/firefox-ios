@@ -46,9 +46,7 @@ open class CancellableDeferred<T>: Deferred<T> {
             dispatchWorkItem = nil
         }
 
-        guard !cancelled else {
-            return
-        }
+        guard !cancelled else { return }
 
         super.fill(value)
     }

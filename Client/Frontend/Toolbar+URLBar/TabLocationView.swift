@@ -298,9 +298,10 @@ extension TabLocationView: UIGestureRecognizerDelegate {
 extension TabLocationView: UIDragInteractionDelegate {
     func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
         // Ensure we actually have a URL in the location bar and that the URL is not local.
-        guard let url = self.url, !InternalURL.isValid(url: url), let itemProvider = NSItemProvider(contentsOf: url) else {
-            return []
-        }
+        guard let url = self.url,
+              !InternalURL.isValid(url: url),
+              let itemProvider = NSItemProvider(contentsOf: url)
+        else { return [] }
 
         TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .locationBar)
 

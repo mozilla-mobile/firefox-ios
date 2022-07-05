@@ -383,9 +383,7 @@ public class RustLoginEncryptionKeys {
     }
 
     func decryptSecureFields(login: EncryptedLogin) -> Login? {
-        guard let key = self.keychain.string(forKey: self.loginPerFieldKeychainKey) else {
-            return nil
-        }
+        guard let key = self.keychain.string(forKey: self.loginPerFieldKeychainKey) else { return nil }
 
         do {
             return try decryptLogin(login: login, encryptionKey: key)
@@ -396,9 +394,7 @@ public class RustLoginEncryptionKeys {
     }
 
     func encryptSecureFields(login: Login, encryptionKey: String? = nil) -> EncryptedLogin? {
-        guard let key = self.keychain.string(forKey: self.loginPerFieldKeychainKey) else {
-            return nil
-        }
+        guard let key = self.keychain.string(forKey: self.loginPerFieldKeychainKey) else { return nil }
 
         do {
             return try encryptLogin(login: login, encryptionKey: key)

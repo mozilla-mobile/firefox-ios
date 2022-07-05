@@ -26,9 +26,7 @@ class GoogleTopSiteManager {
     private var prefs: Prefs
     private var url: String? {
         // Couldn't find a valid region hence returning a nil value for url
-        guard let regionCode = Locale.current.regionCode, !invalidRegion.contains(regionCode) else {
-            return nil
-        }
+        guard let regionCode = Locale.current.regionCode, !invalidRegion.contains(regionCode) else { return nil }
         // Special case for US
         if regionCode == "US" {
             return Constants.usUrl

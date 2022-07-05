@@ -70,9 +70,7 @@ extension SwipeAnimator {
     }
 
     fileprivate func animateAwayWithVelocity(_ velocity: CGPoint, speed: CGFloat) {
-        guard let animatingView = self.animatingView else {
-            return
-        }
+        guard let animatingView = self.animatingView else { return }
 
         if !(delegate?.swipeAnimatorIsAnimateAwayEnabled(self) ?? false) {
             animateBackToCenter()

@@ -658,9 +658,7 @@ extension URLBarView: TabToolbarProtocol {
 
     func appMenuBadge(setVisible: Bool) {
         // Warning badges should take priority over the standard badge
-        guard warningMenuBadge.badge.isHidden else {
-            return
-        }
+        guard warningMenuBadge.badge.isHidden else { return }
 
         appMenuBadge.show(setVisible)
     }

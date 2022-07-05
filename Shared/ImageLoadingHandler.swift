@@ -58,9 +58,7 @@ public class ImageLoadingHandler: ImageFetcher {
             // Download image as its not in cache
             downloadImageOnly(with: url, limit: maxSize) { [unowned self] image, _, error in
                 completion(image, error)
-                guard error == nil, let image = image else {
-                    return
-                }
+                guard error == nil, let image = image else { return }
                 // cache downloaded image for future
                 self.saveImageToCache(img: image, key: url.absoluteString)
             }

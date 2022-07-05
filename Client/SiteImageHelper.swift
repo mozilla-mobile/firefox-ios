@@ -113,7 +113,10 @@ class SiteImageHelper {
                                            completion: @escaping (UIImage?, Bool?) -> Void) {
 
         metadataProvider.startFetchingMetadata(for: url) { metadata, error in
-            guard let metadata = metadata, let imageProvider = metadata.imageProvider, error == nil else {
+            guard let metadata = metadata,
+                  let imageProvider = metadata.imageProvider,
+                    error == nil
+            else {
                 completion(nil, false)
                 return
             }

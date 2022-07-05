@@ -61,9 +61,7 @@ class NotificationService: UNNotificationServiceExtension {
             consoleLog("push didFinish end")
         }
 
-        guard let display = self.display else {
-            return
-        }
+        guard let display = self.display else { return }
 
         display.messageDelivered = false
         display.displayNotification(what, profile: profile, with: error)

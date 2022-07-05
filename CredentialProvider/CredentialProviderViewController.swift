@@ -34,9 +34,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
                 currentViewController.didMove(toParent: self)
             }
 
-            guard let oldViewController = oldValue else {
-                return
-            }
+            guard let oldViewController = oldValue else { return }
             oldViewController.willMove(toParent: nil)
             oldViewController.view.removeFromSuperview()
             oldViewController.removeFromParent()

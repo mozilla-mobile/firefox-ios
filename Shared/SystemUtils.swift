@@ -35,9 +35,7 @@ extension SystemUtils {
     // and not accessible from extension when the device is locked. Thus, we can tell if an extension is being run
     // when the device is locked.
     public static func onFirstRun() {
-        guard let lockFileURL = lockedDeviceURL else {
-            return
-        }
+        guard let lockFileURL = lockedDeviceURL else { return }
 
         let lockFile = lockFileURL.path
         let fm = FileManager.default

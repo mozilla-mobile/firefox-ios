@@ -303,9 +303,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         if let featureFlagName = featureFlagName {
             control.isOn = featureFlags.isFeatureEnabled(featureFlagName, checking: .userOnly)
         } else {
-            guard let key = prefKey, let defaultValue = defaultValue else {
-                return
-            }
+            guard let key = prefKey, let defaultValue = defaultValue else { return }
             control.isOn = prefs?.boolForKey(key) ?? defaultValue
         }
     }
@@ -315,9 +313,7 @@ class BoolSetting: Setting, FeatureFlaggable {
             featureFlags.set(feature: featureFlagName, to: control.isOn)
 
         } else {
-            guard let key = prefKey else {
-                return
-            }
+            guard let key = prefKey else { return }
             prefs?.setBool(control.isOn, forKey: key)
         }
     }
@@ -390,9 +386,7 @@ class WebPageSetting: StringPrefSetting {
     }
 
     override func prepareValidValue(userInput value: String?) -> String? {
-        guard let value = value else {
-            return nil
-        }
+        guard let value = value else { return nil }
         return URIFixup.getURL(value)?.absoluteString
     }
 
@@ -767,9 +761,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
     @objc func didLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         let location = gestureRecognizer.location(in: tableView)
-        guard let indexPath = tableView.indexPathForRow(at: location), gestureRecognizer.state == .began else {
-            return
-        }
+        guard let indexPath = tableView.indexPathForRow(at: location), gestureRecognizer.state == .began else { return }
 
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row], setting.enabled {
@@ -798,9 +790,7 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else {
-            return nil
-        }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         let sectionSetting = settings[section]
         if let sectionTitle = sectionSetting.title?.string {
@@ -813,9 +803,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionSetting = settings[section]
-        guard let sectionFooter = sectionSetting.footerTitle?.string else {
-            return nil
-        }
+        guard let sectionFooter = sectionSetting.footerTitle?.string else { return nil }
         let footerView = ThemedTableSectionHeaderFooterView()
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top

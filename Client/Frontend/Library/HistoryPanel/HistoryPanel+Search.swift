@@ -8,9 +8,7 @@ import Shared
 // MARK: - UISearchBarDelegate
 extension HistoryPanel: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let searchText = searchBar.text, !searchText.isEmpty else {
-            return
-        }
+        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
 
         // Do search and show
         performSearch(term: searchText)

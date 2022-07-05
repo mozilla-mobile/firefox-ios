@@ -159,9 +159,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard self.presentedViewController == nil else {
-            return
-        }
+        guard self.presentedViewController == nil else { return }
         var actions: [[PhotonRowActions]] = []
         actions.append(getTabToolbarLongPressActionsForModeSwitching())
         actions.append(getMoreTabToolbarLongPressActions())

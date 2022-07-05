@@ -151,9 +151,7 @@ public extension Sequence {
     func zip<S: Sequence>(_ elems: S) -> [(Self.Iterator.Element, S.Iterator.Element)] {
         var rights = elems.makeIterator()
         return self.compactMap { lhs in
-            guard let rhs = rights.next() else {
-                return nil
-            }
+            guard let rhs = rights.next() else { return nil }
             return (lhs, rhs)
         }
     }

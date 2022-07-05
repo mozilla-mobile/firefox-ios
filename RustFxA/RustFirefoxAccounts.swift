@@ -199,23 +199,20 @@ open class RustFirefoxAccounts {
         // Ignore this class when de-archiving, it isn't needed.
         NSKeyedUnarchiver.setClass(Unknown.self, forClassName: "Account.FxADeviceRegistration")
 
-        guard let dict = keychain.object(forKey: key) as? [String: AnyObject], let guid = dict["stateKeyLabel"] else {
-            return nil
-        }
+        guard let dict = keychain.object(forKey: key) as? [String: AnyObject],
+              let guid = dict["stateKeyLabel"]
+        else { return nil }
 
         let key2 = "account.state.\(guid)"
         keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key2)
-        guard let jsonData = keychain.data(forKey: key2) else {
-            return nil
-        }
+        guard let jsonData = keychain.data(forKey: key2) else { return nil }
 
-        guard let json = try? JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [String: Any] else {
-            return nil
-        }
+        guard let json = try? JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [String: Any] else { return nil }
 
-        guard let sessionToken = json["sessionToken"] as? String, let ksync = json["kSync"] as? String, let kxcs = json["kXCS"] as? String else {
-            return nil
-        }
+        guard let sessionToken = json["sessionToken"] as? String,
+              let ksync = json["kSync"] as? String,
+              let kxcs = json["kXCS"] as? String
+        else { return nil }
 
         return (session: sessionToken, ksync: ksync, kxcs: kxcs)
     }

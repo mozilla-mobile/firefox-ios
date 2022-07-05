@@ -86,7 +86,8 @@ class TabManagerStore: FeatureFlaggable {
     func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, writeCompletion: (() -> Void)? = nil) {
         assert(Thread.isMainThread)
         guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab),
-            let path = tabsStateArchivePath() else {
+              let path = tabsStateArchivePath()
+        else {
                 clearArchive()
                 return
         }

@@ -165,9 +165,7 @@ class QRCodeViewController: UIViewController {
     }
 
     private func setupVideoPreviewLayer() {
-        guard let videoPreviewLayer = self.videoPreviewLayer else {
-            return
-        }
+        guard let videoPreviewLayer = self.videoPreviewLayer else { return }
         videoPreviewLayer.frame = UIScreen.main.bounds
         switch UIDevice.current.orientation {
         case .portrait:
@@ -214,9 +212,7 @@ class QRCodeViewController: UIViewController {
     }
 
     @objc func openLight() {
-        guard let captureDevice = self.captureDevice else {
-            return
-        }
+        guard let captureDevice = self.captureDevice else { return }
 
         if isLightOn {
             do {
@@ -291,8 +287,13 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
             self.captureSession.stopRunning()
             stopScanLineAnimation()
             self.dismiss(animated: true, completion: {
-                guard let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject, let qrCodeDelegate = self.qrCodeDelegate, let text = metaData.stringValue else {
-                        SentryIntegration.shared.sendWithStacktrace(message: "Unable to scan QR code", tag: .general)
+                guard let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
+                      let qrCodeDelegate = self.qrCodeDelegate,
+                        let text = metaData.stringValue
+                else {
+                        SentryIntegration.shared.sendWithStacktrace(
+                            message: "Unable to scan QR code",
+                            tag: .general)
                         return
                 }
 

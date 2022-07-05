@@ -53,7 +53,7 @@ class WebServerUtil {
         // Add tracking protection check page
         server.addHandler(forMethod: "GET",
                           path: "/test-fixture/find-in-page-test.html",
-                          request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+                          request: GCDWebServerRequest.self) { (_: GCDWebServerRequest?) in
             let node = """
 <span>  And the beast shall come forth surrounded by a roiling cloud of vengeance. \
 The house of the unbelievers shall be razed and they shall be scorched to the earth. \

@@ -124,9 +124,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     }
 
     @objc private func sectionHeaderTapped(sender: UIGestureRecognizer) {
-        guard let section = sender.view?.tag else {
-            return
-        }
+        guard let section = sender.view?.tag else { return }
         collapsibleSectionDelegate?.hideTableViewSection(section)
     }
 

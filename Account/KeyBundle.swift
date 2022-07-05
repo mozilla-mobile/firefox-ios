@@ -30,9 +30,9 @@ open class KeyBundle: Hashable {
 
     public init?(encKeyB64: String, hmacKeyB64: String) {
         guard let e = Bytes.decodeBase64(encKeyB64),
-            let h = Bytes.decodeBase64(hmacKeyB64) else {
-                return nil
-        }
+              let h = Bytes.decodeBase64(hmacKeyB64)
+        else { return nil }
+
         self.encKey = e
         self.hmacKey = h
     }

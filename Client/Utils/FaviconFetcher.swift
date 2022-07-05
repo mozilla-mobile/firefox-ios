@@ -156,23 +156,23 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     }
 
     class func downloadFaviconAndCache(imageURL: URL?, imageKey: String) {
-        guard let imageURL = imageURL, !imageURL.absoluteString.starts(with: "internal://"), !imageKey.isEmpty else { return }
+        guard let imageURL = imageURL,
+              !imageURL.absoluteString.starts(with: "internal://"),
+              !imageKey.isEmpty
+        else { return }
+
         // cache found, don't download
         guard !checkWidgetKitImageCache(imageKey: imageKey) else { return }
 
         ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: imageURL,
                                                                limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
-            guard error == nil, let image = image else {
-                return
-            }
+            guard error == nil, let image = image else { return }
 
             // save image to disk cache
             do {
                 if let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier) {
                     let imageKeyDirectoryUrl = container.appendingPathComponent("Library/Caches/fxfavicon/\(imageKey)")
-                    guard let data = image.jpegData(compressionQuality: 1) ?? image.pngData() else {
-                        return
-                    }
+                    guard let data = image.jpegData(compressionQuality: 1) ?? image.pngData() else { return }
 
                     try data.write(to: imageKeyDirectoryUrl)
                 }
@@ -221,9 +221,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         guard checkWidgetKitImageCache(imageKey: imageKey) else { return nil }
         // image cache found now we retrive image
         let fileManager = FileManager.default
-        guard let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier) else {
-            return nil
-        }
+        guard let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier) else { return nil }
         let imageKeyDirectoryUrl = container.appendingPathComponent("Library/Caches/fxfavicon/\(imageKey)")
         guard let data = fileManager.contents(atPath: imageKeyDirectoryUrl.path) else { return nil }
         return UIImage(data: data)

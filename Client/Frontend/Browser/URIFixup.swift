@@ -12,9 +12,7 @@ class URIFixup {
         }
 
         let trimmed = entry.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard var escaped = trimmed.addingPercentEncoding(withAllowedCharacters: .URLAllowed) else {
-            return nil
-        }
+        guard var escaped = trimmed.addingPercentEncoding(withAllowedCharacters: .URLAllowed) else { return nil }
         escaped = replaceBrackets(url: escaped)
 
         // Then check if the URL includes a scheme. This will handle

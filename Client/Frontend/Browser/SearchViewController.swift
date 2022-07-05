@@ -149,9 +149,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                                                       profile: profile,
                                                       tabs: tabManager.tabs,
                                                       resultCount: 3) { results in
-            guard let results = results else {
-                return
-            }
+            guard let results = results else { return }
             self.searchHighlights = results
             self.tableView.reloadData()
         }
@@ -370,9 +368,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         guard profile.hasSyncableAccount() else { return }
         // Get cached tabs
         self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
-            guard let clientAndTabs = result.successValue else {
-                return
-            }
+            guard let clientAndTabs = result.successValue else { return }
             self.remoteClientTabs.removeAll()
             // Update UI with cached data.
             clientAndTabs.forEach { value in
@@ -571,9 +567,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        guard let section = SearchListSection(rawValue: indexPath.section) else {
-            return
-        }
+        guard let section = SearchListSection(rawValue: indexPath.section) else { return }
 
         if section == .bookmarksAndHistory,
             let suggestion = data[indexPath.item] {
@@ -803,9 +797,7 @@ extension SearchViewController {
         default:
             return
         }
-        guard nextItem >= 0 else {
-            return
-        }
+        guard nextItem >= 0 else { return }
         let next = IndexPath(item: nextItem, section: nextSection)
         self.tableView(tableView, didHighlightRowAt: next)
         tableView.selectRow(at: next, animated: false, scrollPosition: .middle)

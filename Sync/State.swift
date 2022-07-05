@@ -63,9 +63,7 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
         if json.isError() {
             return nil
         }
-        guard let type = json["type"].string else {
-            return nil
-        }
+        guard let type = json["type"].string else { return nil }
         switch type {
         case "ResetAllEngines":
             if let except = json["except"].array, except.every({$0.isString()}) {
@@ -241,7 +239,10 @@ open class Scratchpad {
 
         open func addLocalCommandsFromKeys(_ keys: Fetched<Keys>?) -> Builder {
             // Getting new keys can force local collection resets.
-            guard let freshKeys = keys?.value, let staleKeys = self.keys?.value, staleKeys.valid else {
+            guard let freshKeys = keys?.value,
+                  let staleKeys = self.keys?.value,
+                  staleKeys.valid
+            else {
                 // Removing keys, or new keys and either we didn't have old keys or they weren't valid.  Everybody gets a reset!
                 self.localCommands.insert(LocalCommand.resetAllEngines(except: []))
                 return self
@@ -373,9 +374,7 @@ open class Scratchpad {
     public let clientGUID: String
 
     var hashedDeviceID: String? {
-        guard let hashedUID = hashedUID else {
-            return nil
-        }
+        guard let hashedUID = hashedUID else { return nil }
         return (fxaDeviceId + hashedUID).sha256.hexEncodedString
     }
 

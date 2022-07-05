@@ -15,7 +15,9 @@ private let schemesAllowedToBeOpenedAsPopups = ["http", "https", "javascript", "
 extension BrowserViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         guard let parentTab = tabManager[webView] else { return nil }
-        guard !navigationAction.isInternalUnprivileged, shouldRequestBeOpenedAsPopup(navigationAction.request) else {
+        guard !navigationAction.isInternalUnprivileged,
+              shouldRequestBeOpenedAsPopup(navigationAction.request)
+        else {
             print("Denying popup from request: \(navigationAction.request)")
 
             guard let url = navigationAction.request.url else { return nil }
@@ -118,7 +120,10 @@ extension BrowserViewController: WKUIDelegate {
 
     func webView(_ webView: WKWebView, contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo, completionHandler: @escaping (UIContextMenuConfiguration?) -> Void) {
         completionHandler(UIContextMenuConfiguration(identifier: nil, previewProvider: {
-            guard let url = elementInfo.linkURL, self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true else { return nil }
+            guard let url = elementInfo.linkURL,
+                  self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true
+            else { return nil }
+
             let previewViewController = UIViewController()
             previewViewController.view.isUserInteractionEnabled = false
             let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
@@ -132,9 +137,12 @@ extension BrowserViewController: WKUIDelegate {
 
             return previewViewController
         }, actionProvider: { [self] (suggested) -> UIMenu? in
-            guard let url = elementInfo.linkURL, let currentTab = self.tabManager.selectedTab,
-                let contextHelper = currentTab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper,
-                let elements = contextHelper.elements else { return nil }
+            guard let url = elementInfo.linkURL,
+                  let currentTab = self.tabManager.selectedTab,
+                  let contextHelper = currentTab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper,
+                  let elements = contextHelper.elements
+            else { return nil }
+
             let isPrivate = currentTab.isPrivate
             var setAddTabAdSearchParam = false
             let addTab = { (rURL: URL, isPrivate: Bool) in
@@ -171,9 +179,7 @@ extension BrowserViewController: WKUIDelegate {
                     tab.metadataManager?.updateTimerAndObserving(state: .openInNewTab, searchData: searchData, isPrivate: tab.isPrivate)
                 }
 
-                guard !self.topTabsVisible else {
-                    return
-                }
+                guard !self.topTabsVisible else { return }
                 var toastLabelText: String
 
                 if isPrivate {
@@ -270,7 +276,10 @@ extension BrowserViewController: WKUIDelegate {
             })
 
             actions.append(UIAction(title: .ContextMenuShareLink, image: UIImage.templateImageNamed(ImageIdentifiers.share), identifier: UIAction.Identifier("linkContextMenu.share")) { _ in
-                guard let tab = self.tabManager[webView], let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper else { return }
+                guard let tab = self.tabManager[webView],
+                      let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper
+                else { return }
+
                 // This is only used on ipad for positioning the popover. On iPhone it is an action sheet.
                 let p = webView.convert(helper.touchPoint, to: self.view)
                 self.presentActivityViewController(url as URL, sourceView: self.view, sourceRect: CGRect(origin: p, size: CGSize(width: 10, height: 10)), arrowDirection: .unknown)
@@ -344,9 +353,7 @@ extension BrowserViewController: WKUIDelegate {
 extension WKNavigationAction {
     /// Allow local requests only if the request is privileged.
     var isInternalUnprivileged: Bool {
-        guard let url = request.url else {
-            return true
-        }
+        guard let url = request.url else { return true }
 
         if let url = InternalURL(url) {
             return !url.isAuthorized
@@ -358,9 +365,7 @@ extension WKNavigationAction {
 
 extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-        guard let tab = tabManager[webView] else {
-            return
-        }
+        guard let tab = tabManager[webView] else { return }
 
         if tab.adsTelemetryUrlList.count > 0, !tab.adsProviderName.isEmpty, let webUrl = webView.url {
             tab.adsTelemetryRedirectUrlList.append(webUrl)
@@ -387,14 +392,13 @@ extension BrowserViewController: WKNavigationDelegate {
 
     // Handle Universal link for Firefox wallpaper setting
     private func isFirefoxUniversalWallpaperSetting(_ url: URL) -> Bool {
-        guard let scheme = url.scheme, [URL.mozPublicScheme,
-                                        URL.mozInternalScheme].contains(scheme) else {
-            return false
-        }
+        guard let scheme = url.scheme,
+              [URL.mozPublicScheme, URL.mozInternalScheme].contains(scheme)
+        else { return false }
+
         let deeplinkUrl = "\(scheme)://deep-link?url=/settings/wallpaper"
-        if url.absoluteString == deeplinkUrl {
-            return true
-        }
+        if url.absoluteString == deeplinkUrl { return true }
+
         return false
     }
 
@@ -443,7 +447,9 @@ extension BrowserViewController: WKNavigationDelegate {
     // method.
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        guard let url = navigationAction.request.url, let tab = tabManager[webView] else {
+        guard let url = navigationAction.request.url,
+              let tab = tabManager[webView]
+        else {
             decisionHandler(.cancel)
             return
         }
@@ -730,7 +736,8 @@ extension BrowserViewController: WKNavigationDelegate {
         guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPBasic ||
               challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPDigest ||
               challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodNTLM,
-              let tab = tabManager[webView] else {
+              let tab = tabManager[webView]
+        else {
             completionHandler(.performDefaultHandling, nil)
             return
         }
@@ -756,7 +763,8 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         guard let tab = tabManager[webView],
-              let metadataManager = tab.metadataManager else { return }
+              let metadataManager = tab.metadataManager
+        else { return }
 
         searchTelemetry?.trackTabAndTopSiteSAP(tab, webView: webView)
         tab.url = webView.url

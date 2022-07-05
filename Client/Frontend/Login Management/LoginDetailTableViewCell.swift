@@ -81,9 +81,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
     }
 
     var descriptionTextSize: CGSize? {
-        guard let descriptionText = descriptionLabel.text else {
-            return nil
-        }
+        guard let descriptionText = descriptionLabel.text else { return nil }
 
         let attributes = [
             NSAttributedString.Key.font: LoginTableViewCellUX.descriptionLabelFont

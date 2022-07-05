@@ -710,9 +710,7 @@ open class BrowserProfile: Profile {
         public func applicationDidBecomeActive() {
             self.backgrounded = false
 
-            guard self.profile.hasSyncableAccount() else {
-                return
-            }
+            guard self.profile.hasSyncableAccount() else { return }
 
             self.beginTimedSyncs()
 
@@ -999,9 +997,7 @@ open class BrowserProfile: Profile {
 
             if constellationStateUpdate == nil {
                 constellationStateUpdate = NotificationCenter.default.addObserver(forName: .constellationStateUpdate, object: nil, queue: .main) { [weak self] notification in
-                    guard let accountManager = self?.profile.rustFxA.accountManager.peek(), let state = accountManager.deviceConstellation()?.state() else {
-                        return
-                    }
+                    guard let accountManager = self?.profile.rustFxA.accountManager.peek(), let state = accountManager.deviceConstellation()?.state() else { return }
                     guard let self = self else { return }
                     let devices = state.remoteDevices.map { d -> RemoteDevice in
                         let t = "\(d.deviceType)"
@@ -1184,9 +1180,10 @@ open class BrowserProfile: Profile {
         }
 
         func getProfileAndDeviceId() -> (MozillaAppServices.Profile, String)? {
-            guard let fxa = RustFirefoxAccounts.shared.accountManager.peek(), let profile = fxa.accountProfile(), let deviceID = fxa.deviceConstellation()?.state()?.localDevice?.id else {
-                return nil
-            }
+            guard let fxa = RustFirefoxAccounts.shared.accountManager.peek(),
+                  let profile = fxa.accountProfile(),
+                  let deviceID = fxa.deviceConstellation()?.state()?.localDevice?.id
+            else { return nil }
 
             return (profile, deviceID)
         }

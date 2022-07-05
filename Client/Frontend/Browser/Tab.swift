@@ -299,9 +299,7 @@ class Tab: NSObject {
     // Use computed property so @available can be used to guard `noImageMode`.
     var noImageMode: Bool {
         didSet {
-            guard noImageMode != oldValue else {
-                return
-            }
+            guard noImageMode != oldValue else { return }
 
             contentBlocker?.noImageMode(enabled: noImageMode)
 
@@ -311,9 +309,7 @@ class Tab: NSObject {
 
     var nightMode: Bool {
         didSet {
-            guard nightMode != oldValue else {
-                return
-            }
+            guard nightMode != oldValue else { return }
 
             webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.NightMode.setEnabled(\(nightMode))")
             // For WKWebView background color to take effect, isOpaque must be false,
@@ -465,9 +461,7 @@ class Tab: NSObject {
             jsonDict["history"] = urls as AnyObject?
             jsonDict["currentPage"] = currentPage as AnyObject?
 
-            guard let json = jsonDict.asString?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-                return
-            }
+            guard let json = jsonDict.asString?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
 
             if let restoreURL = URL(string: "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?history=\(json)") {
                 let request = PrivilegedRequest(url: restoreURL) as URLRequest
@@ -713,9 +707,7 @@ class Tab: NSObject {
     }
 
     func dequeueJavascriptAlertPrompt() -> JSAlertInfo? {
-        guard !alertQueue.isEmpty else {
-            return nil
-        }
+        guard !alertQueue.isEmpty else { return nil }
         return alertQueue.removeFirst()
     }
 
@@ -773,9 +765,10 @@ class Tab: NSObject {
     }
 
     func updateFaviconCache() {
-        guard let displayFavicon = displayFavicon?.url, let faviconUrl = URL(string: displayFavicon), let baseDomain = url?.baseDomain else {
-            return
-        }
+        guard let displayFavicon = displayFavicon?.url,
+              let faviconUrl = URL(string: displayFavicon),
+              let baseDomain = url?.baseDomain
+        else { return }
 
         if currentFaviconUrl == nil {
             currentFaviconUrl = faviconUrl

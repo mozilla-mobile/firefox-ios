@@ -348,7 +348,11 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     }
 
     private func setupBadgeOverlay(action: SingleActionViewModel) {
-        guard let name = action.badgeIconName, action.isEnabled, let parent = statusIcon.superview else { return }
+        guard let name = action.badgeIconName,
+              action.isEnabled,
+              let parent = statusIcon.superview
+        else { return }
+
         badgeOverlay = BadgeWithBackdrop(imageName: name)
         badgeOverlay?.add(toParent: parent)
         badgeOverlay?.layout(onButton: statusIcon)

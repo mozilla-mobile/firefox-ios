@@ -221,12 +221,15 @@ extension PushCrypto {
             throw PushCryptoError.encryptionError(errCode: paramsErr)
         }
 
-        guard let cryptoKeyHeader = String(data: Data(bytes: cryptoKeyHeaderBytes, count: cryptoKeyHeaderLength),
+        guard let cryptoKeyHeader = String(data: Data(
+            bytes: cryptoKeyHeaderBytes,
+            count: cryptoKeyHeaderLength),
                                            encoding: .ascii),
-              let encryptionHeader = String(data: Data(bytes: encryptionHeaderBytes, count: encryptionHeaderLength),
-                                            encoding: .ascii) else {
-            throw PushCryptoError.base64EncodeError
-        }
+              let encryptionHeader = String(data: Data(
+                bytes: encryptionHeaderBytes,
+                count: encryptionHeaderLength),
+                                            encoding: .ascii)
+        else { throw PushCryptoError.base64EncodeError }
 
         let headers = PushCryptoHeaders(encryption: encryptionHeader, cryptoKey: cryptoKeyHeader)
         return (headers, Data(bytes: ciphertext, count: ciphertextLength))
@@ -263,10 +266,9 @@ extension PushCrypto {
         }
 
         guard let privKey = Data(bytes: rawRecvPrivKey, count: privateKeyLength).base64urlSafeEncodedString,
-            let pubKey = Data(bytes: rawRecvPubKey, count: publicKeyLength).base64urlSafeEncodedString,
-            let authKey = Data(bytes: authSecret, count: authSecretLength).base64urlSafeEncodedString else {
-                throw PushCryptoError.base64EncodeError
-        }
+              let pubKey = Data(bytes: rawRecvPubKey, count: publicKeyLength).base64urlSafeEncodedString,
+              let authKey = Data(bytes: authSecret, count: authSecretLength).base64urlSafeEncodedString
+        else { throw PushCryptoError.base64EncodeError }
 
         return PushKeys(p256dhPrivateKey: privKey, p256dhPublicKey: pubKey, auth: authKey)
     }
@@ -300,16 +302,12 @@ extension String {
         // We call this method twice: once with the last two args as nil, 0 – this gets us the length
         // of the decoded string.
         let length = ece_base64url_decode(self, self.count, ECE_BASE64URL_REJECT_PADDING, nil, 0)
-        guard length > 0 else {
-            return nil
-        }
+        guard length > 0 else { return nil }
 
         // The second time, we actually decode, and copy it into a made to measure byte array.
         var bytes = [UInt8](repeating: 0, count: length)
         let checkLength = ece_base64url_decode(self, self.count, ECE_BASE64URL_REJECT_PADDING, &bytes, length)
-        guard checkLength == length else {
-            return nil
-        }
+        guard checkLength == length else { return nil }
 
         return Data(bytes: bytes, count: length)
     }
@@ -319,15 +317,11 @@ extension Data {
     /// Returns a base64 url safe encoding of the given data.
     var base64urlSafeEncodedString: String? {
         let length = ece_base64url_encode(self.getBytes(), self.count, ECE_BASE64URL_OMIT_PADDING, nil, 0)
-        guard length > 0 else {
-            return nil
-        }
+        guard length > 0 else { return nil }
 
         var bytes = [CChar](repeating: 0, count: length)
         let checkLength = ece_base64url_encode(self.getBytes(), self.count, ECE_BASE64URL_OMIT_PADDING, &bytes, length)
-        guard checkLength == length else {
-            return nil
-        }
+        guard checkLength == length else { return nil }
 
         return String(data: Data(bytes: bytes, count: length), encoding: .ascii)
     }

@@ -217,7 +217,8 @@ class BrowserViewController: UIViewController {
     @objc func searchBarPositionDidChange(notification: Notification) {
         guard let dict = notification.object as? NSDictionary,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
-              urlBar != nil else { return }
+              urlBar != nil
+        else { return }
 
         let newPositionIsBottom = newSearchBarPosition == .bottom
         let newParent = newPositionIsBottom ? overKeyboardContainer : header
@@ -347,9 +348,9 @@ class BrowserViewController: UIViewController {
 
         // If we are displaying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
-        guard let privateTab = tabManager.selectedTab, privateTab.isPrivate else {
-            return
-        }
+        guard let privateTab = tabManager.selectedTab,
+              privateTab.isPrivate
+        else { return }
 
         view.bringSubviewToFront(webViewContainerBackdrop)
         webViewContainerBackdrop.alpha = 1
@@ -722,8 +723,9 @@ class BrowserViewController: UIViewController {
     }
 
     private func adjustBottomSearchBarForKeyboard() {
-        guard isBottomSearchBar else { return }
-        guard let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 else {
+        guard isBottomSearchBar,
+              let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0
+        else {
             overKeyboardContainer.removeKeyboardSpacer()
             return
         }
@@ -903,9 +905,7 @@ class BrowserViewController: UIViewController {
     }
 
     func hideFirefoxHome(completion: (() -> Void)? = nil) {
-        guard let firefoxHomeViewController = self.firefoxHomeViewController else {
-            return
-        }
+        guard let firefoxHomeViewController = self.firefoxHomeViewController else { return }
 
         self.firefoxHomeViewController = nil
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
@@ -998,9 +998,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func createSearchControllerIfNeeded() {
-        guard self.searchController == nil else {
-            return
-        }
+        guard self.searchController == nil else { return }
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         let searchViewModel = SearchViewModel(isPrivate: isPrivate, isBottomSearchBar: isBottomSearchBar)
@@ -1018,9 +1016,7 @@ class BrowserViewController: UIViewController {
     func showSearchController() {
         createSearchControllerIfNeeded()
 
-        guard let searchController = self.searchController else {
-            return
-        }
+        guard let searchController = self.searchController else { return }
 
         // This needs to be added to ensure during animation of the keyboard,
         // No content is showing in between the bottom search bar and the searchViewController
@@ -1120,7 +1116,9 @@ class BrowserViewController: UIViewController {
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
 
             guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
-                  let bookmarkNode = bookmarkFolder.children?.last else { return }
+                  let bookmarkNode = bookmarkFolder.children?.last
+            else { return }
+
             let detailController = BookmarkDetailPanel(profile: self.profile,
                                                        bookmarkNode: bookmarkNode,
                                                        parentBookmarkFolder: bookmarkFolder,
@@ -1177,10 +1175,13 @@ class BrowserViewController: UIViewController {
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        guard let webView = object as? WKWebView, let tab = tabManager[webView] else {
-            return
-        }
-        guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
+        guard let webView = object as? WKWebView,
+              let tab = tabManager[webView]
+        else { return }
+
+        guard let kp = keyPath,
+              let path = KVOConstants(rawValue: kp)
+        else {
             SentryIntegration.shared.send(message: "BVC observeValue webpage unhandled KVO", tag: .general,
                                           severity: .error,
                                           description: "Unhandled KVO key: \(keyPath ?? "nil")")
@@ -1237,14 +1238,14 @@ class BrowserViewController: UIViewController {
             }
             TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
         case .canGoBack:
-            guard tab === tabManager.selectedTab, let canGoBack = change?[.newKey] as? Bool else {
-                break
-            }
+            guard tab === tabManager.selectedTab,
+                  let canGoBack = change?[.newKey] as? Bool
+            else { break }
             navigationToolbar.updateBackStatus(canGoBack)
         case .canGoForward:
-            guard tab === tabManager.selectedTab, let canGoForward = change?[.newKey] as? Bool else {
-                break
-            }
+            guard tab === tabManager.selectedTab,
+                  let canGoForward = change?[.newKey] as? Bool
+            else { break }
             navigationToolbar.updateForwardStatus(canGoForward)
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
@@ -1375,9 +1376,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func popToBVC() {
-        guard let currentViewController = navigationController?.topViewController else {
-            return
-        }
+        guard let currentViewController = navigationController?.topViewController else { return }
         // Avoid dismissing JSPromptAlert that causes the crash because completionHandler was not called
         if !isShowingJSPromptAlert() {
             currentViewController.dismiss(animated: true, completion: nil)
@@ -1692,9 +1691,7 @@ extension BrowserViewController: TabDelegate {
         // If the Tab that had a SnackBar added to it is not currently
         // the selected Tab, do nothing right now. If/when the Tab gets
         // selected later, we will show the SnackBar at that time.
-        guard tab == tabManager.selectedTab else {
-            return
-        }
+        guard tab == tabManager.selectedTab else { return }
 
         bottomContentStackView.addArrangedViewToBottom(bar, completion: {
             self.view.layoutIfNeeded()
@@ -1743,9 +1740,7 @@ extension BrowserViewController: LibraryPanelDelegate {
         let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
         // If we are showing toptabs a user can just use the top tab bar
         // If in overlay mode switching doesnt correctly dismiss the homepanels
-        guard !topTabsVisible, !self.urlBar.inOverlayMode else {
-            return
-        }
+        guard !topTabsVisible, !self.urlBar.inOverlayMode else { return }
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
         let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
             if buttonPressed {
@@ -2052,9 +2047,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        guard let toast = toast, !(tabManager.selectedTab?.isPrivate ?? false) else {
-            return
-        }
+        guard let toast = toast, !(tabManager.selectedTab?.isPrivate ?? false) else { return }
         show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
     }
 
@@ -2097,15 +2090,11 @@ extension BrowserViewController {
     }
 
     func presentETPCoverSheetViewController(_ force: Bool = false) {
-        guard !hasTriedToPresentETPAlready else {
-            return
-        }
+        guard !hasTriedToPresentETPAlready else { return }
         hasTriedToPresentETPAlready = true
         let cleanInstall = UpdateViewModel.isCleanInstall(userPrefs: profile.prefs)
         let shouldShow = ETPViewModel.shouldShowETPCoverSheet(userPrefs: profile.prefs, isCleanInstall: cleanInstall)
-        guard force || shouldShow else {
-            return
-        }
+        guard force || shouldShow else { return }
         let etpCoverSheetViewController = ETPCoverSheetViewController()
         if topTabsVisible {
             etpCoverSheetViewController.preferredContentSize = CGSize(
@@ -2136,13 +2125,13 @@ extension BrowserViewController {
 
     // Default browser onboarding
     func presentDBOnboardingViewController(_ force: Bool = false) {
-        guard #available(iOS 14.0, *) else { return }
-        guard !hasTriedToPresentDBCardAlready || force else { return }
+        guard #available(iOS 14.0, *),
+              !hasTriedToPresentDBCardAlready || force
+        else { return }
+
         hasTriedToPresentDBCardAlready = true
         let shouldShow = DefaultBrowserOnboardingViewModel.shouldShowDefaultBrowserOnboarding(userPrefs: profile.prefs)
-        guard force || shouldShow else {
-            return
-        }
+        guard force || shouldShow else { return }
         let dBOnboardingViewController = DefaultBrowserOnboardingViewController()
         if topTabsVisible {
             dBOnboardingViewController.preferredContentSize = CGSize(
@@ -2260,9 +2249,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let addTab = { (rURL: URL, isPrivate: Bool) in
                 let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
-                guard !self.topTabsVisible else {
-                    return
-                }
+                guard !self.topTabsVisible else { return }
                 // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
                 let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
                     if buttonPressed {
@@ -2556,9 +2543,7 @@ extension BrowserViewController: TopTabsDelegate {
 
     func topTabsDidTogglePrivateMode() {
         libraryDrawerViewController?.close(immediately: true)
-        guard let _ = tabManager.selectedTab else {
-            return
-        }
+        guard let _ = tabManager.selectedTab else { return }
         urlBar.leaveOverlayMode()
     }
 
@@ -2606,9 +2591,12 @@ extension BrowserViewController: FeatureFlaggable {
     }
 
     func homePanelDidRequestToRestoreClosedTab(_ motion: UIEvent.EventSubtype) {
-        guard motion == .motionShake, !topTabsVisible, !urlBar.inOverlayMode,
+        guard motion == .motionShake,
+              !topTabsVisible,
+              !urlBar.inOverlayMode,
               let lastClosedURL = profile.recentlyClosedTabs.tabs.first?.url,
-              let selectedTab = tabManager.selectedTab else { return }
+              let selectedTab = tabManager.selectedTab
+        else { return }
 
         let alertTitleText: String = .ReopenLastTabAlertTitle
         let reopenButtonText: String = .ReopenLastTabButtonText

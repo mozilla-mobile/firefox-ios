@@ -154,9 +154,7 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     override var status: NSAttributedString? {
-        guard let timestamp = profile.syncManager.lastSyncFinishTime else {
-            return nil
-        }
+        guard let timestamp = profile.syncManager.lastSyncFinishTime else { return nil }
 
         let formattedLabel = timestampFormatter.string(from: Date.fromTimestamp(timestamp))
         let attributedString = NSMutableAttributedString(string: formattedLabel)

@@ -139,9 +139,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
     private func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
         let cardType = viewController.viewModel.cardType
 
-        guard let index = viewModel.enabledCards.firstIndex(of: cardType) else {
-            return nil
-        }
+        guard let index = viewModel.enabledCards.firstIndex(of: cardType) else { return nil }
 
         return index
     }

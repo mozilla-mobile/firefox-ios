@@ -42,9 +42,7 @@ extension BrowserViewController: URLBarDelegate {
             let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
             // If we are showing toptabs a user can just use the top tab bar
             // If in overlay mode switching doesnt correctly dismiss the homepanels
-            guard !self.topTabsVisible, !self.urlBar.inOverlayMode else {
-                return
-            }
+            guard !self.topTabsVisible, !self.urlBar.inOverlayMode else { return }
             // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
             let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
                 if buttonPressed {
@@ -134,9 +132,10 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidPressReaderMode(_ urlBar: URLBarView) {
         libraryDrawerViewController?.close()
 
-        guard let tab = tabManager.selectedTab, let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode else {
-            return
-        }
+        guard let tab = tabManager.selectedTab,
+              let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode
+        else { return }
+
         switch readerMode.state {
         case .available:
             enableReaderMode()
@@ -151,10 +150,10 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidLongPressReaderMode(_ urlBar: URLBarView) -> Bool {
         guard let tab = tabManager.selectedTab,
-               let url = tab.url?.displayURL
-            else {
+              let url = tab.url?.displayURL
+        else {
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageGeneralErrorAccessibilityLabel)
-                return false
+            return false
         }
 
         let result = profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
@@ -171,13 +170,9 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPressReload(_ urlBar: URLBarView, from button: UIButton) {
-        guard let tab = tabManager.selectedTab else {
-            return
-        }
+        guard let tab = tabManager.selectedTab else { return }
         let urlActions = self.getRefreshLongPressMenu(for: tab)
-        guard !urlActions.isEmpty else {
-            return
-        }
+        guard !urlActions.isEmpty else { return }
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
@@ -313,9 +308,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
         libraryDrawerViewController?.close()
         urlBar.updateSearchEngineImage()
-        guard let profile = profile as? BrowserProfile else {
-            return
-        }
+        guard let profile = profile as? BrowserProfile else { return }
 
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: UIAccessibility.Notification.screenChanged)

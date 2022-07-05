@@ -67,9 +67,9 @@ class Pocket: FeatureFlaggable, URLCaching {
         }
 
         urlSession.dataTask(with: request) { (data, response, error) in
-            guard let response = validatedHTTPResponse(response, contentType: "application/json"), let data = data else {
-                return deferred.fill([])
-            }
+            guard let response = validatedHTTPResponse(response, contentType: "application/json"),
+                  let data = data
+            else { return deferred.fill([]) }
 
             self.cache(response: response, for: request, with: data)
 
@@ -91,9 +91,7 @@ class Pocket: FeatureFlaggable, URLCaching {
 
     // Create the URL request to query the Pocket API. The max items that the query can return is 20
     private func createGlobalFeedRequest(items: Int = 2) -> URLRequest? {
-        guard items > 0 && items <= 20 else {
-            return nil
-        }
+        guard items > 0 && items <= 20 else { return nil }
 
         let locale = Locale.current.identifier
         let pocketLocale = locale.replacingOccurrences(of: "_", with: "-")
@@ -102,9 +100,7 @@ class Pocket: FeatureFlaggable, URLCaching {
             params.append(URLQueryItem(name: "consumer_key", value: pocketKey))
         }
 
-        guard let feedURL = URL(string: pocketGlobalFeed)?.withQueryParams(params) else {
-            return nil
-        }
+        guard let feedURL = URL(string: pocketGlobalFeed)?.withQueryParams(params) else { return nil }
 
         return URLRequest(url: feedURL, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 5)
     }

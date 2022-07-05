@@ -105,9 +105,7 @@ class FaviconHandler {
 extension FaviconHandler: TabEventHandler {
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
         tab.favicons.removeAll(keepingCapacity: false)
-        guard let faviconURL = metadata.faviconURL else {
-            return
-        }
+        guard let faviconURL = metadata.faviconURL else { return }
 
         loadFaviconURL(faviconURL, forTab: tab) { favicon, error in
             guard error == nil else { return }

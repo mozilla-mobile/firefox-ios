@@ -126,9 +126,7 @@ class BookmarksPanelTests: KIFTestCase {
         // Add buffer data, then later in the test verify that the buffer mobile folder is not shown in there anymore.
         createSomeBufferBookmarks()
 
-        guard let bookmarks = getAppBookmarkStorage() else {
-            return
-        }
+        guard let bookmarks = getAppBookmarkStorage() else { return }
 
         // TEST: Create remote mobile bookmark, and verify the bookmark appears in the root and the remote mobile folder is not shown
         var applyResult = bookmarks.applyRecords([
@@ -205,9 +203,7 @@ class BookmarksPanelTests: KIFTestCase {
 
     func testRefreshBookmarks() {
         createSomeBufferBookmarks()
-        guard let bookmarks = getAppBookmarkStorage() else {
-            return
-        }
+        guard let bookmarks = getAppBookmarkStorage() else { return }
         let applyResult = bookmarks.applyRecords([
             makeBookmark(guid: "bm-guid0", parentID: BookmarkRoots.MobileFolderGUID, title: "xyz"),
             makeFolder(guid: BookmarkRoots.MobileFolderGUID, parentID: BookmarkRoots.RootGUID, title: "", childrenGuids: ["bm-guid0"])

@@ -63,9 +63,7 @@ public struct PageMetadata {
     }
 
     public static func fromDictionary(_ dict: [String: Any]) -> PageMetadata? {
-        guard let siteURL = dict[MetadataKeys.pageURL.rawValue] as? String else {
-            return nil
-        }
+        guard let siteURL = dict[MetadataKeys.pageURL.rawValue] as? String else { return nil }
 
         return PageMetadata(
             id: nil,

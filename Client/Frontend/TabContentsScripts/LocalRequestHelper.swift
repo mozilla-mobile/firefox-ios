@@ -12,11 +12,15 @@ class LocalRequestHelper: TabContentScript {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard let requestUrl = message.frameInfo.request.url, let internalUrl = InternalURL(requestUrl) else { return }
+        guard let requestUrl = message.frameInfo.request.url,
+              let internalUrl = InternalURL(requestUrl)
+        else { return }
 
         let params = message.body as! [String: String]
 
-        guard let token = params["appIdToken"], token == UserScriptManager.appIdToken else {
+        guard let token = params["appIdToken"],
+              token == UserScriptManager.appIdToken
+        else {
             print("Missing required appid token.")
             return
         }

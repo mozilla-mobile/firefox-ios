@@ -13,16 +13,12 @@ import XCTest
 private let log = Logger.syncLogger
 
 private func optTimestamp(x: AnyObject?) -> Timestamp? {
-    guard let str = x as? String else {
-        return nil
-    }
+    guard let str = x as? String else { return nil }
     return decimalSecondsStringToTimestamp(str)
 }
 
 private func optStringArray(x: AnyObject?) -> [String]? {
-    guard let str = x as? String else {
-        return nil
-    }
+    guard let str = x as? String else { return nil }
     return str.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
 }
 
@@ -106,9 +102,7 @@ struct SyncDeleteRequestSpec {
         let parts = path.components(separatedBy: "/").filter { !$0.isEmpty }
         let queryIDs: [GUID]? = (query["ids"] as? String)?.components(separatedBy: ",")
 
-        guard [2, 4, 5].contains(parts.count) else {
-            return nil
-        }
+        guard [2, 4, 5].contains(parts.count) else { return nil }
 
         if parts.count == 2 {
             return SyncDeleteRequestSpec(collection: nil, id: nil, ids: queryIDs, wholeCollection: true)
@@ -137,9 +131,7 @@ private struct SyncPutRequestSpec {
 
         let parts = request.path.components(separatedBy: "/").filter { !$0.isEmpty }
 
-        guard parts.count == 5 else {
-            return nil
-        }
+        guard parts.count == 5 else { return nil }
 
         if parts[2] != "storage" {
             return nil

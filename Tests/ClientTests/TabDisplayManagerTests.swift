@@ -312,9 +312,7 @@ class MockCollectionView: UICollectionView {
     /// Due to the usage of MockCollectionView with the overriden performBatchUpdates in prod code for those tests, deleteItems needs an extra check.
     /// No check was added for prod code so it would crash in case of concurrency (which would be abnormal and need to be detected)
     override func deleteItems(at indexPaths: [IndexPath]) {
-        guard indexPaths[0].row <= numberOfItems(inSection: 0) - 1 else {
-            return
-        }
+        guard indexPaths[0].row <= numberOfItems(inSection: 0) - 1 else { return }
         super.deleteItems(at: indexPaths)
     }
 }

@@ -31,9 +31,7 @@ class ContextualHintViewModel {
 
     var arrowDirection = UIPopoverArrowDirection.down
     private var hasAlreadyBeenPresented: Bool {
-        guard let contextualHintData = profile.prefs.boolForKey(prefsKey) else {
-            return false
-        }
+        guard let contextualHintData = profile.prefs.boolForKey(prefsKey) else { return false }
 
         return contextualHintData
     }
@@ -182,9 +180,8 @@ class ContextualHintViewModel {
 
     private func getToolbarLocation() -> String {
         guard SearchBarSettingsViewModel.isEnabled,
-              SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom else {
-                  return "ToolbarLocationTop"
-              }
+              SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom
+        else { return "ToolbarLocationTop" }
 
         return "ToolbarLocationBottom"
     }

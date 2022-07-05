@@ -210,8 +210,12 @@ class WallpaperMigrationUtilityTests: XCTestCase {
 
     private func path(for directoryType: FolderPathForDirectory) -> URL? {
         let fileManager = FileManager.default
-        guard let documentPath = fileManager.urls(for: .documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first,
-              let appSupportPath = fileManager.urls(for: .applicationSupportDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first
+        guard let documentPath = fileManager.urls(
+            for: .documentDirectory,
+            in: FileManager.SearchPathDomainMask.userDomainMask).first,
+              let appSupportPath = fileManager.urls(
+                for: .applicationSupportDirectory,
+                in: FileManager.SearchPathDomainMask.userDomainMask).first
         else { return nil }
 
         switch directoryType {

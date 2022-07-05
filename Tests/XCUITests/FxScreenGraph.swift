@@ -1073,9 +1073,7 @@ extension XCUIElement {
     /// Care is taken to make sure that every cell is completely on screen
     /// at least once.
     func forEachScreen(_ eachScreen: (Int) -> ()) {
-        guard self.elementType == .table else {
-            return
-        }
+        guard self.elementType == .table else { return }
 
         func firstInvisibleCell(_ start: UInt) -> UInt {
             let cells = self.cells

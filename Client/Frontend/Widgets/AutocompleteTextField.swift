@@ -98,9 +98,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     @objc func handleKeyCommand(sender: UIKeyCommand) {
-        guard let input = sender.input else {
-            return
-        }
+        guard let input = sender.input else { return }
         switch input {
         case UIKeyCommand.inputLeftArrow:
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-left-arrow"])

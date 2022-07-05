@@ -78,9 +78,7 @@ class MetaGlobalTests: XCTestCase {
 
     func assertFreshStart(ready: Ready?, after: Timestamp) {
         XCTAssertNotNil(ready)
-        guard let ready = ready else {
-            return
-        }
+        guard let ready = ready else { return }
         // We should have wiped.
         // We should have uploaded new meta/global and crypto/keys.
         XCTAssertGreaterThan(server.collections["meta"]?.records["global"]?.modified ?? 0, after)
@@ -94,9 +92,7 @@ class MetaGlobalTests: XCTestCase {
 
         // We should have the default engine configuration.
         XCTAssertNotNil(ready.scratchpad.engineConfiguration)
-        guard let engineConfiguration = ready.scratchpad.engineConfiguration else {
-            return
-        }
+        guard let engineConfiguration = ready.scratchpad.engineConfiguration else { return }
         XCTAssertEqual(engineConfiguration.enabled.sorted(), ["addons", "addresses", "bookmarks", "clients", "creditcards", "forms", "history", "passwords", "prefs", "tabs"])
         XCTAssertEqual(engineConfiguration.declined, [])
 
@@ -259,9 +255,7 @@ class MetaGlobalTests: XCTestCase {
                  "hasFreshCryptoKeys",
                  "ready"])
             XCTAssertNotNil(result.successValue)
-            guard let ready = result.successValue else {
-                return
-            }
+            guard let ready = result.successValue else { return }
 
             // And we should have downloaded meta/global and crypto/keys.
             XCTAssertEqual(ready.scratchpad.global?.value, metaGlobal)
@@ -287,9 +281,7 @@ class MetaGlobalTests: XCTestCase {
         stateMachine.toReady(authState).upon { result in
             XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "hasMetaGlobal", "hasFreshCryptoKeys", "ready"])
             XCTAssertNotNil(result.successValue)
-            guard let ready = result.successValue else {
-                return
-            }
+            guard let ready = result.successValue else { return }
             // And we should have not downloaded a fresh meta/global or crypto/keys.
             XCTAssertLessThan(ready.scratchpad.global?.timestamp ?? Timestamp.max, afterFirstSync)
             XCTAssertLessThan(ready.scratchpad.keys?.timestamp ?? Timestamp.max, afterFirstSync)
@@ -402,9 +394,7 @@ class MetaGlobalTests: XCTestCase {
                  "hasFreshCryptoKeys",
                  "ready"])
             XCTAssertNotNil(result.successValue)
-            guard let ready = result.successValue else {
-                return
-            }
+            guard let ready = result.successValue else { return }
 
             // And we should have downloaded meta/global and crypto/keys.
             XCTAssertEqual(ready.scratchpad.global?.value, metaGlobal)
@@ -444,9 +434,7 @@ class MetaGlobalTests: XCTestCase {
                  "hasFreshCryptoKeys",
                  "ready"])
             XCTAssertNotNil(result.successValue)
-            guard let ready = result.successValue else {
-                return
-            }
+            guard let ready = result.successValue else { return }
             // And we should have not downloaded a fresh meta/global ...
             XCTAssertLessThan(ready.scratchpad.global?.timestamp ?? Timestamp.max, afterFirstSync)
             // ... but we should have downloaded a fresh crypto/keys.
@@ -484,9 +472,7 @@ class MetaGlobalTests: XCTestCase {
                  "hasFreshCryptoKeys",
                  "ready"])
             XCTAssertNotNil(result.successValue)
-            guard let ready = result.successValue else {
-                return
-            }
+            guard let ready = result.successValue else { return }
             // And we should have not downloaded a fresh meta/global ...
             XCTAssertLessThan(ready.scratchpad.global?.timestamp ?? Timestamp.max, afterSecondSync)
             // ... but we should have downloaded a fresh crypto/keys.
@@ -522,9 +508,7 @@ class MetaGlobalTests: XCTestCase {
                  "hasFreshCryptoKeys",
                  "ready"])
             XCTAssertNotNil(result.successValue)
-            guard let ready = result.successValue else {
-                return
-            }
+            guard let ready = result.successValue else { return }
             // And we should have not downloaded a fresh meta/global ...
             XCTAssertLessThan(ready.scratchpad.global?.timestamp ?? Timestamp.max, afterThirdSync)
             // ... but we should have downloaded a fresh crypto/keys.
@@ -571,15 +555,11 @@ class MetaGlobalTests: XCTestCase {
                  "hasFreshCryptoKeys",
                  "ready"])
             XCTAssertNotNil(result.successValue)
-            guard let ready = result.successValue else {
-                return
-            }
+            guard let ready = result.successValue else { return }
 
             // We should have saved the engine configuration.
             XCTAssertNotNil(ready.scratchpad.engineConfiguration)
-            guard let engineConfiguration = ready.scratchpad.engineConfiguration else {
-                return
-            }
+            guard let engineConfiguration = ready.scratchpad.engineConfiguration else { return }
             XCTAssertEqual(engineConfiguration, metaGlobal.engineConfiguration())
 
             XCTAssertTrue(result.isSuccess)
@@ -615,22 +595,16 @@ class MetaGlobalTests: XCTestCase {
                  "hasFreshCryptoKeys",
                  "ready"])
             XCTAssertNotNil(result.successValue)
-            guard let ready = result.successValue else {
-                return
-            }
+            guard let ready = result.successValue else { return }
 
             // The downloaded meta/global should reflect our local engine configuration.
             XCTAssertNotNil(ready.scratchpad.global)
-            guard let global = ready.scratchpad.global?.value else {
-                return
-            }
+            guard let global = ready.scratchpad.global?.value else { return }
             XCTAssertEqual(global.engineConfiguration(), metaGlobal.engineConfiguration())
 
             // We should have the same cached engine configuration.
             XCTAssertNotNil(ready.scratchpad.engineConfiguration)
-            guard let engineConfiguration = ready.scratchpad.engineConfiguration else {
-                return
-            }
+            guard let engineConfiguration = ready.scratchpad.engineConfiguration else { return }
             XCTAssertEqual(engineConfiguration, metaGlobal.engineConfiguration())
 
             XCTAssertTrue(result.isSuccess)
@@ -664,9 +638,7 @@ class MetaGlobalTests: XCTestCase {
                  "hasFreshCryptoKeys",
                  "ready"])
             XCTAssertNotNil(result.successValue)
-            guard let ready = result.successValue else {
-                return
-            }
+            guard let ready = result.successValue else { return }
 
             // And we should have downloaded meta/global and crypto/keys.
             XCTAssertEqual(ready.scratchpad.global?.value, metaGlobal)
@@ -707,9 +679,7 @@ class MetaGlobalTests: XCTestCase {
                  "hasFreshCryptoKeys",
                  "ready"])
             XCTAssertNotNil(result.successValue)
-            guard let ready = result.successValue else {
-                return
-            }
+            guard let ready = result.successValue else { return }
             // And we should have downloaded a fresh meta/global ...
             XCTAssertGreaterThanOrEqual(ready.scratchpad.global?.timestamp ?? Timestamp.min, afterFirstSync)
             // ... and we should have downloaded a fresh crypto/keys -- but its timestamp is identical to the old one!
@@ -720,9 +690,7 @@ class MetaGlobalTests: XCTestCase {
 
             // And our engine configuration should be unchanged.
             XCTAssertNotNil(ready.scratchpad.global)
-            guard let global = ready.scratchpad.global?.value else {
-                return
-            }
+            guard let global = ready.scratchpad.global?.value else { return }
             XCTAssertEqual(global.engineConfiguration(), metaGlobal.engineConfiguration())
 
             XCTAssertTrue(result.isSuccess)
@@ -759,9 +727,7 @@ class MetaGlobalTests: XCTestCase {
                  "hasFreshCryptoKeys",
                  "ready"])
             XCTAssertNotNil(result.successValue)
-            guard let ready = result.successValue else {
-                return
-            }
+            guard let ready = result.successValue else { return }
             // And we should have downloaded a fresh meta/global ...
             XCTAssertGreaterThanOrEqual(ready.scratchpad.global?.timestamp ?? Timestamp.min, afterFirstSync)
             // ... and we should have downloaded a fresh crypto/keys -- but its timestamp is identical to the old one!
@@ -774,9 +740,7 @@ class MetaGlobalTests: XCTestCase {
 
             // And our engine configuration should reflect the new meta/global on the server.
             XCTAssertNotNil(ready.scratchpad.global)
-            guard let global = ready.scratchpad.global?.value else {
-                return
-            }
+            guard let global = ready.scratchpad.global?.value else { return }
             XCTAssertEqual(global.engineConfiguration(), secondMetaGlobal.engineConfiguration())
 
             XCTAssertTrue(result.isSuccess)
