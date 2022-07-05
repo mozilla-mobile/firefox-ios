@@ -37,6 +37,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     // MARK: - Properties
     var libraryPanelDelegate: LibraryPanelDelegate?
     var notificationCenter: NotificationCenter
+    var state: LibraryPanelMainState
 
     private let bookmarkFolderGUID: GUID
     private var bookmarkFolder: BookmarkFolderData?
@@ -56,6 +57,44 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             .tinted(withColor: UIColor.Photon.Grey10)
     }()
 
+    // MARK: - Toolbar items
+    var bottomToolbarItems: [UIBarButtonItem] {
+        // Return empty toolbar when bookmarks is in root node
+        guard case .bookmarks(let subState) = state, subState != .mainView else {
+            return [UIBarButtonItem]()
+        }
+
+        return toolbarButtonItems
+    }
+
+    private var toolbarButtonItems: [UIBarButtonItem] {
+        switch state {
+        case .bookmarks(state: .inFolder):
+            bottomRightButton.title = .BookmarksEdit
+            return [flexibleSpace, bottomRightButton]
+        case .bookmarks(state: .inFolderEditMode):
+            bottomRightButton.title = String.AppSettingsDone
+            return [bottomLeftButton, flexibleSpace, bottomRightButton]
+        case .bookmarks(state: .itemEditMode):
+            bottomRightButton.title = String.AppSettingsDone
+            return [flexibleSpace, bottomRightButton]
+        default:
+            return [UIBarButtonItem]()
+        }
+    }
+
+    private lazy var bottomLeftButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-add"), style: .plain, target: self, action: #selector(bottomLeftButtonAction))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomLeftButton
+        return button
+    }()
+
+    private lazy var bottomRightButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: .BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomRightButton
+        return button
+    }()
+
     // MARK: - Init
 
     init(profile: Profile,
@@ -64,7 +103,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
         self.bookmarkFolderGUID = bookmarkFolderGUID
         self.notificationCenter = notificationCenter
-
+        self.state = .bookmarks(state: .mainView)
         super.init(profile: profile)
 
         setupNotifications(forObserver: self, observing: [.FirefoxAccountChanged])
@@ -248,11 +287,23 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     func enableEditMode() {
-        tableView.setEditing(true, animated: true)
+        updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+        self.tableView.setEditing(true, animated: true)
+        sendPanelChangeNotification()
     }
 
     func disableEditMode() {
-        tableView.setEditing(false, animated: true)
+        print("YRD disableEditMode")
+        updatePanelState(newState: .bookmarks(state: .inFolder))
+        self.tableView.setEditing(false, animated: true)
+        sendPanelChangeNotification()
+    }
+
+    private func sendPanelChangeNotification() {
+        let userInfo: [String: Any] = [
+            "state": state,
+        ]
+        NotificationCenter.default.post(name: .LibraryPanelStateDidChange, object: nil, userInfo: userInfo)
     }
 
     private func centerVisibleRow() -> Int {
@@ -389,7 +440,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         guard let bookmarkNode = node else {
             return
         }
-
+        // TODO: Yoana check with Laurie
+        updatePanelState(newState: .bookmarks(state: .inFolder))
         guard !tableView.isEditing else {
             TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
             if let bookmarkFolder = self.bookmarkFolder, !(bookmarkNode is BookmarkSeparatorData) {
@@ -626,6 +678,76 @@ extension BookmarksPanel: Notifiable {
         default:
             browserLog.warning("Received unexpected notification \(notification.name)")
             break
+        }
+    }
+}
+
+// MARK: - Toolbar button actions
+extension BookmarksPanel {
+    @objc func bottomLeftButtonAction() {
+        if state == .bookmarks(state: .inFolderEditMode) {
+            updatePanelState(newState: .bookmarks(state: .itemEditMode))
+            // TODO: Yoana use new function
+//            addNewBookmarkItemAction()
+        }
+    }
+
+    func handleLeftTopButton() {
+        guard case .bookmarks(let subState) = state else { return }
+
+        switch subState {
+        case .inFolder:
+            // TODO: After rebase create isRoot in new FxBookmarkNode protocol
+            updatePanelState(newState: .bookmarks(state: .mainView))
+
+       case .inFolderEditMode:
+            // TODO: Yoana use new function
+//           addNewBookmarkItemAction()
+            break
+
+       case .itemEditMode:
+            updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+       default:
+           return
+       }
+    }
+
+    func handleRightTopButton() {
+        if state == .bookmarks(state: .itemEditMode) {
+            handleItemEditMode()
+        }
+    }
+
+    func shouldDismissOnDone() -> Bool {
+        guard state != .bookmarks(state: .itemEditMode) else { return false }
+
+        return true
+    }
+
+    @objc func bottomRightButtonAction() {
+        guard case .bookmarks(let subState) = state else { return }
+
+        switch subState {
+        case .inFolder:
+            enableEditMode()
+        case .inFolderEditMode:
+            disableEditMode()
+        case .itemEditMode:
+            handleItemEditMode()
+        default:
+            return
+        }
+    }
+
+    func handleItemEditMode() {
+        guard let bookmarkEditView = navigationController?.viewControllers.last as? BookmarkDetailPanel else { return }
+
+        updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+        bookmarkEditView.save().uponQueue(.main) { _ in
+            self.navigationController?.popViewController(animated: true)
+            if bookmarkEditView.isNew {
+                self.didAddBookmarkNode()
+            }
         }
     }
 }
