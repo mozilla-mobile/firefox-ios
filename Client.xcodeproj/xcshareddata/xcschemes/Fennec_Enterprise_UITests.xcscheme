@@ -201,8 +201,6 @@
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
-      <EnvironmentVariables>
-      </EnvironmentVariables>
       <Testables>
          <TestableReference
             skipped = "NO">
