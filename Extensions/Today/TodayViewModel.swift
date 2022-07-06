@@ -4,7 +4,8 @@
 
 import Foundation
 import NotificationCenter
-protocol TodayWidgetAppearanceDelegate {
+
+protocol TodayWidgetAppearanceDelegate: AnyObject {
     func openContainingApp(_ urlSuffix: String, query: String)
 }
 

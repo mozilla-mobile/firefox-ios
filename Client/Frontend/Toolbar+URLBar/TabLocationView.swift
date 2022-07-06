@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import SnapKit
 
-protocol TabLocationViewDelegate {
+protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView)

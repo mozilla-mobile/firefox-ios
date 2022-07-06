@@ -15,7 +15,7 @@ private struct QRCodeViewControllerUX {
     static let viewBackgroundDeniedColor = UIColor.black
 }
 
-protocol QRCodeViewControllerDelegate {
+protocol QRCodeViewControllerDelegate: AnyObject {
     func didScanQRCodeWithURL(_ url: URL)
     func didScanQRCodeWithText(_ text: String)
 }

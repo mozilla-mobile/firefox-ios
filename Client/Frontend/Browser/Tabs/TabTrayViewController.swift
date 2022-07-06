@@ -12,10 +12,12 @@ enum TabTrayViewAction {
     case deleteTab
 }
 
+// swiftlint:disable class_delegate_protocol
 protocol TabTrayViewDelegate: UIViewController {
     func didTogglePrivateMode(_ togglePrivateModeOn: Bool)
     func performToolbarAction(_ action: TabTrayViewAction, sender: UIBarButtonItem)
 }
+// swiftlint:enable class_delegate_protocol
 
 class TabTrayViewController: UIViewController {
 

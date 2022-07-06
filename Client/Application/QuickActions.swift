@@ -25,10 +25,6 @@ enum ShortcutType: String {
     }
 }
 
-protocol QuickActionHandlerDelegate {
-    func handleShortCutItemType(_ type: ShortcutType, userData: [String: NSSecureCoding]?)
-}
-
 class QuickActions: NSObject {
 
     fileprivate let log = Logger.browserLogger
