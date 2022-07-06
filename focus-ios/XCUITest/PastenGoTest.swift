@@ -54,32 +54,38 @@ class PastenGoTest: BaseTestCase {
 
     // Smoketest
     // Test Paste & Go feature
-    func testPastenGo() {
-        // Inject a string into clipboard
-        var clipboard = "https://www.mozilla.org/en-US/"
-        UIPasteboard.general.string = clipboard
+    func testPastenGo() throws {
+        if #available(iOS 16, *) {
+            throw XCTSkip("This test needs to be updated or removed: Select menu not shown")
+        } else {
+            // Inject a string into clipboard
+            var clipboard = "https://www.mozilla.org/en-US/"
+            UIPasteboard.general.string = clipboard
 
-        // Tap url bar to show context menu
-        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
-        searchOrEnterAddressTextField.tap()
-        waitForExistence(app.menuItems["Paste"], timeout: 10)
-        XCTAssertTrue(app.menuItems["Paste & Go"].isEnabled)
+            // Tap url bar to show context menu
+            let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
+            waitForExistence(searchOrEnterAddressTextField, timeout: 30)
+            searchOrEnterAddressTextField.tap()
+            waitForExistence(app.menuItems["Paste"], timeout: 10)
+            XCTAssertTrue(app.menuItems["Paste & Go"].isEnabled)
 
-        // Select paste and go, and verify it goes to the correct place
-        app.menuItems["Paste & Go"].tap()
-        waitForWebPageLoad()
+            // Select paste and go, and verify it goes to the correct place
+            app.menuItems["Paste & Go"].tap()
 
-        // Check the correct site is reached
-        waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org")
-        app.buttons["URLBar.deleteButton"].firstMatch.tap()
-        waitForExistence(app.staticTexts["Browsing history cleared"])
+            waitForExistence(app.textFields["URLBar.urlText"], timeout: 10)
+            waitForWebPageLoad()
+            // Check the correct site is reached
+            waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org")
+            app.buttons["URLBar.deleteButton"].firstMatch.tap()
+            waitForExistence(app.staticTexts["Browsing history cleared"])
 
-        clipboard = "1(*&)(*%@@$^%^12345)"
-        UIPasteboard.general.string = clipboard
-        waitForExistence(searchOrEnterAddressTextField, timeout: 3)
-        searchOrEnterAddressTextField.tap()
-        waitForExistence(app.menuItems["Paste"], timeout: 5)
-        app.menuItems["Paste"].tap()
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "1(*&)(*%@@$^%^12345)")
+            clipboard = "1(*&)(*%@@$^%^12345)"
+            UIPasteboard.general.string = clipboard
+            waitForExistence(searchOrEnterAddressTextField, timeout: 3)
+            searchOrEnterAddressTextField.tap()
+            waitForExistence(app.menuItems["Paste"], timeout: 5)
+            app.menuItems["Paste"].tap()
+            waitForValueContains(app.textFields["URLBar.urlText"], value: "1(*&)(*%@@$^%^12345)")
+        }
     }
 }
