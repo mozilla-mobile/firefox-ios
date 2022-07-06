@@ -72,7 +72,8 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFl
     }
 
     func fetchSponsoredStories(request: URLRequest, completion: @escaping (SponsoredStoryResult) -> Void) {
-        urlSession.dataTask(with: request) { [unowned self] (data, response, error) in
+        urlSession.dataTask(with: request) { [weak self] (data, response, error) in
+            guard let self = self else { return }
             if let error = error {
                 self.browserLog.debug("An error occurred while fetching data: \(error)")
                 completion(.failure(Error.failure))
