@@ -23,6 +23,7 @@ private class SeparatorTableViewCell: OneLineTableViewCell {
     }
 }
 
+// TODO: Yoana missing itemEditMode case
 class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActionBookmark, Loggable {
 
     private struct UX {

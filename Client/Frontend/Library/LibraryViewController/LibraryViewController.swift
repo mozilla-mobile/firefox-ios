@@ -200,7 +200,7 @@ class LibraryViewController: UIViewController {
         guard let index = viewModel.selectedPanel?.rawValue,
               index < viewModel.panelDescriptors.count else { return }
 
-        viewModel.panelDescriptors[index].setupNavigationController()
+        viewModel.setupNavigationController()
         if let panelVC = self.viewModel.panelDescriptors[index].viewController,
            let navigationController = self.viewModel.panelDescriptors[index].navigationController {
             let accessibilityLabel = self.viewModel.panelDescriptors[index].accessibilityLabel

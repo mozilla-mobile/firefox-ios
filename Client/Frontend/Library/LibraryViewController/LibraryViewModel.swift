@@ -37,4 +37,10 @@ class LibraryViewModel {
         self.tabManager = tabManager
         self.panelDescriptors = LibraryPanelHelper(profile: profile, tabManager: tabManager).enabledPanels
     }
+
+    func setupNavigationController() {
+        guard let index = selectedPanel?.rawValue else { return }
+
+        panelDescriptors[index].setupNavigationController()
+    }
 }
