@@ -118,7 +118,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         getCachedTabs()
         KeyboardHelper.defaultHelper.addDelegate(self)
 
-        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: LibraryResultsSectionHeaderIdentifier)
+        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: LibraryResultsSectionHeaderIdentifier)
 
         searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
         searchEngineContainerView.layer.shadowRadius = 0
@@ -558,13 +558,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard section == SearchListSection.remoteTabs.rawValue,
-              hasFirefoxSuggestions else { return nil }
+              hasFirefoxSuggestions,
+              let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: LibraryResultsSectionHeaderIdentifier) as?
+                SiteTableViewHeader
+        else { return nil }
 
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: LibraryResultsSectionHeaderIdentifier)
-
-        headerView?.textLabel?.textColor = UIColor.Photon.DarkGrey05
-        headerView?.contentView.backgroundColor = .white
-        headerView?.textLabel?.text = .Search.SuggestSectionTitle
+        headerView.titleLabel.text = .Search.SuggestSectionTitle
 
         return headerView
     }
