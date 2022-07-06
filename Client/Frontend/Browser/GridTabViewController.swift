@@ -362,6 +362,7 @@ extension GridTabViewController {
         } else if self.tabManager.normalTabs.count == 1, let tab = self.tabManager.normalTabs.first {
             self.tabManager.selectTab(tab)
             self.dismissTabTray()
+            notificationCenter.post(name: .TabsTrayDidClose, object: nil)
         }
     }
 
