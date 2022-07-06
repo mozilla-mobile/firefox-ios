@@ -1515,7 +1515,7 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-07-01"
+    expires: "2023-01-01"
   private_browsing_button_tapped:
     type: event
     description: |
@@ -2109,7 +2109,7 @@ tabs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9785
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-07-01"
+    expires: "2023-01-01"
   press_tab_toolbar:
     type: event
     description: |
