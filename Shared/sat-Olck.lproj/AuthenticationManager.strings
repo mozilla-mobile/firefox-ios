@@ -71,7 +71,7 @@
 "touchid.disable.reason.label" = "ᱡᱚᱴᱮᱫ ID ᱵᱚᱸᱫᱚᱭ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱹᱴᱩᱵ ᱵᱮᱵᱷᱟᱨ ᱢᱮ ᱾";
 
 /* Touch ID prompt subtitle when accessing the require passcode setting */
-"touchid.require.passcode.reason.label" = "ᱟᱢᱟᱜ ᱯᱟᱥᱠᱳᱰ ᱵᱷᱤᱛᱨᱭ ᱛᱮᱭᱟᱨ ᱟᱫᱮᱨ ᱛᱟᱞᱟ ᱨᱮ ᱟᱢᱟᱜ ᱠᱟᱹᱴᱩᱵ ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱢᱮ᱾";
+"touchid.require.passcode.reason.label" = "ᱟᱢᱟᱜ ᱯᱟᱥᱠᱳᱰ ᱵᱷᱤᱛᱨᱤ ᱛᱮᱭᱟᱨ ᱟᱫᱮᱨ ᱛᱟᱞᱟ ᱨᱮ ᱟᱢᱟᱜ ᱠᱟᱹᱴᱩᱵ ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱢᱮ᱾";
 
 /* Label used as a setting item to turn off passcode */
 "Turn Passcode Off" = "ᱯᱟᱥᱠᱳᱰ ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
@@ -86,5 +86,5 @@
 "Use Touch ID" = "ᱡᱚᱴᱮᱫ ID ᱵᱮᱵᱷᱟᱨ";
 
 /* Touch ID prompt subtitle when accessing logins */
-"Use your fingerprint to access Logins now." = "ᱵᱷᱤᱛᱨᱭ ᱵᱚᱞᱚ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱹᱴᱩᱵ ᱪᱷᱟᱯᱟ ᱵᱮᱵᱷᱟᱨ ᱢᱮ‌ ᱾";
+"Use your fingerprint to access Logins now." = "ᱵᱷᱤᱛᱨᱤ ᱵᱚᱞᱚ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱹᱴᱩᱵ ᱪᱷᱟᱯᱟ ᱵᱮᱵᱷᱟᱨ ᱢᱮ‌ ᱾";
 
