@@ -107,9 +107,7 @@ extension ReadabilityOperation: ReaderModeDelegate {
 
     func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab) {
         log.info("ReadbilityService: Readability result available!")
-        guard tab == self.tab else {
-            return
-        }
+        guard tab == self.tab else { return }
 
         result = ReadabilityOperationResult.success(readabilityResult)
         semaphore.signal()

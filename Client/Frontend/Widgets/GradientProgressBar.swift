@@ -103,9 +103,7 @@ open class GradientProgressBar: UIProgressView {
     }
 
     func hideProgressBar() {
-        guard progress == 1 else {
-            return
-        }
+        guard progress == 1 else { return }
 
         CATransaction.begin()
         let moveAnimation = CABasicAnimation(keyPath: "position")

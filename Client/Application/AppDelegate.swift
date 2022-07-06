@@ -14,6 +14,7 @@ import CoreSpotlight
 import UserNotifications
 import Account
 import BackgroundTasks
+import SDWebImage
 
 let LatestAppVersionProfileKey = "latestAppVersion"
 
@@ -178,6 +179,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         scheduleBGSync(application: application)
 
         tabManager.preserveTabs()
+
+        // send glean telemetry and clear cache
+        // we do this to remove any disk cache
+        // that the app might have built over the
+        // time which is taking up un-necessary space
+        SDImageCache.shared.clearDiskCache { _ in }
     }
 
     private func updateTopSitesWidget() {
@@ -190,9 +197,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func shutdownProfileWhenNotActive(_ application: UIApplication) {
         // Only shutdown the profile if we are not in the foreground
-        guard application.applicationState != .active else {
-            return
-        }
+        guard application.applicationState != .active else { return }
 
         profile._shutdown()
     }
@@ -243,7 +248,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate {
 
     func startListeningForThemeUpdates() {
-        NotificationCenter.default.addObserver(forName: .DisplayThemeChanged, object: nil, queue: .main) { (notification) -> Void in
+        NotificationCenter.default.addObserver(forName: .DisplayThemeChanged, object: nil, queue: .main) { (_) -> Void in
             if !LegacyThemeManager.instance.systemThemeIsOn {
                 self.window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
             } else {
@@ -306,9 +311,7 @@ extension AppDelegate {
     func application(_ application: UIApplication,
                      open url: URL,
                      options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        guard let routerpath = NavigationPath(url: url) else {
-            return false
-        }
+        guard let routerpath = NavigationPath(url: url) else { return false }
 
         if let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
             profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)

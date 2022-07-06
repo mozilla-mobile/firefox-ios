@@ -39,9 +39,7 @@ public class KeychainStore {
     }
 
     public func dictionary(forKey key: String, withAccessibility accessibility: MZKeychainItemAccessibility = .afterFirstUnlock) -> [String: Any]? {
-        guard let stringValue = string(forKey: key, withAccessibility: accessibility) else {
-            return nil
-        }
+        guard let stringValue = string(forKey: key, withAccessibility: accessibility) else { return nil }
 
         let json = JSON(parseJSON: stringValue)
         let dictionary = json.dictionaryObject

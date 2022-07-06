@@ -102,7 +102,7 @@ workflows:
             set -euxo pipefail
             echo "-- compress --"
                 
-            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/Client.xcodeproj" "$BITRISE_SOURCE_DIR/XCUITests/SmokeXCUITests.xctestplan" "$BITRISE_SOURCE_DIR/Smoketest2.xctestplan" "$BITRISE_SOURCE_DIR/Smoketest3.xctestplan" "$BITRISE_SOURCE_DIR/Smoketest4.xctestplan" "$BITRISE_SOURCE_DIR/xcodebuild.log" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Fennec_Enterprise_XCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_SmokeXCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest2_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" "$BITRISE_SOURCE_DIR/XCUITests/UnitTest.xctestplan" "$BITRISE_SOURCE_DIR/Client/"
+            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/Client.xcodeproj" "$BITRISE_SOURCE_DIR/Tests/SmokeXCUITests.xctestplan" "$BITRISE_SOURCE_DIR/Tests/Smoketest2.xctestplan" "$BITRISE_SOURCE_DIR/Tests/Smoketest3.xctestplan" "$BITRISE_SOURCE_DIR/Tests/Smoketest4.xctestplan" "$BITRISE_SOURCE_DIR/xcodebuild.log" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Fennec_Enterprise_XCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_SmokeXCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest2_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" "$BITRISE_SOURCE_DIR/Client/" "$BITRISE_SOURCE_DIR/Tests/XCUITests"
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
@@ -132,10 +132,10 @@ workflows:
             #!/usr/bin/env bash
             set -ex 
 
-            ls -la
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/
+            cp -r ./Users/vagrant/git/Tests/* .
             mv ./Users/vagrant/git/* .
+            ls -la
             echo "-- test-without-building --"
 
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" test-without-building
@@ -170,10 +170,10 @@ workflows:
             #!/usr/bin/env bash
             set -ex 
 
-            ls -la
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/
+            cp -r ./Users/vagrant/git/Tests/* .
             mv ./Users/vagrant/git/* .
+            ls -la
 
             echo "-- test-without-building --"
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "SmokeXCUITests" "test-without-building"
@@ -207,8 +207,8 @@ workflows:
         - content: |
             #!/usr/bin/env bash
             set -ex 
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/
+            cp -r ./Users/vagrant/git/Tests/* .
             mv ./Users/vagrant/git/* .
             ls -la
 
@@ -245,8 +245,8 @@ workflows:
             #!/usr/bin/env bash
             set -ex 
 
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/
+            cp -r ./Users/vagrant/git/Tests/* .
             mv ./Users/vagrant/git/* .
             ls -la
 
@@ -284,8 +284,8 @@ workflows:
             set -ex 
 
             ls -la
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/
+            cp -r ./Users/vagrant/git/Tests/* .
             mv ./Users/vagrant/git/* .
             ls -la
 

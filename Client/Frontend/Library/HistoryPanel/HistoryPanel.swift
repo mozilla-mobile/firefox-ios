@@ -552,9 +552,7 @@ extension HistoryPanel: UITableViewDelegate {
     }
 
     @objc private func sectionHeaderTapped(sender: UIGestureRecognizer) {
-        guard let sectionNumber = sender.view?.tag else {
-            return
-        }
+        guard let sectionNumber = sender.view?.tag else { return }
 
         viewModel.collapseSection(sectionIndex: sectionNumber)
         applySnapshot()
@@ -588,9 +586,7 @@ extension HistoryPanel: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // First section is for recently closed and its header has no view.
-        guard HistoryPanelSections(rawValue: section) != .additionalHistoryActions else {
-            return nil
-        }
+        guard HistoryPanelSections(rawValue: section) != .additionalHistoryActions else { return nil }
 
         return tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier)
     }

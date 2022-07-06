@@ -25,9 +25,7 @@ extension BrowserViewController: UIDropInteractionDelegate {
         TelemetryWrapper.recordEvent(category: .action, method: .drop, object: .url, value: .browser)
 
         _ = session.loadObjects(ofClass: URL.self) { urls in
-            guard let url = urls.first else {
-                return
-            }
+            guard let url = urls.first else { return }
 
             self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
         }

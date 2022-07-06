@@ -20,9 +20,7 @@ public extension URL {
      https://tools.ietf.org/html/rfc2368
      */
     func mailToMetadata() -> MailToMetadata? {
-        guard scheme == "mailto" else {
-            return nil
-        }
+        guard scheme == "mailto" else { return nil }
         let urlString = absoluteString
 
         // Extract 'to' value
@@ -43,9 +41,7 @@ public extension URL {
 
         headerComponents.forEach { headerPair in
             let components = headerPair.components(separatedBy: "=")
-            guard components.count == 2 else {
-                return
-            }
+            guard components.count == 2 else { return }
 
             let (hname, hvalue) = (components[0], components[1])
             headers[hname] = hvalue

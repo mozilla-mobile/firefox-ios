@@ -8,7 +8,7 @@ import Storage
 import SnapKit
 import Account
 
-protocol DevicePickerViewControllerDelegate {
+protocol DevicePickerViewControllerDelegate: AnyObject {
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController)
     func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice])
 }

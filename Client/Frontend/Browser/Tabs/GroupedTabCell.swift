@@ -20,13 +20,13 @@ struct GroupedTabCellProperties {
     }
 }
 
-protocol GroupedTabsDelegate {
+protocol GroupedTabsDelegate: AnyObject {
     func didSelectGroupedTab(tab: Tab?)
     func closeTab(tab: Tab)
     func performSearchOfGroupInNewTab(searchTerm: String?)
 }
 
-protocol GroupedTabDelegate {
+protocol GroupedTabDelegate: AnyObject {
     func closeGroupTab(tab: Tab)
     func selectGroupTab(tab: Tab)
     func newSearchFromGroup(searchTerm: String)
@@ -126,9 +126,8 @@ class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDa
     }
 
     func getTabDomainUrl(tab: Tab) -> URL? {
-        guard tab.url != nil else {
-            return tab.sessionData?.urls.last?.domainURL
-        }
+        guard tab.url != nil else { return tab.sessionData?.urls.last?.domainURL }
+
         return tab.url?.domainURL
     }
 
@@ -345,7 +344,10 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: singleTabCellIdentifier, for: indexPath)
-        guard let tabCell = cell as? TabCell, let tab = tabs?[indexPath.item] else { return cell }
+        guard let tabCell = cell as? TabCell,
+              let tab = tabs?[indexPath.item]
+        else { return cell }
+
         tabCell.delegate = self
         tabCell.configureWith(tab: tab, isSelected: selectedTab == tab)
         tabCell.animator = nil

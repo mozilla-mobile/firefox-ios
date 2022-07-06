@@ -207,9 +207,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             return icon
         }
 
-        guard let icon = roundRectImageWithLabel(fileExtension, width: 29, height: 29) else {
-            return nil
-        }
+        guard let icon = roundRectImageWithLabel(fileExtension, width: 29, height: 29) else { return nil }
 
         fileExtensionIcons[fileExtension] = icon
         return icon
