@@ -72,9 +72,9 @@ class GoogleTopSiteManager {
 
     // Once Google top site is added, we don't remove unless it's explicitly unpinned
     // Add it when pinned websites are less than max pinned sites
-    func shouldAddGoogleTopSite(availableSpacesCount: Int) -> Bool {
+    func shouldAddGoogleTopSite(hasSpace: Bool) -> Bool {
         let shouldShow = !isHidden && suggestedSiteData() != nil
-        return shouldShow && (hasAdded || availableSpacesCount > 0)
+        return shouldShow && (hasAdded || hasSpace)
     }
 
     func removeGoogleTopSite(site: Site) {
