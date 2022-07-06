@@ -21,33 +21,3 @@ pull_request_rules:
       queue:
         method: rebase
         name: default
-  - name: String Import - Auto Approve
-    conditions:
-      - author=github-actions[bot]
-      - title~=string-import*
-      - or:
-        - files~=^Client\/[^\/]*\/[^\/]*.lproj\/*
-        - files~=^Client\/[^\/]*.lproj\/*
-        - files~=^Shared\/[^\/]*\/[^\/]*.lproj\/*
-        - files~=^Shared\/[^\/]*.lproj\/*
-        - files~=^WidgetKit\/[^\/]*\/[^\/]*.lproj\/*
-        - files~=^WidgetKit\/[^\/]*.lproj\/*
-    actions:
-      review:
-        type: APPROVE
-        message: Automatically approving string import
-  - name: String Import - Auto Merge
-    conditions:
-      - author=github-actions[bot]
-      - title~=string-import*
-      - or:
-        - files~=^Client\/[^\/]*\/[^\/]*.lproj\/*
-        - files~=^Client\/[^\/]*.lproj\/*
-        - files~=^Shared\/[^\/]*\/[^\/]*.lproj\/*
-        - files~=^Shared\/[^\/]*.lproj\/*
-        - files~=^WidgetKit\/[^\/]*\/[^\/]*.lproj\/*
-        - files~=^WidgetKit\/[^\/]*.lproj\/*
-    actions:
-      queue:
-        method: rebase
-        name: default
