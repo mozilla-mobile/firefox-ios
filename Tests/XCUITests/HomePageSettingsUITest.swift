@@ -18,7 +18,7 @@ class HomePageSettingsUITests: BaseTestCase {
     }
     let testWithDB = ["testTopSitesCustomNumberOfRows"]
     let prefilledTopSites = "testBookmarksDatabase1000-browser.db"
-    
+
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
@@ -146,7 +146,7 @@ class HomePageSettingsUITests: BaseTestCase {
         waitForNoExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         waitForNoExistence(app.collectionViews.cells.staticTexts["YouTube"])
     }
-    
+
     func testChangeHomeSettingsLabel() {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
@@ -174,7 +174,7 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testJumpBackIn() throws {
-        throw XCTSkip("Disabled failing in BR - investigating") 
+        throw XCTSkip("Disabled failing in BR - investigating")
 //        navigator.openURL(path(forTestPage: exampleUrl))
 //        waitUntilPageLoad()
 //        navigator.goto(TabTray)

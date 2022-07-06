@@ -111,7 +111,7 @@ class NavigationTest: BaseTestCase {
     private func checkFirefoxSyncScreenShownViaSettings() {
         waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
         app.buttons["EmailSignIn.button"].tap()
-        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout:20)
+        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 20)
 
         let email = app.webViews.textFields.element(boundBy: 0)
         // Verify the placeholdervalues here for the textFields
@@ -250,7 +250,7 @@ class NavigationTest: BaseTestCase {
         waitUntilPageLoad()
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
-        app.textFields["url"].press(forDuration:3)
+        app.textFields["url"].press(forDuration: 3)
         app.tables.otherElements[ImageIdentifiers.copyLink].tap()
 
         sleep(2)

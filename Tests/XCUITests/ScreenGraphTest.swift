@@ -103,7 +103,7 @@ class TestUserState: MMUserState {
 
 let WebPageLoading = "WebPageLoading"
 
-fileprivate class TestActions {
+private class TestActions {
     static let ToggleNightMode = ImageIdentifiers.nightMode
     static let LoadURL = "LoadURL"
     static let LoadURLByTyping = "LoadURLByTyping"

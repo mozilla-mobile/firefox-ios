@@ -100,13 +100,13 @@ class BookmarkingTests: BaseTestCase {
     }
 
     private func checkEmptyBookmarkList() {
-        waitForExistence(app.tables["Bookmarks List"], timeout:5)
+        waitForExistence(app.tables["Bookmarks List"], timeout: 5)
         let list = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 0, "There should not be any entry in the bookmarks list")
     }
 
     private func checkItemInBookmarkList() {
-        waitForExistence(app.tables["Bookmarks List"], timeout:5)
+        waitForExistence(app.tables["Bookmarks List"], timeout: 5)
         let list = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[url_2["bookmarkLabel"]!].exists)

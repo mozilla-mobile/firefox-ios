@@ -94,7 +94,7 @@ class HistoryTests: BaseTestCase {
         app.alerts.buttons["OK"].tap()
 
         // Wait for OK pop-up to disappear after confirming
-        waitForNoExistence(app.alerts.buttons["OK"], timeoutValue:5)
+        waitForNoExistence(app.alerts.buttons["OK"], timeoutValue: 5)
 
         // Try to tap on the disabled Clear Private Data button
         app.tables.cells["ClearPrivateData"].tap()
@@ -297,7 +297,7 @@ class HistoryTests: BaseTestCase {
         app.sheets.buttons[optionSelected].tap()
     }
 
-    private func navigateToGoogle(){
+    private func navigateToGoogle() {
         navigator.openURL("example.com")
         waitUntilPageLoad()
         // Workaround as the item does not appear if there is only that tab open

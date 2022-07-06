@@ -197,7 +197,7 @@ class TopTabsTest: BaseTestCase {
         waitForExistence(app.staticTexts["Private Browsing"], timeout: 10)
         XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
         // New behaviour on v14, there is no Undo in Private mode
-        waitForExistence(app.staticTexts["Private Browsing"], timeout:10)
+        waitForExistence(app.staticTexts["Private Browsing"], timeout: 10)
     }
 
     func testCloseAllTabs() {
