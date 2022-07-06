@@ -209,6 +209,13 @@ class TelemetryWrapperTests: XCTestCase {
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.closeTap)
     }
+
+    // MARK: - Migration
+
+    func test_SDWebImageDiskCacheClear_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .information, method: .delete, object: .clearSDWebImageCache)
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.Migration.imageSdCacheCleanup)
+    }
 }
 
 // MARK: - Helper functions to test telemetry

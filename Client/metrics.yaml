@@ -2802,3 +2802,16 @@ adjust:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
+migration:
+  image_sd_cache_cleanup:
+    type: counter
+    description: |
+        Counts the number of times a user runs the
+        sd web image library cache cleanup
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11169
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
