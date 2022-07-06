@@ -168,6 +168,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         collectionView.addGestureRecognizer(longPressRecognizer)
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.showsVerticalScrollIndicator = false
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = a11y.collectionView
