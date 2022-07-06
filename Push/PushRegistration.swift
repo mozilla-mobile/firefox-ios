@@ -52,9 +52,7 @@ public class PushRegistration: NSObject, NSCoding {
               let channelID = json["channelID"].string else {
             return nil
         }
-        guard let defaultSubscription = try? PushSubscription(channelID: channelID, endpoint: endpoint) else {
-            return nil
-        }
+        guard let defaultSubscription = try? PushSubscription(channelID: channelID, endpoint: endpoint) else { return nil }
         return PushRegistration(uaid: uaid, secret: secret, subscriptions: [defaultSubscriptionID: defaultSubscription])
     }
 }

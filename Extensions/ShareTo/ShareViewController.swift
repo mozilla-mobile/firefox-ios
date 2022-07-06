@@ -368,9 +368,7 @@ extension ShareViewController {
     }
 
     @objc func actionSendToDevice(gesture: UIGestureRecognizer) {
-        guard let shareItem = shareItem, case .shareItem(let item) = shareItem else {
-            return
-        }
+        guard let shareItem = shareItem, case .shareItem(let item) = shareItem else { return }
 
         gesture.isEnabled = false
         view.isUserInteractionEnabled = false

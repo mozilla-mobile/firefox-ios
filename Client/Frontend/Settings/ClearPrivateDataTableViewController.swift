@@ -141,9 +141,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
                 self.clearables
                     .enumerated()
                     .compactMap { (i, pair) in
-                        guard toggles[i] else {
-                            return nil
-                        }
+                        guard toggles[i] else { return nil }
                         log.debug("Clearing \(pair.clearable).")
                         return pair.clearable.clear()
                     }

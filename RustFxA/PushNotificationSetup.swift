@@ -13,29 +13,33 @@ open class PushNotificationSetup {
         // If we've already registered this push subscription, we don't need to do it again.
         let apnsToken = deviceToken.hexEncodedString
         let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
-        guard keychain.string(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock) != apnsToken else {
-            return
-        }
+        guard keychain.string(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock) != apnsToken else { return }
 
         RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
             let config = PushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()
-            self.pushClient = PushClient(endpointURL: config.endpointURL, experimentalMode: false)
-            self.pushClient?.register(apnsToken).uponQueue(.main) { [weak self] result in
-                guard let pushReg = result.successValue else { return }
-                self?.pushRegistration = pushReg
+            self.pushClient = PushClientImplementation(endpointURL: config.endpointURL,
+                                                       experimentalMode: false)
+
+            self.pushClient?.register(apnsToken) { [weak self] pushRegistration in
+                guard let pushRegistration = pushRegistration else { return }
+                self?.pushRegistration = pushRegistration
                 keychain.set(apnsToken, forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
 
-                let subscription = pushReg.defaultSubscription
-                let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString, publicKey: subscription.p256dhPublicKey, authKey: subscription.authKey)
+                let subscription = pushRegistration.defaultSubscription
+                let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString,
+                                                        publicKey: subscription.p256dhPublicKey,
+                                                        authKey: subscription.authKey)
                 accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
-                keychain.set(pushReg as NSCoding, forKey: KeychainKey.fxaPushRegistration, withAccessibility: .afterFirstUnlock)
+                keychain.set(pushRegistration as NSCoding,
+                             forKey: KeychainKey.fxaPushRegistration,
+                             withAccessibility: .afterFirstUnlock)
             }
         }
     }
 
     public func unregister() {
-        if let reg = pushRegistration {
-            _ = pushClient?.unregister(reg)
+        if let pushRegistration = pushRegistration {
+            pushClient?.unregister(pushRegistration) {}
         }
     }
 }

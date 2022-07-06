@@ -344,9 +344,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
     }
 
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard let record = records?[indexPath.row] else {
-            return nil
-        }
+        guard let record = records?[indexPath.row] else { return nil }
 
         let deleteAction = UIContextualAction(style: .destructive, title: .ReaderPanelRemove) { [weak self] (_, _, completion) in
             guard let strongSelf = self else { completion(false); return }
@@ -436,9 +434,10 @@ extension ReadingListPanel: LibraryPanelContextMenu {
 
 extension ReadingListPanel: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        guard let site = getSiteDetails(for: indexPath), let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url) else {
-            return []
-        }
+        guard let site = getSiteDetails(for: indexPath),
+              let url = URL(string: site.url),
+              let itemProvider = NSItemProvider(contentsOf: url)
+        else { return [] }
 
         TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .url, value: .readingListPanel)
 

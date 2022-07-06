@@ -29,10 +29,14 @@ class TestFavicons: ProfileTest {
         // I want a site that also has an iOS app so I can get "apple-touch-icon-precomposed" icons as well
         let url = URL(string: "https://instagram.com")
         FaviconFetcher.getForURL(url!, profile: profile).uponQueue(.main) { result in
-            guard let favicons = result.successValue, favicons.count > 0, let url = favicons.first?.url.asURL else {
+            guard let favicons = result.successValue,
+                  favicons.count > 0,
+                  let url = favicons.first?.url.asURL
+            else {
                 XCTFail("Favicons were not found.")
                 return expectation.fulfill()
             }
+
             XCTAssertEqual(favicons.count, 1, "Instagram should have a Favicon.")
             SDWebImageManager.shared.loadImage(with: url, options: .retryFailed, progress: nil, completed: { (img, _, _, _, _, _) in
                 guard let image = img else {

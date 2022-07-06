@@ -176,9 +176,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
         } else if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             let profile = appDelegate.profile
             profile.favicons.getFaviconImage(forSite: site).uponQueue(.main) { result in
-                guard let image = result.successValue else {
-                    return
-                }
+                guard let image = result.successValue else { return }
 
                 self.siteImageView.backgroundColor = .clear
                 self.siteImageView.image = image.createScaled(PhotonActionSheet.UX.IconSize)

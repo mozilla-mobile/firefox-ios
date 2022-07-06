@@ -146,7 +146,11 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     }
 
     fileprivate func setupWebView(_ webView: WKWebView?) {
-        guard let webView = webView, let url = webView.url, !isIgnoredURL(url) else { return }
+        guard let webView = webView,
+              let url = webView.url,
+              !isIgnoredURL(url)
+        else { return }
+
         let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
         clonedWebView.allowsLinkPreview = false
         clonedWebView.accessibilityLabel = previewAccessibilityLabel
@@ -164,22 +168,16 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     func setState(withProfile browserProfile: BrowserProfile, clientPickerDelegate: DevicePickerViewControllerDelegate) {
         assert(Thread.current.isMainThread)
 
-        guard let tab = self.tab else {
-            return
-        }
+        guard let tab = self.tab else { return }
 
-        guard let displayURL = tab.url?.absoluteString, !displayURL.isEmpty else {
-            return
-        }
+        guard let displayURL = tab.url?.absoluteString, !displayURL.isEmpty else { return }
 
         browserProfile.places.isBookmarked(url: displayURL) >>== { isBookmarked in
             self.isBookmarked = isBookmarked
         }
 
         browserProfile.remoteClientsAndTabs.getClientGUIDs().uponQueue(.main) {
-            guard let clientGUIDs = $0.successValue else {
-                return
-            }
+            guard let clientGUIDs = $0.successValue else { return }
 
             self.hasRemoteClients = !clientGUIDs.isEmpty
             let clientPickerController = DevicePickerViewController()

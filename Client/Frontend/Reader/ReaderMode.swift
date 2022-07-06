@@ -311,23 +311,22 @@ class ReaderMode: TabContentScript {
 
     fileprivate func handleReaderModeStateChange(_ state: ReaderModeState) {
         self.state = state
-        guard let tab = tab else {
-            return
-        }
+        guard let tab = tab else { return }
         delegate?.readerMode(self, didChangeReaderModeState: state, forTab: tab)
     }
 
     fileprivate func handleReaderContentParsed(_ readabilityResult: ReadabilityResult) {
-        guard let tab = tab else {
-            return
-        }
+        guard let tab = tab else { return }
         log.info("ReaderMode: Readability result available!")
         tab.readabilityResult = readabilityResult
         delegate?.readerMode(self, didParseReadabilityResult: readabilityResult, forTab: tab)
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard let msg = message.body as? [String: Any], let type = msg["Type"] as? String, let messageType = ReaderModeMessageType(rawValue: type) else { return }
+        guard let msg = message.body as? [String: Any],
+              let type = msg["Type"] as? String,
+              let messageType = ReaderModeMessageType(rawValue: type)
+        else { return }
 
         switch messageType {
             case .pageEvent:

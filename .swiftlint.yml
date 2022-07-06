@@ -100,8 +100,8 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Storage/ThirdParty/SwiftData.swift
   - Sync/Generated/Metrics.swift
   - ThirdParty
-  - UITests/
-  - XCUITests/
+  - Tests/UITests/
+  - Tests/XCUITests/
   - l10n-screenshots-dd/
   - DerivedData/
 
