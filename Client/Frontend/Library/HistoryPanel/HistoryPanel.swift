@@ -59,9 +59,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     }
 
     var bottomToolbarItems: [UIBarButtonItem] {
-        guard case .history = state else {
-            return [UIBarButtonItem]()
-        }
+        guard case .history = state else { return [UIBarButtonItem]() }
 
         return toolbarButtonItems
     }

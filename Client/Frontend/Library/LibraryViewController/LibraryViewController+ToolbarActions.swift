@@ -8,15 +8,14 @@ import Foundation
 extension LibraryViewController {
 
     @objc func topLeftButtonAction() {
-        guard let navController = children.first as? UINavigationController,
-              let panel = viewModel.getCurrentPanel() else { return }
+        guard let navController = children.first as? UINavigationController else { return }
 
-        panel.handleLeftTopButton()
         navController.popViewController(animated: true)
+        viewModel.currentPanel?.handleLeftTopButton()
     }
 
     @objc func topRightButtonAction() {
-        guard let panel = viewModel.getCurrentPanel() else { return }
+        guard let panel = viewModel.currentPanel else { return }
 
         if panel.shouldDismissOnDone() {
             dismiss(animated: true, completion: nil)

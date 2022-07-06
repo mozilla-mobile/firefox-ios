@@ -11,11 +11,18 @@ class LibraryViewModel {
     let panelDescriptors: [LibraryPanelDescriptor]
     var selectedPanel: LibraryPanelType?
     var currentPanelState: LibraryPanelMainState {
-        guard let panel = getCurrentPanel() else {
+        guard let index = selectedPanel?.rawValue,
+              let panel = panelDescriptors[index].viewController as? LibraryPanel else {
             return .bookmarks(state: .mainView)
         }
 
         return panel.state
+    }
+
+    var currentPanel: LibraryPanel? {
+        guard let index = selectedPanel?.rawValue else { return nil }
+
+        return panelDescriptors[index].shownPanel as? LibraryPanel
     }
 
     var segmentedControlItems: [UIImage] {
@@ -29,11 +36,5 @@ class LibraryViewModel {
         self.profile = profile
         self.tabManager = tabManager
         self.panelDescriptors = LibraryPanelHelper(profile: profile, tabManager: tabManager).enabledPanels
-    }
-
-    func getCurrentPanel() -> LibraryPanel? {
-        guard let index = selectedPanel?.rawValue else { return nil }
-
-        return panelDescriptors[index].viewController as? LibraryPanel
     }
 }

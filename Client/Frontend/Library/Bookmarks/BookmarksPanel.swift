@@ -45,6 +45,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     private var chevronImage = UIImage(named: ImageIdentifiers.menuChevron)
     private var flashLastRowOnNextReload = false
 
+    private var isRootNode: Bool {
+        return bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
+    }
+
     private lazy var bookmarkFolderIconNormal = {
         return UIImage(named: ImageIdentifiers.bookmarkFolder)?
             .createScaled(UX.FolderIconSize)
@@ -60,16 +64,14 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     // MARK: - Toolbar items
     var bottomToolbarItems: [UIBarButtonItem] {
         // Return empty toolbar when bookmarks is in root node
-        guard case .bookmarks(let subState) = state, subState != .mainView else {
-            return [UIBarButtonItem]()
-        }
+        guard case .bookmarks = state else { return [UIBarButtonItem]() }
 
         return toolbarButtonItems
     }
 
     private var toolbarButtonItems: [UIBarButtonItem] {
         switch state {
-        case .bookmarks(state: .inFolder):
+        case .bookmarks(state: .mainView), .bookmarks(state: .inFolder):
             bottomRightButton.title = .BookmarksEdit
             return [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .inFolderEditMode):
@@ -98,12 +100,12 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     // MARK: - Init
 
     init(profile: Profile,
-         bookmarkFolderGUID: GUID = BookmarkRoots.RootGUID,
+         bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID,
          notificationCenter: NotificationCenter = NotificationCenter.default) {
 
         self.bookmarkFolderGUID = bookmarkFolderGUID
         self.notificationCenter = notificationCenter
-        self.state = .bookmarks(state: .mainView)
+        self.state = bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID ? .bookmarks(state: .mainView) : .bookmarks(state: .inFolder)
         super.init(profile: profile)
 
         setupNotifications(forObserver: self, observing: [.FirefoxAccountChanged])
@@ -133,10 +135,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         if tableView.isEditing {
             disableEditMode()
@@ -158,7 +156,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         if profile.isShutdown { return }
 
-        if bookmarkFolderGUID == BookmarkRoots.RootGUID {
+        if bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID {
             setupRootFolderData()
 
         } else if bookmarkFolderGUID == LocalDesktopFolder.localDesktopFolderGuid {
@@ -293,7 +291,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     func disableEditMode() {
-        print("YRD disableEditMode")
         updatePanelState(newState: .bookmarks(state: .inFolder))
         self.tableView.setEditing(false, animated: true)
         sendPanelChangeNotification()
@@ -440,7 +437,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         guard let bookmarkNode = node else {
             return
         }
-        // TODO: Yoana check with Laurie
+
         updatePanelState(newState: .bookmarks(state: .inFolder))
         guard !tableView.isEditing else {
             TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
@@ -687,8 +684,7 @@ extension BookmarksPanel {
     @objc func bottomLeftButtonAction() {
         if state == .bookmarks(state: .inFolderEditMode) {
             updatePanelState(newState: .bookmarks(state: .itemEditMode))
-            // TODO: Yoana use new function
-//            addNewBookmarkItemAction()
+            presentInFolderActions()
         }
     }
 
@@ -697,13 +693,11 @@ extension BookmarksPanel {
 
         switch subState {
         case .inFolder:
-            // TODO: After rebase create isRoot in new FxBookmarkNode protocol
-            updatePanelState(newState: .bookmarks(state: .mainView))
-
+            if isRootNode {
+                updatePanelState(newState: .bookmarks(state: .mainView))
+            }
        case .inFolderEditMode:
-            // TODO: Yoana use new function
-//           addNewBookmarkItemAction()
-            break
+          presentInFolderActions()
 
        case .itemEditMode:
             updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
@@ -728,7 +722,7 @@ extension BookmarksPanel {
         guard case .bookmarks(let subState) = state else { return }
 
         switch subState {
-        case .inFolder:
+        case .mainView, .inFolder:
             enableEditMode()
         case .inFolderEditMode:
             disableEditMode()

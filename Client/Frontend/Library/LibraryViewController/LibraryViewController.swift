@@ -77,7 +77,6 @@ class LibraryViewController: UIViewController {
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("YRD viewDidLoad")
         viewSetup()
         applyTheme()
         setupNotifications()
@@ -85,13 +84,11 @@ class LibraryViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("YRD viewWillAppear")
         applyTheme()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        print("YRD viewDidLayoutSubviews")
         // Needed to update toolbar on panel changes
         updateViewWithState()
     }
@@ -140,7 +137,6 @@ class LibraryViewController: UIViewController {
     }
 
     func updateViewWithState() {
-        print("YRD updateViewWithState")
         setupButtons()
     }
 
@@ -201,7 +197,6 @@ class LibraryViewController: UIViewController {
     }
 
     private func setupPanel() {
-        print("YRD setupPanel")
         guard let index = viewModel.selectedPanel?.rawValue,
               index < viewModel.panelDescriptors.count else { return }
 
@@ -258,6 +253,7 @@ class LibraryViewController: UIViewController {
     }
 
     private func topLeftButtonSetup() {
+        print("Yoana setup top button \(viewModel.currentPanelState)")
         switch viewModel.currentPanelState {
         case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
@@ -285,7 +281,8 @@ class LibraryViewController: UIViewController {
     }
 
     private func bottomToolbarButtonSetup() {
-        guard let panel = viewModel.getCurrentPanel() else { return }
+        guard let panel = viewModel.currentPanel else { return }
+//        print("Yoana panelState \(panel.state)")
 
         let shouldHideBar = shouldHideBottomToolbar(panel: panel)
         navigationController?.setToolbarHidden(shouldHideBar, animated: true)
