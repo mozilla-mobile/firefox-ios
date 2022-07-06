@@ -57,7 +57,7 @@ func simulatedFrecency(now: MicrosecondTimestamp, then: MicrosecondTimestamp, vi
 
 func getRemoteFrecencySQL() -> String {
     let visitCountExpression = "remoteVisitCount"
-    let now = Date.nowMicroseconds()
+    let now = Date().toMicrosecondsSince1970()
     let microsecondsPerDay = 86_400_000_000.0      // 1000 * 1000 * 60 * 60 * 24
     let ageDays = "((\(now) - remoteVisitDate) / \(microsecondsPerDay))"
 
@@ -66,7 +66,7 @@ func getRemoteFrecencySQL() -> String {
 
 func getLocalFrecencySQL() -> String {
     let visitCountExpression = "((2 + localVisitCount) * (2 + localVisitCount))"
-    let now = Date.nowMicroseconds()
+    let now = Date().toMicrosecondsSince1970()
     let microsecondsPerDay = 86_400_000_000.0      // 1000 * 1000 * 60 * 60 * 24
     let ageDays = "((\(now) - localVisitDate) / \(microsecondsPerDay))"
 
@@ -253,7 +253,7 @@ private struct SQLiteFrecentHistory: FrecentHistory {
         let localFrecencySQL = getLocalFrecencySQL()
         let remoteFrecencySQL = getRemoteFrecencySQL()
         let sixMonthsInMicroseconds: UInt64 = 15_724_800_000_000      // 182 * 1000 * 1000 * 60 * 60 * 24
-        let sixMonthsAgo = Date.nowMicroseconds() - sixMonthsInMicroseconds
+        let sixMonthsAgo = Date().toMicrosecondsSince1970() - sixMonthsInMicroseconds
 
         let args: Args
         let ftsWhereClause: String
@@ -476,7 +476,7 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func removeHistoryFromDate(_ date: Date) -> Success {
-        let visitTimestamp = date.toMicrosecondTimestamp()
+        let visitTimestamp = date.toMicrosecondsSince1970()
 
         let historyRemoval = """
             WITH deletionIds as (SELECT history.id from history INNER JOIN visits on history.id = visits.siteID WHERE visits.date > ?)

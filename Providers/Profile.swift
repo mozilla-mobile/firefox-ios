@@ -399,7 +399,9 @@ open class BrowserProfile: Profile {
             if !(notification.userInfo!["isPrivate"] as? Bool ?? false) {
                 // We don't record a visit if no type was specified -- that means "ignore me".
                 let site = Site(url: url.absoluteString, title: title as String)
-                let visit = SiteVisit(site: site, date: Date.nowMicroseconds(), type: visitType)
+                let visit = SiteVisit(site: site,
+                                      date: Date().toMicrosecondsSince1970(),
+                                      type: visitType)
                 history.addLocalVisit(visit)
             }
 

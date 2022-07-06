@@ -14,18 +14,25 @@ import Shared
 // These basic cases are not tested here as they are tested in
 // `HistoryHighlightsManagerTests` and `TestHistory` respectively
 class HistoryDeletionUtilityTests: XCTestCase {
+
     struct SiteElements {
         let domain: String
         let path: String
+        let timeVisited: MicrosecondTimestamp
 
-        init(domain: String, path: String = "") {
+        init(domain: String,
+             path: String = "",
+             timeVisited: MicrosecondTimestamp = Date().toMicrosecondsSince1970()) {
+
             self.domain = domain
             self.path = path
+            self.timeVisited = timeVisited
         }
     }
 
     private var profile: MockProfile!
 
+    // MARK: - Setup & Teardown
     override func setUp() {
         super.setUp()
 
@@ -42,6 +49,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         profile = nil
     }
 
+    // MARK: - General Tests
     func testEmptyRead() {
         assertDBIsEmpty()
     }
@@ -53,6 +61,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         assertDBStateFor(testSites)
     }
 
+    // MARK: - Test url based deletion
     func testDeletingSingleItem() {
         let testSites = [SiteElements(domain: "mozilla")]
         populateDBHistory(with: testSites)
@@ -115,6 +124,29 @@ class HistoryDeletionUtilityTests: XCTestCase {
            self.assertDBStateFor(testSites)
        }
    }
+
+    // MARK: - Test time based deletion
+    func testDeletingLastHour() {
+        let testSites = [SiteElements(domain: "cnn",
+                                      timeVisited: Calendar.date(byAdding: .hour, value: -1, to: Date().millisecondsSince1970()))]
+        let sitesToDelete = [SiteElements(domain: "mozilla"),
+                             SiteElements(domain: "google"),
+                             SiteElements(domain: "amazon")]
+        populateDBHistory(with: (testSites + sitesToDelete).shuffled())
+
+    }
+
+    func testDeletingToday() {
+
+    }
+
+    func testDeletingYesterday() {
+
+    }
+
+    func testDeletingAllTime() {
+
+    }
 }
 
 // MARK: - Helper functions
@@ -166,9 +198,10 @@ private extension HistoryDeletionUtilityTests {
         XCTAssertEqual(emptyHistory.successValue!.count, 0, file: file, line: line)
     }
 
-    func assertDBStateFor(_ sites: [SiteElements],
-                                  file: StaticString = #filePath,
-                                  line: UInt = #line
+    func assertDBStateFor(
+        _ sites: [SiteElements],
+        file: StaticString = #filePath,
+        line: UInt = #line
     ) {
         let metadataItems = profile.places.getHistoryMetadataSince(since: 0).value
         XCTAssertTrue(metadataItems.isSuccess, file: file, line: line)
@@ -200,13 +233,14 @@ private extension HistoryDeletionUtilityTests {
         }
     }
 
-    func populateDBHistory(with entries: [SiteElements],
-                                   file: StaticString = #filePath,
-                                   line: UInt = #line
+    func populateDBHistory(
+        with entries: [SiteElements],
+        file: StaticString = #filePath,
+        line: UInt = #line
     ) {
         entries.forEach { entry in
             let site = createWebsiteFor(domain: entry.domain, with: entry.path)
-            addToLocalHistory(site: site)
+            addToLocalHistory(site: site, timeVisited: entry.timeVisited)
             setupMetadataItem(forTestURL: site.url,
                               withTitle: site.title,
                               andViewTime: 1)
@@ -220,16 +254,22 @@ private extension HistoryDeletionUtilityTests {
         return Site(url: urlString, title: urlTitle)
     }
 
-    func addToLocalHistory(site: Site, file: StaticString = #filePath, line: UInt = #line) {
-        let visit = SiteVisit(site: site, date: Date.nowMicroseconds())
+    func addToLocalHistory(
+        site: Site,
+        timeVisited: MicrosecondTimestamp,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let visit = SiteVisit(site: site, date: timeVisited)
         XCTAssertTrue(profile.history.addLocalVisit(visit).value.isSuccess, "Site added: \(site.url).", file: file, line: line)
     }
 
-    func setupMetadataItem(forTestURL siteURL: String,
-                                   withTitle title: String,
-                                   andViewTime viewTime: Int32,
-                                   file: StaticString = #filePath,
-                                   line: UInt = #line
+    func setupMetadataItem(
+        forTestURL siteURL: String,
+        withTitle title: String,
+        andViewTime viewTime: Int32,
+        file: StaticString = #filePath,
+        line: UInt = #line
     ) {
         let metadataKey1 = HistoryMetadataKey(url: siteURL, searchTerm: title, referrerUrl: nil)
 

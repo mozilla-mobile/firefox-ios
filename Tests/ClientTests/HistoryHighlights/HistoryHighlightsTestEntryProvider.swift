@@ -69,7 +69,7 @@ class HistoryHighlightsTestEntryProvider {
     // MARK: - Helper methods
 
     private func add(site: Site) {
-        let visit = SiteVisit(site: site, date: Date.nowMicroseconds())
+        let visit = SiteVisit(site: site, date: Date().toMicrosecondsSince1970())
         XCTAssertTrue(profile.history.addLocalVisit(visit).value.isSuccess, "Site added: \(site.url).")
     }
 

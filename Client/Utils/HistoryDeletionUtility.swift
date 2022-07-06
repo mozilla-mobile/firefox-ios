@@ -97,41 +97,29 @@ class HistoryDeletionUtility {
         _ dateOption: HistoryDeletionUtilityDateOptions,
         completion: ((Date?) -> Void)? = nil
     ) {
-        guard let date = dateFor(dateOption)?.millisecondsSince1970() else { return }
+        guard let date = dateFor(dateOption) else { return }
+        let dateInMilliseconds = date.millisecondsSince1970()
 
         profile.places
-            .getHistoryMetadataSince(since: date)
+            .deleteHistoryMetadataOlderThan(olderThan: dateInMilliseconds)
             .uponQueue(.global(qos: .userInteractive)) { result in
-
-                guard let historyMetadata = result.successValue else { return }
-
-                var sites = [String]()
-
-                historyMetadata.forEach { item in
-                    sites.append(item.url)
-                }
-
-                self.deleteMetadata(sites) { success in
-                    if success {
-
-                    }
-                }
-        }
-    }
-
-    private func deleteAllHistoryData(completion: ((Date?) -> Void)? = nil) {
-
-        profile.history.clearHistory().uponQueue(.global(qos: .userInteractive)) { _ in
-            // INT64_MAX represents the oldest possible time that AS would have
-            self.profile.places
-                .deleteHistoryMetadataOlderThan(olderThan: INT64_MAX)
-                .uponQueue(.global(qos: .userInteractive)) { _ in
-                guard let completion = completion else { return }
-                completion(nil)
+                if result.isSuccess { completion?(date) }
             }
-        }
     }
 
+//    private func deleteAllHistoryData(completion: ((Date?) -> Void)? = nil) {
+//
+//        profile.history.clearHistory().uponQueue(.global(qos: .userInteractive)) { _ in
+//            // INT64_MAX represents the oldest possible time that AS would have
+//            self.profile.places
+//                .deleteHistoryMetadataOlderThan(olderThan: INT64_MAX)
+//                .uponQueue(.global(qos: .userInteractive)) { _ in
+//                guard let completion = completion else { return }
+//                completion(nil)
+//            }
+//        }
+//    }
+//
     private func dateFor(_ dateOption: HistoryDeletionUtilityDateOptions) -> Date? {
         switch dateOption {
         case .lastHour:

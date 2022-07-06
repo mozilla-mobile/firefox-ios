@@ -15,7 +15,7 @@ let threeMonthsInMicros: UInt64 = UInt64(threeMonthsInMillis) * UInt64(1000)
 
 // Start everything three months ago.
 let baseInstantInMillis = Date.now() - threeMonthsInMillis
-let baseInstantInMicros = Date.nowMicroseconds() - threeMonthsInMicros
+let baseInstantInMicros = Date().toMicrosecondsSince1970() - threeMonthsInMicros
 
 func advanceTimestamp(_ timestamp: Timestamp, by: Int) -> Timestamp {
     return timestamp + UInt64(by)

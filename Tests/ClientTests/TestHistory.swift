@@ -11,7 +11,7 @@ import XCTest
 class TestHistory: ProfileTest {
     fileprivate func addSite(_ history: BrowserHistory, url: String, title: String, s: Bool = true) {
         let site = Site(url: url, title: title)
-        let visit = SiteVisit(site: site, date: Date.nowMicroseconds())
+        let visit = SiteVisit(site: site, date: Date().toMicrosecondsSince1970())
         XCTAssertEqual(s, history.addLocalVisit(visit).value.isSuccess, "Site added: \(url).")
     }
 

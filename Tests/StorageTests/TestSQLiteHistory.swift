@@ -1082,7 +1082,9 @@ class TestSQLiteHistory: XCTestCase {
         XCTAssertTrue(insertDeferred.value.isSuccess)
 
         // Now insert it again. This should update the domain.
-        history.addLocalVisit(SiteVisit(site: site, date: Date.nowMicroseconds(), type: VisitType.link)).succeeded()
+        history.addLocalVisit(SiteVisit(site: site,
+                                        date: Date().toMicrosecondsSince1970(),
+                                        type: VisitType.link)).succeeded()
 
         // domain_id isn't normally exposed, so we manually query to get it.
         let resultsDeferred = db.withConnection { connection -> Cursor<Int?> in
@@ -1118,11 +1120,18 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         history.clearHistory().bind({ success in
-            return all([history.addLocalVisit(SiteVisit(site: site11, date: Date.nowMicroseconds(), type: VisitType.link)),
-                        history.addLocalVisit(SiteVisit(site: site12, date: Date.nowMicroseconds(), type: VisitType.link)),
-                        history.addLocalVisit(SiteVisit(site: site3, date: Date.nowMicroseconds(), type: VisitType.link))])
+            return all([
+                history.addLocalVisit(SiteVisit(site: site11,
+                                                date: Date().toMicrosecondsSince1970(),
+                                                type: VisitType.link)),
+                history.addLocalVisit(SiteVisit(site: site12,
+                                                date: Date().toMicrosecondsSince1970(),
+                                                type: VisitType.link)),
+                history.addLocalVisit(SiteVisit(site: site3,
+                                                date: Date().toMicrosecondsSince1970(),
+                                                type: VisitType.link))])
         }).bind({ (results: [Maybe<()>]) in
-            return history.insertOrUpdatePlace(site13, modified: Date.nowMicroseconds())
+            return history.insertOrUpdatePlace(site13, modified: Date().toMicrosecondsSince1970())
         }).bind({ guid -> Success in
             XCTAssertEqual(guid.successValue!, initialGuid, "Guid is correct")
             return db.run(updateTopSites)
@@ -1174,11 +1183,17 @@ class TestSQLiteHistory: XCTestCase {
         let site1 = Site(url: "http://url1/", title: "title one")
         let site1Changed = Site(url: "http://url1/", title: "title one alt")
 
-        let siteVisit1 = SiteVisit(site: site1, date: Date.nowMicroseconds(), type: VisitType.link)
-        let siteVisit2 = SiteVisit(site: site1Changed, date: Date.nowMicroseconds() + 1000, type: VisitType.bookmark)
+        let siteVisit1 = SiteVisit(site: site1,
+                                   date: Date().toMicrosecondsSince1970(),
+                                   type: VisitType.link)
+        let siteVisit2 = SiteVisit(site: site1Changed,
+                                   date: Date().toMicrosecondsSince1970() + 1000,
+                                   type: VisitType.bookmark)
 
         let site2 = Site(url: "http://url2/", title: "title two")
-        let siteVisit3 = SiteVisit(site: site2, date: Date.nowMicroseconds() + 2000, type: VisitType.link)
+        let siteVisit3 = SiteVisit(site: site2,
+                                   date: Date().toMicrosecondsSince1970() + 2000,
+                                   type: VisitType.link)
 
         let expectation = self.expectation(description: "First.")
         func done() -> Success {
