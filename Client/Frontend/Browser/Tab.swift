@@ -299,9 +299,7 @@ class Tab: NSObject {
     // Use computed property so @available can be used to guard `noImageMode`.
     var noImageMode: Bool {
         didSet {
-            guard noImageMode != oldValue else {
-                return
-            }
+            guard noImageMode != oldValue else { return }
 
             contentBlocker?.noImageMode(enabled: noImageMode)
 
@@ -311,9 +309,7 @@ class Tab: NSObject {
 
     var nightMode: Bool {
         didSet {
-            guard nightMode != oldValue else {
-                return
-            }
+            guard nightMode != oldValue else { return }
 
             webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.NightMode.setEnabled(\(nightMode))")
             // For WKWebView background color to take effect, isOpaque must be false,
@@ -372,7 +368,7 @@ class Tab: NSObject {
         self.nightMode = false
         self.noImageMode = false
         self.browserViewController = bvc
-        self.metadataManager = TabMetadataManager(profile: bvc.profile)
+        self.metadataManager = TabMetadataManager()
         super.init()
         self.isPrivate = isPrivate
         debugTabCount += 1
@@ -465,9 +461,7 @@ class Tab: NSObject {
             jsonDict["history"] = urls as AnyObject?
             jsonDict["currentPage"] = currentPage as AnyObject?
 
-            guard let json = jsonDict.asString?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-                return
-            }
+            guard let json = jsonDict.asString?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
 
             if let restoreURL = URL(string: "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?history=\(json)") {
                 let request = PrivilegedRequest(url: restoreURL) as URLRequest
@@ -549,7 +543,9 @@ class Tab: NSObject {
     @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {
         if let webView = webView {
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
-            if let url = request.url, let syncedReaderModeURL = url.decodeReaderModeURL, let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
+            if let url = request.url,
+               let syncedReaderModeURL = url.decodeReaderModeURL,
+               let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
                 let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
                 lastRequest = readerModeRequest
                 return webView.load(readerModeRequest)
@@ -711,9 +707,7 @@ class Tab: NSObject {
     }
 
     func dequeueJavascriptAlertPrompt() -> JSAlertInfo? {
-        guard !alertQueue.isEmpty else {
-            return nil
-        }
+        guard !alertQueue.isEmpty else { return nil }
         return alertQueue.removeFirst()
     }
 
@@ -771,9 +765,10 @@ class Tab: NSObject {
     }
 
     func updateFaviconCache() {
-        guard let displayFavicon = displayFavicon?.url, let faviconUrl = URL(string: displayFavicon), let baseDomain = url?.baseDomain else {
-            return
-        }
+        guard let displayFavicon = displayFavicon?.url,
+              let faviconUrl = URL(string: displayFavicon),
+              let baseDomain = url?.baseDomain
+        else { return }
 
         if currentFaviconUrl == nil {
             currentFaviconUrl = faviconUrl

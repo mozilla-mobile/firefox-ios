@@ -38,7 +38,18 @@ public struct PageMetadata {
         return Set(strings)
     }
 
-    public init(id: Int?, siteURL: String, mediaURL: String?, title: String?, description: String?, type: String?, providerName: String?, faviconURL: String? = nil, language: String? = nil, keywords: String? = nil) {
+    public init(
+        id: Int?,
+        siteURL: String,
+        mediaURL: String?,
+        title: String?,
+        description: String?,
+        type: String?,
+        providerName: String?,
+        faviconURL: String? = nil,
+        language: String? = nil,
+        keywords: String? = nil
+    ) {
         self.id = id
         self.siteURL = siteURL
         self.mediaURL = mediaURL
@@ -52,12 +63,18 @@ public struct PageMetadata {
     }
 
     public static func fromDictionary(_ dict: [String: Any]) -> PageMetadata? {
-        guard let siteURL = dict[MetadataKeys.pageURL.rawValue] as? String else {
-            return nil
-        }
+        guard let siteURL = dict[MetadataKeys.pageURL.rawValue] as? String else { return nil }
 
-        return PageMetadata(id: nil, siteURL: siteURL, mediaURL: dict[MetadataKeys.imageURL.rawValue] as? String,
-                            title: dict[MetadataKeys.title.rawValue] as? String, description: dict[MetadataKeys.description.rawValue] as? String,
-                            type: dict[MetadataKeys.type.rawValue] as? String, providerName: dict[MetadataKeys.provider.rawValue] as? String, faviconURL: dict[MetadataKeys.favicon.rawValue] as? String, language: dict[MetadataKeys.language.rawValue] as? String, keywords: dict[MetadataKeys.keywords.rawValue] as? String)
+        return PageMetadata(
+            id: nil,
+            siteURL: siteURL,
+            mediaURL: dict[MetadataKeys.imageURL.rawValue] as? String,
+            title: dict[MetadataKeys.title.rawValue] as? String,
+            description: dict[MetadataKeys.description.rawValue] as? String,
+            type: dict[MetadataKeys.type.rawValue] as? String,
+            providerName: dict[MetadataKeys.provider.rawValue] as? String,
+            faviconURL: dict[MetadataKeys.favicon.rawValue] as? String,
+            language: dict[MetadataKeys.language.rawValue] as? String,
+            keywords: dict[MetadataKeys.keywords.rawValue] as? String)
     }
 }

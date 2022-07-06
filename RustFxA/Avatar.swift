@@ -3,7 +3,6 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SDWebImage
 import Shared
 
 open class Avatar {
@@ -16,12 +15,19 @@ open class Avatar {
     }
 
     private func downloadAvatar() {
-        SDWebImageManager.shared.loadImage(with: url, options: [.continueInBackground, .lowPriority], progress: nil) { (image, _, error, _, success, _) in
-            if let image = image {
-                self.image.fill(image)
-            } else {
+        guard let url = url else { return }
+
+        ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
+                                                               limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+            guard error == nil,
+                  let image = image
+            else {
                 self.image.fill(UIImage(named: ImageIdentifiers.placeholderAvatar)!)
+                NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
+                return
             }
+
+            self.image.fill(image)
             NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         }
     }

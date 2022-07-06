@@ -82,9 +82,7 @@ extension ContextMenuHelper: UIGestureRecognizerDelegate {
             return
         }
 
-        guard sender.state == .began else {
-            return
-        }
+        guard sender.state == .began else { return }
 
         // To prevent the tapped link from proceeding with navigation, "cancel" the native WKWebView
         // `_highlightLongPressRecognizer`. This preserves the original behavior as seen here:
@@ -113,9 +111,7 @@ extension ContextMenuHelper: TabContentScript {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard let data = message.body as? [String: AnyObject] else {
-            return
-        }
+        guard let data = message.body as? [String: AnyObject] else { return }
 
         if let x = data["touchX"] as? Double, let y = data["touchY"] as? Double {
             touchPoint = CGPoint(x: x, y: y)

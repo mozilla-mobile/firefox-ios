@@ -41,7 +41,7 @@
 "ActivityStream.Highlights.Visited" = "Відвідано";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
-"ActivityStream.JumpBackIn.SectionTitle" = "Назад до";
+"ActivityStream.JumpBackIn.SectionTitle" = "Відкрити знову";
 
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Вкладки: %d";
@@ -362,7 +362,7 @@
 "Downloads" = "Завантаження";
 
 /* The label of the button the user will press to start downloading a file */
-"Downloads.Alert.DownloadNow" = "Завантажити зараз";
+"Downloads.Alert.DownloadNow" = "Завантажити";
 
 /* Button confirming the cancellation of the download. */
 "Downloads.CancelDialog.Cancel" = "Скасувати";
@@ -468,6 +468,9 @@
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Наші спонсори та ваша приватність";
+
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Pocket.Sponsored.v103" = "Спонсоровано";
 
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "Спонсоровано";
@@ -746,7 +749,7 @@
 "Keyboard.Shortcuts.OpenLinkInBackground" = "Відкрити посилання у фоновому режимі";
 
 /* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.OpenLinkInNewTab" = "Відкрити посилання в новій вкладці";
+"Keyboard.Shortcuts.OpenLinkInNewTab" = "Відкрити у новій вкладці";
 
 /* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.SavePageAs" = "Зберегти сторінку як…";
@@ -773,7 +776,7 @@
 "Keyboard.Shortcuts.Section.Window" = "Вікно";
 
 /* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Settings" = "Налаштування";
+"Keyboard.Shortcuts.Settings" = "Параметри";
 
 /* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowBookmarks" = "Показати закладки";
@@ -839,7 +842,7 @@
 "LibraryPanel.History.SyncedHistory.v100" = "Синхронізована історія";
 
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
-"LibraryPanel.Section.Older" = "Старіші";
+"LibraryPanel.Section.Older" = "Давніші";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "Ліцензії";
@@ -1094,6 +1097,9 @@
 
 /* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
 "Menu.SignInToSync.Label.v99" = "Увійти для синхронізації";
+
+/* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
+"Menu.SyncAndSaveData.v103" = "Синхронізувати та зберегти дані";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Вкладку надіслано";
@@ -1678,7 +1684,7 @@
 "Settings.Home.Option.Description.v101" = "Виберіть, що включатиме домівка Firefox.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
-"Settings.Home.Option.JumpBackIn" = "Назад до";
+"Settings.Home.Option.JumpBackIn" = "Відкрити знову";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
 "Settings.Home.Option.Pocket" = "Рекомендації від Pocket";
@@ -1691,6 +1697,9 @@
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "Ярлики";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off */
+"Settings.Home.Option.SponsoredPocket.v103" = "Матеріали від спонсорів";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
 "Settings.Home.Option.StartAtHome.AfterFourHours" = "Домівка через чотири години бездіяльності";
@@ -1825,10 +1834,10 @@
 "Settings.NewTab.Option.FirefoxHome" = "Домівка Firefox";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "Недавні закладки";
+"Settings.NewTab.Option.HighlightsBookmarks" = "Останні закладки";
 
 /* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "Обране";
+"Settings.NewTab.Option.HighlightsHistory" = "Відвідано";
 
 /* Option in settings to show history when you open a new tab */
 "Settings.NewTab.Option.History" = "Історія";
@@ -1878,6 +1887,18 @@
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "Відкрити в";
 
+/* Touch ID prompt subtitle when accessing logins and passwords */
+"Settings.Passwords.FingerPrintReason.v103" = "Тепер використовуйте відбиток пальця для доступу до паролів.";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "Відтепер ваші облікові дані та паролі захищені Face ID, Touch ID або паролем пристрою.";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "Зберігати паролі";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "Паролі";
+
 /* Setting to enable the built-in password manager */
 "Settings.SaveLogins.Title" = "Зберігати паролі";
 
@@ -1906,7 +1927,7 @@
 "Settings.ShowLoginsInAppMenu.Title" = "Показувати в меню";
 
 /* The description of the open new tab siri shortcut */
-"Settings.Siri.OpenTabShortcut" = "Відкрити нову вкладку";
+"Settings.Siri.OpenTabShortcut" = "Нова вкладка";
 
 /* The description that describes what siri shortcuts are */
 "Settings.Siri.SectionDescription" = "Використовуйте команди Siri, щоб швидко відкривати Firefox через Siri";
@@ -1943,6 +1964,15 @@
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Дослідження";
+
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "Увійдіть для синхронізації вкладок, закладок, паролів та інших даних.";
+
+/* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
+"Settings.Sync.ButtonTitle.v103" = "Синхронізувати та зберегти дані";
+
+/* Title for the page where the user sign in to their Firefox Sync account. */
+"Settings.Sync.SignInView.Title.v103" = "Синхронізувати та зберегти дані";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Неактивні вкладки";
@@ -2194,6 +2224,12 @@
 /* The placeholder text for the tab search bar */
 "Tabs.Search.PlaceholderText" = "Пошук вкладок";
 
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Переглянути неактивні вкладки";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Сховати неактивні вкладки";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Додати вкладку";
 
@@ -2222,7 +2258,7 @@
 "TabTray.Older.Header" = "Давніші";
 
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenNewTab.KeyCodeTitle" = "Відкрити нову вкладку";
+"TabTray.OpenNewTab.KeyCodeTitle" = "Нова вкладка";
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Відкрити вибрану вкладку";

@@ -5,8 +5,9 @@
 import Foundation
 import Shared
 import WebKit
-import SDWebImage
 import CoreSpotlight
+import SDWebImage
+import Kingfisher
 
 private let log = Logger.browserLogger
 
@@ -43,8 +44,15 @@ class HistoryClearable: Clearable {
         Tab.ChangeUserAgent.clear()
 
         return profile.history.clearHistory().bindQueue(.main) { success in
+            // TODO: Remove clear cache for SDWebImage when we are ready to remove library
+            // Clear image cache - SDWebImage
             SDImageCache.shared.clearDisk()
             SDImageCache.shared.clearMemory()
+
+            // Clear image cache - Kingfisher
+            KingfisherManager.shared.cache.clearMemoryCache()
+            KingfisherManager.shared.cache.clearDiskCache()
+
             self.profile.recentlyClosedTabs.clearTabs()
             self.profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).uponQueue(.global(qos: .userInteractive)) { _ in }
             CSSearchableIndex.default().deleteAllSearchableItems()
@@ -183,7 +191,12 @@ class DownloadedFilesClearable: Clearable {
 
     func clear() -> Success {
         if let downloadsPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Downloads"),
-            let files = try? FileManager.default.contentsOfDirectory(at: downloadsPath, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants]) {
+            let files = try? FileManager.default.contentsOfDirectory(
+                at: downloadsPath,
+                includingPropertiesForKeys: nil,
+                options: [.skipsHiddenFiles,
+                          .skipsPackageDescendants,
+                          .skipsSubdirectoryDescendants]) {
             for file in files {
                 try? FileManager.default.removeItem(at: file)
             }

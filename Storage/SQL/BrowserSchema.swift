@@ -143,7 +143,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 40    // Issue #4776.
+    static let DefaultVersion = 41    // PR #10553.
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -597,10 +597,14 @@ open class BrowserSchema: Schema {
 
     fileprivate let localBookmarksView = """
         CREATE VIEW view_bookmarksLocal_on_mirror AS
-        SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, NULL AS local_modified, server_modified, 0 AS is_overridden
+        SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, \
+        feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, \
+        NULL AS local_modified, server_modified, 0 AS is_overridden
         FROM bookmarksMirror WHERE is_overridden IS NOT 1
         UNION ALL
-        SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, local_modified, NULL AS server_modified, 1 AS is_overridden
+        SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, \
+        feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, \
+        local_modified, NULL AS server_modified, 1 AS is_overridden
         FROM bookmarksLocal WHERE is_deleted IS NOT 1
         """
 
@@ -674,7 +678,9 @@ open class BrowserSchema: Schema {
 
     fileprivate let awesomebarBookmarksWithIconsView = """
         CREATE VIEW view_awesomebar_bookmarks_with_favicons AS
-        SELECT b.guid AS guid, b.url AS url, b.title AS title, b.description AS description, b.visitDate AS visitDate, f.id AS iconID, f.url AS iconURL, f.date AS iconDate, f.type AS iconType, f.width AS iconWidth
+        SELECT b.guid AS guid, b.url AS url, b.title AS title, b.description AS \
+        description, b.visitDate AS visitDate, f.id AS iconID, f.url AS iconURL, \
+        f.date AS iconDate, f.type AS iconType, f.width AS iconWidth
         FROM view_awesomebar_bookmarks b LEFT JOIN favicons f ON f.id = b.faviconID
         """
 
@@ -1416,6 +1422,17 @@ open class BrowserSchema: Schema {
             // Create indices on the bookmarks tables for the `keyword` column.
             if !self.run(db, queries: [
                 faviconSiteURLsCreate,
+                ]) {
+                return false
+            }
+        }
+
+        if from < 41 && to >= 41 {
+            // As a part of the appservices tabs component integration, remove tabs records from the
+            // browserDB tabs table to prevent issues with the `client_guid` foreign key to the clients
+            // table. In the event that this migration is reverted, the table will be repopulated by sync data.
+            if !self.run(db, queries: [
+                "DELETE FROM tabs",
                 ]) {
                 return false
             }

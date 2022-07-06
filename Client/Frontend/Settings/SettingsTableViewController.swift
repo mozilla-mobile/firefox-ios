@@ -195,7 +195,15 @@ class BoolSetting: Setting, FeatureFlaggable {
     fileprivate let statusText: NSAttributedString?
     fileprivate let featureFlagName: NimbusFeatureFlagID?
 
-    init(prefs: Prefs?, prefKey: String? = nil, defaultValue: Bool?, attributedTitleText: NSAttributedString, attributedStatusText: NSAttributedString? = nil, featureFlagName: NimbusFeatureFlagID? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
+    init(
+        prefs: Prefs?,
+        prefKey: String? = nil,
+        defaultValue: Bool?,
+        attributedTitleText: NSAttributedString,
+        attributedStatusText: NSAttributedString? = nil,
+        featureFlagName: NimbusFeatureFlagID? = nil,
+        settingDidChange: ((Bool) -> Void)? = nil
+    ) {
         self.prefs = prefs
         self.prefKey = prefKey
         self.defaultValue = defaultValue
@@ -205,16 +213,40 @@ class BoolSetting: Setting, FeatureFlaggable {
         super.init(title: attributedTitleText)
     }
 
-    convenience init(prefs: Prefs, prefKey: String? = nil, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
+    convenience init(
+        prefs: Prefs,
+        prefKey: String? = nil,
+        defaultValue: Bool,
+        titleText: String,
+        statusText: String? = nil,
+        settingDidChange: ((Bool) -> Void)? = nil
+    ) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
             statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
         }
-        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
+        self.init(
+            prefs: prefs,
+            prefKey: prefKey,
+            defaultValue: defaultValue,
+            attributedTitleText: NSAttributedString(
+                string: titleText,
+                attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
+            attributedStatusText: statusTextAttributedString,
+            settingDidChange: settingDidChange)
     }
 
-    convenience init(with featureFlagID: NimbusFeatureFlagID, titleText: NSAttributedString, settingDidChange: ((Bool) -> Void)? = nil) {
-        self.init(prefs: nil, defaultValue: nil, attributedTitleText: titleText, featureFlagName: featureFlagID, settingDidChange: settingDidChange)
+    convenience init(
+        with featureFlagID: NimbusFeatureFlagID,
+        titleText: NSAttributedString,
+        settingDidChange: ((Bool) -> Void)? = nil
+    ) {
+        self.init(
+            prefs: nil,
+            defaultValue: nil,
+            attributedTitleText: titleText,
+            featureFlagName: featureFlagID,
+            settingDidChange: settingDidChange)
     }
 
     override var status: NSAttributedString? {
@@ -271,9 +303,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         if let featureFlagName = featureFlagName {
             control.isOn = featureFlags.isFeatureEnabled(featureFlagName, checking: .userOnly)
         } else {
-            guard let key = prefKey, let defaultValue = defaultValue else {
-                return
-            }
+            guard let key = prefKey, let defaultValue = defaultValue else { return }
             control.isOn = prefs?.boolForKey(key) ?? defaultValue
         }
     }
@@ -283,9 +313,7 @@ class BoolSetting: Setting, FeatureFlaggable {
             featureFlags.set(feature: featureFlagName, to: control.isOn)
 
         } else {
-            guard let key = prefKey else {
-                return
-            }
+            guard let key = prefKey else { return }
             prefs?.setBool(control.isOn, forKey: key)
         }
     }
@@ -314,15 +342,36 @@ class PrefPersister: SettingValuePersister {
 }
 
 class StringPrefSetting: StringSetting {
-    init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
-        super.init(defaultValue: defaultValue, placeholder: placeholder, accessibilityIdentifier: accessibilityIdentifier, persister: PrefPersister(prefs: prefs, prefKey: prefKey), settingIsValid: isValueValid, settingDidChange: settingDidChange)
+    init(
+        prefs: Prefs,
+        prefKey: String,
+        defaultValue: String? = nil,
+        placeholder: String,
+        accessibilityIdentifier: String,
+        settingIsValid isValueValid: ((String?) -> Bool)? = nil,
+        settingDidChange: ((String?) -> Void)? = nil
+    ) {
+        super.init(defaultValue: defaultValue,
+                   placeholder: placeholder,
+                   accessibilityIdentifier: accessibilityIdentifier,
+                   persister: PrefPersister(prefs: prefs, prefKey: prefKey),
+                   settingIsValid: isValueValid,
+                   settingDidChange: settingDidChange)
     }
 }
 
 class WebPageSetting: StringPrefSetting {
     let isChecked: () -> Bool
 
-    init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, isChecked: @escaping () -> Bool = { return false }, settingDidChange: ((String?) -> Void)? = nil) {
+    init(
+        prefs: Prefs,
+        prefKey: String,
+        defaultValue: String? = nil,
+        placeholder: String,
+        accessibilityIdentifier: String,
+        isChecked: @escaping () -> Bool = { return false },
+        settingDidChange: ((String?) -> Void)? = nil
+    ) {
         self.isChecked = isChecked
         super.init(prefs: prefs,
                    prefKey: prefKey,
@@ -337,9 +386,7 @@ class WebPageSetting: StringPrefSetting {
     }
 
     override func prepareValidValue(userInput value: String?) -> String? {
-        guard let value = value else {
-            return nil
-        }
+        guard let value = value else { return nil }
         return URIFixup.getURL(value)?.absoluteString
     }
 
@@ -376,7 +423,14 @@ class StringSetting: Setting, UITextFieldDelegate {
 
     let textField = UITextField()
 
-    init(defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, persister: SettingValuePersister, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
+    init(
+        defaultValue: String? = nil,
+        placeholder: String,
+        accessibilityIdentifier: String,
+        persister: SettingValuePersister,
+        settingIsValid isValueValid: ((String?) -> Bool)? = nil,
+        settingDidChange: ((String?) -> Void)? = nil
+    ) {
         self.defaultValue = defaultValue
         self.settingDidChange = settingDidChange
         self.settingIsValid = isValueValid
@@ -471,7 +525,14 @@ class CheckmarkSetting: Setting {
         return subtitle
     }
 
-    init(title: NSAttributedString, style: CheckmarkSettingStyle = .rightSide, subtitle: NSAttributedString?, accessibilityIdentifier: String? = nil, isChecked: @escaping () -> Bool, onChecked: @escaping () -> Void) {
+    init(
+        title: NSAttributedString,
+        style: CheckmarkSettingStyle = .rightSide,
+        subtitle: NSAttributedString?,
+        accessibilityIdentifier: String? = nil,
+        isChecked: @escaping () -> Bool,
+        onChecked: @escaping () -> Void
+    ) {
         self.subtitle = subtitle
         self.onChecked = onChecked
         self.isChecked = isChecked
@@ -700,9 +761,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
     @objc func didLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         let location = gestureRecognizer.location(in: tableView)
-        guard let indexPath = tableView.indexPathForRow(at: location), gestureRecognizer.state == .began else {
-            return
-        }
+        guard let indexPath = tableView.indexPathForRow(at: location), gestureRecognizer.state == .began else { return }
 
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row], setting.enabled {
@@ -731,9 +790,7 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else {
-            return nil
-        }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         let sectionSetting = settings[section]
         if let sectionTitle = sectionSetting.title?.string {
@@ -746,9 +803,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionSetting = settings[section]
-        guard let sectionFooter = sectionSetting.footerTitle?.string else {
-            return nil
-        }
+        guard let sectionFooter = sectionSetting.footerTitle?.string else { return nil }
         let footerView = ThemedTableSectionHeaderFooterView()
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top

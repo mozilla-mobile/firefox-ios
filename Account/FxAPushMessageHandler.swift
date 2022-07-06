@@ -38,9 +38,8 @@ extension FxAPushMessageHandler {
         let subscription = pushReg.defaultSubscription
 
         guard let encoding = userInfo["con"] as? String, // content-encoding
-            let payload = userInfo["body"] as? String else {
-                return deferMaybe(PushMessageError.messageIncomplete("missing con or body"))
-        }
+              let payload = userInfo["body"] as? String
+        else { return deferMaybe(PushMessageError.messageIncomplete("missing con or body")) }
         // ver == endpointURL path, chid == channel id, aps == alert text and content_available.
 
         let plaintext: String?
@@ -77,7 +76,12 @@ extension FxAPushMessageHandler {
                 }
                 if events.count > 1 {
                     // Log to the console for debugging release builds
-                    os_log("%{public}@", log: OSLog(subsystem: "org.mozilla.firefox", category: "firefoxnotificationservice"), type: OSLogType.debug, "Multiple events arrived, only handling the first event.")
+                    os_log(
+                        "%{public}@",
+                        log: OSLog(subsystem: "org.mozilla.firefox",
+                                   category: "firefoxnotificationservice"),
+                        type: OSLogType.debug,
+                        "Multiple events arrived, only handling the first event.")
                 }
                 switch firstEvent {
                 case .commandReceived(let deviceCommand):

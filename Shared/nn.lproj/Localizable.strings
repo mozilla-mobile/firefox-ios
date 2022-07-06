@@ -469,6 +469,9 @@
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Sponsorane våre og ditt personvern";
 
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Pocket.Sponsored.v103" = "Sponsa";
+
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "Sponsa";
 
@@ -491,7 +494,7 @@
 "FxA.FirefoxAccount" = "Firefox-konto";
 
 /* Button label to go to Firefox Account settings */
-"FxA.ManageAccount" = "Handter kontoen og einingar";
+"FxA.ManageAccount" = "Handsam kontoen og einingar";
 
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Ikkje noko internettsamband";
@@ -1024,7 +1027,7 @@
 "Menu.Library.StopReload" = "Stopp";
 
 /* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
-"Menu.ManageAccount.Label" = "Handter kontoen %@";
+"Menu.ManageAccount.Label" = "Handsam kontoen %@";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Ny fane";
@@ -1094,6 +1097,9 @@
 
 /* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
 "Menu.SignInToSync.Label.v99" = "Logg inn på Sync";
+
+/* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
+"Menu.SyncAndSaveData.v103" = "Synkroniser og lagre data";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Fana er sendt";

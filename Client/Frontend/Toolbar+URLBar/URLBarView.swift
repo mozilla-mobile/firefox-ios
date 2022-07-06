@@ -174,7 +174,15 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         return backButton
     }()
 
-    lazy var actionButtons: [NotificationThemeable & UIButton] = [self.tabsButton, self.homeButton, self.bookmarksButton, self.appMenuButton, self.addNewTabButton, self.forwardButton, self.backButton, self.multiStateButton]
+    lazy var actionButtons: [NotificationThemeable & UIButton] = [
+        self.tabsButton,
+        self.homeButton,
+        self.bookmarksButton,
+        self.appMenuButton,
+        self.addNewTabButton,
+        self.forwardButton,
+        self.backButton,
+        self.multiStateButton]
 
     var currentURL: URL? {
         get {
@@ -650,9 +658,7 @@ extension URLBarView: TabToolbarProtocol {
 
     func appMenuBadge(setVisible: Bool) {
         // Warning badges should take priority over the standard badge
-        guard warningMenuBadge.badge.isHidden else {
-            return
-        }
+        guard warningMenuBadge.badge.isHidden else { return }
 
         appMenuBadge.show(setVisible)
     }

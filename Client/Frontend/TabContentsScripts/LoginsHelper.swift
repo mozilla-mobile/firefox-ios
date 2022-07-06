@@ -35,8 +35,9 @@ class LoginsHelper: TabContentScript {
 
     fileprivate func getOrigin(_ uriString: String, allowJS: Bool = false) -> String? {
         guard let uri = URL(string: uriString),
-            let scheme = uri.scheme, !scheme.isEmpty,
-            let host = uri.host else {
+              let scheme = uri.scheme, !scheme.isEmpty,
+              let host = uri.host
+        else {
             // bug 159484 - disallow url types that don't support a hostPort.
             // (although we handle "javascript:..." as a special case above.)
             log.debug("Couldn't parse origin for \(uriString)")
@@ -60,10 +61,9 @@ class LoginsHelper: TabContentScript {
 
     func loginRecordFromScript(_ script: [String: Any], url: URL) -> LoginEntry? {
         guard let username = script["username"] as? String,
-            let password = script["password"] as? String,
-            let origin = getOrigin(url.absoluteString) else {
-            return nil
-        }
+              let password = script["password"] as? String,
+              let origin = getOrigin(url.absoluteString)
+        else { return nil }
 
         var dict: [String: Any] = [
             "hostname": origin,
@@ -89,9 +89,8 @@ class LoginsHelper: TabContentScript {
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard let res = message.body as? [String: Any],
-            let type = res["type"] as? String else {
-            return
-        }
+              let type = res["type"] as? String
+        else { return }
 
         // We don't use the WKWebView's URL since the page can spoof the URL by using document.location
         // right before requesting login data. See bug 1194567 for more context.
@@ -163,9 +162,7 @@ class LoginsHelper: TabContentScript {
     }
 
     fileprivate func promptSave(_ login: LoginEntry) {
-        guard login.isValid.isSuccess else {
-            return
-        }
+        guard login.isValid.isSuccess else { return }
 
         let promptMessage: String
         let https = "^https:\\/\\/"
@@ -198,9 +195,7 @@ class LoginsHelper: TabContentScript {
     }
 
     fileprivate func promptUpdateFromLogin(login old: LoginRecord, toLogin new: LoginEntry) {
-        guard new.isValid.isSuccess else {
-            return
-        }
+        guard new.isValid.isSuccess else { return }
 
         let formatted: String
         let userName = new.username
@@ -239,16 +234,13 @@ class LoginsHelper: TabContentScript {
 
             // We pass in the webview's URL and derive the origin here
             // to workaround Bug 1194567.
-            let origin = getOrigin(url.absoluteString) else {
-            return
-        }
+            let origin = getOrigin(url.absoluteString)
+        else { return }
 
         let protectionSpace = URLProtectionSpace.fromOrigin(origin)
 
         profile.logins.getLoginsForProtectionSpace(protectionSpace).uponQueue(.main) { res in
-            guard let cursor = res.successValue else {
-                return
-            }
+            guard let cursor = res.successValue else { return }
 
             let logins: [[String: Any]] = cursor.compactMap { login in
                 // `requestLogins` is for webpage forms, not for HTTP Auth, and the latter has httpRealm != nil; filter those out.

@@ -127,7 +127,8 @@ enum Experiments {
 
     static let remoteSettingsURL: String? = {
         guard let url = Bundle.main.object(forInfoDictionaryKey: NIMBUS_URL_KEY) as? String,
-              !url.isEmptyOrWhitespace() else {
+              !url.isEmptyOrWhitespace()
+        else {
             log.error("No Nimbus URL found in Info.plist")
             return nil
         }
@@ -149,13 +150,9 @@ enum Experiments {
         // If no URL is specified, or it's not valid continue with as if
         // we're enabled. This to allow testing of the app, without standing
         // up a `RemoteSettings` server.
-        guard let urlString = Experiments.remoteSettingsURL else {
-            return nil
-        }
-
-        guard let url = URL(string: urlString) else {
-            return nil
-        }
+        guard let urlString = Experiments.remoteSettingsURL,
+              let url = URL(string: urlString)
+        else { return nil }
 
         if usePreviewCollection() {
             return NimbusServerSettings(url: url, collection: "nimbus-preview")

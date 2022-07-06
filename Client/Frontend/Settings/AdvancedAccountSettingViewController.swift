@@ -29,7 +29,15 @@ private class CustomFxAContentServerEnableSetting: BoolSetting {
   }
 
   private class CustomURLSetting: WebPageSetting {
-      override init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, isChecked: @escaping () -> Bool = { return false }, settingDidChange: ((String?) -> Void)? = nil) {
+      override init(
+        prefs: Prefs,
+        prefKey: String,
+        defaultValue: String? = nil,
+        placeholder: String,
+        accessibilityIdentifier: String,
+        isChecked: @escaping () -> Bool = { return false },
+        settingDidChange: ((String?) -> Void)? = nil
+      ) {
           super.init(prefs: prefs,
                      prefKey: prefKey,
                      defaultValue: defaultValue,
@@ -60,7 +68,13 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
         let prefs = profile.prefs
 
-        let useStage = BoolSetting(prefs: prefs, prefKey: PrefsKeys.UseStageServer, defaultValue: false, attributedTitleText: NSAttributedString(string: .AdvancedAccountUseStageServer, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])) { isOn in
+        let useStage = BoolSetting(
+            prefs: prefs,
+            prefKey: PrefsKeys.UseStageServer,
+            defaultValue: false,
+            attributedTitleText: NSAttributedString(
+                string: .AdvancedAccountUseStageServer,
+                attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])) { isOn in
             self.settings = self.generateSettings()
             self.tableView.reloadData()
         }

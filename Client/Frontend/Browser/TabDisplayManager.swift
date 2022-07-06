@@ -163,7 +163,10 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         collectionView.cancelInteractiveMovement()
         collectionView.endInteractiveMovement()
 
-        // Long-pressing a cell to initiate dragging, but not actually moving the cell, will not trigger the collectionView's internal 'interactive movement' vars/funcs, and cancelInteractiveMovement() will not work. The gesture recognizer needs to be cancelled in this case.
+        // Long-pressing a cell to initiate dragging, but not actually moving the cell,
+        // will not trigger the collectionView's internal 'interactive movement'
+        // vars/funcs, and cancelInteractiveMovement() will not work. The gesture
+        // recognizer needs to be cancelled in this case.
         collectionView.gestureRecognizers?.forEach { $0.cancel() }
 
         return isActive
@@ -356,9 +359,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                   cell.isSelectedTab,
                   let tab = dataStore.at(index),
                   tab != currentlySelected
-            else {
-                continue
-            }
+            else { continue }
 
             return IndexPath(row: index, section: inSection)
         }
@@ -436,9 +437,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             return
         }
 
-        guard let index = collectionView.indexPath(for: cell)?.item, let tab = dataStore.at(index) else {
-            return
-        }
+        guard let index = collectionView.indexPath(for: cell)?.item, let tab = dataStore.at(index) else { return }
 
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
             if self.isPrivate == false, tabsToDisplay.count + (self.tabsInAllGroups?.count ?? 0) == 1 {
@@ -715,9 +714,7 @@ extension TabDisplayManager: UIDropInteractionDelegate {
         recordEventAndBreadcrumb(object: .url, method: .drop)
 
         _ = session.loadObjects(ofClass: URL.self) { urls in
-            guard let url = urls.first else {
-                return
-            }
+            guard let url = urls.first else { return }
 
             self.tabManager.addTab(URLRequest(url: url), isPrivate: self.isPrivate)
         }
@@ -777,9 +774,11 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        guard collectionView.hasActiveDrag, let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = dataStore.index(of: tab) else {
-            return
-        }
+        guard collectionView.hasActiveDrag,
+              let destinationIndexPath = coordinator.destinationIndexPath,
+              let dragItem = coordinator.items.first?.dragItem,
+              let tab = dragItem.localObject as? Tab,
+              let sourceIndex = dataStore.index(of: tab) else { return }
 
         // This enforces that filtered tabs, and tabs manager are in sync
         if tab.isPrivate {
@@ -889,9 +888,7 @@ extension TabDisplayManager: TabEventHandler {
     }
 
     private func refreshCell(atIndexPath indexPath: IndexPath, forceUpdate: Bool = true) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? TabTrayCell, let tab = dataStore.at(indexPath.row) else {
-            return
-        }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TabTrayCell, let tab = dataStore.at(indexPath.row) else { return }
 
         // Only update from nextTabIndex if needed
         guard forceUpdate || cell.isSelectedTab else { return }
@@ -917,9 +914,12 @@ extension TabDisplayManager: TabManagerDelegate {
             updateCellFor(tab: selected, selectedTabChanged: changed)
         }
 
-        // Rather than using 'previous' Tab to deselect, just check if the selected tab is different, and update the required cells.
-        // The refreshStore() cancels pending operations are reloads data, so we don't want functions that rely on
-        // any assumption of previous state of the view. Passing a previous tab (and relying on that to redraw the previous tab as unselected) would be making this assumption about the state of the view.
+        // Rather than using 'previous' Tab to deselect, just check if the selected tab
+        // is different, and update the required cells. The refreshStore() cancels
+        // pending operations are reloads data, so we don't want functions that rely on
+        // any assumption of previous state of the view. Passing a previous tab (and
+        // relying on that to redraw the previous tab as unselected) would be making
+        // this assumption about the state of the view.
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
@@ -990,9 +990,10 @@ extension TabDisplayManager: TabManagerDelegate {
      and for bulk updates where it is ok to just redraw the entire view with the latest state, use `refreshStore()`.
      */
     private func performChainedOperations() {
-        guard !performingChainedOperations, let (type, operation) = operations.popLast() else {
-            return
-        }
+        guard !performingChainedOperations,
+              let (type, operation) = operations.popLast()
+        else { return }
+
         performingChainedOperations = true
         collectionView.performBatchUpdates({ [weak self] in
             // Baseline animation speed is 1.0, which is too slow, this (odd) code sets it to 3x

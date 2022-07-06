@@ -155,7 +155,12 @@ open class SQLiteHistory {
     }
 }
 
-private let topSitesQuery = "SELECT cached_top_sites.*, page_metadata.provider_name FROM cached_top_sites LEFT OUTER JOIN page_metadata ON cached_top_sites.url = page_metadata.site_url ORDER BY frecencies DESC LIMIT (?)"
+private let topSitesQuery = """
+        SELECT cached_top_sites.*, page_metadata.provider_name \
+        FROM cached_top_sites \
+        LEFT OUTER JOIN page_metadata ON cached_top_sites.url = page_metadata.site_url \
+        ORDER BY frecencies DESC LIMIT (?)
+        """
 
 /**
  * The init for this will perform the heaviest part of the frecency query
@@ -974,9 +979,7 @@ extension SQLiteHistory: SyncableHistory {
         } >>== { visits in
             // Join up the places map we received as input with our visits map.
             let placesAndVisits: [(Place, [Visit])] = places.compactMap { id, place in
-                guard let visitsList = visits[id], !visitsList.isEmpty else {
-                    return nil
-                }
+                guard let visitsList = visits[id], !visitsList.isEmpty else { return nil }
                 return (place, visitsList)
             }
 

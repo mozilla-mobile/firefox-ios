@@ -89,7 +89,99 @@ extension URL {
 }
 
 // The list of permanent URI schemes has been taken from http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
-private let permanentURISchemes = ["aaa", "aaas", "about", "acap", "acct", "cap", "cid", "coap", "coaps", "crid", "data", "dav", "dict", "dns", "dtn", "example", "file", "ftp", "geo", "go", "gopher", "h323", "http", "https", "iax", "icap", "im", "imap", "info", "ipn", "ipp", "ipps", "iris", "iris.beep", "iris.lwz", "iris.xpc", "iris.xpcs", "jabber", "ldap", "leaptofrogans", "mailto", "mid", "msrp", "msrps", "mtqp", "mupdate", "news", "nfs", "ni", "nih", "nntp", "opaquelocktoken", "pkcs11", "pop", "pres", "reload", "rtsp", "rtsps", "rtspu", "service", "session", "shttp", "sieve", "sip", "sips", "sms", "snmp", "soap.beep", "soap.beeps", "stun", "stuns", "tag", "tel", "telnet", "tftp", "thismessage", "tip", "tn3270", "turn", "turns", "tv", "urn", "vemmi", "vnc", "ws", "wss", "xcon", "xcon-userid", "xmlrpc.beep", "xmlrpc.beeps", "xmpp", "z39.50r", "z39.50s"]
+private let permanentURISchemes = ["aaa",
+                                   "aaas",
+                                   "about",
+                                   "acap",
+                                   "acct",
+                                   "cap",
+                                   "cid",
+                                   "coap",
+                                   "coaps",
+                                   "crid",
+                                   "data",
+                                   "dav",
+                                   "dict",
+                                   "dns",
+                                   "dtn",
+                                   "example",
+                                   "file",
+                                   "ftp",
+                                   "geo",
+                                   "go",
+                                   "gopher",
+                                   "h323",
+                                   "http",
+                                   "https",
+                                   "iax",
+                                   "icap",
+                                   "im",
+                                   "imap",
+                                   "info",
+                                   "ipn",
+                                   "ipp",
+                                   "ipps",
+                                   "iris",
+                                   "iris.beep",
+                                   "iris.lwz",
+                                   "iris.xpc",
+                                   "iris.xpcs",
+                                   "jabber",
+                                   "ldap",
+                                   "leaptofrogans",
+                                   "mailto",
+                                   "mid",
+                                   "msrp",
+                                   "msrps",
+                                   "mtqp",
+                                   "mupdate",
+                                   "news",
+                                   "nfs",
+                                   "ni",
+                                   "nih",
+                                   "nntp",
+                                   "opaquelocktoken",
+                                   "pkcs11",
+                                   "pop",
+                                   "pres",
+                                   "reload",
+                                   "rtsp",
+                                   "rtsps",
+                                   "rtspu",
+                                   "service",
+                                   "session",
+                                   "shttp",
+                                   "sieve",
+                                   "sip",
+                                   "sips",
+                                   "sms",
+                                   "snmp",
+                                   "soap.beep",
+                                   "soap.beeps",
+                                   "stun",
+                                   "stuns",
+                                   "tag",
+                                   "tel",
+                                   "telnet",
+                                   "tftp",
+                                   "thismessage",
+                                   "tip",
+                                   "tn3270",
+                                   "turn",
+                                   "turns",
+                                   "tv",
+                                   "urn",
+                                   "vemmi",
+                                   "vnc",
+                                   "ws",
+                                   "wss",
+                                   "xcon",
+                                   "xcon-userid",
+                                   "xmlrpc.beep",
+                                   "xmlrpc.beeps",
+                                   "xmpp",
+                                   "z39.50r",
+                                   "z39.50s"]
 
 extension URL {
 
@@ -137,9 +229,11 @@ extension URL {
     }
 
     public var origin: String? {
-        guard isWebPage(includeDataURIs: false), let hostPort = self.hostPort, let scheme = scheme else {
-            return nil
-        }
+        guard isWebPage(includeDataURIs: false),
+              let hostPort = self.hostPort,
+              let scheme = scheme
+        else { return nil }
+
         return "\(scheme)://\(hostPort)"
     }
 
@@ -250,9 +344,10 @@ extension URL {
     public var normalizedHost: String? {
         // Use components.host instead of self.host since the former correctly preserves
         // brackets for IPv6 hosts, whereas the latter strips them.
-        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false), var host = components.host, host != "" else {
-            return nil
-        }
+        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
+              var host = components.host,
+              host != ""
+        else { return nil }
 
         if let range = host.range(of: "^(www|mobile|m)\\.", options: .regularExpression) {
             host.replaceSubrange(range, with: "")
@@ -419,9 +514,7 @@ public struct InternalURL {
     }
 
     public init?(_ url: URL) {
-        guard InternalURL.isValid(url: url) else {
-            return nil
-        }
+        guard InternalURL.isValid(url: url) else { return nil }
 
         self.url = url
     }
@@ -494,9 +587,7 @@ public struct InternalURL {
     /// Return the path after "about/" in the URI.
     public var aboutComponent: String? {
         let aboutPath = "/about/"
-        guard let url = URL(string: stripAuthorization) else {
-            return nil
-        }
+        guard let url = URL(string: stripAuthorization) else { return nil }
 
         if url.path.hasPrefix(aboutPath) {
             return String(url.path.dropFirst(aboutPath.count))

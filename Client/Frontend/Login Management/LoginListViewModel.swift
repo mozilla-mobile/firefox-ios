@@ -109,9 +109,10 @@ final class LoginListViewModel {
 
     func indexPathForLogin(_ login: LoginRecord) -> IndexPath? {
         let title = self.helper.titleForLogin(login)
-        guard let section = self.titles.firstIndex(of: title), let row = self.loginRecordSections[title]?.firstIndex(of: login) else {
-            return nil
-        }
+        guard let section = self.titles.firstIndex(of: title),
+              let row = self.loginRecordSections[title]?.firstIndex(of: login)
+        else { return nil }
+
         return IndexPath(row: row, section: section+1)
     }
 
@@ -128,12 +129,15 @@ final class LoginListViewModel {
         // NB: Make sure we call the callback on the main thread so it can be synced up with a reloadData to
         //     prevent race conditions between data/UI indexing.
         return self.helper.computeSectionsFromLogins(logins).uponQueue(.main) { result in
-            guard let (titles, sections) = result.successValue, logins.count > 0 else {
+            guard let (titles, sections) = result.successValue,
+                  logins.count > 0
+            else {
                 self.count = 0
                 self.titles = []
                 self.loginRecordSections = [:]
                 return
             }
+
             self.count = logins.count
             self.titles = titles
             self.loginRecordSections = sections

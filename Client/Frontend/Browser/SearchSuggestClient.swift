@@ -41,7 +41,9 @@ class SearchSuggestClient {
                 return
             }
 
-            guard let data = data, let _ = validatedHTTPResponse(response, statusCode: 200..<300) else {
+            guard let data = data,
+                  let _ = validatedHTTPResponse(response, statusCode: 200..<300)
+            else {
                 let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
                 callback(nil, error as NSError?)
                 return

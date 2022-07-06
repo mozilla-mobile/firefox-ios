@@ -50,12 +50,18 @@ class LoginListViewController: SensitiveViewController {
         return prefs.boolForKey(PrefsKeys.LoginsShowShortcutMenuItem) ?? true
     }
 
-    static func create(authenticateInNavigationController navigationController: UINavigationController, profile: Profile, settingsDelegate: SettingsDelegate, webpageNavigationHandler: ((_ url: URL?) -> Void)?) -> Deferred<LoginListViewController?> {
+    static func create(
+        authenticateInNavigationController navigationController: UINavigationController,
+        profile: Profile,
+        settingsDelegate: SettingsDelegate,
+        webpageNavigationHandler: ((_ url: URL?) -> Void)?
+    ) -> Deferred<LoginListViewController?> {
         let deferred = Deferred<LoginListViewController?>()
 
         func fillDeferred(ok: Bool) {
             if ok {
-                let viewController = LoginListViewController(profile: profile, webpageNavigationHandler: webpageNavigationHandler)
+                let viewController = LoginListViewController(profile: profile,
+                                                             webpageNavigationHandler: webpageNavigationHandler)
                 viewController.settingsDelegate = settingsDelegate
                 deferred.fill(viewController)
             } else {
@@ -88,7 +94,7 @@ class LoginListViewController: SensitiveViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = .LoginsAndPasswordsTitle
+        self.title = .Settings.Passwords.LoginsAndPasswordsTitle
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: CellReuseIdentifier)
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderId)
@@ -359,9 +365,7 @@ extension LoginListViewController: UITableViewDelegate {
         if section != 1 {
             return nil
         }
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderId) as? ThemedTableSectionHeaderFooterView else {
-            return nil
-        }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderId) as? ThemedTableSectionHeaderFooterView else { return nil }
         headerView.titleLabel.text = .LoginsListTitle
         headerView.titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmall
         // not using a grouped table: show header borders

@@ -38,10 +38,13 @@ class FxAWebViewModel {
     static let mobileUserAgent = UserAgent.mobileUserAgent()
 
     func setupUserScript(for controller: WKUserContentController) {
-        guard let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"), let source = try? String(contentsOfFile: path, encoding: .utf8) else {
+        guard let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"),
+              let source = try? String(contentsOfFile: path, encoding: .utf8)
+        else {
             assert(false)
             return
         }
+
         let userScript = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
         controller.addUserScript(userScript)
     }
@@ -123,7 +126,9 @@ class FxAWebViewModel {
 // MARK: - Commands
 extension FxAWebViewModel {
     func handle(scriptMessage message: WKScriptMessage) {
-        guard let url = baseURL, let webView = message.webView else { return }
+        guard let url = baseURL,
+              let webView = message.webView
+        else { return }
 
         let origin = message.frameInfo.securityOrigin
         guard origin.`protocol` == url.scheme && origin.host == url.host && origin.port == (url.port ?? 0) else {
@@ -132,10 +137,11 @@ extension FxAWebViewModel {
         }
 
         guard message.name == "accountsCommandHandler" else { return }
-        guard let body = message.body as? [String: Any], let detail = body["detail"] as? [String: Any],
-            let msg = detail["message"] as? [String: Any], let cmd = msg["command"] as? String else {
-                return
-        }
+        guard let body = message.body as? [String: Any],
+              let detail = body["detail"] as? [String: Any],
+              let msg = detail["message"] as? [String: Any],
+              let cmd = msg["command"] as? String
+        else { return }
 
         let id = Int(msg["messageId"] as? String ?? "")
         handleRemote(command: cmd, id: id, data: msg["data"], webView: webView)
@@ -185,7 +191,9 @@ extension FxAWebViewModel {
         webView.evaluateJavascriptInDefaultContentWorld(msg)
     }
 
-    /// Respond to the webpage session status notification by either passing signed in user info (for settings), or by passing CWTS setup info (in case the user is signing up for an account). This latter case is also used for the sign-in state.
+    /// Respond to the webpage session status notification by either passing signed in
+    /// user info (for settings), or by passing CWTS setup info (in case the user is
+    /// signing up for an account). This latter case is also used for the sign-in state.
     private func onSessionStatus(id: Int, webView: WKWebView) {
         guard let fxa = profile.rustFxA.accountManager.peek() else { return }
         let cmd = "fxaccounts:fxa_status"
@@ -220,9 +228,10 @@ extension FxAWebViewModel {
     }
 
     private func onLogin(data: Any, webView: WKWebView) {
-        guard let data = data as? [String: Any], let code = data["code"] as? String, let state = data["state"] as? String else {
-            return
-        }
+        guard let data = data as? [String: Any],
+              let code = data["code"] as? String,
+              let state = data["state"] as? String
+        else { return }
 
         if let declinedSyncEngines = data["declinedSyncEngines"] as? [String] {
             // Stash the declined engines so on first sync we can disable them!
@@ -237,9 +246,7 @@ extension FxAWebViewModel {
             MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
             let center = UNUserNotificationCenter.current()
             center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-                guard error == nil else {
-                    return
-                }
+                guard error == nil else { return }
                 if granted {
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
                 }
@@ -251,9 +258,9 @@ extension FxAWebViewModel {
     }
 
     private func onPasswordChange(data: Any, webView: WKWebView) {
-        guard let data = data as? [String: Any], let sessionToken = data["sessionToken"] as? String else {
-            return
-        }
+        guard let data = data as? [String: Any],
+              let sessionToken = data["sessionToken"] as? String
+        else { return }
 
         profile.rustFxA.accountManager.peek()?.handlePasswordChanged(newSessionToken: sessionToken) {
             NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)

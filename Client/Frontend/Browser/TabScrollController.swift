@@ -133,17 +133,13 @@ class TabScrollingController: NSObject, FeatureFlaggable {
     }
 
     func updateMinimumZoom() {
-        guard let scrollView = scrollView else {
-            return
-        }
+        guard let scrollView = scrollView else { return }
         self.isZoomedOut = roundNum(scrollView.zoomScale) == roundNum(scrollView.minimumZoomScale)
         self.lastZoomedScale = self.isZoomedOut ? 0 : scrollView.zoomScale
     }
 
     func setMinimumZoom() {
-        guard let scrollView = scrollView else {
-            return
-        }
+        guard let scrollView = scrollView else { return }
         if self.isZoomedOut && roundNum(scrollView.zoomScale) != roundNum(scrollView.minimumZoomScale) {
             scrollView.zoomScale = scrollView.minimumZoomScale
         }
