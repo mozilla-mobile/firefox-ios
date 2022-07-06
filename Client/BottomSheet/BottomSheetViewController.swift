@@ -13,7 +13,7 @@ enum BottomSheetState {
     case full
 }
 
-protocol BottomSheetDelegate {
+protocol BottomSheetDelegate: AnyObject {
     func closeBottomSheet()
     func showBottomToolbar()
 }
