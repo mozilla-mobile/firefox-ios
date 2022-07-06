@@ -125,6 +125,9 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
         refreshIfNeeded(forceTopSites: false)
     }
 
+    /// Get available space count for the sponsored tiles and Google tiles
+    /// - Parameter numberOfTilesPerRow: Comes from top sites view model and accounts for different layout (landscape, portrait, iPhone, iPad, etc).
+    /// - Returns: The available space count for the rest of the calculation
     private func getAvailableSpaceCount(numberOfTilesPerRow: Int) -> Int {
         let pinnedSiteCount = countPinnedSites(sites: historySites)
         let totalNumberOfShownTiles = numberOfTilesPerRow * numberOfRows
