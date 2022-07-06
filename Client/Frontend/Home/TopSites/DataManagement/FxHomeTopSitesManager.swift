@@ -41,7 +41,7 @@ class FxHomeTopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
     }
 
     var hasData: Bool {
-        return !historySites.isEmpty
+        return !topSites.isEmpty
     }
 
     var siteCount: Int {
