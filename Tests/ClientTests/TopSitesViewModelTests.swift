@@ -9,7 +9,7 @@ import Shared
 import Storage
 import SyncTelemetry
 
-class FxHomeTopSitesViewModelTests: XCTestCase {
+class TopSitesViewModelTests: XCTestCase {
     var profile: MockProfile!
 
     override func setUp() {
@@ -168,13 +168,13 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
 }
 
 // MARK: Helper methods
-extension FxHomeTopSitesViewModelTests {
+extension TopSitesViewModelTests {
 
     func createViewModel(overridenSiteCount: Int = 40, overridenNumberOfRows: Int = 2) -> TopSitesViewModel {
         let viewModel = TopSitesViewModel(profile: self.profile,
                                                 isZeroSearch: false)
 
-        let managerStub = FxHomeTopSitesManagerStub(profile: profile)
+        let managerStub = TopSitesManagerStub(profile: profile)
         managerStub.overridenSiteCount = overridenSiteCount
         managerStub.overridenNumberOfRows = overridenNumberOfRows
         viewModel.tileManager = managerStub
@@ -202,8 +202,8 @@ class FakeTraitCollection: UITraitCollection {
     }
 }
 
-// MARK: FxHomeTopSitesManagerStub
-private class FxHomeTopSitesManagerStub: TopSitesManager {
+// MARK: TopSitesManagerStub
+private class TopSitesManagerStub: TopSitesManager {
 
     var overridenSiteCount = 40
     override var siteCount: Int {
