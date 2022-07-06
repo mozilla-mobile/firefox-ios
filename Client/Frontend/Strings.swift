@@ -25,7 +25,7 @@ public struct Strings {
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 private enum StringLastUpdatedAppVersion {
-    case v39, v96, v97, v98, v99, v100, v101, v102, v103
+    case v39, v96, v97, v98, v99, v100, v101, v102, v103, v104
 
     // Used for all cases before version 39.
     case unknown
@@ -249,6 +249,11 @@ extension String {
                 value: "Your search for \"%@\"",
                 comment: "On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did.",
                 lastUpdated: .v39)
+            public static let SyncedTabTitle = MZLocalizedString(
+                "FirefoxHome.JumpBackIn.SyncedTab.Title.v104",
+                value: "Tab pickup",
+                comment: "Title shown for latest synced tab on the Firefox homepage in the Jump Back In section.",
+                lastUpdated: .v104)
         }
 
         public struct Pocket {
