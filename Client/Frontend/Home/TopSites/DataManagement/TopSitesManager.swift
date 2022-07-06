@@ -41,10 +41,7 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
     }
 
     var hasData: Bool {
-        // We cannot simply look if there's contiles data to look for other data since it won't necessarely show
-        // depending on the different contiles rules
-        let hasOtherData = shouldAddSponsoredTiles || googleTopSiteManager.shouldAddGoogleTopSite(hasSpace: true)
-        return !historySites.isEmpty || (historySites.isEmpty && hasOtherData)
+        return !topSites.isEmpty
     }
 
     var siteCount: Int {

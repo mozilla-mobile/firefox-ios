@@ -32,17 +32,9 @@ class TopSitesManagerTests: XCTestCase, FeatureFlaggable {
     }
 
     func testEmptyData_whenNotLoaded() {
-        profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteAddedKey)
-        profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
-
         let manager = TopSitesManager(profile: profile)
         XCTAssertFalse(manager.hasData)
         XCTAssertEqual(manager.siteCount, 0)
-    }
-
-    func testNotEmptyData_whenNotLoaded_accountingForGoogle() {
-        let manager = TopSitesManager(profile: profile)
-        XCTAssertTrue(manager.hasData)
     }
 
     func testEmptyData_getSites() {
