@@ -20,13 +20,13 @@ struct GroupedTabCellProperties {
     }
 }
 
-protocol GroupedTabsDelegate {
+protocol GroupedTabsDelegate: AnyObject {
     func didSelectGroupedTab(tab: Tab?)
     func closeTab(tab: Tab)
     func performSearchOfGroupInNewTab(searchTerm: String?)
 }
 
-protocol GroupedTabDelegate {
+protocol GroupedTabDelegate: AnyObject {
     func closeGroupTab(tab: Tab)
     func selectGroupTab(tab: Tab)
     func newSearchFromGroup(searchTerm: String)
