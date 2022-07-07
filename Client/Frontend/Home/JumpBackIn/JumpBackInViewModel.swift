@@ -259,7 +259,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         // get most recent tab
         var mostRecentTab: (client: RemoteClient, tab: RemoteTab)?
 
-        for remoteClient in desktopClientAndTabs {
+        desktopClientAndTabs.forEach { remoteClient in
             let mostRecentClientTab = remoteClient.tabs.reduce(remoteClient.tabs.first!, {
                                                                 $0.lastUsed > $1.lastUsed ? $0 : $1 })
 
