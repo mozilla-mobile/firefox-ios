@@ -2,7 +2,7 @@ import XCTest
 
 class TabsPerformanceTest: BaseTestCase {
 
-    let fixtures:[String:String] = ["testPerfTabs_1_20startup": "tabsState20.archive", "testPerfTabs_3_20tabTray":"tabsState20.archive", "testPerfTabs_2_1280startup": "tabsState1280.archive", "testPerfTabs_4_1280tabTray":"tabsState1280.archive"]
+    let fixtures = ["testPerfTabs_1_20startup": "tabsState20.archive", "testPerfTabs_3_20tabTray": "tabsState20.archive", "testPerfTabs_2_1280startup": "tabsState1280.archive", "testPerfTabs_4_1280tabTray": "tabsState1280.archive"]
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out function name

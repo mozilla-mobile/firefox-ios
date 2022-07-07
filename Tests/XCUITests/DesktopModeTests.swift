@@ -50,7 +50,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(BrowserTab)
-        
+
         // Tab #2
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
@@ -88,7 +88,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
-    
+
     // Smoketest
     func testChangeModeInSameTab() {
         if skipPlatform { return }
@@ -102,7 +102,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-        
+
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.requestMobileSite])

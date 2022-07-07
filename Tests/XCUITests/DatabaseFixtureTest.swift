@@ -47,14 +47,14 @@ class DatabaseFixtureTest: BaseTestCase {
     }*/
 
     func testHistoryDatabaseFixture() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
 
-        // History list has two cells that are for recently closed and synced devices that should not count as history items,
+        // History list has one cell that are for recently closed
         // the actual max number is 100
-        let loaded = NSPredicate(format: "count == 102")
+        let loaded = NSPredicate(format: "count == 101")
         expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
         waitForExpectations(timeout: 30, handler: nil)
     }

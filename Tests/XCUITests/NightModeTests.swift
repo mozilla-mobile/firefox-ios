@@ -18,17 +18,17 @@ class NightModeTests: BaseTestCase {
         // Go to a webpage, and select night mode on and off, check it's applied or not
         navigator.openURL(path(forTestPage: url1))
 
-        //turn on the night mode
+        // turn on the night mode
         navigator.performAction(Action.ToggleNightMode)
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
-        //checking night mode on or off
+        // checking night mode on or off
         checkNightModeOn()
 
-        //turn off the night mode
+        // turn off the night mode
         navigator.performAction(Action.ToggleNightMode)
 
-        //checking night mode on or off
+        // checking night mode on or off
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         checkNightModeOff()

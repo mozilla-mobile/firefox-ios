@@ -74,7 +74,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.staticTexts["Paste"].tap()
         waitForExistence(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
         XCTAssertTrue(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
-                                
+
         // Need to go step by step to Search Settings. The ScreenGraph will fail to go to the Search Settings Screen
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
         app.buttons["urlBar-cancel"].tap()
@@ -82,10 +82,10 @@ class ThirdPartySearchTest: BaseTestCase {
         app.tables["Context Menu"].otherElements["Settings"].tap()
         waitForExistence(app.tables.staticTexts["Google"])
         app.tables.staticTexts["Google"].tap()
-        
+
         navigator.performAction(Action.RemoveCustomSearchEngine)
         dismissSearchScreen()
-        
+
         // Perform a search to check
         waitForExistence(app.textFields["url"], timeout: 3)
         app.textFields["url"].tap()
@@ -97,7 +97,7 @@ class ThirdPartySearchTest: BaseTestCase {
         waitForNoExistence(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
         XCTAssertFalse(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
     }
-    
+
     private func addCustomSearchEngine() {
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
@@ -127,9 +127,9 @@ class ThirdPartySearchTest: BaseTestCase {
         navigator.goto(AddCustomSearchSettings)
         app.textViews["customEngineTitle"].tap()
         app.typeText("Feeling Lucky")
-        
+
         UIPasteboard.general.string = "http://www.google.com/search?q=&btnI"
-        
+
         let tablesQuery = app.tables
         let customengineurlTextView = tablesQuery.textViews["customEngineUrl"].staticTexts["URL (Replace Query with %s)"]
 

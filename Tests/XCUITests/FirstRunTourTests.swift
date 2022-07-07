@@ -1,6 +1,5 @@
 import XCTest
 
-
 class FirstRunTourTests: BaseTestCase {
 
     let onboardingAccessibilityId = [AccessibilityIdentifiers.Onboarding.welcomeCard,
@@ -53,7 +52,7 @@ class FirstRunTourTests: BaseTestCase {
         let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         waitForExistence(topSites)
     }
-    
+
     func testShowTourFromSettings() {
         goToNextScreen()
         goToNextScreen()

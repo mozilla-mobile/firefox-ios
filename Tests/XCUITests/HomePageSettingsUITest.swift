@@ -18,7 +18,7 @@ class HomePageSettingsUITests: BaseTestCase {
     }
     let testWithDB = ["testTopSitesCustomNumberOfRows"]
     let prefilledTopSites = "testBookmarksDatabase1000-browser.db"
-    
+
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
@@ -40,8 +40,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(HomeSettings)
         XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
         XCTAssertTrue(app.tables.cells["HomeAsCustomURL"].exists)
-        waitForExistence(app.tables.cells["TopSitesRows"])
-        XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Shortcuts, Rows: 2")
+        XCTAssert(app.tables.cells["WallpaperSettings"].exists)
         XCTAssertTrue(app.cells.switches["Recommended by Pocket"].exists)
     }
 
@@ -63,7 +62,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
 
-        //Now check open home page should load the previously saved home page
+        // Now check open home page should load the previously saved home page
         let homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.homeButton]
         waitForExistence(homePageMenuItem, timeout: 5)
         homePageMenuItem.tap()
@@ -129,43 +128,6 @@ class HomePageSettingsUITests: BaseTestCase {
         waitForExistence(app.textFields["url"], timeout: 5)
         waitForValueContains(app.textFields["url"], value: "mozilla")
     }
-    
-    func testTopSitesCustomNumberOfRows() {
-        navigator.performAction(Action.CloseURLBarOpen)
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
-        var topSitesPerRow:Int
-        //Ensure testing in portrait mode
-        XCUIDevice.shared.orientation = .portrait
-        //Run test for both iPhone and iPad devices as behavior differs between the two
-        if iPad() {
-            // On iPad, 6 top sites per row are displayed
-            topSitesPerRow = 8
-            //Test each of the custom row options from 1-4
-            for n in 1...4 {
-                userState.numTopSitesRows = n
-                navigator.goto(HomeSettings)
-                app.tables.cells.element(boundBy: 3).tap()
-                app.tables.cells.element(boundBy: n-1).tap()
-                navigator.goto(SettingsScreen)
-                app.buttons["Settings"].tap()
-                navigator.goto(NewTabScreen)
-                checkNumberOfExpectedTopSites(numberOfExpectedTopSites: (n * topSitesPerRow))
-            }
-        } else {
-            // On iPhone, 4 top sites per row are displayed
-            topSitesPerRow = 4
-            //Test each of the custom row options from 1-4
-            for n in 1...4 {
-                userState.numTopSitesRows = n
-                navigator.performAction(Action.SelectTopSitesRows)
-                XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Shortcuts, Rows: " + String(n))
-                navigator.goto(HomePanelsScreen)
-                navigator.nowAt(NewTabScreen)
-                checkNumberOfExpectedTopSites(numberOfExpectedTopSites: (n * topSitesPerRow))
-            }
-        }
-    }
 
     func testDisableTopSitesSettingsRemovesSection() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
@@ -184,26 +146,26 @@ class HomePageSettingsUITests: BaseTestCase {
         waitForNoExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         waitForNoExistence(app.collectionViews.cells.staticTexts["YouTube"])
     }
-    
+
     func testChangeHomeSettingsLabel() {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
-        //Go to New Tab settings and select Custom URL option
+        // Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectHomeAsCustomURL)
         navigator.nowAt(HomeSettings)
-        //Enter a custom URL
+        // Enter a custom URL
         enterWebPageAsHomepage(text: websiteUrl1)
         waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         navigator.goto(SettingsScreen)
         XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Homepage")
-        //Switch to FXHome and check label
+        // Switch to FXHome and check label
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
         navigator.nowAt(HomeSettings)
         navigator.goto(SettingsScreen)
         XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Firefox Home")
     }
 
-    //Function to check the number of top sites shown given a selected number of rows
+    // Function to check the number of top sites shown given a selected number of rows
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
         waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
@@ -212,7 +174,7 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testJumpBackIn() throws {
-        throw XCTSkip("Disabled failing in BR - investigating") 
+        throw XCTSkip("Disabled failing in BR - investigating")
 //        navigator.openURL(path(forTestPage: exampleUrl))
 //        waitUntilPageLoad()
 //        navigator.goto(TabTray)

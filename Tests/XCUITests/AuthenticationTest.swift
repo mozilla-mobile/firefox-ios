@@ -25,9 +25,8 @@ class AuthenticationTest: BaseTestCase {
         waitForExistence(app.alerts.buttons["Log in"])
 
         // Skip login due to HTTP Basic Authentication crash in #5757
-
         // Dismiss authentication prompt
         app.alerts.buttons["Cancel"].tap()
-        waitForNoExistence(app.alerts.buttons["Cancel"], timeoutValue:5)
+        waitForNoExistence(app.alerts.buttons["Cancel"], timeoutValue: 5)
     }
 }

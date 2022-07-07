@@ -55,6 +55,7 @@ class SyncUITests: BaseTestCase {
         waitForExistence(app.navigationBars["Turn on Sync"], timeout: 60)
 
         // Tap Sign in without any value in email Password focus on Email
+        waitForExistence(app.webViews.buttons["Continue"], timeout: 20)
         navigator.performAction(Action.FxATapOnContinueButton)
         waitForExistence(app.webViews.staticTexts["Valid email required"])
 
@@ -67,7 +68,7 @@ class SyncUITests: BaseTestCase {
         userState.fxaPassword = "foo"
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
-        waitForExistence(app.webViews.staticTexts["Must be at least 8 characters"])
+        waitForExistence(app.webViews.staticTexts["At least 8 characters"])
 
         // Enter valid but incorrect, it does not exists, password
         userState.fxaPassword = "atleasteight"
@@ -106,7 +107,7 @@ class SyncUITests: BaseTestCase {
         app.secureTextFields.element(boundBy: 0).typeText(XCUIKeyboardKey.delete.rawValue)
         waitForNoExistence(app.webViews.staticTexts["Show password"])
     }
-    
+
     func testQRPairing() {
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()

@@ -12,7 +12,7 @@ let testSecondLoginPage = path(forTestPage: "test-password-2.html")
 let savedLoginEntry = "test@example.com, http://localhost:\(serverPort)"
 let urlLogin = path(forTestPage: "empty-login-form.html")
 let mailLogin = "iosmztest@mailinator.com"
-//The following seem to be labels that change a lot and make the tests break; aka volatile. Let's keep them in one place.
+// The following seem to be labels that change a lot and make the tests break; aka volatile. Let's keep them in one place.
 let loginsListURLLabel = "Website, \(domain)"
 let loginsListUsernameLabel = "Username, test@example.com"
 let loginsListPasswordLabel = "Password"
@@ -60,7 +60,7 @@ class SaveLoginTest: BaseTestCase {
 
     func testLoginsListFromBrowserTabMenu() {
         closeURLBar()
-        //Make sure you can access empty Login List from Browser Tab Menu
+        // Make sure you can access empty Login List from Browser Tab Menu
         navigator.goto(LoginsSettings)
         unlockLoginsView()
         waitForExistence(app.tables["Login List"])
@@ -68,7 +68,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         saveLogin(givenUrl: testLoginPage)
-        //Make sure you can access populated Login List from Browser Tab Menu
+        // Make sure you can access populated Login List from Browser Tab Menu
         navigator.goto(LoginsSettings)
         unlockLoginsView()
         waitForExistence(app.tables["Login List"])
@@ -91,7 +91,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertTrue(app.staticTexts[domain].exists)
         // XCTAssertTrue(app.staticTexts[domainLogin].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
-        //Check to see how it works with multiple entries in the list- in this case, two for now
+        // Check to see how it works with multiple entries in the list- in this case, two for now
         saveLogin(givenUrl: testSecondLoginPage)
         openLoginsSettings()
         waitForExistence(app.tables["Login List"])
@@ -175,7 +175,7 @@ class SaveLoginTest: BaseTestCase {
         // Type Text that does not match
         app.typeText("b")
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsEmptyFilterList)
-        //waitForExistence(app.tables["No logins found"])
+        // waitForExistence(app.tables["No logins found"])
 
         // Clear Text
         app.buttons["Clear text"].tap()
@@ -192,14 +192,14 @@ class SaveLoginTest: BaseTestCase {
         waitUntilPageLoad()
         // Provided text fields are completely empty
         waitForExistence(app.webViews.staticTexts["Username:"], timeout: 15)
-        
+
         // Fill in the username text box
         app.webViews.textFields.element(boundBy: 0).tap()
         app.webViews.textFields.element(boundBy: 0).typeText(mailLogin)
         // Fill in the password text box
         app.webViews.secureTextFields.element(boundBy: 0).tap()
         app.webViews.secureTextFields.element(boundBy: 0).typeText("test15mz")
-        
+
         // Submit form and choose to save the logins
         app.buttons["submit"].tap()
         waitForExistence(app.buttons["SaveLoginPrompt.saveLoginButton"], timeout: 5)
@@ -208,7 +208,7 @@ class SaveLoginTest: BaseTestCase {
         // Clear Data and go to test page, fields should be filled in
         navigator.goto(SettingsScreen)
         navigator.performAction(Action.AcceptClearPrivateData)
-        
+
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         if iPad() {
@@ -256,7 +256,7 @@ class SaveLoginTest: BaseTestCase {
         // XCTAssertTrue(app.cells.staticTexts["foo"].exists)
     }
 
-    func enterTextInField(typedText: String){
+    func enterTextInField(typedText: String) {
         for letter in typedText {
             print("\(letter)")
             app.keyboards.keys["\(letter)"].tap()

@@ -76,7 +76,7 @@ class BookmarkingTests: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
-        
+
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         checkUnbookmarked()
@@ -100,20 +100,20 @@ class BookmarkingTests: BaseTestCase {
     }
 
     private func checkEmptyBookmarkList() {
-        waitForExistence(app.tables["Bookmarks List"], timeout:5)
+        waitForExistence(app.tables["Bookmarks List"], timeout: 5)
         let list = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 0, "There should not be any entry in the bookmarks list")
     }
 
     private func checkItemInBookmarkList() {
-        waitForExistence(app.tables["Bookmarks List"], timeout:5)
+        waitForExistence(app.tables["Bookmarks List"], timeout: 5)
         let list = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[url_2["bookmarkLabel"]!].exists)
     }
 
     func testAccessBookmarksFromContextMenu() {
-        //Add a bookmark
+        // Add a bookmark
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
@@ -122,7 +122,7 @@ class BookmarkingTests: BaseTestCase {
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         bookmark()
 
-        //There should be a bookmark
+        // There should be a bookmark
         navigator.goto(MobileBookmarks)
         checkItemInBookmarkList()
     }
@@ -137,7 +137,7 @@ class BookmarkingTests: BaseTestCase {
         typeOnSearchBar(text: "\r")
         navigator.nowAt(BrowserTab)
 
-         //Clear text and enter new url
+        // Clear text and enter new url
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(URLBarOpen)
@@ -271,7 +271,7 @@ class BookmarkingTests: BaseTestCase {
         waitForExistence(app.tables["Bookmarks List"], timeout: 5)
         XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 4)
 
-        //Add a bookmark
+        // Add a bookmark
         navigator.nowAt(LibraryPanel_Bookmarks)
         navigator.goto(NewTabScreen)
 
