@@ -185,7 +185,7 @@ class TelemetryWrapper {
         }
     }
     @objc func recordFinishedLaunchingPreferenceMetrics(notification: NSNotification) {
-        guard let profile = self.profile else { assert(false); return; }
+        guard let profile = self.profile else { return }
         // Pocket stories visible
         if let pocketStoriesVisible = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.ASPocketStories) {
             GleanMetrics.FirefoxHomePage.pocketStoriesVisible.set(pocketStoriesVisible)
