@@ -820,6 +820,24 @@
 /* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
 "LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Ջնջել";
 
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Ջնջե՞լ բոլոր կայքերը %@-ում:";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Հեռացնում է պատմությունը (ներառյալ այլ սարքերից համաժամացված պատմությունը), քուքիները և զննարկման այլ տվյալներ:";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "Պատմություն չի գտնվել";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "Վերջին փակված ներդիրները";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Մուտքագրեք որոնվող բառը";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
+"LibraryPanel.History.SyncedFromOtherDevices.v99" = "Համաժամեցված այլ սարերքից";
+
 /* Within the History Panel, users can see the option of viewing their history from synced tabs. */
 "LibraryPanel.History.SyncedHistory.v100" = "Համաժամեցված պատմություն";
 

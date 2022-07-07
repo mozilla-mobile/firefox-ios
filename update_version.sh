@@ -7,5 +7,8 @@ fi
 
 # If needed, modify the starting version number locally
 # This script is mainly a reference as to what needs to be updated
-ls Client/Info.plist Extensions/*/*Info.plist CredentialProvider/Info.plist WidgetKit/Info.plist | xargs perl -pi -e "s/0\.0\.1/$2/g"
+perl -pi -e "s/$1/$2/g" Client/Info.plist
+perl -pi -e "s/$1/$2/g" CredentialProvider/Info.plist
+perl -pi -e "s/$1/$2/g" Extensions/*/*Info.plist
+perl -pi -e "s/$1/$2/g" WidgetKit/Info.plist
 perl -pi -e "s/$1/$2/g" bitrise.yml
