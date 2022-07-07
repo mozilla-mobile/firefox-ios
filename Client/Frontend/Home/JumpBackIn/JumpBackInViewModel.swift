@@ -242,7 +242,7 @@ class JumpBackInViewModel: FeatureFlaggable {
                 completion()
                 return
             }
-            self.createMostRecentSyncedTab(clientAndTabs: clientAndTabs, completion: completion)
+            self.createMostRecentSyncedTab(from: clientAndTabs, completion: completion)
         }
     }
 
