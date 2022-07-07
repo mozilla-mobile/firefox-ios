@@ -90,8 +90,10 @@ class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell 
 
             midView.topAnchor.constraint(equalTo: containerView.topAnchor),
             midView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            midView.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 13),
-            midView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -7),
+            midView.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor,
+                                             constant: InactiveTabItemCellModel.UX.MidViewLeadingConstant),
+            midView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                              constant: InactiveTabItemCellModel.UX.MidViewTrailingConstant),
 
             titleLabel.topAnchor.constraint(equalTo: midView.topAnchor,
                                             constant: InactiveTabItemCellModel.UX.LabelTopBottomMargin),

@@ -13,6 +13,8 @@ struct InactiveTabItemCellModel {
         static let LabelTopBottomMargin: CGFloat = 11
         static let ImageTopBottomMargin: CGFloat = 10
         static let ImageViewLeadingConstant: CGFloat = 16
+        static let MidViewLeadingConstant: CGFloat = 12
+        static let MidViewTrailingConstant: CGFloat = -16
         static let SeparatorHeight: CGFloat = 0.5
     }
 
