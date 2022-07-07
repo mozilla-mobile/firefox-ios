@@ -61,14 +61,6 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
             tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-
-    func handleLeftTopButton() {
-        // no implementation needed
-    }
-
-    func handleRightTopButton() {
-        // no implementation needed
-    }
 }
 
 class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {

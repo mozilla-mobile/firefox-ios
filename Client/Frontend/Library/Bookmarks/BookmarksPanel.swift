@@ -23,7 +23,6 @@ private class SeparatorTableViewCell: OneLineTableViewCell {
     }
 }
 
-// TODO: Yoana missing itemEditMode case
 class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActionBookmark, Loggable {
 
     private struct UX {
@@ -234,7 +233,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         present(sheet, animated: true)
     }
 
-    private func getNewBookmarkAction() -> PhotonRowActions {
+    func getNewBookmarkAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .BookmarksNewBookmark,
                                      iconString: ImageIdentifiers.actionAddBookmark,
                                      tapHandler: { _ in

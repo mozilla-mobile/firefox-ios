@@ -310,14 +310,6 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return downloadedFilesInSection[safe: indexPath.row]
     }
 
-    func handleLeftTopButton() {
-        // no implementation needed
-    }
-
-    func handleRightTopButton() {
-        // no implementation needed
-    }
-
     // MARK: - TableView Delegate / DataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCellIdentifier, for: indexPath) as! TwoLineImageOverlayCell

@@ -94,7 +94,6 @@ class LibraryViewController: UIViewController {
     }
 
     private func viewSetup() {
-        print("YRD viewSetup")
         if let appWindow = (UIApplication.shared.delegate?.window),
            let window = appWindow as UIWindow? {
             window.backgroundColor = .black
@@ -246,14 +245,12 @@ class LibraryViewController: UIViewController {
 
     // MARK: - Buttons setup
     private func setupButtons() {
-        print("YRD setupButtons")
         topLeftButtonSetup()
         topRightButtonSetup()
         bottomToolbarButtonSetup()
     }
 
     private func topLeftButtonSetup() {
-        print("Yoana setup top button \(viewModel.currentPanelState)")
         switch viewModel.currentPanelState {
         case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
@@ -282,7 +279,6 @@ class LibraryViewController: UIViewController {
 
     private func bottomToolbarButtonSetup() {
         guard let panel = viewModel.currentPanel else { return }
-//        print("Yoana panelState \(panel.state)")
 
         let shouldHideBar = shouldHideBottomToolbar(panel: panel)
         navigationController?.setToolbarHidden(shouldHideBar, animated: true)

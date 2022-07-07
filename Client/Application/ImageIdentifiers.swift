@@ -36,7 +36,7 @@ public struct ImageIdentifiers {
     public static let help = "help"
     public static let history = "menu-panel-History"
     public static let key = "key"
-    public static let libraryBookmars = "library-bookmark"
+    public static let libraryBookmarks = "library-bookmark"
     public static let libraryDownloads = "library-downloads"
     public static let libraryHistory = "library-history"
     public static let libraryPanelDelete = "action_delete"

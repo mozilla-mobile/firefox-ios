@@ -36,6 +36,14 @@ extension LibraryPanel {
     func shouldDismissOnDone() -> Bool {
         return true
     }
+
+    func handleLeftTopButton() {
+        // no implementation needed
+    }
+
+    func handleRightTopButton() {
+        // no implementation needed
+    }
 }
 
 struct LibraryPanelUX {

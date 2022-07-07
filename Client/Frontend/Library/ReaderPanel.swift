@@ -329,14 +329,6 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         presentContextMenu(for: indexPath)
     }
 
-    func handleLeftTopButton() {
-        // no implementation needed
-    }
-
-    func handleRightTopButton() {
-        // no implementation needed
-    }
-
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
