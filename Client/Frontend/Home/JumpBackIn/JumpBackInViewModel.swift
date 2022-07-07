@@ -246,7 +246,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         }
     }
 
-    private func createMostRecentSyncedTab(clientAndTabs: [ClientAndTabs], completion: @escaping () -> Void) {
+    private func createMostRecentSyncedTab(from clientAndTabs: [ClientAndTabs], completion: @escaping () -> Void) {
         // filter clients for non empty desktop clients
         let desktopClientAndTabs = clientAndTabs.filter { $0.tabs.count > 0 && $0.client.type == "desktop" }
 
