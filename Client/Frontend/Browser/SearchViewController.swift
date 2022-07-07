@@ -89,6 +89,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     var searchFeature: FeatureHolder<Search>
     static var userAgent: String?
 
+    var hasFirefoxSuggestions: Bool {
+        return data.count != 0 || !filteredOpenedTabs.isEmpty || !filteredRemoteClientTabs.isEmpty || !searchHighlights.isEmpty
+    }
+
     init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager, featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search ) {
         self.viewModel = viewModel
         self.tabManager = tabManager
@@ -536,8 +540,29 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         return super.tableView(tableView, heightForRowAt: indexPath)
     }
 
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let headerView = view as? ThemedTableSectionHeaderFooterView else { return }
+
+        headerView.applyTheme()
+    }
+
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
+        guard section == SearchListSection.remoteTabs.rawValue,
+              hasFirefoxSuggestions else { return 0 }
+
+        return UITableView.automaticDimension
+    }
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard section == SearchListSection.remoteTabs.rawValue,
+              hasFirefoxSuggestions,
+              let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderIdentifier) as?
+                SiteTableViewHeader
+        else { return nil }
+
+        headerView.titleLabel.text = .Search.SuggestSectionTitle
+
+        return headerView
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
