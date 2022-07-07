@@ -13,6 +13,7 @@ struct InactiveTabItemCellModel {
         static let LabelTopBottomMargin: CGFloat = 11
         static let ImageTopBottomMargin: CGFloat = 10
         static let ImageViewLeadingConstant: CGFloat = 16
+        static let SeparatorHeight: CGFloat = 0.5
     }
 
     var fontForLabel: UIFont {

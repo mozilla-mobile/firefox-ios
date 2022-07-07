@@ -100,7 +100,7 @@ class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell 
             titleLabel.leadingAnchor.constraint(equalTo: midView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: midView.trailingAnchor),
 
-            bottomSeparatorView.heightAnchor.constraint(equalToConstant: 0.7),
+            bottomSeparatorView.heightAnchor.constraint(equalToConstant: InactiveTabItemCellModel.UX.SeparatorHeight),
             bottomSeparatorView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             bottomSeparatorView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             bottomSeparatorView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
