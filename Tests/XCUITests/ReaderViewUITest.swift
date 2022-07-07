@@ -22,7 +22,7 @@ class ReaderViewTest: BaseTestCase {
         navigator = createScreenGraph(for: self, with: app).navigator()
         userState = navigator.userState
     }
-    
+
     private func addContentToReaderView() {
         updateScreenGraph()
         userState.url = path(forTestPage: "test-mozilla-book.html")
@@ -76,7 +76,7 @@ class ReaderViewTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
-        
+
         // Initially reading list is empty
         checkReadingListNumberOfItems(items: 0)
         app.buttons["Done"].tap()

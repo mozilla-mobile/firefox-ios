@@ -10,14 +10,14 @@ let oldHistoryEntries: [String] = ["Internet for people, not profit — Mozilla"
 let closedWebPageLabel = "localhost:\(serverPort)/test-fixture/test-mozilla-book.html"
 
 class HistoryTests: BaseTestCase {
-    
+
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
-    
+
     let testWithDB = ["testOpenHistoryFromBrowserContextMenuOptions", "testClearHistoryFromSettings", "testClearRecentHistory"]
 
     // This DDBB contains those 4 websites listed in the name
     let historyDB = "browserYoutubeTwitterMozillaExample.db"
-    
+
     let clearRecentHistoryOptions = ["The Last Hour", "Today", "Today and Yesterday", "Everything"]
 
     override func setUp() {
@@ -87,19 +87,19 @@ class HistoryTests: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
-        //Clear private data from settings and confirm
+        // Clear private data from settings and confirm
         navigator.goto(ClearPrivateDataSettings)
         app.tables.cells["ClearPrivateData"].tap()
         waitForExistence(app.tables.cells["ClearPrivateData"], timeout: 10)
         app.alerts.buttons["OK"].tap()
-        
-        //Wait for OK pop-up to disappear after confirming
-        waitForNoExistence(app.alerts.buttons["OK"], timeoutValue:5)
-        
-        //Try to tap on the disabled Clear Private Data button
+
+        // Wait for OK pop-up to disappear after confirming
+        waitForNoExistence(app.alerts.buttons["OK"], timeoutValue: 5)
+
+        // Try to tap on the disabled Clear Private Data button
         app.tables.cells["ClearPrivateData"].tap()
-        
-        //If the button is disabled, the confirmation pop-up should not exist
+
+        // If the button is disabled, the confirmation pop-up should not exist
         XCTAssertEqual(app.alerts.buttons["OK"].exists, false)
     }
 
@@ -290,14 +290,14 @@ class HistoryTests: BaseTestCase {
         XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
     }
-    
+
     // Private function created to select desired option from the "Clear Recent History" list
     // We used this aproch to avoid code duplication
     private func tapOnClearRecentHistoryOption(optionSelected: String) {
         app.sheets.buttons[optionSelected].tap()
     }
-    
-    private func navigateToGoogle(){
+
+    private func navigateToGoogle() {
         navigator.openURL("example.com")
         waitUntilPageLoad()
         // Workaround as the item does not appear if there is only that tab open
@@ -356,15 +356,6 @@ class HistoryTests: BaseTestCase {
         }
         XCTAssertFalse(app.tables.cells.staticTexts["Google"].exists)
     }*/
-    
-    func testAllOptionsArePresent(){
-        // Go to 'goolge.com' to create a recent history entry.
-        navigateToGoogle()
-        navigator.performAction(Action.ClearRecentHistory)
-        for option in clearRecentHistoryOptions {
-            XCTAssertTrue(app.sheets.buttons[option].exists)
-        }
-    }
 
     // Smoketest
     func testDeleteHistoryEntryBySwiping() {

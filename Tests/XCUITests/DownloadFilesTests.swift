@@ -56,7 +56,7 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(LibraryPanel_Downloads)
         checkTheNumberOfDownloadedItems(items: 0)
     }
-    
+
     // Smoketest
     func testDownloadFile() {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
@@ -111,7 +111,7 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(LibraryPanel_Downloads)
 
         waitForExistence(app.tables["DownloadsTable"])
-        //Comenting out until share sheet can be managed with automated tests issue #5477
+        // Comenting out until share sheet can be managed with automated tests issue #5477
         app.tables.cells.staticTexts[testFileNameDownloadPanel].press(forDuration: 2)
         waitForExistence(app.otherElements["ActivityListView"], timeout: 10)
         if !iPad() {

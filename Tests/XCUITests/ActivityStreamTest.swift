@@ -11,7 +11,7 @@ let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "Twitter
 class ActivityStreamTest: BaseTestCase {
     let TopSiteCellgroup = XCUIApplication().cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
 
-    let testWithDB = ["testActivityStreamPages","testTopSites2Add", "testTopSitesOpenInNewPrivateTab", "testContextMenuInLandscape", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
+    let testWithDB = ["testActivityStreamPages", "testTopSites2Add", "testTopSitesOpenInNewPrivateTab", "testContextMenuInLandscape", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
 
     // Using the DDDBBs created for these tests containing enough entries for the tests that used them listed above
     let pagesVisitediPad = "browserActivityStreamPagesiPad.db"
@@ -116,7 +116,7 @@ class ActivityStreamTest: BaseTestCase {
             navigator.openURL("mozilla.org")
         }
         waitUntilPageLoad()
-        
+
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         app.otherElements[ImageIdentifiers.addShortcut].tap()
         // Workaround to have visited website in top sites
@@ -124,8 +124,8 @@ class ActivityStreamTest: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!])
-        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!].exists)
+        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!])
+        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
 
         navigator.performAction(Action.CloseURLBarOpen)
@@ -134,8 +134,8 @@ class ActivityStreamTest: BaseTestCase {
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
-        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!])
-        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!].exists)
+        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!])
+        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
 
@@ -149,7 +149,7 @@ class ActivityStreamTest: BaseTestCase {
 
         // Remove facebook top sites, first cell
         waitForExistence(app.collectionViews.cells.element(boundBy: 1), timeout: 3)
-        app.collectionViews.cells.element(boundBy: 1).press(forDuration:1)
+        app.collectionViews.cells.element(boundBy: 1).press(forDuration: 1)
         selectOptionFromContextMenu(option: "Remove")
 
         // Check top site in first cell now
@@ -168,7 +168,7 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         // Long tap on apple top site, second cell
         waitForExistence(app.collectionViews.cells.staticTexts["Apple"], timeout: 3)
-        app.collectionViews.cells.staticTexts["Apple"].press(forDuration:1)
+        app.collectionViews.cells.staticTexts["Apple"].press(forDuration: 1)
         app.tables["Context Menu"].cells.otherElements["Open in a Private Tab"].tap()
 
         XCTAssert(TopSiteCellgroup.exists)
@@ -204,7 +204,7 @@ class ActivityStreamTest: BaseTestCase {
         // Open one of the sites from Topsites and wait until page is loaded
         // Long tap on apple top site, second cell
         waitForExistence(app.collectionViews.cells.element(boundBy: 4), timeout: 3)
-        app.collectionViews.cells.element(boundBy: 4).press(forDuration:1)
+        app.collectionViews.cells.element(boundBy: 4).press(forDuration: 1)
         selectOptionFromContextMenu(option: "Open in a Private Tab")
 
         // Check that two tabs are open and one of them is the default top site one

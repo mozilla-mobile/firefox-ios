@@ -157,7 +157,7 @@ class Action {
     static let AcceptClearAllWebsiteData = "AcceptClearAllWebsiteData"
     static let TapOnFilterWebsites = "TapOnFilterWebsites"
     static let ShowMoreWebsiteDataEntries = "ShowMoreWebsiteDataEntries"
-    
+
     static let ClearRecentHistory = "ClearRecentHistory"
 
     static let ToggleTrackingProtectionPerTabEnabled = "ToggleTrackingProtectionPerTabEnabled"
@@ -190,7 +190,7 @@ class Action {
 
     static let SelectGoogle = "SelectGoogle"
     static let SelectBing = "SelectBing"
-    
+
     static let AddCustomSearchEngine = "AddCustomSearchEngine"
     static let RemoveCustomSearchEngine = "RemoveCustomSearchEngine"
 
@@ -225,7 +225,7 @@ class FxUserState: MMUserState {
     var showIntro = false
     var showWhatsNew = false
     var waitForLoading = true
-    var url: String? = nil
+    var url: String?
     var requestDesktopSite = false
 
     var noImageMode = false
@@ -235,8 +235,8 @@ class FxUserState: MMUserState {
     var bookmarksInNewTab = true
     var historyInNewTab = true
 
-    var fxaUsername: String? = nil
-    var fxaPassword: String? = nil
+    var fxaUsername: String?
+    var fxaPassword: String?
 
     var numTabs: Int = 0
 
@@ -249,7 +249,7 @@ class FxUserState: MMUserState {
     var localeIsExpectedDifferent = false
 }
 
-fileprivate let defaultURL = "https://www.mozilla.org/en-US/book/"
+private let defaultURL = "https://www.mozilla.org/en-US/book/"
 
 func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<FxUserState> {
     let map = MMScreenGraph(for: test, with: FxUserState.self)
@@ -282,7 +282,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         map.addScreenState(intro) { screenState in
             if let next = next {
                 screenState.tap(app.buttons["nextOnboardingButton"], to: next)
-            }  else {
+            } else {
                 let startBrowsingButton = app.buttons["startBrowsingOnboardingButton"]
                 screenState.tap(startBrowsingButton, to: BrowserTab)
             }
@@ -300,7 +300,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
         } else {
             screenState.gesture(to: TabTray) {
-                if (app.buttons["TabToolbar.tabsButton"].exists) {
+                if app.buttons["TabToolbar.tabsButton"].exists {
                     app.buttons["TabToolbar.tabsButton"].tap()
                 } else {
                     app.buttons["URLBarView.tabsButton"].tap()
@@ -437,18 +437,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         } else {
             screenState.gesture(to: TabTray) {
                 // iPhone sim tabs button is called differently when in portrait or landscape
-                if (XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft) {
+                if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
                     app.buttons["URLBarView.tabsButton"].tap()
                 } else {
                     app.buttons["TabToolbar.tabsButton"].tap()
                 }
             }
         }
-        
+
         screenState.gesture(forAction: Action.CloseURLBarOpen, transitionTo: HomePanelsScreen) {_ in
             app.buttons["urlBar-cancel"].tap()
         }
-        
+
         screenState.gesture(forAction: Action.OpenSearchBarFromSearchButton, transitionTo: URLBarOpen) {
             userState in app.buttons["TabToolbar.stopReloadButton"].tap()
         }
@@ -522,7 +522,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
-
     map.addScreenState(LibraryPanel_ReadingList) { screenState in
         screenState.dismissOnUse = true
         screenState.gesture(forAction: Action.CloseReadingListPanel, transitionTo: HomePanelsScreen) { userState in
@@ -545,7 +544,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(HistoryPanelContextMenu) { screenState in
         screenState.dismissOnUse = true
     }
-    
+
     map.addScreenState(BookmarksPanelContextMenu) { screenState in
         screenState.dismissOnUse = true
     }
@@ -645,9 +644,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.tables.textViews["customEngineTitle"].staticTexts["Search Engine"].tap()
             app.typeText("Mozilla Engine")
             app.tables.textViews["customEngineUrl"].tap()
-            
+
             UIPasteboard.general.string = "https://developer.mozilla.org/search?q=%s"
-            
+
             let tablesQuery = app.tables
             let customengineurlTextView = tablesQuery.textViews["customEngineUrl"]
             sleep(1)
@@ -671,7 +670,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
         screenState.backAction = navigationControllerBackAction
     }
-    
+
     map.addScreenState(NewTabSettings) { screenState in
         let table = app.tables.element(boundBy: 0)
 
@@ -833,7 +832,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
         } else {
             screenState.gesture(to: TabTray) {
-                if (app.buttons["TabToolbar.tabsButton"].exists) {
+                if app.buttons["TabToolbar.tabsButton"].exists {
                     app.buttons["TabToolbar.tabsButton"].tap()
                 } else {
                     app.buttons["URLBarView.tabsButton"].tap()
@@ -857,7 +856,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.press(link, to: WebLinkContextMenu)
         screenState.press(image, to: WebImageContextMenu)
-        
+
         if !isTablet {
             let reloadButton = app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton]
         screenState.press(reloadButton, to: ReloadLongPressMenu)
@@ -877,7 +876,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
         } else {
             screenState.gesture(to: TabTray) {
-                if (app.buttons["TabToolbar.tabsButton"].exists) {
+                if app.buttons["TabToolbar.tabsButton"].exists {
                     app.buttons["TabToolbar.tabsButton"].tap()
                 } else {
                     app.buttons["URLBarView.tabsButton"].tap()
@@ -919,7 +918,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(FxAccountManagementPage) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
-    
+
     map.addScreenState(FindInPage) { screenState in
         screenState.tap(app.buttons["FindInPage.close"], to: BrowserTab)
     }
@@ -1041,12 +1040,12 @@ extension MMNavigator where T == FxUserState {
 let NATIVE_EXECUTION    = Int32(0)
 let EMULATED_EXECUTION   = Int32(1)
 
-func processIsTranslated() ->Int32 {
+func processIsTranslated() -> Int32 {
     var ret = Int32(0)
     var size = ret.bitWidth
     let result = sysctlbyname("sysctl.proc_translated", &ret, &size, nil, 0)
     if result == -1 {
-        if (errno == ENOENT){
+        if errno == ENOENT {
           return 0
         }
         return -1
@@ -1072,8 +1071,10 @@ extension XCUIElement {
     /// executed with the index number of the screen.
     /// Care is taken to make sure that every cell is completely on screen
     /// at least once.
-    func forEachScreen(_ eachScreen: (Int) -> ()) {
-        guard self.elementType == .table else { return }
+    func forEachScreen(_ eachScreen: (Int) -> Void) {
+        guard self.elementType == .table else {
+            return
+        }
 
         func firstInvisibleCell(_ start: UInt) -> UInt {
             let cells = self.cells
