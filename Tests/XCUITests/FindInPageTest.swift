@@ -162,7 +162,7 @@ class FindInPageTests: BaseTestCase {
         waitForExistence(app.menuItems["Copy"], timeout: 5)
         // Find in page is correctly launched, bar with text pre-filled and
         // the buttons to find next and previous
-        if (app.menuItems["Find in Page"].exists) {
+        if app.menuItems["Find in Page"].exists {
             app.menuItems["Find in Page"].tap()
         } else {
             app.menuItems["show.next.items.menu.button"].tap()

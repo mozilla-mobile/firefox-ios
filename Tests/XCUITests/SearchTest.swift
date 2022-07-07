@@ -107,7 +107,7 @@ class SearchTests: BaseTestCase {
             }
         }
     }
-    
+
     func testCopyPasteComplete() {
         // Copy, Paste and Go to url
         navigator.goto(URLBarOpen)
@@ -197,10 +197,10 @@ class SearchTests: BaseTestCase {
         // Select some text and long press to find the option
         app.webViews.staticTexts["cloud"].press(forDuration: 1)
         // Click on the > button to get to that option only on iPhone
-        if !iPad(){
+        if !iPad() {
             app.menuItems["show.next.items.menu.button"].tap()
         }
-        
+
         waitForExistence(app.menuItems["Search with Firefox"])
         app.menuItems["Search with Firefox"].tap()
         waitUntilPageLoad()
@@ -218,11 +218,11 @@ class SearchTests: BaseTestCase {
         waitForExistence(app.textFields["url"], timeout: 20)
         waitForValueContains(app.textFields["url"], value: "google")
     }
-    
+
     func testSearchIconOnAboutHome() {
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
-        
+
         // Search icon is displayed.
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
 
@@ -251,12 +251,12 @@ class SearchTests: BaseTestCase {
         } else {
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")
         }
-        
+
         app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
 
         if iPad() {
             app.buttons["URLBarView.backButton"].tap()
-        }else {
+        } else {
             app.buttons["TabToolbar.backButton"].tap()
         }
 

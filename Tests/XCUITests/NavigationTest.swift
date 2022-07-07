@@ -88,7 +88,7 @@ class NavigationTest: BaseTestCase {
         navigator.performAction(Action.OpenEmailToSignIn)
         checkFirefoxSyncScreenShown()
     }
-    
+
     func testTapSigninShowsFxAFromSettings() {
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
@@ -102,16 +102,16 @@ class NavigationTest: BaseTestCase {
         // After that it is possible to go back to Settings
         let closeButton = app.navigationBars["Client.FxAWebView"].buttons.element(boundBy: 0)
         closeButton.tap()
-        
+
         let closeButtonFxView = app.navigationBars["Turn on Sync"].buttons["Settings"]
         closeButtonFxView.tap()
     }
-    
+
     // Beacuse the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
     private func checkFirefoxSyncScreenShownViaSettings() {
         waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
         app.buttons["EmailSignIn.button"].tap()
-        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout:20)
+        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 20)
 
         let email = app.webViews.textFields.element(boundBy: 0)
         // Verify the placeholdervalues here for the textFields
@@ -222,7 +222,7 @@ class NavigationTest: BaseTestCase {
     }
 
     func testLongPressOnAddressBar() {
-        //This test is for populated clipboard only so we need to make sure there's something in Pasteboard
+        // This test is for populated clipboard only so we need to make sure there's something in Pasteboard
         app.textFields["address"].typeText("www.google.com")
         // Tapping two times when the text is not selected will reveal the menu
         app.textFields["address"].tap()
@@ -231,8 +231,8 @@ class NavigationTest: BaseTestCase {
         waitForExistence(app.menuItems["Select All"])
         XCTAssertTrue(app.menuItems["Select All"].exists)
         XCTAssertTrue(app.menuItems["Select"].exists)
-        
-        //Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
+
+        // Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
         app.menuItems["Select All"].tap()
         waitForExistence(app.menuItems["Copy"])
         if iPad() {
@@ -245,14 +245,14 @@ class NavigationTest: BaseTestCase {
             XCTAssertTrue(app.menuItems["Cut"].exists)
             XCTAssertTrue(app.menuItems["Look Up"].exists)
         }
-        
+
         app.textFields["address"].typeText("\n")
         waitUntilPageLoad()
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
-        app.textFields["url"].press(forDuration:3)
+        app.textFields["url"].press(forDuration: 3)
         app.tables.otherElements[ImageIdentifiers.copyLink].tap()
-        
+
         sleep(2)
         app.textFields["url"].tap()
         // Since the textField value appears all selected first time is clicked
@@ -413,7 +413,7 @@ class NavigationTest: BaseTestCase {
         let urlBar = app.textFields["url"]
         waitForExistence(urlBar, timeout: 15)
         urlBar.tap()
-        
+
         let addressBar = app.textFields["address"]
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
