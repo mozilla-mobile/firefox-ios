@@ -38,8 +38,9 @@ class HistoryDeletionUtility {
         deleteWKWebsiteDataSince(dateOption,
                                  for: WKWebsiteDataStore.allWebsiteDataTypes())
         deleteProfileHistorySince(dateOption) {
-            self.deleteProfileMetadataSince(dateOption)
-//            completion?(time)
+            self.deleteProfileMetadataSince(dateOption) { time in
+                completion?(time)
+            }
         }
     }
 
