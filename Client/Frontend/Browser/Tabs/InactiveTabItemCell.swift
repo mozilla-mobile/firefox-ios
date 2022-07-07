@@ -28,7 +28,7 @@ class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell 
     }
 
     private lazy var bottomSeparatorView: UIView = .build { separatorLine in
-        separatorLine.backgroundColor = UIColor.Photon.Grey40
+        separatorLine.backgroundColor = UIColor.Photon.LightGrey30
     }
 
     private var containerViewLeadingConstraint: NSLayoutConstraint!
