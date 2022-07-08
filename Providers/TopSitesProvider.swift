@@ -114,20 +114,12 @@ class TopSitesProviderImplementation: TopSitesProvider {
         // Fetch the default sites
         let defaultSites = defaultTopSites(prefs)
         // Create PinnedSite objects. Used by the view layer to tell topsites apart
-        print("Laurie - pinnedSites \(pinnedSites)")
         let pinnedSites: [Site] = pinnedSites.map({ PinnedSite(site: $0) })
-        print("Laurie - sites \(sites)")
-        print("Laurie - defaultSites \(defaultSites)")
-        print("Laurie - pinnedSites \(pinnedSites)")
         // Merge default topsites with a user's topsites.
         let mergedSites = sites.union(defaultSites, f: unionOnURL)
         // Filter out duplicates in merged sites, but do not remove duplicates within pinned sites
-        print("Laurie - merged sites \(mergedSites)")
         let duplicateFreeList = pinnedSites.union(mergedSites, f: unionOnURL).filter { $0 as? PinnedSite == nil }
         let allSites = pinnedSites + duplicateFreeList
-        print("Laurie - pinnedSites2 \(pinnedSites)")
-        print("Laurie - duplicateFreeList \(duplicateFreeList)")
-        print("Laurie - allSites \(allSites)")
 
         // Favour topsites from defaultSites as they have better favicons. But keep PinnedSites
         let newSites = allSites.map { site -> Site in
