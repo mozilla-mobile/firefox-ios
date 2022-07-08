@@ -73,7 +73,7 @@ class BaseTestCase: XCTestCase {
         app.activate()
     }
 
-    //If it is a first run, first run window should be gone
+    // If it is a first run, first run window should be gone
     func dismissFirstRunUI() {
         let firstRunUI = XCUIApplication().scrollViews["IntroViewController.scrollView"]
 
@@ -145,7 +145,7 @@ class BaseTestCase: XCTestCase {
         waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 15)
         } else {
             // iPhone sim tabs button is called differently when in portrait or landscape
-            if (XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft) {
+            if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
                 waitForExistence(app.buttons["URLBarView.tabsButton"], timeout: 15)
             } else {
                 waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 15)

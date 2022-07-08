@@ -32,7 +32,7 @@ class IntegrationTests: BaseTestCase {
                         LaunchArguments.LoadDatabasePrefix + historyDB,
                         LaunchArguments.SkipContextualHints,
                         LaunchArguments.TurnOffTabGroupsInUserPreferences]
-         
+
      } else if testFxAChinaServer.contains(key) {
         launchArguments = [LaunchArguments.SkipIntro,
                            LaunchArguments.FxAChinaServer,
