@@ -149,8 +149,10 @@ class TabLocationView: UIView {
         NSLayoutConstraint.activate([
             trackingProtectionButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.TPIconSize),
             trackingProtectionButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
+            
             readerModeButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ReaderModeButtonWidth),
             readerModeButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
+            
             reloadButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ReaderModeButtonWidth),
             reloadButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
         ])
