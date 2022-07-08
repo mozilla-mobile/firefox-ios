@@ -28,9 +28,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
 
     var _advance: (() -> Void)?
     func advance() {
-        guard let f = self._advance else {
-            return
-        }
+        guard let f = self._advance else { return }
         self._advance = nil
         f()
     }
@@ -69,9 +67,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         get {
             let o = self.prefs.stringForKey("nextOffset")
             let n = self.prefs.timestampForKey("offsetNewer")
-            guard let offset = o, let newer = n else {
-                return nil
-            }
+            guard let offset = o, let newer = n else { return nil }
             return (offset, newer)
         }
         set (value) {

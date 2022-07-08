@@ -359,9 +359,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                   cell.isSelectedTab,
                   let tab = dataStore.at(index),
                   tab != currentlySelected
-            else {
-                continue
-            }
+            else { continue }
 
             return IndexPath(row: index, section: inSection)
         }
@@ -439,9 +437,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             return
         }
 
-        guard let index = collectionView.indexPath(for: cell)?.item, let tab = dataStore.at(index) else {
-            return
-        }
+        guard let index = collectionView.indexPath(for: cell)?.item, let tab = dataStore.at(index) else { return }
 
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
             if self.isPrivate == false, tabsToDisplay.count + (self.tabsInAllGroups?.count ?? 0) == 1 {
@@ -718,9 +714,7 @@ extension TabDisplayManager: UIDropInteractionDelegate {
         recordEventAndBreadcrumb(object: .url, method: .drop)
 
         _ = session.loadObjects(ofClass: URL.self) { urls in
-            guard let url = urls.first else {
-                return
-            }
+            guard let url = urls.first else { return }
 
             self.tabManager.addTab(URLRequest(url: url), isPrivate: self.isPrivate)
         }
@@ -894,9 +888,7 @@ extension TabDisplayManager: TabEventHandler {
     }
 
     private func refreshCell(atIndexPath indexPath: IndexPath, forceUpdate: Bool = true) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? TabTrayCell, let tab = dataStore.at(indexPath.row) else {
-            return
-        }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TabTrayCell, let tab = dataStore.at(indexPath.row) else { return }
 
         // Only update from nextTabIndex if needed
         guard forceUpdate || cell.isSelectedTab else { return }
@@ -998,9 +990,10 @@ extension TabDisplayManager: TabManagerDelegate {
      and for bulk updates where it is ok to just redraw the entire view with the latest state, use `refreshStore()`.
      */
     private func performChainedOperations() {
-        guard !performingChainedOperations, let (type, operation) = operations.popLast() else {
-            return
-        }
+        guard !performingChainedOperations,
+              let (type, operation) = operations.popLast()
+        else { return }
+
         performingChainedOperations = true
         collectionView.performBatchUpdates({ [weak self] in
             // Baseline animation speed is 1.0, which is too slow, this (odd) code sets it to 3x

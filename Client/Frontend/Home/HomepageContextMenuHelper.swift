@@ -6,11 +6,13 @@ import Foundation
 import Shared
 import Storage
 
+// swiftlint:disable class_delegate_protocol
 protocol HomepageContextMenuHelperDelegate: UIViewController {
     func presentWithModalDismissIfNeeded(_ viewController: UIViewController, animated: Bool)
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption)
 }
+// swiftlint:enable class_delegate_protocol
 
 extension HomepageContextMenuHelperDelegate {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {

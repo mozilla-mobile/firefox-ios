@@ -89,6 +89,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     var searchFeature: FeatureHolder<Search>
     static var userAgent: String?
 
+    var hasFirefoxSuggestions: Bool {
+        return data.count != 0 || !filteredOpenedTabs.isEmpty || !filteredRemoteClientTabs.isEmpty || !searchHighlights.isEmpty
+    }
+
     init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager, featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search ) {
         self.viewModel = viewModel
         self.tabManager = tabManager
@@ -149,9 +153,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                                                       profile: profile,
                                                       tabs: tabManager.tabs,
                                                       resultCount: 3) { results in
-            guard let results = results else {
-                return
-            }
+            guard let results = results else { return }
             self.searchHighlights = results
             self.tableView.reloadData()
         }
@@ -370,9 +372,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         guard profile.hasSyncableAccount() else { return }
         // Get cached tabs
         self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
-            guard let clientAndTabs = result.successValue else {
-                return
-            }
+            guard let clientAndTabs = result.successValue else { return }
             self.remoteClientTabs.removeAll()
             // Update UI with cached data.
             clientAndTabs.forEach { value in
@@ -540,8 +540,29 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         return super.tableView(tableView, heightForRowAt: indexPath)
     }
 
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let headerView = view as? ThemedTableSectionHeaderFooterView else { return }
+
+        headerView.applyTheme()
+    }
+
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
+        guard section == SearchListSection.remoteTabs.rawValue,
+              hasFirefoxSuggestions else { return 0 }
+
+        return UITableView.automaticDimension
+    }
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard section == SearchListSection.remoteTabs.rawValue,
+              hasFirefoxSuggestions,
+              let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderIdentifier) as?
+                SiteTableViewHeader
+        else { return nil }
+
+        headerView.titleLabel.text = .Search.SuggestSectionTitle
+
+        return headerView
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -571,9 +592,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        guard let section = SearchListSection(rawValue: indexPath.section) else {
-            return
-        }
+        guard let section = SearchListSection(rawValue: indexPath.section) else { return }
 
         if section == .bookmarksAndHistory,
             let suggestion = data[indexPath.item] {
@@ -803,9 +822,7 @@ extension SearchViewController {
         default:
             return
         }
-        guard nextItem >= 0 else {
-            return
-        }
+        guard nextItem >= 0 else { return }
         let next = IndexPath(item: nextItem, section: nextSection)
         self.tableView(tableView, didHighlightRowAt: next)
         tableView.selectRow(at: next, animated: false, scrollPosition: .middle)

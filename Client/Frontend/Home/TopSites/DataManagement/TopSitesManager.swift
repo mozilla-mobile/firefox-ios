@@ -41,7 +41,7 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
     }
 
     var hasData: Bool {
-        return !historySites.isEmpty
+        return !topSites.isEmpty
     }
 
     var siteCount: Int {
@@ -87,6 +87,7 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
 
     private func loadTopSites(group: DispatchGroup) {
         group.enter()
+
         topSiteHistoryManager.getTopSites { [weak self] sites in
             self?.historySites = sites
             group.leave()
@@ -101,12 +102,20 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
     /// - Parameter numberOfTilesPerRow: The number of tiles per row shown to the user
     func calculateTopSiteData(numberOfTilesPerRow: Int) {
         var sites = historySites
-        let pinnedSiteCount = countPinnedSites(sites: sites)
-        let totalNumberOfShownTiles = numberOfTilesPerRow * numberOfRows
-        let availableSpacesCount = totalNumberOfShownTiles - pinnedSiteCount
+        let availableSpaceCount = getAvailableSpaceCount(numberOfTilesPerRow: numberOfTilesPerRow)
+        let shouldAddGoogle = shouldAddGoogle(availableSpaceCount: availableSpaceCount)
 
-        addSponsoredTiles(sites: &sites, availableSpacesCount: availableSpacesCount)
-        addGoogleTopSite(sites: &sites, availableSpacesCount: availableSpacesCount)
+        // Add Sponsored tile
+        if shouldAddSponsoredTiles {
+            addSponsoredTiles(sites: &sites,
+                              shouldAddGoogle: shouldAddGoogle,
+                              availableSpaceCount: availableSpaceCount)
+        }
+
+        // Add Google Tile
+        if shouldAddGoogle {
+            addGoogleTopSite(sites: &sites)
+        }
 
         sites.removeDuplicates()
 
@@ -114,6 +123,15 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
 
         // Refresh data in the background so we'll have fresh data next time we show
         refreshIfNeeded(forceTopSites: false)
+    }
+
+    /// Get available space count for the sponsored tiles and Google tiles
+    /// - Parameter numberOfTilesPerRow: Comes from top sites view model and accounts for different layout (landscape, portrait, iPhone, iPad, etc).
+    /// - Returns: The available space count for the rest of the calculation
+    private func getAvailableSpaceCount(numberOfTilesPerRow: Int) -> Int {
+        let pinnedSiteCount = countPinnedSites(sites: historySites)
+        let totalNumberOfShownTiles = numberOfTilesPerRow * numberOfRows
+        return totalNumberOfShownTiles - pinnedSiteCount
     }
 
     // The number of rows the user wants.
@@ -124,23 +142,16 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
         return Int(preferredNumberOfRows ?? defaultNumberOfRows)
     }
 
-    func addSponsoredTiles(sites: inout [Site], availableSpacesCount: Int) {
-        guard shouldShowSponsoredTiles else { return }
+    func addSponsoredTiles(sites: inout [Site], shouldAddGoogle: Bool, availableSpaceCount: Int) {
+        let sponsoredTileSpaces = getSponsoredNumberTiles(shouldAddGoogle: shouldAddGoogle,
+                                                          availableSpaceCount: availableSpaceCount)
 
-        // Google tile has precedence over Sponsored Tiles, if Google tile is present
-        let shouldAddGoogleTopSite = googleTopSiteManager.shouldAddGoogleTopSite(availableSpacesCount: availableSpacesCount)
-        let sponsoredTileSpaces = shouldAddGoogleTopSite ? availableSpacesCount - GoogleTopSiteManager.Constants.reservedSpaceCount : availableSpacesCount
         if sponsoredTileSpaces > 0 {
             let maxNumberOfTiles = nimbusSponoredTiles.getMaxNumberOfTiles()
             sites.addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces,
                                     contiles: contiles,
                                     maxNumberOfSponsoredTile: maxNumberOfTiles)
         }
-    }
-
-    private func addGoogleTopSite(sites: inout [Site], availableSpacesCount: Int) {
-        guard googleTopSiteManager.shouldAddGoogleTopSite(availableSpacesCount: availableSpacesCount) else { return }
-        googleTopSiteManager.addGoogleTopSite(sites: &sites)
     }
 
     private func countPinnedSites(sites: [Site]) -> Int {
@@ -151,14 +162,30 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
         return pinnedSites
     }
 
+    // MARK: - Google Tile
+
+    private func shouldAddGoogle(availableSpaceCount: Int) -> Bool {
+        googleTopSiteManager.shouldAddGoogleTopSite(hasSpace: availableSpaceCount > 0)
+    }
+
+    private func addGoogleTopSite(sites: inout [Site]) {
+        googleTopSiteManager.addGoogleTopSite(sites: &sites)
+    }
+
     // MARK: - Sponsored tiles (Contiles)
 
     private var shouldLoadSponsoredTiles: Bool {
         return featureFlags.isFeatureEnabled(.sponsoredTiles, checking: .buildAndUser)
     }
 
-    private var shouldShowSponsoredTiles: Bool {
+    private var shouldAddSponsoredTiles: Bool {
         return !contiles.isEmpty && shouldLoadSponsoredTiles
+    }
+
+    /// Google tile has precedence over Sponsored Tiles, if Google tile is present
+    private func getSponsoredNumberTiles(shouldAddGoogle: Bool, availableSpaceCount: Int) -> Int {
+        let googleAdjustedSpaceCount = availableSpaceCount - GoogleTopSiteManager.Constants.reservedSpaceCount
+        return shouldAddGoogle ? googleAdjustedSpaceCount : availableSpaceCount
     }
 }
 

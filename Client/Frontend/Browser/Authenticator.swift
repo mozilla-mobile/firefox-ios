@@ -51,9 +51,7 @@ class Authenticator {
 
     static func findMatchingCredentialsForChallenge(_ challenge: URLAuthenticationChallenge, fromLoginsProvider loginsProvider: RustLogins) -> Deferred<Maybe<URLCredential?>> {
         return loginsProvider.getLoginsForProtectionSpace(challenge.protectionSpace) >>== { cursor in
-            guard cursor.count >= 1 else {
-                return deferMaybe(nil)
-            }
+            guard cursor.count >= 1 else { return deferMaybe(nil) }
 
             let logins = cursor.compactMap {
                 // HTTP Auth must have nil formSubmitUrl and a non-nil httpRealm.

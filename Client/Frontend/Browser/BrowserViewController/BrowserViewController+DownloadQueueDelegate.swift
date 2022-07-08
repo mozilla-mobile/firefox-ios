@@ -41,9 +41,9 @@ extension BrowserViewController: DownloadQueueDelegate {
     }
 
     func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: Error?) {
-        guard let downloadToast = self.downloadToast, let download = downloadToast.downloads.first else {
-            return
-        }
+        guard let downloadToast = self.downloadToast,
+              let download = downloadToast.downloads.first
+        else { return }
 
         DispatchQueue.main.async {
             downloadToast.dismiss(false)

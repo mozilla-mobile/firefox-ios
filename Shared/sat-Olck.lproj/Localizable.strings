@@ -346,6 +346,9 @@
    Title for default search engine settings section. */
 "Default Search Engine" = "ᱢᱩᱞ ᱥᱮᱸᱫᱽᱨᱟ ᱤᱸᱡᱤᱱ";
 
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
+
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "ᱩᱫᱩᱠ ᱥᱟᱡᱟᱣ ᱠᱚ";
 
@@ -466,6 +469,9 @@
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "ᱟᱞᱮ ᱠᱟᱹᱢᱤᱠᱚ ᱟᱨ ᱟᱢᱟᱜ ᱱᱤᱥᱚᱱ ᱠᱚ";
 
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Pocket.Sponsored.v103" = "ᱠᱟᱹᱢᱤᱼᱤᱭᱟᱹ";
+
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "ᱠᱟᱹᱢᱤᱼᱤᱭᱟᱹ";
 
@@ -515,7 +521,7 @@
 "fxa.signin.camera-signin" = "ᱟᱢᱟᱜ ᱠᱮᱢᱮᱨᱟ ᱛᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ";
 
 /* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "ᱢᱤᱫᱽᱴᱟᱹᱝ ᱠᱷᱟᱛᱟ ᱛᱮ ᱥᱟᱫᱽᱷᱚᱱ ᱵᱷᱤᱛᱨᱭ ᱨᱮ Firefox ᱥᱭᱝᱠ ᱢᱮ ᱾ ";
+"fxa.signin.create-account-pt-1" = "ᱢᱤᱫᱽᱴᱟᱹᱝ ᱠᱷᱟᱛᱟ ᱛᱮ ᱥᱟᱫᱽᱷᱚᱱ ᱵᱷᱤᱛᱨᱤ ᱨᱮ Firefox ᱥᱭᱝᱠ ᱢᱮ ᱾ ";
 
 /* FxA sign in create account label. This will be linked to the site to create an account. */
 "fxa.signin.create-account-pt-2" = "Firefox ᱠᱷᱟᱛᱟ ᱛᱮᱭᱟᱨ ᱢᱮ ᱾";
@@ -1092,6 +1098,9 @@
 /* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
 "Menu.SignInToSync.Label.v99" = "ᱛᱷᱟᱨ ᱞᱟᱹᱜᱤᱛ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ";
 
+/* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
+"Menu.SyncAndSaveData.v103" = "ᱥᱭᱝᱠ ᱟᱨ ᱰᱟᱴᱟ ᱥᱟᱺᱪᱟᱣ";
+
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ᱴᱮᱵ ᱠᱩᱞ ᱦᱩᱭᱮᱱᱟ";
 
@@ -1236,6 +1245,9 @@
 
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "ᱥᱩᱦᱤ ᱮᱢ ᱢᱮ ᱟᱨ ᱵᱚᱞᱚᱱ ᱢᱮ";
+
+/* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
+"Onboarding.SyncTitle.v102" = "ᱟᱢᱟᱜ ᱯᱨᱚᱵᱷᱟᱣ ᱨᱮ ᱛᱟᱦᱮᱸ ᱞᱟᱹᱜᱤᱫ ᱥᱭᱝᱠ ᱢᱮ";
 
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "ᱠᱟᱸᱛᱷᱪᱤᱛᱟᱹᱨ ᱥᱮᱴ ᱢᱮ";
@@ -1680,6 +1692,9 @@
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ";
 
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off */
+"Settings.Home.Option.SponsoredPocket.v103" = "ᱜᱟᱲᱚ ᱠᱟᱱ ᱠᱟᱹᱦᱱᱤ ᱠᱚ";
+
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
 "Settings.Home.Option.StartAtHome.AfterFourHours" = "ᱯᱩᱱ ᱴᱟᱲᱟᱝ ᱵᱤᱱᱟᱹ ᱠᱟᱹᱢᱤ ᱞᱟᱦᱟ ᱨᱮ ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ";
 
@@ -1866,6 +1881,18 @@
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "ᱢᱮᱞ ᱮᱯ";
 
+/* Touch ID prompt subtitle when accessing logins and passwords */
+"Settings.Passwords.FingerPrintReason.v103" = "ᱵᱷᱤᱛᱨᱤ ᱵᱚᱞᱚ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱹᱴᱩᱵ ᱪᱷᱟᱯᱟ ᱵᱮᱵᱷᱟᱨ ᱢᱮ‌ ᱾";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "ᱟᱢᱟᱜ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱢᱚᱦᱲᱟ ID, ᱴᱤᱯᱟᱹᱶ ID ᱟᱨᱵᱟᱝᱠᱷᱟᱱ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱛᱮ ᱱᱤᱛᱚᱜ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱮᱱᱟ ᱾";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ";
+
 /* Setting to enable the built-in password manager */
 "Settings.SaveLogins.Title" = "ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱧᱪᱟᱣ";
 
@@ -1931,6 +1958,15 @@
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "ᱯᱟᱲᱦᱟᱣ ᱠᱚ";
+
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "ᱟᱢᱟᱜ ᱴᱮᱵ ᱠᱚ, ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ, ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱟᱨ ᱵᱚᱲᱛᱤ ᱠᱚ ᱛᱚᱞ ᱡᱚᱠᱷᱟᱭ ᱞᱟᱹᱜᱤᱫ ᱥᱩᱦᱤ ᱮᱢ ᱢᱮ ᱾";
+
+/* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
+"Settings.Sync.ButtonTitle.v103" = "ᱥᱭᱝᱠ ᱟᱨ ᱰᱟᱴᱟ ᱥᱟᱺᱪᱟᱣ";
+
+/* Title for the page where the user sign in to their Firefox Sync account. */
+"Settings.Sync.SignInView.Title.v103" = "ᱥᱭᱝᱠ ᱟᱨ ᱰᱟᱴᱟ ᱥᱟᱺᱪᱟᱣ";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "ᱵᱟᱝ ᱩᱥᱨᱟᱹᱣ ᱴᱮᱵᱽᱥ";
@@ -2123,7 +2159,7 @@
 "Sync.FirstTimeMessage.Label" = "ᱟᱢᱟᱠ ᱯᱟᱦᱤᱞ ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱠᱤᱪᱷᱩ ᱥᱚᱢᱚᱭ ᱦᱟᱛᱟᱣᱟᱭ";
 
 /* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "ᱚᱠᱟ ᱠᱷᱟᱛᱟ ᱵᱟᱹᱱᱩᱜᱼᱟ? ᱥᱟᱫᱷᱚᱱ ᱵᱷᱤᱛᱨᱭ ᱨᱮ Firefox ᱥᱭᱝᱠ ᱞᱟᱹᱜᱤᱫᱽ ᱱᱟᱶᱟ ᱛᱮᱭᱟᱨ ᱢᱮ ᱾";
+"Sync.NoAccount.Description" = "ᱚᱠᱟ ᱠᱷᱟᱛᱟ ᱵᱟᱹᱱᱩᱜᱼᱟ? ᱥᱟᱫᱷᱚᱱ ᱵᱷᱤᱛᱨᱤ ᱨᱮ Firefox ᱥᱭᱝᱠ ᱞᱟᱹᱜᱤᱫᱽ ᱱᱟᱶᱟ ᱛᱮᱭᱟᱨ ᱢᱮ ᱾";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱦᱩᱭᱩᱜ ᱠᱟᱱᱟ";
@@ -2181,6 +2217,12 @@
 
 /* The placeholder text for the tab search bar */
 "Tabs.Search.PlaceholderText" = "ᱴᱮᱵ ᱠᱚ ᱥᱮᱸᱫᱽᱨᱟᱤ ᱢᱮ";
+
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "ᱵᱟᱝ ᱩᱥᱨᱟᱹᱣ ᱴᱮᱵᱽ ᱠᱚ ᱧᱮᱞ ᱢᱮ";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "ᱵᱟᱝ ᱩᱥᱨᱟᱹᱣ ᱴᱮᱵᱽ ᱠᱚ ᱩᱠᱩᱭ ᱢᱮ";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "ᱴᱮᱵ ᱥᱮᱞᱮᱫ ᱢᱮ";

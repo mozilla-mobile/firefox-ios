@@ -127,9 +127,7 @@ class TabsButton: UIButton {
         countToBe = (count < 100) ? count.description : infinity
 
         // only animate a tab count change if the tab count has actually changed
-        guard currentCount != count.description || (clonedTabsButton?.countLabel.text ?? count.description) != count.description else {
-            return
-        }
+        guard currentCount != count.description || (clonedTabsButton?.countLabel.text ?? count.description) != count.description else { return }
 
         // Re-entrancy guard: if this code is running just update the tab count value without starting another animation.
         if isUpdatingTabCount {

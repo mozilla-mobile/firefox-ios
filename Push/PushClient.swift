@@ -6,84 +6,45 @@ import Foundation
 import Shared
 import SwiftyJSON
 
-// public struct PushRemoteError {
-//    static let MissingNecessaryCryptoKeys: Int32 = 101
-//    static let InvalidURLEndpoint: Int32         = 102
-//    static let ExpiredURLEndpoint: Int32         = 103
-//    static let DataPayloadTooLarge: Int32        = 104
-//    static let EndpointBecameUnavailable: Int32  = 105
-//    static let InvalidSubscription: Int32        = 106
-//    static let RouterTypeIsInvalid: Int32        = 108
-//    static let InvalidAuthentication: Int32      = 109
-//    static let InvalidCryptoKeysSpecified: Int32 = 110
-//    static let MissingRequiredHeader: Int32      = 111
-//    static let InvalidTTLHeaderValue: Int32      = 112
-//    static let UnknownError: Int32               = 999
-// }
+protocol PushClient {
+    func register(_ apnsToken: String,
+                  completion: @escaping (PushRegistration?) -> Void)
 
-public let PushClientErrorDomain = "org.mozilla.push.error"
-private let PushClientUnknownError = NSError(domain: PushClientErrorDomain, code: 999,
-                                             userInfo: [NSLocalizedDescriptionKey: "Invalid server response"])
-private let log = Logger.browserLogger
-
-/// Bug 1364403 – This is to be put into the push registration
-private let apsEnvironment: [String: Any] = [
-    "mutable-content": 1,
-    "alert": [
-        "title": " ",
-        "body": " "
-    ],
-]
-
-public struct PushRemoteError {
-    let code: Int
-    let errno: Int
-    let error: String
-    let message: String?
-
-    public static func from(json: JSON) -> PushRemoteError? {
-        guard let code = json["code"].int,
-              let errno = json["errno"].int,
-              let error = json["error"].string else {
-            return nil
-        }
-
-        let message = json["message"].string
-        return PushRemoteError(code: code, errno: errno, error: error, message: message)
-    }
+    func unregister(_ credentials: PushRegistration,
+                    completion: @escaping () -> Void)
 }
 
-public enum PushClientError: MaybeErrorType {
-    case Remote(PushRemoteError)
-    case Local(Error)
+public class PushClientImplementation: PushClient {
 
-    public var description: String {
-        switch self {
-        case let .Remote(error):
-            let errorString = error.error
-            let messageString = error.message ?? ""
-            return "<FxAClientError.Remote \(error.code)/\(error.errno): \(errorString) (\(messageString))>"
-        case let .Local(error):
-            return "<FxAClientError.Local Error \"\(error.localizedDescription)\">"
-        }
-    }
-}
+    private let log = Logger.browserLogger
 
-public class PushClient {
-    let endpointURL: NSURL
-    let experimentalMode: Bool
+    /// Bug 1364403 – This is to be put into the push registration
+    private let apsEnvironment: [String: Any] = [
+        "mutable-content": 1,
+        "alert": [
+            "title": " ",
+            "body": " "
+        ],
+    ]
 
-    lazy fileprivate var urlSession = makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.ephemeral)
+    private let endpointURL: NSURL
+    private let experimentalMode: Bool
+    private let api: PushRegistrationAPI
 
-    public init(endpointURL: NSURL, experimentalMode: Bool = false) {
+    public init(endpointURL: NSURL,
+                experimentalMode: Bool = false,
+                pushRegistrationAPI: PushRegistrationAPI = PushRegistrationAPIImplementation()) {
         self.endpointURL = endpointURL
         self.experimentalMode = experimentalMode
+        self.api = pushRegistrationAPI
     }
 }
 
-public extension PushClient {
-    func register(_ apnsToken: String) -> Deferred<Maybe<PushRegistration>> {
-        //  POST /v1/{type}/{app_id}/registration
+// MARK: - PushClient
+public extension PushClientImplementation {
+    func register(_ apnsToken: String,
+                  completion: @escaping (PushRegistration?) -> Void) {
+
         let registerURL = endpointURL.appendingPathComponent("registration")!
 
         var mutableURLRequest = URLRequest(url: registerURL)
@@ -106,72 +67,26 @@ public extension PushClient {
             log.info("curl -X POST \(registerURL.absoluteString) --data '\(JSON(parameters).stringify()!)'")
         }
 
-        return send(request: mutableURLRequest) >>== { json in
-            guard let response = PushRegistration.from(json: json) else {
-                return deferMaybe(PushClientError.Local(PushClientUnknownError))
+        api.fetchPushRegistration(request: mutableURLRequest) { result in
+            if case .success(let push) = result {
+                completion(push)
+            } else {
+                completion(nil)
             }
-
-            return deferMaybe(response)
         }
     }
 
-    func updateUAID(_ apnsToken: String, withRegistration creds: PushRegistration) -> Deferred<Maybe<PushRegistration>> {
-        //  PUT /v1/{type}/{app_id}/registration/{uaid}
-        let registerURL = endpointURL.appendingPathComponent("registration/\(creds.uaid)")!
-        var mutableURLRequest = URLRequest(url: registerURL)
-
-        mutableURLRequest.httpMethod = HTTPMethod.put.rawValue
-        mutableURLRequest.addValue("Bearer \(creds.secret)", forHTTPHeaderField: "Authorization")
-
-        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        let parameters = ["token": apnsToken]
-        mutableURLRequest.httpBody = JSON(parameters).stringify()?.utf8EncodedData
-
-        return send(request: mutableURLRequest) >>== { json in
-            KeychainStore.shared.setString(apnsToken, forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
-            return deferMaybe(creds)
-        }
-    }
-
-    func unregister(_ creds: PushRegistration) -> Success {
-        //  DELETE /v1/{type}/{app_id}/registration/{uaid}
-        let unregisterURL = endpointURL.appendingPathComponent("registration/\(creds.uaid)")
+    func unregister(_ credentials: PushRegistration,
+                    completion: @escaping () -> Void) {
+        // DELETE /v1/{type}/{app_id}/registration/{uaid}
+        let unregisterURL = endpointURL.appendingPathComponent("registration/\(credentials.uaid)")
 
         var mutableURLRequest = URLRequest(url: unregisterURL!)
         mutableURLRequest.httpMethod = HTTPMethod.delete.rawValue
-        mutableURLRequest.addValue("Bearer \(creds.secret)", forHTTPHeaderField: "Authorization")
+        mutableURLRequest.addValue("Bearer \(credentials.secret)", forHTTPHeaderField: "Authorization")
 
-        return send(request: mutableURLRequest) >>> succeed
-    }
-}
-
-/// Utilities
-extension PushClient {
-    fileprivate func send(request: URLRequest) -> Deferred<Maybe<JSON>> {
-        log.info("\(request.httpMethod!) \(request.url?.absoluteString ?? "nil")")
-        let deferred = Deferred<Maybe<JSON>>()
-        urlSession.dataTask(with: request) { (data, response, error) in
-            if let error = error {
-                deferred.fill(Maybe(failure: PushClientError.Local(error)))
-                return
-            }
-
-            guard let _ = validatedHTTPResponse(response, contentType: "application/json"), let data = data, !data.isEmpty else {
-                deferred.fill(Maybe(failure: PushClientError.Local(PushClientUnknownError)))
-                return
-            }
-
-            do {
-                let json = try JSON(data: data)
-                if let remoteError = PushRemoteError.from(json: json) {
-                    return deferred.fill(Maybe(failure: PushClientError.Remote(remoteError)))
-                }
-                deferred.fill(Maybe(success: json))
-            } catch {
-                return deferred.fill(Maybe(failure: PushClientError.Local(error)))
-            }
-        }.resume()
-
-        return deferred
+        api.fetchPushRegistration(request: mutableURLRequest) { _ in
+            completion()
+        }
     }
 }

@@ -362,6 +362,7 @@ extension GridTabViewController {
         } else if self.tabManager.normalTabs.count == 1, let tab = self.tabManager.normalTabs.first {
             self.tabManager.selectTab(tab)
             self.dismissTabTray()
+            notificationCenter.post(name: .TabsTrayDidClose, object: nil)
         }
     }
 
@@ -655,8 +656,9 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let calculatedWidth = collectionView.bounds.width - collectionView.safeAreaInsets.left - collectionView.safeAreaInsets.right - GridTabTrayControllerUX.Margin
-        let cellWidth = floor((calculatedWidth * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
+        let margin = GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)
+        let calculatedWidth = collectionView.bounds.width - collectionView.safeAreaInsets.left - collectionView.safeAreaInsets.right - margin
+        let cellWidth = floor(calculatedWidth / CGFloat(numberOfColumns))
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .inactiveTabs:
             return calculateInactiveTabSizeHelper(collectionView)
@@ -677,9 +679,13 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
     }
 
     private func calculateInactiveTabSizeHelper(_ collectionView: UICollectionView) -> CGSize {
-        guard !tabDisplayManager.isPrivate, let inactiveTabViewModel = tabDisplayManager.inactiveViewModel, inactiveTabViewModel.activeTabs.count > 0 else {
+        guard !tabDisplayManager.isPrivate,
+              let inactiveTabViewModel = tabDisplayManager.inactiveViewModel,
+              inactiveTabViewModel.activeTabs.count > 0
+        else {
             return CGSize(width: 0, height: 0)
         }
+
         let closeAllButtonHeight = InactiveTabCell.UX.CloseAllTabRowHeight
         let headerHeightWithRoundedCorner = InactiveTabCell.UX.HeaderAndRowHeight + InactiveTabCell.UX.RoundedContainerPaddingClosed
         var totalHeight = headerHeightWithRoundedCorner

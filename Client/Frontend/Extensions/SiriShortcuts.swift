@@ -29,9 +29,7 @@ class SiriShortcuts {
     }()
 
     static func displayAddToSiri(for activityType: activityType, in viewController: UIViewController) {
-        guard let activity = SiriShortcuts().getActivity(for: activityType) else {
-            return
-        }
+        guard let activity = SiriShortcuts().getActivity(for: activityType) else { return }
         let shortcut = INShortcut(userActivity: activity)
         let addViewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
         addViewController.modalPresentationStyle = .formSheet

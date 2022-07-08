@@ -5,7 +5,7 @@
 import UIKit
 import Shared
 
-protocol CredentialPasscodeRequirementViewControllerDelegate {
+protocol CredentialPasscodeRequirementViewControllerDelegate: AnyObject {
     func credentialPasscodeRequirementViewControllerDidDismiss()
 }
 

@@ -7,7 +7,7 @@ import Shared
 
 // MARK: - ReaderModeStyleViewControllerDelegate
 
-protocol ReaderModeStyleViewControllerDelegate {
+protocol ReaderModeStyleViewControllerDelegate: AnyObject {
     // isUsingUserDefinedColor should be false by default unless we need to override the default color 
     func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController,
                                        didConfigureStyle style: ReaderModeStyle,

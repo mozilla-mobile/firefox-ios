@@ -1,7 +1,7 @@
 name: Create a PR with changes after importing strings
 on:
   schedule:
-    - cron: '0 11 * * 1-5'
+    - cron: '0 11 * * 1'
 
 jobs:
   build:

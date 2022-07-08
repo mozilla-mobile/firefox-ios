@@ -51,9 +51,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     class func convertHistoryToString(_ history: [URL]) -> String? {
         let historyAsStrings = optFilter(history.map { $0.absoluteString })
 
-        guard let data = try? JSONSerialization.data(withJSONObject: historyAsStrings, options: []) else {
-            return nil
-        }
+        guard let data = try? JSONSerialization.data(withJSONObject: historyAsStrings, options: []) else { return nil }
         return String(data: data, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
     }
 
