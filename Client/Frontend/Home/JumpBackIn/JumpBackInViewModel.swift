@@ -236,13 +236,16 @@ class JumpBackInViewModel: FeatureFlaggable {
         }
 
         // Get cached tabs
-        profile.getCachedClientsAndTabs().uponQueue(.main) { result in
-            guard let clientAndTabs = result.successValue, clientAndTabs.count > 0 else {
-                self.mostRecentSyncedTab = nil
-                completion()
-                return
+
+        DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass).async {
+            self.profile.getCachedClientsAndTabs().uponQueue(.global(qos: .userInteractive)) { result in
+                guard let clientAndTabs = result.successValue, clientAndTabs.count > 0 else {
+                    self.mostRecentSyncedTab = nil
+                    completion()
+                    return
+                }
+                self.createMostRecentSyncedTab(from: clientAndTabs, completion: completion)
             }
-            self.createMostRecentSyncedTab(from: clientAndTabs, completion: completion)
         }
     }
 
