@@ -23,6 +23,12 @@ struct JumpBackInList {
     }
 }
 
+/// The filtered jumpBack in synced tab to display to the user.
+struct JumpBackInSyncedTab {
+    let client: RemoteClient
+    let tab: RemoteTab
+}
+
 class JumpBackInViewModel: FeatureFlaggable {
 
     struct UX {
@@ -40,6 +46,8 @@ class JumpBackInViewModel: FeatureFlaggable {
     weak var browserBarViewDelegate: BrowserBarViewDelegate?
 
     var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
+    var mostRecentSyncedTab: JumpBackInSyncedTab?
+
     private var recentTabs: [Tab] = [Tab]()
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
 
@@ -212,10 +220,70 @@ class JumpBackInViewModel: FeatureFlaggable {
                 strongSelf.recentGroups = groups
                 completion()
             }
-
         } else {
             completion()
         }
+    }
+
+    private func updateRemoteTabs(completion: @escaping () -> Void) {
+        // Short circuit if the user is not logged in or feature not enabled
+        guard profile.hasSyncableAccount(),
+              featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly)
+        else {
+            mostRecentSyncedTab = nil
+            completion()
+            return
+        }
+
+        // Get cached tabs
+
+        DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass).async {
+            self.profile.getCachedClientsAndTabs().uponQueue(.global(qos: .userInteractive)) { result in
+                guard let clientAndTabs = result.successValue, clientAndTabs.count > 0 else {
+                    self.mostRecentSyncedTab = nil
+                    completion()
+                    return
+                }
+                self.createMostRecentSyncedTab(from: clientAndTabs, completion: completion)
+            }
+        }
+    }
+
+    private func createMostRecentSyncedTab(from clientAndTabs: [ClientAndTabs], completion: @escaping () -> Void) {
+        // filter clients for non empty desktop clients
+        let desktopClientAndTabs = clientAndTabs.filter { $0.tabs.count > 0 &&
+            ClientType.fromFxAType($0.client.type) == .Desktop }
+
+        guard !desktopClientAndTabs.isEmpty else {
+            mostRecentSyncedTab = nil
+            completion()
+            return
+        }
+
+        // get most recent tab
+        var mostRecentTab: (client: RemoteClient, tab: RemoteTab)?
+
+        desktopClientAndTabs.forEach { remoteClient in
+            guard let firstClient = remoteClient.tabs.first else { return }
+            let mostRecentClientTab = remoteClient.tabs.reduce(firstClient, {
+                                                                $0.lastUsed > $1.lastUsed ? $0 : $1 })
+
+            if let currentMostRecentTab = mostRecentTab,
+               currentMostRecentTab.tab.lastUsed < mostRecentClientTab.lastUsed {
+                mostRecentTab = (client: remoteClient.client, tab: mostRecentClientTab)
+            } else if mostRecentTab == nil {
+                mostRecentTab = (client: remoteClient.client, tab: mostRecentClientTab)
+            }
+        }
+
+        guard let mostRecentTab = mostRecentTab else {
+            mostRecentSyncedTab = nil
+            completion()
+            return
+        }
+
+        mostRecentSyncedTab = JumpBackInSyncedTab(client: mostRecentTab.client, tab: mostRecentTab.tab)
+        completion()
     }
 }
 
@@ -289,9 +357,25 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         // Has to be on main due to tab manager needing main tread
         // This can be fixed when tab manager has been revisited
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
+            guard let self = self else {
+                completion()
+                return
+            }
 
-            self.updateJumpBackInData(completion: completion)
+            let dispatchGroup = DispatchGroup()
+            dispatchGroup.enter()
+            self.updateJumpBackInData {
+                dispatchGroup.leave()
+            }
+
+            dispatchGroup.enter()
+            self.updateRemoteTabs {
+                dispatchGroup.leave()
+            }
+
+            dispatchGroup.notify(queue: .main) {
+                completion()
+            }
         }
     }
 

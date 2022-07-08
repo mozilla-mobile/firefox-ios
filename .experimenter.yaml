@@ -18,6 +18,9 @@ homescreenFeature:
   hasExposure: true
   exposureDescription: ""
   variables:
+    jump-back-in-synced-tab:
+      type: boolean
+      description: "This property defines whether the synced tab card appears on the homepage in the jump back in section.\n"
     pocket-sponsored-stories:
       type: boolean
       description: "This property defines whether pocket sponsored stories appear on the homepage.\n"

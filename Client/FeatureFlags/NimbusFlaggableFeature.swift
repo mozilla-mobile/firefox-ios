@@ -15,6 +15,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case historyGroups
     case inactiveTabs
     case jumpBackIn
+    case jumpBackInSyncedTab
     case pocket
     case pullToRefresh
     case recentlySaved
@@ -78,7 +79,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         // Cases where users do not have the option to manipulate a setting.
         case .reportSiteIssue,
                 .shakeToRestore,
-                .searchHighlights:
+                .searchHighlights,
+                .jumpBackInSyncedTab:
             return nil
         }
     }
