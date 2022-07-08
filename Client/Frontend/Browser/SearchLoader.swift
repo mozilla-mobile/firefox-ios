@@ -80,9 +80,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
                     self.currentDeferredHistoryQuery = nil
                 }
 
-                guard !deferredHistory.cancelled else {
-                    return
-                }
+                guard !deferredHistory.cancelled else { return }
 
                 let deferredHistorySites = results[0].successValue?.asArray() ?? []
                 let deferredBookmarksSites = results[1].successValue?.asArray() ?? []
@@ -97,9 +95,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
 
                 // If the new search string is not longer than the previous
                 // we don't need to find an autocomplete suggestion.
-                guard oldValue.count < self.query.count else {
-                    return
-                }
+                guard oldValue.count < self.query.count else { return }
 
                 // If we should skip the next autocomplete, reset
                 // the flag and bail out here.
@@ -136,9 +132,11 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
         // Extract the pre-path substring from the URL. This should be more efficient than parsing via
         // NSURL since we need to only look at the beginning of the string.
         // Note that we won't match non-HTTP(S) URLs.
-        guard let match = URLBeforePathRegex.firstMatch(in: url, options: [], range: NSRange(location: 0, length: url.count)) else {
-            return nil
-        }
+        guard let match = URLBeforePathRegex.firstMatch(
+            in: url,
+            options: [],
+            range: NSRange(location: 0, length: url.count))
+        else { return nil }
 
         // If the pre-path component (including the scheme) starts with the query, just use it as is.
         var prePathURL = (url as NSString).substring(with: match.range(at: 0))

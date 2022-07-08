@@ -141,16 +141,14 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "close-tab"])
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab else { return }
         tabManager.removeTab(currentTab)
         if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func undoLastTabClosedKeyCommand() {
         guard let lastClosedURL = profile.recentlyClosedTabs.popFirstTab()?.url,
-                   let selectedTab = tabManager.selectedTab
+              let selectedTab = tabManager.selectedTab
         else { return }
 
         let request = URLRequest(url: lastClosedURL)
@@ -179,9 +177,7 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "next-tab"])
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab else { return }
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         if let index = tabs.firstIndex(of: currentTab), index + 1 < tabs.count {
@@ -198,9 +194,7 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "previous-tab"])
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab else { return }
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         if let index = tabs.firstIndex(of: currentTab), index - 1 < tabs.count && index != 0 {
@@ -245,9 +239,7 @@ extension BrowserViewController {
     }
 
     @objc private func selectLastTab() {
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab else { return }
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         selectTab(number: tabs.count - 1)
@@ -256,15 +248,11 @@ extension BrowserViewController {
     /// Select a certain tab number - If number is greater than the present number of tabs, select the last tab
     /// - Parameter number: The 0 indexed tab number to select
     private func selectTab(number: Int) {
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab else { return }
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         // Do not continue if the index of the new tab to select is the current one
-        guard let currentTabIndex = tabs.firstIndex(of: currentTab), currentTabIndex != number else {
-            return
-        }
+        guard let currentTabIndex = tabs.firstIndex(of: currentTab), currentTabIndex != number else { return }
 
         if tabs.count > number {
             tabManager.selectTab(tabs[number])
@@ -279,21 +267,24 @@ extension BrowserViewController {
 
     @objc private func zoomIn() {
         guard let currentTab = tabManager.selectedTab,
-              firefoxHomeViewController == nil else { return }
+              firefoxHomeViewController == nil
+        else { return }
 
         currentTab.zoomIn()
     }
 
     @objc private func zoomOut() {
         guard let currentTab = tabManager.selectedTab,
-              firefoxHomeViewController == nil else { return }
+              firefoxHomeViewController == nil
+        else { return }
 
         currentTab.zoomOut()
     }
 
     @objc private func resetZoom() {
         guard let currentTab = tabManager.selectedTab,
-              firefoxHomeViewController == nil else { return }
+              firefoxHomeViewController == nil
+        else { return }
 
         currentTab.resetZoom()
     }

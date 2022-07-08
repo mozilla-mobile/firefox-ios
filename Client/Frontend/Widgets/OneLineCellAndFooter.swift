@@ -2,12 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import UIKit
-
 struct OneLineCellUX {
     static let ImageSize: CGFloat = 29
-    static let ImageCornerRadius: CGFloat = 6
-    static let HorizontalMargin: CGFloat = 16
+    static let BorderViewMargin: CGFloat = 16
 }
 
 enum OneLineTableViewCustomization {
@@ -43,13 +40,6 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
         return imgView
     }()
 
-    var leftOverlayImageView: UIImageView = {
-        let imgView = UIImageView()
-        imgView.contentMode = .scaleAspectFit
-        imgView.clipsToBounds = true
-        return imgView
-    }()
-
     var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
@@ -78,8 +68,16 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
     let midView = UIView()
     var shouldLeftAlignTitle = false
     var customization: OneLineTableViewCustomization = .regular
+
+    private var defaultSeparatorInset: UIEdgeInsets {
+        return UIEdgeInsets(top: 0,
+                            left: OneLineCellUX.ImageSize + 2 * OneLineCellUX.BorderViewMargin,
+                            bottom: 0,
+                            right: 0)
+    }
+
     func initialViewSetup() {
-        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
+        separatorInset = defaultSeparatorInset
         self.selectionStyle = .default
         midView.addSubview(titleLabel)
         containerView.addSubviews(bottomSeparatorView)
@@ -164,7 +162,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
     override func prepareForReuse() {
         super.prepareForReuse()
         self.selectionStyle = .default
-        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
+        separatorInset = defaultSeparatorInset
         applyTheme()
     }
 }

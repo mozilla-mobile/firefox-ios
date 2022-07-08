@@ -34,9 +34,9 @@ extension URLCaching {
         guard findCachedData(for: request, timestamp: Date.now()) != nil else { return nil }
 
         let cachedResponse = urlCache.cachedResponse(for: request)
-        guard let data = cachedResponse?.data, let json = try? JSONSerialization.jsonObject(with: data, options: []) else {
-            return nil
-        }
+        guard let data = cachedResponse?.data,
+              let json = try? JSONSerialization.jsonObject(with: data, options: [])
+        else { return nil }
 
         return json as? [String: Any]
     }

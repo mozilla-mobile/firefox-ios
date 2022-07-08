@@ -142,9 +142,7 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     @objc func sliderValueChanged(control: UISlider, event: UIEvent) {
-        guard let touch = event.allTouches?.first, touch.phase == .ended else {
-            return
-        }
+        guard let touch = event.allTouches?.first, touch.phase == .ended else { return }
 
         LegacyThemeManager.instance.automaticBrightnessValue = control.value
         brightnessChanged()

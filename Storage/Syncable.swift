@@ -19,6 +19,6 @@ public protocol ResettableSyncStorage {
     func resetClient() -> Success
 }
 
-public protocol AccountRemovalDelegate {
+public protocol AccountRemovalDelegate: AnyObject {
     func onRemovedAccount() -> Success
 }

@@ -229,9 +229,11 @@ extension URL {
     }
 
     public var origin: String? {
-        guard isWebPage(includeDataURIs: false), let hostPort = self.hostPort, let scheme = scheme else {
-            return nil
-        }
+        guard isWebPage(includeDataURIs: false),
+              let hostPort = self.hostPort,
+              let scheme = scheme
+        else { return nil }
+
         return "\(scheme)://\(hostPort)"
     }
 
@@ -342,9 +344,10 @@ extension URL {
     public var normalizedHost: String? {
         // Use components.host instead of self.host since the former correctly preserves
         // brackets for IPv6 hosts, whereas the latter strips them.
-        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false), var host = components.host, host != "" else {
-            return nil
-        }
+        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
+              var host = components.host,
+              host != ""
+        else { return nil }
 
         if let range = host.range(of: "^(www|mobile|m)\\.", options: .regularExpression) {
             host.replaceSubrange(range, with: "")
@@ -511,9 +514,7 @@ public struct InternalURL {
     }
 
     public init?(_ url: URL) {
-        guard InternalURL.isValid(url: url) else {
-            return nil
-        }
+        guard InternalURL.isValid(url: url) else { return nil }
 
         self.url = url
     }
@@ -586,9 +587,7 @@ public struct InternalURL {
     /// Return the path after "about/" in the URI.
     public var aboutComponent: String? {
         let aboutPath = "/about/"
-        guard let url = URL(string: stripAuthorization) else {
-            return nil
-        }
+        guard let url = URL(string: stripAuthorization) else { return nil }
 
         if url.path.hasPrefix(aboutPath) {
             return String(url.path.dropFirst(aboutPath.count))

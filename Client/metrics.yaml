@@ -247,21 +247,6 @@ app_menu:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
 
-# Application Services metrics
-application_services:
-  pocket_stories_visible:
-    type: boolean
-    description: |
-      Measures the state of the show Pocket stories preference.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
-
 # Bookmark metrics
 bookmarks:
   view_list:
@@ -1146,6 +1131,17 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
+  pocket_stories_visible:
+    type: boolean
+    description: |
+      Measures the state of the show Pocket stories preference.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8709
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11171
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-29"
 
 # Library
 library:
@@ -1515,7 +1511,7 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-07-01"
+    expires: "2023-01-01"
   private_browsing_button_tapped:
     type: event
     description: |
@@ -2109,7 +2105,7 @@ tabs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9785
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-07-01"
+    expires: "2023-01-01"
   press_tab_toolbar:
     type: event
     description: |
@@ -2799,6 +2795,19 @@ adjust:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_sensitivity:
       - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+migration:
+  image_sd_cache_cleanup:
+    type: counter
+    description: |
+        Counts the number of times a user runs the
+        sd web image library cache cleanup
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11169
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"

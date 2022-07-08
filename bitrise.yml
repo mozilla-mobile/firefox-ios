@@ -102,7 +102,7 @@ workflows:
             set -euxo pipefail
             echo "-- compress --"
                 
-            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/Client.xcodeproj" "$BITRISE_SOURCE_DIR/XCUITests/SmokeXCUITests.xctestplan" "$BITRISE_SOURCE_DIR/Smoketest2.xctestplan" "$BITRISE_SOURCE_DIR/Smoketest3.xctestplan" "$BITRISE_SOURCE_DIR/Smoketest4.xctestplan" "$BITRISE_SOURCE_DIR/xcodebuild.log" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Fennec_Enterprise_XCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_SmokeXCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest2_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" "$BITRISE_SOURCE_DIR/XCUITests/UnitTest.xctestplan" "$BITRISE_SOURCE_DIR/Client/"
+            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/Client.xcodeproj" "$BITRISE_SOURCE_DIR/Tests/SmokeXCUITests.xctestplan" "$BITRISE_SOURCE_DIR/Tests/Smoketest2.xctestplan" "$BITRISE_SOURCE_DIR/Tests/Smoketest3.xctestplan" "$BITRISE_SOURCE_DIR/Tests/Smoketest4.xctestplan" "$BITRISE_SOURCE_DIR/xcodebuild.log" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Fennec_Enterprise_XCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_SmokeXCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest2_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" "$BITRISE_SOURCE_DIR/Client/" "$BITRISE_SOURCE_DIR/Tests/XCUITests"
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
@@ -132,10 +132,10 @@ workflows:
             #!/usr/bin/env bash
             set -ex 
 
-            ls -la
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/
+            cp -r ./Users/vagrant/git/Tests/* .
             mv ./Users/vagrant/git/* .
+            ls -la
             echo "-- test-without-building --"
 
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" test-without-building
@@ -170,10 +170,10 @@ workflows:
             #!/usr/bin/env bash
             set -ex 
 
-            ls -la
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/
+            cp -r ./Users/vagrant/git/Tests/* .
             mv ./Users/vagrant/git/* .
+            ls -la
 
             echo "-- test-without-building --"
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "SmokeXCUITests" "test-without-building"
@@ -207,8 +207,8 @@ workflows:
         - content: |
             #!/usr/bin/env bash
             set -ex 
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/
+            cp -r ./Users/vagrant/git/Tests/* .
             mv ./Users/vagrant/git/* .
             ls -la
 
@@ -245,8 +245,8 @@ workflows:
             #!/usr/bin/env bash
             set -ex 
 
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/
+            cp -r ./Users/vagrant/git/Tests/* .
             mv ./Users/vagrant/git/* .
             ls -la
 
@@ -284,8 +284,8 @@ workflows:
             set -ex 
 
             ls -la
-            ls ./Users/vagrant/git/XCUITests
-            cp ./Users/vagrant/git/XCUITests/* .
+            ls ./Users/vagrant/git/Tests/
+            cp -r ./Users/vagrant/git/Tests/* .
             mv ./Users/vagrant/git/* .
             ls -la
 
@@ -313,7 +313,7 @@ workflows:
     - deploy-to-bitrise-io@2.0: {}
     meta:
         bitrise.io:
-            stack: osx-xcode-13.2.x
+            stack: osx-xcode-13.4.x
             machine_type_id: g2.8core
   just_build_fennec_to_get_warnings:
     before_run:
@@ -377,7 +377,7 @@ workflows:
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
     meta:
         bitrise.io:
-            stack: osx-xcode-13.2.x
+            stack: osx-xcode-13.4.x
             machine_type_id: g2.4core
   send_slack_notification:
     steps:
@@ -717,7 +717,7 @@ workflows:
     - 5_deploy_and_slack
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.4.x
         machine_type_id: g2.4core
   RunSmokeXCUITestsiPad:
     steps:
@@ -734,7 +734,7 @@ workflows:
     description: This Workflow is to run SmokeTest on iPad simulator device
     meta:
       bitrise.io:
-        stack: osx-xcode-13.1.x
+        stack: osx-xcode-13.4.x
         machine_type_id: g2.4core
     before_run:
     - 1_git_clone_and_post_clone
@@ -1016,7 +1016,7 @@ workflows:
     description: This Workflow is to run tests UI TESTS
     meta:
       bitrise.io:
-        stack: osx-xcode-13.1.x
+        stack: osx-xcode-13.4.x
         machine_type_id: g2.8core
   SPM_Deploy_Prod_Beta:
     steps:
@@ -1142,7 +1142,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.1.x
+        stack: osx-xcode-13.4.x
         machine_type_id: g2.8core
   SPM_Deploy_Beta_Only:
     steps:
@@ -1239,7 +1239,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.1.x
+        stack: osx-xcode-13.4.x
         machine_type_id: g2.8core
   SPM_Nightly_Beta_Only:
     steps:
@@ -1336,7 +1336,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.4.x
         machine_type_id: g2.8core
 app:
   envs:
@@ -1358,7 +1358,7 @@ app:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-13.2.x
+    stack: osx-xcode-13.4.x
     machine_type_id: g2.4core
 
 trigger_map:

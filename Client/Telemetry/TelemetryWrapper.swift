@@ -164,6 +164,12 @@ class TelemetryWrapper {
             name: UIApplication.didEnterBackgroundNotification,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(recordFinishedLaunchingPreferenceMetrics(notification:)),
+            name: UIApplication.didFinishLaunchingNotification,
+            object: nil
+        )
     }
 
     // Sets hashed fxa sync device id for glean deletion ping
@@ -176,6 +182,15 @@ class TelemetryWrapper {
 
             let deviceId = (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
             GleanMetrics.Deletion.syncDeviceId.set(deviceId)
+        }
+    }
+    @objc func recordFinishedLaunchingPreferenceMetrics(notification: NSNotification) {
+        guard let profile = self.profile else { return }
+        // Pocket stories visible
+        if let pocketStoriesVisible = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.ASPocketStories) {
+            GleanMetrics.FirefoxHomePage.pocketStoriesVisible.set(pocketStoriesVisible)
+        } else {
+            GleanMetrics.FirefoxHomePage.pocketStoriesVisible.set(true)
         }
     }
 
@@ -233,12 +248,6 @@ class TelemetryWrapper {
             GleanMetrics.Preferences.closePrivateTabs.set(closePrivateTabs)
         } else {
             GleanMetrics.Preferences.closePrivateTabs.set(false)
-        }
-        // Pocket stories visible
-        if let pocketStoriesVisible = prefs.boolForKey(PrefsKeys.FeatureFlags.ASPocketStories) {
-            GleanMetrics.ApplicationServices.pocketStoriesVisible.set(pocketStoriesVisible)
-        } else {
-            GleanMetrics.ApplicationServices.pocketStoriesVisible.set(true)
         }
         // Tracking protection - enabled
         if let tpEnabled = prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) {
@@ -439,6 +448,7 @@ extension TelemetryWrapper {
         case fxaConfirmSignInToken = "fxa-confirm-signin-token"
         case awesomebarLocation = "awesomebar-position"
         case searchHighlights = "search-highlights"
+        case clearSDWebImageCache = "clear-sd-webimage-cache"
     }
 
     public enum EventValue: String {
@@ -1132,6 +1142,8 @@ extension TelemetryWrapper {
                     GleanMetrics.Messaging.MalformedExtra(messageKey: messageId)
                 )
             }
+        case (.information, .delete, .clearSDWebImageCache, _, _):
+            GleanMetrics.Migration.imageSdCacheCleanup.add()
 
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)

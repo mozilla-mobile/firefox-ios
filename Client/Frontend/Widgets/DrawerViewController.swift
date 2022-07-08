@@ -199,26 +199,20 @@ public class DrawerViewController: UIViewController, NotificationThemeable {
     }
 
     @objc fileprivate func didRecognizeTapGesture(_ gestureRecognizer: UITapGestureRecognizer) {
-        guard gestureRecognizer.state == .ended else {
-            return
-        }
+        guard gestureRecognizer.state == .ended else { return }
 
         close()
     }
 
     @objc fileprivate func didRecognizePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
         // Drawer is not draggable on iPad layout.
-        guard !showingPadLayout else {
-            return
-        }
+        guard !showingPadLayout else { return }
 
         let translation = gestureRecognizer.translation(in: drawerView)
         yPosition += translation.y
         gestureRecognizer.setTranslation(CGPoint.zero, in: drawerView)
 
-        guard gestureRecognizer.state == .ended else {
-            return
-        }
+        guard gestureRecognizer.state == .ended else { return }
 
         let velocity = gestureRecognizer.velocity(in: drawerView).y
         let landingYPosition = yPosition + velocity / 10
