@@ -75,7 +75,16 @@ class TopSitesProviderImplementation: TopSitesProvider {
         }
     }
 
-    private func getFrecencySites(group: DispatchGroup, numberOfMaxItems: Int) {
+    func defaultTopSites(_ prefs: Prefs) -> [Site] {
+        let suggested = SuggestedSites.asArray()
+        let deleted = prefs.arrayForKey(defaultSuggestedSitesKey) as? [String] ?? []
+        return suggested.filter({deleted.firstIndex(of: $0.url) == .none})
+    }
+}
+
+// MARK: Private
+private extension TopSitesProviderImplementation {
+    func getFrecencySites(group: DispatchGroup, numberOfMaxItems: Int) {
         group.enter()
         browserHistoryFetcher
             .getTopSitesWithLimit(numberOfMaxItems)
@@ -88,7 +97,7 @@ class TopSitesProviderImplementation: TopSitesProvider {
             }
     }
 
-    private func getPinnedSites(group: DispatchGroup) {
+    func getPinnedSites(group: DispatchGroup) {
         group.enter()
         browserHistoryFetcher
             .getPinnedTopSites()
@@ -101,7 +110,7 @@ class TopSitesProviderImplementation: TopSitesProvider {
             }
     }
 
-    private func calculateTopSites(completion: ([Site]?) -> Void) {
+    func calculateTopSites(completion: ([Site]?) -> Void) {
         // Filter out frecency history which resulted from sponsored tiles clicks
         let sites = frecencySites.filter { !$0.url.contains(hideWithSearchParam) }
 
@@ -131,11 +140,5 @@ class TopSitesProviderImplementation: TopSitesProvider {
         }
 
         completion(newSites)
-    }
-
-    func defaultTopSites(_ prefs: Prefs) -> [Site] {
-        let suggested = SuggestedSites.asArray()
-        let deleted = prefs.arrayForKey(defaultSuggestedSitesKey) as? [String] ?? []
-        return suggested.filter({deleted.firstIndex(of: $0.url) == .none})
     }
 }
