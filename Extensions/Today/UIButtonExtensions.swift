@@ -23,14 +23,14 @@ extension UIButton {
                    imageTitlePadding: CGFloat) {
         let isLTR = effectiveUserInterfaceLayoutDirection == .leftToRight
 
-        self.contentEdgeInsets = UIEdgeInsets(
+        contentEdgeInsets = UIEdgeInsets(
             top: contentPadding.top,
             left: isLTR ? contentPadding.left : contentPadding.right + imageTitlePadding,
             bottom: contentPadding.bottom,
             right: isLTR ? contentPadding.right + imageTitlePadding : contentPadding.left
         )
 
-        self.titleEdgeInsets = UIEdgeInsets(
+        titleEdgeInsets = UIEdgeInsets(
             top: 0,
             left: isLTR ? imageTitlePadding : -imageTitlePadding,
             bottom: 0,

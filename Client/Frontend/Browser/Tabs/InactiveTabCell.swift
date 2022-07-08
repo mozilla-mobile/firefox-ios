@@ -41,7 +41,7 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell {
     // Views
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
+        tableView.register(InactiveTabItemCell.self, forCellReuseIdentifier: InactiveTabItemCell.cellIdentifier)
         tableView.register(CellWithRoundedButton.self, forCellReuseIdentifier: CellWithRoundedButton.cellIdentifier)
         tableView.register(InactiveTabHeader.self, forHeaderFooterViewReuseIdentifier: InactiveTabHeader.cellIdentifier)
         tableView.allowsMultipleSelectionDuringEditing = false
@@ -129,30 +129,39 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch InactiveTabSection(rawValue: indexPath.section) {
         case .inactive:
-            let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as! OneLineTableViewCell
-            cell.customization = .inactiveCell
-            cell.backgroundColor = .clear
-            cell.accessoryView = nil
-            cell.bottomSeparatorView.isHidden = false
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: InactiveTabItemCell.cellIdentifier,
+                                                           for: indexPath) as? InactiveTabItemCell
+            else {
+                return UITableViewCell()
+            }
 
             guard let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] else { return cell }
-            cell.titleLabel.text = tab.getTabTrayTitle()
-            cell.leftImageView.setImageAndBackground(forIcon: tab.displayFavicon, website: getTabDomainUrl(tab: tab)) {}
-            cell.shouldLeftAlignTitle = false
-            cell.updateMidConstraint()
-            cell.accessoryType = .none
+
+            let viewModel = InactiveTabItemCellModel(title: tab.getTabTrayTitle(),
+                                                     icon: tab.displayFavicon,
+                                                     website: getTabDomainUrl(tab: tab))
+            cell.configureCell(viewModel: viewModel)
             return cell
 
         case .closeAllTabsButton:
-            if let closeAllButtonCell = tableView.dequeueReusableCell(withIdentifier: CellWithRoundedButton.cellIdentifier, for: indexPath) as? CellWithRoundedButton {
-                closeAllButtonCell.buttonClosure = {
-                    self.delegate?.didTapCloseAllTabs()
-                }
-                return closeAllButtonCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CellWithRoundedButton.cellIdentifier,
+                                                           for: indexPath) as? CellWithRoundedButton
+            else {
+                return UITableViewCell()
             }
-            return tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as! OneLineTableViewCell
+
+            cell.buttonClosure = {
+                self.delegate?.didTapCloseAllTabs()
+            }
+
+            return cell
         case .none:
-            return tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as! OneLineTableViewCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
+                                                           for: indexPath) as? OneLineTableViewCell
+            else {
+                return UITableViewCell()
+            }
+            return cell
         }
     }
 
