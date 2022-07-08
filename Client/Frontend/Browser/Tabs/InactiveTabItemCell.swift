@@ -21,10 +21,10 @@ class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell 
     }
 
     private lazy var titleLabel: UILabel = .build { label in
-           label.textColor = .black
-           label.textAlignment = .natural
-           label.numberOfLines = 1
-           label.contentMode = .center
+        label.textColor = .black
+        label.textAlignment = .natural
+        label.numberOfLines = 1
+        label.contentMode = .center
     }
 
     private lazy var bottomSeparatorView: UIView = .build { separatorLine in
