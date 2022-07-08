@@ -79,6 +79,16 @@ extension UIView {
             trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: constant)
         ])
     }
+    
+    /**
+     * Makes x and y anchors of a view equaled to that of another view.
+     */
+    func center(equalTo view: UIView, constant: CGFloat = 0) {
+        NSLayoutConstraint.activate([
+            centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: constant),
+            centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: constant),
+        ])
+    }
 
     /**
      This allows us to find the view in a current view hierarchy that is currently the first responder
