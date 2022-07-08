@@ -104,7 +104,7 @@ class LoadingBarColor {
     func middle(_ isPrivate: Bool) -> UIColor? {
         return !isPrivate ? UIColor.Photon.Pink40 : nil
     }
-    
+
     func end(_ isPrivate: Bool) -> UIColor {
         return !isPrivate ? UIColor.Photon.Yellow40 : UIColor.Photon.Purple60
     }
