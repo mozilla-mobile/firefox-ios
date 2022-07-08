@@ -258,12 +258,12 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     }
 
     private func showClearRecentHistory() {
-        clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: { [weak self] date in
+        clearHistoryHelper.showClearRecentHistory(onViewController: self) { [weak self] dateOption in
+
             // Delete groupings that belong to THAT section.
-            if let date = date {
-                self?.viewModel.deleteGroupsForDates(date: date)
+            if let dateOption = dateOption {
+                self?.viewModel.deleteGroupsFor(dateOption: dateOption)
             } else {
-                // Otherwise delete ALL groups, since we're deleting all history anyways.
                 self?.viewModel.removeAllData()
             }
 
@@ -272,7 +272,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
                 self?.tableView.reloadData()
                 self?.refreshRecentlyClosedCell()
             }
-        })
+        }
     }
 
     private func refreshRecentlyClosedCell() {

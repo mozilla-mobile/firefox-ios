@@ -127,10 +127,10 @@ class HistoryDeletionUtilityTests: XCTestCase {
 
     // MARK: - Test time based deletion
     // In these tests, we don't test the deletion of metadata. The assumption
-    // is that A-S has it's own testing. Furthermore, this testing is currently
-    // not possible because we don't have an API to control when the date
-    // at which a metadata item is created, currently making testing these time
-    // frames, with the exception of `.allTime` impossible to test.
+    // is that A-S has its own testing. Furthermore, because we don't have an
+    // API to control when the date at which a metadata item is created,
+    // currently making testing these time frames, with the exception of
+    // `.allTime` impossible to test.
 
     func testDeletingAllItemsInLastHour() {
         guard let thirtyMinutesAgo = Calendar.current.date(byAdding: .minute,
@@ -141,12 +141,13 @@ class HistoryDeletionUtilityTests: XCTestCase {
             return
         }
 
+        let timeframe: HistoryDeletionUtilityDateOptions = .lastHour
         let sitesToDelete = [SiteElements(domain: "cnn", timeVisited: thirtyMinutesAgo),
                              SiteElements(domain: "mozilla")]
         populateDBHistory(with: sitesToDelete)
 
-        deletionWithExpectation(since: .lastHour) { result in
-            XCTAssertTrue(result)
+        deletionWithExpectation(since: timeframe) { returnedTimeframe in
+            XCTAssertEqual(timeframe, returnedTimeframe)
             self.assertDBIsEmpty(shouldSkipMetadata: true)
         }
     }
@@ -163,12 +164,13 @@ class HistoryDeletionUtilityTests: XCTestCase {
             return
         }
 
+        let timeframe: HistoryDeletionUtilityDateOptions = .lastHour
         let sitesToDelete = [SiteElements(domain: "cnn", timeVisited: thirtyMinutesAgo)]
         let sitesToRemain = [SiteElements(domain: "mozilla", timeVisited: twoHoursAgo)]
         populateDBHistory(with: (sitesToRemain + sitesToDelete).shuffled())
 
-        deletionWithExpectation(since: .lastHour) { result in
-            XCTAssertTrue(result)
+        deletionWithExpectation(since: timeframe) { returnedTimeframe in
+            XCTAssertEqual(timeframe, returnedTimeframe)
             self.assertDBHistoryStateFor(sitesToRemain)
         }
     }
@@ -183,12 +185,13 @@ class HistoryDeletionUtilityTests: XCTestCase {
             return
         }
 
+        let timeframe: HistoryDeletionUtilityDateOptions = .today
         let sitesToDelete = [SiteElements(domain: "cnn", timeVisited: someTimeToday),
                              SiteElements(domain: "mozilla")]
         populateDBHistory(with: sitesToDelete)
 
-        deletionWithExpectation(since: .today) { result in
-            XCTAssertTrue(result)
+        deletionWithExpectation(since: timeframe) { returnedTimeframe in
+            XCTAssertEqual(timeframe, returnedTimeframe)
             self.assertDBIsEmpty(shouldSkipMetadata: true)
         }
     }
@@ -206,12 +209,13 @@ class HistoryDeletionUtilityTests: XCTestCase {
             return
         }
 
+        let timeframe: HistoryDeletionUtilityDateOptions = .today
         let sitesToDelete = [SiteElements(domain: "cnn", timeVisited: someTimeToday)]
         let sitesToRemain = [SiteElements(domain: "mozilla", timeVisited: thirtyHoursAgo)]
         populateDBHistory(with: (sitesToRemain + sitesToDelete).shuffled())
 
-        deletionWithExpectation(since: .today) { result in
-            XCTAssertTrue(result)
+        deletionWithExpectation(since: timeframe) { returnedTimeframe in
+            XCTAssertEqual(timeframe, returnedTimeframe)
             self.assertDBHistoryStateFor(sitesToRemain)
         }
     }
@@ -222,12 +226,13 @@ class HistoryDeletionUtilityTests: XCTestCase {
             return
         }
 
+        let timeframe: HistoryDeletionUtilityDateOptions = .yesterday
         let sitesToDelete = [SiteElements(domain: "cnn", timeVisited: someTimeYesterday),
                              SiteElements(domain: "mozilla")]
         populateDBHistory(with: sitesToDelete)
 
-        deletionWithExpectation(since: .yesterday) { result in
-            XCTAssertTrue(result)
+        deletionWithExpectation(since: timeframe) { returnedTimeframe in
+            XCTAssertEqual(timeframe, returnedTimeframe)
             self.assertDBIsEmpty(shouldSkipMetadata: true)
         }
     }
@@ -242,12 +247,13 @@ class HistoryDeletionUtilityTests: XCTestCase {
             return
         }
 
+        let timeframe: HistoryDeletionUtilityDateOptions = .yesterday
         let sitesToDelete = [SiteElements(domain: "cnn", timeVisited: someTimeYesterday)]
         let sitesToRemain = [SiteElements(domain: "mozilla", timeVisited: ninetyHoursAgo)]
         populateDBHistory(with: (sitesToRemain + sitesToDelete).shuffled())
 
-        deletionWithExpectation(since: .yesterday) { result in
-            XCTAssertTrue(result)
+        deletionWithExpectation(since: timeframe) { returnedTimeframe in
+            XCTAssertEqual(timeframe, returnedTimeframe)
             self.assertDBHistoryStateFor(sitesToRemain)
         }
     }
@@ -271,6 +277,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
             return
         }
 
+        let timeframe: HistoryDeletionUtilityDateOptions = .allTime
         let sitesToDelete = [SiteElements(domain: "cnn", timeVisited: earlierToday),
                              SiteElements(domain: "polygon", timeVisited: yesterday),
                              SiteElements(domain: "theverge", timeVisited: aFewDaysAgo),
@@ -278,8 +285,8 @@ class HistoryDeletionUtilityTests: XCTestCase {
                              SiteElements(domain: "doihaveinternet", timeVisited: lastMonth)]
         populateDBHistory(with: sitesToDelete)
 
-        deletionWithExpectation(since: .allTime) { result in
-            XCTAssertTrue(result)
+        deletionWithExpectation(since: timeframe) { returnedTimeframe in
+            XCTAssertNil(returnedTimeframe)
             self.assertDBIsEmpty(shouldSkipMetadata: true)
         }
     }
@@ -309,13 +316,13 @@ private extension HistoryDeletionUtilityTests {
 
     func deletionWithExpectation(
         since dateOption: HistoryDeletionUtilityDateOptions,
-        completion: @escaping (Bool) -> Void
+        completion: @escaping (HistoryDeletionUtilityDateOptions?) -> Void
     ) {
         let deletionUtility = createDeletionUtility()
         let expectation = expectation(description: "HistoryDeletionUtilityTest")
 
-        deletionUtility.deleteHistoryFrom(dateOption) { _ in
-            completion(true)
+        deletionUtility.deleteHistoryFrom(dateOption) { time in
+            completion(time)
             expectation.fulfill()
         }
 

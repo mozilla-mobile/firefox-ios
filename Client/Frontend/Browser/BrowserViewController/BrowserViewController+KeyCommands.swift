@@ -32,7 +32,7 @@ extension BrowserViewController {
     @objc private func openClearHistoryPanelKeyCommand() {
         guard let libraryViewController = self.libraryViewController else {
             let clearHistoryHelper = ClearHistorySheetProvider(profile: profile, tabManager: tabManager)
-            clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: nil)
+            clearHistoryHelper.showClearRecentHistory(onViewController: self)
             return
         }
 

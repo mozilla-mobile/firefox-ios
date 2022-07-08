@@ -21,6 +21,7 @@ class HistoryDeletionUtility {
         self.profile = profile
     }
 
+    // MARK: URL based deletion functions
     /// Deletes sites from the history and from metadata.
     ///
     /// Completion block is included for testing and should not be used otherwise.
@@ -30,21 +31,6 @@ class HistoryDeletionUtility {
             completion?(result)
         }
     }
-
-    public func deleteHistoryFrom(
-        _ dateOption: HistoryDeletionUtilityDateOptions,
-        completion: ((Date?) -> Void)? = nil
-    ) {
-        deleteWKWebsiteDataSince(dateOption,
-                                 for: WKWebsiteDataStore.allWebsiteDataTypes())
-        deleteProfileHistorySince(dateOption) {
-            self.deleteProfileMetadataSince(dateOption) { time in
-                completion?(time)
-            }
-        }
-    }
-
-    // MARK: Private url based deletion functions
 
     private func deleteFromHistory(_ sites: [String]) {
         sites.forEach { profile.history.removeHistoryForURL($0) }
@@ -64,13 +50,26 @@ class HistoryDeletionUtility {
         }
     }
 
-    // MARK: Private date based deletion functions
+    // MARK: - Date based deletion functions
+    public func deleteHistoryFrom(
+        _ dateOption: HistoryDeletionUtilityDateOptions,
+        completion: ((HistoryDeletionUtilityDateOptions?) -> Void)? = nil
+    ) {
+        deleteWKWebsiteDataSince(dateOption, for: WKWebsiteDataStore.allWebsiteDataTypes())
+        deleteProfileHistorySince(dateOption) {
+            self.deleteProfileMetadataSince(dateOption) {
+                self.clearRecentlyClosedTabs(using: dateOption) { date in
+                    completion?(date)
+                }
+            }
+        }
+    }
+
     private func deleteWKWebsiteDataSince(
         _ dateOption: HistoryDeletionUtilityDateOptions,
         for types: Set<String>
     ) {
-        guard let unwrappedDate = dateFor(dateOption) else { return }
-        let date = dateOption == .allTime ? .distantPast : unwrappedDate
+        guard let date = dateFor(dateOption, requiringAllTimeAsPresent: false) else { return }
 
         WKWebsiteDataStore.default().removeData(ofTypes: types,
                                                 modifiedSince: date,
@@ -87,10 +86,6 @@ class HistoryDeletionUtility {
                 .clearHistory()
                 .uponQueue(.global(qos: .userInteractive)) { result in
                     if result.isSuccess { completion?() }
-                    // ROUX: does this need to be here?
-                    //                guard let completion = didComplete else { return }
-                    //                self.profile.recentlyClosedTabs.removeTabsFromDate(startOfDay)
-                    //                completion?(nil)
                 }
 
         default:
@@ -100,17 +95,13 @@ class HistoryDeletionUtility {
                 .removeHistoryFromDate(date)
                 .uponQueue(.global(qos: .userInteractive)) { result in
                     if result.isSuccess { completion?() }
-                    // ROUX: does this need to be here?
-                    //                guard let completion = didComplete else { return }
-                    //                self.profile.recentlyClosedTabs.removeTabsFromDate(startOfDay)
-                    //                completion?(nil)
                 }
         }
     }
 
     private func deleteProfileMetadataSince(
         _ dateOption: HistoryDeletionUtilityDateOptions,
-        completion: ((Date?) -> Void)? = nil
+        completion: (() -> Void)? = nil
     ) {
         guard let date = dateFor(dateOption) else { return }
         let dateInMilliseconds = date.toMillisecondsSince1970()
@@ -118,24 +109,33 @@ class HistoryDeletionUtility {
         profile.places
             .deleteHistoryMetadataOlderThan(olderThan: dateInMilliseconds)
             .uponQueue(.global(qos: .userInteractive)) { result in
-                if result.isSuccess { completion?(date) }
+                if result.isSuccess { completion?() }
             }
     }
 
-//    private func deleteAllHistoryData(completion: ((Date?) -> Void)? = nil) {
-//
-//        profile.history.clearHistory().uponQueue(.global(qos: .userInteractive)) { _ in
-//            // INT64_MAX represents the oldest possible time that AS would have
-//            self.profile.places
-//                .deleteHistoryMetadataOlderThan(olderThan: INT64_MAX)
-//                .uponQueue(.global(qos: .userInteractive)) { _ in
-//                guard let completion = completion else { return }
-//                completion(nil)
-//            }
-//        }
-//    }
-//
-    private func dateFor(_ dateOption: HistoryDeletionUtilityDateOptions) -> Date? {
+    private func clearRecentlyClosedTabs(
+        using dateOption: HistoryDeletionUtilityDateOptions,
+        completion: ((HistoryDeletionUtilityDateOptions?) -> Void)? = nil
+    ) {
+        guard let date = dateFor(dateOption) else {
+            completion?(nil)
+            return
+        }
+
+        switch dateOption {
+        case .allTime:
+            profile.recentlyClosedTabs.clearTabs()
+            completion?(nil)
+        default:
+            profile.recentlyClosedTabs.removeTabsFromDate(date)
+            completion?(dateOption)
+        }
+    }
+
+    private func dateFor(
+        _ dateOption: HistoryDeletionUtilityDateOptions,
+        requiringAllTimeAsPresent: Bool = true
+    ) -> Date? {
         switch dateOption {
         case .lastHour:
             return Calendar.current.date(byAdding: .hour, value: -1, to: Date())
@@ -149,7 +149,8 @@ class HistoryDeletionUtility {
 
             return Calendar.current.startOfDay(for: yesterday)
         case .allTime:
-            return Date()
+            let pastReferenceDate = Date(timeIntervalSinceReferenceDate: 0)
+            return requiringAllTimeAsPresent ? Date() : pastReferenceDate
         }
     }
 }

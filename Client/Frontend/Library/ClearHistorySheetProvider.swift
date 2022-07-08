@@ -19,31 +19,13 @@ class ClearHistorySheetProvider {
     /// - Parameters:
     ///   - viewController: The view controller the clear history prompt is shown on
     ///   - didComplete: Did complete a recent history clear up action
-    func showClearRecentHistory(onViewController viewController: UIViewController, didComplete: ((Date?) -> Void)? = nil) {
-        // ROUX
-//        func remove(dateOption: DateOptions) {
-//            var date: Date?
-//            switch dateOption {
-//            case .today:
-//                date = Date()
-//            case .yesterday:
-//                date = Calendar.current.date(byAdding: .hour, value: -24, to: Date())
-//            }
-//
-//            if let date = date {
-//                let startOfDay = Calendar.current.startOfDay(for: date)
-//                let types = WKWebsiteDataStore.allWebsiteDataTypes()
-//                WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: startOfDay, completionHandler: {})
-//
-//                self.profile.history.removeHistoryFromDate(date).uponQueue(.global(qos: .userInteractive)) { result in
-//                    guard let completion = didComplete else { return }
-//                    self.profile.recentlyClosedTabs.removeTabsFromDate(startOfDay)
-//                    completion(startOfDay)
-//                }
-//            }
-//        }
+    func showClearRecentHistory(
+        onViewController viewController: UIViewController,
+        didComplete: ((HistoryDeletionUtilityDateOptions?) -> Void)? = nil) {
 
-        let alert = UIAlertController(title: .LibraryPanel.History.ClearHistoryMenuTitle, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: .LibraryPanel.History.ClearHistoryMenuTitle,
+                                      message: nil,
+                                      preferredStyle: .actionSheet)
 
         // This will run on the iPad-only, and sets the alert to be centered with no arrow.
         guard let view = viewController.view else { return }
@@ -53,42 +35,30 @@ class ClearHistorySheetProvider {
             popoverController.permittedArrowDirections = []
         }
 
+        typealias DateOptions = HistoryDeletionUtilityDateOptions
         // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-4187
-        // ROUX
-        [(String.ClearHistoryMenuOptionToday, HistoryDeletionUtilityDateOptions.today),
-         (String.ClearHistoryMenuOptionTodayAndYesterday, HistoryDeletionUtilityDateOptions.yesterday)]
-            .forEach { (name, time) in
-            let action = UIAlertAction(title: name, style: .destructive) { _ in
-                let deletionUlitity = HistoryDeletionUtility(with: self.profile)
-                deletionUlitity.deleteHistoryFrom(time) { time in
-                    guard let time = time, let completion = didComplete else { return }
-                    self.profile.recentlyClosedTabs.removeTabsFromDate(time)
-                    completion(time)
+//        [(String.ClearHistoryMenuOptionTheLastHour, DateOptions.lastHour),
+         [(String.ClearHistoryMenuOptionToday, DateOptions.today),
+         (String.ClearHistoryMenuOptionTodayAndYesterday, DateOptions.yesterday)]
+            .forEach { (name, timeRange) in
+                let action = UIAlertAction(title: name, style: .destructive) { _ in
+                    let deletionUlitity = HistoryDeletionUtility(with: self.profile)
+                    deletionUlitity.deleteHistoryFrom(timeRange) { date in
+                        didComplete?(date)
+                    }
                 }
-                // ROUX
-//                remove(dateOption: time)
-            }
-            alert.addAction(action)
-        }
-        alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive, handler: { _ in
-            let deletionUlitily = HistoryDeletionUtility(with: self.profile)
-            deletionUlitily.deleteHistoryFrom(.allTime) { _ in
-                self.profile.recentlyClosedTabs.clearTabs()
-                self.tabManager.clearAllTabsHistory()
-                NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
-                didComplete?(nil)
+                alert.addAction(action)
             }
 
-//            let types = WKWebsiteDataStore.allWebsiteDataTypes()
-//            WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast, completionHandler: {})
-//            self.profile.history.clearHistory().uponQueue(.global(qos: .userInteractive)) { _ in
-//                // INT64_MAX represents the oldest possible time that AS would have
-//                self.profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).uponQueue(.global(qos: .userInteractive)) { _ in
-//                    guard let completion = didComplete else { return }
-//                    completion(nil)
-//                }
-//            }
-        }))
+        alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive) { _ in
+                let deletionUlitily = HistoryDeletionUtility(with: self.profile)
+                deletionUlitily.deleteHistoryFrom(.allTime) { _ in
+                    self.tabManager.clearAllTabsHistory()
+                    NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
+                    didComplete?(nil)
+                }
+        })
+
         let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
         alert.addAction(cancelAction)
         viewController.present(alert, animated: true)
