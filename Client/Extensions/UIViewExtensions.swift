@@ -67,6 +67,18 @@ extension UIView {
         maskLayer.path = maskPath.cgPath
         layer.mask = maskLayer
     }
+    
+    /**
+     * Makes the edge constraints (`topAnchor`, `bottomAnchor`, `leadingAnchor`, `trailingAnchor`) of a view equaled to the edge constrains of another view.
+     */
+    func edges(equalTo view: UIView, constant: CGFloat = 0) {
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: view.topAnchor, constant: constant),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: constant),
+            leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: constant),
+            trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: constant)
+        ])
+    }
 
     /**
      This allows us to find the view in a current view hierarchy that is currently the first responder
