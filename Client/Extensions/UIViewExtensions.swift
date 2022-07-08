@@ -83,10 +83,10 @@ extension UIView {
     /**
      * Makes x and y anchors of a view equaled to that of another view.
      */
-    func center(equalTo view: UIView, constant: CGFloat = 0) {
+    func center(equalTo view: UIView) {
         NSLayoutConstraint.activate([
-            centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: constant),
-            centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: constant),
+            centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 
