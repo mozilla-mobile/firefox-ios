@@ -141,6 +141,7 @@ class TabLocationView: UIView {
         contentView = UIStackView(arrangedSubviews: subviews)
         contentView.distribution = .fill
         contentView.alignment = .center
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentView)
 
         contentView.edges(equalTo: self)
