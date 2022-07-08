@@ -10,16 +10,20 @@ import Storage
 class TopSiteHistoryManager: DataObserver, Loggable {
 
     let profile: Profile
+
     weak var delegate: DataObserverDelegate?
     var notificationCenter = NotificationCenter.default
 
-    private let ActivityStreamTopSiteCacheSize: Int32 = 32
+    private let topSiteCacheSize: Int32 = 32
     private let events: [Notification.Name] = [.FirefoxAccountChanged, .ProfileDidFinishSyncing, .PrivateDataClearedHistory]
     private let dataQueue = DispatchQueue(label: "com.moz.topSiteHistory.queue")
 
+    lazy var topSitesProvider: TopSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
+                                                                                 prefs: profile.prefs)
+
     init(profile: Profile) {
         self.profile = profile
-        self.profile.history.setTopSitesCacheSize(ActivityStreamTopSiteCacheSize)
+        profile.history.setTopSitesCacheSize(topSiteCacheSize)
 
         setupNotifications(forObserver: self, observing: events)
     }
@@ -49,8 +53,8 @@ class TopSiteHistoryManager: DataObserver, Loggable {
         }
     }
 
-    func getTopSites(completion: @escaping ([Site]) -> Void) {
-        TopSitesHelper.getTopSites(profile: profile).uponQueue(dataQueue) { [weak self] result in
+    func getTopSites(completion: @escaping ([Site]?) -> Void) {
+        topSitesProvider.getTopSites { [weak self] result in
             guard let _ = self else { return }
             completion(result)
         }
@@ -61,6 +65,20 @@ class TopSiteHistoryManager: DataObserver, Loggable {
             guard result.isSuccess, let self = self else { return }
             self.refreshIfNeeded(forceTopSites: true)
         }
+    }
+
+    /// If the default top sites contains the siteurl. also wipe it from default suggested sites.
+    func removeDefaultTopSitesTile(site: Site) {
+        let url = site.tileURL.absoluteString
+        if !topSitesProvider.defaultTopSites(profile.prefs).filter({ $0.url == url }).isEmpty {
+            deleteTileForSuggestedSite(url)
+        }
+    }
+
+    private func deleteTileForSuggestedSite(_ siteURL: String) {
+        var deletedSuggestedSites = profile.prefs.arrayForKey(topSitesProvider.defaultSuggestedSitesKey) as? [String] ?? []
+        deletedSuggestedSites.append(siteURL)
+        profile.prefs.setObject(deletedSuggestedSites, forKey: topSitesProvider.defaultSuggestedSitesKey)
     }
 }
 
