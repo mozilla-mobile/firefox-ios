@@ -20,7 +20,7 @@ class DateExtensionsTests: XCTestCase {
         }
 
         dates.forEach { datePair in
-            XCTAssertEqual(datePair.date.millisecondsSince1970(), datePair.millisecond)
+            XCTAssertEqual(datePair.date.toMillisecondsSince1970(), datePair.millisecond)
         }
     }
 

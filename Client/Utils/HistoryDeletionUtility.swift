@@ -81,16 +81,30 @@ class HistoryDeletionUtility {
         _ dateOption: HistoryDeletionUtilityDateOptions,
         completion: (() -> Void)? = nil
     ) {
-        guard let date = dateFor(dateOption) else { return }
+        switch dateOption {
+        case .allTime:
+            profile.history
+                .clearHistory()
+                .uponQueue(.global(qos: .userInteractive)) { result in
+                    if result.isSuccess { completion?() }
+                    // ROUX: does this need to be here?
+                    //                guard let completion = didComplete else { return }
+                    //                self.profile.recentlyClosedTabs.removeTabsFromDate(startOfDay)
+                    //                completion?(nil)
+                }
 
-        profile.history
-            .removeHistoryFromDate(date)
-            .uponQueue(.global(qos: .userInteractive)) { result in
-                if result.isSuccess { completion?() }
-                // ROUX: does this need to be here?
-//                guard let completion = didComplete else { return }
-//                self.profile.recentlyClosedTabs.removeTabsFromDate(startOfDay)
-//                completion?(nil)
+        default:
+            guard let date = dateFor(dateOption) else { return }
+
+            profile.history
+                .removeHistoryFromDate(date)
+                .uponQueue(.global(qos: .userInteractive)) { result in
+                    if result.isSuccess { completion?() }
+                    // ROUX: does this need to be here?
+                    //                guard let completion = didComplete else { return }
+                    //                self.profile.recentlyClosedTabs.removeTabsFromDate(startOfDay)
+                    //                completion?(nil)
+                }
         }
     }
 
@@ -99,7 +113,7 @@ class HistoryDeletionUtility {
         completion: ((Date?) -> Void)? = nil
     ) {
         guard let date = dateFor(dateOption) else { return }
-        let dateInMilliseconds = date.millisecondsSince1970()
+        let dateInMilliseconds = date.toMillisecondsSince1970()
 
         profile.places
             .deleteHistoryMetadataOlderThan(olderThan: dateInMilliseconds)
