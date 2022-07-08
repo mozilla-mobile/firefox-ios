@@ -115,7 +115,7 @@ class LibraryViewModelTests: XCTestCase {
         XCTAssertEqual(toolbarItems.count, 3, "Expected Edit button and flexibleSpace")
     }
 
-    func testBookmarks_SubFolderLeavingEdit() {
+    func testBookmarks_MainFolderLeavingEdit() {
         setup(panelType: .bookmarks)
         guard let panel = sut.currentPanel as? BookmarksPanel else {
             XCTFail("Expected bookmark panel")
@@ -125,7 +125,7 @@ class LibraryViewModelTests: XCTestCase {
         panel.updatePanelState(newState: .bookmarks(state: .itemEditMode))
         panel.disableEditMode()
 
-        XCTAssertEqual(sut.currentPanelState, .bookmarks(state: .inFolder))
+        XCTAssertEqual(sut.currentPanelState, .bookmarks(state: .mainView))
         let toolbarItems = panel.bottomToolbarItems
         // We need to account for the flexibleSpace item
         XCTAssertEqual(toolbarItems.count, 2, "Expected Edit button and flexibleSpace")
