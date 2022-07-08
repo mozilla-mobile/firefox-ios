@@ -18,10 +18,11 @@ class LibraryPanelDescriptor {
     let accessibilityIdentifier: String
     let panelType: LibraryPanelType
 
-    // Returns latest viewController shown from navigationController
+    // Returns latest libraryPanel viewController filtering out "details view controllers" from navigationController
     // Handles Bookmarks case where BookmarksPanel is used for main folder and subfolder state
     var shownPanel: UIViewController? {
-        return navigationController?.viewControllers.last
+        let libraryPanel = navigationController?.viewControllers.filter { $0 is LibraryPanel }
+        return libraryPanel?.last
     }
 
     init(viewController: LibraryPanel?, profile: Profile, tabManager: TabManager, accessibilityLabel: String, accessibilityIdentifier: String, panelType: LibraryPanelType) {

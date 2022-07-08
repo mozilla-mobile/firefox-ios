@@ -239,6 +239,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
                                      tapHandler: { _ in
             guard let bookmarkFolder = self.bookmarkFolder else { return }
 
+            self.updatePanelState(newState: .bookmarks(state: .itemEditMode))
             let detailController = BookmarkDetailPanel(profile: self.profile,
                                                        withNewBookmarkNodeType: .bookmark,
                                                        parentBookmarkFolder: bookmarkFolder)
@@ -252,6 +253,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
                                      tapHandler: { _ in
             guard let bookmarkFolder = self.bookmarkFolder else { return }
 
+            self.updatePanelState(newState: .bookmarks(state: .itemEditMode))
             let detailController = BookmarkDetailPanel(profile: self.profile,
                                                        withNewBookmarkNodeType: .folder,
                                                        parentBookmarkFolder: bookmarkFolder)
@@ -291,7 +293,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     func disableEditMode() {
-        updatePanelState(newState: .bookmarks(state: .inFolder))
+        let substate: LibraryPanelSubState = isRootNode ? .mainView : .inFolder
+        updatePanelState(newState: .bookmarks(state: substate))
         self.tableView.setEditing(false, animated: true)
         sendPanelChangeNotification()
     }

@@ -12,7 +12,7 @@ class LibraryViewModel {
     var selectedPanel: LibraryPanelType?
     var currentPanelState: LibraryPanelMainState {
         guard let index = selectedPanel?.rawValue,
-              let panel = panelDescriptors[index].viewController as? LibraryPanel else {
+              let panel = panelDescriptors[index].shownPanel as? LibraryPanel else {
             return .bookmarks(state: .mainView)
         }
 
