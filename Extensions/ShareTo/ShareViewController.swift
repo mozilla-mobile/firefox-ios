@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-import SnapKit
 import Shared
 import Storage
 import Account
@@ -70,8 +69,8 @@ class ShareViewController: UIViewController {
     private var stackView: UIStackView!
     private var actionDoneRow: (row: UIStackView, label: UILabel)!
     private var sendToDevice: SendToDevice?
-    private var pageInfoHeight: Constraint?
-    private var actionRowHeights = [Constraint]()
+    private var pageInfoHeight: NSLayoutConstraint?
+    private var actionRowHeights = [NSLayoutConstraint]()
     private var pageInfoRowTitleLabel: UILabel?
     private var pageInfoRowUrlLabel: UILabel?
 
@@ -129,12 +128,11 @@ class ShareViewController: UIViewController {
         }
 
         let footerSpaceRow = UIView()
+        footerSpaceRow.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(footerSpaceRow)
         // Without some growable space at the bottom there are constraint errors because the UIView space doesn't subdivide equally, and none of the rows are growable.
         // Also, during the animation to the done state, without this space, the page info label moves down slightly.
-        footerSpaceRow.snp.makeConstraints { make in
-            make.height.greaterThanOrEqualTo(0)
-        }
+        footerSpaceRow.heightAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
 
         actionDoneRow = makeActionDoneRow(addTo: stackView)
         // Fully constructing and pre-adding as a subview ensures that only the show operation will animate during the UIView.animate(),
@@ -147,12 +145,14 @@ class ShareViewController: UIViewController {
 
     private func makeSeparator(addTo parent: UIStackView) {
         let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = ShareTheme.separator.color
         parent.addArrangedSubview(view)
-        view.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(1)
-        }
+        NSLayoutConstraint.activate([
+            view.leadingAnchor.constraint(equalTo: parent.leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: parent.trailingAnchor),
+            view.heightAnchor.constraint(equalToConstant: 1)
+        ])
     }
 
     func layout(forTraitCollection traitCollection: UITraitCollection) {
@@ -161,9 +161,9 @@ class ShareViewController: UIViewController {
             return
         }
 
-        pageInfoHeight?.update(offset: isLandscapeSmallScreen(traitCollection) ? UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape : UX.pageInfoRowHeight)
+        pageInfoHeight?.constant = CGFloat(isLandscapeSmallScreen(traitCollection) ? UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape : UX.pageInfoRowHeight)
         actionRowHeights.forEach {
-            $0.update(offset: isLandscapeSmallScreen(traitCollection) ? UX.actionRowHeight - UX.perRowShrinkageForLandscape : UX.actionRowHeight)
+            $0.constant = CGFloat(isLandscapeSmallScreen(traitCollection) ? UX.actionRowHeight - UX.perRowShrinkageForLandscape : UX.actionRowHeight)
         }
     }
 
@@ -171,11 +171,11 @@ class ShareViewController: UIViewController {
         let row = UIStackView()
         row.axis = .horizontal
         row.alignment = .center
+        row.translatesAutoresizingMaskIntoConstraints = false
         row.rightLeftEdges(inset: UX.rowInset)
         parent.addArrangedSubview(row)
-        row.snp.makeConstraints { make in
-            pageInfoHeight = make.height.equalTo(isLandscapeSmallScreen(traitCollection) ? UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape : UX.pageInfoRowHeight).constraint
-        }
+        pageInfoHeight = row.heightAnchor.constraint(equalToConstant: CGFloat(isLandscapeSmallScreen(traitCollection) ? UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape : UX.pageInfoRowHeight))
+        pageInfoHeight?.isActive = true
 
         let verticalStackView = UIStackView()
         verticalStackView.axis = .vertical
@@ -201,16 +201,17 @@ class ShareViewController: UIViewController {
         let row = UIStackView()
         row.axis = .horizontal
         row.spacing = UX.actionRowSpacingBetweenIconAndTitle
+        row.translatesAutoresizingMaskIntoConstraints = false
         row.rightLeftEdges(inset: UX.rowInset)
         parent.addArrangedSubview(row)
-        row.snp.makeConstraints { make in
-            let c = make.height.equalTo(isLandscapeSmallScreen(traitCollection) ? UX.actionRowHeight - UX.perRowShrinkageForLandscape : UX.actionRowHeight).constraint
-            actionRowHeights.append(c)
-        }
+        let heightConstraint = row.heightAnchor.constraint(equalToConstant: CGFloat(isLandscapeSmallScreen(traitCollection) ? UX.actionRowHeight - UX.perRowShrinkageForLandscape : UX.actionRowHeight))
+        heightConstraint.isActive = true
+        actionRowHeights.append(heightConstraint)
 
         let icon = UIImageView(image: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate))
         icon.contentMode = .scaleAspectFit
         icon.tintColor = ShareTheme.actionRowTextAndIcon.color
+        icon.translatesAutoresizingMaskIntoConstraints = false
 
         let title = UILabel()
         title.font = UX.baseFont
@@ -218,19 +219,15 @@ class ShareViewController: UIViewController {
         title.textColor = ShareTheme.actionRowTextAndIcon.color
         title.text = label
         [icon, title].forEach { row.addArrangedSubview($0) }
-
-        icon.snp.makeConstraints { make in
-            make.width.equalTo(UX.actionRowIconSize)
-        }
+        icon.widthAnchor.constraint(equalToConstant: CGFloat(UX.actionRowIconSize)).isActive = true
 
         if hasNavigation {
             let navButton = UIImageView(image: UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate))
             navButton.contentMode = .scaleAspectFit
             navButton.tintColor = ShareTheme.actionRowTextAndIcon.color
+            navButton.translatesAutoresizingMaskIntoConstraints = false
             row.addArrangedSubview(navButton)
-            navButton.snp.makeConstraints { make in
-                make.width.equalTo(14)
-            }
+            navButton.widthAnchor.constraint(equalToConstant: 14).isActive = true
         }
 
         let gesture = UITapGestureRecognizer(target: self, action: action)
@@ -240,9 +237,8 @@ class ShareViewController: UIViewController {
     fileprivate func animateToActionDoneView(withTitle title: String = "") {
         navigationItem.leftBarButtonItem = nil
 
-        navigationController?.view.snp.updateConstraints { make in
-            make.height.equalTo(UX.viewHeightForDoneState)
-        }
+        navigationController?.view.translatesAutoresizingMaskIntoConstraints = false
+        navigationController?.view.heightAnchor.constraint(equalToConstant: CGFloat(UX.viewHeightForDoneState)).isActive = true
 
         actionDoneRow.label.text = title
 
@@ -263,13 +259,11 @@ class ShareViewController: UIViewController {
     private func makeActionDoneRow(addTo parent: UIStackView) -> (row: UIStackView, label: UILabel) {
         let stackView = UIStackView()
         stackView.axis = .horizontal
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.addBackground(color: ShareTheme.doneLabelBackground.color)
         stackView.rightLeftEdges(inset: UX.rowInset)
         parent.addArrangedSubview(stackView)
-
-        stackView.snp.makeConstraints { make in
-            make.height.equalTo(UX.pageInfoRowHeight)
-        }
+        stackView.heightAnchor.constraint(equalToConstant: CGFloat(UX.pageInfoRowHeight)).isActive = true
 
         let label = UILabel()
         label.font = UX.doneLabelFont
@@ -278,15 +272,14 @@ class ShareViewController: UIViewController {
         let checkmark = UILabel()
         checkmark.text = "✓"
         checkmark.font = UIFont.boldSystemFont(ofSize: 22)
+        checkmark.translatesAutoresizingMaskIntoConstraints = false
 
         [label, checkmark].forEach {
             stackView.addArrangedSubview($0)
             $0.textColor = .white
         }
 
-        checkmark.snp.makeConstraints { make in
-            make.width.equalTo(20)
-        }
+        checkmark.widthAnchor.constraint(equalToConstant: 20).isActive = true
 
         return (stackView, label)
     }
@@ -310,10 +303,14 @@ class ShareViewController: UIViewController {
         stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 4
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stackView)
-        stackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: view.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+         ])
     }
 }
 
