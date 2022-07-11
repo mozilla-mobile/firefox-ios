@@ -6007,6 +6007,20 @@
 			path = EnhancedTrackingProtection;
 			sourceTree = "<group>";
 		};
+		C85F9711287CC3D200F5EE86 /* Legacy */ = {
+			isa = PBXGroup;
+			children = (
+				DFD64DB627A1A909003D4534 /* LegacyWallpaper.swift */,
+				DFACBF7E277B5F7B003D5F41 /* LegacyWallpaperBackgroundView.swift */,
+				DFF95954279B021700ECC572 /* LegacyWallpaperDataManager.swift */,
+				DF9845FF276B99660071CCAE /* LegacyWallpaperManager.swift */,
+				C87DC85B27B2C94D006EFCE2 /* LegacyWallpaperResourceManager.swift */,
+				C87DC85327B2C85E006EFCE2 /* Protocols */,
+				C87DC85427B2C867006EFCE2 /* Utilities */,
+			);
+			path = Legacy;
+			sourceTree = "<group>";
+		};
 		C86E4F6F2493BA8E0087BFD9 /* Generated */ = {
 			isa = PBXGroup;
 			children = (
@@ -6505,13 +6519,7 @@
 		DFACBF82277B9278003D5F41 /* Wallpapers */ = {
 			isa = PBXGroup;
 			children = (
-				C87DC85327B2C85E006EFCE2 /* Protocols */,
-				C87DC85427B2C867006EFCE2 /* Utilities */,
-				DFD64DB627A1A909003D4534 /* LegacyWallpaper.swift */,
-				C87DC85B27B2C94D006EFCE2 /* LegacyWallpaperResourceManager.swift */,
-				DFACBF7E277B5F7B003D5F41 /* LegacyWallpaperBackgroundView.swift */,
-				DFF95954279B021700ECC572 /* LegacyWallpaperDataManager.swift */,
-				DF9845FF276B99660071CCAE /* LegacyWallpaperManager.swift */,
+				C85F9711287CC3D200F5EE86 /* Legacy */,
 			);
 			path = Wallpapers;
 			sourceTree = "<group>";
