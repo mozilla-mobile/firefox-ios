@@ -40,17 +40,8 @@ protocol WebControllerDelegate: AnyObject {
     func webController(_ controller: WebController, scrollViewDidEndDragging scrollView: UIScrollView)
     func webController(_ controller: WebController, scrollViewDidScroll scrollView: UIScrollView)
     func webControllerShouldScrollToTop(_ controller: WebController) -> Bool
-    func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus)
+    func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus, oldTrackingProtectionStatus: TrackingProtectionStatus)
     func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?)
-}
-
-class TrackingProtectionManager {
-    @Published var trackingProtectionStatus: TrackingProtectionStatus
-
-    init(isTrackingEnabled: () -> Bool) {
-        let isTrackingEnabled = isTrackingEnabled()
-        self.trackingProtectionStatus = isTrackingEnabled ? .on(TPPageStats()) : .off
-    }
 }
 
 class WebViewController: UIViewController, WebController {
@@ -74,6 +65,7 @@ class WebViewController: UIViewController, WebController {
     private var progressObserver: NSKeyValueObservation?
     private var currentBackForwardItem: WKBackForwardListItem?
     private let trackingProtectionManager: TrackingProtectionManager
+    private var cancellable: AnyCancellable?
 
     var pageTitle: String? {
         return browserView.title
@@ -93,6 +85,10 @@ class WebViewController: UIViewController, WebController {
     init(trackingProtectionManager: TrackingProtectionManager) {
         self.trackingProtectionManager = trackingProtectionManager
         super.init(nibName: nil, bundle: nil)
+        cancellable = self.trackingProtectionManager.$trackingProtectionStatus.sink { [weak self] status in
+            guard let self = self else { return }
+            self.delegate?.webController(self, didUpdateTrackingProtectionStatus: status, oldTrackingProtectionStatus: self.trackingProtectionManager.trackingProtectionStatus)
+        }
         setupWebview()
         ContentBlockerHelper.shared.handler = reloadBlockers(_:)
     }
