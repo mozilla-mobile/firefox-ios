@@ -6,7 +6,7 @@ import Foundation
 
 // TODO: will move more things in there from the view during the next ticket.
 
-class WallpaperSettingsViewModel {
+class LegacyWallpaperSettingsViewModel {
 
     // MARK: - Internal definitions
     struct Constants {
@@ -20,10 +20,10 @@ class WallpaperSettingsViewModel {
 
     // MARK: - Variables
     var tabManager: TabManager
-    var wallpaperManager: WallpaperManager
+    var wallpaperManager: LegacyWallpaperManager
 
     init(with tabManager: TabManager,
-         and wallpaperManager: WallpaperManager
+         and wallpaperManager: LegacyWallpaperManager
     ) {
         self.tabManager = tabManager
         self.wallpaperManager = wallpaperManager
