@@ -37,7 +37,7 @@ extension TopSitesProvider {
     }
 
     static var numberOfMaxItems: Int {
-        return 32
+        return UIDevice.current.userInterfaceIdiom == .pad ? 32 : 16
     }
 
     var hideWithSearchParam: String {

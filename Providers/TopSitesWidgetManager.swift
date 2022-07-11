@@ -18,7 +18,7 @@ class TopSitesWidgetManager: TopSitesWidget {
     init(topSitesProvider: TopSitesProvider) {
         self.topSitesProvider = topSitesProvider
     }
-    
+
     @available(iOS 14.0, *)
     func writeWidgetKitTopSites() {
 
