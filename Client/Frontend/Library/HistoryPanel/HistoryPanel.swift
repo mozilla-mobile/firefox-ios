@@ -261,9 +261,10 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         clearHistoryHelper.showClearRecentHistory(onViewController: self) { [weak self] dateOption in
 
             // Delete groupings that belong to THAT section.
-            if let dateOption = dateOption {
+            switch dateOption {
+            case .today, .yesterday:
                 self?.viewModel.deleteGroupsFor(dateOption: dateOption)
-            } else {
+            default:
                 self?.viewModel.removeAllData()
             }
 

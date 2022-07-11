@@ -21,7 +21,7 @@ class ClearHistorySheetProvider {
     ///   - didComplete: Did complete a recent history clear up action
     func showClearRecentHistory(
         onViewController viewController: UIViewController,
-        didComplete: ((HistoryDeletionUtilityDateOptions?) -> Void)? = nil) {
+        didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil) {
 
         let alert = UIAlertController(title: .LibraryPanel.History.ClearHistoryMenuTitle,
                                       message: nil,
@@ -42,21 +42,31 @@ class ClearHistorySheetProvider {
          (String.ClearHistoryMenuOptionTodayAndYesterday, DateOptions.yesterday)]
             .forEach { (name, timeRange) in
                 let action = UIAlertAction(title: name, style: .destructive) { _ in
-                    let deletionUlitity = HistoryDeletionUtility(with: self.profile)
-                    deletionUlitity.deleteHistoryFrom(timeRange) { date in
-                        didComplete?(date)
-                    }
+                    // ROUX
+//                    let deletionUlitity = HistoryDeletionUtility(with: self.profile)
+//                    deletionUlitity.deleteHistoryFrom(timeRange) { dateOption in
+//                        didComplete?(dateOption)
+//                    }
                 }
                 alert.addAction(action)
             }
 
-        alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive) { _ in
-                let deletionUlitily = HistoryDeletionUtility(with: self.profile)
-                deletionUlitily.deleteHistoryFrom(.allTime) { _ in
-                    self.tabManager.clearAllTabsHistory()
-                    NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
-                    didComplete?(nil)
-                }
+
+
+            alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive) { _ in
+                // ROUX
+//            Task {
+//                let deletionUlitily = HistoryDeletionUtility(with: self.profile)
+//                let timeframe = await deletionUlitily.deleteHistoryFrom(.allTime)
+//                self.tabManager.clearAllTabsHistory()
+//                NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
+//                return timeframe
+//            }
+//            deletionUlitily.deleteHistoryFrom(.allTime) { dateOption in
+//                self.tabManager.clearAllTabsHistory()
+//                NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
+//                didComplete?(dateOption)
+//            }
         })
 
         let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
