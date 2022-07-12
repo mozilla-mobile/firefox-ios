@@ -123,10 +123,6 @@ class PocketViewModel {
         return pocketStoriesViewModels.count != 0 ? pocketStoriesViewModels.count + 1 : 0
     }
 
-    static var numberOfItemsInColumn: CGFloat {
-        return 3
-    }
-
     func isStoryCell(index: Int) -> Bool {
         return index < pocketStoriesViewModels.count
     }
