@@ -21,6 +21,7 @@ class LibraryViewController: UIViewController {
     }
 
     var viewModel: LibraryViewModel
+    var notificationCenter: NotificationCenter
     weak var delegate: LibraryPanelDelegate?
     var onViewDismissed: (() -> Void)?
 
@@ -60,8 +61,9 @@ class LibraryViewController: UIViewController {
     }()
 
     // MARK: - Initializers
-    init(profile: Profile, tabManager: TabManager) {
+    init(profile: Profile, tabManager: TabManager, notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewModel = LibraryViewModel(withProfile: profile, tabManager: tabManager)
+        self.notificationCenter = notificationCenter
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -79,7 +81,7 @@ class LibraryViewController: UIViewController {
         super.viewDidLoad()
         viewSetup()
         applyTheme()
-        setupNotifications()
+        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged, .LibraryPanelStateDidChange])
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -126,13 +128,6 @@ class LibraryViewController: UIViewController {
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         LegacyThemeManager.instance.statusBarStyle
-    }
-
-    private func setupNotifications() {
-        [Notification.Name.DisplayThemeChanged,
-         Notification.Name.LibraryPanelStateDidChange].forEach {
-            NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil)
-        }
     }
 
     func updateViewWithState() {
@@ -214,7 +209,6 @@ class LibraryViewController: UIViewController {
     }
 
     private func hideCurrentPanel() {
-        print("YRD hideCurrentPanel")
         if let panel = children.first {
             panel.willMove(toParent: nil)
             panel.beginAppearanceTransition(false, animated: false)
@@ -225,7 +219,6 @@ class LibraryViewController: UIViewController {
     }
 
     private func showPanel(_ libraryPanel: UIViewController) {
-        print("YRD showPanel")
         addChild(libraryPanel)
         libraryPanel.beginAppearanceTransition(true, animated: false)
         controllerContainerView.addSubview(libraryPanel.view)
@@ -286,17 +279,16 @@ class LibraryViewController: UIViewController {
     }
 }
 
-// MARK: UIAppearance
-extension LibraryViewController: NotificationThemeable {
+// MARK: Notifiable
+extension LibraryViewController: NotificationThemeable, Notifiable {
 
-    @objc func notificationReceived(_ notification: Notification) {
+    func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
         case .LibraryPanelStateDidChange:
             setupButtons()
-        default:
-            break
+        default: break
         }
     }
 
