@@ -12,10 +12,10 @@ private struct WallpaperID {
 }
 
 /// A internal model for projects with wallpapers that are timed.
-private struct WallpaperCollection {
+private struct LegacyWallpaperCollection {
     /// The base file names of the wallpaper assets to be included in the collection.
     let wallpaperIDs: [WallpaperID]
-    let type: WallpaperType
+    let type: LegacyWallpaperType
     /// The date on which a collection should become available to users.
     let shipDate: Date?
     /// The date on which a collection becomes unavailable to users.
@@ -36,7 +36,7 @@ private struct WallpaperCollection {
     ///   - locales: An optional set of locales used to limit the regions to which
     ///         wallpapers in the collection are shown.
     init(wallpaperFileNames: [WallpaperID],
-         ofType type: WallpaperType,
+         ofType type: LegacyWallpaperType,
          shippingOn shipDate: Date? = nil,
          expiringOn expiryDate: Date? = nil,
          limitedToLocales locales: [String]? = nil) {
@@ -48,21 +48,21 @@ private struct WallpaperCollection {
     }
 }
 
-struct WallpaperDataManager {
+struct LegacyWallpaperDataManager {
     typealias accessibilityIDs = String.Settings.Homepage.Wallpaper.AccessibilityLabels
 
-    private var resourceManager: WallpaperResourceManager
+    private var resourceManager: LegacyWallpaperResourceManager
 
-    init(with resourceManager: WallpaperResourceManager = WallpaperResourceManager()) {
+    init(with resourceManager: LegacyWallpaperResourceManager = LegacyWallpaperResourceManager()) {
         self.resourceManager = resourceManager
     }
 
     /// Returns an array of wallpapers available to the user given their region,
     /// and various seasonal or expiration date requirements.
-    var availableWallpapers: [Wallpaper] {
-        var wallpapers: [Wallpaper] = []
+    var availableWallpapers: [LegacyWallpaper] {
+        var wallpapers: [LegacyWallpaper] = []
         // Default wallpaper should always be first in the array.
-        wallpapers.append(Wallpaper(named: "defaultBackground",
+        wallpapers.append(LegacyWallpaper(named: "defaultBackground",
                                     ofType: .defaultBackground,
                                     withAccessibiltyLabel: accessibilityIDs.DefaultWallpaper))
 
@@ -73,7 +73,7 @@ struct WallpaperDataManager {
         return wallpapers
     }
 
-    public func getImageSet(at index: Int) -> WallpaperImageSet {
+    public func getImageSet(at index: Int) -> LegacyWallpaperImageSet {
         return resourceManager.getImageSet(for: availableWallpapers[index])
     }
 
@@ -84,19 +84,19 @@ struct WallpaperDataManager {
     /// those objects currently have resources (images) available to be presented
     /// to the user.
     private func getWallpapers(
-        from collection: [WallpaperCollection]?,
+        from collection: [LegacyWallpaperCollection]?,
         ignoringEligibility shouldIgnoreEligibility: Bool = false
-    ) -> [Wallpaper]? {
+    ) -> [LegacyWallpaper]? {
 
         guard let collection = collection else { return nil }
 
-        var wallpapers = [Wallpaper]()
+        var wallpapers = [LegacyWallpaper]()
 
         collection.forEach { collection in
             wallpapers.append(
                 contentsOf: collection.wallpaperIDs.compactMap { wallpaperID in
 
-                    let wallpaper = Wallpaper(named: wallpaperID.name,
+                    let wallpaper = LegacyWallpaper(named: wallpaperID.name,
                                               ofType: collection.type,
                                               withAccessibiltyLabel: wallpaperID.accessibilityLabel,
                                               expiringOn: collection.expiryDate,
@@ -111,7 +111,7 @@ struct WallpaperDataManager {
         return wallpapers
     }
 
-    private func allWallpaperCollections() -> [WallpaperCollection] {
+    private func allWallpaperCollections() -> [LegacyWallpaperCollection] {
 
         var allCollections = firefoxDefaultCollection()
 
@@ -122,12 +122,12 @@ struct WallpaperDataManager {
         return allCollections
     }
 
-    private func firefoxDefaultCollection() -> [WallpaperCollection] {
-        return [WallpaperCollection(
+    private func firefoxDefaultCollection() -> [LegacyWallpaperCollection] {
+        return [LegacyWallpaperCollection(
             wallpaperFileNames: [WallpaperID(name: "fxSunrise",
                                              accessibilityLabel: accessibilityIDs.FxSunriseWallpaper)],
             ofType: .themed(type: .firefox)),
-                WallpaperCollection(
+                LegacyWallpaperCollection(
             wallpaperFileNames: [WallpaperID(name: "fxCerulean",
                                              accessibilityLabel: accessibilityIDs.FxCeruleanWallpaper),
                                  WallpaperID(name: "fxAmethyst",
@@ -135,8 +135,8 @@ struct WallpaperDataManager {
             ofType: .themed(type: .firefoxOverlay))]
     }
 
-    private func allSpecialCollections() -> [WallpaperCollection]? {
-        var specialCollections = [WallpaperCollection]()
+    private func allSpecialCollections() -> [LegacyWallpaperCollection]? {
+        var specialCollections = [LegacyWallpaperCollection]()
 
         specialCollections.append(projectHouseCollection())
         specialCollections.append(v100CelebrationCollection())
@@ -158,12 +158,12 @@ struct WallpaperDataManager {
 // These collections should remain in code for as long as possible.
 // They are required for not just downloading wallpapers, but also
 // deleting them from the disk once they expire.
-extension WallpaperDataManager {
-    private func projectHouseCollection() -> WallpaperCollection {
+extension LegacyWallpaperDataManager {
+    private func projectHouseCollection() -> LegacyWallpaperCollection {
         let houseExpiryDate = Calendar.current.date(
             from: DateComponents(year: 2022, month: 5, day: 1))
 
-        return WallpaperCollection(
+        return LegacyWallpaperCollection(
             wallpaperFileNames: [WallpaperID(name: "trRed",
                                              accessibilityLabel: "Turning Red wallpaper, giant red panda"),
                                  WallpaperID(name: "trGroup",
@@ -173,8 +173,8 @@ extension WallpaperDataManager {
             limitedToLocales: ["en_US", "es_US"])
     }
 
-    private func v100CelebrationCollection() -> WallpaperCollection {
-        return WallpaperCollection(
+    private func v100CelebrationCollection() -> LegacyWallpaperCollection {
+        return LegacyWallpaperCollection(
             wallpaperFileNames: [WallpaperID(name: "beachVibes",
                                              accessibilityLabel: accessibilityIDs.FxBeachHillsWallpaper),
                                  WallpaperID(name: "twilightHills",

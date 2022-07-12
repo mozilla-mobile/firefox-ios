@@ -4,7 +4,7 @@
 
 import UIKit
 
-class WallpaperBackgroundView: UIView {
+class LegacyWallpaperBackgroundView: UIView {
 
     // MARK: - UI Elements
     private lazy var pictureView: UIImageView = .build { imageView in
@@ -18,7 +18,7 @@ class WallpaperBackgroundView: UIView {
     }
 
     // MARK: - Variables
-    private var wallpaperManager = WallpaperManager()
+    private var wallpaperManager = LegacyWallpaperManager()
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
     // MARK: - Initializers & Setup
@@ -132,7 +132,7 @@ class WallpaperBackgroundView: UIView {
 }
 
 // MARK: - Notifiable
-extension WallpaperBackgroundView: Notifiable {
+extension LegacyWallpaperBackgroundView: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .WallpaperDidChange:

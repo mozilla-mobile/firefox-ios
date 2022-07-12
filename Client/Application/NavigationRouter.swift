@@ -328,9 +328,9 @@ enum NavigationPath {
             controller.pushViewController(ThemeSettingsController(), animated: true)
 
         case .wallpaper:
-            let viewModel = WallpaperSettingsViewModel(with: tabManager,
-                                                       and: WallpaperManager())
-            let wallpaperVC = WallpaperSettingsViewController(with: viewModel)
+            let viewModel = LegacyWallpaperSettingsViewModel(with: tabManager,
+                                                       and: LegacyWallpaperManager())
+            let wallpaperVC = LegacyWallpaperSettingsViewController(with: viewModel)
             controller.pushViewController(wallpaperVC, animated: true)
         }
     }

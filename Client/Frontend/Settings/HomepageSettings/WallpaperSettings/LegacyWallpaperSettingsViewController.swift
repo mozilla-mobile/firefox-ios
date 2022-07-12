@@ -20,7 +20,7 @@ private struct WallpaperSettingsUX {
     static let inset: CGFloat = 3.5
 }
 
-class WallpaperSettingsViewController: UIViewController {
+class LegacyWallpaperSettingsViewController: UIViewController {
 
     // MARK: - UIElements
     // Collection View
@@ -74,10 +74,10 @@ class WallpaperSettingsViewController: UIViewController {
 
     // MARK: - Variables
     var notificationCenter: NotificationCenter
-    private var viewModel: WallpaperSettingsViewModel
+    private var viewModel: LegacyWallpaperSettingsViewModel
 
     // MARK: - Initializers
-    init(with viewModel: WallpaperSettingsViewModel,
+    init(with viewModel: LegacyWallpaperSettingsViewModel,
          and notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
@@ -222,8 +222,8 @@ class WallpaperSettingsViewController: UIViewController {
 
     private func showToast() {
         let toast = ButtonToast(
-            labelText: WallpaperSettingsViewModel.Constants.Strings.Toast.label,
-            buttonText: WallpaperSettingsViewModel.Constants.Strings.Toast.button,
+            labelText: LegacyWallpaperSettingsViewModel.Constants.Strings.Toast.label,
+            buttonText: LegacyWallpaperSettingsViewModel.Constants.Strings.Toast.button,
             completion: { buttonPressed in
 
             if buttonPressed { self.dismissView() }
@@ -252,7 +252,7 @@ class WallpaperSettingsViewController: UIViewController {
 }
 
 // MARK: - Notifications
-extension WallpaperSettingsViewController: Notifiable {
+extension LegacyWallpaperSettingsViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:
@@ -264,7 +264,7 @@ extension WallpaperSettingsViewController: Notifiable {
 }
 
 // MARK: - Collection View Data Source
-extension WallpaperSettingsViewController: UICollectionViewDataSource {
+extension LegacyWallpaperSettingsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.wallpaperManager.numberOfWallpapers
     }
@@ -282,7 +282,7 @@ extension WallpaperSettingsViewController: UICollectionViewDataSource {
 }
 
 // MARK: - Collection View Delegate
-extension WallpaperSettingsViewController: UICollectionViewDelegate {
+extension LegacyWallpaperSettingsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) { cell.isSelected = true }
         viewModel.wallpaperManager.updateSelectedWallpaperIndex(to: indexPath.row)
@@ -302,7 +302,7 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate {
 }
 
 // MARK: - Themable
-extension WallpaperSettingsViewController: NotificationThemeable {
+extension LegacyWallpaperSettingsViewController: NotificationThemeable {
     func applyTheme() {
         view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
 

@@ -270,7 +270,7 @@ class TelemetryWrapper {
         GleanMetrics.Device.authentication.set(AppAuthenticator.canAuthenticateDeviceOwner())
 
         // Wallpapers
-        let currentWallpaper = WallpaperManager().currentWallpaper
+        let currentWallpaper = LegacyWallpaperManager().currentWallpaper
 
         if case .themed = currentWallpaper.type {
             GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.name].add()

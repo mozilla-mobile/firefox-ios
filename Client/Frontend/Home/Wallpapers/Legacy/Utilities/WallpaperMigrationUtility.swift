@@ -27,7 +27,7 @@ class WallpaperMigrationUtility {
     func attemptMigration() {
         guard shouldPerformMigration else { return }
 
-        let storageUtility = WallpaperStorageUtility()
+        let storageUtility = LegacyWallpaperStorageUtility()
         storageUtility.migrateResources { result in
             self.profile.prefs.setBool(result, forKey: self.migrationKey)
         }

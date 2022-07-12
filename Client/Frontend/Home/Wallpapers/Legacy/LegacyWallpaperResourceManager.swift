@@ -9,12 +9,12 @@ private enum WallpaperResourceType {
     case downloaded
 }
 
-struct WallpaperImageSet {
+struct LegacyWallpaperImageSet {
     let portrait: UIImage?
     let landscape: UIImage?
 }
 
-struct WallpaperImageResourceName {
+struct LegacyWallpaperImageResourceName {
     private let folder: String
     let portrait: String
     let landscape: String
@@ -34,13 +34,13 @@ struct WallpaperImageResourceName {
     }
 }
 
-class WallpaperResourceManager {
+class LegacyWallpaperResourceManager {
 
     // MARK: - Resource verification
-    func verifyResources(for specialWallpapers: [Wallpaper]) {
+    func verifyResources(for specialWallpapers: [LegacyWallpaper]) {
         specialWallpapers.forEach { wallpaper in
             if wallpaper.meetsDateAndLocaleCriteria && !verifyResourceExists(for: wallpaper) {
-                let networkUtility = WallpaperNetworkUtility()
+                let networkUtility = LegacyWallpaperNetworkUtility()
                 networkUtility.downloadTaskFor(id: getResourceNames(for: wallpaper.name))
 
             } else if !wallpaper.meetsDateAndLocaleCriteria {
@@ -50,7 +50,7 @@ class WallpaperResourceManager {
         }
     }
 
-    func verifyResourceExists(for wallpaper: Wallpaper) -> Bool {
+    func verifyResourceExists(for wallpaper: LegacyWallpaper) -> Bool {
         switch wallpaper.type {
         case .defaultBackground: return true
         case .themed(type: .firefox): return verify(.bundled, for: wallpaper)
@@ -62,7 +62,7 @@ class WallpaperResourceManager {
 
     // MARK: - Resource retrieval
 
-    func getImageSet(for wallpaper: Wallpaper) -> WallpaperImageSet {
+    func getImageSet(for wallpaper: LegacyWallpaper) -> LegacyWallpaperImageSet {
         switch wallpaper.type {
         case .defaultBackground,
                 .themed(type: .firefox),
@@ -74,40 +74,40 @@ class WallpaperResourceManager {
         }
     }
 
-    private func getResourceOf(type: WallpaperResourceType, for wallpaper: Wallpaper) -> WallpaperImageSet {
+    private func getResourceOf(type: WallpaperResourceType, for wallpaper: LegacyWallpaper) -> LegacyWallpaperImageSet {
 
         let imageName = getResourceNames(for: wallpaper.name)
 
         switch type {
         case .bundled:
-            return WallpaperImageSet(portrait: UIImage(named: imageName.portrait),
+            return LegacyWallpaperImageSet(portrait: UIImage(named: imageName.portrait),
                                      landscape: UIImage(named: imageName.landscape))
 
         case .downloaded:
-            let storageUtility = WallpaperStorageUtility()
+            let storageUtility = LegacyWallpaperStorageUtility()
 
-            return WallpaperImageSet(portrait: storageUtility.getImageResource(for: imageName.portrait),
+            return LegacyWallpaperImageSet(portrait: storageUtility.getImageResource(for: imageName.portrait),
                                      landscape: storageUtility.getImageResource(for: imageName.landscape))
         }
     }
 
-    private func getResourceNames(for wallpaperName: String) -> WallpaperImageResourceName {
+    private func getResourceNames(for wallpaperName: String) -> LegacyWallpaperImageResourceName {
         var fileName = wallpaperName
         if UIDevice.current.userInterfaceIdiom == .pad { fileName += "_pad" }
 
-        return WallpaperImageResourceName(folder: wallpaperName,
+        return LegacyWallpaperImageResourceName(folder: wallpaperName,
                                           portrait: fileName,
                                           landscape: fileName + "_ls")
     }
 
     // MARK: - Resource deletion
-    private func deleteResources(for wallpaper: Wallpaper) {
-        let storageManager = WallpaperStorageUtility()
+    private func deleteResources(for wallpaper: LegacyWallpaper) {
+        let storageManager = LegacyWallpaperStorageUtility()
         storageManager.deleteImageResource(named: wallpaper.name)
     }
 
     // MARK: - Verification
-    private func verify(_ resourceType: WallpaperResourceType, for wallpaper: Wallpaper) -> Bool {
+    private func verify(_ resourceType: WallpaperResourceType, for wallpaper: LegacyWallpaper) -> Bool {
         let imageSet = getResourceOf(type: resourceType, for: wallpaper)
         guard imageSet.portrait != nil, imageSet.landscape != nil else { return false }
 
