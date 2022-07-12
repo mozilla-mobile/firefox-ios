@@ -1392,4 +1392,4 @@ trigger_map:
 - pull_request_target_branch: main
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: epic-branch/*
-  workflow: pipeline_multiple_shards
+  workflow: RunUnitTests
