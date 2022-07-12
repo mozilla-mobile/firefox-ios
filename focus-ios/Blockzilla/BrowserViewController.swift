@@ -244,7 +244,7 @@ class BrowserViewController: UIViewController {
         overlayView.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom)
             make.leading.trailing.equalTo(mainContainerView)
-            make.bottom.equalToSuperview().inset(UIConstants.layout.toolbarHeight + UIConstants.layout.tipViewHeight)
+            make.bottom.equalToSuperview().inset(UIConstants.layout.tipViewHeight)
         }
 
         // Listen for request desktop site notifications

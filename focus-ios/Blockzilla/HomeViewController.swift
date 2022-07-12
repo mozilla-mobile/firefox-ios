@@ -32,8 +32,6 @@ class HomeViewController: UIViewController {
         tapOutsideAction: dismissKeyboard
     )
 
-    public var tipViewTop: ConstraintItem { tipView.snp.top }
-
     var onboardingEventsHandler: OnboardingEventsHandler!
     let toolbar = HomeViewToolbar()
 
