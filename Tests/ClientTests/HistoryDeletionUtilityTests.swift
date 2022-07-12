@@ -31,7 +31,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
     }
 
     // MARK: - General Tests
-    func testEmptyRead() async {
+    func testEmptyRead() {
         let profile = profileSetup(named: "hsd_emptyTest")
 
         Task {
@@ -39,7 +39,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-    func testSingleDataExists() async {
+    func testSingleDataExists() {
         let profile = profileSetup(named: "hsd_singleDataExists")
         let testSites = [SiteElements(domain: "mozilla")]
         populateDBHistory(with: testSites, with: profile)
@@ -50,7 +50,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
     }
 
     // MARK: - Test url based deletion
-    func testDeletingSingleItem() async {
+    func testDeletingSingleItem() {
         let profile = profileSetup(named: "hsd_deleteSingleItem")
         let testSites = [SiteElements(domain: "mozilla")]
         populateDBHistory(with: testSites, with: profile)
@@ -63,61 +63,61 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-   func testDeletingMultipleItemsEmptyingDatabase() async {
-       let profile = profileSetup(named: "hsd_deleteMultipleItemsEmptyingDB")
-       let sitesToDelete = [SiteElements(domain: "mozilla"),
-                            SiteElements(domain: "amazon"),
-                            SiteElements(domain: "google")]
-       populateDBHistory(with: sitesToDelete, with: profile)
+    func testDeletingMultipleItemsEmptyingDatabase() {
+        let profile = profileSetup(named: "hsd_deleteMultipleItemsEmptyingDB")
+        let sitesToDelete = [SiteElements(domain: "mozilla"),
+                             SiteElements(domain: "amazon"),
+                             SiteElements(domain: "google")]
+        populateDBHistory(with: sitesToDelete, with: profile)
 
-       let siteEntries = sitesToDelete
-           .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
-           .map { $0.url }
+        let siteEntries = sitesToDelete
+            .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
+            .map { $0.url }
 
-       Task {
-           let result = await deletionWithExpectation(siteEntries, with: profile)
-           XCTAssertTrue(result)
-           await assertDBIsEmpty(with: profile)
-       }
-   }
+        Task {
+            let result = await deletionWithExpectation(siteEntries, with: profile)
+            XCTAssertTrue(result)
+            await assertDBIsEmpty(with: profile)
+        }
+    }
 
-   func testDeletingMultipleTopLevelItems() async {
-       let profile = profileSetup(named: "hsd_deleteMultipleItemsTopLevelItems")
-       let sitesToRemain = [SiteElements(domain: "cnn")]
-       let sitesToDelete = [SiteElements(domain: "mozilla"),
-                            SiteElements(domain: "google"),
-                            SiteElements(domain: "amazon")]
-       populateDBHistory(with: (sitesToRemain + sitesToDelete).shuffled(), with: profile)
+    func testDeletingMultipleTopLevelItems() {
+        let profile = profileSetup(named: "hsd_deleteMultipleItemsTopLevelItems")
+        let sitesToRemain = [SiteElements(domain: "cnn")]
+        let sitesToDelete = [SiteElements(domain: "mozilla"),
+                             SiteElements(domain: "google"),
+                             SiteElements(domain: "amazon")]
+        populateDBHistory(with: (sitesToRemain + sitesToDelete).shuffled(), with: profile)
 
-       let siteEntries = sitesToDelete
-           .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
-           .map { $0.url }
+        let siteEntries = sitesToDelete
+            .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
+            .map { $0.url }
 
-       Task {
-           let result = await deletionWithExpectation(siteEntries, with: profile)
-           XCTAssertTrue(result)
-           await assertDBStateFor(sitesToRemain, with: profile)
-       }
-   }
+        Task {
+            let result = await deletionWithExpectation(siteEntries, with: profile)
+            XCTAssertTrue(result)
+            await assertDBStateFor(sitesToRemain, with: profile)
+        }
+    }
 
-   func testDeletingMultipleSpecificItems() async {
-       let profile = profileSetup(named: "hsd_deleteMultipleSpecificItems")
-       let sitesToRemain = [SiteElements(domain: "cnn", path: "newsOne/test1.html")]
-       let sitesToDelete = [SiteElements(domain: "cnn", path: "newsOne/test2.html"),
-                            SiteElements(domain: "cnn", path: "newsOne/test3.html"),
-                            SiteElements(domain: "cnn", path: "newsTwo/test1.html")]
-       populateDBHistory(with: (sitesToRemain + sitesToDelete).shuffled(), with: profile)
+    func testDeletingMultipleSpecificItems() {
+        let profile = profileSetup(named: "hsd_deleteMultipleSpecificItems")
+        let sitesToRemain = [SiteElements(domain: "cnn", path: "newsOne/test1.html")]
+        let sitesToDelete = [SiteElements(domain: "cnn", path: "newsOne/test2.html"),
+                             SiteElements(domain: "cnn", path: "newsOne/test3.html"),
+                             SiteElements(domain: "cnn", path: "newsTwo/test1.html")]
+        populateDBHistory(with: (sitesToRemain + sitesToDelete).shuffled(), with: profile)
 
-       let siteEntries = sitesToDelete
-           .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
-           .map { $0.url }
+        let siteEntries = sitesToDelete
+            .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
+            .map { $0.url }
 
-       Task {
-           let result = await deletionWithExpectation(siteEntries, with: profile)
-           XCTAssertTrue(result)
-           await assertDBStateFor(sitesToRemain, with: profile)
-       }
-   }
+        Task {
+            let result = await deletionWithExpectation(siteEntries, with: profile)
+            XCTAssertTrue(result)
+            await assertDBStateFor(sitesToRemain, with: profile)
+        }
+    }
 
     // MARK: - Test time based deletion
     // In these tests, we don't test the deletion of metadata. The assumption
@@ -126,8 +126,8 @@ class HistoryDeletionUtilityTests: XCTestCase {
     // currently making testing these time frames, with the exception of
     // `.allTime` impossible to test.
 
-    func testDeletingAllItemsInLastHour() async {
-        let profile = profileSetup(named: "hsd_deleteAllItemsInLastHour")
+    func testDeletingAllItemsInLastHour() {
+        let profile = profileSetup(named: "hsd_deleteLastHour")
         guard let thirtyMinutesAgo = Calendar.current.date(byAdding: .minute,
                                                            value: -30,
                                                            to: Date())?.toMicrosecondsSince1970()
@@ -148,7 +148,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-    func testDeletingItemsInLastHour_WithFurtherHistory() async {
+    func testDeletingItemsInLastHour_WithFurtherHistory() {
         let profile = profileSetup(named: "hsd_deleteLastHour_WithFurtherHistory")
         guard let thirtyMinutesAgo = Calendar.current.date(byAdding: .minute,
                                                            value: -30,
@@ -173,7 +173,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-    func testDeletingAllItemsInHistoryUsingToday() async {
+    func testDeletingAllItemsInHistoryUsingToday() {
         let profile = profileSetup(named: "hsd_deleteToday")
         guard let someTimeToday = Calendar.current.date(
             byAdding: .minute,
@@ -196,7 +196,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-    func testDeletingItemsInHistoryUsingToday_WithFurtherHistory() async {
+    func testDeletingItemsInHistoryUsingToday_WithFurtherHistory() {
         let profile = profileSetup(named: "hsd_deleteToday_WithFurtherHistory")
         guard let someTimeToday = Calendar.current.date(
             byAdding: .minute,
@@ -222,7 +222,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-    func testDeletingAllItemsInHistoryUsingYesterday() async {
+    func testDeletingAllItemsInHistoryUsingYesterday() {
         let profile = MockProfile(databasePrefix: "hsd_deleteYesterday")
         guard let someTimeYesterday = someTimeYesterday()?.toMicrosecondsSince1970() else {
             XCTFail("Unable to create date")
@@ -241,7 +241,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-    func testDeletingItemsInHistoryUsingYesterday_WithFurtherHistory() async {
+    func testDeletingItemsInHistoryUsingYesterday_WithFurtherHistory() {
         let profile = MockProfile(databasePrefix: "hsd_deleteYesterday_WithFurtherHistory")
         guard let someTimeYesterday = someTimeYesterday()?.toMicrosecondsSince1970(),
               let ninetyHoursAgo = Calendar.current.date(byAdding: .hour,
@@ -264,7 +264,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-    func testDeletingAllItemsInHistoryUsingAllTime() async {
+    func testDeletingAllItemsInHistoryUsingAllTime() {
         let profile = MockProfile(databasePrefix: "hsd_deleteAllTime")
         guard let earlierToday = Calendar.current.date(byAdding: .hour,
                                                        value: -5,

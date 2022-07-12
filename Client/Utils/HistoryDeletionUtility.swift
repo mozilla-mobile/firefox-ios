@@ -25,15 +25,11 @@ class HistoryDeletionUtility {
     /// Deletes sites from the history and from metadata.
     ///
     /// Completion block is included for testing and should not be used otherwise.
-    public func delete(_ sites: [String], completion: ((Bool) -> Void)? = nil) {
-        deleteFromHistory(sites)
-        deleteMetadata(sites) { result in
-            completion?(result)
-        }
-    }
-
-//    private func deleteFromHistory(_ sites: [String]) {
-//        sites.forEach { profile.history.removeHistoryForURL($0) }
+//    public func delete(_ sites: [String], completion: ((Bool) -> Void)? = nil) {
+//        deleteFromHistory(sites)
+//        deleteMetadata(sites) { result in
+//            completion?(result)
+//        }
 //    }
 
     private func deleteMetadata(_ sites: [String], completion: ((Bool) -> Void)? = nil) {
