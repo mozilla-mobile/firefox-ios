@@ -6,7 +6,7 @@ import Shared
 
 protocol PocketSponsoredStoriesProviding {
 
-    typealias SponsoredStoryResult = Swift.Result<[PocketSponsoredStory], Error>
+    typealias SponsoredStoryResult = Result<[PocketSponsoredStory], Error>
 
     func fetchSponsoredStories(timestamp: Timestamp, completion: @escaping (SponsoredStoryResult) -> Void)
     func fetchSponsoredStories(timestamp: Timestamp) async throws -> [PocketSponsoredStory]
