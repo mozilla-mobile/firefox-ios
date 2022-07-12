@@ -17,7 +17,7 @@
 "About.privateBulletHeader" = "Використовуйте як приватний браузер:";
 
 /* Label for row in About screen */
-"About.rowHelp" = "Допомога";
+"About.rowHelp" = "Довідка";
 
 /* Link to Privacy Notice in the About screen */
 "About.rowPrivacy" = "Повідомлення про приватність";
