@@ -98,11 +98,15 @@ class ToolbarButtonColor {
 
 class LoadingBarColor {
     func start(_ isPrivate: Bool) -> UIColor {
-        return !isPrivate ? UIColor.Photon.Blue40A30 : UIColor.Photon.Magenta60A30
+        return !isPrivate ? UIColor.Photon.Violet50 : UIColor.Photon.Magenta60A30
+    }
+    // Adds middle color for loadingBar only in public browsing
+    func middle(_ isPrivate: Bool) -> UIColor? {
+        return !isPrivate ? UIColor.Photon.Pink40 : nil
     }
 
     func end(_ isPrivate: Bool) -> UIColor {
-        return !isPrivate ? UIColor.Photon.Teal60 : UIColor.Photon.Purple60
+        return !isPrivate ? UIColor.Photon.Yellow40 : UIColor.Photon.Purple60
     }
 }
 
