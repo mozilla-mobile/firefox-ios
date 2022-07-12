@@ -89,7 +89,9 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
         group.enter()
 
         topSiteHistoryManager.getTopSites { [weak self] sites in
-            self?.historySites = sites
+            if let sites = sites {
+                self?.historySites = sites
+            }
             group.leave()
         }
     }

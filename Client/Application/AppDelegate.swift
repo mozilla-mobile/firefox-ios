@@ -191,7 +191,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Since we only need the topSites data in the archiver, let's write it
         // only if iOS 14 is available.
         if #available(iOS 14.0, *) {
-            TopSitesHelper.writeWidgetKitTopSites(profile: profile)
+            let topSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
+                                                                  prefs: profile.prefs)
+
+            TopSitesWidgetManager(topSitesProvider: topSitesProvider).writeWidgetKitTopSites()
         }
     }
 
