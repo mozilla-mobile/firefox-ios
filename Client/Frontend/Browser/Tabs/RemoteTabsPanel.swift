@@ -27,8 +27,12 @@ class RemoteTabsPanel: UIViewController, NotificationThemeable, Loggable {
     init(profile: Profile) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .ProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(notificationReceived),
+                                               name: .FirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(notificationReceived),
+                                               name: .ProfileDidFinishSyncing, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -369,6 +373,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
         static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
         static let EmptyStateSignInButtonHeight = 44
         static let EmptyStateSignInButtonWidth = 200
+        static let EmptyTabContentOffset: CGFloat = -180
     }
 
     var remoteTabsPanel: RemoteTabsPanel?
@@ -422,7 +427,8 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(emptyStateImageView.snp.bottom).offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
+            make.top.equalTo(emptyStateImageView.snp.bottom)
+                .offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
             make.centerX.equalTo(emptyStateImageView)
         }
 
@@ -463,7 +469,8 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
     override func updateConstraints() {
         if UIWindow.isLandscape && !(DeviceInfo.deviceModel().range(of: "iPad") != nil) {
             instructionsLabel.snp.remakeConstraints { make in
-                make.top.equalTo(titleLabel.snp.bottom).offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
+                make.top.equalTo(titleLabel.snp.bottom)
+                    .offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
                 make.width.equalTo(RemoteTabsErrorCell.UX.EmptyStateInstructionsWidth)
 
                 // Sets proper landscape layout for bigger phones: iPhone 6 and on.
@@ -476,7 +483,8 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
             signInButton.snp.remakeConstraints { make in
                 make.height.equalTo(UX.EmptyStateSignInButtonHeight)
                 make.width.equalTo(UX.EmptyStateSignInButtonWidth)
-                make.centerY.equalTo(emptyStateImageView).offset(2 * RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
+                make.centerY.equalTo(emptyStateImageView)
+                    .offset(2 * RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
 
                 // Sets proper landscape layout for bigger phones: iPhone 6 and on.
                 make.right.greaterThanOrEqualTo(contentView.snp.right).offset(-70).priority(100)
@@ -486,14 +494,16 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
             }
         } else {
             instructionsLabel.snp.remakeConstraints { make in
-                make.top.equalTo(titleLabel.snp.bottom).offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
+                make.top.equalTo(titleLabel.snp.bottom)
+                    .offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
                 make.centerX.equalTo(contentView)
                 make.width.equalTo(RemoteTabsErrorCell.UX.EmptyStateInstructionsWidth)
             }
 
             signInButton.snp.remakeConstraints { make in
                 make.centerX.equalTo(contentView)
-                make.top.equalTo(instructionsLabel.snp.bottom).offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
+                make.top.equalTo(instructionsLabel.snp.bottom)
+                    .offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
                 make.height.equalTo(UX.EmptyStateSignInButtonHeight)
                 make.width.equalTo(UX.EmptyStateSignInButtonWidth)
             }
@@ -526,8 +536,10 @@ class RemoteTabsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
-        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
-        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
+        tableView.register(SiteTableViewHeader.self,
+                           forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self,
+                           forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
 
         tableView.rowHeight = UX.RowHeight
         tableView.separatorInset = .zero
@@ -593,11 +605,13 @@ class RemoteTabsTableViewController: UITableViewController {
     func updateDelegateClientAndTabData(_ clientAndTabs: [ClientAndTabs]) {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
         if clientAndTabs.count == 0 {
-            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel, error: .noClients)
+            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+                                                                    error: .noClients)
         } else {
             let nonEmptyClientAndTabs = clientAndTabs.filter { $0.tabs.count > 0 }
             if nonEmptyClientAndTabs.count == 0 {
-                self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel, error: .noTabs)
+                self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+                                                                        error: .noTabs)
             } else {
                 let tabsPanelDataSource = RemoteTabsPanelClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel,
                                                                                  clientAndTabs: nonEmptyClientAndTabs,
@@ -617,7 +631,8 @@ class RemoteTabsTableViewController: UITableViewController {
         // Short circuit if the user is not logged in
         guard profile.hasSyncableAccount() else {
             self.endRefreshing()
-            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel, error: .notLoggedIn)
+            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+                                                                    error: .notLoggedIn)
             return
         }
 
@@ -625,7 +640,8 @@ class RemoteTabsTableViewController: UITableViewController {
         self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
             guard let clientAndTabs = result.successValue else {
                 self.endRefreshing()
-                self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel, error: .failedToSync)
+                self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+                                                                        error: .failedToSync)
                 return
             }
 
@@ -675,13 +691,16 @@ extension RemoteTabsTableViewController: CollapsibleTableViewSection {
 
 // MARK: LibraryPanelContextMenu
 extension RemoteTabsTableViewController: LibraryPanelContextMenu {
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath,
+                            completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
         self.present(contextMenu, animated: true, completion: nil)
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        guard let tab = (tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource)?.tabAtIndexPath(indexPath) else { return nil }
+        guard let tab = (tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource)?.tabAtIndexPath(indexPath) else {
+            return nil
+        }
         return Site(url: String(describing: tab.URL), title: tab.title)
     }
 
