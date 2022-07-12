@@ -463,7 +463,3 @@ extension ReadingListPanel: NotificationThemeable {
         refreshReadingList()
     }
 }
-
-extension ReadingListPanel {
-
-}

@@ -86,7 +86,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     private lazy var bottomLeftButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-add"), style: .plain, target: self, action: #selector(bottomLeftButtonAction))
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.navAdd),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(bottomLeftButtonAction))
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomLeftButton
         return button
     }()

@@ -45,6 +45,7 @@ public struct ImageIdentifiers {
     public static let libraryReadingList = "library-readinglist"
     public static let logo = "splash"
     public static let menuChevron = "menu-Disclosure"
+    public static let navAdd = "nav-add"
     public static let navTabCounter = "nav-tabcounter"
     public static let navMenu = "nav-menu"
     public static let newPrivateTab = "quick_action_new_private_tab"

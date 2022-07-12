@@ -46,10 +46,6 @@ extension LibraryPanel {
     }
 }
 
-struct LibraryPanelUX {
-    static let EmptyTabContentOffset: CGFloat = -180
-}
-
 enum LibraryPanelType: Int, CaseIterable {
     case bookmarks = 0
     case history = 1

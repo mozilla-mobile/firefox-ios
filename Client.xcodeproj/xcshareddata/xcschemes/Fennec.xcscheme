@@ -331,9 +331,6 @@
                   Identifier = "ETPCoverSheetTests">
                </Test>
                <Test
-                  Identifier = "LibraryViewModelTests/testBookmarksSomething_ForItemEditMode2()">
-               </Test>
-               <Test
                   Identifier = "TestFavicons/testFaviconFetcherParse()">
                </Test>
             </SkippedTests>

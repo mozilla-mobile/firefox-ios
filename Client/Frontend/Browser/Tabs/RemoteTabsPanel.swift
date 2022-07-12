@@ -283,6 +283,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell {
     struct UX {
         static let EmptyStateInstructionsWidth = 170
         static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15
+        static let EmptyTabContentOffset: CGFloat = -180
     }
 
     let titleLabel = UILabel()
@@ -334,8 +335,8 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell {
             // And then center it in the overlay view that sits on top of the UITableView
             make.centerX.equalTo(contentView)
 
-            // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(contentView.snp.centerY).offset(LibraryPanelUX.EmptyTabContentOffset).priority(100)
+            // Sets proper top constraint for iPhone 6 in portrait and for iPad.
+            make.centerY.equalTo(contentView.snp.centerY).offset(UX.EmptyTabContentOffset).priority(100)
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(contentView.snp.top).offset(20).priority(1000)
@@ -414,7 +415,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
             make.centerX.equalTo(instructionsLabel)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(contentView).offset(LibraryPanelUX.EmptyTabContentOffset + 30).priority(100)
+            make.centerY.equalTo(contentView).offset(UX.EmptyTabContentOffset + 30).priority(100)
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(contentView.snp.top).priority(1000)
@@ -506,6 +507,7 @@ class RemoteTabsTableViewController: UITableViewController {
 
     struct UX {
         static let RowHeight = SiteTableViewControllerUX.RowHeight
+
     }
 
     weak var remoteTabsPanel: RemoteTabsPanel?

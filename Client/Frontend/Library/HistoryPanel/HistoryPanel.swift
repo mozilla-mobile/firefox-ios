@@ -9,15 +9,6 @@ import XCGLogger
 import WebKit
 import os.log
 
-private struct HistoryPanelUX {
-    static let WelcomeScreenItemWidth = 170
-    static let HeaderHeight = CGFloat(40)
-    static let IconSize = 23
-    static let IconBorderColor = UIColor.Photon.Grey30
-    static let IconBorderWidth: CGFloat = 0.5
-    static let actionIconColor = UIColor.Photon.Grey40 // Works for light and dark theme.
-}
-
 private class FetchInProgressError: MaybeErrorType {
     internal var description: String {
         return "Fetch is already in-progress"
@@ -26,6 +17,16 @@ private class FetchInProgressError: MaybeErrorType {
 
 @objcMembers
 class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemeable {
+
+    struct UX {
+        static let WelcomeScreenItemWidth = 170
+        static let HeaderHeight = CGFloat(40)
+        static let IconSize = 23
+        static let IconBorderColor = UIColor.Photon.Grey30
+        static let IconBorderWidth: CGFloat = 0.5
+        static let actionIconColor = UIColor.Photon.Grey40 // Works for light and dark theme.
+        static let EmptyTabContentOffset: CGFloat = -180
+    }
 
     // MARK: - Properties
     typealias HistoryPanelSections = HistoryPanelViewModel.Sections
@@ -377,8 +378,8 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         cell.titleLabel.isHidden = site.title.isEmpty
         cell.descriptionLabel.text = site.url
         cell.descriptionLabel.isHidden = false
-        cell.leftImageView.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
-        cell.leftImageView.layer.borderWidth = HistoryPanelUX.IconBorderWidth
+        cell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
+        cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
         cell.accessoryView = nil
         getFavIcon(for: site) { [weak cell] image in
             cell?.leftImageView.image = image
@@ -514,10 +515,10 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         NSLayoutConstraint.activate([
             welcomeLabel.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
             welcomeLabel.centerYAnchor.constraint(equalTo: overlayView.centerYAnchor,
-                                                  constant: LibraryPanelUX.EmptyTabContentOffset).priority(welcomeLabelPriority),
+                                                  constant: UX.EmptyTabContentOffset).priority(welcomeLabelPriority),
             welcomeLabel.topAnchor.constraint(greaterThanOrEqualTo: overlayView.topAnchor,
                                               constant: 50),
-            welcomeLabel.widthAnchor.constraint(equalToConstant: CGFloat(HistoryPanelUX.WelcomeScreenItemWidth))
+            welcomeLabel.widthAnchor.constraint(equalToConstant: CGFloat(UX.WelcomeScreenItemWidth))
         ])
         return overlayView
     }
@@ -665,7 +666,7 @@ extension HistoryPanel: UITableViewDelegate {
             return 0
         }
 
-        return HistoryPanelUX.HeaderHeight
+        return UX.HeaderHeight
     }
 }
 

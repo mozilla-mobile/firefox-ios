@@ -4,9 +4,7 @@
 
 import UIKit
 
-/**
- * Data for identifying and constructing a LibraryPanel.
- */
+/// Data for identifying and constructing a LibraryPanel.
 class LibraryPanelDescriptor {
     var viewController: UIViewController?
     var navigationController: UINavigationController?
@@ -25,7 +23,12 @@ class LibraryPanelDescriptor {
         return libraryPanel?.last
     }
 
-    init(viewController: LibraryPanel?, profile: Profile, tabManager: TabManager, accessibilityLabel: String, accessibilityIdentifier: String, panelType: LibraryPanelType) {
+    init(viewController: LibraryPanel?,
+         profile: Profile,
+         tabManager: TabManager,
+         accessibilityLabel: String,
+         accessibilityIdentifier: String,
+         panelType: LibraryPanelType) {
         self.viewController = viewController
         self.profile = profile
         self.tabManager = tabManager
