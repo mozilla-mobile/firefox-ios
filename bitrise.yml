@@ -730,8 +730,29 @@ workflows:
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: "-testPlan SmokeXCUITests"
         - simulator_os_version: latest
-        - simulator_device: iPad Pro (12.9-inch) (4th generation)
-    description: This Workflow is to run SmokeTest on iPad simulator device
+        - simulator_device: iPad Pro (12.9-inch) (5th generation)
+        description: This Workflow is to run SmokeTest on iPad simulator device
+    - xcode-test@2.4:
+        inputs:
+        - scheme: Fennec_Enterprise_XCUITests
+        - xcodebuild_test_options: "-testPlan Smoketest2"
+        - simulator_os_version: latest
+        - simulator_device: iPad Pro (12.9-inch) (5th generation)
+        description: This Workflow is to run SmokeTest on iPad simulator device Smoketest2
+    - xcode-test@2.4:
+        inputs:
+        - scheme: Fennec_Enterprise_XCUITests
+        - xcodebuild_test_options: "-testPlan Smoketest3"
+        - simulator_os_version: latest
+        - simulator_device: iPad Pro (12.9-inch) (5th generation)
+        description: This Workflow is to run SmokeTest on iPad simulator device Smoketest3
+    - xcode-test@2.4:
+        inputs:
+        - scheme: Fennec_Enterprise_XCUITests
+        - xcodebuild_test_options: "-testPlan Smoketest4"
+        - simulator_os_version: latest
+        - simulator_device: iPad Pro (12.9-inch) (5th generation)
+        description: This Workflow is to run SmokeTest on iPad simulator device Smoketest4
     meta:
       bitrise.io:
         stack: osx-xcode-13.4.x
