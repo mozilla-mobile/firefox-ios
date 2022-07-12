@@ -15,9 +15,11 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFl
     }
 
     lazy var urlSession: URLSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
+
     private lazy var pocketKey: String = {
         return Bundle.main.object(forInfoDictionaryKey: PocketSponsoredConstants.pocketEnvAPIKey) as? String ?? ""
     }()
+
     lazy var urlCache: URLCache = {
         return URLCache.shared
     }()
@@ -55,6 +57,7 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFl
         let bodyData = try? JSONSerialization.data(withJSONObject: body)
         request?.httpBody = bodyData
         request?.httpMethod = .post
+
         return request
     }
 
