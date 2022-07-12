@@ -47,6 +47,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     private let profile: Profile
     // Request limit and offset
     private let queryFetchLimit = 100
+    // Is not intended to be use in prod code, only on test
     private(set) var currentFetchOffset = 0
     private let searchQueryFetchLimit = 50
     private var searchCurrentFetchOffset = 0
