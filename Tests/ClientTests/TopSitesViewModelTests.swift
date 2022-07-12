@@ -24,13 +24,15 @@ class TopSitesViewModelTests: XCTestCase {
     }
 
     func testDeletionOfSingleSuggestedSite() {
-        let viewModel = TopSitesViewModel(profile: self.profile,
-                                                isZeroSearch: false)
+        let viewModel = TopSitesViewModel(profile: profile,
+                                          isZeroSearch: false)
+        let topSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
+                                                              prefs: profile.prefs)
 
-        let siteToDelete = TopSitesHelper.defaultTopSites(profile)[0]
+        let siteToDelete = topSitesProvider.defaultTopSites(profile.prefs)[0]
 
         viewModel.hideURLFromTopSites(siteToDelete)
-        let newSites = TopSitesHelper.defaultTopSites(profile)
+        let newSites = topSitesProvider.defaultTopSites(profile.prefs)
 
         XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
             return a.url == b.url
@@ -39,14 +41,16 @@ class TopSitesViewModelTests: XCTestCase {
 
     func testDeletionOfAllDefaultSites() {
         let viewModel = TopSitesViewModel(profile: self.profile,
-                                                isZeroSearch: false)
+                                          isZeroSearch: false)
+        let topSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
+                                                              prefs: profile.prefs)
 
-        let defaultSites = TopSitesHelper.defaultTopSites(profile)
+        let defaultSites = topSitesProvider.defaultTopSites(profile.prefs)
         defaultSites.forEach({
             viewModel.hideURLFromTopSites($0)
         })
 
-        let newSites = TopSitesHelper.defaultTopSites(profile)
+        let newSites = topSitesProvider.defaultTopSites(profile.prefs)
         XCTAssertTrue(newSites.isEmpty)
     }
 
@@ -172,7 +176,7 @@ extension TopSitesViewModelTests {
 
     func createViewModel(overridenSiteCount: Int = 40, overridenNumberOfRows: Int = 2) -> TopSitesViewModel {
         let viewModel = TopSitesViewModel(profile: self.profile,
-                                                isZeroSearch: false)
+                                          isZeroSearch: false)
 
         let managerStub = TopSitesManagerStub(profile: profile)
         managerStub.overridenSiteCount = overridenSiteCount

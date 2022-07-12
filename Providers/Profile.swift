@@ -92,12 +92,15 @@ class CommandStoringSyncDelegate: SyncDelegate {
  * A Profile manages access to the user's data.
  */
 protocol Profile: AnyObject {
+
+    typealias HistoryFetcher = BrowserHistory & SyncableHistory & ResettableSyncStorage
+
     var places: RustPlaces { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
-    var history: BrowserHistory & SyncableHistory & ResettableSyncStorage { get }
+    var history: HistoryFetcher { get }
     var metadata: Metadata { get }
     var recommendations: HistoryRecommendations { get }
     var favicons: Favicons { get }
@@ -442,7 +445,7 @@ open class BrowserProfile: Profile {
      * Any other class that needs to access any one of these should ensure
      * that this is initialized first.
      */
-    fileprivate lazy var legacyPlaces: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations  = {
+    private lazy var legacyPlaces: Favicons & Profile.HistoryFetcher & HistoryRecommendations  = {
         return SQLiteHistory(db: self.db, prefs: self.prefs)
     }()
 
@@ -450,7 +453,7 @@ open class BrowserProfile: Profile {
         return self.legacyPlaces
     }
 
-    var history: BrowserHistory & SyncableHistory & ResettableSyncStorage {
+    var history: Profile.HistoryFetcher {
         return self.legacyPlaces
     }
 
