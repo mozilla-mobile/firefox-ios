@@ -976,6 +976,7 @@
 		E571EE782875694C0051D9AA /* PocketSponsoredStoriesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E571EE752875694C0051D9AA /* PocketSponsoredStoriesProvider.swift */; };
 		E571EE7D28756A130051D9AA /* PocketSponsoredStoriesProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E571EE7A287569960051D9AA /* PocketSponsoredStoriesProviderTests.swift */; };
 		E571EE7E28756A130051D9AA /* PocketStoryProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E571EE79287569960051D9AA /* PocketStoryProviderTests.swift */; };
+		E58368AA287D632F0087A449 /* StoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58368A9287D632F0087A449 /* StoryProvider.swift */; };
 		E60D03181D511398002FE3F6 /* SyncStatusResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncStatusResolver.swift */; };
 		E60D03271D511554002FE3F6 /* SyncStatusResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncStatusResolver.swift */; };
 		E60D032A1D5118DB002FE3F6 /* SyncStatusResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03291D5118DB002FE3F6 /* SyncStatusResolverTests.swift */; };
@@ -4312,6 +4313,7 @@
 		E571EE752875694C0051D9AA /* PocketSponsoredStoriesProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketSponsoredStoriesProvider.swift; sourceTree = "<group>"; };
 		E571EE79287569960051D9AA /* PocketStoryProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketStoryProviderTests.swift; sourceTree = "<group>"; };
 		E571EE7A287569960051D9AA /* PocketSponsoredStoriesProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketSponsoredStoriesProviderTests.swift; sourceTree = "<group>"; };
+		E58368A9287D632F0087A449 /* StoryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryProvider.swift; sourceTree = "<group>"; };
 		E59A418F9208400903902F07 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		E5C24864B9BA6790B352962E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Search.strings; sourceTree = "<group>"; };
 		E5D343558F3C933F5CA7690C /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Storage.strings"; sourceTree = "<group>"; };
@@ -6080,6 +6082,7 @@
 				C8B0F5EC283B7C9F007AE65D /* PocketStandardCell.swift */,
 				8A9AC46A276D11280047F5B0 /* PocketViewModel.swift */,
 				8ABC5AED284532C900FEA552 /* PocketDiscoverCell.swift */,
+				E58368A9287D632F0087A449 /* StoryProvider.swift */,
 			);
 			path = Pocket;
 			sourceTree = "<group>";
@@ -9723,6 +9726,7 @@
 				43175DB826B87D2C00C41C31 /* AdsTelemetryHelper.swift in Sources */,
 				43DDB96A240994370058A068 /* ETPCoverSheetViewController.swift in Sources */,
 				217AEF7828480844004EED37 /* ResizableButton.swift in Sources */,
+				E58368AA287D632F0087A449 /* StoryProvider.swift in Sources */,
 				E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */,
 				F85C7EDD27109241004BDBA4 /* LoginOnboardingViewController.swift in Sources */,
 				D8FDEB57220CFE970069A582 /* UIImage+ImageEffects.m in Sources */,
