@@ -24,8 +24,8 @@ class PocketViewModel {
     private var hasSentPocketSectionEvent = false
 
     private lazy var storyProvider: StoryProvider = {
-        StoryProvider(pocketAPI: pocketAPI, pocketSponsoredAPI: pocketSponsoredAPI) {
-            self.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly) == true
+        StoryProvider(pocketAPI: pocketAPI, pocketSponsoredAPI: pocketSponsoredAPI) { [weak self] in
+            self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .buildAndUser) == true
         }
     }()
 
