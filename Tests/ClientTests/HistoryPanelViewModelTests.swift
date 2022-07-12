@@ -56,7 +56,6 @@ class HistoryPanelViewModelTests: XCTestCase {
             XCTAssertTrue(success)
             XCTAssertNotNil(self.sut.searchTermGroups)
             XCTAssertFalse(self.sut.groupedSites.isEmpty)
-            print("YRD visible sections count \(self.sut.visibleSections.count)")
             XCTAssertFalse(self.sut.visibleSections.isEmpty)
         }
     }
