@@ -144,7 +144,7 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
         let useStagingContileAPI = CoreFlaggableFeature(withID: .useStagingContileAPI,
                                                         enabledFor: [.beta, .developer])
         let useStagingSponsoredPocketStoriesAPI = CoreFlaggableFeature(withID: .useStagingSponsoredPocketStoriesAPI,
-                                                        enabledFor: [.beta, .developer])
+                                                                       enabledFor: [.beta, .developer])
 
         coreFeatures[.useStagingContileAPI] = useStagingContileAPI
         coreFeatures[.useStagingSponsoredPocketStoriesAPI] = useStagingSponsoredPocketStoriesAPI
