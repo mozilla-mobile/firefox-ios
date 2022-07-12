@@ -220,9 +220,9 @@ class WallpaperMigrationUtilityTests: XCTestCase {
 
         switch directoryType {
         case .documents:
-            return documentPath.appendingPathComponent(WallpaperStorageUtility.directoryName)
+            return documentPath.appendingPathComponent(LegacyWallpaperStorageUtility.directoryName)
         case .applicationSupport:
-            return appSupportPath.appendingPathComponent(WallpaperStorageUtility.directoryName)
+            return appSupportPath.appendingPathComponent(LegacyWallpaperStorageUtility.directoryName)
         }
     }
 }
