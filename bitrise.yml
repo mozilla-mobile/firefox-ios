@@ -1385,11 +1385,11 @@ meta:
 trigger_map:
 - push_branch: main
   pipeline: pipeline_multiple_shards
-- push_branch: epic-branch/*
+- push_branch: epic-branch/bookmark-folders-changes
   workflow: pipeline_multiple_shards
 - push_branch: v103.0
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
   pipeline: pipeline_multiple_shards
-- pull_request_target_branch: epic-branch/*
-  workflow: RunUnitTests
+- pull_request_target_branch: epic-branch/bookmark-folders-changes
+  workflow: pipeline_multiple_shards
