@@ -26,7 +26,12 @@ class StoryProvider {
     private let pocketSponsoredAPI: PocketSponsoredStoriesProviding
     private var showSponsoredStories: () -> Bool
 
-    private func insert(sponsoredStories: [PocketStory], into globalFeed: [PocketStory], indices: [Int]) -> [PocketStory] {
+    private func insert(
+        sponsoredStories: [PocketStory],
+        into globalFeed: [PocketStory],
+        indices: [Int]
+    ) -> [PocketStory] {
+        
         var global = globalFeed
         var sponsored = sponsoredStories
         for index in indices {
