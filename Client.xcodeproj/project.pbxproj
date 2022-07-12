@@ -4394,7 +4394,6 @@
 		E689C72F1E0C7617008BAADB /* NSAttributedStringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSAttributedStringExtensions.swift; path = Extensions/NSAttributedStringExtensions.swift; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingsTableViewController.swift; sourceTree = "<group>"; };
-		E68F36971EA694000048CF44 /* PanelDataObservers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PanelDataObservers.swift; path = ../Client/Frontend/Home/PanelDataObservers.swift; sourceTree = "<group>"; };
 		E6927EBF1C7B6FB800D03F75 /* ErrorToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorToast.swift; sourceTree = "<group>"; };
 		E692E3361C46E86A009D1240 /* AppSettingsOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingsOptions.swift; sourceTree = "<group>"; };
 		E6934171BA2BD0BCAF225D44 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/LoginManager.strings; sourceTree = "<group>"; };
@@ -6304,7 +6303,6 @@
 			children = (
 				C8B0F5EE283B7CCE007AE65D /* Pocket */,
 				6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */,
-				E68F36971EA694000048CF44 /* PanelDataObservers.swift */,
 				E60D03171D511398002FE3F6 /* SyncStatusResolver.swift */,
 				D34DC84D1A16C40C00D49B7B /* Profile.swift */,
 			);
