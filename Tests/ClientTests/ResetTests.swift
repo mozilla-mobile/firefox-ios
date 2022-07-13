@@ -11,29 +11,21 @@ import UIKit
 import XCTest
 
 class ResetTests: XCTestCase {
+
+    static let testClientGuid = "abcdefghijkl"
+
     func testResetting() {
         let profile = MockBrowserProfile(localName: "testResetTests")
 
         // Add a client.
         let tabs = profile.peekTabs
-        XCTAssertTrue(tabs.insertOrUpdateClient(
-            RemoteClient(guid: "abcdefghijkl",
-                         name: "Remote",
-                         modified: Date.now(),
-                         type: "mobile",
-                         formfactor: "tablet",
-                         os: "Windows",
-                         version: "55.0.1a",
-                         fxaDeviceId: "fxa1")).value.isSuccess)
-        tabs.replaceRemoteDevices([RemoteDevice(id: "fxa1",
-                                                name: "Device 1",
-                                                type: "desktop",
-                                                isCurrentDevice: false,
-                                                lastAccessTime: 123,
-                                                availableCommands: [:])]).succeeded()
+        assertAddClient(tabs)
+
+        // Replace remote device
+        assertReplaceRemoteDevices(tabs)
 
         // Verify that it's there.
-        assertClientsHaveGUIDsFromStorage(tabs, expected: ["abcdefghijkl"])
+        assertClientsHaveGUIDsFromStorage(tabs, expected: [ResetTests.testClientGuid])
 
         // Tell the sync manager that "clients" has changed syncID.
         let engine = MockEngineStateChanges()
@@ -45,24 +37,95 @@ class ResetTests: XCTestCase {
             return
         }
 
-        XCTAssertTrue(profile.peekSyncManager.takeActionsOnEngineStateChanges(engine).value.isSuccess)
+        assertActionsOnEngine(profile: profile, engine: engine)
 
-        // We threw away the command.
-        XCTAssertEqual(engine.clearLocalCommandsCount, 1, "Clear local commands was called once")
-
-        // And now we have no local clients.
-        let empty = tabs.getClients().value.successValue
-        XCTAssertNotNil(empty)
-        XCTAssertEqual(empty!, [])
+        assertNoClients(tabs)
     }
 }
 
 // MARK: - Helper methods
 extension ResetTests {
-    func assertClientsHaveGUIDsFromStorage(_ storage: RemoteClientsAndTabs, expected: [GUID]) {
-        let recs = storage.getClients().value.successValue
-        XCTAssertNotNil(recs)
-        XCTAssertEqual(expected, recs!.map { $0.guid! })
+
+    func assertAddClient(_ tabs: RemoteClientsAndTabs) {
+        let addClientExpectation = expectation(description: "Add client fulfilled")
+        tabs.insertOrUpdateClient(
+            RemoteClient(guid: ResetTests.testClientGuid,
+                         name: "Remote",
+                         modified: Date.now(),
+                         type: "mobile",
+                         formfactor: "tablet",
+                         os: "Windows",
+                         version: "55.0.1a",
+                         fxaDeviceId: "fxa1"))
+        .uponQueue(.main) { result in
+            XCTAssertTrue(result.isSuccess)
+            addClientExpectation.fulfill()
+        }
+
+        wait(for: [addClientExpectation], timeout: 5.0)
+    }
+
+    func assertReplaceRemoteDevices(_ tabs: SQLiteRemoteClientsAndTabs) {
+        let replaceRemoteExpectation = expectation(description: "Replace remote devices fulfilled")
+        tabs.replaceRemoteDevices(
+            [RemoteDevice(id: "fxa1",
+                          name: "Device 1",
+                          type: "desktop",
+                          isCurrentDevice: false,
+                          lastAccessTime: 123,
+                          availableCommands: [:])])
+        .uponQueue(.main) { result in
+            XCTAssertTrue(result.isSuccess)
+            replaceRemoteExpectation.fulfill()
+        }
+
+        wait(for: [replaceRemoteExpectation], timeout: 5.0)
+    }
+
+    func assertClientsHaveGUIDsFromStorage(_ storage: RemoteClientsAndTabs,
+                                           expected: [GUID],
+                                           file: StaticString = #file,
+                                           line: UInt = #line) {
+
+        let getClientExpectation = expectation(description: "Get client fulfilled")
+
+        storage.getClients().uponQueue(.main) { result in
+            let recs = result.successValue
+            XCTAssertNotNil(recs, file: file, line: line)
+            XCTAssertEqual(expected, recs!.map { $0.guid! }, file: file, line: line)
+            getClientExpectation.fulfill()
+        }
+
+        wait(for: [getClientExpectation], timeout: 5.0)
+    }
+
+    func assertActionsOnEngine(profile: MockBrowserProfile, engine: MockEngineStateChanges) {
+        let engineActionExpectation = expectation(description: "Action on engine fulfilled")
+
+        profile.peekSyncManager.takeActionsOnEngineStateChanges(engine).uponQueue(.main) { result in
+            XCTAssertTrue(result.isSuccess)
+
+            // We threw away the command.
+            XCTAssertEqual(engine.clearLocalCommandsCount, 1, "Clear local commands was called once")
+            engineActionExpectation.fulfill()
+        }
+
+        wait(for: [engineActionExpectation], timeout: 5.0)
+    }
+
+    func assertNoClients(_ tabs: RemoteClientsAndTabs) {
+        let getClientExpectation = expectation(description: "Get client fulfilled")
+
+        // And now we have no local clients.
+        tabs.getClients().uponQueue(.main) { result in
+            let empty = result.successValue
+            XCTAssertNotNil(empty)
+            XCTAssertEqual(empty!, [])
+
+            getClientExpectation.fulfill()
+        }
+
+        wait(for: [getClientExpectation], timeout: 5.0)
     }
 }
 

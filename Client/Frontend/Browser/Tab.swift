@@ -368,7 +368,7 @@ class Tab: NSObject {
         self.nightMode = false
         self.noImageMode = false
         self.browserViewController = bvc
-        self.metadataManager = TabMetadataManager()
+        self.metadataManager = TabMetadataManager(profile: bvc.profile)
         super.init()
         self.isPrivate = isPrivate
         debugTabCount += 1

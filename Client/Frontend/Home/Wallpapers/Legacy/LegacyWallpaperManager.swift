@@ -6,12 +6,12 @@ import Foundation
 import UIKit
 import Shared
 
-struct WallpaperManager {
+struct LegacyWallpaperManager {
 
     // MARK: - Variables
     private let userDefaults: UserDefaults
-    private let dataManager: WallpaperDataManager
-    private let storageManager: WallpaperStorageUtility
+    private let dataManager: LegacyWallpaperDataManager
+    private let storageManager: LegacyWallpaperStorageUtility
 
     var numberOfWallpapers: Int {
         return dataManager.availableWallpapers.count
@@ -21,7 +21,7 @@ struct WallpaperManager {
         return storageManager.getCurrentWallpaperImage()
     }
 
-    var currentWallpaper: Wallpaper {
+    var currentWallpaper: LegacyWallpaper {
         guard let currentWallpaper = storageManager.getCurrentWallpaperObject() else {
             // Returning the default wallpaper if nothing else is currently set,
             // as default will always exist. The reason this is returned is this manner
@@ -59,8 +59,8 @@ struct WallpaperManager {
 
     // MARK: - Initializer
     init(with userDefaults: UserDefaults = UserDefaults.standard,
-         wallpaperDataManager: WallpaperDataManager = WallpaperDataManager(),
-         wallpaperStorageManager: WallpaperStorageUtility = WallpaperStorageUtility()
+         wallpaperDataManager: LegacyWallpaperDataManager = LegacyWallpaperDataManager(),
+         wallpaperStorageManager: LegacyWallpaperStorageUtility = LegacyWallpaperStorageUtility()
     ) {
         self.userDefaults = userDefaults
         self.dataManager = wallpaperDataManager
@@ -101,7 +101,7 @@ struct WallpaperManager {
     // MARK: - Private functions
     private func calculateNextIndex(
         using currentIndex: Int?,
-        and wallpaperArray: [Wallpaper]
+        and wallpaperArray: [LegacyWallpaper]
     ) -> Int {
 
         guard let currentIndex = currentIndex else { return 0 }

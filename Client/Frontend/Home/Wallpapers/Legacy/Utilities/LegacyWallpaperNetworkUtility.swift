@@ -5,22 +5,22 @@
 import Foundation
 import Shared
 
-protocol WallpaperDownloadProtocol {
+protocol LegacyWallpaperDownloadProtocol {
     func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask
 }
 
-extension URLSession: WallpaperDownloadProtocol {}
+extension URLSession: LegacyWallpaperDownloadProtocol {}
 
-class WallpaperNetworkUtility: WallpaperFilePathProtocol, Loggable {
+class LegacyWallpaperNetworkUtility: LegacyWallpaperFilePathProtocol, Loggable {
 
     // MARK: - Variables
     private static let wallpaperURLScheme = "MozWallpaperURLScheme"
-    lazy var downloadProtocol: WallpaperDownloadProtocol = {
+    lazy var downloadProtocol: LegacyWallpaperDownloadProtocol = {
         return URLSession.shared
     }()
 
     // MARK: - Public interfaces
-    public func downloadTaskFor(id: WallpaperImageResourceName) {
+    public func downloadTaskFor(id: LegacyWallpaperImageResourceName) {
         // Prioritize downloading the image matching the current orientation
         if UIDevice.current.orientation.isLandscape {
             downloadResourceFrom(urlPath: id.landscapePath, andLocalPath: id.landscape)
@@ -55,7 +55,7 @@ class WallpaperNetworkUtility: WallpaperFilePathProtocol, Loggable {
                 return
             }
 
-            let storageUtility = WallpaperStorageUtility()
+            let storageUtility = LegacyWallpaperStorageUtility()
             do {
                 try storageUtility.store(image: image, forKey: localPath)
 
@@ -75,7 +75,7 @@ class WallpaperNetworkUtility: WallpaperFilePathProtocol, Loggable {
 
     private func urlScheme() -> String? {
         let bundle = AppInfo.applicationBundle
-        guard let appToken = bundle.object(forInfoDictionaryKey: WallpaperNetworkUtility.wallpaperURLScheme) as? String,
+        guard let appToken = bundle.object(forInfoDictionaryKey: LegacyWallpaperNetworkUtility.wallpaperURLScheme) as? String,
               !appToken.isEmpty
         else {
             browserLog.debug("Error fetching wallpapers: asset scheme not configured in Info.plist")
