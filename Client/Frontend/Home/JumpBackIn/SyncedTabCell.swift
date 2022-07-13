@@ -7,6 +7,7 @@ import UIKit
 struct FxHomeSyncedTabCellViewModel {
     let titleText: String
     let descriptionText: String
+    let url: URL
     let tag: Int
     var hasFavicon: Bool // Pocket has no favicon
     var favIconImage: UIImage?
@@ -43,6 +44,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     private var faviconCenterConstraint: NSLayoutConstraint?
     private var faviconFirstBaselineConstraint: NSLayoutConstraint?
     private var showAllSyncedTabsAction: ((UIButton) -> Void)?
+    private var openSyncedTabAction: (() -> Void)?
 
     // MARK: - UI Elements
     private let cardTitle: UILabel = .build { label in
@@ -112,6 +114,10 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         view.backgroundColor = .clear
     }
 
+    private var syncedTabTapTargetView: UIView = .build { view in
+        view.backgroundColor = .clear
+    }
+
     // MARK: - Variables
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
@@ -154,7 +160,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Helpers
 
-    func configure(viewModel: FxHomeSyncedTabCellViewModel, onTapShowAllAction: ((UIButton) -> Void)?) {
+    func configure(viewModel: FxHomeSyncedTabCellViewModel,
+                   onTapShowAllAction: ((UIButton) -> Void)?,
+                   onOpenSyncedTabAction: ((URL) -> Void)?) {
         tag = viewModel.tag
         itemTitle.text = viewModel.titleText
         heroImage.image = viewModel.heroImage
@@ -168,6 +176,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             descriptionContainer.removeArrangedSubview(faviconImage)
             faviconImage.isHidden = true
         }
+
         let textAttributes: [NSAttributedString.Key: Any] = [
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
@@ -180,10 +189,18 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         syncedTabsButton.setAttributedTitle(attributeString, for: .normal)
         syncedTabsButton.addTarget(self, action: #selector(showAllSyncedTabs), for: .touchUpInside)
         showAllSyncedTabsAction = onTapShowAllAction
+        openSyncedTabAction = { onOpenSyncedTabAction?(viewModel.url) }
+
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapSyncedTab(_:)))
+        syncedTabTapTargetView.addGestureRecognizer(tapRecognizer)
     }
 
     @objc func showAllSyncedTabs(sender: UIButton) {
         showAllSyncedTabsAction?(sender)
+    }
+
+    @objc func didTapSyncedTab(_ sender: UITapGestureRecognizer) {
+        openSyncedTabAction?()
     }
 
     func setFallBackFaviconVisibility(isHidden: Bool) {
@@ -202,7 +219,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
         descriptionContainer.addArrangedSubview(faviconImage)
         descriptionContainer.addArrangedSubview(descriptionLabel)
-        contentView.addSubviews(cardTitle, syncedTabsButton, itemTitle, imageContainer, descriptionContainer)
+        contentView.addSubviews(cardTitle, syncedTabsButton, itemTitle, imageContainer,
+                                descriptionContainer, syncedTabTapTargetView)
 
         NSLayoutConstraint.activate([
             cardTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
@@ -247,6 +265,11 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
             faviconImage.heightAnchor.constraint(equalToConstant: UX.faviconSize.height),
             faviconImage.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
+
+            syncedTabTapTargetView.topAnchor.constraint(equalTo: itemTitle.topAnchor, constant: -24),
+            syncedTabTapTargetView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            syncedTabTapTargetView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            syncedTabTapTargetView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
 
         faviconCenterConstraint = descriptionLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor).priority(UILayoutPriority(999))

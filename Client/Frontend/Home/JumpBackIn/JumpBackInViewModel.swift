@@ -54,6 +54,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     var headerButtonAction: ((UIButton) -> Void)?
     var onTapGroup: ((Tab) -> Void)?
     var syncedTabsShowAllAction: ((UIButton) -> Void)?
+    var openSyncedTabAction: ((URL) -> Void)?
 
     weak var browserBarViewDelegate: BrowserBarViewDelegate?
 
@@ -381,13 +382,17 @@ private extension JumpBackInViewModel {
         let itemURL = item.tab.URL.absoluteString
         let site = Site(url: itemURL, title: item.tab.title)
         let descriptionText = item.client.name
+        let image = UIImage(named: ImageIdentifiers.syncedDevicesIcon)
 
         let cellViewModel = FxHomeSyncedTabCellViewModel(titleText: site.title,
                                                          descriptionText: descriptionText,
+                                                         url: item.tab.URL,
                                                          tag: indexPath.item,
                                                          hasFavicon: true,
-                                                         favIconImage: UIImage(named: ImageIdentifiers.syncedDevicesIcon))
-        cell.configure(viewModel: cellViewModel, onTapShowAllAction: syncedTabsShowAllAction)
+                                                         favIconImage: image)
+        cell.configure(viewModel: cellViewModel,
+                       onTapShowAllAction: syncedTabsShowAllAction,
+                       onOpenSyncedTabAction: openSyncedTabAction)
 
         /// Sets a small favicon in place of the hero image in case there's no hero image
         getFaviconImage(forSite: site) { image in
@@ -652,8 +657,9 @@ extension JumpBackInViewModel: HomepageSectionHandler {
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
-
-        if indexPath.row == jumpBackInList.itemsToDisplay - 1,
+        if isSyncedTabCell(for: indexPath) {
+            // do nothing, will be handled in cell depending on area tapped
+        } else if indexPath.row == jumpBackInList.itemsToDisplay - 1,
            let group = jumpBackInList.group {
             switchTo(group: group)
 
