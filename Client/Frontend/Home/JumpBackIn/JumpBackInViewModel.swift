@@ -48,6 +48,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     // MARK: - Properties
     var headerButtonAction: ((UIButton) -> Void)?
     var onTapGroup: ((Tab) -> Void)?
+    var syncedTabsShowAllAction: ((UIButton) -> Void)?
 
     weak var browserBarViewDelegate: BrowserBarViewDelegate?
 
@@ -370,6 +371,33 @@ private extension JumpBackInViewModel {
         }
     }
 
+    func configureSyncedTabCellForTab(item: JumpBackInSyncedTab, cell: SyncedTabCell, indexPath: IndexPath) {
+        let itemURL = item.tab.URL.absoluteString
+        let site = Site(url: itemURL, title: item.tab.title)
+        let descriptionText = item.client.name
+
+        let cellViewModel = FxHomeSyncedTabCellViewModel(titleText: site.title,
+                                                         descriptionText: descriptionText,
+                                                         tag: indexPath.item,
+                                                         hasFavicon: true,
+                                                         favIconImage: UIImage(named: ImageIdentifiers.syncedDevicesIcon))
+        cell.configure(viewModel: cellViewModel, onTapShowAllAction: syncedTabsShowAllAction)
+
+        /// Replace the fallback favicon image when it's ready or available
+        getHeroImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
+
+            // If image is a square use it as a favicon
+            if image?.size.width == image?.size.height {
+                cell.fallbackFaviconImage.image = image
+                return
+            }
+
+            cell.setFallBackFaviconVisibility(isHidden: true)
+            cell.heroImage.image = image
+        }
+    }
+
     func getFaviconImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
         siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
             completion(image)
@@ -392,7 +420,7 @@ private extension JumpBackInViewModel {
             }
         } else {
             if traitCollection.horizontalSizeClass == .compact && UIWindow.isPortrait {
-                return .fractionalWidth(7.66/24) // iPhone in portrait
+                return .fractionalWidth(1) // iPhone in portrait
             } else {
                 return .fractionalWidth(7.8/16) // iPhone in landscape
             }
@@ -572,16 +600,10 @@ extension JumpBackInViewModel: HomepageSectionHandler {
                    at indexPath: IndexPath) -> UICollectionViewCell {
         if isSyncedTabCell(for: indexPath, traitCollection: collectionView.traitCollection) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SyncedTabCell.cellIdentifier, for: indexPath)
-            guard let syncedTabCell = cell as? SyncedTabCell else { return UICollectionViewCell() }
-
-            let faviconImage = UIImage(imageLiteralResourceName: ImageIdentifiers.stackedTabsIcon).withRenderingMode(.alwaysTemplate)
-            let cellViewModel = FxHomeSyncedTabCellViewModel(titleText: "Synced Tab",
-                                                              descriptionText: "This is a synced tab",
-                                                              tag: indexPath.item,
-                                                              hasFavicon: true,
-                                                              favIconImage: faviconImage)
-
-            syncedTabCell.configure(viewModel: cellViewModel)
+            guard let syncedTabCell = cell as? SyncedTabCell,
+                    let mostRecentSyncedTab = mostRecentSyncedTab
+            else { return UICollectionViewCell() }
+            configureSyncedTabCellForTab(item: mostRecentSyncedTab, cell: syncedTabCell, indexPath: indexPath)
             return syncedTabCell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeHorizontalCell.cellIdentifier, for: indexPath)

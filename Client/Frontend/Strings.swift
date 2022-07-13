@@ -254,6 +254,11 @@ extension String {
                 value: "Tab pickup",
                 comment: "Title shown for latest synced tab on the Firefox homepage in the Jump Back In section.",
                 lastUpdated: .v104)
+            public static let SyncedTabShowAllButtonTitle = MZLocalizedString(
+                "FirefoxHome.JumpBackIn.SyncedTab.ShowAll.Button.Title.v104",
+                value: "See all synced tabs",
+                comment: "Button title shown for latest synced tab on the Firefox homepage in the Jump Back In section.",
+                lastUpdated: .v104)
         }
 
         public struct Pocket {

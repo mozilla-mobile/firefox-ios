@@ -12,7 +12,13 @@ struct FxHomeSyncedTabCellViewModel {
     var favIconImage: UIImage?
     var heroImage: UIImage?
     var accessibilityLabel: String {
-        return "\(titleText), \(descriptionText)"
+        return "\(cardTitleText): \(titleText), \(descriptionText)"
+    }
+    var cardTitleText: String {
+        return .FirefoxHomepage.JumpBackIn.SyncedTabTitle
+    }
+    var syncedTabsButtonText: String {
+        return .FirefoxHomepage.JumpBackIn.SyncedTabShowAllButtonTitle
     }
 }
 
@@ -36,8 +42,19 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
     private var faviconCenterConstraint: NSLayoutConstraint?
     private var faviconFirstBaselineConstraint: NSLayoutConstraint?
+    private var showAllSyncedTabsAction: ((UIButton) -> Void)?
 
     // MARK: - UI Elements
+    private let cardTitle: UILabel = .build { label in
+        label.adjustsFontForContentSizeCategory = true
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline, size: 16)
+    }
+
+    private let syncedTabsButton: UIButton = .build { button in
+        button.titleLabel?.font = DynamicFontHelper().preferredFont(withTextStyle: .body, size: 12)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+    }
+
     let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -48,8 +65,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
     private let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                   maxSize: UX.titleFontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline)
         label.numberOfLines = 2
     }
 
@@ -71,8 +87,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
     private let descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   maxSize: UX.siteFontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1)
         label.textColor = .label
     }
 
@@ -139,12 +154,13 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Helpers
 
-    func configure(viewModel: FxHomeSyncedTabCellViewModel) {
+    func configure(viewModel: FxHomeSyncedTabCellViewModel, onTapShowAllAction: ((UIButton) -> Void)?) {
         tag = viewModel.tag
         itemTitle.text = viewModel.titleText
         heroImage.image = viewModel.heroImage
         descriptionLabel.text = viewModel.descriptionText
         accessibilityLabel = viewModel.accessibilityLabel
+        cardTitle.text = viewModel.cardTitleText
 
         if viewModel.hasFavicon {
             faviconImage.image = viewModel.favIconImage
@@ -152,6 +168,22 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             descriptionContainer.removeArrangedSubview(faviconImage)
             faviconImage.isHidden = true
         }
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+
+        let attributeString = NSMutableAttributedString(
+            string: viewModel.syncedTabsButtonText,
+            attributes: textAttributes
+        )
+
+        syncedTabsButton.setAttributedTitle(attributeString, for: .normal)
+        syncedTabsButton.addTarget(self, action: #selector(showAllSyncedTabs), for: .touchUpInside)
+        showAllSyncedTabsAction = onTapShowAllAction
+    }
+
+    @objc func showAllSyncedTabs(sender: UIButton) {
+        showAllSyncedTabsAction?(sender)
     }
 
     func setFallBackFaviconVisibility(isHidden: Bool) {
@@ -170,10 +202,18 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
         descriptionContainer.addArrangedSubview(faviconImage)
         descriptionContainer.addArrangedSubview(descriptionLabel)
-        contentView.addSubviews(itemTitle, imageContainer, descriptionContainer)
+        contentView.addSubviews(cardTitle, syncedTabsButton, itemTitle, imageContainer, descriptionContainer)
 
         NSLayoutConstraint.activate([
-            itemTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            cardTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            cardTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            cardTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+
+            syncedTabsButton.topAnchor.constraint(equalTo: cardTitle.bottomAnchor, constant: 8),
+            syncedTabsButton.leadingAnchor.constraint(equalTo: cardTitle.leadingAnchor, constant: 0),
+            syncedTabsButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: 0),
+
+            itemTitle.topAnchor.constraint(equalTo: syncedTabsButton.bottomAnchor, constant: 64),
             itemTitle.leadingAnchor.constraint(equalTo: imageContainer.trailingAnchor, constant: 16),
             itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
@@ -182,7 +222,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             imageContainer.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
             imageContainer.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
             imageContainer.topAnchor.constraint(equalTo: itemTitle.topAnchor),
-            imageContainer.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -16),
+            imageContainer.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -24),
 
             heroImage.topAnchor.constraint(equalTo: imageContainer.topAnchor),
             heroImage.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
@@ -203,7 +243,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             descriptionContainer.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.bottomAnchor, constant: 8),
             descriptionContainer.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
             descriptionContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            descriptionContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            descriptionContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
 
             faviconImage.heightAnchor.constraint(equalToConstant: UX.faviconSize.height),
             faviconImage.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
@@ -214,6 +254,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
                                                                                          constant: -UX.faviconSize.height / 2)
 
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
+        syncedTabsButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 
         adjustLayout()
     }
@@ -231,13 +272,17 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 extension SyncedTabCell: NotificationThemeable {
     func applyTheme() {
         if LegacyThemeManager.instance.currentName == .dark {
-            [itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
+            [cardTitle, itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
             faviconImage.tintColor = UIColor.Photon.LightGrey10
             fallbackFaviconImage.tintColor = UIColor.Photon.LightGrey10
+            syncedTabsButton.tintColor = .white
         } else {
-            [itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.DarkGrey90 }
+            itemTitle.textColor = UIColor.Photon.DarkGrey90
+            descriptionLabel.textColor = UIColor.Photon.DarkGrey05
             faviconImage.tintColor = UIColor.Photon.DarkGrey90
             fallbackFaviconImage.tintColor = UIColor.Photon.DarkGrey90
+            cardTitle.textColor = .black
+            syncedTabsButton.tintColor = .black
         }
 
         fallbackFaviconBackground.backgroundColor = UIColor.theme.homePanel.shortcutBackground
