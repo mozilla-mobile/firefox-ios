@@ -16,8 +16,17 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
     lazy var logoButton: ActionButton = .build { button in
-        button.setTitle("", for: .normal)
-        button.backgroundColor = .clear
+        if #available(iOS 15.0, *) {
+            var config = UIButton.Configuration.plain()
+            config.title = ""
+            config.contentInsets = .zero
+            button.configuration = config
+        } else {
+            button.setTitle("", for: .normal)
+            button.backgroundColor = .clear
+            button.contentEdgeInsets = .zero
+        }
+
         button.accessibilityIdentifier = a11y.logoButton
         button.accessibilityLabel = .Settings.Homepage.Wallpaper.AccessibilityLabels.FxHomepageWallpaperButton
     }
