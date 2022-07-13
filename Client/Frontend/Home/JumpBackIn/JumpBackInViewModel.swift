@@ -156,15 +156,15 @@ private extension JumpBackInViewModel {
     func maxJumpBackInItemsToDisplay(for traitCollection: UITraitCollection) -> Int {
         if UIDevice.current.userInterfaceIdiom == .pad {
             if traitCollection.horizontalSizeClass == .compact {
-                return hasAccount ? 1 : 2 //  iPad in split view
+                return hasSyncedTab ? 1 : 2 //  iPad in split view
             } else {
-                return hasAccount ? 4 : 6 // iPad
+                return hasSyncedTab ? 4 : 6 // iPad
             }
         } else {
             if traitCollection.horizontalSizeClass == .compact && UIWindow.isPortrait {
-                return hasAccount ? 1 : 2 // iPhone in portrait
+                return hasSyncedTab ? 1 : 2 // iPhone in portrait
             } else {
-                return hasAccount ? 2 : 4 // iPhone in landscape
+                return hasSyncedTab ? 2 : 4 // iPhone in landscape
             }
         }
     }
