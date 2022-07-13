@@ -87,10 +87,10 @@ class TestHistory: ProfileTest {
             mockProfile._shutdown()
         }
 
-        self.addSite(history, url: "http://amazon.com/", title: "Amazon")
-        self.addSite(history, url: "http://mozilla.org/", title: "Mozilla")
-        self.addSite(history, url: "https://apple.com/", title: "Apple")
-        self.addSite(history, url: "https://apple.developer.com/", title: "Apple Developer")
+        addSite(history, url: "http://amazon.com/", title: "Amazon")
+        addSite(history, url: "http://mozilla.org/", title: "Mozilla")
+        addSite(history, url: "https://apple.com/", title: "Apple")
+        addSite(history, url: "https://apple.developer.com/", title: "Apple Developer")
 
         history.getHistory(matching: "App", limit: 25, offset: 0) { results in
             XCTAssertEqual(results.count, 2)
@@ -112,10 +112,10 @@ class TestHistory: ProfileTest {
             mockProfile._shutdown()
         }
 
-        self.addSite(history, url: "http://amazon.com/", title: "Amazon")
-        self.addSite(history, url: "http://mozilla.org/", title: "Mozilla internet")
-        self.addSite(history, url: "http://mozilla.dev.org/", title: "Internet dev")
-        self.addSite(history, url: "https://apple.com/", title: "Apple")
+        addSite(history, url: "http://amazon.com/", title: "Amazon")
+        addSite(history, url: "http://mozilla.org/", title: "Mozilla internet")
+        addSite(history, url: "http://mozilla.dev.org/", title: "Internet dev")
+        addSite(history, url: "https://apple.com/", title: "Apple")
 
         history.getHistory(matching: "int", limit: 25, offset: 0) { results in
             XCTAssertEqual(results.count, 2)
@@ -137,9 +137,9 @@ class TestHistory: ProfileTest {
             mockProfile._shutdown()
         }
 
-        self.addSite(history, url: "http://amazon.com/", title: "Amazon")
-        self.addSite(history, url: "http://mozilla.developer.org/", title: "Mozilla")
-        self.addSite(history, url: "https://apple.developer.com/", title: "Apple")
+        addSite(history, url: "http://amazon.com/", title: "Amazon")
+        addSite(history, url: "http://mozilla.developer.org/", title: "Mozilla")
+        addSite(history, url: "https://apple.developer.com/", title: "Apple")
 
         history.getHistory(matching: "dev", limit: 25, offset: 0) { results in
             XCTAssertEqual(results.count, 2)
@@ -161,9 +161,9 @@ class TestHistory: ProfileTest {
             mockProfile._shutdown()
         }
 
-        self.addSite(history, url: "http://amazon.com/", title: "Amazon")
-        self.addSite(history, url: "http://mozilla.org/", title: "Mozilla internet")
-        self.addSite(history, url: "https://apple.com/", title: "Apple")
+        addSite(history, url: "http://amazon.com/", title: "Amazon")
+        addSite(history, url: "http://mozilla.org/", title: "Mozilla internet")
+        addSite(history, url: "https://apple.com/", title: "Apple")
 
         history.getHistory(matching: "red", limit: 25, offset: 0) { results in
             XCTAssertEqual(results.count, 0)
