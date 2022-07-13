@@ -6,20 +6,44 @@ import UIKit
 import Shared
 import Storage
 
-protocol LibraryPanel: NotificationThemeable {
-    var libraryPanelDelegate: LibraryPanelDelegate? { get set }
-}
-
-struct LibraryPanelUX {
-    static let EmptyTabContentOffset: CGFloat = -180
-}
-
 protocol LibraryPanelDelegate: AnyObject {
     func libraryPanelDidRequestToSignIn()
     func libraryPanelDidRequestToCreateAccount()
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
     func libraryPanel(didSelectURL url: URL, visitType: VisitType)
     func libraryPanel(didSelectURLString url: String, visitType: VisitType)
+}
+
+protocol LibraryPanel: UIViewController, NotificationThemeable {
+    var libraryPanelDelegate: LibraryPanelDelegate? { get set }
+    var state: LibraryPanelMainState { get set }
+    var bottomToolbarItems: [UIBarButtonItem] { get }
+
+    func handleLeftTopButton()
+    func handleRightTopButton()
+    func shouldDismissOnDone() -> Bool
+}
+
+extension LibraryPanel {
+    var flexibleSpace: UIBarButtonItem {
+        return UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+    }
+
+    func updatePanelState(newState: LibraryPanelMainState) {
+        state = newState
+    }
+
+    func shouldDismissOnDone() -> Bool {
+        return true
+    }
+
+    func handleLeftTopButton() {
+        // no implementation needed
+    }
+
+    func handleRightTopButton() {
+        // no implementation needed
+    }
 }
 
 enum LibraryPanelType: Int, CaseIterable {
@@ -42,48 +66,9 @@ enum LibraryPanelType: Int, CaseIterable {
     }
 }
 
-/**
- * Data for identifying and constructing a LibraryPanel.
- */
-class LibraryPanelDescriptor {
-    var viewController: UIViewController?
-    var navigationController: UINavigationController?
-
-    fileprivate let makeViewController: (_ profile: Profile, _ tabManager: TabManager) -> UIViewController
-    fileprivate let profile: Profile
-    fileprivate let tabManager: TabManager
-
-    let accessibilityLabel: String
-    let accessibilityIdentifier: String
-    let panelType: LibraryPanelType
-
-    init(
-        makeViewController: @escaping ((_ profile: Profile, _ tabManager: TabManager) -> UIViewController),
-        profile: Profile,
-        tabManager: TabManager,
-        accessibilityLabel: String,
-        accessibilityIdentifier: String,
-        panelType: LibraryPanelType
-    ) {
-        self.makeViewController = makeViewController
-        self.profile = profile
-        self.tabManager = tabManager
-        self.accessibilityLabel = accessibilityLabel
-        self.accessibilityIdentifier = accessibilityIdentifier
-        self.panelType = panelType
-    }
-
-    func setup() {
-        guard viewController == nil else { return }
-        let viewController = makeViewController(profile, tabManager)
-        self.viewController = viewController
-        navigationController = ThemedNavigationController(rootViewController: viewController)
-    }
-}
-
-class LibraryPanels: FeatureFlaggable {
-    fileprivate let profile: Profile
-    fileprivate let tabManager: TabManager
+class LibraryPanelHelper {
+    private let profile: Profile
+    private let tabManager: TabManager
 
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
@@ -92,9 +77,7 @@ class LibraryPanels: FeatureFlaggable {
 
     lazy var enabledPanels = [
         LibraryPanelDescriptor(
-            makeViewController: { profile, tabManager  in
-                return BookmarksPanel(profile: profile)
-            },
+            viewController: BookmarksPanel(profile: profile),
             profile: profile,
             tabManager: tabManager,
             accessibilityLabel: .LibraryPanelBookmarksAccessibilityLabel,
@@ -102,9 +85,7 @@ class LibraryPanels: FeatureFlaggable {
             panelType: .bookmarks),
 
         LibraryPanelDescriptor(
-            makeViewController: { profile, tabManager in
-                return HistoryPanel(profile: profile, tabManager: tabManager)
-            },
+            viewController: HistoryPanel(profile: profile, tabManager: tabManager),
             profile: profile,
             tabManager: tabManager,
             accessibilityLabel: .LibraryPanelHistoryAccessibilityLabel,
@@ -112,9 +93,7 @@ class LibraryPanels: FeatureFlaggable {
             panelType: .history),
 
         LibraryPanelDescriptor(
-            makeViewController: { profile, tabManager in
-                return DownloadsPanel(profile: profile)
-            },
+            viewController: DownloadsPanel(profile: profile),
             profile: profile,
             tabManager: tabManager,
             accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
@@ -122,9 +101,7 @@ class LibraryPanels: FeatureFlaggable {
             panelType: .downloads),
 
         LibraryPanelDescriptor(
-            makeViewController: { profile, tabManager in
-                return ReadingListPanel(profile: profile)
-            },
+            viewController: ReadingListPanel(profile: profile),
             profile: profile,
             tabManager: tabManager,
             accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,

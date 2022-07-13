@@ -26,6 +26,7 @@ extension HistoryPanel: UISearchBarDelegate {
     }
 
     func startSearchState() {
+        updatePanelState(newState: .history(state: .search))
         bottomStackView.isHidden = false
         searchbar.becomeFirstResponder()
         viewModel.isSearchInProgress = true
