@@ -456,6 +456,10 @@ private extension HomepageViewController {
             self?.openTabTray(button)
         }
 
+        viewModel.jumpBackInViewModel.syncedTabsShowAllAction = { [weak self] button in
+            self?.homePanelDelegate?.homePanelDidRequestToOpenTabTray(focusedSegment: .syncedTabs)
+        }
+
         // History highlights
         viewModel.historyHighlightsViewModel.onTapItem = { [weak self] highlight in
             guard let url = highlight.siteUrl else {
