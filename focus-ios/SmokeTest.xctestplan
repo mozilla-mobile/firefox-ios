@@ -9,7 +9,7 @@
     }
   ],
   "defaultOptions" : {
-
+    "testRepetitionMode" : "retryOnFailure"
   },
   "testTargets" : [
     {
@@ -46,6 +46,7 @@
       }
     },
     {
+      "enabled" : false,
       "target" : {
         "containerPath" : "container:Blockzilla.xcodeproj",
         "identifier" : "D8E0155B1FCF409F00CA3B9F",
