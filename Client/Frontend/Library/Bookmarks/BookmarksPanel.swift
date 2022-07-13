@@ -103,6 +103,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     // MARK: - Init
 
+    /// By default our root folder is the mobile folder. Desktop folders are shown in the local desktop folders.
     init(profile: Profile,
          bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID,
          notificationCenter: NotificationCenter = NotificationCenter.default) {
@@ -161,7 +162,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         if profile.isShutdown { return }
 
         if bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID {
-            setupRootFolderData()
+            setupMobileFolderData()
 
         } else if bookmarkFolderGUID == LocalDesktopFolder.localDesktopFolderGuid {
             setupLocalDesktopFolderData()
@@ -171,8 +172,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         }
     }
 
-    /// "Root" folder is showing mobile bookmarks with a local desktop folder
-    private func setupRootFolderData() {
+    private func setupMobileFolderData() {
         profile.places
             .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false)
             .uponQueue(.main) { result in
