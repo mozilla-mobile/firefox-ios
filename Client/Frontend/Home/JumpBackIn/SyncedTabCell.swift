@@ -272,16 +272,18 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 extension SyncedTabCell: NotificationThemeable {
     func applyTheme() {
         if LegacyThemeManager.instance.currentName == .dark {
-            [cardTitle, itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
-            faviconImage.tintColor = UIColor.Photon.LightGrey10
-            fallbackFaviconImage.tintColor = UIColor.Photon.LightGrey10
-            syncedTabsButton.tintColor = .white
+            cardTitle.textColor  = UIColor.Photon.LightGrey10
+            itemTitle.textColor = UIColor.Photon.LightGrey05
+            descriptionLabel.textColor = UIColor.Photon.LightGrey40
+            faviconImage.tintColor = UIColor.Photon.LightGrey40
+            fallbackFaviconImage.tintColor = UIColor.Photon.LightGrey40
+            syncedTabsButton.tintColor = UIColor.Photon.LightGrey40
         } else {
+            cardTitle.textColor = .black
             itemTitle.textColor = UIColor.Photon.DarkGrey90
             descriptionLabel.textColor = UIColor.Photon.DarkGrey05
-            faviconImage.tintColor = UIColor.Photon.DarkGrey90
-            fallbackFaviconImage.tintColor = UIColor.Photon.DarkGrey90
-            cardTitle.textColor = .black
+            faviconImage.tintColor = .black
+            fallbackFaviconImage.tintColor = .black
             syncedTabsButton.tintColor = .black
         }
 
