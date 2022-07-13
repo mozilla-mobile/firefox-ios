@@ -26,7 +26,7 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
             button.backgroundColor = .clear
             button.contentEdgeInsets = .zero
         }
-        
+
         button.accessibilityIdentifier = a11y.logoButton
         button.accessibilityLabel = .Settings.Homepage.Wallpaper.AccessibilityLabels.FxHomepageWallpaperButton
     }
