@@ -383,6 +383,15 @@ private extension JumpBackInViewModel {
                                                          favIconImage: UIImage(named: ImageIdentifiers.syncedDevicesIcon))
         cell.configure(viewModel: cellViewModel, onTapShowAllAction: syncedTabsShowAllAction)
 
+        /// Sets a small favicon in place of the hero image in case there's no hero image
+        getFaviconImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
+
+            if cell.heroImage.image == nil {
+                cell.fallbackFaviconImage.image = image
+            }
+        }
+
         /// Replace the fallback favicon image when it's ready or available
         getHeroImage(forSite: site) { image in
             guard cell.tag == indexPath.item else { return }
