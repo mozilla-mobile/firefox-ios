@@ -51,8 +51,6 @@ class ClearHistorySheetProvider {
                 alert.addAction(action)
             }
 
-
-
             alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive) { _ in
                 // ROUX
 //            Task {

@@ -166,8 +166,9 @@ class HistoryHighlightsViewModel {
         let deletionUtility = HistoryDeletionUtility(with: profile)
         let urls = extractDeletableURLs(from: item)
 
-        deletionUtility.delete(urls) { [weak self] success in
-            if success { self?.delegate?.reloadHighlights() }
+        Task {
+            let successful = await deletionUtility.delete(urls)
+            if successful { delegate?.reloadHighlights() }
         }
     }
 

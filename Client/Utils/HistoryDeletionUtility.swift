@@ -22,30 +22,6 @@ class HistoryDeletionUtility {
     }
 
     // MARK: URL based deletion functions
-    /// Deletes sites from the history and from metadata.
-    ///
-    /// Completion block is included for testing and should not be used otherwise.
-//    public func delete(_ sites: [String], completion: ((Bool) -> Void)? = nil) {
-//        deleteFromHistory(sites)
-//        deleteMetadata(sites) { result in
-//            completion?(result)
-//        }
-//    }
-
-    private func deleteMetadata(_ sites: [String], completion: ((Bool) -> Void)? = nil) {
-        sites.forEach { currentSite in
-            profile.places
-                .deleteVisitsFor(url: currentSite)
-                .uponQueue(.global(qos: .userInitiated)) { result in
-                    guard let lastSite = sites.last,
-                          lastSite == currentSite
-                    else { return }
-
-                    completion?(result.isSuccess)
-                }
-        }
-    }
-
     public func delete(_ sites: [String]) async -> Bool {
         deleteFromHistory(sites)
         return await deleteMetadata(sites)
@@ -72,87 +48,6 @@ class HistoryDeletionUtility {
     }
 
     // MARK: - Date based deletion functions
-//    public func deleteHistoryFrom(
-//        _ dateOption: HistoryDeletionUtilityDateOptions,
-//        completion: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
-//    ) {
-//        deleteWKWebsiteDataSince(dateOption, for: WKWebsiteDataStore.allWebsiteDataTypes())
-//        deleteProfileHistorySince(dateOption) {
-//            self.deleteProfileMetadataSince(dateOption) {
-//                self.clearRecentlyClosedTabs(using: dateOption) { dateOption in
-//                    completion?(dateOption)
-//                }
-//            }
-//        }
-//    }
-
-//    private func deleteWKWebsiteDataSince(
-//        _ dateOption: HistoryDeletionUtilityDateOptions,
-//        for types: Set<String>
-//    ) async {
-//        guard let date = dateFor(dateOption, requiringAllTimeAsPresent: false) else { return }
-//
-//        await WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: date)
-//    }
-//
-//    private func deleteProfileHistorySince(
-//        _ dateOption: HistoryDeletionUtilityDateOptions,
-//        completion: (() -> Void)? = nil
-//    ) {
-//        switch dateOption {
-//        case .allTime:
-//            profile.history
-//                .clearHistory()
-//                .uponQueue(.global(qos: .userInteractive)) { result in
-//                    if result.isSuccess { completion?() }
-//                }
-//
-//        default:
-//            guard let date = datefor(dateoption) else { return }
-//
-//            profile.history
-//                .removehistoryfromdate(date)
-//                .uponqueue(.global(qos: .userinteractive)) { result in
-//                    if result.issuccess { completion?() }
-//                }
-//        }
-//    }
-//
-//    private func deleteprofilemetadatasince(
-//        _ dateoption: historydeletionutilitydateoptions,
-//        completion: (() -> void)? = nil
-//    ) {
-//        guard let date = datefor(dateoption) else { return }
-//        let dateinmilliseconds = date.tomillisecondssince1970()
-//
-//        // roux! this needs to be updated to the new a-s thing
-//        profile.places
-//            .deletehistorymetadataolderthan(olderthan: dateinmilliseconds)
-//            .uponqueue(.global(qos: .userinteractive)) { result in
-//                if result.issuccess { completion?() }
-//            }
-//    }
-//
-//    private func clearrecentlyclosedtabs(
-//        using dateoption: historydeletionutilitydateoptions,
-//        completion: ((historydeletionutilitydateoptions) -> void)? = nil
-//    ) {
-//        switch dateoption {
-//        case .alltime:
-//            profile.recentlyclosedtabs.cleartabs()
-//        default:
-//            guard let date = datefor(dateoption) else {
-//                completion?(dateoption)
-//                return
-//            }
-//
-//            profile.recentlyclosedtabs.removetabsfromdate(date)
-//        }
-//
-//        completion?(dateoption)
-//    }
-//
-    // MARK: - Async version
     public func deleteHistoryFrom(_ dateOption: HistoryDeletionUtilityDateOptions) async -> HistoryDeletionUtilityDateOptions {
 
         await deleteWKWebsiteDataSince(dateOption, for: WKWebsiteDataStore.allWebsiteDataTypes())
