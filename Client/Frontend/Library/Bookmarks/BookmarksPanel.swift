@@ -423,27 +423,35 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         // TODO: Laurie Evaluate during https://mozilla-hub.atlassian.net/browse/FXIOS-4467 if we can use configure methods
         switch bookmarkNode {
         case let bookmarkFolder as BookmarkFolderData:
+            var title: String
             if bookmarkFolder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid] {
-                cell.titleLabel.text = localizedString
+                title = localizedString
             } else {
-                cell.titleLabel.text = bookmarkFolder.title
+                title = bookmarkFolder.title
             }
 
-            cell.leftImageView.image = LegacyThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
-            cell.leftImageView.contentMode = .center
-            let imageView = UIImageView(image: chevronImage)
-            cell.accessoryView = imageView
-            cell.editingAccessoryType = .disclosureIndicator
+            let leftImageView = LegacyThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
+            let viewModel = OneLineTableViewCellViewModel(title: title,
+                                                          leftImageView: leftImageView,
+                                                          leftImageViewContentView: .center,
+                                                          accessoryView: UIImageView(image: chevronImage),
+                                                          accessoryType: .disclosureIndicator)
+            cell.configure(viewModel: viewModel)
             return cell
 
         case let bookmarkItem as BookmarkItemData:
+            var title: String
             if bookmarkItem.title.isEmpty {
-                cell.titleLabel.text = bookmarkItem.url
+                title = bookmarkItem.url
             } else {
-                cell.titleLabel.text = bookmarkItem.title
+                title = bookmarkItem.title
             }
 
-            cell.leftImageView.image = nil
+            let viewModel = OneLineTableViewCellViewModel(title: title,
+                                                          leftImageView: nil,
+                                                          leftImageViewContentView: .center,
+                                                          accessoryView: nil,
+                                                          accessoryType: .disclosureIndicator)
 
             let site = Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
             profile.favicons.getFaviconImage(forSite: site).uponQueue(.main) { result in
@@ -451,13 +459,17 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
                 // and ensure that the cell we were fetching for is still on-screen.
                 guard let image = result.successValue else { return }
 
-                cell.leftImageView.image = image
-                cell.leftImageView.contentMode = .scaleAspectFill
+                let viewModel = OneLineTableViewCellViewModel(title: title,
+                                                              leftImageView: image,
+                                                              leftImageViewContentView: .scaleAspectFill,
+                                                              accessoryView: nil,
+                                                              accessoryType: .disclosureIndicator)
+
+                cell.configure(viewModel: viewModel)
                 cell.setNeedsLayout()
             }
 
-            cell.accessoryView = nil
-            cell.editingAccessoryType = .disclosureIndicator
+            cell.configure(viewModel: viewModel)
             return cell
 
         case is BookmarkSeparatorData:
@@ -466,14 +478,14 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             return cell
 
         case let bookmarkFolder as LocalDesktopFolder:
-            if let localizedString = LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid] {
-                cell.titleLabel.text = localizedString
-            }
-            cell.leftImageView.image = LegacyThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
-            cell.leftImageView.contentMode = .center
-            let imageView = UIImageView(image: chevronImage)
-            cell.accessoryView = imageView
-            cell.editingAccessoryType = .disclosureIndicator
+            let leftImageView = LegacyThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
+            let viewModel = OneLineTableViewCellViewModel(title: LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid],
+                                                          leftImageView: leftImageView,
+                                                          leftImageViewContentView: .center,
+                                                          accessoryView: UIImageView(image: chevronImage),
+                                                          accessoryType: .disclosureIndicator)
+
+            cell.configure(viewModel: viewModel)
             return cell
 
         default:
