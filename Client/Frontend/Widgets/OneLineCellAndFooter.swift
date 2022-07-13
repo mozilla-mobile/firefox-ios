@@ -14,8 +14,8 @@ enum OneLineTableViewCustomization {
 
 struct OneLineTableViewCellViewModel {
     let title: String?
-    let leftImageView: UIImage?
-    let leftImageViewContentView: UIView.ContentMode
+    var leftImageView: UIImage?
+    var leftImageViewContentView: UIView.ContentMode
     let accessoryView: UIImageView?
     let accessoryType: UITableViewCell.AccessoryType
 }

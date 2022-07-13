@@ -35,3 +35,13 @@ class LocalDesktopFolder: FxBookmarkNode {
         return 0
     }
 }
+
+extension LocalDesktopFolder: BookmarksCell {
+    func getViewModel() -> OneLineTableViewCellViewModel {
+        return OneLineTableViewCellViewModel(title: LocalizedRootBookmarkFolderStrings[guid],
+                                             leftImageView: leftImageView,
+                                             leftImageViewContentView: .center,
+                                             accessoryView: UIImageView(image: chevronImage),
+                                             accessoryType: .disclosureIndicator)
+    }
+}
