@@ -63,8 +63,9 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     // MARK: - Toolbar items
     var bottomToolbarItems: [UIBarButtonItem] {
-        // Return empty toolbar when bookmarks is in root node
-        guard case .bookmarks = state else { return [UIBarButtonItem]() }
+        // Return empty toolbar when bookmarks is in desktop folder node
+        guard case .bookmarks = state,
+              bookmarkFolderGUID != LocalDesktopFolder.localDesktopFolderGuid else { return [UIBarButtonItem]() }
 
         return toolbarButtonItems
     }
