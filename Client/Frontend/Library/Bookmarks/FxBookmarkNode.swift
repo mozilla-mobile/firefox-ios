@@ -13,4 +13,14 @@ protocol FxBookmarkNode {
     var position: UInt32 { get }
 }
 
+extension FxBookmarkNode {
+    var isNonEmptyFolder: Bool {
+        guard let bookmarkFolder = self as? BookmarkFolderData else {
+            return false
+        }
+
+        return !bookmarkFolder.childGUIDs.isEmpty
+    }
+}
+
 extension BookmarkNodeData: FxBookmarkNode {}
