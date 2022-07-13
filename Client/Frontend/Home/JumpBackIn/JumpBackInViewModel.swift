@@ -45,6 +45,11 @@ class JumpBackInViewModel: FeatureFlaggable {
         case syncedTab
     }
 
+    enum SectionLayout {
+        case compactWithAccount // jumpBackIn is displayed first and then synced tab
+        case regular // synced tab is displayed first and then jumpBackIn
+    }
+
     // MARK: - Properties
     var headerButtonAction: ((UIButton) -> Void)?
     var onTapGroup: ((Tab) -> Void)?
@@ -65,6 +70,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     private var isPrivate: Bool
     private var hasSentJumpBackInSectionEvent = false
     private let tabManager: TabManagerProtocol
+    private var sectionLayout: SectionLayout?
 
     init(
         isZeroSearch: Bool = false,
@@ -309,11 +315,11 @@ private extension JumpBackInViewModel {
 // MARK: - Private: Configure UI
 private extension JumpBackInViewModel {
 
-    func isSyncedTabCell(for index: IndexPath, traitCollection: UITraitCollection) -> Bool {
+    func isSyncedTabCell(for index: IndexPath) -> Bool {
         // depending on the horizontal size class the synced tab is either displayed
         // as first item (regular) or as the second item (compact)
-        return hasSyncedTab && ((index.row == 0 && traitCollection.horizontalSizeClass == .regular) ||
-                              (index.row == 1 && traitCollection.horizontalSizeClass == .compact))
+        return hasSyncedTab && ((index.row == 0 && sectionLayout == .regular) ||
+                              (index.row == 1 && sectionLayout == .compactWithAccount))
     }
 
     func configureJumpBackInCellForGroups(group: ASGroup<Tab>, cell: HomeHorizontalCell, indexPath: IndexPath) {
@@ -538,8 +544,10 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
 
         if hasSyncedTab, traitCollection.horizontalSizeClass == .compact {
             section = sectionWithSyncedTabCompact(for: traitCollection)
+            sectionLayout = .compactWithAccount
         } else {
             section = defaultSection(for: traitCollection)
+            sectionLayout = .regular
         }
 
         // Supplementary Item
@@ -607,7 +615,7 @@ extension JumpBackInViewModel: HomepageSectionHandler {
 
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell {
-        if isSyncedTabCell(for: indexPath, traitCollection: collectionView.traitCollection) {
+        if isSyncedTabCell(for: indexPath) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SyncedTabCell.cellIdentifier, for: indexPath)
             guard let syncedTabCell = cell as? SyncedTabCell,
                     let mostRecentSyncedTab = mostRecentSyncedTab
