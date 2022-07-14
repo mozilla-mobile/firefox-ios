@@ -10,7 +10,21 @@ import Shared
 
 class SearchBarSettingsViewModelTests: XCTestCase {
 
-    private let expectationWaitTime: TimeInterval = 2
+    private let expectationWaitTime: TimeInterval = 1
+
+    var profile: MockProfile!
+
+    override func setUp() {
+        super.setUp()
+        profile = MockProfile(databasePrefix: "SearchBarSettingsTests_")
+        profile.prefs.clearAll()
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        profile.prefs.clearAll()
+        profile = nil
+    }
 
     // MARK: Default
     func testDefaultSearchPosition() {
@@ -22,14 +36,14 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
     func testSavedSearchPosition_onTopSavesOnTop() {
         let viewModel = createViewModel()
-        callSetting(viewModel.topSetting)
+        viewModel.topSetting.onChecked()
 
         XCTAssertEqual(viewModel.searchBarPosition, .top)
     }
 
     func testSavedSearchPosition_onBottomSavesOnBottom() {
         let viewModel = createViewModel()
-        callSetting(viewModel.bottomSetting)
+        viewModel.bottomSetting.onChecked()
 
         XCTAssertEqual(viewModel.searchBarPosition, .bottom)
     }
@@ -38,7 +52,7 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
     func testSavedSearchPosition_onTopSettingHasCheckmark() {
         let viewModel = createViewModel()
-        callSetting(viewModel.topSetting)
+        viewModel.topSetting.onChecked()
 
         XCTAssertEqual(viewModel.topSetting.isChecked(), true)
         XCTAssertEqual(viewModel.bottomSetting.isChecked(), false)
@@ -46,7 +60,7 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
     func testSavedSearchPosition_onBottomSettingHasCheckmark() {
         let viewModel = createViewModel()
-        callSetting(viewModel.bottomSetting)
+        viewModel.bottomSetting.onChecked()
 
         XCTAssertEqual(viewModel.bottomSetting.isChecked(), true)
         XCTAssertEqual(viewModel.topSetting.isChecked(), false)
@@ -54,18 +68,17 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
     // MARK: Delegate
 
-    private var delegate: SearchBarPreferenceDelegateMock?
     func testSavedSearchPosition_onBottomSettingCallsDelegate() {
         let expectation = expectation(description: "Delegate is called")
         let viewModel = createViewModel()
-        callSetting(viewModel.topSetting)
+        viewModel.topSetting.onChecked()
 
-        delegate = SearchBarPreferenceDelegateMock(completion: {
-            expectation.fulfill()
+        let delegate = SearchBarPreferenceDelegateMock(completion: {
             XCTAssertEqual(viewModel.bottomSetting.isChecked(), true)
+            expectation.fulfill()
         })
         viewModel.delegate = delegate
-        callSetting(viewModel.bottomSetting)
+        viewModel.bottomSetting.onChecked()
 
         waitForExpectations(timeout: expectationWaitTime, handler: nil)
     }
@@ -73,14 +86,14 @@ class SearchBarSettingsViewModelTests: XCTestCase {
     func testSavedSearchPosition_onTopSettingCallsDelegate() {
         let expectation = expectation(description: "Delegate is called")
         let viewModel = createViewModel()
-        callSetting(viewModel.bottomSetting)
+        viewModel.bottomSetting.onChecked()
 
-        delegate = SearchBarPreferenceDelegateMock(completion: {
-            expectation.fulfill()
+        let delegate = SearchBarPreferenceDelegateMock(completion: {
             XCTAssertEqual(viewModel.topSetting.isChecked(), true)
+            expectation.fulfill()
         })
         viewModel.delegate = delegate
-        callSetting(viewModel.topSetting)
+        viewModel.topSetting.onChecked()
 
         waitForExpectations(timeout: expectationWaitTime, handler: nil)
     }
@@ -100,18 +113,18 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
     func testNotificationSent_onBottomSetting() {
         expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: nil)
-        let (viewModel, prefs) = createViewModelWithPrefs()
-        setDefault(prefs, defaultPosition: .top)
-        callSetting(viewModel.bottomSetting)
+        let viewModel = createViewModel()
+        setDefault(defaultPosition: .top)
+        viewModel.bottomSetting.onChecked()
 
         waitForExpectations(timeout: expectationWaitTime, handler: nil)
     }
 
     func testNotificationSent_onTopSetting() {
         expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: nil)
-        let (viewModel, prefs) = createViewModelWithPrefs()
-        setDefault(prefs, defaultPosition: .bottom)
-        callSetting(viewModel.topSetting)
+        let viewModel = createViewModel()
+        setDefault(defaultPosition: .bottom)
+        viewModel.topSetting.onChecked()
 
         waitForExpectations(timeout: expectationWaitTime, handler: nil)
     }
@@ -122,9 +135,9 @@ class SearchBarSettingsViewModelTests: XCTestCase {
             self.verifyNotification(expectedPosition: .top, notification: notification)
         }
 
-        let (viewModel, prefs) = createViewModelWithPrefs()
-        setDefault(prefs, defaultPosition: .bottom)
-        callSetting(viewModel.topSetting)
+        let viewModel = createViewModel()
+        setDefault(defaultPosition: .bottom)
+        viewModel.topSetting.onChecked()
 
         waitForExpectations(timeout: expectationWaitTime, handler: nil)
     }
@@ -136,9 +149,9 @@ class SearchBarSettingsViewModelTests: XCTestCase {
                                     notification: notification)
         }
 
-        let (viewModel, prefs) = createViewModelWithPrefs()
-        setDefault(prefs, defaultPosition: .top)
-        callSetting(viewModel.bottomSetting)
+        let viewModel = createViewModel()
+        setDefault(defaultPosition: .top)
+        viewModel.bottomSetting.onChecked()
 
         waitForExpectations(timeout: expectationWaitTime, handler: nil)
     }
@@ -147,31 +160,16 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 // MARK: Helper methods
 private extension SearchBarSettingsViewModelTests {
 
-    func createViewModel() -> SearchBarSettingsViewModel {
-        return createViewModelWithPrefs().0
+    func createViewModel(file: StaticString = #file, line: UInt = #line) -> SearchBarSettingsViewModel {
+        let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        trackForMemoryLeaks(viewModel, file: file, line: line)
+        return viewModel
     }
 
-    func createViewModelWithPrefs() -> (SearchBarSettingsViewModel, Prefs) {
-        let mockProfile = MockProfile(databasePrefix: "SearchBarSettingsTests_")
-        mockProfile.prefs.clearAll()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
-        let viewModel = SearchBarSettingsViewModel(prefs: mockProfile.prefs)
-
-        addTeardownBlock {
-            mockProfile.prefs.clearAll()
-        }
-
-        return (viewModel, mockProfile.prefs)
-    }
-
-    func callSetting(_ setting: CheckmarkSetting) {
-        let dummyNavController = UINavigationController()
-        setting.onClick(dummyNavController)
-    }
-
-    func setDefault(_ prefs: Prefs, defaultPosition: SearchBarPosition) {
-        prefs.setString(defaultPosition.rawValue,
-                        forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+    func setDefault(defaultPosition: SearchBarPosition) {
+        profile.prefs.setString(defaultPosition.rawValue,
+                                forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
     }
 
     func verifyNotification(expectedPosition: SearchBarPosition,
