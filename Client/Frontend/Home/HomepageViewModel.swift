@@ -82,7 +82,10 @@ class HomepageViewModel: FeatureFlaggable {
             with: profile,
             isPrivate: isPrivate)
         self.pocketViewModel = PocketViewModel(
-            isZeroSearch: isZeroSearch)
+            pocketAPI: Pocket(),
+            pocketSponsoredAPI: MockPocketSponsoredStoriesProvider(),
+            isZeroSearch: isZeroSearch
+        )
         self.customizeButtonViewModel = CustomizeHomepageSectionViewModel()
         self.childViewModels = [headerViewModel,
                                 topSiteViewModel,
