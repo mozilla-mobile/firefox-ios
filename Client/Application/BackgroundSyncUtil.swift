@@ -5,19 +5,21 @@
 import Foundation
 import BackgroundTasks
 
-class BackgroundSyncUtil {
+class BackgroundSyncUtil: Notifiable {
 
     let profile: Profile
     let application: UIApplication
+    var notificationCenter: NotificationCenter
 
-    init(profile: Profile, application: UIApplication) {
+    init(profile: Profile,
+         application: UIApplication,
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.profile = profile
         self.application = application
+        self.notificationCenter = notificationCenter
 
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(scheduleSyncOnAppBackground),
-                                               name: UIApplication.willResignActiveNotification,
-                                               object: nil)
+        setupNotifications(forObserver: self,
+                           observing: [UIApplication.willResignActiveNotification])
 
         setUpBackgroundSync()
     }
@@ -86,6 +88,16 @@ class BackgroundSyncUtil {
         guard application.applicationState != .active else { return }
 
         profile._shutdown()
+    }
+
+    // MARK: Notifiable
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.willResignActiveNotification:
+            scheduleSyncOnAppBackground()
+        default: break
+        }
     }
 
 }
