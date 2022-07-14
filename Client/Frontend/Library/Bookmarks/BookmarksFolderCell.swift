@@ -10,6 +10,10 @@ protocol BookmarksFolderCell {
     func getViewModel(forSite site: Site?,
                       profile: Profile?,
                       completion: ((OneLineTableViewCellViewModel) -> Void)?) -> OneLineTableViewCellViewModel
+
+    func didSelect(profile: Profile,
+                   libraryPanelDelegate: LibraryPanelDelegate?,
+                   navigationController: UINavigationController?)
 }
 
 extension BookmarkFolderData: BookmarksFolderCell {
@@ -29,6 +33,21 @@ extension BookmarkFolderData: BookmarksFolderCell {
                                              leftImageViewContentView: .center,
                                              accessoryView: UIImageView(image: chevronImage),
                                              accessoryType: .disclosureIndicator)
+    }
+
+    func didSelect(profile: Profile,
+                   libraryPanelDelegate: LibraryPanelDelegate?,
+                   navigationController: UINavigationController?) {
+        let viewModel = BookmarksPanelViewModel(profile: profile,
+                                                bookmarkFolderGUID: guid)
+        let nextController = BookmarksPanel(viewModel: viewModel)
+        if isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[guid] {
+            nextController.title = localizedString
+        } else {
+            nextController.title = title
+        }
+        nextController.libraryPanelDelegate = libraryPanelDelegate
+        navigationController?.pushViewController(nextController, animated: true)
     }
 }
 
@@ -64,6 +83,13 @@ extension BookmarkItemData: BookmarksFolderCell {
         }
 
         return viewModel
+    }
+
+    func didSelect(profile: Profile,
+                   libraryPanelDelegate: LibraryPanelDelegate?,
+                   navigationController: UINavigationController?) {
+        libraryPanelDelegate?.libraryPanel(didSelectURLString: url, visitType: .bookmark)
+        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .bookmarksPanel)
     }
 }
 

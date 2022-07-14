@@ -339,55 +339,26 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        let node = viewModel.bookmarkNodes[safe: indexPath.row]
 
-        guard let bookmarkNode = node else {
+        guard let node = viewModel.bookmarkNodes[safe: indexPath.row],
+              let bookmarkCell = node as? BookmarksFolderCell else {
             return
         }
 
         updatePanelState(newState: .bookmarks(state: .inFolder))
         guard !tableView.isEditing else {
             TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
-            if let bookmarkFolder = self.viewModel.bookmarkFolder, !(bookmarkNode is BookmarkSeparatorData) {
-                let detailController = BookmarkDetailPanel(profile: profile, bookmarkNode: bookmarkNode,
+            if let bookmarkFolder = self.viewModel.bookmarkFolder, !(node is BookmarkSeparatorData) {
+                let detailController = BookmarkDetailPanel(profile: profile, bookmarkNode: node,
                                                            parentBookmarkFolder: bookmarkFolder)
                 navigationController?.pushViewController(detailController, animated: true)
             }
             return
         }
 
-        // TODO: Laurie Evaluate during https://mozilla-hub.atlassian.net/browse/FXIOS-4467 if we can use configure methods
-        switch bookmarkNode {
-        case let bookmarkFolder as BookmarkFolderData:
-            let viewModel = BookmarksPanelViewModel(profile: viewModel.profile,
-                                                    bookmarkFolderGUID: bookmarkFolder.guid)
-            let nextController = BookmarksPanel(viewModel: viewModel)
-            if bookmarkFolder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid] {
-                nextController.title = localizedString
-            } else {
-                nextController.title = bookmarkFolder.title
-            }
-            nextController.libraryPanelDelegate = libraryPanelDelegate
-            navigationController?.pushViewController(nextController, animated: true)
-
-        case let bookmarkItem as BookmarkItemData:
-            libraryPanelDelegate?.libraryPanel(didSelectURLString: bookmarkItem.url, visitType: .bookmark)
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .bookmarksPanel)
-
-        case let bookmarkFolder as LocalDesktopFolder:
-            let viewModel = BookmarksPanelViewModel(profile: viewModel.profile,
-                                                    bookmarkFolderGUID: bookmarkFolder.guid)
-            let nextController = BookmarksPanel(viewModel: viewModel)
-            nextController.title = .Bookmarks.Menu.DesktopBookmarks
-            if let localizedString = LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid] {
-                nextController.title = localizedString
-            }
-            nextController.libraryPanelDelegate = libraryPanelDelegate
-            navigationController?.pushViewController(nextController, animated: true)
-
-        default:
-            return // Likely a separator was selected so do nothing.
-        }
+        bookmarkCell.didSelect(profile: profile,
+                               libraryPanelDelegate: libraryPanelDelegate,
+                               navigationController: navigationController)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

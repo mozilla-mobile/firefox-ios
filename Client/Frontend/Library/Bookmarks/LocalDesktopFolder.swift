@@ -47,4 +47,18 @@ extension LocalDesktopFolder: BookmarksFolderCell {
                                              accessoryView: UIImageView(image: chevronImage),
                                              accessoryType: .disclosureIndicator)
     }
+
+    func didSelect(profile: Profile,
+                   libraryPanelDelegate: LibraryPanelDelegate?,
+                   navigationController: UINavigationController?) {
+        let viewModel = BookmarksPanelViewModel(profile: profile,
+                                                bookmarkFolderGUID: guid)
+        let nextController = BookmarksPanel(viewModel: viewModel)
+        nextController.title = .Bookmarks.Menu.DesktopBookmarks
+        if let localizedString = LocalizedRootBookmarkFolderStrings[guid] {
+            nextController.title = localizedString
+        }
+        nextController.libraryPanelDelegate = libraryPanelDelegate
+        navigationController?.pushViewController(nextController, animated: true)
+    }
 }
