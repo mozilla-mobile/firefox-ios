@@ -11,33 +11,34 @@ class PocketViewModel {
     struct UX {
         static let numberOfItemsInColumn = 3
         static let discoverMoreMaxFontSize: CGFloat = 55 // Title 3 xxxLarge
-        static let numberOfItemsInSection = 11
         static let fractionalWidthiPhonePortrait: CGFloat = 0.93
         static let fractionalWidthiPhoneLanscape: CGFloat = 0.46
-        static let numberOfSponsoredItemsInSection = 2
-        static let indexOfFirstSponsoredItem = 1
-        static let indexOfSecondSponsoredItem = 9
     }
 
     // MARK: - Properties
 
-    private let pocketAPI = Pocket()
+    private let pocketAPI: Pocket
+    private let pocketSponsoredAPI: PocketSponsoredStoriesProviding
 
     private let isZeroSearch: Bool
     private var hasSentPocketSectionEvent = false
 
+    private lazy var storyProvider: StoryProvider = {
+        StoryProvider(pocketAPI: pocketAPI, pocketSponsoredAPI: pocketSponsoredAPI) { [weak self] in
+            self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .buildAndUser) == true
+        }
+    }()
+
     var onTapTileAction: ((URL) -> Void)?
     var onLongPressTileAction: ((Site, UIView?) -> Void)?
-    var onScroll: (() -> Void)?
+    var onScroll: (([NSCollectionLayoutVisibleItem]) -> Void)?
 
     private(set) var pocketStoriesViewModels: [PocketStandardCellViewModel] = []
 
-    init(pocketStoriesViewModel: [PocketStandardCellViewModel] = [], isZeroSearch: Bool) {
+    init(pocketAPI: Pocket, pocketSponsoredAPI: PocketSponsoredStoriesProviding, isZeroSearch: Bool) {
         self.isZeroSearch = isZeroSearch
-        self.pocketStoriesViewModels = pocketStoriesViewModel
-        for pocketStoryViewModel in pocketStoriesViewModel {
-            bind(pocketStoryViewModel: pocketStoryViewModel)
-        }
+        self.pocketAPI = pocketAPI
+        self.pocketSponsoredAPI = pocketSponsoredAPI
     }
 
     private func bind(pocketStoryViewModel: PocketStandardCellViewModel) {
@@ -64,10 +65,6 @@ class PocketViewModel {
 
     var numberOfCells: Int {
         return pocketStoriesViewModels.count != 0 ? pocketStoriesViewModels.count + 1 : 0
-    }
-
-    static var numberOfItemsInColumn: CGFloat {
-        return 3
     }
 
     func isStoryCell(index: Int) -> Bool {
@@ -105,43 +102,13 @@ class PocketViewModel {
 
     // MARK: - Private
 
-    func updatePocketStoryViewModels(with stories: [PocketStory]) {
+    private func updatePocketSites() async {
+        let stories = await storyProvider.fetchPocketStories()
         pocketStoriesViewModels = []
+        // Add the story in the view models list
         for story in stories {
             bind(pocketStoryViewModel: .init(story: story))
         }
-    }
-
-    private func getPocketSites(completion: @escaping () -> Void) {
-        pocketAPI
-            .globalFeed(items: UX.numberOfItemsInSection)
-            .uponQueue(.main) { [weak self] (pocketStory: [PocketFeedStory]) -> Void in
-                var globalTemp = pocketStory.map(PocketStory.init)
-
-                // Check if sponsored stories are enabled, otherwise drop api call
-                guard self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .buildAndUser)  == true else {
-                    self?.updatePocketStoryViewModels(with: globalTemp)
-                    completion()
-                    return
-                }
-
-                self?.pocketAPI.sponsoredFeed().uponQueue(.main) { sponsored in
-                    // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
-                    var sponsoredTemp = sponsored.map(PocketStory.init).prefix(UX.numberOfSponsoredItemsInSection)
-
-                    // Making sure we insert a sponsored story at a valid index
-                    let firstIndex = min(UX.indexOfFirstSponsoredItem, globalTemp.endIndex)
-                    sponsoredTemp.first.map { globalTemp.insert($0, at: firstIndex) }
-                    sponsoredTemp.removeFirst()
-
-                    let secondIndex = min(UX.indexOfSecondSponsoredItem, globalTemp.endIndex)
-                    sponsoredTemp.first.map { globalTemp.insert($0, at: secondIndex) }
-                    sponsoredTemp.removeFirst()
-
-                    self?.updatePocketStoryViewModels(with: globalTemp)
-                    completion()
-                }
-            }
     }
 
     func showDiscoverMore() {
@@ -188,7 +155,7 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
                                                                  alignment: .top)
         section.boundarySupplementaryItems = [header]
         section.visibleItemsInvalidationHandler = { (visibleItems, point, env) -> Void in
-            self.onScroll?()
+            self.onScroll?(visibleItems)
         }
 
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
@@ -216,7 +183,10 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     func updateData(completion: @escaping () -> Void) {
-        getPocketSites(completion: completion)
+        Task {
+            await updatePocketSites()
+            completion()
+        }
     }
 }
 

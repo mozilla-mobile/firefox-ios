@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct PocketStory {
+struct PocketStory: Equatable {
     let url: URL?
     let title: String
     let domain: String

@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct PocketSponsoredStory: Codable {
+struct PocketSponsoredStory: Codable, Equatable, Hashable {
     let id: Int
     let flightId: Int
     let campaignId: Int
@@ -37,25 +37,25 @@ struct PocketSponsoredStory: Codable {
         case sponsor = "sponsor"
     }
 
-    struct Shim: Codable {
+    struct Shim: Codable, Equatable, Hashable {
         let click: String
         let impression: String
         let delete: String
         let save: String
     }
 
-    struct Caps: Codable {
+    struct Caps: Codable, Equatable, Hashable {
         let lifetime: Int
         let campaign: Limit
         let flight: Limit
 
-        struct Limit: Codable {
+        struct Limit: Codable, Equatable, Hashable {
             let count: Int
             let period: Int
         }
     }
 }
 
-struct PocketSponsoredRequest: Codable {
+struct PocketSponsoredRequest: Codable, Equatable, Hashable {
     let spocs: [PocketSponsoredStory]
 }
