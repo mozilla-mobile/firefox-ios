@@ -46,22 +46,23 @@ class ResetTests: XCTestCase {
         wait(for: [getClientExpectation], timeout: 5.0)
     }
 
-    func testActionsOnEngine() {
-        let profile = MockBrowserProfile(localName: "testResetTests_actionsOnEngine")
-
-        // Tell the sync manager that "clients" has changed syncID.
-        let engine = MockEngineStateChanges()
-        engine.collections.append("clients")
-
-        let error = profile.tabs.reopenIfClosed()
-        if let error = error {
-            XCTFail("Could not reopen tabs, failed with error \(error.description)")
-            return
-        }
-
-        assertActionsOnEngine(profile: profile, engine: engine)
-
-        assertNoClients(profile.peekTabs)
+    func testActionsOnEngine() throws {
+        throw XCTSkip("testActionsOnEngine is unreliable on Bitrise, disabling")
+//        let profile = MockBrowserProfile(localName: "testResetTests_actionsOnEngine")
+//
+//        // Tell the sync manager that "clients" has changed syncID.
+//        let engine = MockEngineStateChanges()
+//        engine.collections.append("clients")
+//
+//        let error = profile.tabs.reopenIfClosed()
+//        if let error = error {
+//            XCTFail("Could not reopen tabs, failed with error \(error.description)")
+//            return
+//        }
+//
+//        assertActionsOnEngine(profile: profile, engine: engine)
+//
+//        assertNoClients(profile.peekTabs)
     }
 }
 
