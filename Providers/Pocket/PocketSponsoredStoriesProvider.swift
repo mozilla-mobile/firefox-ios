@@ -83,7 +83,10 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFl
                 return
             }
 
-            guard let response = validatedHTTPResponse(response, statusCode: 200..<300), let data = data, !data.isEmpty else {
+            guard let response = validatedHTTPResponse(response, statusCode: 200..<300), 
+                       let data = data,
+                       !data.isEmpty 
+            else {
                 self.browserLog.debug("Response isn't proper: \(response.debugDescription), with data \(String(describing: data))")
                 completion(.failure(Error.invalidHTTPResponse))
                 return
