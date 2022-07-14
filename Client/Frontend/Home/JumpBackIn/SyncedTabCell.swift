@@ -50,11 +50,13 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     private let cardTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline, size: 16)
+        label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.cardTitle
     }
 
     private let syncedTabsButton: UIButton = .build { button in
         button.titleLabel?.font = DynamicFontHelper().preferredFont(withTextStyle: .body, size: 12)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.showAllButton
     }
 
     let heroImage: UIImageView = .build { imageView in
@@ -63,12 +65,14 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = UX.generalCornerRadius
         imageView.backgroundColor = .clear
+        imageView.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.heroImage
     }
 
     private let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline)
         label.numberOfLines = 2
+        label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.itemTitle
     }
 
     // Contains the faviconImage and descriptionLabel
@@ -85,12 +89,14 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = UX.generalCornerRadius
+        imageView.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.favIconImage
     }
 
     private let descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1)
         label.textColor = .label
+        label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.descriptionLabel
     }
 
     // Used as a fallback if hero image isn't set
@@ -100,6 +106,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         imageView.backgroundColor = UIColor.clear
         imageView.layer.cornerRadius = TopSiteItemCell.UX.iconCornerRadius
         imageView.layer.masksToBounds = true
+        imageView.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.fallbackFavIconImage
     }
 
     private var fallbackFaviconBackground: UIView = .build { view in
@@ -127,7 +134,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         super.init(frame: .zero)
 
         isAccessibilityElement = true
-        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell
+        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.itemCell
 
         applyTheme()
         setupNotifications(forObserver: self,
