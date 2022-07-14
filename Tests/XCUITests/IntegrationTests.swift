@@ -32,7 +32,7 @@ class IntegrationTests: BaseTestCase {
                         LaunchArguments.LoadDatabasePrefix + historyDB,
                         LaunchArguments.SkipContextualHints,
                         LaunchArguments.TurnOffTabGroupsInUserPreferences]
-         
+
      } else if testFxAChinaServer.contains(key) {
         launchArguments = [LaunchArguments.SkipIntro,
                            LaunchArguments.FxAChinaServer,
@@ -218,7 +218,8 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
 
         // Check synced Tabs
-        navigator.goto(NewTabScreen)
+        app.buttons["Done"].tap()
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleSyncMode)
 

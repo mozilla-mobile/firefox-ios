@@ -28,8 +28,8 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManager
-    private var wallpaperManager: WallpaperManager
-    private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
+    private var wallpaperManager: LegacyWallpaperManager
+    private lazy var wallpaperView: LegacyWallpaperBackgroundView = .build { _ in }
     private var contextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
 
@@ -50,7 +50,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     init(profile: Profile,
          tabManager: TabManager,
          isZeroSearch: Bool = false,
-         wallpaperManager: WallpaperManager = WallpaperManager()
+         wallpaperManager: LegacyWallpaperManager = LegacyWallpaperManager()
     ) {
         self.isZeroSearch = isZeroSearch
         self.tabManager = tabManager
@@ -168,6 +168,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         collectionView.addGestureRecognizer(longPressRecognizer)
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.showsVerticalScrollIndicator = false
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = a11y.collectionView

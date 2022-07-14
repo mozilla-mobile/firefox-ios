@@ -6,13 +6,13 @@ import Foundation
 import UIKit
 
 // MARK: - Wallpaper Type
-enum WallpaperType {
+enum LegacyWallpaperType {
     case defaultBackground
-    case themed(type: WallpaperCollectionType)
+    case themed(type: LegacyWallpaperCollectionType)
 }
 
-extension WallpaperType: Equatable {
-    static func == (lhs: WallpaperType, rhs: WallpaperType) -> Bool {
+extension LegacyWallpaperType: Equatable {
+    static func == (lhs: LegacyWallpaperType, rhs: LegacyWallpaperType) -> Bool {
         switch (lhs, rhs) {
         case (.defaultBackground, .defaultBackground):
             return true
@@ -24,7 +24,7 @@ extension WallpaperType: Equatable {
     }
 }
 
-extension WallpaperType: Codable {
+extension LegacyWallpaperType: Codable {
     enum CodingKeys: CodingKey {
         case defaultBackground, themed
     }
@@ -48,7 +48,7 @@ extension WallpaperType: Codable {
         case .defaultBackground:
             self = .defaultBackground
         case .themed:
-            let themeType = try container.decode(WallpaperCollectionType.self,
+            let themeType = try container.decode(LegacyWallpaperCollectionType.self,
                                                  forKey: .themed)
             self = .themed(type: themeType)
         default:
@@ -63,7 +63,7 @@ extension WallpaperType: Codable {
 // MARK: - Collection types
 /// This enum will outline all types of different wallpaper collections we currently
 /// and may offer in the future. As such, there may be items here that are outdated.
-enum WallpaperCollectionType: String, Codable {
+enum LegacyWallpaperCollectionType: String, Codable {
     case firefox
     case firefoxOverlay
     case projectHouse
@@ -71,10 +71,10 @@ enum WallpaperCollectionType: String, Codable {
 }
 
 // MARK: - Wallpaper
-struct Wallpaper: Codable, Equatable {
+struct LegacyWallpaper: Codable, Equatable {
     // MARK: - Variables
     let name: String
-    let type: WallpaperType
+    let type: LegacyWallpaperType
     let accessibilityLabel: String
     private let shipDate: Date?
     private let expiryDate: Date?
@@ -107,7 +107,7 @@ struct Wallpaper: Codable, Equatable {
 
     // MARK: - Initializer
     init(named name: String,
-         ofType type: WallpaperType,
+         ofType type: LegacyWallpaperType,
          withAccessibiltyLabel accessibilityLabel: String,
          shippingOn appearanceDate: Date? = nil,
          expiringOn expiryDate: Date? = nil,

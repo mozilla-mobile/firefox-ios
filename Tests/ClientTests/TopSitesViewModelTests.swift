@@ -9,7 +9,7 @@ import Shared
 import Storage
 import SyncTelemetry
 
-class FxHomeTopSitesViewModelTests: XCTestCase {
+class TopSitesViewModelTests: XCTestCase {
     var profile: MockProfile!
 
     override func setUp() {
@@ -24,13 +24,15 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testDeletionOfSingleSuggestedSite() {
-        let viewModel = TopSitesViewModel(profile: self.profile,
-                                                isZeroSearch: false)
+        let viewModel = TopSitesViewModel(profile: profile,
+                                          isZeroSearch: false)
+        let topSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
+                                                              prefs: profile.prefs)
 
-        let siteToDelete = TopSitesHelper.defaultTopSites(profile)[0]
+        let siteToDelete = topSitesProvider.defaultTopSites(profile.prefs)[0]
 
         viewModel.hideURLFromTopSites(siteToDelete)
-        let newSites = TopSitesHelper.defaultTopSites(profile)
+        let newSites = topSitesProvider.defaultTopSites(profile.prefs)
 
         XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
             return a.url == b.url
@@ -39,14 +41,16 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
 
     func testDeletionOfAllDefaultSites() {
         let viewModel = TopSitesViewModel(profile: self.profile,
-                                                isZeroSearch: false)
+                                          isZeroSearch: false)
+        let topSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
+                                                              prefs: profile.prefs)
 
-        let defaultSites = TopSitesHelper.defaultTopSites(profile)
+        let defaultSites = topSitesProvider.defaultTopSites(profile.prefs)
         defaultSites.forEach({
             viewModel.hideURLFromTopSites($0)
         })
 
-        let newSites = TopSitesHelper.defaultTopSites(profile)
+        let newSites = topSitesProvider.defaultTopSites(profile.prefs)
         XCTAssertTrue(newSites.isEmpty)
     }
 
@@ -168,13 +172,13 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
 }
 
 // MARK: Helper methods
-extension FxHomeTopSitesViewModelTests {
+extension TopSitesViewModelTests {
 
     func createViewModel(overridenSiteCount: Int = 40, overridenNumberOfRows: Int = 2) -> TopSitesViewModel {
         let viewModel = TopSitesViewModel(profile: self.profile,
-                                                isZeroSearch: false)
+                                          isZeroSearch: false)
 
-        let managerStub = FxHomeTopSitesManagerStub(profile: profile)
+        let managerStub = TopSitesManagerStub(profile: profile)
         managerStub.overridenSiteCount = overridenSiteCount
         managerStub.overridenNumberOfRows = overridenNumberOfRows
         viewModel.tileManager = managerStub
@@ -202,8 +206,8 @@ class FakeTraitCollection: UITraitCollection {
     }
 }
 
-// MARK: FxHomeTopSitesManagerStub
-private class FxHomeTopSitesManagerStub: TopSitesManager {
+// MARK: TopSitesManagerStub
+private class TopSitesManagerStub: TopSitesManager {
 
     var overridenSiteCount = 40
     override var siteCount: Int {

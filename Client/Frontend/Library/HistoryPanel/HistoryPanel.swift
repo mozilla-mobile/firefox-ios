@@ -151,7 +151,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
 
     // Reload viewModel data and update layout
     private func fetchDataAndUpdateLayout(animating: Bool = false) {
-        // Avoid refresing if search is in progress
+        // Avoid refreshing if search is in progress
         guard !viewModel.isSearchInProgress else { return }
 
         viewModel.reloadData { [weak self] success in

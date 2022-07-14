@@ -49,7 +49,7 @@ class SearchSettingsUITests: BaseTestCase {
 
         app.tables.cells.textViews["customEngineUrl"].tap()
         app.tables.cells.textViews["customEngineUrl"].typeText(customSearchEngine["url"]!)
-
+        waitForExistence(app.buttons["Save"], timeout: 5)
         app.buttons["Save"].tap()
         // Check that custom engine has been added successfully
         waitForExistence(app.tables.cells.staticTexts[customSearchEngine["name"]!])
@@ -97,7 +97,7 @@ class SearchSettingsUITests: BaseTestCase {
         XCTAssertTrue(app.buttons["Edit"].isEnabled)
         waitForNoExistence(app.buttons["Done"])
 
-        //Make sure switches are there
+        // Make sure switches are there
         XCTAssertEqual(app.tables.cells.switches.count, app.tables.cells.count - 2)
     }
 

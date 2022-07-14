@@ -117,7 +117,7 @@ class PhotonActionSheetTest: BaseTestCase {
         waitForExistence(app.tables["Context Menu"])
         app.tables["Context Menu"].staticTexts["Share"].tap()
         waitForExistence(app.buttons["Copy"])
-        let moreElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
+        let moreElement = app.collectionViews.cells.collectionViews.containing(.button, identifier: "Reminders").buttons["More"]
         moreElement.tap()
         waitForExistence(app.switches["Reminders"])
         // Tap on Fennec switch
@@ -151,6 +151,6 @@ class PhotonActionSheetTest: BaseTestCase {
         app.buttons["Cancel"].tap()
         // User is back to the BrowserTab where the sharesheet was launched
         waitForExistence(app.textFields["url"])
-        waitForValueContains(app.textFields["url"], value:"example.com/")
+        waitForValueContains(app.textFields["url"], value: "example.com/")
     }
 }

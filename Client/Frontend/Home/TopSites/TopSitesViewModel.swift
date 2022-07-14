@@ -145,12 +145,7 @@ class TopSitesViewModel {
 
     func hideURLFromTopSites(_ site: Site) {
         guard let host = site.tileURL.normalizedHost else { return }
-
-        let url = site.tileURL.absoluteString
-        // if the default top sites contains the siteurl. also wipe it from default suggested sites.
-        if !TopSitesHelper.defaultTopSites(profile).filter({ $0.url == url }).isEmpty {
-            deleteTileForSuggestedSite(url)
-        }
+        tileManager.topSiteHistoryManager.removeDefaultTopSitesTile(site: site)
 
         profile.history.removeHostFromTopSites(host).uponQueue(.main) { [weak self] result in
             guard result.isSuccess, let self = self else { return }
@@ -167,12 +162,6 @@ class TopSitesViewModel {
             guard result.isSuccess else { return }
             self.tileManager.refreshIfNeeded(forceTopSites: true)
         }
-    }
-
-    private func deleteTileForSuggestedSite(_ siteURL: String) {
-        var deletedSuggestedSites = profile.prefs.arrayForKey(TopSitesHelper.DefaultSuggestedSitesKey) as? [String] ?? []
-        deletedSuggestedSites.append(siteURL)
-        profile.prefs.setObject(deletedSuggestedSites, forKey: TopSitesHelper.DefaultSuggestedSitesKey)
     }
 }
 

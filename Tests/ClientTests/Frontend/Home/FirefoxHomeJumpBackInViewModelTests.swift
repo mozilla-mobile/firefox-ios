@@ -5,6 +5,7 @@
 @testable import Client
 import XCTest
 import WebKit
+import Storage
 
 class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     var subject: JumpBackInViewModel!
@@ -174,7 +175,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
             expectation.fulfill()
         }
 
-        wait(for: [expectation], timeout: 1.0)
+        wait(for: [expectation], timeout: 5.0)
 
         XCTAssertEqual(subject.jumpBackInList.tabs.count, 2, "iPhone portrait has 2 tabs in it's jumpbackin layout")
         XCTAssertEqual(subject.jumpBackInList.tabs[0], tab1)
@@ -211,6 +212,147 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(subject.jumpBackInList.tabs[0], tab1)
         XCTAssertEqual(subject.jumpBackInList.tabs[1], tab2)
         XCTAssertEqual(subject.jumpBackInList.tabs[2], tab3)
+    }
+
+    // MARK: Syncable Tabs
+
+    func test_updateData_mostRecentTab_noSyncableAccount() {
+        let profile = MockProfile()
+        profile.hasSyncableAccountMock = false
+        subject = JumpBackInViewModel(
+            isZeroSearch: false,
+            profile: profile,
+            isPrivate: false,
+            tabManager: mockTabManager
+        )
+
+        let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
+        subject.updateData {
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 5.0)
+        XCTAssertNil(subject.mostRecentSyncedTab, "There should be no most recent tab")
+    }
+
+    func test_updateData_mostRecentTab_noCachedClients() {
+        subject = JumpBackInViewModel(
+            isZeroSearch: false,
+            profile: MockProfile(),
+            isPrivate: false,
+            tabManager: mockTabManager
+        )
+
+        let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
+        subject.updateData {
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 5.0)
+        XCTAssertNil(subject.mostRecentSyncedTab, "There should be no most recent tab")
+    }
+
+    func test_updateData_mostRecentTab_noDesktopClients() {
+        let profile = MockProfile()
+        profile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs(idRange: 1...2))]
+        subject = JumpBackInViewModel(
+            isZeroSearch: false,
+            profile: profile,
+            isPrivate: false,
+            tabManager: mockTabManager
+        )
+
+        let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
+        subject.updateData {
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 5.0)
+        XCTAssertNil(subject.mostRecentSyncedTab, "There should be no most recent tab")
+    }
+
+    func test_updateData_mostRecentTab_oneDesktopClient() {
+        let profile = MockProfile()
+        let remoteClient = remoteDesktopClient()
+        let remoteTabs = remoteTabs(idRange: 1...3)
+        profile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs)]
+        subject = JumpBackInViewModel(
+            isZeroSearch: false,
+            profile: profile,
+            isPrivate: false,
+            tabManager: mockTabManager
+        )
+
+        let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
+        subject.updateData {
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 5.0)
+        XCTAssertEqual(subject.mostRecentSyncedTab?.client, remoteClient)
+        XCTAssertEqual(subject.mostRecentSyncedTab?.tab, remoteTabs.last)
+    }
+
+    func test_updateData_mostRecentTab_multipleDesktopClients() {
+        let profile = MockProfile()
+        let remoteClient = remoteDesktopClient(name: "Fake Client 2")
+        let remoteClientTabs = remoteTabs(idRange: 7...9)
+        profile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(), tabs: remoteTabs(idRange: 1...5)),
+                                     ClientAndTabs(client: remoteClient, tabs: remoteClientTabs)]
+        subject = JumpBackInViewModel(
+            isZeroSearch: false,
+            profile: profile,
+            isPrivate: false,
+            tabManager: mockTabManager
+        )
+
+        let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
+        subject.updateData {
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 5.0)
+        XCTAssertEqual(subject.mostRecentSyncedTab?.client, remoteClient)
+        XCTAssertEqual(subject.mostRecentSyncedTab?.tab, remoteClientTabs.last)
+    }
+}
+
+extension FirefoxHomeJumpBackInViewModelTests {
+    var remoteClient: RemoteClient {
+        return RemoteClient(guid: nil,
+                            name: "Fake client",
+                            modified: 1,
+                            type: nil,
+                            formfactor: nil,
+                            os: nil,
+                            version: nil,
+                            fxaDeviceId: nil)
+    }
+
+    func remoteDesktopClient(name: String = "Fake client") -> RemoteClient {
+        return RemoteClient(guid: nil,
+                            name: name,
+                            modified: 1,
+                            type: "desktop",
+                            formfactor: nil,
+                            os: nil,
+                            version: nil,
+                            fxaDeviceId: nil)
+    }
+
+    func remoteTabs(idRange: ClosedRange<Int> = 1...1) -> [RemoteTab] {
+        var remoteTabs: [RemoteTab] = []
+
+        for i in idRange {
+            let tab = RemoteTab(clientGUID: String(i),
+                                URL: URL(string: "www.mozilla.org")!,
+                                title: "Mozilla \(i)",
+                                history: [],
+                                lastUsed: UInt64(i),
+                                icon: nil)
+            remoteTabs.append(tab)
+        }
+        return remoteTabs
     }
 }
 

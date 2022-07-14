@@ -41,7 +41,7 @@ class TabCounterTests: BaseTestCase {
 
         navigator.createNewTab()
         navigator.nowAt(NewTabScreen)
-        
+
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
 
@@ -69,7 +69,7 @@ class TabCounterTests: BaseTestCase {
         XCTAssertEqual("1", tabsOpen as? String)
 
         navigator.goto(TabTray)
-        tabsOpen = app.segmentedControls.buttons.element(boundBy:0).label
+        tabsOpen = app.segmentedControls.buttons.element(boundBy: 0).label
         XCTAssertTrue(app.segmentedControls.buttons.element(boundBy: 0).isSelected)
         if !isTablet {
             waitForExistence(app.segmentedControls.firstMatch, timeout: 5)

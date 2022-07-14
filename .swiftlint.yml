@@ -4,7 +4,6 @@ disabled_rules: # rule identifiers to exclude from running
 
 # Disabled all default rules
 - block_based_kvo
-- class_delegate_protocol
 - closure_parameter_position
 - compiler_protocol_init
 - computed_accessors_order
@@ -101,7 +100,6 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Sync/Generated/Metrics.swift
   - ThirdParty
   - Tests/UITests/
-  - Tests/XCUITests/
   - l10n-screenshots-dd/
   - DerivedData/
 

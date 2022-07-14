@@ -77,8 +77,8 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             viewController = SearchBarSettingsViewController(viewModel: viewModel)
 
         case .wallpaper:
-            let viewModel = WallpaperSettingsViewModel(with: tabManager, and: WallpaperManager())
-            let wallpaperVC = WallpaperSettingsViewController(with: viewModel)
+            let viewModel = LegacyWallpaperSettingsViewModel(with: tabManager, and: LegacyWallpaperManager())
+            let wallpaperVC = LegacyWallpaperSettingsViewController(with: viewModel)
             // Push wallpaper settings view controller directly as its not of type settings viewcontroller
             navigationController?.pushViewController(wallpaperVC, animated: true)
             return

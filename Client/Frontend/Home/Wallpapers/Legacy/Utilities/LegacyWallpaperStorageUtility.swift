@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 
-class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
+class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
 
     // MARK: - Variables
     private var userDefaults: UserDefaults
@@ -18,7 +18,7 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
     }
 
     // MARK: - Storage
-    public func store(_ wallpaper: Wallpaper, and resources: WallpaperImageSet) {
+    public func store(_ wallpaper: LegacyWallpaper, and resources: LegacyWallpaperImageSet) {
         store(imageSet: resources) { result in
             switch result {
             case .success:
@@ -30,14 +30,14 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
         }
     }
 
-    private func store(wallpaperObject: Wallpaper) {
+    private func store(wallpaperObject: LegacyWallpaper) {
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(wallpaperObject) {
             userDefaults.set(encoded, forKey: PrefsKeys.WallpaperManagerCurrentWallpaperObject)
         }
     }
 
-    private func store(imageSet: WallpaperImageSet,
+    private func store(imageSet: LegacyWallpaperImageSet,
                        completionHandler: @escaping (Result<Void, Error>) -> Void
     ) {
         if let portrait = imageSet.portrait, let landscape = imageSet.landscape {
@@ -99,9 +99,9 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
     }
 
     // MARK: - Wallpaper retrieval
-    func getCurrentWallpaperObject() -> Wallpaper? {
+    func getCurrentWallpaperObject() -> LegacyWallpaper? {
         if let savedWallpaper = userDefaults.object(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperObject) as? Data {
-            return try? JSONDecoder().decode(Wallpaper.self, from: savedWallpaper)
+            return try? JSONDecoder().decode(LegacyWallpaper.self, from: savedWallpaper)
         }
 
         return nil
@@ -146,8 +146,8 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
             return
         }
 
-        let wallpaperDocumentDirectoryPath = documentPath.appendingPathComponent(WallpaperStorageUtility.directoryName)
-        let wallpaperAppSupportDirectoryPath = appSupportPath.appendingPathComponent(WallpaperStorageUtility.directoryName)
+        let wallpaperDocumentDirectoryPath = documentPath.appendingPathComponent(LegacyWallpaperStorageUtility.directoryName)
+        let wallpaperAppSupportDirectoryPath = appSupportPath.appendingPathComponent(LegacyWallpaperStorageUtility.directoryName)
 
         if shouldSkipMigration(
             source: wallpaperDocumentDirectoryPath,

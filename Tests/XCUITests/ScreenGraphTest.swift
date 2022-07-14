@@ -86,7 +86,6 @@ extension ScreenGraphTest {
     }
 }
 
-
 private let defaultURL = "https://example.com"
 
 @objcMembers
@@ -96,15 +95,15 @@ class TestUserState: MMUserState {
         initialScreenState = FirstRun
     }
 
-    var url: String? = nil
+    var url: String?
     var nightMode = false
-    var passcode: String? = nil
+    var passcode: String?
     var newPasscode: String = "111111"
 }
 
 let WebPageLoading = "WebPageLoading"
 
-fileprivate class TestActions {
+private class TestActions {
     static let ToggleNightMode = ImageIdentifiers.nightMode
     static let LoadURL = "LoadURL"
     static let LoadURLByTyping = "LoadURLByTyping"
@@ -118,7 +117,7 @@ public var isTablet: Bool {
     return UIDevice.current.userInterfaceIdiom == .pad
 }
 
-fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<TestUserState> {
+private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<TestUserState> {
     let map = MMScreenGraph(for: test, with: TestUserState.self)
 
     map.addScreenState(FirstRun) { screenState in

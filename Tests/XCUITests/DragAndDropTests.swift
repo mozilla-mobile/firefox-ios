@@ -13,7 +13,6 @@ let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
 let exampleDomainTitle = "Example Domain"
 let twitterTitle = "Twitter"
 
-
 class DragAndDropTests: BaseTestCase {
 /* Disble test suite since in theory it does not make sense with Chron tabs implementation
     override func tearDown() {
@@ -121,7 +120,7 @@ fileprivate extension BaseTestCase {
         let firstTabCell = app.collectionViews.cells.element(boundBy: 0).label
         let secondTabCell = app.collectionViews.cells.element(boundBy: 1).label
 
-        if (dragAndDropTab) {
+        if dragAndDropTab {
             sleep(1)
             XCTAssertEqual(firstTabCell, firstTab, "first tab after is not correct")
             XCTAssertEqual(secondTabCell, secondTab, "second tab after is not correct")
@@ -134,7 +133,7 @@ fileprivate extension BaseTestCase {
 
 class DragAndDropTestIpad: IpadOnlyTestCase {
 
-    let testWithDB = ["testTryDragAndDropHistoryToURLBar","testTryDragAndDropBookmarkToURLBar","testDragAndDropBookmarkEntry","test3DragAndDropHistoryEntry"]
+    let testWithDB = ["testTryDragAndDropHistoryToURLBar", "testTryDragAndDropBookmarkToURLBar", "testDragAndDropBookmarkEntry", "test3DragAndDropHistoryEntry"]
 
         // This DDBB contains those 4 websites listed in the name
     let historyAndBookmarksDB = "browserYoutubeTwitterMozillaExample.db"
@@ -204,7 +203,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         // Drag and drop home tab from the second position to the first one
         dragAndDrop(dragElement: app.collectionViews.cells["Homepage"], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
 
-        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName , secondTab: homeTabName)
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: homeTabName)
         // Check that focus is kept on last website open
         XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
     }
@@ -222,7 +221,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         // Check that focus is kept on last website open
         XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
     }
-        
+
     // Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/8358
     /* func testRearrangeTabsTabTrayIsKeptinTopTabs() {
         if skipPlatform { return }
@@ -257,7 +256,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
 
     func test3DragAndDropHistoryEntry() {
         if skipPlatform { return }
-        
+
         typealias historyPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
         // Drop a bookmark/history entry is only allowed on other apps. This test is to check that nothing happens within the app
@@ -309,7 +308,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     // Will be removed if this is going the final implementation
     func testTryDragAndDropHistoryToURLBar() {
         if skipPlatform { return }
-        
+
         typealias historyPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
         navigator.goto(LibraryPanel_History)

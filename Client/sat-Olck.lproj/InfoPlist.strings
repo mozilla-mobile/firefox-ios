@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "ᱱᱚᱶᱟ ᱛᱮ ᱟᱢ ᱪᱤᱛᱟᱹᱨ ᱨᱟᱠᱟᱵ ᱟᱨ ᱞᱟᱫᱮ ᱫᱟᱰᱮᱭᱟᱜᱼᱟᱢ᱾";
+"NSCameraUsageDescription" = "ᱱᱚᱶᱟ ᱛᱮ ᱟᱢ ᱪᱤᱛᱟᱹᱨ ᱨᱟᱠᱟᱵ ᱟᱨ ᱞᱟᱫᱮ ᱫᱟᱰᱮᱭᱟᱜᱼᱟᱢ ᱾";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "ᱟᱢᱟᱜ ᱥᱟᱺᱪᱟᱣ ᱠᱟᱱ ᱵᱚᱞᱚ ᱠᱚ ᱟᱫᱮᱨ ᱞᱟᱹᱜᱤᱫ Firefox ᱟᱢᱟᱜ ᱢᱚᱦᱲᱟ ID ᱫᱚᱨᱠᱟᱨ ᱾";
