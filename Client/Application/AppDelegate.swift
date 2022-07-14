@@ -4,16 +4,7 @@
 
 import Shared
 import Storage
-import AVFoundation
-import XCGLogger
-import MessageUI
-import SyncTelemetry
-import LocalAuthentication
-import Sync
 import CoreSpotlight
-import UserNotifications
-import Account
-import BackgroundTasks
 import SDWebImage
 
 let LatestAppVersionProfileKey = "latestAppVersion"
@@ -32,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var shutdownWebServer: DispatchSourceTimer?
     private var webServerUtil: WebServerUtil?
     private var appLaunchUtil: AppLaunchUtil?
+    private var backgroundSyncUtil: BackgroundSyncUtil?
+
     func application(_ application: UIApplication,
                      willFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -74,40 +67,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window!.makeKeyAndVisible()
         pushNotificationSetup()
         appLaunchUtil?.setUpPostLaunchDependencies()
-        setUpBackgroundSync(with: application)
+        backgroundSyncUtil = BackgroundSyncUtil(profile: profile, application: application)
 
         return true
-    }
-
-    private func setUpBackgroundSync(with application: UIApplication) {
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
-            guard self.profile.hasSyncableAccount() else {
-                self.shutdownProfileWhenNotActive(application)
-                return
-            }
-            let collection = ["bookmarks", "history"]
-            self.profile.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
-                task.setTaskCompleted(success: true)
-                let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part2")
-                request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
-                request.requiresNetworkConnectivity = true
-                do {
-                    try BGTaskScheduler.shared.submit(request)
-                } catch {
-                    NSLog(error.localizedDescription)
-                }
-            }
-        }
-
-        // Split up the sync tasks so each can get maximal time for a bg task.
-        // This task runs after the bookmarks+history sync.
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part2", using: DispatchQueue.global()) { task in
-            let collection = ["tabs", "logins", "clients"]
-            self.profile.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
-                self.shutdownProfileWhenNotActive(application)
-                task.setTaskCompleted(success: true)
-            }
-        }
     }
 
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
@@ -176,8 +138,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         singleShotTimer.resume()
         shutdownWebServer = singleShotTimer
 
-        scheduleBGSync(application: application)
-
         tabManager.preserveTabs()
 
         // send glean telemetry and clear cache
@@ -198,13 +158,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    private func shutdownProfileWhenNotActive(_ application: UIApplication) {
-        // Only shutdown the profile if we are not in the foreground
-        guard application.applicationState != .active else { return }
-
-        profile._shutdown()
-    }
-
     /// When a user presses and holds the app icon from the Home Screen, we present quick actions / shortcut items (see QuickActions).
     ///
     /// This method can handle a quick action from both app launch and when the app becomes active. However, the system calls launch methods first if the app `launches`
@@ -216,34 +169,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(shortcutItem, withBrowserViewController: browserViewController)
 
         completionHandler(handledShortCutItem)
-    }
-
-    private func scheduleBGSync(application: UIApplication) {
-        if profile.syncManager.isSyncing {
-            // If syncing, create a bg task because _shutdown() is blocking and might take a few seconds to complete
-            var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
-            taskId = application.beginBackgroundTask(expirationHandler: {
-                self.shutdownProfileWhenNotActive(application)
-                application.endBackgroundTask(taskId)
-            })
-
-            DispatchQueue.main.async {
-                self.shutdownProfileWhenNotActive(application)
-                application.endBackgroundTask(taskId)
-            }
-        } else {
-            // Blocking call, however without sync running it should be instantaneous
-            profile._shutdown()
-
-            let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part1")
-            request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
-            request.requiresNetworkConnectivity = true
-            do {
-                try BGTaskScheduler.shared.submit(request)
-            } catch {
-                NSLog(error.localizedDescription)
-            }
-        }
     }
 }
 
