@@ -18,7 +18,7 @@ class BookmarksPanelViewModel {
 
     let profile: Profile
     let bookmarkFolderGUID: GUID
-    var bookmarkFolder: BookmarkFolderData?
+    var bookmarkFolder: FxBookmarkNode?
     var bookmarkNodes = [FxBookmarkNode]()
     private var flashLastRowOnNextReload = false
 
@@ -72,7 +72,7 @@ class BookmarksPanelViewModel {
 
                 self.bookmarkFolder = mobileFolder
                 // Reversed since we want the newest mobile bookmarks at the top
-                self.bookmarkNodes = mobileFolder.children?.reversed() ?? []
+                self.bookmarkNodes = mobileFolder.fxChildren?.reversed() ?? []
 
                 let desktopFolder = LocalDesktopFolder()
                 self.bookmarkNodes.insert(desktopFolder, at: 0)
@@ -103,7 +103,7 @@ class BookmarksPanelViewModel {
             }
 
             self.bookmarkFolder = folder
-            self.bookmarkNodes = folder.children ?? []
+            self.bookmarkNodes = folder.fxChildren ?? []
 
             completion()
         }

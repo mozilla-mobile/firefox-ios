@@ -12,6 +12,8 @@ protocol FxBookmarkNode {
     var guid: String { get }
     var parentGUID: String? { get }
     var position: UInt32 { get }
+    var isRoot: Bool { get }
+    var title: String { get }
 }
 
 extension FxBookmarkNode {
@@ -24,4 +26,15 @@ extension FxBookmarkNode {
     }
 }
 
-extension BookmarkNodeData: FxBookmarkNode {}
+extension BookmarkItemData: FxBookmarkNode {}
+
+extension BookmarkFolderData: FxBookmarkNode {
+    // Convenience to be able to fetch children as an array of FxBookmarkNode
+    var fxChildren: [FxBookmarkNode]? {
+        return self.children as? [FxBookmarkNode]
+    }
+}
+
+extension BookmarkSeparatorData: FxBookmarkNode {
+    var title: String { "" }
+}

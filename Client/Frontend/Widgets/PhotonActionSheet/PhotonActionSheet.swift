@@ -49,7 +49,7 @@ class PhotonActionSheet: UIViewController {
 
     // MARK: - Variables
     private var tableView = UITableView(frame: .zero, style: .grouped)
-    private var viewModel: PhotonActionSheetViewModel!
+    var viewModel: PhotonActionSheetViewModel!
     private var constraints = [NSLayoutConstraint]()
     var notificationCenter: NotificationCenter = NotificationCenter.default
 

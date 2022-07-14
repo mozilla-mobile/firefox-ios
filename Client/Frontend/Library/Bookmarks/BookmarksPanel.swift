@@ -144,7 +144,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         present(sheet, animated: true)
     }
 
-    func getNewBookmarkAction() -> PhotonRowActions {
+    private func getNewBookmarkAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .BookmarksNewBookmark,
                                      iconString: ImageIdentifiers.actionAddBookmark,
                                      tapHandler: { _ in

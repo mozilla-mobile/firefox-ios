@@ -35,6 +35,14 @@ class LocalDesktopFolder: FxBookmarkNode {
     var position: UInt32 {
         return 0
     }
+
+    var isRoot: Bool {
+        return false
+    }
+
+    var title: String {
+        return ""
+    }
 }
 
 extension LocalDesktopFolder: BookmarksFolderCell {
