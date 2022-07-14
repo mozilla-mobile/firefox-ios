@@ -300,7 +300,9 @@ extension HistoryHightlightsViewModel: HomepageSectionHandler {
     }
 
     private func isBottomOfColumn(with currentIndex: Int, totalItems: Int) -> Bool {
+        guard numberOfColumns > 0 else { return false }
         var bottomCellIndex: Int
+
         for column in 1...numberOfColumns {
             bottomCellIndex = (UX.maxNumberOfItemsPerColumn * column) - 1
             if currentIndex == bottomCellIndex { return true }
