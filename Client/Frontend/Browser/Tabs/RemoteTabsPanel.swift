@@ -615,15 +615,19 @@ class RemoteTabsTableViewController: UITableViewController {
         // Short circuit if the user is not logged in
         guard profile.hasSyncableAccount() else {
             self.endRefreshing()
-            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel, error: .notLoggedIn)
+            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+                                                                    error: .notLoggedIn)
+            completion?()
             return
         }
 
         // Get cached tabs.
-        self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
-            guard let clientAndTabs = result.successValue else {
-                self.endRefreshing()
-                self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel, error: .failedToSync)
+        profile.getCachedClientsAndTabs().uponQueue(.main) { [weak self] result in
+            guard let clientAndTabs = result.successValue, let self = self else {
+                self?.endRefreshing()
+                self?.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+                                                                         error: .failedToSync)
+                completion?()
                 return
             }
 
@@ -639,12 +643,12 @@ class RemoteTabsTableViewController: UITableViewController {
                     }
 
                     self.endRefreshing()
+                    completion?()
                 }
             } else {
                 self.endRefreshing()
+                completion?()
             }
-
-            completion?()
         }
     }
 
