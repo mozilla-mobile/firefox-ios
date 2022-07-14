@@ -54,7 +54,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     }
 
     private let syncedTabsButton: UIButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper().preferredFont(withTextStyle: .body, size: 12)
+        button.titleLabel?.font = DynamicFontHelper().preferredFont(withTextStyle: .subheadline, size: 12)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.showAllButton
     }
@@ -184,10 +184,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             faviconImage.isHidden = true
         }
 
-        let textAttributes: [NSAttributedString.Key: Any] = [
-            .underlineStyle: NSUnderlineStyle.single.rawValue
-        ]
-
+        let textAttributes: [NSAttributedString.Key: Any] = [ .underlineStyle: NSUnderlineStyle.single.rawValue ]
         let attributeString = NSMutableAttributedString(
             string: viewModel.syncedTabsButtonText,
             attributes: textAttributes
