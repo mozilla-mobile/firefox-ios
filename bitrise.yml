@@ -893,7 +893,7 @@ workflows:
       This Workflow is to run L10n tests in one locale and then share the bundle with the rest of the builds
     meta:
       bitrise.io:
-        stack: osx-xcode-13.4.x
+        stack: osx-xcode-13.3.x
         machine_type_id: g2.4core
 
   L10nScreenshotsTests:
@@ -972,7 +972,7 @@ workflows:
       This Workflow is to run L10n tests for all locales
     meta:
       bitrise.io:
-        stack: osx-xcode-13.4.x
+        stack: osx-xcode-13.3.x
         machine_type_id: g2.4core
 
   RunUnitTests:
@@ -1390,6 +1390,6 @@ trigger_map:
 - push_branch: v103.0
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
-  pipeline: pipeline_multiple_shards
+  workflow: L10nBuild
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
