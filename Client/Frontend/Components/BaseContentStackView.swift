@@ -43,14 +43,12 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
     private var keyboardSpacer: UIView?
 
     func addKeyboardSpacer(spacerHeight: CGFloat) {
-        guard keyboardSpacer == nil else {
-            setKeyboardSpacerHeight(height: spacerHeight)
-            return
+        keyboardSpacer?.removeFromSuperview()
+        if keyboardSpacer == nil {
+            keyboardSpacer = UIView()
         }
-
-        keyboardSpacer = UIView()
-        setKeyboardSpacerHeight(height: spacerHeight)
         addArrangedViewToBottom(keyboardSpacer!)
+        setKeyboardSpacerHeight(height: spacerHeight)
     }
 
     func removeKeyboardSpacer() {
