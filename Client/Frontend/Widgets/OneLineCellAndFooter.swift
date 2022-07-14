@@ -181,6 +181,8 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
         super.prepareForReuse()
         self.selectionStyle = .default
         separatorInset = defaultSeparatorInset
+        titleLabel.text = nil
+        leftImageView.image = nil
         applyTheme()
     }
 }

@@ -399,51 +399,39 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let bookmarkNode = viewModel.bookmarkNodes[safe: indexPath.row] else {
+        guard let node = viewModel.bookmarkNodes[safe: indexPath.row] else {
             return super.tableView(tableView, cellForRowAt: indexPath)
         }
 
-        if let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
+        if let bookmarkCell = node as? BookmarksFolderCell,
+            let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
                                                     for: indexPath) as? OneLineTableViewCell {
-            let viewModel = bookmarkNode.getViewModel()
-            cell.configure(viewModel: viewModel)
-            return cell
-        }
 
-        // TODO: Laurie Evaluate during https://mozilla-hub.atlassian.net/browse/FXIOS-4467 if we can use configure methods
-        switch bookmarkNode {
-        case let bookmarkFolder as BookmarkFolderData:
-            let viewModel = bookmarkFolder.getViewModel()
-            cell.configure(viewModel: viewModel)
-            return cell
-
-        case let bookmarkItem as BookmarkItemData:
-            let site = Site(url: bookmarkItem.url,
-                            title: bookmarkItem.title,
+            // Site is needed on BookmarkItemData to setup cell image
+            var site: Site?
+            if let node = node as? BookmarkItemData {
+                site = Site(url: node.url,
+                            title: node.title,
                             bookmarked: true,
-                            guid: bookmarkItem.guid)
+                            guid: node.guid)
+            }
+            cell.tag = indexPath.item
 
-            let viewModel = bookmarkItem.getViewModel(forSite: site,
+            let viewModel = bookmarkCell.getViewModel(forSite: site,
                                                       profile: profile) { viewModel in
+                guard cell.tag == indexPath.item else { return }
+
+                // Configure again once image is loaded for BookmarkItemData
                 cell.configure(viewModel: viewModel)
-//                cell.setNeedsLayout() // Laurie - needed?
+                cell.setNeedsLayout()
             }
 
             cell.configure(viewModel: viewModel)
             return cell
 
-        case is BookmarkSeparatorData:
-            let cell = tableView.dequeueReusableCell(withIdentifier: SeparatorTableViewCell.cellIdentifier,
-                                                     for: indexPath)
-            return cell
-
-        case let bookmarkFolder as LocalDesktopFolder:
-            let viewModel = bookmarkFolder.getViewModel()
-            cell.configure(viewModel: viewModel)
-            return cell
-
-        default:
-            return super.tableView(tableView, cellForRowAt: indexPath) // Should not happen.
+        } else {
+            return tableView.dequeueReusableCell(withIdentifier: SeparatorTableViewCell.cellIdentifier,
+                                                 for: indexPath)
         }
     }
 
@@ -574,7 +562,6 @@ extension BookmarksPanel: Notifiable {
 extension BookmarksPanel {
     @objc func bottomLeftButtonAction() {
         if state == .bookmarks(state: .inFolderEditMode) {
-            updatePanelState(newState: .bookmarks(state: .itemEditMode))
             presentInFolderActions()
         }
     }
@@ -632,7 +619,7 @@ extension BookmarksPanel {
         bookmarkEditView.save().uponQueue(.main) { _ in
             self.navigationController?.popViewController(animated: true)
             if bookmarkEditView.isNew {
-                self.didAddBookmarkNode()
+                self.viewModel.didAddBookmarkNode()
             }
         }
     }
