@@ -388,8 +388,7 @@ private extension JumpBackInViewModel {
                                                          descriptionText: descriptionText,
                                                          url: item.tab.URL,
                                                          tag: indexPath.item,
-                                                         hasFavicon: true,
-                                                         favIconImage: image)
+                                                         syncedDeviceImage: image)
         cell.configure(viewModel: cellViewModel,
                        onTapShowAllAction: syncedTabsShowAllAction,
                        onOpenSyncedTabAction: openSyncedTabAction)

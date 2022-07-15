@@ -91,8 +91,6 @@ class HomeHorizontalCell: UICollectionViewCell, ReusableCell {
     private var fallbackFaviconBackground: UIView = .build { view in
         view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
         view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
-        view.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-        view.layer.borderColor = TopSiteItemCell.UX.borderColor.cgColor
     }
 
     // Contains the hero image and fallback favicons
@@ -243,8 +241,8 @@ extension HomeHorizontalCell: NotificationThemeable {
             fallbackFaviconImage.tintColor = UIColor.Photon.DarkGrey90
         }
 
-        fallbackFaviconBackground.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-        fallbackFaviconBackground.layer.borderColor = TopSiteItemCell.UX.borderColor.cgColor
+        fallbackFaviconBackground.backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
     }
 }

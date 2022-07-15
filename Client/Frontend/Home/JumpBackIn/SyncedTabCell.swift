@@ -9,8 +9,7 @@ struct FxHomeSyncedTabCellViewModel {
     let descriptionText: String
     let url: URL
     let tag: Int
-    var hasFavicon: Bool // Pocket has no favicon
-    var favIconImage: UIImage?
+    var syncedDeviceImage: UIImage?
     var heroImage: UIImage?
     var accessibilityLabel: String {
         return "\(cardTitleText): \(titleText), \(descriptionText)"
@@ -84,11 +83,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         stackView.distribution = .fillProportionally
     }
 
-    let faviconImage: UIImageView = .build { imageView in
+    let syncedDeviceImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
-        imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = UX.generalCornerRadius
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.favIconImage
     }
 
@@ -112,8 +109,6 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     private var fallbackFaviconBackground: UIView = .build { view in
         view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
         view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
-        view.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-        view.layer.borderColor = TopSiteItemCell.UX.borderColor.cgColor
     }
 
     // Contains the hero image and fallback favicons
@@ -136,11 +131,11 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.itemCell
 
-        applyTheme()
         setupNotifications(forObserver: self,
                            observing: [.DisplayThemeChanged,
                                        .DynamicFontChanged])
         setupLayout()
+        applyTheme()
     }
 
     required init?(coder: NSCoder) {
@@ -154,15 +149,15 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         heroImage.image = nil
-        faviconImage.image = nil
+        syncedDeviceImage.image = nil
         fallbackFaviconImage.image = nil
         descriptionLabel.text = nil
         itemTitle.text = nil
         setFallBackFaviconVisibility(isHidden: false)
         applyTheme()
 
-        faviconImage.isHidden = false
-        descriptionContainer.addArrangedViewToTop(faviconImage)
+        syncedDeviceImage.isHidden = false
+        descriptionContainer.addArrangedViewToTop(syncedDeviceImage)
     }
 
     // MARK: - Helpers
@@ -177,12 +172,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         accessibilityLabel = viewModel.accessibilityLabel
         cardTitle.text = viewModel.cardTitleText
 
-        if viewModel.hasFavicon {
-            faviconImage.image = viewModel.favIconImage
-        } else {
-            descriptionContainer.removeArrangedSubview(faviconImage)
-            faviconImage.isHidden = true
-        }
+        syncedDeviceImage.image = viewModel.syncedDeviceImage
 
         let textAttributes: [NSAttributedString.Key: Any] = [ .underlineStyle: NSUnderlineStyle.single.rawValue ]
         let attributeString = NSMutableAttributedString(
@@ -197,6 +187,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapSyncedTab(_:)))
         syncedTabTapTargetView.addGestureRecognizer(tapRecognizer)
+        applyTheme()
     }
 
     @objc func showAllSyncedTabs(sender: UIButton) {
@@ -221,7 +212,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
         fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
         imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
-        descriptionContainer.addArrangedSubview(faviconImage)
+        descriptionContainer.addArrangedSubview(syncedDeviceImage)
         descriptionContainer.addArrangedSubview(descriptionLabel)
         contentView.addSubviews(cardTitle, syncedTabsButton, itemTitle, imageContainer,
                                 descriptionContainer, syncedTabTapTargetView)
@@ -267,8 +258,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             descriptionContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             descriptionContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
 
-            faviconImage.heightAnchor.constraint(equalToConstant: UX.faviconSize.height),
-            faviconImage.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
+            syncedDeviceImage.heightAnchor.constraint(equalToConstant: UX.faviconSize.height),
+            syncedDeviceImage.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
 
             syncedTabTapTargetView.topAnchor.constraint(equalTo: itemTitle.topAnchor, constant: -24),
             syncedTabTapTargetView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
@@ -276,8 +267,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             syncedTabTapTargetView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
 
-        faviconCenterConstraint = descriptionLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor).priority(UILayoutPriority(999))
-        faviconFirstBaselineConstraint = descriptionLabel.firstBaselineAnchor.constraint(equalTo: faviconImage.bottomAnchor,
+        faviconCenterConstraint = descriptionLabel.centerYAnchor.constraint(equalTo: syncedDeviceImage.centerYAnchor).priority(UILayoutPriority(999))
+        faviconFirstBaselineConstraint = descriptionLabel.firstBaselineAnchor.constraint(equalTo: syncedDeviceImage.bottomAnchor,
                                                                                          constant: -UX.faviconSize.height / 2)
 
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
@@ -302,20 +293,20 @@ extension SyncedTabCell: NotificationThemeable {
             cardTitle.textColor  = UIColor.Photon.LightGrey10
             itemTitle.textColor = UIColor.Photon.LightGrey05
             descriptionLabel.textColor = UIColor.Photon.LightGrey40
-            faviconImage.tintColor = UIColor.Photon.LightGrey40
             fallbackFaviconImage.tintColor = UIColor.Photon.LightGrey40
             syncedTabsButton.tintColor = UIColor.Photon.LightGrey40
+            syncedDeviceImage.image = syncedDeviceImage.image?.tinted(withColor: UIColor.Photon.LightGrey40)
         } else {
             cardTitle.textColor = .black
             itemTitle.textColor = UIColor.Photon.DarkGrey90
             descriptionLabel.textColor = UIColor.Photon.DarkGrey05
-            faviconImage.tintColor = .black
             fallbackFaviconImage.tintColor = .black
             syncedTabsButton.tintColor = .black
+            syncedDeviceImage.image = syncedDeviceImage.image?.tinted(withColor: .black)
         }
 
-        fallbackFaviconBackground.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-        fallbackFaviconBackground.layer.borderColor = TopSiteItemCell.UX.borderColor.cgColor
+        fallbackFaviconBackground.backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
     }
 }
