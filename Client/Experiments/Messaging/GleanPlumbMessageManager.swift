@@ -66,12 +66,13 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     private let messagingStore: GleanPlumbMessageStore
     private let feature = FxNimbus.shared.features.messaging.value()
 
+    var surfaceMessages = [MessageSurfaceId: GleanPlumbMessage]()
+
     // MARK: - Inits
 
-    init(messagingUtility: GleanPlumbMessageUtility = GleanPlumbMessageUtility(),
-         messagingStore: GleanPlumbMessageStore = GleanPlumbMessageStore()) {
+    init(messagingUtility: GleanPlumbMessageUtility = GleanPlumbMessageUtility()) {
         self.messagingUtility = messagingUtility
-        self.messagingStore = messagingStore
+        self.messagingStore = GleanPlumbMessageStore(messagingUtility: messagingUtility)
 
         onStartup()
     }
@@ -83,6 +84,9 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     /// Returns the next valid and triggered message for the surface, if one exists.
     func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
+        if let existingMessage = surfaceMessages[surface] {
+            return existingMessage
+        }
 
         /// All these are non-expired, well formed, and descending priority ordered messages for a requested surface.
         let messages = getAllValidMessagesFor(surface, with: feature)
@@ -105,6 +109,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             return nextTriggeredMessage
         }
 
+        surfaceMessages[surface] = message
         return message
     }
 
@@ -180,15 +185,14 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
         /// All these are non-expired, well formed, and descending priority messages for a requested surface.
         let messages = feature.messages.compactMap { key, messageData -> GleanPlumbMessage? in
-            if let message = self.createMessage(messageId: key,
+            guard let message = self.createMessage(messageId: key,
                                                 message: messageData,
-                                                lookupTables: feature) {
-                return message
+                                                lookupTables: feature) else {
+                onMalformedMessage(messageKey: key)
+                return nil
             }
 
-            onMalformedMessage(messageKey: key)
-
-            return nil
+            return message
 
         }.filter { message in
             !message.isExpired
@@ -206,7 +210,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     private func createMessage(messageId: String, message: MessageData, lookupTables: Messaging) -> GleanPlumbMessage? {
 
         /// Guard against a message with a blank `text` property. 
-        if message.text.isEmpty { return nil }
+        guard !message.text.isEmpty else { return nil }
 
         /// Ascertain a Message's style, to know priority and max impressions.
         guard let style = lookupTables.styles[message.style] else { return nil }
@@ -286,5 +290,4 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             }
         }
     }
-
 }
