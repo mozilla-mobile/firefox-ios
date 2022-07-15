@@ -5,21 +5,15 @@
 import Foundation
 import BackgroundTasks
 
-class BackgroundSyncUtil: Notifiable {
+class BackgroundSyncUtil {
 
     let profile: Profile
     let application: UIApplication
-    var notificationCenter: NotificationCenter
 
     init(profile: Profile,
-         application: UIApplication,
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
+         application: UIApplication) {
         self.profile = profile
         self.application = application
-        self.notificationCenter = notificationCenter
-
-        setupNotifications(forObserver: self,
-                           observing: [UIApplication.willResignActiveNotification])
 
         setUpBackgroundSync()
     }
@@ -55,32 +49,32 @@ class BackgroundSyncUtil: Notifiable {
         }
     }
 
-    @objc private func scheduleSyncOnAppBackground() {
-//        if profile.syncManager.isSyncing {
-//            // If syncing, create a bg task because _shutdown() is blocking and might take a few seconds to complete
-//            var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
-//            taskId = application.beginBackgroundTask(expirationHandler: {
-//                self.shutdownProfileWhenNotActive(self.application)
-//                self.application.endBackgroundTask(taskId)
-//            })
-//
-//            DispatchQueue.main.async {
-//                self.shutdownProfileWhenNotActive(self.application)
-//                self.application.endBackgroundTask(taskId)
-//            }
-//        } else {
-//            // Blocking call, however without sync running it should be instantaneous
-//            profile._shutdown()
-//
-//            let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part1")
-//            request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
-//            request.requiresNetworkConnectivity = true
-//            do {
-//                try BGTaskScheduler.shared.submit(request)
-//            } catch {
-//                NSLog(error.localizedDescription)
-//            }
-//        }
+    func scheduleSyncOnAppBackground() {
+        if profile.syncManager.isSyncing {
+            // If syncing, create a bg task because _shutdown() is blocking and might take a few seconds to complete
+            var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
+            taskId = application.beginBackgroundTask(expirationHandler: {
+                self.shutdownProfileWhenNotActive(self.application)
+                self.application.endBackgroundTask(taskId)
+            })
+
+            DispatchQueue.main.async {
+                self.shutdownProfileWhenNotActive(self.application)
+                self.application.endBackgroundTask(taskId)
+            }
+        } else {
+            // Blocking call, however without sync running it should be instantaneous
+            profile._shutdown()
+
+            let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part1")
+            request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
+            request.requiresNetworkConnectivity = true
+            do {
+                try BGTaskScheduler.shared.submit(request)
+            } catch {
+                NSLog(error.localizedDescription)
+            }
+        }
     }
 
     private func shutdownProfileWhenNotActive(_ application: UIApplication) {
