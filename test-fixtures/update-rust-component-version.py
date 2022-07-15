@@ -29,12 +29,9 @@ def read_rust_components_tag_version():
     try:
         f = open(SPM_PACKAGE)
         data = json.load(f)
-        pin = data["object"]
-        print("inside try")
-        print(pin)
 
-        for i in pin["pins"]:
-            if i["package"] == "MozillaRustComponentsSwift":
+        for i in data["pins"]:
+            if i["identity"] == "rust-components-swift":
                 # return the json with the RustComponent info
                 json_new_version = i["state"]
         f.close()
@@ -135,6 +132,7 @@ def main():
 
     rust_component_repo_tag, rust_component_repo_commit = get_newest_rust_components_version()
     current_tag, current_commit = read_rust_components_tag_version()
+
     current_min_version  = read_project_min_version()
     if compare_versions(current_tag, rust_component_repo_tag):
         # If the version does not match, then the files are updated
