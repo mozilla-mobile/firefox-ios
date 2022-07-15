@@ -245,12 +245,10 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
     @objc private func dismissCard() {
         self.dismissClosure?()
 
-        guard let message = message else {
-            /// If we're here, that means we've shown the evergreen. Handle it as we always did.
-            UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
-            TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserCard)
+        guard let message = message else { return }
 
-            return
+        if message.action == "MAKE_DEFAULT_BROWSER" {
+            sendTelemetry(telemetryObject: .dismissDefaultBrowserCard)
         }
 
         messagingManager.onMessageDismissed(message)
@@ -264,14 +262,18 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
 
         // set only default browser evergreen
         if message.action == "MAKE_DEFAULT_BROWSER" {
-            TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserCard)
-            /// The evergreen needs to be treated like the other messages - once interacted with, don't show it.
-            UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
-
-            // Set default browser onboarding did show to true so it will not show again after user clicks this button
-            UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
+            sendTelemetry(telemetryObject: .goToSettingsDefaultBrowserCard)
         }
 
         messagingManager.onMessagePressed(message)
+    }
+
+    private func sendTelemetry(telemetryObject: TelemetryWrapper.EventObject) {
+        TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: telemetryObject)
+        /// The evergreen needs to be treated like the other messages - once interacted with, don't show it.
+        UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
+
+        // Set default browser onboarding did show to true so it will not show again after user clicks this button
+        UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
     }
 }
