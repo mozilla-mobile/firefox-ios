@@ -21,7 +21,7 @@ class BackgroundSyncUtil {
     func setUpBackgroundSync() {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
             guard self.profile.hasSyncableAccount() else {
-                self.shutdownProfileWhenNotActive(self.application)
+                self.shutdownProfileWhenNotActive()
                 return
             }
             let collection = ["bookmarks", "history"]
@@ -43,7 +43,7 @@ class BackgroundSyncUtil {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part2", using: DispatchQueue.global()) { task in
             let collection = ["tabs", "logins", "clients"]
             self.profile.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
-                self.shutdownProfileWhenNotActive(self.application)
+                self.shutdownProfileWhenNotActive()
                 task.setTaskCompleted(success: true)
             }
         }
@@ -54,12 +54,12 @@ class BackgroundSyncUtil {
             // If syncing, create a bg task because _shutdown() is blocking and might take a few seconds to complete
             var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
             taskId = application.beginBackgroundTask(expirationHandler: {
-                self.shutdownProfileWhenNotActive(self.application)
+                self.shutdownProfileWhenNotActive()
                 self.application.endBackgroundTask(taskId)
             })
 
             DispatchQueue.main.async {
-                self.shutdownProfileWhenNotActive(self.application)
+                self.shutdownProfileWhenNotActive()
                 self.application.endBackgroundTask(taskId)
             }
         } else {
@@ -77,21 +77,11 @@ class BackgroundSyncUtil {
         }
     }
 
-    private func shutdownProfileWhenNotActive(_ application: UIApplication) {
+    private func shutdownProfileWhenNotActive() {
         // Only shutdown the profile if we are not in the foreground
         guard application.applicationState != .active else { return }
 
         profile._shutdown()
-    }
-
-    // MARK: Notifiable
-
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIApplication.willResignActiveNotification:
-            scheduleSyncOnAppBackground()
-        default: break
-        }
     }
 
 }
