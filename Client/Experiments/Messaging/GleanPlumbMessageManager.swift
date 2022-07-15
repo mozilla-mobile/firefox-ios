@@ -66,8 +66,6 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     private let messagingStore: GleanPlumbMessageStore
     private let feature = FxNimbus.shared.features.messaging.value()
 
-    var surfaceMessages = [MessageSurfaceId: GleanPlumbMessage]()
-
     // MARK: - Inits
 
     init(messagingUtility: GleanPlumbMessageUtility = GleanPlumbMessageUtility()) {
@@ -84,10 +82,6 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     /// Returns the next valid and triggered message for the surface, if one exists.
     func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
-        if let existingMessage = surfaceMessages[surface] {
-            return existingMessage
-        }
-
         /// All these are non-expired, well formed, and descending priority ordered messages for a requested surface.
         let messages = getAllValidMessagesFor(surface, with: feature)
 
@@ -109,7 +103,6 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             return nextTriggeredMessage
         }
 
-        surfaceMessages[surface] = message
         return message
     }
 

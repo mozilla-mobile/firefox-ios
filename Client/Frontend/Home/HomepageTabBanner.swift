@@ -116,11 +116,9 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
 
         setupLayout()
 
-        message = messagingManager.getNextMessage(for: .newTabCard)
-        if let message = message {
+        if let message = messagingManager.getNextMessage(for: .newTabCard) {
+            self.message = message
             applyGleanMessage(message)
-        } else {
-            applyDefaultCard()
         }
     }
 
@@ -220,15 +218,6 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
 
     // MARK: - Message setup
 
-    /// Default card (evergreen message) is applied when there's no GleanPlumbMessage available
-    private func applyDefaultCard() {
-        bannerTitle.text = BannerCopy.HomeTabBannerTitle
-        descriptionText.text = BannerCopy.HomeTabBannerDescription
-        ctaButton.setTitle(BannerCopy.HomeTabBannerButton, for: .normal)
-
-        TelemetryWrapper.recordEvent(category: .information, method: .view, object: .homeTabBannerEvergreen)
-    }
-
     /// Apply message data, including handling of cases where certain parts of the message are missing.
     private func applyGleanMessage(_ message: GleanPlumbMessage) {
         if let buttonLabel = message.data.buttonLabel {
@@ -271,18 +260,16 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
     @objc func handleCTA() {
         self.dismissClosure?()
 
-        guard let message = message else {
-            /// If we're here, that means we've shown the evergreen. Handle it as we always did.
-            BrowserViewController.foregroundBVC().presentDBOnboardingViewController(true)
-            TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserCard)
+        guard let message = message else { return }
 
+        // set only default browser evergreen
+        if message.action == "MAKE_DEFAULT_BROWSER" {
+            TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserCard)
             /// The evergreen needs to be treated like the other messages - once interacted with, don't show it.
             UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
 
             // Set default browser onboarding did show to true so it will not show again after user clicks this button
             UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
-
-            return
         }
 
         messagingManager.onMessagePressed(message)
