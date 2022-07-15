@@ -1242,14 +1242,25 @@ open class BrowserProfile: Profile {
                 gleanHelper.start()
             }
 
-            do {
-                return try syncReducer!.append(synchronizers)
-            } catch let error {
-                log.error("Synchronizers appended after sync was finished. This is a bug. \(error)")
+            let deferStatuses = { () -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> in
                 let statuses = synchronizers.map {
                     ($0.0, SyncStatus.notStarted(.unknown))
                 }
                 return deferMaybe(statuses)
+            }
+
+            guard let syncReducer = syncReducer else {
+                return deferStatuses()
+            }
+
+            do {
+                return try syncReducer.append(synchronizers)
+            } catch let error {
+                SentryIntegration.shared.send(message: "Synchronizers appended after sync was finished. This is a bug",
+                                              tag: .clientSynchronizer,
+                                              severity: .fatal,
+                                              description: error.localizedDescription)
+                return deferStatuses()
             }
         }
 
