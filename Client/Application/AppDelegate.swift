@@ -6,6 +6,7 @@ import Shared
 import Storage
 import CoreSpotlight
 import SDWebImage
+import BackgroundTasks
 
 let LatestAppVersionProfileKey = "latestAppVersion"
 
@@ -137,7 +138,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         singleShotTimer.resume()
         shutdownWebServer = singleShotTimer
-
+        scheduleBGSync(application: application)
         tabManager.preserveTabs()
 
         // send glean telemetry and clear cache
@@ -145,6 +146,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // that the app might have built over the
         // time which is taking up un-necessary space
         SDImageCache.shared.clearDiskCache { _ in }
+    }
+
+    private func shutdownProfileWhenNotActive(_ application: UIApplication) {
+        // Only shutdown the profile if we are not in the foreground
+        guard application.applicationState != .active else { return }
+
+        profile._shutdown()
+    }
+
+    private func scheduleBGSync(application: UIApplication) {
+        if profile.syncManager.isSyncing {
+            // If syncing, create a bg task because _shutdown() is blocking and might take a few seconds to complete
+            var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
+            taskId = application.beginBackgroundTask(expirationHandler: {
+                self.shutdownProfileWhenNotActive(application)
+                application.endBackgroundTask(taskId)
+            })
+
+            DispatchQueue.main.async {
+                self.shutdownProfileWhenNotActive(application)
+                application.endBackgroundTask(taskId)
+            }
+        } else {
+            // Blocking call, however without sync running it should be instantaneous
+            profile._shutdown()
+
+            let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part1")
+            request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
+            request.requiresNetworkConnectivity = true
+            do {
+                try BGTaskScheduler.shared.submit(request)
+            } catch {
+                NSLog(error.localizedDescription)
+            }
+        }
     }
 
     private func updateTopSitesWidget() {
