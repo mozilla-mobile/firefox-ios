@@ -1257,7 +1257,8 @@ open class BrowserProfile: Profile {
                 return try syncReducer.append(synchronizers)
             } catch let error {
                 SentryIntegration.shared.send(message: "Synchronizers appended after sync was finished. This is a bug",
-                                              tag: .clientSynchronizer, severity: .fatal,
+                                              tag: .clientSynchronizer,
+                                              severity: .fatal,
                                               description: error.localizedDescription)
                 return deferStatuses()
             }
