@@ -41,12 +41,7 @@ extension HistoryPanel: UISearchBarDelegate {
     }
 
     func performSearch(term: String) {
-        viewModel.performSearch(term: term.lowercased()) { hasResults in
-            guard hasResults else {
-                self.handleNoResults()
-                return
-            }
-
+        viewModel.performSearch(term: term.lowercased()) { _ in
             self.applySearchSnapshot()
             self.updateEmptyPanelState()
         }
@@ -58,11 +53,10 @@ extension HistoryPanel: UISearchBarDelegate {
         snapshot.appendSections([HistoryPanelSections.searchResults])
         snapshot.appendItems(self.viewModel.searchResultSites)
         self.diffableDatasource?.apply(snapshot, animatingDifferences: false)
-    }
 
-    private func handleNoResults() {
-        applySearchSnapshot()
-        updateEmptyPanelState()
+        if self.viewModel.searchResultSites.isEmpty {
+            updateEmptyPanelState()
+        }
     }
 
     private func handleEmptySearch() {
