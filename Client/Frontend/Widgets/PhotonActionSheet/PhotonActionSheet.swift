@@ -274,7 +274,13 @@ class PhotonActionSheet: UIViewController {
                                change: [NSKeyValueChangeKey: Any]?,
                                context: UnsafeMutableRawPointer?) {
         if viewModel.presentationStyle == .popover && !wasHeightOverriden {
-            preferredContentSize = tableView.contentSize
+            if #available(iOS 15.4, *) {
+                var size = tableView.contentSize
+                size.height = tableView.contentSize.height - UX.Spacing - UX.TablePadding
+                preferredContentSize = size
+            } else {
+                preferredContentSize = tableView.contentSize
+            }
         }
     }
 
@@ -392,9 +398,7 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
 
         } else {
             let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
-            let isLastSection = indexPath.section == tableView.numberOfSections - 1
-            let rowIsLast = isLastRow && isLastSection
-            cell.hideBottomBorder(isHidden: rowIsLast)
+            cell.hideBottomBorder(isHidden: isLastRow)
         }
 
         return cell

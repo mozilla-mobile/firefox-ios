@@ -15,7 +15,7 @@ private let URLBeforePathRegex = try! NSRegularExpression(pattern: "^https?://([
  * Shared data source for the SearchViewController and the URLBar domain completion.
  * Since both of these use the same SQL query, we can perform the query once and dispatch the results.
  */
-class SearchLoader: Loader<Cursor<Site>, SearchViewController> {
+class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable {
     fileprivate let profile: Profile
     fileprivate let urlBar: URLBarView
     fileprivate let frecentHistory: FrecentHistory
@@ -80,22 +80,22 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController> {
                     self.currentDeferredHistoryQuery = nil
                 }
 
-                guard !deferredHistory.cancelled else {
-                    return
-                }
+                guard !deferredHistory.cancelled else { return }
 
                 let deferredHistorySites = results[0].successValue?.asArray() ?? []
                 let deferredBookmarksSites = results[1].successValue?.asArray() ?? []
-                let combinedSites = deferredBookmarksSites + deferredHistorySites
+                var combinedSites = deferredBookmarksSites
+
+                if !self.featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly) {
+                    combinedSites += deferredHistorySites
+                }
 
                 // Load the data in the table view.
                 self.load(ArrayCursor(data: combinedSites))
 
                 // If the new search string is not longer than the previous
                 // we don't need to find an autocomplete suggestion.
-                guard oldValue.count < self.query.count else {
-                    return
-                }
+                guard oldValue.count < self.query.count else { return }
 
                 // If we should skip the next autocomplete, reset
                 // the flag and bail out here.
@@ -132,9 +132,11 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController> {
         // Extract the pre-path substring from the URL. This should be more efficient than parsing via
         // NSURL since we need to only look at the beginning of the string.
         // Note that we won't match non-HTTP(S) URLs.
-        guard let match = URLBeforePathRegex.firstMatch(in: url, options: [], range: NSRange(location: 0, length: url.count)) else {
-            return nil
-        }
+        guard let match = URLBeforePathRegex.firstMatch(
+            in: url,
+            options: [],
+            range: NSRange(location: 0, length: url.count))
+        else { return nil }
 
         // If the pre-path component (including the scheme) starts with the query, just use it as is.
         var prePathURL = (url as NSString).substring(with: match.range(at: 0))

@@ -25,7 +25,7 @@ public class TabGroupData: NSObject, NSCoding {
     func tabHistoryMetadatakey() -> HistoryMetadataKey {
         return HistoryMetadataKey(url: tabAssociatedSearchUrl, searchTerm: tabAssociatedSearchTerm, referrerUrl: tabAssociatedNextUrl)
     }
-    
+
     var jsonDictionary: [String: Any] {
         return [
             "tabAssociatedSearchTerm": String(self.tabAssociatedSearchTerm),
@@ -34,7 +34,7 @@ public class TabGroupData: NSObject, NSCoding {
             "tabHistoryCurrentState": String(self.tabHistoryCurrentState),
         ]
     }
-    
+
     convenience override init() {
         self.init(searchTerm: "",
                   searchUrl: "",

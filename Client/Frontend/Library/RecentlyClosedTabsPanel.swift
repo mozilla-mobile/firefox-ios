@@ -50,7 +50,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
         tableViewController.didMove(toParent: self)
 
         self.view.addSubview(tableViewController.view)
-        
+
         NSLayoutConstraint.activate([
             tableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
             tableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -95,14 +95,14 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         twoLineCell.descriptionLabel.isHidden = false
         twoLineCell.titleLabel.text = tab.title
         twoLineCell.titleLabel.isHidden = tab.title?.isEmpty ?? true ? true : false
-        twoLineCell.descriptionLabel.text = displayURL.absoluteDisplayString        
+        twoLineCell.descriptionLabel.text = displayURL.absoluteDisplayString
         twoLineCell.leftImageView.layer.borderColor = RecentlyClosedPanelUX.IconBorderColor.cgColor
         twoLineCell.leftImageView.layer.borderWidth = RecentlyClosedPanelUX.IconBorderWidth
         twoLineCell.leftImageView.contentMode = .center
         twoLineCell.leftImageView.setImageAndBackground(forIcon: site, website: displayURL) { [weak twoLineCell] in
             twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(RecentlyClosedPanelUX.IconSize)
         }
-        
+
         return twoLineCell
     }
 

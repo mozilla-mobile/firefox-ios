@@ -76,9 +76,9 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
     // MARK: - Properties
     private var viewModel: ContextualHintViewModel
-    private var onViewSummoned: (() -> Void)? = nil
-    var onViewDismissed: (() -> Void)? = nil
-    private var onActionTapped: (() -> Void)? = nil
+    private var onViewSummoned: (() -> Void)?
+    var onViewDismissed: (() -> Void)?
+    private var onActionTapped: (() -> Void)?
     private var topContainerConstraint: NSLayoutConstraint?
     private var bottomContainerConstraint: NSLayoutConstraint?
 
@@ -130,8 +130,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         view.layoutIfNeeded()
 
         // Portrait orientation: lock enable
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait,
-                                               andRotateTo: UIInterfaceOrientation.portrait)
+        OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.portrait,
+                                              andRotateTo: UIInterfaceOrientation.portrait)
     }
 
     override func viewDidLayoutSubviews() {
@@ -147,7 +147,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Portrait orientation: lock disable
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.all)
+        OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.all)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -200,7 +200,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         topContainerConstraint?.isActive = true
         bottomContainerConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         bottomContainerConstraint?.isActive = true
-        
+
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
     }
 

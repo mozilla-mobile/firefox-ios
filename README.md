@@ -1,12 +1,13 @@
 Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios) [![codecov](https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main/graph/badge.svg)](https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main)
 ===============
 
-Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id989804926).
+Download on the [App Store](https://apps.apple.com/app/firefox-web-browser/id989804926).
+
 
 This branch (main)
 -----------
 
-This branch works only with [Xcode 13.2.1](https://developer.apple.com/download/all/?q=xcode), Swift 5.5.2 and supports iOS 13 and above.
+This branch works only with [Xcode 13.4.1](https://developer.apple.com/download/all/?q=xcode), Swift 5.5.2 and supports iOS 13 and above.
 
 *Please note:* Both Intel and M1 macs are supported 🎉 and we use swift package manager.
 
@@ -33,7 +34,7 @@ Building the code
     ```shell
     git clone https://github.com/mozilla-mobile/firefox-ios
     ```
-1. Pull in the project dependencies:
+1. Install Node.js dependencies, build user scripts and update content blocker:
     ```shell
     cd firefox-ios
     sh ./bootstrap.sh

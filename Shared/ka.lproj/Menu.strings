@@ -41,7 +41,7 @@
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "ისტორია";
 
 /* Label for the button, displayed in the menu, used to navigate to the home page. */
-"Menu.OpenHomePageAction.Title" = "მთავარი";
+"Menu.OpenHomePageAction.Title" = "საწყისი";
 
 /* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "წასაკითხი";

@@ -38,7 +38,7 @@ struct DownloadedFile: Equatable {
         return MIMEType.mimeTypeFromFileExtension(fileExtension)
     }
 
-    static public func ==(lhs: DownloadedFile, rhs: DownloadedFile) -> Bool {
+    static public func == (lhs: DownloadedFile, rhs: DownloadedFile) -> Bool {
         return lhs.path == rhs.path
     }
 }
@@ -62,7 +62,6 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
     }
-    
 
     private let events: [Notification.Name] = [.FileDidDownload, .PrivateDataClearedDownloadedFiles, .DynamicFontChanged]
 
@@ -91,7 +90,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
 
         view.addSubview(tableView)
-        
+
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -145,8 +144,17 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     private func fetchData() -> [DownloadedFile] {
         var downloadedFiles: [DownloadedFile] = []
         do {
-            let downloadsPath = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Downloads")
-            let files = try FileManager.default.contentsOfDirectory(at: downloadsPath, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants])
+            let downloadsPath = try FileManager.default.url(
+                for: .documentDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil,
+                create: false).appendingPathComponent("Downloads")
+            let files = try FileManager.default.contentsOfDirectory(
+                at: downloadsPath,
+                includingPropertiesForKeys: nil,
+                options: [.skipsHiddenFiles,
+                          .skipsPackageDescendants,
+                          .skipsSubdirectoryDescendants])
 
             for file in files {
                 let attributes = try FileManager.default.attributesOfItem(atPath: file.path) as NSDictionary
@@ -199,15 +207,21 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             return icon
         }
 
-        guard let icon = roundRectImageWithLabel(fileExtension, width: 29, height: 29) else {
-            return nil
-        }
+        guard let icon = roundRectImageWithLabel(fileExtension, width: 29, height: 29) else { return nil }
 
         fileExtensionIcons[fileExtension] = icon
         return icon
     }
 
-    private func roundRectImageWithLabel(_ label: String, width: CGFloat, height: CGFloat, radius: CGFloat = 5.0, strokeWidth: CGFloat = 1.0, strokeColor: UIColor = UIColor.theme.homePanel.downloadedFileIcon, fontSize: CGFloat = 9.0) -> UIImage? {
+    private func roundRectImageWithLabel(
+        _ label: String,
+        width: CGFloat,
+        height: CGFloat,
+        radius: CGFloat = 5.0,
+        strokeWidth: CGFloat = 1.0,
+        strokeColor: UIColor = UIColor.theme.homePanel.downloadedFileIcon,
+        fontSize: CGFloat = 9.0
+    ) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, 0.0)
         let context = UIGraphicsGetCurrentContext()
         context?.setStrokeColor(strokeColor.cgColor)
@@ -238,7 +252,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             if emptyStateOverlayView.superview == nil {
                 view.addSubview(emptyStateOverlayView)
                 view.bringSubviewToFront(emptyStateOverlayView)
-                
+
                 NSLayoutConstraint.activate([
                     emptyStateOverlayView.topAnchor.constraint(equalTo: view.topAnchor),
                     emptyStateOverlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -271,13 +285,13 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         overlayView.addSubview(logoImageView)
         overlayView.addSubview(welcomeLabel)
-        
+
         NSLayoutConstraint.activate([
             logoImageView.topAnchor.constraint(equalTo: overlayView.topAnchor, constant: DownloadsPanelUX.WelcomeScreenTopPadding),
             logoImageView.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
             logoImageView.heightAnchor.constraint(equalToConstant: 60),
             logoImageView.widthAnchor.constraint(equalToConstant: 60),
-            
+
             welcomeLabel.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
             welcomeLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: DownloadsPanelUX.WelcomeScreenPadding),
             welcomeLabel.widthAnchor.constraint(equalToConstant: DownloadsPanelUX.WelcomeScreenItemWidth)
@@ -300,7 +314,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
             header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
-            header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground //UIColor.theme.tableView.headerBackground
+            header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground // UIColor.theme.tableView.headerBackground
         }
     }
 

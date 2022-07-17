@@ -29,10 +29,10 @@
 "Incorrect passcode. Try again." = "El códigu d'accesu ye incorreutu. Volvi tentalo.";
 
 /* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
-"Maximum attempts reached. Please try again in an hour." = "Algamóse'l númberu máximu d'intentos. Volvi tentalo nuna hora, por favor.";
+"Maximum attempts reached. Please try again in an hour." = "Algamóse'l númberu máximu d'intentos. Volvi tentalo nuna hora.";
 
 /* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
-"Maximum attempts reached. Please try again later." = "Algamóse'l númberu máximu d'intentos. Volvi tentalo dempués, por favor.";
+"Maximum attempts reached. Please try again later." = "Algamóse'l númberu máximu d'intentos. Volvi tentalo dempués.";
 
 /* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
 "New passcode must be different than existing code." = "El códigu d'accesu pasu nuevu ha estremase del esistente.";

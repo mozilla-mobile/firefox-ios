@@ -25,7 +25,7 @@ let LocalizedRootBookmarkFolderStrings = [
     BookmarkRoots.MobileFolderGUID: String.BookmarksFolderTitleMobile
 ]
 
-fileprivate class SeparatorTableViewCell: OneLineTableViewCell {
+private class SeparatorTableViewCell: OneLineTableViewCell {
     override func applyTheme() {
         super.applyTheme()
 
@@ -46,6 +46,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     var bookmarkFolder: BookmarkFolderData?
     var bookmarkNodes = [BookmarkNodeData]()
     var recentBookmarks = [BookmarkNodeData]()
+    var chevronImage = UIImage(named: ImageIdentifiers.menuChevron)
 
     fileprivate var flashLastRowOnNextReload = false
 
@@ -84,21 +85,17 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         tableView.allowsSelectionDuringEditing = true
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
     }
-    
+
     func addNewBookmarkItemAction() {
         let newBookmark = SingleActionViewModel(title: .BookmarksNewBookmark, iconString: ImageIdentifiers.actionAddBookmark, tapHandler: { _ in
-            guard let bookmarkFolder = self.bookmarkFolder else {
-                return
-            }
+            guard let bookmarkFolder = self.bookmarkFolder else { return }
 
             let detailController = BookmarkDetailPanel(profile: self.profile, withNewBookmarkNodeType: .bookmark, parentBookmarkFolder: bookmarkFolder)
             self.navigationController?.pushViewController(detailController, animated: true)
         }).items
 
         let newFolder = SingleActionViewModel(title: .BookmarksNewFolder, iconString: "bookmarkFolder", tapHandler: { _ in
-            guard let bookmarkFolder = self.bookmarkFolder else {
-                return
-            }
+            guard let bookmarkFolder = self.bookmarkFolder else { return }
 
             let detailController = BookmarkDetailPanel(profile: self.profile, withNewBookmarkNodeType: .folder, parentBookmarkFolder: bookmarkFolder)
             self.navigationController?.pushViewController(detailController, animated: true)
@@ -109,9 +106,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
             self.profile.places.createSeparator(parentGUID: self.bookmarkFolderGUID, position: UInt32(centerVisibleRow)) >>== { guid in
                 self.profile.places.getBookmark(guid: guid).uponQueue(.main) { result in
-                    guard let bookmarkNode = result.successValue, let bookmarkSeparator = bookmarkNode as? BookmarkSeparatorData else {
-                        return
-                    }
+                    guard let bookmarkNode = result.successValue, let bookmarkSeparator = bookmarkNode as? BookmarkSeparatorData else { return }
 
                     let indexPath = IndexPath(row: centerVisibleRow, section: BookmarksSection.bookmarks.rawValue)
                     self.tableView.beginUpdates()
@@ -134,7 +129,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         if tableView.isEditing {
             disableEditMode()
@@ -190,7 +185,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     func enableEditMode() {
         self.tableView.setEditing(true, animated: true)
     }
-    
+
     func disableEditMode() {
         self.tableView.setEditing(false, animated: true)
     }
@@ -211,9 +206,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     fileprivate func deleteBookmarkNodeAtIndexPath(_ indexPath: IndexPath) {
-        guard let bookmarkNode = indexPath.section == BookmarksSection.bookmarks.rawValue ? bookmarkNodes[safe: indexPath.row] : recentBookmarks[safe: indexPath.row] else {
-            return
-        }
+        guard let bookmarkNode = indexPath.section == BookmarksSection.bookmarks.rawValue ? bookmarkNodes[safe: indexPath.row] : recentBookmarks[safe: indexPath.row] else { return }
 
         func doDelete() {
             // Perform the delete asynchronously even though we update the
@@ -253,9 +246,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     fileprivate func flashRow(at indexPath: IndexPath) {
-        guard indexPathIsValid(indexPath) else {
-            return
-        }
+        guard indexPathIsValid(indexPath) else { return }
 
         tableView.selectRow(at: indexPath, animated: true, scrollPosition: .middle)
 
@@ -272,9 +263,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     @objc fileprivate func didLongPressTableView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
-        guard longPressGestureRecognizer.state == .began, let indexPath = tableView.indexPathForRow(at: touchPoint) else {
-            return
-        }
+        guard longPressGestureRecognizer.state == .began, let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
 
         presentContextMenu(for: indexPath)
     }
@@ -307,9 +296,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             node = bookmarkNodes[safe: indexPath.row]
         }
 
-        guard let bookmarkNode = node else {
-            return
-        }
+        guard let bookmarkNode = node else { return }
 
         guard !tableView.isEditing else {
             TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
@@ -360,7 +347,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         }
 
         let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkNodeCellIdentifier, for: indexPath) as! OneLineTableViewCell
-        
+
         switch bookmarkNode {
         case let bookmarkFolder as BookmarkFolderData:
             if bookmarkFolder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid] {
@@ -371,7 +358,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
             cell.leftImageView.image = LegacyThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
             cell.leftImageView.contentMode = .center
-            cell.accessoryType = .disclosureIndicator
+            let imageView = UIImageView(image: chevronImage)
+            cell.accessoryView = imageView
             cell.editingAccessoryType = .disclosureIndicator
             return cell
         case let bookmarkItem as BookmarkItemData:
@@ -394,7 +382,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
                 cell.setNeedsLayout()
             }
 
-            cell.accessoryType = .none
+            cell.accessoryView = nil
             cell.editingAccessoryType = .disclosureIndicator
             return cell
         case is BookmarkSeparatorData:
@@ -406,10 +394,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section == BookmarksSection.recent.rawValue, !recentBookmarks.isEmpty,
-              let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookmarkSectionHeaderIdentifier) as? SiteTableViewHeader else {
-                  return nil
-              }
+        guard section == BookmarksSection.recent.rawValue,
+              !recentBookmarks.isEmpty,
+              let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookmarkSectionHeaderIdentifier) as? SiteTableViewHeader
+        else { return nil }
 
         headerView.titleLabel.text = .RecentlyBookmarkedTitle
         headerView.showBorder(for: .top, true)
@@ -419,9 +407,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        guard let headerView = view as? ThemedTableSectionHeaderFooterView else {
-            return
-        }
+        guard let headerView = view as? ThemedTableSectionHeaderFooterView else { return }
 
         headerView.applyTheme()
     }
@@ -450,9 +436,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        guard let bookmarkNode = bookmarkNodes[safe: sourceIndexPath.row] else {
-            return
-        }
+        guard let bookmarkNode = bookmarkNodes[safe: sourceIndexPath.row] else { return }
 
         _ = profile.places.updateBookmarkNode(guid: bookmarkNode.guid, position: UInt32(destinationIndexPath.row))
 
@@ -477,9 +461,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
 extension BookmarksPanel: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
-        guard let contextMenu = completionHandler() else {
-            return
-        }
+        guard let contextMenu = completionHandler() else { return }
 
         present(contextMenu, animated: true, completion: nil)
     }
@@ -494,9 +476,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
-        guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else {
-            return nil
-        }
+        guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else { return nil }
 
         let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle, iconString: ImageIdentifiers.addShortcut, tapHandler: { _ in
             self.profile.history.addPinnedTopSite(site).uponQueue(.main) { result in

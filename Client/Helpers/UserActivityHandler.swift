@@ -23,7 +23,9 @@ class UserActivityHandler {
     }
 
     fileprivate func setUserActivityForTab(_ tab: Tab, url: URL) {
-        guard !tab.isPrivate, url.isWebPage(includeDataURIs: false), !InternalURL.isValid(url: url) else {
+        guard !tab.isPrivate, url.isWebPage(includeDataURIs: false),
+              !InternalURL.isValid(url: url)
+        else {
             tab.userActivity?.resignCurrent()
             tab.userActivity = nil
             return
@@ -53,9 +55,7 @@ extension UserActivityHandler: TabEventHandler {
     }
 
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
-        guard let url = URL(string: metadata.siteURL) else {
-            return
-        }
+        guard let url = URL(string: metadata.siteURL) else { return }
 
         setUserActivityForTab(tab, url: url)
     }
@@ -65,9 +65,7 @@ extension UserActivityHandler: TabEventHandler {
     }
 
     func tabDidClose(_ tab: Tab) {
-        guard let userActivity = tab.userActivity else {
-            return
-        }
+        guard let userActivity = tab.userActivity else { return }
         tab.userActivity = nil
         userActivity.invalidate()
     }
@@ -77,41 +75,38 @@ private let log = Logger.browserLogger
 
 extension UserActivityHandler {
     func spotlightIndex(_ page: ReadabilityResult, for tab: Tab) {
-        guard let url = tab.url, !tab.isPrivate, url.isWebPage(includeDataURIs: false), !InternalURL.isValid(url: url) else {
-            return
-        }
-        guard let experimental = Experiments.shared.getVariables(featureId: .search).getVariables("spotlight"),
-              experimental.getBool("enabled") == true else { // i.e. defaults to false
-            return
-        }
+        guard let url = tab.url,
+              !tab.isPrivate,
+              url.isWebPage(includeDataURIs: false),
+              !InternalURL.isValid(url: url)
+        else { return }
+
+        let spotlightConfig = FxNimbus.shared.features.spotlightSearch.value()
+        if !spotlightConfig.enabled { return }
 
         let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
         attributeSet.title = page.title
 
-        switch experimental.getString("description") ?? "excerpt" {
-        case "excerpt":
+        switch spotlightConfig.searchableContent {
+        case .textExcerpt:
             attributeSet.contentDescription = page.excerpt
-        case "content":
+        case .textContent:
             attributeSet.contentDescription = page.textContent
-        default:
-            attributeSet.contentDescription = nil
-        }
-
-        switch experimental.getBool("use-html-content") ?? true {
-        case true:
+        case .htmlContent:
             attributeSet.htmlContentData = page.content.utf8EncodedData
         default:
+            attributeSet.contentDescription = nil
             attributeSet.htmlContentData = nil
         }
 
-        switch experimental.getString("icon") ?? "letter" {
-        case "screenshot":
+        switch spotlightConfig.iconType {
+        case .screenshot:
             attributeSet.thumbnailData = tab.screenshot?.pngData()
-        case "favicon":
+        case .favicon:
             if let baseDomain = tab.url?.baseDomain {
                 attributeSet.thumbnailData = FaviconFetcher.getFaviconFromDiskCache(imageKey: baseDomain)?.pngData()
             }
-        case "letter":
+        case .letter:
             if let url = tab.url {
                 attributeSet.thumbnailData = FaviconFetcher.letter(forUrl: url).pngData()
             }
@@ -131,7 +126,7 @@ extension UserActivityHandler {
 
         let item = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: "org.mozilla.ios.firefox", attributeSet: attributeSet)
 
-        if let numDays = experimental.getInt("keep-for-days") {
+        if let numDays = spotlightConfig.keepForDays {
             let day: TimeInterval = 60 * 60 * 24
             item.expirationDate = Date.init(timeIntervalSinceNow: Double(numDays) * day)
         }
@@ -149,7 +144,7 @@ extension UserActivityHandler {
             if let error = error {
                 log.info("Spotlight: Deindexing error: \(error.localizedDescription)")
             } else {
-                log.info("Spotlight: sSearch item successfully removed!")
+                log.info("Spotlight: Search item successfully removed!")
             }
         }
     }

@@ -653,7 +653,7 @@
 "Load original page" = "ផ្ទុក​ទំព័រ​ដើម";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
-"Loading content…" = "កំពុង​ផ្ទុក​មាតិកា...";
+"Loading content…" = "កំពុង​ផ្ទុក​មាតិកា…";
 
 /* Authentication prompt log in button */
 "Log in" = "ចូល";
@@ -1627,7 +1627,7 @@
 "Sync.Syncing.Label" = "កំពុង​ធ្វើ​សមកាលកម្ម";
 
 /* Message displayed when the user's account is syncing with ellipsis at the end */
-"Sync.SyncingEllipsis.Label" = "កំពុង​ធ្វើ​សមកាលកម្ម...";
+"Sync.SyncingEllipsis.Label" = "កំពុង​ធ្វើ​សមកាលកម្ម…";
 
 /* Panel accessibility label */
 "Synced Tabs" = "ផ្ទាំង​ដែល​បាន​ធ្វើ​សមកាលកម្ម";

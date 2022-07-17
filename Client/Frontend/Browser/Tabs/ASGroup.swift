@@ -10,17 +10,21 @@ struct ASGroup<T>: Hashable {
     var groupedItems: [T]
     var timestamp: Timestamp
     let identifier = UUID()
-    
+
     public func hash(into hasher: inout Hasher) {
         hasher.combine(identifier)
     }
-    
+
     static func == (lhs: ASGroup<T>, rhs: ASGroup<T>) -> Bool {
         lhs.identifier == rhs.identifier
     }
 }
 
 extension ASGroup: HighlightItem {
+    var group: [HighlightItem]? {
+        return groupedItems as? [HighlightItem]
+    }
+
     var type: HighlightItemType {
         return .group
     }
@@ -30,7 +34,7 @@ extension ASGroup: HighlightItem {
     }
 
     var description: String? {
-        return "\(groupedItems.count)"
+        return String.localizedStringWithFormat(.FirefoxHomepage.Common.SitesCount, groupedItems.count)
     }
 
     var siteUrl: URL? {

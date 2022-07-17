@@ -28,7 +28,7 @@ struct TopSitesProvider: TimelineProvider {
         let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: widgetKitTopSites)
         completion(topSitesEntry)
     }
-    
+
     func getBundledFaviconWithBackground(siteUrl: URL) -> UIImage? {
         // Get the bundled favicon if available
         guard let bundled = FaviconFetcher.getBundledIcon(forUrl: siteUrl), let image = UIImage(contentsOfFile: bundled.filePath) else { return nil }
@@ -36,7 +36,7 @@ struct TopSitesProvider: TimelineProvider {
         let color = bundled.bgcolor.components.alpha < 0.01 ? UIColor.white : bundled.bgcolor
         return image.withBackgroundAndPadding(color: color)
     }
-    
+
     func getTimeline(in context: Context, completion: @escaping (Timeline<TopSitesEntry>) -> Void) {
         getSnapshot(in: context, completion: { topSitesEntry in
             let timeline = Timeline(entries: [topSitesEntry], policy: .atEnd)
@@ -54,10 +54,10 @@ struct TopSitesEntry: TimelineEntry {
 fileprivate extension UIImage {
   func withBackgroundAndPadding(color: UIColor, opaque: Bool = true) -> UIImage {
     UIGraphicsBeginImageContextWithOptions(size, opaque, scale)
-        
+
     guard let ctx = UIGraphicsGetCurrentContext(), let image = cgImage else { return self }
     defer { UIGraphicsEndImageContext() }
-        
+
     // Pad the image in a bit to make the favicons look better
     let newSize = CGSize(width: size.width - 20, height: size.height - 20)
     let rect = CGRect(origin: .zero, size: size)
@@ -66,7 +66,7 @@ fileprivate extension UIImage {
     ctx.fill(rect)
     ctx.concatenate(CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: size.height))
     ctx.draw(image, in: imageRect)
-        
+
     return UIGraphicsGetImageFromCurrentImageContext() ?? self
   }
 }

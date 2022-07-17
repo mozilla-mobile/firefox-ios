@@ -17,23 +17,22 @@ class AboutHomeHandler: InternalSchemeResponse {
               <body style='background-color:\(bg)'></body>
             </html>
         """
-        guard let data = html.data(using: .utf8) else {
-            return nil
-        }
+        guard let data = html.data(using: .utf8) else { return nil }
         return (response, data)
     }
 }
 
 class AboutLicenseHandler: InternalSchemeResponse {
     static let path = "about/license"
-    
+
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
         guard let url = request.url else { return nil }
         let response = InternalSchemeHandler.response(forUrl: url)
-        guard let path = Bundle.main.path(forResource: "Licenses", ofType: "html"), let html = try? String(contentsOfFile: path, encoding: .utf8),
-            let data = html.data(using: .utf8) else {
-                return nil
-        }
+        guard let path = Bundle.main.path(forResource: "Licenses", ofType: "html"),
+              let html = try? String(contentsOfFile: path, encoding: .utf8),
+              let data = html.data(using: .utf8)
+        else { return nil }
+
         return (response, data)
     }
 }

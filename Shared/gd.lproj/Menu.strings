@@ -71,7 +71,7 @@
 "Menu.SeeAllAction.Title" = "Seall na h-uile";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
-"Menu.SharePageAction.Title" = "Co-roinn an duilleag le...";
+"Menu.SharePageAction.Title" = "Co-roinn an duilleag le…";
 
 /* Label for the button, displayed in the menu, used to open the tabs tray */
 "Menu.ShowTabs.Title" = "Seall na tabaichean";

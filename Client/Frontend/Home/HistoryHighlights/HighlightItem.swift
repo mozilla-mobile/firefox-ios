@@ -14,13 +14,19 @@ protocol HighlightItem {
     var description: String? { get }
     var siteUrl: URL? { get }
     var type: HighlightItemType { get }
+    var group: [HighlightItem]? { get }
 }
 
 extension HistoryHighlight: HighlightItem {
+
+    var group: [HighlightItem]? {
+        return nil
+    }
+
     var type: HighlightItemType {
         return .item
     }
-    
+
     var displayTitle: String {
         return title ?? url
     }

@@ -40,7 +40,7 @@ class PhotonActionSheetContainerCell: UITableViewCell {
     }
 
     // MARK: Table view
-    
+
     func configure(actions: PhotonRowActions, viewModel: PhotonActionSheetViewModel) {
         for item in actions.items {
             item.tintColor = viewModel.tintColor

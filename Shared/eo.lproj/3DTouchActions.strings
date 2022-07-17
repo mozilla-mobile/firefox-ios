@@ -17,7 +17,7 @@
 "Open Last Tab" = "Malfermi lastan langeton";
 
 /* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
-"Preview of %@" = "Antaŭvido de %2@";
+"Preview of %@" = "Antaŭvido de %@";
 
 /* Label for preview action on Tab Tray Tab to send the current tab to another device */
 "Send to Device" = "Sendi al aparato";

@@ -74,7 +74,7 @@ class ReadabilityOperation: Operation {
                     print("Failed to store readability results in the cache: \(error.localizedDescription)")
                     // TODO Fail
                 }
-            case .error(_):
+            case .error:
                 // TODO Not entitely sure what to do on error. Needs UX discussion and followup bug.
                 break
             }
@@ -107,9 +107,7 @@ extension ReadabilityOperation: ReaderModeDelegate {
 
     func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab) {
         log.info("ReadbilityService: Readability result available!")
-        guard tab == self.tab else {
-            return
-        }
+        guard tab == self.tab else { return }
 
         result = ReadabilityOperationResult.success(readabilityResult)
         semaphore.signal()

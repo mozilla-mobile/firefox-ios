@@ -50,7 +50,7 @@
 "Menu.OpenSettingsAction.Title" = "Cài đặt";
 
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
-"Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Các thẻ đã đồng bộ";
+"Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Thẻ đã đồng bộ hóa";
 
 /* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
 "Menu.OpenTopSitesAction.AccessibilityLabel" = "Các trang phổ biến";

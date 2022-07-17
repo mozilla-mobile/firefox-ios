@@ -17,7 +17,7 @@ class ScreenshotHelper {
     init(controller: BrowserViewController) {
         self.controller = controller
     }
-    
+
     /// Takes a screenshot of the WebView to be displayed on the tab view page
     /**
      If taking a screenshot of the home page, uses our custom screenshot `UIView` extension function
@@ -25,32 +25,32 @@ class ScreenshotHelper {
      */
     func takeScreenshot(_ tab: Tab) {
         guard let webView = tab.webView, let url = tab.url else {
-            Sentry.shared.send(message: "Tab Snapshot Error", tag: .tabManager, severity: .debug, description: "Tab webView or url is nil")
+            SentryIntegration.shared.send(message: "Tab Snapshot Error", tag: .tabManager, severity: .debug, description: "Tab webView or url is nil")
             return
         }
-        //Handle home page snapshots, can not use Apple API snapshot function for this
+        // Handle home page snapshots, can not use Apple API snapshot function for this
         if InternalURL(url)?.isAboutHomeURL ?? false {
             if let homePanel = controller?.firefoxHomeViewController {
                 let screenshot = homePanel.view.screenshot(quality: UIConstants.ActiveScreenshotQuality)
                 tab.hasHomeScreenshot = true
                 tab.setScreenshot(screenshot)
-                TabEvent.post(.didSetScreenshot(isHome: true) , for: tab)
+                TabEvent.post(.didSetScreenshot(isHome: true), for: tab)
             }
-        //Handle webview screenshots
+        // Handle webview screenshots
         } else {
             let configuration = WKSnapshotConfiguration()
-            //This is for a bug in certain iOS 13 versions, snapshots cannot be taken correctly without this boolean being set
+            // This is for a bug in certain iOS 13 versions, snapshots cannot be taken correctly without this boolean being set
             configuration.afterScreenUpdates = false
-            
+
             webView.takeSnapshot(with: configuration) { image, error in
                 if let image = image {
                     tab.hasHomeScreenshot = false
                     tab.setScreenshot(image)
-                    TabEvent.post(.didSetScreenshot(isHome: false) , for: tab)
+                    TabEvent.post(.didSetScreenshot(isHome: false), for: tab)
                 } else if let error = error {
-                    Sentry.shared.send(message: "Tab snapshot error", tag: .tabManager, severity: .debug, description: error.localizedDescription)
+                    SentryIntegration.shared.send(message: "Tab snapshot error", tag: .tabManager, severity: .debug, description: error.localizedDescription)
                 } else {
-                    Sentry.shared.send(message: "Tab snapshot error", tag: .tabManager, severity: .debug, description: "No error description")
+                    SentryIntegration.shared.send(message: "Tab snapshot error", tag: .tabManager, severity: .debug, description: "No error description")
                 }
             }
         }

@@ -15,7 +15,7 @@ private struct QRCodeViewControllerUX {
     static let viewBackgroundDeniedColor = UIColor.black
 }
 
-protocol QRCodeViewControllerDelegate {
+protocol QRCodeViewControllerDelegate: AnyObject {
     func didScanQRCodeWithURL(_ url: URL)
     func didScanQRCodeWithText(_ text: String)
 }
@@ -64,10 +64,18 @@ class QRCodeViewController: UIViewController {
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: QRCodeViewControllerUX.navigationBarTitleColor]
 
         // Setup the NavigationItem
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "qrcode-goBack")?.imageFlippedForRightToLeftLayoutDirection(), style: .plain, target: self, action: #selector(goBack))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(named: "qrcode-goBack")?.imageFlippedForRightToLeftLayoutDirection(),
+            style: .plain,
+            target: self,
+            action: #selector(goBack))
         self.navigationItem.leftBarButtonItem?.tintColor = UIColor.Photon.White100
 
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "qrcode-light"), style: .plain, target: self, action: #selector(openLight))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(named: "qrcode-light"),
+            style: .plain,
+            target: self,
+            action: #selector(openLight))
         if captureDevice.hasTorch {
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor.Photon.White100
         } else {
@@ -100,7 +108,7 @@ class QRCodeViewController: UIViewController {
         isAnimationing = true
         startScanLineAnimation()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyShapeLayer()
@@ -116,7 +124,7 @@ class QRCodeViewController: UIViewController {
         super.viewWillLayoutSubviews()
         applyShapeLayer()
     }
-    
+
     private func applyShapeLayer() {
         view.layoutIfNeeded()
         shapeLayer.removeFromSuperlayer()
@@ -157,9 +165,7 @@ class QRCodeViewController: UIViewController {
     }
 
     private func setupVideoPreviewLayer() {
-        guard let videoPreviewLayer = self.videoPreviewLayer else {
-            return
-        }
+        guard let videoPreviewLayer = self.videoPreviewLayer else { return }
         videoPreviewLayer.frame = UIScreen.main.bounds
         switch UIDevice.current.orientation {
         case .portrait:
@@ -174,7 +180,6 @@ class QRCodeViewController: UIViewController {
             videoPreviewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
         }
     }
-
 
     @objc func startScanLineAnimation() {
         if !isAnimationing {
@@ -207,9 +212,7 @@ class QRCodeViewController: UIViewController {
     }
 
     @objc func openLight() {
-        guard let captureDevice = self.captureDevice else {
-            return
-        }
+        guard let captureDevice = self.captureDevice else { return }
 
         if isLightOn {
             do {
@@ -284,8 +287,13 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
             self.captureSession.stopRunning()
             stopScanLineAnimation()
             self.dismiss(animated: true, completion: {
-                guard let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject, let qrCodeDelegate = self.qrCodeDelegate, let text = metaData.stringValue else {
-                        Sentry.shared.sendWithStacktrace(message: "Unable to scan QR code", tag: .general)
+                guard let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
+                      let qrCodeDelegate = self.qrCodeDelegate,
+                        let text = metaData.stringValue
+                else {
+                        SentryIntegration.shared.sendWithStacktrace(
+                            message: "Unable to scan QR code",
+                            tag: .general)
                         return
                 }
 

@@ -27,7 +27,7 @@ enum LibraryPanelType: Int, CaseIterable {
     case history = 1
     case downloads = 2
     case readingList = 3
-    
+
     var title: String {
         switch self {
         case .bookmarks:
@@ -53,19 +53,24 @@ class LibraryPanelDescriptor {
     fileprivate let profile: Profile
     fileprivate let tabManager: TabManager
 
-    let imageName: String
-    let activeImageName: String
     let accessibilityLabel: String
     let accessibilityIdentifier: String
+    let panelType: LibraryPanelType
 
-    init(makeViewController: @escaping ((_ profile: Profile, _ tabManager: TabManager) -> UIViewController), profile: Profile, tabManager: TabManager, imageName: String, accessibilityLabel: String, accessibilityIdentifier: String) {
+    init(
+        makeViewController: @escaping ((_ profile: Profile, _ tabManager: TabManager) -> UIViewController),
+        profile: Profile,
+        tabManager: TabManager,
+        accessibilityLabel: String,
+        accessibilityIdentifier: String,
+        panelType: LibraryPanelType
+    ) {
         self.makeViewController = makeViewController
         self.profile = profile
         self.tabManager = tabManager
-        self.imageName = "panelIcon" + imageName
-        self.activeImageName = self.imageName + "-active"
         self.accessibilityLabel = accessibilityLabel
         self.accessibilityIdentifier = accessibilityIdentifier
+        self.panelType = panelType
     }
 
     func setup() {
@@ -76,7 +81,7 @@ class LibraryPanelDescriptor {
     }
 }
 
-class LibraryPanels: FeatureFlagsProtocol {
+class LibraryPanels: FeatureFlaggable {
     fileprivate let profile: Profile
     fileprivate let tabManager: TabManager
 
@@ -92,26 +97,19 @@ class LibraryPanels: FeatureFlagsProtocol {
             },
             profile: profile,
             tabManager: tabManager,
-            imageName: "Bookmarks",
             accessibilityLabel: .LibraryPanelBookmarksAccessibilityLabel,
-            accessibilityIdentifier: "LibraryPanels.Bookmarks"),
+            accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.bookmarksView,
+            panelType: .bookmarks),
 
         LibraryPanelDescriptor(
             makeViewController: { profile, tabManager in
-                
-                // NOTE: Switch to HistoryPanelV2 from v100 onwards.
-                if self.featureFlags.isFeatureActiveForBuild(.historyGroups) {
-                    return HistoryPanelV2(profile: profile, tabManager: tabManager)
-                } else {
-                    return HistoryPanel(profile: profile, tabManager: tabManager)
-                }
-                
+                return HistoryPanel(profile: profile, tabManager: tabManager)
             },
             profile: profile,
             tabManager: tabManager,
-            imageName: "History",
             accessibilityLabel: .LibraryPanelHistoryAccessibilityLabel,
-            accessibilityIdentifier: "LibraryPanels.History"),
+            accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.historyView,
+            panelType: .history),
 
         LibraryPanelDescriptor(
             makeViewController: { profile, tabManager in
@@ -119,9 +117,9 @@ class LibraryPanels: FeatureFlagsProtocol {
             },
             profile: profile,
             tabManager: tabManager,
-            imageName: "Downloads",
             accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
-            accessibilityIdentifier: "LibraryPanels.Downloads"),
+            accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.downloadsView,
+            panelType: .downloads),
 
         LibraryPanelDescriptor(
             makeViewController: { profile, tabManager in
@@ -129,8 +127,8 @@ class LibraryPanels: FeatureFlagsProtocol {
             },
             profile: profile,
             tabManager: tabManager,
-            imageName: "ReadingList",
             accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,
-            accessibilityIdentifier: "LibraryPanels.ReadingList")
+            accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.readingListView,
+            panelType: .readingList)
     ]
 }

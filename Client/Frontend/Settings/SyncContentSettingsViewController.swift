@@ -35,7 +35,7 @@ class DisconnectSetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: .SettingsDisconnectSyncButton, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.destructiveRed])
     }
-    
+
     init(settings: SettingsTableViewController) {
         self.settingsVC = settings
         self.profile = settings.profile
@@ -117,7 +117,6 @@ class DeviceNameSetting: StringSetting {
     }
 }
 
-
 class SyncContentSettingsViewController: SettingsTableViewController {
     fileprivate var enginesToSyncOnExit: Set<String> = Set()
 
@@ -158,15 +157,45 @@ class SyncContentSettingsViewController: SettingsTableViewController {
         let manage = ManageFxAccountSetting(settings: self)
         let manageSection = SettingSection(title: nil, footerTitle: nil, children: [manage])
 
-        let bookmarks = BoolSetting(prefs: profile.prefs, prefKey: "sync.engine.bookmarks.enabled", defaultValue: true, attributedTitleText: NSAttributedString(string: .FirefoxSyncBookmarksEngine), attributedStatusText: nil, settingDidChange: engineSettingChanged("bookmarks"))
-        let history = BoolSetting(prefs: profile.prefs, prefKey: "sync.engine.history.enabled", defaultValue: true, attributedTitleText: NSAttributedString(string: .FirefoxSyncHistoryEngine), attributedStatusText: nil, settingDidChange: engineSettingChanged("history"))
-        let tabs = BoolSetting(prefs: profile.prefs, prefKey: "sync.engine.tabs.enabled", defaultValue: true, attributedTitleText: NSAttributedString(string: .FirefoxSyncTabsEngine), attributedStatusText: nil, settingDidChange: engineSettingChanged("tabs"))
-        let passwords = BoolSetting(prefs: profile.prefs, prefKey: "sync.engine.passwords.enabled", defaultValue: true, attributedTitleText: NSAttributedString(string: .FirefoxSyncLoginsEngine), attributedStatusText: nil, settingDidChange: engineSettingChanged("passwords"))
+        let bookmarks = BoolSetting(
+            prefs: profile.prefs,
+            prefKey: "sync.engine.bookmarks.enabled",
+            defaultValue: true,
+            attributedTitleText: NSAttributedString(string: .FirefoxSyncBookmarksEngine),
+            attributedStatusText: nil,
+            settingDidChange: engineSettingChanged("bookmarks"))
+        let history = BoolSetting(
+            prefs: profile.prefs,
+            prefKey: "sync.engine.history.enabled",
+            defaultValue: true,
+            attributedTitleText: NSAttributedString(string: .FirefoxSyncHistoryEngine),
+            attributedStatusText: nil,
+            settingDidChange: engineSettingChanged("history"))
+        let tabs = BoolSetting(
+            prefs: profile.prefs,
+            prefKey: "sync.engine.tabs.enabled",
+            defaultValue: true,
+            attributedTitleText: NSAttributedString(string: .FirefoxSyncTabsEngine),
+            attributedStatusText: nil,
+            settingDidChange: engineSettingChanged("tabs"))
+        let passwords = BoolSetting(
+            prefs: profile.prefs,
+            prefKey: "sync.engine.passwords.enabled",
+            defaultValue: true,
+            attributedTitleText: NSAttributedString(string: .FirefoxSyncLoginsEngine),
+            attributedStatusText: nil,
+            settingDidChange: engineSettingChanged("passwords"))
 
-        let enginesSection = SettingSection(title: NSAttributedString(string: .FxASettingsSyncSettings), footerTitle: nil, children: [bookmarks, history, tabs, passwords])
+        let enginesSection = SettingSection(
+            title: NSAttributedString(string: .FxASettingsSyncSettings),
+            footerTitle: nil,
+            children: [bookmarks, history, tabs, passwords])
 
         let deviceName = DeviceNameSetting(settings: self)
-        let deviceNameSection = SettingSection(title: NSAttributedString(string: .FxASettingsDeviceName), footerTitle: nil, children: [deviceName])
+        let deviceNameSection = SettingSection(
+            title: NSAttributedString(string: .FxASettingsDeviceName),
+            footerTitle: nil,
+            children: [deviceName])
 
         let disconnect = DisconnectSetting(settings: self)
         let disconnectSection = SettingSection(title: nil, footerTitle: nil, children: [disconnect])

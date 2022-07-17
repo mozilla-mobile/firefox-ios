@@ -13,13 +13,14 @@ struct FormPostData {
 
     init?(messageBody: Any) {
         guard let messageBodyDict = messageBody as? [String: String],
-            let actionString = messageBodyDict["action"],
-            let method = messageBodyDict["method"],
-            let target = messageBodyDict["target"],
-            let enctype = messageBodyDict["enctype"],
-            let requestBodyString = messageBodyDict["requestBody"],
-            let action = URL(string: actionString),
-            let requestBody = requestBodyString.data(using: .utf8) else {
+              let actionString = messageBodyDict["action"],
+              let method = messageBodyDict["method"],
+              let target = messageBodyDict["target"],
+              let enctype = messageBodyDict["enctype"],
+              let requestBodyString = messageBodyDict["requestBody"],
+              let action = URL(string: actionString),
+              let requestBody = requestBodyString.data(using: .utf8)
+        else {
                 return nil
         }
 
@@ -92,4 +93,3 @@ class FormPostHelper: TabContentScript {
         return request
     }
 }
-

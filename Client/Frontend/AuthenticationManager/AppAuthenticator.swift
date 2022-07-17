@@ -6,25 +6,25 @@ import LocalAuthentication
 import WebKit
 
 class AppAuthenticator {
-    
+
     enum AuthenticationError: Error {
         case failedEvaluation(message: String)
         case failedAutentication(message: String)
     }
-    
-    static func authenticateWithDeviceOwnerAuthentication(_ completion: @escaping (Result<Void, AuthenticationError>)->()) {
+
+    static func authenticateWithDeviceOwnerAuthentication(_ completion: @escaping (Result<Void, AuthenticationError>) -> Void) {
         // Get a fresh context for each login. If you use the same context on multiple attempts
         //  (by commenting out the next line), then a previously successful authentication
         //  causes the next policy evaluation to succeed without testing biometry again.
         //  That's usually not what you want.
         let context = LAContext()
-        
+
         context.localizedFallbackTitle = .AuthenticationEnterPasscode
-        
+
         // First check if we have the needed hardware support.
         var error: NSError?
         if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
-            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: .AuthenticationLoginsTouchReason) { success, error in
+            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: .Settings.Passwords.AuthenticationLoginsTouchReason) { success, error in
                 if success {
                     DispatchQueue.main.async {
                         completion(.success(()))
@@ -41,7 +41,7 @@ class AppAuthenticator {
             }
         }
     }
-            
+
     static func canAuthenticateDeviceOwner() -> Bool {
         return LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
     }

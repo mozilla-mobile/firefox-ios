@@ -36,24 +36,22 @@ class FxAWebViewTelemetry {
 //    -------------
 //    /reset_password
 //    /confirm_reset_password
-    
-    
+
     // There are two valid started flow
     // signup and signin
     var validStartedFlow: FxAUrlPathStartedFlow?
-    
+
     func getFlowFromUrl(fxaUrl: URL?) -> FxAUrlPathStartedFlow? {
-        guard let url = fxaUrl else { return nil }
-        guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            return nil
-        }
-        guard !urlComponents.path.isEmpty else { return nil }
+        guard let url = fxaUrl,
+              let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              !urlComponents.path.isEmpty
+        else { return nil }
+
         var pathElements = urlComponents.path.components(separatedBy: "/")
         pathElements.reverse()
         guard let element = pathElements.first(where: { $0 != "" }),
-              let flow = FxAUrlPathStartedFlow(rawValue: element) else {
-            return nil
-        }
+              let flow = FxAUrlPathStartedFlow(rawValue: element)
+        else { return nil }
 
         return flow
     }

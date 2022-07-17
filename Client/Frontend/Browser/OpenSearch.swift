@@ -79,7 +79,7 @@ class OpenSearchEngine: NSObject, NSCoding {
         let placeholder = "PLACEHOLDER"
         let template = searchTemplate.replacingOccurrences(of: SearchTermComponent, with: placeholder)
         var components = URLComponents(string: template)
-        
+
         if let retVal = extractQueryArg(in: components?.queryItems, for: placeholder) {
             return retVal
         } else {
@@ -89,14 +89,14 @@ class OpenSearchEngine: NSObject, NSCoding {
             return extractQueryArg(in: components?.queryItems, for: placeholder)
         }
     }
-    
+
     fileprivate func extractQueryArg(in queryItems: [URLQueryItem]?, for placeholder: String) -> String? {
         let searchTerm = queryItems?.filter { item in
             return item.value == placeholder
         }
         return searchTerm?.first?.name
     }
-    
+
     /**
      * check that the URL host contains the name of the search engine somewhere inside it
      **/
@@ -112,14 +112,14 @@ class OpenSearchEngine: NSObject, NSCoding {
      **/
     func queryForSearchURL(_ url: URL?) -> String? {
         guard isSearchURLForEngine(url), let key = searchQueryComponentKey else { return nil }
-        
+
         if let value = url?.getQuery()[key] {
             return value.replacingOccurrences(of: "+", with: " ").removingPercentEncoding
         } else {
             // If search term could not found in query, it may be exist inside fragment
             var components = URLComponents()
             components.query = url?.fragment?.removingPercentEncoding
-            
+
             guard let value = components.url?.getQuery()[key] else { return nil }
             return value.replacingOccurrences(of: "+", with: " ").removingPercentEncoding
         }

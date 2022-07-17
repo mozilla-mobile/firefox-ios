@@ -39,7 +39,7 @@ enum MenuButtonToastAction {
 ///     - The home page menu, determined with isHomePage variable
 ///     - The file URL menu, shown when the user is on a url of type `file://`
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
-class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol, CanRemoveQuickActionBookmark {
+class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemoveQuickActionBookmark {
 
     typealias FXASyncClosure = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
 
@@ -121,7 +121,15 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol, Can
     /// Update data to show the proper menus related to the page
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
     private func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
-        guard let url = tabUrl?.absoluteString else {
+        var url: String?
+
+        if let tabUrl = tabUrl, tabUrl.isReaderModeURL, let tabUrlDecoded = tabUrl.decodeReaderModeURL {
+            url = tabUrlDecoded.absoluteString
+        } else {
+            url = tabUrl?.absoluteString
+        }
+
+        guard let url = url else {
             dataLoadingCompletion?()
             return
         }
@@ -290,6 +298,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol, Can
     private func getFindInPageAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.AppMenuFindInPageTitleString,
                                      iconString: ImageIdentifiers.findInPage) { _ in
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .findInPage)
             self.delegate?.showFindInPage()
         }.items
     }
@@ -360,11 +369,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol, Can
     }
 
     private func getReportSiteIssueAction() -> PhotonRowActions? {
-        guard featureFlags.isFeatureActiveForBuild(.reportSiteIssue) else { return nil }
+        guard featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly) else { return nil }
+
         return SingleActionViewModel(title: .AppMenu.AppMenuReportSiteIssueTitleString,
                                      iconString: ImageIdentifiers.reportSiteIssue) { _ in
             guard let tabURL = self.selectedTab?.url?.absoluteString else { return }
             self.delegate?.openURLInNewTab(SupportUtils.URLForReportSiteIssue(tabURL), isPrivate: false)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reportSiteIssue)
         }.items
     }
 
@@ -386,13 +397,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol, Can
     }
 
     private func getSettingsAction() -> PhotonRowActions {
-        // This method is being called when we the user sees the menu, not just when it's constructed.
-        // In that case, we can let sendExposureEvent default to true.
-        let variables = Experiments.shared.getVariables(featureId: .nimbusValidation)
-        // Get the title and icon for this feature from nimbus.
-        // We need to provide defaults if Nimbus doesn't provide them.
-        let title = variables.getText("settings-title") ?? .AppMenu.AppMenuSettingsTitleString
-        let icon = variables.getString("settings-icon") ?? ImageIdentifiers.settings
+        let title = String.AppMenu.AppMenuSettingsTitleString
+        let icon = ImageIdentifiers.settings
 
         let openSettings = SingleActionViewModel(title: title,
                                                  iconString: icon) { _ in
@@ -477,7 +483,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol, Can
 
         let iconString = needsReAuth ? ImageIdentifiers.warning : ImageIdentifiers.placeholderAvatar
 
-        var iconURL: URL? = nil
+        var iconURL: URL?
         if let str = rustAccount.userProfile?.avatarUrl, let url = URL(string: str) {
             iconURL = url
         }

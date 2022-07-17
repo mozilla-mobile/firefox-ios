@@ -9,10 +9,10 @@ extension GridTabViewController {
     override var keyCommands: [UIKeyCommand]? {
         let toggleText: String = tabDisplayManager.isPrivate ? .KeyboardShortcuts.NormalBrowsingMode: .KeyboardShortcuts.PrivateBrowsingMode
         let commands = [
-            UIKeyCommand(action: #selector(didTogglePrivateModeKeyCommand), input: "`", modifierFlags: .command,  discoverabilityTitle: toggleText),
+            UIKeyCommand(action: #selector(didTogglePrivateModeKeyCommand), input: "`", modifierFlags: .command, discoverabilityTitle: toggleText),
             UIKeyCommand(input: "w", modifierFlags: .command, action: #selector(didCloseTabKeyCommand)),
-            
-            UIKeyCommand(action: #selector(didCloseAllTabsKeyCommand), input: "w", modifierFlags: [.command, .shift],  discoverabilityTitle: .KeyboardShortcuts.CloseAllTabsInTabTray),
+
+            UIKeyCommand(action: #selector(didCloseAllTabsKeyCommand), input: "w", modifierFlags: [.command, .shift], discoverabilityTitle: .KeyboardShortcuts.CloseAllTabsInTabTray),
             UIKeyCommand(input: "\\", modifierFlags: [.command, .shift], action: #selector(didEnterTabKeyCommand)),
             UIKeyCommand(input: "\t", modifierFlags: [.command, .alternate], action: #selector(didEnterTabKeyCommand)),
             UIKeyCommand(action: #selector(didOpenNewTabKeyCommand), input: "t", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.OpenNewTabInTabTray),
@@ -45,7 +45,7 @@ extension GridTabViewController {
 
     @objc func didCloseAllTabsKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-all-tabs"])
-        closeTabsForCurrentTray()
+        closeTabsTrayBackground()
     }
 
     @objc func didEnterTabKeyCommand() {

@@ -12,8 +12,8 @@ protocol OnViewDismissable: AnyObject {
 }
 
 class DismissableNavigationViewController: UINavigationController, OnViewDismissable {
-    var onViewDismissed: (() -> Void)? = nil
-    var onViewWillDisappear: (() -> Void)? = nil
+    var onViewDismissed: (() -> Void)?
+    var onViewWillDisappear: (() -> Void)?
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -28,22 +28,21 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
     }
 }
 
-extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
+extension BrowserViewController: URLBarDelegate {
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil) {
         updateFindInPageVisibility(visible: false)
 
-        self.tabTrayViewController = TabTrayViewController(tabTrayDelegate: self,
-                                                           profile: profile,
-                                                           showChronTabs: shouldShowChronTabs(),
-                                                           tabToFocus: tabToFocus)
+        self.tabTrayViewController = TabTrayViewController(
+            tabTrayDelegate: self,
+            profile: profile,
+            tabToFocus: tabToFocus,
+            tabManager: tabManager)
 
         tabTrayViewController?.openInNewTab = { url, isPrivate in
             let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
             // If we are showing toptabs a user can just use the top tab bar
             // If in overlay mode switching doesnt correctly dismiss the homepanels
-            guard !self.topTabsVisible, !self.urlBar.inOverlayMode else {
-                return
-            }
+            guard !self.topTabsVisible, !self.urlBar.inOverlayMode else { return }
             // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
             let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
                 if buttonPressed {
@@ -72,32 +71,6 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
         // App store review in-app prompt
         ratingPromptManager.showRatingPromptIfNeeded()
-    }
-
-    private func shouldShowChronTabs() -> Bool {
-        var shouldShowChronTabs = false // default don't show
-        let chronDebugValue = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.ChronologicalTabs)
-        let chronLPValue = chronTabsUserResearch?.chronTabsState ?? false
-
-        // Only allow chron tabs on iPhone
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            // Respect debug mode chron tab value on
-            if chronDebugValue != nil {
-                shouldShowChronTabs = chronDebugValue!
-            // Respect build channel based settings
-            } else if chronDebugValue == nil {
-                if featureFlags.isFeatureActiveForBuild(.chronologicalTabs) {
-                    shouldShowChronTabs = true
-                } else {
-                    // Respect LP value
-                    shouldShowChronTabs = chronLPValue
-                }
-                profile.prefs.setBool(shouldShowChronTabs,
-                                      forKey: PrefsKeys.FeatureFlags.ChronologicalTabs)
-            }
-        }
-
-        return shouldShowChronTabs
     }
 
     func urlBarDidPressReload(_ urlBar: URLBarView) {
@@ -159,9 +132,10 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
     func urlBarDidPressReaderMode(_ urlBar: URLBarView) {
         libraryDrawerViewController?.close()
 
-        guard let tab = tabManager.selectedTab, let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode else {
-            return
-        }
+        guard let tab = tabManager.selectedTab,
+              let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode
+        else { return }
+
         switch readerMode.state {
         case .available:
             enableReaderMode()
@@ -176,10 +150,10 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
     func urlBarDidLongPressReaderMode(_ urlBar: URLBarView) -> Bool {
         guard let tab = tabManager.selectedTab,
-               let url = tab.url?.displayURL
-            else {
+              let url = tab.url?.displayURL
+        else {
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageGeneralErrorAccessibilityLabel)
-                return false
+            return false
         }
 
         let result = profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
@@ -196,13 +170,9 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
     }
 
     func urlBarDidLongPressReload(_ urlBar: URLBarView, from button: UIButton) {
-        guard let tab = tabManager.selectedTab else {
-            return
-        }
+        guard let tab = tabManager.selectedTab else { return }
         let urlActions = self.getRefreshLongPressMenu(for: tab)
-        guard !urlActions.isEmpty else {
-            return
-        }
+        guard !urlActions.isEmpty else { return }
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
@@ -322,11 +292,11 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
             GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
             searchTelemetry?.shouldSetUrlTypeSearch = true
-            
+
             let searchData = TabGroupData(searchTerm: text,
                                           searchUrl: searchURL.absoluteString,
                                           nextReferralUrl: "")
-            tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData)
+            tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
@@ -338,9 +308,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
         libraryDrawerViewController?.close()
         urlBar.updateSearchEngineImage()
-        guard let profile = profile as? BrowserProfile else {
-            return
-        }
+        guard let profile = profile as? BrowserProfile else { return }
 
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: UIAccessibility.Notification.screenChanged)

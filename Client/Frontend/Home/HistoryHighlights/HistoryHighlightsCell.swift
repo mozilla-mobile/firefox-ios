@@ -19,6 +19,13 @@ struct HistoryHighlightsViewModel {
     let hideBottomLine: Bool
     let isFillerCell: Bool
     let shouldAddShadow: Bool
+    var accessibilityLabel: String {
+        if let description = description {
+            return "\(title), \(description)"
+        } else {
+            return title
+        }
+    }
 
     init(title: String,
          description: String?,
@@ -57,7 +64,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
     var shadowViewLayer: CAShapeLayer?
-    
+
     let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
@@ -67,14 +74,14 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 
     let itemTitle: UILabel = .build { label in
-        // Limiting max size to accomodate for non-self-sizing parent cell.
+        // Limiting max size since background/shadow of cell can't support self-sizing (shadow doesn't follow)
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    maxSize: 23)
         label.adjustsFontForContentSizeCategory = true
     }
 
     let itemDescription: UILabel = .build { label in
-        // Limiting max size to accomodate for non-self-sizing parent cell.
+        // Limiting max size since background/shadow of cell can't support self-sizing (shadow doesn't follow)
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                    maxSize: 18)
         label.adjustsFontForContentSizeCategory = true
@@ -104,11 +111,14 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
     var notificationCenter: NotificationCenter = NotificationCenter.default
-    
+
     // MARK: - Inits
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
+
+        isAccessibilityElement = true
+        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell
 
         applyTheme()
         setupNotifications(forObserver: self,
@@ -127,24 +137,30 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     // MARK: - Public methods
     public func updateCell(with options: HistoryHighlightsViewModel) {
         itemTitle.text = options.title
-        itemDescription.text = options.description
+        if let descriptionCount = options.description {
+            itemDescription.text = descriptionCount
+            itemDescription.isHidden = false
+        }
         bottomLine.alpha = options.hideBottomLine ? 0 : 1
         isFillerCell = options.isFillerCell
-        itemDescription.isHidden = itemDescription.text?.isEmpty ?? false
+        accessibilityLabel = options.accessibilityLabel
 
         if let corners = options.corners {
-            contentView.addRoundedCorners([corners], radius: RecentlyVisitedCellUX.generalCornerRadius)
+            addRoundedCorners([corners], radius: RecentlyVisitedCellUX.generalCornerRadius)
         }
-        
+
         if options.shouldAddShadow {
             addShadowLayer(cornersToRound: options.corners ?? UIRectCorner())
         }
+        heroImage.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
-        
+
         shadowViewLayer?.removeFromSuperlayer()
+        heroImage.image = nil
+        itemDescription.isHidden = true
     }
 
     // MARK: - Setup Helper methods
@@ -169,16 +185,16 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
             bottomLine.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
-    
+
     private func addShadowLayer(cornersToRound: UIRectCorner) {
         let shadowLayer = CAShapeLayer()
-        
+
         shadowLayer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         shadowLayer.shadowOffset = CGSize(width: 0,
                                           height: RecentlyVisitedCellUX.shadowOffset)
         shadowLayer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
         shadowLayer.shadowRadius = RecentlyVisitedCellUX.shadowRadius
-        
+
         let radiusSize = CGSize(width: RecentlyVisitedCellUX.generalCornerRadius,
                                 height: RecentlyVisitedCellUX.generalCornerRadius)
         shadowLayer.shadowPath = UIBezierPath(roundedRect: bounds,

@@ -15,7 +15,7 @@ class ExtensionProfile: BrowserProfile {
     }
 }
 
-fileprivate let extensionSafeNames = Set(["clients"])
+private let extensionSafeNames = Set(["clients"])
 
 // Mock class required by `BrowserProfile`
 open class SearchEngines {

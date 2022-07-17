@@ -5,16 +5,20 @@
 import Foundation
 import Adjust
 import Shared
+import Glean
 
 private let log = Logger.browserLogger
 
-final class AdjustHelper {
+final class AdjustHelper: FeatureFlaggable {
 
     private static let adjustAppTokenKey = "AdjustAppToken"
     private let profile: Profile
+    private let telemetryHelper: AdjustTelemetryProtocol
 
-    init(profile: Profile) {
+    init(profile: Profile,
+         telemetryHelper: AdjustTelemetryProtocol = AdjustTelemetryHelper()) {
         self.profile = profile
+        self.telemetryHelper = telemetryHelper
     }
 
     func setupAdjust() {
@@ -47,7 +51,7 @@ final class AdjustHelper {
             return nil
         }
 
-        let isProd = FeatureFlagsManager.shared.isFeatureActiveForBuild(.adjustEnvironmentProd)
+        let isProd = featureFlags.isCoreFeatureEnabled(.adjustEnvironmentProd)
         let environment = isProd ? ADJEnvironmentProduction : ADJEnvironmentSandbox
         let config = ADJConfig(appToken: appToken, environment: environment)
         config?.logLevel = isProd ? ADJLogLevelSuppress : ADJLogLevelDebug
@@ -90,5 +94,16 @@ extension AdjustHelper: AdjustDelegate {
         if !shouldEnable {
             AdjustHelper.setEnabled(false)
         }
+
+        telemetryHelper.setAttributionData(attribution)
+    }
+
+    func adjustDeeplinkResponse(_ deeplink: URL?) -> Bool {
+        guard let url = deeplink else { return true }
+
+        // Send telemetry if url is not nil
+        let attribution = Adjust.attribution()
+        telemetryHelper.sendDeeplinkTelemetry(url: url, attribution: attribution)
+        return true
     }
 }

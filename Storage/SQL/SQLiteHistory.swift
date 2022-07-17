@@ -73,7 +73,7 @@ func getLocalFrecencySQL() -> String {
     return "\(visitCountExpression) * max(2, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
 }
 
-fileprivate func escapeFTSSearchString(_ search: String) -> String {
+private func escapeFTSSearchString(_ search: String) -> String {
     // Remove double-quotes, split search string on whitespace
     // and remove any empty strings
     let words = search.replacingOccurrences(of: "\"", with: "").components(separatedBy: .whitespaces).filter({ !$0.isEmpty })
@@ -155,7 +155,12 @@ open class SQLiteHistory {
     }
 }
 
-private let topSitesQuery = "SELECT cached_top_sites.*, page_metadata.provider_name FROM cached_top_sites LEFT OUTER JOIN page_metadata ON cached_top_sites.url = page_metadata.site_url ORDER BY frecencies DESC LIMIT (?)"
+private let topSitesQuery = """
+        SELECT cached_top_sites.*, page_metadata.provider_name \
+        FROM cached_top_sites \
+        LEFT OUTER JOIN page_metadata ON cached_top_sites.url = page_metadata.site_url \
+        ORDER BY frecencies DESC LIMIT (?)
+        """
 
 /**
  * The init for this will perform the heaviest part of the frecency query
@@ -163,7 +168,7 @@ private let topSitesQuery = "SELECT cached_top_sites.*, page_metadata.provider_n
  * >75% of the query time.
  * The scope/lifetime of this object is important as the data is 'frozen' until a new instance is created.
  */
-fileprivate struct SQLiteFrecentHistory: FrecentHistory {
+private struct SQLiteFrecentHistory: FrecentHistory {
     private let db: BrowserDB
     private let prefs: Prefs
 
@@ -402,7 +407,7 @@ extension SQLiteHistory: BrowserHistory {
             return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
         }
 
-        //do a fuzzy delete so dupes can be removed
+        // do a fuzzy delete so dupes can be removed
         let query: (String, Args?) = ("DELETE FROM pinned_top_sites where domain = ?", [host])
         return db.run([query]) >>== {
             return self.db.run([("UPDATE domains SET showOnTopSites = 1 WHERE domain = ?", [host])])
@@ -609,6 +614,33 @@ extension SQLiteHistory: BrowserHistory {
 
     public func getFrecentHistory() -> FrecentHistory {
         return SQLiteFrecentHistory(db: db, prefs: prefs)
+    }
+
+    public func getHistory(matching searchTerm: String,
+                           limit: Int,
+                           offset: Int,
+                           completion: @escaping ([Site]) -> Void) {
+
+        let query = """
+            SELECT hist.* FROM history hist
+            INNER JOIN history_fts historyFTS ON
+                historyFTS.rowid = hist.rowid
+            WHERE historyFTS.title LIKE ? OR
+                historyFTS.url LIKE ?
+            ORDER BY local_modified DESC
+            LIMIT \(limit)
+            OFFSET \(offset);
+            """
+
+        let args: Args = ["%\(searchTerm)%", "%\(searchTerm)%"]
+
+        db.runQueryConcurrently(query, args: args, factory: SQLiteHistory.basicHistoryColumnFactory).uponQueue(.main) { result in
+            guard result.isSuccess else {
+                completion([Site]())
+                return
+            }
+            completion(result.successValue?.asArray() ?? [Site]())
+        }
     }
 
     public func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
@@ -947,9 +979,7 @@ extension SQLiteHistory: SyncableHistory {
         } >>== { visits in
             // Join up the places map we received as input with our visits map.
             let placesAndVisits: [(Place, [Visit])] = places.compactMap { id, place in
-                guard let visitsList = visits[id], !visitsList.isEmpty else {
-                    return nil
-                }
+                guard let visitsList = visits[id], !visitsList.isEmpty else { return nil }
                 return (place, visitsList)
             }
 

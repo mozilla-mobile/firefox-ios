@@ -32,7 +32,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0), timeout: 10)
         app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0).press(forDuration: 1)
         snapshot("LongPressTextOptions-01")
-        if(app.menuItems["show.next.items.menu.button"].exists) {
+        if app.menuItems["show.next.items.menu.button"].exists {
             app.menuItems["show.next.items.menu.button"].tap()
             snapshot("LongPressTextOptions-02")
         }
@@ -130,7 +130,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         app.keyboards.keys.element(boundBy: 3).tap()
         app.navigationBars["Client.AddCredentialView"].buttons.element(boundBy: 1).tap()
 
-        waitForExistence(app.tables["Login List"],timeout: 15)
+        waitForExistence(app.tables["Login List"], timeout: 15)
         snapshot("CreatedLoginView")
 
         app.tables["Login List"].cells.element(boundBy: 2).tap()

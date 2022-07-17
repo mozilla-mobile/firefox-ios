@@ -5,7 +5,7 @@
 "Copy" = "Copiar";
 
 /* Label describing when the current login was created with the timestamp as the parameter. */
-"Created %@" = "Creóse:";
+"Created %@" = "Creóse: %@";
 
 /* Label for the button used to delete the current login. */
 "Delete" = "Desaniciar";

@@ -16,11 +16,17 @@
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "కాపీచేసిన లంకెకు వెళ్ళు";
 
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+ఇంకా %d…";
+
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "కొత్త వెతుకులాట";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "అంతరంగిక వెతుకులాట";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "త్వరిత చర్యలు";
 
 /* Sub label for Top Sites widget */
 "TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - తెరిచివున్న ట్యాబులు";

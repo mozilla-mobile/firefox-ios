@@ -19,7 +19,7 @@ class L10nBaseSnapshotTests: XCTestCase {
                 LaunchArguments.SkipETPCoverSheet,
                 LaunchArguments.SkipIntro,
                 LaunchArguments.SkipContextualHints,
-                LaunchArguments.ChronTabs]
+                LaunchArguments.TurnOffTabGroupsInUserPreferences]
 
     override func setUp() {
         super.setUp()

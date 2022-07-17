@@ -20,7 +20,7 @@ open class UserAgent {
 
     private static func clientUserAgent(prefix: String) -> String {
         let versionStr: String
-        if AppInfo.appVersion != "0.0.1" {
+        if AppInfo.buildNumber != "1" {
             versionStr = "\(AppInfo.appVersion)b\(AppInfo.buildNumber)"
         } else {
             versionStr = "dev"
@@ -97,7 +97,7 @@ public enum UserAgentPlatform {
 public struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
     private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
-    
+
     public static let customUAFor = [
         "paypal.com": defaultMobileUA,
         "yahoo.com": defaultMobileUA,
@@ -132,14 +132,24 @@ public struct UserAgentBuilder {
 
     /// Helper method to remove the empty components from user agent string that contain only whitespaces or are just empty
     private func removeEmptyComponentsAndJoin(uaItems: [String]) -> String {
-        return uaItems.filter{ !$0.isEmptyOrWhitespace() }.joined(separator: " ")
+        return uaItems.filter { !$0.isEmptyOrWhitespace() }.joined(separator: " ")
     }
 
     public static func defaultMobileUserAgent() -> UserAgentBuilder {
-        return UserAgentBuilder(product: UserAgent.product, systemInfo: "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)", platform: UserAgent.platform, platformDetails: UserAgent.platformDetails, extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
+        return UserAgentBuilder(
+            product: UserAgent.product,
+            systemInfo: "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)",
+            platform: UserAgent.platform,
+            platformDetails: UserAgent.platformDetails,
+            extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
     }
 
     public static func defaultDesktopUserAgent() -> UserAgentBuilder {
-        return UserAgentBuilder(product: UserAgent.product, systemInfo: "(Macintosh; Intel Mac OS X 10.15)", platform: UserAgent.platform, platformDetails: UserAgent.platformDetails, extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
+        return UserAgentBuilder(
+            product: UserAgent.product,
+            systemInfo: "(Macintosh; Intel Mac OS X 10.15)",
+            platform: UserAgent.platform,
+            platformDetails: UserAgent.platformDetails,
+            extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
     }
 }

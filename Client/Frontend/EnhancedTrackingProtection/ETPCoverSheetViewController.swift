@@ -88,23 +88,23 @@ class ETPCoverSheetViewController: UIViewController {
         button.backgroundColor = .clear
         return button
     }()
-    
+
     init() {
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         initialViewSetup()
     }
-    
+
     func initialViewSetup() {
         self.view.backgroundColor = fxBackgroundThemeColour
-        
+
         // Initialize
         self.view.addSubview(topImageView)
         self.view.addSubview(doneButton)
@@ -112,16 +112,16 @@ class ETPCoverSheetViewController: UIViewController {
         self.view.addSubview(descriptionLabel)
         self.view.addSubview(goToSettingsButton)
         self.view.addSubview(startBrowsingButton)
-        
+
         // Constraints
         setupTopView()
         setupBottomView()
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-    
+
     private func setupTopView() {
         // Done button target setup
         doneButton.addTarget(self, action: #selector(dismissAnimated), for: .touchUpInside)
@@ -151,7 +151,7 @@ class ETPCoverSheetViewController: UIViewController {
             make.left.right.equalToSuperview().inset(20)
         }
     }
-    
+
     private func setupBottomView() {
         // Bottom start button constraints
         goToSettingsButton.snp.makeConstraints { make in
@@ -173,18 +173,18 @@ class ETPCoverSheetViewController: UIViewController {
         // Bottom start browsing target setup
         startBrowsingButton.addTarget(self, action: #selector(startBrowsing), for: .touchUpInside)
     }
-    
+
     // Button Actions
     @objc private func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedETPCoverSheet)
     }
-    
+
     @objc private func goToSettings() {
         viewModel.goToSettings?()
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissETPCoverSheetAndGoToSettings)
     }
-    
+
     @objc private func startBrowsing() {
         viewModel.startBrowsing?()
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissUpdateCoverSheetAndStartBrowsing)

@@ -8,8 +8,7 @@ import Storage
 import Shared
 import XCGLogger
 
-fileprivate var debugTabCount = 0
-fileprivate let log = Logger.browserLogger
+private var debugTabCount = 0
 
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
     var recent = tabs.first
@@ -76,12 +75,12 @@ class Tab: NSObject {
     var tabState: TabState {
         return TabState(isPrivate: _isPrivate, url: url, title: displayTitle, favicon: displayFavicon)
     }
-    
+
     var timerPerWebsite: [String: StopWatchTimer] = [:]
-    
+
     // Tab Groups
     var metadataManager: TabMetadataManager?
-    
+
     // PageMetadata is derived from the page content itself, and as such lags behind the
     // rest of the tab.
     var pageMetadata: PageMetadata?
@@ -89,12 +88,12 @@ class Tab: NSObject {
     var readabilityResult: ReadabilityResult?
 
     var consecutiveCrashes: UInt = 0
-    
+
     // Setting default page as topsites
     var newTabPageType: NewTabPage = .topSites
     var tabUUID: String = UUID().uuidString
     private var screenshotUUIDString: String?
-    
+
     var screenshotUUID: UUID? {
         get {
             guard let uuidString = screenshotUUIDString else { return nil }
@@ -103,7 +102,7 @@ class Tab: NSObject {
             screenshotUUIDString = value?.uuidString ?? ""
         }
     }
-    
+
     var adsTelemetryUrlList: [String] = [String]() {
         didSet {
             startingSearchUrlWithAds = url
@@ -140,7 +139,7 @@ class Tab: NSObject {
         }
         return self.url
     }
-    
+
     var loading: Bool {
         return webView?.isLoading ?? false
     }
@@ -160,33 +159,33 @@ class Tab: NSObject {
     var historyList: [URL] {
         get {
             func listToUrl(_ item: WKBackForwardListItem) -> URL { return item.url }
-            
+
             var historyUrls = self.backList?.map(listToUrl) ?? [URL]()
             if let url = url {
                 historyUrls.append(url)
             }
             return historyUrls
         }
-        
+
         set { }
     }
 
     var title: String? {
         return webView?.title
     }
-    
+
     var displayTitle: String {
         if let title = webView?.title, !title.isEmpty {
             return title
         }
-        
+
         // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
         // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
         if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil, !isRestoring {
             return .AppMenu.AppMenuOpenHomePageTitleString
         }
 
-        //lets double check the sessionData in case this is a non-restored new tab
+        // lets double check the sessionData in case this is a non-restored new tab
         if let firstURL = sessionData?.urls.first, sessionData?.urls.count == 1, InternalURL(firstURL)?.isAboutHomeURL ?? false {
             return .AppMenu.AppMenuOpenHomePageTitleString
         }
@@ -200,6 +199,20 @@ class Tab: NSObject {
         }
 
         return lastTitle
+    }
+
+    /// Use the display title unless it's an empty string, then use the base domain from the url
+    func getTabTrayTitle() -> String? {
+        let baseDomain = sessionData?.urls.last?.baseDomain ?? url?.baseDomain
+        var backUpName: String = "" // In case display title is empty
+
+        if let baseDomain = baseDomain {
+            backUpName = baseDomain.contains("local") ? .AppMenu.AppMenuOpenHomePageTitleString : baseDomain
+        } else if let url = url, let about = InternalURL(url)?.aboutComponent {
+            backUpName = about
+        }
+
+        return self.displayTitle.isEmpty ? backUpName : self.displayTitle
     }
 
     var displayFavicon: Favicon? {
@@ -248,16 +261,16 @@ class Tab: NSObject {
 
     var isFxHomeTab: Bool {
         if let url = url, url.absoluteString.hasPrefix("internal://") { return true }
-        
+
         // Check lastKnownUrl in case url is nil
         if let url = lastKnownUrl, url.absoluteString.hasPrefix("internal://") { return true }
-        
+
         return false
     }
-    
+
     var isCustomHomeTab: Bool {
         guard let profile = self.browserViewController?.profile else { return false }
-        
+
         if let customHomeUrl = HomeButtonHomePageAccessors.getHomePage(profile.prefs),
            let customHomeBaseDomain = customHomeUrl.baseDomain,
            let url = url,
@@ -286,9 +299,7 @@ class Tab: NSObject {
     // Use computed property so @available can be used to guard `noImageMode`.
     var noImageMode: Bool {
         didSet {
-            guard noImageMode != oldValue else {
-                return
-            }
+            guard noImageMode != oldValue else { return }
 
             contentBlocker?.noImageMode(enabled: noImageMode)
 
@@ -298,9 +309,7 @@ class Tab: NSObject {
 
     var nightMode: Bool {
         didSet {
-            guard nightMode != oldValue else {
-                return
-            }
+            guard nightMode != oldValue else { return }
 
             webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.NightMode.setEnabled(\(nightMode))")
             // For WKWebView background color to take effect, isOpaque must be false,
@@ -325,7 +334,7 @@ class Tab: NSObject {
             }
         }
     }
-    
+
     var readerModeAvailableOrActive: Bool {
         if let readerMode = self.getContentScript(name: "ReaderMode") as? ReaderMode {
             return readerMode.state != .unavailable
@@ -451,10 +460,8 @@ class Tab: NSObject {
             var jsonDict = [String: AnyObject]()
             jsonDict["history"] = urls as AnyObject?
             jsonDict["currentPage"] = currentPage as AnyObject?
-            
-            guard let json = jsonDict.asString?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-                return
-            }
+
+            guard let json = jsonDict.asString?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
 
             if let restoreURL = URL(string: "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?history=\(json)") {
                 let request = PrivilegedRequest(url: restoreURL) as URLRequest
@@ -470,6 +477,10 @@ class Tab: NSObject {
     }
 
     deinit {
+        webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
+        webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
+        webView?.navigationDelegate = nil
+
         debugTabCount -= 1
 
         #if DEBUG
@@ -489,16 +500,16 @@ class Tab: NSObject {
         checkTabCount(failures: 0)
         #endif
     }
-    
+
     /// When a user clears ALL history, `sessionData` and `historyList` need to be purged, and close the webView.
     func clearAndResetTabHistory() {
         guard let currentlyOpenUrl = lastKnownUrl ?? historyList.last else { return }
-        
+
         url = currentlyOpenUrl
         sessionData = SessionData(currentPage: 0, urls: [currentlyOpenUrl], lastUsedTime: Date.now())
         historyList = [currentlyOpenUrl]
         webView = nil
-        
+
         close()
     }
 
@@ -532,7 +543,9 @@ class Tab: NSObject {
     @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {
         if let webView = webView {
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
-            if let url = request.url, let syncedReaderModeURL = url.decodeReaderModeURL, let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
+            if let url = request.url,
+               let syncedReaderModeURL = url.decodeReaderModeURL,
+               let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
                 let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
                 lastRequest = readerModeRequest
                 return webView.load(readerModeRequest)
@@ -556,7 +569,7 @@ class Tab: NSObject {
             webView?.replaceLocation(with: page)
             return
         }
-        
+
         if let _ = webView?.reloadFromOrigin() {
             print("reloaded zombified tab from origin")
             return
@@ -567,12 +580,11 @@ class Tab: NSObject {
             restore(webView)
         }
     }
-    
+
     @objc func reloadPage() {
         reload()
         self.webView?.scrollView.refreshControl?.endRefreshing()
     }
-    
 
     @objc func zoomIn() {
         switch pageZoom {
@@ -676,7 +688,7 @@ class Tab: NSObject {
     func setScreenshot(_ screenshot: UIImage?) {
         self.screenshot = screenshot
     }
-    
+
     func toggleChangeUserAgent() {
         changedUserAgent = !changedUserAgent
 
@@ -695,9 +707,7 @@ class Tab: NSObject {
     }
 
     func dequeueJavascriptAlertPrompt() -> JSAlertInfo? {
-        guard !alertQueue.isEmpty else {
-            return nil
-        }
+        guard !alertQueue.isEmpty else { return nil }
         return alertQueue.removeFirst()
     }
 
@@ -713,11 +723,11 @@ class Tab: NSObject {
               let path = keyPath else {
             return assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
-        
+
         if let url = self.webView?.url, path == KVOConstants.URL.rawValue {
             self.urlDidChangeDelegate?.tab(self, urlDidChangeTo: url)
         }
-        
+
         if let title = self.webView?.title, !title.isEmpty,
            path == KVOConstants.title.rawValue {
             metadataManager?.updateObservationTitle(title)
@@ -741,60 +751,61 @@ class Tab: NSObject {
     func applyTheme() {
         UITextField.appearance().keyboardAppearance = isPrivate ? .dark : (LegacyThemeManager.instance.currentName == .dark ? .dark : .light)
     }
-    
+
     func getProviderForUrl() -> SearchEngine {
         guard let url = self.webView?.url else {
             return .none
         }
         for provider in SearchEngine.allCases {
-            if (url.absoluteString.contains(provider.rawValue)) {
+            if url.absoluteString.contains(provider.rawValue) {
                 return provider
             }
         }
         return .none
     }
-    
+
     func updateFaviconCache() {
-        guard let displayFavicon = displayFavicon?.url, let faviconUrl = URL(string: displayFavicon), let baseDomain = url?.baseDomain else {
-            return
-        }
+        guard let displayFavicon = displayFavicon?.url,
+              let faviconUrl = URL(string: displayFavicon),
+              let baseDomain = url?.baseDomain
+        else { return }
 
         if currentFaviconUrl == nil {
             currentFaviconUrl = faviconUrl
         } else if !faviconUrl.isEqual(currentFaviconUrl!) {
             return
         }
-        
+
         FaviconFetcher.downloadFaviconAndCache(imageURL: currentFaviconUrl, imageKey: baseDomain)
     }
 }
 
-extension Tab: UIGestureRecognizerDelegate {
+extension Tab: UIGestureRecognizerDelegate, Loggable {
     // This prevents the recognition of one gesture recognizer from blocking another
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
-    
+
     func configureEdgeSwipeGestureRecognizers() {
         guard let webView = webView else {
-            log.info("Tab's edge swipe gesture recognizer was never added. This will affect Tab navigation telemetry!")
+            browserLog.info("Tab's edge swipe gesture recognizer was never added. This will affect Tab navigation telemetry!")
             return
         }
-        
+
         let edgeSwipeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleEdgeSwipeTabNavigation(_:)))
         edgeSwipeGesture.edges = .left
         edgeSwipeGesture.delegate = self
         webView.addGestureRecognizer(edgeSwipeGesture)
     }
-    
+
     @objc func handleEdgeSwipeTabNavigation(_ sender: UIScreenEdgePanGestureRecognizer) {
         guard let webView = webView else { return }
-        
+
         if sender.state == .ended, (sender.velocity(in: webView).x > 150) {
             TelemetryWrapper.recordEvent(category: .action, method: .swipe, object: .navigateTabHistoryBackSwipe)
         }
     }
-    
+
 }
 
 extension Tab: TabWebViewDelegate {
@@ -920,14 +931,14 @@ class TabWebView: WKWebView, MenuHelperInterface {
 
         return super.hitTest(point, with: event)
     }
-    
+
     /// Override evaluateJavascript - should not be called directly on TabWebViews any longer
     // We should only be calling evaluateJavascriptInDefaultContentWorld in the future
     @available(*, unavailable, message:"Do not call evaluateJavaScript directly on TabWebViews, should only be called on super class")
     override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
     }
-    
+
 }
 
 ///

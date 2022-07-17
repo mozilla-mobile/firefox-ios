@@ -3,7 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import SwiftUI
-// Enum file that holds the different cases for the Quick Actions small widget with their configurations (string, backgrounds, images) as selected by the user in edit mode. It maps the values of IntentQuickLink enum in the QuickLinkSelectionIntent to the designated values of each case.
+// Enum file that holds the different cases for the Quick Actions small widget with
+// their configurations (string, backgrounds, images) as selected by the user in edit
+// mode. It maps the values of IntentQuickLink enum in the QuickLinkSelectionIntent to
+// the designated values of each case.
 
 enum QuickLink: Int {
     case search = 1
@@ -36,7 +39,7 @@ enum QuickLink: Int {
             return String.ClosePrivateTabsLabelV2
         }
     }
-    
+
     public var smallWidgetUrl: URL {
         switch self {
         case .search:
@@ -49,7 +52,7 @@ enum QuickLink: Int {
             return linkToContainingApp(query: "widget-small-quicklink-close-private-tabs")
         }
     }
-    
+
     public var mediumWidgetUrl: URL {
         switch self {
         case .search:
@@ -68,11 +71,11 @@ enum QuickLink: Int {
         case .search:
             return [Color("searchButtonColorTwo"), Color("searchButtonColorOne")]
         case .privateSearch:
-            return [Color("privateGradientThree"), Color("privateGradientTwo"),Color("privateGradientOne")]
+            return [Color("privateGradientThree"), Color("privateGradientTwo"), Color("privateGradientOne")]
         case .copiedLink:
             return [Color("goToCopiedLinkSolid")]
         case .closePrivateTabs:
-            return [Color("privateGradientThree"), Color("privateGradientTwo"),Color("privateGradientOne")]
+            return [Color("privateGradientThree"), Color("privateGradientTwo"), Color("privateGradientOne")]
         }
     }
 

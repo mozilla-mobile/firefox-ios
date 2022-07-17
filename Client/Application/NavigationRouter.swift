@@ -44,13 +44,13 @@ enum DeepLink {
     case settings(SettingsPage)
     case homePanel(HomePanelPath)
     case defaultBrowser(DefaultBrowserPath)
-    
+
     init?(urlString: String) {
         let paths = urlString.split(separator: "/")
         guard let component = paths[safe: 0],
               let componentPath = paths[safe: 1]
         else { return nil }
-        
+
         if component == "settings", let link = SettingsPage(rawValue: String(componentPath)) {
             self = .settings(link)
         } else if component == "homepanel", let link = HomePanelPath(rawValue: String(componentPath)) {
@@ -88,28 +88,23 @@ enum NavigationPath {
          */
         func sanitizedURL(for unsanitized: URL) -> URL {
             guard var components = URLComponents(url: unsanitized, resolvingAgainstBaseURL: true),
-                  let scheme = components.scheme, !scheme.isEmpty else {
-                return unsanitized
-            }
+                  let scheme = components.scheme, !scheme.isEmpty
+            else { return unsanitized }
 
             components.scheme = scheme.lowercased()
             return components.url ?? unsanitized
         }
 
         let url = sanitizedURL(for: url)
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            return nil
-        }
-
-        guard let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [AnyObject],
-            let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String] else {
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [AnyObject],
+              let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String]
+        else {
             // Something very strange has happened; org.mozilla.Client should be the zeroeth URL type.
             return nil
         }
 
-        guard let scheme = components.scheme, urlSchemes.contains(scheme) else {
-            return nil
-        }
+        guard let scheme = components.scheme, urlSchemes.contains(scheme) else { return nil }
 
         let isOurScheme = [URL.mozPublicScheme, URL.mozInternalScheme].contains(scheme)
         if isOurScheme, let host = components.host?.lowercased(), !host.isEmpty {
@@ -129,14 +124,14 @@ enum NavigationPath {
             } else {
                 return nil
             }
-            
+
         } else if ["http", "https"].contains(scheme) {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             RatingPromptManager.isBrowserDefault = true
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)
-            
+
         } else {
             return nil
         }
@@ -159,10 +154,10 @@ enum NavigationPath {
         switch link {
         case .homePanel(let panelPath):
             NavigationPath.handleHomePanel(panel: panelPath, with: bvc)
-            
+
         case .settings(let settingsPath):
             guard let rootVC = bvc.navigationController else { return }
-            
+
             let settingsTableViewController = AppSettingsTableViewController(
                 with: bvc.profile,
                 and: bvc.tabManager,
@@ -172,16 +167,14 @@ enum NavigationPath {
                                           with: rootVC,
                                           baseSettingsVC: settingsTableViewController,
                                           and: bvc)
-            
+
         case .defaultBrowser(let path):
             NavigationPath.handleDefaultBrowser(path: path)
         }
     }
 
     private static func handleWidgetKitQuery(components: URLComponents) -> NavigationPath? {
-        guard let host = components.host?.lowercased(), !host.isEmpty else {
-            return nil
-        }
+        guard let host = components.host?.lowercased(), !host.isEmpty else { return nil }
         switch host {
         case "widget-medium-topsites-open-url":
             // Widget Top sites - open url
@@ -333,11 +326,11 @@ enum NavigationPath {
             controller.pushViewController(viewController, animated: true)
         case .theme:
             controller.pushViewController(ThemeSettingsController(), animated: true)
-            
+
         case .wallpaper:
-            let viewModel = WallpaperSettingsViewModel(with: tabManager,
-                                                       and: WallpaperManager())
-            let wallpaperVC = WallpaperSettingsViewController(with: viewModel)
+            let viewModel = LegacyWallpaperSettingsViewModel(with: tabManager,
+                                                       and: LegacyWallpaperManager())
+            let wallpaperVC = LegacyWallpaperSettingsViewController(with: viewModel)
             controller.pushViewController(wallpaperVC, animated: true)
         }
     }
@@ -381,4 +374,3 @@ func == (lhs: DeepLink, rhs: DeepLink) -> Bool {
         return false
     }
 }
-

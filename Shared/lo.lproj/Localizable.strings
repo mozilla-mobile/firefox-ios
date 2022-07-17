@@ -290,8 +290,17 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "ແບ່ງປັນລີ້ງ";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "ຕອນນີ້ທ່ານສາມາດຍ້າຍແຖບເຄື່ອງມືໄປໄວ້ຢູ່ລຸ່ມສຸດໄດ້ ດັ່ງນັ້ນມັນຈຶ່ງງ່າຍຕໍ່ການໃສ່ຂໍ້ມູນ.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
+"ContextualHint.SearchBarPlacement.NewUsers" = "ເພື່ອເຮັດໃຫ້ການປ້ອນຂໍ້ມູນງ່າຍຂື້ນ ຕອນນີ້ໄດ້ປັບໃຫ້ແທບເຄືອງມືໄປຢູ່ດ້ານແລ້ວ.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "ຕອນນີ້ຫນ້າທໍາອິດຂອງ Firefox ທີ່ໄດ້ຮັບການປັບແຕ່ງຕາມແບບຂອງທ່ານຈະເຮັດໃຫ້ທ່ານສາມາດກັບໄປເບິງຫນ້າເວັບທີ່ໄດ້ເປີດປະໄວ້ໄດ້ງ່າຍຂື້ນແລ້ວ. ຊອກຫາແທັບ, ບຸກມາກ, ແລະ ຜົນການຄົ້ນຫາຫຼ້າສຸດຂອງທ່ານ.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "ການຕັ້ງຄ່າແທບເຄື່ອງມື";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "ແທັບທີ່ທ່ານບໍ່ໄດ້ເບິ່ງເປັນເວລາສອງອາທິດຈະໄດ້ຖືກຍ້າຍມາໄວ້ທີ່ນີ້.";
@@ -436,11 +445,29 @@
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "ປັບແຕ່ງຫນ້າທຳອິດ";
 
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "ຄົ້ນຫາເພີ່ມເຕີມ";
+
 /* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
 "FirefoxHome.Pocket.Minutes.v99" = "%d ນາທີ";
 
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "ເລື່ອງລາວທີ່ຈຸດປະກາຍຄວາມຄິດ";
+
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "ລຶບ";
+
+/* Label showing how many sites there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.SitesCount.v101" = "ເວັບໄຊທ: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "ການຕັ້ງຄ່າ";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "ຜູ້ສະຫນັບສະຫນູນຂອງພວກເຮົາ & ຄວາມເປັນສ່ວນຕົວຂອງທ່ານ";
+
+/* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "ໄດ້ຮັບການສະຫນັບສະຫນູນ";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "ໄປຂ້າງຫນ້າ";
@@ -538,6 +565,9 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "ອຸປະກອນບໍ່ໄດ້ເຊື່ອມຕໍ່ກັບ Firefox Sync";
 
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "ໂລໂກ້ Firefox, ປ່ຽນພາບຫນ້າຈໍ.";
+
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "ນຳເອົາແທັບທີ່ທ່ານເປີດ, ບຸກມາກ ແລະ ລະຫັດຜ່ານຂອງທ່ານຈາກອຸປະກອນອື່ນເຂົ້າມາ.";
 
@@ -621,6 +651,9 @@
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab" = "ເປີດໃນແທັບສ່ວນຕົວໃຫມ່";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "ເປີດໃນແທັບສ່ວນຕົວ";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "ເປີດໃນແທັບໃຫມ່";
@@ -713,7 +746,7 @@
 "Keyboard.Shortcuts.OpenLinkInNewTab" = "ເປີດລີ້ງໃນແທັບໃຫມ່";
 
 /* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.SavePageAs" = "ບັນທຶກຫນ້ານີ້ໄວ້ທີ່...";
+"Keyboard.Shortcuts.SavePageAs" = "ບັນທຶກຫນ້ານີ້ໄວ້ທີ່…";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "ບຸກມາກ";
@@ -774,6 +807,15 @@
 
 /* History tableview section header */
 "Last week" = "ອາທິດທີ່ຜ່ານມາ";
+
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "ຍົກເລີກ";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "ລຶບ";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "ລຶບທຸກເວັບໄຊໃນ %@ ບໍ?";
 
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
 "LibraryPanel.Section.Older" = "ເກົ່າກວ່າ";
@@ -1524,9 +1566,6 @@
 /* General settings section title */
 "Settings.General.SectionName" = "ທົ່ວໄປ";
 
-/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description" = "ເລືອກເນື້ອຫາທີ່ທ່ານເຫັນຢູ່ໃນໜ້າທຳອິດຂອງ Firefox.";
-
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "ກັບໄປໃນ";
 
@@ -1556,9 +1595,6 @@
 
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
 "Settings.Home.Option.StartAtHome.Title" = "ໜ້າຈໍກຳລັງເປີດຢູ່";
-
-/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
-"Settings.Home.Option.Title" = "ຫນ້າທຳອິດຂອງ Firefox";
 
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "ລົບລ້າງ";
@@ -1731,7 +1767,7 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "ການສຶກສາ";
 
-/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "ແທັບທີ່ບໍ່ໄດ້ນຳໃຊ້";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
@@ -2004,9 +2040,6 @@
 
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "ແທັບອື່ນໆ";
-
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "ແທັບສ່ວນຕົວ";
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "ແທັບຈະປະກົດຢູ່ນີ້ເປັນເວລາ 30 ວັນ. ຫລັງຈາກນັ້ນແທັບຈະໄດ້ຮັບການປິດອັດຕະໂນມັດ.";

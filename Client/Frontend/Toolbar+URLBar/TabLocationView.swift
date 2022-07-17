@@ -4,9 +4,8 @@
 
 import UIKit
 import Shared
-import SnapKit
 
-protocol TabLocationViewDelegate {
+protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView)
@@ -65,9 +64,7 @@ class TabLocationView: UIView {
         return NSAttributedString(string: .TabLocationURLPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.Photon.Grey50])
     }()
 
-    lazy var urlTextField: URLTextField = {
-        let urlTextField = URLTextField()
-
+    lazy var urlTextField: URLTextField = .build { urlTextField in
         // Prevent the field from compressing the toolbar buttons on the 4S in landscape.
         urlTextField.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 250), for: .horizontal)
         urlTextField.attributedPlaceholder = self.placeholder
@@ -84,40 +81,42 @@ class TabLocationView: UIView {
         if let dropInteraction = urlTextField.textDropInteraction {
             urlTextField.removeInteraction(dropInteraction)
         }
+    }
 
-        return urlTextField
-    }()
-
-    lazy var trackingProtectionButton: LockButton = {
-        let trackingProtectionButton = LockButton()
-        trackingProtectionButton.addTarget(self, action: #selector(didPressTPShieldButton(_:)), for: .touchUpInside)
+    lazy var trackingProtectionButton: LockButton = .build { trackingProtectionButton in
+        trackingProtectionButton.addTarget(self, action: #selector(self.didPressTPShieldButton(_:)), for: .touchUpInside)
         trackingProtectionButton.clipsToBounds = false
         trackingProtectionButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.trackingProtection
-        return trackingProtectionButton
-    }()
+    }
 
-    private lazy var readerModeButton: ReaderModeButton = {
-        let readerModeButton = ReaderModeButton()
-        readerModeButton.addTarget(self, action: #selector(tapReaderModeButton), for: .touchUpInside)
-        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPressReaderModeButton)))
+    private lazy var readerModeButton: ReaderModeButton = .build { readerModeButton in
+        readerModeButton.addTarget(self, action: #selector(self.tapReaderModeButton), for: .touchUpInside)
+        readerModeButton.addGestureRecognizer(
+            UILongPressGestureRecognizer(target: self,
+                                         action: #selector(self.longPressReaderModeButton)))
         readerModeButton.isAccessibilityElement = true
         readerModeButton.isHidden = true
         readerModeButton.accessibilityLabel = .TabLocationReaderModeAccessibilityLabel
         readerModeButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.readerModeButton
-        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: .TabLocationReaderModeAddToReadingListAccessibilityLabel, target: self, selector: #selector(readerModeCustomAction))]
-        return readerModeButton
-    }()
+        readerModeButton.accessibilityCustomActions = [
+            UIAccessibilityCustomAction(
+                name: .TabLocationReaderModeAddToReadingListAccessibilityLabel,
+                target: self,
+                selector: #selector(self.readerModeCustomAction))]
+    }
 
     lazy var reloadButton: StatefulButton = {
         let reloadButton = StatefulButton(frame: .zero, state: .disabled)
         reloadButton.addTarget(self, action: #selector(tapReloadButton), for: .touchUpInside)
-        reloadButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPressReloadButton)))
+        reloadButton.addGestureRecognizer(
+            UILongPressGestureRecognizer(target: self, action: #selector(longPressReloadButton)))
         reloadButton.tintColor = UIColor.Photon.Grey50
         reloadButton.imageView?.contentMode = .scaleAspectFit
         reloadButton.contentHorizontalAlignment = .left
         reloadButton.accessibilityLabel = .TabLocationReloadAccessibilityLabel
         reloadButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.reloadButton
         reloadButton.isAccessibilityElement = true
+        reloadButton.translatesAutoresizingMaskIntoConstraints = false
         return reloadButton
     }()
 
@@ -135,35 +134,26 @@ class TabLocationView: UIView {
         addGestureRecognizer(longPressRecognizer)
         addGestureRecognizer(tapRecognizer)
 
-        let space1px = UIView()
-        space1px.snp.makeConstraints { make in
-            make.width.equalTo(1)
-        }
+        let space1px = UIView.build()
+        space1px.widthAnchor.constraint(equalToConstant: 1).isActive = true
 
         let subviews = [trackingProtectionButton, space1px, urlTextField, readerModeButton, reloadButton]
         contentView = UIStackView(arrangedSubviews: subviews)
         contentView.distribution = .fill
         contentView.alignment = .center
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentView)
 
-        contentView.snp.makeConstraints { make in
-            make.edges.equalTo(self)
-        }
+        contentView.edges(equalTo: self)
 
-        trackingProtectionButton.snp.makeConstraints { make in
-            make.width.equalTo(TabLocationViewUX.TPIconSize)
-            make.height.equalTo(TabLocationViewUX.ButtonSize)
-        }
-
-        readerModeButton.snp.makeConstraints { make in
-            make.width.equalTo(TabLocationViewUX.ReaderModeButtonWidth)
-            make.height.equalTo(TabLocationViewUX.ButtonSize)
-        }
-
-        reloadButton.snp.makeConstraints { make in
-            make.width.equalTo(TabLocationViewUX.ReaderModeButtonWidth)
-            make.height.equalTo(TabLocationViewUX.ButtonSize)
-        }
+        NSLayoutConstraint.activate([
+            trackingProtectionButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.TPIconSize),
+            trackingProtectionButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
+            readerModeButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ReaderModeButtonWidth),
+            readerModeButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
+            reloadButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ReaderModeButtonWidth),
+            reloadButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
+        ])
 
         // Setup UIDragInteraction to handle dragging the location
         // bar for dropping its URL into other apps.
@@ -291,9 +281,10 @@ extension TabLocationView: UIGestureRecognizerDelegate {
 extension TabLocationView: UIDragInteractionDelegate {
     func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
         // Ensure we actually have a URL in the location bar and that the URL is not local.
-        guard let url = self.url, !InternalURL.isValid(url: url), let itemProvider = NSItemProvider(contentsOf: url) else {
-            return []
-        }
+        guard let url = self.url,
+              !InternalURL.isValid(url: url),
+              let itemProvider = NSItemProvider(contentsOf: url)
+        else { return [] }
 
         TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .locationBar)
 

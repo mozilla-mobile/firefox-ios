@@ -210,7 +210,7 @@
 "BreachAlerts.BreachDate" = "Sta fughjita di dati hè accaduta u";
 
 /* Description of what a breach is */
-"BreachAlerts.Description" = "Parolle d’intesa sò state palisate o arrubate dapoi l’ultima mudificazione di a vostra parolla d’intesa. Per prutege stu contu, cunnittetevi à u situ è mudificate a vostra parolla d’intesa.";
+"BreachAlerts.Description" = "Parolle d’intesa sò state palisate o arrubate dapoi l’ultima mudificazione di a vostra parolla d’intesa. Per prutege stu contu, cunnittitevi à u situ è mudificate a vostra parolla d’intesa.";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "Sapene di più";
@@ -457,6 +457,18 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Caccià";
 
+/* Label showing how many sites there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.SitesCount.v101" = "Siti : %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "Preferenze";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "I nostri finanzieri è a vostra vita privata";
+
+/* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "Finanziatu";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Pagina seguente";
 
@@ -500,7 +512,7 @@
 "FxA.ResendEmail" = "Mandà u messaghji torna";
 
 /* FxA sign in view subtitle */
-"fxa.signin.camera-signin" = "Cunnittetevi cù u vostru apparechju-fotò";
+"fxa.signin.camera-signin" = "Cunnittitevi cù u vostru apparechju-fotò";
 
 /* FxA sign in create account label. */
 "fxa.signin.create-account-pt-1" = "Sincrunizà Firefox trà i vostri apparechji cù un contu.";
@@ -590,7 +602,7 @@
 "HistoryPanel.EmptySyncedTabsNullState.Description" = "E vostre unghjette da l’altri apparechji s’affissanu quì.";
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Cunnittetevi per affissà a lista di l’unghjette di i vostri altri apparechji.";
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Cunnittitevi per affissà a lista di l’unghjette di i vostri altri apparechji.";
 
 /* Description for the empty synced tabs 'not yet verified' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "U vostru contu deve esse verificatu.";
@@ -639,6 +651,9 @@
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab" = "Apre in una nova unghjetta privata";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Apre in un’unghjetta privata";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Apre in una nova unghjetta";
@@ -701,7 +716,7 @@
 "InactiveTabs.TabTray.CloseButtonTitle" = "Chjode tutte l’unghjette inattive";
 
 /* Accessibility label for button increasing font size in display settings of reader mode */
-"Increase text size" = "Aummentà a dimensione di u testu";
+"Increase text size" = "Aumentà a dimensione di u testu";
 
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "una stonda fà";
@@ -793,6 +808,18 @@
 /* History tableview section header */
 "Last week" = "A settimana scorsa";
 
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Abbandunà";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Squassà";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Squassà tutti i siti in %@ ?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Caccia a cronolugia (inchjusa quella sincrunizata da d’altri apparechji), i canistrelli è altri dati di navigazione.";
+
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "Nisunu elementu trovu in a cronolugia";
 
@@ -804,6 +831,9 @@
 
 /* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
 "LibraryPanel.History.SyncedFromOtherDevices.v99" = "Sincrunizati nant’à d’altri apparechji";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "Cronolugia sincrunizata";
 
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
 "LibraryPanel.Section.Older" = "Più vechju";
@@ -896,7 +926,7 @@
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrà";
 
 /* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "L’identificazioni di cunnessione arregistrate seranu affissate quì. S’è vo avete arregistratu e vostre identificazioni di cunnessione Firefox nant’à un altru apparechju, cunnittetevi à u vostru contu Firefox.";
+"LoginsList.NoLoginsFound.Description" = "L’identificazioni di cunnessione arregistrate seranu affissate quì. S’è vo avete arregistratu e vostre identificazioni di cunnessione Firefox nant’à un altru apparechju, cunnittitevi à u vostru contu Firefox.";
 
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Alcuna identificazione di cunnessione trova";
@@ -1346,6 +1376,9 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "Ci vole à permette à Firefox d’accede à l’apparechju-fotò di u vostru apparechju in « Preferenze» -> « Cunfidenzialità » -> « Apparechju-fotò ».";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "Andà à « Preferenze » > « Firefox » di l’apparechju. Permette à Firefox d’accede à l’apparechju-fotò.";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Analizà un codice QR";
 
@@ -1400,7 +1433,7 @@
 "Secure connection" = "Cunnessione assicurizata";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Mandà un raportu di u penseru per chì Mozilla possa currege u penseru ?";
+"Send a crash report so Mozilla can fix the problem?" = "Mandà un raportu d’accidente per chì Mozilla possa currege u penseru ?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Dà u mo avisu";
@@ -1605,8 +1638,11 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Generale";
 
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "Sciglite ciò chì s’affissa cum’è pagina d’accolta.";
+
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description" = "Sciglite u cuntenutu chì si vede nant’à a pagina d’accolta di Firefox.";
+"Settings.Home.Option.Description.v101" = "Sciglite u cuntenutu di a pagina d’accolta di Firefox.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Rivene à st’unghjetta";
@@ -1639,13 +1675,16 @@
 "Settings.Home.Option.StartAtHome.Title" = "Screnu d’apertura";
 
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
-"Settings.Home.Option.Title" = "Pagina d’accolta di Firefox";
+"Settings.Home.Option.Title.v101" = "Include nant’à a pagina d’accolta";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "Sfondulu di screnu";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Sfondulu di screnu Firefox, mudellu amatista.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Sfondulu di screnu di Firefox, mudellu d’un tombulu di rena.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Sfondulu di screnu Firefox, mudellu turchinu azuratu.";
@@ -1658,6 +1697,9 @@
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Cummutatore di u ciclu di sfondulu di screnu di a pagina d’accolta";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Sfondulu di screnu di Firefox, mudellu d’un’attrachju marina.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "SCRENU À L’APERTURA";
@@ -1679,6 +1721,27 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Pagina d’accolta";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "Linee";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Linee";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Accurtatoghji";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Accurtatoghji";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Accurtatoghji finanziati";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "Disattivatu";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "Attivatu";
 
 /* Title displayed in header of the setting panel. */
 "Settings.HomePage.Title" = "Preferenze di a pagina d’accolta";
@@ -1848,8 +1911,11 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Studii";
 
-/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Unghjette inattive";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "L’unghjette chì vo ùn avete micca viste dapoi duie settimane sò dispiazzate in a sezzione inattiva.";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "Gruppi d’unghjette";
@@ -2054,7 +2120,7 @@
 "SyncState.Clients.Title" = "Clienti alluntanati";
 
 /* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Fiascu di a sincrunisazione";
+"SyncState.Failed.Title" = "Fiascu di a sincrunizazione";
 
 /* The History sync component, used in SyncState.Partial.Title */
 "SyncState.History.Title" = "Cronolugia";
@@ -2131,9 +2197,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Altre unghjette";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Unghjette private";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "L’unghjette sò dispunibule quì durante 30 ghjorni. Dopu à stu periudu, l’unghjette seranu chjose autumaticamente.";
 
@@ -2204,10 +2267,10 @@
 "TopSites.RemovePage.Button" = "Caccià a pagina - %@";
 
 /* Button to disallow the page to be translated to the user locale language */
-"TranslationToastHandler.PromptTranslate.Cancel" = "Innò";
+"TranslationToastHandler.PromptTranslate.Cancel" = "Nò";
 
 /* Button to allow the page to be translated to the user locale language */
-"TranslationToastHandler.PromptTranslate.OK" = "Iè";
+"TranslationToastHandler.PromptTranslate.OK" = "Sì";
 
 /* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
 "TranslationToastHandler.PromptTranslate.Title" = "Sta pagina pare esse in %1$@. Traducella in %2$@ cù %3$@ ?";

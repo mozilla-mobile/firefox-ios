@@ -25,10 +25,6 @@ enum ShortcutType: String {
     }
 }
 
-protocol QuickActionHandlerDelegate {
-    func handleShortCutItemType(_ type: ShortcutType, userData: [String: NSSecureCoding]?)
-}
-
 class QuickActions: NSObject {
 
     fileprivate let log = Logger.browserLogger
@@ -52,7 +48,11 @@ class QuickActions: NSObject {
         QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(type, withUserData: userData, toApplication: application)
     }
 
-    @discardableResult func addDynamicApplicationShortcutItemOfType(_ type: ShortcutType, withUserData userData: [String: String] = [String: String](), toApplication application: UIApplication) -> Bool {
+    @discardableResult func addDynamicApplicationShortcutItemOfType(
+        _ type: ShortcutType,
+        withUserData userData: [String: String] = [String: String](),
+        toApplication application: UIApplication
+    ) -> Bool {
         // add the quick actions version so that it is always in the user info
         var userData: [String: String] = userData
         userData[QuickActions.QuickActionsVersionKey] = QuickActions.QuickActionsVersion
@@ -80,7 +80,8 @@ class QuickActions: NSObject {
 
     func removeDynamicApplicationShortcutItemOfType(_ type: ShortcutType, fromApplication application: UIApplication) {
         guard var dynamicShortcutItems = application.shortcutItems,
-            let index = (dynamicShortcutItems.firstIndex { $0.type == type.type }) else { return }
+              let index = (dynamicShortcutItems.firstIndex { $0.type == type.type })
+        else { return }
 
         dynamicShortcutItems.remove(at: index)
         application.shortcutItems = dynamicShortcutItems

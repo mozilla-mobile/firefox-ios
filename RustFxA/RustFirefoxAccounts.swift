@@ -171,7 +171,7 @@ open class RustFirefoxAccounts {
 
             self?.update()
         }
-        
+
         NotificationCenter.default.addObserver(forName: .accountProfileUpdate, object: nil, queue: .main) { [weak self] notification in
             self?.update()
         }
@@ -181,7 +181,7 @@ open class RustFirefoxAccounts {
             if let error = notification.userInfo?["error"] as? Error {
                 info = error.localizedDescription
             }
-            Sentry.shared.send(message: "RustFxa failed account migration", tag: .rustLog, severity: .error, description: info)
+            SentryIntegration.shared.send(message: "RustFxa failed account migration", tag: .rustLog, severity: .error, description: info)
             self?.accountMigrationFailed = true
             NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
         }
@@ -199,23 +199,20 @@ open class RustFirefoxAccounts {
         // Ignore this class when de-archiving, it isn't needed.
         NSKeyedUnarchiver.setClass(Unknown.self, forClassName: "Account.FxADeviceRegistration")
 
-        guard let dict = keychain.object(forKey: key) as? [String: AnyObject], let guid = dict["stateKeyLabel"] else {
-            return nil
-        }
+        guard let dict = keychain.object(forKey: key) as? [String: AnyObject],
+              let guid = dict["stateKeyLabel"]
+        else { return nil }
 
         let key2 = "account.state.\(guid)"
         keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key2)
-        guard let jsonData = keychain.data(forKey: key2) else {
-            return nil
-        }
+        guard let jsonData = keychain.data(forKey: key2) else { return nil }
 
-        guard let json = try? JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [String: Any] else {
-            return nil
-        }
+        guard let json = try? JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [String: Any] else { return nil }
 
-        guard let sessionToken = json["sessionToken"] as? String, let ksync = json["kSync"] as? String, let kxcs = json["kXCS"] as? String else {
-            return nil
-        }
+        guard let sessionToken = json["sessionToken"] as? String,
+              let ksync = json["kSync"] as? String,
+              let kxcs = json["kXCS"] as? String
+        else { return nil }
 
         return (session: sessionToken, ksync: ksync, kxcs: kxcs)
     }
@@ -279,7 +276,7 @@ open class RustFirefoxAccounts {
 
     public func disconnect() {
         guard let accountManager = accountManager.peek() else { return }
-        accountManager.logout() { _ in }
+        accountManager.logout { _ in }
         let prefs = RustFirefoxAccounts.prefs
         prefs?.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
         prefs?.removeObjectForKey(prefKeyCachedUserProfile)

@@ -8,7 +8,7 @@ import Shared
 import XCGLogger
 
 private let log = Logger.browserLogger
-class TabManagerStore: FeatureFlagsProtocol {
+class TabManagerStore: FeatureFlaggable {
     fileprivate var lockedForReading = false
     fileprivate let imageStore: DiskImageStore?
     fileprivate var fileManager = FileManager.default
@@ -70,7 +70,7 @@ class TabManagerStore: FeatureFlagsProtocol {
             imageStore?.put(uuidString, image: screenshot)
         }
     }
-    
+
     func removeScreenshot(forTab tab: Tab?) {
         if let tab = tab, let screenshotUUID = tab.screenshotUUID {
             _ = imageStore?.removeImage(screenshotUUID.uuidString)
@@ -86,7 +86,8 @@ class TabManagerStore: FeatureFlagsProtocol {
     func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, writeCompletion: (() -> Void)? = nil) {
         assert(Thread.isMainThread)
         guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab),
-            let path = tabsStateArchivePath() else {
+              let path = tabsStateArchivePath()
+        else {
                 clearArchive()
                 return
         }
@@ -123,7 +124,7 @@ class TabManagerStore: FeatureFlagsProtocol {
         guard !lockedForReading, savedTabs.count > 0 else { return nil }
         lockedForReading = true
         defer { lockedForReading = false }
-        
+
         var savedTabs = savedTabs
         // Make sure to wipe the private tabs if the user has the pref turned on
         if clearPrivateTabs {
@@ -162,4 +163,3 @@ extension TabManagerStore {
         return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).0.count
     }
 }
-

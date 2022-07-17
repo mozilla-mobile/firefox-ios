@@ -18,7 +18,7 @@ struct EmptyPrivateTabsViewUX {
 // View we display when there are no private tabs created
 class EmptyPrivateTabsView: UIView {
     // MARK: - Properties
-    
+
     // UI
     let titleLabel: UILabel = .build { label in
         label.text =  .PrivateBrowsingTitle
@@ -43,24 +43,24 @@ class EmptyPrivateTabsView: UIView {
     }
 
     // MARK: - Inits
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         addSubviews(iconImageView, titleLabel, descriptionLabel, learnMoreButton)
-        
+
         NSLayoutConstraint.activate([
             iconImageView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -70),
             iconImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             iconImageView.widthAnchor.constraint(equalToConstant: 120),
             iconImageView.heightAnchor.constraint(equalToConstant: 120),
-            
+
             titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 0),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            
+
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: CGFloat(EmptyPrivateTabsViewUX.TextMargin)),
             descriptionLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            
+
             learnMoreButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: CGFloat(EmptyPrivateTabsViewUX.LearnMoreMargin)),
             learnMoreButton.centerXAnchor.constraint(equalTo: centerXAnchor),
         ])

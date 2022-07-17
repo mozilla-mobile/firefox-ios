@@ -10,24 +10,22 @@ enum AppSettingsDeeplinkOption {
     case customizeHomepage
     case customizeTabs
     case customizeToolbar
+    case customizeTopSites
     case wallpaper
 }
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
-class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsProtocol {
+class AppSettingsTableViewController: SettingsTableViewController, FeatureFlaggable {
 
     // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption?
-    var nimbus: FxNimbus
 
     // MARK: - Initializers
     init(with profile: Profile,
          and tabManager: TabManager,
          delegate: SettingsDelegate?,
-         deeplinkingTo destination: AppSettingsDeeplinkOption? = nil,
-         with nimbus: FxNimbus = FxNimbus.shared) {
+         deeplinkingTo destination: AppSettingsDeeplinkOption? = nil) {
         self.deeplinkTo = destination
-        self.nimbus = nimbus
 
         super.init()
         self.profile = profile
@@ -43,11 +41,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let variables = Experiments.shared.getVariables(featureId: .nimbusValidation)
-        let title = variables.getText("settings-title") ?? .AppSettingsTitle
-        let suffix = variables.getString("settings-title-punctuation") ?? ""
-
-        navigationItem.title = "\(title)\(suffix)"
+        navigationItem.title = String.AppSettingsTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: .AppSettingsDone,
             style: .done,
@@ -58,7 +52,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         // Refresh the user's FxA profile upon viewing settings. This will update their avatar,
         // display name, etc.
-        ////profile.rustAccount.refreshProfile()
+        //// profile.rustAccount.refreshProfile()
 
         checkForDeeplinkSetting()
     }
@@ -74,20 +68,23 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         case .customizeHomepage:
             viewController = HomePageSettingViewController(prefs: profile.prefs)
-            
+
         case .customizeTabs:
             viewController = TabsSettingsViewController()
-            
+
         case .customizeToolbar:
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
             viewController = SearchBarSettingsViewController(viewModel: viewModel)
 
         case .wallpaper:
-            let viewModel = WallpaperSettingsViewModel(with: tabManager, and: WallpaperManager())
-            let wallpaperVC = WallpaperSettingsViewController(with: viewModel)
+            let viewModel = LegacyWallpaperSettingsViewModel(with: tabManager, and: LegacyWallpaperManager())
+            let wallpaperVC = LegacyWallpaperSettingsViewController(with: viewModel)
             // Push wallpaper settings view controller directly as its not of type settings viewcontroller
             navigationController?.pushViewController(wallpaperVC, animated: true)
             return
+
+        case .customizeTopSites:
+            viewController = TopSitesSettingsViewController()
         }
 
         viewController.profile = profile
@@ -116,10 +113,9 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
             generalSettings.insert(SearchBarSetting(settings: self), at: 5)
         }
 
-        let tabTrayGroupsAreBuildActive = featureFlags.isFeatureActiveForBuild(.tabTrayGroups)
-        let inactiveTabsAreBuildActive = featureFlags.isFeatureActiveForBuild(.inactiveTabs)
-        if let inactiveTabsAreNimbusActive = nimbus.features.tabTrayFeature.value().sectionsEnabled[.inactiveTabs],
-           tabTrayGroupsAreBuildActive || (inactiveTabsAreBuildActive && inactiveTabsAreNimbusActive) {
+        let tabTrayGroupsAreBuildActive = featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly)
+        let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
+        if tabTrayGroupsAreBuildActive || inactiveTabsAreBuildActive {
             generalSettings.insert(TabsSetting(), at: 3)
         }
 
@@ -147,13 +143,14 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         if #available(iOS 14.0, *) {
             settings += [
-                SettingSection(footerTitle: NSAttributedString(string: String.DefaultBrowserCardDescription), children: [DefaultBrowserSetting()])
+                SettingSection(footerTitle: NSAttributedString(string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription),
+                               children: [DefaultBrowserSetting()])
             ]
         }
 
         let accountSectionTitle = NSAttributedString(string: .FxAFirefoxAccount)
 
-        let footerText = !profile.hasAccount() ? NSAttributedString(string: .FxASyncUsageDetails) : nil
+        let footerText = !profile.hasAccount() ? NSAttributedString(string: .Settings.Sync.FxASyncUsageDetails) : nil
         settings += [
             SettingSection(title: accountSectionTitle, footerTitle: footerText, children: [
                 // Without a Firefox Account:
@@ -208,7 +205,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
                 SentryIDSetting(settings: self),
                 ChangeToChinaSetting(settings: self),
                 ShowEtpCoverSheet(settings: self),
-                ToggleChronTabs(settings: self),
                 TogglePullToRefresh(settings: self),
                 ToggleInactiveTabs(settings: self),
                 ToggleHistoryGroups(settings: self),

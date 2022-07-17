@@ -25,16 +25,13 @@ class ContextualHintViewModel {
     // MARK: - Properties
     var hintType: ContextualHintViewType
     var timer: Timer?
-    var presentFromTimer: (() -> Void)? = nil
+    var presentFromTimer: (() -> Void)?
     private var profile: Profile
     private var hasSentTelemetryEvent = false
 
     var arrowDirection = UIPopoverArrowDirection.down
-
     private var hasAlreadyBeenPresented: Bool {
-        guard let contextualHintData = profile.prefs.boolForKey(prefsKey) else {
-            return false
-        }
+        guard let contextualHintData = profile.prefs.boolForKey(prefsKey) else { return false }
 
         return contextualHintData
     }
@@ -43,7 +40,7 @@ class ContextualHintViewModel {
     // CFR has not yet been presented. On iPad we don't present the onboarding CFR
     private var canJumpBackInBePresented: Bool {
         guard UIDevice.current.userInterfaceIdiom != .pad else { return true }
-        
+
         if let hasShownOnboardingCFR = profile.prefs.boolForKey(CFRPrefsKeys.ToolbarOnboardingKey.rawValue),
            hasShownOnboardingCFR {
             return true
@@ -111,6 +108,7 @@ class ContextualHintViewModel {
 
     func stopTimer() {
         timer?.invalidate()
+        timer = nil
     }
 
     // MARK: Text
@@ -150,7 +148,8 @@ class ContextualHintViewModel {
 
     // MARK: - Telemetry
     func sendTelemetryEvent(for eventType: CFRTelemetryEvent) {
-        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: hintType.rawValue]
+        let hintTypeExtra = hintType == .toolbarLocation ? getToolbarLocation() : hintType.rawValue
+        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: hintTypeExtra]
 
         switch eventType {
         case .closeButton:
@@ -177,6 +176,14 @@ class ContextualHintViewModel {
                                          extras: extra)
             hasSentTelemetryEvent = true
         }
+    }
+
+    private func getToolbarLocation() -> String {
+        guard SearchBarSettingsViewModel.isEnabled,
+              SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom
+        else { return "ToolbarLocationTop" }
+
+        return "ToolbarLocationBottom"
     }
 
     // MARK: - Present

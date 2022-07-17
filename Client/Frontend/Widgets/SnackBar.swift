@@ -148,7 +148,7 @@ class SnackBar: UIView {
         }
 
         backgroundColor = UIColor.clear
-        self.clipsToBounds = true //overridden by masksToBounds = false
+        self.clipsToBounds = true // overridden by masksToBounds = false
         self.layer.borderWidth = SnackBarUX.BorderWidth
         self.layer.borderColor = UIColor.theme.snackbar.border.cgColor
         self.layer.cornerRadius = 8

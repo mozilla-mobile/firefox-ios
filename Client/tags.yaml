@@ -1,0 +1,16 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# You can find more information about tags
+# here: https://mozilla.github.io/glean/book/reference/yaml/tags.html
+
+# Disable line-length rule because the links in the descriptions can be long
+# yamllint disable rule:line-length
+
+---
+$schema: moz://mozilla.org/schemas/glean/tags/1-0-0
+
+TopSites:
+  description: Corresponds to the [Feature:TopSites](https://mozilla-hub.atlassian.net/browse/FXIOS-3464)
+    label on GitHub.

@@ -5,8 +5,9 @@
 import Foundation
 import Shared
 import WebKit
-import SDWebImage
 import CoreSpotlight
+import SDWebImage
+import Kingfisher
 
 private let log = Logger.browserLogger
 
@@ -29,7 +30,7 @@ class ClearableError: MaybeErrorType {
 class HistoryClearable: Clearable {
     let profile: Profile
     let tabManager: TabManager
-    
+
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
@@ -43,15 +44,23 @@ class HistoryClearable: Clearable {
         Tab.ChangeUserAgent.clear()
 
         return profile.history.clearHistory().bindQueue(.main) { success in
+            // TODO: Remove clear cache for SDWebImage when we are ready to remove library
+            // Clear image cache - SDWebImage
             SDImageCache.shared.clearDisk()
             SDImageCache.shared.clearMemory()
+
+            // Clear image cache - Kingfisher
+            KingfisherManager.shared.cache.clearMemoryCache()
+            KingfisherManager.shared.cache.clearDiskCache()
+
             self.profile.recentlyClosedTabs.clearTabs()
+            self.profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).uponQueue(.global(qos: .userInteractive)) { _ in }
             CSSearchableIndex.default().deleteAllSearchableItems()
             NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
             log.debug("HistoryClearable succeeded: \(success).")
-            
+
             self.tabManager.clearAllTabsHistory()
-            
+
             return Deferred(value: success)
         }
     }
@@ -96,7 +105,7 @@ class SpotlightClearable: Clearable {
 
     func clear() -> Success {
         let deferred = Success()
-        UserActivityHandler.clearSearchIndex() { _ in
+        UserActivityHandler.clearSearchIndex { _ in
             deferred.fill(Maybe(success: ()))
         }
         return deferred
@@ -162,14 +171,14 @@ class CookiesClearable: Clearable {
 }
 
 class TrackingProtectionClearable: Clearable {
-    //@TODO: re-using string because we are too late in cycle to change strings
+    // @TODO: re-using string because we are too late in cycle to change strings
     var label: String {
         return .SettingsTrackingProtectionSectionName
     }
 
     func clear() -> Success {
         let result = Success()
-        ContentBlocker.shared.clearSafelist() {
+        ContentBlocker.shared.clearSafelist {
             result.fill(Maybe(success: ()))
         }
         return result
@@ -182,7 +191,12 @@ class DownloadedFilesClearable: Clearable {
 
     func clear() -> Success {
         if let downloadsPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Downloads"),
-            let files = try? FileManager.default.contentsOfDirectory(at: downloadsPath, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants]) {
+            let files = try? FileManager.default.contentsOfDirectory(
+                at: downloadsPath,
+                includingPropertiesForKeys: nil,
+                options: [.skipsHiddenFiles,
+                          .skipsPackageDescendants,
+                          .skipsSubdirectoryDescendants]) {
             for file in files {
                 try? FileManager.default.removeItem(at: file)
             }

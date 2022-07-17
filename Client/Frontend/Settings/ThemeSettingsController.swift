@@ -122,7 +122,7 @@ class ThemeSettingsController: ThemedTableViewController {
 
     @objc func systemThemeSwitchValueChanged(control: UISwitch) {
         LegacyThemeManager.instance.systemThemeIsOn = control.isOn
-    
+
         if control.isOn {
             // Reset the user interface style to the default before choosing our theme
             UIApplication.shared.delegate?.window??.overrideUserInterfaceStyle = .unspecified
@@ -133,16 +133,16 @@ class ThemeSettingsController: ThemedTableViewController {
         }
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: .systemThemeSwitch, extras: ["to": control.isOn])
 
-        // Switch animation must begin prior to scheduling table view update animation (or the switch will be auto-synchronized to the slower tableview animation and makes the switch behaviour feel slow and non-standard).
+        // Switch animation must begin prior to scheduling table view update animation
+        // (or the switch will be auto-synchronized to the slower tableview animation
+        // and makes the switch behaviour feel slow and non-standard).
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             UIView.transition(with: self.tableView, duration: 0.2, options: .transitionCrossDissolve, animations: { self.tableView.reloadData()  })
         }
     }
 
     @objc func sliderValueChanged(control: UISlider, event: UIEvent) {
-        guard let touch = event.allTouches?.first, touch.phase == .ended else {
-            return
-        }
+        guard let touch = event.allTouches?.first, touch.phase == .ended else { return }
 
         LegacyThemeManager.instance.automaticBrightnessValue = control.value
         brightnessChanged()

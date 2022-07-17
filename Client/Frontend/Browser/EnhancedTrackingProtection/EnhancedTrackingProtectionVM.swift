@@ -55,7 +55,7 @@ class EnhancedTrackingProtectionMenuVM {
         self.tab = tab
         self.profile = profile
         self.tabManager = tabManager
-        
+
     }
 
     // MARK: - Functions

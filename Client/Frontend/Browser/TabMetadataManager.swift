@@ -2,33 +2,32 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-
 import MozillaAppServices
 
 class TabMetadataManager {
-    
+
     let profile: Profile?
-    
+
     // Tab Groups
     var tabGroupData = TabGroupData()
     var tabGroupsTimerHelper = StopWatchTimer()
     var shouldResetTabGroupData = false
     let minViewTimeInSeconds = 7
-    
+
     private var shouldUpdateObservationTitle: Bool {
         tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
         tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
         tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openURLOnly.rawValue
     }
-    
+
     init(profile: Profile) {
         self.profile = profile
     }
-    
+
     // Only update search term data with valid search term data
     func shouldUpdateSearchTermData(webViewUrl: String?) -> Bool {
         guard let nextUrl = webViewUrl, !nextUrl.isEmpty else { return false }
-        
+
         return !tabGroupData.tabAssociatedSearchTerm.isEmpty &&
         !tabGroupData.tabAssociatedSearchUrl.isEmpty &&
         nextUrl != tabGroupData.tabAssociatedSearchUrl &&
@@ -37,7 +36,10 @@ class TabMetadataManager {
 
     func updateTimerAndObserving(state: TabGroupTimerState,
                                  searchData: TabGroupData = TabGroupData(),
-                                 tabTitle: String? = nil) {
+                                 tabTitle: String? = nil, isPrivate: Bool) {
+
+        guard !isPrivate else { return }
+
         switch state {
         case .navSearchLoaded:
             updateNavSearchLoadedState(searchData: searchData)
@@ -57,17 +59,17 @@ class TabMetadataManager {
             tabGroupData.tabHistoryCurrentState = state.rawValue
         }
     }
-    
+
     /// Update existing or new observation with title once it changes for certain tab states title becomes available
     /// - Parameters:
     ///   - title: Title to be saved
     ///   - completion: Completion handler that gets called once the recording is done. Initially used only for Unit test
-    func updateObservationTitle(_ title: String, completion: (() -> ())? = nil) {
+    func updateObservationTitle(_ title: String, completion: (() -> Void)? = nil) {
         guard shouldUpdateObservationTitle else {
             completion?()
             return
         }
-        
+
         let key = tabGroupData.tabHistoryMetadatakey()
         let observation = HistoryMetadataObservation(url: key.url,
                                                      referrerUrl: key.referrerUrl,
@@ -77,8 +79,8 @@ class TabMetadataManager {
                                                      title: title)
         updateObservationForKey(key: key, observation: observation, completion: completion)
     }
-    
-    func updateObservationViewTime(completion: (() -> ())? = nil) {
+
+    func updateObservationViewTime(completion: (() -> Void)? = nil) {
         let key = tabGroupData.tabHistoryMetadatakey()
         let observation = HistoryMetadataObservation(url: key.url,
                                                      referrerUrl: key.referrerUrl,
@@ -88,33 +90,35 @@ class TabMetadataManager {
                                                      title: nil)
         updateObservationForKey(key: key, observation: observation, completion: completion)
     }
-    
+
     // MARK: - Private
-    
+
     private func updateObservationForKey(key: HistoryMetadataKey,
                                          observation: HistoryMetadataObservation,
-                                         completion: (() -> ())?) {
+                                         completion: (() -> Void)?) {
         guard let profile = profile else { return }
-        
+
+        guard !key.url.isEmpty else { return }
+
         profile.places.noteHistoryMetadataObservation(key: key, observation: observation).uponQueue(.main) { _ in
             completion?()
         }
     }
-    
+
     private func updateNavSearchLoadedState(searchData: TabGroupData) {
         shouldResetTabGroupData = false
         tabGroupsTimerHelper.startOrResume()
         tabGroupData = searchData
         tabGroupData.tabHistoryCurrentState = TabGroupTimerState.navSearchLoaded.rawValue
     }
-    
+
     private func updateNewTabState(searchData: TabGroupData) {
         shouldResetTabGroupData = false
         tabGroupsTimerHelper.resetTimer()
         tabGroupsTimerHelper.startOrResume()
         tabGroupData.tabHistoryCurrentState = TabGroupTimerState.newTab.rawValue
     }
-    
+
     private func updateNavigatedToDifferentUrl(searchData: TabGroupData) {
         if !tabGroupData.tabAssociatedNextUrl.isEmpty && tabGroupData.tabAssociatedSearchUrl.isEmpty || shouldResetTabGroupData {
             // reset tab group
@@ -132,7 +136,7 @@ class TabMetadataManager {
             tabGroupData.tabHistoryCurrentState = TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue
         }
     }
-    
+
     private func updateTabSelected(searchData: TabGroupData) {
         if !shouldResetTabGroupData {
             if tabGroupsTimerHelper.isPaused {
@@ -141,7 +145,7 @@ class TabMetadataManager {
             tabGroupData.tabHistoryCurrentState = TabGroupTimerState.tabSelected.rawValue
         }
     }
-    
+
     private func updateTabSwitched(searchData: TabGroupData) {
         if !shouldResetTabGroupData {
             updateObservationViewTime()
@@ -149,7 +153,7 @@ class TabMetadataManager {
             tabGroupData.tabHistoryCurrentState = TabGroupTimerState.tabSwitched.rawValue
         }
     }
-    
+
     private func updateOpenInNewTab(searchData: TabGroupData) {
         shouldResetTabGroupData = false
         if !searchData.tabAssociatedSearchUrl.isEmpty {
@@ -157,7 +161,7 @@ class TabMetadataManager {
         }
         tabGroupData.tabHistoryCurrentState = TabGroupTimerState.openInNewTab.rawValue
     }
-    
+
     /// Update observation for Regular sites (not search term)
     /// if the title isEmpty we don't record because title can be overriden
     /// - Parameters:
@@ -167,7 +171,7 @@ class TabMetadataManager {
         tabGroupData = searchData
         tabGroupData.tabHistoryCurrentState = TabGroupTimerState.openURLOnly.rawValue
         tabGroupsTimerHelper.startOrResume()
-        
+
         guard let title = title, !title.isEmpty else { return }
 
         updateObservationTitle(title)

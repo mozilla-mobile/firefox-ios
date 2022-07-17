@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 
-protocol DownloadDelegate {
+protocol DownloadDelegate: AnyObject {
     func download(_ download: Download, didCompleteWithError error: Error?)
     func download(_ download: Download, didDownloadBytes bytesDownloaded: Int64)
     func download(_ download: Download, didFinishDownloadingTo location: URL)
@@ -80,11 +80,9 @@ class HTTPDownload: Download {
         self.cookieStore = cookieStore
         self.preflightResponse = preflightResponse
         self.request = request
-        
+
         // Verify scheme is a secure http or https scheme before moving forward with HTTPDownload initialization
-        guard let scheme = request.url?.scheme, (scheme == "http" || scheme == "https") else {
-            return nil
-        }
+        guard let scheme = request.url?.scheme, (scheme == "http" || scheme == "https") else { return nil }
 
         super.init()
 
@@ -97,7 +95,7 @@ class HTTPDownload: Download {
         }
 
         self.totalBytesExpected = preflightResponse.expectedContentLength > 0 ? preflightResponse.expectedContentLength : nil
-        
+
         self.session = URLSession(configuration: .ephemeral, delegate: self, delegateQueue: .main)
         self.task = session?.downloadTask(with: request)
     }
@@ -192,7 +190,7 @@ class BlobDownload: Download {
     }
 }
 
-protocol DownloadQueueDelegate {
+protocol DownloadQueueDelegate: AnyObject {
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download)
     func downloadQueue(_ downloadQueue: DownloadQueue, didDownloadCombinedBytes combinedBytesDownloaded: Int64, combinedTotalBytesExpected: Int64?)
     func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL)
@@ -258,9 +256,7 @@ class DownloadQueue {
 
 extension DownloadQueue: DownloadDelegate {
     func download(_ download: Download, didCompleteWithError error: Error?) {
-        guard let error = error, let index = downloads.firstIndex(of: download) else {
-            return
-        }
+        guard let error = error, let index = downloads.firstIndex(of: download) else { return }
 
         lastDownloadError = error
         downloads.remove(at: index)
@@ -276,9 +272,7 @@ extension DownloadQueue: DownloadDelegate {
     }
 
     func download(_ download: Download, didFinishDownloadingTo location: URL) {
-        guard let index = downloads.firstIndex(of: download) else {
-            return
-        }
+        guard let index = downloads.firstIndex(of: download) else { return }
 
         downloads.remove(at: index)
         delegate?.downloadQueue(self, download: download, didFinishDownloadingTo: location)

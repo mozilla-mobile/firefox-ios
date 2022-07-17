@@ -8,7 +8,7 @@ import SnapKit
 
 import Account
 
-fileprivate class CustomFxAContentServerEnableSetting: BoolSetting {
+private class CustomFxAContentServerEnableSetting: BoolSetting {
       init(prefs: Prefs, settingDidChange: ((Bool?) -> Void)? = nil) {
           super.init(
               prefs: prefs, prefKey: PrefsKeys.KeyUseCustomFxAContentServer, defaultValue: false,
@@ -18,7 +18,7 @@ fileprivate class CustomFxAContentServerEnableSetting: BoolSetting {
       }
   }
 
-  fileprivate class CustomSyncTokenServerEnableSetting: BoolSetting {
+  private class CustomSyncTokenServerEnableSetting: BoolSetting {
       init(prefs: Prefs, settingDidChange: ((Bool?) -> Void)? = nil) {
           super.init(
               prefs: prefs, prefKey: PrefsKeys.KeyUseCustomSyncTokenServerOverride, defaultValue: false,
@@ -28,8 +28,16 @@ fileprivate class CustomFxAContentServerEnableSetting: BoolSetting {
       }
   }
 
-  fileprivate class CustomURLSetting: WebPageSetting {
-      override init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, isChecked: @escaping () -> Bool = { return false }, settingDidChange: ((String?) -> Void)? = nil) {
+  private class CustomURLSetting: WebPageSetting {
+      override init(
+        prefs: Prefs,
+        prefKey: String,
+        defaultValue: String? = nil,
+        placeholder: String,
+        accessibilityIdentifier: String,
+        isChecked: @escaping () -> Bool = { return false },
+        settingDidChange: ((String?) -> Void)? = nil
+      ) {
           super.init(prefs: prefs,
                      prefKey: prefKey,
                      defaultValue: defaultValue,
@@ -39,7 +47,6 @@ fileprivate class CustomFxAContentServerEnableSetting: BoolSetting {
           textField.clearButtonMode = .always
       }
   }
-
 
 class AdvancedAccountSettingViewController: SettingsTableViewController {
     fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
@@ -61,8 +68,13 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
         let prefs = profile.prefs
 
-        let useStage = BoolSetting(prefs: prefs, prefKey: PrefsKeys.UseStageServer, defaultValue: false, attributedTitleText: NSAttributedString(string: .AdvancedAccountUseStageServer, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
-        { isOn in
+        let useStage = BoolSetting(
+            prefs: prefs,
+            prefKey: PrefsKeys.UseStageServer,
+            defaultValue: false,
+            attributedTitleText: NSAttributedString(
+                string: .AdvancedAccountUseStageServer,
+                attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])) { isOn in
             self.settings = self.generateSettings()
             self.tableView.reloadData()
         }

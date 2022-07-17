@@ -26,16 +26,14 @@ class GoogleTopSiteManager {
     private var prefs: Prefs
     private var url: String? {
         // Couldn't find a valid region hence returning a nil value for url
-        guard let regionCode = Locale.current.regionCode, !invalidRegion.contains(regionCode) else {
-            return nil
-        }
+        guard let regionCode = Locale.current.regionCode, !invalidRegion.contains(regionCode) else { return nil }
         // Special case for US
         if regionCode == "US" {
             return Constants.usUrl
         }
         return Constants.rowUrl
     }
-    
+
     var hasAdded: Bool {
         get {
             guard let value = prefs.boolForKey(PrefsKeys.GoogleTopSiteAddedKey) else {
@@ -47,7 +45,7 @@ class GoogleTopSiteManager {
             prefs.setBool(value, forKey: PrefsKeys.GoogleTopSiteAddedKey)
         }
     }
-    
+
     var isHidden: Bool {
         get {
             guard let value = prefs.boolForKey(PrefsKeys.GoogleTopSiteHideKey) else {
@@ -59,11 +57,11 @@ class GoogleTopSiteManager {
             prefs.setBool(value, forKey: PrefsKeys.GoogleTopSiteHideKey)
         }
     }
-    
+
     init(prefs: Prefs) {
         self.prefs = prefs
     }
-    
+
     func suggestedSiteData() -> PinnedSite? {
         guard let url = self.url else { return nil }
 
@@ -74,9 +72,9 @@ class GoogleTopSiteManager {
 
     // Once Google top site is added, we don't remove unless it's explicitly unpinned
     // Add it when pinned websites are less than max pinned sites
-    func shouldAddGoogleTopSite(availableSpacesCount: Int) -> Bool {
+    func shouldAddGoogleTopSite(hasSpace: Bool) -> Bool {
         let shouldShow = !isHidden && suggestedSiteData() != nil
-        return shouldShow && (hasAdded || availableSpacesCount > 0)
+        return shouldShow && (hasAdded || hasSpace)
     }
 
     func removeGoogleTopSite(site: Site) {

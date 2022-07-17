@@ -5,7 +5,7 @@
 import UIKit
 import Shared
 
-protocol CredentialWelcomeViewControllerDelegate {
+protocol CredentialWelcomeViewControllerDelegate: AnyObject {
     func credentialWelcomeViewControllerDidCancel()
     func credentialWelcomeViewControllerDidProceed()
 }

@@ -10,7 +10,7 @@ enum AddCredentialField: Int {
     case websiteItem
     case usernameItem
     case passwordItem
-    
+
     var indexPath: IndexPath {
         return IndexPath(row: rawValue, section: 0)
     }
@@ -33,16 +33,16 @@ class AddCredentialViewController: UIViewController {
     fileprivate weak var websiteField: UITextField!
     fileprivate weak var usernameField: UITextField!
     fileprivate weak var passwordField: UITextField!
-    
+
     fileprivate let didSaveAction: (LoginEntry) -> Void
-    
+
     fileprivate lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
     fileprivate lazy var saveButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: .SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(addCredential))
         button.isEnabled = false
         return button
     }()
-    
+
     init(didSaveAction: @escaping (LoginEntry) -> Void) {
         self.didSaveAction = didSaveAction
         super.init(nibName: nil, bundle: nil)
@@ -74,14 +74,14 @@ class AddCredentialViewController: UIViewController {
         // but since we don't use the tableView's editing flag for editing we handle this ourselves.
         KeyboardHelper.defaultHelper.addDelegate(self)
     }
-    
+
     @objc func addCredential() {
         guard let hostname = websiteField.text,
               let username = usernameField.text,
               let password = passwordField.text else {
             return
         }
-        
+
         didSaveAction(
             LoginEntry(
                 fromLoginEntryFlattened: LoginEntryFlattened(
@@ -97,11 +97,11 @@ class AddCredentialViewController: UIViewController {
             )
         )
     }
-    
+
     @objc func cancel() {
         dismiss(animated: true)
     }
-    
+
     /// Normalize the website entered by adding `https://` URL scheme. This format is necessary in ordered to be saved on local passwords storage.
     /// - Parameter website: Website address provided by the user in a String format
     /// - Returns: Normalized website containing `https://` URL scheme if necessary
@@ -191,17 +191,17 @@ extension AddCredentialViewController: LoginDetailTableViewCellDelegate {
         guard cell.descriptionLabel == websiteField, let website = websiteField?.text else { return }
         websiteField.text = normalize(website: website)
     }
-    
+
     func textFieldDidChange(_ cell: LoginDetailTableViewCell) {
         // TODO: Add validation if necessary
         let enableSave =
             !(websiteField.text?.isEmpty ?? true) &&
             !(usernameField.text?.isEmpty ?? true) &&
             !(passwordField.text?.isEmpty ?? true)
-        
+
         saveButton.isEnabled = enableSave
     }
-    
+
     func canPerform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool {
         guard let item = infoItemForCell(cell) else {
             return false
@@ -225,7 +225,7 @@ extension AddCredentialViewController: LoginDetailTableViewCellDelegate {
 
         return false
     }
-    
+
     fileprivate func cellForItem(_ item: AddCredentialField) -> LoginDetailTableViewCell? {
         return tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
     }

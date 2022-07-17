@@ -26,7 +26,7 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let HeaderAndRowHeight: CGFloat = 48
-        static let CloseAllTabRowHeight: CGFloat = 100
+        static let CloseAllTabRowHeight: CGFloat = 88
         static let RoundedContainerPaddingClosed: CGFloat = 30
         static let RoundedContainerAdditionalPaddingOpened: CGFloat  = 40
         static let InactiveTabTrayWidthPadding: CGFloat = 30
@@ -37,11 +37,11 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell {
     var inactiveTabsViewModel: InactiveTabViewModel?
     var hasExpanded = false
     weak var delegate: InactiveTabsDelegate?
-    
+
     // Views
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
+        tableView.register(InactiveTabItemCell.self, forCellReuseIdentifier: InactiveTabItemCell.cellIdentifier)
         tableView.register(CellWithRoundedButton.self, forCellReuseIdentifier: CellWithRoundedButton.cellIdentifier)
         tableView.register(InactiveTabHeader.self, forHeaderFooterViewReuseIdentifier: InactiveTabHeader.cellIdentifier)
         tableView.allowsMultipleSelectionDuringEditing = false
@@ -56,7 +56,7 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-    
+
     private var containerView: UIView = .build { view in
         view.layer.cornerRadius = 13
         view.layer.borderWidth = 1
@@ -89,7 +89,7 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell {
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            
+
             tableView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -122,37 +122,46 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         case .inactive, .none:
             return InactiveTabCell.UX.HeaderAndRowHeight
         case .closeAllTabsButton:
-            return InactiveTabCell.UX.CloseAllTabRowHeight
+            return UITableView.automaticDimension
         }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch InactiveTabSection(rawValue: indexPath.section) {
         case .inactive:
-            let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as! OneLineTableViewCell
-            cell.customization = .inactiveCell
-            cell.backgroundColor = .clear
-            cell.accessoryView = nil
-            cell.bottomSeparatorView.isHidden = false
-            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: InactiveTabItemCell.cellIdentifier,
+                                                           for: indexPath) as? InactiveTabItemCell
+            else {
+                return UITableViewCell()
+            }
+
             guard let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] else { return cell }
-            cell.titleLabel.text = tab.displayTitle
-            cell.leftImageView.setImageAndBackground(forIcon: tab.displayFavicon, website: getTabDomainUrl(tab: tab)) {}
-            cell.shouldLeftAlignTitle = false
-            cell.updateMidConstraint()
-            cell.accessoryType = .none
+
+            let viewModel = InactiveTabItemCellModel(title: tab.getTabTrayTitle(),
+                                                     icon: tab.displayFavicon,
+                                                     website: getTabDomainUrl(tab: tab))
+            cell.configureCell(viewModel: viewModel)
             return cell
 
         case .closeAllTabsButton:
-            if let closeAllButtonCell = tableView.dequeueReusableCell(withIdentifier: CellWithRoundedButton.cellIdentifier, for: indexPath) as? CellWithRoundedButton {
-                closeAllButtonCell.buttonClosure = {
-                    self.delegate?.didTapCloseAllTabs()
-                }
-                return closeAllButtonCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CellWithRoundedButton.cellIdentifier,
+                                                           for: indexPath) as? CellWithRoundedButton
+            else {
+                return UITableViewCell()
             }
-            return tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as! OneLineTableViewCell
+
+            cell.buttonClosure = {
+                self.delegate?.didTapCloseAllTabs()
+            }
+
+            return cell
         case .none:
-            return tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as! OneLineTableViewCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
+                                                           for: indexPath) as? OneLineTableViewCell
+            else {
+                return UITableViewCell()
+            }
+            return cell
         }
     }
 
@@ -163,7 +172,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             return nil
         }
     }
-    
+
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if !hasExpanded { return CGFloat.leastNormalMagnitude }
         switch InactiveTabSection(rawValue: section) {
@@ -171,7 +180,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             return CGFloat.leastNormalMagnitude
         }
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let section = indexPath.section
@@ -191,21 +200,27 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: InactiveTabHeader.cellIdentifier) as? InactiveTabHeader else { return nil }
             headerView.state = hasExpanded ? .down : .right
             headerView.title = String.TabsTrayInactiveTabsSectionTitle
+            headerView.accessibilityLabel = hasExpanded ?
+                .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionOpenedAccessibilityTitle :
+                .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionClosedAccessibilityTitle
             headerView.moreButton.isHidden = false
             headerView.moreButton.addTarget(self,
                                             action: #selector(toggleInactiveTabSection),
                                             for: .touchUpInside)
             headerView.contentView.backgroundColor = .clear
 
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleInactiveTabSection))
+            headerView.addGestureRecognizer(tapGesture)
+
             delegate?.setupCFR(with: headerView.titleLabel)
 
             return headerView
-            
+
         case .closeAllTabsButton:
             return nil
         }
     }
-    
+
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         let section = indexPath.section
         switch InactiveTabSection(rawValue: section) {
@@ -215,7 +230,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             return .none
         }
     }
-    
+
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let section = indexPath.section
         guard editingStyle == .delete else { return }
@@ -227,22 +242,20 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         case .closeAllTabsButton, .none: return
         }
     }
-    
+
     @objc func toggleInactiveTabSection() {
         hasExpanded = !hasExpanded
         tableView.reloadData()
         delegate?.toggleInactiveTabSection(hasExpanded: hasExpanded)
 
+        // Post accessibility notification when the section was opened/closed
+        UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
+
         if hasExpanded { delegate?.presentCFR() }
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch InactiveTabSection(rawValue: section) {
-        case .inactive, .none:
-            return InactiveTabCell.UX.HeaderAndRowHeight
-        case .closeAllTabsButton:
-            return CGFloat.leastNormalMagnitude
-        }
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
@@ -253,11 +266,10 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             return CGFloat.leastNormalMagnitude
         }
     }
-    
+
     func getTabDomainUrl(tab: Tab) -> URL? {
-        guard tab.url != nil else {
-            return tab.sessionData?.urls.last?.domainURL
-        }
+        guard tab.url != nil else { return tab.sessionData?.urls.last?.domainURL }
+
         return tab.url?.domainURL
     }
 }

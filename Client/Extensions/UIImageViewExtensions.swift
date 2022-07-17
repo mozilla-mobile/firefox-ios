@@ -4,8 +4,8 @@
 
 import UIKit
 import Storage
-import SDWebImage
 import Shared
+import Kingfisher
 
 extension UIColor {
     var components: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
@@ -38,28 +38,32 @@ public extension UIImageView {
         }
 
         backgroundColor = nil
-        sd_setImage(with: nil) // cancels any pending SDWebImage operations.
+        let defaults = fallbackFavicon(forUrl: website)
 
         if let url = website, let bundledIcon = FaviconFetcher.getBundledIcon(forUrl: url) {
             self.image = UIImage(contentsOfFile: bundledIcon.filePath)
             finish(bgColor: bundledIcon.bgcolor)
-        } else {
-            let imageURL = URL(string: icon?.url ?? "")
-            let defaults = fallbackFavicon(forUrl: website)
-            self.sd_setImage(with: imageURL, placeholderImage: defaults.image, options: []) {(img, err, _, _) in
-                guard err == nil else {
-                    finish(bgColor: defaults.color)
+        } else if let imageURL = URL(string: icon?.url ?? "") {
+            ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: imageURL,
+                                       limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+                guard error == nil, let image = image else {
+                    self.image = defaults.image
+                    finish(bgColor: nil)
                     return
                 }
-                finish(bgColor: nil)
+                self.image = image
+                finish(bgColor: defaults.color)
             }
+        } else {
+            self.image = defaults.image
+            finish(bgColor: nil)
         }
     }
 
     func setFavicon(forSite site: Site, completion: @escaping () -> Void ) {
         setImageAndBackground(forIcon: site.icon, website: site.tileURL, completion: completion)
     }
-    
+
    /*
     * If the webpage has low-res favicon, use defaultFavIcon
     */
@@ -81,23 +85,11 @@ public extension UIImageView {
             return (FaviconFetcher.defaultFavicon, .white)
         }
     }
-    
+
     func setImageColor(color: UIColor) {
         let templateImage = self.image?.withRenderingMode(.alwaysTemplate)
         self.image = templateImage
         self.tintColor = color
-    }
-}
-
-open class ImageOperation: NSObject, SDWebImageOperation {
-    open var cacheOperation: Operation?
-
-    var cancelled: Bool {
-        return cacheOperation?.isCancelled ?? false
-    }
-
-    @objc open func cancel() {
-        cacheOperation?.cancel()
     }
 }
 
@@ -108,7 +100,7 @@ extension UIImage {
         image.draw(CGRect(origin: CGPoint.zero, size: image.frame.size))
         let newImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-        
+
         return newImage
     }
 

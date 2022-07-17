@@ -197,7 +197,7 @@ class BookmarkDetailPanel: SiteTableViewController {
                     bookmarkFolders.append((folder, indent))
                 }
 
-                var folderChildren: [BookmarkNodeData]? = nil
+                var folderChildren: [BookmarkNodeData]?
                 // Suitable to be appended
                 if folder.guid != self.bookmarkNodeGUID {
                     folderChildren = folder.children
@@ -225,9 +225,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     }
 
     func updateSaveButton() {
-        guard bookmarkNodeType == .bookmark else {
-            return
-        }
+        guard bookmarkNodeType == .bookmark else { return }
 
         let url = URL(string: bookmarkItemURL ?? "")
         navigationItem.rightBarButtonItem?.isEnabled = url?.schemeIsValid == true && url?.host != nil
@@ -270,9 +268,18 @@ class BookmarkDetailPanel: SiteTableViewController {
             }
 
             if bookmarkNodeType == .bookmark {
-                return profile.places.updateBookmarkNode(guid: bookmarkNodeGUID, parentGUID: parentBookmarkFolder.guid, position: bookmarkItemPosition, title: bookmarkItemOrFolderTitle, url: bookmarkItemURL)
+                return profile.places.updateBookmarkNode(
+                    guid: bookmarkNodeGUID,
+                    parentGUID: parentBookmarkFolder.guid,
+                    position: bookmarkItemPosition,
+                    title: bookmarkItemOrFolderTitle,
+                    url: bookmarkItemURL)
             } else if bookmarkNodeType == .folder {
-                return profile.places.updateBookmarkNode(guid: bookmarkNodeGUID, parentGUID: parentBookmarkFolder.guid, position: bookmarkItemPosition, title: bookmarkItemOrFolderTitle)
+                return profile.places.updateBookmarkNode(
+                    guid: bookmarkNodeGUID,
+                    parentGUID: parentBookmarkFolder.guid,
+                    position: bookmarkItemPosition,
+                    title: bookmarkItemOrFolderTitle)
             }
         }
 
@@ -284,9 +291,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
 
-        guard indexPath.section == BookmarkDetailSection.folder.rawValue else {
-            return
-        }
+        guard indexPath.section == BookmarkDetailSection.folder.rawValue else { return }
 
         if isFolderListExpanded, let item = bookmarkFolders[safe: indexPath.row], parentBookmarkFolder.guid != item.folder.guid {
             parentBookmarkFolder = item.folder
@@ -419,9 +424,7 @@ class BookmarkDetailPanel: SiteTableViewController {
 
 extension BookmarkDetailPanel: TextFieldTableViewCellDelegate {
     func textFieldTableViewCell(_ textFieldTableViewCell: TextFieldTableViewCell, didChangeText text: String) {
-        guard let indexPath = tableView.indexPath(for: textFieldTableViewCell) else {
-            return
-        }
+        guard let indexPath = tableView.indexPath(for: textFieldTableViewCell) else { return }
 
         switch indexPath.row {
         case BookmarkDetailFieldsRow.title.rawValue:

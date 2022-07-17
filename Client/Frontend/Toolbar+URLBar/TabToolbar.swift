@@ -3,10 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-import SnapKit
 import Shared
 
-class TabToolbar: UIView {
+class TabToolbar: UIView, FeatureFlaggable {
 
     // MARK: - Variables
 
@@ -22,7 +21,13 @@ class TabToolbar: UIView {
     let actionButtons: [NotificationThemeable & UIButton]
 
     private var isBottomSearchBar: Bool {
-        return BrowserViewController.foregroundBVC().isBottomSearchBar
+        guard SearchBarSettingsViewModel.isEnabled else { return false }
+
+        if let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) {
+            return position == .bottom
+        }
+
+        return false
     }
 
     private let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
@@ -48,12 +53,13 @@ class TabToolbar: UIView {
 
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
+        contentView.translatesAutoresizingMaskIntoConstraints = false
     }
-    
+
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - View Setup
 
     override func updateConstraints() {
@@ -61,10 +67,12 @@ class TabToolbar: UIView {
         appMenuBadge.layout(onButton: appMenuButton)
         warningMenuBadge.layout(onButton: appMenuButton)
 
-        contentView.snp.makeConstraints { make in
-            make.leading.trailing.top.equalTo(self)
-            make.bottom.equalTo(self.safeArea.bottom)
-        }
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+        ])
         super.updateConstraints()
     }
 

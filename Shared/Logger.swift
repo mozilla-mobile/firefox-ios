@@ -88,11 +88,8 @@ public extension Logger {
     }
 
     static private func urlForLogNamed(_ name: String) -> URL? {
-        guard let logDir = Logger.logFileDirectoryPath(inDocuments: saveLogsToDocuments) else {
-            return nil
-        }
+        guard let logDir = Logger.logFileDirectoryPath(inDocuments: saveLogsToDocuments) else { return nil }
 
         return URL(string: "\(logDir)/\(name).log")
     }
 }
-

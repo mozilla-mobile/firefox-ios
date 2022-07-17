@@ -72,4 +72,3 @@ public struct InfoConfiguration {
     // as part of a batched upload.
     public let maxTotalBytes: Int
 }
-

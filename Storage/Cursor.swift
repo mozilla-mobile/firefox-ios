@@ -64,7 +64,7 @@ open class Cursor<T>: TypedCursor {
 
     open func makeIterator() -> AnyIterator<T?> {
         var nextIndex = 0
-        return AnyIterator() {
+        return AnyIterator {
             if nextIndex >= self.count || self.status != CursorStatus.success {
                 return nil
             }

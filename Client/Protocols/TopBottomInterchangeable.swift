@@ -24,7 +24,7 @@ extension TopBottomInterchangeable {
         } else {
             parent.addArrangedViewToBottom(self)
         }
-        
+
         updateConstraints()
         setNeedsDisplay()
     }

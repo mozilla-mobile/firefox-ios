@@ -46,4 +46,3 @@ protocol ThemeColourPalette {
 protocol ThemeFontPalette {
 
 }
-

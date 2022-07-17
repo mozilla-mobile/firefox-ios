@@ -6,7 +6,12 @@ import Foundation
 import GCDWebServers
 import Shared
 
-class WebServer {
+protocol WebServerProtocol {
+    var server: GCDWebServer { get }
+    @discardableResult func start() throws -> Bool
+}
+
+class WebServer: WebServerProtocol {
     private let log = Logger.browserLogger
 
     static let WebServerSharedInstance = WebServer()
@@ -50,9 +55,9 @@ class WebServer {
     func registerHandlerForMethod(_ method: String, module: String, resource: String, handler: @escaping (_ request: GCDWebServerRequest?) -> GCDWebServerResponse?) {
         // Prevent serving content if the requested host isn't a safelisted local host.
         let wrappedHandler = {(request: GCDWebServerRequest?) -> GCDWebServerResponse? in
-            guard let request = request, InternalURL.isValid(url: request.url) else {
-                return GCDWebServerResponse(statusCode: 403)
-            }
+            guard let request = request,
+                  InternalURL.isValid(url: request.url)
+            else { return GCDWebServerResponse(statusCode: 403) }
 
             return handler(request)
         }

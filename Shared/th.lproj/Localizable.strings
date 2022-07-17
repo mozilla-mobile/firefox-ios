@@ -290,6 +290,12 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "แบ่งปันลิงก์";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "ขณะนี้คุณสามารถย้ายแถบเครื่องมือไปไว้ด้านล่างเพื่อให้ใส่ข้อมูลได้ง่ายขึ้น";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
+"ContextualHint.SearchBarPlacement.NewUsers" = "เพื่อให้ใส่ข้อมูลได้ง่ายขึ้น จึงได้กำหนดแถบเครื่องมือให้อยู่ด้านล่างเป็นค่าเริ่มต้นในขณะนี้";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "ขณะนี้หน้าแรกของ Firefox ที่ปรับแต่งแบบคุณได้รับการปรับปรุงให้คุณสามารถกลับมาดูหน้าเว็บที่คุณดูค้างไว้ได้ง่ายขึ้นแล้ว ค้นหาแท็บ ที่คั่นหน้า และผลการค้นหาล่าสุดของคุณ";
 
@@ -339,6 +345,9 @@
    Title for default search engine picker.
    Title for default search engine settings section. */
 "Default Search Engine" = "เครื่องมือค้นหาเริ่มต้น";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "ปิด";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "การตั้งค่าการแสดงผล";
@@ -451,6 +460,21 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "เอาออก";
 
+/* Label showing how many sites there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.SitesCount.v101" = "ไซต์: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "การตั้งค่า";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "สปอนเซอร์ของเราและความเป็นส่วนตัวของคุณ";
+
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Pocket.Sponsored.v103" = "ได้รับการสนับสนุน";
+
+/* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "ได้รับการสนับสนุน";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "เดินหน้า";
 
@@ -547,6 +571,9 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "อุปกรณ์ได้ตัดการเชื่อมต่อจาก Firefox Sync";
 
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "โลโก้ Firefoxเปลี่ยนวอลเปเปอร์";
+
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "รับแท็บที่เปิดอยู่, ที่คั่นหน้า และรหัสผ่านของคุณจากอุปกรณ์อื่น ๆ ของคุณ";
 
@@ -630,6 +657,9 @@
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab" = "เปิดในแท็บส่วนตัวใหม่";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "เปิดในแท็บส่วนตัว";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "เปิดในแท็บใหม่";
@@ -784,6 +814,18 @@
 /* History tableview section header */
 "Last week" = "สัปดาห์ที่แล้ว";
 
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "ยกเลิก";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "ลบ";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "ต้องการลบไซต์ทั้งหมดใน %@ หรือไม่?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "ลบประวัติ (รวมถึงประวัติที่ซิงค์จากอุปกรณ์อื่น) คุกกี้ และข้อมูลการเรียกดูอื่น ๆ";
+
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "ไม่พบประวัติ";
 
@@ -795,6 +837,9 @@
 
 /* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
 "LibraryPanel.History.SyncedFromOtherDevices.v99" = "ซิงค์จากอุปกรณ์อื่น";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "ประวัติการซิงค์";
 
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
 "LibraryPanel.Section.Older" = "เก่ากว่า";
@@ -1053,6 +1098,9 @@
 /* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
 "Menu.SignInToSync.Label.v99" = "ลงชื่อเข้า Sync";
 
+/* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
+"Menu.SyncAndSaveData.v103" = "ซิงค์และบันทึก";
+
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "แท็บถูกส่งแล้ว";
 
@@ -1185,6 +1233,27 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "ตกลง";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
+"Onboarding.IntroAction.v102" = "เริ่มต้นใช้งาน";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
+"Onboarding.IntroDescriptionPart1.v102" = "อินดี้ ไม่แสวงหาผลกำไร เพื่อความถูกต้อง";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v102" = "มุ่งมั่นที่จะให้อินเทอร์เน็ตที่ดีกว่าสำหรับทุกคน";
+
+/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
+"Onboarding.LaterAction.v102" = "ไม่ใช่ตอนนี้";
+
+/* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
+"Onboarding.SyncAction.v102" = "ลงทะเบียนและเข้าสู่ระบบ";
+
+/* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
+"Onboarding.WallpaperAction.v102" = "ตั้งค่ารูปพื้นหลัง";
+
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
+"Onboarding.WallpaperTitle.v102" = "เลือกภาพพื้นหลัง Firefox";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "เริ่มการเรียกดู";
@@ -1337,6 +1406,9 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "โปรดอนุญาตให้ Firefox เข้าถึงกล้องของอุปกรณ์ของคุณใน ‘การตั้งค่า’ -> ‘ความเป็นส่วนตัว’ -> ‘กล้อง’";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "ไปที่ ‘การตั้งค่า’ ของอุปกรณ์ > ‘Firefox’ และอนุญาตให้ Firefox เข้าถึงกล้อง";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "สแกนรหัส QR";
 
@@ -1350,6 +1422,9 @@
 
 /* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
 "Search.Awesomebar.SwitchToTab" = "สลับไปยังแท็บ";
+
+/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
+"Search.SuggestSectionTitle.v102" = "Firefox Suggest";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "เครื่องมือค้นหาใหม่จะปรากฏในแถบค้นหาด่วน";
@@ -1596,8 +1671,11 @@
 /* General settings section title */
 "Settings.General.SectionName" = "ทั่วไป";
 
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "เลือกสิ่งที่ต้องการให้แสดงบนหน้าแรก";
+
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description" = "เลือกเนื้อหาที่คุณเห็นในหน้าแรกของ Firefox";
+"Settings.Home.Option.Description.v101" = "เลือกสิ่งที่รวมอยู่ในหน้าแรกของ Firefox";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "กลับเข้าไป";
@@ -1613,6 +1691,9 @@
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "ทางลัด";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off */
+"Settings.Home.Option.SponsoredPocket.v103" = "เรื่องราวที่ได้รับการสนับสนุน";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
 "Settings.Home.Option.StartAtHome.AfterFourHours" = "หน้าแรกหลังจากไม่มีการใช้งานเป็นเวลา 4 ชั่วโมง";
@@ -1630,10 +1711,37 @@
 "Settings.Home.Option.StartAtHome.Title" = "หน้าจอเมื่อเปิด";
 
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
-"Settings.Home.Option.Title" = "หน้าแรกของ Firefox";
+"Settings.Home.Option.Title.v101" = "รวมไว้ในหน้าแรก";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "รูปพื้นหลัง";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "วอลล์เปเปอร์ Firefox, ลายอะเมทิสต์";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "วอลล์เปเปอร์ Firefox, ลายเนินเขาชายหาด";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "วอลล์เปเปอร์ Firefox, ลายซีรูเลียน";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "วอลล์เปเปอร์ว่างเริ่มต้น";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "วอลล์เปเปอร์ Firefox, ลายพระอาทิตย์ขึ้น";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "เปลี่ยนวอลล์เปเปอร์ของหน้าแรกแบบหมุนเวียน";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "วอลล์เปเปอร์ Firefox, ลายทิวเขายามพลบค่ำ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "หน้าจอเปิด";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "เปลี่ยนวอลเปเปอร์โดยแตะโลโก้หน้าแรกของ Firefox";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "รูปพื้นหลัง";
@@ -1649,6 +1757,27 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "หน้าแรก";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "แถว";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "แถว";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "ทางลัด";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "ทางลัด";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "ทางลัดที่ได้รับการสนับสนุน";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "ปิด";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "เปิด";
 
 /* Title displayed in header of the setting panel. */
 "Settings.HomePage.Title" = "การตั้งค่าหน้าแรก";
@@ -1752,6 +1881,18 @@
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "แอปจดหมาย";
 
+/* Touch ID prompt subtitle when accessing logins and passwords */
+"Settings.Passwords.FingerPrintReason.v103" = "ใช้ลายนิ้วมือของคุณเพื่อเข้าถึงการรหัสผ่านตอนนี้";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "รหัสผ่านของคุณได้รับการปกป้องโดย Face ID, Touch ID หรือรหัสผ่านของอุปกรณ์";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "บันทึกรหัสผ่าน";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "รหัสผ่าน";
+
 /* Setting to enable the built-in password manager */
 "Settings.SaveLogins.Title" = "บันทึกการเข้าสู่ระบบ";
 
@@ -1818,8 +1959,20 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "การศึกษา";
 
-/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "ลงชื่อเข้าเพื่อซิงค์แท็บ ที่คั่นหน้า รหัสผ่าน และอื่น ๆ ของคุณ";
+
+/* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
+"Settings.Sync.ButtonTitle.v103" = "ซิงค์และบันทึก";
+
+/* Title for the page where the user sign in to their Firefox Sync account. */
+"Settings.Sync.SignInView.Title.v103" = "ซิงค์และบันทึก";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "แท็บที่ไม่ได้ใช้งาน";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "แท็บที่คุณไม่ได้ดูเป็นเวลา 2 สัปดาห์จะถูกย้ายไปยังส่วนที่ไม่ได้ใช้งาน";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "กลุ่มแท็บ";
@@ -2065,6 +2218,12 @@
 /* The placeholder text for the tab search bar */
 "Tabs.Search.PlaceholderText" = "ค้นหาแท็บ";
 
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "ดูแท็บที่ไม่ใช้งาน";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "ซ่อนแท็บที่ไม่ใช้งาน";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "เพิ่มแท็บ";
 
@@ -2100,9 +2259,6 @@
 
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "แท็บอื่น";
-
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "แท็บส่วนตัว";
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "แท็บจะปรากฏที่นี่เป็นเวลา 30 วัน หลังจากนั้น แท็บต่าง ๆ จะถูกปิดโดยอัตโนมัติ";

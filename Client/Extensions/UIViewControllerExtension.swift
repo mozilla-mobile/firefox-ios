@@ -65,14 +65,16 @@ extension UIViewController {
         let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
         themedNavigationController.navigationBar.isTranslucent = false
         if topTabsVisible {
-            themedNavigationController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.IntroViewController.width, height: ViewControllerConsts.PreferredSize.IntroViewController.height)
+            themedNavigationController.preferredContentSize = CGSize(
+                width: ViewControllerConsts.PreferredSize.IntroViewController.width,
+                height: ViewControllerConsts.PreferredSize.IntroViewController.height)
             themedNavigationController.modalPresentationStyle = .formSheet
         } else {
             themedNavigationController.modalPresentationStyle = .fullScreen
         }
         presentWithModalDismissIfNeeded(themedNavigationController, animated: true)
     }
-    
+
     @objc func dismissVC() {
         self.dismiss(animated: true, completion: nil)
     }
@@ -89,5 +91,3 @@ extension UIViewController {
         }
     }
 }
- 
-

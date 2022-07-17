@@ -17,34 +17,34 @@ class CredentialListPresenter {
     weak var view: CredentialListViewProtocol?
     var loginsData = [(ASPasswordCredentialIdentity, ASPasswordCredential)]()
     private var filteredCredentials = [(ASPasswordCredentialIdentity, ASPasswordCredential)]()
-    
+
     init(view: CredentialListViewProtocol) {
         self.view = view
     }
-    
+
     func filterCredentials(for searchText: String) {
         filteredCredentials = loginsData.filter { item in
             item.0.serviceIdentifier.identifier.titleFromHostname.lowercased().contains(searchText.lowercased()) || item.0.user.lowercased().contains(searchText.lowercased())
         }
     }
-    
+
     func numberOfSections() -> Int {
         guard let view = view else { return 1 }
         return loginsData.isEmpty || (view.searchIsActive && filteredCredentials.isEmpty) ? 1 : 2
     }
-    
+
     func numberOfRows(for section: Int) -> Int {
         guard let view = view else { return 1 }
-        
+
         if loginsData.isEmpty || (view.searchIsActive && filteredCredentials.isEmpty) {
             return 1
         } else if section == 1 {
             return view.searchIsActive ? filteredCredentials.count : loginsData.count
         } else {
             return 1
-        } 
+        }
     }
-    
+
     func getItemsType(in section: Int, for index: Int) -> CredentialState {
         if loginsData.isEmpty {
             return .emptyCredentialList
@@ -62,7 +62,7 @@ class CredentialListPresenter {
             return .displayItem(credential)
         }
     }
-    
+
     func selectItem(for index: Int) {
         guard let view = view else { return }
         var passwordCredential: ASPasswordCredential
@@ -73,9 +73,9 @@ class CredentialListPresenter {
         }
         view.credentialExtensionContext?.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
     }
-    
+
     func cancelRequest() {
         view?.credentialExtensionContext?.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
     }
-    
+
 }

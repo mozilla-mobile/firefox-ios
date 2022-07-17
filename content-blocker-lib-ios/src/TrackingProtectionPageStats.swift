@@ -13,7 +13,7 @@ struct TPPageStats {
     }
 
     init() {
-        domains = [BlocklistCategory: Set<String>]();
+        domains = [BlocklistCategory: Set<String>]()
     }
 
     private init(domains: [BlocklistCategory: Set<String>], blocklistName: BlocklistCategory, host: String) {
@@ -21,7 +21,7 @@ struct TPPageStats {
         if self.domains[blocklistName] == nil {
             self.domains[blocklistName] = Set<String>()
         }
-       self.domains[blocklistName]?.insert(host);
+       self.domains[blocklistName]?.insert(host)
     }
 
     func create(matchingBlocklist blocklistName: BlocklistCategory, host: String) -> TPPageStats {
@@ -38,13 +38,19 @@ class TPStatsBlocklistChecker {
     func isBlocked(url: URL, mainDocumentURL: URL) -> Deferred<BlocklistCategory?> {
         let deferred = Deferred<BlocklistCategory?>()
 
-        guard let blockLists = blockLists, let host = url.host, !host.isEmpty else {
+        guard let blockLists = blockLists,
+              let host = url.host,
+              !host.isEmpty
+        else {
             // TP Stats init isn't complete yet
             deferred.fill(nil)
             return deferred
         }
 
-        guard let domain = url.baseDomain, let docDomain = mainDocumentURL.baseDomain, domain != docDomain else {
+        guard let domain = url.baseDomain,
+              let docDomain = mainDocumentURL.baseDomain,
+              domain != docDomain
+        else {
             deferred.fill(nil)
             return deferred
         }
@@ -73,7 +79,7 @@ class TPStatsBlocklistChecker {
 // The 'unless-domain' and 'if-domain' rules use wildcard expressions, convert this to regex.
 func wildcardContentBlockerDomainToRegex(domain: String) -> String? {
     struct Memo { static var domains = [String: String]() }
-    
+
     if let memoized = Memo.domains[domain] {
         return memoized
     }
@@ -84,7 +90,7 @@ func wildcardContentBlockerDomainToRegex(domain: String) -> String? {
         regex = "." + regex
     }
     regex = regex.replacingOccurrences(of: ".", with: "\\.")
-    
+
     Memo.domains[domain] = regex
     return regex
 }
@@ -192,9 +198,10 @@ class TPStatsBlocklists {
     func urlIsInList(_ url: URL, mainDocumentURL: URL, safelistedDomains: [String]) -> BlocklistCategory? {
         let resourceString = url.absoluteString
 
-        guard let firstPartyDomain = mainDocumentURL.baseDomain, let baseDomain = url.baseDomain, let rules = blockRules[baseDomain] else {
-            return nil
-        }
+        guard let firstPartyDomain = mainDocumentURL.baseDomain,
+              let baseDomain = url.baseDomain,
+              let rules = blockRules[baseDomain]
+        else { return nil }
 
         domainSearch: for rule in rules {
             // First, test the top-level filters to see if this URL might be blocked.

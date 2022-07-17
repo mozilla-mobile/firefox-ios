@@ -50,24 +50,30 @@ class LoginListViewController: SensitiveViewController {
         return prefs.boolForKey(PrefsKeys.LoginsShowShortcutMenuItem) ?? true
     }
 
-    static func create(authenticateInNavigationController navigationController: UINavigationController, profile: Profile, settingsDelegate: SettingsDelegate, webpageNavigationHandler: ((_ url: URL?) -> Void)?) -> Deferred<LoginListViewController?> {
+    static func create(
+        authenticateInNavigationController navigationController: UINavigationController,
+        profile: Profile,
+        settingsDelegate: SettingsDelegate,
+        webpageNavigationHandler: ((_ url: URL?) -> Void)?
+    ) -> Deferred<LoginListViewController?> {
         let deferred = Deferred<LoginListViewController?>()
 
         func fillDeferred(ok: Bool) {
             if ok {
-                let viewController = LoginListViewController(profile: profile, webpageNavigationHandler: webpageNavigationHandler)
+                let viewController = LoginListViewController(profile: profile,
+                                                             webpageNavigationHandler: webpageNavigationHandler)
                 viewController.settingsDelegate = settingsDelegate
                 deferred.fill(viewController)
             } else {
                 deferred.fill(nil)
             }
         }
-        
+
         AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
             switch result {
-                case .success():
+                case .success:
                     fillDeferred(ok: true)
-                case .failure(_):
+                case .failure:
                     fillDeferred(ok: false)
             }
         }
@@ -88,7 +94,7 @@ class LoginListViewController: SensitiveViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = .LoginsAndPasswordsTitle
+        self.title = .Settings.Passwords.LoginsAndPasswordsTitle
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: CellReuseIdentifier)
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderId)
@@ -171,7 +177,7 @@ class LoginListViewController: SensitiveViewController {
 
         let isDarkTheme = LegacyThemeManager.instance.currentName == .dark
         let searchTextField = searchController.searchBar.searchTextField
-        
+
         // Theme the search text field (Dark / Light)
         if isDarkTheme {
             searchTextField.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = UIColor.white
@@ -180,7 +186,7 @@ class LoginListViewController: SensitiveViewController {
         }
         // Theme the glass icon next to the search text field
         if let glassIconView = searchTextField.leftView as? UIImageView {
-            //Magnifying glass
+            // Magnifying glass
             glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
             glassIconView.tintColor = UIColor.theme.tableView.headerTextLight
         }
@@ -200,7 +206,7 @@ class LoginListViewController: SensitiveViewController {
 
     fileprivate func setupDefaultNavButtons() {
          navigationItem.rightBarButtonItems = [editButton, addCredentialButton]
-        
+
         if shownFromAppMenu {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissLogins))
         } else {
@@ -269,9 +275,9 @@ private extension LoginListViewController {
         tableView.setEditing(true, animated: true)
         tableView.reloadData()
     }
-    
+
     @objc func presentAddCredential() {
-        let addController = AddCredentialViewController() { [weak self] record in
+        let addController = AddCredentialViewController { [weak self] record in
             let result = self?.viewModel.save(loginRecord: record)
             self?.presentedViewController?.dismiss(animated: true) {
                 result?.upon { id in
@@ -282,7 +288,7 @@ private extension LoginListViewController {
                 }
             }
         }
-        
+
         let controller = UINavigationController(
             rootViewController: addController
         )
@@ -359,9 +365,7 @@ extension LoginListViewController: UITableViewDelegate {
         if section != 1 {
             return nil
         }
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderId) as? ThemedTableSectionHeaderFooterView else {
-            return nil
-        }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderId) as? ThemedTableSectionHeaderFooterView else { return nil }
         headerView.titleLabel.text = .LoginsListTitle
         headerView.titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmall
         // not using a grouped table: show header borders

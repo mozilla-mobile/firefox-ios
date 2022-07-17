@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import SDWebImage
 import Storage
 import UIKit
 
@@ -13,8 +12,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
 
-    private var homeTopSite: HomeTopSite?
-    private var titleLabelLeadingConstraint: NSLayoutConstraint?
+    private var homeTopSite: TopSite?
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
     struct UX {
@@ -29,8 +27,9 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         static let pinAlignmentSpacing: CGFloat = 2
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
         static let shadowRadius: CGFloat = 6
-        static let widthSafeSpace: CGFloat = 16
-        static let Spacing: CGFloat = 8
+        static let topSpace: CGFloat = 8
+        static let textSafeSpace: CGFloat = 4
+        static let bottomSpace: CGFloat = 10
     }
 
     private lazy var imageView: UIImageView = .build { imageView in
@@ -38,8 +37,20 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         imageView.layer.masksToBounds = true
     }
 
-    private lazy var titleWrapper: UIView = .build { view in
-        view.backgroundColor = .clear
+    // Holds the title and the pin image of the top site
+    private lazy var titlePinWrapper: UIStackView = .build { stackView in
+        stackView.backgroundColor = .clear
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .fillProportionally
+    }
+
+    // Holds the titlePinWrapper and the Sponsored text for a sponsored tile
+    private lazy var descriptionWrapper: UIStackView = .build { stackView in
+        stackView.backgroundColor = .clear
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.distribution = .fillProportionally
     }
 
     private lazy var pinViewHolder: UIView = .build { view in
@@ -48,15 +59,27 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     private lazy var pinImageView: UIImageView = .build { imageView in
         imageView.image = UIImage.templateImageNamed(ImageIdentifiers.pinSmall)
+        imageView.isHidden = true
     }
 
     private lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.textAlignment = .center
-        // Limiting max size to accomodate for non-self-sizing parent cell.
         titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                        maxSize: 18)
+                                                                        maxSize: 26)
+        titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
-        titleLabel.numberOfLines = 2
+        titleLabel.numberOfLines = 1
+        titleLabel.backgroundColor = UIColor.clear
+        titleLabel.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
+    }
+
+    private lazy var sponsoredLabel: UILabel = .build { sponsoredLabel in
+        sponsoredLabel.textAlignment = .center
+        sponsoredLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+                                                                            maxSize: 26)
+        sponsoredLabel.adjustsFontForContentSizeCategory = true
+        sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
+        sponsoredLabel.numberOfLines = 1
     }
 
     private lazy var faviconBG: UIView = .build { view in
@@ -118,10 +141,9 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         imageView.backgroundColor = UIColor.clear
 
         titleLabel.text = nil
-        titleLabelLeadingConstraint?.isActive = true
-
+        sponsoredLabel.text = nil
         pinViewHolder.isHidden = true
-        pinImageView.removeFromSuperview()
+        pinImageView.isHidden = true
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -131,38 +153,39 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Public methods
 
-    func configure(_ topSite: HomeTopSite) {
+    func configure(_ topSite: TopSite, position: Int) {
         homeTopSite = topSite
         titleLabel.text = topSite.title
-        accessibilityLabel = titleLabel.text
+        accessibilityLabel = topSite.accessibilityLabel
 
-        imageView.image = topSite.image
-        topSite.imageLoaded = { image in
-            // Checks to assign image to correct cell when reusing a cell
-            guard topSite.identifier == self.homeTopSite?.identifier else { return }
-            self.imageView.image = image
-        }
+        imageView.setFaviconOrDefaultIcon(forSite: topSite.site) {}
 
         configurePinnedSite(topSite)
+        configureSponsoredSite(topSite)
+
         applyTheme()
     }
 
     // MARK: - Setup Helper methods
 
     private func setupLayout() {
-        titleWrapper.addSubview(titleLabel)
-        titleWrapper.addSubview(pinViewHolder)
-        contentView.addSubview(titleWrapper)
+        titlePinWrapper.addArrangedSubview(pinViewHolder)
+        titlePinWrapper.addArrangedSubview(titleLabel)
+        pinViewHolder.addSubview(pinImageView)
+
+        descriptionWrapper.addArrangedSubview(titlePinWrapper)
+        descriptionWrapper.addArrangedSubview(sponsoredLabel)
+        contentView.addSubview(descriptionWrapper)
+
         faviconBG.addSubview(imageView)
         contentView.addSubview(faviconBG)
         contentView.addSubview(selectedOverlay)
 
         NSLayoutConstraint.activate([
-            titleWrapper.topAnchor.constraint(equalTo: faviconBG.bottomAnchor, constant: UX.Spacing),
-            titleWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            titleWrapper.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            titleWrapper.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.imageBackgroundSize.width),
-            titleWrapper.widthAnchor.constraint(lessThanOrEqualToConstant: contentView.frame.width - UX.widthSafeSpace),
+            descriptionWrapper.topAnchor.constraint(equalTo: faviconBG.bottomAnchor, constant: UX.topSpace),
+            descriptionWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.bottomSpace),
+            descriptionWrapper.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.textSafeSpace),
+            descriptionWrapper.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.textSafeSpace),
 
             faviconBG.topAnchor.constraint(equalTo: contentView.topAnchor),
             faviconBG.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -179,27 +202,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
             selectedOverlay.trailingAnchor.constraint(equalTo: faviconBG.trailingAnchor),
             selectedOverlay.bottomAnchor.constraint(equalTo: faviconBG.bottomAnchor),
 
-            pinViewHolder.leadingAnchor.constraint(equalTo: titleWrapper.leadingAnchor),
             pinViewHolder.bottomAnchor.constraint(equalTo: titleLabel.firstBaselineAnchor, constant: UX.pinAlignmentSpacing),
 
-            titleLabel.topAnchor.constraint(equalTo: titleWrapper.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: pinViewHolder.trailingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: titleWrapper.trailingAnchor),
-            titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: titleWrapper.bottomAnchor)
-        ])
-
-        titleLabel.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
-        titleLabelLeadingConstraint = titleLabel.leadingAnchor.constraint(equalTo: titleWrapper.leadingAnchor)
-        titleLabelLeadingConstraint?.isActive = true
-    }
-
-    private func configurePinnedSite(_ topSite: HomeTopSite) {
-        guard topSite.isPinned else { return }
-        pinViewHolder.addSubview(pinImageView)
-        pinViewHolder.isHidden = false
-        titleLabelLeadingConstraint?.isActive = false
-
-        NSLayoutConstraint.activate([
             pinViewHolder.leadingAnchor.constraint(equalTo: pinImageView.leadingAnchor),
             pinViewHolder.trailingAnchor.constraint(equalTo: pinImageView.trailingAnchor, constant: UX.titleOffset),
             pinViewHolder.topAnchor.constraint(equalTo: pinImageView.topAnchor),
@@ -208,6 +212,18 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
             pinImageView.widthAnchor.constraint(equalToConstant: UX.pinIconSize.width),
             pinImageView.heightAnchor.constraint(equalToConstant: UX.pinIconSize.height),
         ])
+    }
+
+    private func configurePinnedSite(_ topSite: TopSite) {
+        guard topSite.isPinned else { return }
+        pinViewHolder.isHidden = false
+        pinImageView.isHidden = false
+    }
+
+    private func configureSponsoredSite(_ topSite: TopSite) {
+        guard topSite.isSponsoredTile else { return }
+
+        sponsoredLabel.text = topSite.sponsoredText
     }
 }
 
@@ -218,7 +234,9 @@ extension TopSiteItemCell: NotificationThemeable {
         titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
         faviconBG.backgroundColor = UIColor.theme.homePanel.shortcutBackground
         faviconBG.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        titleLabel.backgroundColor = UIColor.clear
+
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        sponsoredLabel.textColor = theme == .dark ? UIColor.Photon.LightGrey40 : UIColor.Photon.DarkGrey05
     }
 }
 

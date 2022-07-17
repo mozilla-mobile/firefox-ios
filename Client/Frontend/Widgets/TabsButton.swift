@@ -64,7 +64,7 @@ class TabsButton: UIButton {
     }()
 
     fileprivate lazy var borderView: UIImageView = {
-        let border = UIImageView(image: UIImage(named: "nav-tabcounter")?.withRenderingMode(.alwaysTemplate))
+        let border = UIImageView(image: UIImage(named: ImageIdentifiers.navTabCounter)?.withRenderingMode(.alwaysTemplate))
         border.tintColor = UIColor.theme.browser.tint
         return border
     }()
@@ -116,7 +116,7 @@ class TabsButton: UIButton {
 
         button.labelBackground.backgroundColor = labelBackground.backgroundColor
         button.labelBackground.layer.cornerRadius = labelBackground.layer.cornerRadius
-        
+
         return button
     }
 
@@ -127,9 +127,7 @@ class TabsButton: UIButton {
         countToBe = (count < 100) ? count.description : infinity
 
         // only animate a tab count change if the tab count has actually changed
-        guard currentCount != count.description || (clonedTabsButton?.countLabel.text ?? count.description) != count.description else {
-            return
-        }
+        guard currentCount != count.description || (clonedTabsButton?.countLabel.text ?? count.description) != count.description else { return }
 
         // Re-entrancy guard: if this code is running just update the tab count value without starting another animation.
         if isUpdatingTabCount {
@@ -218,4 +216,3 @@ extension TabsButton: NotificationThemeable {
         }
     }
 }
-

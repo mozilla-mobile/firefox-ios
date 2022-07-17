@@ -23,7 +23,7 @@ extension UILabel {
         }
         attributedText = attributed
     }
-    
+
     func heightForLabel(_ label: UILabel, width: CGFloat, text: String?) -> CGFloat {
         guard let text = text else { return 0 }
 
@@ -186,16 +186,24 @@ private class PaddedSwitch: UIView {
 
 // A helper class for settings with a UISwitch.
 // Takes and optional settingsDidChange callback and status text.
-class BoolSetting: Setting, FeatureFlagsProtocol {
+class BoolSetting: Setting, FeatureFlaggable {
     let prefKey: String? // Sometimes a subclass will manage its own pref setting. In that case the prefkey will be nil
 
     fileprivate let prefs: Prefs?
     fileprivate let defaultValue: Bool?
     fileprivate let settingDidChange: ((Bool) -> Void)?
     fileprivate let statusText: NSAttributedString?
-    fileprivate let featureFlagName: FeatureFlagName?
+    fileprivate let featureFlagName: NimbusFeatureFlagID?
 
-    init(prefs: Prefs?, prefKey: String? = nil, defaultValue: Bool?, attributedTitleText: NSAttributedString, attributedStatusText: NSAttributedString? = nil, featureFlagName: FeatureFlagName? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
+    init(
+        prefs: Prefs?,
+        prefKey: String? = nil,
+        defaultValue: Bool?,
+        attributedTitleText: NSAttributedString,
+        attributedStatusText: NSAttributedString? = nil,
+        featureFlagName: NimbusFeatureFlagID? = nil,
+        settingDidChange: ((Bool) -> Void)? = nil
+    ) {
         self.prefs = prefs
         self.prefKey = prefKey
         self.defaultValue = defaultValue
@@ -205,16 +213,40 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
         super.init(title: attributedTitleText)
     }
 
-    convenience init(prefs: Prefs, prefKey: String? = nil, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
+    convenience init(
+        prefs: Prefs,
+        prefKey: String? = nil,
+        defaultValue: Bool,
+        titleText: String,
+        statusText: String? = nil,
+        settingDidChange: ((Bool) -> Void)? = nil
+    ) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
             statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
         }
-        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
+        self.init(
+            prefs: prefs,
+            prefKey: prefKey,
+            defaultValue: defaultValue,
+            attributedTitleText: NSAttributedString(
+                string: titleText,
+                attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
+            attributedStatusText: statusTextAttributedString,
+            settingDidChange: settingDidChange)
     }
 
-    convenience init(with featureFlagID: FeatureFlagName, titleText: NSAttributedString) {
-        self.init(prefs: nil, defaultValue: nil, attributedTitleText: titleText, featureFlagName: featureFlagID)
+    convenience init(
+        with featureFlagID: NimbusFeatureFlagID,
+        titleText: NSAttributedString,
+        settingDidChange: ((Bool) -> Void)? = nil
+    ) {
+        self.init(
+            prefs: nil,
+            defaultValue: nil,
+            attributedTitleText: titleText,
+            featureFlagName: featureFlagID,
+            settingDidChange: settingDidChange)
     }
 
     override var status: NSAttributedString? {
@@ -228,6 +260,7 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
         control.onTintColor = UIConstants.SystemBlueColor
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
+        control.isEnabled = enabled
 
         displayBool(control)
         if let title = title {
@@ -240,6 +273,10 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
         }
         cell.accessoryView = PaddedSwitch(switchView: control)
         cell.selectionStyle = .none
+
+        if !enabled {
+            cell.subviews.forEach { $0.alpha = 0.5 }
+        }
     }
 
     @objc func switchValueChanged(_ control: UISwitch) {
@@ -247,11 +284,11 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
         settingDidChange?(control.isOn)
 
         if let featureFlagName = featureFlagName {
-            guard let key = featureFlags.featureKey(for: featureFlagName) else { return }
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .change,
                                          object: .setting,
-                                         extras: ["pref": key as Any, "to": control.isOn])
+                                         extras: ["pref": featureFlagName.rawValue as Any,
+                                                  "to": control.isOn])
 
         } else {
             TelemetryWrapper.recordEvent(category: .action,
@@ -264,24 +301,19 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
     // These methods allow a subclass to control how the pref is saved
     func displayBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
-            control.isOn = featureFlags.userPreferenceFor(featureFlagName) == UserFeaturePreference.enabled
+            control.isOn = featureFlags.isFeatureEnabled(featureFlagName, checking: .userOnly)
         } else {
-            guard let key = prefKey, let defaultValue = defaultValue else {
-                return
-            }
+            guard let key = prefKey, let defaultValue = defaultValue else { return }
             control.isOn = prefs?.boolForKey(key) ?? defaultValue
         }
     }
 
     func writeBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
-            let controlState = control.isOn ? UserFeaturePreference.enabled : UserFeaturePreference.disabled
-            featureFlags.setUserPreferenceFor(featureFlagName, to: controlState)
+            featureFlags.set(feature: featureFlagName, to: control.isOn)
 
         } else {
-            guard let key = prefKey else {
-                return
-            }
+            guard let key = prefKey else { return }
             prefs?.setBool(control.isOn, forKey: key)
         }
     }
@@ -310,15 +342,36 @@ class PrefPersister: SettingValuePersister {
 }
 
 class StringPrefSetting: StringSetting {
-    init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
-        super.init(defaultValue: defaultValue, placeholder: placeholder, accessibilityIdentifier: accessibilityIdentifier, persister: PrefPersister(prefs: prefs, prefKey: prefKey), settingIsValid: isValueValid, settingDidChange: settingDidChange)
+    init(
+        prefs: Prefs,
+        prefKey: String,
+        defaultValue: String? = nil,
+        placeholder: String,
+        accessibilityIdentifier: String,
+        settingIsValid isValueValid: ((String?) -> Bool)? = nil,
+        settingDidChange: ((String?) -> Void)? = nil
+    ) {
+        super.init(defaultValue: defaultValue,
+                   placeholder: placeholder,
+                   accessibilityIdentifier: accessibilityIdentifier,
+                   persister: PrefPersister(prefs: prefs, prefKey: prefKey),
+                   settingIsValid: isValueValid,
+                   settingDidChange: settingDidChange)
     }
 }
 
 class WebPageSetting: StringPrefSetting {
     let isChecked: () -> Bool
 
-    init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, isChecked: @escaping () -> Bool = { return false }, settingDidChange: ((String?) -> Void)? = nil) {
+    init(
+        prefs: Prefs,
+        prefKey: String,
+        defaultValue: String? = nil,
+        placeholder: String,
+        accessibilityIdentifier: String,
+        isChecked: @escaping () -> Bool = { return false },
+        settingDidChange: ((String?) -> Void)? = nil
+    ) {
         self.isChecked = isChecked
         super.init(prefs: prefs,
                    prefKey: prefKey,
@@ -333,9 +386,7 @@ class WebPageSetting: StringPrefSetting {
     }
 
     override func prepareValidValue(userInput value: String?) -> String? {
-        guard let value = value else {
-            return nil
-        }
+        guard let value = value else { return nil }
         return URIFixup.getURL(value)?.absoluteString
     }
 
@@ -372,7 +423,14 @@ class StringSetting: Setting, UITextFieldDelegate {
 
     let textField = UITextField()
 
-    init(defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, persister: SettingValuePersister, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
+    init(
+        defaultValue: String? = nil,
+        placeholder: String,
+        accessibilityIdentifier: String,
+        persister: SettingValuePersister,
+        settingIsValid isValueValid: ((String?) -> Bool)? = nil,
+        settingDidChange: ((String?) -> Void)? = nil
+    ) {
         self.defaultValue = defaultValue
         self.settingDidChange = settingDidChange
         self.settingIsValid = isValueValid
@@ -467,7 +525,14 @@ class CheckmarkSetting: Setting {
         return subtitle
     }
 
-    init(title: NSAttributedString, style: CheckmarkSettingStyle = .rightSide, subtitle: NSAttributedString?, accessibilityIdentifier: String? = nil, isChecked: @escaping () -> Bool, onChecked: @escaping () -> Void) {
+    init(
+        title: NSAttributedString,
+        style: CheckmarkSettingStyle = .rightSide,
+        subtitle: NSAttributedString?,
+        accessibilityIdentifier: String? = nil,
+        isChecked: @escaping () -> Bool,
+        onChecked: @escaping () -> Void
+    ) {
         self.subtitle = subtitle
         self.onChecked = onChecked
         self.isChecked = isChecked
@@ -686,7 +751,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
     @objc fileprivate func refresh() {
         // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
-        ////self.profile.rustAccount.refreshProfile()
+        //// self.profile.rustAccount.refreshProfile()
         // TODO [rustfxa] listen to notification and refresh profile
     }
 
@@ -696,9 +761,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
     @objc func didLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         let location = gestureRecognizer.location(in: tableView)
-        guard let indexPath = tableView.indexPathForRow(at: location), gestureRecognizer.state == .began else {
-            return
-        }
+        guard let indexPath = tableView.indexPathForRow(at: location), gestureRecognizer.state == .began else { return }
 
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row], setting.enabled {
@@ -727,9 +790,7 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else {
-            return nil
-        }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         let sectionSetting = settings[section]
         if let sectionTitle = sectionSetting.title?.string {
@@ -742,9 +803,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionSetting = settings[section]
-        guard let sectionFooter = sectionSetting.footerTitle?.string else {
-            return nil
-        }
+        guard let sectionFooter = sectionSetting.footerTitle?.string else { return nil }
         let footerView = ThemedTableSectionHeaderFooterView()
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
@@ -789,4 +848,3 @@ class SettingsTableViewController: ThemedTableViewController {
         }
     }
 }
-

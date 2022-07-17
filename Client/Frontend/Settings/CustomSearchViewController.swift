@@ -6,7 +6,6 @@ import UIKit
 import Shared
 import SnapKit
 import Storage
-import SDWebImage
 
 private let log = Logger.browserLogger
 
@@ -95,7 +94,7 @@ class CustomSearchViewController: SettingsTableViewController {
             let image = result.successValue ?? FaviconFetcher.letter(forUrl: url)
             let engine = OpenSearchEngine(engineID: nil, shortName: name, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true)
 
-            //Make sure a valid scheme is used
+            // Make sure a valid scheme is used
             let url = engine.searchURLForQuery("test")
             let maybe = (url == nil) ? Maybe(failure: CustomSearchError(.FormInput)) : Maybe(success: engine)
             deferred.fill(maybe)
@@ -110,15 +109,15 @@ class CustomSearchViewController: SettingsTableViewController {
     }
 
     func getSearchTemplate(withString query: String) -> String? {
-        let SearchTermComponent = "%s"      //Placeholder in User Entered String
-        let placeholder = "{searchTerms}"   //Placeholder looked for when using Custom Search Engine in OpenSearch.swift
+        let SearchTermComponent = "%s"      // Placeholder in User Entered String
+        let placeholder = "{searchTerms}"   // Placeholder looked for when using Custom Search Engine in OpenSearch.swift
 
         if query.contains(SearchTermComponent) {
             return query.replacingOccurrences(of: SearchTermComponent, with: placeholder)
         }
         return nil
     }
-    
+
     func updateSaveButton() {
         let isEnabled = !self.engineTitle.isEmptyOrWhitespace() && !(self.urlString?.isEmptyOrWhitespace() ?? true)
         self.navigationItem.rightBarButtonItem?.isEnabled = isEnabled
@@ -127,18 +126,14 @@ class CustomSearchViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
 
         func URLFromString(_ string: String?) -> URL? {
-            guard let string = string else {
-                return nil
-            }
+            guard let string = string else { return nil }
             return URL(string: string)
         }
 
         let titleField = CustomSearchEngineTextView(placeholder: .SettingsAddCustomEngineTitlePlaceholder, settingIsValid: { text in
             return text != nil && text != ""
         }, settingDidChange: {fieldText in
-            guard let title = fieldText else {
-                return
-            }
+            guard let title = fieldText else { return }
             self.engineTitle = title
             self.updateSaveButton()
         })
@@ -147,7 +142,7 @@ class CustomSearchViewController: SettingsTableViewController {
 
         let urlField = CustomSearchEngineTextView(placeholder: .SettingsAddCustomEngineURLPlaceholder, height: 133,
             keyboardType: .URL, settingIsValid: { text in
-            //Can check url text text validity here.
+            // Can check url text text validity here.
             return true
         }, settingDidChange: {fieldText in
             self.urlString = fieldText
@@ -165,7 +160,7 @@ class CustomSearchViewController: SettingsTableViewController {
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.addCustomSearchEngine))
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"
-        
+
         self.navigationItem.rightBarButtonItem?.isEnabled = false
         return settings
     }
@@ -198,7 +193,14 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     let placeholderLabel = UILabel()
     var keyboardType: UIKeyboardType = .default
 
-    init(defaultValue: String? = nil, placeholder: String, height: CGFloat = 44, keyboardType: UIKeyboardType = .default, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
+    init(
+        defaultValue: String? = nil,
+        placeholder: String,
+        height: CGFloat = 44,
+        keyboardType: UIKeyboardType = .default,
+        settingIsValid isValueValid: ((String?) -> Bool)? = nil,
+        settingDidChange: ((String?) -> Void)? = nil
+    ) {
         self.defaultValue = defaultValue
         self.TextFieldHeight = height
         self.settingDidChange = settingDidChange
@@ -224,7 +226,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
 
         textField.textContainer.lineFragmentPadding = 0
         textField.keyboardType = keyboardType
-        if (keyboardType == .default) {
+        if keyboardType == .default {
             textField.autocapitalizationType = .words
         }
         textField.autocorrectionType = .no

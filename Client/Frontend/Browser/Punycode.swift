@@ -123,7 +123,7 @@ extension String {
         var n = initialN
         var bias = initialBias
         var pos = 0
-        if let ipos = input.firstIndex(of: delimiter) {
+        if let ipos = input.lastIndex(of: delimiter) {
             pos = ipos
             output.append(contentsOf: input[0 ..< pos])
             pos += 1

@@ -59,7 +59,7 @@
 "Menu.SeeAllAction.Title" = "Tingnan Lahat";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
-"Menu.SharePageAction.Title" = "Ibahagi ang Pahina Sa...";
+"Menu.SharePageAction.Title" = "Ibahagi ang Pahina Sa…";
 
 /* Label for the button, displayed in the menu, used to open the tabs tray */
 "Menu.ShowTabs.Title" = "Ipakita and mga Tab";

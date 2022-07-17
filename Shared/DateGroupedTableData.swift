@@ -4,7 +4,7 @@
 
 import Foundation
 
-fileprivate func getDate(dayOffset: Int) -> Date {
+private func getDate(dayOffset: Int) -> Date {
     let calendar = Calendar(identifier: .gregorian)
     let components = calendar.dateComponents([.year, .month, .day], from: Date())
     let today = calendar.date(from: components)!
@@ -83,12 +83,12 @@ public struct DateGroupedTableData<T: Equatable> {
         default: return []
         }
     }
-    
+
     /// Returns all currently fetched items in a single array: `[T.item]`.
     public func allItems() -> [T] {
         let allItems = (today + yesterday + lastWeek + lastMonth + older)
             .map { $0.item }
-        
+
         return allItems
     }
 }

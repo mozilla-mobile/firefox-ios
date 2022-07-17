@@ -30,11 +30,11 @@ class WallpaperSettingCollectionCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
     var notificationCenter: NotificationCenter = NotificationCenter.default
-    
+
     override var isSelected: Bool {
         didSet { selectedView.alpha = isSelected ? 1.0 : 0.0 }
     }
-    
+
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)

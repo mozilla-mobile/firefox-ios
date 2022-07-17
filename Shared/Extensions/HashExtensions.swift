@@ -56,4 +56,3 @@ extension Data {
         return String(data: self, encoding: .utf8)
     }
 }
-

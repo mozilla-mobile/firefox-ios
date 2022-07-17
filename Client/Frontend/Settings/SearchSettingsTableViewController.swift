@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-import SDWebImage
 import Shared
 
 protocol SearchEnginePickerDelegate: AnyObject {
@@ -191,7 +190,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 v.backgroundColor = UIColor.clear
             }
         }
-        
+
         // Change re-order control tint color to match app theme
         for subViewA in cell.subviews where subViewA.classForCoder.description() == "UITableViewCellReorderControl" {
             for subViewB in subViewA.subviews {
@@ -225,9 +224,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else {
-            return nil
-        }
+        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         footerView.applyTheme()
         return footerView
@@ -257,7 +254,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             return sourceIndexPath
         }
 
-        //Can't drag/drop over "Add Custom Engine button"
+        // Can't drag/drop over "Add Custom Engine button"
         if sourceIndexPath.item + 1 == model.orderedEngines.count || proposedDestinationIndexPath.item + 1 == model.orderedEngines.count {
             return sourceIndexPath
         }

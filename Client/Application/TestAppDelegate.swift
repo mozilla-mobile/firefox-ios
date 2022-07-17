@@ -4,17 +4,29 @@
 
 import Foundation
 import Shared
-import SDWebImage
 import XCGLogger
+import SDWebImage
+import Kingfisher
 
 private let log = Logger.browserLogger
 
-class TestAppDelegate: AppDelegate {
+class TestAppDelegate: AppDelegate, FeatureFlaggable {
 
     lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
 
-    override func getProfile(_ application: UIApplication) -> Profile {
-        if let profile = self.profile {
+    private var internalProfile: Profile?
+
+    override var profile: Profile {
+        get {
+            getProfile(UIApplication.shared)
+        }
+        set {
+            internalProfile = newValue
+        }
+    }
+
+    func getProfile(_ application: UIApplication) -> Profile {
+        if let profile = self.internalProfile {
             return profile
         }
 
@@ -45,7 +57,7 @@ class TestAppDelegate: AppDelegate {
                 let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
                 let filePaths = enumerator?.allObjects as! [String]
                 filePaths.filter { $0.contains(".db") }.forEach { item in
-                    try! FileManager.default.removeItem(at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)"))
+                    try? FileManager.default.removeItem(at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)"))
                 }
 
                 try! FileManager.default.copyItem(at: input, to: output)
@@ -97,8 +109,12 @@ class TestAppDelegate: AppDelegate {
             profile.prefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
         }
 
+        if launchArguments.contains(LaunchArguments.TurnOffTabGroupsInUserPreferences) {
+            profile.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.TabTrayGroups)
+        }
+
         if launchArguments.contains(LaunchArguments.SkipSponsoredShortcuts) {
-            profile.prefs.setBool(false, forKey: PrefsKeys.KeyShowSponsoredShortcuts)
+            profile.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
         }
 
         // Don't show the What's New page.
@@ -113,11 +129,6 @@ class TestAppDelegate: AppDelegate {
         // Skip the intro when requested by for example tests or automation
         if launchArguments.contains(LaunchArguments.SkipIntro) {
             profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-        }
-
-        // Change to 0 to deactivate chron tabs
-        if launchArguments.contains(LaunchArguments.ChronTabs) {
-            profile.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.ChronologicalTabs)
         }
 
         if launchArguments.contains(LaunchArguments.StageServer) {
@@ -150,9 +161,14 @@ class TestAppDelegate: AppDelegate {
     func resetApplication() {
         log.debug("Wiping everything for a clean start.")
 
-        // Clear image cache
+        // TODO: Remove clear cache for SDWebImage when we are ready to remove library
+        // Clear image cache - SDWebImage
         SDImageCache.shared.clearDisk()
         SDImageCache.shared.clearMemory()
+
+        // Clear image cache - Kingfisher
+        KingfisherManager.shared.cache.clearMemoryCache()
+        KingfisherManager.shared.cache.clearDiskCache()
 
         // Clear the cookie/url cache
         URLCache.shared.removeAllCachedResponses()

@@ -21,6 +21,10 @@ open class AppInfo {
         }
     }
 
+    public static var bundleIdentifier: String {
+        return applicationBundle.object(forInfoDictionaryKey: "CFBundleIdentifier") as! String
+    }
+
     public static var displayName: String {
         return applicationBundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
     }

@@ -5,13 +5,9 @@
 import Foundation
 import Shared
 
-class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProtocol {
+class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
 
-    var nimbus: FxNimbus
-
-    init(nimbus: FxNimbus = FxNimbus.shared) {
-        self.nimbus = nimbus
-
+    init() {
         super.init(style: .grouped)
 
         self.title = .Settings.SectionTitles.TabsTitle
@@ -23,8 +19,7 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
 
     override func generateSettings() -> [SettingSection] {
 
-        var sectionItems = [Setting]()
-
+        var sectionItems = [SettingSection]()
 
         let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
                                               titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
@@ -32,19 +27,17 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
         let tabGroupsSetting = BoolSetting(with: .tabTrayGroups,
                                            titleText: NSAttributedString(string: .Settings.Tabs.TabGroups))
 
-
-        if featureFlags.isFeatureActiveForBuild(.inactiveTabs),
-           let isNimbusEnabled = nimbus.features.tabTrayFeature.value().sectionsEnabled[.inactiveTabs],
-           isNimbusEnabled {
-            sectionItems.append(inactiveTabsSetting)
+        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) {
+            sectionItems.append(SettingSection(title: NSAttributedString(string: .Settings.Tabs.TabsSectionTitle),
+                                               footerTitle: NSAttributedString(string: .Settings.Tabs.InactiveTabsDescription),
+                                               children: [inactiveTabsSetting]))
         }
 
-        if featureFlags.isFeatureActiveForBuild(.tabTrayGroups) {
-            sectionItems.append(tabGroupsSetting)
+        if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly) {
+            sectionItems.append(SettingSection(children: [tabGroupsSetting]))
         }
 
-        return [SettingSection(title: NSAttributedString(string: .Settings.Tabs.TabsSectionTitle),
-                               children: sectionItems)]
+        return sectionItems
     }
 
     override func viewDidDisappear(_ animated: Bool) {

@@ -12,9 +12,7 @@ class BackForwardListAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let screens = (from: transitionContext.viewController(forKey: .from)!, to: transitionContext.viewController(forKey: .to)!)
 
-        guard let backForwardViewController = !self.presenting ? screens.from as? BackForwardListViewController : screens.to as? BackForwardListViewController else {
-            return
-        }
+        guard let backForwardViewController = !self.presenting ? screens.from as? BackForwardListViewController : screens.to as? BackForwardListViewController else { return }
 
         var bottomViewController = !self.presenting ? screens.to as UIViewController : screens.from as UIViewController
 
@@ -59,9 +57,7 @@ extension BackForwardListAnimator {
 
             UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: [], animations: { () -> Void in
                 backForward.view.alpha = 1
-                backForward.tableView.snp.updateConstraints { make in
-                    make.height.equalTo(backForward.tableHeight)
-                }
+                backForward.tableViewHeightAnchor.constant = backForward.tableHeight
                 backForward.view.layoutIfNeeded()
                 }, completion: { (completed) -> Void in
                     transitionContext.completeTransition(completed)
@@ -70,9 +66,7 @@ extension BackForwardListAnimator {
         } else {
             UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 1.2, initialSpringVelocity: 0.0, options: [], animations: { () -> Void in
                 backForward.view.alpha = 0
-                backForward.tableView.snp.updateConstraints { make in
-                    make.height.equalTo(0)
-                }
+                backForward.tableViewHeightAnchor.constant = 0
                 backForward.view.layoutIfNeeded()
                 }, completion: { (completed) -> Void in
                     backForward.view.removeFromSuperview()

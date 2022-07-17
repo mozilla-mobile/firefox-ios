@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
-import SwiftyJSON
 import SyncTelemetry
 import Account
 import os.log
@@ -39,9 +38,8 @@ extension FxAPushMessageHandler {
         let subscription = pushReg.defaultSubscription
 
         guard let encoding = userInfo["con"] as? String, // content-encoding
-            let payload = userInfo["body"] as? String else {
-                return deferMaybe(PushMessageError.messageIncomplete("missing con or body"))
-        }
+              let payload = userInfo["body"] as? String
+        else { return deferMaybe(PushMessageError.messageIncomplete("missing con or body")) }
         // ver == endpointURL path, chid == channel id, aps == alert text and content_available.
 
         let plaintext: String?
@@ -78,7 +76,12 @@ extension FxAPushMessageHandler {
                 }
                 if events.count > 1 {
                     // Log to the console for debugging release builds
-                    os_log("%{public}@", log: OSLog(subsystem: "org.mozilla.firefox", category: "firefoxnotificationservice"), type: OSLogType.debug, "Multiple events arrived, only handling the first event.")
+                    os_log(
+                        "%{public}@",
+                        log: OSLog(subsystem: "org.mozilla.firefox",
+                                   category: "firefoxnotificationservice"),
+                        type: OSLogType.debug,
+                        "Multiple events arrived, only handling the first event.")
                 }
                 switch firstEvent {
                 case .commandReceived(let deviceCommand):
@@ -156,11 +159,11 @@ enum PushMessage: Equatable {
 
     var messageType: PushMessageType {
         switch self {
-        case .commandReceived(_):
+        case .commandReceived:
             return .commandReceived
-        case .deviceConnected(_):
+        case .deviceConnected:
             return .deviceConnected
-        case .deviceDisconnected(_):
+        case .deviceDisconnected:
             return .deviceDisconnected
         case .thisDeviceDisconnected:
             return .deviceDisconnected
@@ -173,7 +176,7 @@ enum PushMessage: Equatable {
         }
     }
 
-    public static func ==(lhs: PushMessage, rhs: PushMessage) -> Bool {
+    public static func == (lhs: PushMessage, rhs: PushMessage) -> Bool {
         guard lhs.messageType == rhs.messageType else {
             return false
         }

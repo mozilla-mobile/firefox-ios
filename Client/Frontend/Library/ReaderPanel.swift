@@ -35,10 +35,10 @@ private struct ReadingListPanelUX {
     // Welcome Screen
     static let WelcomeScreenPadding: CGFloat = 15
     static let WelcomeScreenHorizontalMinPadding: CGFloat = 40
-    
+
     static let WelcomeScreenMaxWidth: CGFloat = 400
     static let WelcomeScreenItemImageWidth: CGFloat = 20
-    
+
     static let WelcomeScreenTopPadding: CGFloat = 120
 }
 
@@ -83,7 +83,7 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
 
         setupLayout()
     }
-    
+
     private func setupLayout() {
         backgroundColor = UIColor.clear
         separatorInset = UIEdgeInsets(top: 0, left: 48, bottom: 0, right: 0)
@@ -96,12 +96,12 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
             readStatusImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             readStatusImageView.widthAnchor.constraint(equalToConstant: CGFloat(ReadingListTableViewCellUX.ReadIndicatorWidth)),
             readStatusImageView.heightAnchor.constraint(equalToConstant: CGFloat(ReadingListTableViewCellUX.ReadIndicatorHeight)),
-            
+
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelTopOffset)),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelLeftOffset)),
             titleLabel.bottomAnchor.constraint(equalTo: hostnameLabel.topAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelRightOffset)),
-            
+
             hostnameLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             hostnameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: CGFloat(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)),
             hostnameLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
@@ -145,7 +145,10 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
             if !unread {
                 // mimic light gray visual dimming by "dimming" the speech by reducing pitch
                 let lowerPitchString = NSMutableAttributedString(string: string as String)
-                lowerPitchString.addAttribute(NSAttributedString.Key.accessibilitySpeechPitch, value: NSNumber(value: ReadingListTableViewCellUX.ReadAccessibilitySpeechPitch as Float), range: NSRange(location: 0, length: lowerPitchString.length))
+                lowerPitchString.addAttribute(
+                    NSAttributedString.Key.accessibilitySpeechPitch,
+                    value: NSNumber(value: ReadingListTableViewCellUX.ReadAccessibilitySpeechPitch as Float),
+                    range: NSRange(location: 0, length: lowerPitchString.length))
                 label = NSAttributedString(attributedString: lowerPitchString)
             } else {
                 label = string as AnyObject
@@ -187,13 +190,13 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         super.viewWillAppear(animated)
         // Note this will then call applyTheme() on this class, which reloads the tableview.
         (navigationController as? ThemedNavigationController)?.applyTheme()
+        tableView.accessibilityIdentifier = "ReadingTable"
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.addGestureRecognizer(longPressRecognizer)
-        tableView.accessibilityIdentifier = "ReadingTable"
         tableView.estimatedRowHeight = ReadingListTableViewCellUX.RowHeight
         tableView.rowHeight = UITableView.automaticDimension
         tableView.cellLayoutMarginsFollowReadableWidth = false
@@ -234,15 +237,16 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             } else {
                 if prevNumberOfRecords == 0 {
                     tableView.isScrollEnabled = true
+                    DispatchQueue.main.async { self.tableView.backgroundView = nil }
                 }
             }
             self.tableView.reloadData()
         }
     }
-    
+
     private lazy var emptyStateView: UIView = {
         let view = UIView()
-        
+
         let welcomeLabel: UILabel = .build { label in
             label.text = .ReaderPanelWelcome
             label.textAlignment = .center
@@ -273,44 +277,44 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         let emptyStateViewWrapper: UIView = .build { view in
             view.addSubviews(welcomeLabel, readerModeLabel, readerModeImageView, readingListLabel, readingListImageView)
         }
-        
+
         view.addSubview(emptyStateViewWrapper)
-        
+
         NSLayoutConstraint.activate([
             // title
             welcomeLabel.topAnchor.constraint(equalTo: emptyStateViewWrapper.topAnchor),
             welcomeLabel.leadingAnchor.constraint(equalTo: emptyStateViewWrapper.leadingAnchor),
             welcomeLabel.trailingAnchor.constraint(equalTo: emptyStateViewWrapper.trailingAnchor),
-            
+
             // first row
             readerModeLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: ReadingListPanelUX.WelcomeScreenPadding),
             readerModeLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
             readerModeLabel.trailingAnchor.constraint(equalTo: readerModeImageView.leadingAnchor, constant: -ReadingListPanelUX.WelcomeScreenPadding),
-            
+
             readerModeImageView.centerYAnchor.constraint(equalTo: readerModeLabel.centerYAnchor),
             readerModeImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
             readerModeImageView.widthAnchor.constraint(equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth),
-            
+
             // second row
             readingListLabel.topAnchor.constraint(equalTo: readerModeLabel.bottomAnchor, constant: ReadingListPanelUX.WelcomeScreenPadding),
             readingListLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
             readingListLabel.trailingAnchor.constraint(equalTo: readingListImageView.leadingAnchor, constant: -ReadingListPanelUX.WelcomeScreenPadding),
-            
+
             readingListImageView.centerYAnchor.constraint(equalTo: readingListLabel.centerYAnchor),
             readingListImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
             readingListImageView.widthAnchor.constraint(equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth),
-            
+
             readingListLabel.bottomAnchor.constraint(equalTo: emptyStateViewWrapper.bottomAnchor),
-            
+
             // overall positioning of emptyStateViewWrapper
             emptyStateViewWrapper.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: ReadingListPanelUX.WelcomeScreenHorizontalMinPadding),
             emptyStateViewWrapper.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -ReadingListPanelUX.WelcomeScreenHorizontalMinPadding),
             emptyStateViewWrapper.widthAnchor.constraint(lessThanOrEqualToConstant: ReadingListPanelUX.WelcomeScreenMaxWidth),
-            
+
             emptyStateViewWrapper.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyStateViewWrapper.topAnchor.constraint(equalTo: view.topAnchor, constant: ReadingListPanelUX.WelcomeScreenTopPadding)
         ])
-        
+
         return view
     }()
 
@@ -340,9 +344,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
     }
 
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard let record = records?[indexPath.row] else {
-            return nil
-        }
+        guard let record = records?[indexPath.row] else { return nil }
 
         let deleteAction = UIContextualAction(style: .destructive, title: .ReaderPanelRemove) { [weak self] (_, _, completion) in
             guard let strongSelf = self else { completion(false); return }
@@ -432,9 +434,10 @@ extension ReadingListPanel: LibraryPanelContextMenu {
 
 extension ReadingListPanel: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        guard let site = getSiteDetails(for: indexPath), let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url) else {
-            return []
-        }
+        guard let site = getSiteDetails(for: indexPath),
+              let url = URL(string: site.url),
+              let itemProvider = NSItemProvider(contentsOf: url)
+        else { return [] }
 
         TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .url, value: .readingListPanel)
 

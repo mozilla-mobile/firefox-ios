@@ -11,7 +11,6 @@ import Shared
 extension SavedTab {
     convenience init?(tab: Tab, isSelected: Bool) {
         assert(Thread.isMainThread)
-        
         var sessionData = tab.sessionData
         if sessionData == nil {
             let currentItem: WKBackForwardListItem! = tab.webView?.backForwardList.currentItem
@@ -27,7 +26,7 @@ extension SavedTab {
                 sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: tab.lastExecutedTime ?? Date.now())
             }
         }
-        
+
         self.init(screenshotUUID: tab.screenshotUUID,
                   isSelected: isSelected,
                   title: tab.title ?? tab.lastTitle,
@@ -40,7 +39,7 @@ extension SavedTab {
                   createdAt: tab.firstCreatedTime,
                   hasHomeScreenshot: tab.hasHomeScreenshot)
     }
-    
+
     func configureSavedTabUsing(_ tab: Tab, imageStore: DiskImageStore? = nil) -> Tab {
         // Since this is a restored tab, reset the URL to be loaded as that will be handled by the SessionRestoreHandler
         tab.url = nil

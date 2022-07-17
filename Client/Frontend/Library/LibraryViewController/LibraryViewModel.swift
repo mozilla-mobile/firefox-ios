@@ -4,7 +4,7 @@
 
 import Foundation
 
-class LibraryViewModel {
+class LibraryViewModel: FeatureFlaggable {
 
     let profile: Profile
     let tabManager: TabManager
@@ -14,6 +14,17 @@ class LibraryViewModel {
     var currentPanelState: LibraryPanelMainState {
         get { return panelState.currentState }
         set { panelState.currentState = newValue }
+    }
+
+    var shouldShowSearch: Bool {
+        return featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) && currentPanelState == .history(state: .mainView) || currentPanelState == .history(state: .search)
+    }
+
+    var segmentedControlItems: [UIImage] {
+        [UIImage(named: ImageIdentifiers.libraryBookmars) ?? UIImage(),
+         UIImage(named: ImageIdentifiers.libraryHistory) ?? UIImage(),
+         UIImage(named: ImageIdentifiers.libraryDownloads) ?? UIImage(),
+         UIImage(named: ImageIdentifiers.libraryReadingList) ?? UIImage()]
     }
 
     init(withProfile profile: Profile, tabManager: TabManager) {

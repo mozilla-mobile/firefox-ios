@@ -26,12 +26,7 @@ extension BrowserViewController {
     }
 
     private func showPanel(_ panel: LibraryPanelType) {
-        guard let libraryViewController = self.libraryViewController else {
-            showLibrary(panel: panel)
-            return
-        }
-
-        libraryViewController.selectedPanel = panel
+        showLibrary(panel: panel)
     }
 
     @objc private func openClearHistoryPanelKeyCommand() {
@@ -119,6 +114,7 @@ extension BrowserViewController {
                                      extras: ["action": "new-tab"])
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func newPrivateTabKeyCommand() {
@@ -129,8 +125,7 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
         openBlankNewTab(focusLocationField: true, isPrivate: true)
-        keyboardPressesHandler.reset()
-    }
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }    }
 
     @objc private func newNormalTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
@@ -138,7 +133,7 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
         openBlankNewTab(focusLocationField: true, isPrivate: false)
-        keyboardPressesHandler.reset()
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func closeTabKeyCommand() {
@@ -146,15 +141,14 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "close-tab"])
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab else { return }
         tabManager.removeTab(currentTab)
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func undoLastTabClosedKeyCommand() {
         guard let lastClosedURL = profile.recentlyClosedTabs.popFirstTab()?.url,
-                   let selectedTab = tabManager.selectedTab
+              let selectedTab = tabManager.selectedTab
         else { return }
 
         let request = URLRequest(url: lastClosedURL)
@@ -183,9 +177,7 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "next-tab"])
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab else { return }
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         if let index = tabs.firstIndex(of: currentTab), index + 1 < tabs.count {
@@ -194,7 +186,7 @@ extension BrowserViewController {
             tabManager.selectTab(firstTab)
         }
 
-        keyboardPressesHandler.reset()
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func previousTabKeyCommand() {
@@ -202,9 +194,7 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "previous-tab"])
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab else { return }
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         if let index = tabs.firstIndex(of: currentTab), index - 1 < tabs.count && index != 0 {
@@ -213,7 +203,7 @@ extension BrowserViewController {
             tabManager.selectTab(lastTab)
         }
 
-        keyboardPressesHandler.reset()
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func selectFirstTab() {
@@ -249,9 +239,7 @@ extension BrowserViewController {
     }
 
     @objc private func selectLastTab() {
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab else { return }
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         selectTab(number: tabs.count - 1)
@@ -260,22 +248,18 @@ extension BrowserViewController {
     /// Select a certain tab number - If number is greater than the present number of tabs, select the last tab
     /// - Parameter number: The 0 indexed tab number to select
     private func selectTab(number: Int) {
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab else { return }
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         // Do not continue if the index of the new tab to select is the current one
-        guard let currentTabIndex = tabs.firstIndex(of: currentTab), currentTabIndex != number else {
-            return
-        }
+        guard let currentTabIndex = tabs.firstIndex(of: currentTab), currentTabIndex != number else { return }
 
         if tabs.count > number {
             tabManager.selectTab(tabs[number])
-            keyboardPressesHandler.reset()
+            if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
         } else if let lastTab = tabs.last {
             tabManager.selectTab(lastTab)
-            keyboardPressesHandler.reset()
+            if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
         }
     }
 
@@ -283,21 +267,24 @@ extension BrowserViewController {
 
     @objc private func zoomIn() {
         guard let currentTab = tabManager.selectedTab,
-              firefoxHomeViewController == nil else { return }
+              firefoxHomeViewController == nil
+        else { return }
 
         currentTab.zoomIn()
     }
 
     @objc private func zoomOut() {
         guard let currentTab = tabManager.selectedTab,
-              firefoxHomeViewController == nil else { return }
+              firefoxHomeViewController == nil
+        else { return }
 
         currentTab.zoomOut()
     }
 
     @objc private func resetZoom() {
         guard let currentTab = tabManager.selectedTab,
-              firefoxHomeViewController == nil else { return }
+              firefoxHomeViewController == nil
+        else { return }
 
         currentTab.resetZoom()
     }
@@ -351,17 +338,18 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(findInPageAgainKeyCommand), input: "g", modifierFlags: .command, discoverabilityTitle: shortcuts.FindAgain),
 
             // View
+            UIKeyCommand(action: #selector(zoomIn), input: "=", modifierFlags: .command),
             UIKeyCommand(action: #selector(zoomIn), input: "+", modifierFlags: .command, discoverabilityTitle: shortcuts.ZoomIn),
             UIKeyCommand(action: #selector(zoomOut), input: "-", modifierFlags: .command, discoverabilityTitle: shortcuts.ZoomOut),
             UIKeyCommand(action: #selector(resetZoom), input: "0", modifierFlags: .command, discoverabilityTitle: shortcuts.ActualSize),
             UIKeyCommand(action: #selector(reloadTabKeyCommand), input: "r", modifierFlags: .command, discoverabilityTitle: shortcuts.ReloadPage),
-            
+
             // History
             UIKeyCommand(action: #selector(goBackKeyCommand), input: "[", modifierFlags: .command, discoverabilityTitle: shortcuts.Back),
             UIKeyCommand(action: #selector(openClearHistoryPanelKeyCommand), input: "\u{8}", modifierFlags: [.shift, .command], discoverabilityTitle: shortcuts.ClearRecentHistory),
             UIKeyCommand(action: #selector(goForwardKeyCommand), input: "]", modifierFlags: .command, discoverabilityTitle: shortcuts.Forward),
             UIKeyCommand(action: #selector(showHistoryKeyCommand), input: "y", modifierFlags: .command, discoverabilityTitle: shortcuts.ShowHistory),
-            
+
             // Bookmarks
             UIKeyCommand(action: #selector(showBookmarksKeyCommand), input: "o", modifierFlags: [.shift, .command], discoverabilityTitle: shortcuts.ShowBookmarks),
             UIKeyCommand(action: #selector(addBookmarkKeyCommand), input: "d", modifierFlags: .command, discoverabilityTitle: shortcuts.AddBookmark),
@@ -391,22 +379,24 @@ extension BrowserViewController {
     }
 
     // MARK: Keyboards + Link click shortcuts
-
+    @available(iOS 13.4, *)
     func navigateLinkShortcutIfNeeded(url: URL) -> Bool {
         var shouldCancelHandler = false
 
         // Open tab in background || Open in new tab
-        if keyboardPressesHandler.isOnlyCmdPressed || keyboardPressesHandler.isCmdAndShiftPressed {
+        if keyboardPressesHandler().isOnlyCmdPressed || keyboardPressesHandler().isCmdAndShiftPressed {
             guard let isPrivate = tabManager.selectedTab?.isPrivate else { return shouldCancelHandler }
-            let selectNewTab = !keyboardPressesHandler.isOnlyCmdPressed && keyboardPressesHandler.isCmdAndShiftPressed
+            let selectNewTab = !keyboardPressesHandler().isOnlyCmdPressed && keyboardPressesHandler().isCmdAndShiftPressed
             homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
             shouldCancelHandler = true
 
         // Download Link
-        } else if keyboardPressesHandler.isOnlyOptionPressed, let currentTab = tabManager.selectedTab {
+        } else if keyboardPressesHandler().isOnlyOptionPressed, let currentTab = tabManager.selectedTab {
             // This checks if download is a blob, if yes, begin blob download process
             if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
-                // if not a blob, set pendingDownloadWebView and load the request in the webview, which will trigger the WKWebView navigationResponse delegate function and eventually downloadHelper.open()
+                // if not a blob, set pendingDownloadWebView and load the request in
+                // the webview, which will trigger the WKWebView navigationResponse
+                // delegate function and eventually downloadHelper.open()
                 self.pendingDownloadWebView = currentTab.webView
                 let request = URLRequest(url: url)
                 currentTab.webView?.load(request)

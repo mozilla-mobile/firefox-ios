@@ -23,7 +23,7 @@
 "Menu.Library.Reload" = "Endurhlaða";
 
 /* Label for the button, displayed in the menu, used to open the Library */
-"Menu.Library.Title" = "Bókasafnið þitt";
+"Menu.Library.Title" = "Safnið þitt";
 
 /* Label for the button, displayed in the menu, used to open a new private tab. */
 "Menu.NewPrivateTabAction.Title" = "Opna nýjan huliðsflipa";
