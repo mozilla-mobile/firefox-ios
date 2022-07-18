@@ -12,6 +12,14 @@ enum OneLineTableViewCustomization {
     case inactiveCell
 }
 
+struct OneLineTableViewCellViewModel {
+    let title: String?
+    var leftImageView: UIImage?
+    var leftImageViewContentView: UIView.ContentMode
+    let accessoryView: UIImageView?
+    let accessoryType: UITableViewCell.AccessoryType
+}
+
 class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell {
     // Tableview cell items
 
@@ -147,6 +155,16 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
         }
     }
 
+    // To simplify setup, OneLineTableViewCell now has a viewModel
+    // Use it for new code, replace when possible in old code
+    func configure(viewModel: OneLineTableViewCellViewModel) {
+        titleLabel.text = viewModel.title
+        leftImageView.image = viewModel.leftImageView
+        leftImageView.contentMode = viewModel.leftImageViewContentView
+        self.accessoryView = viewModel.accessoryView
+        self.editingAccessoryType = viewModel.accessoryType
+    }
+
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
@@ -163,6 +181,8 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
         super.prepareForReuse()
         self.selectionStyle = .default
         separatorInset = defaultSeparatorInset
+        titleLabel.text = nil
+        leftImageView.image = nil
         applyTheme()
     }
 }

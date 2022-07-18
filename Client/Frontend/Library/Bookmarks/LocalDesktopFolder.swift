@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import MozillaAppServices
+import Storage
 
 /// A folder class that enables us to have local folder presented to the user
 /// We can use this folder class for:
@@ -33,5 +34,40 @@ class LocalDesktopFolder: FxBookmarkNode {
 
     var position: UInt32 {
         return 0
+    }
+
+    var isRoot: Bool {
+        return false
+    }
+
+    var title: String {
+        return ""
+    }
+}
+
+extension LocalDesktopFolder: BookmarksFolderCell {
+    func getViewModel(forSite site: Site?,
+                      profile: Profile?,
+                      completion: ((OneLineTableViewCellViewModel) -> Void)?)
+    -> OneLineTableViewCellViewModel {
+        return OneLineTableViewCellViewModel(title: LocalizedRootBookmarkFolderStrings[guid],
+                                             leftImageView: leftImageView,
+                                             leftImageViewContentView: .center,
+                                             accessoryView: UIImageView(image: chevronImage),
+                                             accessoryType: .disclosureIndicator)
+    }
+
+    func didSelect(profile: Profile,
+                   libraryPanelDelegate: LibraryPanelDelegate?,
+                   navigationController: UINavigationController?) {
+        let viewModel = BookmarksPanelViewModel(profile: profile,
+                                                bookmarkFolderGUID: guid)
+        let nextController = BookmarksPanel(viewModel: viewModel)
+        nextController.title = .Bookmarks.Menu.DesktopBookmarks
+        if let localizedString = LocalizedRootBookmarkFolderStrings[guid] {
+            nextController.title = localizedString
+        }
+        nextController.libraryPanelDelegate = libraryPanelDelegate
+        navigationController?.pushViewController(nextController, animated: true)
     }
 }

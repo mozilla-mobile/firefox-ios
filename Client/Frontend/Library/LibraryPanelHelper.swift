@@ -75,37 +75,41 @@ class LibraryPanelHelper {
         self.tabManager = tabManager
     }
 
-    lazy var enabledPanels = [
-        LibraryPanelDescriptor(
-            viewController: BookmarksPanel(profile: profile),
-            profile: profile,
-            tabManager: tabManager,
-            accessibilityLabel: .LibraryPanelBookmarksAccessibilityLabel,
-            accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.bookmarksView,
-            panelType: .bookmarks),
+    lazy var enabledPanels: [LibraryPanelDescriptor] = {
+        let bookmarksViewModel = BookmarksPanelViewModel(profile: profile)
 
-        LibraryPanelDescriptor(
-            viewController: HistoryPanel(profile: profile, tabManager: tabManager),
-            profile: profile,
-            tabManager: tabManager,
-            accessibilityLabel: .LibraryPanelHistoryAccessibilityLabel,
-            accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.historyView,
-            panelType: .history),
+        return [
+            LibraryPanelDescriptor(
+                viewController: BookmarksPanel(viewModel: bookmarksViewModel),
+                profile: profile,
+                tabManager: tabManager,
+                accessibilityLabel: .LibraryPanelBookmarksAccessibilityLabel,
+                accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.bookmarksView,
+                panelType: .bookmarks),
 
-        LibraryPanelDescriptor(
-            viewController: DownloadsPanel(profile: profile),
-            profile: profile,
-            tabManager: tabManager,
-            accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
-            accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.downloadsView,
-            panelType: .downloads),
+            LibraryPanelDescriptor(
+                viewController: HistoryPanel(profile: profile, tabManager: tabManager),
+                profile: profile,
+                tabManager: tabManager,
+                accessibilityLabel: .LibraryPanelHistoryAccessibilityLabel,
+                accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.historyView,
+                panelType: .history),
 
-        LibraryPanelDescriptor(
-            viewController: ReadingListPanel(profile: profile),
-            profile: profile,
-            tabManager: tabManager,
-            accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,
-            accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.readingListView,
-            panelType: .readingList)
-    ]
+            LibraryPanelDescriptor(
+                viewController: DownloadsPanel(profile: profile),
+                profile: profile,
+                tabManager: tabManager,
+                accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
+                accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.downloadsView,
+                panelType: .downloads),
+
+            LibraryPanelDescriptor(
+                viewController: ReadingListPanel(profile: profile),
+                profile: profile,
+                tabManager: tabManager,
+                accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,
+                accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.readingListView,
+                panelType: .readingList)
+        ]
+    }()
 }

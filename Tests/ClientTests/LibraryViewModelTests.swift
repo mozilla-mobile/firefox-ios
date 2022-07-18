@@ -131,44 +131,6 @@ class LibraryViewModelTests: XCTestCase {
         XCTAssertEqual(toolbarItems.count, 2, "Expected Edit button and flexibleSpace")
     }
 
-    func testBookmarksDone_ForItemEditMode() {
-        setup(panelType: .bookmarks)
-        guard let panel = sut.currentPanel as? BookmarksPanel else {
-            XCTFail("Expected bookmark panel")
-            return
-        }
-
-        panel.updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
-        panel.bottomLeftButtonAction()
-
-        XCTAssertEqual(sut.currentPanelState, .bookmarks(state: .itemEditMode))
-        let toolbarItems = panel.bottomToolbarItems
-        // We need to account for the flexibleSpace item
-        XCTAssertEqual(toolbarItems.count, 2, "Expected Edit button and flexibleSpace")
-    }
-
-    // Currently we cannot test this state because we don't have a viewModel and we can interact with PhotonActionSheet
-    // we are planning to introduce a BookmarksPanelViewModel so leaving here to enable when we have one
-    func testBookmarksHandleItemEditMode() throws {
-        throw XCTSkip("Not able to test state because of PhotonSheet interaction")
-//        setup(panelType: .bookmarks)
-//        guard let panel = sut.currentPanel as? BookmarksPanel else {
-//            XCTFail("Expected bookmark panel")
-//            return
-//        }
-//
-//        panel.updatePanelState(newState: .bookmarks(state: .itemEditMode))
-//        panel.reloadData()
-//        let viewModel = panel.getNewBookmarkAction().items.first
-//        viewModel?.tapHandler!(viewModel!)
-//        panel.handleItemEditMode()
-//
-//        XCTAssertEqual(sut.currentPanelState, .bookmarks(state: .inFolderEditMode))
-//        let toolbarItems = panel.bottomToolbarItems
-//        // We need to account for the flexibleSpace item
-//        XCTAssertEqual(toolbarItems.count, 2, "Expected Edit button and flexibleSpace")
-    }
-
     func testBookmarksBack_ForInFolder() {
         setup(panelType: .bookmarks)
         guard let panel = sut.currentPanel as? BookmarksPanel else {
