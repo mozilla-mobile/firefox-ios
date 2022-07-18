@@ -547,7 +547,8 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         var section: NSCollectionLayoutSection
 
-        if hasSyncedTab, traitCollection.horizontalSizeClass == .compact {
+        let isPhoneInLandscape = UIDevice.current.userInterfaceIdiom == .phone && UIWindow.isLandscape
+        if hasSyncedTab, traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
             section = sectionWithSyncedTabCompact(for: traitCollection)
             sectionLayout = .compactWithAccount
         } else {
