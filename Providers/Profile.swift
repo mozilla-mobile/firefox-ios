@@ -1169,10 +1169,14 @@ open class BrowserProfile: Profile {
          * Runs the single provided synchronization function and returns its status.
          */
         fileprivate func sync(_ label: EngineIdentifier, function: @escaping SyncFunction) -> SyncResult {
-            return syncSeveral(why: .user, synchronizers: [(label, function)]) >>== { statuses in
-                let status = statuses.find { label == $0.0 }?.1
-                return deferMaybe(status ?? .notStarted(.unknown))
+            let syncSeveralItems: SyncResult = syncSeveral(why: .user, synchronizers: [(label, function)]) >>== { statuses in
+                if let status = statuses.find({ label == $0.0 }) {
+                    return deferMaybe(status.1)
+                }
+                return deferMaybe(.notStarted(.unknown))
             }
+
+            return syncSeveralItems
         }
 
         /**
