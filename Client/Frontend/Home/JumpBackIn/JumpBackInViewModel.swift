@@ -621,17 +621,20 @@ extension JumpBackInViewModel: HomepageSectionHandler {
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         if isSyncedTabCell(for: indexPath) {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SyncedTabCell.cellIdentifier, for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SyncedTabCell.cellIdentifier,
+                                                          for: indexPath)
             guard let syncedTabCell = cell as? SyncedTabCell,
                     let mostRecentSyncedTab = mostRecentSyncedTab
             else { return UICollectionViewCell() }
             configureSyncedTabCellForTab(item: mostRecentSyncedTab, cell: syncedTabCell, indexPath: indexPath)
             return syncedTabCell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeHorizontalCell.cellIdentifier, for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeHorizontalCell.cellIdentifier,
+                                                          for: indexPath)
             guard let jumpBackInCell = cell as? HomeHorizontalCell else { return UICollectionViewCell() }
 
-            let jumpBackInItemRow = indexOfJumpBackInItem(for: indexPath, traitCollection: collectionView.traitCollection)
+            let jumpBackInItemRow = indexOfJumpBackInItem(for: indexPath,
+                                                          traitCollection: collectionView.traitCollection)
             if jumpBackInItemRow == (jumpBackInList.itemsToDisplay - 1),
                let group = jumpBackInList.group {
                 configureJumpBackInCellForGroups(group: group, cell: jumpBackInCell, indexPath: indexPath)
