@@ -125,9 +125,16 @@ extension UIView {
     func addBlurEffect(using style: UIBlurEffect.Style) {
         let blurEffect = UIBlurEffect(style: style)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = self.bounds
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurEffectView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(blurEffectView)
+        self.sendSubviewToBack(blurEffectView)
+
+        NSLayoutConstraint.activate([
+            blurEffectView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            blurEffectView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            blurEffectView.topAnchor.constraint(equalTo: self.topAnchor),
+            blurEffectView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
     }
 }
 
