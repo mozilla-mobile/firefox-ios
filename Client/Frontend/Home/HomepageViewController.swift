@@ -237,7 +237,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
             presentedViewController?.dismiss(animated: false, completion: nil)
         }
 
-        // Adjust layout for rotation, cells needs to be relayout
+        // Adjust layout for rotation, cells need to re-layout
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
