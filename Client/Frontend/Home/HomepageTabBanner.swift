@@ -247,25 +247,17 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
 
         guard let message = message else { return }
 
-        updateDefaultBrowserValues()
+        /// Update value to save DefaultBrowserMessage was dismissed
+        UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
         messagingManager.onMessageDismissed(message)
     }
 
-    /// The surface needs to handle CTAs a certain way when there's a message OR the evergreen.
+    /// The surface needs to handle CTAs a certain way when there's a message.
     @objc func handleCTA() {
         self.dismissClosure?()
 
         guard let message = message else { return }
 
-        updateDefaultBrowserValues()
         messagingManager.onMessagePressed(message)
-    }
-
-    private func updateDefaultBrowserValues() {
-        /// The evergreen needs to be treated like the other messages - once interacted with, don't show it.
-        UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
-
-        // Set default browser onboarding did show to true so it will not show again after user clicks this button
-        UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
     }
 }

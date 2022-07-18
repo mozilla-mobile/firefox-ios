@@ -38,7 +38,6 @@ class GleanPlumbContextProvider {
     /// - https://experimenter.info/mobile-messaging/#list-of-attributes
     /// We should pass as much device context as possible.
     func createAdditionalDeviceContext() -> [String: Any] {
-
         return [ContextKey.todayDate.rawValue: todaysDate,
                 ContextKey.isDefaultBrowser.rawValue: isDefaultBrowser]
     }

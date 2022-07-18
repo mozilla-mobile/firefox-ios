@@ -350,12 +350,12 @@ features:
               max-display-count: 10
           messages:
             default-browser:
-              title: \(String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerTitle)
-              text: \(String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
+              title: Default Browser/DefaultBrowserCard.Title
+              text: Default Browser/DefaultBrowserCard.Description
               action: "MAKE_DEFAULT_BROWSER"
               trigger: ["I_AM_NOT_DEFAULT_BROWSER", "SUPPORTS_DEFAULT_BROWSER"]
               style: "FALLBACK"
-              button-label: \(String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerButton)
+              button-label: Default Browser/DefaultBrowserCard.Button.v2
 
 types:
   objects:
