@@ -1169,10 +1169,14 @@ open class BrowserProfile: Profile {
          * Runs the single provided synchronization function and returns its status.
          */
         fileprivate func sync(_ label: EngineIdentifier, function: @escaping SyncFunction) -> SyncResult {
-            return syncSeveral(why: .user, synchronizers: [(label, function)]) >>== { statuses in
-                let status = statuses.find { label == $0.0 }?.1
-                return deferMaybe(status ?? .notStarted(.unknown))
+            let syncSeveralItems: SyncResult = syncSeveral(why: .user, synchronizers: [(label, function)]) >>== { statuses in
+                if let status = statuses.find({ label == $0.0 }) {
+                    return deferMaybe(status.1)
+                }
+                return deferMaybe(.notStarted(.unknown))
             }
+
+            return syncSeveralItems
         }
 
         /**
@@ -1242,14 +1246,25 @@ open class BrowserProfile: Profile {
                 gleanHelper.start()
             }
 
-            do {
-                return try syncReducer!.append(synchronizers)
-            } catch let error {
-                log.error("Synchronizers appended after sync was finished. This is a bug. \(error)")
+            let deferStatuses = { () -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> in
                 let statuses = synchronizers.map {
                     ($0.0, SyncStatus.notStarted(.unknown))
                 }
                 return deferMaybe(statuses)
+            }
+
+            guard let syncReducer = syncReducer else {
+                return deferStatuses()
+            }
+
+            do {
+                return try syncReducer.append(synchronizers)
+            } catch let error {
+                SentryIntegration.shared.send(message: "Synchronizers appended after sync was finished. This is a bug",
+                                              tag: .clientSynchronizer,
+                                              severity: .fatal,
+                                              description: error.localizedDescription)
+                return deferStatuses()
             }
         }
 
