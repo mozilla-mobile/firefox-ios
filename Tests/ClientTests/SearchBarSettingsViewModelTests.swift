@@ -10,7 +10,21 @@ import Shared
 
 class SearchBarSettingsViewModelTests: XCTestCase {
 
-    private let expectationWaitTime: TimeInterval = 2
+    var prefs: Prefs!
+
+    override func setUp() {
+        super.setUp()
+        let profile = MockProfile(databasePrefix: "SearchBarSettingsTests")
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        prefs = profile.prefs
+        prefs.clearAll()
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        prefs.clearAll()
+        prefs = nil
+    }
 
     // MARK: Default
     func testDefaultSearchPosition() {
@@ -22,14 +36,14 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
     func testSavedSearchPosition_onTopSavesOnTop() {
         let viewModel = createViewModel()
-        callSetting(viewModel.topSetting)
+        viewModel.topSetting.onChecked()
 
         XCTAssertEqual(viewModel.searchBarPosition, .top)
     }
 
     func testSavedSearchPosition_onBottomSavesOnBottom() {
         let viewModel = createViewModel()
-        callSetting(viewModel.bottomSetting)
+        viewModel.bottomSetting.onChecked()
 
         XCTAssertEqual(viewModel.searchBarPosition, .bottom)
     }
@@ -38,7 +52,7 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
     func testSavedSearchPosition_onTopSettingHasCheckmark() {
         let viewModel = createViewModel()
-        callSetting(viewModel.topSetting)
+        viewModel.topSetting.onChecked()
 
         XCTAssertEqual(viewModel.topSetting.isChecked(), true)
         XCTAssertEqual(viewModel.bottomSetting.isChecked(), false)
@@ -46,7 +60,7 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
     func testSavedSearchPosition_onBottomSettingHasCheckmark() {
         let viewModel = createViewModel()
-        callSetting(viewModel.bottomSetting)
+        viewModel.bottomSetting.onChecked()
 
         XCTAssertEqual(viewModel.bottomSetting.isChecked(), true)
         XCTAssertEqual(viewModel.topSetting.isChecked(), false)
@@ -54,143 +68,119 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
     // MARK: Delegate
 
-    private var delegate: SearchBarPreferenceDelegateMock?
     func testSavedSearchPosition_onBottomSettingCallsDelegate() {
-        let expectation = expectation(description: "Delegate is called")
         let viewModel = createViewModel()
-        callSetting(viewModel.topSetting)
+        viewModel.topSetting.onChecked()
 
-        delegate = SearchBarPreferenceDelegateMock(completion: {
-            expectation.fulfill()
+        let delegate = SearchBarPreferenceDelegateMock {
             XCTAssertEqual(viewModel.bottomSetting.isChecked(), true)
-        })
+        }
         viewModel.delegate = delegate
-        callSetting(viewModel.bottomSetting)
-
-        waitForExpectations(timeout: expectationWaitTime, handler: nil)
+        viewModel.bottomSetting.onChecked()
     }
 
     func testSavedSearchPosition_onTopSettingCallsDelegate() {
-        let expectation = expectation(description: "Delegate is called")
         let viewModel = createViewModel()
-        callSetting(viewModel.bottomSetting)
+        viewModel.bottomSetting.onChecked()
 
-        delegate = SearchBarPreferenceDelegateMock(completion: {
-            expectation.fulfill()
+        let delegate = SearchBarPreferenceDelegateMock {
             XCTAssertEqual(viewModel.topSetting.isChecked(), true)
-        })
+        }
         viewModel.delegate = delegate
-        callSetting(viewModel.topSetting)
-
-        waitForExpectations(timeout: expectationWaitTime, handler: nil)
+        viewModel.topSetting.onChecked()
     }
 
     // MARK: Notification
 
     func testNoNotificationSent_withoutDefaultPref() {
-        let expectation = expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: nil)
-        expectation.isInverted = true
-
-        let viewModel = createViewModel()
+        let spyNotificationCenter = SpyNotificationCenter()
+        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
         let searchBarPosition = viewModel.searchBarPosition
 
         XCTAssertEqual(searchBarPosition, .bottom)
-        waitForExpectations(timeout: expectationWaitTime, handler: nil)
+        XCTAssertNil(spyNotificationCenter.notificationNameSent)
+        XCTAssertNil(spyNotificationCenter.notificationObjectSent)
     }
 
     func testNotificationSent_onBottomSetting() {
-        expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: nil)
-        let (viewModel, prefs) = createViewModelWithPrefs()
-        setDefault(prefs, defaultPosition: .top)
-        callSetting(viewModel.bottomSetting)
+        setDefault(defaultPosition: .top)
+        let spyNotificationCenter = SpyNotificationCenter()
+        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
+        viewModel.bottomSetting.onChecked()
 
-        waitForExpectations(timeout: expectationWaitTime, handler: nil)
+        XCTAssertNotNil(spyNotificationCenter.notificationNameSent)
+        XCTAssertNotNil(spyNotificationCenter.notificationObjectSent)
     }
 
     func testNotificationSent_onTopSetting() {
-        expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: nil)
-        let (viewModel, prefs) = createViewModelWithPrefs()
-        setDefault(prefs, defaultPosition: .bottom)
-        callSetting(viewModel.topSetting)
+        setDefault(defaultPosition: .bottom)
+        let spyNotificationCenter = SpyNotificationCenter()
+        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
+        viewModel.topSetting.onChecked()
 
-        waitForExpectations(timeout: expectationWaitTime, handler: nil)
+        XCTAssertNotNil(spyNotificationCenter.notificationNameSent)
+        XCTAssertNotNil(spyNotificationCenter.notificationObjectSent)
     }
 
     func testNotificationSent_topIsReceived() {
-        expectation(forNotification: .SearchBarPositionDidChange,
-                    object: nil) { notification in
-            self.verifyNotification(expectedPosition: .top, notification: notification)
-        }
+        setDefault(defaultPosition: .bottom)
+        let spyNotificationCenter = SpyNotificationCenter()
+        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
+        viewModel.topSetting.onChecked()
 
-        let (viewModel, prefs) = createViewModelWithPrefs()
-        setDefault(prefs, defaultPosition: .bottom)
-        callSetting(viewModel.topSetting)
-
-        waitForExpectations(timeout: expectationWaitTime, handler: nil)
+        verifyNotification(name: spyNotificationCenter.notificationNameSent,
+                           object: spyNotificationCenter.notificationObjectSent,
+                           expectedPosition: .top)
     }
 
     func testNotificationSent_bottomIsReceived() {
-        expectation(forNotification: .SearchBarPositionDidChange,
-                    object: nil) { notification in
-            self.verifyNotification(expectedPosition: .bottom,
-                                    notification: notification)
-        }
+        setDefault(defaultPosition: .top)
+        let spyNotificationCenter = SpyNotificationCenter()
+        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
+        viewModel.bottomSetting.onChecked()
 
-        let (viewModel, prefs) = createViewModelWithPrefs()
-        setDefault(prefs, defaultPosition: .top)
-        callSetting(viewModel.bottomSetting)
-
-        waitForExpectations(timeout: expectationWaitTime, handler: nil)
+        verifyNotification(name: spyNotificationCenter.notificationNameSent,
+                           object: spyNotificationCenter.notificationObjectSent,
+                           expectedPosition: .bottom)
     }
 }
 
-// MARK: Helper methods
+// MARK: - Helper methods
 private extension SearchBarSettingsViewModelTests {
 
-    func createViewModel() -> SearchBarSettingsViewModel {
-        return createViewModelWithPrefs().0
+    func createViewModel(notificationCenter: NotificationCenter = NotificationCenter.default,
+                         file: StaticString = #file,
+                         line: UInt = #line) -> SearchBarSettingsViewModel {
+        let viewModel = SearchBarSettingsViewModel(prefs: prefs, notificationCenter: notificationCenter)
+        trackForMemoryLeaks(viewModel, file: file, line: line)
+        return viewModel
     }
 
-    func createViewModelWithPrefs() -> (SearchBarSettingsViewModel, Prefs) {
-        let mockProfile = MockProfile(databasePrefix: "SearchBarSettingsTests_")
-        mockProfile.prefs.clearAll()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
-        let viewModel = SearchBarSettingsViewModel(prefs: mockProfile.prefs)
-
-        addTeardownBlock {
-            mockProfile.prefs.clearAll()
-        }
-
-        return (viewModel, mockProfile.prefs)
-    }
-
-    func callSetting(_ setting: CheckmarkSetting) {
-        let dummyNavController = UINavigationController()
-        setting.onClick(dummyNavController)
-    }
-
-    func setDefault(_ prefs: Prefs, defaultPosition: SearchBarPosition) {
+    func setDefault(defaultPosition: SearchBarPosition) {
         prefs.setString(defaultPosition.rawValue,
                         forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
     }
 
-    func verifyNotification(expectedPosition: SearchBarPosition,
-                            notification: Notification,
+    func verifyNotification(name: NSNotification.Name?,
+                            object: Any?,
+                            expectedPosition: SearchBarPosition,
                             file: StaticString = #filePath,
-                            line: UInt = #line) -> Bool {
+                            line: UInt = #line) {
 
-        guard let dict = notification.object as? NSDictionary,
+        guard let name = name,
+              let dict = object as? NSDictionary,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition
         else {
-            XCTFail("Notification should be \(expectedPosition), instead of \(notification.debugDescription)", file: file, line: line)
-            return false
+            XCTFail("Notification have name and SearchBarPosition object", file: file, line: line)
+            return
         }
 
+        XCTAssertEqual(name, Notification.Name.SearchBarPositionDidChange, file: file, line: line)
         XCTAssertEqual(newSearchBarPosition, expectedPosition, file: file, line: line)
-        return true
     }
 }
 
+// MARK: - SearchBarPreferenceDelegateMock
 private class SearchBarPreferenceDelegateMock: SearchBarPreferenceDelegate {
 
     var completion: () -> Void
@@ -201,5 +191,17 @@ private class SearchBarPreferenceDelegateMock: SearchBarPreferenceDelegate {
 
     func didUpdateSearchBarPositionPreference() {
         completion()
+    }
+}
+
+// MARK: - SpyNotificationCenter
+class SpyNotificationCenter: NotificationCenter {
+
+    var notificationNameSent: NSNotification.Name?
+    var notificationObjectSent: Any?
+    override func post(name aName: NSNotification.Name, object anObject: Any?) {
+        super.post(name: aName, object: anObject)
+        notificationNameSent = aName
+        notificationObjectSent = anObject
     }
 }
