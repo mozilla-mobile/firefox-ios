@@ -247,10 +247,7 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
 
         guard let message = message else { return }
 
-        if message.action == "MAKE_DEFAULT_BROWSER" {
-            sendTelemetry(telemetryObject: .dismissDefaultBrowserCard)
-        }
-
+        updateDefaultBrowserValues()
         messagingManager.onMessageDismissed(message)
     }
 
@@ -260,16 +257,11 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
 
         guard let message = message else { return }
 
-        // set only default browser evergreen
-        if message.action == "MAKE_DEFAULT_BROWSER" {
-            sendTelemetry(telemetryObject: .goToSettingsDefaultBrowserCard)
-        }
-
+        updateDefaultBrowserValues()
         messagingManager.onMessagePressed(message)
     }
 
-    private func sendTelemetry(telemetryObject: TelemetryWrapper.EventObject) {
-        TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: telemetryObject)
+    private func updateDefaultBrowserValues() {
         /// The evergreen needs to be treated like the other messages - once interacted with, don't show it.
         UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
 

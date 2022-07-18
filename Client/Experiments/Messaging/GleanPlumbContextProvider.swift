@@ -10,8 +10,7 @@ class GleanPlumbContextProvider {
 
     enum ContextKey: String {
         case todayDate = "date_string"
-        case isDefaultBrowser = "is_default_browser_string"
-
+        case isDefaultBrowser = "is_default_browser"
     }
 
     private var todaysDate: String {
@@ -20,7 +19,7 @@ class GleanPlumbContextProvider {
         return dateFormatter.string(from: Date())
     }
 
-    private var isDefaultBrowser: String {
+    private var isDefaultBrowser: Bool {
         let didDismissCard = UserDefaults.standard.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
         let didShow = UserDefaults.standard.bool(forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
 
@@ -31,7 +30,7 @@ class GleanPlumbContextProvider {
             allConditions = didDismissCard && didShow
         }
 
-        return String(allConditions)
+        return allConditions
     }
 
     /// JEXLs are more accurately evaluated when given certain details about the app on device.
@@ -43,5 +42,4 @@ class GleanPlumbContextProvider {
         return [ContextKey.todayDate.rawValue: todaysDate,
                 ContextKey.isDefaultBrowser.rawValue: isDefaultBrowser]
     }
-
 }

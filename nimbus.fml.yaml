@@ -307,8 +307,9 @@ features:
             USER_FR_SPEAKER:          "'fr' in locale"
             DEVICE_ANDROID:           os == 'Android'
             DEVICE_IOS:               os == 'iOS'
-            I_AM_DEFAULT_BROWSER: "is_default_browser_string == 'true'"
-            I_AM_NOT_DEFAULT_BROWSER: "is_default_browser_string == 'false'"
+            I_AM_DEFAULT_BROWSER: "is_default_browser"
+            I_AM_NOT_DEFAULT_BROWSER: "is_default_browser == false"
+            SUPPORTS_DEFAULT_BROWSER: os_version|versionCompare('14.!') >= 0
             ALWAYS:                   "true"
             NEVER:                    "false"
           actions:
@@ -352,7 +353,7 @@ features:
               title: \(String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerTitle)
               text: \(String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
               action: "MAKE_DEFAULT_BROWSER"
-              trigger: ["I_AM_NOT_DEFAULT_BROWSER"]
+              trigger: ["I_AM_NOT_DEFAULT_BROWSER", "SUPPORTS_DEFAULT_BROWSER"]
               style: "FALLBACK"
               button-label: \(String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerButton)
 
