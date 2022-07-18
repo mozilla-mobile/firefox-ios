@@ -33,12 +33,6 @@ class GleanPlumbMessageStore: GleanPlumbMessagingStoreProtocol {
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
 
-    private let messagingUtility: GleanPlumbMessageUtility
-
-    init(messagingUtility: GleanPlumbMessageUtility = GleanPlumbMessageUtility()) {
-        self.messagingUtility = messagingUtility
-    }
-
     // MARK: - MessageStoreProtocol methods
 
     /// Returns the metadata that persists on system. If there's none, it returns default data.
@@ -129,5 +123,4 @@ class GleanPlumbMessageStore: GleanPlumbMessagingStoreProtocol {
 
         return nil
     }
-
 }
