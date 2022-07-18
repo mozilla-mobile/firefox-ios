@@ -110,7 +110,7 @@ extension UIView {
 
     /// Shortcut to set the view's background colour to `.clear`, set the view's
     /// `clipsToBounds` property set to true, and then add a blur effect on the view,
-    /// using the desired blur style
+    /// using the desired blur style.
     ///
     /// - Parameter style: The strength of the blur desired
     func addBlurEffectWithClearBackgroundAndClipping(using style: UIBlurEffect.Style) {
@@ -119,7 +119,7 @@ extension UIView {
         self.addBlurEffect(using: style)
     }
 
-    /// Shortcut to set a blur effect on a view, given a specified style of blur desired
+    /// Shortcut to set a blur effect on a view, given a specified style of blur desired.
     ///
     /// - Parameter style: The strength of the blur desired
     func addBlurEffect(using style: UIBlurEffect.Style) {
