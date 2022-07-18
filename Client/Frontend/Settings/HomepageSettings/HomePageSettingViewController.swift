@@ -39,10 +39,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     // MARK: - Initializers
-    init(prefs: Prefs) {
+    init(prefs: Prefs, tabManager: TabManager) {
         self.prefs = prefs
         super.init(style: .grouped)
-
+        self.tabManager = tabManager
         self.title = .SettingsHomePageSectionName
         self.navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar
     }
@@ -143,7 +143,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         let historyHighlightsSetting = BoolSetting(with: .historyHighlights,
                                                    titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlyVisited))
 
-        let wallpaperSetting = WallpaperSettings(settings: self)
+        let wallpaperSetting = WallpaperSettings(settings: self,
+                                                 and: tabManager)
 
         // Section ordering
         sectionItems.append(TopSitesSettings(settings: self))
@@ -272,7 +273,7 @@ extension HomePageSettingViewController {
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         init(settings: SettingsTableViewController,
-             and tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager
+             and tabManager: TabManager
         ) {
             self.profile = settings.profile
             self.tabManager = tabManager

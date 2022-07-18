@@ -93,11 +93,11 @@ class TelemetryWrapper {
             self.crashedLastLaunch = false
 
             outputDict["settings"] = settings
-
+/*
             let delegate = UIApplication.shared.delegate as? AppDelegate
 
-            outputDict["openTabCount"] = delegate?.tabManager.count ?? 0
-
+            outputDict["openTabCount"] = BrowserViewController.foregroundBVC().tabManager.count ?? 0
+*/
             outputDict["systemTheme"] = UITraitCollection.current.userInterfaceStyle == .dark ? "dark" : "light"
 
             return outputDict
@@ -204,10 +204,11 @@ class TelemetryWrapper {
         GleanMetrics.Search.defaultEngine.set(searchEngines.defaultEngine.engineID ?? "custom")
 
         // Record the open tab count
+        /*
         let delegate = UIApplication.shared.delegate as? AppDelegate
         if let count = delegate?.tabManager.count {
             GleanMetrics.Tabs.cumulativeCount.add(Int32(count))
-        }
+        }*/
 
         // Record other preference settings.
         // If the setting exists at the key location, use that value. Otherwise record the default

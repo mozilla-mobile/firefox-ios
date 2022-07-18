@@ -168,6 +168,7 @@ class TabTrayViewController: UIViewController {
                                           tabToFocus: tabToFocus,
                                           tabManager: tabManager)
 
+        print("num tabs:\(tabManager.normalTabs.count)")
         super.init(nibName: nil, bundle: nil)
 
         setupNotifications(forObserver: self,
@@ -263,6 +264,7 @@ class TabTrayViewController: UIViewController {
     }
 
     @objc func panelChanged() {
+        print("panelChanged: normal tabs changed \(viewModel.tabManager.normalTabs.count)")
         switch navigationMenu.selectedSegmentIndex {
         case 0:
             switchBetweenLocalPanels(withPrivateMode: false)

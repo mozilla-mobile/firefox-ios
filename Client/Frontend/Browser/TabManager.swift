@@ -65,6 +65,8 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     fileprivate let store: TabManagerStore
     fileprivate let profile: Profile
     fileprivate var isRestoringTabs = false
+    var sceneUUID: String!
+    var isNewWindow: Bool = false
 
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
@@ -84,6 +86,8 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             completion?()
         }
     }
+    
+    weak var bvc : BrowserViewController!
 
     fileprivate(set) var tabs = [Tab]()
     fileprivate var _selectedIndex = -1
@@ -169,13 +173,14 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     }
 
     // MARK: - Initializer
-    init(profile: Profile, imageStore: DiskImageStore?) {
+    init(profile: Profile, imageStore: DiskImageStore?, uuid: String = UUID().uuidString) {
 
         self.profile = profile
         self.navDelegate = TabManagerNavDelegate()
         self.tabEventHandlers = TabEventHandlers.create(with: profile.prefs)
 
-        self.store = TabManagerStore(imageStore: imageStore, prefs: profile.prefs)
+        self.sceneUUID = uuid;
+        self.store = TabManagerStore(imageStore: imageStore, prefs: profile.prefs, uuid: uuid)
         super.init()
 
         register(self, forTabEvents: .didLoadFavicon, .didSetScreenshot)
@@ -294,6 +299,38 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     // Called by other classes to signal that they are entering/exiting private mode
     // This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
     // we only want to remove all private tabs when leaving PBM and not when entering.
+    
+    
+    func moveTab(_ tab: Tab, toIndex: Int, replaceTab : Bool = false) {
+         tab.willMove()
+         let previouslySelectedTab = selectedTab
+         if (replaceTab){
+             tabs.append(tab)
+         } else {
+             self.insertTab(tab: tab, atIndex: toIndex)
+         }
+
+        tab.navigationDelegate = self.navDelegate
+         delegates.forEach { $0.get()?.tabManager(self, didAddTab: tab, placeNextToParentTab: true, isRestoring: store.isRestoringTabs) }
+         selectTab(tab, previous: previouslySelectedTab)
+        tab.didMove()
+         storeChanges()
+     }
+
+    func insertTab(tab: Tab, atIndex: Int, privateMode : Bool = false)
+    {
+        let currentTabs = privateMode ? privateTabs : normalTabs
+
+        guard atIndex <= currentTabs.count else {
+            return
+        }
+
+        let atIndex = currentTabs.count == atIndex ? tabs.count : tabs.firstIndex(of: currentTabs[atIndex]) ?? tabs.count
+
+        tabs.insert(tab, at: atIndex)
+    }
+
+    
     func willSwitchTabMode(leavingPBM: Bool) {
         recentlyClosedForUndo.removeAll()
 
@@ -355,7 +392,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
         let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
 
-        let bvc = BrowserViewController.foregroundBVC()
+        let bvc = self.bvc!
         let tab = Tab(bvc: bvc, configuration: configuration, isPrivate: isPrivate)
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
@@ -637,7 +674,10 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
         }
 
-        tab.close()
+        if (tab.browserViewController?.tabManager == self){
+            tab.close()
+            
+        }
 
         // Notify of tab removal
         ensureMainThread { [unowned self] in
@@ -880,7 +920,8 @@ extension TabManager {
 
     private func checkForSingleTab() {
         // Always make sure there is a single normal tab.
-        if normalTabs.isEmpty {
+    
+        if isNewWindow && normalTabs.isEmpty {
             let tab = addTab()
             if selectedTab == nil { selectTab(tab) }
         }
@@ -891,10 +932,10 @@ extension TabManager {
     /// Public interface for checking whether the StartAtHome Feature should run.
     public func startAtHomeCheck() {
         // Do not open a new home page if we come from an external url source
-        guard !BrowserViewController.foregroundBVC().openedUrlFromExternalSource else {
+        guard !bvc.openedUrlFromExternalSource else {
             // Reset the value for external url source so that
             // after inactivity we can start at home again
-            BrowserViewController.foregroundBVC().openedUrlFromExternalSource = false
+            bvc.openedUrlFromExternalSource = false
             return
         }
 

@@ -275,6 +275,17 @@ extension BrowserViewController: WKUIDelegate {
                 UIPasteboard.general.url = url
             })
 
+            if UIApplication.shared.supportsMultipleScenes {
+                actions.append(UIAction(
+                    title: .ContextMenuOpenInNewWindow,
+                    image: nil,
+                    identifier: UIAction.Identifier("linkContextMenu.openInNewWindow")
+                ) { _ in
+                    let activity = NSUserActivity(activityType: "org.mozilla.ios.firefox.browsing")
+                    activity.webpageURL = url
+                    UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil)
+                })
+            }
             actions.append(UIAction(title: .ContextMenuShareLink, image: UIImage.templateImageNamed(ImageIdentifiers.share), identifier: UIAction.Identifier("linkContextMenu.share")) { _ in
                 guard let tab = self.tabManager[webView],
                       let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper

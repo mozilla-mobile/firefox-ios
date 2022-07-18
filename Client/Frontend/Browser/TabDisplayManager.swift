@@ -397,6 +397,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                 for i in 0..<self.collectionView.numberOfItems(inSection: 0) {
                     indexPaths.append(IndexPath(item: i, section: 0))
                 }
+                print("tabs: \(tabsToDisplay.count)")
                 self.collectionView.reloadItems(at: indexPaths)
             }
 
@@ -592,7 +593,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
 extension TabDisplayManager: GroupedTabDelegate {
 
     func newSearchFromGroup(searchTerm: String) {
-        let bvc = BrowserViewController.foregroundBVC()
+        let bvc = tabManager.bvc!
         bvc.openSearchNewTab(searchTerm)
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .groupedTabPerformSearch)
     }
@@ -744,11 +745,22 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
 
         // Don't store the URL in the item as dragging a tab near the screen edge will prompt to open Safari with the URL
         let itemProvider = NSItemProvider()
+        let activity = NSUserActivity(activityType: "org.mozilla.ios.firefox.browsing")
+        var userInfo : [String: Any] = [:]
+        if tab.url?.scheme != "internal" {
+            activity.webpageURL = tab.url;
+            userInfo["private"] = tab.isPrivate
+        }
+        userInfo["id"] = tab.tabUUID
+        userInfo["isPrivate"] = tab.isPrivate
+        activity.userInfo = userInfo
+        
 
         recordEventAndBreadcrumb(object: .tab, method: .drag)
 
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = tab
+        itemProvider.registerObject(activity, visibility: .all)
         return [dragItem]
     }
 }
@@ -774,12 +786,22 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        guard collectionView.hasActiveDrag,
-              let destinationIndexPath = coordinator.destinationIndexPath,
-              let dragItem = coordinator.items.first?.dragItem,
-              let tab = dragItem.localObject as? Tab,
-              let sourceIndex = dataStore.index(of: tab) else { return }
-
+        guard let destinationIndexPath = coordinator.destinationIndexPath else { return }
+        guard let dragItem = coordinator.items.first?.dragItem else { return }
+            guard let tab = dragItem.localObject as? Tab else { return }
+        
+        if let sourceTabManager = tab.browserViewController?.tabManager, sourceTabManager != tabManager {
+            coordinator.drop(dragItem, toItemAt: destinationIndexPath)
+            sourceTabManager.removeTab(tab)
+            tab.browserViewController = tabManager.bvc
+            tabManager.moveTab(tab, toIndex: destinationIndexPath.row)
+            return
+        }
+        
+        
+        guard let sourceIndex = dataStore.index(of: tab) else {
+            return
+        }
         // This enforces that filtered tabs, and tabs manager are in sync
         if tab.isPrivate {
             filteredTabs = tabManager.privateTabs.filter { filteredTabs.contains($0) }

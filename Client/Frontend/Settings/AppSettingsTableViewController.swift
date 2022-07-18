@@ -60,14 +60,14 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
     private func checkForDeeplinkSetting() {
         guard let deeplink = deeplinkTo else { return }
         var viewController: SettingsTableViewController
-
+        print("tab manager:\(tabManager)")
         switch deeplink {
         case .contentBlocker:
             viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
             viewController.tabManager = tabManager
 
         case .customizeHomepage:
-            viewController = HomePageSettingViewController(prefs: profile.prefs)
+            viewController = HomePageSettingViewController(prefs: profile.prefs, tabManager: tabManager)
 
         case .customizeTabs:
             viewController = TabsSettingsViewController()

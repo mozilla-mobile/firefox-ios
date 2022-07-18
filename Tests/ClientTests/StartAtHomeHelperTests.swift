@@ -17,7 +17,7 @@ class StartAtHomeHelperTests: XCTestCase {
 
         profile = MockProfile(databasePrefix: "startAtHomeHelper_tests")
         profile._reopen()
-        tabManager = TabManager(profile: profile, imageStore: nil)
+        tabManager = TabManager(profile: profile, imageStore: nil, uuid: UUID().uuidString)
     }
 
     override func tearDown() {

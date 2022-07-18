@@ -34,6 +34,7 @@ protocol TabDelegate {
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String)
     @objc optional func tab(_ tab: Tab, didCreateWebView webView: WKWebView)
     @objc optional func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
+    @objc optional func tab(_ tab: Tab, willMoveWebView webView: WKWebView)
 }
 
 @objc
@@ -200,6 +201,25 @@ class Tab: NSObject {
 
         return lastTitle
     }
+    
+    func willMove() {
+         contentScriptManager.uninstall(tab: self)
+ 
+         if let webView = webView {
+             
+             tabDelegate?.tab?(self, willMoveWebView: webView)
+             webView.navigationDelegate = nil
+             webView.removeFromSuperview()
+         }
+        self.tabDelegate = nil
+     }
+         
+     func didMove(){
+         if let webView = webView {
+             UserScriptManager.shared.injectUserScriptsIntoTab(self, nightMode: nightMode, noImageMode: noImageMode)
+             tabDelegate?.tab?(self, didCreateWebView: webView)
+         }
+     }
 
     /// Use the display title unless it's an empty string, then use the base domain from the url
     func getTabTrayTitle() -> String? {

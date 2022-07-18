@@ -58,7 +58,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         let isPrivate = tabManager.selectedTab?.isPrivate ?? true
         self.viewModel = HomepageViewModel(profile: profile,
                                            isZeroSearch: isZeroSearch,
-                                           isPrivate: isPrivate)
+                                           isPrivate: isPrivate,tabManager: tabManager)
 
         let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
                                                           with: viewModel.profile)

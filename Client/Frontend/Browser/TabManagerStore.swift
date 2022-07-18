@@ -15,16 +15,23 @@ class TabManagerStore: FeatureFlaggable {
     fileprivate let prefs: Prefs
     fileprivate let serialQueue = DispatchQueue(label: "tab-manager-write-queue")
     fileprivate var writeOperation = DispatchWorkItem {}
+    fileprivate var sceneUUID : String!
 
     // Init this at startup with the tabs on disk, and then on each save, update the in-memory tab state.
     fileprivate lazy var archivedStartupTabs = {
         return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
     }()
 
-    init(imageStore: DiskImageStore?, _ fileManager: FileManager = FileManager.default, prefs: Prefs) {
+    init(imageStore: DiskImageStore?, _ fileManager: FileManager = FileManager.default, prefs: Prefs, uuid: String) {
         self.fileManager = fileManager
         self.imageStore = imageStore
         self.prefs = prefs
+        self.sceneUUID = uuid
+        
+        
+        if #available(iOS 13.0, *){
+            migrateArchive()
+        }
     }
 
     var isRestoringTabs: Bool {
@@ -35,6 +42,25 @@ class TabManagerStore: FeatureFlaggable {
         return archivedStartupTabs.0.count > 0
     }
 
+    
+    fileprivate func migrateArchive()
+    {
+        let profilePath: String?
+        if  AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {      profilePath = (UIApplication.shared.delegate as? TestAppDelegate)?.dirForTestProfile
+        } else {
+            profilePath = fileManager.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
+        }
+        
+        guard let path = profilePath else { return }
+        let oldArchivePath = URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
+        let newArchivePath = URL(fileURLWithPath: path).appendingPathComponent("\(sceneUUID!).archive").path
+        
+        if fileManager.fileExists(atPath: oldArchivePath) {
+            try? fileManager.moveItem(atPath: oldArchivePath, toPath: newArchivePath)
+        }
+    }
+    
+    
     fileprivate func tabsStateArchivePath() -> String? {
         let profilePath: String?
         if  AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {      profilePath = (UIApplication.shared.delegate as? TestAppDelegate)?.dirForTestProfile
@@ -42,7 +68,11 @@ class TabManagerStore: FeatureFlaggable {
             profilePath = fileManager.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
         }
         guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
+        if #available(iOS 13.0, *) {
+        return URL(fileURLWithPath: path).appendingPathComponent("\(sceneUUID!).archive").path
+        } else { return URL(fileURLWithPath:
+            path).appendingPathComponent("tabsState.archive").path
+        }
     }
 
     fileprivate func prepareSavedTabs(fromTabs tabs: [Tab], selectedTab: Tab?) -> [SavedTab]? {
@@ -70,7 +100,7 @@ class TabManagerStore: FeatureFlaggable {
             imageStore?.put(uuidString, image: screenshot)
         }
     }
-
+    
     func removeScreenshot(forTab tab: Tab?) {
         if let tab = tab, let screenshotUUID = tab.screenshotUUID {
             _ = imageStore?.removeImage(screenshotUUID.uuidString)

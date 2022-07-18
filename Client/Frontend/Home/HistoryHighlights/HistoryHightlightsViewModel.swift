@@ -68,12 +68,12 @@ class HistoryHightlightsViewModel {
     // MARK: - Inits
     init(with profile: Profile,
          isPrivate: Bool,
-         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
-         foregroundBVC: BrowserViewController = BrowserViewController.foregroundBVC()) {
+         tabManager: TabManager,
+         foregroundBVC: BrowserViewController? = nil) {
         self.profile = profile
         self.isPrivate = isPrivate
         self.tabManager = tabManager
-        self.foregroundBVC = foregroundBVC
+        self.foregroundBVC = foregroundBVC ?? tabManager.bvc
 
         loadItems {}
     }

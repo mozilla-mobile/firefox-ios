@@ -26,7 +26,7 @@ class ContextMenuHelperTests: XCTestCase {
 
     func testHistoryHighlightsTelemetry() {
         let viewModel = HomepageViewModel(profile: profile,
-                                             isPrivate: false)
+                                             isPrivate: false, tabManager: BrowserViewController.foregroundBVC().tabManager)
         let helper = HomepageContextMenuHelper(viewModel: viewModel)
 
         helper.sendHistoryHighlightContextualTelemetry(type: .remove)

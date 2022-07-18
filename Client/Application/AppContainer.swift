@@ -59,7 +59,7 @@ class AppContainer: ServiceProvider {
                         imageStore: DiskImageStore(
                             files: (try container.resolve() as Profile).files,
                             namespace: "TabManagerScreenshots",
-                            quality: UIConstants.ScreenshotQuality))
+                            quality: UIConstants.ScreenshotQuality),uuid: UUID().uuidString)
                 }
 
                 try container.bootstrap()

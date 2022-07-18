@@ -176,6 +176,7 @@ class BrowserViewController: UIViewController {
         self.contextHintVC = ContextualHintViewController(with: contextViewModel)
 
         super.init(nibName: nil, bundle: nil)
+        self.tabManager.bvc = self
         didInit()
     }
 
@@ -511,6 +512,7 @@ class BrowserViewController: UIViewController {
             self.view.alpha = (profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil) ? 1.0 : 0.0
         }
 
+        tabManager.bvc = self
         if !displayedRestoreTabsAlert && crashedLastLaunch() {
             displayedRestoreTabsAlert = true
             showRestoreTabsAlert()
@@ -1282,6 +1284,30 @@ class BrowserViewController: UIViewController {
         urlBar.locationView.tabDidChangeContentBlocking(tab)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
+        if #available(iOS 13.0, *){
+
+            var title = ""
+
+            if tab.isPrivate {
+                title = "Private browsing"
+            } else {
+                if let url = tab.url, let internalURL = InternalURL(url), internalURL.isAboutHomeURL {
+                    title = .AppMenu.AppMenuOpenHomePageTitleString
+                } else {
+                    title = tab.url?.normalizedHost ?? ""
+                }
+
+                let otherTabsCount = tabManager.normalTabs.count - 1
+                if otherTabsCount > 1 {
+                    title = "\(title) and \(otherTabsCount) other tabs"
+                } else if otherTabsCount == 1 {
+                    title = "\(title) and one other tab"
+                }
+                if let scene = view.window?.windowScene {
+                    scene.title = title
+                }
+            }
+        }
     }
 
     // MARK: Opening New Tabs
@@ -1675,6 +1701,13 @@ extension BrowserViewController: TabDelegate {
             webView.removeFromSuperview()
         }
     }
+    
+    func tab(_ tab: Tab, willMoveWebView webView: WKWebView) {
+        KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
+        webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOConstants.contentSize.rawValue)
+        webView.uiDelegate = nil
+        webView.scrollView.delegate = nil
+    }
 
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
         updateFindInPageVisibility(visible: true)
@@ -1879,7 +1912,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
-        if let wv = previous?.webView {
+        if previous?.browserViewController == self, let wv = previous?.webView {
             wv.endEditing(true)
             wv.accessibilityLabel = nil
             wv.accessibilityElementsHidden = true
@@ -2618,12 +2651,21 @@ extension BrowserViewController: FeatureFlaggable {
 
 extension BrowserViewController {
     public static func foregroundBVC() -> BrowserViewController {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-              let browserViewController = appDelegate.browserViewController else {
-            fatalError("Unable unwrap BrowserViewController")
+        if #available(iOS 13.0, *) {
+            for scene in UIApplication.shared.connectedScenes {
+                if scene.activationState == .foregroundActive, let sceneDelegate = ((scene as? UIWindowScene)?.delegate as? UIWindowSceneDelegate) {
+                    return (sceneDelegate as! SceneDelegate).browserViewController
+                }
+            }
+            // grab the first scene?
+            let scene = UIApplication.shared.connectedScenes.first
+            let sceneDelegate = ((scene as? UIWindowScene)?.delegate as? UIWindowSceneDelegate)
+            return (sceneDelegate as! SceneDelegate).browserViewController
+            
         }
+        
+        return (UIApplication.shared.delegate as! AppDelegate).browserViewController
 
-        return browserViewController
     }
 }
 

@@ -1126,6 +1126,7 @@ class NewTabPageSetting: Setting {
 
 class HomeSetting: Setting {
     let profile: Profile
+    let tabManager: TabManager
 
     override var accessoryView: UIImageView? { return disclosureIndicator }
 
@@ -1139,12 +1140,12 @@ class HomeSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-
+        self.tabManager = settings.tabManager
         super.init(title: NSAttributedString(string: .SettingsHomePageSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = HomePageSettingViewController(prefs: profile.prefs)
+        let viewController = HomePageSettingViewController(prefs: profile.prefs, tabManager: tabManager)
         viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }

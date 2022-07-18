@@ -113,6 +113,7 @@ class TabManagerTests: XCTestCase {
         profile = TabManagerMockProfile()
         manager = TabManager(profile: profile, imageStore: nil)
         delegate = MockTabManagerDelegate()
+        manager.bvc = BrowserViewController.foregroundBVC()
     }
 
     override func tearDown() {

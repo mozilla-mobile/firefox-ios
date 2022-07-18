@@ -305,7 +305,7 @@ enum NavigationPath {
             viewController.profile = profile
             controller.pushViewController(viewController, animated: true)
         case .homepage:
-            let viewController = HomePageSettingViewController(prefs: baseSettingsVC.profile.prefs)
+            let viewController = HomePageSettingViewController(prefs: baseSettingsVC.profile.prefs, tabManager: tabManager)
             viewController.profile = profile
             controller.pushViewController(viewController, animated: true)
         case .mailto:

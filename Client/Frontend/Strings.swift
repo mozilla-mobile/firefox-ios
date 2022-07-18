@@ -2716,6 +2716,12 @@ extension String {
         value: "Open Link in New Private Tab",
         comment: "Context menu item for opening a link in a new private tab",
         lastUpdated: .unknown)
+    
+    public static let ContextMenuOpenInNewWindow = MZLocalizedString(
+        "ContextMenu.OpenInNewTabButtonWindow",
+        value: "Open in New Window",
+        comment: "Context menu item for opening a link in a new window",
+        lastUpdated: .unknown)
 
     public static let ContextMenuBookmarkLink = MZLocalizedString(
         "ContextMenu.BookmarkLinkButtonTitle",

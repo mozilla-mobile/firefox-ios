@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         log.info("startApplication begin")
 
-        self.window = UIWindow(frame: UIScreen.main.bounds)
+//        self.window = UIWindow(frame: UIScreen.main.bounds)
 
         appLaunchUtil = AppLaunchUtil(profile: profile)
         appLaunchUtil?.setUpPreLaunchDependencies()
@@ -38,12 +38,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         webServerUtil = WebServerUtil(profile: profile)
         webServerUtil?.setUpWebServer()
-
+/*
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
-        self.tabManager = TabManager(profile: profile, imageStore: imageStore)
+        self.tabManager = TabManager(profile: profile, imageStore: imageStore)*/
 
-        setupRootViewController()
-        startListeningForThemeUpdates()
+//        setupRootViewController()
+//        startListeningForThemeUpdates()
 
         log.info("startApplication end")
 
@@ -55,16 +55,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         profile._shutdown()
 
         // Allow deinitializers to close our database connections.
+        /*
         tabManager = nil
         browserViewController = nil
-        rootViewController = nil
+        rootViewController = nil*/
     }
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        window!.makeKeyAndVisible()
+//        window!.makeKeyAndVisible()
         pushNotificationSetup()
         appLaunchUtil?.setUpPostLaunchDependencies()
         backgroundSyncUtil = BackgroundSyncUtil(profile: profile, application: application)
@@ -271,4 +272,28 @@ extension AppDelegate {
 
         window!.rootViewController = rootViewController
     }
+    
+@available(iOS 13.0, *)
+    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
+        sceneSessions.forEach {
+            if let uuid = $0.userInfo?["sceneID"] as? String {
+                clearArchive(uuid: uuid)
+            }
+
+        }
+    }
+
+    private func clearArchive(uuid: String){
+        let profilePath: String?
+        let fileManager = FileManager.default
+        if  AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {      profilePath = (UIApplication.shared.delegate as? TestAppDelegate)?.dirForTestProfile
+        } else {
+            profilePath = fileManager.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
+        }
+        guard let path = profilePath else { return }
+
+        let url = URL(fileURLWithPath: path).appendingPathComponent("\(uuid).archive").path
+        try? fileManager.removeItem(atPath: url)
+    }
+
 }
