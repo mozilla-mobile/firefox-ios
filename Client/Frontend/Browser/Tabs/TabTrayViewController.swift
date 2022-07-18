@@ -168,7 +168,6 @@ class TabTrayViewController: UIViewController {
                                           tabToFocus: tabToFocus,
                                           tabManager: tabManager)
 
-        print("num tabs:\(tabManager.normalTabs.count)")
         super.init(nibName: nil, bundle: nil)
 
         setupNotifications(forObserver: self,

@@ -397,7 +397,6 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                 for i in 0..<self.collectionView.numberOfItems(inSection: 0) {
                     indexPaths.append(IndexPath(item: i, section: 0))
                 }
-                print("tabs: \(tabsToDisplay.count)")
                 self.collectionView.reloadItems(at: indexPaths)
             }
 
