@@ -223,7 +223,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             cardTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             cardTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
-            syncedTabsButton.topAnchor.constraint(equalTo: cardTitle.bottomAnchor, constant: 8),
+            syncedTabsButton.topAnchor.constraint(equalTo: cardTitle.bottomAnchor, constant: 2), // 8 - button top inset
             syncedTabsButton.leadingAnchor.constraint(equalTo: cardTitle.leadingAnchor, constant: 0),
             syncedTabsButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: 0),
 
