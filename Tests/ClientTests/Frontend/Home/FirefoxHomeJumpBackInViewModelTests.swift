@@ -181,6 +181,8 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     }
 
     func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_onIphoneLayout_hasAccount_has1() {
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
+                                                       tabs: remoteTabs(idRange: 1...3))]
         subject.featureFlags.set(feature: .tabTrayGroups, to: false)
         let tab1 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox1.com")
         let tab2 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox2.com")
@@ -199,7 +201,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
             expectation.fulfill()
         }
 
-        wait(for: [expectation], timeout: 5.0)
+        wait(for: [expectation], timeout: 10.0)
 
         XCTAssertEqual(subject.jumpBackInList.tabs.count, 1, "iPhone portrait has 1 tab in it's jumpbackin layout")
         XCTAssertEqual(subject.jumpBackInList.tabs[0], tab1)
@@ -239,7 +241,9 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(subject.jumpBackInList.tabs[2], tab3)
     }
 
-    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_oniPhoneLandscapeLayout_hasAccount_has3() {
+    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_oniPhoneLandscapeLayout_hasAccount_has2() {
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
+                                                       tabs: remoteTabs(idRange: 1...3))]
         subject.featureFlags.set(feature: .tabTrayGroups, to: false)
         let tab1 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox1.com")
         let tab2 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox2.com")
@@ -330,7 +334,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
             expectation.fulfill()
         }
 
-        wait(for: [expectation], timeout: 5.0)
+        wait(for: [expectation], timeout: 15.0)
         XCTAssertEqual(subject.mostRecentSyncedTab?.client, remoteClient)
         XCTAssertEqual(subject.mostRecentSyncedTab?.tab, remoteClientTabs.last)
     }
