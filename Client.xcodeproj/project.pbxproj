@@ -600,6 +600,7 @@
 		96EB6C4027DBEE9800A9D159 /* SearchGroupedItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3F27DBEE9800A9D159 /* SearchGroupedItemsViewController.swift */; };
 		96EB6C4327DC205D00A9D159 /* SearchGroupedItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C4227DC205D00A9D159 /* SearchGroupedItemsViewModel.swift */; };
 		96F8DA49280452CA00E53239 /* GleanPlumbContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F8DA48280452CA00E53239 /* GleanPlumbContextProvider.swift */; };
+		986B1004288511E700576952 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986B1003288511E700576952 /* SceneDelegate.swift */; };
 		A83E5AB71C1D993D0026D912 /* UIPasteboardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5AB61C1D993D0026D912 /* UIPasteboardExtensions.swift */; };
 		A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B181C1DA8BF0026D912 /* image.gif */; };
 		A83E5B1B1C1DA8BF0026D912 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B191C1DA8BF0026D912 /* image.png */; };
@@ -3140,6 +3141,7 @@
 		980C492382221DFFEFCD6340 /* or */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = or; path = or.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		982C4C92BC5D34C57F4050F9 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		98674293801BB7CC9A9D19DF /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
+		986B1003288511E700576952 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = "../../../../Downloads/firefox-ios-main-2/Client/Application/SceneDelegate.swift"; sourceTree = "<group>"; };
 		988942C9A019AF4FD4B3C0C3 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		98B54F46B062D5E486D79D3F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Shared.strings; sourceTree = "<group>"; };
 		98D8406FB13F48746144489F /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -6852,6 +6854,7 @@
 				F84B21E51A0910F600AAB793 /* AppDelegate.swift */,
 				EB9854FD2422686F0040F24B /* AppDelegate+PushNotifications.swift */,
 				EB98550024226EF60040F24B /* AppDelegate+SyncSentTabs.swift */,
+				986B1003288511E700576952 /* SceneDelegate.swift */,
 				D3BE7B451B054F8600641031 /* TestAppDelegate.swift */,
 			);
 			name = Delegates;
@@ -9629,6 +9632,7 @@
 				39455F771FC83F430088A22C /* TabEventHandler.swift in Sources */,
 				215B458227DA420400E5E800 /* TabMetadataManager.swift in Sources */,
 				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,
+				986B1004288511E700576952 /* SceneDelegate.swift in Sources */,
 				D821E90E2141B71C00452C55 /* SiriSettingsViewController.swift in Sources */,
 				EBB89507219398E500EB91A0 /* ContentBlocker.swift in Sources */,
 				5A3A2A0D287F742C00B79EAC /* BackgroundSyncUtil.swift in Sources */,
