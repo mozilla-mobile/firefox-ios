@@ -33,11 +33,10 @@ class JumpBackInViewModel: FeatureFlaggable {
 
     struct UX {
         static let jumpBackInCellHeight: CGFloat = 112
+        static let syncedTabCellIphonePortraitHeight: CGFloat = 182
         static let syncedTabCellHeight: CGFloat = 232
         static let maxDisplayedSyncedTabs: Int = 1
         static let maxJumpBackInItemsPerGroup: Int = 2
-        static let interGroupSpacing: CGFloat = 14
-        static let nestedGroupInterItemSpacing = NSCollectionLayoutSpacing.fixed(14)
     }
 
     enum DisplayGroup {
@@ -482,7 +481,7 @@ private extension JumpBackInViewModel {
         }
         let mainGroup = NSCollectionLayoutGroup.horizontal(layoutSize: mainGroupSize,
                                                            subitems: subItems)
-        mainGroup.interItemSpacing = JumpBackInViewModel.UX.nestedGroupInterItemSpacing
+        mainGroup.interItemSpacing = HomeHorizontalCell.UX.interItemSpacing
 
         return NSCollectionLayoutSection(group: mainGroup)
     }
@@ -490,9 +489,12 @@ private extension JumpBackInViewModel {
     // compact layout with synced tab
     private func sectionWithSyncedTabCompact(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         // Items
+        let syncedTabCellHeight = UIDevice.current.userInterfaceIdiom == .phone ?
+                                    JumpBackInViewModel.UX.syncedTabCellIphonePortraitHeight :
+                                    JumpBackInViewModel.UX.syncedTabCellHeight
         let syncedTabItemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(JumpBackInViewModel.UX.syncedTabCellHeight))
+            heightDimension: .estimated(syncedTabCellHeight))
         let syncedTabItem = NSCollectionLayoutItem(layoutSize: syncedTabItemSize)
 
         let jumpBackInItemSize = NSCollectionLayoutSize(
@@ -502,8 +504,7 @@ private extension JumpBackInViewModel {
 
         // Main Group
         let groupWidth = widthDimension(for: traitCollection)
-        let groupHeight: CGFloat = JumpBackInViewModel.UX.syncedTabCellHeight +
-                                    JumpBackInViewModel.UX.jumpBackInCellHeight +
+        let groupHeight: CGFloat = syncedTabCellHeight + JumpBackInViewModel.UX.jumpBackInCellHeight +
                                     HomeHorizontalCell.UX.interItemSpacing.spacing
         let groupSize = NSCollectionLayoutSize(widthDimension: groupWidth,
                                                heightDimension: .estimated(groupHeight))

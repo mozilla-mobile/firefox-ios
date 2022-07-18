@@ -26,22 +26,18 @@ struct FxHomeSyncedTabCellViewModel {
 class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
-        static let cellHeight: CGFloat = 112
-        static let cellWidth: CGFloat = 350
-        static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
-        static let interGroupSpacing: CGFloat = 8
         static let generalCornerRadius: CGFloat = 12
-        static let titleFontSize: CGFloat = 49 // Style subheadline - AX5
-        static let siteFontSize: CGFloat = 43 // Style caption1 - AX5
         static let stackViewShadowRadius: CGFloat = 4
         static let stackViewShadowOffset: CGFloat = 2
         static let heroImageSize =  CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 56, height: 56)
-        static let faviconSize = CGSize(width: 24, height: 24)
+        static let syncedDeviceImageSize = CGSize(width: 24, height: 24)
+        static let itemTitleTopAnchorConstant: CGFloat = 64
+        static let itemTitleTopAnchorCompactPhoneConstant: CGFloat = 24
     }
 
-    private var faviconCenterConstraint: NSLayoutConstraint?
-    private var faviconFirstBaselineConstraint: NSLayoutConstraint?
+    private var syncedDeviceIconCenterConstraint: NSLayoutConstraint?
+    private var syncedDeviceIconFirstBaselineConstraint: NSLayoutConstraint?
     private var showAllSyncedTabsAction: ((UIButton) -> Void)?
     private var openSyncedTabAction: (() -> Void)?
 
@@ -217,6 +213,11 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         contentView.addSubviews(cardTitle, syncedTabsButton, itemTitle, imageContainer,
                                 descriptionContainer, syncedTabTapTargetView)
 
+        var itemTitleTopAnchorConstant = SyncedTabCell.UX.itemTitleTopAnchorConstant
+        if UIDevice.current.userInterfaceIdiom == .phone && traitCollection.horizontalSizeClass == .compact {
+            itemTitleTopAnchorConstant = SyncedTabCell.UX.itemTitleTopAnchorCompactPhoneConstant
+        }
+
         NSLayoutConstraint.activate([
             cardTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             cardTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -226,7 +227,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             syncedTabsButton.leadingAnchor.constraint(equalTo: cardTitle.leadingAnchor, constant: 0),
             syncedTabsButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: 0),
 
-            itemTitle.topAnchor.constraint(equalTo: syncedTabsButton.bottomAnchor, constant: 64),
+            itemTitle.topAnchor.constraint(equalTo: syncedTabsButton.bottomAnchor, constant: itemTitleTopAnchorConstant),
             itemTitle.leadingAnchor.constraint(equalTo: imageContainer.trailingAnchor, constant: 16),
             itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
@@ -258,8 +259,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             descriptionContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             descriptionContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
 
-            syncedDeviceImage.heightAnchor.constraint(equalToConstant: UX.faviconSize.height),
-            syncedDeviceImage.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
+            syncedDeviceImage.heightAnchor.constraint(equalToConstant: UX.syncedDeviceImageSize.height),
+            syncedDeviceImage.widthAnchor.constraint(equalToConstant: UX.syncedDeviceImageSize.width),
 
             syncedTabTapTargetView.topAnchor.constraint(equalTo: itemTitle.topAnchor, constant: -24),
             syncedTabTapTargetView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
@@ -267,9 +268,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             syncedTabTapTargetView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
 
-        faviconCenterConstraint = descriptionLabel.centerYAnchor.constraint(equalTo: syncedDeviceImage.centerYAnchor).priority(UILayoutPriority(999))
-        faviconFirstBaselineConstraint = descriptionLabel.firstBaselineAnchor.constraint(equalTo: syncedDeviceImage.bottomAnchor,
-                                                                                         constant: -UX.faviconSize.height / 2)
+        syncedDeviceIconCenterConstraint = descriptionLabel.centerYAnchor.constraint(equalTo: syncedDeviceImage.centerYAnchor).priority(UILayoutPriority(999))
+        syncedDeviceIconFirstBaselineConstraint = descriptionLabel.firstBaselineAnchor.constraint(equalTo: syncedDeviceImage.bottomAnchor,
+                                                                                         constant: -UX.syncedDeviceImageSize.height / 2)
 
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
         syncedTabsButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -281,8 +282,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
-        faviconCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
-        faviconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
+        syncedDeviceIconCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
+        syncedDeviceIconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
     }
 }
 
