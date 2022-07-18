@@ -3,9 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-@testable import Client
 import Storage
 import Shared
+
+@testable import Client
 
 class BookmarksPanelTests: XCTestCase {
 

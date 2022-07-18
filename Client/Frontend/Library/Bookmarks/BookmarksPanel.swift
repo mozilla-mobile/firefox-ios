@@ -32,7 +32,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     var bottomToolbarItems: [UIBarButtonItem] {
         // Return empty toolbar when bookmarks is in desktop folder node
         guard case .bookmarks = state,
-              viewModel.bookmarkFolderGUID != LocalDesktopFolder.localDesktopFolderGuid else { return [UIBarButtonItem]() }
+              viewModel.bookmarkFolderGUID != LocalDesktopFolder.localDesktopFolderGuid
+        else { return [UIBarButtonItem]() }
 
         return toolbarButtonItems
     }
@@ -264,9 +265,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     private func sendPanelChangeNotification() {
-        let userInfo: [String: Any] = [
-            "state": state,
-        ]
+        let userInfo: [String: Any] = ["state": state]
         NotificationCenter.default.post(name: .LibraryPanelStateDidChange, object: nil, userInfo: userInfo)
     }
 
@@ -341,9 +340,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         tableView.deselectRow(at: indexPath, animated: false)
 
         guard let node = viewModel.bookmarkNodes[safe: indexPath.row],
-              let bookmarkCell = node as? BookmarksFolderCell else {
-            return
-        }
+              let bookmarkCell = node as? BookmarksFolderCell
+        else { return }
 
         updatePanelState(newState: .bookmarks(state: .inFolder))
         guard !tableView.isEditing else {

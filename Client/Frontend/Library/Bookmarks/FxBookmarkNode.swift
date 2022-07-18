@@ -18,9 +18,7 @@ protocol FxBookmarkNode {
 
 extension FxBookmarkNode {
     var isNonEmptyFolder: Bool {
-        guard let bookmarkFolder = self as? BookmarkFolderData else {
-            return false
-        }
+        guard let bookmarkFolder = self as? BookmarkFolderData else { return false }
 
         return !bookmarkFolder.childGUIDs.isEmpty
     }
