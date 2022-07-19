@@ -653,6 +653,10 @@
 		C84266772728462900382274 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
 		C8445A14264428DC00B83F53 /* LibraryPanelViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8445A13264428DC00B83F53 /* LibraryPanelViewState.swift */; };
 		C8445AD126443C7F00B83F53 /* LibraryPanelViewStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8445AD026443C7F00B83F53 /* LibraryPanelViewStateTests.swift */; };
+		C84655E22887388F00861B4A /* Wallpaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655E12887388F00861B4A /* Wallpaper.swift */; };
+		C84655E42887394B00861B4A /* WallpaperMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655E32887394B00861B4A /* WallpaperMetadata.swift */; };
+		C84655E62887398700861B4A /* WallpaperCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655E52887398700861B4A /* WallpaperCollection.swift */; };
+		C84655E8288739CB00861B4A /* WallpaperCollectionAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655E7288739CB00861B4A /* WallpaperCollectionAvailability.swift */; };
 		C849E46126B9C39B00260F0B /* EnhancedTrackingProtectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C849E46026B9C39B00260F0B /* EnhancedTrackingProtectionVC.swift */; };
 		C849E46326B9C3AF00260F0B /* EnhancedTrackingProtectionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C849E46226B9C3AF00260F0B /* EnhancedTrackingProtectionVM.swift */; };
 		C849E46526B9C3DD00260F0B /* SlideoverPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C849E46426B9C3DD00260F0B /* SlideoverPresentationController.swift */; };
@@ -3586,6 +3590,10 @@
 		C8445A13264428DC00B83F53 /* LibraryPanelViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelViewState.swift; sourceTree = "<group>"; };
 		C8445AD026443C7F00B83F53 /* LibraryPanelViewStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelViewStateTests.swift; sourceTree = "<group>"; };
 		C8464093BC0470D518B16C72 /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
+		C84655E12887388F00861B4A /* Wallpaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallpaper.swift; sourceTree = "<group>"; };
+		C84655E32887394B00861B4A /* WallpaperMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMetadata.swift; sourceTree = "<group>"; };
+		C84655E52887398700861B4A /* WallpaperCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCollection.swift; sourceTree = "<group>"; };
+		C84655E7288739CB00861B4A /* WallpaperCollectionAvailability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCollectionAvailability.swift; sourceTree = "<group>"; };
 		C849E46026B9C39B00260F0B /* EnhancedTrackingProtectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedTrackingProtectionVC.swift; sourceTree = "<group>"; };
 		C849E46226B9C3AF00260F0B /* EnhancedTrackingProtectionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedTrackingProtectionVM.swift; sourceTree = "<group>"; };
 		C849E46426B9C3DD00260F0B /* SlideoverPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideoverPresentationController.swift; sourceTree = "<group>"; };
@@ -6027,6 +6035,49 @@
 			path = ThirdParty/ecec/src;
 			sourceTree = SOURCE_ROOT;
 		};
+		C84655DC2887384200861B4A /* v2.0 */ = {
+			isa = PBXGroup;
+			children = (
+				C84655E02887387D00861B4A /* Interfaces */,
+				C84655DF2887387100861B4A /* Models */,
+				C84655DE2887386A00861B4A /* Utilities */,
+				C84655DD2887386200861B4A /* Protocols */,
+			);
+			path = v2.0;
+			sourceTree = "<group>";
+		};
+		C84655DD2887386200861B4A /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		C84655DE2887386A00861B4A /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		C84655DF2887387100861B4A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C84655E12887388F00861B4A /* Wallpaper.swift */,
+				C84655E32887394B00861B4A /* WallpaperMetadata.swift */,
+				C84655E52887398700861B4A /* WallpaperCollection.swift */,
+				C84655E7288739CB00861B4A /* WallpaperCollectionAvailability.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C84655E02887387D00861B4A /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Interfaces;
+			sourceTree = "<group>";
+		};
 		C849E45F26B9C36600260F0B /* EnhancedTrackingProtection */ = {
 			isa = PBXGroup;
 			children = (
@@ -6555,6 +6606,7 @@
 		DFACBF82277B9278003D5F41 /* Wallpapers */ = {
 			isa = PBXGroup;
 			children = (
+				C84655DC2887384200861B4A /* v2.0 */,
 				C85F9711287CC3D200F5EE86 /* Legacy */,
 			);
 			path = Wallpapers;
@@ -9393,6 +9445,7 @@
 				048B4C8324A53F26001B56E8 /* ButtonWithSublabel.swift in Sources */,
 				435D660323D793DF0046EFA2 /* UpdateModel.swift in Sources */,
 				8AD40FCB27BADC4B00672675 /* StatefulButton.swift in Sources */,
+				C84655E62887398700861B4A /* WallpaperCollection.swift in Sources */,
 				DFB2610B277CA7D300DDDD38 /* LegacyWallpaperSettingsViewController.swift in Sources */,
 				EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */,
 				8AD40FCF27BADC6B00672675 /* URLTextField.swift in Sources */,
@@ -9595,6 +9648,7 @@
 				CA4ACE4924C8C91600F55894 /* BreachAlertsDetailView.swift in Sources */,
 				A83E5AB71C1D993D0026D912 /* UIPasteboardExtensions.swift in Sources */,
 				D8EFFA0C1FF5B1FA001D3A09 /* NavigationRouter.swift in Sources */,
+				C84655E22887388F00861B4A /* Wallpaper.swift in Sources */,
 				C849E46326B9C3AF00260F0B /* EnhancedTrackingProtectionVM.swift in Sources */,
 				D0E55C4F1FB4FD23006DC274 /* FormPostHelper.swift in Sources */,
 				E118B9292862674E00C84831 /* InactiveTabItemCellModel.swift in Sources */,
@@ -9647,6 +9701,7 @@
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
 				8A161411282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift in Sources */,
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
+				C84655E8288739CB00861B4A /* WallpaperCollectionAvailability.swift in Sources */,
 				8ABC5AEE284532C900FEA552 /* PocketDiscoverCell.swift in Sources */,
 				C834330026BAD32800ABAAA6 /* EnhancedTrackingProtectionDetailsVM.swift in Sources */,
 				8AB5958A284145B30090F4AE /* HomepageSectionHandler.swift in Sources */,
@@ -9714,6 +9769,7 @@
 				8AFA263227B6E9AB00D0C33B /* ToolbarBadge.swift in Sources */,
 				048B4C8024A53EEB001B56E8 /* ImageButtonWithLabel.swift in Sources */,
 				8AD40FCD27BADC5C00672675 /* TabLocationContainerView.swift in Sources */,
+				C84655E42887394B00861B4A /* WallpaperMetadata.swift in Sources */,
 				8AB8572E27D94A1A0075C173 /* UXSizeClass.swift in Sources */,
 				D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */,
 				C8445A14264428DC00B83F53 /* LibraryPanelViewState.swift in Sources */,
