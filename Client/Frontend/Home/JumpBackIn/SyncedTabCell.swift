@@ -38,6 +38,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
     private var syncedDeviceIconCenterConstraint: NSLayoutConstraint?
     private var syncedDeviceIconFirstBaselineConstraint: NSLayoutConstraint?
+    private var itemTitleTopConstraint: NSLayoutConstraint!
     private var showAllSyncedTabsAction: ((UIButton) -> Void)?
     private var openSyncedTabAction: (() -> Void)?
 
@@ -184,6 +185,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapSyncedTab(_:)))
         syncedTabTapTargetView.addGestureRecognizer(tapRecognizer)
         applyTheme()
+        adjustLayout()
     }
 
     @objc func showAllSyncedTabs(sender: UIButton) {
@@ -213,10 +215,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         contentView.addSubviews(cardTitle, syncedTabsButton, itemTitle, imageContainer,
                                 descriptionContainer, syncedTabTapTargetView)
 
-        var itemTitleTopAnchorConstant = SyncedTabCell.UX.itemTitleTopAnchorConstant
-        if UIDevice.current.userInterfaceIdiom == .phone && traitCollection.horizontalSizeClass == .compact {
-            itemTitleTopAnchorConstant = SyncedTabCell.UX.itemTitleTopAnchorCompactPhoneConstant
-        }
+        itemTitleTopConstraint = itemTitle.topAnchor.constraint(equalTo: syncedTabsButton.bottomAnchor,
+                                                                constant: SyncedTabCell.UX.itemTitleTopAnchorConstant)
 
         NSLayoutConstraint.activate([
             cardTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
@@ -227,7 +227,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             syncedTabsButton.leadingAnchor.constraint(equalTo: cardTitle.leadingAnchor, constant: 0),
             syncedTabsButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: 0),
 
-            itemTitle.topAnchor.constraint(equalTo: syncedTabsButton.bottomAnchor, constant: itemTitleTopAnchorConstant),
+            itemTitleTopConstraint,
             itemTitle.leadingAnchor.constraint(equalTo: imageContainer.trailingAnchor, constant: 16),
             itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
@@ -284,6 +284,13 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
         syncedDeviceIconCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
         syncedDeviceIconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
+
+        var itemTitleTopAnchorConstant = SyncedTabCell.UX.itemTitleTopAnchorConstant
+        let isPhoneInLandscape = UIDevice.current.userInterfaceIdiom == .phone && UIWindow.isLandscape
+        if traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
+            itemTitleTopAnchorConstant = SyncedTabCell.UX.itemTitleTopAnchorCompactPhoneConstant
+        }
+        itemTitleTopConstraint.constant = itemTitleTopAnchorConstant
     }
 }
 

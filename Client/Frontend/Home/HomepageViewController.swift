@@ -237,7 +237,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
             presentedViewController?.dismiss(animated: false, completion: nil)
         }
 
-        // reload JumpBackIn section as the order of cells can change depending on size class
+        // reload JumpBackIn section as the order of cells and their size can change depending on size class
         if let index = viewModel.indexOfShownSection(.jumpBackIn) {
             collectionView.reloadSections(IndexSet([index]))
         }

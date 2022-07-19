@@ -33,7 +33,7 @@ class JumpBackInViewModel: FeatureFlaggable {
 
     struct UX {
         static let jumpBackInCellHeight: CGFloat = 112
-        static let syncedTabCellIphonePortraitHeight: CGFloat = 182
+        static let syncedTabCellPortraitCompactHeight: CGFloat = 182
         static let syncedTabCellHeight: CGFloat = 232
         static let maxDisplayedSyncedTabs: Int = 1
         static let maxJumpBackInItemsPerGroup: Int = 2
@@ -489,9 +489,7 @@ private extension JumpBackInViewModel {
     // compact layout with synced tab
     private func sectionWithSyncedTabCompact(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         // Items
-        let syncedTabCellHeight = UIDevice.current.userInterfaceIdiom == .phone ?
-                                    JumpBackInViewModel.UX.syncedTabCellIphonePortraitHeight :
-                                    JumpBackInViewModel.UX.syncedTabCellHeight
+        let syncedTabCellHeight = JumpBackInViewModel.UX.syncedTabCellPortraitCompactHeight
         let syncedTabItemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(syncedTabCellHeight))
