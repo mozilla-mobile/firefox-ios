@@ -32,6 +32,7 @@ class GleanPlumbMessageStore: GleanPlumbMessagingStoreProtocol {
 
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
+    static let rootKey = "GleanPlumb.Messages."
 
     // MARK: - MessageStoreProtocol methods
 
@@ -102,7 +103,7 @@ class GleanPlumbMessageStore: GleanPlumbMessagingStoreProtocol {
     /// Collisions can happen if a message key string and a string elsewhere in the codebase happen to be the same.
     /// We prevent it by prepending `GleanPlumb.Messages.` to the message key.
     private func generateKey(from key: String) -> String {
-        return "GleanPlumb.Messages.\(key)"
+        return "\(GleanPlumbMessageStore.rootKey)\(key)"
     }
 
     /// Persist a message's metadata.
@@ -110,6 +111,7 @@ class GleanPlumbMessageStore: GleanPlumbMessagingStoreProtocol {
         if let encoded = try? encoder.encode(metadata) {
             UserDefaults.standard.set(encoded, forKey: generateKey(from: key))
         }
+        UserDefaults.resetStandardUserDefaults()
     }
 
     /// Return persisted message metadata.

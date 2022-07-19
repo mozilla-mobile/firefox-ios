@@ -11,10 +11,11 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 
     var sut: GleanPlumbMessageManager!
     var messagingStore: MockGleanPlumbMessageStore!
+    let messageId = "testId"
 
     override func setUp() {
         super.setUp()
-        messagingStore = MockGleanPlumbMessageStore()
+        messagingStore = MockGleanPlumbMessageStore(messageId: messageId)
         sut = GleanPlumbMessageManager(messagingStore: messagingStore)
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
@@ -22,6 +23,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        messagingStore = nil
         sut = nil
     }
 
@@ -32,7 +34,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         }
 
         sut.onMessageDisplayed(message)
-        let messageMetadata = messagingStore.getMessageMetadata(messageId: "testId")
+        let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertFalse(messageMetadata.isExpired)
         XCTAssertEqual(messageMetadata.impressions, 1)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.shown)
@@ -45,7 +47,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         }
 
         sut.onMessagePressed(message)
-        let messageMetadata = messagingStore.getMessageMetadata(messageId: "testId")
+        let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
     }
@@ -57,22 +59,10 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         }
 
         sut.onMessageDismissed(message)
-        let messageMetadata = messagingStore.getMessageMetadata(messageId: "testId")
+        let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertEqual(messageMetadata.dismissals, 1)
         XCTAssertTrue(messageMetadata.isExpired)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.dismissed)
-    }
-
-    func testManagerOnMessageExpired_WhenDismiss() {
-        guard let message = sut.getNextMessage(for: .newTabCard) else {
-            XCTFail("Message was expected")
-            return
-        }
-
-        sut.onMessageDismissed(message)
-        let messageMetadata = messagingStore.getMessageMetadata(messageId: "testId")
-        XCTAssertTrue(messageMetadata.isExpired)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.expired)
     }
 }
 
@@ -80,20 +70,16 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 class MockGleanPlumbMessageStore: GleanPlumbMessagingStoreProtocol {
 
     private var metadata: GleanPlumbMessageMetaData
-//    var impression: Int
-//    var dismissals: Int
-//    var isExpired: Bool
+    var messageId: String
 
     var maxImpression = 3
 
-    init(impression: Int = 0, dismissals: Int = 0, isExpired: Bool = false) {
-//        self.impression = impression
-//        self.dismissals = dismissals
-//        self.isExpired = isExpired
-        metadata = GleanPlumbMessageMetaData(id: "testId",
-                                             impressions: impression,
-                                             dismissals: dismissals,
-                                             isExpired: isExpired)
+    init(messageId: String) {
+        self.messageId = messageId
+        metadata = GleanPlumbMessageMetaData(id: messageId,
+                                             impressions: 0,
+                                             dismissals: 0,
+                                             isExpired: false)
     }
 
     func getMessageMetadata(messageId: String) -> GleanPlumbMessageMetaData {

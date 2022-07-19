@@ -4,6 +4,23 @@
 
 import Foundation
 
+protocol MessageDataProtocol {
+    var surface: MessageSurfaceId { get }
+    var isControl: Bool { get }
+    var title: String? { get }
+    var text: String { get }
+    var buttonLabel: String? { get }
+}
+
+extension MessageData: MessageDataProtocol {}
+
+protocol StyleDataProtocol {
+    var priority: Int { get }
+    var maxDisplayCount: Int { get }
+}
+
+extension StyleData: StyleDataProtocol {}
+
 /// Message is a representation of `MessageData` from `GleanPlumb` that we can better utilize.
 struct GleanPlumbMessage {
 
@@ -11,7 +28,7 @@ struct GleanPlumbMessage {
     let id: String
 
     /// An access point to MessageData from Nimbus Messaging.
-    let data: MessageData
+    let data: MessageDataProtocol
 
     /// The action to be done when a user positively engages with the message (CTA).
     let action: String
@@ -20,7 +37,7 @@ struct GleanPlumbMessage {
     let triggers: [String]
 
     /// The access point to StyleData from Nimbus Messaging.
-    let style: StyleData
+    let style: StyleDataProtocol
 
     /// The minimal data about a message that we should persist.
     var metadata: GleanPlumbMessageMetaData
