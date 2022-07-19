@@ -9,18 +9,17 @@ import XCTest
 
 class LoginListDataSourceHelperTests: XCTestCase {
 
-    func testSetDomainLookup() throws {
-        throw XCTSkip("Failing without App delegate setup, needs investigation")
-//        let sut = LoginListDataSourceHelper()
-//        let login = LoginRecord(fromJSONDict: [
-//            "hostname": "https://example.com/",
-//            "id": "example"
-//        ])
-//        sut.setDomainLookup([login])
-//        XCTAssertNotNil(sut.domainLookup[login.id])
-//        XCTAssertEqual(sut.domainLookup[login.id]?.baseDomain, login.hostname.asURL?.baseDomain)
-//        XCTAssertEqual(sut.domainLookup[login.id]?.host, login.hostname.asURL?.host)
-//        XCTAssertEqual(sut.domainLookup[login.id]?.hostname, login.hostname)
+    func testSetDomainLookup() {
+        let sut = LoginListDataSourceHelper()
+        let login = LoginRecord(fromJSONDict: [
+            "hostname": "https://example.com/",
+            "id": "example"
+        ])
+        sut.setDomainLookup([login])
+        XCTAssertNotNil(sut.domainLookup[login.id])
+        XCTAssertEqual(sut.domainLookup[login.id]?.baseDomain, login.hostname.asURL?.baseDomain)
+        XCTAssertEqual(sut.domainLookup[login.id]?.host, login.hostname.asURL?.host)
+        XCTAssertEqual(sut.domainLookup[login.id]?.hostname, login.hostname)
     }
 
     func testTitleForLogin() {
@@ -72,12 +71,16 @@ class LoginListDataSourceHelperTests: XCTestCase {
 
         let logins = [apple, appleMusic, zebra]
         sut.setDomainLookup(logins)
+        let expectation = expectation(description: "Compute sections from login done")
         sut.computeSectionsFromLogins(logins).upon { (formattedLoginsMaybe) in
             XCTAssertTrue(formattedLoginsMaybe.isSuccess)
             XCTAssertNotNil(formattedLoginsMaybe.successValue)
             let formattedLogins = formattedLoginsMaybe.successValue
             XCTAssertEqual(formattedLogins?.0, sortedTitles)
             XCTAssertEqual(formattedLogins?.1, expected)
+            expectation.fulfill()
         }
+
+        wait(for: [expectation], timeout: 5.0)
     }
 }
