@@ -6,18 +6,18 @@ import Shared
 
 class StartAtHomeHelper: FeatureFlaggable {
     private var isRestoringTabs: Bool
-    // Override only for unit test to test `shouldSkipStartHome` logic
-    private var isRunningTest: Bool
+    // Override only for UI tests to test `shouldSkipStartHome` logic
+    private var isRunningUITest: Bool
     lazy var startAtHomeSetting: StartAtHomeSetting? = featureFlags.getCustomState(for: .startAtHome)
 
     init(isRestoringTabs: Bool,
-         isRunnigTest: Bool = AppConstants.IsRunningTest) {
+         isRunningUITest: Bool = AppConstants.isRunningUITests) {
         self.isRestoringTabs = isRestoringTabs
-        self.isRunningTest = isRunnigTest
+        self.isRunningUITest = isRunningUITest
     }
 
     var shouldSkipStartHome: Bool {
-        return isRunningTest ||
+        return isRunningUITest ||
               DebugSettingsBundleOptions.skipSessionRestore ||
               isRestoringTabs
     }

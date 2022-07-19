@@ -22,6 +22,12 @@ class DownloadQueueTests: XCTestCase {
         super.setUp()
     }
 
+    override func tearDown() {
+        super.tearDown()
+        queue = nil
+        download = nil
+    }
+
     func testDownloadQueueIsEmpty() {
         XCTAssertTrue(queue.isEmpty)
     }

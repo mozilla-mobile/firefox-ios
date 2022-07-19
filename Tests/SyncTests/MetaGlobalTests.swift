@@ -57,6 +57,20 @@ class MetaGlobalTests: XCTestCase {
         syncPrefs = MockProfilePrefs()
         authState = MockSyncAuthState(serverRoot: serverRoot, kSync: kSync)
         stateMachine = SyncStateMachine(prefs: syncPrefs)
+
+        RustFirefoxAccounts.startup(prefs: syncPrefs).uponQueue(.main) { _ in
+            print("RustFirefoxAccounts started")
+        }
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        kSync = nil
+        server = nil
+        serverRoot = nil
+        syncPrefs = nil
+        authState = nil
+        stateMachine = nil
     }
 
     func storeMetaGlobal(metaGlobal: MetaGlobal) {

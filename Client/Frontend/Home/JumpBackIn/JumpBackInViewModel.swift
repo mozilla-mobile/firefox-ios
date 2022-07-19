@@ -63,7 +63,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         isZeroSearch: Bool = false,
         profile: Profile,
         isPrivate: Bool,
-        tabManager: TabManagerProtocol = BrowserViewController.foregroundBVC().tabManager
+        tabManager: TabManagerProtocol
     ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch

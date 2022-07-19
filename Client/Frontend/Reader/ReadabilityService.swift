@@ -41,7 +41,8 @@ class ReadabilityOperation: Operation {
 
         DispatchQueue.main.async(execute: { () -> Void in
             let configuration = WKWebViewConfiguration()
-            self.tab = Tab(bvc: BrowserViewController.foregroundBVC(), configuration: configuration)
+            // TODO: To resolve profile from DI container
+            self.tab = Tab(profile: BrowserViewController.foregroundBVC().profile, configuration: configuration)
             self.tab.createWebview()
             self.tab.navigationDelegate = self
 

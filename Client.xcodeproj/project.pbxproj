@@ -496,6 +496,7 @@
 		8A33222227DFE658008F809E /* NimbusMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A33222127DFE658008F809E /* NimbusMock.swift */; };
 		8A35497227BD672700534A65 /* ToggleSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A35497127BD672700534A65 /* ToggleSwitch.swift */; };
 		8A355E5E27D267A400B9AF34 /* RecentItemsHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A355E5D27D267A400B9AF34 /* RecentItemsHelperTests.swift */; };
+		8A36AC2C2886F27F00CDC0AD /* MockTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */; };
 		8A56955227C68AE00077A89E /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A56955127C68AE00077A89E /* UILabelExtensions.swift */; };
 		8A57519927AD80B800A84DBF /* ReaderModeStyleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */; };
 		8A5BD95A28788A3D000FE773 /* TopSitesHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */; };
@@ -825,7 +826,7 @@
 		D3BA41681BD82F2200DA5457 /* XCTestCaseExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */; };
 		D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA7E0D1B0E934F00153782 /* ContextMenuHelper.swift */; };
 		D3BE7B261B054D4400641031 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B251B054D4400641031 /* main.swift */; };
-		D3BE7B461B054F8600641031 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B451B054F8600641031 /* TestAppDelegate.swift */; };
+		D3BE7B461B054F8600641031 /* UITestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B451B054F8600641031 /* UITestAppDelegate.swift */; };
 		D3BF8CBB1B7425570007AFE6 /* DiskImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBA1B7425570007AFE6 /* DiskImageStore.swift */; };
 		D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C3696D1CC6B78800348A61 /* LocalRequestHelper.swift */; };
 		D3C3EB651B6FF44000388E9A /* SessionRestoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C3EB641B6FF44000388E9A /* SessionRestoreTests.swift */; };
@@ -930,7 +931,7 @@
 		E1877A81286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */; };
 		E1AEC176286E0CF500062E29 /* FirefoxHomeJumpBackInViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC16F286E0CF500062E29 /* FirefoxHomeJumpBackInViewModelTests.swift */; };
 		E1AEC177286E0CF500062E29 /* HomeHistoryHighlightsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC170286E0CF500062E29 /* HomeHistoryHighlightsViewModelTests.swift */; };
-		E1AEC178286E0CF500062E29 /* FirefoxHomeViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC171286E0CF500062E29 /* FirefoxHomeViewControllerTests.swift */; };
+		E1AEC178286E0CF500062E29 /* HomepageViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC171286E0CF500062E29 /* HomepageViewControllerTests.swift */; };
 		E1AEC179286E0CF500062E29 /* FirefoxHomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC172286E0CF500062E29 /* FirefoxHomeViewModelTests.swift */; };
 		E1AEC17A286E0CF500062E29 /* WebViewNavigationHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC175286E0CF500062E29 /* WebViewNavigationHandlerTests.swift */; };
 		E1AF3560286DE5F800960045 /* Smoketest3.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF3558286DE5F600960045 /* Smoketest3.xctestplan */; };
@@ -2919,6 +2920,7 @@
 		8A33222127DFE658008F809E /* NimbusMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusMock.swift; sourceTree = "<group>"; };
 		8A35497127BD672700534A65 /* ToggleSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleSwitch.swift; sourceTree = "<group>"; };
 		8A355E5D27D267A400B9AF34 /* RecentItemsHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentItemsHelperTests.swift; sourceTree = "<group>"; };
+		8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabManager.swift; sourceTree = "<group>"; };
 		8A5143D6BF179870414566ED /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Search.strings; sourceTree = "<group>"; };
 		8A56955127C68AE00077A89E /* UILabelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
 		8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleViewModel.swift; sourceTree = "<group>"; };
@@ -3817,7 +3819,7 @@
 		D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCTestCaseExtensions.swift; sourceTree = "<group>"; };
 		D3BA7E0D1B0E934F00153782 /* ContextMenuHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextMenuHelper.swift; sourceTree = "<group>"; };
 		D3BE7B251B054D4400641031 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		D3BE7B451B054F8600641031 /* TestAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppDelegate.swift; sourceTree = "<group>"; };
+		D3BE7B451B054F8600641031 /* UITestAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITestAppDelegate.swift; sourceTree = "<group>"; };
 		D3BF8CBA1B7425570007AFE6 /* DiskImageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskImageStore.swift; sourceTree = "<group>"; };
 		D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskImageStoreTests.swift; sourceTree = "<group>"; };
 		D3C3696D1CC6B78800348A61 /* LocalRequestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalRequestHelper.swift; sourceTree = "<group>"; };
@@ -4250,7 +4252,7 @@
 		E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewNavigationHandler.swift; sourceTree = "<group>"; };
 		E1AEC16F286E0CF500062E29 /* FirefoxHomeJumpBackInViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxHomeJumpBackInViewModelTests.swift; sourceTree = "<group>"; };
 		E1AEC170286E0CF500062E29 /* HomeHistoryHighlightsViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeHistoryHighlightsViewModelTests.swift; sourceTree = "<group>"; };
-		E1AEC171286E0CF500062E29 /* FirefoxHomeViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxHomeViewControllerTests.swift; sourceTree = "<group>"; };
+		E1AEC171286E0CF500062E29 /* HomepageViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomepageViewControllerTests.swift; sourceTree = "<group>"; };
 		E1AEC172286E0CF500062E29 /* FirefoxHomeViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxHomeViewModelTests.swift; sourceTree = "<group>"; };
 		E1AEC175286E0CF500062E29 /* WebViewNavigationHandlerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewNavigationHandlerTests.swift; sourceTree = "<group>"; };
 		E1AF3558286DE5F600960045 /* Smoketest3.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Smoketest3.xctestplan; sourceTree = "<group>"; };
@@ -6137,6 +6139,7 @@
 				E683F0A51E92E0820035D990 /* MockableHistory.swift */,
 				281B2BE91ADF4D90002917DC /* MockProfile.swift */,
 				2165B2C32860CB34004C0786 /* MockAdjustTelemetryData.swift */,
+				8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -6640,7 +6643,7 @@
 			children = (
 				E1AEC16F286E0CF500062E29 /* FirefoxHomeJumpBackInViewModelTests.swift */,
 				E1AEC170286E0CF500062E29 /* HomeHistoryHighlightsViewModelTests.swift */,
-				E1AEC171286E0CF500062E29 /* FirefoxHomeViewControllerTests.swift */,
+				E1AEC171286E0CF500062E29 /* HomepageViewControllerTests.swift */,
 				E1AEC172286E0CF500062E29 /* FirefoxHomeViewModelTests.swift */,
 			);
 			path = Home;
@@ -6852,7 +6855,7 @@
 				F84B21E51A0910F600AAB793 /* AppDelegate.swift */,
 				EB9854FD2422686F0040F24B /* AppDelegate+PushNotifications.swift */,
 				EB98550024226EF60040F24B /* AppDelegate+SyncSentTabs.swift */,
-				D3BE7B451B054F8600641031 /* TestAppDelegate.swift */,
+				D3BE7B451B054F8600641031 /* UITestAppDelegate.swift */,
 			);
 			name = Delegates;
 			sourceTree = "<group>";
@@ -9450,7 +9453,7 @@
 				EBFDB790211C83A5005CCA2F /* BrowserViewController+FindInPage.swift in Sources */,
 				C8A012F126AB07D70096A7A7 /* JumpBackInViewModel.swift in Sources */,
 				EBB89509219398E500EB91A0 /* TabContentBlocker+ContentScript.swift in Sources */,
-				D3BE7B461B054F8600641031 /* TestAppDelegate.swift in Sources */,
+				D3BE7B461B054F8600641031 /* UITestAppDelegate.swift in Sources */,
 				23D57E6E25ED6F2700883FAD /* SearchViewController.swift in Sources */,
 				C82A94F2269F68ED00624AA7 /* FeatureFlagsManager.swift in Sources */,
 				3BB50E111D6274CD004B33DF /* TopSiteItemCell.swift in Sources */,
@@ -9848,6 +9851,7 @@
 				E60D032A1D5118DB002FE3F6 /* SyncStatusResolverTests.swift in Sources */,
 				8ADED7F0276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift in Sources */,
 				E683F0A61E92E0820035D990 /* MockableHistory.swift in Sources */,
+				8A36AC2C2886F27F00CDC0AD /* MockTabManager.swift in Sources */,
 				8AD08D1727E91AC800B8E907 /* TabsQuantityTelemetryTests.swift in Sources */,
 				D815A3A824A53F3200AAB221 /* TabToolbarHelperTests.swift in Sources */,
 				C8445AD126443C7F00B83F53 /* LibraryPanelViewStateTests.swift in Sources */,
@@ -9893,7 +9897,7 @@
 				E571EE7D28756A130051D9AA /* PocketSponsoredStoriesProviderTests.swift in Sources */,
 				D82ED2641FEB3C420059570B /* DefaultSearchPrefsTests.swift in Sources */,
 				CA24B53B24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift in Sources */,
-				E1AEC178286E0CF500062E29 /* FirefoxHomeViewControllerTests.swift in Sources */,
+				E1AEC178286E0CF500062E29 /* HomepageViewControllerTests.swift in Sources */,
 				3B61CD591F2A750800D38DE1 /* PocketFeedTests.swift in Sources */,
 				C8E1BC0A28085AA700C62964 /* NimbusFeatureFlagLayerTests.swift in Sources */,
 				C8D0D6F4281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift in Sources */,

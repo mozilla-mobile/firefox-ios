@@ -9,10 +9,12 @@ class LibraryPanelViewStateTests: XCTestCase {
     var panelState: LibraryPanelViewState?
 
     override func setUp() {
+        super.setUp()
         panelState = LibraryPanelViewState()
     }
 
     override func tearDown() {
+        super.tearDown()
         panelState = nil
     }
 
