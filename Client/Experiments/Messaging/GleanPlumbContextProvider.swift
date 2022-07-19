@@ -20,17 +20,7 @@ class GleanPlumbContextProvider {
     }
 
     private var isDefaultBrowser: Bool {
-        let didDismissCard = UserDefaults.standard.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
-        let didShow = UserDefaults.standard.bool(forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
-
-        var allConditions: Bool
-        if let isBrowserDefault = UserDefaults.standard.object(forKey: RatingPromptManager.UserDefaultsKey.keyIsBrowserDefault.rawValue) as? Bool {
-            allConditions = isBrowserDefault && didDismissCard && didShow
-        } else {
-            allConditions = didDismissCard && didShow
-        }
-
-        return allConditions
+        return UserDefaults.standard.bool(forKey: RatingPromptManager.UserDefaultsKey.keyIsBrowserDefault.rawValue)
     }
 
     /// JEXLs are more accurately evaluated when given certain details about the app on device.

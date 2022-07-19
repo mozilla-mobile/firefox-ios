@@ -332,7 +332,7 @@ features:
           styles:
             FALLBACK:
               priority: 40
-              max-display-count: 10
+              max-display-count: 20
             DEFAULT:
               priority: 50
               max-display-count: 5
@@ -355,7 +355,8 @@ features:
               action: "MAKE_DEFAULT_BROWSER"
               trigger: ["I_AM_NOT_DEFAULT_BROWSER", "SUPPORTS_DEFAULT_BROWSER"]
               style: "FALLBACK"
-              button-label: Default Browser/DefaultBrowserCard.Button.v2
+              # Use string interpolation because $TABLE_NAME/$KEY doesn't exist in en.lproj/Default Browser.strings
+              button-label: \(String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerButton)
 
 types:
   objects:
