@@ -343,17 +343,18 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
               let bookmarkCell = node as? BookmarksFolderCell
         else { return }
 
-        updatePanelState(newState: .bookmarks(state: .inFolder))
         guard !tableView.isEditing else {
             TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
             if let bookmarkFolder = self.viewModel.bookmarkFolder, !(node is BookmarkSeparatorData) {
                 let detailController = BookmarkDetailPanel(profile: profile, bookmarkNode: node,
                                                            parentBookmarkFolder: bookmarkFolder)
+                updatePanelState(newState: .bookmarks(state: .itemEditMode))
                 navigationController?.pushViewController(detailController, animated: true)
             }
             return
         }
 
+        updatePanelState(newState: .bookmarks(state: .inFolder))
         bookmarkCell.didSelect(profile: profile,
                                libraryPanelDelegate: libraryPanelDelegate,
                                navigationController: navigationController)
