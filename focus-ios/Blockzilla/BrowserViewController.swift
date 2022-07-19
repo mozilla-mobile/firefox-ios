@@ -217,16 +217,13 @@ class BrowserViewController: UIViewController {
             homeViewBottomConstraint.activate()
         }
 
-        webViewContainer.snp.makeConstraints { make in
-            make.top.equalTo(urlBarContainer.snp.bottom).priority(500)
-            make.bottom.equalTo(mainContainerView).priority(500)
-            browserBottomConstraint = make.bottom.equalTo(browserToolbar.snp.top).priority(1000).constraint
+        addWebViewConstraints()
 
+        webViewContainer.snp.makeConstraints { make in
+            browserBottomConstraint = make.bottom.equalTo(browserToolbar.snp.top).priority(1000).constraint
             if !showsToolsetInURLBar {
                 browserBottomConstraint.activate()
             }
-
-            make.leading.trailing.equalTo(mainContainerView)
         }
 
         view.addSubview(alertStackView)
@@ -544,6 +541,16 @@ class BrowserViewController: UIViewController {
                 make.leading.trailing.equalToSuperview()
             }
         }
+    }
+
+    private func addWebViewConstraints() {
+        let topConstraint = webViewContainer.topAnchor.constraint(equalTo: urlBarContainer.bottomAnchor)
+        topConstraint.priority = .defaultLow
+        let bottomConstraint = webViewContainer.bottomAnchor.constraint(equalTo: mainContainerView.bottomAnchor)
+        bottomConstraint.priority = .defaultLow
+        let leadingConstraint = webViewContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let trailingConstraint = webViewContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        NSLayoutConstraint.activate([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
     }
 
     override func updateViewConstraints() {
