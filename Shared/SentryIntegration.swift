@@ -18,6 +18,7 @@ public enum SentryTag: String {
     case bookmarks = "Bookmarks"
     case nimbus = "Nimbus"
     case tabDisplayManager = "TabDisplayManager"
+    case clientSynchronizer = "clientSynchronizer"
 }
 
 public protocol SentryProtocol {
