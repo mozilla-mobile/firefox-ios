@@ -659,8 +659,8 @@
 		C84655E8288739CB00861B4A /* WallpaperCollectionAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655E7288739CB00861B4A /* WallpaperCollectionAvailability.swift */; };
 		C84655EA28873B1700861B4A /* WallpaperDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655E928873B1700861B4A /* WallpaperDataService.swift */; };
 		C84655EC28873B9000861B4A /* WallpaperFetchDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655EB28873B9000861B4A /* WallpaperFetchDataService.swift */; };
-		C84655F228873D3400861B4A /* WallpaperNetworkDataServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655EE28873C6F00861B4A /* WallpaperNetworkDataServiceMock.swift */; };
-		C84655F328873D3A00861B4A /* WallpaperNetworkUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655F028873C8300861B4A /* WallpaperNetworkUtilityTests.swift */; };
+		C84655F228873D3400861B4A /* WallpaperDataServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655EE28873C6F00861B4A /* WallpaperDataServiceMock.swift */; };
+		C84655F328873D3A00861B4A /* WallpaperDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655F028873C8300861B4A /* WallpaperDataServiceTests.swift */; };
 		C84655F528879ED800861B4A /* WallpaperDataVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655F428879ED800861B4A /* WallpaperDataVerifier.swift */; };
 		C84655F728879EF100861B4A /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655F628879EF100861B4A /* WallpaperManager.swift */; };
 		C84655F928879FA000861B4A /* WallpaperDeletionUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655F828879FA000861B4A /* WallpaperDeletionUtility.swift */; };
@@ -3609,8 +3609,8 @@
 		C84655E7288739CB00861B4A /* WallpaperCollectionAvailability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCollectionAvailability.swift; sourceTree = "<group>"; };
 		C84655E928873B1700861B4A /* WallpaperDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperDataService.swift; sourceTree = "<group>"; };
 		C84655EB28873B9000861B4A /* WallpaperFetchDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperFetchDataService.swift; sourceTree = "<group>"; };
-		C84655EE28873C6F00861B4A /* WallpaperNetworkDataServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperNetworkDataServiceMock.swift; sourceTree = "<group>"; };
-		C84655F028873C8300861B4A /* WallpaperNetworkUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperNetworkUtilityTests.swift; sourceTree = "<group>"; };
+		C84655EE28873C6F00861B4A /* WallpaperDataServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperDataServiceMock.swift; sourceTree = "<group>"; };
+		C84655F028873C8300861B4A /* WallpaperDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperDataServiceTests.swift; sourceTree = "<group>"; };
 		C84655F428879ED800861B4A /* WallpaperDataVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperDataVerifier.swift; sourceTree = "<group>"; };
 		C84655F628879EF100861B4A /* WallpaperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManager.swift; sourceTree = "<group>"; };
 		C84655F828879FA000861B4A /* WallpaperDeletionUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperDeletionUtility.swift; sourceTree = "<group>"; };
@@ -6120,8 +6120,6 @@
 			children = (
 				C846560328881BED00861B4A /* UtilitiesTests */,
 				C8501F5028510DA1003B09AB /* WallpaperMigrationUtilityTests.swift */,
-				C84655EE28873C6F00861B4A /* WallpaperNetworkDataServiceMock.swift */,
-				C84655F028873C8300861B4A /* WallpaperNetworkUtilityTests.swift */,
 			);
 			path = Wallpaper;
 			sourceTree = "<group>";
@@ -6129,8 +6127,26 @@
 		C846560328881BED00861B4A /* UtilitiesTests */ = {
 			isa = PBXGroup;
 			children = (
+				C846560A28883EC300861B4A /* DataService */,
 			);
 			path = UtilitiesTests;
+			sourceTree = "<group>";
+		};
+		C846560A28883EC300861B4A /* DataService */ = {
+			isa = PBXGroup;
+			children = (
+				C846560B28883FF200861B4A /* TestJSONFiles */,
+				C84655EE28873C6F00861B4A /* WallpaperDataServiceMock.swift */,
+				C84655F028873C8300861B4A /* WallpaperDataServiceTests.swift */,
+			);
+			path = DataService;
+			sourceTree = "<group>";
+		};
+		C846560B28883FF200861B4A /* TestJSONFiles */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TestJSONFiles;
 			sourceTree = "<group>";
 		};
 		C849E45F26B9C36600260F0B /* EnhancedTrackingProtection */ = {
@@ -9966,7 +9982,7 @@
 				C889D7CE2858C4B500121E1D /* ContextMenuHelperTests.swift in Sources */,
 				8DCD3BCD1ED5B7FA00446D38 /* FxADeepLinkingTests.swift in Sources */,
 				8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */,
-				C84655F228873D3400861B4A /* WallpaperNetworkDataServiceMock.swift in Sources */,
+				C84655F228873D3400861B4A /* WallpaperDataServiceMock.swift in Sources */,
 				3943A81D1E9807C700D4F6DC /* FxAPushMessageTest.swift in Sources */,
 				E60D032A1D5118DB002FE3F6 /* SyncStatusResolverTests.swift in Sources */,
 				8ADED7F0276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift in Sources */,
@@ -9985,7 +10001,7 @@
 				39236E721FCC600200A38F1B /* TabEventHandlerTests.swift in Sources */,
 				0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */,
 				D8BA1790206D47830023AC00 /* DeferredTestUtils.swift in Sources */,
-				C84655F328873D3A00861B4A /* WallpaperNetworkUtilityTests.swift in Sources */,
+				C84655F328873D3A00861B4A /* WallpaperDataServiceTests.swift in Sources */,
 				2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */,
 				CA24B52224ABD7D40093848C /* LoginsListViewModelTests.swift in Sources */,
 				8AE1E1DB27B1C1320024C45E /* SearchBarSettingsViewModelTests.swift in Sources */,

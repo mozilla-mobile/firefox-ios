@@ -7,10 +7,10 @@ import XCTest
 
 @testable import Client
 
-class WallpaperNetworkUtilityTests: XCTestCase {
+class WallpaperDataServiceTests: XCTestCase {
 
     func testGetData_SimulatingNoResponse() async {
-        let dataService = WallpaperNetworkDataServiceMock()
+        let dataService = WallpaperDataServiceMock()
         let sut = WallpaperDataService(with: dataService)
 
         let result: Result<WallpaperMetadata, Error>? = nil
@@ -23,8 +23,4 @@ class WallpaperNetworkUtilityTests: XCTestCase {
             XCTAssertThrowsError(error)
         }
     }
-}
-
-extension WallpaperNetworkUtilityTests {
-    
 }
