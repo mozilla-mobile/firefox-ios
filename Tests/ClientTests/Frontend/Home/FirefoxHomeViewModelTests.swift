@@ -14,12 +14,14 @@ class FirefoxHomeViewModelTests: XCTestCase {
     func testNumberOfSection_withoutUpdatingData() {
         let profile = MockProfile()
         let viewModel = HomepageViewModel(profile: profile,
-                                             isPrivate: false)
+                                          isPrivate: false,
+                                          tabManager: MockTabManager(),
+                                          urlBar: URLBarView(profile: profile))
         XCTAssertEqual(viewModel.shownSections.count, 2)
     }
 
-// TODO: Disabled until homepage's reload issue is solved next sprint.
-//    func testNumberOfSection_updatingData_adds2Sections() {
+    func testNumberOfSection_updatingData_adds2Sections() throws {
+        throw XCTSkip("Disabled until homepage's reload issue is solved")
 //        let collectionView = UICollectionView(frame: CGRect.zero,
 //                                              collectionViewLayout: UICollectionViewLayout())
 //        let profile = MockProfile()
@@ -40,13 +42,15 @@ class FirefoxHomeViewModelTests: XCTestCase {
 //        waitForExpectations(timeout: 1.0, handler: nil)
 //
 //        XCTAssertEqual(viewModel.shownSections.count, 4)
-//    }
+    }
 
     // MARK: Orders of sections
     func testSectionOrder_addingJumpBackIn() {
         let profile = MockProfile()
         let viewModel = HomepageViewModel(profile: profile,
-                                             isPrivate: false)
+                                          isPrivate: false,
+                                          tabManager: MockTabManager(),
+                                          urlBar: URLBarView(profile: profile))
 
         viewModel.addShownSection(section: HomepageSectionType.jumpBackIn)
         XCTAssertEqual(viewModel.shownSections.count, 3)
@@ -58,7 +62,9 @@ class FirefoxHomeViewModelTests: XCTestCase {
     func testSectionOrder_addingTwoSections() {
         let profile = MockProfile()
         let viewModel = HomepageViewModel(profile: profile,
-                                             isPrivate: false)
+                                          isPrivate: false,
+                                          tabManager: MockTabManager(),
+                                          urlBar: URLBarView(profile: profile))
 
         viewModel.addShownSection(section: HomepageSectionType.jumpBackIn)
         viewModel.addShownSection(section: HomepageSectionType.pocket)
@@ -72,7 +78,9 @@ class FirefoxHomeViewModelTests: XCTestCase {
     func testSectionOrder_addingAndRemovingSections() {
         let profile = MockProfile()
         let viewModel = HomepageViewModel(profile: profile,
-                                             isPrivate: false)
+                                          isPrivate: false,
+                                          tabManager: MockTabManager(),
+                                          urlBar: URLBarView(profile: profile))
 
         viewModel.addShownSection(section: HomepageSectionType.jumpBackIn)
         viewModel.addShownSection(section: HomepageSectionType.pocket)
@@ -86,7 +94,9 @@ class FirefoxHomeViewModelTests: XCTestCase {
     func testSectionOrder_addingAndRemovingMoreSections() {
         let profile = MockProfile()
         let viewModel = HomepageViewModel(profile: profile,
-                                             isPrivate: false)
+                                          isPrivate: false,
+                                          tabManager: MockTabManager(),
+                                          urlBar: URLBarView(profile: profile))
 
         viewModel.addShownSection(section: HomepageSectionType.jumpBackIn)
         viewModel.addShownSection(section: HomepageSectionType.pocket)

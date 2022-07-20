@@ -14,13 +14,23 @@ class DiskImageStoreTests: XCTestCase {
     var store: DiskImageStore!
 
     override func setUp() {
+        super.setUp()
         files = MockFiles()
         store = DiskImageStore(files: files, namespace: "DiskImageStoreTests", quality: 1)
 
-        _ = store.clearExcluding(Set()).value
+        clearStore()
     }
 
-    func testStore() {
+    override func tearDown() {
+        super.tearDown()
+
+        clearStore()
+
+        files = nil
+        store = nil
+    }
+
+    func testStore_putImage() {
         var success = false
 
         // Avoid image comparison and use size of the image for equality
@@ -38,8 +48,16 @@ class DiskImageStoreTests: XCTestCase {
         XCTAssertNotNil(getImage("red"), "Red image still exists")
         XCTAssertNil(getImage("blue"), "Blue image cleared")
     }
+}
 
-    private func makeImageWithColor(_ color: UIColor, size: CGSize) -> UIImage {
+// MARK: Helper methods
+private extension DiskImageStoreTests {
+
+    func clearStore() {
+        _ = store.clearExcluding(Set()).value
+    }
+
+    func makeImageWithColor(_ color: UIColor, size: CGSize) -> UIImage {
         let rect = CGRect(size: size)
         UIGraphicsBeginImageContextWithOptions(size, false, 1.0)
         color.setFill()
@@ -49,7 +67,7 @@ class DiskImageStoreTests: XCTestCase {
         return image
     }
 
-    private func getImage(_ key: String) -> UIImage? {
+    func getImage(_ key: String) -> UIImage? {
         let expectation = self.expectation(description: "Get succeeded")
         var image: UIImage?
         store.get(key).upon {
@@ -60,7 +78,7 @@ class DiskImageStoreTests: XCTestCase {
         return image
     }
 
-    private func putImage(_ key: String, image: UIImage) -> Bool {
+    func putImage(_ key: String, image: UIImage) -> Bool {
         let expectation = self.expectation(description: "Put succeeded")
         var success = false
         store.put(key, image: image).upon {

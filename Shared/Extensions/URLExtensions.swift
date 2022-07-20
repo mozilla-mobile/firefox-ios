@@ -275,7 +275,7 @@ extension URL {
     }
 
     public var displayURL: URL? {
-        if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest, path.contains("test-fixture/") {
+        if AppConstants.isRunningUITests || AppConstants.isRunningPerfTests, path.contains("test-fixture/") {
             return self
         }
 

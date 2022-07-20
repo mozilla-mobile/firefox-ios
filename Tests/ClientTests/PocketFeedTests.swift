@@ -11,13 +11,14 @@ import XCTest
 class PocketStoriesTests: XCTestCase {
 
     var pocketAPI: String!
-    let webServer: GCDWebServer = GCDWebServer()
+    var webServer: GCDWebServer!
 
     /// Setup a basic web server that binds to a random port and that has one default handler on /hello
     fileprivate func setupWebServer() {
         let path = Bundle(for: type(of: self)).path(forResource: "pocketglobalfeed", ofType: "json")
         let data = try! Data(contentsOf: URL(fileURLWithPath: path!))
 
+        webServer = GCDWebServer()
         webServer.addHandler(forMethod: "GET", path: "/pocketglobalfeed", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse in
             return GCDWebServerDataResponse(data: data, contentType: "application/json")
         }
@@ -35,6 +36,8 @@ class PocketStoriesTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        pocketAPI = nil
+        webServer = nil
     }
 
     func testPocketStoriesCaching() {
