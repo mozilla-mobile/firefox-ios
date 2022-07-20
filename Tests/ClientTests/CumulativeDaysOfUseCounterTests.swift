@@ -8,11 +8,12 @@ import XCTest
 
 class CumulativeDaysOfUseCounterTests: XCTestCase {
 
-    private let calendar = Calendar.current
+    private var calendar: Calendar!
     private var counter: CumulativeDaysOfUseCounter!
 
     override func setUp() {
         super.setUp()
+        calendar = Calendar.current
         counter = CumulativeDaysOfUseCounter()
         counter.reset()
     }
@@ -20,6 +21,7 @@ class CumulativeDaysOfUseCounterTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         counter = nil
+        calendar = nil
     }
 
     func testByDefaultCounter_isFalse() {

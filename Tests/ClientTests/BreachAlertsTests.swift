@@ -8,25 +8,25 @@ import Shared
 import XCTest
 
 let blockbusterBreach = BreachRecord(
- name: "MockBreach",
- title: "A Mock Blockbuster Record",
- domain: "blockbuster.com",
- breachDate: "1970-01-02",
- description: "A mock BreachRecord for testing purposes."
+    name: "MockBreach",
+    title: "A Mock Blockbuster Record",
+    domain: "blockbuster.com",
+    breachDate: "1970-01-02",
+    description: "A mock BreachRecord for testing purposes."
 )
 let lipsumBreach = BreachRecord(
- name: "MockBreach",
- title: "A Mock Lorem Ipsum Record",
- domain: "lipsum.com",
- breachDate: "1970-01-02",
- description: "A mock BreachRecord for testing purposes."
+    name: "MockBreach",
+    title: "A Mock Lorem Ipsum Record",
+    domain: "lipsum.com",
+    breachDate: "1970-01-02",
+    description: "A mock BreachRecord for testing purposes."
 )
 let longBreach = BreachRecord(
- name: "MockBreach",
- title: "A Mock Swift Breach Record",
- domain: "swift.org",
- breachDate: "1970-01-02",
- description: "A mock BreachRecord for testing purposes."
+    name: "MockBreach",
+    title: "A Mock Swift Breach Record",
+    domain: "swift.org",
+    breachDate: "1970-01-02",
+    description: "A mock BreachRecord for testing purposes."
 )
 let unbreachedLogin = LoginRecord(fromJSONDict: ["hostname": "http://unbreached.com", "timePasswordChanged": 1594411049000])
 let breachedLogin = LoginRecord(fromJSONDict: ["hostname": "http://blockbuster.com", "timePasswordChanged": 46800000])
@@ -52,6 +52,11 @@ class BreachAlertsTests: XCTestCase {
 
     override func setUp() {
         self.breachAlertsManager = BreachAlertsManager(MockBreachAlertsClient(), profile: MockProfile())
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        breachAlertsManager = nil
     }
 
     func testDataRequest() {

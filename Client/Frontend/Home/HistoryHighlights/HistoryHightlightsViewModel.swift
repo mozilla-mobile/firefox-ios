@@ -24,8 +24,8 @@ class HistoryHightlightsViewModel {
     var historyItems: [HighlightItem]?
     private var profile: Profile
     private var isPrivate: Bool
-    private var tabManager: TabManager
-    private var foregroundBVC: BrowserViewController
+    private var tabManager: TabManagerProtocol
+    private var urlBar: URLBarViewProtocol
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var hasSentSectionEvent = false
 
@@ -68,12 +68,12 @@ class HistoryHightlightsViewModel {
     // MARK: - Inits
     init(with profile: Profile,
          isPrivate: Bool,
-         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
-         foregroundBVC: BrowserViewController = BrowserViewController.foregroundBVC()) {
+         tabManager: TabManagerProtocol,
+         urlBar: URLBarViewProtocol) {
         self.profile = profile
         self.isPrivate = isPrivate
         self.tabManager = tabManager
-        self.foregroundBVC = foregroundBVC
+        self.urlBar = urlBar
 
         loadItems {}
     }
@@ -92,7 +92,7 @@ class HistoryHightlightsViewModel {
     }
 
     func switchTo(_ highlight: HighlightItem) {
-        if foregroundBVC.urlBar.inOverlayMode { foregroundBVC.urlBar.leaveOverlayMode() }
+        if urlBar.inOverlayMode { urlBar.leaveOverlayMode() }
 
         onTapItem?(highlight)
         TelemetryWrapper.recordEvent(category: .action,

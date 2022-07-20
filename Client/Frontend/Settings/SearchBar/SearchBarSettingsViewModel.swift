@@ -28,7 +28,7 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
     static var isEnabled: Bool {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let isFeatureEnabled = FeatureFlagsManager.shared.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
-        return !isiPad && isFeatureEnabled && !AppConstants.IsRunningTest
+        return !isiPad && isFeatureEnabled && !AppConstants.isRunningUITests
     }
 
     var title: String = .Settings.Toolbar.Toolbar
