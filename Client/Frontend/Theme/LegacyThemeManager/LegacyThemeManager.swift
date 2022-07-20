@@ -16,7 +16,7 @@ class LegacyThemeManager {
     var current: LegacyTheme = themeFrom(name: UserDefaults.standard.string(forKey: LegacyThemeManagerPrefs.themeName.rawValue)) {
         didSet {
             UserDefaults.standard.set(current.name, forKey: LegacyThemeManagerPrefs.themeName.rawValue)
-//            NotificationCenter.default.post(name: .DisplayThemeChanged, object: nil)
+            NotificationCenter.default.post(name: .DisplayThemeChanged, object: nil)
         }
     }
 
