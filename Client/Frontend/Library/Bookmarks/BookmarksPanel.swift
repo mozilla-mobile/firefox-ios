@@ -272,8 +272,9 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     // MARK: - Utility
 
     private func indexPathIsValid(_ indexPath: IndexPath) -> Bool {
-        return indexPath.section < numberOfSections(in: tableView) &&
-        indexPath.row < tableView(tableView, numberOfRowsInSection: indexPath.section)
+        return indexPath.section < numberOfSections(in: tableView)
+        && indexPath.row < tableView(tableView, numberOfRowsInSection: indexPath.section)
+        && viewModel.bookmarkFolderGUID != BookmarkRoots.MobileFolderGUID
     }
 
     private func numberOfSections(in tableView: UITableView) -> Int {
