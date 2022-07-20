@@ -344,12 +344,11 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         else { return }
 
         guard !tableView.isEditing else {
-            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
-            if let bookmarkFolder = self.viewModel.bookmarkFolder, !(node is BookmarkSeparatorData) {
-                let detailController = BookmarkDetailPanel(profile: profile, bookmarkNode: node,
-                                                           parentBookmarkFolder: bookmarkFolder)
-                updatePanelState(newState: .bookmarks(state: .itemEditMode))
-                navigationController?.pushViewController(detailController, animated: true)
+            if let bookmarkFolder = self.viewModel.bookmarkFolder,
+                !(node is BookmarkSeparatorData),
+                isCurrentFolderEditable(at: indexPath) {
+                // Only show detail controller for editable nodes
+                showBookmarkDetailController(for: node, folder: bookmarkFolder)
             }
             return
         }
@@ -411,6 +410,15 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return isCurrentFolderEditable(at: indexPath)
+    }
+
+    private func showBookmarkDetailController(for node: FxBookmarkNode, folder: FxBookmarkNode) {
+        TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
+        let detailController = BookmarkDetailPanel(profile: profile,
+                                                   bookmarkNode: node,
+                                                   parentBookmarkFolder: folder)
+        updatePanelState(newState: .bookmarks(state: .itemEditMode))
+        navigationController?.pushViewController(detailController, animated: true)
     }
 
     /// Root folders and local desktop folder cannot be moved or edited
