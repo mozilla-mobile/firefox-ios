@@ -600,6 +600,7 @@
 		96EB6C4027DBEE9800A9D159 /* SearchGroupedItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3F27DBEE9800A9D159 /* SearchGroupedItemsViewController.swift */; };
 		96EB6C4327DC205D00A9D159 /* SearchGroupedItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C4227DC205D00A9D159 /* SearchGroupedItemsViewModel.swift */; };
 		96F8DA49280452CA00E53239 /* GleanPlumbContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F8DA48280452CA00E53239 /* GleanPlumbContextProvider.swift */; };
+		986878822887ECA700B910CE /* Colours.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 986878812887ECA700B910CE /* Colours.xcassets */; };
 		A83E5AB71C1D993D0026D912 /* UIPasteboardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5AB61C1D993D0026D912 /* UIPasteboardExtensions.swift */; };
 		A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B181C1DA8BF0026D912 /* image.gif */; };
 		A83E5B1B1C1DA8BF0026D912 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B191C1DA8BF0026D912 /* image.png */; };
@@ -3140,6 +3141,7 @@
 		980C492382221DFFEFCD6340 /* or */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = or; path = or.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		982C4C92BC5D34C57F4050F9 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		98674293801BB7CC9A9D19DF /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
+		986878812887ECA700B910CE /* Colours.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colours.xcassets; sourceTree = "<group>"; };
 		988942C9A019AF4FD4B3C0C3 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		98B54F46B062D5E486D79D3F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Shared.strings; sourceTree = "<group>"; };
 		98D8406FB13F48746144489F /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -7315,6 +7317,7 @@
 				E699220D1B94E3EF007C480D /* About */,
 				F84B22391A0914A300AAB793 /* Fonts */,
 				F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */,
+				986878812887ECA700B910CE /* Colours.xcassets */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -8526,6 +8529,7 @@
 				23BEA767251A99ED00A014BF /* NewYorkMedium-Bold.otf in Resources */,
 				3BC659591E5BA505006D560F /* top_sites.json in Resources */,
 				43446CE7240D9F3000F5C643 /* ETP.xcassets in Resources */,
+				986878822887ECA700B910CE /* Colours.xcassets in Resources */,
 				C8399D9522DE5E6200EFA5CA /* disconnect-block-social.json in Resources */,
 				E4CD9F541A71506400318571 /* Reader.html in Resources */,
 				E1AF3563286DE5F800960045 /* Fennec_Enterprise_XCUITests.xctestplan in Resources */,

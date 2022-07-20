@@ -119,9 +119,11 @@ class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell 
         selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         if theme == .dark {
             backgroundColor = UIColor.Photon.Grey80
+            UIColor(named: "InactiveTabColor.background")
             titleLabel.textColor = .white
         } else {
             backgroundColor = .white
+            UIColor(named: "InactiveTabColor.title")
             titleLabel.textColor = .black
         }
     }

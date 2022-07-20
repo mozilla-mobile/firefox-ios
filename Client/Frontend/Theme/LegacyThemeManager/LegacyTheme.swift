@@ -28,38 +28,38 @@ private let defaultSeparator = UIColor.Photon.Grey30
 private let defaultTextAndTint = UIColor.Photon.Grey80
 
 class TableViewColor {
-    var rowBackground: UIColor { return UIColor.Photon.White100 }
-    var rowText: UIColor { return UIColor.Photon.Grey90 }
-    var rowDetailText: UIColor { return UIColor.Photon.Grey60 }
-    var disabledRowText: UIColor { return UIColor.Photon.Grey40 }
-    var separator: UIColor { return defaultSeparator }
-    var headerBackground: UIColor { return defaultBackground }
+    var rowBackground: UIColor { return UIColor(named: "TableViewColor.rowBackground")!  }
+    var rowText: UIColor { return UIColor(named: "TableViewColor.rowText")!  }
+    var rowDetailText: UIColor { return UIColor(named: "TableViewColor.rowDetailText")!  }
+    var disabledRowText: UIColor { return UIColor(named: "TableViewColor.disabledRowText")!  }
+    var separator: UIColor { return UIColor(named: "TableViewColor.separator")!  }
+    var headerBackground: UIColor { return UIColor(named: "TableViewColor.headerBackground")!  }
     // Used for table headers in Settings and Photon menus
-    var headerTextLight: UIColor { return UIColor.Photon.Grey50 }
+    var headerTextLight: UIColor { return UIColor(named: "TableViewColor.headerTextLight")!  }
     // Used for table headers in home panel tables
-    var headerTextDark: UIColor { return UIColor.Photon.Grey90 }
-    var rowActionAccessory: UIColor { return UIColor.Photon.Blue40 }
-    var controlTint: UIColor { return rowActionAccessory }
-    var syncText: UIColor { return defaultTextAndTint }
-    var errorText: UIColor { return UIColor.Photon.Red50 }
-    var warningText: UIColor { return UIColor.Photon.Orange50 }
-    var accessoryViewTint: UIColor { return UIColor.Photon.Grey40 }
-    var selectedBackground: UIColor { return UIColor.Custom.selectedHighlightLight }
+    var headerTextDark: UIColor { return UIColor(named: "TableViewColor.headerTextDark")!  }
+    var rowActionAccessory: UIColor { return UIColor(named: "TableViewColor.rowActionAccessory")!  }
+    var controlTint: UIColor { return UIColor(named: "TableViewColor.controlTint")!  }
+    var syncText: UIColor { return UIColor(named: "TableViewColor.syncText")!  }
+    var errorText: UIColor { return UIColor(named: "TableViewColor.errorText")!  }
+    var warningText: UIColor { return UIColor(named: "TableViewColor.warningText")!  }
+    var accessoryViewTint: UIColor { return UIColor(named: "TableViewColor.accessoryViewTint")!  }
+    var selectedBackground: UIColor { return UIColor(named: "TableViewColor.selectedBackground")!  }
 }
 
 class ActionMenuColor {
-    var foreground: UIColor { return defaultTextAndTint }
+    var foreground: UIColor { return UIColor(named: "ActionMenuColor.foreground")! }
     var iPhoneBackgroundBlurStyle: UIBlurEffect.Style { return UIBlurEffect.Style.light }
-    var iPhoneBackground: UIColor { return defaultBackground.withAlphaComponent(0.9) }
-    var closeButtonBackground: UIColor { return defaultBackground }
+    var iPhoneBackground: UIColor { return UIColor(named: "ActionMenuColor.iPhoneBackground")! }
+    var closeButtonBackground: UIColor { return UIColor(named: "ActionMenuColor.closeButtonBackground")! }
 }
 
 class URLBarColor {
-    var border: UIColor { return UIColor.Photon.Grey90A10 }
+    var border: UIColor { return UIColor(named: "URLBarColor.border")! }
     func activeBorder(_ isPrivate: Bool) -> UIColor {
         return !isPrivate ? UIColor.Photon.Blue20A40 : UIColor.Defaults.MobilePrivatePurple
     }
-    var tint: UIColor { return UIColor.Photon.Blue40A30 }
+    var tint: UIColor { return UIColor(named: "URLBarColor.tint")! }
 
     // This text selection color is used in two ways:
     // 1) <UILabel>.background = textSelectionHighlight.withAlphaComponent(textSelectionHighlightAlpha)
@@ -74,26 +74,26 @@ class URLBarColor {
             let color = UIColor.Defaults.MobilePrivatePurple
             return (labelMode: color.withAlphaComponent(0.25), textFieldMode: color)
         } else {
-            return (labelMode: UIColor.Defaults.iOSTextHighlightBlue, textFieldMode: nil)
+            return (labelMode: UIColor(named: "URLBarColor.textSelectionHighlight")!, textFieldMode: nil)
         }
     }
 
-    var readerModeButtonSelected: UIColor { return UIColor.Photon.Blue40 }
-    var readerModeButtonUnselected: UIColor { return UIColor.Photon.Grey50 }
-    var pageOptionsSelected: UIColor { return readerModeButtonSelected }
-    var pageOptionsUnselected: UIColor { return UIColor.theme.browser.tint }
+    var readerModeButtonSelected: UIColor { return UIColor(named: "URLBarColor.readerModeButtonSelected")! }
+    var readerModeButtonUnselected: UIColor { return UIColor(named: "URLBarColor.readerModeButtonUnselected")! }
+    var pageOptionsSelected: UIColor { return UIColor(named: "URLBarColor.pageOptionsSelected")! }
+    var pageOptionsUnselected: UIColor { return UIColor(named: "URLBarColor.pageOptionsUnselected")! }
 }
 
 class BrowserColor {
-    var background: UIColor { return defaultBackground }
-    var urlBarDivider: UIColor { return UIColor.Photon.Grey90A10 }
-    var tint: UIColor { return defaultTextAndTint }
+    var background: UIColor { return UIColor(named: "BrowserColor.background")! }
+    var urlBarDivider: UIColor { return UIColor(named: "BrowserColor.urlBarDivider")! }
+    var tint: UIColor { return UIColor(named: "BrowserColor.tint")! }
 }
 
 // The back/forward/refresh/menu button (bottom toolbar)
 class ToolbarButtonColor {
-    var selectedTint: UIColor { return UIColor.Photon.Blue40 }
-    var disabledTint: UIColor { return UIColor.Photon.Grey30 }
+    var selectedTint: UIColor { return UIColor(named: "ToolbarButtonColor.selectedTint")! }
+    var disabledTint: UIColor { return UIColor(named: "ToolbarButtonColor.disabledTint")! }
 }
 
 class LoadingBarColor {
@@ -111,140 +111,140 @@ class LoadingBarColor {
 }
 
 class TabTrayColor {
-    var tabTitleText: UIColor { return UIColor.black }
+    var tabTitleText: UIColor { return UIColor(named: "TabTrayColor.tabTitleText")! }
     var tabTitleBlur: UIBlurEffect.Style { return UIBlurEffect.Style.extraLight }
-    var background: UIColor { return UIColor.Photon.LightGrey30 }
-    var screenshotBackground: UIColor { return UIColor.Photon.Grey10 }
-    var cellBackground: UIColor { return defaultBackground }
-    var toolbar: UIColor { return defaultBackground }
-    var toolbarButtonTint: UIColor { return defaultTextAndTint }
-    var privateModeLearnMore: UIColor { return UIColor.Photon.Purple60 }
-    var privateModePurple: UIColor { return UIColor.Photon.Purple60 }
-    var privateModeButtonOffTint: UIColor { return toolbarButtonTint }
-    var privateModeButtonOnTint: UIColor { return UIColor.Photon.Grey10 }
-    var cellCloseButton: UIColor { return UIColor.Photon.Grey50 }
-    var cellTitleBackground: UIColor { return UIColor.clear }
-    var faviconTint: UIColor { return UIColor.black }
-    var searchBackground: UIColor { return UIColor.Photon.Grey30 }
+    var background: UIColor { return UIColor(named: "TabTrayColor.background")! }
+    var screenshotBackground: UIColor { return UIColor(named: "TabTrayColor.screenshotBackground")! }
+    var cellBackground: UIColor { return UIColor(named: "TabTrayColor.cellBackground")! }
+    var toolbar: UIColor { return UIColor(named: "TabTrayColor.toolbar")! }
+    var toolbarButtonTint: UIColor { return UIColor(named: "TabTrayColor.toolbarButtonTint")! }
+    var privateModeLearnMore: UIColor { return UIColor(named: "TabTrayColor.privateModeLearnMore")! }
+    var privateModePurple: UIColor { return UIColor(named: "TabTrayColor.privateModePurple")! }
+    var privateModeButtonOffTint: UIColor { return UIColor(named: "TabTrayColor.privateModeButtonOffTint")! }
+    var privateModeButtonOnTint: UIColor { return UIColor(named: "TabTrayColor.privateModeButtonOnTint")! }
+    var cellCloseButton: UIColor { return UIColor(named: "TabTrayColor.cellCloseButton")! }
+    var cellTitleBackground: UIColor { return UIColor(named: "TabTrayColor.cellTitleBackground")! }
+    var faviconTint: UIColor { return UIColor(named: "TabTrayColor.faviconTint")! }
+    var searchBackground: UIColor { return UIColor(named: "TabTrayColor.searchBackground")! }
 }
 
 class EnhancedTrackingProtectionMenuColor {
-    var defaultImageTints: UIColor { return defaultTextAndTint }
-    var background: UIColor { return UIColor.Photon.Grey12 }
-    var horizontalLine: UIColor { return UIColor.Photon.Grey75A39 }
-    var sectionColor: UIColor { return .white }
-    var switchAndButtonTint: UIColor { return UIColor.Photon.Blue50 }
-    var subtextColor: UIColor { return UIColor.Photon.Grey75A60}
-    var closeButtonColor: UIColor { return UIColor.Photon.LightGrey30 }
+    var defaultImageTints: UIColor { return UIColor(named: "EnhancedTrackingProtectionMenuColor.defaultImageTints")! }
+    var background: UIColor { return UIColor(named: "EnhancedTrackingProtectionMenuColor.background")! }
+    var horizontalLine: UIColor { return UIColor(named: "EnhancedTrackingProtectionMenuColor.horizontalLine")! }
+    var sectionColor: UIColor { return UIColor(named: "EnhancedTrackingProtectionMenuColor.sectionColor")! }
+    var switchAndButtonTint: UIColor { return UIColor(named: "EnhancedTrackingProtectionMenuColor.switchAndButtonTint")! }
+    var subtextColor: UIColor { return UIColor(named: "EnhancedTrackingProtectionMenuColor.subtextColor")! }
+    var closeButtonColor: UIColor { return UIColor(named: "EnhancedTrackingProtectionMenuColor.closeButtonColor")! }
 }
 
 class TopTabsColor {
-    var background: UIColor { return UIColor.Photon.LightGrey20 }
-    var tabBackgroundSelected: UIColor { return UIColor.Photon.Grey10 }
-    var tabBackgroundUnselected: UIColor { return UIColor.Photon.Grey80 }
-    var tabForegroundSelected: UIColor { return UIColor.Photon.Grey90 }
-    var tabForegroundUnselected: UIColor { return UIColor.Photon.Grey40 }
+    var background: UIColor { return UIColor(named: "TopTabsColor.background")! }
+    var tabBackgroundSelected: UIColor { return UIColor(named: "TopTabsColor.tabBackgroundSelected")! }
+    var tabBackgroundUnselected: UIColor { return UIColor(named: "TopTabsColor.tabBackgroundUnselected")! }
+    var tabForegroundSelected: UIColor { return UIColor(named: "TopTabsColor.tabForegroundSelected")! }
+    var tabForegroundUnselected: UIColor { return UIColor(named: "TopTabsColor.tabForegroundUnselected")! }
     func tabSelectedIndicatorBar(_ isPrivate: Bool) -> UIColor {
         return !isPrivate ? UIColor.Photon.Blue40 : UIColor.Photon.Purple60
     }
-    var buttonTint: UIColor { return UIColor.Photon.Grey80 }
-    var privateModeButtonOffTint: UIColor { return buttonTint }
-    var privateModeButtonOnTint: UIColor { return UIColor.Photon.Grey10 }
-    var closeButtonSelectedTab: UIColor { return tabBackgroundUnselected }
-    var closeButtonUnselectedTab: UIColor { return tabBackgroundSelected }
-    var separator: UIColor { return UIColor.Photon.Grey70 }
+    var buttonTint: UIColor { return UIColor(named: "TopTabsColor.buttonTint")! }
+    var privateModeButtonOffTint: UIColor { return UIColor(named: "TopTabsColor.privateModeButtonOffTint")! }
+    var privateModeButtonOnTint: UIColor { return UIColor(named: "TopTabsColor.privateModeButtonOnTint")! }
+    var closeButtonSelectedTab: UIColor { return UIColor(named: "TopTabsColor.closeButtonSelectedTab")! }
+    var closeButtonUnselectedTab: UIColor { return UIColor(named: "TopTabsColor.closeButtonUnselectedTab")! }
+    var separator: UIColor { return UIColor(named: "TopTabsColor.separator")! }
 }
 
 class TextFieldColor {
-    var background: UIColor { return UIColor.Photon.LightGrey20 }
-    var backgroundInOverlay: UIColor { return UIColor.Photon.LightGrey20 }
-    var textAndTint: UIColor { return defaultTextAndTint }
-    var separator: UIColor { return .white }
+    var background: UIColor { return UIColor(named: "TextFieldColor.background")! }
+    var backgroundInOverlay: UIColor { return UIColor(named: "TextFieldColor.backgroundInOverlay")!}
+    var textAndTint: UIColor { return UIColor(named: "TextFieldColor.textAndTint")! }
+    var separator: UIColor { return UIColor(named: "TextFieldColor.separator")! }
 }
 
 class HomePanelColor {
-    var toolbarBackground: UIColor { return defaultBackground }
-    var toolbarHighlight: UIColor { return UIColor.Photon.Blue40 }
-    var toolbarTint: UIColor { return UIColor.Photon.Grey50 }
-    var topSiteHeaderTitle: UIColor { return .black }
-    var panelBackground: UIColor { return UIColor.Photon.White100 }
+    var toolbarBackground: UIColor { return UIColor(named: "HomePanelColor.toolbarBackground")! }
+    var toolbarHighlight: UIColor { return UIColor(named: "HomePanelColor.toolbarHighlight")! }
+    var toolbarTint: UIColor { return UIColor(named: "HomePanelColor.toolbarTint")! }
+    var topSiteHeaderTitle: UIColor { return UIColor(named: "HomePanelColor.topSiteHeaderTitle")! }
+    var panelBackground: UIColor { return UIColor(named: "HomePanelColor.panelBackground")! }
 
-    var separator: UIColor { return defaultSeparator }
-    var border: UIColor { return UIColor.Photon.Grey60 }
-    var buttonContainerBorder: UIColor { return separator }
+    var separator: UIColor { return UIColor(named: "HomePanelColor.separator")! }
+    var border: UIColor { return UIColor(named: "HomePanelColor.border")! }
+    var buttonContainerBorder: UIColor { return UIColor(named: "HomePanelColor.buttonContainerBorder")! }
 
-    var welcomeScreenText: UIColor { return UIColor.Photon.Grey50 }
-    var bookmarkIconBorder: UIColor { return UIColor.Photon.Grey30 }
-    var bookmarkFolderBackground: UIColor { return UIColor.Photon.Grey10.withAlphaComponent(0.3) }
-    var bookmarkFolderText: UIColor { return UIColor.Photon.Grey80 }
-    var bookmarkCurrentFolderText: UIColor { return UIColor.Photon.Blue40 }
-    var bookmarkBackNavCellBackground: UIColor { return UIColor.clear }
+    var welcomeScreenText: UIColor { return UIColor(named: "HomePanelColor.welcomeScreenText")! }
+    var bookmarkIconBorder: UIColor { return UIColor(named: "HomePanelColor.bookmarkIconBorder")! }
+    var bookmarkFolderBackground: UIColor { return UIColor(named: "HomePanelColor.bookmarkFolderBackground")! }
+    var bookmarkFolderText: UIColor { return UIColor(named: "HomePanelColor.bookmarkFolderText")! }
+    var bookmarkCurrentFolderText: UIColor { return UIColor(named: "HomePanelColor.bookmarkCurrentFolderText")! }
+    var bookmarkBackNavCellBackground: UIColor { return UIColor(named: "HomePanelColor.bookmarkBackNavCellBackground")! }
 
-    var siteTableHeaderBorder: UIColor { return UIColor.Photon.Grey30.withAlphaComponent(0.8) }
+    var siteTableHeaderBorder: UIColor { return UIColor(named: "HomePanelColor.siteTableHeaderBorder")! }
 
-    var topSiteDomain: UIColor { return UIColor.Photon.DarkGrey90 }
-    var topSitePin: UIColor { return UIColor.Photon.DarkGrey05 }
-    var topSitesBackground: UIColor { return UIColor.Photon.LightGrey10 }
+    var topSiteDomain: UIColor { return UIColor(named: "HomePanelColor.topSiteDomain")! }
+    var topSitePin: UIColor { return UIColor(named: "HomePanelColor.topSitePin")! }
+    var topSitesBackground: UIColor { return UIColor(named: "HomePanelColor.topSitesBackground")! }
 
-    var shortcutBackground: UIColor { return .white }
-    var shortcutShadowColor: CGColor { return UIColor(red: 0.23, green: 0.22, blue: 0.27, alpha: 1.0).cgColor }
+    var shortcutBackground: UIColor { return UIColor(named: "HomePanelColor.shortcutBackground")! }
+    var shortcutShadowColor: CGColor { return UIColor(named: "HomePanelColor.shortcutShadowColor")!.cgColor }
     var shortcutShadowOpacity: Float { return 0.2 }
 
-    var recentlySavedBookmarkCellBackground: UIColor { return .white}
+    var recentlySavedBookmarkCellBackground: UIColor { return UIColor(named: "HomePanelColor.recentlySavedBookmarkCellBackground")! }
 
-    var recentlyVisitedCellGroupImage: UIColor { return UIColor.Photon.DarkGrey90 }
-    var recentlyVisitedCellBottomLine: UIColor { return UIColor.Photon.LightGrey40 }
+    var recentlyVisitedCellGroupImage: UIColor { return UIColor(named: "HomePanelColor.recentlyVisitedCellGroupImage")! }
+    var recentlyVisitedCellBottomLine: UIColor { return UIColor(named: "HomePanelColor.recentlyVisitedCellBottomLine")! }
 
-    var activityStreamHeaderText: UIColor { return UIColor.Photon.DarkGrey90 }
-    var activityStreamHeaderButton: UIColor { return UIColor.Photon.Blue50 }
-    var activityStreamCellTitle: UIColor { return UIColor.Photon.DarkGrey90 }
-    var activityStreamCellDescription: UIColor { return UIColor.Photon.DarkGrey05 }
+    var activityStreamHeaderText: UIColor { return UIColor(named: "HomePanelColor.activityStreamHeaderText")! }
+    var activityStreamHeaderButton: UIColor { return UIColor(named: "HomePanelColor.activityStreamHeaderButton")! }
+    var activityStreamCellTitle: UIColor { return UIColor(named: "HomePanelColor.activityStreamCellTitle")! }
+    var activityStreamCellDescription: UIColor { return UIColor(named: "HomePanelColor.activityStreamCellDescription")!}
 
-    var readingListActive: UIColor { return defaultTextAndTint }
-    var readingListDimmed: UIColor { return UIColor.Photon.Grey40 }
+    var readingListActive: UIColor { return UIColor(named: "HomePanelColor.readingListActive")! }
+    var readingListDimmed: UIColor { return UIColor(named: "HomePanelColor.readingListDimmed")! }
 
-    var downloadedFileIcon: UIColor { return UIColor.Photon.Grey60 }
+    var downloadedFileIcon: UIColor { return UIColor(named: "HomePanelColor.downloadedFileIcon")! }
 
-    var historyHeaderIconsBackground: UIColor { return UIColor.Photon.White100 }
+    var historyHeaderIconsBackground: UIColor { return UIColor(named: "HomePanelColor.historyHeaderIconsBackground")! }
 
-    var searchSuggestionPillBackground: UIColor { return UIColor.Photon.White100 }
-    var searchSuggestionPillForeground: UIColor { return UIColor.Photon.Blue40 }
+    var searchSuggestionPillBackground: UIColor { return UIColor(named: "HomePanelColor.searchSuggestionPillBackground")! }
+    var searchSuggestionPillForeground: UIColor { return UIColor(named: "HomePanelColor.searchSuggestionPillForeground")! }
 
-    var customizeHomepageButtonBackground: UIColor { return UIColor.Photon.LightGrey30 }
-    var customizeHomepageButtonText: UIColor { return UIColor.Photon.DarkGrey90 }
+    var customizeHomepageButtonBackground: UIColor { return UIColor(named: "HomePanelColor.customizeHomepageButtonBackground")! }
+    var customizeHomepageButtonText: UIColor { return UIColor(named: "HomePanelColor.customizeHomepageButtonText")! }
 }
 
 class SnackBarColor {
     var highlight: UIColor { return UIColor.Defaults.iOSTextHighlightBlue.withAlphaComponent(0.9) }
-    var highlightText: UIColor { return UIColor.Photon.Blue40 }
-    var border: UIColor { return UIColor.Photon.Grey30 }
-    var title: UIColor { return UIColor.Photon.Blue40 }
+    var highlightText: UIColor { return UIColor(named: "SnackBarColor.highlightText")! }
+    var border: UIColor { return UIColor(named: "SnackBarColor.border")! }
+    var title: UIColor { return UIColor(named: "SnackBarColor.title")! }
 }
 
 class GeneralColor {
-    var faviconBackground: UIColor { return UIColor.clear }
-    var passcodeDot: UIColor { return UIColor.Photon.Grey60 }
-    var highlightBlue: UIColor { return UIColor.Photon.Blue40 }
-    var destructiveRed: UIColor { return UIColor.Photon.Red50 }
-    var separator: UIColor { return defaultSeparator }
-    var settingsTextPlaceholder: UIColor { return UIColor.Photon.Grey40 }
-    var controlTint: UIColor { return UIColor.Photon.Blue40 }
-    var switchToggle: UIColor { return UIColor.Photon.Grey90A40 }
+    var faviconBackground: UIColor { return UIColor(named: "GeneralColor.faviconBackground")! }
+    var passcodeDot: UIColor { return UIColor(named: "GeneralColor.passcodeDot")! }
+    var highlightBlue: UIColor { return UIColor(named: "GeneralColor.highlightBlue")! }
+    var destructiveRed: UIColor { return UIColor(named: "GeneralColor.destructiveRed")! }
+    var separator: UIColor { return UIColor(named: "GeneralColor.separator")! }
+    var settingsTextPlaceholder: UIColor { return UIColor(named: "GeneralColor.settingsTextPlaceholder")! }
+    var controlTint: UIColor { return UIColor(named: "GeneralColor.controlTint")! }
+    var switchToggle: UIColor { return UIColor(named: "GeneralColor.switchToggle")! }
 }
 
 class HomeTabBannerColor {
-    var backgroundColor: UIColor { return UIColor.Photon.Grey30 }
-    var textColor: UIColor { return UIColor.black }
-    var closeButtonBackground: UIColor { return UIColor.Photon.Grey20 }
-    var closeButton: UIColor { return UIColor.Photon.Grey80 }
+    var backgroundColor: UIColor { return UIColor(named: "HomeTabBannerColor.backgroundColor")!  }
+    var textColor: UIColor { return UIColor(named: "HomeTabBannerColor.textColor")!  }
+    var closeButtonBackground: UIColor { return UIColor(named: "HomeTabBannerColor.closeButtonBackground")! }
+    var closeButton: UIColor { return UIColor(named: "HomeTabBannerColor.closeButton")! }
 }
 
 class OnboardingColor {
-    var backgroundColor: UIColor { return UIColor.white }
+    var backgroundColor: UIColor { return UIColor(named: "OnboardingColor.backgroundColor")! }
 }
 
 class RemoteTabTrayColor {
-    var background: UIColor { return UIColor.white }
+    var background: UIColor { return UIColor(named: "RemoteTabTrayColor.background")! }
 }
 
 protocol LegacyTheme {
