@@ -657,12 +657,12 @@ class RemoteTabsTableViewController: UITableViewController {
                     }
 
                     self.endRefreshing()
+                    completion?()
                 }
             } else {
                 self.endRefreshing()
+                completion?()
             }
-
-            completion?()
         }
     }
 
