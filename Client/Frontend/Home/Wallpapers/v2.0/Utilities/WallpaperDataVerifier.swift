@@ -4,8 +4,8 @@
 
 import Foundation
 
-/// Metadata, fetched from the server, to update wallpaper availability.
-struct WallpaperMetadata: Codable {
-    let lastUpdatedDate: String
-    let collections: [WallpaperCollection]
+/// Responsible for verifying currently existing data, such as whether thumbnails
+/// exist, or if a collection has expired and must be deleted.
+struct WallpaperDataVerifier {
+    
 }

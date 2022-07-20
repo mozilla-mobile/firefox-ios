@@ -4,6 +4,7 @@
 
 import Foundation
 
+/// Describes a wallpaper collection.
 struct WallpaperCollection: Codable {
     let id: String
     let availableLocales: [String]
