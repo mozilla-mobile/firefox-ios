@@ -9,8 +9,4 @@ struct Wallpaper: Codable {
     let id: String
     let textColour: String
     let accessibilityLabel: String
-
-    // will also require:
-    //  - images (landscape & portrait)
-    //  - thumbnail
 }
