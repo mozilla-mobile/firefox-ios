@@ -227,6 +227,8 @@ class TelemetryWrapperTests: XCTestCase {
         wrapper.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
 
         testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
+        let wallpaperName = LegacyWallpaperManager().currentWallpaper.name
+        XCTAssertNil(try? GleanMetrics.WallpaperAnalytics.themedWallpaper[wallpaperName].testGetValue())
     }
 
     func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
@@ -239,6 +241,8 @@ class TelemetryWrapperTests: XCTestCase {
         wrapper.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
 
         testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
+        let wallpaperName = LegacyWallpaperManager().currentWallpaper.name
+        XCTAssertEqual(try? GleanMetrics.WallpaperAnalytics.themedWallpaper[wallpaperName].testGetValue(), 1)
     }
 }
 
