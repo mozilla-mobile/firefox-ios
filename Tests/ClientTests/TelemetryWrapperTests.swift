@@ -248,34 +248,34 @@ extension XCTestCase {
     func testEventMetricRecordingSuccess<Keys: ExtraKeys, Extras: EventExtras>(metric: EventMetricType<Keys, Extras>,
                                                                                file: StaticString = #file,
                                                                                line: UInt = #line) {
-        XCTAssertTrue(metric.testHasValue())
-        XCTAssertEqual(try! metric.testGetValue().count, 1)
+        XCTAssertTrue(metric.testHasValue(), file: file, line: line)
+        XCTAssertEqual(try! metric.testGetValue().count, 1, file: file, line: line)
 
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0, file: file, line: line)
     }
 
     func testCounterMetricRecordingSuccess(metric: CounterMetricType,
                                            file: StaticString = #file,
                                            line: UInt = #line) {
-        XCTAssertTrue(metric.testHasValue())
-        XCTAssertEqual(try! metric.testGetValue(), 1)
+        XCTAssertTrue(metric.testHasValue(), file: file, line: line)
+        XCTAssertEqual(try! metric.testGetValue(), 1, file: file, line: line)
 
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0, file: file, line: line)
     }
 
     func testLabeledMetricSuccess(metric: LabeledMetricType<CounterMetricType>,
                                   file: StaticString = #file,
                                   line: UInt = #line) {
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0, file: file, line: line)
     }
 
     func testQuantityMetricSuccess(metric: QuantityMetricType,
@@ -283,13 +283,13 @@ extension XCTestCase {
                                    failureMessage: String,
                                    file: StaticString = #file,
                                    line: UInt = #line) {
-        XCTAssertTrue(metric.testHasValue(), "Should have value on quantity metric")
-        XCTAssertEqual(try! metric.testGetValue(), expectedValue, failureMessage)
+        XCTAssertTrue(metric.testHasValue(), "Should have value on quantity metric", file: file, line: line)
+        XCTAssertEqual(try! metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
 
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0, file: file, line: line)
     }
 
     func testStringMetricSuccess(metric: StringMetricType,
@@ -297,13 +297,13 @@ extension XCTestCase {
                                  failureMessage: String,
                                  file: StaticString = #file,
                                  line: UInt = #line) {
-        XCTAssertTrue(metric.testHasValue(), "Should have value on string metric")
-        XCTAssertEqual(try! metric.testGetValue(), expectedValue, failureMessage)
+        XCTAssertTrue(metric.testHasValue(), "Should have value on string metric", file: file, line: line)
+        XCTAssertEqual(try! metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
 
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0, file: file, line: line)
     }
 
     func testUrlMetricSuccess(metric: UrlMetricType,
@@ -311,13 +311,13 @@ extension XCTestCase {
                               failureMessage: String,
                               file: StaticString = #file,
                               line: UInt = #line) {
-        XCTAssertTrue(metric.testHasValue(), "Should have value on url metric")
-        XCTAssertEqual(try! metric.testGetValue(), expectedValue, failureMessage)
+        XCTAssertTrue(metric.testHasValue(), "Should have value on url metric", file: file, line: line)
+        XCTAssertEqual(try! metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
 
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0, file: file, line: line)
     }
 
     func testUuidMetricSuccess(metric: UuidMetricType,
@@ -330,7 +330,7 @@ extension XCTestCase {
             XCTFail("Expected contextId to be configured")
             return
         }
-        XCTAssertTrue(metric.testHasValue(), "Should have value on uuid metric")
-        XCTAssertEqual(value, expectedValue, failureMessage)
+        XCTAssertTrue(metric.testHasValue(), "Should have value on uuid metric", file: file, line: line)
+        XCTAssertEqual(value, expectedValue, failureMessage, file: file, line: line)
     }
 }
