@@ -7,5 +7,5 @@ import Foundation
 /// Responsible for tracking whether or not the wallpaper system should perform
 /// a variety of checks, such as whether it should fetch data from the server.
 class WallpaperMetadataTracker {
-    
+
 }

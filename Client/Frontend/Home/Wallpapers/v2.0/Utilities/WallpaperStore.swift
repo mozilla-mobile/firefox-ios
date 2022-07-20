@@ -6,5 +6,5 @@ import Foundation
 
 /// Responsible for writing or deleting wallpaper data to/from memory.
 struct WallpaperStore {
-    
+
 }

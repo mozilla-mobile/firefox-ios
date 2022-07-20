@@ -6,5 +6,5 @@ import Foundation
 
 /// Deletes a given resource, or collection, from the disk.
 struct WallpaperDeletionUtility {
-    
+
 }

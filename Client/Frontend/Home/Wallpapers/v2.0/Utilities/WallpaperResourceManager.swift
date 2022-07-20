@@ -7,5 +7,5 @@ import Foundation
 /// Responsible for wallpaper image resources, and behaving as required if those
 /// resources don't exist and should, or if resources exist when they shouldn't.
 struct WallpaperResourceManager {
-    
+
 }
