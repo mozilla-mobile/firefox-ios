@@ -216,6 +216,30 @@ class TelemetryWrapperTests: XCTestCase {
         TelemetryWrapper.recordEvent(category: .information, method: .delete, object: .clearSDWebImageCache)
         testCounterMetricRecordingSuccess(metric: GleanMetrics.Migration.imageSdCacheCleanup)
     }
+
+    // MARK: Wallpapers
+
+    func test_backgroundWallpaperMetric_defaultBackgroundIsNotSentAndHasNoError() {
+        let profile = MockProfile()
+        let wrapper = TelemetryWrapper(profile: profile)
+
+        let fakeNotif = NSNotification(name: UIApplication.didEnterBackgroundNotification, object: nil)
+        wrapper.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
+
+        testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
+    }
+
+    func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
+        let profile = MockProfile()
+        let wrapper = TelemetryWrapper(profile: profile)
+
+        LegacyWallpaperManager().updateSelectedWallpaperIndex(to: 1)
+
+        let fakeNotif = NSNotification(name: UIApplication.didEnterBackgroundNotification, object: nil)
+        wrapper.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
+
+        testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
+    }
 }
 
 // MARK: - Helper functions to test telemetry
