@@ -75,8 +75,6 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
             return self.getPopoverSourceRect(sourceView: popoverView)
         }
 
-        viewModel.delegate = self
-
         setupNotifications(forObserver: self,
                            observing: [.HomePanelPrefsChanged,
                                        .TopTabsTabClosed,
@@ -102,6 +100,9 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         configureWallpaperView()
         configureContentStackView()
         configureCollectionView()
+
+        // Delay setting up the view model delegate to ensure the views have been configured first
+        viewModel.delegate = self
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
@@ -644,6 +645,10 @@ extension HomepageViewController: HomepageViewModelDelegate {
             self.viewModel.updateEnabledSections()
             self.viewModel.reloadSection(section, with: self.collectionView)
         }
+    }
+
+    func reloadData() {
+        collectionView.reloadData()
     }
 }
 

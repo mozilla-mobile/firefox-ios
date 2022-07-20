@@ -49,6 +49,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     private let tabUrl: URL?
     private let isFileURL: Bool
     private let showFXASyncAction: (FXASyncClosure) -> Void
+    private let notificationCenter: NotificationCenter
 
     let profile: Profile
     let tabManager: TabManager
@@ -65,11 +66,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     init(profile: Profile,
          tabManager: TabManager,
          buttonView: UIButton,
+         notificationCenter: NotificationCenter = NotificationCenter.default,
          showFXASyncAction: @escaping (FXASyncClosure) -> Void) {
 
         self.profile = profile
         self.tabManager = tabManager
         self.buttonView = buttonView
+        self.notificationCenter = notificationCenter
         self.showFXASyncAction = showFXASyncAction
 
         self.selectedTab = tabManager.selectedTab
@@ -627,6 +630,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             self.profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
             self.delegate?.showToast(message: .AppMenu.AddToReadingListConfirmMessage, toastAction: .addToReadingList, url: nil)
+            self.notificationCenter.post(name: .ReadingListUpdated, object: self)
         }
     }
 
@@ -642,6 +646,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             self.profile.readingList.deleteRecord(record)
             self.delegate?.showToast(message: .AppMenu.RemoveFromReadingListConfirmMessage, toastAction: .removeFromReadingList, url: nil)
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .pageActionMenu)
+            self.notificationCenter.post(name: .ReadingListUpdated, object: self)
         }
     }
 
@@ -682,6 +687,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             // The method in BVC also handles the toast for this use case
             self.delegate?.addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
+            self.notificationCenter.post(name: .BookmarksUpdated, object: self)
         }
     }
 
@@ -699,6 +705,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             }
 
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
+            self.notificationCenter.post(name: .BookmarksUpdated, object: self)
         }
     }
 
