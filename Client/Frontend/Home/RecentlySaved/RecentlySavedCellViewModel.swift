@@ -95,7 +95,7 @@ extension RecentlySavedCellViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     }
 
     var hasData: Bool {
-        return false
+        return !recentItems.isEmpty
     }
 
     /// Using dispatch group to know when data has completely loaded for both sources (recent bookmarks and reading list items)
