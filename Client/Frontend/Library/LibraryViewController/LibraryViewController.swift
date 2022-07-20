@@ -26,10 +26,10 @@ class LibraryViewController: UIViewController {
     var onViewDismissed: (() -> Void)?
 
     // Views
-    fileprivate var controllerContainerView: UIView = .build { view in }
+    private var controllerContainerView: UIView = .build { view in }
 
     // UI Elements
-    lazy var librarySegmentControl: UISegmentedControl = {
+    private lazy var librarySegmentControl: UISegmentedControl = {
         var librarySegmentControl: UISegmentedControl
         librarySegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
         librarySegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
@@ -39,7 +39,7 @@ class LibraryViewController: UIViewController {
         return librarySegmentControl
     }()
 
-    lazy var navigationToolbar: UIToolbar = .build { [weak self] toolbar in
+    private lazy var segmentControlToolbar: UIToolbar = .build { [weak self] toolbar in
         guard let self = self else { return }
         toolbar.delegate = self
         toolbar.setItems([UIBarButtonItem(customView: self.librarySegmentControl)], animated: false)
@@ -102,17 +102,17 @@ class LibraryViewController: UIViewController {
         }
 
         navigationItem.rightBarButtonItem = topRightButton
-        view.addSubviews(controllerContainerView, navigationToolbar)
+        view.addSubviews(controllerContainerView, segmentControlToolbar)
 
         NSLayoutConstraint.activate([
-            navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            segmentControlToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            segmentControlToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            segmentControlToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             librarySegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
             librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
 
-            controllerContainerView.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor),
+            controllerContainerView.topAnchor.constraint(equalTo: segmentControlToolbar.bottomAnchor),
             controllerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             controllerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             controllerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -222,12 +222,12 @@ class LibraryViewController: UIViewController {
         addChild(libraryPanel)
         libraryPanel.beginAppearanceTransition(true, animated: false)
         controllerContainerView.addSubview(libraryPanel.view)
-        view.bringSubviewToFront(navigationToolbar)
+        view.bringSubviewToFront(segmentControlToolbar)
         libraryPanel.endAppearanceTransition()
 
         libraryPanel.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            libraryPanel.view.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor),
+            libraryPanel.view.topAnchor.constraint(equalTo: segmentControlToolbar.bottomAnchor),
             libraryPanel.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             libraryPanel.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             libraryPanel.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -309,9 +309,9 @@ extension LibraryViewController: NotificationThemeable, Notifiable {
         navigationController?.navigationBar.backgroundColor = UIColor.theme.tabTray.toolbar
         navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
         navigationController?.toolbar.tintColor = .systemBlue
-        navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
-        navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-        navigationToolbar.isTranslucent = false
+        segmentControlToolbar.barTintColor = UIColor.theme.tabTray.toolbar
+        segmentControlToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+        segmentControlToolbar.isTranslucent = false
 
         setNeedsStatusBarAppearanceUpdate()
     }
