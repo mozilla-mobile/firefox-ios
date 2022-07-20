@@ -127,7 +127,7 @@ extension RecentlySavedCellViewModel: HomepageSectionHandler {
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
 
-        if let item = recentItems[safe: indexPath.row] as? BookmarkItemData {
+        if let item = recentItems[safe: indexPath.row] as? RecentlySavedBookmark {
             guard let url = URIFixup.getURL(item.url) else { return }
 
             homePanelDelegate?.homePanel(didSelectURL: url, visitType: .bookmark, isGoogleTopSite: false)
