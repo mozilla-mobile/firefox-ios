@@ -23,6 +23,12 @@ class TabToolbarHelperTests: XCTestCase {
         subject = TabToolbarHelper(toolbar: mockToolbar)
     }
 
+    override func tearDown() {
+        super.tearDown()
+        mockToolbar = nil
+        subject = nil
+    }
+
     func testSetsInitialImages() {
         XCTAssertEqual(mockToolbar.backButton.image(for: .normal), backButtonImage)
         XCTAssertEqual(mockToolbar.forwardButton.image(for: .normal), forwardButtonImage)

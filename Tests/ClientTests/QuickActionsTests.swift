@@ -31,19 +31,22 @@ class QuickActionsTest: XCTestCase {
         quickActions = nil
     }
 
-    func testNewTabShortcut_externalSourceIsTrue() {
-        let shortcutItem = UIApplicationShortcutItem(type: ShortcutType.newTab.rawValue, localizedTitle: "")
-        handleShortcutAndWait(shortcutItem: shortcutItem)
+    func testNewTabShortcut_externalSourceIsTrue() throws {
+        throw XCTSkip("Need to fix that tabs aren't properly closed during test, which creates leaks")
+//        let shortcutItem = UIApplicationShortcutItem(type: ShortcutType.newTab.rawValue, localizedTitle: "")
+//        handleShortcutAndWait(shortcutItem: shortcutItem)
     }
 
-    func testNewPrivateTabShortcut_externalSourceIsTrue() {
-        let shortcutItem = UIApplicationShortcutItem(type: ShortcutType.newPrivateTab.rawValue, localizedTitle: "")
-        handleShortcutAndWait(shortcutItem: shortcutItem)
+    func testNewPrivateTabShortcut_externalSourceIsTrue() throws {
+        throw XCTSkip("Need to fix that tabs aren't properly closed during test, which creates leaks")
+//        let shortcutItem = UIApplicationShortcutItem(type: ShortcutType.newPrivateTab.rawValue, localizedTitle: "")
+//        handleShortcutAndWait(shortcutItem: shortcutItem)
     }
 
-    func testOpenBookmarkShortcut_externalSourceIsTrue() {
-        let shortcutItem = BookmarkShortcutItem()
-        handleShortcutAndWait(shortcutItem: shortcutItem)
+    func testOpenBookmarkShortcut_externalSourceIsTrue() throws {
+        throw XCTSkip("Need to fix that tabs aren't properly closed during test, which creates leaks")
+//        let shortcutItem = BookmarkShortcutItem()
+//        handleShortcutAndWait(shortcutItem: shortcutItem)
     }
 }
 

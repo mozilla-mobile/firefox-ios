@@ -19,6 +19,7 @@ class PrefsTests: XCTestCase {
     override func tearDown() {
         prefs.clearAll()
         super.tearDown()
+        prefs = nil
     }
 
     func testClearPrefs() {

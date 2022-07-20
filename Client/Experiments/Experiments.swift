@@ -106,8 +106,8 @@ enum Experiments {
 
     static var dbPath: String? {
         let profilePath: String?
-        if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {
-            profilePath = (UIApplication.shared.delegate as? TestAppDelegate)?.dirForTestProfile
+        if AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
+            profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
         } else {
             profilePath = FileManager.default.containerURL(
                 forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier

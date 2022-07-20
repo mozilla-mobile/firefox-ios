@@ -37,7 +37,8 @@ class TabManagerStore: FeatureFlaggable {
 
     fileprivate func tabsStateArchivePath() -> String? {
         let profilePath: String?
-        if  AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {      profilePath = (UIApplication.shared.delegate as? TestAppDelegate)?.dirForTestProfile
+        if  AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
+            profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
         } else {
             profilePath = fileManager.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
         }
@@ -159,7 +160,7 @@ class TabManagerStore: FeatureFlaggable {
 // Functions for testing
 extension TabManagerStore {
     func testTabCountOnDisk() -> Int {
-        assert(AppConstants.IsRunningTest)
+        assert(AppConstants.isRunningTest)
         return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).0.count
     }
 }

@@ -15,6 +15,8 @@ class ContextMenuHelperTests: XCTestCase {
         super.setUp()
         profile = MockProfile()
 
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
     }
@@ -26,7 +28,9 @@ class ContextMenuHelperTests: XCTestCase {
 
     func testHistoryHighlightsTelemetry() {
         let viewModel = HomepageViewModel(profile: profile,
-                                             isPrivate: false)
+                                          isPrivate: false,
+                                          tabManager: MockTabManager(),
+                                          urlBar: URLBarView(profile: profile))
         let helper = HomepageContextMenuHelper(viewModel: viewModel)
 
         helper.sendHistoryHighlightContextualTelemetry(type: .remove)

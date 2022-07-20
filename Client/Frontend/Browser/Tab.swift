@@ -269,8 +269,6 @@ class Tab: NSObject {
     }
 
     var isCustomHomeTab: Bool {
-        guard let profile = self.browserViewController?.profile else { return false }
-
         if let customHomeUrl = HomeButtonHomePageAccessors.getHomePage(profile.prefs),
            let customHomeBaseDomain = customHomeUrl.baseDomain,
            let url = url,
@@ -361,14 +359,14 @@ class Tab: NSObject {
     /// tab instance, queue it for later until we become foregrounded.
     fileprivate var alertQueue = [JSAlertInfo]()
 
-    weak var browserViewController: BrowserViewController?
+    var profile: Profile
 
-    init(bvc: BrowserViewController, configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
+    init(profile: Profile, configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
         self.configuration = configuration
         self.nightMode = false
         self.noImageMode = false
-        self.browserViewController = bvc
-        self.metadataManager = TabMetadataManager(profile: bvc.profile)
+        self.profile = profile
+        self.metadataManager = TabMetadataManager(profile: profile)
         super.init()
         self.isPrivate = isPrivate
         debugTabCount += 1

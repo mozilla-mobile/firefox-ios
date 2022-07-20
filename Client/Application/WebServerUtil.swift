@@ -34,7 +34,7 @@ class WebServerUtil {
             InternalSchemeHandler.responders[path] = responder
         }
 
-        if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {
+        if AppConstants.isRunningTest {
             registerHandlersForTestMethods(server: webServer.server)
         }
 

@@ -9,8 +9,14 @@ class LoginsListSelectionHelperTests: XCTestCase {
     var selectionHelper: LoginListSelectionHelper!
 
     override func setUp() {
+        super.setUp()
         let tableView = UITableView()
-        self.selectionHelper = LoginListSelectionHelper(tableView: tableView)
+        selectionHelper = LoginListSelectionHelper(tableView: tableView)
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        selectionHelper = nil
     }
 
     func testSelectIndexPath() {

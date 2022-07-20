@@ -9,11 +9,12 @@ import XCTest
 /// Minimal web server tests. This class can be used as a base class for tests that need a real web server.
 /// Simply add additional handlers your test class' setUp() method.
 class WebServerTests: XCTestCase {
-    let webServer: GCDWebServer = GCDWebServer()
+    var webServer: GCDWebServer!
     var webServerBase: String!
 
     /// Setup a basic web server that binds to a random port and that has one default handler on /hello
     fileprivate func setupWebServer() {
+        webServer = GCDWebServer()
         webServer.addHandler(forMethod: "GET", path: "/hello", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse in
             return GCDWebServerDataResponse(html: "<html><body><p>Hello World</p></body></html>")!
         }
@@ -30,6 +31,8 @@ class WebServerTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        webServer = nil
+        webServerBase = nil
     }
 
     func testWebServerIsRunning() {

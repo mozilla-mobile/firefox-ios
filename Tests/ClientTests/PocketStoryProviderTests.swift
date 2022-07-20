@@ -9,6 +9,11 @@ import Shared
 class PocketStoryProviderTests: XCTestCase {
     var sut: StoryProvider!
 
+    override func tearDown() {
+        super.tearDown()
+        sut = nil
+    }
+
     func testIfSponsoredAreDisabled_FetchingStories_ReturnsTheNonSponsoredList() async {
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),

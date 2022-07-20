@@ -872,6 +872,7 @@ class BrowserViewController: UIViewController {
             let firefoxHomeViewController = HomepageViewController(
                 profile: profile,
                 tabManager: tabManager,
+                urlBar: urlBar,
                 isZeroSearch: !inline)
             firefoxHomeViewController.homePanelDelegate = self
             firefoxHomeViewController.libraryPanelDelegate = self

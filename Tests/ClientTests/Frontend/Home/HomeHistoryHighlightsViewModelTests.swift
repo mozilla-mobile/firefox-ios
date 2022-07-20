@@ -21,8 +21,9 @@ class HomeHistoryHighlightsViewModelTests: XCTestCase {
         tabManager = TabManager(profile: profile, imageStore: nil)
         entryProvider = HistoryHighlightsTestEntryProvider(with: profile, and: tabManager)
         sut = HistoryHightlightsViewModel(with: profile,
-                                                isPrivate: false,
-                                                tabManager: tabManager)
+                                          isPrivate: false,
+                                          tabManager: tabManager,
+                                          urlBar: URLBarView(profile: profile))
     }
 
     override func tearDown() {

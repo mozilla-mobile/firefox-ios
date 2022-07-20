@@ -17,6 +17,7 @@ class ETPCoverSheetTests: XCTestCase {
 
     override func tearDown() {
         prefs.clearAll()
+        prefs = nil
         super.tearDown()
     }
 

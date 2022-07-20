@@ -17,6 +17,8 @@ class HistoryPanelViewModelTests: XCTestCase {
         super.setUp()
 
         profile = MockProfile(databasePrefix: "HistoryPanelViewModelTest")
+
+        ThemeManager.shared.updateProfile(with: profile)
         profile._reopen()
         sut = HistoryPanelViewModel(profile: profile)
     }

@@ -116,22 +116,31 @@ class TabManagerNavDelegateTests: XCTestCase {
 
 // MARK: - Helpers
 
-private func makeSUT() -> (sut: TabManagerNavDelegate, delegate1: WKNavigationDelegateSpy, delegate2: WKNavigationDelegateSpy) {
-    let sut = TabManagerNavDelegate()
-    let delegate1 = WKNavigationDelegateSpy()
-    let delegate2 = WKNavigationDelegateSpy()
+private extension TabManagerNavDelegateTests {
+    func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: TabManagerNavDelegate,
+                                                                     delegate1: WKNavigationDelegateSpy,
+                                                                     delegate2: WKNavigationDelegateSpy) {
+        let sut = TabManagerNavDelegate()
+        let delegate1 = WKNavigationDelegateSpy()
+        let delegate2 = WKNavigationDelegateSpy()
 
-    return (sut, delegate1, delegate2)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeaks(delegate1, file: file, line: line)
+        trackForMemoryLeaks(delegate2, file: file, line: line)
+
+        return (sut, delegate1, delegate2)
+    }
+
+    func anyWebView() -> WKWebView {
+        return WKWebView(frame: CGRect(width: 100, height: 100))
+    }
+
+    func anyError() -> NSError {
+        return NSError(domain: "any error", code: 0)
+    }
 }
 
-private func anyWebView() -> WKWebView {
-    return WKWebView(frame: CGRect(width: 100, height: 100))
-}
-
-private func anyError() -> NSError {
-    return NSError(domain: "any error", code: 0)
-}
-
+// MARK: - WKNavigationDelegateSpy
 private class WKNavigationDelegateSpy: NSObject, WKNavigationDelegate {
     enum Message {
         case webViewDidCommit

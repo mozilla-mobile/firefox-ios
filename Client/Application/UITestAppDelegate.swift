@@ -10,7 +10,7 @@ import Kingfisher
 
 private let log = Logger.browserLogger
 
-class TestAppDelegate: AppDelegate, FeatureFlaggable {
+class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
     lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
 
@@ -50,7 +50,9 @@ class TestAppDelegate: AppDelegate, FeatureFlaggable {
 
                 // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
                 let filename = arg.replacingOccurrences(of: LaunchArguments.LoadDatabasePrefix, with: "")
-                let input = URL(fileURLWithPath: Bundle(for: TestAppDelegate.self).path(forResource: filename, ofType: nil, inDirectory: "test-fixtures")!)
+                let input = URL(fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(forResource: filename,
+                                                                                          ofType: nil,
+                                                                                          inDirectory: "test-fixtures")!)
                 try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
                 let output = URL(fileURLWithPath: "\(dirForTestProfile)/browser.db")
 
@@ -70,7 +72,9 @@ class TestAppDelegate: AppDelegate, FeatureFlaggable {
 
                  // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
                  let filenameArchive = arg.replacingOccurrences(of: LaunchArguments.LoadTabsStateArchive, with: "")
-                 let input = URL(fileURLWithPath: Bundle(for: TestAppDelegate.self).path(forResource: filenameArchive, ofType: nil, inDirectory: "test-fixtures")!)
+                 let input = URL(fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(forResource: filenameArchive,
+                                                                                           ofType: nil,
+                                                                                           inDirectory: "test-fixtures")!)
                  try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
                  let output = URL(fileURLWithPath: "\(dirForTestProfile)/tabsState.archive")
 

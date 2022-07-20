@@ -12,15 +12,16 @@ class TabDisplayManagerTests: XCTestCase {
 
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.cellIdentifier
 
-    var mockDataStore = WeakListMock<Tab>()
-    var dataStore = WeakList<Tab>()
+    var mockDataStore: WeakListMock<Tab>!
+    var dataStore: WeakList<Tab>!
     var collectionView: MockCollectionView!
     var profile: TabManagerMockProfile!
     var manager: TabManager!
 
     override func setUp() {
         super.setUp()
-
+        mockDataStore = WeakListMock<Tab>()
+        dataStore = WeakList<Tab>()
         profile = TabManagerMockProfile()
         manager = TabManager(profile: profile, imageStore: nil)
         collectionView = MockCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -35,8 +36,11 @@ class TabDisplayManagerTests: XCTestCase {
         profile = nil
         manager = nil
         collectionView = nil
+
         dataStore.removeAll()
         mockDataStore.removeAll()
+        mockDataStore = nil
+        dataStore = nil
     }
 
     // MARK: Index to place tab

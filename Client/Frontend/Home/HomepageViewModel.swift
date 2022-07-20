@@ -63,7 +63,9 @@ class HomepageViewModel: FeatureFlaggable {
     init(profile: Profile,
          isZeroSearch: Bool = false,
          isPrivate: Bool,
-         nimbus: FxNimbus = FxNimbus.shared) {
+         nimbus: FxNimbus = FxNimbus.shared,
+         tabManager: TabManagerProtocol,
+         urlBar: URLBarViewProtocol) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
 
@@ -74,13 +76,16 @@ class HomepageViewModel: FeatureFlaggable {
         self.jumpBackInViewModel = JumpBackInViewModel(
             isZeroSearch: isZeroSearch,
             profile: profile,
-            isPrivate: isPrivate)
+            isPrivate: isPrivate,
+            tabManager: tabManager)
         self.recentlySavedViewModel = RecentlySavedCellViewModel(
             isZeroSearch: isZeroSearch,
             profile: profile)
         self.historyHighlightsViewModel = HistoryHightlightsViewModel(
             with: profile,
-            isPrivate: isPrivate)
+            isPrivate: isPrivate,
+            tabManager: tabManager,
+            urlBar: urlBar)
         self.pocketViewModel = PocketViewModel(
             pocketAPI: Pocket(),
             pocketSponsoredAPI: MockPocketSponsoredStoriesProvider(),
