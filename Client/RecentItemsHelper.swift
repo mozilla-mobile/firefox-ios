@@ -38,6 +38,25 @@ extension BookmarkItemData: RecentlySavedItem {
     }
 }
 
+// This is an intermediary object to allow us to more easily use this data in a thread safe way.
+// Thread safety is difficult to ensure when passing classes around by reference.
+struct RecentlySavedBookmark: RecentlySavedItem {
+    var title: String
+    var url: String
+    var dateAdded: Timestamp
+    var numberOfDaysBeforeStale: Int { return 10 }
+
+    init(bookmark: BookmarkItemData) {
+        self.title = bookmark.title
+        self.url = bookmark.url
+        self.dateAdded = Timestamp(bookmark.dateAdded)
+    }
+
+    func getItemDate() -> Date {
+        return Date.fromTimestamp(dateAdded)
+    }
+}
+
 class RecentItemsHelper {
 
     private let calendar = Calendar.current

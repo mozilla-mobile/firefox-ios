@@ -22,10 +22,12 @@ public class RustPlaces {
     public fileprivate(set) var isOpen: Bool = false
 
     private var didAttemptToMoveToBackup = false
+    private var notificationCenter: NotificationCenter
 
-    public init(databasePath: String) {
+    public init(databasePath: String,
+                notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.databasePath = databasePath
-
+        self.notificationCenter = notificationCenter
         self.writerQueue = DispatchQueue(label: "RustPlaces writer queue: \(databasePath)", attributes: [])
         self.readerQueue = DispatchQueue(label: "RustPlaces reader queue: \(databasePath)", attributes: [])
     }
@@ -232,6 +234,7 @@ public class RustPlaces {
                     return deferMaybe(error)
                 }
 
+                self.notificationCenter.post(name: .BookmarksUpdated, object: self)
                 return succeed()
             }
         }
@@ -251,6 +254,7 @@ public class RustPlaces {
 
     @discardableResult
     public func createBookmark(parentGUID: GUID, url: String, title: String?, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
+        notificationCenter.post(name: .BookmarksUpdated, object: self)
         return withWriter { connection in
             return try connection.createBookmark(parentGUID: parentGUID, url: url, title: title, position: position)
         }

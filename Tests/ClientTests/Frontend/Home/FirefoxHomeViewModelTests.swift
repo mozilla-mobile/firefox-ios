@@ -123,4 +123,6 @@ extension FirefoxHomeViewModelTests: HomepageViewModelDelegate {
     func reloadSection(section: HomepageViewModelProtocol) {
         reloadSectionCompleted?(section)
     }
+
+    func reloadData() {}
 }
