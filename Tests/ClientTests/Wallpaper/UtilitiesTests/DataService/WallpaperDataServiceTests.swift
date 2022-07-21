@@ -10,7 +10,7 @@ import XCTest
 class WallpaperDataServiceTests: XCTestCase {
 
     func testGetData_SimulatingNoResponse() async {
-        var sut = WallpaperDataServiceMock()
+        let sut = WallpaperDataServiceMock()
 
         let result: Result<WallpaperMetadata, Error>? = nil
         sut.mockNetworkResponse = result

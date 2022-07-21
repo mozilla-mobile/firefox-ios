@@ -6,11 +6,11 @@ import Foundation
 
 @testable import Client
 
-struct WallpaperDataServiceMock: WallpaperFetchDataService {
+class WallpaperDataServiceMock: WallpaperDataService {
 
     var mockNetworkResponse: Result<WallpaperMetadata, Error>?
 
-    func getMetadata() async throws -> WallpaperMetadata {
+    override func getMetadata() async throws -> WallpaperMetadata {
         guard let mockServiceResponse = mockNetworkResponse else {
             throw URLError(.notConnectedToInternet)
         }

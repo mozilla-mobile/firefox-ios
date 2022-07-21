@@ -6,6 +6,6 @@ import Foundation
 
 /// Metadata, fetched from the server, to update wallpaper availability.
 struct WallpaperMetadata: Codable {
-    let lastUpdatedDate: String
+    let lastUpdated: Date
     let collections: [WallpaperCollection]
 }
