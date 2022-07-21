@@ -2353,8 +2353,6 @@ wallpaper_analytics:
     description: |
       Recorded when the user enters the background. This reports
       the currently selected wallpaper if it's not the default.
-    labels:
-      - name
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/10669
     data_reviews:
