@@ -8,8 +8,27 @@ import XCTest
 
 class HomepageViewControllerTests: XCTestCase {
 
-    func testHomepageViewController_creationFromBVC_hasNoLeaks() {
-        let profile = MockProfile()
+    var profile: MockProfile!
+
+    override func setUp() {
+        super.setUp()
+        profile = MockProfile()
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        profile = nil
+    }
+
+    func testHomepageViewController_creationFromBVC_nilByDefault() {
+        let tabManager = TabManager(profile: profile, imageStore: nil)
+        let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
+        browserViewController.addSubviews()
+        XCTAssertNil(browserViewController.homepageViewController, "Homepage is nil on creation")
+    }
+
+    func testHomepageViewController_creationFromBVC_hideDoesntNil() {
         let tabManager = TabManager(profile: profile, imageStore: nil)
         let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
 
@@ -26,8 +45,7 @@ class HomepageViewControllerTests: XCTestCase {
         XCTAssertNotNil(browserViewController.homepageViewController, "Homepage isn't nil after hiding it")
     }
 
-    func testFirefoxHomeViewController_simpleCreation_hasNoLeaks() {
-        let profile = MockProfile()
+    func testHomepageViewController_simpleCreation_hasNoLeaks() {
         let tabManager = TabManager(profile: profile, imageStore: nil)
         let urlBar = URLBarView(profile: profile)
 
@@ -38,5 +56,39 @@ class HomepageViewControllerTests: XCTestCase {
                                                                urlBar: urlBar)
 
         trackForMemoryLeaks(firefoxHomeViewController)
+    }
+
+    // MARK: - UpdateInContentHomePanel
+
+    func testUpdateInContentHomePanel_nilURL_doesntShowHomepage() {
+        let tabManager = TabManager(profile: profile, imageStore: nil)
+        let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
+        browserViewController.addSubviews()
+
+        browserViewController.updateInContentHomePanel(nil)
+
+        XCTAssertNil(browserViewController.homepageViewController, "Homepage isn't shown")
+    }
+
+    func testUpdateInContentHomePanel_homeURL_showHomepage() {
+        let tabManager = TabManager(profile: profile, imageStore: nil)
+        let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
+        browserViewController.addSubviews()
+
+        let aboutHomeURL = URL(string: "internal://local/sessionrestore?url=internal://local/about/home")!
+        browserViewController.updateInContentHomePanel(aboutHomeURL)
+
+        XCTAssertNotNil(browserViewController.homepageViewController, "Homepage is shown")
+    }
+
+    func testUpdateInContentHomePanel_notHomeURL_doesntShowHomepage() {
+        let tabManager = TabManager(profile: profile, imageStore: nil)
+        let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
+        browserViewController.addSubviews()
+
+        let notHomeURL = URL(string: "www.google.com")!
+        browserViewController.updateInContentHomePanel(notHomeURL)
+
+        XCTAssertNil(browserViewController.homepageViewController, "Homepage isn't shown")
     }
 }
