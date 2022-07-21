@@ -506,7 +506,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             recordSearchListSelectionTelemetry(type: .searchSuggestions)
             // Assume that only the default search engine can provide search suggestions.
             let engine = searchEngines.defaultEngine
-            guard let suggestion = suggestions?[indexPath.row] else { return }
+            guard let suggestions = suggestions else { return }
+            guard let suggestion = suggestions[safe: indexPath.row] else { return }
             if let url = engine.searchURLForQuery(suggestion) {
                 Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
                 GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
