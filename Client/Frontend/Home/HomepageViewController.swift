@@ -28,6 +28,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManagerProtocol
+    private var urlBar: URLBarViewProtocol
     private var wallpaperManager: LegacyWallpaperManager
     private lazy var wallpaperView: LegacyWallpaperBackgroundView = .build { _ in }
     private var contextualHintViewController: ContextualHintViewController
@@ -53,6 +54,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
          isZeroSearch: Bool = false,
          wallpaperManager: LegacyWallpaperManager = LegacyWallpaperManager()
     ) {
+        self.urlBar = urlBar
         self.isZeroSearch = isZeroSearch
         self.tabManager = tabManager
         self.wallpaperManager = wallpaperManager
@@ -268,7 +270,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     }
 
     @objc private func dismissKeyboard() {
-        currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode() : nil
+        currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? urlBar.leaveOverlayMode() : nil
     }
 
     func updatePocketCellsWithVisibleRatio(cells: [UICollectionViewCell], relativeRect: CGRect) {
