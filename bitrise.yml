@@ -1336,6 +1336,7 @@ workflows:
         - distribution_method: app-store
         - configuration: FirefoxBeta
         title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+    - deploy-to-bitrise-io@2: {}
     - deploy-to-itunesconnect-application-loader@1.3:
         inputs:
         - app_password: "$APPLE_ACCOUNT_PW"
