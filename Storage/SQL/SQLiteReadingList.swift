@@ -22,9 +22,12 @@ open class SQLiteReadingList {
     let db: BrowserDB
 
     let allColumns = ["client_id", "client_last_modified", "id", "last_modified", "url", "title", "added_by", "archived", "favorite", "unread"].joined(separator: ",")
+    let notificationCenter: NotificationCenter
 
-    required public init(db: BrowserDB) {
+    required public init(db: BrowserDB,
+                         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.db = db
+        self.notificationCenter = notificationCenter
     }
 }
 
@@ -37,12 +40,14 @@ extension SQLiteReadingList: ReadingList {
     }
 
     public func deleteRecord(_ record: ReadingListItem) -> Success {
+        notificationCenter.post(name: .ReadingListUpdated, object: self)
         let sql = "DELETE FROM items WHERE client_id = ?"
         let args: Args = [record.id]
         return db.run(sql, withArgs: args)
     }
 
     public func deleteAllRecords() -> Success {
+        notificationCenter.post(name: .ReadingListUpdated, object: self)
         let sql = "DELETE FROM items"
         return db.run(sql)
     }
@@ -66,6 +71,7 @@ extension SQLiteReadingList: ReadingList {
 
             let items = cursor.asArray()
             if let item = items.first {
+                self.notificationCenter.post(name: .ReadingListUpdated, object: self)
                 return item
             } else {
                 throw ReadingListStorageError("Unable to get inserted ReadingListItem")
@@ -100,6 +106,7 @@ extension SQLiteReadingList: ReadingList {
 
             let items = cursor.asArray()
             if let item = items.first {
+                self.notificationCenter.post(name: .ReadingListUpdated, object: self)
                 return item
             } else {
                 throw ReadingListStorageError("Unable to get updated ReadingListItem")
