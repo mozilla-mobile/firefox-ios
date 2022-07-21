@@ -12,7 +12,6 @@ class TelemetryWrapperTests: XCTestCase {
     override func setUp() {
         super.setUp()
         Glean.shared.resetGlean(clearStores: true)
-        Glean.shared.enableTestingMode()
     }
 
     override func tearDown() {
