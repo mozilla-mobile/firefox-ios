@@ -1022,11 +1022,11 @@ workflows:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
-    - 4_A_xcode_build_and_test_Fennec
+    #- 4_A_xcode_build_and_test_Fennec
     after_run:
     #- RunSmokeXCUITests
     #- Detect_warnings
-    - 5_deploy_and_slack
+    #- 5_deploy_and_slack
   RunSmokeXCUITests:
     steps:
     - cache-pull@2.1:
