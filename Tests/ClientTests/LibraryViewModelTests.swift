@@ -17,6 +17,9 @@ class LibraryViewModelTests: XCTestCase {
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
         profile._reopen()
         tabManager = TabManager(profile: profile, imageStore: nil)
+
+        ThemeManager.shared.updateProfile(with: profile)
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
