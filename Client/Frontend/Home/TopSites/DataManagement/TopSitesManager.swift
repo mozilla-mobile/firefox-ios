@@ -235,7 +235,7 @@ private extension Array where Element == Site {
             // If shouldAddSite or site domain was not found, then insert the site
             guard shouldAddSite || siteDomain == nil else { return nil }
             alreadyThere.insert(site)
-            
+
             return site
         }
 
