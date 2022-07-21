@@ -7,9 +7,9 @@ import XCTest
 import Shared
 
 class HomePageTests: XCTestCase {
-    let prefs = NSUserDefaultsPrefs(prefix: "PrefsTests")
 
     func testHomePageSettingForInternalURLs() {
+        let prefs = NSUserDefaultsPrefs(prefix: "PrefsTests")
         let helper = HomePageHelper(prefs: prefs)
         helper.currentURL = URL(string: "\(InternalURL.baseUrl)")
         XCTAssertNil(prefs.stringForKey(HomePageConstants.NewTabCustomUrlPrefKey))

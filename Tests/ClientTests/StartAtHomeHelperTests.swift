@@ -106,7 +106,7 @@ class StartAtHomeHelperTests: XCTestCase {
     // MARK: - Private
     private func setupHelper(isRestoringTabs: Bool = false) {
         helper = StartAtHomeHelper(isRestoringTabs: isRestoringTabs,
-                                   isRunnigTest: false)
+                                   isRunningUITest: false)
         helper.startAtHomeSetting = .afterFourHours
     }
 

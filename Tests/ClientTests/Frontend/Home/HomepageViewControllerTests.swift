@@ -6,9 +6,9 @@
 
 import XCTest
 
-class FirefoxHomeViewControllerTests: XCTestCase {
+class HomepageViewControllerTests: XCTestCase {
 
-    func testFirefoxHomeViewController_creationFromBVC_hasNoLeaks() {
+    func testHomepageViewController_creationFromBVC_hasNoLeaks() {
         let profile = MockProfile()
         let tabManager = TabManager(profile: profile, imageStore: nil)
         let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
@@ -32,7 +32,13 @@ class FirefoxHomeViewControllerTests: XCTestCase {
     func testFirefoxHomeViewController_simpleCreation_hasNoLeaks() {
         let profile = MockProfile()
         let tabManager = TabManager(profile: profile, imageStore: nil)
-        let firefoxHomeViewController = HomepageViewController(profile: profile, tabManager: tabManager)
+        let urlBar = URLBarView(profile: profile)
+
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+
+        let firefoxHomeViewController = HomepageViewController(profile: profile,
+                                                               tabManager: tabManager,
+                                                               urlBar: urlBar)
 
         trackForMemoryLeaks(firefoxHomeViewController)
     }

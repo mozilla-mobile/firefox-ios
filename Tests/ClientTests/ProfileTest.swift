@@ -26,11 +26,15 @@ class ProfileTest: XCTestCase {
         profile = MockProfile(databasePrefix: "profile-test")
     }
 
-   func withTestProfile(_ callback: (_ profile: Client.Profile) -> Void) {
+    override func tearDown() {
+        super.tearDown()
+        profile = nil
+    }
+
+    func withTestProfile(_ callback: (_ profile: Client.Profile) -> Void) {
         guard let mockProfile = profile else { return }
         mockProfile._reopen()
         callback(mockProfile)
         mockProfile._shutdown()
     }
-
 }

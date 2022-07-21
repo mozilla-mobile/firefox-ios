@@ -27,7 +27,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     private var isZeroSearch: Bool
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
-    private var tabManager: TabManager
+    private var tabManager: TabManagerProtocol
     private var wallpaperManager: LegacyWallpaperManager
     private lazy var wallpaperView: LegacyWallpaperBackgroundView = .build { _ in }
     private var contextualHintViewController: ContextualHintViewController
@@ -48,7 +48,8 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
 
     // MARK: - Initializers
     init(profile: Profile,
-         tabManager: TabManager,
+         tabManager: TabManagerProtocol,
+         urlBar: URLBarViewProtocol,
          isZeroSearch: Bool = false,
          wallpaperManager: LegacyWallpaperManager = LegacyWallpaperManager()
     ) {
@@ -58,7 +59,9 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         let isPrivate = tabManager.selectedTab?.isPrivate ?? true
         self.viewModel = HomepageViewModel(profile: profile,
                                            isZeroSearch: isZeroSearch,
-                                           isPrivate: isPrivate)
+                                           isPrivate: isPrivate,
+                                           tabManager: tabManager,
+                                           urlBar: urlBar)
 
         let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
                                                           with: viewModel.profile)

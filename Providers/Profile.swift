@@ -1235,8 +1235,8 @@ open class BrowserProfile: Profile {
                         engineResults: results,
                         stats: statsSession.hasStarted() ? statsSession.end() : nil
                     )
-                    gleanHelper.end(result)
                     self.endSyncing(result)
+                    gleanHelper.end(result)
                 }
 
                 // The actual work of synchronizing doesn't start until we append

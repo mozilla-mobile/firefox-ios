@@ -250,14 +250,14 @@ extension String {
                 comment: "On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did.",
                 lastUpdated: .v39)
             public static let SyncedTabTitle = MZLocalizedString(
-                "FirefoxHome.JumpBackIn.SyncedTab.Title.v104",
+                "FirefoxHomepage.JumpBackIn.TabPickup.v104",
                 value: "Tab pickup",
-                comment: "Title shown for latest synced tab on the Firefox homepage in the Jump Back In section.",
+                comment: "If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab.",
                 lastUpdated: .v104)
             public static let SyncedTabShowAllButtonTitle = MZLocalizedString(
-                "FirefoxHome.JumpBackIn.SyncedTab.ShowAll.Button.Title.v104",
+                "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104",
                 value: "See all synced tabs",
-                comment: "Button title shown for latest synced tab on the Firefox homepage in the Jump Back In section.",
+                comment: "Button title shown for tab pickup on the Firefox homepage in the Jump Back In section.",
                 lastUpdated: .v104)
         }
 
@@ -642,6 +642,11 @@ extension String {
                 value: "Delete",
                 comment: "Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button.",
                 lastUpdated: .v100)
+            public static let Delete = MZLocalizedString(
+                "LibraryPanel.History.DeleteGroupedItem.v104",
+                value: "Delete",
+                comment: "Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item.",
+                lastUpdated: .v104)
         }
 
         public struct ReadingList {

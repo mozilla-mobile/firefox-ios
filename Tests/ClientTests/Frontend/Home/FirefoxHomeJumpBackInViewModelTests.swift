@@ -6,6 +6,7 @@
 import XCTest
 import WebKit
 import Storage
+import Shared
 
 class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     var subject: JumpBackInViewModel!
@@ -91,7 +92,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     }
 
     func test_switchToGroup_callCompletionOnFirstGroupedItem() {
-        let expectedTab = Tab(bvc: stubBrowserViewController)
+        let expectedTab = createTab(profile: mockProfile)
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [expectedTab], timestamp: 0)
         mockBrowserBarViewDelegate.inOverlayMode = true
         var receivedTab: Tab?
@@ -106,7 +107,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     }
 
     func test_switchToTab_noBrowserDelegate_doNothing() {
-        let expectedTab = Tab(bvc: stubBrowserViewController)
+        let expectedTab = createTab(profile: mockProfile)
         subject.browserBarViewDelegate = nil
 
         subject.switchTo(tab: expectedTab)
@@ -117,7 +118,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     }
 
     func test_switchToTab_notInOverlayMode_switchTabs() {
-        let tab = Tab(bvc: stubBrowserViewController)
+        let tab = createTab(profile: mockProfile)
         mockBrowserBarViewDelegate.inOverlayMode = false
 
         subject.switchTo(tab: tab)
@@ -128,7 +129,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     }
 
     func test_switchToTab_inOverlayMode_leaveOverlayMode() {
-        let tab = Tab(bvc: stubBrowserViewController)
+        let tab = createTab(profile: mockProfile)
         mockBrowserBarViewDelegate.inOverlayMode = true
 
         subject.switchTo(tab: tab)
@@ -139,7 +140,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     }
 
     func test_switchToTab_tabManagerSelectsTab() {
-        let tab1 = Tab(bvc: stubBrowserViewController)
+        let tab1 = createTab(profile: mockProfile)
         mockBrowserBarViewDelegate.inOverlayMode = true
 
         subject.switchTo(tab: tab1)
@@ -155,9 +156,9 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_onIphoneLayout_noAccount_has2() {
         mockProfile.hasSyncableAccountMock = false
         subject.featureFlags.set(feature: .tabTrayGroups, to: false)
-        let tab1 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox1.com")
-        let tab2 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox2.com")
-        let tab3 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox3.com")
+        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
+        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
         let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
 
@@ -184,9 +185,9 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
                                                        tabs: remoteTabs(idRange: 1...3))]
         subject.featureFlags.set(feature: .tabTrayGroups, to: false)
-        let tab1 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox1.com")
-        let tab2 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox2.com")
-        let tab3 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox3.com")
+        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
+        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
         let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
 
@@ -379,27 +380,6 @@ extension FirefoxHomeJumpBackInViewModelTests {
     }
 }
 
-class MockTabManager: TabManagerProtocol {
-    var nextRecentlyAccessedNormalTabs = [Tab]()
-
-    var recentlyAccessedNormalTabs: [Tab] {
-        return nextRecentlyAccessedNormalTabs
-    }
-
-    var lastSelectedTabs = [Tab]()
-    var lastSelectedPreviousTabs = [Tab]()
-
-    func selectTab(_ tab: Tab?, previous: Tab?) {
-        if let tab = tab {
-            lastSelectedTabs.append(tab)
-        }
-
-        if let previous = previous {
-            lastSelectedPreviousTabs.append(previous)
-        }
-    }
-}
-
 class MockBrowserBarViewDelegate: BrowserBarViewDelegate {
     var inOverlayMode = false
 
@@ -410,12 +390,15 @@ class MockBrowserBarViewDelegate: BrowserBarViewDelegate {
     }
 }
 
-fileprivate extension Tab {
-    convenience init(bvc: BrowserViewController, urlString: String? = "www.website.com") {
-        self.init(bvc: bvc, configuration: WKWebViewConfiguration())
+extension FirefoxHomeJumpBackInViewModelTests {
+    func createTab(profile: MockProfile,
+                   configuration: WKWebViewConfiguration = WKWebViewConfiguration(),
+                   urlString: String? = "www.website.com") -> Tab {
+        let tab = Tab(profile: profile, configuration: configuration)
 
         if let urlString = urlString {
-            url = URL(string: urlString)!
+            tab.url = URL(string: urlString)!
         }
+        return tab
     }
 }

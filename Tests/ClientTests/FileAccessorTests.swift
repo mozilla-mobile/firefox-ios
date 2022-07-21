@@ -18,6 +18,12 @@ class FileAccessorTests: XCTestCase {
         try! files.removeFilesInDirectory()
     }
 
+    override func tearDown() {
+        super.tearDown()
+        files = nil
+        testDir = nil
+    }
+
     func testFileAccessor() {
         // Test existence.
         XCTAssertFalse(files.exists("foo"), "File doesn't exist")
