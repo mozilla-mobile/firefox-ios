@@ -31,10 +31,10 @@ class AdjustTelemetryHelperTests: XCTestCase {
         let attribution = MockAdjustTelemetryData(campaign: nil)
         telemetryHelper.setAttributionData(attribution)
 
-        XCTAssertFalse(GleanMetrics.Adjust.campaign.testHasValue())
-        XCTAssertFalse(GleanMetrics.Adjust.adGroup.testHasValue())
-        XCTAssertFalse(GleanMetrics.Adjust.creative.testHasValue())
-        XCTAssertFalse(GleanMetrics.Adjust.network.testHasValue())
+        XCTAssertNil(GleanMetrics.Adjust.campaign.testGetValue())
+        XCTAssertNil(GleanMetrics.Adjust.adGroup.testGetValue())
+        XCTAssertNil(GleanMetrics.Adjust.creative.testGetValue())
+        XCTAssertNil(GleanMetrics.Adjust.network.testGetValue())
     }
 
     func testFirstSessionPing() {

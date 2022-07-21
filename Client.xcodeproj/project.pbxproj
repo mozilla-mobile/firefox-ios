@@ -15155,7 +15155,7 @@
 			repositoryURL = "https://github.com/mozilla/glean-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 43.0.2;
+				version = 51.0.0;
 			};
 		};
 		4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
