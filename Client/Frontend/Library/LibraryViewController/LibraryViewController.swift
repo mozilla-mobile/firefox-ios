@@ -277,6 +277,19 @@ class LibraryViewController: UIViewController {
         navigationController?.setToolbarHidden(shouldHideBar, animated: true)
         setToolbarItems(panel.bottomToolbarItems, animated: true)
     }
+
+    private func setupToolBarAppearance() {
+        let standardAppearance = UIToolbarAppearance()
+        standardAppearance.configureWithDefaultBackground()
+        standardAppearance.backgroundColor = UIColor.Photon.LightGrey10
+
+        navigationController?.toolbar.standardAppearance = standardAppearance
+        navigationController?.toolbar.compactAppearance = standardAppearance
+        if #available(iOS 15.0, *) {
+            navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
+            navigationController?.toolbar.compactScrollEdgeAppearance = standardAppearance
+        }
+    }
 }
 
 // MARK: Notifiable
@@ -314,5 +327,6 @@ extension LibraryViewController: NotificationThemeable, Notifiable {
         segmentControlToolbar.isTranslucent = false
 
         setNeedsStatusBarAppearanceUpdate()
+        setupToolBarAppearance()
     }
 }
