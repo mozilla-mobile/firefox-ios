@@ -1344,6 +1344,7 @@ workflows:
         - distribution_method: app-store
         - configuration: FirefoxBeta
         title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+    - deploy-to-bitrise-io@2.0: {}
     - deploy-to-itunesconnect-application-loader@1.3:
         inputs:
         - app_password: "$APPLE_ACCOUNT_PW"
@@ -1399,6 +1400,6 @@ trigger_map:
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
   #pipeline: pipeline_multiple_shards
-  workflow: RunUnitTests
+  workflow: SPM_Nightly_Beta_Only
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
