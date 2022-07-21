@@ -35,6 +35,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
             tabManager: mockTabManager
         )
         subject.browserBarViewDelegate = mockBrowserBarViewDelegate
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 
     override func tearDown() {
@@ -169,7 +170,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
 
         subject.updateData {
             // Refresh data for specific layout
-            self.subject.refreshData(for: trait)
+            self.subject.refreshData(for: trait, isPortrait: true)
             expectation.fulfill()
         }
 
@@ -198,7 +199,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
 
         subject.updateData {
             // Refresh data for specific layout
-            self.subject.refreshData(for: trait)
+            self.subject.refreshData(for: trait, isPortrait: true)
             expectation.fulfill()
         }
 
@@ -213,9 +214,9 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_oniPhoneLandscapeLayout_noAccount_has3() {
         mockProfile.hasSyncableAccountMock = false
         subject.featureFlags.set(feature: .tabTrayGroups, to: false)
-        let tab1 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox1.com")
-        let tab2 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox2.com")
-        let tab3 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox3.com")
+        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
+        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
         let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
 
@@ -246,9 +247,9 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
                                                        tabs: remoteTabs(idRange: 1...3))]
         subject.featureFlags.set(feature: .tabTrayGroups, to: false)
-        let tab1 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox1.com")
-        let tab2 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox2.com")
-        let tab3 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox3.com")
+        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
+        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
         let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
 
@@ -263,7 +264,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
             expectation.fulfill()
         }
 
-        wait(for: [expectation], timeout: 1.0)
+        wait(for: [expectation], timeout: 5.0)
         guard subject.jumpBackInList.tabs.count > 0 else {
             XCTFail("Incorrect number of tabs in subject")
             return

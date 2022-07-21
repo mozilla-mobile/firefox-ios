@@ -138,10 +138,12 @@ class JumpBackInViewModel: FeatureFlaggable {
 private extension JumpBackInViewModel {
 
     // The maximum number of items to display in the whole section
-    func maxItemsToDisplay(for traitCollection: UITraitCollection, displayGroup: DisplayGroup) -> Int {
+    func maxItemsToDisplay(for traitCollection: UITraitCollection,
+                           isPortrait: Bool = UIWindow.isPortrait,
+                           displayGroup: DisplayGroup) -> Int {
         switch displayGroup {
         case .jumpBackIn:
-            return maxJumpBackInItemsToDisplay(for: traitCollection)
+            return maxJumpBackInItemsToDisplay(for: traitCollection, isPortrait: isPortrait)
         case .syncedTab:
             return hasAccount ? JumpBackInViewModel.UX.maxDisplayedSyncedTabs : 0
         }
@@ -152,7 +154,8 @@ private extension JumpBackInViewModel {
 private extension JumpBackInViewModel {
 
     // The maximum number of Jump Back In items to display in the whole section
-    func maxJumpBackInItemsToDisplay(for traitCollection: UITraitCollection) -> Int {
+    func maxJumpBackInItemsToDisplay(for traitCollection: UITraitCollection,
+                                     isPortrait: Bool = UIWindow.isPortrait) -> Int {
         if UIDevice.current.userInterfaceIdiom == .pad {
             if traitCollection.horizontalSizeClass == .compact {
                 return hasSyncedTab ? 1 : 2 //  iPad in split view
@@ -160,7 +163,7 @@ private extension JumpBackInViewModel {
                 return hasSyncedTab ? 4 : 6 // iPad
             }
         } else {
-            if traitCollection.horizontalSizeClass == .compact && UIWindow.isPortrait {
+            if traitCollection.horizontalSizeClass == .compact && isPortrait {
                 return hasSyncedTab ? 1 : 2 // iPhone in portrait
             } else {
                 return hasSyncedTab ? 2 : 4 // iPhone in landscape
@@ -602,10 +605,12 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         }
     }
 
-    func refreshData(for traitCollection: UITraitCollection) {
+    func refreshData(for traitCollection: UITraitCollection, isPortrait: Bool = UIWindow.isPortrait) {
         jumpBackInList = createJumpBackInList(
             from: recentTabs,
-            withMaxItemsToDisplay: maxItemsToDisplay(for: traitCollection, displayGroup: .jumpBackIn),
+            withMaxItemsToDisplay: maxItemsToDisplay(for: traitCollection,
+                                                     isPortrait: isPortrait,
+                                                     displayGroup: .jumpBackIn),
             and: recentGroups)
     }
 
