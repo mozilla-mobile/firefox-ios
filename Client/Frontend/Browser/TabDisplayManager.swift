@@ -687,7 +687,7 @@ extension TabDisplayManager: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         guard let tab = dataStore.at(index) else { return }
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
-            if tabsToDisplay.firstIndex(of: tab) != nil {
+            if tabsToDisplay.contains(tab) {
                 self.tabManager.selectTab(tab)
             }
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tab)

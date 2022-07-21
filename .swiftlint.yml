@@ -87,6 +87,13 @@ opt_in_rules: # some rules are only opt-in
   # Find all the available rules by running:
   # swiftlint rules
 
+opt_in_rules:
+
+  - contains_over_filter_count
+  - contains_over_filter_is_empty
+  - contains_over_first_not_nil
+  - contains_over_range_nil_comparison
+
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - build
   - Client/Assets/Search/get_supported_locales.swift
