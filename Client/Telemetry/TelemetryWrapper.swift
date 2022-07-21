@@ -273,7 +273,8 @@ class TelemetryWrapper {
         let currentWallpaper = LegacyWallpaperManager().currentWallpaper
 
         if case .themed = currentWallpaper.type {
-            // Need to lowercase the name for labeled counter
+            // Need to lowercase the name for labeled counter. Ref:
+            // https://mozilla.github.io/glean/book/reference/metrics/index.html#label-format)
             GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.name.lowercased()].add()
         }
 
