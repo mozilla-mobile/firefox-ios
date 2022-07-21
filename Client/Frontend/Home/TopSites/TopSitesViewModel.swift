@@ -245,6 +245,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 // MARK: - FxHomeTopSitesManagerDelegate
 extension TopSitesViewModel: TopSitesManagerDelegate {
     func reloadTopSites() {
+        guard shouldShow else { return }
         delegate?.reloadTopSites()
     }
 }
