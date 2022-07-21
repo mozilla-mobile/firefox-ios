@@ -1002,6 +1002,9 @@ workflows:
         is_always_run: true
     - xcode-archive@4.0:
         inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - export_method: development
         - configuration: Fennec
         - scheme: Fennec
