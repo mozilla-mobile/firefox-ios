@@ -1000,6 +1000,11 @@ workflows:
                 exit 1
             fi
         is_always_run: true
+    - xcode-archive@4.0:
+        inputs:
+        - export_method: development
+        - configuration: Fennec
+        - scheme: Fennec
     - slack@3.1:
         run_if: '{{getenv "NEW_RC_VERSION" | eq "New_RC_Version"}}'
         inputs:
@@ -1019,8 +1024,8 @@ workflows:
     - 3_provisioning_and_npm_installation
     - 4_A_xcode_build_and_test_Fennec
     after_run:
-    - RunSmokeXCUITests
-    - Detect_warnings
+    #- RunSmokeXCUITests
+    #- Detect_warnings
     - 5_deploy_and_slack
   RunSmokeXCUITests:
     steps:
@@ -1390,6 +1395,7 @@ trigger_map:
 - push_branch: v103.0
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
-  pipeline: pipeline_multiple_shards
+  #pipeline: pipeline_multiple_shards
+  workflow: RunUnitTests
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
