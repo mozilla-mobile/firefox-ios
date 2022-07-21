@@ -15,6 +15,7 @@ let ReadingListDefaultFavorite: Bool = false
 
 public protocol ReadingList {
     func getAvailableRecords() -> Deferred<Maybe<[ReadingListItem]>>
+    func getAvailableRecords() async -> [ReadingListItem]
     @discardableResult func deleteRecord(_ record: ReadingListItem) -> Success
     func deleteAllRecords() -> Success
     @discardableResult func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Deferred<Maybe<ReadingListItem>>

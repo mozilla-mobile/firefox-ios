@@ -8,7 +8,11 @@ import Shared
 
 private let log = Logger.syncLogger
 
-public class RustPlaces {
+public protocol BookmarksHandler {
+    func getRecentBookmarks(limit: UInt) async -> [BookmarkItemData]
+}
+
+public class RustPlaces: BookmarksHandler {
     let databasePath: String
 
     let writerQueue: DispatchQueue
@@ -166,6 +170,18 @@ public class RustPlaces {
     public func getBookmark(guid: GUID) -> Deferred<Maybe<BookmarkNodeData?>> {
         return withReader { connection in
             return try connection.getBookmark(guid: guid)
+        }
+    }
+
+    public func getRecentBookmarks(limit: UInt) async -> [BookmarkItemData] {
+        let deferredResponse = withReader { connection in
+            return try connection.getRecentBookmarks(limit: limit)
+        }
+
+        return await withCheckedContinuation { continuation in
+            deferredResponse.upon { bookmarks in
+                continuation.resume(returning: bookmarks.successValue ?? [])
+            }
         }
     }
 

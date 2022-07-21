@@ -32,6 +32,20 @@ open class SQLiteReadingList {
 }
 
 extension SQLiteReadingList: ReadingList {
+
+    public func getAvailableRecords() async -> [ReadingListItem] {
+        let sql = "SELECT \(allColumns) FROM items ORDER BY client_last_modified DESC"
+        let deferredResponse = db.runQuery(sql, args: nil, factory: SQLiteReadingList.ReadingListItemFactory) >>== { cursor in
+            return deferMaybe(cursor.asArray())
+        }
+
+        return await withCheckedContinuation { continuation in
+            deferredResponse.upon { readingList in
+                continuation.resume(returning: readingList.successValue ?? [])
+            }
+        }
+    }
+
     public func getAvailableRecords() -> Deferred<Maybe<[ReadingListItem]>> {
         let sql = "SELECT \(allColumns) FROM items ORDER BY client_last_modified DESC"
         return db.runQuery(sql, args: nil, factory: SQLiteReadingList.ReadingListItemFactory) >>== { cursor in

@@ -31,7 +31,8 @@ class RecentlySavedCellViewModel {
         self.isZeroSearch = isZeroSearch
         let siteImageHelper = SiteImageHelper(profile: profile)
         let adaptor = RecentlySavedDataAdaptorImplementation(siteImageHelper: siteImageHelper,
-                                                             profile: profile)
+                                                             readingList: profile.readingList,
+                                                             bookmarksHandler: profile.places)
         self.recentlySavedDataAdaptor = adaptor
 
         adaptor.delegate = self
