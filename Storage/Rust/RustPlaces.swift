@@ -28,7 +28,6 @@ public class RustPlaces {
                 notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.databasePath = databasePath
         self.notificationCenter = notificationCenter
-        
         self.writerQueue = DispatchQueue(label: "RustPlaces writer queue: \(databasePath)", attributes: [])
         self.readerQueue = DispatchQueue(label: "RustPlaces reader queue: \(databasePath)", attributes: [])
     }
