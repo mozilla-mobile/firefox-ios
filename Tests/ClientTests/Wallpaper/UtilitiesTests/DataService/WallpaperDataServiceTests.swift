@@ -10,17 +10,16 @@ import XCTest
 class WallpaperDataServiceTests: XCTestCase {
 
     func testGetData_SimulatingNoResponse() async {
-        let dataService = WallpaperDataServiceMock()
-        let sut = WallpaperDataService(with: dataService)
+        var sut = WallpaperDataServiceMock()
 
         let result: Result<WallpaperMetadata, Error>? = nil
-        dataService.setServiceResponse(to: result)
+        sut.mockNetworkResponse = result
 
         do {
             _ = try await sut.getMetadata()
             XCTFail("This test should throw an error.")
         } catch let error {
-            XCTAssertThrowsError(error)
+            XCTAssertEqual(error as? URLError, URLError(.notConnectedToInternet))
         }
     }
 }

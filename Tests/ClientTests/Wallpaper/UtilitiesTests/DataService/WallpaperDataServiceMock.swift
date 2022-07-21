@@ -6,13 +6,9 @@ import Foundation
 
 @testable import Client
 
-class WallpaperDataServiceMock: WallpaperFetchDataService {
+struct WallpaperDataServiceMock: WallpaperFetchDataService {
 
-    private var mockNetworkResponse: Result<WallpaperMetadata, Error>?
-
-    func setServiceResponse(to response: Result<WallpaperMetadata, Error>?) {
-        self.mockNetworkResponse = response
-    }
+    var mockNetworkResponse: Result<WallpaperMetadata, Error>?
 
     func getMetadata() async throws -> WallpaperMetadata {
         guard let mockServiceResponse = mockNetworkResponse else {

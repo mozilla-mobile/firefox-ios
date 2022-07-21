@@ -7,17 +7,4 @@ import Foundation
 ///  Responsible for fetching data from the server.
 struct WallpaperDataService: WallpaperFetchDataService {
 
-    private let dataService: WallpaperFetchDataService
-
-    init(with dataService: WallpaperFetchDataService) {
-        self.dataService = dataService
-    }
-
-    func getMetadata() async throws -> WallpaperMetadata {
-        // Roux Notes for PR Review:
-        // Ignore the contents of this function for now. I just needed to make Xcode
-        // not give me errors while I'm slowly building the system.
-        return WallpaperMetadata(lastUpdatedDate: "0864",
-                                 collections: [WallpaperCollection]())
-    }
 }
