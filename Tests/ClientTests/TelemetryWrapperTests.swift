@@ -32,7 +32,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_topSiteTileWithoutExtras_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .topSiteTile, value: nil)
-        XCTAssertFalse(GleanMetrics.TopSites.tilePressed.testHasValue())
+        XCTAssertNil(GleanMetrics.TopSites.tilePressed.testGetValue())
     }
 
     func test_topSiteContextualMenu_GleanIsCalled() {
@@ -44,7 +44,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_topSiteContextualMenuWithoutExtra_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: nil)
-        XCTAssertFalse(GleanMetrics.TopSites.contextualMenu.testHasValue())
+        XCTAssertNil(GleanMetrics.TopSites.contextualMenu.testGetValue())
     }
 
     // MARK: - Preferences
@@ -59,7 +59,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_preferencesWithoutExtras_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting)
-        XCTAssertFalse(GleanMetrics.Preferences.changed.testHasValue())
+        XCTAssertNil(GleanMetrics.Preferences.changed.testGetValue())
     }
 
     // MARK: - Firefox Home Page
@@ -73,7 +73,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_recentlySavedBookmarkViewWithoutExtras_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .firefoxHomepage, value: .recentlySavedBookmarkItemView)
-        XCTAssertFalse(GleanMetrics.FirefoxHomePage.recentlySavedBookmarkView.testHasValue())
+        XCTAssertNil(GleanMetrics.FirefoxHomePage.recentlySavedBookmarkView.testGetValue())
     }
 
     func test_recentlySavedReadingListViewViewWithExtras_GleanIsCalled() {
@@ -85,7 +85,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_recentlySavedReadingListViewWithoutExtras_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .firefoxHomepage, value: .recentlySavedReadingListView)
-        XCTAssertFalse(GleanMetrics.FirefoxHomePage.readingListView.testHasValue())
+        XCTAssertNil(GleanMetrics.FirefoxHomePage.readingListView.testGetValue())
     }
 
     func test_firefoxHomePageAddView_GleanIsCalled() {
@@ -106,7 +106,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_contextualHintDismissButtonWithoutExtras_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .contextualHint, value: .dismissCFRFromButton)
-        XCTAssertFalse(GleanMetrics.CfrAnalytics.dismissCfrFromButton.testHasValue())
+        XCTAssertNil(GleanMetrics.CfrAnalytics.dismissCfrFromButton.testGetValue())
     }
 
     func test_contextualHintDismissOutsideTap_GleanIsCalled() {
@@ -118,7 +118,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_contextualHintDismissOutsideTapWithoutExtras_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .contextualHint, value: .dismissCFRFromOutsideTap)
-        XCTAssertFalse(GleanMetrics.CfrAnalytics.dismissCfrFromOutsideTap.testHasValue())
+        XCTAssertNil(GleanMetrics.CfrAnalytics.dismissCfrFromOutsideTap.testGetValue())
     }
 
     func test_contextualHintPressAction_GleanIsCalled() {
@@ -130,7 +130,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_contextualHintPressActionWithoutExtras_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .contextualHint, value: .pressCFRActionButton)
-        XCTAssertFalse(GleanMetrics.CfrAnalytics.pressCfrActionButton.testHasValue())
+        XCTAssertNil(GleanMetrics.CfrAnalytics.pressCfrActionButton.testGetValue())
     }
 
     // MARK: - Tabs quantity
@@ -157,12 +157,12 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_tabsNormalQuantityWithoutExtras_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabNormalQuantity, value: nil, extras: nil)
-        XCTAssertFalse(GleanMetrics.Tabs.normalTabsQuantity.testHasValue())
+        XCTAssertNil(GleanMetrics.Tabs.normalTabsQuantity.testGetValue())
     }
 
     func test_tabsPrivateQuantityWithoutExtras_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabPrivateQuantity, value: nil, extras: nil)
-        XCTAssertFalse(GleanMetrics.Tabs.privateTabsQuantity.testHasValue())
+        XCTAssertNil(GleanMetrics.Tabs.privateTabsQuantity.testGetValue())
     }
 
     // MARK: - Onboarding
@@ -234,7 +234,7 @@ class TelemetryWrapperTests: XCTestCase {
 
         testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
         let wallpaperName = LegacyWallpaperManager().currentWallpaper.name.lowercased()
-        XCTAssertNil(try? GleanMetrics.WallpaperAnalytics.themedWallpaper[wallpaperName].testGetValue())
+        XCTAssertNil(GleanMetrics.WallpaperAnalytics.themedWallpaper[wallpaperName].testGetValue())
     }
 
     func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
@@ -249,18 +249,18 @@ class TelemetryWrapperTests: XCTestCase {
 
         testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
         let wallpaperName = LegacyWallpaperManager().currentWallpaper.name.lowercased()
-        XCTAssertEqual(try? GleanMetrics.WallpaperAnalytics.themedWallpaper[wallpaperName].testGetValue(), 1)
+        XCTAssertEqual(GleanMetrics.WallpaperAnalytics.themedWallpaper[wallpaperName].testGetValue(), 1)
     }
 }
 
 // MARK: - Helper functions to test telemetry
 extension XCTestCase {
 
-    func testEventMetricRecordingSuccess<Keys: ExtraKeys, Extras: EventExtras>(metric: EventMetricType<Keys, Extras>,
+    func testEventMetricRecordingSuccess<Keys: EventExtraKey, Extras: EventExtras>(metric: EventMetricType<Keys, Extras>,
                                                                                file: StaticString = #file,
                                                                                line: UInt = #line) {
-        XCTAssertTrue(metric.testHasValue(), file: file, line: line)
-        XCTAssertEqual(try! metric.testGetValue().count, 1, file: file, line: line)
+        XCTAssertNotNil(metric.testGetValue(), file: file, line: line)
+        XCTAssertEqual(metric.testGetValue()!.count, 1, file: file, line: line)
 
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
@@ -271,8 +271,8 @@ extension XCTestCase {
     func testCounterMetricRecordingSuccess(metric: CounterMetricType,
                                            file: StaticString = #file,
                                            line: UInt = #line) {
-        XCTAssertTrue(metric.testHasValue(), file: file, line: line)
-        XCTAssertEqual(try! metric.testGetValue(), 1, file: file, line: line)
+        XCTAssertNotNil(metric.testGetValue(), file: file, line: line)
+        XCTAssertEqual(metric.testGetValue(), 1, file: file, line: line)
 
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
@@ -294,8 +294,8 @@ extension XCTestCase {
                                    failureMessage: String,
                                    file: StaticString = #file,
                                    line: UInt = #line) {
-        XCTAssertTrue(metric.testHasValue(), "Should have value on quantity metric", file: file, line: line)
-        XCTAssertEqual(try! metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
+        XCTAssertNotNil(metric.testGetValue(), "Should have value on quantity metric", file: file, line: line)
+        XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
 
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
@@ -308,8 +308,8 @@ extension XCTestCase {
                                  failureMessage: String,
                                  file: StaticString = #file,
                                  line: UInt = #line) {
-        XCTAssertTrue(metric.testHasValue(), "Should have value on string metric", file: file, line: line)
-        XCTAssertEqual(try! metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
+        XCTAssertNotNil(metric.testGetValue(), "Should have value on string metric", file: file, line: line)
+        XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
 
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
@@ -322,8 +322,8 @@ extension XCTestCase {
                               failureMessage: String,
                               file: StaticString = #file,
                               line: UInt = #line) {
-        XCTAssertTrue(metric.testHasValue(), "Should have value on url metric", file: file, line: line)
-        XCTAssertEqual(try! metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
+        XCTAssertNotNil(metric.testGetValue(), "Should have value on url metric", file: file, line: line)
+        XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
 
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
@@ -336,12 +336,7 @@ extension XCTestCase {
                                failureMessage: String,
                                file: StaticString = #file,
                                line: UInt = #line) {
-
-        guard let value = try? metric.testGetValue() else {
-            XCTFail("Expected contextId to be configured")
-            return
-        }
-        XCTAssertTrue(metric.testHasValue(), "Should have value on uuid metric", file: file, line: line)
-        XCTAssertEqual(value, expectedValue, failureMessage, file: file, line: line)
+        XCTAssertNotNil(metric.testGetValue(), "Should have value on uuid metric", file: file, line: line)
+        XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
     }
 }
