@@ -29,7 +29,7 @@ class TopSitesViewModel {
     }
 
     private let profile: Profile
-    private let isZeroSearch: Bool
+    var isZeroSearch: Bool
     private var sentImpressionTelemetry = [String: Bool]()
 
     var sectionDimension: SectionDimension = TopSitesViewModel.defaultDimension
@@ -43,7 +43,7 @@ class TopSitesViewModel {
         return TopSitesManager(profile: profile)
     }()
 
-    init(profile: Profile, isZeroSearch: Bool) {
+    init(profile: Profile, isZeroSearch: Bool = false) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         tileManager.delegate = self

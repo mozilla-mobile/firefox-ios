@@ -24,11 +24,11 @@ class RecentlySavedCellViewModel {
 
     weak var delegate: HomepageDataModelDelegate?
 
-    init(isZeroSearch: Bool,
-         profile: Profile) {
+    init(profile: Profile,
+         isZeroSearch: Bool = false) {
 
-        self.isZeroSearch = isZeroSearch
         self.profile = profile
+        self.isZeroSearch = isZeroSearch
         let siteImageHelper = SiteImageHelper(profile: profile)
         let adaptor = RecentlySavedDataAdaptorImplementation(siteImageHelper: siteImageHelper,
                                                              profile: profile)
