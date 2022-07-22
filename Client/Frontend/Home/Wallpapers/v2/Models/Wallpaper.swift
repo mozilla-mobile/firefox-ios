@@ -4,6 +4,13 @@
 
 import Foundation
 
-protocol WallpaperFetchDataService {
-    func getMetadata() async throws -> WallpaperMetadata
+/// A single wallpaper instance.
+struct Wallpaper: Codable, Equatable {
+    enum CodingKeys: String, CodingKey {
+        case textColour = "text-color"
+        case id
+    }
+
+    let id: String
+    let textColour: String
 }

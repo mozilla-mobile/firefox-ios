@@ -5,7 +5,14 @@
 import Foundation
 
 /// Describes a wallpaper collection.
-struct WallpaperCollection: Codable {
+struct WallpaperCollection: Codable, Equatable {
+    enum CodingKeys: String, CodingKey {
+        case id
+        case availableLocales = "available-locales"
+        case availability = "availability-range"
+        case wallpapers
+    }
+
     let id: String
     let availableLocales: [String]
     let availability: WallpaperCollectionAvailability

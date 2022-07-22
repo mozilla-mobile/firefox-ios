@@ -5,7 +5,12 @@
 import Foundation
 
 /// Metadata, fetched from the server, to update wallpaper availability.
-struct WallpaperMetadata: Codable {
+struct WallpaperMetadata: Codable, Equatable {
+    enum CodingKeys: String, CodingKey {
+        case lastUpdated = "last-updated-date"
+        case collections
+    }
+
     let lastUpdated: Date
     let collections: [WallpaperCollection]
 }
