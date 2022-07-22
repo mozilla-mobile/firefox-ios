@@ -6,6 +6,11 @@ import MozillaAppServices
 
 protocol HomepageViewModelDelegate: AnyObject {
     func reloadSection(section: HomepageViewModelProtocol)
+    func reloadData()
+}
+
+protocol HomepageDataModelDelegate: AnyObject {
+    func reloadData()
 }
 
 class HomepageViewModel: FeatureFlaggable {
@@ -110,6 +115,7 @@ class HomepageViewModel: FeatureFlaggable {
         self.nimbus = nimbus
         topSiteViewModel.delegate = self
         historyHighlightsViewModel.delegate = self
+        recentlySavedViewModel.delegate = self
 
         updateEnabledSections()
     }
@@ -213,5 +219,11 @@ extension HomepageViewModel: TopSitesViewModelDelegate {
 extension HomepageViewModel: HomeHistoryHighlightsDelegate {
     func reloadHighlights() {
         updateData(section: historyHighlightsViewModel)
+    }
+}
+
+extension HomepageViewModel: HomepageDataModelDelegate {
+    func reloadData() {
+        delegate?.reloadData()
     }
 }
