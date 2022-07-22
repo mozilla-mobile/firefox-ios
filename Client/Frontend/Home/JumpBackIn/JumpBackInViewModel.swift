@@ -53,7 +53,7 @@ class JumpBackInViewModel: FeatureFlaggable {
 
     private var recentGroups: [ASGroup<Tab>]?
 
-    private let isZeroSearch: Bool
+    var isZeroSearch: Bool
     private let profile: Profile
     private var isPrivate: Bool
     private var hasSentJumpBackInSectionEvent = false
