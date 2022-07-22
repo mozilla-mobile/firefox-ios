@@ -24,10 +24,10 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
 
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
-    private var isZeroSearch: Bool
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManagerProtocol
+    private var urlBar: URLBarViewProtocol
     private var wallpaperManager: LegacyWallpaperManager
     private lazy var wallpaperView: LegacyWallpaperBackgroundView = .build { _ in }
     private var contextualHintViewController: ContextualHintViewController
@@ -50,15 +50,13 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     init(profile: Profile,
          tabManager: TabManagerProtocol,
          urlBar: URLBarViewProtocol,
-         isZeroSearch: Bool = false,
          wallpaperManager: LegacyWallpaperManager = LegacyWallpaperManager()
     ) {
-        self.isZeroSearch = isZeroSearch
+        self.urlBar = urlBar
         self.tabManager = tabManager
         self.wallpaperManager = wallpaperManager
         let isPrivate = tabManager.selectedTab?.isPrivate ?? true
         self.viewModel = HomepageViewModel(profile: profile,
-                                           isZeroSearch: isZeroSearch,
                                            isPrivate: isPrivate,
                                            tabManager: tabManager,
                                            urlBar: urlBar)
@@ -74,8 +72,6 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
             guard let self = self else { return CGRect() }
             return self.getPopoverSourceRect(sourceView: popoverView)
         }
-
-        viewModel.delegate = self
 
         setupNotifications(forObserver: self,
                            observing: [.HomePanelPrefsChanged,
@@ -103,6 +99,9 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         configureContentStackView()
         configureCollectionView()
 
+        // Delay setting up the view model delegate to ensure the views have been configured first
+        viewModel.delegate = self
+
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
@@ -118,12 +117,6 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         if shouldDisplayHomeTabBanner {
             showHomeTabBanner()
         }
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        viewModel.recordViewAppeared()
-
-        super.viewDidAppear(animated)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -232,6 +225,16 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
 
     // MARK: - Helpers
 
+    /// Called to update the appearance source of the home page, and send tracking telemetry
+    func recordHomepageAppeared(isZeroSearch: Bool) {
+        viewModel.isZeroSearch = isZeroSearch
+        viewModel.recordViewAppeared()
+    }
+
+    func recordHomepageDisappeared() {
+        viewModel.recordViewDisappeared()
+    }
+
     /// On iPhone, we call reloadOnRotation when the trait collection has changed, to ensure calculation
     /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
     /// since it's `.regular` on both. We reloadOnRotation from viewWillTransition in that case.
@@ -273,7 +276,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     }
 
     @objc private func dismissKeyboard() {
-        currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode() : nil
+        currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? urlBar.leaveOverlayMode() : nil
     }
 
     func updatePocketCellsWithVisibleRatio(cells: [UICollectionViewCell], relativeRect: CGRect) {
@@ -554,7 +557,7 @@ private extension HomepageViewController {
                                          method: .tap,
                                          object: .firefoxHomepage,
                                          value: .jumpBackInSectionShowAll,
-                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
         }
     }
 
@@ -566,7 +569,7 @@ private extension HomepageViewController {
                                          method: .tap,
                                          object: .firefoxHomepage,
                                          value: .recentlySavedSectionShowAll,
-                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
         }
     }
 
@@ -656,6 +659,12 @@ extension HomepageViewController: HomepageViewModelDelegate {
             guard let self = self else { return }
             self.viewModel.updateEnabledSections()
             self.viewModel.reloadSection(section, with: self.collectionView)
+        }
+    }
+
+    func reloadData() {
+        ensureMainThread { [weak self] in
+            self?.collectionView.reloadData()
         }
     }
 }

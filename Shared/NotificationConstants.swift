@@ -79,4 +79,9 @@ extension Notification.Name {
     // Tab manager creates a toast for undo recently closed tabs and a notification is
     // fired when user taps on undo button on Toast
     public static let DidTapUndoCloseAllTabToast = Notification.Name("DidTapUndoCloseAllTabToast")
+
+    // MARK: Settings
+
+    public static let ReadingListUpdated = Notification.Name("ReadingListUpdated")
+    public static let BookmarksUpdated = Notification.Name("BookmarksUpdated")
 }

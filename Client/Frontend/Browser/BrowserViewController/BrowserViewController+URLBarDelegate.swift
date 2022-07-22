@@ -217,7 +217,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
-        if let selectedTab = tabManager.selectedTab, firefoxHomeViewController == nil {
+        if let selectedTab = tabManager.selectedTab, homepageViewController == nil {
             // Only scroll to top if we are not showing the home view controller
             selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
         }
@@ -319,7 +319,7 @@ extension BrowserViewController: URLBarDelegate {
                 toast.removeFromSuperview()
             }
 
-            showFirefoxHome(inline: false)
+            showHomepage(inline: false)
         }
     }
 

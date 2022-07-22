@@ -6,6 +6,11 @@ import MozillaAppServices
 
 protocol HomepageViewModelDelegate: AnyObject {
     func reloadSection(section: HomepageViewModelProtocol)
+    func reloadData()
+}
+
+protocol HomepageDataModelDelegate: AnyObject {
+    func reloadData()
 }
 
 class HomepageViewModel: FeatureFlaggable {
@@ -45,7 +50,18 @@ class HomepageViewModel: FeatureFlaggable {
 
     let nimbus: FxNimbus
     let profile: Profile
-    var isZeroSearch: Bool
+    var isZeroSearch: Bool {
+        didSet {
+            topSiteViewModel.isZeroSearch = isZeroSearch
+            jumpBackInViewModel.isZeroSearch = isZeroSearch
+            recentlySavedViewModel.isZeroSearch = isZeroSearch
+            pocketViewModel.isZeroSearch = isZeroSearch
+        }
+    }
+
+    /// Record view appeared is sent multitple times, this avoids recording telemetry mutltiple times for one appearence
+    private var viewAppeared: Bool = false
+
     var shownSections = [HomepageSectionType]()
     weak var delegate: HomepageViewModelDelegate?
 
@@ -61,25 +77,21 @@ class HomepageViewModel: FeatureFlaggable {
 
     // MARK: - Initializers
     init(profile: Profile,
-         isZeroSearch: Bool = false,
          isPrivate: Bool,
-         nimbus: FxNimbus = FxNimbus.shared,
          tabManager: TabManagerProtocol,
-         urlBar: URLBarViewProtocol) {
+         urlBar: URLBarViewProtocol,
+         nimbus: FxNimbus = FxNimbus.shared,
+         isZeroSearch: Bool = false) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
 
         self.headerViewModel = HomeLogoHeaderViewModel(profile: profile)
-        self.topSiteViewModel = TopSitesViewModel(
-            profile: profile,
-            isZeroSearch: isZeroSearch)
+        self.topSiteViewModel = TopSitesViewModel(profile: profile)
         self.jumpBackInViewModel = JumpBackInViewModel(
-            isZeroSearch: isZeroSearch,
             profile: profile,
             isPrivate: isPrivate,
             tabManager: tabManager)
         self.recentlySavedViewModel = RecentlySavedCellViewModel(
-            isZeroSearch: isZeroSearch,
             profile: profile)
         self.historyHighlightsViewModel = HistoryHightlightsViewModel(
             with: profile,
@@ -88,8 +100,7 @@ class HomepageViewModel: FeatureFlaggable {
             urlBar: urlBar)
         self.pocketViewModel = PocketViewModel(
             pocketAPI: Pocket(),
-            pocketSponsoredAPI: MockPocketSponsoredStoriesProvider(),
-            isZeroSearch: isZeroSearch
+            pocketSponsoredAPI: MockPocketSponsoredStoriesProvider()
         )
         self.customizeButtonViewModel = CustomizeHomepageSectionViewModel()
         self.childViewModels = [headerViewModel,
@@ -104,6 +115,7 @@ class HomepageViewModel: FeatureFlaggable {
         self.nimbus = nimbus
         topSiteViewModel.delegate = self
         historyHighlightsViewModel.delegate = self
+        recentlySavedViewModel.delegate = self
 
         updateEnabledSections()
     }
@@ -111,12 +123,28 @@ class HomepageViewModel: FeatureFlaggable {
     // MARK: - Interfaces
 
     func recordViewAppeared() {
+        guard !viewAppeared else { return }
+
+        viewAppeared = true
         nimbus.features.homescreenFeature.recordExposure()
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .firefoxHomepage,
                                      value: .fxHomepageOrigin,
                                      extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+
+        // Firefox home page tracking i.e. being shown from awesomebar vs bottom right hamburger menu
+        let trackingValue: TelemetryWrapper.EventValue = isZeroSearch
+        ? .openHomeFromAwesomebar : .openHomeFromPhotonMenuButton
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .open,
+                                     object: .firefoxHomepage,
+                                     value: trackingValue,
+                                     extras: nil)
+    }
+
+    func recordViewDisappeared() {
+        viewAppeared = false
     }
 
     // MARK: - Fetch section data
@@ -195,5 +223,11 @@ extension HomepageViewModel: TopSitesViewModelDelegate {
 extension HomepageViewModel: HomeHistoryHighlightsDelegate {
     func reloadHighlights() {
         updateData(section: historyHighlightsViewModel)
+    }
+}
+
+extension HomepageViewModel: HomepageDataModelDelegate {
+    func reloadData() {
+        delegate?.reloadData()
     }
 }
