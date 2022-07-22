@@ -874,6 +874,7 @@ class BrowserViewController: UIViewController {
         }
 
         homepageViewController?.applyTheme()
+        homepageViewController?.recordHomepageAppeared(isZeroSearch: !inline)
 
         // We have to run this animation, even if the view is already showing
         // because there may be a hide animation running and we want to be sure
@@ -892,15 +893,10 @@ class BrowserViewController: UIViewController {
     /// Once the homepage is created, browserViewController keeps a reference to it, never setting it to nil during
     /// an app session. The homepage can be nil in the case of a user having a Blank Page or custom URL as it's new tab and homepage
     private func createHomepage(inline: Bool) {
-        // Firefox home page tracking i.e. being shown from awesomebar vs bottom right hamburger menu
-        let trackingValue: TelemetryWrapper.EventValue = inline ? .openHomeFromPhotonMenuButton : .openHomeFromAwesomebar
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .firefoxHomepage, value: trackingValue, extras: nil)
-
         let homepageViewController = HomepageViewController(
             profile: profile,
             tabManager: tabManager,
-            urlBar: urlBar,
-            isZeroSearch: !inline)
+            urlBar: urlBar)
         homepageViewController.homePanelDelegate = self
         homepageViewController.libraryPanelDelegate = self
         homepageViewController.browserBarViewDelegate = self
@@ -912,10 +908,11 @@ class BrowserViewController: UIViewController {
     }
 
     func hideHomepage(completion: (() -> Void)? = nil) {
-        guard let firefoxHomeViewController = self.homepageViewController else { return }
+        guard let homepageViewController = self.homepageViewController else { return }
 
+        homepageViewController.recordHomepageDisappeared()
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
-            firefoxHomeViewController.view.alpha = 0
+            homepageViewController.view.alpha = 0
         }, completion: { _ in
             self.webViewContainer.accessibilityElementsHidden = false
             UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)

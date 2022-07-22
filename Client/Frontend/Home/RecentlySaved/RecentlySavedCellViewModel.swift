@@ -29,9 +29,9 @@ class RecentlySavedCellViewModel {
 
     var headerButtonAction: ((UIButton) -> Void)?
 
-    init(isZeroSearch: Bool, profile: Profile) {
-        self.isZeroSearch = isZeroSearch
+    init(profile: Profile, isZeroSearch: Bool = false) {
         self.profile = profile
+        self.isZeroSearch = isZeroSearch
     }
 
     var recentItems: [RecentlySavedItem] {

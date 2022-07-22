@@ -24,7 +24,6 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
 
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
-    private var isZeroSearch: Bool
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManagerProtocol
@@ -51,16 +50,13 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     init(profile: Profile,
          tabManager: TabManagerProtocol,
          urlBar: URLBarViewProtocol,
-         isZeroSearch: Bool = false,
          wallpaperManager: LegacyWallpaperManager = LegacyWallpaperManager()
     ) {
         self.urlBar = urlBar
-        self.isZeroSearch = isZeroSearch
         self.tabManager = tabManager
         self.wallpaperManager = wallpaperManager
         let isPrivate = tabManager.selectedTab?.isPrivate ?? true
         self.viewModel = HomepageViewModel(profile: profile,
-                                           isZeroSearch: isZeroSearch,
                                            isPrivate: isPrivate,
                                            tabManager: tabManager,
                                            urlBar: urlBar)
@@ -120,12 +116,6 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         if shouldDisplayHomeTabBanner {
             showHomeTabBanner()
         }
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        viewModel.recordViewAppeared()
-
-        super.viewDidAppear(animated)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -233,6 +223,16 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     }
 
     // MARK: - Helpers
+
+    /// Called to update the appearance source of the home page, and send tracking telemetry
+    func recordHomepageAppeared(isZeroSearch: Bool) {
+        viewModel.isZeroSearch = isZeroSearch
+        viewModel.recordViewAppeared()
+    }
+
+    func recordHomepageDisappeared() {
+        viewModel.recordViewDisappeared()
+    }
 
     /// On iPhone, we call reloadOnRotation when the trait collection has changed, to ensure calculation
     /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
@@ -543,7 +543,7 @@ private extension HomepageViewController {
                                          method: .tap,
                                          object: .firefoxHomepage,
                                          value: .jumpBackInSectionShowAll,
-                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
         }
     }
 
@@ -555,7 +555,7 @@ private extension HomepageViewController {
                                          method: .tap,
                                          object: .firefoxHomepage,
                                          value: .recentlySavedSectionShowAll,
-                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
         }
     }
 
