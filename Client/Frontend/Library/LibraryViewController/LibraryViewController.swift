@@ -281,7 +281,10 @@ class LibraryViewController: UIViewController {
     private func setupToolBarAppearance() {
         let standardAppearance = UIToolbarAppearance()
         standardAppearance.configureWithDefaultBackground()
-        standardAppearance.backgroundColor = UIColor.Photon.LightGrey10
+
+        let backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
+                                UIColor.Photon.DarkGrey30 : UIColor.Photon.LightGrey10
+        standardAppearance.backgroundColor = backgroundColor
 
         navigationController?.toolbar.standardAppearance = standardAppearance
         navigationController?.toolbar.compactAppearance = standardAppearance
@@ -289,6 +292,9 @@ class LibraryViewController: UIViewController {
             navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
             navigationController?.toolbar.compactScrollEdgeAppearance = standardAppearance
         }
+        let tintColor = LegacyThemeManager.instance.currentName == .dark ?
+                            UIColor.Photon.Blue20 : UIColor.Photon.Blue50
+        navigationController?.toolbar.tintColor = tintColor
     }
 }
 
