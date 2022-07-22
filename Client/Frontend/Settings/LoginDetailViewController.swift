@@ -187,6 +187,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.descriptionLabel.returnKeyType = .default
             loginCell.displayDescriptionAsPassword = true
             loginCell.isEditingFieldData = isEditingFieldData
+            loginCell.separatorInset = .zero
             passwordField = loginCell.descriptionLabel
             passwordField?.accessibilityIdentifier = "passwordField"
             return loginCell
@@ -215,6 +216,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             cell.detailTextLabel?.numberOfLines = 2
             cell.detailTextLabel?.textAlignment = .center
             cell.backgroundColor = view.backgroundColor
+            cell.separatorInset = .zero
             return cell
 
         case .deleteItem:
@@ -224,6 +226,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             deleteCell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraits.button
             deleteCell.backgroundColor = UIColor.theme.tableView.rowBackground
+            deleteCell.separatorInset = .zero
             return deleteCell
         }
     }
