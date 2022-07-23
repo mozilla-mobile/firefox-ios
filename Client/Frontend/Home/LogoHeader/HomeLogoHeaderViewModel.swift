@@ -23,11 +23,11 @@ class HomeLogoHeaderViewModel {
 extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
     var sectionType: HomepageSectionType {
-        return .logoHeader
+        .logoHeader
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        return .emptyHeader
+        .emptyHeader
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
@@ -49,11 +49,11 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
-        return 1
+        1
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
+        featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
     }
 }
 

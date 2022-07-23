@@ -147,13 +147,13 @@ enum TabEvent {
 ////////////////////////////////////////////////////////////////////////////////////////
 extension TabEventLabel {
     var name: Notification.Name {
-        return Notification.Name(self.rawValue)
+        Notification.Name(self.rawValue)
     }
 }
 
 extension TabEvent {
     func notification(for tab: Tab) -> Notification {
-        return Notification(name: label.name, object: tab, userInfo: ["payload": self])
+        Notification(name: label.name, object: tab, userInfo: ["payload": self])
     }
 
     /// Use this method to post notifications to any concerned listeners.

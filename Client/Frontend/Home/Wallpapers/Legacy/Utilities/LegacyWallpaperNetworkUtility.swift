@@ -16,7 +16,7 @@ class LegacyWallpaperNetworkUtility: LegacyWallpaperFilePathProtocol, Loggable {
     // MARK: - Variables
     private static let wallpaperURLScheme = "MozWallpaperURLScheme"
     lazy var downloadProtocol: LegacyWallpaperDownloadProtocol = {
-        return URLSession.shared
+        URLSession.shared
     }()
 
     // MARK: - Public interfaces

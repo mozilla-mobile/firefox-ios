@@ -213,7 +213,7 @@ class JumpBackInViewModel: FeatureFlaggable {
 private extension JumpBackInViewModel {
 
     var hasJumpBackIn: Bool {
-        return !recentTabs.isEmpty || !(recentGroups?.isEmpty ?? true)
+        !recentTabs.isEmpty || !(recentGroups?.isEmpty ?? true)
     }
 
     func createJumpBackInList(
@@ -280,12 +280,12 @@ private extension JumpBackInViewModel {
 private extension JumpBackInViewModel {
 
     var hasSyncedTabFeatureEnabled: Bool {
-        return profile.hasSyncableAccount() &&
+        profile.hasSyncableAccount() &&
                 featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly)
     }
 
     var hasSyncedTab: Bool {
-        return hasSyncedTabFeatureEnabled && mostRecentSyncedTab != nil
+        hasSyncedTabFeatureEnabled && mostRecentSyncedTab != nil
     }
 
     func updateRemoteTabs(completion: @escaping () -> Void) {
@@ -529,17 +529,17 @@ private extension JumpBackInViewModel {
 extension JumpBackInViewModel: HomepageViewModelProtocol {
 
     var sectionType: HomepageSectionType {
-        return .jumpBackIn
+        .jumpBackIn
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        return LabelButtonHeaderViewModel(trailingInset: 0,
-                                          title: HomepageSectionType.jumpBackIn.title,
-                                          titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
-                                          isButtonHidden: false,
-                                          buttonTitle: .RecentlySavedShowAllText,
-                                          buttonAction: headerButtonAction,
-                                          buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn)
+        LabelButtonHeaderViewModel(trailingInset: 0,
+                title: HomepageSectionType.jumpBackIn.title,
+                titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
+                isButtonHidden: false,
+                buttonTitle: .RecentlySavedShowAllText,
+                buttonAction: headerButtonAction,
+                buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn)
     }
 
     var isEnabled: Bool {
@@ -585,7 +585,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     }
 
     var hasData: Bool {
-        return hasJumpBackIn || hasSyncedTab
+        hasJumpBackIn || hasSyncedTab
     }
 
     func updateData(completion: @escaping () -> Void) {
@@ -671,7 +671,7 @@ extension JumpBackInViewModel: HomepageSectionHandler {
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         // Setup is done through configure(collectionView:indexPath:), shouldn't be called
-        return UICollectionViewCell()
+        UICollectionViewCell()
     }
 
     func didSelectItem(at indexPath: IndexPath,

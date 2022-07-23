@@ -258,7 +258,6 @@ extension PocketStoryProviderTests {
             case .failure(let error):
                 completion(.failure(error))
             }
-            return
         }
 
     }

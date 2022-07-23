@@ -57,7 +57,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     var bookmarkItemURL: String?
 
     var isNew: Bool {
-        return bookmarkNodeGUID == nil
+        bookmarkNodeGUID == nil
     }
 
     var isFolderListExpanded = false
@@ -67,7 +67,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     var bookmarkFolders: [(folder: BookmarkFolderData, indent: Int)] = []
 
     private var maxIndentationLevel: Int {
-        return Int(floor((view.frame.width - BookmarkDetailPanelUX.MinIndentedContentWidth) / BookmarkDetailPanelUX.IndentationWidth))
+        Int(floor((view.frame.width - BookmarkDetailPanelUX.MinIndentedContentWidth) / BookmarkDetailPanelUX.IndentationWidth))
     }
 
     // Additional UI elements only used if `BookmarkDetailPanel` is called from the toast button
@@ -251,7 +251,7 @@ class BookmarkDetailPanel: SiteTableViewController {
                 }
 
                 return profile.places.createBookmark(parentGUID: parentBookmarkFolder.guid, url: bookmarkItemURL, title: bookmarkItemOrFolderTitle).bind({ result in
-                    return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : succeed()
+                    result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : succeed()
                 })
             } else if bookmarkNodeType == .folder {
                 guard let bookmarkItemOrFolderTitle = self.bookmarkItemOrFolderTitle else {
@@ -259,7 +259,7 @@ class BookmarkDetailPanel: SiteTableViewController {
                 }
 
                 return profile.places.createFolder(parentGUID: parentBookmarkFolder.guid, title: bookmarkItemOrFolderTitle).bind({ result in
-                    return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : succeed()
+                    result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : succeed()
                 })
             }
         } else {
@@ -304,7 +304,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return BookmarkDetailSection.allCases.count
+        BookmarkDetailSection.allCases.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

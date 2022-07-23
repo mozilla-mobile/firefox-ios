@@ -61,7 +61,7 @@ class HTTPDownload: Download {
     let request: URLRequest
 
     var state: URLSessionTask.State {
-        return task?.state ?? .suspended
+        task?.state ?? .suspended
     }
 
     fileprivate(set) var session: URLSession?
@@ -203,7 +203,7 @@ class DownloadQueue {
     var delegate: DownloadQueueDelegate?
 
     var isEmpty: Bool {
-        return downloads.isEmpty
+        downloads.isEmpty
     }
 
     fileprivate var combinedBytesDownloaded: Int64 = 0

@@ -18,22 +18,22 @@ open class EnvelopeJSON {
     }
 
     open func isValid() -> Bool {
-        return !self.json.isError() &&
-            self.json["id"].isString() &&
-            // self["collection"].isString &&
-            self.json["payload"].isString()
+        !self.json.isError() &&
+                self.json["id"].isString() &&
+                // self["collection"].isString &&
+                self.json["payload"].isString()
     }
 
     open var id: String {
-        return self.json["id"].string!
+        self.json["id"].string!
     }
 
     open var collection: String {
-        return self.json["collection"].string ?? ""
+        self.json["collection"].string ?? ""
     }
 
     open var payload: String {
-        return self.json["payload"].string!
+        self.json["payload"].string!
     }
 
     open var sortindex: Int {
@@ -54,7 +54,7 @@ open class EnvelopeJSON {
     }
 
     open func stringify() -> String {
-        return self.json.stringify()!
+        self.json.stringify()!
     }
 
     open func withModified(_ now: Timestamp) -> EnvelopeJSON {
@@ -68,6 +68,6 @@ open class EnvelopeJSON {
 
 extension EnvelopeJSON {
     func asJSON() -> JSON {
-        return self.json
+        self.json
     }
 }

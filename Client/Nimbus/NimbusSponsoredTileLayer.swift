@@ -8,6 +8,6 @@ final class NimbusSponsoredTileLayer {
 
     // MARK: - Public methods
     public func getMaxNumberOfTiles(from nimbus: FxNimbus = FxNimbus.shared) -> Int {
-        return nimbus.features.homescreenFeature.value().sponsoredTiles.maxNumberOfTiles
+        nimbus.features.homescreenFeature.value().sponsoredTiles.maxNumberOfTiles
     }
 }

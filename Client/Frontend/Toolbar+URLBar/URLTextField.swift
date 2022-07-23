@@ -10,7 +10,7 @@ class URLTextField: UITextField {
 
     override var accessibilityCustomActions: [UIAccessibilityCustomAction]? {
         get {
-            return accessibilityActionsSource?.accessibilityCustomActionsForView(self)
+            accessibilityActionsSource?.accessibilityCustomActionsForView(self)
         }
         set {
             super.accessibilityCustomActions = newValue
@@ -18,10 +18,10 @@ class URLTextField: UITextField {
     }
 
     override var canBecomeFirstResponder: Bool {
-        return false
+        false
     }
 
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.insetBy(dx: TabLocationViewUX.Spacing, dy: 0)
+        bounds.insetBy(dx: TabLocationViewUX.Spacing, dy: 0)
     }
 }

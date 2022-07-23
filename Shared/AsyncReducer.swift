@@ -7,7 +7,7 @@ import Foundation
 public let DefaultDispatchQueue = DispatchQueue.global(qos: DispatchQoS.default.qosClass)
 
 public func asyncReducer<T, U>(_ initialValue: T, combine: @escaping (T, U) -> Deferred<Maybe<T>>) -> AsyncReducer<T, U> {
-    return AsyncReducer(initialValue: initialValue, combine: combine)
+    AsyncReducer(initialValue: initialValue, combine: combine)
 }
 
 /**
@@ -73,7 +73,7 @@ open class AsyncReducer<T, U> {
         func nextItem() -> U? {
             // Because popFirst is only available on array slices.
             // removeFirst is fine for range-replaceable collections.
-            return queuedItems.isEmpty ? nil : queuedItems.removeFirst()
+            queuedItems.isEmpty ? nil : queuedItems.removeFirst()
         }
 
         func continueMaybe(_ res: Maybe<T>) {
@@ -94,7 +94,7 @@ open class AsyncReducer<T, U> {
             }
 
             let combineItem = deferDispatchAsync(dispatchQueue) {
-                return self.combine(accumulator, item)
+                self.combine(accumulator, item)
             }
 
             queueNext(combineItem)
@@ -110,7 +110,7 @@ open class AsyncReducer<T, U> {
      * @throws AlreadyFilled if the queue has finished already.
      */
     open func append(_ items: U...) throws -> Deferred<Maybe<T>> {
-        return try append(items)
+        try append(items)
     }
 
     /**

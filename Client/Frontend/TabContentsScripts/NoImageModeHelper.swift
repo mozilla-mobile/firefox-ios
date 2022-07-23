@@ -18,11 +18,11 @@ class NoImageModeHelper: TabContentScript {
     }
 
     static func name() -> String {
-        return "NoImageMode"
+        "NoImageMode"
     }
 
     func scriptMessageHandlerName() -> String? {
-        return "NoImageMode"
+        "NoImageMode"
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
@@ -30,7 +30,7 @@ class NoImageModeHelper: TabContentScript {
     }
 
     static func isActivated(_ prefs: Prefs) -> Bool {
-        return prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
+        prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
     }
 
     static func toggle(isEnabled: Bool, profile: Profile, tabManager: TabManager) {

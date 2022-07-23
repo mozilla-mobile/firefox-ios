@@ -35,11 +35,11 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
 
     // In order for context menu handling, this is required
     override var canBecomeFirstResponder: Bool {
-        return true
+        true
     }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        return delegate?.canPerform(action: action, for: self) ?? false
+        delegate?.canPerform(action: action, for: self) ?? false
     }
 
     lazy var descriptionLabel: UITextField = .build { [weak self] label in
@@ -111,7 +111,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
 
     var highlightedLabelTitle: String? {
         get {
-            return highlightedLabel.text
+            highlightedLabel.text
         }
         set(newTitle) {
             highlightedLabel.text = newTitle
@@ -199,7 +199,7 @@ extension LoginDetailTableViewCell {
 
 extension LoginDetailTableViewCell: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        return delegate?.shouldReturnAfterEditingDescription(self) ?? true
+        delegate?.shouldReturnAfterEditingDescription(self) ?? true
     }
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {

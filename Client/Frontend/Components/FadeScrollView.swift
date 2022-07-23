@@ -14,15 +14,15 @@ class FadeScrollView: UIScrollView, UIScrollViewDelegate {
     private let opaqueColor = UIColor.black.cgColor
 
     private var needsToScroll: Bool {
-        return frame.size.height >= contentSize.height
+        frame.size.height >= contentSize.height
     }
 
     private var isAtBottom: Bool {
-        return contentOffset.y + frame.size.height >= contentSize.height
+        contentOffset.y + frame.size.height >= contentSize.height
     }
 
     private var isAtTop: Bool {
-        return contentOffset.y <= 0
+        contentOffset.y <= 0
     }
 
     private var topOpacity: CGColor {

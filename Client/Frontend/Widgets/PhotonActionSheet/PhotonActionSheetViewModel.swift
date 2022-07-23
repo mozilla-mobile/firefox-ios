@@ -17,7 +17,7 @@ class PhotonActionSheetViewModel {
     var tintColor = UIColor.theme.actionMenu.foreground
 
     var presentationStyle: PresentationStyle {
-        return modalStyle.getPhotonPresentationStyle()
+        modalStyle.getPhotonPresentationStyle()
     }
 
     private enum SheetStyle {
@@ -193,7 +193,7 @@ class PhotonActionSheetViewModel {
 
     // We use small size for iPhone and on iPad in multitasking mode
     static func isSmallSizeForTraitCollection(trait: UITraitCollection) -> Bool {
-        return trait.verticalSizeClass == .compact || trait.horizontalSizeClass == .compact
+        trait.verticalSizeClass == .compact || trait.horizontalSizeClass == .compact
     }
 
     func popOverWidthForTraitCollection(trait: UITraitCollection) -> CGFloat {

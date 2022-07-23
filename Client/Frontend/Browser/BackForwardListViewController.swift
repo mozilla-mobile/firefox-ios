@@ -224,7 +224,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
 
     // MARK: - Table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listData.count
+        listData.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -260,6 +260,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt  indexPath: IndexPath) -> CGFloat {
-        return BackForwardViewUX.RowHeight
+        BackForwardViewUX.RowHeight
     }
 }

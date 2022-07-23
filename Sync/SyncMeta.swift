@@ -38,12 +38,12 @@ open class EngineConfiguration: Equatable {
 }
 
 public func == (lhs: EngineConfiguration, rhs: EngineConfiguration) -> Bool {
-    return Set(lhs.enabled) == Set(rhs.enabled)
+    Set(lhs.enabled) == Set(rhs.enabled)
 }
 
 extension EngineConfiguration: CustomStringConvertible {
     public var description: String {
-        return "EngineConfiguration(enabled: \(self.enabled.sorted()), declined: \(self.declined.sorted()))"
+        "EngineConfiguration(enabled: \(self.enabled.sorted()), declined: \(self.declined.sorted()))"
     }
 }
 
@@ -76,7 +76,7 @@ public struct EngineMeta: Equatable {
 }
 
 public func == (lhs: EngineMeta, rhs: EngineMeta) -> Bool {
-    return (lhs.version == rhs.version) && (lhs.syncID == rhs.syncID)
+    (lhs.version == rhs.version) && (lhs.syncID == rhs.syncID)
 }
 
 public struct MetaGlobal: Equatable {
@@ -105,7 +105,7 @@ public struct MetaGlobal: Equatable {
     }
 
     public func enginesPayload() -> JSON {
-        return JSON(mapValues(engines, f: { $0.toJSON() }))
+        JSON(mapValues(engines, f: { $0.toJSON() }))
     }
 
     // TODO: make a whole record JSON for this.
@@ -120,19 +120,19 @@ public struct MetaGlobal: Equatable {
     }
 
     public func withSyncID(_ syncID: String) -> MetaGlobal {
-        return MetaGlobal(syncID: syncID, storageVersion: self.storageVersion, engines: self.engines, declined: self.declined)
+        MetaGlobal(syncID: syncID, storageVersion: self.storageVersion, engines: self.engines, declined: self.declined)
     }
 
     public func engineConfiguration() -> EngineConfiguration {
-        return EngineConfiguration(enabled: Array(engines.keys), declined: declined)
+        EngineConfiguration(enabled: Array(engines.keys), declined: declined)
     }
 }
 
 public func == (lhs: MetaGlobal, rhs: MetaGlobal) -> Bool {
-    return (lhs.syncID == rhs.syncID) &&
-           (lhs.storageVersion == rhs.storageVersion) &&
-           optArrayEqual(lhs.declined, rhs: rhs.declined) &&
-           optDictionaryEqual(lhs.engines, rhs: rhs.engines)
+    (lhs.syncID == rhs.syncID) &&
+            (lhs.storageVersion == rhs.storageVersion) &&
+            optArrayEqual(lhs.declined, rhs: rhs.declined) &&
+            optDictionaryEqual(lhs.engines, rhs: rhs.engines)
 }
 
 /**

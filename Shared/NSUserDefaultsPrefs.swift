@@ -10,7 +10,7 @@ open class NSUserDefaultsPrefs: Prefs {
     fileprivate let userDefaults: UserDefaults
 
     open func getBranchPrefix() -> String {
-        return self.prefixWithDot
+        self.prefixWithDot
     }
 
     public init(prefix: String, userDefaults: UserDefaults) {
@@ -31,7 +31,7 @@ open class NSUserDefaultsPrefs: Prefs {
     // Preferences are qualified by the profile's local name.
     // Connecting a profile to a Firefox Account, or changing to another, won't alter this.
     fileprivate func qualifyKey(_ key: String) -> String {
-        return self.prefixWithDot + key
+        self.prefixWithDot + key
     }
 
     open func setInt(_ value: Int32, forKey defaultName: String) {
@@ -65,7 +65,7 @@ open class NSUserDefaultsPrefs: Prefs {
 
     open func stringForKey(_ defaultName: String) -> String? {
         // stringForKey converts numbers to strings, which is almost always a bug.
-        return userDefaults.object(forKey: qualifyKey(defaultName)) as? String
+        userDefaults.object(forKey: qualifyKey(defaultName)) as? String
     }
 
     open func setBool(_ value: Bool, forKey defaultName: String) {
@@ -81,27 +81,27 @@ open class NSUserDefaultsPrefs: Prefs {
     }
 
     fileprivate func nsNumberForKey(_ defaultName: String) -> NSNumber? {
-        return userDefaults.object(forKey: qualifyKey(defaultName)) as? NSNumber
+        userDefaults.object(forKey: qualifyKey(defaultName)) as? NSNumber
     }
 
     open func unsignedLongForKey(_ defaultName: String) -> UInt64? {
-        return nsNumberForKey(defaultName)?.uint64Value
+        nsNumberForKey(defaultName)?.uint64Value
     }
 
     open func timestampForKey(_ defaultName: String) -> Timestamp? {
-        return unsignedLongForKey(defaultName)
+        unsignedLongForKey(defaultName)
     }
 
     open func longForKey(_ defaultName: String) -> Int64? {
-        return nsNumberForKey(defaultName)?.int64Value
+        nsNumberForKey(defaultName)?.int64Value
     }
 
     open func objectForKey<T: Any>(_ defaultName: String) -> T? {
-        return userDefaults.object(forKey: qualifyKey(defaultName)) as? T
+        userDefaults.object(forKey: qualifyKey(defaultName)) as? T
     }
 
     open func intForKey(_ defaultName: String) -> Int32? {
-        return nsNumberForKey(defaultName)?.int32Value
+        nsNumberForKey(defaultName)?.int32Value
     }
 
     open func stringArrayForKey(_ defaultName: String) -> [String]? {
@@ -113,11 +113,11 @@ open class NSUserDefaultsPrefs: Prefs {
     }
 
     open func arrayForKey(_ defaultName: String) -> [Any]? {
-        return userDefaults.array(forKey: qualifyKey(defaultName)) as [Any]?
+        userDefaults.array(forKey: qualifyKey(defaultName)) as [Any]?
     }
 
     open func dictionaryForKey(_ defaultName: String) -> [String: Any]? {
-        return userDefaults.dictionary(forKey: qualifyKey(defaultName)) as [String: Any]?
+        userDefaults.dictionary(forKey: qualifyKey(defaultName)) as [String: Any]?
     }
 
     open func removeObjectForKey(_ defaultName: String) {

@@ -209,7 +209,7 @@ class HomepageViewModel: FeatureFlaggable {
     }
 
     func indexOfShownSection(_ type: HomepageSectionType) -> Int? {
-        return shownSections.firstIndex(of: type)
+        shownSections.firstIndex(of: type)
     }
 }
 

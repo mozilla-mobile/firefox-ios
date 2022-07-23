@@ -61,7 +61,7 @@ open class SQLiteFavicons {
     }
 
     public func insertOrUpdateFavicon(_ favicon: Favicon) -> Deferred<Maybe<Int>> {
-        return db.withConnection { conn -> Int in
+        db.withConnection { conn -> Int in
             self.insertOrUpdateFaviconInTransaction(favicon, conn: conn) ?? 0
         }
     }

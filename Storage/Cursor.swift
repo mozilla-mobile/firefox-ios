@@ -27,7 +27,9 @@ public protocol TypedCursor: Sequence {
  */
 open class Cursor<T>: TypedCursor {
     open var count: Int {
-        get { return 0 }
+        get {
+            0
+        }
     }
 
     // Extra status information
@@ -46,7 +48,9 @@ open class Cursor<T>: TypedCursor {
 
     // Collection iteration and access functions
     open subscript(index: Int) -> T? {
-        get { return nil }
+        get {
+            nil
+        }
     }
 
     open func asArray() -> [T] {

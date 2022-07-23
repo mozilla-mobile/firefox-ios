@@ -10,9 +10,13 @@ import Account
 class ManageFxAccountSetting: Setting {
     let profile: Profile
 
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+    override var accessoryType: UITableViewCell.AccessoryType {
+        .disclosureIndicator
+    }
 
-    override var accessibilityIdentifier: String? { return "Manage" }
+    override var accessibilityIdentifier: String? {
+        "Manage"
+    }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
@@ -29,11 +33,15 @@ class ManageFxAccountSetting: Setting {
 class DisconnectSetting: Setting {
     let settingsVC: SettingsTableViewController
     let profile: Profile
-    override var accessoryType: UITableViewCell.AccessoryType { return .none }
-    override var textAlignment: NSTextAlignment { return .center }
+    override var accessoryType: UITableViewCell.AccessoryType {
+        .none
+    }
+    override var textAlignment: NSTextAlignment {
+        .center
+    }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .SettingsDisconnectSyncButton, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.destructiveRed])
+        NSAttributedString(string: .SettingsDisconnectSyncButton, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.destructiveRed])
     }
 
     init(settings: SettingsTableViewController) {
@@ -41,7 +49,9 @@ class DisconnectSetting: Setting {
         self.profile = settings.profile
     }
 
-    override var accessibilityIdentifier: String? { return "SignOut" }
+    override var accessibilityIdentifier: String? {
+        "SignOut"
+    }
 
     override func onClick(_ navigationController: UINavigationController?) {
         let alertController = UIAlertController(

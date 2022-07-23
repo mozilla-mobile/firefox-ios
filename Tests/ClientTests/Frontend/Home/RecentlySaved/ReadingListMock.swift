@@ -21,20 +21,20 @@ class ReadingListMock: ReadingList {
     }
 
     func getAvailableRecords() -> Deferred<Maybe<[ReadingListItem]>> {
-        return deferMaybe([])
+        deferMaybe([])
     }
 
     func deleteRecord(_ record: ReadingListItem, completion: ((Bool) -> Void)?) {}
 
     func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Deferred<Maybe<ReadingListItem>> {
-        return deferMaybe(ReadingListStorageError("Function not mocked"))
+        deferMaybe(ReadingListStorageError("Function not mocked"))
     }
 
     func getRecordWithURL(_ url: String) -> Deferred<Maybe<ReadingListItem>> {
-        return deferMaybe(ReadingListStorageError("Function not mocked"))
+        deferMaybe(ReadingListStorageError("Function not mocked"))
     }
 
     func updateRecord(_ record: ReadingListItem, unread: Bool) -> Deferred<Maybe<ReadingListItem>> {
-        return deferMaybe(ReadingListStorageError("Function not mocked"))
+        deferMaybe(ReadingListStorageError("Function not mocked"))
     }
 }

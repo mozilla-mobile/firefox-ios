@@ -145,8 +145,12 @@ private let log = Logger.syncLogger
 open class BrowserSchema: Schema {
     static let DefaultVersion = 41    // PR #10553.
 
-    public var name: String { return "BROWSER" }
-    public var version: Int { return BrowserSchema.DefaultVersion }
+    public var name: String {
+        "BROWSER"
+    }
+    public var version: Int {
+        BrowserSchema.DefaultVersion
+    }
 
     let sqliteVersion: Int32
     let supportsPartialIndices: Bool
@@ -202,7 +206,7 @@ open class BrowserSchema: Schema {
     }
 
     func runValidQueries(_ db: SQLiteDBConnection, queries: [String?]) -> Bool {
-        return self.run(db, queries: optFilter(queries))
+        self.run(db, queries: optFilter(queries))
     }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {

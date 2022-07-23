@@ -64,23 +64,23 @@ class EventTests: XCTestCase {
 // Builder methods for easier mocking of the pickled/unpickled events
 extension EventTests {
     fileprivate func basicEventString(timestamp: Timestamp) -> String {
-        return "[\(timestamp),\"test\",\"pickling\",\"this\",null,null]"
+        "[\(timestamp),\"test\",\"pickling\",\"this\",null,null]"
     }
 
     fileprivate func basicWithValueString(timestamp: Timestamp) -> String {
-        return "[\(timestamp),\"test\",\"pickling\",\"this\",\"value\",null]"
+        "[\(timestamp),\"test\",\"pickling\",\"this\",\"value\",null]"
     }
 
     fileprivate func extraEventString(timestamp: Timestamp) -> String {
-        return "[\(timestamp),\"test\",\"pickling\",\"this\",\"value\",{\"flowID\":\"testFlowID\"}]"
+        "[\(timestamp),\"test\",\"pickling\",\"this\",\"value\",{\"flowID\":\"testFlowID\"}]"
     }
 
     fileprivate func basicEvent(timestamp: Timestamp) -> Event {
-        return Event(timestamp: timestamp, category: "test", method: "pickling", object: "this")
+        Event(timestamp: timestamp, category: "test", method: "pickling", object: "this")
     }
 
     fileprivate func basicWithValueEvent(timestamp: Timestamp) -> Event {
-        return Event(timestamp: timestamp, category: "test", method: "pickling", object: "this", value: "value")
+        Event(timestamp: timestamp, category: "test", method: "pickling", object: "this", value: "value")
     }
 
     fileprivate func extraEvent(timestamp: Timestamp) -> Event {

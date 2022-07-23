@@ -37,16 +37,16 @@ enum HomepageSectionType: Int, CaseIterable {
     }
 
     static var cellTypes: [ReusableCell.Type] {
-        return [HomeLogoHeaderCell.self,
-                TopSiteItemCell.self,
-                EmptyTopSiteCell.self,
-                HomeHorizontalCell.self,
-                PocketDiscoverCell.self,
-                PocketStandardCell.self,
-                RecentlySavedCell.self,
-                HistoryHighlightsCell.self,
-                CustomizeHomepageSectionView.self,
-                SyncedTabCell.self
+        [HomeLogoHeaderCell.self,
+         TopSiteItemCell.self,
+         EmptyTopSiteCell.self,
+         HomeHorizontalCell.self,
+         PocketDiscoverCell.self,
+         PocketStandardCell.self,
+         RecentlySavedCell.self,
+         HistoryHighlightsCell.self,
+         CustomizeHomepageSectionView.self,
+         SyncedTabCell.self
         ]
     }
 

@@ -12,7 +12,7 @@ extension LoginRecord {
     }
 
     public var passwordCredential: ASPasswordCredential {
-        return ASPasswordCredential(user: self.decryptedUsername, password: self.decryptedPassword)
+        ASPasswordCredential(user: self.decryptedUsername, password: self.decryptedPassword)
     }
 }
 

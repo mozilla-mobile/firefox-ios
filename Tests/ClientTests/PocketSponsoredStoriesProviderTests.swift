@@ -197,7 +197,7 @@ private extension PocketSponsoredStoriesProviderTests {
     }
 
     var emptyResponse: String {
-        return "{}"
+        "{}"
     }
 
     var validSpocResponse: String {
@@ -282,6 +282,6 @@ private extension PocketSponsoredStoriesProviderTests {
     }
 
     var anError: NSError {
-        return NSError(domain: "test error", code: 0)
+        NSError(domain: "test error", code: 0)
     }
 }

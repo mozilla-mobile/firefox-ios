@@ -29,9 +29,13 @@ class SiriSettingsViewController: SettingsTableViewController {
 }
 
 class SiriOpenURLSetting: Setting {
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+    override var accessoryType: UITableViewCell.AccessoryType {
+        .disclosureIndicator
+    }
 
-    override var accessibilityIdentifier: String? { return "SiriSettings" }
+    override var accessibilityIdentifier: String? {
+        "SiriSettings"
+    }
 
     init(settings: SettingsTableViewController) {
         super.init(title: NSAttributedString(string: .SettingsSiriOpenURL, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))

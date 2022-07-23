@@ -50,7 +50,7 @@ class SearchInputView: UIView, NotificationThemeable {
     }()
 
     lazy var searchIcon: UIImageView = {
-        return UIImageView(image: UIImage(named: "quickSearch"))
+        UIImageView(image: UIImage(named: "quickSearch"))
     }()
 
     fileprivate lazy var closeButton: UIButton = {

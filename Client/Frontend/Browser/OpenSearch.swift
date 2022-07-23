@@ -65,7 +65,7 @@ class OpenSearchEngine: NSObject, NSCoding {
      * Returns the search URL for the given query.
      */
     func searchURLForQuery(_ query: String) -> URL? {
-        return getURLFromTemplate(searchTemplate, query: query)
+        getURLFromTemplate(searchTemplate, query: query)
     }
 
     /**
@@ -92,7 +92,7 @@ class OpenSearchEngine: NSObject, NSCoding {
 
     fileprivate func extractQueryArg(in queryItems: [URLQueryItem]?, for placeholder: String) -> String? {
         let searchTerm = queryItems?.filter { item in
-            return item.value == placeholder
+            item.value == placeholder
         }
         return searchTerm?.first?.name
     }

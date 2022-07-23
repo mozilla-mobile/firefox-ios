@@ -31,7 +31,7 @@ class TPStatsBlocklistsTests: XCTestCase {
         blocklists.load()
 
         let safelistedRegexs = ["*google.com"].compactMap { (domain) -> String? in
-            return wildcardContentBlockerDomainToRegex(domain: domain)
+            wildcardContentBlockerDomainToRegex(domain: domain)
         }
 
         self.measureMetrics([.wallClockTime], automaticallyStartMeasuring: true) {
@@ -47,7 +47,7 @@ class TPStatsBlocklistsTests: XCTestCase {
 
         func blocklist(_ urlString: String, _ mainDoc: String = "https://foo.com", _ safelistedDomains: [String] = []) -> BlocklistCategory? {
             let safelistedRegexs = safelistedDomains.compactMap { (domain) -> String? in
-                return wildcardContentBlockerDomainToRegex(domain: domain)
+                wildcardContentBlockerDomainToRegex(domain: domain)
             }
             let mainDoc = URL(string: mainDoc)!
             return blocklists.urlIsInList(URL(string: urlString)!, mainDocumentURL: mainDoc, safelistedDomains: safelistedRegexs)

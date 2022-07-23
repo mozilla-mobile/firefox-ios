@@ -87,8 +87,8 @@ open class Visit: Hashable {
 }
 
 public func == (lhs: Visit, rhs: Visit) -> Bool {
-    return lhs.date == rhs.date &&
-           lhs.type == rhs.type
+    lhs.date == rhs.date &&
+            lhs.type == rhs.type
 }
 
 open class SiteVisit: Visit {

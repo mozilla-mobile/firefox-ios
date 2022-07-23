@@ -197,7 +197,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     var currentURL: URL? {
         get {
-            return locationView.url as URL?
+            locationView.url as URL?
         }
 
         set(newURL) {
@@ -447,7 +447,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     }
 
     override func becomeFirstResponder() -> Bool {
-        return self.locationTextField?.becomeFirstResponder() ?? false
+        self.locationTextField?.becomeFirstResponder() ?? false
     }
 
     func removeLocationTextField() {
@@ -723,7 +723,7 @@ extension URLBarView: TabToolbarProtocol {
 
 extension URLBarView: TabLocationViewDelegate {
     func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool {
-        return delegate?.urlBarDidLongPressReaderMode(self) ?? false
+        delegate?.urlBarDidLongPressReaderMode(self) ?? false
     }
 
     func tabLocationViewDidLongPressReload(_ tabLocationView: TabLocationView) {
@@ -769,7 +769,7 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]? {
-        return delegate?.urlBarLocationAccessibilityActions(self)
+        delegate?.urlBarLocationAccessibilityActions(self)
     }
 
     func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView) {
@@ -816,12 +816,16 @@ extension URLBarView: AutocompleteTextFieldDelegate {
 extension URLBarView {
 
     @objc dynamic var cancelTintColor: UIColor? {
-        get { return cancelButton.tintColor }
+        get {
+            cancelButton.tintColor
+        }
         set { return cancelButton.tintColor = newValue }
     }
 
     @objc dynamic var showQRButtonTintColor: UIColor? {
-        get { return showQRScannerButton.tintColor }
+        get {
+            showQRScannerButton.tintColor
+        }
         set { return showQRScannerButton.tintColor = newValue }
     }
 

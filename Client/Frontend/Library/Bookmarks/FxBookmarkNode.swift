@@ -29,7 +29,7 @@ extension BookmarkItemData: FxBookmarkNode {}
 extension BookmarkFolderData: FxBookmarkNode {
     // Convenience to be able to fetch children as an array of FxBookmarkNode
     var fxChildren: [FxBookmarkNode]? {
-        return self.children as? [FxBookmarkNode]
+        self.children as? [FxBookmarkNode]
     }
 }
 

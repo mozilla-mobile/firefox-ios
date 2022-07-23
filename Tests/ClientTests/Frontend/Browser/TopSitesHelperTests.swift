@@ -175,13 +175,13 @@ class TopSitesHelperTests: XCTestCase {
 extension TopSitesHelperTests {
 
     var defaultPinnedSites: [PinnedSite] {
-        return [PinnedSite(site: Site(url: "https://apinnedsite.com/", title: "a pinned site title")),
-                PinnedSite(site: Site(url: "https://apinnedsite2.com/", title: "a pinned site title2"))]
+        [PinnedSite(site: Site(url: "https://apinnedsite.com/", title: "a pinned site title")),
+         PinnedSite(site: Site(url: "https://apinnedsite2.com/", title: "a pinned site title2"))]
     }
 
     var defaultFrecencySites: [Site] {
-        return [Site(url: "https://frecencySite.com/1/", title: "a frecency site"),
-                Site(url: "https://anotherWebSite.com/2/", title: "Another website")]
+        [Site(url: "https://frecencySite.com/1/", title: "a frecency site"),
+         Site(url: "https://anotherWebSite.com/2/", title: "Another website")]
     }
 }
 
@@ -190,7 +190,7 @@ class SiteCursorMock: Cursor<Site> {
 
     var sites = [Site]()
     override func asArray() -> [Site] {
-        return sites
+        sites
     }
 }
 

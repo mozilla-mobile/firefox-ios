@@ -151,7 +151,7 @@ open class MockProfilePrefs: Prefs {
     let prefix: String
 
     open func getBranchPrefix() -> String {
-        return self.prefix
+        self.prefix
     }
 
     // Public for testing.
@@ -167,11 +167,11 @@ open class MockProfilePrefs: Prefs {
     }
 
     open func branch(_ branch: String) -> Prefs {
-        return MockProfilePrefs(things: self.things, prefix: self.prefix + branch + ".")
+        MockProfilePrefs(things: self.things, prefix: self.prefix + branch + ".")
     }
 
     private func name(_ name: String) -> String {
-        return self.prefix + name
+        self.prefix + name
     }
 
     open func setTimestamp(_ value: Timestamp, forKey defaultName: String) {
@@ -203,31 +203,31 @@ open class MockProfilePrefs: Prefs {
     }
 
     open func stringForKey(_ defaultName: String) -> String? {
-        return things[name(defaultName)] as? String
+        things[name(defaultName)] as? String
     }
 
     open func boolForKey(_ defaultName: String) -> Bool? {
-        return things[name(defaultName)] as? Bool
+        things[name(defaultName)] as? Bool
     }
 
     open func objectForKey<T: Any>(_ defaultName: String) -> T? {
-        return things[name(defaultName)] as? T
+        things[name(defaultName)] as? T
     }
 
     open func timestampForKey(_ defaultName: String) -> Timestamp? {
-        return unsignedLongForKey(defaultName)
+        unsignedLongForKey(defaultName)
     }
 
     open func unsignedLongForKey(_ defaultName: String) -> UInt64? {
-        return things[name(defaultName)] as? UInt64
+        things[name(defaultName)] as? UInt64
     }
 
     open func longForKey(_ defaultName: String) -> Int64? {
-        return things[name(defaultName)] as? Int64
+        things[name(defaultName)] as? Int64
     }
 
     open func intForKey(_ defaultName: String) -> Int32? {
-        return things[name(defaultName)] as? Int32
+        things[name(defaultName)] as? Int32
     }
 
     open func stringArrayForKey(_ defaultName: String) -> [String]? {
@@ -251,7 +251,7 @@ open class MockProfilePrefs: Prefs {
     }
 
     open func dictionaryForKey(_ defaultName: String) -> [String: Any]? {
-        return things.object(forKey: name(defaultName)) as? [String: Any]
+        things.object(forKey: name(defaultName)) as? [String: Any]
     }
 
     open func removeObjectForKey(_ defaultName: String) {

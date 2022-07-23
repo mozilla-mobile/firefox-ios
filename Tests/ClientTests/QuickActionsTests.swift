@@ -72,7 +72,7 @@ private class BookmarkShortcutItem: UIApplicationShortcutItem {
     }
 
     override var userInfo: [String: NSSecureCoding]? {
-        return [QuickActions.TabURLKey: "https://www.mozilla.org/en-CA/" as NSSecureCoding]
+        [QuickActions.TabURLKey: "https://www.mozilla.org/en-CA/" as NSSecureCoding]
     }
 }
 

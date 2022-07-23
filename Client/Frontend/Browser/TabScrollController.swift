@@ -78,10 +78,18 @@ class TabScrollingController: NSObject, FeatureFlaggable {
         return panGesture
     }()
 
-    private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
-    private var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
-    private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
-    private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
+    private var scrollView: UIScrollView? {
+        tab?.webView?.scrollView
+    }
+    private var contentOffset: CGPoint {
+        scrollView?.contentOffset ?? .zero
+    }
+    private var contentSize: CGSize {
+        scrollView?.contentSize ?? .zero
+    }
+    private var scrollViewHeight: CGFloat {
+        scrollView?.frame.height ?? 0
+    }
     private var topScrollHeight: CGFloat { header?.frame.height ?? 0 }
 
     // Over keyboard content and bottom content
@@ -99,7 +107,7 @@ class TabScrollingController: NSObject, FeatureFlaggable {
     private var scrollDirection: ScrollDirection = .down
     private var toolbarState: ToolbarState = .visible
     private var isBottomSearchBar: Bool {
-        return BrowserViewController.foregroundBVC().isBottomSearchBar
+        BrowserViewController.foregroundBVC().isBottomSearchBar
     }
 
     override init() {
@@ -183,11 +191,11 @@ private extension TabScrollingController {
     }
 
     func roundNum(_ num: CGFloat) -> CGFloat {
-        return round(100 * num) / 100
+        round(100 * num) / 100
     }
 
     func tabIsLoading() -> Bool {
-        return tab?.loading ?? true
+        tab?.loading ?? true
     }
 
     func isBouncingAtBottom() -> Bool {
@@ -236,7 +244,7 @@ private extension TabScrollingController {
     }
 
     func checkRubberbandingForDelta(_ delta: CGFloat) -> Bool {
-        return !((delta < 0 && contentOffset.y + scrollViewHeight > contentSize.height &&
+        !((delta < 0 && contentOffset.y + scrollViewHeight > contentSize.height &&
                 scrollViewHeight < contentSize.height) ||
                 contentOffset.y < delta)
     }
@@ -262,7 +270,7 @@ private extension TabScrollingController {
     }
 
     func isHeaderDisplayedForGivenOffset(_ offset: CGFloat) -> Bool {
-        return offset > -topScrollHeight && offset < 0
+        offset > -topScrollHeight && offset < 0
     }
 
     func clamp(_ y: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
@@ -309,7 +317,7 @@ private extension TabScrollingController {
     }
 
     func checkScrollHeightIsLargeEnoughForScrolling() -> Bool {
-        return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height ?? 0
+        (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height ?? 0
     }
 
     // Duration for hiding bottom containers is taken from overKeyboard since it's longer to hide
@@ -337,14 +345,14 @@ private extension TabScrollingController {
     // Scroll alpha is only for header views since status bar has an overlay
     // Bottom content doesn't have alpha since it's completely hidden
     var scrollAlpha: CGFloat {
-        return 1 - abs(headerTopOffset / topScrollHeight)
+        1 - abs(headerTopOffset / topScrollHeight)
     }
 }
 
 extension TabScrollingController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                            shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        true
     }
 }
 

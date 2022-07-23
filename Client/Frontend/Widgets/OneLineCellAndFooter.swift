@@ -78,10 +78,10 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
     var customization: OneLineTableViewCustomization = .regular
 
     private var defaultSeparatorInset: UIEdgeInsets {
-        return UIEdgeInsets(top: 0,
-                            left: OneLineCellUX.ImageSize + 2 * OneLineCellUX.BorderViewMargin,
-                            bottom: 0,
-                            right: 0)
+        UIEdgeInsets(top: 0,
+                left: OneLineCellUX.ImageSize + 2 * OneLineCellUX.BorderViewMargin,
+                bottom: 0,
+                right: 0)
     }
 
     func initialViewSetup() {

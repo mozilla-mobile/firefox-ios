@@ -54,7 +54,7 @@ class FindInPageBar: UIView {
 
     var text: String? {
         get {
-            return searchText.text
+            searchText.text
         }
 
         set {
@@ -183,7 +183,7 @@ class FindInPageBar: UIView {
     }
 
     static var retrieveSavedText: String? {
-        return UserDefaults.standard.object(forKey: FindInPageBar.savedTextKey) as? String
+        UserDefaults.standard.object(forKey: FindInPageBar.savedTextKey) as? String
     }
 }
 

@@ -25,7 +25,7 @@ struct TPPageStats {
     }
 
     func create(matchingBlocklist blocklistName: BlocklistCategory, host: String) -> TPPageStats {
-        return TPPageStats(domains: domains, blocklistName: blocklistName, host: host)
+        TPPageStats(domains: domains, blocklistName: blocklistName, host: host)
     }
 }
 
@@ -177,7 +177,7 @@ class TPStatsBlocklists {
                 }
 
                 let domainExceptionsRegex = (trigger["unless-domain"] as? [String])?.compactMap { domain in
-                    return wildcardContentBlockerDomainToRegex(domain: domain)
+                    wildcardContentBlockerDomainToRegex(domain: domain)
                 }
 
                 // Only "third-party" is supported; other types are not used in our block lists.

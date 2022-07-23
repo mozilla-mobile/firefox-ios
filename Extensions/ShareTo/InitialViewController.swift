@@ -166,7 +166,7 @@ extension InitialViewController: ShareControllerDelegate {
     }
 
     func getValidExtensionContext() -> NSExtensionContext? {
-        return extensionContext
+        extensionContext
     }
 
     // At startup, the extension may show an alert that it can't share. In this case for a better UI, rather than showing

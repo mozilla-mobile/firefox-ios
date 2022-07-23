@@ -166,7 +166,7 @@ open class FatalError: SyncError {
     }
 
     open var description: String {
-        return self.message
+        self.message
     }
 }
 
@@ -209,7 +209,7 @@ open class BaseCollectionSynchronizer {
 
     // Short-hand for returning .Complete status + recorded stats
     var completedWithStats: SyncStatus {
-        return .completed(statsSession.end())
+        .completed(statsSession.end())
     }
 
     open func reasonToNotSync(_ client: Sync15StorageClient) -> SyncNotStartedReason? {
@@ -242,7 +242,7 @@ open class BaseCollectionSynchronizer {
     }
 
     func encrypter<T>(_ encoder: RecordEncoder<T>) -> RecordEncrypter<T>? {
-        return self.scratchpad.keys?.value.encrypter(self.collection, encoder: encoder)
+        self.scratchpad.keys?.value.encrypter(self.collection, encoder: encoder)
     }
 
     func collectionClient<T>(_ encoder: RecordEncoder<T>, storageClient: Sync15StorageClient) -> Sync15CollectionClient<T>? {
@@ -265,7 +265,7 @@ open class TimestampedSingleCollectionSynchronizer: BaseCollectionSynchronizer, 
         }
 
         get {
-            return self.prefs.unsignedLongForKey("lastFetched") ?? 0
+            self.prefs.unsignedLongForKey("lastFetched") ?? 0
         }
     }
 
@@ -275,7 +275,7 @@ open class TimestampedSingleCollectionSynchronizer: BaseCollectionSynchronizer, 
     }
 
     open func remoteHasChanges(_ info: InfoCollections) -> Bool {
-        return info.modified(self.collection) ?? 0 > self.lastFetched
+        info.modified(self.collection) ?? 0 > self.lastFetched
     }
 }
 

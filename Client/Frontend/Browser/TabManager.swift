@@ -30,7 +30,7 @@ class WeakTabManagerDelegate {
     }
 
     func get() -> TabManagerDelegate? {
-        return value
+        value
     }
 }
 
@@ -111,28 +111,34 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
     // A WKWebViewConfiguration used for normal tabs
     lazy fileprivate var configuration: WKWebViewConfiguration = {
-        return TabManager.makeWebViewConfig(isPrivate: false, prefs: profile.prefs)
+        TabManager.makeWebViewConfig(isPrivate: false, prefs: profile.prefs)
     }()
 
     // A WKWebViewConfiguration used for private mode tabs
     lazy fileprivate var privateConfiguration: WKWebViewConfiguration = {
-        return TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
+        TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }()
 
     var didChangedPanelSelection: Bool = true
     var didAddNewTab: Bool = true
 
-    var selectedIndex: Int { return _selectedIndex }
+    var selectedIndex: Int {
+        _selectedIndex
+    }
 
     // Enables undo of recently closed tabs
     var recentlyClosedForUndo = [SavedTab]()
 
     var normalTabs: [Tab] {
-        return tabs.filter { !$0.isPrivate }
+        tabs.filter {
+            !$0.isPrivate
+        }
     }
 
     var privateTabs: [Tab] {
-        return tabs.filter { $0.isPrivate }
+        tabs.filter {
+            $0.isPrivate
+        }
     }
 
     /// This variable returns all normal tabs, sorted chronologically, excluding any
@@ -168,7 +174,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     }
 
     var lastSessionWasPrivate: Bool {
-        return UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+        UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
     }
 
     // MARK: - Initializer
@@ -193,7 +199,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     }
 
     var count: Int {
-        return tabs.count
+        tabs.count
     }
 
     var selectedTab: Tab? {
@@ -291,7 +297,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     }
 
     func shouldClearPrivateTabs() -> Bool {
-        return profile.prefs.boolForKey("settings.closePrivateTabs") ?? false
+        profile.prefs.boolForKey("settings.closePrivateTabs") ?? false
     }
 
     // Called by other classes to signal that they are entering/exiting private mode
@@ -331,12 +337,12 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
                                    zombie: Bool = false,
                                    isPrivate: Bool = false)
     -> Tab {
-        return self.addTab(request,
-                           configuration: configuration,
-                           afterTab: afterTab,
-                           flushToDisk: true,
-                           zombie: zombie,
-                           isPrivate: isPrivate)
+        self.addTab(request,
+                configuration: configuration,
+                afterTab: afterTab,
+                flushToDisk: true,
+                zombie: zombie,
+                isPrivate: isPrivate)
     }
 
     func addTabsForURLs(_ urls: [URL], zombie: Bool) {
@@ -780,7 +786,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
     func getTabForURL(_ url: URL) -> Tab? {
 
-        return tabs.filter({ $0.webView?.url == url }).first
+        tabs.filter({ $0.webView?.url == url }).first
     }
 
     func getTabForUUID(uuid: String) -> Tab? {
@@ -866,7 +872,7 @@ extension TabManager {
     }
 
     func hasTabsToRestoreAtStartup() -> Bool {
-        return store.hasTabsToRestoreAtStartup
+        store.hasTabsToRestoreAtStartup
     }
 
     func restoreTabs(_ forced: Bool = false) {

@@ -102,9 +102,9 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
 
 extension WallpaperNetworkingModuleTests {
     private func createResponseWith(statusCode: Int) -> HTTPURLResponse? {
-        return HTTPURLResponse(url: url,
-                               statusCode: statusCode,
-                               httpVersion: nil,
-                               headerFields: nil)
+        HTTPURLResponse(url: url,
+                statusCode: statusCode,
+                httpVersion: nil,
+                headerFields: nil)
     }
 }

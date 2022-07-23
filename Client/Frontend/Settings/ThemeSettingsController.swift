@@ -27,11 +27,11 @@ class ThemeSettingsController: ThemedTableViewController {
     private let deviceBrightnessIndicatorColor = UIColor(white: 182/255, alpha: 1.0)
 
     var isAutoBrightnessOn: Bool {
-        return LegacyThemeManager.instance.automaticBrightnessIsOn
+        LegacyThemeManager.instance.automaticBrightnessIsOn
     }
 
     var isSystemThemeOn: Bool {
-        return LegacyThemeManager.instance.systemThemeIsOn
+        LegacyThemeManager.instance.systemThemeIsOn
     }
 
     private var shouldHideSystemThemeSection = false

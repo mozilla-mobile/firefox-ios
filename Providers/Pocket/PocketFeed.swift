@@ -15,7 +15,7 @@ protocol PocketStoriesProviding {
 
 extension PocketStoriesProviding {
     func fetchStories(items: Int) async throws -> [PocketFeedStory] {
-        return try await withCheckedThrowingContinuation { continuation in
+        try await withCheckedThrowingContinuation { continuation in
             fetchStories(items: items) { result in
                 continuation.resume(with: result)
             }
@@ -43,13 +43,13 @@ class Pocket: PocketStoriesProviding, FeatureFlaggable, URLCaching {
     }
 
     var urlCache: URLCache {
-        return URLCache.shared
+        URLCache.shared
     }
 
     lazy private var urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
 
     private lazy var pocketKey: String? = {
-        return Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String
+        Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String
     }()
 
     enum Error: Swift.Error {
@@ -93,7 +93,7 @@ class Pocket: PocketStoriesProviding, FeatureFlaggable, URLCaching {
 
     // Returns nil if the locale is not supported
     static func IslocaleSupported(_ locale: String) -> Bool {
-        return Pocket.SupportedLocales.contains(locale)
+        Pocket.SupportedLocales.contains(locale)
     }
 
     // Create the URL request to query the Pocket API. The max items that the query can return is 20

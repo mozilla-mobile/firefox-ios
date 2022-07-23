@@ -17,35 +17,49 @@ class ArrayExtensionTests: XCTestCase {
 
     func testUnique() {
         let a = [1, 2, 3, 4, 5, 6, 1, 2]
-        let result = a.unique { return $0 }
+        let result = a.unique {
+            $0
+        }
         XCTAssertEqual(result, [1, 2, 3, 4, 5, 6])
 
         let b = [1, 2, 3]
-        let resultB = b.unique { return $0 }
+        let resultB = b.unique {
+            $0
+        }
         XCTAssertEqual(resultB, [1, 2, 3])
     }
 
     func testUnion() {
         let a = [1, 2, 3, 4, 5, 6]
         let b = [7, 8, 9, 10]
-        XCTAssertEqual(a.union(b) { return $0 },
+        XCTAssertEqual(a.union(b) {
+            $0
+        },
                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
         let c = [1, 2, 3, 4, 5, 6]
         let d = [4, 5, 6, 7, 8, 9, 10]
-        XCTAssertEqual(c.union(d) { return $0 }, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+        XCTAssertEqual(c.union(d) {
+            $0
+        }, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
         let e = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         let f = [4, 5, 6, 7, 8, 9, 10]
-        XCTAssertEqual(e.union(f) { return $0 }, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+        XCTAssertEqual(e.union(f) {
+            $0
+        }, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
         let g = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         let h = [Int]()
-        XCTAssertEqual(g.union(h) { return $0 }, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+        XCTAssertEqual(g.union(h) {
+            $0
+        }, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
         let i = [Int]()
         let j = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        XCTAssertEqual(i.union(j) { return $0 }, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+        XCTAssertEqual(i.union(j) {
+            $0
+        }, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
     }
 
     func testSameElements() {

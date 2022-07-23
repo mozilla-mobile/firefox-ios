@@ -25,7 +25,9 @@ open class Deferred<T> {
 
     // Check whether or not the receiver is filled
     public var isFilled: Bool {
-        return protected.withReadLock { $0.protectedValue != nil }
+        protected.withReadLock {
+            $0.protectedValue != nil
+        }
     }
 
     private func _fill(value: T, assertIfFilled: Bool) {
@@ -54,7 +56,9 @@ open class Deferred<T> {
     }
 
     public func peek() -> T? {
-        return protected.withReadLock { $0.protectedValue }
+        protected.withReadLock {
+            $0.protectedValue
+        }
     }
 
     public func uponQueue(_ queue: DispatchQueue, block: @escaping (T) -> ()) {
@@ -99,7 +103,9 @@ extension Deferred {
     }
 
     public func mapQueue<U>(_ queue: DispatchQueue, f: @escaping (T) -> U) -> Deferred<U> {
-        return bindQueue(queue) { t in Deferred<U>(value: f(t)) }
+        bindQueue(queue) { t in
+            Deferred<U>(value: f(t))
+        }
     }
 }
 
@@ -109,17 +115,21 @@ extension Deferred {
     }
 
     public func bind<U>(_ f: @escaping (T) -> Deferred<U>) -> Deferred<U> {
-        return bindQueue(defaultQueue, f: f)
+        bindQueue(defaultQueue, f: f)
     }
 
     public func map<U>(_ f: @escaping (T) -> U) -> Deferred<U> {
-        return mapQueue(defaultQueue, f: f)
+        mapQueue(defaultQueue, f: f)
     }
 }
 
 extension Deferred {
     public func both<U>(_ other: Deferred<U>) -> Deferred<(T,U)> {
-        return self.bind { t in other.map { u in (t, u) } }
+        self.bind { t in
+            other.map { u in
+                (t, u)
+            }
+        }
     }
 }
 

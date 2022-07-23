@@ -53,14 +53,20 @@ extension TopSitesSettingsViewController {
     class RowSettings: Setting {
         let profile: Profile
 
-        override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+        override var accessoryType: UITableViewCell.AccessoryType {
+            .disclosureIndicator
+        }
         override var status: NSAttributedString {
             let numberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
             return NSAttributedString(string: String(format: "%d", numberOfRows))
         }
 
-        override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.topSitesRows }
-        override var style: UITableViewCell.CellStyle { return .value1 }
+        override var accessibilityIdentifier: String? {
+            AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.topSitesRows
+        }
+        override var style: UITableViewCell.CellStyle {
+            .value1
+        }
 
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile

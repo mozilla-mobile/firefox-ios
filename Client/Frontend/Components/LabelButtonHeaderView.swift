@@ -15,7 +15,7 @@ struct LabelButtonHeaderViewModel {
     var buttonA11yIdentifier: String?
 
     static var emptyHeader: LabelButtonHeaderViewModel {
-        return LabelButtonHeaderViewModel(title: nil, isButtonHidden: true)
+        LabelButtonHeaderViewModel(title: nil, isButtonHidden: true)
     }
 }
 

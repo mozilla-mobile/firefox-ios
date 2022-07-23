@@ -144,6 +144,6 @@ protocol CardTheme {
 
 extension CardTheme {
     var theme: BuiltinThemeName {
-        return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
     }
 }

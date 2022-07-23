@@ -40,7 +40,7 @@ open class Record<T: CleartextPayloadJSON> {
     //
     // @seealso EncryptedRecord.
     open class func payloadFromPayloadString(_ envelope: EnvelopeJSON, payload: String) -> T? {
-        return T(payload)
+        T(payload)
     }
 
     // TODO: consider using error tuples.
@@ -82,17 +82,17 @@ open class Record<T: CleartextPayloadJSON> {
     }
 
     func equalIdentifiers(_ rec: Record) -> Bool {
-        return rec.id == self.id
+        rec.id == self.id
     }
 
     // Override me.
     func equalPayloads(_ rec: Record) -> Bool {
-        return equalIdentifiers(rec) && rec.payload.deleted == self.payload.deleted
+        equalIdentifiers(rec) && rec.payload.deleted == self.payload.deleted
     }
 
     func equals(_ rec: Record) -> Bool {
-        return rec.sortindex == self.sortindex &&
-               rec.modified == self.modified &&
-               equalPayloads(rec)
+        rec.sortindex == self.sortindex &&
+                rec.modified == self.modified &&
+                equalPayloads(rec)
     }
 }

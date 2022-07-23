@@ -90,40 +90,40 @@ class DownloadHelperTests: XCTestCase {
     // MARK: - Helpers
 
     private func anyRequest(urlString: String = "http://any-url.com") -> URLRequest {
-        return URLRequest(url: URL(string: urlString)!, cachePolicy: anyCachePolicy(), timeoutInterval: 60.0)
+        URLRequest(url: URL(string: urlString)!, cachePolicy: anyCachePolicy(), timeoutInterval: 60.0)
     }
 
     private func anyResponse(mimeType: String?) -> URLResponse {
-        return URLResponse(url: URL(string: "http://any-url.com")!, mimeType: mimeType, expectedContentLength: 10, textEncodingName: nil)
+        URLResponse(url: URL(string: "http://any-url.com")!, mimeType: mimeType, expectedContentLength: 10, textEncodingName: nil)
     }
 
     private func anyResponse(urlString: String) -> URLResponse {
-        return URLResponse(url: URL(string: urlString)!, mimeType: nil, expectedContentLength: 10, textEncodingName: nil)
+        URLResponse(url: URL(string: urlString)!, mimeType: nil, expectedContentLength: 10, textEncodingName: nil)
     }
 
     private func cookieStore() -> WKHTTPCookieStore {
-        return WKWebsiteDataStore.`default`().httpCookieStore
+        WKWebsiteDataStore.`default`().httpCookieStore
     }
 
     private func anyCachePolicy() -> URLRequest.CachePolicy {
-        return .useProtocolCachePolicy
+        .useProtocolCachePolicy
     }
 
     private func allMIMETypes() -> [String] {
-        return [MIMEType.Bitmap,
-                MIMEType.CSS,
-                MIMEType.GIF,
-                MIMEType.JavaScript,
-                MIMEType.JPEG,
-                MIMEType.HTML,
-                MIMEType.OctetStream,
-                MIMEType.Passbook,
-                MIMEType.PDF,
-                MIMEType.PlainText,
-                MIMEType.PNG,
-                MIMEType.WebP,
-                MIMEType.Calendar,
-                MIMEType.USDZ,
-                MIMEType.Reality]
+        [MIMEType.Bitmap,
+         MIMEType.CSS,
+         MIMEType.GIF,
+         MIMEType.JavaScript,
+         MIMEType.JPEG,
+         MIMEType.HTML,
+         MIMEType.OctetStream,
+         MIMEType.Passbook,
+         MIMEType.PDF,
+         MIMEType.PlainText,
+         MIMEType.PNG,
+         MIMEType.WebP,
+         MIMEType.Calendar,
+         MIMEType.USDZ,
+         MIMEType.Reality]
     }
 }

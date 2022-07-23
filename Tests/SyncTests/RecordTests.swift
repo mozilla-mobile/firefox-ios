@@ -124,12 +124,12 @@ class RecordTests: XCTestCase {
 
         let cleartextClientsFactory: (String) -> ClientPayload? = {
             (s: String) -> ClientPayload? in
-            return ClientPayload(s)
+            ClientPayload(s)
         }
 
         let clearFactory: (String) -> CleartextPayloadJSON? = {
             (s: String) -> CleartextPayloadJSON? in
-            return CleartextPayloadJSON(s)
+            CleartextPayloadJSON(s)
         }
 
         print(clientPayload, terminator: "\n")
@@ -191,7 +191,7 @@ c2d37dac\\\"}\", \"id\": \"0-P9fabp9vJD\", \"modified\": 1326254123.65}
         let encryptClient = keysPayloadSerializer(keyBundle: keyBundle, { $0.json }) // It's already a JSON.
 
         let toRecord = {
-            return Record<CleartextPayloadJSON>.fromEnvelope($0, payloadFactory: decryptClient)
+            Record<CleartextPayloadJSON>.fromEnvelope($0, payloadFactory: decryptClient)
         }
 
         let envelope = EnvelopeJSON(inputString)

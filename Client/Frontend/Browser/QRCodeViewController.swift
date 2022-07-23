@@ -30,7 +30,7 @@ class QRCodeViewController: UIViewController {
     }()
 
     private lazy var captureDevice: AVCaptureDevice? = {
-        return AVCaptureDevice.default(for: AVMediaType.video)
+        AVCaptureDevice.default(for: AVMediaType.video)
     }()
 
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
@@ -309,6 +309,6 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
 
 class QRCodeNavigationController: UINavigationController {
     override open var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        .lightContent
     }
 }

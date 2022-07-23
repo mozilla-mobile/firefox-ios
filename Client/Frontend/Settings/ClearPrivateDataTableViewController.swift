@@ -104,7 +104,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return NumberOfSections
+        NumberOfSections
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -192,7 +192,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension
+        UITableView.automaticDimension
     }
 
     @objc func switchValueChanged(_ toggle: UISwitch) {

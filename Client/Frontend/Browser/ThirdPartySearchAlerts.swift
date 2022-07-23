@@ -11,7 +11,7 @@ class ThirdPartySearchAlerts: UIAlertController {
     Allows the keyboard to pop back up after an alertview.
     **/
     override var canBecomeFirstResponder: Bool {
-        return false
+        false
     }
 
     /**
@@ -54,18 +54,18 @@ class ThirdPartySearchAlerts: UIAlertController {
      **/
 
     static func failedToAddThirdPartySearch() -> UIAlertController {
-        return searchAlertWithOK(title: .ThirdPartySearchFailedTitle,
-                                 message: .ThirdPartySearchFailedMessage)
+        searchAlertWithOK(title: .ThirdPartySearchFailedTitle,
+                message: .ThirdPartySearchFailedMessage)
     }
 
     static func incorrectCustomEngineForm() -> UIAlertController {
-        return searchAlertWithOK(title: .CustomEngineFormErrorTitle,
-                                      message: .CustomEngineFormErrorMessage)
+        searchAlertWithOK(title: .CustomEngineFormErrorTitle,
+                message: .CustomEngineFormErrorMessage)
     }
 
     static func duplicateCustomEngine() -> UIAlertController {
-        return searchAlertWithOK(title: .CustomEngineDuplicateErrorTitle,
-                                 message: .CustomEngineDuplicateErrorMessage)
+        searchAlertWithOK(title: .CustomEngineDuplicateErrorTitle,
+                message: .CustomEngineDuplicateErrorMessage)
     }
 
     private static func searchAlertWithOK(title: String, message: String) -> UIAlertController {

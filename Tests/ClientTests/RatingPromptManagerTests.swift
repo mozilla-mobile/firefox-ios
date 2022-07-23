@@ -281,7 +281,7 @@ class CumulativeDaysOfUseCounterMock: CumulativeDaysOfUseCounter {
     }
 
     override var hasRequiredCumulativeDaysOfUse: Bool {
-        return hasMockRequiredDaysOfUse
+        hasMockRequiredDaysOfUse
     }
 }
 
@@ -290,7 +290,7 @@ class CrashingMockSentryClient: SentryProtocol {
     var enableCrashOnLastLaunch = false
 
     var crashedLastLaunch: Bool {
-        return enableCrashOnLastLaunch
+        enableCrashOnLastLaunch
     }
 }
 

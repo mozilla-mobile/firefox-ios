@@ -20,7 +20,7 @@ class NewTabHomePageAccessors {
     }
 
     static func getDefaultHomePageString(_ prefs: Prefs) -> String? {
-        return prefs.stringForKey(HomePageConstants.DefaultHomePageURLPrefKey)
+        prefs.stringForKey(HomePageConstants.DefaultHomePageURLPrefKey)
     }
 }
 

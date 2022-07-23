@@ -30,7 +30,7 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
     let userPrefs: Prefs
 
     class func name() -> String {
-        return "TrackingProtectionStats"
+        "TrackingProtectionStats"
     }
 
     var isUserEnabled: Bool? {
@@ -51,11 +51,11 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
     }
 
     var isEnabledInPref: Bool {
-        return userPrefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
+        userPrefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
     }
 
     var blockingStrengthPref: BlockingStrength {
-        return userPrefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap(BlockingStrength.init) ?? .basic
+        userPrefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap(BlockingStrength.init) ?? .basic
     }
 
     init(tab: ContentBlockerTab, prefs: Prefs) {
@@ -78,7 +78,7 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
     }
 
     override func currentlyEnabledLists() -> [BlocklistFileName] {
-        return BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict)
+        BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict)
     }
 
     override func notifyContentBlockingChanged() {
@@ -101,7 +101,7 @@ extension FirefoxTabContentBlocker {
     }
 
     static func isTrackingProtectionEnabled(prefs: Prefs) -> Bool {
-        return prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
+        prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
     }
 
     static func toggleTrackingProtectionEnabled(prefs: Prefs) {

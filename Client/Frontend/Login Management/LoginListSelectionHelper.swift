@@ -10,7 +10,7 @@ public class LoginListSelectionHelper {
     private(set) var selectedIndexPaths = [IndexPath]()
 
     var selectedCount: Int {
-        return selectedIndexPaths.count
+        selectedIndexPaths.count
     }
 
     init(tableView: UITableView) {
@@ -22,8 +22,8 @@ public class LoginListSelectionHelper {
     }
 
     func indexPathIsSelected(_ indexPath: IndexPath) -> Bool {
-        return selectedIndexPaths.contains(indexPath) { path1, path2 in
-            return path1.row == path2.row && path1.section == path2.section
+        selectedIndexPaths.contains(indexPath) { path1, path2 in
+            path1.row == path2.row && path1.section == path2.section
         }
     }
 

@@ -14,7 +14,7 @@ struct FxHomeHorizontalCellViewModel {
     var favIconImage: UIImage?
     var heroImage: UIImage?
     var accessibilityLabel: String {
-        return "\(titleText), \(descriptionText)"
+        "\(titleText), \(descriptionText)"
     }
 }
 

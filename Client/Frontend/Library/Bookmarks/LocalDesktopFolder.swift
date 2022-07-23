@@ -21,27 +21,27 @@ class LocalDesktopFolder: FxBookmarkNode {
     }
 
     var type: BookmarkNodeType {
-        return .folder
+        .folder
     }
 
     var guid: String {
-        return forcedGuid
+        forcedGuid
     }
 
     var parentGUID: String? {
-        return nil
+        nil
     }
 
     var position: UInt32 {
-        return 0
+        0
     }
 
     var isRoot: Bool {
-        return false
+        false
     }
 
     var title: String {
-        return ""
+        ""
     }
 }
 
@@ -50,11 +50,11 @@ extension LocalDesktopFolder: BookmarksFolderCell {
                       profile: Profile?,
                       completion: ((OneLineTableViewCellViewModel) -> Void)?)
     -> OneLineTableViewCellViewModel {
-        return OneLineTableViewCellViewModel(title: LocalizedRootBookmarkFolderStrings[guid],
-                                             leftImageView: leftImageView,
-                                             leftImageViewContentView: .center,
-                                             accessoryView: UIImageView(image: chevronImage),
-                                             accessoryType: .disclosureIndicator)
+        OneLineTableViewCellViewModel(title: LocalizedRootBookmarkFolderStrings[guid],
+                leftImageView: leftImageView,
+                leftImageViewContentView: .center,
+                accessoryView: UIImageView(image: chevronImage),
+                accessoryType: .disclosureIndicator)
     }
 
     func didSelect(profile: Profile,

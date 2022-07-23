@@ -22,22 +22,22 @@ struct ASGroup<T>: Hashable {
 
 extension ASGroup: HighlightItem {
     var group: [HighlightItem]? {
-        return groupedItems as? [HighlightItem]
+        groupedItems as? [HighlightItem]
     }
 
     var type: HighlightItemType {
-        return .group
+        .group
     }
 
     var displayTitle: String {
-        return searchTerm
+        searchTerm
     }
 
     var description: String? {
-        return String.localizedStringWithFormat(.FirefoxHomepage.Common.SitesCount, groupedItems.count)
+        String.localizedStringWithFormat(.FirefoxHomepage.Common.SitesCount, groupedItems.count)
     }
 
     var siteUrl: URL? {
-        return nil
+        nil
     }
 }

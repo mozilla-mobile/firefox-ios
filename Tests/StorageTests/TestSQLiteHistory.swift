@@ -10,19 +10,23 @@ import Shared
 import XCTest
 
 class BaseHistoricalBrowserSchema: Schema {
-    var name: String { return "BROWSER" }
-    var version: Int { return -1 }
+    var name: String {
+        "BROWSER"
+    }
+    var version: Int {
+        -1
+    }
 
     func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
         fatalError("Should never be called.")
     }
 
     func create(_ db: SQLiteDBConnection) -> Bool {
-        return false
+        false
     }
 
     func drop(_ db: SQLiteDBConnection) -> Bool {
-        return false
+        false
     }
 
     var supportsPartialIndices: Bool {
@@ -87,7 +91,9 @@ class BaseHistoricalBrowserSchema: Schema {
 // These tests snapshot the table creation code at each of these points.
 
 class BrowserSchemaV6: BaseHistoricalBrowserSchema {
-    override var version: Int { return 6 }
+    override var version: Int {
+        6
+    }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = 2 // "folder"
@@ -266,7 +272,9 @@ class BrowserSchemaV6: BaseHistoricalBrowserSchema {
 }
 
 class BrowserSchemaV7: BaseHistoricalBrowserSchema {
-    override var version: Int { return 7 }
+    override var version: Int {
+        7
+    }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = 2 // "folder"
@@ -450,7 +458,9 @@ class BrowserSchemaV7: BaseHistoricalBrowserSchema {
 }
 
 class BrowserSchemaV8: BaseHistoricalBrowserSchema {
-    override var version: Int { return 8 }
+    override var version: Int {
+        8
+    }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = 2 // "folder"
@@ -649,7 +659,9 @@ class BrowserSchemaV8: BaseHistoricalBrowserSchema {
 }
 
 class BrowserSchemaV10: BaseHistoricalBrowserSchema {
-    override var version: Int { return 10 }
+    override var version: Int {
+        10
+    }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = 2 // "folder"
@@ -1112,17 +1124,17 @@ class TestSQLiteHistory: XCTestCase {
         let updateTopSites: [(String, Args?)] = [(clearTopSites, nil), (history.getFrecentHistory().updateTopSitesCacheQuery())]
 
         func countTopSites() -> Deferred<Maybe<Cursor<Int>>> {
-            return db.runQuery("SELECT count(*) FROM cached_top_sites", args: nil, factory: { sdrow -> Int in
-                return sdrow[0] as? Int ?? 0
+            db.runQuery("SELECT count(*) FROM cached_top_sites", args: nil, factory: { sdrow -> Int in
+                sdrow[0] as? Int ?? 0
             })
         }
 
         history.clearHistory().bind({ success in
-            return all([history.addLocalVisit(SiteVisit(site: site11, date: Date.nowMicroseconds(), type: VisitType.link)),
-                        history.addLocalVisit(SiteVisit(site: site12, date: Date.nowMicroseconds(), type: VisitType.link)),
-                        history.addLocalVisit(SiteVisit(site: site3, date: Date.nowMicroseconds(), type: VisitType.link))])
+                    all([history.addLocalVisit(SiteVisit(site: site11, date: Date.nowMicroseconds(), type: VisitType.link)),
+                         history.addLocalVisit(SiteVisit(site: site12, date: Date.nowMicroseconds(), type: VisitType.link)),
+                         history.addLocalVisit(SiteVisit(site: site3, date: Date.nowMicroseconds(), type: VisitType.link))])
         }).bind({ (results: [Maybe<()>]) in
-            return history.insertOrUpdatePlace(site13, modified: Date.nowMicroseconds())
+                    history.insertOrUpdatePlace(site13, modified: Date.nowMicroseconds())
         }).bind({ guid -> Success in
             XCTAssertEqual(guid.successValue!, initialGuid, "Guid is correct")
             return db.run(updateTopSites)
@@ -1145,7 +1157,6 @@ class TestSQLiteHistory: XCTestCase {
         })
 
         waitForExpectations(timeout: 10.0) { error in
-            return
         }
     }
 
@@ -1187,30 +1198,30 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func checkSitesByFrecency(_ f: @escaping (Cursor<Site>) -> Success) -> () -> Success {
-            return {
+            {
                 history.getFrecentHistory().getSites(matchingSearchQuery: nil, limit: 10)
-                    >>== f
+                        >>== f
             }
         }
 
         func checkSitesByDate(_ f: @escaping (Cursor<Site>) -> Success) -> () -> Success {
-            return {
+            {
                 history.getSitesByLastVisit(limit: 10, offset: 0)
-                >>== f
+                        >>== f
             }
         }
 
         func checkSitesWithFilter(_ filter: String, f: @escaping (Cursor<Site>) -> Success) -> () -> Success {
-            return {
+            {
                 history.getFrecentHistory().getSites(matchingSearchQuery: filter, limit: 10)
-                >>== f
+                        >>== f
             }
         }
 
         func checkDeletedCount(_ expected: Int) -> () -> Success {
-            return {
+            {
                 history.getDeletedHistoryToUpload()
-                >>== { guids in
+                        >>== { guids in
                     XCTAssertEqual(expected, guids.count)
                     return succeed()
                 }
@@ -1283,7 +1294,6 @@ class TestSQLiteHistory: XCTestCase {
             >>> done
 
         waitForExpectations(timeout: 10.0) { error in
-            return
         }
     }
 
@@ -1374,11 +1384,11 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func loadCache() -> Success {
-            return history.repopulate(invalidateTopSites: true) >>> succeed
+            history.repopulate(invalidateTopSites: true) >>> succeed
         }
 
         func checkTopSitesReturnsResults() -> Success {
-            return history.getTopSitesWithLimit(20) >>== { topSites in
+            history.getTopSitesWithLimit(20) >>== { topSites in
                 XCTAssertEqual(topSites.count, 20)
                 XCTAssertEqual(topSites[0]!.guid, "abc\(5)defhi")
                 return succeed()
@@ -1390,7 +1400,6 @@ class TestSQLiteHistory: XCTestCase {
             >>> done
 
         waitForExpectations(timeout: 10.0) { error in
-            return
         }
     }
 
@@ -1427,11 +1436,11 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func loadCache() -> Success {
-            return history.repopulate(invalidateTopSites: true) >>> succeed
+            history.repopulate(invalidateTopSites: true) >>> succeed
         }
 
         func checkTopSitesReturnsResults() -> Success {
-            return history.getTopSitesWithLimit(20) >>== { topSites in
+            history.getTopSitesWithLimit(20) >>== { topSites in
                 XCTAssertEqual(topSites[0]?.guid, "docsgoogle") // google docs should be the first topsite
                 // make sure all other google guids are not in the topsites array
                 topSites.forEach {
@@ -1448,7 +1457,6 @@ class TestSQLiteHistory: XCTestCase {
             >>> done
 
         waitForExpectations(timeout: 10.0) { error in
-            return
         }
     }
 
@@ -1478,11 +1486,11 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func loadCache() -> Success {
-            return history.repopulate(invalidateTopSites: true) >>> succeed
+            history.repopulate(invalidateTopSites: true) >>> succeed
         }
 
         func checkTopSitesReturnsResults() -> Success {
-            return history.getTopSitesWithLimit(20) >>== { topSites in
+            history.getTopSitesWithLimit(20) >>== { topSites in
                 XCTAssertEqual(topSites.count, 20)
                 XCTAssertEqual(topSites[0]!.guid, "abc\(5)def")
                 return succeed()
@@ -1490,8 +1498,8 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func invalidateIfNeededDoesntChangeResults() -> Success {
-            return history.repopulate(invalidateTopSites: true) >>> {
-                return history.getTopSitesWithLimit(20) >>== { topSites in
+            history.repopulate(invalidateTopSites: true) >>> {
+                history.getTopSitesWithLimit(20) >>== { topSites in
                     XCTAssertEqual(topSites.count, 20)
                     XCTAssertEqual(topSites[0]!.guid, "abc\(5)def")
                     return succeed()
@@ -1533,7 +1541,6 @@ class TestSQLiteHistory: XCTestCase {
             >>> done
 
         waitForExpectations(timeout: 10.0) { error in
-            return
         }
     }
 
@@ -1568,14 +1575,14 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func addPinnedSites() -> Success {
-            return history.addPinnedTopSite(site1) >>== {
+            history.addPinnedTopSite(site1) >>== {
                 sleep(1) // Sleep to prevent intermittent issue with sorting on the timestamp
                 return history.addPinnedTopSite(site2)
             }
         }
 
         func checkPinnedSites() -> Success {
-            return history.getPinnedTopSites() >>== { pinnedSites in
+            history.getPinnedTopSites() >>== { pinnedSites in
                 XCTAssertEqual(pinnedSites.count, 2)
                 XCTAssertEqual(pinnedSites[0]!.url, site2.url)
                 XCTAssertEqual(pinnedSites[1]!.url, site1.url, "The older pinned site should be last")
@@ -1584,8 +1591,8 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func removePinnedSites() -> Success {
-            return history.removeFromPinnedTopSites(site2) >>== {
-                return history.getPinnedTopSites() >>== { pinnedSites in
+            history.removeFromPinnedTopSites(site2) >>== {
+                history.getPinnedTopSites() >>== { pinnedSites in
                     XCTAssertEqual(pinnedSites.count, 1, "There should only be one pinned site")
                     XCTAssertEqual(pinnedSites[0]!.url, site1.url, "Site2 should be the only pin left")
                     return succeed()
@@ -1594,8 +1601,8 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func dupePinnedSite() -> Success {
-            return history.addPinnedTopSite(site1) >>== {
-                return history.getPinnedTopSites() >>== { pinnedSites in
+            history.addPinnedTopSite(site1) >>== {
+                history.getPinnedTopSites() >>== { pinnedSites in
                     XCTAssertEqual(pinnedSites.count, 1, "There should not be a dupe")
                     XCTAssertEqual(pinnedSites[0]!.url, site1.url, "Site2 should be the only pin left")
                     return succeed()
@@ -1604,8 +1611,8 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func removeHistory() -> Success {
-            return history.clearHistory() >>== {
-                return history.getPinnedTopSites() >>== { pinnedSites in
+            history.clearHistory() >>== {
+                history.getPinnedTopSites() >>== { pinnedSites in
                     XCTAssertEqual(pinnedSites.count, 1, "Pinned sites should exist after a history clear")
                     return succeed()
                 }
@@ -1620,7 +1627,6 @@ class TestSQLiteHistory: XCTestCase {
             >>> done
 
         waitForExpectations(timeout: 10.0) { error in
-            return
         }
 
     }
@@ -1651,14 +1657,14 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func addPinnedSites() -> Success {
-            return history.addPinnedTopSite(site1) >>== {
+            history.addPinnedTopSite(site1) >>== {
                 sleep(1) // Sleep to prevent intermittent issue with sorting on the timestamp
                 return history.addPinnedTopSite(site2)
             }
         }
 
         func checkPinnedSites() -> Success {
-            return history.getPinnedTopSites() >>== { pinnedSites in
+            history.getPinnedTopSites() >>== { pinnedSites in
                 XCTAssertEqual(pinnedSites.count, 2)
                 XCTAssertEqual(pinnedSites[0]!.url, site2.url)
                 XCTAssertEqual(pinnedSites[1]!.url, site1.url, "The older pinned site should be last")
@@ -1667,8 +1673,8 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func removePinnedSites() -> Success {
-            return history.removeFromPinnedTopSites(site2) >>== {
-                return history.getPinnedTopSites() >>== { pinnedSites in
+            history.removeFromPinnedTopSites(site2) >>== {
+                history.getPinnedTopSites() >>== { pinnedSites in
                     XCTAssertEqual(pinnedSites.count, 1, "There should only be one pinned site")
                     XCTAssertEqual(pinnedSites[0]!.url, site1.url, "Site2 should be the only pin left")
                     return succeed()
@@ -1677,8 +1683,8 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func removeHistory() -> Success {
-            return history.clearHistory() >>== {
-                return history.getPinnedTopSites() >>== { pinnedSites in
+            history.clearHistory() >>== {
+                history.getPinnedTopSites() >>== { pinnedSites in
                     XCTAssertEqual(pinnedSites.count, 2, "Pinned sites should exist after a history clear")
                     return succeed()
                 }
@@ -1691,7 +1697,6 @@ class TestSQLiteHistory: XCTestCase {
             >>> done
 
         waitForExpectations(timeout: 10.0) { error in
-            return
         }
     }
 }

@@ -22,7 +22,7 @@ struct IntentProvider: IntentTimelineProvider {
     }
 
     func placeholder(in context: Context) -> QuickLinkEntry {
-        return QuickLinkEntry(date: Date(), link: .search)
+        QuickLinkEntry(date: Date(), link: .search)
     }
 }
 

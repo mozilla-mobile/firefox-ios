@@ -29,7 +29,7 @@ class LoginListTableViewCell: ThemedTableViewCell {
     }
 
     lazy var breachMargin: CGFloat = {
-        return breachAlertSize + LoginTableViewCellUX.HorizontalMargin * 2
+        breachAlertSize + LoginTableViewCellUX.HorizontalMargin * 2
     }()
 
     lazy var hostnameLabel: UILabel = .build { label in

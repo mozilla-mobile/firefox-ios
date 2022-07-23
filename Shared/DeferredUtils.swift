@@ -18,7 +18,7 @@ infix operator >>== : MonadicBindPrecedence
 infix operator >>> : MonadicDoPrecedence
 
 @discardableResult public func >>== <T, U>(x: Deferred<Maybe<T>>, f: @escaping (T) -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
-    return chainDeferred(x, f: f)
+    chainDeferred(x, f: f)
 }
 
 // A termination case.
@@ -32,7 +32,7 @@ public func >>== <T>(x: Deferred<Maybe<T>>, f: @escaping (T) -> Void) {
 
 // Monadic `do` for Deferred.
 @discardableResult public func >>> <T, U>(x: Deferred<Maybe<T>>, f: @escaping () -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
-    return x.bind { res in
+    x.bind { res in
         if res.isSuccess {
             return f()
         }
@@ -53,27 +53,29 @@ public func >>> <T>(x: Deferred<Maybe<T>>, f: @escaping () -> Void) {
 * Returns a thunk that return a Deferred that resolves to the provided value.
 */
 public func always<T>(_ t: T) -> () -> Deferred<Maybe<T>> {
-    return { deferMaybe(t) }
+    {
+        deferMaybe(t)
+    }
 }
 
 public func deferMaybe<T>(_ s: T) -> Deferred<Maybe<T>> {
-    return Deferred(value: Maybe(success: s))
+    Deferred(value: Maybe(success: s))
 }
 
 // This specific overload prevents Strings, which conform to MaybeErrorType, from
 // always matching the failure case. See <https://github.com/mozilla-mobile/firefox-ios/issues/7791>.
 public func deferMaybe(_ s: String) -> Deferred<Maybe<String>> {
-    return Deferred(value: Maybe(success: s))
+    Deferred(value: Maybe(success: s))
 }
 
 public func deferMaybe<T>(_ e: MaybeErrorType) -> Deferred<Maybe<T>> {
-    return Deferred(value: Maybe(failure: e))
+    Deferred(value: Maybe(failure: e))
 }
 
 public typealias Success = Deferred<Maybe<Void>>
 
 @discardableResult public func succeed() -> Success {
-    return deferMaybe(())
+    deferMaybe(())
 }
 
 /**
@@ -81,8 +83,10 @@ public typealias Success = Deferred<Maybe<Void>>
  * of f over the provided items.
  */
 public func walk<T>(_ items: [T], f: @escaping (T) -> Success) -> Success {
-    return items.reduce(succeed()) { success, item -> Success in
-        success >>> { f(item) }
+    items.reduce(succeed()) { success, item -> Success in
+        success >>> {
+            f(item)
+        }
     }
 }
 
@@ -133,7 +137,7 @@ public func accumulate<T>(_ thunks: [() -> Deferred<Maybe<T>>]) -> Deferred<Mayb
  * in a chain of async operations without producing its own value.
  */
 public func effect<T, U>(_ f: @escaping (T) -> U) -> (T) -> Deferred<Maybe<T>> {
-    return { t in
+    { t in
         _ = f(t)
         return deferMaybe(t)
     }
@@ -142,7 +146,7 @@ public func effect<T, U>(_ f: @escaping (T) -> U) -> (T) -> Deferred<Maybe<T>> {
 // SE-0029 introduced this behaviour
 // https://github.com/apple/swift-evolution/blob/master/proposals/0029-remove-implicit-tuple-splat.md
 public func effect(_ f: @escaping (Swift.Void) -> Void) -> () -> Success {
-    return {
+    {
         f(())
         return succeed()
     }
@@ -154,7 +158,7 @@ public func effect(_ f: @escaping (Swift.Void) -> Void) -> () -> Success {
  */
 public func walk<T, U, S: Sequence>(_ items: S, start: Deferred<Maybe<U>>, f: @escaping (T, U) -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> where S.Iterator.Element == T {
     let fs = items.map { item in
-        return { val in
+        { val in
             f(item, val)
         }
     }
@@ -166,7 +170,7 @@ public func walk<T, U, S: Sequence>(_ items: S, start: Deferred<Maybe<U>>, f: @e
  */
 extension Array where Element: Success {
     public func allSucceed() -> Success {
-        return all(self).bind { results -> Success in
+        all(self).bind { results -> Success in
             if let failure = results.find({ $0.isFailure }) {
                 return deferMaybe(failure.failureValue!)
             }
@@ -177,7 +181,7 @@ extension Array where Element: Success {
 }
 
 public func chainDeferred<T, U>(_ a: Deferred<Maybe<T>>, f: @escaping (T) -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
-    return a.bind { res in
+    a.bind { res in
         if let v = res.successValue {
             return f(v)
         }
@@ -186,7 +190,7 @@ public func chainDeferred<T, U>(_ a: Deferred<Maybe<T>>, f: @escaping (T) -> Def
 }
 
 public func chainResult<T, U>(_ a: Deferred<Maybe<T>>, f: @escaping (T) -> Maybe<U>) -> Deferred<Maybe<U>> {
-    return a.map { res in
+    a.map { res in
         if let v = res.successValue {
             return f(v)
         }
@@ -195,7 +199,7 @@ public func chainResult<T, U>(_ a: Deferred<Maybe<T>>, f: @escaping (T) -> Maybe
 }
 
 public func chain<T, U>(_ a: Deferred<Maybe<T>>, f: @escaping (T) -> U) -> Deferred<Maybe<U>> {
-    return chainResult(a, f: { Maybe<U>(success: f($0)) })
+    chainResult(a, f: { Maybe<U>(success: f($0)) })
 }
 
 /// Defer-ifies a block to an async dispatch queue.

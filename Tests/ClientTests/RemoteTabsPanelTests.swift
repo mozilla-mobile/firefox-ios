@@ -87,23 +87,23 @@ class RemoteTabsPanelTests: XCTestCase {
 
 private extension RemoteTabsPanelTests {
     var remoteClient: RemoteClient {
-        return RemoteClient(guid: nil,
-                            name: "Fake client",
-                            modified: 1,
-                            type: nil,
-                            formfactor: nil,
-                            os: nil,
-                            version: nil,
-                            fxaDeviceId: nil)
+        RemoteClient(guid: nil,
+                name: "Fake client",
+                modified: 1,
+                type: nil,
+                formfactor: nil,
+                os: nil,
+                version: nil,
+                fxaDeviceId: nil)
     }
 
     var remoteTabs: [RemoteTab] {
-        return [RemoteTab(clientGUID: nil,
-                          URL: URL(string: "www.mozilla.org")!,
-                          title: "Mozilla",
-                          history: [],
-                          lastUsed: 1,
-                          icon: nil)]
+        [RemoteTab(clientGUID: nil,
+                URL: URL(string: "www.mozilla.org")!,
+                title: "Mozilla",
+                history: [],
+                lastUsed: 1,
+                icon: nil)]
     }
 
     func panelRefreshWithExpectation(panel: RemoteTabsPanel, completion: @escaping () -> Void) {

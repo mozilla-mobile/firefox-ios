@@ -16,7 +16,7 @@ open class StorageResponseError<T>: MaybeErrorType, SyncPingFailureFormattable {
     public let response: StorageResponse<T>
 
     open var failureReasonName: SyncPingFailureReasonName {
-        return .httpError
+        .httpError
     }
 
     public init(_ response: StorageResponse<T>) {
@@ -24,17 +24,17 @@ open class StorageResponseError<T>: MaybeErrorType, SyncPingFailureFormattable {
     }
 
     open var description: String {
-        return "Error."
+        "Error."
     }
 }
 
 open class RequestError: MaybeErrorType, SyncPingFailureFormattable {
     open var failureReasonName: SyncPingFailureReasonName {
-        return .httpError
+        .httpError
     }
 
     open var description: String {
-        return "Request error."
+        "Request error."
     }
 }
 
@@ -47,13 +47,13 @@ open class BadRequestError<T>: StorageResponseError<T> {
     }
 
     override open var description: String {
-        return "Bad request."
+        "Bad request."
     }
 }
 
 open class ServerError<T>: StorageResponseError<T> {
     override open var description: String {
-        return "Server error."
+        "Server error."
     }
 
     override public init(_ response: StorageResponse<T>) {
@@ -63,7 +63,7 @@ open class ServerError<T>: StorageResponseError<T> {
 
 open class NotFound<T>: StorageResponseError<T> {
     override open var description: String {
-        return "Not found. (\(T.self))"
+        "Not found. (\(T.self))"
     }
 
     override public init(_ response: StorageResponse<T>) {
@@ -73,21 +73,21 @@ open class NotFound<T>: StorageResponseError<T> {
 
 open class RecordParseError: MaybeErrorType, SyncPingFailureFormattable {
     open var description: String {
-        return "Failed to parse record."
+        "Failed to parse record."
     }
 
     open var failureReasonName: SyncPingFailureReasonName {
-        return .otherError
+        .otherError
     }
 }
 
 open class MalformedMetaGlobalError: MaybeErrorType, SyncPingFailureFormattable {
     open var description: String {
-        return "Supplied meta/global for upload did not serialize to valid JSON."
+        "Supplied meta/global for upload did not serialize to valid JSON."
     }
 
     open var failureReasonName: SyncPingFailureReasonName {
-        return .otherError
+        .otherError
     }
 }
 
@@ -96,7 +96,7 @@ open class RecordTooLargeError: MaybeErrorType, SyncPingFailureFormattable {
     public let size: ByteCount
 
     open var failureReasonName: SyncPingFailureReasonName {
-        return .otherError
+        .otherError
     }
 
     public init(size: ByteCount, guid: GUID) {
@@ -105,7 +105,7 @@ open class RecordTooLargeError: MaybeErrorType, SyncPingFailureFormattable {
     }
 
     open var description: String {
-        return "Record \(self.guid) too large: \(size) bytes."
+        "Record \(self.guid) too large: \(size) bytes."
     }
 }
 
@@ -119,7 +119,7 @@ open class ServerInBackoffError: MaybeErrorType, SyncPingFailureFormattable {
     fileprivate let until: Timestamp
 
     open var failureReasonName: SyncPingFailureReasonName {
-        return .otherError
+        .otherError
     }
 
     open var description: String {
@@ -568,28 +568,28 @@ open class Sync15StorageClient {
     }
 
     fileprivate func getResource<T>(_ path: String, f: @escaping (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
-        return doOp(self.requestGET, path: path, f: f)
+        doOp(self.requestGET, path: path, f: f)
     }
 
     fileprivate func deleteResource<T>(_ path: String, f: @escaping (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
-        return doOp(self.requestDELETE, path: path, f: f)
+        doOp(self.requestDELETE, path: path, f: f)
     }
 
     func wipeStorage() -> Deferred<Maybe<StorageResponse<JSON>>> {
         // In Sync 1.5 it's preferred that we delete the root, not /storage.
-        return deleteResource("", f: { $0 })
+        deleteResource("", f: { $0 })
     }
 
     func deleteObject(collection: String, guid: String) -> Deferred<Maybe<StorageResponse<JSON>>> {
-        return deleteResource("storage/\(collection)/\(guid)", f: { $0 })
+        deleteResource("storage/\(collection)/\(guid)", f: { $0 })
     }
 
     func getInfoCollections() -> Deferred<Maybe<StorageResponse<InfoCollections>>> {
-        return getResource("info/collections", f: InfoCollections.fromJSON)
+        getResource("info/collections", f: InfoCollections.fromJSON)
     }
 
     func getMetaGlobal() -> Deferred<Maybe<StorageResponse<MetaGlobal>>> {
-        return getResource("storage/meta/global") { json in
+        getResource("storage/meta/global") { json in
             // We have an envelope.  Parse the meta/global record embedded in the 'payload' string.
             let envelope = EnvelopeJSON(json)
             if envelope.isValid() {
@@ -662,25 +662,25 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
 
     var maxBatchPostRecords: Int {
         get {
-            return infoConfig.maxPostRecords
+            infoConfig.maxPostRecords
         }
     }
 
     fileprivate func uriForRecord(_ guid: String) -> URL {
-        return self.collectionURI.appendingPathComponent(guid)
+        self.collectionURI.appendingPathComponent(guid)
     }
 
     open func newBatch(ifUnmodifiedSince: Timestamp? = nil, onCollectionUploaded: @escaping (POSTResult, Timestamp?) -> DeferredTimestamp) -> Sync15BatchClient<T> {
-        return Sync15BatchClient(config: infoConfig,
-                                 ifUnmodifiedSince: ifUnmodifiedSince,
-                                 serializeRecord: self.serializeRecord,
-                                 uploader: self.post,
-                                 onCollectionUploaded: onCollectionUploaded)
+        Sync15BatchClient(config: infoConfig,
+                ifUnmodifiedSince: ifUnmodifiedSince,
+                serializeRecord: self.serializeRecord,
+                uploader: self.post,
+                onCollectionUploaded: onCollectionUploaded)
     }
 
     // Exposed so we can batch by size.
     open func serializeRecord(_ record: Record<T>) -> String? {
-        return self.encrypter.serializer(record)?.stringify()
+        self.encrypter.serializer(record)?.stringify()
     }
 
     open func post(_ lines: [String], ifUnmodifiedSince: Timestamp?, queryParams: [URLQueryItem]? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {

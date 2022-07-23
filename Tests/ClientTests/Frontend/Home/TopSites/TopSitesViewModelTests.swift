@@ -37,7 +37,7 @@ class TopSitesViewModelTests: XCTestCase {
         let newSites = topSitesProvider.defaultTopSites(profile.prefs)
 
         XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
-            return a.url == b.url
+            a.url == b.url
         }))
     }
 

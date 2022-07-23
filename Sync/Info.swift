@@ -29,11 +29,11 @@ open class InfoCollections {
     }
 
     open func collectionNames() -> [String] {
-        return Array(self.collections.keys)
+        Array(self.collections.keys)
     }
 
     open func modified(_ collection: String) -> Timestamp? {
-        return self.collections[collection]
+        self.collections[collection]
     }
 
     // Two I/Cs are the same if they have the same modified times for a set of

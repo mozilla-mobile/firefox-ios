@@ -11,7 +11,7 @@ import os.log
 
 private class FetchInProgressError: MaybeErrorType {
     internal var description: String {
-        return "Fetch is already in-progress"
+        "Fetch is already in-progress"
     }
 }
 
@@ -48,7 +48,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     var diffableDatasource: UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>?
 
     var shouldShowToolBar: Bool {
-        return state == .history(state: .mainView) || state == .history(state: .search)
+        state == .history(state: .mainView) || state == .history(state: .search)
     }
 
     var shouldShowSearch: Bool {

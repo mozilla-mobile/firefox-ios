@@ -219,50 +219,50 @@ private extension ContileProviderTests {
     // MARK: - Mock responses
 
     var emptyArrayResponse: String {
-        return "{\"tiles\":[]}"
+        "{\"tiles\":[]}"
     }
 
     var emptyWrongResponse: String {
-        return "{\"tiles\":[{\"answer\":\"isBad\"}]}"
+        "{\"tiles\":[{\"answer\":\"isBad\"}]}"
     }
 
     var emptyResponse: String {
-        return "{}"
+        "{}"
     }
 
     var twoTilesWithOneNilPosition: String {
-        return "{\"tiles\":[\(oneTileEmptyPosition),\(oneTileWithPosition)]}"
+        "{\"tiles\":[\(oneTileEmptyPosition),\(oneTileWithPosition)]}"
     }
 
     var twoTilesWithOutOfOrderPositions: String {
-        return "{\"tiles\":[\(secondTileWithPosition),\(oneTileWithPosition)]}"
+        "{\"tiles\":[\(secondTileWithPosition),\(oneTileWithPosition)]}"
     }
 
     var oneTileEmptyPosition: String {
-        return """
-{\"id\":1,\"name\":\"TileNilPosition\",\"url\":\"https://www.website.com\",\"\
-click_url\":\"https://www.website.com\",\"image_url\":\"https://www.website.com\",\"\
-image_size\":200,\"impression_url\":\"https://www.website.com\"}
-"""
+        """
+        {\"id\":1,\"name\":\"TileNilPosition\",\"url\":\"https://www.website.com\",\"\
+        click_url\":\"https://www.website.com\",\"image_url\":\"https://www.website.com\",\"\
+        image_size\":200,\"impression_url\":\"https://www.website.com\"}
+        """
     }
 
     var oneTileWithPosition: String {
-        return """
-{\"id\":1,\"name\":\"Tile1\",\"url\":\"https://www.website.com\",\"click_url\":\"\
-https://www.website.com\",\"image_url\":\"https://www.website.com\",\"\
-image_size\":200,\"impression_url\":\"https://www.website.com\",\"position\":1}
-"""
+        """
+        {\"id\":1,\"name\":\"Tile1\",\"url\":\"https://www.website.com\",\"click_url\":\"\
+        https://www.website.com\",\"image_url\":\"https://www.website.com\",\"\
+        image_size\":200,\"impression_url\":\"https://www.website.com\",\"position\":1}
+        """
     }
 
     var secondTileWithPosition: String {
-        return """
-{\"id\":2,\"name\":\"Tile2\",\"url\":\"https://www.website2.com\",\"click_url\":\"\
-https://www.website2.com\",\"image_url\":\"https://www.website2.com\",\"\
-image_size\":200,\"impression_url\":\"https://www.website2.com\",\"position\":2}
-"""
+        """
+        {\"id\":2,\"name\":\"Tile2\",\"url\":\"https://www.website2.com\",\"click_url\":\"\
+        https://www.website2.com\",\"image_url\":\"https://www.website2.com\",\"\
+        image_size\":200,\"impression_url\":\"https://www.website2.com\",\"position\":2}
+        """
     }
 
     var anError: NSError {
-        return NSError(domain: "test error", code: 0)
+        NSError(domain: "test error", code: 0)
     }
 }

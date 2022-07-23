@@ -67,7 +67,9 @@ class MockToolbarButton: ToolbarButton {
 
 class MockTabToolbar: TabToolbarProtocol {
     var tabToolbarDelegate: TabToolbarDelegate? {
-        get { return nil }
+        get {
+            nil
+        }
         set { }
     }
 
@@ -100,7 +102,9 @@ class MockTabToolbar: TabToolbarProtocol {
     var _multiStateButton = MockToolbarButton()
     var multiStateButton: ToolbarButton { get { _multiStateButton } }
     var actionButtons: [NotificationThemeable & UIButton] {
-        get { return [] }
+        get {
+            []
+        }
     }
 
     func updateBackStatus(_ canGoBack: Bool) {

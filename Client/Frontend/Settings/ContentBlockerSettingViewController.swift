@@ -85,11 +85,11 @@ class TPAccessoryInfo: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        2
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return isStrictMode ? 5 : 4
+        isStrictMode ? 5 : 4
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -164,7 +164,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                 style: .leftSide,
                 subtitle: NSAttributedString(string: option.settingSubtitle),
                 accessibilityIdentifier: id,
-                isChecked: { return option == self.currentBlockingStrength },
+                isChecked: { option == self.currentBlockingStrength },
                 onChecked: {
                     self.currentBlockingStrength = option
                     self.prefs.setString(self.currentBlockingStrength.rawValue,
@@ -257,7 +257,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension
+        UITableView.automaticDimension
     }
 
     @objc func moreInfoTapped() {

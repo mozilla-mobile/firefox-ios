@@ -10,7 +10,7 @@ struct TopSitesProvider: TimelineProvider {
     public typealias Entry = TopSitesEntry
 
     func placeholder(in context: Context) -> TopSitesEntry {
-        return TopSitesEntry(date: Date(), favicons: [String: Image](), sites: [])
+        TopSitesEntry(date: Date(), favicons: [String: Image](), sites: [])
     }
 
     func getSnapshot(in context: Context, completion: @escaping (TopSitesEntry) -> Void) {

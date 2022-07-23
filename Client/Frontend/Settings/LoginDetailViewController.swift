@@ -15,7 +15,7 @@ enum InfoItem: Int {
     case deleteItem
 
     var indexPath: IndexPath {
-        return IndexPath(row: rawValue, section: 0)
+        IndexPath(row: rawValue, section: 0)
     }
 }
 
@@ -229,7 +229,7 @@ extension LoginDetailViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 6
+        6
     }
 }
 
@@ -391,7 +391,7 @@ extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
     }
 
     private func cellForItem(_ item: InfoItem) -> LoginDetailTableViewCell? {
-        return tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
+        tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
     }
 
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell) {

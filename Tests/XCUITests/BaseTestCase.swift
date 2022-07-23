@@ -8,7 +8,7 @@ import XCTest
 let serverPort = Int.random(in: 1025..<65000)
 
 func path(forTestPage page: String) -> String {
-    return "http://localhost:\(serverPort)/test-fixture/\(page)"
+    "http://localhost:\(serverPort)/test-fixture/\(page)"
 }
 
 class BaseTestCase: XCTestCase {
@@ -174,7 +174,7 @@ class IphoneOnlyTestCase: BaseTestCase {
 
 extension BaseTestCase {
     func tabTrayButton(forApp app: XCUIApplication) -> XCUIElement {
-        return app.buttons["TopTabsViewController.tabsButton"].exists ? app.buttons["TopTabsViewController.tabsButton"] : app.buttons["TabToolbar.tabsButton"]
+        app.buttons["TopTabsViewController.tabsButton"].exists ? app.buttons["TopTabsViewController.tabsButton"] : app.buttons["TabToolbar.tabsButton"]
     }
 }
 

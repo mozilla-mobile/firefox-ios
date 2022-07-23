@@ -21,7 +21,7 @@ enum ShortcutType: String {
     }
 
     var type: String {
-        return Bundle.main.bundleIdentifier! + ".\(self.rawValue)"
+        Bundle.main.bundleIdentifier! + ".\(self.rawValue)"
     }
 }
 

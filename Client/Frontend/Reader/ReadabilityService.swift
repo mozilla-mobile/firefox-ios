@@ -117,7 +117,7 @@ extension ReadabilityOperation: ReaderModeDelegate {
 
 class ReadabilityService {
     class var sharedInstance: ReadabilityService {
-        return ReadabilityServiceSharedInstance
+        ReadabilityServiceSharedInstance
     }
 
     var queue: OperationQueue

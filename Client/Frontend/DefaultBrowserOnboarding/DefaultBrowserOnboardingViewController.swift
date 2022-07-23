@@ -49,20 +49,20 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
-        return theme.currentName == .dark ? .white : .black
+        theme.currentName == .dark ? .white : .black
     }
 
     private var fxBackgroundThemeColour: UIColor = UIColor.theme.onboarding.backgroundColor
 
     private var descriptionFontSize: CGFloat {
-        return screenSize.height > 1000 ? DBOnboardingUX.fontSizeXSmall :
-               screenSize.height > 668 ? DBOnboardingUX.fontSize :
-               screenSize.height > 640 ? DBOnboardingUX.fontSizeSmall : DBOnboardingUX.fontSizeXSmall
+        screenSize.height > 1000 ? DBOnboardingUX.fontSizeXSmall :
+                screenSize.height > 668 ? DBOnboardingUX.fontSize :
+                screenSize.height > 640 ? DBOnboardingUX.fontSizeSmall : DBOnboardingUX.fontSizeXSmall
     }
 
     private var titleFontSize: CGFloat {
-        return screenSize.height > 1000 ? DBOnboardingUX.titleSizeLarge :
-               screenSize.height > 640 ? DBOnboardingUX.titleSize : DBOnboardingUX.titleSizeSmall
+        screenSize.height > 1000 ? DBOnboardingUX.titleSizeLarge :
+                screenSize.height > 640 ? DBOnboardingUX.titleSize : DBOnboardingUX.titleSizeSmall
     }
 
     // Orientation independent screen size

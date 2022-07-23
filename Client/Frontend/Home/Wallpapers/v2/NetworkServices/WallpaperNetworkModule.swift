@@ -15,29 +15,30 @@ class WallpaperNetworkingModule: WallpaperNetworking {
 
     /// A basic async/await wrapper
     func data(from url: URL) async throws -> (Data, URLResponse) {
-        return try await withCheckedThrowingContinuation { continuation in
+        try await withCheckedThrowingContinuation { continuation in
             urlSession.dataTaskWith(url) { data, response, error in
 
-                if let error = error {
-                    continuation.resume(throwing: error)
-                    return
-                }
+                        if let error = error {
+                            continuation.resume(throwing: error)
+                            return
+                        }
 
-                guard let response = validatedHTTPResponse(response, statusCode: 200..<300) else {
-                    continuation.resume(throwing: URLError(.badServerResponse))
-                    return
-                }
+                        guard let response = validatedHTTPResponse(response, statusCode: 200..<300) else {
+                            continuation.resume(throwing: URLError(.badServerResponse))
+                            return
+                        }
 
-                guard let data = data,
-                      !data.isEmpty
-                else {
-                    continuation.resume(throwing: WallpaperServiceError.dataUnavailable)
-                    return
-                }
+                        guard let data = data,
+                              !data.isEmpty
+                        else {
+                            continuation.resume(throwing: WallpaperServiceError.dataUnavailable)
+                            return
+                        }
 
-                continuation.resume(returning: (data, response))
+                        continuation.resume(returning: (data, response))
 
-            }.resume()
+                    }
+                    .resume()
         }
     }
 }

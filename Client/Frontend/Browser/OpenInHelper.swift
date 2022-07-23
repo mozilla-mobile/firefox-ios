@@ -37,7 +37,7 @@ struct MIMEType {
         MIMEType.WebP]
 
     static func canShowInWebView(_ mimeType: String) -> Bool {
-        return webViewViewableTypes.contains(mimeType.lowercased())
+        webViewViewableTypes.contains(mimeType.lowercased())
     }
 
     static func mimeTypeFromFileExtension(_ fileExtension: String) -> String {
@@ -112,7 +112,7 @@ class DownloadHelper: NSObject {
             filenameItem = SingleActionViewModel(title: download.filename, text: host, iconString: "file", iconAlignment: .right, bold: true)
         }
         filenameItem.customHeight = { _ in
-            return 80
+            80
         }
         filenameItem.customRender = { label, contentView in
             label.numberOfLines = 2
@@ -233,10 +233,10 @@ class OpenQLPreviewHelper: NSObject, QLPreviewControllerDataSource {
     }
 
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-        return 1
+        1
     }
 
     func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-        return self.url
+        self.url
     }
 }

@@ -24,7 +24,7 @@ public struct DateGroupedTableData<T: Equatable> {
     var older: [(item: T, timing: TimeInterval)] = []
 
     public var isEmpty: Bool {
-        return today.isEmpty && yesterday.isEmpty && lastWeek.isEmpty && lastMonth.isEmpty && older.isEmpty
+        today.isEmpty && yesterday.isEmpty && lastWeek.isEmpty && lastMonth.isEmpty && older.isEmpty
     }
 
     public init() {}

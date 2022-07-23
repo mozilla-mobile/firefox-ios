@@ -25,15 +25,15 @@ public protocol Command {
 open class WipeCommand: Command {
 
     public init?(command: String, args: [JSON]) {
-        return nil
+        nil
     }
 
     open class func fromName(_ command: String, args: [JSON]) -> Command? {
-        return WipeCommand(command: command, args: args)
+        WipeCommand(command: command, args: args)
     }
 
     open func run(_ synchronizer: ClientsSynchronizer) -> Success {
-        return succeed()
+        succeed()
     }
 
     public static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
@@ -67,7 +67,7 @@ open class DisplayURICommand: Command {
     }
 
     open class func fromName(_ command: String, args: [JSON]) -> Command? {
-        return DisplayURICommand(command: command, args: args)
+        DisplayURICommand(command: command, args: args)
     }
 
     open func run(_ synchronizer: ClientsSynchronizer) -> Success {
@@ -81,7 +81,7 @@ open class DisplayURICommand: Command {
         }
 
         return sender >>== { client in
-            return display(client?.name)
+            display(client?.name)
         }
     }
 
@@ -114,7 +114,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     var clientGuidIsMigrated: Bool = false
 
     override var storageVersion: Int {
-        return ClientsStorageVersion
+        ClientsStorageVersion
     }
 
     var clientRecordLastUpload: Timestamp {
@@ -123,7 +123,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         }
 
         get {
-            return self.prefs.unsignedLongForKey("lastClientUpload") ?? 0
+            self.prefs.unsignedLongForKey("lastClientUpload") ?? 0
         }
     }
 
@@ -217,17 +217,18 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     }
 
     fileprivate func uploadClientCommands(toLocalClients localClients: RemoteClientsAndTabs, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
-        return localClients.getCommands() >>== { clientCommands in
-            return clientCommands.map { (clientGUID, commands) -> Success in
-                self.syncClientCommands(clientGUID, commands: commands, clientsAndTabs: localClients, withServer: storageClient)
-            }.allSucceed()
+        localClients.getCommands() >>== { clientCommands in
+            clientCommands.map { (clientGUID, commands) -> Success in
+                        self.syncClientCommands(clientGUID, commands: commands, clientsAndTabs: localClients, withServer: storageClient)
+                    }
+                    .allSucceed()
         }
     }
 
     fileprivate func syncClientCommands(_ clientGUID: GUID, commands: [SyncCommand], clientsAndTabs: RemoteClientsAndTabs, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
 
         let deleteCommands: () -> Success = {
-            return clientsAndTabs.deleteCommands(clientGUID).bind({ x in return succeed() })
+            clientsAndTabs.deleteCommands(clientGUID).bind({ x in succeed() })
         }
 
         log.debug("Fetching current client record for client \(clientGUID).")
@@ -411,10 +412,13 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         // clients since the beginning of time instead of looking at `self.lastFetched`.
         return clientsClient.getSince(0)
             >>== { response in
-                return self.maybeDeleteClients(response: response, withServer: storageClient)
-                    >>> { self.wipeIfNecessary(localClients)
-                                >>> { self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient, notifier: notifier) }
-                    }
+            self.maybeDeleteClients(response: response, withServer: storageClient)
+                >>> {
+                self.wipeIfNecessary(localClients)
+                        >>> {
+                    self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient, notifier: notifier)
+                }
+            }
 
             }
             >>> { deferMaybe(self.completedWithStats) }

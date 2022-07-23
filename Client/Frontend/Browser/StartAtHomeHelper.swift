@@ -17,9 +17,9 @@ class StartAtHomeHelper: FeatureFlaggable {
     }
 
     var shouldSkipStartHome: Bool {
-        return isRunningUITest ||
-              DebugSettingsBundleOptions.skipSessionRestore ||
-              isRestoringTabs
+        isRunningUITest ||
+                DebugSettingsBundleOptions.skipSessionRestore ||
+                isRestoringTabs
     }
 
     /// Determines whether the Start at Home feature is enabled, how long it has been since

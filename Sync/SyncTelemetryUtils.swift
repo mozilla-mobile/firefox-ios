@@ -41,13 +41,13 @@ public struct SyncUploadStats: Stats {
     var sentFailed: Int = 0
 
     public func hasData() -> Bool {
-        return sent > 0 || sentFailed > 0
+        sent > 0 || sentFailed > 0
     }
 }
 
 extension SyncUploadStats: DictionaryRepresentable {
     func asDictionary() -> [String: Any] {
-        return [
+        [
             "sent": sent,
             "failed": sentFailed
         ]
@@ -62,17 +62,17 @@ public struct SyncDownloadStats: Stats {
     var reconciled: Int = 0
 
     public func hasData() -> Bool {
-        return applied > 0 ||
-               succeeded > 0 ||
-               failed > 0 ||
-               newFailed > 0 ||
-               reconciled > 0
+        applied > 0 ||
+                succeeded > 0 ||
+                failed > 0 ||
+                newFailed > 0 ||
+                reconciled > 0
     }
 }
 
 extension SyncDownloadStats: DictionaryRepresentable {
     func asDictionary() -> [String: Any] {
-        return [
+        [
             "applied": applied,
             "succeeded": succeeded,
             "failed": failed,
@@ -88,7 +88,7 @@ public struct ValidationStats: Stats, DictionaryRepresentable {
     let checked: Int?
 
     public func hasData() -> Bool {
-        return !problems.isEmpty
+        !problems.isEmpty
     }
 
     func asDictionary() -> [String: Any] {
@@ -108,7 +108,7 @@ public struct ValidationProblem: DictionaryRepresentable {
     let count: Int
 
     func asDictionary() -> [String: Any] {
-        return ["name": name, "count": count]
+        ["name": name, "count": count]
     }
 }
 
@@ -124,7 +124,7 @@ public class StatsSession {
     }
 
     public func hasStarted() -> Bool {
-        return startUptimeNanos != nil
+        startUptimeNanos != nil
     }
 
     public func end() -> Self {
@@ -245,16 +245,16 @@ public struct SyncPing: SyncTelemetryPing {
     static func pingFields(prefs: Prefs, why: SyncPingReason) -> Deferred<Maybe<(token: TokenServerToken, fields: [String: Any])>> {
         // Grab our token so we can use the hashed_fxa_uid and clientGUID from our scratchpad for
         // our ping's identifiers
-        return RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: false) >>== { (token, kSync) in
+        RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: false) >>== { (token, kSync) in
             let scratchpadPrefs = prefs.branch("sync.scratchpad")
             guard let scratchpad = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync)) else {
                 return deferMaybe(SyncPingError.failedToRestoreScratchpad)
             }
 
             let ping: [String: Any] = pingCommonData(
-                why: why,
-                hashedUID: token.hashedFxAUID,
-                hashedDeviceID: (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
+                    why: why,
+                    hashedUID: token.hashedFxAUID,
+                    hashedDeviceID: (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
             )
 
             return deferMaybe((token, ping))
@@ -265,13 +265,15 @@ public struct SyncPing: SyncTelemetryPing {
                             remoteClientsAndTabs: RemoteClientsAndTabs,
                             prefs: Prefs,
                             why: SyncPingReason) -> Deferred<Maybe<SyncPing>> {
-        return pingFields(prefs: prefs, why: why) >>== { (token, fields) in
+        pingFields(prefs: prefs, why: why) >>== { (token, fields) in
             var ping = fields
 
             // TODO: We don't cache our sync pings so if it fails, it fails. Once we add
             // some kind of caching we'll want to make sure we don't dump the events if
             // the ping has failed.
-            let events = Event.takeAll(fromPrefs: prefs).map { $0.toArray() }
+            let events = Event.takeAll(fromPrefs: prefs).map {
+                $0.toArray()
+            }
             ping["events"] = events
 
             return dictionaryFrom(result: result, storage: remoteClientsAndTabs, token: token) >>== { syncDict in
@@ -294,24 +296,24 @@ public struct SyncPing: SyncTelemetryPing {
     }
 
     static func pingCommonData(why: SyncPingReason, hashedUID: String, hashedDeviceID: String) -> [String: Any] {
-         return [
-            "version": 1,
-            "why": why.rawValue,
-            "uid": hashedUID,
-            "deviceID": hashedDeviceID,
-            "os": [
-                "name": "iOS",
-                "version": UIDevice.current.systemVersion,
-                "locale": Locale.current.identifier
-            ]
-        ]
+        [
+           "version": 1,
+           "why": why.rawValue,
+           "uid": hashedUID,
+           "deviceID": hashedDeviceID,
+           "os": [
+               "name": "iOS",
+               "version": UIDevice.current.systemVersion,
+               "locale": Locale.current.identifier
+           ]
+       ]
     }
 
     // Generates a single sync ping payload that is stored in the 'syncs' list in the sync ping.
     private static func dictionaryFrom(result: SyncOperationResult,
                                        storage: RemoteClientsAndTabs,
                                        token: TokenServerToken) -> Deferred<Maybe<[String: Any]>> {
-        return connectedDevices(fromStorage: storage, token: token) >>== { devices in
+        connectedDevices(fromStorage: storage, token: token) >>== { devices in
             guard let stats = result.stats else {
                 return deferMaybe([String: Any]())
             }
@@ -359,7 +361,7 @@ public struct SyncPing: SyncTelemetryPing {
     }
 
     private static func enginePingDataFrom(engineResults: EngineResults) -> [[String: Any]] {
-        return engineResults.map { result in
+        engineResults.map { result in
             let (name, status) = result
             var engine: [String: Any] = [
                 "name": name

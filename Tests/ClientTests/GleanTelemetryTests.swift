@@ -21,12 +21,12 @@ class MockSyncDelegate: SyncDelegate {
 
 class MockBrowserSyncManager: BrowserProfile.BrowserSyncManager {
     override func getProfileAndDeviceId() -> (MozillaAppServices.Profile, String) {
-        return (MozillaAppServices.Profile(
-            uid: "test",
-            email: "test@test.test",
-            displayName: nil,
-            avatar: "",
-            isDefaultAvatar: true
+        (MozillaAppServices.Profile(
+                uid: "test",
+                email: "test@test.test",
+                displayName: nil,
+                avatar: "",
+                isDefaultAvatar: true
         ), "test")
     }
 }

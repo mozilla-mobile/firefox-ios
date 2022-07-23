@@ -37,15 +37,15 @@ extension TopSitesProvider {
     }
 
     static var numberOfMaxItems: Int {
-        return UIDevice.current.userInterfaceIdiom == .pad ? 32 : 16
+        UIDevice.current.userInterfaceIdiom == .pad ? 32 : 16
     }
 
     var hideWithSearchParam: String {
-        return "mfadid=adm"
+        "mfadid=adm"
     }
 
     var defaultSuggestedSitesKey: String {
-        return "topSites.deletedSuggestedSites"
+        "topSites.deletedSuggestedSites"
     }
 }
 
@@ -117,7 +117,7 @@ private extension TopSitesProviderImplementation {
         // How sites are merged together. We compare against the url's base domain.
         // Example m.youtube.com is compared against `youtube.com`
         let unionOnURL = { (site: Site) -> String in
-            return URL(string: site.url)?.normalizedHost ?? ""
+            URL(string: site.url)?.normalizedHost ?? ""
         }
 
         // Fetch the default sites

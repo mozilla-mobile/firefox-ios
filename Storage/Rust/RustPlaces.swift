@@ -162,20 +162,20 @@ public class RustPlaces: BookmarksHandler {
     }
 
     public func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>> {
-        return withReader { connection in
-            return try connection.getBookmarksTree(rootGUID: rootGUID, recursive: recursive)
+        withReader { connection in
+            try connection.getBookmarksTree(rootGUID: rootGUID, recursive: recursive)
         }
     }
 
     public func getBookmark(guid: GUID) -> Deferred<Maybe<BookmarkNodeData?>> {
-        return withReader { connection in
-            return try connection.getBookmark(guid: guid)
+        withReader { connection in
+            try connection.getBookmark(guid: guid)
         }
     }
 
     public func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void) {
         let deferredResponse = withReader { connection in
-            return try connection.getRecentBookmarks(limit: limit)
+            try connection.getRecentBookmarks(limit: limit)
         }
 
         deferredResponse.upon { result in
@@ -184,25 +184,25 @@ public class RustPlaces: BookmarksHandler {
     }
 
     public func getRecentBookmarks(limit: UInt) -> Deferred<Maybe<[BookmarkItemData]>> {
-        return withReader { connection in
-            return try connection.getRecentBookmarks(limit: limit)
+        withReader { connection in
+            try connection.getRecentBookmarks(limit: limit)
         }
     }
 
     public func getBookmarkURLForKeyword(keyword: String) -> Deferred<Maybe<String?>> {
-        return withReader { connection in
-            return try connection.getBookmarkURLForKeyword(keyword: keyword)
+        withReader { connection in
+            try connection.getBookmarkURLForKeyword(keyword: keyword)
         }
     }
 
     public func getBookmarksWithURL(url: String) -> Deferred<Maybe<[BookmarkItemData]>> {
-        return withReader { connection in
-            return try connection.getBookmarksWithURL(url: url)
+        withReader { connection in
+            try connection.getBookmarksWithURL(url: url)
         }
     }
 
     public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
-        return getBookmarksWithURL(url: url).bind { result in
+        getBookmarksWithURL(url: url).bind { result in
             guard let bookmarks = result.successValue else {
                 return deferMaybe(false)
             }
@@ -212,8 +212,8 @@ public class RustPlaces: BookmarksHandler {
     }
 
     public func searchBookmarks(query: String, limit: UInt) -> Deferred<Maybe<[BookmarkItemData]>> {
-        return withReader { connection in
-            return try connection.searchBookmarks(query: query, limit: limit)
+        withReader { connection in
+            try connection.searchBookmarks(query: query, limit: limit)
         }
     }
 
@@ -232,7 +232,7 @@ public class RustPlaces: BookmarksHandler {
     }
 
     public func deleteBookmarkNode(guid: GUID) -> Success {
-        return withWriter { connection in
+        withWriter { connection in
             let result = try connection.deleteBookmarkNode(guid: guid)
             if !result {
                 log.debug("Bookmark with GUID \(guid) does not exist.")
@@ -241,7 +241,7 @@ public class RustPlaces: BookmarksHandler {
     }
 
     public func deleteBookmarksWithURL(url: String) -> Success {
-        return getBookmarksWithURL(url: url) >>== { bookmarks in
+        getBookmarksWithURL(url: url) >>== { bookmarks in
             let deferreds = bookmarks.map({ self.deleteBookmarkNode(guid: $0.guid) })
             return all(deferreds).bind { results in
                 if let error = results.find({ $0.isFailure })?.failureValue {
@@ -255,20 +255,20 @@ public class RustPlaces: BookmarksHandler {
     }
 
     public func createFolder(parentGUID: GUID, title: String, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
-        return withWriter { connection in
-            return try connection.createFolder(parentGUID: parentGUID, title: title, position: position)
+        withWriter { connection in
+            try connection.createFolder(parentGUID: parentGUID, title: title, position: position)
         }
     }
 
     public func createSeparator(parentGUID: GUID, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
-        return withWriter { connection in
-            return try connection.createSeparator(parentGUID: parentGUID, position: position)
+        withWriter { connection in
+            try connection.createSeparator(parentGUID: parentGUID, position: position)
         }
     }
 
     @discardableResult
     public func createBookmark(parentGUID: GUID, url: String, title: String?, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
-        return withWriter { connection in
+        withWriter { connection in
             let response = try connection.createBookmark(parentGUID: parentGUID, url: url, title: title, position: position)
             self.notificationCenter.post(name: .BookmarksUpdated, object: self)
             return response
@@ -276,8 +276,8 @@ public class RustPlaces: BookmarksHandler {
     }
 
     public func updateBookmarkNode(guid: GUID, parentGUID: GUID? = nil, position: UInt32? = nil, title: String? = nil, url: String? = nil) -> Success {
-        return withWriter { connection in
-            return try connection.updateBookmarkNode(guid: guid, parentGUID: parentGUID, position: position, title: title, url: url)
+        withWriter { connection in
+            try connection.updateBookmarkNode(guid: guid, parentGUID: parentGUID, position: position, title: title, url: url)
         }
     }
 
@@ -360,20 +360,20 @@ public class RustPlaces: BookmarksHandler {
     }
 
     public func getHistoryMetadataSince(since: Int64) -> Deferred<Maybe<[HistoryMetadata]>> {
-        return withReader { connection in
-            return try connection.getHistoryMetadataSince(since: since)
+        withReader { connection in
+            try connection.getHistoryMetadataSince(since: since)
         }
     }
 
     public func getHighlights(weights: HistoryHighlightWeights, limit: Int32) -> Deferred<Maybe<[HistoryHighlight]>> {
-        return withReader { connection in
-            return try connection.getHighlights(weights: weights, limit: limit)
+        withReader { connection in
+            try connection.getHighlights(weights: weights, limit: limit)
         }
     }
 
     public func queryHistoryMetadata(query: String, limit: Int32) -> Deferred<Maybe<[HistoryMetadata]>> {
-        return withReader { connection in
-            return try connection.queryHistoryMetadata(query: query, limit: limit)
+        withReader { connection in
+            try connection.queryHistoryMetadata(query: query, limit: limit)
         }
     }
 
@@ -381,7 +381,7 @@ public class RustPlaces: BookmarksHandler {
         Title observations must be made first for any given url. Observe one fact at a time (e.g. just the viewTime, or just the documentType).
      */
     public func noteHistoryMetadataObservation(key: HistoryMetadataKey, observation: HistoryMetadataObservation) -> Deferred<Maybe<Void>> {
-        return withWriter { connection in
+        withWriter { connection in
             if let title = observation.title {
                 return try connection.noteHistoryMetadataObservationTitle(key: key, title: title)
             }
@@ -395,20 +395,20 @@ public class RustPlaces: BookmarksHandler {
     }
 
     public func deleteHistoryMetadataOlderThan(olderThan: Int64) -> Deferred<Maybe<Void>> {
-        return withWriter { connection in
-            return try connection.deleteHistoryMetadataOlderThan(olderThan: olderThan)
+        withWriter { connection in
+            try connection.deleteHistoryMetadataOlderThan(olderThan: olderThan)
         }
     }
 
     public func deleteHistoryMetadata(key: HistoryMetadataKey) -> Deferred<Maybe<Void>> {
-        return withWriter { connection in
-            return try connection.deleteHistoryMetadata(key: key)
+        withWriter { connection in
+            try connection.deleteHistoryMetadata(key: key)
         }
     }
 
     public func deleteVisitsFor(url: Url) -> Deferred<Maybe<Void>> {
-        return withWriter { connection in
-            return try connection.deleteVisitsFor(url: url)
+        withWriter { connection in
+            try connection.deleteVisitsFor(url: url)
         }
     }
 }

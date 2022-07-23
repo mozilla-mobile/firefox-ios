@@ -8,11 +8,11 @@ class MockTraitCollection: UITraitCollection {
 
     var overridenHorizontalSizeClass: UIUserInterfaceSizeClass = .regular
     override var horizontalSizeClass: UIUserInterfaceSizeClass {
-        return overridenHorizontalSizeClass
+        overridenHorizontalSizeClass
     }
 
     var overridenVerticalSizeClass: UIUserInterfaceSizeClass = .regular
     override var verticalSizeClass: UIUserInterfaceSizeClass {
-        return overridenVerticalSizeClass
+        overridenVerticalSizeClass
     }
 }

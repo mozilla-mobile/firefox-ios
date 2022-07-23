@@ -291,11 +291,11 @@ class WeakListMock<T: AnyObject>: WeakList<T> {
 
     var countToReturn: Int = 0
     override var count: Int {
-        return countToReturn
+        countToReturn
     }
 
     override var isEmpty: Bool {
-        return countToReturn <= 0
+        countToReturn <= 0
     }
 }
 

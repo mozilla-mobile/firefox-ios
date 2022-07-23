@@ -11,10 +11,16 @@ protocol WallpaperMetadataTestProvider {
 }
 
 extension WallpaperMetadataTestProvider {
-    private var lastUpdatedDate: Date { return dateWith(year: 2001, month: 02, day: 03) }
-    private var startDate: Date { return dateWith(year: 2002, month: 11, day: 28) }
+    private var lastUpdatedDate: Date {
+        dateWith(year: 2001, month: 02, day: 03)
+    }
+    private var startDate: Date {
+        dateWith(year: 2002, month: 11, day: 28)
+    }
     private var endDate: Date { dateWith(year: 2022, month: 09, day: 10) }
-    private var textColour: UIColor { return UIColor(colorString: "0xADD8E6") }
+    private var textColour: UIColor {
+        UIColor(colorString: "0xADD8E6")
+    }
 
     func getExpectedMetadata(for jsonType: WallpaperJSONId) -> WallpaperMetadata {
         switch jsonType {
@@ -29,86 +35,86 @@ extension WallpaperMetadataTestProvider {
     }
 
     private func getInitialMetadata() -> WallpaperMetadata {
-        return WallpaperMetadata(
-            lastUpdated: lastUpdatedDate,
-            collections: [
-                WallpaperCollection(
-                    id: "firefox",
-                    availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
-                    availability: WallpaperCollectionAvailability(
-                        start: startDate,
-                        end: endDate),
-                    wallpapers: [
-                        Wallpaper(id: "beachVibes",
-                                  textColour: textColour)
-                    ])
-            ])
+        WallpaperMetadata(
+                lastUpdated: lastUpdatedDate,
+                collections: [
+                    WallpaperCollection(
+                            id: "firefox",
+                            availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
+                            availability: WallpaperCollectionAvailability(
+                                    start: startDate,
+                                    end: endDate),
+                            wallpapers: [
+                                Wallpaper(id: "beachVibes",
+                                        textColour: textColour)
+                            ])
+                ])
     }
 
     private func getFullAvailabilityMetadata() -> WallpaperMetadata {
-        return WallpaperMetadata(
-            lastUpdated: lastUpdatedDate,
-            collections: [
-                WallpaperCollection(
-                    id: "firefox",
-                    availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
-                    availability: nil,
-                    wallpapers: [
-                        Wallpaper(id: "beachVibes",
-                                  textColour: textColour)
-                    ])
-            ])
+        WallpaperMetadata(
+                lastUpdated: lastUpdatedDate,
+                collections: [
+                    WallpaperCollection(
+                            id: "firefox",
+                            availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
+                            availability: nil,
+                            wallpapers: [
+                                Wallpaper(id: "beachVibes",
+                                        textColour: textColour)
+                            ])
+                ])
     }
 
     private func getNoLocalesMetadata() -> WallpaperMetadata {
-        return WallpaperMetadata(
-            lastUpdated: lastUpdatedDate,
-            collections: [
-                WallpaperCollection(
-                    id: "firefox",
-                    availableLocales: nil,
-                    availability: WallpaperCollectionAvailability(
-                        start: startDate,
-                        end: endDate),
-                    wallpapers: [
-                        Wallpaper(id: "beachVibes",
-                                  textColour: textColour)
-                    ])
-            ])
+        WallpaperMetadata(
+                lastUpdated: lastUpdatedDate,
+                collections: [
+                    WallpaperCollection(
+                            id: "firefox",
+                            availableLocales: nil,
+                            availability: WallpaperCollectionAvailability(
+                                    start: startDate,
+                                    end: endDate),
+                            wallpapers: [
+                                Wallpaper(id: "beachVibes",
+                                        textColour: textColour)
+                            ])
+                ])
     }
 
     func getAvailabilityStartMetadata() -> WallpaperMetadata {
-        return WallpaperMetadata(
-            lastUpdated: lastUpdatedDate,
-            collections: [
-                WallpaperCollection(
-                    id: "firefox",
-                    availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
-                    availability: WallpaperCollectionAvailability(
-                        start: startDate,
-                        end: nil),
-                    wallpapers: [
-                        Wallpaper(id: "beachVibes",
-                                  textColour: textColour)
-                    ])
-            ])
+        WallpaperMetadata(
+                lastUpdated: lastUpdatedDate,
+                collections: [
+                    WallpaperCollection(
+                            id: "firefox",
+                            availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
+                            availability: WallpaperCollectionAvailability(
+                                    start: startDate,
+                                    end: nil),
+                            wallpapers: [
+                                Wallpaper(id: "beachVibes",
+                                        textColour: textColour)
+                            ])
+                ])
     }
 
     func getAvailabilityEndMetadata() -> WallpaperMetadata {
-        return WallpaperMetadata(
-            lastUpdated: lastUpdatedDate,
-            collections: [
-                WallpaperCollection(
-                    id: "firefox",
-                    availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
-                    availability: WallpaperCollectionAvailability(
-                        start: nil,
-                        end: endDate),
-                    wallpapers: [
-                        Wallpaper(id: "beachVibes",
-                                  textColour: textColour)
-                    ])
-            ])
+        WallpaperMetadata(
+                lastUpdated: lastUpdatedDate,
+                collections: [
+                    WallpaperCollection(
+                            id: "firefox",
+                            availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
+                            availability: WallpaperCollectionAvailability(
+                                    start: nil,
+                                    end: endDate),
+                            wallpapers: [
+                                Wallpaper(id: "beachVibes",
+                                        textColour: textColour)
+                            ])
+                ])
     }
 
     private func dateWith(year: Int, month: Int, day: Int) -> Date {

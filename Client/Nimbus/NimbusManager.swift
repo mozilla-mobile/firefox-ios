@@ -8,7 +8,7 @@ protocol HasNimbusFeatureFlags { }
 
 extension HasNimbusFeatureFlags {
     var nimbusFlags: NimbusFeatureFlagLayer {
-        return NimbusManager.shared.featureFlagLayer
+        NimbusManager.shared.featureFlagLayer
     }
 }
 
@@ -16,7 +16,7 @@ protocol HasNimbusSearchBar { }
 
 extension HasNimbusSearchBar {
     var nimbusSearchBar: NimbusSearchBarLayer {
-        return NimbusManager.shared.bottomSearchBarLayer
+        NimbusManager.shared.bottomSearchBarLayer
     }
 }
 
@@ -24,7 +24,7 @@ protocol HasNimbusSponsoredTiles { }
 
 extension HasNimbusSponsoredTiles {
     var nimbusSponoredTiles: NimbusSponsoredTileLayer {
-        return NimbusManager.shared.sponsoredTileLayer
+        NimbusManager.shared.sponsoredTileLayer
     }
 }
 

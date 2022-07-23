@@ -14,7 +14,7 @@ class DownloadContentScript: TabContentScript {
     fileprivate static var blobUrlForDownload: URL?
 
     class func name() -> String {
-        return "DownloadContentScript"
+        "DownloadContentScript"
     }
 
     required init(tab: Tab) {
@@ -22,7 +22,7 @@ class DownloadContentScript: TabContentScript {
     }
 
     func scriptMessageHandlerName() -> String? {
-        return "downloadManager"
+        "downloadManager"
     }
 
     /// This function handles blob downloads

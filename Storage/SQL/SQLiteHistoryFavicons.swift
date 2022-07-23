@@ -17,7 +17,7 @@ private var urlSession: URLSession = makeURLSession(userAgent: UserAgent.desktop
 
 // If all else fails, this is the default "default" icon.
 private var defaultFavicon: UIImage = {
-    return UIImage(named: "defaultFavicon")!
+    UIImage(named: "defaultFavicon")!
 }()
 
 // An in-memory cache of "default" favicons keyed by the
@@ -58,7 +58,7 @@ class FaviconLookupError: MaybeErrorType {
         self.siteURL = siteURL
     }
     var description: String {
-        return "Unable to find favicon for site URL: \(siteURL)"
+        "Unable to find favicon for site URL: \(siteURL)"
     }
 }
 
@@ -68,7 +68,7 @@ class FaviconDownloadError: MaybeErrorType {
         self.faviconURL = faviconURL
     }
     internal var description: String {
-        return "Unable to download favicon at URL: \(faviconURL)"
+        "Unable to download favicon at URL: \(faviconURL)"
     }
 }
 
@@ -92,7 +92,7 @@ extension SQLiteHistory: Favicons {
     }
 
     public func addFavicon(_ icon: Favicon) -> Deferred<Maybe<Int>> {
-        return self.favicons.insertOrUpdateFavicon(icon)
+        self.favicons.insertOrUpdateFavicon(icon)
     }
 
     /**
@@ -101,7 +101,7 @@ extension SQLiteHistory: Favicons {
      */
     public func addFavicon(_ icon: Favicon, forSite site: Site) -> Deferred<Maybe<Int>> {
         func doChange(_ query: String, args: Args?) -> Deferred<Maybe<Int>> {
-            return db.withConnection { conn -> Int in
+            db.withConnection { conn -> Int in
                 // Blind! We don't see failure here.
                 let id = self.favicons.insertOrUpdateFaviconInTransaction(icon, conn: conn)
 
@@ -148,7 +148,7 @@ extension SQLiteHistory: Favicons {
 
     public func getFaviconImage(forSite site: Site) -> Deferred<Maybe<UIImage>> {
         // First, attempt to lookup the favicon from our bundled top sites.
-        return getTopSitesFaviconImage(forSite: site).bind { result in
+        getTopSitesFaviconImage(forSite: site).bind { result in
             guard let image = result.successValue else {
                 // Second, attempt to lookup the favicon URL from the database.
                 return self.lookupFaviconURLFromDatabase(forSite: site).bind { result in
@@ -323,7 +323,7 @@ extension SQLiteHistory: Favicons {
 
     // Scrapes the web page at the specified URL for its favicon URLs.
     fileprivate func getFaviconURLsFromWebPage(url: URL) -> Deferred<Maybe<[URL]>> {
-        return getHTMLDocumentFromWebPage(url: url).bind { result in
+        getHTMLDocumentFromWebPage(url: url).bind { result in
             guard let document = result.successValue else {
                 return deferMaybe(FaviconLookupError(siteURL: url.absoluteString))
             }
@@ -332,10 +332,10 @@ extension SQLiteHistory: Favicons {
             // URL, go to the redirected page for the favicon instead.
             for meta in document.xpath("//head/meta") {
                 if let refresh = meta["http-equiv"], refresh == "Refresh",
-                    let content = meta["content"],
-                    let index = content.range(of: "URL="),
-                    let reloadURL = URL(string: String(content[index.upperBound...])),
-                    reloadURL != url {
+                   let content = meta["content"],
+                   let index = content.range(of: "URL="),
+                   let reloadURL = URL(string: String(content[index.upperBound...])),
+                   reloadURL != url {
                     return self.getFaviconURLsFromWebPage(url: reloadURL)
                 }
             }

@@ -16,7 +16,7 @@ private class RandomError: MaybeErrorType {
 class SyncStatusResolverTests: XCTestCase {
 
     private func mockStatsForCollection(collection: String) -> SyncEngineStatsSession {
-        return SyncEngineStatsSession(collection: collection)
+        SyncEngineStatsSession(collection: collection)
     }
 
     func testAllCompleted() {

@@ -232,7 +232,7 @@ class WKNavigationActionMock: WKNavigationAction {
     var overridenTargetFrame: WKFrameInfoMock?
 
     override var targetFrame: WKFrameInfo? {
-        return overridenTargetFrame
+        overridenTargetFrame
     }
 }
 
@@ -246,6 +246,6 @@ class WKFrameInfoMock: WKFrameInfo {
     }
 
     override var isMainFrame: Bool {
-        return overridenTargetFrame
+        overridenTargetFrame
     }
 }

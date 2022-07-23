@@ -11,8 +11,8 @@ extension UIFont {
      * Note: the font does *not* scale for different dynamic type settings.
      */
     static var navigationButtonFont: UIFont {
-        return self.preferredFont(forTextStyle: .body,
-                                  compatibleWith: UITraitCollection(preferredContentSizeCategory: .large))
+        self.preferredFont(forTextStyle: .body,
+                compatibleWith: UITraitCollection(preferredContentSizeCategory: .large))
     }
 
     /** Returns a font to be used for a title in a navigation bar.
@@ -20,7 +20,7 @@ extension UIFont {
      * Note: the font does *not* scale for different dynamic type settings.
      */
     static var navigationTitleFont: UIFont {
-        return self.preferredFont(forTextStyle: .headline,
-                                  compatibleWith: UITraitCollection(preferredContentSizeCategory: .large))
+        self.preferredFont(forTextStyle: .headline,
+                compatibleWith: UITraitCollection(preferredContentSizeCategory: .large))
     }
 }

@@ -66,11 +66,11 @@ class PocketViewModel {
     }
 
     var numberOfCells: Int {
-        return !pocketStoriesViewModels.isEmpty ? pocketStoriesViewModels.count + 1 : 0
+        !pocketStoriesViewModels.isEmpty ? pocketStoriesViewModels.count + 1 : 0
     }
 
     func isStoryCell(index: Int) -> Bool {
-        return index < pocketStoriesViewModels.count
+        index < pocketStoriesViewModels.count
     }
 
     func getSitesDetail(for index: Int) -> Site {
@@ -122,13 +122,13 @@ class PocketViewModel {
 extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
     var sectionType: HomepageSectionType {
-        return .pocket
+        .pocket
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        return LabelButtonHeaderViewModel(title: HomepageSectionType.pocket.title,
-                                          titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
-                                          isButtonHidden: true)
+        LabelButtonHeaderViewModel(title: HomepageSectionType.pocket.title,
+                titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
+                isButtonHidden: true)
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
@@ -168,7 +168,7 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
-        return numberOfCells
+        numberOfCells
     }
 
     var isEnabled: Bool {
@@ -181,7 +181,7 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var hasData: Bool {
-        return !pocketStoriesViewModels.isEmpty
+        !pocketStoriesViewModels.isEmpty
     }
 
     func updateData(completion: @escaping () -> Void) {
@@ -215,7 +215,7 @@ extension PocketViewModel: HomepageSectionHandler {
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         // Setup is done through configure(collectionView:indexPath:), shouldn't be called
-        return UICollectionViewCell()
+        UICollectionViewCell()
     }
 
     func didSelectItem(at indexPath: IndexPath,

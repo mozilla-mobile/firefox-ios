@@ -31,7 +31,7 @@ final class LoginListViewModel {
     }
     fileprivate let helper = LoginListDataSourceHelper()
     private(set) lazy var breachAlertsManager: BreachAlertsManager = {
-        return BreachAlertsManager(profile: self.profile)
+        BreachAlertsManager(profile: self.profile)
     }()
     private(set) var userBreaches: Set<LoginRecord>?
     private(set) var breachIndexPath = Set<IndexPath>() {
@@ -154,7 +154,7 @@ final class LoginListViewModel {
     }
 
     public func save(loginRecord: LoginEntry) -> Deferred<Maybe<String>> {
-        return profile.logins.addLogin(login: loginRecord)
+        profile.logins.addLogin(login: loginRecord)
     }
 
     func setBreachIndexPath(indexPath: IndexPath) {

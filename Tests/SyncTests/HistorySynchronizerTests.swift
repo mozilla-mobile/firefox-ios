@@ -35,7 +35,9 @@ class MockSyncableHistory {
     }
 
     fileprivate func placeForURL(url: String) -> DBPlace? {
-        return findOneValue(places) { $0.url == url }
+        findOneValue(places) {
+            $0.url == url
+        }
     }
 }
 
@@ -148,35 +150,35 @@ extension MockSyncableHistory: SyncableHistory {
 
     func getModifiedHistoryToUpload() -> Deferred<Maybe<[(Place, [Visit])]>> {
         // TODO.
-        return deferMaybe([])
+        deferMaybe([])
     }
 
     func getDeletedHistoryToUpload() -> Deferred<Maybe<[GUID]>> {
         // TODO.
-        return deferMaybe([])
+        deferMaybe([])
     }
 
     func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>> {
         // TODO
-        return deferMaybe(0)
+        deferMaybe(0)
     }
 
     func markAsDeleted(_: [GUID]) -> Success {
         // TODO
-        return succeed()
+        succeed()
     }
 
     func onRemovedAccount() -> Success {
         // TODO
-        return succeed()
+        succeed()
     }
 
     func doneApplyingRecordsAfterDownload() -> Success {
-        return succeed()
+        succeed()
     }
 
     func doneUpdatingMetadataAfterUpload() -> Success {
-        return succeed()
+        succeed()
     }
 }
 

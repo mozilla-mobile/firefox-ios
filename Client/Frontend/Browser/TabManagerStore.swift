@@ -18,7 +18,7 @@ class TabManagerStore: FeatureFlaggable {
 
     // Init this at startup with the tabs on disk, and then on each save, update the in-memory tab state.
     fileprivate lazy var archivedStartupTabs = {
-        return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
+        SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
     }()
 
     init(imageStore: DiskImageStore?, _ fileManager: FileManager = FileManager.default, prefs: Prefs) {
@@ -28,11 +28,11 @@ class TabManagerStore: FeatureFlaggable {
     }
 
     var isRestoringTabs: Bool {
-        return lockedForReading
+        lockedForReading
     }
 
     var hasTabsToRestoreAtStartup: Bool {
-        return !archivedStartupTabs.0.isEmpty
+        !archivedStartupTabs.0.isEmpty
     }
 
     fileprivate func tabsStateArchivePath() -> String? {

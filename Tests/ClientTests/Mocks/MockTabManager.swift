@@ -12,7 +12,7 @@ class MockTabManager: TabManagerProtocol {
     var nextRecentlyAccessedNormalTabs = [Tab]()
 
     var recentlyAccessedNormalTabs: [Tab] {
-        return nextRecentlyAccessedNormalTabs
+        nextRecentlyAccessedNormalTabs
     }
 
     var tabs = [Tab]()

@@ -12,6 +12,6 @@ protocol UserResearch {
 
 extension UserResearch {
     var experiments: NimbusApi {
-        return Experiments.shared
+        Experiments.shared
     }
 }

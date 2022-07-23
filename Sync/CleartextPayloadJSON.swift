@@ -18,13 +18,13 @@ open class BasePayloadJSON {
 
     // Override me.
     public func isValid() -> Bool {
-        return self.json.type != .unknown &&
-               self.json.error == nil
+        self.json.type != .unknown &&
+                self.json.error == nil
     }
 
     subscript(key: String) -> JSON {
         get {
-            return json[key]
+            json[key]
         }
     }
 }
@@ -45,11 +45,11 @@ open class CleartextPayloadJSON: BasePayloadJSON {
 
     // Override me.
     override open func isValid() -> Bool {
-        return super.isValid() && self["id"].isString()
+        super.isValid() && self["id"].isString()
     }
 
     open var id: String {
-        return self["id"].string!
+        self["id"].string!
     }
 
     open var deleted: Bool {
@@ -64,6 +64,6 @@ open class CleartextPayloadJSON: BasePayloadJSON {
     // Override me.
     // Doesn't check id. Should it?
     open func equalPayloads (_ obj: CleartextPayloadJSON) -> Bool {
-        return self.deleted == obj.deleted
+        self.deleted == obj.deleted
     }
 }

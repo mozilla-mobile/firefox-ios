@@ -31,7 +31,7 @@ open class HistoryPayload: CleartextPayloadJSON {
     }
 
     open func asPlace() -> Place {
-        return Place(guid: self.id, url: self.histURI, title: self.title)
+        Place(guid: self.id, url: self.histURI, title: self.title)
     }
 
     var visits: [Visit] {
@@ -40,15 +40,15 @@ open class HistoryPayload: CleartextPayloadJSON {
     }
 
     fileprivate var histURI: String {
-        return self["histUri"].string!
+        self["histUri"].string!
     }
 
     var historyURI: URL {
-        return self.histURI.asURL!
+        self.histURI.asURL!
     }
 
     var title: String {
-        return self["title"].string ?? ""
+        self["title"].string ?? ""
     }
 
     override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {

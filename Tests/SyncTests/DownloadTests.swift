@@ -9,7 +9,7 @@ import Shared
 import XCTest
 
 func identity<T>(x: T) -> T {
-    return x
+    x
 }
 
 class DownloadTests: XCTestCase {

@@ -70,7 +70,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     weak var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(RecentlyClosedTabsPanelSiteTableViewController.longPress))
+        UILongPressGestureRecognizer(target: self, action: #selector(RecentlyClosedTabsPanelSiteTableViewController.longPress))
     }()
 
     override func viewDidLoad() {
@@ -117,16 +117,16 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
+        0
     }
 
     // Functions that deal with showing header rows.
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.recentlyClosedTabs.count
+        self.recentlyClosedTabs.count
     }
 
     // MARK: - Libray Toolbar actions

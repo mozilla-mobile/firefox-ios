@@ -99,7 +99,7 @@ private func metadataFromDB(_ db: BrowserDB) -> Deferred<Maybe<Cursor<PageMetada
 }
 
 private func removeAllMetadata(_ db: BrowserDB) -> Success {
-    return db.run("DELETE FROM page_metadata")
+    db.run("DELETE FROM page_metadata")
 }
 
 private func pageMetadataFactory(_ row: SDRow) -> PageMetadata {

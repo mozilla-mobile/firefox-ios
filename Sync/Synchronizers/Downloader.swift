@@ -84,7 +84,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
     // Set after each batch, from record timestamps.
     var baseTimestamp: Timestamp {
         get {
-            return self.prefs.timestampForKey("baseTimestamp") ?? 0
+            self.prefs.timestampForKey("baseTimestamp") ?? 0
         }
         set (value) {
             self.prefs.setTimestamp(value, forKey: "baseTimestamp")
@@ -94,7 +94,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
     // Only set at the end of a batch, from headers.
     var lastModified: Timestamp {
         get {
-            return self.prefs.timestampForKey("lastModified") ?? 0
+            self.prefs.timestampForKey("lastModified") ?? 0
         }
         set (value) {
             self.prefs.setTimestamp(value, forKey: "lastModified")

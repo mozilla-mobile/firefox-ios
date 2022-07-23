@@ -26,7 +26,7 @@ class TokenServerClientTests {
 
     func testAudienceForEndpoint() {
         func audienceFor(_ endpoint: String) -> String {
-            return TokenServerClient.getAudience(forURL: URL(string: endpoint)!)
+            TokenServerClient.getAudience(forURL: URL(string: endpoint)!)
         }
 
         // Sub-domains and path components.

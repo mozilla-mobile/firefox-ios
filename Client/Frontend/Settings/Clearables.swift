@@ -23,7 +23,9 @@ class ClearableError: MaybeErrorType {
         self.msg = msg
     }
 
-    var description: String { return msg }
+    var description: String {
+        msg
+    }
 }
 
 // Clears our browsing history, including favicons and thumbnails.
@@ -74,7 +76,7 @@ struct ClearableErrorType: MaybeErrorType {
     }
 
     var description: String {
-        return "Couldn't clear: \(err)."
+        "Couldn't clear: \(err)."
     }
 }
 
@@ -173,7 +175,7 @@ class CookiesClearable: Clearable {
 class TrackingProtectionClearable: Clearable {
     // @TODO: re-using string because we are too late in cycle to change strings
     var label: String {
-        return .SettingsTrackingProtectionSectionName
+        .SettingsTrackingProtectionSectionName
     }
 
     func clear() -> Success {

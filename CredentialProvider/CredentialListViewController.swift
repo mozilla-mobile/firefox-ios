@@ -46,7 +46,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     private var searchController: UISearchController?
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
+        UIStatusBarStyle.lightContent
     }
 
     var searchIsActive: Bool {
@@ -59,7 +59,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     }
 
     var credentialExtensionContext: ASCredentialProviderExtensionContext? {
-        return (navigationController?.parent as? CredentialProviderViewController)?.extensionContext
+        (navigationController?.parent as? CredentialProviderViewController)?.extensionContext
     }
 
     init() {

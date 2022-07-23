@@ -19,7 +19,7 @@ public struct ModernColor {
     }
 
     public var color: UIColor {
-        return UIColor { (traitCollection: UITraitCollection) -> UIColor in
+        UIColor { (traitCollection: UITraitCollection) -> UIColor in
             if traitCollection.userInterfaceStyle == .dark {
                 return self.color(for: .dark)
             } else {
@@ -29,7 +29,7 @@ public struct ModernColor {
     }
 
     private func color(for scheme: ColorScheme) -> UIColor {
-        return scheme == .dark ? darkColor : lightColor
+        scheme == .dark ? darkColor : lightColor
     }
 }
 

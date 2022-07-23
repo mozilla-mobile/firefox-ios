@@ -15,6 +15,6 @@ extension Calendar {
     }
 
     func add(numberOfDays: Int, to date: Date) -> Date? {
-        return self.date(byAdding: .day, value: numberOfDays, to: date)
+        self.date(byAdding: .day, value: numberOfDays, to: date)
     }
 }

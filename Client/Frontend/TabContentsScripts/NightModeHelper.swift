@@ -20,11 +20,11 @@ class NightModeHelper: TabContentScript {
     }
 
     static func name() -> String {
-        return "NightMode"
+        "NightMode"
     }
 
     func scriptMessageHandlerName() -> String? {
-        return "NightMode"
+        "NightMode"
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
@@ -49,16 +49,16 @@ class NightModeHelper: TabContentScript {
     }
 
     static func hasEnabledDarkTheme(_ prefs: Prefs) -> Bool {
-        return prefs.boolForKey(NightModePrefsKey.NightModeEnabledDarkTheme) ?? false
+        prefs.boolForKey(NightModePrefsKey.NightModeEnabledDarkTheme) ?? false
     }
 
     static func isActivated(_ prefs: Prefs) -> Bool {
-        return prefs.boolForKey(NightModePrefsKey.NightModeStatus) ?? false
+        prefs.boolForKey(NightModePrefsKey.NightModeStatus) ?? false
     }
 }
 
 class NightModeAccessors {
     static func isNightMode(_ prefs: Prefs) -> Bool {
-        return prefs.boolForKey(NightModePrefsKey.NightModeStatus) ?? false
+        prefs.boolForKey(NightModePrefsKey.NightModeStatus) ?? false
     }
 }

@@ -64,11 +64,11 @@ open class DeviceInfo {
     }
 
     open class func deviceModel() -> String {
-        return UIDevice.current.model
+        UIDevice.current.model
     }
 
     open class func isSimulator() -> Bool {
-        return ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] != nil
+        ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] != nil
     }
 
     open class func isBlurSupported() -> Bool {
@@ -77,7 +77,7 @@ open class DeviceInfo {
         // 1. http://stackoverflow.com/questions/21603475/how-can-i-detect-if-the-iphone-my-app-is-on-is-going-to-use-a-simple-transparen
         // 2. https://gist.github.com/conradev/8655650
         // Thus, testing has to take place on actual devices.
-        return !lowGraphicsQualityModels.contains(specificModelName)
+        !lowGraphicsQualityModels.contains(specificModelName)
     }
 
     open class func hasConnectivity() -> Bool {

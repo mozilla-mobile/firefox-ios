@@ -38,11 +38,11 @@ private func MZLocalizedString(_ key: String,
                                comment: String,
                                lastUpdated: StringLastUpdatedAppVersion
 ) -> String {
-    return NSLocalizedString(key,
-                             tableName: tableName,
-                             bundle: Strings.bundle,
-                             value: value,
-                             comment: comment)
+    NSLocalizedString(key,
+            tableName: tableName,
+            bundle: Strings.bundle,
+            value: value,
+            comment: comment)
 }
 
 /// This file contains all strings for Firefox iOS.

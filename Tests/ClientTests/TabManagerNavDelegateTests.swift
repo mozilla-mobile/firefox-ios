@@ -132,11 +132,11 @@ private extension TabManagerNavDelegateTests {
     }
 
     func anyWebView() -> WKWebView {
-        return WKWebView(frame: CGRect(width: 100, height: 100))
+        WKWebView(frame: CGRect(width: 100, height: 100))
     }
 
     func anyError() -> NSError {
-        return NSError(domain: "any error", code: 0)
+        NSError(domain: "any error", code: 0)
     }
 }
 

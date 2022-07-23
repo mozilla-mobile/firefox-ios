@@ -78,14 +78,14 @@ final class DefaultSearchPrefs {
      Create a list of these and return the last one. The globalDefault acts as the fallback in case the list is empty.
      */
     public func searchDefault(for possibleLocales: [String], and region: String) -> String {
-        return possibleLocales
-            .compactMap {
-                locales?[$0] as? [String: Any]
-            }
-            .reduce(globalDefaultEngine) {
-                (defaultEngine, localeJSON) -> String in
-                let inner = localeJSON[region] as? [String: Any]
-                return inner?["searchDefault"] as? String ?? defaultEngine
-        }
+        possibleLocales
+                .compactMap {
+                    locales?[$0] as? [String: Any]
+                }
+                .reduce(globalDefaultEngine) {
+                    (defaultEngine, localeJSON) -> String in
+                    let inner = localeJSON[region] as? [String: Any]
+                    return inner?["searchDefault"] as? String ?? defaultEngine
+                }
     }
 }

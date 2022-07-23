@@ -15,7 +15,7 @@ public class PushRegistration: NSObject, NSCoding {
     fileprivate var subscriptions: [String: PushSubscription]
 
     public var defaultSubscription: PushSubscription {
-        return subscriptions[defaultSubscriptionID]!
+        subscriptions[defaultSubscriptionID]!
     }
 
     public init(uaid: String, secret: String, subscriptions: [String: PushSubscription] = [:]) {
@@ -122,6 +122,6 @@ public extension PushSubscription {
     }
 
     func aes128gcm(payload: String) -> String? {
-        return try? PushCrypto.sharedInstance.aes128gcm(payload: payload, decryptWith: p256dhPrivateKey, authenticateWith: authKey)
+        try? PushCrypto.sharedInstance.aes128gcm(payload: payload, decryptWith: p256dhPrivateKey, authenticateWith: authKey)
     }
 }

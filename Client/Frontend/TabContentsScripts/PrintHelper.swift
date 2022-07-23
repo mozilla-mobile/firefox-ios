@@ -10,7 +10,7 @@ class PrintHelper: TabContentScript {
     fileprivate weak var tab: Tab?
 
     class func name() -> String {
-        return "PrintHelper"
+        "PrintHelper"
     }
 
     required init(tab: Tab) {
@@ -18,7 +18,7 @@ class PrintHelper: TabContentScript {
     }
 
     func scriptMessageHandlerName() -> String? {
-        return "printHandler"
+        "printHandler"
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {

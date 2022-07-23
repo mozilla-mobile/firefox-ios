@@ -14,7 +14,7 @@ public class ReadingListStorageError: MaybeErrorType {
         self.message = message
     }
     public var description: String {
-        return message
+        message
     }
 }
 
@@ -36,7 +36,7 @@ extension SQLiteReadingList: ReadingList {
     public func getAvailableRecords(completion: @escaping ([ReadingListItem]) -> Void) {
         let sql = "SELECT \(allColumns) FROM items ORDER BY client_last_modified DESC"
         let deferredResponse = db.runQuery(sql, args: nil, factory: SQLiteReadingList.ReadingListItemFactory) >>== { cursor in
-            return deferMaybe(cursor.asArray())
+            deferMaybe(cursor.asArray())
         }
 
         deferredResponse.upon { result in
@@ -47,7 +47,7 @@ extension SQLiteReadingList: ReadingList {
     public func getAvailableRecords() -> Deferred<Maybe<[ReadingListItem]>> {
         let sql = "SELECT \(allColumns) FROM items ORDER BY client_last_modified DESC"
         return db.runQuery(sql, args: nil, factory: SQLiteReadingList.ReadingListItemFactory) >>== { cursor in
-            return deferMaybe(cursor.asArray())
+            deferMaybe(cursor.asArray())
         }
     }
 
@@ -63,7 +63,7 @@ extension SQLiteReadingList: ReadingList {
     }
 
     public func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Deferred<Maybe<ReadingListItem>> {
-        return db.transaction { connection -> ReadingListItem in
+        db.transaction { connection -> ReadingListItem in
             let insertSQL = "INSERT OR REPLACE INTO items (client_last_modified, url, title, added_by) VALUES (?, ?, ?, ?)"
             let insertArgs: Args = [ReadingListNow(), url, title, addedBy]
             let lastInsertedRowID = connection.lastInsertedRowID
@@ -103,7 +103,7 @@ extension SQLiteReadingList: ReadingList {
     }
 
     public func updateRecord(_ record: ReadingListItem, unread: Bool) -> Deferred<Maybe<ReadingListItem>> {
-        return db.transaction { connection -> ReadingListItem in
+        db.transaction { connection -> ReadingListItem in
             let updateSQL = "UPDATE items SET unread = ? WHERE client_id = ?"
             let updateArgs: Args = [unread, record.id]
 

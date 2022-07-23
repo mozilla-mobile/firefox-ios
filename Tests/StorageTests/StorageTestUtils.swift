@@ -18,16 +18,16 @@ let baseInstantInMillis = Date.now() - threeMonthsInMillis
 let baseInstantInMicros = Date.nowMicroseconds() - threeMonthsInMicros
 
 func advanceTimestamp(_ timestamp: Timestamp, by: Int) -> Timestamp {
-    return timestamp + UInt64(by)
+    timestamp + UInt64(by)
 }
 
 func advanceMicrosecondTimestamp(_ timestamp: MicrosecondTimestamp, by: Int) -> MicrosecondTimestamp {
-    return timestamp + UInt64(by)
+    timestamp + UInt64(by)
 }
 
 extension Site {
     func asPlace() -> Place {
-        return Place(guid: self.guid!, url: self.url, title: self.title)
+        Place(guid: self.guid!, url: self.url, title: self.title)
     }
 }
 
@@ -71,7 +71,7 @@ extension BrowserDB {
 extension BrowserDB {
     func getGUIDs(_ sql: String) -> [GUID] {
         func guidFactory(_ row: SDRow) -> GUID {
-            return row[0] as! GUID
+            row[0] as! GUID
         }
 
         guard let cursor = self.runQuery(sql, args: nil, factory: guidFactory).value.successValue else {
@@ -84,7 +84,7 @@ extension BrowserDB {
     func getPositionsForChildrenOfParent(_ parent: GUID, fromTable table: String) -> [GUID: Int] {
         let args: Args = [parent]
         let factory: (SDRow) -> (GUID, Int) = {
-            return ($0["child"] as! GUID, $0["idx"] as! Int)
+            ($0["child"] as! GUID, $0["idx"] as! Int)
         }
         let cursor = self.runQuery("SELECT child, idx FROM \(table) WHERE parent = ?", args: args, factory: factory).value.successValue!
         return cursor.reduce([:], { (dict, pair) in

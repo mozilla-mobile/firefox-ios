@@ -9,7 +9,7 @@ import MozillaAppServices
 
 extension HistoryHighlight {
     var urlFromString: URL? {
-        return URL(string: url)
+        URL(string: url)
     }
 }
 

@@ -17,7 +17,7 @@ extension LibraryPanelContextMenu {
         guard let site = getSiteDetails(for: indexPath) else { return }
 
         presentContextMenu(for: site, with: indexPath, completionHandler: {
-            return self.contextMenu(for: site, with: indexPath)
+            self.contextMenu(for: site, with: indexPath)
         })
     }
 

@@ -74,54 +74,72 @@ open class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func onRemovedAccount() -> Success {
-        return succeed()
+        succeed()
     }
 
     open func wipeClients() -> Success {
-        return succeed()
+        succeed()
     }
 
     open func insertOrUpdateClients(_ clients: [RemoteClient]) -> Deferred<Maybe<Int>> {
-        return deferMaybe(0)
+        deferMaybe(0)
     }
 
     open func insertOrUpdateClient(_ client: RemoteClient) -> Deferred<Maybe<Int>> {
-        return deferMaybe(0)
+        deferMaybe(0)
     }
 
     open func getClients() -> Deferred<Maybe<[RemoteClient]>> {
-        return deferMaybe(self.clientsAndTabs.map { $0.client })
+        deferMaybe(self.clientsAndTabs.map {
+            $0.client
+        })
     }
 
     public func getClient(guid: GUID) -> Deferred<Maybe<RemoteClient?>> {
-        return deferMaybe(self.clientsAndTabs.find { clientAndTabs in
-            return clientAndTabs.client.guid == guid
-        }?.client)
+        deferMaybe(self.clientsAndTabs.find { clientAndTabs in
+                    clientAndTabs.client.guid == guid
+                }?
+                .client)
     }
 
     public func getClient(fxaDeviceId: GUID) -> Deferred<Maybe<RemoteClient?>> {
-        return deferMaybe(self.clientsAndTabs.find { clientAndTabs in
-            return clientAndTabs.client.fxaDeviceId == fxaDeviceId
-            }?.client)
+        deferMaybe(self.clientsAndTabs.find { clientAndTabs in
+                    clientAndTabs.client.fxaDeviceId == fxaDeviceId
+                }?
+                .client)
     }
 
     open func getClientGUIDs() -> Deferred<Maybe<Set<GUID>>> {
-        return deferMaybe(Set<GUID>(optFilter(self.clientsAndTabs.map { $0.client.guid })))
+        deferMaybe(Set<GUID>(optFilter(self.clientsAndTabs.map {
+            $0.client.guid
+        })))
     }
 
-    open func deleteClient(guid: GUID) -> Success { return succeed() }
+    open func deleteClient(guid: GUID) -> Success {
+        succeed()
+    }
 
-    open func deleteCommands() -> Success { return succeed() }
-    open func deleteCommands(_ clientGUID: GUID) -> Success { return succeed() }
+    open func deleteCommands() -> Success {
+        succeed()
+    }
+    open func deleteCommands(_ clientGUID: GUID) -> Success {
+        succeed()
+    }
 
-    open func getCommands() -> Deferred<Maybe<[GUID: [SyncCommand]]>> { return deferMaybe([GUID: [SyncCommand]]()) }
+    open func getCommands() -> Deferred<Maybe<[GUID: [SyncCommand]]>> {
+        deferMaybe([GUID: [SyncCommand]]())
+    }
 
-    open func insertCommand(_ command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>> { return deferMaybe(0) }
-    open func insertCommands(_ commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>> { return deferMaybe(0) }
+    open func insertCommand(_ command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>> {
+        deferMaybe(0)
+    }
+    open func insertCommands(_ commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>> {
+        deferMaybe(0)
+    }
 }
 
 func removeLocalClient(_ a: ClientAndTabs) -> Bool {
-    return a.client.guid != nil
+    a.client.guid != nil
 }
 
 class SQLRemoteClientsAndTabsTests: XCTestCase {

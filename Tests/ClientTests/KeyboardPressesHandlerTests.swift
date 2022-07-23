@@ -247,7 +247,7 @@ class MockKey: UIKey {
 
     let mockKeyCode: UIKeyboardHIDUsage
     override var keyCode: UIKeyboardHIDUsage {
-        return mockKeyCode
+        mockKeyCode
     }
 
     init(keyCode: UIKeyboardHIDUsage) {
@@ -265,7 +265,7 @@ class MockPress: UIPress {
 
     let mockKey: MockKey
     override var key: UIKey {
-        return mockKey
+        mockKey
     }
 
     init(mockKey: MockKey) {

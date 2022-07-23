@@ -14,7 +14,7 @@ struct SimpleTab: Hashable, Codable {
     var isPrivate: Bool = false
     var uuid: String = ""
     var imageKey: String {
-        return url?.baseDomain ?? ""
+        url?.baseDomain ?? ""
     }
 }
 

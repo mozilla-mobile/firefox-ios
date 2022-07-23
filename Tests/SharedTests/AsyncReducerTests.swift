@@ -153,7 +153,7 @@ func delay(_ delay: Double, closure:@escaping () -> Void) {
 }
 
 private func simpleAdder(_ a: Int, b: Int) -> Deferred<Maybe<Int>> {
-    return deferMaybe(a + b)
+    deferMaybe(a + b)
 }
 
 private func waitingFillingAdder(_ a: Int, b: Int) -> Deferred<Maybe<Int>> {

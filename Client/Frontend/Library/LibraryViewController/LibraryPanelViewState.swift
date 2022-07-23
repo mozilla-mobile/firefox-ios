@@ -88,7 +88,9 @@ enum LibraryPanelSubState {
 class LibraryPanelViewState {
     private var state: LibraryPanelMainState = .bookmarks(state: .mainView)
     var currentState: LibraryPanelMainState {
-        get { return state }
+        get {
+            state
+        }
         set {
             updateState(to: newValue)
         }

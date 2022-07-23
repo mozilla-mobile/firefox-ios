@@ -21,15 +21,15 @@ open class ClientPayload: CleartextPayloadJSON {
     }
 
     var commands: [JSON] {
-        return self["commands"].array ?? []   // It might not be present at all.
+        self["commands"].array ?? []   // It might not be present at all.
     }
 
     var name: String {
-        return self["name"].stringValue
+        self["name"].stringValue
     }
 
     var clientType: String {
-        return self["type"].stringValue
+        self["type"].stringValue
     }
 
     override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {

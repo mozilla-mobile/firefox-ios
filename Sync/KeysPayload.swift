@@ -9,8 +9,8 @@ import SwiftyJSON
 
 open class KeysPayload: CleartextPayloadJSON {
     override open func isValid() -> Bool {
-        return super.isValid() &&
-               self["default"].isArray()
+        super.isValid() &&
+                self["default"].isArray()
     }
 
     fileprivate func keyBundleFromPair(_ input: JSON) -> KeyBundle? {
@@ -25,7 +25,7 @@ open class KeysPayload: CleartextPayloadJSON {
     }
 
     var defaultKeys: KeyBundle? {
-        return self.keyBundleFromPair(self["default"])
+        self.keyBundleFromPair(self["default"])
     }
 
     var collectionKeys: [String: KeyBundle] {

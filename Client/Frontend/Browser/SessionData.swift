@@ -13,12 +13,12 @@ import Shared
 /// reduces security risk. Also, this particular method helps in cleaning up / migrating
 /// old localhost:6571 URLs to internal: SessionData urls 
 private func migrate(urls: [URL]) -> [URL] {
-    return urls.compactMap { url in
+    urls.compactMap { url in
         var url = url
         let port = AppInfo.webserverPort
         [("http://localhost:\(port)/errors/error.html?url=", "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?url=")
-            // TODO: handle reader pages ("http://localhost:6571/reader-mode/page?url=", "\(InternalScheme.url)/\(ReaderModeHandler.path)?url=")
-            ].forEach {
+         // TODO: handle reader pages ("http://localhost:6571/reader-mode/page?url=", "\(InternalScheme.url)/\(ReaderModeHandler.path)?url=")
+        ].forEach {
             oldItem, newItem in
             if url.absoluteString.hasPrefix(oldItem) {
                 var urlStr = url.absoluteString.replacingOccurrences(of: oldItem, with: newItem)
@@ -46,10 +46,12 @@ class SessionData: NSObject, NSCoding {
     let urls: [URL]
 
     var jsonDictionary: [String: Any] {
-        return [
+        [
             "currentPage": String(self.currentPage),
             "lastUsedTime": String(self.lastUsedTime),
-            "urls": urls.map { $0.absoluteString }
+            "urls": urls.map {
+                $0.absoluteString
+            }
         ]
     }
 

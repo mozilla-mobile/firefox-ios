@@ -10,7 +10,7 @@ public protocol Identifiable: Equatable {
 }
 
 public func ==<T> (lhs: T, rhs: T) -> Bool where T: Identifiable {
-    return lhs.id == rhs.id
+    lhs.id == rhs.id
 }
 
 open class Favicon: Identifiable {
@@ -34,12 +34,12 @@ open class Site: Identifiable {
     open var guid: String?
 
     open var tileURL: URL {
-        return URL(string: url)?.domainURL ?? URL(string: "about:blank")!
+        URL(string: url)?.domainURL ?? URL(string: "about:blank")!
     }
 
     // i.e. `http://www.example.com/` --> `example`
     open var secondLevelDomain: String? {
-        return URL(string: url)?.host?.components(separatedBy: ".").suffix(2).first
+        URL(string: url)?.host?.components(separatedBy: ".").suffix(2).first
     }
 
     public let url: String

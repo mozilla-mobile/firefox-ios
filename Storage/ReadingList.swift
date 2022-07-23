@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 func ReadingListNow() -> Timestamp {
-    return Timestamp(Date.timeIntervalSinceReferenceDate * 1000.0)
+    Timestamp(Date.timeIntervalSinceReferenceDate * 1000.0)
 }
 
 let ReadingListDefaultUnread: Bool = true
@@ -46,12 +46,12 @@ public struct ReadingListItem: Equatable {
 }
 
 public func == (lhs: ReadingListItem, rhs: ReadingListItem) -> Bool {
-    return lhs.id == rhs.id
-        && lhs.lastModified == rhs.lastModified
-        && lhs.url == rhs.url
-        && lhs.title == rhs.title
-        && lhs.addedBy == rhs.addedBy
-        && lhs.unread == rhs.unread
-        && lhs.archived == rhs.archived
-        && lhs.favorite == rhs.favorite
+    lhs.id == rhs.id
+            && lhs.lastModified == rhs.lastModified
+            && lhs.url == rhs.url
+            && lhs.title == rhs.title
+            && lhs.addedBy == rhs.addedBy
+            && lhs.unread == rhs.unread
+            && lhs.archived == rhs.archived
+            && lhs.favorite == rhs.favorite
 }

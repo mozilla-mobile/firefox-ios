@@ -40,7 +40,7 @@ struct WebViewNavigationHandlerImplementation: WebViewNavigationHandler {
     }
 
     func shouldFilterDataScheme(url: URL) -> Bool {
-        return url.scheme == WebViewNavigationHandlerImplementation.Scheme.data.rawValue
+        url.scheme == WebViewNavigationHandlerImplementation.Scheme.data.rawValue
     }
 
     func filterDataScheme(url: URL,

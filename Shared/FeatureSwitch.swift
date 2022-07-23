@@ -47,7 +47,7 @@ open class FeatureSwitch {
     /// Is this user always a member of the test set, whatever the percentage probability?
     /// This _only_ tests the probabilities, not the other conditions.
     open func alwaysMembership(_ prefs: Prefs) -> Bool {
-        return lowerCaseS(prefs) == 99
+        lowerCaseS(prefs) == 99
     }
 
     /// Reset the random component of this switch (`lowerCaseS`). This is primarily useful for testing.

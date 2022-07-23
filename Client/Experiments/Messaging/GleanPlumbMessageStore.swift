@@ -103,7 +103,7 @@ class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
     /// Collisions can happen if a message key string and a string elsewhere in the codebase happen to be the same.
     /// We prevent it by prepending `GleanPlumb.Messages.` to the message key.
     private func generateKey(from key: String) -> String {
-        return "\(GleanPlumbMessageStore.rootKey)\(key)"
+        "\(GleanPlumbMessageStore.rootKey)\(key)"
     }
 
     /// Persist a message's metadata.

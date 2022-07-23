@@ -13,11 +13,11 @@ class CustomizeHomepageSectionViewModel {
 extension CustomizeHomepageSectionViewModel: HomepageViewModelProtocol {
 
     var sectionType: HomepageSectionType {
-        return .customizeHome
+        .customizeHome
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        return .emptyHeader
+        .emptyHeader
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
@@ -37,11 +37,11 @@ extension CustomizeHomepageSectionViewModel: HomepageViewModelProtocol {
     }
 
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
-        return 1
+        1
     }
 
     var isEnabled: Bool {
-        return true
+        true
     }
 }
 

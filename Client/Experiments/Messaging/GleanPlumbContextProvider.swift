@@ -20,7 +20,7 @@ class GleanPlumbContextProvider {
     }
 
     private var isDefaultBrowser: Bool {
-        return UserDefaults.standard.bool(forKey: RatingPromptManager.UserDefaultsKey.keyIsBrowserDefault.rawValue)
+        UserDefaults.standard.bool(forKey: RatingPromptManager.UserDefaultsKey.keyIsBrowserDefault.rawValue)
     }
 
     /// JEXLs are more accurately evaluated when given certain details about the app on device.
@@ -28,7 +28,7 @@ class GleanPlumbContextProvider {
     /// - https://experimenter.info/mobile-messaging/#list-of-attributes
     /// We should pass as much device context as possible.
     func createAdditionalDeviceContext() -> [String: Any] {
-        return [ContextKey.todayDate.rawValue: todaysDate,
-                ContextKey.isDefaultBrowser.rawValue: isDefaultBrowser]
+        [ContextKey.todayDate.rawValue: todaysDate,
+         ContextKey.isDefaultBrowser.rawValue: isDefaultBrowser]
     }
 }

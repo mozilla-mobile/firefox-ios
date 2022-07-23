@@ -10,38 +10,38 @@ precedencegroup PipelinePrecedence {
 infix operator |> : PipelinePrecedence
 
 public func |> <T, U>(x: T, f: (T) -> U) -> U {
-    return f(x)
+    f(x)
 }
 
 // Basic currying.
 public func curry<A, B>(_ f: @escaping (A) -> B) -> (A) -> B {
-    return { a in
-        return f(a)
+    { a in
+        f(a)
     }
 }
 
 public func curry<A, B, C>(_ f: @escaping (A, B) -> C) -> (A) -> (B) -> C {
-    return { a in
-        return { b in
-            return f(a, b)
+    { a in
+        { b in
+            f(a, b)
         }
     }
 }
 
 public func curry<A, B, C, D>(_ f: @escaping (A, B, C) -> D) -> (A) -> (B) -> (C) -> D {
-    return { a in
-        return { b in
-            return { c in
-                return f(a, b, c)
+    { a in
+        { b in
+            { c in
+                f(a, b, c)
             }
         }
     }
 }
 
 public func curry<A, B, C, D, E>(_ f: @escaping (A, B, C, D) -> E) -> (A, B, C) -> (D) -> E {
-    return { (a, b, c) in
-        return { d in
-            return f(a, b, c, d)
+    { (a, b, c) in
+        { d in
+            f(a, b, c, d)
         }
     }
 }
@@ -50,18 +50,18 @@ public func curry<A, B, C, D, E>(_ f: @escaping (A, B, C, D) -> E) -> (A, B, C) 
 infix operator •
 
 public func •<T, U, V>(f: @escaping (T) -> U, g: @escaping (U) -> V) -> (T) -> V {
-    return { t in
-        return g(f(t))
+    { t in
+        g(f(t))
     }
 }
 public func •<T, V>(f: @escaping (T) -> Void, g: @escaping () -> V) -> (T) -> V {
-    return { t in
+    { t in
         f(t)
         return g()
     }
 }
 public func •<V>(f: @escaping () -> Void, g: @escaping () -> V) -> () -> V {
-    return {
+    {
         f()
         return g()
     }
@@ -174,7 +174,9 @@ public func optDictionaryEqual<K, V: Equatable>(_ lhs: [K: V]?, rhs: [K: V]?) ->
  * Return members of `a` that aren't nil, changing the type of the sequence accordingly.
  */
 public func optFilter<T>(_ a: [T?]) -> [T] {
-    return a.compactMap { $0 }
+    a.compactMap {
+        $0
+    }
 }
 
 /**
@@ -215,7 +217,9 @@ public func findOneValue<K, V>(_ map: [K: V], f: (V) -> Bool) -> V? {
  * It's usually convenient for this to accept an optional.
  */
 public func jsonsToStrings(_ arr: [JSON]?) -> [String]? {
-    return arr?.compactMap { $0.stringValue }
+    arr?.compactMap {
+        $0.stringValue
+    }
 }
 
 // Encapsulate a callback in a way that we can use it with NSTimer.

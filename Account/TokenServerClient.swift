@@ -25,8 +25,8 @@ public struct TokenServerToken {
      * Return true if this token points to the same place as the other token.
      */
     public func sameDestination(_ other: TokenServerToken) -> Bool {
-        return self.uid == other.uid &&
-               self.api_endpoint == other.api_endpoint
+        self.uid == other.uid &&
+                self.api_endpoint == other.api_endpoint
     }
 
     public static func fromJSON(_ json: JSON) -> TokenServerToken? {

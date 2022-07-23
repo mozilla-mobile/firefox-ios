@@ -115,7 +115,7 @@ class WallpaperCardViewController: OnboardingCardViewController {
 
 extension WallpaperCardViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return wallpaperManager.numberOfWallpapers
+        wallpaperManager.numberOfWallpapers
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

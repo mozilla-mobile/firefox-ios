@@ -169,7 +169,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
     var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
 
     private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
+        UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
     private var records: [ReadingListItem]?
@@ -330,11 +330,11 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return records?.count ?? 0
+        records?.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -371,7 +371,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // the cells you would like the actions to appear needs to be editable
-        return true
+        true
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

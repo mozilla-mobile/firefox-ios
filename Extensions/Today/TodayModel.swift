@@ -10,6 +10,6 @@ struct TodayModel {
     static var searchedText: String?
 
     var scheme: String {
-        return URL.mozInternalScheme
+        URL.mozInternalScheme
     }
 }

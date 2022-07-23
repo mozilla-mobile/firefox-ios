@@ -357,7 +357,10 @@ class PhotonActionSheet: UIViewController {
     }
 
     private func getViewsHeightSum(views: [UIView]) -> CGFloat {
-        return views.map { $0.frame.height }.reduce(0, +)
+        views.map {
+                    $0.frame.height
+                }
+                .reduce(0, +)
     }
 }
 
@@ -375,15 +378,15 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.actions.count
+        viewModel.actions.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.actions[section].count
+        viewModel.actions[section].count
     }
 
     func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
-        return false
+        false
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -405,19 +408,19 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0
+        0
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return UIView()
+        UIView()
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return viewModel.getHeaderHeightForSection(section: section)
+        viewModel.getHeaderHeightForSection(section: section)
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return viewModel.getViewHeader(tableView: tableView, section: section)
+        viewModel.getViewHeader(tableView: tableView, section: section)
     }
 }
 

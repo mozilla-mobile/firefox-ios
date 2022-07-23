@@ -21,7 +21,7 @@ extension HomepageContextMenuProtocol {
     // MARK: Site
     func presentContextMenu(for site: Site, with sourceView: UIView?, sectionType: HomepageSectionType) {
         presentContextMenu(for: site, with: sourceView, sectionType: sectionType, completionHandler: {
-            return self.contextMenu(for: site, with: sourceView, sectionType: sectionType)
+            self.contextMenu(for: site, with: sourceView, sectionType: sectionType)
         })
     }
 
@@ -46,7 +46,7 @@ extension HomepageContextMenuProtocol {
     // MARK: - Highlight Item
     func presentContextMenu(for highlightItem: HighlightItem, with sourceView: UIView?, sectionType: HomepageSectionType) {
         presentContextMenu(for: highlightItem, with: sourceView, sectionType: sectionType, completionHandler: {
-            return self.contextMenu(for: highlightItem, with: sourceView, sectionType: sectionType)
+            self.contextMenu(for: highlightItem, with: sourceView, sectionType: sectionType)
         })
     }
     func contextMenu(for highlightItem: HighlightItem, with sourceView: UIView?, sectionType: HomepageSectionType) -> PhotonActionSheet? {

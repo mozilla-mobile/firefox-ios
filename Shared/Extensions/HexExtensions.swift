@@ -70,6 +70,6 @@ extension Data {
 
 extension Data {
     public var base64EncodedString: String {
-        return self.base64EncodedString(options: [])
+        self.base64EncodedString(options: [])
     }
 }

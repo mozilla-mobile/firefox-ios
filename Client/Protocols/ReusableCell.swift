@@ -17,19 +17,27 @@ protocol ReusableCell: AnyObject {
 }
 
 extension ReusableCell where Self: UICollectionViewCell {
-    static var cellIdentifier: String { return String(describing: self) }
+    static var cellIdentifier: String {
+        String(describing: self)
+    }
 }
 
 extension ReusableCell where Self: UITableViewCell {
-    static var cellIdentifier: String { return String(describing: self) }
+    static var cellIdentifier: String {
+        String(describing: self)
+    }
 }
 
 extension ReusableCell where Self: UITableViewHeaderFooterView {
-    static var cellIdentifier: String { return String(describing: self) }
+    static var cellIdentifier: String {
+        String(describing: self)
+    }
 }
 
 extension ReusableCell where Self: UICollectionReusableView {
-    static var cellIdentifier: String { return String(describing: self) }
+    static var cellIdentifier: String {
+        String(describing: self)
+    }
 }
 
 extension UICollectionView: Loggable {

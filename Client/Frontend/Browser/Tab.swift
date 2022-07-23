@@ -63,7 +63,7 @@ class Tab: NSObject {
     fileprivate var _isPrivate: Bool = false
     internal fileprivate(set) var isPrivate: Bool {
         get {
-            return _isPrivate
+            _isPrivate
         }
         set {
             if _isPrivate != newValue {
@@ -73,7 +73,7 @@ class Tab: NSObject {
     }
     var urlType: TabUrlType = .regular
     var tabState: TabState {
-        return TabState(isPrivate: _isPrivate, url: url, title: displayTitle, favicon: displayFavicon)
+        TabState(isPrivate: _isPrivate, url: url, title: displayTitle, favicon: displayFavicon)
     }
 
     var timerPerWebsite: [String: StopWatchTimer] = [:]
@@ -141,24 +141,26 @@ class Tab: NSObject {
     }
 
     var loading: Bool {
-        return webView?.isLoading ?? false
+        webView?.isLoading ?? false
     }
 
     var estimatedProgress: Double {
-        return webView?.estimatedProgress ?? 0
+        webView?.estimatedProgress ?? 0
     }
 
     var backList: [WKBackForwardListItem]? {
-        return webView?.backForwardList.backList
+        webView?.backForwardList.backList
     }
 
     var forwardList: [WKBackForwardListItem]? {
-        return webView?.backForwardList.forwardList
+        webView?.backForwardList.forwardList
     }
 
     var historyList: [URL] {
         get {
-            func listToUrl(_ item: WKBackForwardListItem) -> URL { return item.url }
+            func listToUrl(_ item: WKBackForwardListItem) -> URL {
+                item.url
+            }
 
             var historyUrls = self.backList?.map(listToUrl) ?? [URL]()
             if let url = url {
@@ -171,7 +173,7 @@ class Tab: NSObject {
     }
 
     var title: String? {
-        return webView?.title
+        webView?.title
     }
 
     var displayTitle: String {
@@ -216,15 +218,17 @@ class Tab: NSObject {
     }
 
     var displayFavicon: Favicon? {
-        return favicons.max { $0.width! < $1.width! }
+        favicons.max {
+            $0.width! < $1.width!
+        }
     }
 
     var canGoBack: Bool {
-        return webView?.canGoBack ?? false
+        webView?.canGoBack ?? false
     }
 
     var canGoForward: Bool {
-        return webView?.canGoForward ?? false
+        webView?.canGoForward ?? false
     }
 
     var userActivity: NSUserActivity?
@@ -631,7 +635,7 @@ class Tab: NSObject {
     }
 
     func getContentScript(name: String) -> TabContentScript? {
-        return contentScriptManager.getContentScript(name)
+        contentScriptManager.getContentScript(name)
     }
 
     func hideContent(_ animated: Bool = false) {
@@ -733,7 +737,12 @@ class Tab: NSObject {
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {
-        return sequence(first: parent) { $0?.parent }.contains { $0 == ancestor }
+        sequence(first: parent) {
+            $0?.parent
+        }
+                .contains {
+                    $0 == ancestor
+                }
     }
 
     func observeURLChanges(delegate: URLChangeDelegate) {
@@ -781,7 +790,7 @@ class Tab: NSObject {
 extension Tab: UIGestureRecognizerDelegate, Loggable {
     // This prevents the recognition of one gesture recognizer from blocking another
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        true
     }
 
     func configureEdgeSwipeGestureRecognizers() {
@@ -817,15 +826,15 @@ extension Tab: TabWebViewDelegate {
 
 extension Tab: ContentBlockerTab {
     func currentURL() -> URL? {
-        return url
+        url
     }
 
     func currentWebView() -> WKWebView? {
-        return webView
+        webView
     }
 
     func imageContentBlockingEnabled() -> Bool {
-        return noImageMode
+        noImageMode
     }
 }
 
@@ -877,7 +886,7 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
     }
 
     func getContentScript(_ name: String) -> TabContentScript? {
-        return helpers[name]
+        helpers[name]
     }
 }
 
@@ -899,7 +908,7 @@ class TabWebView: WKWebView, MenuHelperInterface {
     }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        return super.canPerformAction(action, withSender: sender) || action == MenuHelper.SelectorFindInPage
+        super.canPerformAction(action, withSender: sender) || action == MenuHelper.SelectorFindInPage
     }
 
     func menuHelperFindInPage() {

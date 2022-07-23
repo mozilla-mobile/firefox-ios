@@ -99,22 +99,22 @@ extension BookmarkItemData: BookmarksFolderCell {
 extension FxBookmarkNode {
 
     var leftImageView: UIImage? {
-        return LegacyThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
+        LegacyThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
     }
 
     var chevronImage: UIImage? {
-        return UIImage(named: ImageIdentifiers.menuChevron)
+        UIImage(named: ImageIdentifiers.menuChevron)
     }
 
     private var bookmarkFolderIconNormal: UIImage? {
-        return UIImage(named: ImageIdentifiers.bookmarkFolder)?
-            .createScaled(BookmarksPanel.UX.FolderIconSize)
-            .tinted(withColor: UIColor.Photon.Grey90)
+        UIImage(named: ImageIdentifiers.bookmarkFolder)?
+                .createScaled(BookmarksPanel.UX.FolderIconSize)
+                .tinted(withColor: UIColor.Photon.Grey90)
     }
 
     private var bookmarkFolderIconDark: UIImage? {
-        return UIImage(named: ImageIdentifiers.bookmarkFolder)?
-            .createScaled(BookmarksPanel.UX.FolderIconSize)
-            .tinted(withColor: UIColor.Photon.Grey10)
+        UIImage(named: ImageIdentifiers.bookmarkFolder)?
+                .createScaled(BookmarksPanel.UX.FolderIconSize)
+                .tinted(withColor: UIColor.Photon.Grey10)
     }
 }

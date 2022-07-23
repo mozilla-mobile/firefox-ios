@@ -14,7 +14,7 @@ class EnhancedTrackingProtectionMenuVM {
     var onOpenSettingsTapped: (() -> Void)?
 
     var websiteTitle: String {
-        return tab.url?.baseDomain ?? ""
+        tab.url?.baseDomain ?? ""
     }
 
     var favIcon: URL? {
@@ -23,7 +23,7 @@ class EnhancedTrackingProtectionMenuVM {
     }
 
     var connectionStatusString: String {
-        return connectionSecure ? .ProtectionStatusSecure : .ProtectionStatusNotSecure
+        connectionSecure ? .ProtectionStatusSecure : .ProtectionStatusNotSecure
     }
 
     var connectionStatusImage: UIImage {
@@ -33,7 +33,7 @@ class EnhancedTrackingProtectionMenuVM {
     }
 
     var connectionSecure: Bool {
-        return tab.webView?.hasOnlySecureContent ?? false
+        tab.webView?.hasOnlySecureContent ?? false
     }
 
     var isSiteETPEnabled: Bool {
@@ -46,7 +46,7 @@ class EnhancedTrackingProtectionMenuVM {
     }
 
     var globalETPIsEnabled: Bool {
-        return FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs)
+        FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs)
     }
 
     // MARK: - Initializers

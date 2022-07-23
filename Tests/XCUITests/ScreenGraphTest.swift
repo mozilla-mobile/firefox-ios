@@ -114,7 +114,7 @@ public var isTablet: Bool {
     // There is more value in a variable having the same name,
     // so it can be used in both predicates and in code
     // than avoiding the duplication of one line of code.
-    return UIDevice.current.userInterfaceIdiom == .pad
+    UIDevice.current.userInterfaceIdiom == .pad
 }
 
 private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<TestUserState> {

@@ -140,7 +140,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     var asPopover: Bool = false
 
     private var toggleContainerShouldBeHidden: Bool {
-        return !viewModel.globalETPIsEnabled
+        !viewModel.globalETPIsEnabled
     }
 
     private var protectionViewTopConstraint: NSLayoutConstraint?

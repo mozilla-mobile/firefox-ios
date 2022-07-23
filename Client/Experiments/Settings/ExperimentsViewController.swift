@@ -61,7 +61,7 @@ class ExperimentsViewController: UIViewController {
 
 extension ExperimentsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return availableExperiments.count
+        availableExperiments.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

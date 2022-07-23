@@ -16,7 +16,7 @@ class WebServerTests: XCTestCase {
     fileprivate func setupWebServer() {
         webServer = GCDWebServer()
         webServer.addHandler(forMethod: "GET", path: "/hello", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse in
-            return GCDWebServerDataResponse(html: "<html><body><p>Hello World</p></body></html>")!
+            GCDWebServerDataResponse(html: "<html><body><p>Hello World</p></body></html>")!
         }
         if webServer.start(withPort: 0, bonjourName: nil) == false {
             XCTFail("Can't start the GCDWebServer")

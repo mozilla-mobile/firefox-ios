@@ -40,14 +40,13 @@ extension FaviconFetcher {
                 }
 
                 oldIcons = oldIcons.sorted {
-                    return $0.width! > $1.width!
+                    $0.width! > $1.width!
                 }
 
                 return deferMaybe(oldIcons)
             }).upon({ (result: Maybe<[Favicon]>) in
                 deferred.fill(result)
-                return
-            })
+                    })
         }
 
         return deferred
@@ -55,19 +54,21 @@ extension FaviconFetcher {
 
     // Loads and parses an html document and tries to find any known favicon-type tags for the page
     fileprivate func parseHTMLForFavicons(_ url: URL) -> Deferred<Maybe<[Favicon]>> {
-        return fetchDataForURL(url).bind({ result -> Deferred<Maybe<[Favicon]>> in
+        fetchDataForURL(url).bind({ result -> Deferred<Maybe<[Favicon]>> in
             var icons = [Favicon]()
             guard let data = result.successValue,
                   result.isSuccess,
                   let root = try? HTMLDocument(data: data as Data)
-            else { return deferMaybe([]) }
+            else {
+                return deferMaybe([])
+            }
 
             var reloadUrl: URL?
             for meta in root.xpath("//head/meta") {
                 if let refresh = meta["http-equiv"], refresh == "Refresh",
-                    let content = meta["content"],
-                    let index = content.range(of: "URL="),
-                    let url = NSURL(string: String(content[index.upperBound...])) {
+                   let content = meta["content"],
+                   let index = content.range(of: "URL="),
+                   let url = NSURL(string: String(content[index.upperBound...])) {
                     reloadUrl = url as URL
                 }
             }

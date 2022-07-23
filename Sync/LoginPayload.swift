@@ -80,31 +80,31 @@ open class LoginPayload: CleartextPayloadJSON {
     }
 
     open var hostname: String {
-        return self["hostname"].string!
+        self["hostname"].string!
     }
 
     open var username: String {
-        return self["username"].string!
+        self["username"].string!
     }
 
     open var password: String {
-        return self["password"].string!
+        self["password"].string!
     }
 
     open var usernameField: String {
-        return self["usernameField"].string!
+        self["usernameField"].string!
     }
 
     open var passwordField: String {
-        return self["passwordField"].string!
+        self["passwordField"].string!
     }
 
     open var formSubmitUrl: String? {
-        return self["formSubmitUrl"].string
+        self["formSubmitUrl"].string
     }
 
     open var httpRealm: String? {
-        return self["httpRealm"].string
+        self["httpRealm"].string
     }
 
     fileprivate func timestamp(_ field: String) -> Timestamp? {
@@ -116,19 +116,19 @@ open class LoginPayload: CleartextPayloadJSON {
     }
 
     open var timesUsed: Int? {
-        return self["timesUsed"].int
+        self["timesUsed"].int
     }
 
     open var timeCreated: Timestamp? {
-        return self.timestamp("timeCreated")
+        self.timestamp("timeCreated")
     }
 
     open var timeLastUsed: Timestamp? {
-        return self.timestamp("timeLastUsed")
+        self.timestamp("timeLastUsed")
     }
 
     open var timePasswordChanged: Timestamp? {
-        return self.timestamp("timePasswordChanged")
+        self.timestamp("timePasswordChanged")
     }
 
     override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {

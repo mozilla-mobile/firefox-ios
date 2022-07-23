@@ -14,11 +14,11 @@ struct LegacyWallpaperManager {
     private let storageManager: LegacyWallpaperStorageUtility
 
     var numberOfWallpapers: Int {
-        return dataManager.availableWallpapers.count
+        dataManager.availableWallpapers.count
     }
 
     var currentWallpaperImage: UIImage? {
-        return storageManager.getCurrentWallpaperImage()
+        storageManager.getCurrentWallpaperImage()
     }
 
     var currentWallpaper: LegacyWallpaper {
@@ -53,7 +53,9 @@ struct LegacyWallpaperManager {
     /// being turned on, as `false` is what UserDefaults returns when a bool does not
     /// exist for a key.
     var switchWallpaperFromLogoEnabled: Bool {
-        get { return !userDefaults.bool(forKey: PrefsKeys.WallpaperManagerLogoSwitchPreference) }
+        get {
+            !userDefaults.bool(forKey: PrefsKeys.WallpaperManagerLogoSwitchPreference)
+        }
         set { userDefaults.set(!newValue, forKey: PrefsKeys.WallpaperManagerLogoSwitchPreference) }
     }
 
@@ -87,11 +89,11 @@ struct LegacyWallpaperManager {
     }
 
     public func getWallpaperTelemetryAt(index: Int) -> [String: String] {
-        return dataManager.availableWallpapers[index].telemetryMetadata
+        dataManager.availableWallpapers[index].telemetryMetadata
     }
 
     public func getAccessibilityLabelForWallpaper(at index: Int) -> String {
-        return dataManager.availableWallpapers[index].accessibilityLabel
+        dataManager.availableWallpapers[index].accessibilityLabel
     }
 
     public func runResourceVerification() {

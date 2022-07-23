@@ -72,10 +72,10 @@ class UpdateViewController: UIViewController {
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
-        return UpdateViewController.theme == .dark ? .white : .black
+        UpdateViewController.theme == .dark ? .white : .black
     }
     private var fxBackgroundThemeColour: UIColor {
-        return UpdateViewController.theme == .dark ? .black : .white
+        UpdateViewController.theme == .dark ? .black : .white
     }
     private lazy var updatesTableView: UITableView = {
         let tableView = UITableView(frame: CGRect.zero, style: .grouped)
@@ -217,15 +217,15 @@ class UpdateViewController: UIViewController {
 
 extension UpdateViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return CGFloat.leastNormalMagnitude
+        CGFloat.leastNormalMagnitude
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return CGFloat.leastNormalMagnitude
+        CGFloat.leastNormalMagnitude
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.updates.count
+        viewModel.updates.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -15,7 +15,7 @@ class MockBackoffStorage: BackoffStorage {
     }
 
     func isInBackoff(_ now: Timestamp) -> Timestamp? {
-        return nil
+        nil
     }
 }
 
@@ -35,11 +35,11 @@ class MockSyncCollectionClient<T: CleartextPayloadJSON>: Sync15CollectionClient<
     }
 
     override func newBatch(ifUnmodifiedSince: Timestamp? = nil, onCollectionUploaded: @escaping (POSTResult, Timestamp?) -> DeferredTimestamp) -> Sync15BatchClient<T> {
-        return Sync15BatchClient(config: self.infoConfig,
-                                 ifUnmodifiedSince: ifUnmodifiedSince,
-                                 serializeRecord: self.serializeRecord,
-                                 uploader: self.uploader,
-                                 onCollectionUploaded: onCollectionUploaded)
+        Sync15BatchClient(config: self.infoConfig,
+                ifUnmodifiedSince: ifUnmodifiedSince,
+                serializeRecord: self.serializeRecord,
+                uploader: self.uploader,
+                onCollectionUploaded: onCollectionUploaded)
     }
 }
 

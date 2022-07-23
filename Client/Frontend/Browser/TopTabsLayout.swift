@@ -13,7 +13,7 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     let HeaderFooterWidth = TopTabsUX.SeparatorWidth + TopTabsUX.FaderPading
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return TopTabsUX.SeparatorWidth
+        TopTabsUX.SeparatorWidth
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -24,11 +24,11 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return .zero
+        .zero
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return TopTabsUX.SeparatorWidth
+        TopTabsUX.SeparatorWidth
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -36,11 +36,11 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: 0, height: 0)
+        CGSize(width: 0, height: 0)
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return CGSize(width: 0, height: 0)
+        CGSize(width: 0, height: 0)
     }
 }
 
@@ -74,6 +74,6 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
     }
 
     override var flipsHorizontallyInOppositeLayoutDirection: Bool {
-        return true
+        true
     }
 }

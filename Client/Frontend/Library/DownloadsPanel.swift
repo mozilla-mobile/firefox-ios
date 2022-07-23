@@ -19,27 +19,27 @@ struct DownloadedFile: Equatable {
     let lastModified: Date
 
     var canShowInWebView: Bool {
-        return MIMEType.canShowInWebView(mimeType)
+        MIMEType.canShowInWebView(mimeType)
     }
 
     var filename: String {
-        return path.lastPathComponent
+        path.lastPathComponent
     }
 
     var fileExtension: String {
-        return path.pathExtension
+        path.pathExtension
     }
 
     var formattedSize: String {
-        return ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file)
+        ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file)
     }
 
     var mimeType: String {
-        return MIMEType.mimeTypeFromFileExtension(fileExtension)
+        MIMEType.mimeTypeFromFileExtension(fileExtension)
     }
 
     static public func == (lhs: DownloadedFile, rhs: DownloadedFile) -> Bool {
-        return lhs.path == rhs.path
+        lhs.path == rhs.path
     }
 }
 
@@ -172,7 +172,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
 
         return downloadedFiles.sorted(by: { a, b -> Bool in
-            return a.lastModified > b.lastModified
+            a.lastModified > b.lastModified
         })
     }
 
@@ -393,11 +393,11 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        4
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groupedDownloadedFiles.numberOfItemsForSection(section)
+        groupedDownloadedFiles.numberOfItemsForSection(section)
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -438,7 +438,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 // MARK: - UIDocumentInteractionControllerDelegate
 extension DownloadsPanel: UIDocumentInteractionControllerDelegate {
     func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
-        return self
+        self
     }
 }
 

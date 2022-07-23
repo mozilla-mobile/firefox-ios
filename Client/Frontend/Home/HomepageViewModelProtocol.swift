@@ -38,10 +38,12 @@ protocol HomepageViewModelProtocol {
 }
 
 extension HomepageViewModelProtocol {
-    var hasData: Bool { return true }
+    var hasData: Bool {
+        true
+    }
 
     var shouldShow: Bool {
-        return isEnabled && hasData
+        isEnabled && hasData
     }
 
     func updateData(completion: @escaping () -> Void) {

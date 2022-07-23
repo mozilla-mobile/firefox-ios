@@ -51,7 +51,7 @@ class SearchEngines {
 
     var defaultEngine: OpenSearchEngine {
         get {
-            return self.orderedEngines[0]
+            self.orderedEngines[0]
         }
 
         set(defaultEngine) {
@@ -65,7 +65,7 @@ class SearchEngines {
     }
 
     func isEngineDefault(_ engine: OpenSearchEngine) -> Bool {
-        return defaultEngine.shortName == engine.shortName
+        defaultEngine.shortName == engine.shortName
     }
 
     // The keys of this dictionary are used as a set.
@@ -83,7 +83,7 @@ class SearchEngines {
 
     var quickSearchEngines: [OpenSearchEngine]! {
         get {
-            return self.orderedEngines.filter({ (engine) in !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
+            self.orderedEngines.filter({ (engine) in !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
         }
     }
 
@@ -94,7 +94,7 @@ class SearchEngines {
     }
 
     func isEngineEnabled(_ engine: OpenSearchEngine) -> Bool {
-        return disabledEngineNames.index(forKey: engine.shortName) == nil
+        disabledEngineNames.index(forKey: engine.shortName) == nil
     }
 
     func enableEngine(_ engine: OpenSearchEngine) {
@@ -153,7 +153,7 @@ class SearchEngines {
     }
 
     fileprivate lazy var customEngines: [OpenSearchEngine] = {
-        return NSKeyedUnarchiver.unarchiveObject(withFile: self.customEngineFilePath()) as? [OpenSearchEngine] ?? []
+        NSKeyedUnarchiver.unarchiveObject(withFile: self.customEngineFilePath()) as? [OpenSearchEngine] ?? []
     }()
 
     fileprivate func saveCustomEngines() {

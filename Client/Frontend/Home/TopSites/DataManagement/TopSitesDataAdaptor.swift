@@ -82,7 +82,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     }
 
     func getTopSitesData() -> [TopSite] {
-        return topSites
+        topSites
     }
 
     func recalculateTopSiteData(for numberOfTilesPerRow: Int) {
@@ -196,11 +196,11 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     // MARK: - Sponsored tiles (Contiles)
 
     private var shouldLoadSponsoredTiles: Bool {
-        return featureFlags.isFeatureEnabled(.sponsoredTiles, checking: .buildAndUser)
+        featureFlags.isFeatureEnabled(.sponsoredTiles, checking: .buildAndUser)
     }
 
     private var shouldAddSponsoredTiles: Bool {
-        return !contiles.isEmpty && shouldLoadSponsoredTiles
+        !contiles.isEmpty && shouldLoadSponsoredTiles
     }
 
     /// Google tile has precedence over Sponsored Tiles, if Google tile is present

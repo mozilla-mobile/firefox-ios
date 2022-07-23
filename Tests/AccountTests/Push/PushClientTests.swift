@@ -10,7 +10,7 @@ import XCTest
 class PushClientTests: XCTestCase {
 
     var endpointURL: NSURL {
-        return FennecPushConfiguration().endpointURL
+        FennecPushConfiguration().endpointURL
     }
 
     func generateDeviceID() -> String {

@@ -52,7 +52,7 @@ class TabLocationView: UIView {
 
     var readerModeState: ReaderModeState {
         get {
-            return readerModeButton.readerModeState
+            readerModeButton.readerModeState
         }
         set (newReaderModeState) {
             guard newReaderModeState != self.readerModeButton.readerModeState else { return }
@@ -61,7 +61,7 @@ class TabLocationView: UIView {
     }
 
     lazy var placeholder: NSAttributedString = {
-        return NSAttributedString(string: .TabLocationURLPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.Photon.Grey50])
+        NSAttributedString(string: .TabLocationURLPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.Photon.Grey50])
     }()
 
     lazy var urlTextField: URLTextField = .build { urlTextField in
@@ -175,7 +175,9 @@ class TabLocationView: UIView {
 
     override var accessibilityElements: [Any]? {
         get {
-            return _accessibilityElements.filter { !$0.isHidden }
+            _accessibilityElements.filter {
+                !$0.isHidden
+            }
         }
         set {
             super.accessibilityElements = newValue
@@ -225,7 +227,7 @@ class TabLocationView: UIView {
     }
 
     @objc func readerModeCustomAction() -> Bool {
-        return delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
+        delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
     }
 
     private func updateTextWithURL() {
@@ -269,12 +271,12 @@ private extension TabLocationView {
 extension TabLocationView: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         // When long pressing a button make sure the textfield's long press gesture is not triggered
-        return !(otherGestureRecognizer.view is UIButton)
+        !(otherGestureRecognizer.view is UIButton)
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         // If the longPressRecognizer is active, fail the tap recognizer to avoid conflicts.
-        return gestureRecognizer == longPressRecognizer && otherGestureRecognizer == tapRecognizer
+        gestureRecognizer == longPressRecognizer && otherGestureRecognizer == tapRecognizer
     }
 }
 

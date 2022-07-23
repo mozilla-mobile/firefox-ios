@@ -23,11 +23,11 @@ public class TabGroupData: NSObject, NSCoding {
     var tabHistoryCurrentState = ""
 
     func tabHistoryMetadatakey() -> HistoryMetadataKey {
-        return HistoryMetadataKey(url: tabAssociatedSearchUrl, searchTerm: tabAssociatedSearchTerm, referrerUrl: tabAssociatedNextUrl)
+        HistoryMetadataKey(url: tabAssociatedSearchUrl, searchTerm: tabAssociatedSearchTerm, referrerUrl: tabAssociatedNextUrl)
     }
 
     var jsonDictionary: [String: Any] {
-        return [
+        [
             "tabAssociatedSearchTerm": String(self.tabAssociatedSearchTerm),
             "tabAssociatedSearchUrl": String(self.tabAssociatedSearchUrl),
             "tabAssociatedNextUrl": String(self.tabAssociatedNextUrl),

@@ -22,23 +22,23 @@ open class AppInfo {
     }
 
     public static var bundleIdentifier: String {
-        return applicationBundle.object(forInfoDictionaryKey: "CFBundleIdentifier") as! String
+        applicationBundle.object(forInfoDictionaryKey: "CFBundleIdentifier") as! String
     }
 
     public static var displayName: String {
-        return applicationBundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
+        applicationBundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
     }
 
     public static var appVersion: String {
-        return applicationBundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+        applicationBundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     }
 
     public static var buildNumber: String {
-        return applicationBundle.object(forInfoDictionaryKey: String(kCFBundleVersionKey)) as! String
+        applicationBundle.object(forInfoDictionaryKey: String(kCFBundleVersionKey)) as! String
     }
 
     public static var majorAppVersion: String {
-        return appVersion.components(separatedBy: ".").first!
+        appVersion.components(separatedBy: ".").first!
     }
 
     /// Return the shared container identifier (also known as the app group) to be used with for example background
@@ -94,7 +94,7 @@ open class AppInfo {
 
     // Return whether the currently executing code is running in an Application
     public static var isApplication: Bool {
-        return Bundle.main.object(forInfoDictionaryKey: "CFBundlePackageType") as! String == "APPL"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundlePackageType") as! String == "APPL"
     }
 
     // The port for the internal webserver, tests can change this

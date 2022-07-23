@@ -224,16 +224,16 @@ extension IntroViewController: OnboardingCardDelegate {
 // MARK: UIViewController setup
 extension IntroViewController {
     override var prefersStatusBarHidden: Bool {
-        return true
+        true
     }
 
     override var shouldAutorotate: Bool {
-        return false
+        false
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         // This actually does the right thing on iPad where the modally
         // presented version happily rotates with the iPad orientation.
-        return .portrait
+        .portrait
     }
 }

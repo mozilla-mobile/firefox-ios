@@ -32,7 +32,9 @@ struct InactiveTabModel: Codable {
     /// Check to see if we ever ran this feature before, this is mainly
     /// to avoid tabs automatically going to their state on their first ever run
     static var hasRunInactiveTabFeatureBefore: Bool {
-        get { return userDefaults.bool(forKey: PrefsKeys.KeyInactiveTabsFirstTimeRun) }
+        get {
+            userDefaults.bool(forKey: PrefsKeys.KeyInactiveTabsFirstTimeRun)
+        }
         set(value) { userDefaults.setValue(value, forKey: PrefsKeys.KeyInactiveTabsFirstTimeRun) }
     }
 

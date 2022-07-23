@@ -23,7 +23,7 @@ class MockSyncAuthState: SyncAuthState {
     let kSync: Data
 
     var deviceID: String? {
-        return "mock_device_id"
+        "mock_device_id"
     }
 
     init(serverRoot: String, kSync: Data) {

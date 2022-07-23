@@ -18,7 +18,7 @@ class SessionRestoreHelper: TabContentScript {
     }
 
     func scriptMessageHandlerName() -> String? {
-        return "sessionRestoreHelper"
+        "sessionRestoreHelper"
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
@@ -32,6 +32,6 @@ class SessionRestoreHelper: TabContentScript {
     }
 
     class func name() -> String {
-        return "SessionRestoreHelper"
+        "SessionRestoreHelper"
     }
 }

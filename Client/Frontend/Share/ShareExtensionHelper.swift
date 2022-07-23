@@ -82,7 +82,7 @@ class ShareExtensionHelper: NSObject {
 
 extension ShareExtensionHelper: UIActivityItemSource {
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        return url
+        url
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {

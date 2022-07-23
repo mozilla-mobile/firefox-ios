@@ -35,7 +35,9 @@ private class CustomFxAContentServerEnableSetting: BoolSetting {
         defaultValue: String? = nil,
         placeholder: String,
         accessibilityIdentifier: String,
-        isChecked: @escaping () -> Bool = { return false },
+        isChecked: @escaping () -> Bool = {
+            false
+        },
         settingDidChange: ((String?) -> Void)? = nil
       ) {
           super.init(prefs: prefs,

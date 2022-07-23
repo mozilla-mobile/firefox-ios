@@ -21,7 +21,7 @@ class LegacyThemeManager {
     }
 
     var currentName: BuiltinThemeName {
-        return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
     }
 
     var automaticBrightnessValue: Float = UserDefaults.standard.float(forKey: LegacyThemeManagerPrefs.automaticSliderValue.rawValue) {
@@ -53,7 +53,7 @@ class LegacyThemeManager {
 
     // UIViewControllers / UINavigationControllers need to have `preferredStatusBarStyle` and call this.
     var statusBarStyle: UIStatusBarStyle {
-        return .default
+        .default
     }
 
     var userInterfaceStyle: UIUserInterfaceStyle {

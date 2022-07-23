@@ -20,22 +20,22 @@ protocol HighlightItem {
 extension HistoryHighlight: HighlightItem {
 
     var group: [HighlightItem]? {
-        return nil
+        nil
     }
 
     var type: HighlightItemType {
-        return .item
+        .item
     }
 
     var displayTitle: String {
-        return title ?? url
+        title ?? url
     }
 
     var description: String? {
-        return nil
+        nil
     }
 
     var siteUrl: URL? {
-        return URL(string: url)
+        URL(string: url)
     }
 }

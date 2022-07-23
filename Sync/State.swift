@@ -24,8 +24,8 @@ public struct Fetched<T: Equatable>: Equatable {
 }
 
 public func ==<T> (lhs: Fetched<T>, rhs: Fetched<T>) -> Bool {
-    return lhs.timestamp == rhs.timestamp &&
-           lhs.value == rhs.value
+    lhs.timestamp == rhs.timestamp &&
+            lhs.value == rhs.value
 }
 
 public enum LocalCommand: CustomStringConvertible, Hashable {
@@ -91,7 +91,7 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
     }
 
     public var description: String {
-        return self.toJSON().description
+        self.toJSON().description
     }
 
     public func hash(into hasher: inout Hasher) {
@@ -159,7 +159,7 @@ class PrefsBackoffStorage: BackoffStorage {
 
     var serverBackoffUntilLocalTimestamp: Timestamp? {
         get {
-            return self.prefs.unsignedLongForKey(self.key)
+            self.prefs.unsignedLongForKey(self.key)
         }
 
         set(value) {
@@ -305,7 +305,7 @@ open class Scratchpad {
         }
 
         open func build() -> Scratchpad {
-            return Scratchpad(
+            Scratchpad(
                     b: self.syncKeyBundle,
                     m: self.global,
                     k: self.keys,
@@ -323,11 +323,11 @@ open class Scratchpad {
     }
 
     open lazy var backoffStorage: BackoffStorage = {
-        return PrefsBackoffStorage(prefs: self.prefs.branch("backoff.storage"))
+        PrefsBackoffStorage(prefs: self.prefs.branch("backoff.storage"))
     }()
 
     open func evolve() -> Scratchpad.Builder {
-        return Scratchpad.Builder(p: self)
+        Scratchpad.Builder(p: self)
     }
 
     // This is never persisted.
@@ -431,11 +431,11 @@ open class Scratchpad {
 
     func freshStartWithGlobal(_ global: Fetched<MetaGlobal>) -> Scratchpad {
         // TODO: I *think* a new keyLabel is unnecessary.
-        return self.evolve()
-                   .setGlobal(global)
-                   .addLocalCommandsFromKeys(nil)
-                   .setKeys(nil)
-                   .build()
+        self.evolve()
+                .setGlobal(global)
+                .addLocalCommandsFromKeys(nil)
+                .setKeys(nil)
+                .build()
     }
 
     fileprivate class func unpickleV1FromPrefs(_ prefs: Prefs, syncKeyBundle: KeyBundle) -> Scratchpad {
@@ -556,7 +556,7 @@ open class Scratchpad {
      * overall pseudo-transaction is not atomic.
      */
     open func checkpoint() -> Scratchpad {
-        return pickle(self.prefs)
+        pickle(self.prefs)
     }
 
     func pickle(_ prefs: Prefs) -> Scratchpad {

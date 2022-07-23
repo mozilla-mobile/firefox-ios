@@ -45,11 +45,11 @@ public class SentryIntegration: SentryProtocol {
     private var attributes: [String: Any] = [:]
 
     public var crashedLastLaunch: Bool {
-        return SentrySDK.crashedLastRun
+        SentrySDK.crashedLastRun
     }
 
     private var releaseName: String {
-        return "\(AppInfo.bundleIdentifier)@\(AppInfo.appVersion)+(\(AppInfo.buildNumber))"
+        "\(AppInfo.bundleIdentifier)@\(AppInfo.appVersion)+(\(AppInfo.buildNumber))"
     }
 
     public func setup(sendUsageData: Bool) {

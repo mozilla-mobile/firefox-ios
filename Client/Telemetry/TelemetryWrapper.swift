@@ -556,7 +556,7 @@ extension TelemetryWrapper {
         case averageTabsInAllGroups = "averageTabsInAllGroups"
         case totalTabsInAllGroups = "totalTabsInAllGroups"
         var description: String {
-            return self.rawValue
+            self.rawValue
         }
 
         // Inactive Tab

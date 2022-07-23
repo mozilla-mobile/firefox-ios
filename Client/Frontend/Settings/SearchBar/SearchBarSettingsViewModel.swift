@@ -54,20 +54,20 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
     }
 
     var topSetting: CheckmarkSetting {
-        return CheckmarkSetting(title: NSAttributedString(string: SearchBarPosition.top.getLocalizedTitle),
-                                subtitle: nil,
-                                accessibilityIdentifier: AccessibilityIdentifiers.Settings.SearchBar.topSetting,
-                                isChecked: { return self.searchBarPosition == .top },
-                                onChecked: { self.saveSearchBarPosition(SearchBarPosition.top)}
+        CheckmarkSetting(title: NSAttributedString(string: SearchBarPosition.top.getLocalizedTitle),
+                subtitle: nil,
+                accessibilityIdentifier: AccessibilityIdentifiers.Settings.SearchBar.topSetting,
+                isChecked: { self.searchBarPosition == .top },
+                onChecked: { self.saveSearchBarPosition(SearchBarPosition.top) }
         )
     }
 
     var bottomSetting: CheckmarkSetting {
-        return CheckmarkSetting(title: NSAttributedString(string: SearchBarPosition.bottom.getLocalizedTitle),
-                                subtitle: nil,
-                                accessibilityIdentifier: AccessibilityIdentifiers.Settings.SearchBar.bottomSetting,
-                                isChecked: { return self.searchBarPosition == .bottom },
-                                onChecked: { self.saveSearchBarPosition(SearchBarPosition.bottom) }
+        CheckmarkSetting(title: NSAttributedString(string: SearchBarPosition.bottom.getLocalizedTitle),
+                subtitle: nil,
+                accessibilityIdentifier: AccessibilityIdentifiers.Settings.SearchBar.bottomSetting,
+                isChecked: { self.searchBarPosition == .bottom },
+                onChecked: { self.saveSearchBarPosition(SearchBarPosition.bottom) }
         )
     }
 }

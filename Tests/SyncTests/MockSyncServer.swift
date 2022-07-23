@@ -95,7 +95,7 @@ struct SyncDeleteRequestSpec {
     static func fromRequest(request: GCDWebServerRequest) -> SyncDeleteRequestSpec? {
         // Input is "/1.5/user{/storage{/collection{/id}}}".
         // That means we get four, five, or six path components here, the first being empty.
-        return SyncDeleteRequestSpec.fromPath(path: request.path, withQuery: request.query! as [NSString: AnyObject])
+        SyncDeleteRequestSpec.fromPath(path: request.path, withQuery: request.query! as [NSString: AnyObject])
     }
 
     static func fromPath(path: String, withQuery query: [NSString: AnyObject]) -> SyncDeleteRequestSpec? {
@@ -200,7 +200,7 @@ class MockSyncServer {
     }
 
     private func splitArray<T>(items: [T], at: Int) -> ([T], [T]) {
-        return (Array(items.dropLast(items.count - at)), Array(items.dropFirst(at)))
+        (Array(items.dropLast(items.count - at)), Array(items.dropFirst(at)))
     }
 
     private func recordsMatchingSpec(spec: SyncRequestSpec) -> (records: [EnvelopeJSON], offsetID: String?)? {
@@ -286,7 +286,7 @@ class MockSyncServer {
     }
 
     func modifiedTimeForCollection(collection: String) -> Timestamp? {
-        return self.collections[collection]?.modified
+        self.collections[collection]?.modified
     }
 
     func removeAllItemsFromCollection(collection: String, atTime: Timestamp) {

@@ -224,7 +224,9 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarLocationAccessibilityActions(_ urlBar: URLBarView) -> [UIAccessibilityCustomAction]? {
-        return locationActionsForURLBar(urlBar).map { $0.accessibilityCustomAction }
+        locationActionsForURLBar(urlBar).map {
+            $0.accessibilityCustomAction
+        }
     }
 
     func urlBar(_ urlBar: URLBarView, didRestoreText text: String) {

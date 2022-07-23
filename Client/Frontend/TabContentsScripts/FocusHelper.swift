@@ -16,11 +16,11 @@ class FocusHelper: TabContentScript {
     }
 
     static func name() -> String {
-        return "FocusHelper"
+        "FocusHelper"
     }
 
     func scriptMessageHandlerName() -> String? {
-        return "focusHelper"
+        "focusHelper"
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {

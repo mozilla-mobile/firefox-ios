@@ -15,27 +15,27 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     var hasHomePage = false
 
     var isJumpBackInSectionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly)
+        featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly)
     }
 
     var isRecentlySavedSectionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildOnly)
+        featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildOnly)
     }
 
     var isWallpaperSectionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
+        featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
     }
 
     var isPocketSectionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.pocket, checking: .buildOnly)
+        featureFlags.isFeatureEnabled(.pocket, checking: .buildOnly)
     }
 
     var isPocketSponsoredStoriesEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .buildOnly)
+        featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .buildOnly)
     }
 
     var isHistoryHighlightsSectionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly)
+        featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly)
     }
 
     // MARK: - Initializers
@@ -90,7 +90,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             title: NSAttributedString(string: .SettingsNewTabTopSites),
             subtitle: nil,
             accessibilityIdentifier: "HomeAsFirefoxHome",
-            isChecked: { return self.currentNewTabChoice == NewTabPage.topSites },
+            isChecked: { self.currentNewTabChoice == NewTabPage.topSites },
             onChecked: {
                 self.currentNewTabChoice = NewTabPage.topSites
                 onFinished()
@@ -101,7 +101,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             defaultValue: nil,
             placeholder: .CustomNewPageURL,
             accessibilityIdentifier: "HomeAsCustomURL",
-            isChecked: { return !showTopSites.isChecked() },
+            isChecked: { !showTopSites.isChecked() },
             settingDidChange: { (string) in
                 self.currentNewTabChoice = NewTabPage.homePage
                 self.prefs.setString(self.currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
@@ -198,7 +198,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             title: NSAttributedString(string: .Settings.Homepage.StartAtHome.AfterFourHours),
             subtitle: nil,
             accessibilityIdentifier: a11y.afterFourHours,
-            isChecked: { return self.currentStartAtHomeSetting == .afterFourHours },
+            isChecked: { self.currentStartAtHomeSetting == .afterFourHours },
             onChecked: {
                 self.currentStartAtHomeSetting = .afterFourHours
                 onOptionSelected(true, .afterFourHours)
@@ -208,7 +208,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             title: NSAttributedString(string: .Settings.Homepage.StartAtHome.Always),
             subtitle: nil,
             accessibilityIdentifier: a11y.always,
-            isChecked: { return self.currentStartAtHomeSetting == .always },
+            isChecked: { self.currentStartAtHomeSetting == .always },
             onChecked: {
                 self.currentStartAtHomeSetting = .always
                 onOptionSelected(true, .always)
@@ -218,7 +218,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             title: NSAttributedString(string: .Settings.Homepage.StartAtHome.Never),
             subtitle: nil,
             accessibilityIdentifier: a11y.disabled,
-            isChecked: { return self.currentStartAtHomeSetting == .disabled },
+            isChecked: { self.currentStartAtHomeSetting == .disabled },
             onChecked: {
                 self.currentStartAtHomeSetting = .disabled
                 onOptionSelected(false, .disabled)
@@ -237,9 +237,15 @@ extension HomePageSettingViewController {
     class TopSitesSettings: Setting, FeatureFlaggable {
         var profile: Profile
 
-        override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
-        override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage }
-        override var style: UITableViewCell.CellStyle { return .value1 }
+        override var accessoryType: UITableViewCell.AccessoryType {
+            .disclosureIndicator
+        }
+        override var accessibilityIdentifier: String? {
+            AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage
+        }
+        override var style: UITableViewCell.CellStyle {
+            .value1
+        }
 
         override var status: NSAttributedString {
             let areShortcutsOn = featureFlags.isFeatureEnabled(.topSites, checking: .userOnly)
@@ -267,9 +273,15 @@ extension HomePageSettingViewController {
         var profile: Profile
         var tabManager: TabManager
 
-        override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
-        override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.wallpaper }
-        override var style: UITableViewCell.CellStyle { return .value1 }
+        override var accessoryType: UITableViewCell.AccessoryType {
+            .disclosureIndicator
+        }
+        override var accessibilityIdentifier: String? {
+            AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.wallpaper
+        }
+        override var style: UITableViewCell.CellStyle {
+            .value1
+        }
 
         init(settings: SettingsTableViewController,
              and tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager

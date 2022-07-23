@@ -47,12 +47,12 @@ extension Data {
 
 extension String {
     public var utf8EncodedData: Data {
-        return self.data(using: .utf8, allowLossyConversion: false)!
+        self.data(using: .utf8, allowLossyConversion: false)!
     }
 }
 
 extension Data {
     public var utf8EncodedString: String? {
-        return String(data: self, encoding: .utf8)
+        String(data: self, encoding: .utf8)
     }
 }

@@ -12,7 +12,9 @@ private let log = Logger.browserLogger
 
 class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
-    lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
+    lazy var dirForTestProfile = {
+        "\(self.appRootDir())/profile.testProfile"
+    }()
 
     private var internalProfile: Profile?
 

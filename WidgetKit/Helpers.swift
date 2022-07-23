@@ -8,7 +8,7 @@ import UIKit
 import Shared
 
 var scheme: String {
-    return URL.mozInternalScheme
+    URL.mozInternalScheme
 }
 
 func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {

@@ -13,11 +13,11 @@ let LabelAddressAndSearch = "Address and Search"
 
 extension XCTestCase {
     func tester(_ file: String = #file, _ line: Int = #line) -> KIFUITestActor {
-        return KIFUITestActor(inFile: file, atLine: line, delegate: self)
+        KIFUITestActor(inFile: file, atLine: line, delegate: self)
     }
 
     func system(_ file: String = #file, _ line: Int = #line) -> KIFSystemTestActor {
-        return KIFSystemTestActor(inFile: file, atLine: line, delegate: self)
+        KIFSystemTestActor(inFile: file, atLine: line, delegate: self)
     }
 }
 
@@ -25,7 +25,7 @@ extension KIFUITestActor {
     /// Looks for a view with the given accessibility hint.
     func tryFindingViewWithAccessibilityHint(_ hint: String) -> Bool {
         let element = UIApplication.shared.accessibilityElement { element in
-            return element?.accessibilityHint! == hint
+            element?.accessibilityHint! == hint
         }
 
         return element != nil
@@ -50,7 +50,7 @@ extension KIFUITestActor {
 
     func viewExistsWithLabelPrefixedBy(_ prefix: String) -> Bool {
         let element = UIApplication.shared.accessibilityElement { element in
-            return element?.accessibilityLabel?.hasPrefix(prefix) ?? false
+            element?.accessibilityLabel?.hasPrefix(prefix) ?? false
         }
         return element != nil
     }
@@ -61,7 +61,7 @@ extension KIFUITestActor {
 
         run { _ in
             element = UIApplication.shared.accessibilityElement { element in
-                return element?.accessibilityValue == value
+                element?.accessibilityValue == value
             }
 
             return (element == nil) ? KIFTestStepResult.wait : KIFTestStepResult.success
@@ -176,7 +176,9 @@ extension KIFUITestActor {
             stepResult = KIFTestStepResult.success
         }
 
-        run { _ in return stepResult }
+        run { _ in
+            stepResult
+        }
 
         return found
     }
@@ -186,7 +188,7 @@ extension KIFUITestActor {
 
         // Wait for the web view to stop loading.
         run { _ in
-            return webView.isLoading ? KIFTestStepResult.wait : KIFTestStepResult.success
+            webView.isLoading ? KIFTestStepResult.wait : KIFTestStepResult.success
         }
         var stepResult = KIFTestStepResult.wait
 
@@ -200,7 +202,9 @@ extension KIFUITestActor {
             stepResult = KIFTestStepResult.success
         }
 
-        run { _ in return stepResult }
+        run { _ in
+            stepResult
+        }
 
         return webView
     }
@@ -262,7 +266,7 @@ class BrowserUtils {
     }
     
     class func iPad() -> Bool {
-        return UIDevice.current.userInterfaceIdiom == .pad
+        UIDevice.current.userInterfaceIdiom == .pad
     }
 
     /// Injects a URL and title into the browser's history database.
@@ -391,7 +395,7 @@ class SimplePageServer {
 
         for page in ["findPage", "noTitle", "readablePage", "JSPrompt", "blobURL", "firefoxScheme"] {
             webServer.addHandler(forMethod: "GET", path: "/\(page).html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
-                return GCDWebServerDataResponse(html: self.getPageData(page))
+                GCDWebServerDataResponse(html: self.getPageData(page))
             }
         }
 
@@ -413,19 +417,19 @@ class SimplePageServer {
         }
 
         webServer.addHandler(forMethod: "GET", path: "/readerContent.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
-            return GCDWebServerDataResponse(html: self.getPageData("readerContent"))
+            GCDWebServerDataResponse(html: self.getPageData("readerContent"))
         }
 
         webServer.addHandler(forMethod: "GET", path: "/loginForm.html", request: GCDWebServerRequest.self) { _ in
-            return GCDWebServerDataResponse(html: self.getPageData("loginForm"))
+            GCDWebServerDataResponse(html: self.getPageData("loginForm"))
         }
 
         webServer.addHandler(forMethod: "GET", path: "/navigationDelegate.html", request: GCDWebServerRequest.self) { _ in
-            return GCDWebServerDataResponse(html: self.getPageData("navigationDelegate"))
+            GCDWebServerDataResponse(html: self.getPageData("navigationDelegate"))
         }
 
         webServer.addHandler(forMethod: "GET", path: "/localhostLoad.html", request: GCDWebServerRequest.self) { _ in
-            return GCDWebServerDataResponse(html: self.getPageData("localhostLoad"))
+            GCDWebServerDataResponse(html: self.getPageData("localhostLoad"))
         }
 
         webServer.addHandler(forMethod: "GET", path: "/auth.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
@@ -478,12 +482,12 @@ class SimplePageServer {
 
         // Add tracking protection check page
         webServer.addHandler(forMethod: "GET", path: "/tracking-protection-test.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
-            return GCDWebServerDataResponse(html: htmlForImageBlockingTest(imageURL: "http://ymail.com/favicon.ico"))
+            GCDWebServerDataResponse(html: htmlForImageBlockingTest(imageURL: "http://ymail.com/favicon.ico"))
         }
 
         // Add image blocking test page
         webServer.addHandler(forMethod: "GET", path: "/hide-images-test.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
-            return GCDWebServerDataResponse(html: htmlForImageBlockingTest(imageURL: "https://www.mozilla.com/favicon.ico"))
+            GCDWebServerDataResponse(html: htmlForImageBlockingTest(imageURL: "https://www.mozilla.com/favicon.ico"))
         }
 
 

@@ -9,7 +9,7 @@ import SwiftUI
 
 private class FetchInProgressError: MaybeErrorType {
     internal var description: String {
-        return "Fetch is already in-progress"
+        "Fetch is already in-progress"
     }
 }
 
@@ -68,11 +68,11 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     var hiddenSections: [Sections] = []
 
     var hasRecentlyClosed: Bool {
-        return !profile.recentlyClosedTabs.tabs.isEmpty
+        !profile.recentlyClosedTabs.tabs.isEmpty
     }
 
     var emptyStateText: String {
-        return !isSearchInProgress ? .HistoryPanelEmptyStateTitle : .LibraryPanel.History.NoHistoryResult
+        !isSearchInProgress ? .HistoryPanelEmptyStateTitle : .LibraryPanel.History.NoHistoryResult
     }
 
     let historyPanelNotifications = [Notification.Name.FirefoxAccountChanged,
@@ -286,8 +286,8 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
     private func buildGroupsVisibleSections() {
         self.visibleSections = Sections.allCases.filter { section in
-            return self.groupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
-            || !self.groupsForSection(section: section).isEmpty
+            self.groupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
+                    || !self.groupsForSection(section: section).isEmpty
         }
     }
 

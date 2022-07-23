@@ -79,21 +79,23 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     // MARK: - Default actions
 
     func getOpenInNewPrivateTabAction(siteURL: URL) -> PhotonRowActions {
-        return SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
+        SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
-        }.items
+        }
+                .items
     }
 
     // MARK: - History Highlights
 
     private func getHistoryHighlightsActions(for highlightItem: HighlightItem) -> [PhotonRowActions]? {
-        return [SingleActionViewModel(title: .RemoveContextMenuTitle,
-                                      iconString: ImageIdentifiers.actionRemove,
-                                      tapHandler: { _ in
+        [SingleActionViewModel(title: .RemoveContextMenuTitle,
+                iconString: ImageIdentifiers.actionRemove,
+                tapHandler: { _ in
 
-            self.viewModel.historyHighlightsViewModel.delete(highlightItem)
-            self.sendHistoryHighlightContextualTelemetry(type: .remove)
-        }).items]
+                    self.viewModel.historyHighlightsViewModel.delete(highlightItem)
+                    self.sendHistoryHighlightContextualTelemetry(type: .remove)
+                })
+                .items]
     }
 
     // MARK: - Pocket
@@ -110,17 +112,18 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     private func getOpenInNewTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
-        return SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.newTab) { _ in
+        SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.newTab) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
 
             if sectionType == .pocket {
                 let originExtras = TelemetryWrapper.getOriginExtras(isZeroSearch: self.viewModel.isZeroSearch)
                 TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .pocketStory,
-                                             extras: originExtras)
+                        method: .tap,
+                        object: .pocketStory,
+                        extras: originExtras)
             }
-        }.items
+        }
+                .items
     }
 
     private func getBookmarkAction(site: Site) -> PhotonRowActions {
@@ -134,7 +137,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     private func getRemoveBookmarkAction(site: Site) -> SingleActionViewModel {
-        return SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle, iconString: ImageIdentifiers.actionRemoveBookmark, tapHandler: { _ in
+        SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle, iconString: ImageIdentifiers.actionRemoveBookmark, tapHandler: { _ in
             self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
                 site.setBookmarked(false)
             }
@@ -144,7 +147,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     private func getAddBookmarkAction(site: Site) -> SingleActionViewModel {
-        return SingleActionViewModel(title: .BookmarkContextMenuTitle, iconString: ImageIdentifiers.actionAddBookmark, tapHandler: { _ in
+        SingleActionViewModel(title: .BookmarkContextMenuTitle, iconString: ImageIdentifiers.actionAddBookmark, tapHandler: { _ in
             let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
             _ = self.viewModel.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: shareItem.url, title: shareItem.title)
 
@@ -153,17 +156,18 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                 userData[QuickActions.TabTitleKey] = title
             }
             QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
-                                                                                withUserData: userData,
-                                                                                toApplication: .shared)
+                    withUserData: userData,
+                    toApplication: .shared)
             site.setBookmarked(true)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .activityStream)
         })
     }
 
     private func getShareAction(siteURL: URL, sourceView: UIView?) -> PhotonRowActions {
-        return SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
+        SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
             let helper = ShareExtensionHelper(url: siteURL, tab: nil)
-            let controller = helper.createActivityViewController { (_, _) in }
+            let controller = helper.createActivityViewController { (_, _) in
+            }
             if UIDevice.current.userInterfaceIdiom == .pad,
                let popoverController = controller.popoverPresentationController,
                let getSourceRect = self.getPopoverSourceRect {
@@ -175,7 +179,8 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
             }
 
             self.delegate?.presentWithModalDismissIfNeeded(controller, animated: true)
-        }).items
+        })
+                .items
     }
 
     // MARK: - Top sites
@@ -204,51 +209,58 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     // Removes the site out of the top sites. If site is pinned it removes it from pinned and remove
     private func getRemoveTopSiteAction(site: Site) -> PhotonRowActions {
-        return SingleActionViewModel(title: .RemoveContextMenuTitle,
-                                     iconString: ImageIdentifiers.actionRemove,
-                                     tapHandler: { _ in
+        SingleActionViewModel(title: .RemoveContextMenuTitle,
+                iconString: ImageIdentifiers.actionRemove,
+                tapHandler: { _ in
 
-            self.viewModel.topSiteViewModel.removePinTopSite(site)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                self?.viewModel.topSiteViewModel.hideURLFromTopSites(site)
-            }
+                    self.viewModel.topSiteViewModel.removePinTopSite(site)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                        self?.viewModel.topSiteViewModel.hideURLFromTopSites(site)
+                    }
 
-            self.sendTopSiteContextualTelemetry(type: .remove)
-        }).items
+                    self.sendTopSiteContextualTelemetry(type: .remove)
+                })
+                .items
     }
 
     private func getPinTopSiteAction(site: Site) -> PhotonRowActions {
-        return SingleActionViewModel(title: .PinTopsiteActionTitle2,
-                                     iconString: ImageIdentifiers.addShortcut,
-                                     tapHandler: { _ in
-            self.viewModel.topSiteViewModel.pinTopSite(site)
-            self.sendTopSiteContextualTelemetry(type: .pin)
-        }).items
+        SingleActionViewModel(title: .PinTopsiteActionTitle2,
+                iconString: ImageIdentifiers.addShortcut,
+                tapHandler: { _ in
+                    self.viewModel.topSiteViewModel.pinTopSite(site)
+                    self.sendTopSiteContextualTelemetry(type: .pin)
+                })
+                .items
     }
 
     // Unpin removes it from the location it's in. Still can appear in the top sites as unpin
     private func getRemovePinTopSiteAction(site: Site) -> PhotonRowActions {
-        return SingleActionViewModel(title: .UnpinTopsiteActionTitle2,
-                                     iconString: ImageIdentifiers.removeFromShortcut,
-                                     tapHandler: { _ in
-            self.viewModel.topSiteViewModel.removePinTopSite(site)
-            self.sendTopSiteContextualTelemetry(type: .unpin)
-        }).items
+        SingleActionViewModel(title: .UnpinTopsiteActionTitle2,
+                iconString: ImageIdentifiers.removeFromShortcut,
+                tapHandler: { _ in
+                    self.viewModel.topSiteViewModel.removePinTopSite(site)
+                    self.sendTopSiteContextualTelemetry(type: .unpin)
+                })
+                .items
     }
 
     private func getSettingsAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.Settings, iconString: ImageIdentifiers.settings, tapHandler: { _ in
+        SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.Settings, iconString: ImageIdentifiers.settings, tapHandler: { _ in
             self.delegate?.homePanelDidRequestToOpenSettings(at: .customizeTopSites)
             self.sendTopSiteContextualTelemetry(type: .settings)
-        }).items
+        })
+                .items
     }
 
     private func getSponsoredContentAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent, iconString: ImageIdentifiers.help, tapHandler: { _ in
-            guard let url = SupportUtils.URLForTopic("sponsor-privacy") else { return }
+        SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent, iconString: ImageIdentifiers.help, tapHandler: { _ in
+            guard let url = SupportUtils.URLForTopic("sponsor-privacy") else {
+                return
+            }
             self.delegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false, selectNewTab: true)
             self.sendTopSiteContextualTelemetry(type: .sponsoredSupport)
-        }).items
+        })
+                .items
     }
 
     private func fetchBookmarkStatus(for site: Site, completionHandler: @escaping () -> Void) {

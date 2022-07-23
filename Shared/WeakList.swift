@@ -39,11 +39,11 @@ open class WeakList<T: AnyObject>: Sequence {
     }
 
     open var count: Int {
-        return items.count
+        items.count
     }
 
     open var isEmpty: Bool {
-        return items.isEmpty
+        items.isEmpty
     }
 
     open func removeAll() {
@@ -57,15 +57,17 @@ open class WeakList<T: AnyObject>: Sequence {
     }
 
     open func at(_ index: Int) -> T? {
-        return items[safe: index]?.value
+        items[safe: index]?.value
     }
 
     open func index(of item: T) -> Int? {
-        return items.firstIndex { $0.value === item }
+        items.firstIndex {
+            $0.value === item
+        }
     }
 
     open func firstIndexDel(where predicate: (WeakRef<T>) -> Bool) -> Int? {
-        return items.firstIndex(where: predicate)
+        items.firstIndex(where: predicate)
     }
 
     open func makeIterator() -> AnyIterator<T> {

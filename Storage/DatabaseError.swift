@@ -11,7 +11,7 @@ open class DatabaseError: MaybeErrorType {
     let err: NSError?
 
     open var description: String {
-        return err?.localizedDescription ?? "Unknown database error."
+        err?.localizedDescription ?? "Unknown database error."
     }
 
     public init(description: String) {

@@ -20,27 +20,30 @@ struct PocketFeedStory {
     let imageURL: URL
 
     static func parseJSON(list: [[String: Any]]) -> [PocketFeedStory] {
-        return list.compactMap({ (storyDict) -> PocketFeedStory? in
+        list.compactMap({ (storyDict) -> PocketFeedStory? in
             guard let urlS = storyDict["url"] as? String,
                   let domain = storyDict["domain"] as? String,
                   let imageURLS = storyDict["image_src"] as? String,
                   let title = storyDict["title"] as? String,
                   let timeToRead = storyDict["time_to_read"] as? Int64,
-                  let description = storyDict["excerpt"] as? String else {
-                      return nil
-                  }
+                  let description = storyDict["excerpt"] as? String
+            else {
+                return nil
+            }
 
             guard let url = URL(string: urlS),
                   let imageURL = URL(string: imageURLS)
-            else { return nil }
+            else {
+                return nil
+            }
 
             return PocketFeedStory(
-                title: title,
-                url: url,
-                domain: domain,
-                timeToRead: timeToRead,
-                storyDescription: description,
-                imageURL: imageURL
+                    title: title,
+                    url: url,
+                    domain: domain,
+                    timeToRead: timeToRead,
+                    storyDescription: description,
+                    imageURL: imageURL
             )
         })
     }

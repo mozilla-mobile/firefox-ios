@@ -10,7 +10,7 @@ class BreachAlertsDetailView: UIView {
     private let textColor = UIColor.white
     private let titleIconSize: CGFloat = 24
     private lazy var titleIconContainerSize: CGFloat = {
-        return titleIconSize + LoginTableViewCellUX.HorizontalMargin * 2
+        titleIconSize + LoginTableViewCellUX.HorizontalMargin * 2
     }()
 
     lazy var titleIcon: UIImageView = {

@@ -13,7 +13,7 @@ private class MockFailure<T: CleartextPayloadJSON>: MaybeErrorType {
     let record: Record<T>
 
     var description: String {
-        return "Failed to store or upload record: \(record)"
+        "Failed to store or upload record: \(record)"
     }
 
     init(record: Record<T>) {
@@ -48,7 +48,7 @@ extension SyncTelemetryTests {
         let remoteRecords = [A, B]
 
         _ = synchronizer.applyIncomingRecords(remoteRecords) { record in
-            return record.id == "B" ? deferMaybe(MockFailure(record: record)) : succeed()
+                    record.id == "B" ? deferMaybe(MockFailure(record: record)) : succeed()
         }.value
 
         let session = synchronizer.statsSession.end()
@@ -73,7 +73,7 @@ extension SyncTelemetryTests {
         let records = [A, B]
 
         _ = synchronizer.applyIncomingToStorage(records, fetched: Date.now()) { record in
-            return record.id == "B" ? deferMaybe(MockFailure(record: record)) : succeed()
+                    record.id == "B" ? deferMaybe(MockFailure(record: record)) : succeed()
         }.value
 
         let session = synchronizer.statsSession.end()
@@ -108,7 +108,7 @@ extension SyncTelemetryTests {
         let miniConfig = InfoConfiguration(maxRequestBytes: 1_048_576, maxPostRecords: 2, maxPostBytes: 1_048_576, maxTotalRecords: 10, maxTotalBytes: 104_857_600)
         let collectionClient = MockSyncCollectionClient(uploader: uploader, infoConfig: miniConfig, collection: "mockdata", encrypter: getEncrypter())
         _ = synchronizer.uploadRecords(records, lastTimestamp: now, storageClient: collectionClient) { _, _ in
-            return deferMaybe(now)
+                    deferMaybe(now)
         }.value
 
         let uploadStats = synchronizer.statsSession.uploadStats

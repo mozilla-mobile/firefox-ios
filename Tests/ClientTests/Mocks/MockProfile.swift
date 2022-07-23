@@ -16,23 +16,33 @@ open class MockSyncManager: SyncManager {
     open var syncDisplayState: SyncDisplayState?
 
     open func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
-        return deferMaybe(true)
+        deferMaybe(true)
     }
 
     private func completedWithStats(collection: String) -> Deferred<Maybe<SyncStatus>> {
-        return deferMaybe(SyncStatus.completed(SyncEngineStatsSession(collection: collection)))
+        deferMaybe(SyncStatus.completed(SyncEngineStatsSession(collection: collection)))
     }
 
-    open func syncClients() -> SyncResult { return completedWithStats(collection: "mock_clients") }
-    open func syncClientsThenTabs() -> SyncResult { return completedWithStats(collection: "mock_clientsandtabs") }
-    open func syncHistory() -> SyncResult { return completedWithStats(collection: "mock_history") }
-    open func syncLogins() -> SyncResult { return completedWithStats(collection: "mock_logins") }
-    open func syncBookmarks() -> SyncResult { return completedWithStats(collection: "mock_bookmarks") }
+    open func syncClients() -> SyncResult {
+        completedWithStats(collection: "mock_clients")
+    }
+    open func syncClientsThenTabs() -> SyncResult {
+        completedWithStats(collection: "mock_clientsandtabs")
+    }
+    open func syncHistory() -> SyncResult {
+        completedWithStats(collection: "mock_history")
+    }
+    open func syncLogins() -> SyncResult {
+        completedWithStats(collection: "mock_logins")
+    }
+    open func syncBookmarks() -> SyncResult {
+        completedWithStats(collection: "mock_bookmarks")
+    }
     open func syncEverything(why: SyncReason) -> Success {
-        return succeed()
+        succeed()
     }
     open func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
-        return succeed()
+        succeed()
     }
     open func beginTimedSyncs() {}
     open func endTimedSyncs() {}
@@ -47,28 +57,28 @@ open class MockSyncManager: SyncManager {
     }
 
     open func onAddedAccount() -> Success {
-        return succeed()
+        succeed()
     }
     open func onRemovedAccount() -> Success {
-        return succeed()
+        succeed()
     }
 
     open func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
-        return deferMaybe(true)
+        deferMaybe(true)
     }
 }
 
 open class MockTabQueue: TabQueue {
     open func addToQueue(_ tab: ShareItem) -> Success {
-        return succeed()
+        succeed()
     }
 
     open func getQueuedTabs() -> Deferred<Maybe<Cursor<ShareItem>>> {
-        return deferMaybe(ArrayCursor<ShareItem>(data: []))
+        deferMaybe(ArrayCursor<ShareItem>(data: []))
     }
 
     open func clearQueuedTabs() -> Success {
-        return succeed()
+        succeed()
     }
 }
 
@@ -81,7 +91,7 @@ class MockFiles: FileAccessor {
 
 open class MockProfile: Client.Profile {
     public var rustFxA: RustFirefoxAccounts {
-        return RustFirefoxAccounts.shared
+        RustFirefoxAccounts.shared
     }
 
     // Read/Writeable properties for mocking
@@ -127,7 +137,7 @@ open class MockProfile: Client.Profile {
     }
 
     public func localName() -> String {
-        return name
+        name
     }
 
     public func _reopen() {
@@ -151,56 +161,56 @@ open class MockProfile: Client.Profile {
     public var isShutdown: Bool = false
 
     public var favicons: Favicons {
-        return self.legacyPlaces
+        self.legacyPlaces
     }
 
     lazy public var queue: TabQueue = {
-        return MockTabQueue()
+        MockTabQueue()
     }()
 
     lazy public var metadata: Metadata = {
-        return SQLiteMetadata(db: self.db)
+        SQLiteMetadata(db: self.db)
     }()
 
     lazy public var isChinaEdition: Bool = {
-        return Locale.current.identifier == "zh_CN"
+        Locale.current.identifier == "zh_CN"
     }()
 
     lazy public var certStore: CertStore = {
-        return CertStore()
+        CertStore()
     }()
 
     lazy public var searchEngines: SearchEngines = {
-        return SearchEngines(prefs: self.prefs, files: self.files)
+        SearchEngines(prefs: self.prefs, files: self.files)
     }()
 
     lazy public var prefs: Prefs = {
-        return MockProfilePrefs()
+        MockProfilePrefs()
     }()
 
     lazy public var readingList: ReadingList = {
-        return SQLiteReadingList(db: self.readingListDB)
+        SQLiteReadingList(db: self.readingListDB)
     }()
 
     lazy public var recentlyClosedTabs: ClosedTabsStore = {
-        return ClosedTabsStore(prefs: self.prefs)
+        ClosedTabsStore(prefs: self.prefs)
     }()
 
     internal lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {
-        return SQLiteRemoteClientsAndTabs(db: self.db)
+        SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
     fileprivate lazy var syncCommands: SyncCommands = {
-        return SQLiteRemoteClientsAndTabs(db: self.db)
+        SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
     public func hasAccount() -> Bool {
-        return true
+        true
     }
 
     var hasSyncableAccountMock: Bool = true
     public func hasSyncableAccount() -> Bool {
-        return hasSyncableAccountMock
+        hasSyncableAccountMock
     }
 
     public func flushAccount() {}
@@ -210,30 +220,30 @@ open class MockProfile: Client.Profile {
     }
 
     public func getClients() -> Deferred<Maybe<[RemoteClient]>> {
-        return deferMaybe([])
+        deferMaybe([])
     }
 
     public func getCachedClients() -> Deferred<Maybe<[RemoteClient]>> {
-        return deferMaybe([])
+        deferMaybe([])
     }
 
     public func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
-        return deferMaybe([])
+        deferMaybe([])
     }
 
     var mockClientAndTabs = [ClientAndTabs]()
     public func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
-        return deferMaybe(mockClientAndTabs)
+        deferMaybe(mockClientAndTabs)
     }
 
     public func cleanupHistoryIfNeeded() {}
 
     public func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
-        return deferMaybe(0)
+        deferMaybe(0)
     }
 
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
-        return succeed()
+        succeed()
     }
 
     public func sendQueuedSyncEvents() {}

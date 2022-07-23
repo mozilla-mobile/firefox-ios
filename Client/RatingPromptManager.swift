@@ -75,7 +75,9 @@ final class RatingPromptManager {
     }
 
     private var lastRequestDate: Date? {
-        get { return UserDefaults.standard.object(forKey: UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue) as? Date }
+        get {
+            UserDefaults.standard.object(forKey: UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue) as? Date
+        }
         set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue) }
     }
 

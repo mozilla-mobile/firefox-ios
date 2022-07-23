@@ -188,7 +188,7 @@ extension AppDelegate {
     // Orientation lock for views that use new modal presenter
     func application(_ application: UIApplication,
                      supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        return self.orientationLock
+        self.orientationLock
     }
 
     func application(_ application: UIApplication,

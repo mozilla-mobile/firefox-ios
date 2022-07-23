@@ -42,24 +42,24 @@ class AppContainer: ServiceProvider {
     /// Prepares the container by registering all services for the app session.
     /// - Returns: A bootstrapped `DependencyContainer`.
     private func bootstrapContainer() -> DependencyContainer {
-        return DependencyContainer { container in
+        DependencyContainer { container in
             do {
                 unowned let container = container
 
                 container.register(.eagerSingleton) {
                     BrowserProfile(
-                        localName: "profile",
-                        syncDelegate: UIApplication.shared.syncDelegate) as Profile
+                            localName: "profile",
+                            syncDelegate: UIApplication.shared.syncDelegate) as Profile
                 }
 
                 /// TabManager can remain a singleton until we support multiple scenes.
                 container.register(.singleton) {
                     TabManager(
-                        profile: try container.resolve(),
-                        imageStore: DiskImageStore(
-                            files: (try container.resolve() as Profile).files,
-                            namespace: "TabManagerScreenshots",
-                            quality: UIConstants.ScreenshotQuality))
+                            profile: try container.resolve(),
+                            imageStore: DiskImageStore(
+                                    files: (try container.resolve() as Profile).files,
+                                    namespace: "TabManagerScreenshots",
+                                    quality: UIConstants.ScreenshotQuality))
                 }
 
                 try container.bootstrap()

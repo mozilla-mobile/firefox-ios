@@ -48,7 +48,6 @@ open class FileAccessor {
         for file in files {
             try remove(URL(fileURLWithPath: relativePath).appendingPathComponent(file).path)
         }
-        return
     }
 
     /**
@@ -60,7 +59,7 @@ open class FileAccessor {
     }
 
     open func attributesForFileAt(relativePath: String) throws -> [FileAttributeKey: Any] {
-        return try FileManager.default.attributesOfItem(atPath: URL(fileURLWithPath: rootPath).appendingPathComponent(relativePath).path)
+        try FileManager.default.attributesOfItem(atPath: URL(fileURLWithPath: rootPath).appendingPathComponent(relativePath).path)
     }
 
     /**

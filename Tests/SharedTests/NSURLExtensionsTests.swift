@@ -204,7 +204,7 @@ class NSURLExtensionsTests: XCTestCase {
             ]
 
         checkUrls(goodurls: goodurls, badurls: badurls, checker: { url in
-            return url.isAboutHomeURL
+            url.isAboutHomeURL
         })
     }
 
@@ -221,7 +221,7 @@ class NSURLExtensionsTests: XCTestCase {
             ]
 
         checkUrls(goodurls: goodurls, badurls: badurls, checker: { url in
-            return url.isAboutURL
+            url.isAboutURL
         })
     }
 
@@ -236,7 +236,7 @@ class NSURLExtensionsTests: XCTestCase {
         ]
 
         checkUrls(goodurls: goodurls, badurls: badurls, checker: { url in
-            return url.isErrorPage
+            url.isErrorPage
         })
     }
 
@@ -266,7 +266,7 @@ class NSURLExtensionsTests: XCTestCase {
         ]
 
         checkUrls(goodurls: goodurls, badurls: badurls) { url in
-            return url.url.isReaderModeURL
+            url.url.isReaderModeURL
         }
     }
 

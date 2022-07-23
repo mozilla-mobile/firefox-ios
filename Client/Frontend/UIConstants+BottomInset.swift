@@ -7,7 +7,7 @@ import Foundation
 extension UIConstants {
     static var BottomToolbarHeight: CGFloat {
         get {
-            return ToolbarHeight + BottomInset
+            ToolbarHeight + BottomInset
         }
     }
 

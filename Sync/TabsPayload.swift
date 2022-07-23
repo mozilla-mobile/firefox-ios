@@ -39,7 +39,7 @@ open class TabsPayload: CleartextPayloadJSON {
         }
 
         class func remoteTabFromJSON(_ json: JSON, clientGUID: GUID) -> RemoteTab? {
-            return fromJSON(json)?.toRemoteTabForClient(clientGUID)
+            fromJSON(json)?.toRemoteTabForClient(clientGUID)
         }
 
         class func fromJSON(_ json: JSON) -> Tab? {
@@ -122,11 +122,11 @@ open class TabsPayload: CleartextPayloadJSON {
     }
 
     var tabs: [Tab] {
-        return self["tabs"].arrayValue.compactMap(Tab.fromJSON)
+        self["tabs"].arrayValue.compactMap(Tab.fromJSON)
     }
 
     var clientName: String {
-        return self["clientName"].string!
+        self["clientName"].string!
     }
 
     override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {

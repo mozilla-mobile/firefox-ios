@@ -52,7 +52,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     var tabToFocus: Tab?
 
     override var canBecomeFirstResponder: Bool {
-        return true
+        true
     }
 
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
@@ -69,7 +69,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     }()
 
     var numberOfColumns: Int {
-        return tabLayoutDelegate.numberOfColumns
+        tabLayoutDelegate.numberOfColumns
     }
 
     // MARK: - Inits
@@ -264,7 +264,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     }
 
     fileprivate func privateTabsAreEmpty() -> Bool {
-        return tabDisplayManager.isPrivate && tabManager.privateTabs.isEmpty
+        tabDisplayManager.isPrivate && tabManager.privateTabs.isEmpty
     }
 
     func openNewTab(_ request: URLRequest? = nil, isPrivate: Bool) {
@@ -428,7 +428,7 @@ extension GridTabViewController: UIScrollViewAccessibilityDelegate {
 
         let cells = visibleCells.map { self.collectionView.indexPath(for: $0)! }
         let indexPaths = cells.sorted { (a: IndexPath, b: IndexPath) -> Bool in
-            return a.section < b.section || (a.section == b.section && a.row < b.row)
+            a.section < b.section || (a.section == b.section && a.row < b.row)
         }
 
         guard !indexPaths.isEmpty else {
@@ -461,7 +461,7 @@ extension GridTabViewController: SwipeAnimatorDelegate {
 
     // Disable swipe delete while drag reordering
     func swipeAnimatorIsAnimateAwayEnabled(_ animator: SwipeAnimator) -> Bool {
-        return !tabDisplayManager.isDragging
+        !tabDisplayManager.isDragging
     }
 }
 
@@ -480,7 +480,7 @@ extension GridTabViewController: TabPeekDelegate {
     }
 
     func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? {
-        return delegate?.tabTrayDidAddToReadingList(tab)
+        delegate?.tabTrayDidAddToReadingList(tab)
     }
 
     func tabPeekDidCloseTab(_ tab: Tab) {
@@ -640,7 +640,7 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
         _ gestureRecognizer: UIGestureRecognizer,
         shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
     ) -> Bool {
-        return true
+        true
     }
 
     @objc func collectionView(
@@ -648,7 +648,7 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
         layout collectionViewLayout: UICollectionViewLayout,
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
-        return GridTabTrayControllerUX.Margin
+        GridTabTrayControllerUX.Margin
     }
 
     @objc func collectionView(
@@ -732,7 +732,7 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return GridTabTrayControllerUX.Margin
+        GridTabTrayControllerUX.Margin
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -750,7 +750,7 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
             tabVC.setState(withProfile: browserProfile, clientPickerDelegate: pickerDelegate)
         }
 
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: { return tabVC }, actionProvider: tabVC.contextActions(defaultActions:))
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: { tabVC }, actionProvider: tabVC.contextActions(defaultActions:))
     }
 }
 
@@ -773,7 +773,7 @@ extension GridTabViewController: UIAdaptivePresentationControllerDelegate, UIPop
     // Returning None here makes sure that the Popover is actually presented as a Popover and
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-        return .none
+        .none
     }
 }
 

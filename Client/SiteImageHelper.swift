@@ -10,11 +10,11 @@ enum SiteImageType: Int {
     case heroImage = 0, favicon
 
     func peek() -> Self? {
-        return SiteImageType(rawValue: rawValue + 1)
+        SiteImageType(rawValue: rawValue + 1)
     }
 
     mutating func next() -> Self? {
-        return SiteImageType(rawValue: rawValue + 1)
+        SiteImageType(rawValue: rawValue + 1)
     }
 }
 
@@ -78,7 +78,6 @@ class SiteImageHelper: SiteImageHelperProtocol {
                 didCompleteFetch = result ?? false
                 DispatchQueue.main.async {
                     completion(heroImage)
-                    return
                 }
             }
         case .favicon:
@@ -87,7 +86,6 @@ class SiteImageHelper: SiteImageHelperProtocol {
                 didCompleteFetch = result ?? false
                 DispatchQueue.main.async {
                     completion(favicon)
-                    return
                 }
             }
         }

@@ -73,7 +73,7 @@ struct LegacyWallpaperDataManager {
     }
 
     public func getImageSet(at index: Int) -> LegacyWallpaperImageSet {
-        return resourceManager.getImageSet(for: availableWallpapers[index])
+        resourceManager.getImageSet(for: availableWallpapers[index])
     }
 
     // MARK: - Wallpaper data
@@ -122,16 +122,16 @@ struct LegacyWallpaperDataManager {
     }
 
     private func firefoxDefaultCollection() -> [LegacyWallpaperCollection] {
-        return [LegacyWallpaperCollection(
-            wallpaperFileNames: [WallpaperID(name: "fxSunrise",
-                                             accessibilityLabel: accessibilityIDs.FxSunriseWallpaper)],
-            ofType: .themed(type: .firefox)),
-                LegacyWallpaperCollection(
-            wallpaperFileNames: [WallpaperID(name: "fxCerulean",
-                                             accessibilityLabel: accessibilityIDs.FxCeruleanWallpaper),
-                                 WallpaperID(name: "fxAmethyst",
-                                             accessibilityLabel: accessibilityIDs.FxAmethystWallpaper)],
-            ofType: .themed(type: .firefoxOverlay))]
+        [LegacyWallpaperCollection(
+                wallpaperFileNames: [WallpaperID(name: "fxSunrise",
+                        accessibilityLabel: accessibilityIDs.FxSunriseWallpaper)],
+                ofType: .themed(type: .firefox)),
+            LegacyWallpaperCollection(
+                    wallpaperFileNames: [WallpaperID(name: "fxCerulean",
+                            accessibilityLabel: accessibilityIDs.FxCeruleanWallpaper),
+                        WallpaperID(name: "fxAmethyst",
+                                accessibilityLabel: accessibilityIDs.FxAmethystWallpaper)],
+                    ofType: .themed(type: .firefoxOverlay))]
     }
 
     private func allSpecialCollections() -> [LegacyWallpaperCollection]? {
@@ -173,11 +173,11 @@ extension LegacyWallpaperDataManager {
     }
 
     private func v100CelebrationCollection() -> LegacyWallpaperCollection {
-        return LegacyWallpaperCollection(
-            wallpaperFileNames: [WallpaperID(name: "beachVibes",
-                                             accessibilityLabel: accessibilityIDs.FxBeachHillsWallpaper),
-                                 WallpaperID(name: "twilightHills",
-                                             accessibilityLabel: accessibilityIDs.FxTwilightHillsWallpaper)],
-            ofType: .themed(type: .v100Celebration))
+        LegacyWallpaperCollection(
+                wallpaperFileNames: [WallpaperID(name: "beachVibes",
+                        accessibilityLabel: accessibilityIDs.FxBeachHillsWallpaper),
+                    WallpaperID(name: "twilightHills",
+                            accessibilityLabel: accessibilityIDs.FxTwilightHillsWallpaper)],
+                ofType: .themed(type: .v100Celebration))
     }
 }

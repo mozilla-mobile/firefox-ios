@@ -64,7 +64,7 @@ class StateTests: XCTestCase {
     }
 
     func getEngineConfiguration() -> EngineConfiguration {
-        return EngineConfiguration(enabled: ["bookmarks", "clients"], declined: ["tabs"])
+        EngineConfiguration(enabled: ["bookmarks", "clients"], declined: ["tabs"])
     }
 
     func baseScratchpad() -> Scratchpad {

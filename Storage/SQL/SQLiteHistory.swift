@@ -15,7 +15,7 @@ class NoSuchRecordError: MaybeErrorType {
         self.guid = guid
     }
     var description: String {
-        return "No such record: \(guid)."
+        "No such record: \(guid)."
     }
 }
 
@@ -116,7 +116,7 @@ private func escapeFTSSearchString(_ search: String) -> String {
 
 extension SDRow {
     func getTimestamp(_ column: String) -> Timestamp? {
-        return (self[column] as? NSNumber)?.uint64Value
+        (self[column] as? NSNumber)?.uint64Value
     }
 
     func getBoolean(_ column: String) -> Bool {
@@ -416,7 +416,7 @@ extension SQLiteHistory: BrowserHistory {
         // do a fuzzy delete so dupes can be removed
         let query: (String, Args?) = ("DELETE FROM pinned_top_sites where domain = ?", [host])
         return db.run([query]) >>== {
-            return self.db.run([("UPDATE domains SET showOnTopSites = 1 WHERE domain = ?", [host])])
+            self.db.run([("UPDATE domains SET showOnTopSites = 1 WHERE domain = ?", [host])])
         }
     }
 
@@ -452,12 +452,12 @@ extension SQLiteHistory: BrowserHistory {
         // Prevent the pinned site from being used in topsite calculations
         // We dont have to worry about this when removing a pin because the assumption is that a user probably doesnt want it being recommended as a topsite either
         return self.removeHostFromTopSites(host) >>== {
-            return self.db.run([("INSERT OR REPLACE INTO pinned_top_sites (url, pinDate, title, historyID, guid, domain) VALUES \(arglist)", args)])
+            self.db.run([("INSERT OR REPLACE INTO pinned_top_sites (url, pinDate, title, historyID, guid, domain) VALUES \(arglist)", args)])
         }
     }
 
     public func removeHostFromTopSites(_ host: String) -> Success {
-        return db.run([("UPDATE domains SET showOnTopSites = 0 WHERE domain = ?", [host])])
+        db.run([("UPDATE domains SET showOnTopSites = 0 WHERE domain = ?", [host])])
     }
 
     public func removeHistoryForURL(_ url: String) -> Success {
@@ -500,16 +500,16 @@ extension SQLiteHistory: BrowserHistory {
     // This method should be split to do something else.
     // Bug 1162778.
     public func clearHistory() -> Success {
-        return self.db.run([
+        self.db.run([
             ("DELETE FROM visits", nil),
             ("DELETE FROM history", nil),
             ("DELETE FROM domains", nil),
             ("DELETE FROM page_metadata", nil),
             ("DELETE FROM favicon_site_urls", nil),
             ("DELETE FROM favicons", nil),
-            ])
-            // We've probably deleted a lot of stuff. Vacuum now to recover the space.
-            >>> effect({ self.db.vacuum() })
+        ])
+                // We've probably deleted a lot of stuff. Vacuum now to recover the space.
+                >>> effect({ self.db.vacuum() })
     }
 
     func recordVisitedSite(_ site: Site) -> Success {
@@ -599,16 +599,16 @@ extension SQLiteHistory: BrowserHistory {
 
     // TODO: thread siteID into this to avoid the need to do the lookup.
     func addLocalVisitForExistingSite(_ visit: SiteVisit) -> Success {
-        return db.withConnection { conn -> Void in
+        db.withConnection { conn -> Void in
             // INSERT OR IGNORE because we *might* have a clock error that causes a timestamp
             // collision with an existing visit, and it would really suck to error out for that reason.
             let insert = """
-                INSERT OR IGNORE INTO visits (
-                    siteID, date, type, is_local
-                ) VALUES (
-                    (SELECT id FROM history WHERE url = ?), ?, ?, 1
-                )
-                """
+                         INSERT OR IGNORE INTO visits (
+                             siteID, date, type, is_local
+                         ) VALUES (
+                             (SELECT id FROM history WHERE url = ?), ?, ?, 1
+                         )
+                         """
 
             let realDate = visit.date
             let insertArgs: Args? = [visit.site.url, realDate, visit.type.rawValue]
@@ -618,12 +618,14 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func addLocalVisit(_ visit: SiteVisit) -> Success {
-        return recordVisitedSite(visit.site)
-         >>> { self.addLocalVisitForExistingSite(visit) }
+        recordVisitedSite(visit.site)
+                >>> {
+            self.addLocalVisitForExistingSite(visit)
+        }
     }
 
     public func getFrecentHistory() -> FrecentHistory {
-        return SQLiteFrecentHistory(db: db, prefs: prefs)
+        SQLiteFrecentHistory(db: db, prefs: prefs)
     }
 
     public func getHistory(matching searchTerm: String,
@@ -654,7 +656,7 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        return self.db.runQueryConcurrently(topSitesQuery, args: [limit], factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
+        self.db.runQueryConcurrently(topSitesQuery, args: [limit], factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
     }
 
     public func setTopSitesNeedsInvalidation() {
@@ -670,11 +672,11 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func refreshTopSitesQuery() -> [(String, Args?)] {
-        return [clearTopSitesQuery, getFrecentHistory().updateTopSitesCacheQuery()]
+        [clearTopSitesQuery, getFrecentHistory().updateTopSitesCacheQuery()]
     }
 
     public func clearTopSitesCache() -> Success {
-        return self.db.run([clearTopSitesQuery]) >>> {
+        self.db.run([clearTopSitesQuery]) >>> {
             self.prefs.removeObjectForKey(PrefsKeys.KeyTopSitesCacheIsValid)
             return succeed()
         }
@@ -735,7 +737,9 @@ extension SQLiteHistory: SyncableHistory {
     fileprivate func getSiteIDForGUID(_ guid: GUID) -> Deferred<Maybe<Int>> {
         let args: Args = [guid]
         let query = "SELECT id FROM history WHERE guid = ?"
-        let factory: (SDRow) -> Int = { return $0["id"] as! Int }
+        let factory: (SDRow) -> Int = {
+            $0["id"] as! Int
+        }
 
         return db.runQueryConcurrently(query, args: args, factory: factory)
             >>== { cursor in
@@ -748,8 +752,8 @@ extension SQLiteHistory: SyncableHistory {
     }
 
     public func storeRemoteVisits(_ visits: [Visit], forGUID guid: GUID) -> Success {
-        return self.getSiteIDForGUID(guid)
-            >>== { (siteID: Int) -> Success in
+        self.getSiteIDForGUID(guid)
+                >>== { (siteID: Int) -> Success in
             let visitArgs = visits.map { (visit: Visit) -> Args in
                 let realDate = visit.date
                 let isLocal = 0
@@ -778,17 +782,17 @@ extension SQLiteHistory: SyncableHistory {
         let select = "SELECT id, server_modified, local_modified, is_deleted, should_upload, title FROM history WHERE guid = ?"
         let args: Args = [guid]
         let factory = { (row: SDRow) -> HistoryMetadata in
-            return HistoryMetadata(
-                id: row["id"] as! Int,
-                serverModified: row.getTimestamp("server_modified"),
-                localModified: row.getTimestamp("local_modified"),
-                isDeleted: row.getBoolean("is_deleted"),
-                shouldUpload: row.getBoolean("should_upload"),
-                title: row["title"] as! String
+            HistoryMetadata(
+                    id: row["id"] as! Int,
+                    serverModified: row.getTimestamp("server_modified"),
+                    localModified: row.getTimestamp("local_modified"),
+                    isDeleted: row.getBoolean("is_deleted"),
+                    shouldUpload: row.getBoolean("should_upload"),
+                    title: row["title"] as! String
             )
         }
         return db.runQueryConcurrently(select, args: args, factory: factory) >>== { cursor in
-            return deferMaybe(cursor[0])
+            deferMaybe(cursor[0])
         }
     }
 
@@ -898,7 +902,9 @@ extension SQLiteHistory: SyncableHistory {
     public func getModifiedHistoryToUpload() -> Deferred<Maybe<[(Place, [Visit])]>> {
         // What we want to do: find all history items that are flagged for upload, then find a number of recent visits for each item.
         // This was originally all in a single SQL query but was seperated into two to save some memory when returning back the cursor.
-        return getModifiedHistory(limit: 1000) >>== { self.attachVisitsTo(places: $0, visitLimit: 20) }
+        getModifiedHistory(limit: 1000) >>== {
+            self.attachVisitsTo(places: $0, visitLimit: 20)
+        }
     }
 
     private func getModifiedHistory(limit: Int) -> Deferred<Maybe<[Int: Place]>> {
@@ -1028,7 +1034,7 @@ extension SQLiteHistory: SyncableHistory {
 
         log.debug("Marking \(guids.count) GUIDs as synchronized. Returning timestamp \(modified).")
         return self.db.run(chunk(guids, by: BrowserDB.MaxVariableNumber).compactMap { chunk in
-            return markAsSynchronizedStatementForGUIDs(chunk, modified: modified)
+            markAsSynchronizedStatementForGUIDs(chunk, modified: modified)
         }) >>> always(modified)
     }
 
@@ -1062,7 +1068,7 @@ extension SQLiteHistory {
     // without syncing, the presence of matching rows directly indicates that a deletion
     // would be synced to the server.
     public func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
-        return self.db.queryReturnsResults("SELECT 1 FROM history WHERE server_modified IS NOT NULL LIMIT 1")
+        self.db.queryReturnsResults("SELECT 1 FROM history WHERE server_modified IS NOT NULL LIMIT 1")
     }
 }
 

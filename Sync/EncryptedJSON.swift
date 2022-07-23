@@ -52,7 +52,7 @@ open class EncryptedJSON {
      * You probably want to call validate() and then use .ciphertext.
      */
     fileprivate var ciphertextBytes: Data? {
-        return Bytes.decodeBase64(self["ciphertext"].string!)
+        Bytes.decodeBase64(self["ciphertext"].string!)
     }
 
     fileprivate func validate() -> Bool {
@@ -102,7 +102,7 @@ open class EncryptedJSON {
     }
 
     open func isValid() -> Bool {
-        return !json.isError() && self.validate()
+        !json.isError() && self.validate()
     }
 
     /**
@@ -159,7 +159,7 @@ open class EncryptedJSON {
 
     subscript(key: String) -> JSON {
         get {
-            return json[key]
+            json[key]
         }
 
         set {

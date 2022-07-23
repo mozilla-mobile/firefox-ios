@@ -9,9 +9,12 @@ struct ReaderModeUtils {
     static let DomainPrefixesToSimplify = ["www.", "mobile.", "m.", "blog."]
 
     static func simplifyDomain(_ domain: String) -> String {
-        return DomainPrefixesToSimplify.first { domain.hasPrefix($0) }.map {
-            String($0[$0.index($0.startIndex, offsetBy: $0.count)...])
-        } ?? domain
+        DomainPrefixesToSimplify.first {
+                    domain.hasPrefix($0)
+                }
+                .map {
+                    String($0[$0.index($0.startIndex, offsetBy: $0.count)...])
+                } ?? domain
     }
 
     static func generateReaderContent(_ readabilityResult: ReadabilityResult, initialStyle: ReaderModeStyle) -> String? {

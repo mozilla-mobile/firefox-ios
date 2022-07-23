@@ -43,16 +43,16 @@ class RecentlySavedCellViewModel {
 extension RecentlySavedCellViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
     var sectionType: HomepageSectionType {
-        return .recentlySaved
+        .recentlySaved
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        return LabelButtonHeaderViewModel(title: HomepageSectionType.recentlySaved.title,
-                                          titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.recentlySaved,
-                                          isButtonHidden: false,
-                                          buttonTitle: .RecentlySavedShowAllText,
-                                          buttonAction: headerButtonAction,
-                                          buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved)
+        LabelButtonHeaderViewModel(title: HomepageSectionType.recentlySaved.title,
+                titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.recentlySaved,
+                isButtonHidden: false,
+                buttonTitle: .RecentlySavedShowAllText,
+                buttonAction: headerButtonAction,
+                buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved)
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
@@ -88,15 +88,15 @@ extension RecentlySavedCellViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     }
 
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
-        return recentItems.count
+        recentItems.count
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildAndUser)
+        featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildAndUser)
     }
 
     var hasData: Bool {
-        return !recentItems.isEmpty
+        !recentItems.isEmpty
     }
 
     /// Using dispatch group to know when data has completely loaded for both sources (recent bookmarks and reading list items)

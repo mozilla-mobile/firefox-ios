@@ -56,13 +56,13 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func wipeClients() -> Success {
-        return db.run("DELETE FROM clients")
+        db.run("DELETE FROM clients")
     }
 
     open func insertOrUpdateClients(_ clients: [RemoteClient]) -> Deferred<Maybe<Int>> {
         // TODO: insert multiple clients in a single query.
         // ORM systems are foolish.
-        return db.transaction { connection -> Int in
+        db.transaction { connection -> Int in
             var succeeded = 0
 
             // Update or insert client records.
@@ -109,7 +109,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func insertOrUpdateClient(_ client: RemoteClient) -> Deferred<Maybe<Int>> {
-        return insertOrUpdateClients([client])
+        insertOrUpdateClients([client])
     }
 
     open func deleteClient(guid: GUID) -> Success {
@@ -134,10 +134,10 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func getClients() -> Deferred<Maybe<[RemoteClient]>> {
-        return db.withConnection { connection -> [RemoteClient] in
+        db.withConnection { connection -> [RemoteClient] in
             let cursor = connection.executeQuery(
-                "SELECT * FROM clients WHERE EXISTS (SELECT 1 FROM remote_devices rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC",
-                factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)
+                    "SELECT * FROM clients WHERE EXISTS (SELECT 1 FROM remote_devices rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC",
+                    factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)
             defer {
                 cursor.close()
             }
@@ -155,19 +155,19 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func deleteCommands() -> Success {
-        return db.run("DELETE FROM commands")
+        db.run("DELETE FROM commands")
     }
 
     open func deleteCommands(_ clientGUID: GUID) -> Success {
-        return db.run("DELETE FROM commands WHERE client_guid = ?", withArgs: [clientGUID] as Args)
+        db.run("DELETE FROM commands WHERE client_guid = ?", withArgs: [clientGUID] as Args)
     }
 
     open func insertCommand(_ command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>> {
-        return insertCommands([command], forClients: clients)
+        insertCommands([command], forClients: clients)
     }
 
     open func insertCommands(_ commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>> {
-        return db.transaction { connection -> Int in
+        db.transaction { connection -> Int in
             var numberOfInserts = 0
 
             // Update or insert client records.
@@ -192,12 +192,12 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func getCommands() -> Deferred<Maybe<[GUID: [SyncCommand]]>> {
-        return db.withConnection { connection -> [GUID: [SyncCommand]] in
+        db.withConnection { connection -> [GUID: [SyncCommand]] in
             let cursor = connection.executeQuery("SELECT * FROM commands", factory: { row -> SyncCommand in
                 SyncCommand(
-                    id: row["command_id"] as? Int,
-                    value: row["value"] as! String,
-                    clientGUID: row["client_guid"] as? GUID)
+                        id: row["command_id"] as? Int,
+                        value: row["value"] as! String,
+                        clientGUID: row["client_guid"] as? GUID)
             })
             defer {
                 cursor.close()
@@ -259,11 +259,11 @@ extension SQLiteRemoteClientsAndTabs: RemoteDevices {
 extension SQLiteRemoteClientsAndTabs: ResettableSyncStorage {
     public func resetClient() -> Success {
         // For this engine, resetting is equivalent to wiping.
-        return self.clear()
+        self.clear()
     }
 
     public func clear() -> Success {
-        return db.transaction { conn -> Void in
+        db.transaction { conn -> Void in
             try conn.executeChange("DELETE FROM tabs WHERE client_guid IS NOT NULL")
             try conn.executeChange("DELETE FROM clients")
         }

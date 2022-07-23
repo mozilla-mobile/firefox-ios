@@ -8,7 +8,7 @@ import Shared
 
 private extension UITableView {
     var allLoginIndexPaths: [IndexPath] {
-        return ((LoginsSettingsSection + 1)..<self.numberOfSections).flatMap { sectionNum in
+        ((LoginsSettingsSection + 1)..<self.numberOfSections).flatMap { sectionNum in
             (0..<self.numberOfRows(inSection: sectionNum)).map {
                 IndexPath(row: $0, section: sectionNum)
             }
@@ -24,7 +24,7 @@ class LoginListViewController: SensitiveViewController {
     private let viewModel: LoginListViewModel
 
     fileprivate lazy var loginSelectionController: LoginListSelectionHelper = {
-        return LoginListSelectionHelper(tableView: self.tableView)
+        LoginListSelectionHelper(tableView: self.tableView)
     }()
 
     fileprivate var loginDataSource: LoginDataSource
@@ -46,7 +46,7 @@ class LoginListViewController: SensitiveViewController {
 
     static func shouldShowAppMenuShortcut(forPrefs prefs: Prefs) -> Bool {
         // default to on
-        return prefs.boolForKey(PrefsKeys.LoginsShowShortcutMenuItem) ?? true
+        prefs.boolForKey(PrefsKeys.LoginsShowShortcutMenuItem) ?? true
     }
 
     static func create(
@@ -338,7 +338,7 @@ private extension LoginListViewController {
         if loginSelectionController.selectedCount < viewModel.count {
             // Find all unselected indexPaths
             let unselectedPaths = tableView.allLoginIndexPaths.filter { indexPath in
-                return !loginSelectionController.indexPathIsSelected(indexPath)
+                !loginSelectionController.indexPathIsSelected(indexPath)
             }
             loginSelectionController.selectIndexPaths(unselectedPaths)
             unselectedPaths.forEach { indexPath in
@@ -363,7 +363,7 @@ private extension LoginListViewController {
 extension LoginListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // Headers are hidden except for the first login section, which has a title (see also viewForHeaderInSection)
-        return section == 1 ? UITableView.automaticDimension : 0
+        section == 1 ? UITableView.automaticDimension : 0
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -388,7 +388,7 @@ extension LoginListViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return .none
+        .none
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

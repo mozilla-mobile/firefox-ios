@@ -27,7 +27,7 @@ private let rfc822DateFormatter: DateFormatter = {
 
 extension TimeInterval {
     public static func fromMicrosecondTimestamp(_ microsecondTimestamp: MicrosecondTimestamp) -> TimeInterval {
-        return Double(microsecondTimestamp) / 1000000
+        Double(microsecondTimestamp) / 1000000
     }
 
     public static func timeIntervalSince1970ToDate(timeInterval: TimeInterval) -> Date {
@@ -37,37 +37,37 @@ extension TimeInterval {
 
 extension Timestamp {
     public static func uptimeInMilliseconds() -> Timestamp {
-        return Timestamp(DispatchTime.now().uptimeNanoseconds) / 1000000
+        Timestamp(DispatchTime.now().uptimeNanoseconds) / 1000000
     }
 }
 
 extension Date {
     public static func now() -> Timestamp {
-        return UInt64(1000 * Date().timeIntervalSince1970)
+        UInt64(1000 * Date().timeIntervalSince1970)
     }
 
     public func toMicrosecondTimestamp() -> MicrosecondTimestamp {
-        return UInt64(1_000_000 * timeIntervalSince1970)
+        UInt64(1_000_000 * timeIntervalSince1970)
     }
 
     public static func nowNumber() -> NSNumber {
-        return NSNumber(value: now() as UInt64)
+        NSNumber(value: now() as UInt64)
     }
 
     public static func nowMicroseconds() -> MicrosecondTimestamp {
-        return UInt64(1000000 * Date().timeIntervalSince1970)
+        UInt64(1000000 * Date().timeIntervalSince1970)
     }
 
     public static func fromTimestamp(_ timestamp: Timestamp) -> Date {
-        return Date(timeIntervalSince1970: Double(timestamp) / 1000)
+        Date(timeIntervalSince1970: Double(timestamp) / 1000)
     }
 
     public func toTimestamp() -> Timestamp {
-        return UInt64(1000 * timeIntervalSince1970)
+        UInt64(1000 * timeIntervalSince1970)
     }
 
     public static func fromMicrosecondTimestamp(_ microsecondTimestamp: MicrosecondTimestamp) -> Date {
-        return Date(timeIntervalSince1970: Double(microsecondTimestamp) / 1000000)
+        Date(timeIntervalSince1970: Double(microsecondTimestamp) / 1000000)
     }
 
     public func toRelativeTimeString(dateStyle: DateFormatter.Style = .short, timeStyle: DateFormatter.Style = .short) -> String {
@@ -111,7 +111,7 @@ extension Date {
     }
 
     public func toRFC822String() -> String {
-        return rfc822DateFormatter.string(from: self)
+        rfc822DateFormatter.string(from: self)
     }
 
     public static func difference(recent: Date, previous: Date) -> (month: Int?, day: Int?, hour: Int?, minute: Int?, second: Int?) {
@@ -125,46 +125,50 @@ extension Date {
     }
 
     static func - (lhs: Date, rhs: Date) -> TimeInterval {
-        return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
+        lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
     }
 }
 
 extension Date {
-    public static var yesterday: Date { return Date().dayBefore }
-    public static var tomorrow: Date { return Date().dayAfter }
+    public static var yesterday: Date {
+        Date().dayBefore
+    }
+    public static var tomorrow: Date {
+        Date().dayAfter
+    }
     public var lastTwoWeek: Date {
-        return Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
+        Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
     }
     public var lastWeek: Date {
-        return Calendar.current.date(byAdding: .day, value: -8, to: noon) ?? Date()
+        Calendar.current.date(byAdding: .day, value: -8, to: noon) ?? Date()
     }
     public var older: Date {
-        return Calendar.current.date(byAdding: .day, value: -20, to: noon) ?? Date()
+        Calendar.current.date(byAdding: .day, value: -20, to: noon) ?? Date()
     }
     public var dayBefore: Date {
-        return Calendar.current.date(byAdding: .day, value: -1, to: noon) ?? Date()
+        Calendar.current.date(byAdding: .day, value: -1, to: noon) ?? Date()
     }
     public var dayAfter: Date {
-        return Calendar.current.date(byAdding: .day, value: 1, to: noon) ?? Date()
+        Calendar.current.date(byAdding: .day, value: 1, to: noon) ?? Date()
     }
     public var noon: Date {
-        return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self) ?? Date()
+        Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self) ?? Date()
     }
 
     public func isToday() -> Bool {
-        return Calendar.current.isDateInToday(self)
+        Calendar.current.isDateInToday(self)
     }
 
     public func isYesterday() -> Bool {
-        return Calendar.current.isDateInYesterday(self)
+        Calendar.current.isDateInYesterday(self)
     }
 
     public func isWithinLast7Days() -> Bool {
-        return (Date().lastWeek ... Date()).contains(self)
+        (Date().lastWeek...Date()).contains(self)
     }
 
     public func isWithinLast14Days() -> Bool {
-        return (Date().lastTwoWeek ... Date()).contains(self)
+        (Date().lastTwoWeek...Date()).contains(self)
     }
 }
 

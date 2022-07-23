@@ -42,7 +42,7 @@ class ContextMenuHelper: NSObject {
 @available(iOS, obsoleted: 14.0)
 extension ContextMenuHelper: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        true
     }
 
     // BVC KVO events for all changes on the webview will call this. 
@@ -103,11 +103,11 @@ extension ContextMenuHelper: UIGestureRecognizerDelegate {
 
 extension ContextMenuHelper: TabContentScript {
     class func name() -> String {
-        return "ContextMenuHelper"
+        "ContextMenuHelper"
     }
 
     func scriptMessageHandlerName() -> String? {
-        return "contextMenuMessageHandler"
+        "contextMenuMessageHandler"
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {

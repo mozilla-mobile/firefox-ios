@@ -13,7 +13,7 @@ class BookmarksPanelViewModel {
     }
 
     var isRootNode: Bool {
-        return bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
+        bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
     }
 
     let profile: Profile

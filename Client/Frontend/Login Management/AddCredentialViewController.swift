@@ -12,7 +12,7 @@ enum AddCredentialField: Int {
     case passwordItem
 
     var indexPath: IndexPath {
-        return IndexPath(row: rawValue, section: 0)
+        IndexPath(row: rawValue, section: 0)
     }
 }
 
@@ -161,14 +161,14 @@ extension AddCredentialViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        3
     }
 }
 
 // MARK: - UITableViewDelegate
 extension AddCredentialViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return LoginDetailUX.InfoRowHeight
+        LoginDetailUX.InfoRowHeight
     }
 }
 
@@ -227,7 +227,7 @@ extension AddCredentialViewController: LoginDetailTableViewCellDelegate {
     }
 
     fileprivate func cellForItem(_ item: AddCredentialField) -> LoginDetailTableViewCell? {
-        return tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
+        tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
     }
 
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell) { }

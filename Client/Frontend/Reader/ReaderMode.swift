@@ -80,7 +80,7 @@ enum ReaderModeFontType: String {
     }
 
     func isSameFamily(_ font: ReaderModeFontType) -> Bool {
-        return FontFamily.families.contains(where: { $0.contains(font) && $0.contains(self) })
+        FontFamily.families.contains(where: { $0.contains(font) && $0.contains(self) })
     }
 }
 
@@ -100,7 +100,7 @@ enum ReaderModeFontSize: Int {
     case size13 = 13
 
     func isSmallest() -> Bool {
-        return self == ReaderModeFontSize.size1
+        self == ReaderModeFontSize.size1
     }
 
     func smaller() -> ReaderModeFontSize {
@@ -112,7 +112,7 @@ enum ReaderModeFontSize: Int {
     }
 
     func isLargest() -> Bool {
-        return self == ReaderModeFontSize.size13
+        self == ReaderModeFontSize.size13
     }
 
     static var defaultSize: ReaderModeFontSize {
@@ -152,12 +152,12 @@ struct ReaderModeStyle {
 
     /// Encode the style to a JSON dictionary that can be passed to ReaderMode.js
     func encode() -> String {
-        return encodeAsDictionary().asString ?? ""
+        encodeAsDictionary().asString ?? ""
     }
 
     /// Encode the style to a dictionary that can be stored in the profile
     func encodeAsDictionary() -> [String: Any] {
-        return ["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]
+        ["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]
     }
 
     init(theme: ReaderModeTheme, fontType: ReaderModeFontType, fontSize: ReaderModeFontSize) {
@@ -262,7 +262,7 @@ struct ReadabilityResult {
 
     /// Encode to a dictionary, which can then for example be json encoded
     func encode() -> [String: Any] {
-        return ["domain": domain, "url": url, "content": content, "title": title, "credits": credits, "textContent": textContent, "excerpt": excerpt]
+        ["domain": domain, "url": url, "content": content, "title": title, "credits": credits, "textContent": textContent, "excerpt": excerpt]
     }
 
     /// Encode to a JSON encoded string
@@ -289,7 +289,7 @@ class ReaderMode: TabContentScript {
     fileprivate var originalURL: URL?
 
     class func name() -> String {
-        return "ReaderMode"
+        "ReaderMode"
     }
 
     required init(tab: Tab) {
@@ -297,7 +297,7 @@ class ReaderMode: TabContentScript {
     }
 
     func scriptMessageHandlerName() -> String? {
-        return "readerModeMessageHandler"
+        "readerModeMessageHandler"
     }
 
     fileprivate func handleReaderPageEvent(_ readerPageEvent: ReaderPageEvent) {
@@ -348,7 +348,6 @@ class ReaderMode: TabContentScript {
         didSet {
             if state == ReaderModeState.active {
                 tab?.webView?.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).setStyle(\(style.encode()))") { object, error in
-                    return
                 }
             }
         }

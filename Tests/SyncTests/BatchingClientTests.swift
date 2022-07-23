@@ -11,17 +11,17 @@ import SwiftyJSON
 
 // Always return a gigantic encoded payload.
 private func massivify<T>(_ record: Record<T>) -> JSON? {
-    return JSON([
+    JSON([
         "id": record.id,
         "foo": String(repeating: "X", count: Sync15StorageClient.maxRecordSizeBytes + 1)
     ])
 }
 
 private func basicSerializer<T>(record: Record<T>) -> String {
-    return JSON([
+    JSON([
         "id": record.id,
         "payload": record.payload.json.dictionaryObject as Any
-        ]).stringify()!
+    ]).stringify()!
 }
 
 // Create a basic record with an ID and a title that is the `Site$ID`.
@@ -62,7 +62,7 @@ private func deferEmptyResponse(token batchToken: BatchToken? = nil, lastModifie
 
 // Small helper operator for comparing query parameters below
 private func == (param1: NSURLQueryItem, param2: NSURLQueryItem) -> Bool {
-    return param1.name == param2.name && param1.value == param2.value
+    param1.name == param2.name && param1.value == param2.value
 }
 
 private let miniConfig = InfoConfiguration(maxRequestBytes: 1_048_576, maxPostRecords: 2, maxPostBytes: 1_048_576, maxTotalRecords: 10, maxTotalBytes: 104_857_600)
@@ -245,7 +245,7 @@ class Sync15BatchClientTests: XCTestCase {
         var linesSent = [String]()
 
         let allRecords: [Record<CleartextPayloadJSON>] = "ABCDEF".reduce([]) { list, char in
-            return list + [createRecordWithID(id: String(char))]
+            list + [createRecordWithID(id: String(char))]
         }
 
         // Since we never return a batch token, the batch client won't batch upload and default to single POSTs
@@ -322,7 +322,7 @@ class Sync15BatchClientTests: XCTestCase {
         var linesSent = [String]()
 
         let allRecords: [Record<CleartextPayloadJSON>] = "ABC".reduce([]) { list, char in
-            return list + [createRecordWithID(id: String(char))]
+            list + [createRecordWithID(id: String(char))]
         }
 
         // Since we never return a batch token, the batch client won't batch upload and default to single POSTs
@@ -393,7 +393,7 @@ class Sync15BatchClientTests: XCTestCase {
         var linesSent = [String]()
 
         let allRecords: [Record<CleartextPayloadJSON>] = "ABCDE".reduce([]) { list, char in
-            return list + [createRecordWithID(id: String(char))]
+            list + [createRecordWithID(id: String(char))]
         }
 
         // Since we never return a batch token, the batch client won't batch upload and default to single POSTs
@@ -526,7 +526,7 @@ class Sync15BatchClientTests: XCTestCase {
         var linesSent = [String]()
 
         let allRecords: [Record<CleartextPayloadJSON>] = "ABCDEFGHIJKL".reduce([]) { list, char in
-            return list + [createRecordWithID(id: String(char))]
+            list + [createRecordWithID(id: String(char))]
         }
 
         // For each upload, verify that we are getting the correct queryParams and records to be sent.

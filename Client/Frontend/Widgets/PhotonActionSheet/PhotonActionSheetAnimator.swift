@@ -25,7 +25,7 @@ class PhotonActionSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning
     }
 
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return animationDuration
+        animationDuration
     }
 }
 

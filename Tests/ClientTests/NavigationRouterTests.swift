@@ -34,7 +34,7 @@ class NavigationRouterTests: XCTestCase {
     }
 
     private var appScheme: String {
-        return URL.mozInternalScheme
+        URL.mozInternalScheme
     }
 
     func testOpenURLScheme() {

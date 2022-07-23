@@ -85,7 +85,7 @@ public class ImageLoadingHandler: ImageFetcher {
     }
 
     public func isImageInCache(url: URL) -> Bool {
-        return ImageCache.default.isCached(forKey: url.absoluteString)
+        ImageCache.default.isCached(forKey: url.absoluteString)
     }
 
     public func downloadAndCacheImage(with url: URL, completion: @escaping (UIImage?, ImageLoadingError?) -> Void) {

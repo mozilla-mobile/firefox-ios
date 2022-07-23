@@ -58,7 +58,7 @@ class URIFixup {
     }
 
     static func replaceBrackets(url: String) -> String {
-        return url.replacingOccurrences(of: "[", with: "%5B").replacingOccurrences(of: "]", with: "%5D")
+        url.replacingOccurrences(of: "[", with: "%5B").replacingOccurrences(of: "]", with: "%5D")
     }
 
     static func replaceHashMarks(url: String) -> String {

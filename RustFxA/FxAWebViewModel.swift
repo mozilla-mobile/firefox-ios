@@ -68,7 +68,7 @@ class FxAWebViewModel {
     var onDismissController: (() -> Void)?
 
     func composeTitle(basedOn url: URL?, hasOnlySecureContent: Bool) -> String {
-        return (hasOnlySecureContent ? "🔒 " : "") + (url?.host ?? "")
+        (hasOnlySecureContent ? "🔒 " : "") + (url?.host ?? "")
     }
 
     func setupFirstPage(completion: @escaping (URLRequest, TelemetryWrapper.EventMethod?) -> Void) {
@@ -109,7 +109,7 @@ class FxAWebViewModel {
     private func makeRequest(_ url: URL) -> URLRequest {
         if let query = deepLinkParams?.query {
             let args = query.filter { $0.key.starts(with: "utm_") }.map {
-                return URLQueryItem(name: $0.key, value: $0.value)
+                        URLQueryItem(name: $0.key, value: $0.value)
             }
 
             var comp = URLComponents(url: url, resolvingAgainstBaseURL: false)

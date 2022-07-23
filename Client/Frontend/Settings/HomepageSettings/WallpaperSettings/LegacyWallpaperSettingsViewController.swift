@@ -285,7 +285,7 @@ extension LegacyWallpaperSettingsViewController: Notifiable {
 // MARK: - Collection View Data Source
 extension LegacyWallpaperSettingsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.wallpaperManager.numberOfWallpapers
+        viewModel.wallpaperManager.numberOfWallpapers
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

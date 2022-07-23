@@ -42,7 +42,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
     private weak var currentDeferredHistoryQuery: CancellableDeferred<Maybe<Cursor<Site>>>?
 
     fileprivate func getBookmarksAsSites(matchingSearchQuery query: String, limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        return profile.places.searchBookmarks(query: query, limit: 5).bind { result in
+        profile.places.searchBookmarks(query: query, limit: 5).bind { result in
             guard let bookmarkItems = result.successValue else {
                 return deferMaybe(ArrayCursor(data: []))
             }

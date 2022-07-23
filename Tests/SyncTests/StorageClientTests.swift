@@ -12,7 +12,7 @@ import SwiftyJSON
 
 // Always return a gigantic encoded payload.
 func massivify(record: Record<CleartextPayloadJSON>) -> JSON? {
-    return JSON([
+    JSON([
         "id": record.id,
         "foo": String(repeating: "X", count: Sync15StorageClient.maxRecordSizeBytes + 1)
     ])

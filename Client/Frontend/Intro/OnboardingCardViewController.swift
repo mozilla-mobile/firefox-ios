@@ -30,7 +30,7 @@ class OnboardingCardViewController: UIViewController {
     weak var delegate: OnboardingCardDelegate?
 
     var shouldUseSmallDeviceLayout: Bool {
-        return view.frame.height < 600
+        view.frame.height < 600
     }
 
     private lazy var scrollView: UIScrollView = .build { view in

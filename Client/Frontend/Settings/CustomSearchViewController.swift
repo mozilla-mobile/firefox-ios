@@ -18,7 +18,7 @@ class CustomSearchError: MaybeErrorType {
     var reason: Reason!
 
     internal var description: String {
-        return "Search Engine Not Added"
+        "Search Engine Not Added"
     }
 
     init(_ reason: Reason) {
@@ -103,8 +103,8 @@ class CustomSearchViewController: SettingsTableViewController {
     }
 
     private func engineExists(name: String, template: String) -> Bool {
-        return profile.searchEngines.orderedEngines.contains { (engine) -> Bool in
-            return engine.shortName == name || engine.searchTemplate == template
+        profile.searchEngines.orderedEngines.contains { (engine) -> Bool in
+            engine.shortName == name || engine.searchTemplate == template
         }
     }
 
@@ -147,7 +147,7 @@ class CustomSearchViewController: SettingsTableViewController {
         let urlField = CustomSearchEngineTextView(placeholder: .SettingsAddCustomEngineURLPlaceholder, height: 133,
             keyboardType: .URL, settingIsValid: { text in
             // Can check url text text validity here.
-            return true
+            true
         }, settingDidChange: {fieldText in
             self.urlString = fieldText
             self.updateSaveButton()
@@ -260,7 +260,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     }
 
     func prepareValidValue(userInput value: String?) -> String? {
-        return value
+        value
     }
 
     func textViewDidBeginEditing(_ textView: UITextView) {

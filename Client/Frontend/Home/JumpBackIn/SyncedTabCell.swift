@@ -12,13 +12,13 @@ struct FxHomeSyncedTabCellViewModel {
     var syncedDeviceImage: UIImage?
     var heroImage: UIImage?
     var accessibilityLabel: String {
-        return "\(cardTitleText): \(titleText), \(descriptionText)"
+        "\(cardTitleText): \(titleText), \(descriptionText)"
     }
     var cardTitleText: String {
-        return .FirefoxHomepage.JumpBackIn.SyncedTabTitle
+        .FirefoxHomepage.JumpBackIn.SyncedTabTitle
     }
     var syncedTabsButtonText: String {
-        return .FirefoxHomepage.JumpBackIn.SyncedTabShowAllButtonTitle
+        .FirefoxHomepage.JumpBackIn.SyncedTabShowAllButtonTitle
     }
 }
 

@@ -29,31 +29,31 @@ open class UserAgent {
     }
 
     public static var syncUserAgent: String {
-        return clientUserAgent(prefix: "Firefox-iOS-Sync")
+        clientUserAgent(prefix: "Firefox-iOS-Sync")
     }
 
     public static var tokenServerClientUserAgent: String {
-        return clientUserAgent(prefix: "Firefox-iOS-Token")
+        clientUserAgent(prefix: "Firefox-iOS-Token")
     }
 
     public static var fxaUserAgent: String {
-        return clientUserAgent(prefix: "Firefox-iOS-FxA")
+        clientUserAgent(prefix: "Firefox-iOS-FxA")
     }
 
     public static var defaultClientUserAgent: String {
-        return clientUserAgent(prefix: "Firefox-iOS")
+        clientUserAgent(prefix: "Firefox-iOS")
     }
 
     public static func isDesktop(ua: String) -> Bool {
-        return ua.lowercased().contains("intel mac")
+        ua.lowercased().contains("intel mac")
     }
 
     public static func desktopUserAgent() -> String {
-        return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15"
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15"
     }
 
     public static func mobileUserAgent() -> String {
-        return UserAgentBuilder.defaultMobileUserAgent().userAgent()
+        UserAgentBuilder.defaultMobileUserAgent().userAgent()
     }
 
     public static func oppositeUserAgent(domain: String) -> String {
@@ -132,24 +132,27 @@ public struct UserAgentBuilder {
 
     /// Helper method to remove the empty components from user agent string that contain only whitespaces or are just empty
     private func removeEmptyComponentsAndJoin(uaItems: [String]) -> String {
-        return uaItems.filter { !$0.isEmptyOrWhitespace() }.joined(separator: " ")
+        uaItems.filter {
+                    !$0.isEmptyOrWhitespace()
+                }
+                .joined(separator: " ")
     }
 
     public static func defaultMobileUserAgent() -> UserAgentBuilder {
-        return UserAgentBuilder(
-            product: UserAgent.product,
-            systemInfo: "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)",
-            platform: UserAgent.platform,
-            platformDetails: UserAgent.platformDetails,
-            extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
+        UserAgentBuilder(
+                product: UserAgent.product,
+                systemInfo: "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)",
+                platform: UserAgent.platform,
+                platformDetails: UserAgent.platformDetails,
+                extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
     }
 
     public static func defaultDesktopUserAgent() -> UserAgentBuilder {
-        return UserAgentBuilder(
-            product: UserAgent.product,
-            systemInfo: "(Macintosh; Intel Mac OS X 10.15)",
-            platform: UserAgent.platform,
-            platformDetails: UserAgent.platformDetails,
-            extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
+        UserAgentBuilder(
+                product: UserAgent.product,
+                systemInfo: "(Macintosh; Intel Mac OS X 10.15)",
+                platform: UserAgent.platform,
+                platformDetails: UserAgent.platformDetails,
+                extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
     }
 }

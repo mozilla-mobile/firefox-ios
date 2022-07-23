@@ -35,10 +35,10 @@ class ETPCoverSheetViewController: UIViewController {
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
-        return ETPCoverSheetViewController.theme == .dark ? .white : .black
+        ETPCoverSheetViewController.theme == .dark ? .white : .black
     }
     private var fxBackgroundThemeColour: UIColor {
-        return ETPCoverSheetViewController.theme == .dark ? .black : .white
+        ETPCoverSheetViewController.theme == .dark ? .black : .white
     }
     private var doneButton: UIButton = {
         let button = UIButton()
@@ -194,12 +194,12 @@ class ETPCoverSheetViewController: UIViewController {
 // UIViewController setup to keep it in portrait mode
 extension ETPCoverSheetViewController {
     override var shouldAutorotate: Bool {
-        return false
+        false
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         // This actually does the right thing on iPad where the modally
         // presented version happily rotates with the iPad orientation.
-        return .portrait
+        .portrait
     }
 }

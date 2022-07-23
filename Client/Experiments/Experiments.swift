@@ -101,7 +101,7 @@ enum Experiments {
     }
 
     static func getLocalExperimentData(storage: UserDefaults = .standard) -> String? {
-        return storage.string(forKey: NIMBUS_LOCAL_DATA_KEY)
+        storage.string(forKey: NIMBUS_LOCAL_DATA_KEY)
     }
 
     static var dbPath: String? {

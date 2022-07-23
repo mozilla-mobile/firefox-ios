@@ -110,6 +110,6 @@ open class RollingFileLogger: XCGLogger {
     }
 
     fileprivate func fileLogIdentifierWithRoot(_ root: String) -> String {
-        return "\(fileLogIdentifierPrefix).\(root)"
+        "\(fileLogIdentifierPrefix).\(root)"
     }
 }

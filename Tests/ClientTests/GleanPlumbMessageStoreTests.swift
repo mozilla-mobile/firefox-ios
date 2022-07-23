@@ -91,23 +91,23 @@ class GleanPlumbMessageStoreTests: XCTestCase {
 // MARK: - MockStyleData
 class MockMessageData: MessageDataProtocol {
     var surface: MessageSurfaceId {
-        return .newTabCard
+        .newTabCard
     }
 
     var isControl: Bool {
-        return false
+        false
     }
 
     var title: String? {
-        return "Title"
+        "Title"
     }
 
     var text: String {
-        return "text"
+        "text"
     }
 
     var buttonLabel: String? {
-        return "Tap"
+        "Tap"
     }
 }
 

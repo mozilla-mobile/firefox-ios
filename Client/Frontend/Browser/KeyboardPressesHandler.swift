@@ -18,15 +18,15 @@ class KeyboardPressesHandler {
     private lazy var keysPressed: [UIKeyboardHIDUsage] = []
 
     var isOnlyCmdPressed: Bool {
-        return isCmdPressed && !isShiftPressed
+        isCmdPressed && !isShiftPressed
     }
 
     var isCmdAndShiftPressed: Bool {
-        return isCmdPressed && isShiftPressed
+        isCmdPressed && isShiftPressed
     }
 
     var isOnlyOptionPressed: Bool {
-        return isOptionPressed && !isCmdPressed
+        isOptionPressed && !isCmdPressed
     }
 
     func handlePressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -45,15 +45,15 @@ class KeyboardPressesHandler {
     // MARK: Private
 
     private var isCmdPressed: Bool {
-        return keysPressed.contains(.keyboardLeftGUI) || keysPressed.contains(.keyboardRightGUI)
+        keysPressed.contains(.keyboardLeftGUI) || keysPressed.contains(.keyboardRightGUI)
     }
 
     private var isShiftPressed: Bool {
-        return keysPressed.contains(.keyboardLeftShift) || keysPressed.contains(.keyboardRightShift)
+        keysPressed.contains(.keyboardLeftShift) || keysPressed.contains(.keyboardRightShift)
     }
 
     private var isOptionPressed: Bool {
-        return keysPressed.contains(.keyboardLeftAlt) || keysPressed.contains(.keyboardRightAlt)
+        keysPressed.contains(.keyboardLeftAlt) || keysPressed.contains(.keyboardRightAlt)
     }
 
     /// Handle keyboard presses to determine certain commands

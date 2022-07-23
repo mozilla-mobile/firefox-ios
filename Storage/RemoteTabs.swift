@@ -10,7 +10,7 @@ public struct ClientAndTabs: Equatable, CustomStringConvertible {
     public let tabs: [RemoteTab]
 
     public var description: String {
-        return "<Client guid: \(client.guid ?? "nil"), \(tabs.count) tabs.>"
+        "<Client guid: \(client.guid ?? "nil"), \(tabs.count) tabs.>"
     }
 
     public init(client: RemoteClient, tabs: [RemoteTab]) {
@@ -20,8 +20,8 @@ public struct ClientAndTabs: Equatable, CustomStringConvertible {
 }
 
 public func == (lhs: ClientAndTabs, rhs: ClientAndTabs) -> Bool {
-    return (lhs.client == rhs.client) &&
-           (lhs.tabs == rhs.tabs)
+    (lhs.client == rhs.client) &&
+            (lhs.tabs == rhs.tabs)
 }
 
 public protocol RemoteClientsAndTabs: SyncCommands {
@@ -66,7 +66,7 @@ public struct RemoteTab: Equatable {
     }
 
     public func withClientGUID(_ clientGUID: String?) -> RemoteTab {
-        return RemoteTab(clientGUID: clientGUID, URL: URL, title: title, history: history, lastUsed: lastUsed, icon: icon)
+        RemoteTab(clientGUID: clientGUID, URL: URL, title: title, history: history, lastUsed: lastUsed, icon: icon)
     }
 
     public func toRemoteTabRecord() -> RemoteTabRecord {
@@ -80,16 +80,16 @@ public struct RemoteTab: Equatable {
 }
 
 public func == (lhs: RemoteTab, rhs: RemoteTab) -> Bool {
-    return lhs.clientGUID == rhs.clientGUID &&
-        lhs.URL == rhs.URL &&
-        lhs.title == rhs.title &&
-        lhs.history == rhs.history &&
-        lhs.lastUsed == rhs.lastUsed &&
-        lhs.icon == rhs.icon
+    lhs.clientGUID == rhs.clientGUID &&
+            lhs.URL == rhs.URL &&
+            lhs.title == rhs.title &&
+            lhs.history == rhs.history &&
+            lhs.lastUsed == rhs.lastUsed &&
+            lhs.icon == rhs.icon
 }
 
 extension RemoteTab: CustomStringConvertible {
     public var description: String {
-        return "<RemoteTab clientGUID: \(clientGUID ?? "nil"), URL: \(URL), title: \(title), lastUsed: \(lastUsed)>"
+        "<RemoteTab clientGUID: \(clientGUID ?? "nil"), URL: \(URL), title: \(title), lastUsed: \(lastUsed)>"
     }
 }

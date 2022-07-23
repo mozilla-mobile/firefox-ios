@@ -17,7 +17,7 @@ class PocketStandardCellViewModel {
         }
     }
     var accessibilityLabel: String {
-        return "\(title), \(description)"
+        "\(title), \(description)"
     }
 
     var onTap: (IndexPath) -> Void = { _ in }

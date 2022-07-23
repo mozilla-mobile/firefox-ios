@@ -26,7 +26,7 @@ class BackForwardListAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     }
 
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return animationDuration
+        animationDuration
     }
 }
 

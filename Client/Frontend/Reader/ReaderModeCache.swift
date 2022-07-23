@@ -44,7 +44,7 @@ class MemoryReaderModeCache: ReaderModeCache {
     }
 
     class var sharedInstance: ReaderModeCache {
-        return MemoryReaderModeCacheSharedInstance
+        MemoryReaderModeCacheSharedInstance
     }
 
     func put(_ url: URL, _ readabilityResult: ReadabilityResult) throws {
@@ -63,7 +63,7 @@ class MemoryReaderModeCache: ReaderModeCache {
     }
 
     func contains(_ url: URL) -> Bool {
-        return cache.object(forKey: url as AnyObject) != nil
+        cache.object(forKey: url as AnyObject) != nil
     }
 
     func clear() {
@@ -79,7 +79,7 @@ class MemoryReaderModeCache: ReaderModeCache {
 /// and improve at a later time.
 class DiskReaderModeCache: ReaderModeCache {
     class var sharedInstance: ReaderModeCache {
-        return DiskReaderModeCacheSharedInstance
+        DiskReaderModeCacheSharedInstance
     }
 
     func put(_ url: URL, _ readabilityResult: ReadabilityResult) throws {
@@ -90,7 +90,6 @@ class DiskReaderModeCache: ReaderModeCache {
         try FileManager.default.createDirectory(atPath: cacheDirectoryPath, withIntermediateDirectories: true, attributes: nil)
         let string: String = readabilityResult.encode()
         try string.write(toFile: contentFilePath, atomically: true, encoding: .utf8)
-        return
     }
 
     func get(_ url: URL) throws -> ReadabilityResult {

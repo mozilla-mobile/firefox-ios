@@ -17,11 +17,11 @@ class LoginsHelper: TabContentScript {
 
     // Exposed for mocking purposes
     var logins: RustLogins {
-        return profile.logins
+        profile.logins
     }
 
     class func name() -> String {
-        return "LoginsHelper"
+        "LoginsHelper"
     }
 
     required init(tab: Tab, profile: Profile) {
@@ -30,7 +30,7 @@ class LoginsHelper: TabContentScript {
     }
 
     func scriptMessageHandlerName() -> String? {
-        return "loginsManagerMessageHandler"
+        "loginsManagerMessageHandler"
     }
 
     fileprivate func getOrigin(_ uriString: String, allowJS: Bool = false) -> String? {
@@ -244,7 +244,7 @@ class LoginsHelper: TabContentScript {
 
             let logins: [[String: Any]] = cursor.compactMap { login in
                 // `requestLogins` is for webpage forms, not for HTTP Auth, and the latter has httpRealm != nil; filter those out.
-                return login?.httpRealm == nil ? login?.toJSONDict() : nil
+                login?.httpRealm == nil ? login?.toJSONDict() : nil
             }
 
             log.debug("Found \(logins.count) logins.")

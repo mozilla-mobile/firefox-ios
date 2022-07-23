@@ -50,12 +50,14 @@ class Authenticator {
     }
 
     static func findMatchingCredentialsForChallenge(_ challenge: URLAuthenticationChallenge, fromLoginsProvider loginsProvider: RustLogins) -> Deferred<Maybe<URLCredential?>> {
-        return loginsProvider.getLoginsForProtectionSpace(challenge.protectionSpace) >>== { cursor in
-            guard cursor.count >= 1 else { return deferMaybe(nil) }
+        loginsProvider.getLoginsForProtectionSpace(challenge.protectionSpace) >>== { cursor in
+            guard cursor.count >= 1 else {
+                return deferMaybe(nil)
+            }
 
             let logins = cursor.compactMap {
                 // HTTP Auth must have nil formSubmitUrl and a non-nil httpRealm.
-                return $0?.formSubmitUrl == nil && $0?.httpRealm != nil ? $0 : nil
+                $0?.formSubmitUrl == nil && $0?.httpRealm != nil ? $0 : nil
             }
             var credentials: URLCredential?
 
@@ -64,7 +66,8 @@ class Authenticator {
             if logins.count > 1 {
                 credentials = (logins.find { login in
                     (login.protectionSpace.`protocol` == challenge.protectionSpace.`protocol`) && !login.hasMalformedHostname
-                })?.credentials
+                })?
+                        .credentials
 
                 let malformedGUIDs: [GUID] = logins.compactMap { login in
                     if login.hasMalformedHostname {
@@ -72,7 +75,9 @@ class Authenticator {
                     }
                     return nil
                 }
-                loginsProvider.deleteLogins(ids: malformedGUIDs).upon { _ in log.debug("Removed malformed logins.") }
+                loginsProvider.deleteLogins(ids: malformedGUIDs).upon { _ in
+                    log.debug("Removed malformed logins.")
+                }
             }
 
             // Found a single entry but the schemes don't match. This is a result of a schemeless entry that we
@@ -83,7 +88,9 @@ class Authenticator {
                 credentials = login.credentials
                 let new = LoginEntry(credentials: login.credentials, protectionSpace: challenge.protectionSpace)
                 return loginsProvider.updateLogin(id: login.id, login: new)
-                    >>> { deferMaybe(credentials) }
+                        >>> {
+                    deferMaybe(credentials)
+                }
             }
 
             // Found a single entry that matches the scheme and host - good to go.

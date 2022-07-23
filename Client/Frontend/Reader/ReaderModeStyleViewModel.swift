@@ -32,10 +32,10 @@ struct ReaderModeStyleViewModel {
     var readerModeStyle: ReaderModeStyle = DefaultReaderModeStyle
 
     var fontTypeOffset: CGFloat {
-        return isBottomPresented ? 0 : ReaderModeStyleViewModel.PresentationSpace
+        isBottomPresented ? 0 : ReaderModeStyleViewModel.PresentationSpace
     }
 
     var brightnessRowOffset: CGFloat {
-        return isBottomPresented ? -ReaderModeStyleViewModel.PresentationSpace : 0
+        isBottomPresented ? -ReaderModeStyleViewModel.PresentationSpace : 0
     }
 }

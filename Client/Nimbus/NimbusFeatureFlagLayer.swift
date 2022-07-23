@@ -110,7 +110,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkNimbusForJumpBackInSyncedTabFeature(using nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homescreenFeature.value().jumpBackInSyncedTab
+        nimbus.features.homescreenFeature.value().jumpBackInSyncedTab
     }
 
     private func checkNimbusForWallpapersFeature(using nimbus: FxNimbus) -> Bool {
@@ -119,7 +119,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkNimbusForPocketSponsoredStoriesFeature(using nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homescreenFeature.value().pocketSponsoredStories
+        nimbus.features.homescreenFeature.value().pocketSponsoredStories
     }
 
     private func checkSponsoredTilesFeature(from nimbus: FxNimbus) -> Bool {

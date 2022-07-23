@@ -79,7 +79,7 @@ class SearchTermGroupsUtility {
     /// - Returns: A dictionary whose keys are search terms used for grouping
     private static func buildMetadataGroups(from ASMetadata: [HistoryMetadata]) -> [String: [HistoryMetadata]] {
 
-        let searchTerms = Set(ASMetadata.map({ return $0.searchTerm }))
+        let searchTerms = Set(ASMetadata.map({ $0.searchTerm }))
         var searchTermMetaDataGroup: [String: [HistoryMetadata]] = [:]
 
         for term in searchTerms {
@@ -196,7 +196,9 @@ class SearchTermGroupsUtility {
     /// - Returns: A filtered array of the original items, containing no items present in groups
     private static func filterDuplicate<T: Equatable>(itemsInGroups: [T], from items: [T]) -> [T] {
         // 4. Filter the tabs so it doesn't include same tabs as tab groups
-        return items.filter { item in !itemsInGroups.contains(item) }
+        items.filter { item in
+            !itemsInGroups.contains(item)
+        }
 
     }
 
@@ -208,19 +210,19 @@ class SearchTermGroupsUtility {
     /// - Parameter groupDictionary: Dictionary that is to be processed
     /// - Returns: An array of `ASGroup<T>`
     private static func createGroups<T: Equatable>(from groupDictionary: [String: [T]]) -> [ASGroup<T>] {
-        return groupDictionary.map {
-                let orderedItems = orderItemsIn(group: $0.value)
-                var timestamp: Timestamp = 0
-                if let firstItem = orderedItems.first, let tab = firstItem as? Tab {
-                    timestamp = tab.firstCreatedTime ?? 0
-                }
+        groupDictionary.map {
+            let orderedItems = orderItemsIn(group: $0.value)
+            var timestamp: Timestamp = 0
+            if let firstItem = orderedItems.first, let tab = firstItem as? Tab {
+                timestamp = tab.firstCreatedTime ?? 0
+            }
 
-                // Base timestamp on score to order historyHighlight properly
-                if let firstItem = orderedItems.first, let highlight = firstItem as? HistoryHighlight {
-                    timestamp = Date.now() - Timestamp(highlight.score)
-                }
+            // Base timestamp on score to order historyHighlight properly
+            if let firstItem = orderedItems.first, let highlight = firstItem as? HistoryHighlight {
+                timestamp = Date.now() - Timestamp(highlight.score)
+            }
 
-                return ASGroup<T>(searchTerm: $0.key.capitalized, groupedItems: orderedItems, timestamp: timestamp)
+            return ASGroup<T>(searchTerm: $0.key.capitalized, groupedItems: orderedItems, timestamp: timestamp)
         }
     }
 
@@ -229,7 +231,7 @@ class SearchTermGroupsUtility {
     /// - Parameter group: A group in which items must be sorted
     /// - Returns: The items in the group, sorted chronologically, in ascending order
     private static func orderItemsIn<T: Equatable>(group: [T]) -> [T] {
-        return group.sorted {
+        group.sorted {
             if let firstTab = $0 as? Tab, let secondTab = $1 as? Tab {
                 let firstTabTimestamp = firstTab.firstCreatedTime ?? 0
                 let secondTabTimestamp = secondTab.firstCreatedTime ?? 0

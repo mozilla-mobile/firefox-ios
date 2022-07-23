@@ -12,8 +12,8 @@ open class KeyBundle: Hashable {
     public let hmacKey: Data
 
     open class func fromKSync(_ kSync: Data) -> KeyBundle {
-        return KeyBundle(encKey: kSync.subdata(in: 0..<KeyLength),
-                         hmacKey: kSync.subdata(in: KeyLength..<(2 * KeyLength)))
+        KeyBundle(encKey: kSync.subdata(in: 0..<KeyLength),
+                hmacKey: kSync.subdata(in: KeyLength..<(2 * KeyLength)))
     }
 
     open class func random() -> KeyBundle {
@@ -21,11 +21,11 @@ open class KeyBundle: Hashable {
         // on iOS is populated by the OS from kernel-level sources of entropy.
         // That should mean that we don't need to seed or initialize anything before calling
         // this. That is probably not true on (some versions of) OS X.
-        return KeyBundle(encKey: Bytes.generateRandomBytes(32), hmacKey: Bytes.generateRandomBytes(32))
+        KeyBundle(encKey: Bytes.generateRandomBytes(32), hmacKey: Bytes.generateRandomBytes(32))
     }
 
     open class var invalid: KeyBundle {
-        return KeyBundle(encKeyB64: "deadbeef", hmacKeyB64: "deadbeef")!
+        KeyBundle(encKeyB64: "deadbeef", hmacKeyB64: "deadbeef")!
     }
 
     public init?(encKeyB64: String, hmacKeyB64: String) {
@@ -133,7 +133,7 @@ open class KeyBundle: Hashable {
     }
 
     open func asPair() -> [String] {
-        return [self.encKey.base64EncodedString, self.hmacKey.base64EncodedString]
+        [self.encKey.base64EncodedString, self.hmacKey.base64EncodedString]
     }
 
     public func hash(into hasher: inout Hasher) {
@@ -142,6 +142,6 @@ open class KeyBundle: Hashable {
     }
 
     public static func == (lhs: KeyBundle, rhs: KeyBundle) -> Bool {
-        return lhs.encKey == rhs.encKey && lhs.hmacKey == rhs.hmacKey
+        lhs.encKey == rhs.encKey && lhs.hmacKey == rhs.hmacKey
     }
 }

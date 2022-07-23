@@ -13,8 +13,12 @@ private let log = Logger.syncLogger
 open class ReadingListSchema: Schema {
     static let DefaultVersion = 1
 
-    public var name: String { return "READINGLIST" }
-    public var version: Int { return ReadingListSchema.DefaultVersion }
+    public var name: String {
+        "READINGLIST"
+    }
+    public var version: Int {
+        ReadingListSchema.DefaultVersion
+    }
 
     public init() {}
 
@@ -34,7 +38,7 @@ open class ReadingListSchema: Schema {
         """
 
     public func create(_ db: SQLiteDBConnection) -> Bool {
-        return self.run(db, queries: [itemsTableCreate])
+        self.run(db, queries: [itemsTableCreate])
     }
 
     public func update(_ db: SQLiteDBConnection, from: Int) -> Bool {

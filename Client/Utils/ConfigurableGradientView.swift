@@ -17,11 +17,11 @@ public class ConfigurableGradientView: UIView {
     }
 
     private var gradientLayer: CAGradientLayer {
-        return layer as! CAGradientLayer
+        layer as! CAGradientLayer
     }
 
     public override class var layerClass: AnyClass {
-        return CAGradientLayer.self
+        CAGradientLayer.self
     }
 
     /// The main interface through which the gradient view is configured.

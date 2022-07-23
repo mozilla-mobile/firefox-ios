@@ -32,7 +32,7 @@ class StatefulButton: UIButton {
 
     var reloadButtonState: ReloadButtonState {
         get {
-            return savedReloadButtonState
+            savedReloadButtonState
         }
         set (newReloadButtonState) {
             savedReloadButtonState = newReloadButtonState

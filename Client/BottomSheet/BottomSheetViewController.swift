@@ -23,10 +23,10 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
     var delegate: BottomSheetDelegate?
     private var currentState: BottomSheetState = .none
     private var isLandscape: Bool {
-        return UIWindow.isLandscape
+        UIWindow.isLandscape
     }
     private var orientationBasedHeight: CGFloat {
-        return isLandscape ? DeviceInfo.screenSizeOrientationIndependent().width : DeviceInfo.screenSizeOrientationIndependent().height
+        isLandscape ? DeviceInfo.screenSizeOrientationIndependent().width : DeviceInfo.screenSizeOrientationIndependent().height
     }
     // shows how much bottom sheet should be visible
     // 1 = full, 0.5 = half, 0 = hidden
@@ -41,19 +41,19 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
         return specifier
     }
     private var navHeight: CGFloat {
-        return navigationController?.navigationBar.frame.height ?? 0
+        navigationController?.navigationBar.frame.height ?? 0
     }
     private var fullHeight: CGFloat {
-        return orientationBasedHeight - navHeight
+        orientationBasedHeight - navHeight
     }
     private var partialHeight: CGFloat {
-        return fullHeight * heightSpecifier
+        fullHeight * heightSpecifier
     }
     private var maxY: CGFloat {
-        return fullHeight - partialHeight
+        fullHeight - partialHeight
     }
     private var minY: CGFloat {
-        return orientationBasedHeight
+        orientationBasedHeight
     }
     private var endedYVal: CGFloat = 0
     private var endedTranslationYVal: CGFloat = 0

@@ -42,14 +42,14 @@ open class DiskImageStore {
 
     /// Gets an image for the given key if it is in the store.
     open func get(_ key: String) -> Deferred<Maybe<UIImage>> {
-        return deferDispatchAsync(queue) { () -> Deferred<Maybe<UIImage>> in
+        deferDispatchAsync(queue) { () -> Deferred<Maybe<UIImage>> in
             if !self.keys.contains(key) {
                 return deferMaybe(DiskImageStoreErrorType(description: "Image key not found"))
             }
 
             let imagePath = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
             if let data = try? Data(contentsOf: imagePath),
-                   let image = UIImage.imageFromDataThreadSafe(data) {
+               let image = UIImage.imageFromDataThreadSafe(data) {
                 return deferMaybe(image)
             }
 
@@ -61,7 +61,7 @@ open class DiskImageStore {
     /// This put is asynchronous; the image is not recorded in the cache until the write completes.
     /// Does nothing if this key already exists in the store.
     @discardableResult open func put(_ key: String, image: UIImage) -> Success {
-        return deferDispatchAsync(queue) { () -> Success in
+        deferDispatchAsync(queue) { () -> Success in
             let imageURL = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
             if let data = image.jpegData(compressionQuality: self.quality) {
                 do {
@@ -79,7 +79,7 @@ open class DiskImageStore {
 
     /// Clears all images from the cache, excluding the given set of keys.
     open func clearExcluding(_ keys: Set<String>) -> Success {
-        return deferDispatchAsync(queue) { () -> Success in
+        deferDispatchAsync(queue) { () -> Success in
             let keysToDelete = self.keys.subtracting(keys)
 
             for key in keysToDelete {
@@ -99,7 +99,7 @@ open class DiskImageStore {
 
     /// Remove image with provided key
     open func removeImage(_ key: String) -> Success {
-        return deferDispatchAsync(queue) { () -> Success in
+        deferDispatchAsync(queue) { () -> Success in
             let url = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
 
             do {

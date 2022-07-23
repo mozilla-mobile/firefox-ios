@@ -17,13 +17,13 @@ class WebServer: WebServerProtocol {
     static let WebServerSharedInstance = WebServer()
 
     class var sharedInstance: WebServer {
-        return WebServerSharedInstance
+        WebServerSharedInstance
     }
 
     let server: GCDWebServer = GCDWebServer()
 
     var base: String {
-        return "http://localhost:\(server.port)"
+        "http://localhost:\(server.port)"
     }
 
     /// The private credentials for accessing resources on this Web server.
@@ -84,10 +84,10 @@ class WebServer: WebServerProtocol {
 
     /// Return a full url, as a string, for a resource in a module. No check is done to find out if the resource actually exist.
     func URLForResource(_ resource: String, module: String) -> String {
-        return "\(base)/\(module)/\(resource)"
+        "\(base)/\(module)/\(resource)"
     }
 
     func baseReaderModeURL() -> String {
-        return WebServer.sharedInstance.URLForResource("page", module: "reader-mode")
+        WebServer.sharedInstance.URLForResource("page", module: "reader-mode")
     }
 }

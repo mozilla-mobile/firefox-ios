@@ -29,7 +29,7 @@ class ExtensionSyncManager: BrowserProfile.BrowserSyncManager {
 
     // We don't want to send ping data at all while we're in the extension.
     override func canSendUsageData() -> Bool {
-        return false
+        false
     }
 
     // We should probably only want to sync client commands while we're in the extension.
@@ -39,6 +39,6 @@ class ExtensionSyncManager: BrowserProfile.BrowserSyncManager {
     }
 
     override func takeActionsOnEngineStateChanges<T: EngineStateChanges>(_ changes: T) -> Deferred<Maybe<T>> {
-        return deferMaybe(changes)
+        deferMaybe(changes)
     }
 }

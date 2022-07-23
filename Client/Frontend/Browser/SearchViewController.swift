@@ -17,7 +17,9 @@ private enum SearchListSection: Int, CaseIterable {
 }
 
 private struct SearchViewControllerUX {
-    static var SearchEngineScrollViewBackgroundColor: CGColor { return UIColor.theme.homePanel.toolbarBackground.withAlphaComponent(0.8).cgColor }
+    static var SearchEngineScrollViewBackgroundColor: CGColor {
+        UIColor.theme.homePanel.toolbarBackground.withAlphaComponent(0.8).cgColor
+    }
     static let SearchEngineScrollViewBorderColor = UIColor.black.withAlphaComponent(0.2).cgColor
 
     // TODO: This should use ToolbarHeight in BVC. Fix this when we create a shared theming file.
@@ -59,7 +61,7 @@ struct SearchViewModel {
 class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener, FeatureFlaggable {
     var searchDelegate: SearchViewControllerDelegate?
     var currentTheme: BuiltinThemeName {
-        return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
     }
     private let viewModel: SearchViewModel
     private var suggestClient: SearchSuggestClient?
@@ -77,11 +79,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private let searchEngineScrollViewContent = UIView()
 
     private lazy var bookmarkedBadge: UIImage = {
-        return UIImage(named: "bookmark_results")!
+        UIImage(named: "bookmark_results")!
     }()
 
     private lazy var openAndSyncTabBadge: UIImage = {
-        return UIImage(named: "sync_open_tab")!
+        UIImage(named: "sync_open_tab")!
     }()
 
     var suggestions: [String]? = []
@@ -546,7 +548,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return super.tableView(tableView, heightForRowAt: indexPath)
+        super.tableView(tableView, heightForRowAt: indexPath)
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -591,7 +593,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return SearchListSection.allCases.count
+        SearchListSection.allCases.count
     }
 
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
@@ -841,7 +843,7 @@ fileprivate extension String {
         // The assumption here is that if the user is typing in a forward slash and there are no spaces
         // involved, it's going to be a URL. If we type a space, any url would be invalid.
         // See https://bugzilla.mozilla.org/show_bug.cgi?id=1192155 for additional details.
-        return self.contains("/") && !self.contains(" ")
+        self.contains("/") && !self.contains(" ")
     }
 }
 
@@ -850,6 +852,6 @@ fileprivate extension String {
  */
 private class ButtonScrollView: UIScrollView {
     override func touchesShouldCancel(in view: UIView) -> Bool {
-        return true
+        true
     }
 }

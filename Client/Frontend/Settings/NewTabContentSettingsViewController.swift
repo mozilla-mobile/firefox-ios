@@ -35,7 +35,7 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
             title: NSAttributedString(string: .SettingsNewTabTopSites),
             subtitle: nil,
             accessibilityIdentifier: "NewTabAsFirefoxHome",
-            isChecked: {return self.currentChoice == NewTabPage.topSites},
+            isChecked: { self.currentChoice == NewTabPage.topSites },
             onChecked: {
                 self.currentChoice = NewTabPage.topSites
                 onFinished()
@@ -44,7 +44,7 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
             title: NSAttributedString(string: .SettingsNewTabBlankPage),
             subtitle: nil,
             accessibilityIdentifier: "NewTabAsBlankPage",
-            isChecked: {return self.currentChoice == NewTabPage.blankPage},
+            isChecked: { self.currentChoice == NewTabPage.blankPage },
             onChecked: {
                 self.currentChoice = NewTabPage.blankPage
                 onFinished()
@@ -55,7 +55,7 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
             defaultValue: nil,
             placeholder: .CustomNewPageURL,
             accessibilityIdentifier: "NewTabAsCustomURL",
-            isChecked: { return !showTopSites.isChecked() && !showBlankPage.isChecked() },
+            isChecked: { !showTopSites.isChecked() && !showBlankPage.isChecked() },
             settingDidChange: { (string) in
                 self.currentChoice = NewTabPage.homePage
                 self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.NewTabPrefKey)

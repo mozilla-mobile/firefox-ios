@@ -142,11 +142,11 @@ extension ResetTests {
 // MARK: - MockBrowserProfile
 class MockBrowserProfile: BrowserProfile {
     var peekSyncManager: BrowserSyncManager {
-        return self.syncManager as! BrowserSyncManager
+        self.syncManager as! BrowserSyncManager
     }
 
     var peekTabs: SQLiteRemoteClientsAndTabs {
-        return self.remoteClientsAndTabs as! SQLiteRemoteClientsAndTabs
+        self.remoteClientsAndTabs as! SQLiteRemoteClientsAndTabs
     }
 }
 
@@ -158,15 +158,15 @@ class MockEngineStateChanges: EngineStateChanges {
     var clearLocalCommandsCount = 0
 
     func collectionsThatNeedLocalReset() -> [String] {
-        return self.collections
+        self.collections
     }
 
     func enginesEnabled() -> [String] {
-        return self.enabled
+        self.enabled
     }
 
     func enginesDisabled() -> [String] {
-        return self.disabled
+        self.disabled
     }
 
     func clearLocalCommands() {

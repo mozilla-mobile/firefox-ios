@@ -207,7 +207,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.count
+        Section.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -314,7 +314,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0
+        0
     }
 
     private func unfoldSearchbar() {

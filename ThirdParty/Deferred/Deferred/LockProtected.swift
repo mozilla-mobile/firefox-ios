@@ -22,14 +22,14 @@ public final class LockProtected<T> {
     }
 
     public func withReadLock<U>(block: (T) -> U) -> U {
-        return lock.withReadLock { [unowned self] in
-            return block(self.item)
+        lock.withReadLock { [unowned self] in
+            block(self.item)
         }
     }
 
     public func withWriteLock<U>(block: (inout T) -> U) -> U {
-        return lock.withWriteLock { [unowned self] in
-            return block(&self.item)
+        lock.withWriteLock { [unowned self] in
+            block(&self.item)
         }
     }
 }

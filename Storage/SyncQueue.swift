@@ -45,12 +45,12 @@ public struct SyncCommand: Equatable {
     }
 
     public func withClientGUID(_ clientGUID: String?) -> SyncCommand {
-        return SyncCommand(id: self.commandID, value: self.value, clientGUID: clientGUID)
+        SyncCommand(id: self.commandID, value: self.value, clientGUID: clientGUID)
     }
 }
 
 public func == (lhs: SyncCommand, rhs: SyncCommand) -> Bool {
-    return lhs.value == rhs.value
+    lhs.value == rhs.value
 }
 
 public protocol SyncCommands {

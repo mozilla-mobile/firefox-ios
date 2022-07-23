@@ -17,11 +17,11 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFl
     lazy var urlSession: URLSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
 
     private lazy var pocketKey: String = {
-        return Bundle.main.object(forInfoDictionaryKey: PocketSponsoredConstants.pocketEnvAPIKey) as? String ?? ""
+        Bundle.main.object(forInfoDictionaryKey: PocketSponsoredConstants.pocketEnvAPIKey) as? String ?? ""
     }()
 
     lazy var urlCache: URLCache = {
-        return URLCache.shared
+        URLCache.shared
     }()
 
     private lazy var pocketId: String = {

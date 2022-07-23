@@ -165,7 +165,7 @@ class SnackBar: UIView {
      * - returns: true if the snackbar should be kept alive
      */
     func shouldPersist(_ tab: Tab) -> Bool {
-        return true
+        true
     }
 
     override func updateConstraints() {
@@ -184,7 +184,7 @@ class SnackBar: UIView {
     }
 
     var showing: Bool {
-        return alpha != 0 && self.superview != nil
+        alpha != 0 && self.superview != nil
     }
 
     func show() {

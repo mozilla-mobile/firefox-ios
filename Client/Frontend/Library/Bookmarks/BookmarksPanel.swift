@@ -147,57 +147,66 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     private func getNewBookmarkAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .BookmarksNewBookmark,
-                                     iconString: ImageIdentifiers.actionAddBookmark,
-                                     tapHandler: { _ in
-            guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
+        SingleActionViewModel(title: .BookmarksNewBookmark,
+                iconString: ImageIdentifiers.actionAddBookmark,
+                tapHandler: { _ in
+                    guard let bookmarkFolder = self.viewModel.bookmarkFolder else {
+                        return
+                    }
 
-            self.updatePanelState(newState: .bookmarks(state: .itemEditMode))
-            let detailController = BookmarkDetailPanel(profile: self.profile,
-                                                       withNewBookmarkNodeType: .bookmark,
-                                                       parentBookmarkFolder: bookmarkFolder)
-            self.navigationController?.pushViewController(detailController, animated: true)
-        }).items
+                    self.updatePanelState(newState: .bookmarks(state: .itemEditMode))
+                    let detailController = BookmarkDetailPanel(profile: self.profile,
+                            withNewBookmarkNodeType: .bookmark,
+                            parentBookmarkFolder: bookmarkFolder)
+                    self.navigationController?.pushViewController(detailController, animated: true)
+                })
+                .items
     }
 
     private func getNewFolderAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .BookmarksNewFolder,
-                                     iconString: ImageIdentifiers.bookmarkFolder,
-                                     tapHandler: { _ in
-            guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
+        SingleActionViewModel(title: .BookmarksNewFolder,
+                iconString: ImageIdentifiers.bookmarkFolder,
+                tapHandler: { _ in
+                    guard let bookmarkFolder = self.viewModel.bookmarkFolder else {
+                        return
+                    }
 
-            self.updatePanelState(newState: .bookmarks(state: .itemEditMode))
-            let detailController = BookmarkDetailPanel(profile: self.profile,
-                                                       withNewBookmarkNodeType: .folder,
-                                                       parentBookmarkFolder: bookmarkFolder)
-            self.navigationController?.pushViewController(detailController, animated: true)
-        }).items
+                    self.updatePanelState(newState: .bookmarks(state: .itemEditMode))
+                    let detailController = BookmarkDetailPanel(profile: self.profile,
+                            withNewBookmarkNodeType: .folder,
+                            parentBookmarkFolder: bookmarkFolder)
+                    self.navigationController?.pushViewController(detailController, animated: true)
+                })
+                .items
     }
 
     private func getNewSeparatorAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .BookmarksNewSeparator,
-                                     iconString: ImageIdentifiers.navMenu,
-                                     tapHandler: { _ in
-            let centerVisibleRow = self.centerVisibleRow()
+        SingleActionViewModel(title: .BookmarksNewSeparator,
+                iconString: ImageIdentifiers.navMenu,
+                tapHandler: { _ in
+                    let centerVisibleRow = self.centerVisibleRow()
 
-            self.profile.places.createSeparator(parentGUID: self.viewModel.bookmarkFolderGUID,
-                                                position: UInt32(centerVisibleRow)) >>== { guid in
-                self.profile.places.getBookmark(guid: guid).uponQueue(.main) { result in
-                    guard let bookmarkNode = result.successValue,
-                          let bookmarkSeparator = bookmarkNode as? BookmarkSeparatorData
-                    else { return }
+                    self.profile.places.createSeparator(parentGUID: self.viewModel.bookmarkFolderGUID,
+                            position: UInt32(centerVisibleRow)) >>== { guid in
+                        self.profile.places.getBookmark(guid: guid).uponQueue(.main) { result in
+                            guard let bookmarkNode = result.successValue,
+                                  let bookmarkSeparator = bookmarkNode as? BookmarkSeparatorData
+                            else {
+                                return
+                            }
 
-                    let indexPath = IndexPath(row: centerVisibleRow,
-                                              section: BookmarksPanelViewModel.BookmarksSection.bookmarks.rawValue)
-                    self.tableView.beginUpdates()
-                    self.viewModel.bookmarkNodes.insert(bookmarkSeparator, at: centerVisibleRow)
-                    self.tableView.insertRows(at: [indexPath], with: .automatic)
-                    self.tableView.endUpdates()
+                            let indexPath = IndexPath(row: centerVisibleRow,
+                                    section: BookmarksPanelViewModel.BookmarksSection.bookmarks.rawValue)
+                            self.tableView.beginUpdates()
+                            self.viewModel.bookmarkNodes.insert(bookmarkSeparator, at: centerVisibleRow)
+                            self.tableView.insertRows(at: [indexPath], with: .automatic)
+                            self.tableView.endUpdates()
 
-                    self.flashRow(at: indexPath)
-                }
-            }
-        }).items
+                            self.flashRow(at: indexPath)
+                        }
+                    }
+                })
+                .items
     }
 
     private func centerVisibleRow() -> Int {
@@ -273,9 +282,9 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     // MARK: - Utility
 
     private func indexPathIsValid(_ indexPath: IndexPath) -> Bool {
-        return indexPath.section < numberOfSections(in: tableView)
-        && indexPath.row < tableView(tableView, numberOfRowsInSection: indexPath.section)
-        && viewModel.bookmarkFolderGUID != BookmarkRoots.MobileFolderGUID
+        indexPath.section < numberOfSections(in: tableView)
+                && indexPath.row < tableView(tableView, numberOfRowsInSection: indexPath.section)
+                && viewModel.bookmarkFolderGUID != BookmarkRoots.MobileFolderGUID
     }
 
     private func numberOfSections(in tableView: UITableView) -> Int {
@@ -362,11 +371,11 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.bookmarkNodes.count
+        viewModel.bookmarkNodes.count
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        UITableView.automaticDimension
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -407,11 +416,11 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return isCurrentFolderEditable(at: indexPath)
+        isCurrentFolderEditable(at: indexPath)
     }
 
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return isCurrentFolderEditable(at: indexPath)
+        isCurrentFolderEditable(at: indexPath)
     }
 
     private func showBookmarkDetailController(for node: FxBookmarkNode, folder: FxBookmarkNode) {
@@ -464,7 +473,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
+        0
     }
 }
 

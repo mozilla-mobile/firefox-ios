@@ -9,7 +9,7 @@ protocol FeatureFlaggable { }
 
 extension FeatureFlaggable {
     var featureFlags: FeatureFlagsManager {
-        return FeatureFlagsManager.shared
+        FeatureFlagsManager.shared
     }
 }
 

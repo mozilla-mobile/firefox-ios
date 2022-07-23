@@ -18,7 +18,7 @@ extension CGRect {
 
 extension Data {
     public var isGIF: Bool {
-        return [0x47, 0x49, 0x46].elementsEqual(prefix(3))
+        [0x47, 0x49, 0x46].elementsEqual(prefix(3))
     }
 }
 
@@ -47,7 +47,7 @@ extension UIImage {
     }
 
     public static func templateImageNamed(_ name: String) -> UIImage? {
-        return UIImage(named: name)?.withRenderingMode(.alwaysTemplate)
+        UIImage(named: name)?.withRenderingMode(.alwaysTemplate)
     }
 
     // Uses compositor blending to apply color to an image.

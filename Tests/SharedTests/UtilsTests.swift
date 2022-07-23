@@ -13,7 +13,7 @@ class UtilsTests: XCTestCase {
     func testMapUtils() {
         let m: [String: Int] = ["foo": 123, "bar": 456]
         let f: (Int) -> Int? = { v in
-            return (v > 200) ? 999 : nil
+            (v > 200) ? 999 : nil
         }
 
         let o = mapValues(m, f: f)

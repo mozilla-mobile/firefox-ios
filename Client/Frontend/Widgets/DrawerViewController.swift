@@ -83,8 +83,8 @@ public class DrawerViewController: UIViewController, NotificationThemeable {
     }
 
     fileprivate var showingPadLayout: Bool {
-        return traitCollection.userInterfaceIdiom == .pad &&
-            traitCollection.horizontalSizeClass == .regular
+        traitCollection.userInterfaceIdiom == .pad &&
+                traitCollection.horizontalSizeClass == .regular
     }
 
     public init(childViewController: UIViewController) {

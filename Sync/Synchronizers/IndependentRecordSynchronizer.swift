@@ -37,8 +37,8 @@ class Uploader {
 
 open class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronizer {
     private func reportApplyStatsWrap<T>(apply: @escaping (T) -> Success) -> (T) -> Success {
-        return { record in
-            return apply(record).bind({ result in
+        { record in
+            apply(record).bind({ result in
                 var stats = SyncDownloadStats()
                 stats.applied = 1
                 if result.isSuccess {

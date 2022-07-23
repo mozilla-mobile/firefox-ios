@@ -26,7 +26,7 @@ public extension String {
     }
 
     func unescape() -> String? {
-        return self.removingPercentEncoding
+        self.removingPercentEncoding
     }
 
     /**
@@ -50,7 +50,7 @@ public extension String {
     }
 
     private var stringWithAdditionalEscaping: String {
-        return self.replacingOccurrences(of: "|", with: "%7C")
+        self.replacingOccurrences(of: "|", with: "%7C")
     }
 
     var asURL: URL? {
@@ -58,8 +58,8 @@ public extension String {
         // Let's escape | for them.
         // We'd love to use one of the more sophisticated CFURL* or NSString.* functions, but
         // none seem to be quite suitable.
-        return URL(string: self) ??
-               URL(string: self.stringWithAdditionalEscaping)
+        URL(string: self) ??
+                URL(string: self.stringWithAdditionalEscaping)
     }
 
     /// Returns a new string made by removing the leading String characters contained
@@ -93,13 +93,13 @@ public extension String {
     }
 
     static func contentsOfFileWithResourceName(_ name: String, ofType type: String, fromBundle bundle: Bundle, encoding: String.Encoding, error: NSErrorPointer) -> String? {
-        return bundle.path(forResource: name, ofType: type).flatMap {
+        bundle.path(forResource: name, ofType: type).flatMap {
             try? String(contentsOfFile: $0, encoding: encoding)
         }
     }
 
     func remove(_ string: String?) -> String {
-        return self.replacingOccurrences(of: string ?? "", with: "")
+        self.replacingOccurrences(of: string ?? "", with: "")
     }
 
     func replaceFirstOccurrence(of original: String, with replacement: String) -> String {

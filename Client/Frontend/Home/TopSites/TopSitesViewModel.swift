@@ -116,7 +116,7 @@ class TopSitesViewModel {
 extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
     var sectionType: HomepageSectionType {
-        return .topSites
+        .topSites
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
@@ -128,7 +128,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.topSites, checking: .buildAndUser)
+        featureFlags.isFeatureEnabled(.topSites, checking: .buildAndUser)
     }
 
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
@@ -171,7 +171,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var hasData: Bool {
-        return !topSites.isEmpty
+        !topSites.isEmpty
     }
 
     func updateData(completion: @escaping () -> Void) {
@@ -218,7 +218,7 @@ extension TopSitesViewModel: HomepageSectionHandler {
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         // Setup is done through configure(collectionView:indexPath:), shouldn't be called
-        return UICollectionViewCell()
+        UICollectionViewCell()
     }
 
     func didSelectItem(at indexPath: IndexPath,

@@ -78,7 +78,7 @@ class ShareViewController: UIViewController {
 
     override var extensionContext: NSExtensionContext? {
         get {
-            return delegate?.getValidExtensionContext()
+            delegate?.getValidExtensionContext()
         }
     }
 

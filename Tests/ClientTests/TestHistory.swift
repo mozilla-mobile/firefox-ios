@@ -215,7 +215,6 @@ class TestHistory: ProfileTest {
 
             self.measure({ () -> Void in
                 self.checkSites(h, urls: urls)
-                return
             })
 
             self.clear(h)

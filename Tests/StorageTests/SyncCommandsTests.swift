@@ -11,11 +11,11 @@ import XCTest
 import SwiftyJSON
 
 func byValue(_ a: SyncCommand, b: SyncCommand) -> Bool {
-    return a.value < b.value
+    a.value < b.value
 }
 
 func byClient(_ a: RemoteClient, b: RemoteClient) -> Bool {
-    return a.guid! < b.guid!
+    a.guid! < b.guid!
 }
 
 class SyncCommandsTests: XCTestCase {
@@ -147,7 +147,7 @@ class SyncCommandsTests: XCTestCase {
     func testInsertWithMultipleCommands() {
         let e = self.expectation(description: "Insert.")
         let syncCommands = shareItems.map { item in
-            return SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
+            SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
         }
         clientsAndTabs.insertCommands(syncCommands, forClients: clients).upon {
             XCTAssertTrue($0.isSuccess)
@@ -169,7 +169,7 @@ class SyncCommandsTests: XCTestCase {
 
     func testGetForAllClients() {
         let syncCommands = shareItems.map { item in
-            return SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
+                    SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
         }.sorted(by: byValue)
         clientsAndTabs.insertCommands(syncCommands, forClients: clients).succeeded()
 
@@ -191,7 +191,7 @@ class SyncCommandsTests: XCTestCase {
 
     func testDeleteForValidClient() {
         let syncCommands = shareItems.map { item in
-            return SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
+                    SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
         }.sorted(by: byValue)
 
         var client = self.clients[0]
@@ -235,7 +235,7 @@ class SyncCommandsTests: XCTestCase {
 
     func testDeleteForAllClients() {
         let syncCommands = shareItems.map { item in
-            return SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
+            SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
         }
 
         let a = self.expectation(description: "Wipe for all clients.")

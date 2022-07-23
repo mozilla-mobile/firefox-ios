@@ -20,11 +20,11 @@ struct LegacyWallpaperImageResourceName {
     let landscape: String
 
     var portraitPath: String {
-        return "\(folder)/\(portrait)"
+        "\(folder)/\(portrait)"
     }
 
     var landscapePath: String {
-        return "\(folder)/\(landscape)"
+        "\(folder)/\(landscape)"
     }
 
     init(folder: String, portrait: String, landscape: String) {

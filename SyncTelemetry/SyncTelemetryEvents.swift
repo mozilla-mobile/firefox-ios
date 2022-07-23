@@ -137,7 +137,7 @@ public struct Event: Decodable {
     }
 
     public func toArray() -> [Any] {
-        return [timestamp, category, method, object, value ?? NSNull(), extra ?? NSNull()]
+        [timestamp, category, method, object, value ?? NSNull(), extra ?? NSNull()]
     }
 
     public func record(intoPrefs prefs: Prefs) {
@@ -154,6 +154,6 @@ public struct Event: Decodable {
 
 extension Event: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return toArray().description
+        toArray().description
     }
 }

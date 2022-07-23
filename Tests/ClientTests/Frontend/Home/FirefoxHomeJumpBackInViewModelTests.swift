@@ -344,25 +344,25 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
 
 extension FirefoxHomeJumpBackInViewModelTests {
     var remoteClient: RemoteClient {
-        return RemoteClient(guid: nil,
-                            name: "Fake client",
-                            modified: 1,
-                            type: nil,
-                            formfactor: nil,
-                            os: nil,
-                            version: nil,
-                            fxaDeviceId: nil)
+        RemoteClient(guid: nil,
+                name: "Fake client",
+                modified: 1,
+                type: nil,
+                formfactor: nil,
+                os: nil,
+                version: nil,
+                fxaDeviceId: nil)
     }
 
     func remoteDesktopClient(name: String = "Fake client") -> RemoteClient {
-        return RemoteClient(guid: nil,
-                            name: name,
-                            modified: 1,
-                            type: "desktop",
-                            formfactor: nil,
-                            os: nil,
-                            version: nil,
-                            fxaDeviceId: nil)
+        RemoteClient(guid: nil,
+                name: name,
+                modified: 1,
+                type: "desktop",
+                formfactor: nil,
+                os: nil,
+                version: nil,
+                fxaDeviceId: nil)
     }
 
     func remoteTabs(idRange: ClosedRange<Int> = 1...1) -> [RemoteTab] {

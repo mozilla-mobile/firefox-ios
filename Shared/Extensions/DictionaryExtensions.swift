@@ -5,7 +5,9 @@
 extension Dictionary {
 
     public func merge(with dictionary: Dictionary) -> Dictionary {
-        return self.merging(dictionary) { (_, new) in new }
+        self.merging(dictionary) { (_, new) in
+            new
+        }
     }
 
     public var asString: String? {

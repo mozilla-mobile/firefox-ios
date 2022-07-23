@@ -19,7 +19,7 @@ struct InactiveTabItemCellModel {
     }
 
     var fontForLabel: UIFont {
-        return DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 17)
+        DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 17)
     }
 
     var title: String?

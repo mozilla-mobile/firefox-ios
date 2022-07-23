@@ -20,7 +20,7 @@ public struct ShareItem {
 
     // We only support sharing HTTP and HTTPS URLs, as well as data URIs.
     public var isShareable: Bool {
-        return URL(string: url)?.isWebPage() ?? false
+        URL(string: url)?.isWebPage() ?? false
     }
 }
 

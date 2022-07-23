@@ -10,7 +10,9 @@ import Shared
 protocol Themeable { }
 
 extension Themeable {
-    var themeSystem: ThemeManager { return ThemeManager.shared }
+    var themeSystem: ThemeManager {
+        ThemeManager.shared
+    }
 }
 
 /// The `ThemeManager` will be responsible for providing the theme throughout the app
@@ -104,6 +106,6 @@ final class ThemeManager {
     /// in the future, this empty function is merely serving as a placeholder.
     private func verify(customTheme: CustomTheme) -> Theme? {
 
-        return nil
+        nil
     }
 }

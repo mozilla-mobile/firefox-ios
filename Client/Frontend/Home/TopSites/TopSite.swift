@@ -13,31 +13,31 @@ final class TopSite {
     var title: String
 
     var sponsoredText: String {
-        return .FirefoxHomepage.Shortcuts.Sponsored
+        .FirefoxHomepage.Shortcuts.Sponsored
     }
 
     var accessibilityLabel: String? {
-        return isSponsoredTile ? "\(title), \(sponsoredText)" : title
+        isSponsoredTile ? "\(title), \(sponsoredText)" : title
     }
 
     var isPinned: Bool {
-        return (site as? PinnedSite) != nil
+        (site as? PinnedSite) != nil
     }
 
     var isSuggested: Bool {
-        return (site as? SuggestedSite) != nil
+        (site as? SuggestedSite) != nil
     }
 
     var isSponsoredTile: Bool {
-        return (site as? SponsoredTile) != nil
+        (site as? SponsoredTile) != nil
     }
 
     var isGoogleGUID: Bool {
-        return site.guid == GoogleTopSiteManager.Constants.googleGUID
+        site.guid == GoogleTopSiteManager.Constants.googleGUID
     }
 
     var isGoogleURL: Bool {
-        return site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
+        site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
     }
 
     var imageLoaded: ((UIImage?) -> Void)?

@@ -15,11 +15,11 @@ private let asciiPunycode = Array("abcdefghijklmnopqrstuvwxyz0123456789")
 
 extension String {
     fileprivate func toValue(_ index: Int) -> Character {
-        return asciiPunycode[index]
+        asciiPunycode[index]
     }
 
     fileprivate func toIndex(_ value: Character) -> Int {
-        return asciiPunycode.firstIndex(of: value)!
+        asciiPunycode.firstIndex(of: value)!
     }
 
     fileprivate func adapt(_ delta: Int, numPoints: Int, firstTime: Bool) -> Int {
@@ -166,7 +166,7 @@ extension String {
     }
 
     fileprivate func isValidPunycodeScala(_ s: String) -> Bool {
-        return s.hasPrefix(prefixPunycode)
+        s.hasPrefix(prefixPunycode)
     }
 
     public func utf8HostToAscii() -> String {

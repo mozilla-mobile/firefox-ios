@@ -13,7 +13,7 @@ extension HistoryPanel: LibraryPanelContextMenu {
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        return siteAt(indexPath: indexPath)
+        siteAt(indexPath: indexPath)
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {

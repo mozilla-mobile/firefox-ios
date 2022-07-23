@@ -8,7 +8,7 @@ import Storage
 
 extension LibraryViewController: UIToolbarDelegate {
     func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
+        .topAttached
     }
 }
 
@@ -141,7 +141,7 @@ class LibraryViewController: UIViewController {
     }
 
     private func shouldHideBottomToolbar(panel: LibraryPanel) -> Bool {
-        return panel.bottomToolbarItems.isEmpty
+        panel.bottomToolbarItems.isEmpty
     }
 
     func setupLibraryPanel(_ panel: UIViewController,

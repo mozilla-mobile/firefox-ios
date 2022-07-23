@@ -62,7 +62,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.count
+        Section.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -164,7 +164,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
 
     func filterContentForSearchText(_ searchText: String) {
         filteredSiteRecords = viewModel.siteRecords.filter({ siteRecord in
-            return siteRecord.displayName.lowercased().contains(searchText.lowercased())
+            siteRecord.displayName.lowercased().contains(searchText.lowercased())
         })
 
         tableView.reloadData()

@@ -79,8 +79,8 @@ public struct SearchProviderModel {
 extension SearchProviderModel {
     func listAdUrls(urls: [String]) -> [String] {
         let predicates: [Predicate] = extraAdServersRegexps.map { regex in
-            return { url in
-                return url.range(of: regex, options: .regularExpression) != nil
+            { url in
+                url.range(of: regex, options: .regularExpression) != nil
             }
         }
 
@@ -101,7 +101,7 @@ class AdsTelemetryHelper: TabContentScript {
     fileprivate weak var tab: Tab?
 
     class func name() -> String {
-        return "Ads"
+        "Ads"
     }
 
     required init(tab: Tab) {
@@ -109,7 +109,7 @@ class AdsTelemetryHelper: TabContentScript {
     }
 
     func scriptMessageHandlerName() -> String? {
-        return "adsMessageHandler"
+        "adsMessageHandler"
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {

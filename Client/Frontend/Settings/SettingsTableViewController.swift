@@ -45,29 +45,51 @@ class Setting: NSObject {
     weak var delegate: SettingsDelegate?
 
     // The url the SettingsContentViewController will show, e.g. Licenses and Privacy Policy.
-    var url: URL? { return nil }
+    var url: URL? {
+        nil
+    }
 
     // The title shown on the pref.
-    var title: NSAttributedString? { return _title }
-    var footerTitle: NSAttributedString? { return _footerTitle }
-    var cellHeight: CGFloat? { return _cellHeight}
+    var title: NSAttributedString? {
+        _title
+    }
+    var footerTitle: NSAttributedString? {
+        _footerTitle
+    }
+    var cellHeight: CGFloat? {
+        _cellHeight
+    }
     fileprivate(set) var accessibilityIdentifier: String?
 
     // An optional second line of text shown on the pref.
-    var status: NSAttributedString? { return nil }
+    var status: NSAttributedString? {
+        nil
+    }
 
     // Whether or not to show this pref.
-    var hidden: Bool { return false }
+    var hidden: Bool {
+        false
+    }
 
-    var style: UITableViewCell.CellStyle { return .subtitle }
+    var style: UITableViewCell.CellStyle {
+        .subtitle
+    }
 
-    var accessoryType: UITableViewCell.AccessoryType { return .none }
+    var accessoryType: UITableViewCell.AccessoryType {
+        .none
+    }
 
-    var accessoryView: UIImageView? { return nil }
+    var accessoryView: UIImageView? {
+        nil
+    }
 
-    var textAlignment: NSTextAlignment { return .natural }
+    var textAlignment: NSTextAlignment {
+        .natural
+    }
 
-    var image: UIImage? { return _image }
+    var image: UIImage? {
+        _image
+    }
 
     var enabled: Bool = true
 
@@ -114,10 +136,12 @@ class Setting: NSObject {
     }
 
     // Called when the pref is tapped.
-    func onClick(_ navigationController: UINavigationController?) { return }
+    func onClick(_ navigationController: UINavigationController?) {
+    }
 
     // Called when the pref is long-pressed.
-    func onLongPress(_ navigationController: UINavigationController?) { return }
+    func onLongPress(_ navigationController: UINavigationController?) {
+    }
 
     // Helper method to set up and push a SettingsContentViewController
     func setUpAndPushSettingsContentViewController(_ navigationController: UINavigationController?, _ url: URL? = nil) {
@@ -250,7 +274,7 @@ class BoolSetting: Setting, FeatureFlaggable {
     }
 
     override var status: NSAttributedString? {
-        return statusText
+        statusText
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -329,7 +353,7 @@ class PrefPersister: SettingValuePersister {
     }
 
     func readPersistedValue() -> String? {
-        return prefs.stringForKey(prefKey)
+        prefs.stringForKey(prefKey)
     }
 
     func writePersistedValue(value: String?) {
@@ -369,7 +393,9 @@ class WebPageSetting: StringPrefSetting {
         defaultValue: String? = nil,
         placeholder: String,
         accessibilityIdentifier: String,
-        isChecked: @escaping () -> Bool = { return false },
+        isChecked: @escaping () -> Bool = {
+            false
+        },
         settingDidChange: ((String?) -> Void)? = nil
     ) {
         self.isChecked = isChecked
@@ -486,7 +512,7 @@ class StringSetting: Setting, UITextFieldDelegate {
     /// before it is saved or tested.
     /// Default implementation does nothing.
     func prepareValidValue(userInput value: String?) -> String? {
-        return value
+        value
     }
 
     @objc func textFieldDidChange(_ textField: UITextField) {
@@ -522,7 +548,7 @@ class CheckmarkSetting: Setting {
     let checkmarkStyle: CheckmarkSettingStyle
 
     override var status: NSAttributedString? {
-        return subtitle
+        subtitle
     }
 
     init(
@@ -642,10 +668,12 @@ class AccountSetting: Setting {
     unowned var settings: SettingsTableViewController
 
     var profile: Profile {
-        return settings.profile
+        settings.profile
     }
 
-    override var title: NSAttributedString? { return nil }
+    override var title: NSAttributedString? {
+        nil
+    }
 
     init(settings: SettingsTableViewController) {
         self.settings = settings
@@ -659,15 +687,21 @@ class AccountSetting: Setting {
         }
     }
 
-    override var accessoryType: UITableViewCell.AccessoryType { return .none }
+    override var accessoryType: UITableViewCell.AccessoryType {
+        .none
+    }
 }
 
 class WithAccountSetting: AccountSetting {
-    override var hidden: Bool { return !profile.hasAccount() }
+    override var hidden: Bool {
+        !profile.hasAccount()
+    }
 }
 
 class WithoutAccountSetting: AccountSetting {
-    override var hidden: Bool { return profile.hasAccount() }
+    override var hidden: Bool {
+        profile.hasAccount()
+    }
 }
 
 @objc
@@ -740,7 +774,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
     // Override to provide settings in subclasses
     func generateSettings() -> [SettingSection] {
-        return []
+        []
     }
 
     @objc fileprivate func syncDidChangeState() {
@@ -781,7 +815,7 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return settings.count
+        settings.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -825,7 +859,7 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension
+        UITableView.automaticDimension
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

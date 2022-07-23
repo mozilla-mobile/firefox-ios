@@ -19,7 +19,7 @@ protocol InternalSchemeResponse {
 class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
 
     static func response(forUrl url: URL) -> URLResponse {
-        return URLResponse(url: url, mimeType: "text/html", expectedContentLength: -1, textEncodingName: "utf-8")
+        URLResponse(url: url, mimeType: "text/html", expectedContentLength: -1, textEncodingName: "utf-8")
     }
 
     // Responders are looked up based on the path component, for instance responder["about/license"] is used for 'internal://local/about/license'

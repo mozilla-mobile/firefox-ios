@@ -53,7 +53,7 @@ class ReaddleSparkIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders, bodyHName: "textbody", toHName: "recipient").asURL
+        constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders, bodyHName: "textbody", toHName: "recipient").asURL
     }
 }
 
@@ -70,7 +70,7 @@ class AirmailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders, bodyHName: "htmlBody").asURL
+        constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders, bodyHName: "htmlBody").asURL
     }
 }
 
@@ -85,7 +85,7 @@ class MyMailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
+        constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
     }
 }
 
@@ -107,7 +107,7 @@ class MSOutlookIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
+        constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
     }
 }
 
@@ -121,7 +121,7 @@ class YMailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
+        constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
     }
 }
 
@@ -136,7 +136,7 @@ class GoogleGmailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
+        constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
     }
 }
 
@@ -151,6 +151,6 @@ class FastmailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
+        constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
     }
 }

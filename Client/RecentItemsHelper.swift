@@ -17,24 +17,28 @@ protocol RecentlySavedItem {
 
 extension RecentlySavedItem {
     func getNumberOfDays(calendar: Calendar, date: Date) -> Int {
-        return calendar.numberOfDaysBetween(getItemDate(), and: date)
+        calendar.numberOfDaysBetween(getItemDate(), and: date)
     }
 }
 
 extension ReadingListItem: RecentlySavedItem {
-    var numberOfDaysBeforeStale: Int { return 7 }
+    var numberOfDaysBeforeStale: Int {
+        7
+    }
 
     func getItemDate() -> Date {
         // ReadingListItem is using timeIntervalSinceReferenceDate to save lastModified timestamp
-        return Date(timeIntervalSinceReferenceDate: Double(lastModified) / 1000)
+        Date(timeIntervalSinceReferenceDate: Double(lastModified) / 1000)
     }
 }
 
 extension BookmarkItemData: RecentlySavedItem {
-    var numberOfDaysBeforeStale: Int { return 10 }
+    var numberOfDaysBeforeStale: Int {
+        10
+    }
 
     func getItemDate() -> Date {
-        return Date.fromTimestamp(Timestamp(dateAdded))
+        Date.fromTimestamp(Timestamp(dateAdded))
     }
 }
 
@@ -44,7 +48,9 @@ struct RecentlySavedBookmark: RecentlySavedItem {
     var title: String
     var url: String
     var dateAdded: Timestamp
-    var numberOfDaysBeforeStale: Int { return 10 }
+    var numberOfDaysBeforeStale: Int {
+        10
+    }
 
     init(bookmark: BookmarkItemData) {
         self.title = bookmark.title
@@ -53,7 +59,7 @@ struct RecentlySavedBookmark: RecentlySavedItem {
     }
 
     func getItemDate() -> Date {
-        return Date.fromTimestamp(dateAdded)
+        Date.fromTimestamp(dateAdded)
     }
 }
 
@@ -67,8 +73,8 @@ class RecentItemsHelper {
     ///   - date: The date to filter against.
     /// - Returns: A filtered list of items that are within the cutoff date.
     func filterStaleItems(recentItems: [RecentlySavedItem], since date: Date = Date()) -> [RecentlySavedItem] {
-        return recentItems.filter {
-            return $0.getNumberOfDays(calendar: calendar, date: date) <= $0.numberOfDaysBeforeStale
+        recentItems.filter {
+            $0.getNumberOfDays(calendar: calendar, date: date) <= $0.numberOfDaysBeforeStale
         }
     }
 }

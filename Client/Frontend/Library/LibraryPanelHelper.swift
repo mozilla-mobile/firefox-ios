@@ -26,7 +26,7 @@ protocol LibraryPanel: UIViewController, NotificationThemeable {
 
 extension LibraryPanel {
     var flexibleSpace: UIBarButtonItem {
-        return UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
     }
 
     func updatePanelState(newState: LibraryPanelMainState) {
@@ -34,7 +34,7 @@ extension LibraryPanel {
     }
 
     func shouldDismissOnDone() -> Bool {
-        return true
+        true
     }
 
     func handleLeftTopButton() {

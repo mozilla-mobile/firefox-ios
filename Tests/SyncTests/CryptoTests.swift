@@ -54,7 +54,7 @@ c2l0cyI6W3siZGF0ZSI6MTMxOTE0OTAxMjM3MjQyNSwidHlwZSI6MX1dfQ==
     }
 
     func dataFromBase64(b64: String) -> Data {
-        return Bytes.dataFromBase64(b64)!
+        Bytes.dataFromBase64(b64)!
     }
 
     func testDecrypt() {

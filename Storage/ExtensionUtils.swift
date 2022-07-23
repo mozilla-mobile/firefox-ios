@@ -6,8 +6,12 @@ import UIKit
 import MobileCoreServices
 
 extension NSItemProvider {
-    var isText: Bool { return hasItemConformingToTypeIdentifier(String(kUTTypeText)) }
-    var isUrl: Bool { return hasItemConformingToTypeIdentifier(String(kUTTypeURL)) }
+    var isText: Bool {
+        hasItemConformingToTypeIdentifier(String(kUTTypeText))
+    }
+    var isUrl: Bool {
+        hasItemConformingToTypeIdentifier(String(kUTTypeURL))
+    }
 
     func processText(completion: CompletionHandler?) {
         loadItem(forTypeIdentifier: String(kUTTypeText), options: nil, completionHandler: completion)

@@ -11,7 +11,7 @@ protocol GleanPlumbMessageManagable { }
 
 extension GleanPlumbMessageManagable {
     var messagingManager: GleanPlumbMessageManager {
-        return GleanPlumbMessageManager.shared
+        GleanPlumbMessageManager.shared
     }
 }
 
@@ -82,7 +82,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onStartup() { }
 
     func hasMessage(for surface: MessageSurfaceId) -> Bool {
-        return getNextMessage(for: surface) != nil
+        getNextMessage(for: surface) != nil
     }
 
     /// Returns the next valid and triggered message for the surface, if one exists.

@@ -46,7 +46,7 @@ class DeferredTests: XCTestCase {
         let e2 = self.expectation(description: "Second.")
 
         let f1: () -> Deferred<Maybe<Int>> = {
-            return deferMaybe(5)
+            deferMaybe(5)
         }
 
         let f2: (_ x: Int) -> Deferred<Maybe<String>> = {
@@ -71,7 +71,7 @@ class DeferredTests: XCTestCase {
     func testPassAccumulate_andDoesntLeak() {
         let expectation = self.expectation(description: "Deinit is called")
         let accumulateCall: () -> Success = {
-            return succeed()
+            succeed()
         }
 
         var myclass: AccumulateTestClass? = AccumulateTestClass(expectation: expectation, accumulateCall: accumulateCall)
@@ -86,7 +86,7 @@ class DeferredTests: XCTestCase {
         let expectation = self.expectation(description: "Deinit is called")
 
         let accumulateCall: () -> Success = {
-            return Deferred(value: Maybe(failure: AccumulateTestClass.Error()))
+            Deferred(value: Maybe(failure: AccumulateTestClass.Error()))
         }
 
         var myclass: AccumulateTestClass? = AccumulateTestClass(expectation: expectation, accumulateCall: accumulateCall)

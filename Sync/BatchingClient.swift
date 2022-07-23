@@ -10,11 +10,11 @@ open class SerializeRecordFailure<T: CleartextPayloadJSON>: MaybeErrorType, Sync
     public let record: Record<T>
 
     open var failureReasonName: SyncPingFailureReasonName {
-        return .otherError
+        .otherError
     }
 
     open var description: String {
-        return "Failed to serialize record: \(record)"
+        "Failed to serialize record: \(record)"
     }
 
     public init(record: Record<T>) {
@@ -47,19 +47,19 @@ private enum AccumulateRecordError: MaybeErrorType {
 
 open class TooManyRecordsError: MaybeErrorType, SyncPingFailureFormattable {
     open var description: String {
-        return "Trying to send too many records in a single batch."
+        "Trying to send too many records in a single batch."
     }
     open var failureReasonName: SyncPingFailureReasonName {
-        return .otherError
+        .otherError
     }
 }
 
 open class RecordsFailedToUpload: MaybeErrorType, SyncPingFailureFormattable {
     open var description: String {
-        return "Some records failed to upload"
+        "Some records failed to upload"
     }
     open var failureReasonName: SyncPingFailureReasonName {
-        return .otherError
+        .otherError
     }
 }
 
@@ -85,7 +85,7 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
     fileprivate var onCollectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp
 
     fileprivate func batchQueryParamWithValue(_ value: String) -> URLQueryItem {
-        return URLQueryItem(name: "batch", value: value)
+        URLQueryItem(name: "batch", value: value)
     }
 
     init(config: InfoConfiguration, ifUnmodifiedSince: Timestamp? = nil, serializeRecord: @escaping (Record<T>) -> String?,
@@ -115,7 +115,7 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
 
     // If in batch mode, will discard the batch if any record fails
     open func endSingleBatch() -> Deferred<Maybe<(succeeded: [GUID], lastModified: Timestamp?)>> {
-        return self.start() >>== { response in
+        self.start() >>== { response in
             let succeeded = response.value.success
             guard let token = self.batchToken else {
                 return deferMaybe((succeeded: succeeded, lastModified: response.metadata.lastModifiedMilliseconds))
@@ -124,7 +124,7 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
                 return deferMaybe(RecordsFailedToUpload())
             }
             return self.commitBatch(token) >>== { commitResp in
-                return deferMaybe((succeeded: succeeded, lastModified: commitResp.metadata.lastModifiedMilliseconds))
+                deferMaybe((succeeded: succeeded, lastModified: commitResp.metadata.lastModifiedMilliseconds))
             }
         }
     }
@@ -137,7 +137,9 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
         // Eagerly serializer the record prior to processing them so we can catch any issues
         // with record sizes before we start uploading to the server.
         let serializeThunks = records.map { record in
-            return { self.serialize(record) }
+            {
+                self.serialize(record)
+            }
         }
 
         return accumulate(serializeThunks) >>== {
@@ -169,7 +171,7 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
     }
 
     fileprivate func accumulateOrUpload(_ record: UploadRecord) -> Success {
-        return accumulateRecord(record).bind { result in
+        accumulateRecord(record).bind { result in
             // Try to add the record to our buffer
             guard let e = result.failureValue as? AccumulateRecordError else {
                 return succeed()
@@ -177,7 +179,9 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
 
             switch e {
             case .full(let uploadOp):
-                return uploadOp >>> { self.accumulateOrUpload(record) }
+                return uploadOp >>> {
+                    self.accumulateOrUpload(record)
+                }
             default:
                 return deferMaybe(e)
             }
@@ -228,7 +232,7 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
     }
 
     fileprivate func fitsInBatch(_ record: UploadRecord) -> Bool {
-        return totalRecords + 1 <= config.maxTotalRecords && totalBytes + record.sizeBytes <= config.maxTotalBytes
+        totalRecords + 1 <= config.maxTotalRecords && totalBytes + record.sizeBytes <= config.maxTotalBytes
     }
 
     fileprivate func addToBatch(_ record: UploadRecord) {

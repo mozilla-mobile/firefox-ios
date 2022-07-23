@@ -36,7 +36,7 @@ open class RustFirefoxAccounts {
     // This is used so that if a migration failed, show a UI indicator for the user to manually log in to their account.
     public var accountMigrationFailed: Bool {
         get {
-            return UserDefaults.standard.bool(forKey: "fxaccount-migration-failed")
+            UserDefaults.standard.bool(forKey: "fxaccount-migration-failed")
         }
         set {
             UserDefaults.standard.set(newValue, forKey: "fxaccount-migration-failed")
@@ -112,7 +112,7 @@ open class RustFirefoxAccounts {
     }
 
     public var isChinaSyncServiceEnabled: Bool {
-        return RustFirefoxAccounts.prefs?.boolForKey(PrefsKeys.KeyEnableChinaSyncService) ?? AppInfo.isChinaEdition
+        RustFirefoxAccounts.prefs?.boolForKey(PrefsKeys.KeyEnableChinaSyncService) ?? AppInfo.isChinaEdition
     }
 
     private func createAccountManager() -> FxAccountManager {

@@ -253,7 +253,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
     // MARK: - Interface
     public func shouldPresentHint() -> Bool {
-        return viewModel.shouldPresentContextualHint()
+        viewModel.shouldPresentContextualHint()
     }
 
     public func configure(

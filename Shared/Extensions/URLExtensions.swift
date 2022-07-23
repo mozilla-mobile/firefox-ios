@@ -7,7 +7,9 @@ import UIKit
 private struct ETLDEntry: CustomStringConvertible {
     let entry: String
 
-    var isNormal: Bool { return isWild || !isException }
+    var isNormal: Bool {
+        isWild || !isException
+    }
     var isWild: Bool = false
     var isException: Bool = false
 
@@ -18,7 +20,7 @@ private struct ETLDEntry: CustomStringConvertible {
     }
 
     fileprivate var description: String {
-        return "{ Entry: \(entry), isWildcard: \(isWild), isException: \(isException) }"
+        "{ Entry: \(entry), isWildcard: \(isWild), isException: \(isException) }"
     }
 }
 
@@ -44,7 +46,7 @@ private func loadEntries() -> TLDEntryMap? {
 }
 
 private var etldEntries: TLDEntryMap? = {
-    return loadEntries()
+    loadEntries()
 }()
 
 // MARK: - Local Resource URL Extensions
@@ -52,9 +54,9 @@ extension URL {
 
     public func allocatedFileSize() -> Int64 {
         // First try to get the total allocated size and in failing that, get the file allocated size
-        return getResourceLongLongForKey(URLResourceKey.totalFileAllocatedSizeKey.rawValue)
-            ?? getResourceLongLongForKey(URLResourceKey.fileAllocatedSizeKey.rawValue)
-            ?? 0
+        getResourceLongLongForKey(URLResourceKey.totalFileAllocatedSizeKey.rawValue)
+                ?? getResourceLongLongForKey(URLResourceKey.fileAllocatedSizeKey.rawValue)
+                ?? 0
     }
 
     public func getResourceValueForKey(_ key: String) -> Any? {
@@ -72,19 +74,19 @@ extension URL {
     }
 
     public func getResourceLongLongForKey(_ key: String) -> Int64? {
-        return (getResourceValueForKey(key) as? NSNumber)?.int64Value
+        (getResourceValueForKey(key) as? NSNumber)?.int64Value
     }
 
     public func getResourceBoolForKey(_ key: String) -> Bool? {
-        return getResourceValueForKey(key) as? Bool
+        getResourceValueForKey(key) as? Bool
     }
 
     public var isRegularFile: Bool {
-        return getResourceBoolForKey(URLResourceKey.isRegularFileKey.rawValue) ?? false
+        getResourceBoolForKey(URLResourceKey.isRegularFileKey.rawValue) ?? false
     }
 
     public func lastComponentIsPrefixedBy(_ prefix: String) -> Bool {
-        return (pathComponents.last?.hasPrefix(prefix) ?? false)
+        (pathComponents.last?.hasPrefix(prefix) ?? false)
     }
 }
 
@@ -251,7 +253,9 @@ extension URL {
     }
 
     public var normalizedHostAndPath: String? {
-        return normalizedHost.flatMap { $0 + self.path }
+        normalizedHost.flatMap {
+            $0 + self.path
+        }
     }
 
     public var absoluteDisplayString: String {
@@ -271,7 +275,7 @@ extension URL {
     /// String suitable for displaying outside of the app, for example in notifications, were Data Detectors will
     /// linkify the text and make it into a openable-in-Safari link.
     public var absoluteDisplayExternalString: String {
-        return self.absoluteDisplayString.replacingOccurrences(of: ".", with: "\u{2024}")
+        self.absoluteDisplayString.replacingOccurrences(of: ".", with: "\u{2024}")
     }
 
     public var displayURL: URL? {
@@ -364,13 +368,17 @@ extension URL {
     :returns: The public suffix for within the given hostname.
     */
     public var publicSuffix: String? {
-        return host.flatMap { publicSuffixFromHost($0, withAdditionalParts: 0) }
+        host.flatMap {
+            publicSuffixFromHost($0, withAdditionalParts: 0)
+        }
     }
 
     /// Creates a short domain version of a link's url
     /// e.g. url: http://www.foosite.com  =>  "foosite"
     public var shortDomain: String? {
-        return host.flatMap { shortDomain($0, etld: publicSuffix ?? "") }
+        host.flatMap {
+            shortDomain($0, etld: publicSuffix ?? "")
+        }
     }
 
     public func isWebPage(includeDataURIs: Bool = true) -> Bool {
@@ -379,7 +387,7 @@ extension URL {
     }
 
     public var isIPv6: Bool {
-        return host?.contains(":") ?? false
+        host?.contains(":") ?? false
     }
 
     /**
@@ -419,7 +427,7 @@ extension URL {
     }
 
     public var isFxHomeUrl: Bool {
-        return absoluteString.hasPrefix("internal://local/about/home")
+        absoluteString.hasPrefix("internal://local/about/home")
     }
 
 }
@@ -433,7 +441,7 @@ extension URL {
     }
 
     public var isSyncedReaderModeURL: Bool {
-        return self.absoluteString.hasPrefix("about:reader?url=")
+        self.absoluteString.hasPrefix("about:reader?url=")
     }
 
     public var decodeReaderModeURL: URL? {
@@ -488,14 +496,16 @@ public struct InternalURL {
         case errorpage = "errorpage"
         case sessionrestore = "sessionrestore"
         func matches(_ string: String) -> Bool {
-            return string.range(of: "/?\(self.rawValue)", options: .regularExpression, range: nil, locale: nil) != nil
+            string.range(of: "/?\(self.rawValue)", options: .regularExpression, range: nil, locale: nil) != nil
         }
     }
 
     public enum Param: String {
         case uuidkey = "uuidkey"
         case url = "url"
-        func matches(_ string: String) -> Bool { return string == self.rawValue }
+        func matches(_ string: String) -> Bool {
+            string == self.rawValue
+        }
     }
 
     public let url: URL
@@ -520,7 +530,7 @@ public struct InternalURL {
     }
 
     public var isAuthorized: Bool {
-        return (url.getQuery()[InternalURL.Param.uuidkey.rawValue] ?? "") == InternalURL.uuid
+        (url.getQuery()[InternalURL.Param.uuidkey.rawValue] ?? "") == InternalURL.uuid
     }
 
     public var stripAuthorization: String {
@@ -547,7 +557,7 @@ public struct InternalURL {
     }
 
     public var isSessionRestore: Bool {
-        return url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl)
+        url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl)
     }
 
     public var isErrorPage: Bool {
@@ -581,7 +591,7 @@ public struct InternalURL {
     }
 
     public var isAboutURL: Bool {
-        return aboutComponent != nil
+        aboutComponent != nil
     }
 
     /// Return the path after "about/" in the URI.

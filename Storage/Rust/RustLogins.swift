@@ -40,7 +40,7 @@ public extension EncryptedLogin {
 
     var formSubmitUrl: String? {
         get {
-            return self.fields.formActionOrigin
+            self.fields.formActionOrigin
         }
         set (newValue) {
             self.fields.formActionOrigin = newValue
@@ -49,7 +49,7 @@ public extension EncryptedLogin {
 
     var httpRealm: String? {
         get {
-            return self.fields.httpRealm
+            self.fields.httpRealm
         }
         set (newValue) {
             self.fields.httpRealm = newValue
@@ -58,7 +58,7 @@ public extension EncryptedLogin {
 
     var hostname: String {
         get {
-            return self.fields.origin
+            self.fields.origin
         }
         set (newValue) {
             self.fields.origin = newValue
@@ -67,7 +67,7 @@ public extension EncryptedLogin {
 
     var usernameField: String {
         get {
-            return self.fields.usernameField
+            self.fields.usernameField
         }
         set (newValue) {
             self.fields.usernameField = newValue
@@ -76,7 +76,7 @@ public extension EncryptedLogin {
 
     var passwordField: String {
         get {
-            return self.fields.passwordField
+            self.fields.passwordField
         }
         set (newValue) {
             self.fields.passwordField = newValue
@@ -85,7 +85,7 @@ public extension EncryptedLogin {
 
     var id: String {
         get {
-            return self.record.id
+            self.record.id
         }
         set (newValue) {
             self.record.id = newValue
@@ -94,7 +94,7 @@ public extension EncryptedLogin {
 
     var timePasswordChanged: Int64 {
         get {
-            return self.record.timePasswordChanged
+            self.record.timePasswordChanged
         }
         set (newValue) {
             self.record.timePasswordChanged = newValue
@@ -103,7 +103,7 @@ public extension EncryptedLogin {
 
     var timeCreated: Int64 {
         get {
-            return self.record.timeCreated
+            self.record.timeCreated
         }
         set (newValue) {
             self.record.timeCreated = newValue
@@ -131,7 +131,7 @@ public extension EncryptedLogin {
     }
 
     var protectionSpace: URLProtectionSpace {
-        return URLProtectionSpace.fromOrigin(fields.origin)
+        URLProtectionSpace.fromOrigin(fields.origin)
     }
 
     var hasMalformedHostname: Bool {
@@ -285,7 +285,7 @@ public extension LoginEntry {
 
     var hostname: String {
         get {
-            return self.fields.origin
+            self.fields.origin
         }
         set (newValue) {
             self.fields.origin = newValue
@@ -294,7 +294,7 @@ public extension LoginEntry {
 
     var username: String {
         get {
-            return self.secFields.username
+            self.secFields.username
         }
         set (newValue) {
             self.secFields.username = newValue
@@ -303,7 +303,7 @@ public extension LoginEntry {
 
     var password: String {
         get {
-            return self.secFields.password
+            self.secFields.password
         }
         set (newValue) {
             self.secFields.password = newValue
@@ -311,11 +311,11 @@ public extension LoginEntry {
     }
 
     var protectionSpace: URLProtectionSpace {
-        return URLProtectionSpace.fromOrigin(fields.origin)
+        URLProtectionSpace.fromOrigin(fields.origin)
     }
 
     var credentials: URLCredential {
-        return URLCredential(user: self.secFields.username, password: self.secFields.password, persistence: .forSession)
+        URLCredential(user: self.secFields.username, password: self.secFields.password, persistence: .forSession)
     }
 
     var isValid: Maybe<Void> {
@@ -600,8 +600,8 @@ public class RustLogins {
                 }
             } else {
                 filteredRecords = records.filter {
-                    return $0.fields.origin == protectionSpace.urlString() ||
-                        $0.fields.origin == protectionSpace.host
+                    $0.fields.origin == protectionSpace.urlString() ||
+                            $0.fields.origin == protectionSpace.host
                 }
             }
             return deferMaybe(ArrayCursor(data: filteredRecords))
@@ -609,7 +609,7 @@ public class RustLogins {
     }
 
     public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
-        return listLogins().bind { result in
+        listLogins().bind { result in
             if let error = result.failureValue {
                 return deferMaybe(error)
             }
@@ -705,7 +705,9 @@ public class RustLogins {
     }
 
     public func deleteLogins(ids: [String]) -> Deferred<[Maybe<Bool>]> {
-        return all(ids.map { deleteLogin(id: $0) })
+        all(ids.map {
+            deleteLogin(id: $0)
+        })
     }
 
     public func deleteLogin(id: String) -> Deferred<Maybe<Bool>> {

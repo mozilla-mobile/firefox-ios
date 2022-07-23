@@ -6,7 +6,7 @@ import Shared
 
 open class IgnoredSiteError: MaybeErrorType {
     open var description: String {
-        return "Ignored site."
+        "Ignored site."
     }
 }
 

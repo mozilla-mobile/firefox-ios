@@ -84,9 +84,9 @@ class TabTrayViewController: UIViewController {
     }()
 
     lazy var flexibleSpace: UIBarButtonItem = {
-        return UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
-                               target: nil,
-                               action: nil)
+        UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
+                target: nil,
+                action: nil)
     }()
 
     lazy var fixedSpace: UIBarButtonItem = {
@@ -107,11 +107,11 @@ class TabTrayViewController: UIViewController {
     }()
 
     lazy var bottomToolbarItems: [UIBarButtonItem] = {
-        return [deleteButton, flexibleSpace, newTabButton]
+        [deleteButton, flexibleSpace, newTabButton]
     }()
 
     lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
-        return [flexibleSpace, syncTabButton]
+        [flexibleSpace, syncTabButton]
     }()
 
     lazy var navigationMenu: UISegmentedControl = {
@@ -134,11 +134,13 @@ class TabTrayViewController: UIViewController {
     }()
 
     lazy var iPadNavigationMenuIdentifiers: UISegmentedControl = {
-        return UISegmentedControl(items: TabTrayViewModel.Segment.allCases.map { $0.label })
+        UISegmentedControl(items: TabTrayViewModel.Segment.allCases.map {
+            $0.label
+        })
     }()
 
     lazy var iPhoneNavigationMenuIdentifiers: UISegmentedControl = {
-        return UISegmentedControl(items: [
+        UISegmentedControl(items: [
             TabTrayViewModel.Segment.tabs.image!.overlayWith(image: countLabel),
             TabTrayViewModel.Segment.privateTabs.image!,
             TabTrayViewModel.Segment.syncedTabs.image!])
@@ -154,7 +156,7 @@ class TabTrayViewController: UIViewController {
     }()
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        .lightContent
     }
 
     // MARK: - Initializers
@@ -407,7 +409,7 @@ extension TabTrayViewController: NotificationThemeable {
 // MARK: - UIToolbarDelegate
 extension TabTrayViewController: UIToolbarDelegate {
     func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
+        .topAttached
     }
 }
 

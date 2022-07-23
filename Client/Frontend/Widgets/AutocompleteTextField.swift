@@ -28,7 +28,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     private let copyShortcutKey = "c"
 
     var isSelectionActive: Bool {
-        return autocompleteTextLabel != nil
+        autocompleteTextLabel != nil
     }
 
     // This variable is a solution to get the right behavior for refocusing
@@ -51,7 +51,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     override var accessibilityValue: String? {
         get {
-            return (self.text ?? "") + (self.autocompleteTextLabel?.text ?? "")
+            (self.text ?? "") + (self.autocompleteTextLabel?.text ?? "")
         }
         set(value) {
             super.accessibilityValue = value
@@ -153,7 +153,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     fileprivate func normalizeString(_ string: String) -> String {
-        return string.lowercased().stringByTrimmingLeadingCharactersInSet(CharacterSet.whitespaces)
+        string.lowercased().stringByTrimmingLeadingCharactersInSet(CharacterSet.whitespaces)
     }
 
     /// Commits the completion by setting the text and removing the highlight.
@@ -236,7 +236,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     override func caretRect(for position: UITextPosition) -> CGRect {
-        return hideCursor ? CGRect.zero : super.caretRect(for: position)
+        hideCursor ? CGRect.zero : super.caretRect(for: position)
     }
 
     private func createAutocompleteLabelWith(_ autocompleteText: NSAttributedString) -> UILabel {

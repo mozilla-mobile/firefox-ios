@@ -152,16 +152,16 @@ class HistoryHightlightsViewModel {
 extension HistoryHightlightsViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
     var sectionType: HomepageSectionType {
-        return .historyHighlights
+        .historyHighlights
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        return LabelButtonHeaderViewModel(title: HomepageSectionType.historyHighlights.title,
-                                          titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.historyHighlights,
-                                          isButtonHidden: false,
-                                          buttonTitle: .RecentlySavedShowAllText,
-                                          buttonAction: headerButtonAction,
-                                          buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.historyHighlights)
+        LabelButtonHeaderViewModel(title: HomepageSectionType.historyHighlights.title,
+                titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.historyHighlights,
+                isButtonHidden: false,
+                buttonTitle: .RecentlySavedShowAllText,
+                buttonAction: headerButtonAction,
+                buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.historyHighlights)
     }
 
     var isEnabled: Bool {
@@ -214,7 +214,7 @@ extension HistoryHightlightsViewModel: HomepageViewModelProtocol, FeatureFlaggab
     }
 
     var hasData: Bool {
-        return !(historyItems?.isEmpty ?? true)
+        !(historyItems?.isEmpty ?? true)
     }
 
     func updateData(completion: @escaping () -> Void) {
@@ -325,7 +325,7 @@ extension HistoryHightlightsViewModel: HomepageSectionHandler {
     }
 
     private func isTopLeftCell(index: Int) -> Bool {
-        return index == 0
+        index == 0
     }
 
     private func isTopRightCell(index: Int, totalItems: Int) -> Bool {

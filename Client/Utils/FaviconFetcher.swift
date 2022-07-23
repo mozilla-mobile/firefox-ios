@@ -29,7 +29,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
     private static var characterToFaviconCache = [String: UIImage]()
     static var defaultFavicon: UIImage = {
-        return UIImage(named: "defaultFavicon")!
+        UIImage(named: "defaultFavicon")!
     }()
 
     typealias BundledIconType = (bgcolor: UIColor, filePath: String)
@@ -230,6 +230,6 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
 class FaviconError: MaybeErrorType {
     internal var description: String {
-        return "No Image Loaded"
+        "No Image Loaded"
     }
 }

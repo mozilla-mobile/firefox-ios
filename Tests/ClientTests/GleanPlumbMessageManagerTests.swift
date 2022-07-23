@@ -105,7 +105,7 @@ class MockGleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
     }
 
     func getMessageMetadata(messageId: String) -> GleanPlumbMessageMetaData {
-        return metadata
+        metadata
     }
 
     func onMessageDisplayed(_ message: GleanPlumbMessage) {

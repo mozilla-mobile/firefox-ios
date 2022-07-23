@@ -7,7 +7,7 @@ class FirstRunTourTests: BaseTestCase {
                                      AccessibilityIdentifiers.Onboarding.signSyncCard]
     var currentScreen = 0
     var rootA11yId: String {
-        return onboardingAccessibilityId[currentScreen]
+        onboardingAccessibilityId[currentScreen]
     }
 
     override func setUp() {

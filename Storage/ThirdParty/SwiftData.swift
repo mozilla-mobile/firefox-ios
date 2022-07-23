@@ -41,7 +41,7 @@ private let log = Logger.syncLogger
 
 public class DBOperationCancelled : MaybeErrorType {
     public var description: String {
-        return "Database operation cancelled"
+        "Database operation cancelled"
     }
 }
 
@@ -211,7 +211,7 @@ open class SwiftData {
      * The code block can return true if the transaction should be committed. False if we should roll back.
      */
     func transaction<T>(synchronous: Bool = false, _ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
-        return withConnection(SwiftData.Flags.readWriteCreate, synchronous: synchronous) { connection in
+        withConnection(SwiftData.Flags.readWriteCreate, synchronous: synchronous) { connection in
             try connection.transaction(transactionClosure)
         }
     }
@@ -389,7 +389,7 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
     var version: Int = 0
 
     fileprivate func fail(_ str: String) -> NSError {
-        return NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: str])
+        NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: str])
     }
 
     func executeChange(_ sqlStr: String, withArgs args: Args?) throws -> Void {
@@ -400,13 +400,13 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
     }
 
     func executeQuery<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T) -> Cursor<T> {
-        return Cursor<T>(err: fail("Non-open connection; can't execute query."))
+        Cursor<T>(err: fail("Non-open connection; can't execute query."))
     }
     func executeQuery<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T, withArgs args: Args?) -> Cursor<T> {
-        return Cursor<T>(err: fail("Non-open connection; can't execute query."))
+        Cursor<T>(err: fail("Non-open connection; can't execute query."))
     }
     func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T, withArgs args: Args?) -> Cursor<T> {
-        return Cursor<T>(err: fail("Non-open connection; can't execute query."))
+        Cursor<T>(err: fail("Non-open connection; can't execute query."))
     }
 
     func transaction<T>(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> T) throws -> T {
@@ -427,19 +427,19 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
 
 open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     open var lastInsertedRowID: Int64 {
-        return Int64(sqlite3_last_insert_rowid(sqliteDB))
+        Int64(sqlite3_last_insert_rowid(sqliteDB))
     }
 
     open var numberOfRowsModified: Int {
-        return Int(sqlite3_changes(sqliteDB))
+        Int(sqlite3_changes(sqliteDB))
     }
 
     open var version: Int {
-        return pragma("user_version", factory: IntFactory) ?? 0
+        pragma("user_version", factory: IntFactory) ?? 0
     }
 
     open var cipherVersion: String? {
-        return pragma("cipher_version", factory: StringFactory)
+        pragma("cipher_version", factory: StringFactory)
     }
 
     fileprivate var sqliteDB: OpaquePointer?
@@ -1067,14 +1067,14 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     public func executeQuery<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T) -> Cursor<T> {
-        return self.executeQuery(sqlStr, factory: factory, withArgs: nil)
+        self.executeQuery(sqlStr, factory: factory, withArgs: nil)
     }
 
     func explain(query sqlStr: String, withArgs args: Args?) {
         do {
             let qp = try SQLiteDBStatement(connection: self, query: "EXPLAIN QUERY PLAN \(sqlStr)", args: args)
             let qpFactory: (SDRow) -> String = { row in
-                return "id: \(row[0] as! Int), order: \(row[1] as! Int), from: \(row[2] as! Int), details: \(row[3] as! String)"
+                "id: \(row[0] as! Int), order: \(row[1] as! Int), from: \(row[2] as! Int), details: \(row[3] as! String)"
             }
             let qpCursor = FilledSQLiteCursor<String>(statement: qp, factory: qpFactory)
             print("⦿ EXPLAIN QUERY (Columns: id, order, from, details) ---------------- ")
@@ -1243,12 +1243,12 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
 /// Helper for queries that return a single integer result.
 func IntFactory(_ row: SDRow) -> Int {
-    return row[0] as! Int
+    row[0] as! Int
 }
 
 /// Helper for queries that return a single String result.
 func StringFactory(_ row: SDRow) -> String {
-    return row[0] as! String
+    row[0] as! String
 }
 
 /// Wrapper around a statement for getting data from a row. This provides accessors for subscript indexing
@@ -1299,7 +1299,7 @@ open class SDRow: Sequence {
 
     // Accessor getting column 'key' in the row
     public subscript(key: Int) -> Any? {
-        return getValue(key)
+        getValue(key)
     }
 
     // Accessor getting a named column in the row. This (currently) depends on

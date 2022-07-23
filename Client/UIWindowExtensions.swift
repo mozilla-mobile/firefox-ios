@@ -6,20 +6,24 @@ import Foundation
 
 extension UIWindow {
     static var keyWindow: UIWindow? {
-        return UIApplication.shared.connectedScenes
-            .filter { $0.activationState == .foregroundActive }
-            .first(where: { $0 is UIWindowScene })
-            .flatMap({ $0 as? UIWindowScene })?.windows
-            .first(where: \.isKeyWindow)
+        UIApplication.shared.connectedScenes
+                .filter {
+                    $0.activationState == .foregroundActive
+                }
+                .first(where: { $0 is UIWindowScene })
+                .flatMap({ $0 as? UIWindowScene })?.windows
+                .first(where: \.isKeyWindow)
     }
 
     /// Filter for any scenes that are attached, regardless of state (i.e. active, inactive and background)
     static var attachedKeyWindow: UIWindow? {
-        return UIApplication.shared.connectedScenes
-            .filter { $0.activationState != .unattached }
-            .first(where: { $0 is UIWindowScene })
-            .flatMap({ $0 as? UIWindowScene })?.windows
-            .first(where: \.isKeyWindow)
+        UIApplication.shared.connectedScenes
+                .filter {
+                    $0.activationState != .unattached
+                }
+                .first(where: { $0 is UIWindowScene })
+                .flatMap({ $0 as? UIWindowScene })?.windows
+                .first(where: \.isKeyWindow)
     }
 
     static var isLandscape: Bool {

@@ -85,27 +85,27 @@ class ChevronView: UIView {
     }
 
     fileprivate func drawUpChevronAt(_ origin: CGPoint, strokeLength: CGFloat) -> UIBezierPath {
-        return drawChevron(CGPoint(x: origin.x-strokeLength, y: origin.y+strokeLength),
-            head: CGPoint(x: origin.x, y: origin.y),
-            rightTip: CGPoint(x: origin.x+strokeLength, y: origin.y+strokeLength))
+        drawChevron(CGPoint(x: origin.x - strokeLength, y: origin.y + strokeLength),
+                head: CGPoint(x: origin.x, y: origin.y),
+                rightTip: CGPoint(x: origin.x + strokeLength, y: origin.y + strokeLength))
     }
 
     fileprivate func drawDownChevronAt(_ origin: CGPoint, strokeLength: CGFloat) -> UIBezierPath {
-        return drawChevron(CGPoint(x: origin.x-strokeLength, y: origin.y-strokeLength),
-            head: CGPoint(x: origin.x, y: origin.y),
-            rightTip: CGPoint(x: origin.x+strokeLength, y: origin.y-strokeLength))
+        drawChevron(CGPoint(x: origin.x - strokeLength, y: origin.y - strokeLength),
+                head: CGPoint(x: origin.x, y: origin.y),
+                rightTip: CGPoint(x: origin.x + strokeLength, y: origin.y - strokeLength))
     }
 
     fileprivate func drawLeftChevronAt(_ origin: CGPoint, strokeLength: CGFloat) -> UIBezierPath {
-        return drawChevron(CGPoint(x: origin.x+strokeLength, y: origin.y-strokeLength),
-            head: CGPoint(x: origin.x, y: origin.y),
-            rightTip: CGPoint(x: origin.x+strokeLength, y: origin.y+strokeLength))
+        drawChevron(CGPoint(x: origin.x + strokeLength, y: origin.y - strokeLength),
+                head: CGPoint(x: origin.x, y: origin.y),
+                rightTip: CGPoint(x: origin.x + strokeLength, y: origin.y + strokeLength))
     }
 
     fileprivate func drawRightChevronAt(_ origin: CGPoint, strokeLength: CGFloat) -> UIBezierPath {
-        return drawChevron(CGPoint(x: origin.x-strokeLength, y: origin.y+strokeLength),
-            head: CGPoint(x: origin.x, y: origin.y),
-            rightTip: CGPoint(x: origin.x-strokeLength, y: origin.y-strokeLength))
+        drawChevron(CGPoint(x: origin.x - strokeLength, y: origin.y + strokeLength),
+                head: CGPoint(x: origin.x, y: origin.y),
+                rightTip: CGPoint(x: origin.x - strokeLength, y: origin.y - strokeLength))
     }
 
     fileprivate func drawChevron(_ leftTip: CGPoint, head: CGPoint, rightTip: CGPoint) -> UIBezierPath {

@@ -51,7 +51,7 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
     }
 
     override var storageVersion: Int {
-        return HistoryStorageVersion
+        HistoryStorageVersion
     }
 
     fileprivate let batchSize: Int = 1000  // A balance between number of requests and per-request size.
@@ -137,7 +137,7 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
             log.info("Uploading \(recs.count) history items…")
             return self.uploadRecords(recs, lastTimestamp: timestamp, storageClient: storageClient) { result, lastModified in
                 // We don't do anything with failed.
-                return storage.markAsSynchronized(result.success, modified: lastModified ?? timestamp)
+                storage.markAsSynchronized(result.success, modified: lastModified ?? timestamp)
             }
         }
 
@@ -212,8 +212,8 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
         }
 
         func applyBatched() -> Success {
-            return self.applyIncomingToStorage(history, records: downloader.retrieve())
-               >>> effect(downloader.advance)
+            self.applyIncomingToStorage(history, records: downloader.retrieve())
+                    >>> effect(downloader.advance)
         }
 
         func onBatchResult(_ result: Maybe<DownloadEndState>) -> SyncResult {

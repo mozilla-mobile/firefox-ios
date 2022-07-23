@@ -20,7 +20,7 @@ class PocketStoriesTests: XCTestCase {
 
         webServer = GCDWebServer()
         webServer.addHandler(forMethod: "GET", path: "/pocketglobalfeed", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse in
-            return GCDWebServerDataResponse(data: data, contentType: "application/json")
+            GCDWebServerDataResponse(data: data, contentType: "application/json")
         }
 
         if webServer.start(withPort: 0, bonjourName: nil) == false {

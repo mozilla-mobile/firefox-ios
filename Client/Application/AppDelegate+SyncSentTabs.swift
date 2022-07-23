@@ -13,7 +13,7 @@ private let log = Logger.browserLogger
 
 extension UIApplication {
     var syncDelegate: SyncDelegate {
-        return AppSyncDelegate(app: self)
+        AppSyncDelegate(app: self)
     }
 }
 

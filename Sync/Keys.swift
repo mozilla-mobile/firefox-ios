@@ -23,7 +23,7 @@ import SwiftyJSON
  * For this reason, be careful trying to simplify or improve this code.
  */
 public func keysPayloadFactory<T: CleartextPayloadJSON>(keyBundle: KeyBundle, _ f: @escaping (JSON) -> T) -> (String) -> T? {
-    return { (payload: String) -> T? in
+    { (payload: String) -> T? in
         let potential = EncryptedJSON(json: payload, keyBundle: keyBundle)
         if !potential.isValid() {
             return nil
@@ -39,7 +39,7 @@ public func keysPayloadFactory<T: CleartextPayloadJSON>(keyBundle: KeyBundle, _ 
 
 // TODO: how much do we want to move this into EncryptedJSON?
 public func keysPayloadSerializer<T: CleartextPayloadJSON>(keyBundle: KeyBundle, _ f: @escaping (T) -> JSON) -> (Record<T>) -> JSON? {
-    return { (record: Record<T>) -> JSON? in
+    { (record: Record<T>) -> JSON? in
         let json = f(record.payload)
         if json.isNull() {
             // This should never happen, but if it does, we don't want to leak this
@@ -51,7 +51,9 @@ public func keysPayloadSerializer<T: CleartextPayloadJSON>(keyBundle: KeyBundle,
         // `rawData` simply calls JSONSerialization.dataWithJSONObject:options:error, which
         // guarantees UTF-8 encoded output.
 
-        guard let bytes: Data = try? json.rawData(options: []) else { return nil }
+        guard let bytes: Data = try? json.rawData(options: []) else {
+            return nil
+        }
 
         // Given a valid non-null JSON object, we don't ever expect a round-trip to fail.
         assert(!JSON(bytes).isNull())
@@ -72,9 +74,9 @@ public func keysPayloadSerializer<T: CleartextPayloadJSON>(keyBundle: KeyBundle,
                 let obj = ["id": record.id,
                            "sortindex": record.sortindex,
                            // This is how SwiftyJSON wants us to express a null that we want to
-                    // serialize. Yes, this is gross.
-                    "ttl": record.ttl ?? NSNull(),
-                    "payload": payload]
+                           // serialize. Yes, this is gross.
+                           "ttl": record.ttl ?? NSNull(),
+                           "payload": payload]
                 return JSON(obj)
             }
         }
@@ -111,7 +113,7 @@ open class Keys: Equatable {
     }
 
     open class func random() -> Keys {
-        return Keys(defaultBundle: KeyBundle.random())
+        Keys(defaultBundle: KeyBundle.random())
     }
 
     open func forCollection(_ collection: String) -> KeyBundle {
@@ -122,7 +124,7 @@ open class Keys: Equatable {
     }
 
     open func encrypter<T>(_ collection: String, encoder: RecordEncoder<T>) -> RecordEncrypter<T> {
-        return RecordEncrypter(bundle: forCollection(collection), encoder: encoder)
+        RecordEncrypter(bundle: forCollection(collection), encoder: encoder)
     }
 
     open func asPayload() -> KeysPayload {
@@ -136,9 +138,9 @@ open class Keys: Equatable {
     }
 
     public static func == (lhs: Keys, rhs: Keys) -> Bool {
-        return lhs.valid == rhs.valid &&
-            lhs.defaultBundle == rhs.defaultBundle &&
-            lhs.collectionKeys == rhs.collectionKeys
+        lhs.valid == rhs.valid &&
+                lhs.defaultBundle == rhs.defaultBundle &&
+                lhs.collectionKeys == rhs.collectionKeys
     }
 }
 

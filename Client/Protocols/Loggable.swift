@@ -14,14 +14,14 @@ protocol Loggable {
 
 extension Loggable {
     var browserLog: RollingFileLogger {
-        return Logger.browserLogger
+        Logger.browserLogger
     }
 
     var keychainLog: XCGLogger {
-        return Logger.keychainLogger
+        Logger.keychainLogger
     }
 
     var syncLog: RollingFileLogger {
-        return Logger.syncLogger
+        Logger.syncLogger
     }
 }

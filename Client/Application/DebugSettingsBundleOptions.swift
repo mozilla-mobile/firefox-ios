@@ -8,11 +8,11 @@ struct DebugSettingsBundleOptions {
 
     /// Save logs to `~/Documents` folder
     static var saveLogsToDocuments: Bool {
-        return UserDefaults.standard.bool(forKey: "SettingsBundleSaveLogsToDocuments")
+        UserDefaults.standard.bool(forKey: "SettingsBundleSaveLogsToDocuments")
     }
 
     /// Don't restore tabs on app launch
     static var skipSessionRestore: Bool {
-        return UserDefaults.standard.bool(forKey: "SettingsBundleSkipSessionRestore")
+        UserDefaults.standard.bool(forKey: "SettingsBundleSkipSessionRestore")
     }
 }

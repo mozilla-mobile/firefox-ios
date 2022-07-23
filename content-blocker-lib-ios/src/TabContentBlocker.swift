@@ -19,13 +19,13 @@ class TabContentBlocker {
     weak var tab: ContentBlockerTab?
 
     var isEnabled: Bool {
-        return false
+        false
     }
 
     @objc func notifiedTabSetupRequired() {}
 
     func currentlyEnabledLists() -> [BlocklistFileName] {
-        return []
+        []
     }
 
     func notifyContentBlockingChanged() {}
@@ -63,7 +63,7 @@ class TabContentBlocker {
     }
 
     func scriptMessageHandlerName() -> String? {
-        return "trackingProtectionStats"
+        "trackingProtectionStats"
     }
 
     class func prefsChanged() {

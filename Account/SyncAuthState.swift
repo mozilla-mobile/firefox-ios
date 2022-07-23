@@ -44,18 +44,18 @@ public struct RemoteError {
     let info: String?
 
     var isUpgradeRequired: Bool {
-        return errno == FxAccountRemoteError.EndpointIsNoLongerSupported
-            || errno == FxAccountRemoteError.IncorrectLoginMethodForThisAccount
-            || errno == FxAccountRemoteError.IncorrectKeyRetrievalMethodForThisAccount
-            || errno == FxAccountRemoteError.IncorrectAPIVersionForThisAccount
+        errno == FxAccountRemoteError.EndpointIsNoLongerSupported
+                || errno == FxAccountRemoteError.IncorrectLoginMethodForThisAccount
+                || errno == FxAccountRemoteError.IncorrectKeyRetrievalMethodForThisAccount
+                || errno == FxAccountRemoteError.IncorrectAPIVersionForThisAccount
     }
 
     var isInvalidAuthentication: Bool {
-        return code == 401
+        code == 401
     }
 
     var isUnverified: Bool {
-        return errno == FxAccountRemoteError.AttemptToOperateOnAnUnverifiedAccount
+        errno == FxAccountRemoteError.AttemptToOperateOnAnUnverifiedAccount
     }
 }
 
@@ -94,7 +94,7 @@ public func syncAuthStateCachefromJSON(_ json: JSON) -> SyncAuthStateCache? {
 
 extension SyncAuthStateCache: JSONLiteralConvertible {
     public func asJSON() -> JSON {
-        return JSON([
+        JSON([
             "version": CurrentSyncAuthStateCacheVersion,
             "token": token.asJSON(),
             "forKey": forKey.hexEncodedString,

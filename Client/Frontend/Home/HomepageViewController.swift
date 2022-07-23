@@ -43,7 +43,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     }
 
     var currentTab: Tab? {
-        return tabManager.selectedTab
+        tabManager.selectedTab
     }
 
     // MARK: - Initializers
@@ -209,7 +209,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     // MARK: Long press
 
     private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
+        UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
@@ -340,7 +340,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     // MARK: - Home Tab Banner
 
     private var shouldDisplayHomeTabBanner: Bool {
-        return messagingManager.hasMessage(for: .newTabCard)
+        messagingManager.hasMessage(for: .newTabCard)
     }
 
     private func showHomeTabBanner() {
@@ -397,11 +397,11 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return viewModel.shownSections.count
+        viewModel.shownSections.count
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.getSectionViewModel(shownSection: section)?.numberOfItemsInSection(for: traitCollection) ?? 0
+        viewModel.getSectionViewModel(shownSection: section)?.numberOfItemsInSection(for: traitCollection) ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -640,11 +640,11 @@ extension HomepageViewController: UIPopoverPresentationControllerDelegate {
     }
 
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .none
+        .none
     }
 
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-        return true
+        true
     }
 }
 

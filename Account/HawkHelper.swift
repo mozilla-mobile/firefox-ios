@@ -58,7 +58,7 @@ open class HawkHelper {
     }
 
     class func getSignatureFor(_ input: Data, key: Data) -> String {
-        return input.hmacSha256WithKey(key).base64EncodedString
+        input.hmacSha256WithKey(key).base64EncodedString
     }
 
     class func getRequestStringFor(_ request: URLRequest, timestampString: String, nonce: String, hash: String, extra: String) -> String {
@@ -131,11 +131,11 @@ open class HawkHelper {
     }
 
     class func escapeExtraHeaderAttribute(_ extra: String) -> String {
-        return extra.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
+        extra.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
     }
 
     class func escapeExtraString(_ extra: String) -> String {
-        return extra.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\n", with: "\\n")
+        extra.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\n", with: "\\n")
     }
 }
 

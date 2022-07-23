@@ -16,7 +16,7 @@ class ThemedNavigationController: DismissableNavigationViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return topViewController?.preferredStatusBarStyle ?? LegacyThemeManager.instance.statusBarStyle
+        topViewController?.preferredStatusBarStyle ?? LegacyThemeManager.instance.statusBarStyle
     }
 
     override func viewDidLoad() {
@@ -57,6 +57,6 @@ protocol PresentingModalViewControllerDelegate: AnyObject {
 
 class ModalSettingsNavigationController: UINavigationController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .default
+        .default
     }
 }

@@ -113,7 +113,7 @@ class BrowserViewController: UIViewController {
     private var topTouchArea: UIButton!
 
     var topTabsVisible: Bool {
-        return topTabsViewController != nil
+        topTabsViewController != nil
     }
     // Backdrop used for displaying greyed background for private tabs
     var webViewContainerBackdrop: UIView!
@@ -136,7 +136,7 @@ class BrowserViewController: UIViewController {
     var typedNavigation = [WKNavigation: VisitType]()
     var toolbar = TabToolbar()
     var navigationToolbar: TabToolbarProtocol {
-        return toolbar.isHidden ? urlBar : toolbar
+        toolbar.isHidden ? urlBar : toolbar
     }
 
     var topTabsViewController: TopTabsViewController?
@@ -184,7 +184,7 @@ class BrowserViewController: UIViewController {
     }
 
     override var prefersStatusBarHidden: Bool {
-        return false
+        false
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -237,11 +237,11 @@ class BrowserViewController: UIViewController {
     }
 
     func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
-        return previousTraitCollection.verticalSizeClass != .compact && previousTraitCollection.horizontalSizeClass != .regular
+        previousTraitCollection.verticalSizeClass != .compact && previousTraitCollection.horizontalSizeClass != .regular
     }
 
     func shouldShowTopTabsForTraitCollection(_ newTraitCollection: UITraitCollection) -> Bool {
-        return newTraitCollection.verticalSizeClass == .regular && newTraitCollection.horizontalSizeClass == .regular
+        newTraitCollection.verticalSizeClass == .regular && newTraitCollection.horizontalSizeClass == .regular
     }
 
     fileprivate func constraintsForLibraryDrawerView(_ make: SnapKit.ConstraintMaker) {
@@ -808,7 +808,7 @@ class BrowserViewController: UIViewController {
     var displayedRestoreTabsAlert = false
 
     fileprivate func crashedLastLaunch() -> Bool {
-        return SentryIntegration.shared.crashedLastLaunch
+        SentryIntegration.shared.crashedLastLaunch
     }
 
     fileprivate func showRestoreTabsAlert() {
@@ -1388,7 +1388,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func isShowingJSPromptAlert() -> Bool {
-        return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
+        navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
     }
 
     func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
@@ -2076,7 +2076,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
     // Returning None here makes sure that the Popover is actually presented as a Popover and
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-        return .none
+        .none
     }
 }
 
@@ -2627,7 +2627,7 @@ extension BrowserViewController {
 
 extension BrowserViewController: BrowserBarViewDelegate {
     var inOverlayMode: Bool {
-        return urlBar.inOverlayMode
+        urlBar.inOverlayMode
     }
 
     func leaveOverlayMode(didCancel cancel: Bool) {

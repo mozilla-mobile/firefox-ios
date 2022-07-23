@@ -32,7 +32,7 @@ class ContileProvider: ContileProviderInterface, Loggable, URLCaching, FeatureFl
                                          configuration: URLSessionConfiguration.default)
 
     lazy var urlCache: URLCache = {
-        return URLCache.shared
+        URLCache.shared
     }()
 
     enum Error: Swift.Error {

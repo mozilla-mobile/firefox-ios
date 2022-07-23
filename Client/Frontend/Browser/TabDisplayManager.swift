@@ -86,15 +86,15 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     var tabDisplayOrder: TabDisplayOrder = TabDisplayOrder()
 
     var shouldEnableGroupedTabs: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser)
+        featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser)
     }
 
     var shouldEnableInactiveTabs: Bool {
-        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
+        featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
     }
 
     var orderedTabs: [Tab] {
-        return filteredTabs
+        filteredTabs
     }
 
     func getRegularOrderedTabs() -> [Tab]? {
@@ -144,7 +144,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     // Dragging on the collection view is either an 'active drag' where the item is moved, or
     // that the item has been long pressed on (and not moved yet), and this gesture recognizer has been triggered
     var isDragging: Bool {
-        return collectionView.hasActiveDrag || isLongPressGestureStarted
+        collectionView.hasActiveDrag || isLongPressGestureStarted
     }
 
     fileprivate var isLongPressGestureStarted: Bool {
@@ -310,7 +310,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     }
 
     func indexOfRegularTab(tab: Tab) -> Int? {
-        return filteredTabs.firstIndex(of: tab)
+        filteredTabs.firstIndex(of: tab)
     }
 
     func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool,
@@ -713,7 +713,7 @@ extension TabDisplayManager: UIDropInteractionDelegate {
     }
 
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
-        return UIDropProposal(operation: .copy)
+        UIDropProposal(operation: .copy)
     }
 
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
@@ -772,11 +772,11 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
-        return dragPreviewParameters(collectionView, dragPreviewParametersForItemAt: indexPath)
+        dragPreviewParameters(collectionView, dragPreviewParametersForItemAt: indexPath)
     }
 
     func collectionView(_ collectionView: UICollectionView, dropPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
-        return dragPreviewParameters(collectionView, dragPreviewParametersForItemAt: indexPath)
+        dragPreviewParameters(collectionView, dragPreviewParametersForItemAt: indexPath)
     }
 
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {

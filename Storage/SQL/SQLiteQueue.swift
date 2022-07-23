@@ -21,14 +21,14 @@ open class SQLiteQueue: TabQueue {
     }
 
     fileprivate func factory(_ row: SDRow) -> ShareItem {
-        return ShareItem(url: row["url"] as! String, title: row["title"] as? String, favicon: nil)
+        ShareItem(url: row["url"] as! String, title: row["title"] as? String, favicon: nil)
     }
 
     open func getQueuedTabs() -> Deferred<Maybe<Cursor<ShareItem>>> {
-        return db.runQuery("SELECT url, title FROM queue", args: nil, factory: self.factory)
+        db.runQuery("SELECT url, title FROM queue", args: nil, factory: self.factory)
     }
 
     open func clearQueuedTabs() -> Success {
-        return db.run("DELETE FROM queue")
+        db.run("DELETE FROM queue")
     }
 }
