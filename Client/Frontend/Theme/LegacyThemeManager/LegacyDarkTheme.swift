@@ -141,6 +141,8 @@ private class DarkHomePanelColor: HomePanelColor {
 
     override var customizeHomepageButtonBackground: UIColor { return UIColor.Photon.DarkGrey50 }
     override var customizeHomepageButtonText: UIColor { return UIColor.Photon.LightGrey10 }
+
+    override var sponsored: UIColor { return UIColor.Photon.LightGrey40 }
 }
 
 private class DarkSnackBarColor: SnackBarColor {
