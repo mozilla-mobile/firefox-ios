@@ -932,7 +932,7 @@ class LoginsSetting: Setting {
         deselectRow()
 
         guard let navController = navigationController else { return }
-        let navigationHandler: ((_ url: URL?) -> Void) = { url in
+        let navigationHandler: (_ url: URL?) -> Void = { url in
             guard let url = url else { return }
             UIWindow.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
             self.delegate?.settingsOpenURLInNewTab(url)
