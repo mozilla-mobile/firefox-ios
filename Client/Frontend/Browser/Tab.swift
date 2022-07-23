@@ -902,14 +902,14 @@ class TabWebView: WKWebView, MenuHelperInterface {
         return super.canPerformAction(action, withSender: sender) || action == MenuHelper.SelectorFindInPage
     }
 
-    @objc func menuHelperFindInPage() {
+    func menuHelperFindInPage() {
         evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
             self.delegate?.tabWebView(self, didSelectFindInPageForSelection: selection)
         }
     }
 
-    @objc func menuHelperSearchWithFirefox() {
+    func menuHelperSearchWithFirefox() {
         evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
             self.delegate?.tabWebViewSearchWithFirefox(self, didSelectSearchWithFirefoxForSelection: selection)
