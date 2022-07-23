@@ -687,7 +687,6 @@
 		C857CD392889EFD200E0AB39 /* wallpaperSecondary.json in Resources */ = {isa = PBXBuildFile; fileRef = C857CD372889EFD200E0AB39 /* wallpaperSecondary.json */; };
 		C857CD3A2889EFD200E0AB39 /* wallpaperInitial.json in Resources */ = {isa = PBXBuildFile; fileRef = C857CD382889EFD200E0AB39 /* wallpaperInitial.json */; };
 		C857CD3C288B321400E0AB39 /* WallpaperDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857CD3B288B321400E0AB39 /* WallpaperDateFormatter.swift */; };
-		C857CD42288B33B700E0AB39 /* WallpaperDateFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857CD3D288B334200E0AB39 /* WallpaperDateFormatterTests.swift */; };
 		C857CD45288B460500E0AB39 /* WallpaperMetadataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857CD44288B460500E0AB39 /* WallpaperMetadataLoader.swift */; };
 		C857CD47288B49E200E0AB39 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857CD46288B49E200E0AB39 /* Networking.swift */; };
 		C857CD49288B4F1200E0AB39 /* WallpaperNetworkModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857CD48288B4F1200E0AB39 /* WallpaperNetworkModule.swift */; };
@@ -3654,7 +3653,6 @@
 		C857CD372889EFD200E0AB39 /* wallpaperSecondary.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperSecondary.json; sourceTree = "<group>"; };
 		C857CD382889EFD200E0AB39 /* wallpaperInitial.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperInitial.json; sourceTree = "<group>"; };
 		C857CD3B288B321400E0AB39 /* WallpaperDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperDateFormatter.swift; sourceTree = "<group>"; };
-		C857CD3D288B334200E0AB39 /* WallpaperDateFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperDateFormatterTests.swift; sourceTree = "<group>"; };
 		C857CD44288B460500E0AB39 /* WallpaperMetadataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMetadataLoader.swift; sourceTree = "<group>"; };
 		C857CD46288B49E200E0AB39 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		C857CD48288B4F1200E0AB39 /* WallpaperNetworkModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperNetworkModule.swift; sourceTree = "<group>"; };
@@ -6178,29 +6176,20 @@
 		C84655ED28873C4800861B4A /* Wallpaper */ = {
 			isa = PBXGroup;
 			children = (
+				C84655F028873C8300861B4A /* WallpaperDataServiceTests.swift */,
 				C857CD362889EF7100E0AB39 /* UnitTestAssets */,
-				C846560328881BED00861B4A /* UtilitiesTests */,
+				C846560328881BED00861B4A /* Mocks */,
 				C8501F5028510DA1003B09AB /* WallpaperMigrationUtilityTests.swift */,
 			);
 			path = Wallpaper;
 			sourceTree = "<group>";
 		};
-		C846560328881BED00861B4A /* UtilitiesTests */ = {
+		C846560328881BED00861B4A /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
 				C857CD4A288B519600E0AB39 /* NetworkingMock.swift */,
-				C857CD3D288B334200E0AB39 /* WallpaperDateFormatterTests.swift */,
-				C846560A28883EC300861B4A /* DataService */,
 			);
-			path = UtilitiesTests;
-			sourceTree = "<group>";
-		};
-		C846560A28883EC300861B4A /* DataService */ = {
-			isa = PBXGroup;
-			children = (
-				C84655F028873C8300861B4A /* WallpaperDataServiceTests.swift */,
-			);
-			path = DataService;
+			path = Mocks;
 			sourceTree = "<group>";
 		};
 		C849E45F26B9C36600260F0B /* EnhancedTrackingProtection */ = {
@@ -10055,7 +10044,6 @@
 				C889D7D52858CD8800121E1D /* HistoryHighlightsTestEntryProvider.swift in Sources */,
 				21737FB72878A4BD000A9A92 /* HistoryPanelViewModelTests.swift in Sources */,
 				C8501F5128510DA1003B09AB /* WallpaperMigrationUtilityTests.swift in Sources */,
-				C857CD42288B33B700E0AB39 /* WallpaperDateFormatterTests.swift in Sources */,
 				8A8A05E42746ACAC004267A0 /* TabDisplayManagerTests.swift in Sources */,
 				D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */,
 				D3BA41681BD82F2200DA5457 /* XCTestCaseExtensions.swift in Sources */,
