@@ -22,7 +22,9 @@ class WallpaperNetworkingModule: Networking {
                     return
                 }
 
-                guard let data = data else {
+                guard let data = data,
+                      !data.isEmpty
+                else {
                     continuation.resume(throwing: SessionErrors.dataUnavailable)
                     return
                 }

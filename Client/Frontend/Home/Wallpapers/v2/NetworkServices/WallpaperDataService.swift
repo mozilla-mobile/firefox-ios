@@ -26,7 +26,7 @@ class WallpaperDataService: Loggable {
         let scheme = try urlScheme()
         let loader = WallpaperMetadataLoader(networkModule: networking)
 
-        return try await loader.loadMetadataWith(scheme)
+        return try await loader.fetchMetadataWith(scheme)
     }
 
     func getImageWith(path: String) async throws -> UIImage {

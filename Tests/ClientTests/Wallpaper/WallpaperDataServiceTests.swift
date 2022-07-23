@@ -8,7 +8,7 @@ import XCTest
 @testable import Client
 
 class WallpaperDataServiceTests: XCTestCase {
-    typealias ServiceError = WallpaperDataService.WallpaperDataServiceError
+    typealias ServiceError = WallpaperDataService.DataServiceError
 
     // MARK: - Test metadata functions
     func testGetData_SimulatingNoInternet() async {
@@ -38,14 +38,9 @@ class WallpaperDataServiceTests: XCTestCase {
 
     func testExtractWallpaperMetadata() async {
         let data = convertLocalJSONToData()
-        let networking = NetworkingMock()
-        networking.result = .success(data)
-        let sut = WallpaperDataService(with: networking)
-
         let lastUpdatedDate = dateWith(year: 2001, month: 02, day: 03)
         let startDate = dateWith(year: 2002, month: 11, day: 28)
         let endDate = dateWith(year: 2022, month: 09, day: 10)
-
         let expectedMetadata = WallpaperMetadata(
             lastUpdated: lastUpdatedDate,
             collections: [
@@ -59,6 +54,10 @@ class WallpaperDataServiceTests: XCTestCase {
                         Wallpaper(id: "beachVibes", textColour: "0xADD8E6")
                     ])
             ])
+
+        let networking = NetworkingMock()
+        networking.result = .success(data)
+        let sut = WallpaperDataService(with: networking)
 
         do {
             let actualMetadata = try await sut.getMetadata()
@@ -103,7 +102,6 @@ class WallpaperDataServiceTests: XCTestCase {
 // MARK: - Test helpers
 extension WallpaperDataServiceTests {
     private func convertLocalJSONToData() -> Data {
-
         let bundle = Bundle(for: type(of: self))
 
         guard let url = bundle.url(forResource: "wallpaperInitial", withExtension: "json") else {

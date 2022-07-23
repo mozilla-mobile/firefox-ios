@@ -10,6 +10,11 @@ class NetworkingMock: Networking {
     var result = Result<Data, Error>.failure(URLError(.notConnectedToInternet))
 
     func data(from url: URL) async throws -> (Data, URLResponse) {
-        return try (result.get(), URLResponse())
+        switch result {
+        case .success(let data):
+            return (data, URLResponse())
+        case .failure(let error):
+            throw error
+        }
     }
 }
