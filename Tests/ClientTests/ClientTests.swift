@@ -22,7 +22,7 @@ class ClientTests: XCTestCase {
             let loc = ua.range(of: expectedRegex, options: .regularExpression)
             XCTAssertTrue(loc != nil, "Sync UA is as expected. Was \(ua)")
         } else {
-            XCTAssertTrue(ua.range(of: "dev") != nil)
+            XCTAssertTrue(ua.contains("dev"))
         }
     }
 
