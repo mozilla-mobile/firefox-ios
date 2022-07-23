@@ -231,10 +231,11 @@ private extension Array where Element == Site {
             }
 
             let siteDomain = site.url.asURL?.shortDomain
-            let shouldAddSite = alreadyThere.first(where: { $0.url.asURL?.shortDomain == siteDomain }) == nil
+            let shouldAddSite = !alreadyThere.contains(where: { $0.url.asURL?.shortDomain == siteDomain })
             // If shouldAddSite or site domain was not found, then insert the site
             guard shouldAddSite || siteDomain == nil else { return nil }
             alreadyThere.insert(site)
+
             return site
         }
 
