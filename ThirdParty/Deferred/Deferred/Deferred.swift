@@ -41,7 +41,7 @@ open class Deferred<T> {
             return (data.protectedValue!, blocks)
         }
         for (queue, block) in blocks {
-            queue.async() { block(filledValue) }
+            queue.async { block(filledValue) }
         }
     }
 
@@ -65,7 +65,7 @@ open class Deferred<T> {
             return data.protectedValue
         }
         if let value = maybeValue {
-            queue.async() { block(value) }
+            queue.async { block(value) }
         }
     }
 }
