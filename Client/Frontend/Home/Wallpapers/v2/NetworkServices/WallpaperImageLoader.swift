@@ -6,4 +6,37 @@ import Foundation
 
 class WallpaperImageLoader {
 
+    enum ImageLoaderError: Error {
+        case badData
+    }
+
+    // MARK: - Properties
+    private let network: Networking
+
+    // MARK: - Initializers
+    init(networkModule: Networking) {
+        self.network = networkModule
+    }
+
+    // MARK: - Methods
+    func fetchImage(
+        using scheme: String,
+        andPath path: String
+    ) async throws -> UIImage {
+        guard let url = formatImageURLWith(scheme: scheme, andPath: path) else {
+            throw URLError(.badURL)
+        }
+
+        let (data, _) = try await network.data(from: url)
+
+        guard let image = UIImage(data: data) else {
+            throw ImageLoaderError.badData
+        }
+
+        return image
+    }
+
+    private func formatImageURLWith(scheme: String, andPath path: String) -> URL? {
+        return URL(string: "\(scheme)\(path).png")
+    }
 }

@@ -9,10 +9,6 @@ enum SessionErrors: Error {
     case dataUnavailable
 }
 
-/// A protocol serving as a wrapper on URLSession to provide
-/// async/await functionality for ios 13 & 14, but still leaving
-/// room for each feature to implement its own networking module
-/// to meet its specific needs
 protocol Networking {
     func data(from url: URL) async throws -> (Data, URLResponse)
 }

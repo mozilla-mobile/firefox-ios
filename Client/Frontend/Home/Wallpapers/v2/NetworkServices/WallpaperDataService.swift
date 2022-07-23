@@ -9,52 +9,41 @@ import Shared
 class WallpaperDataService: Loggable {
 
     // MARK: - Properties
-    enum URLType {
-        case metadata
-        case image
-    }
-
-    enum WallpaperDataServiceError: Error {
-        case invalidURL
-        case invalidResponse
-        case badData
+    enum DataServiceError: Error {
+        case noBundledURL
     }
 
     private let networking: Networking
-
     private let wallpaperURLScheme = "MozWallpaperURLScheme"
 
+    // MARK: - Initializers
     init(with networkingModule: Networking = WallpaperNetworkingModule()) {
         self.networking = networkingModule
     }
 
     // MARK: - Methods
     func getMetadata() async throws -> WallpaperMetadata {
-        guard let scheme = urlScheme() else {
-            throw WallpaperDataServiceError.invalidURL
-        }
-
+        let scheme = try urlScheme()
         let loader = WallpaperMetadataLoader(networkModule: networking)
 
         return try await loader.loadMetadataWith(scheme)
     }
 
-    private func urlScheme() -> String? {
+    func getImageWith(path: String) async throws -> UIImage {
+        let scheme = try urlScheme()
+        let loader = WallpaperImageLoader(networkModule: networking)
+
+        return try await loader.fetchImage(using: scheme, andPath: path)
+    }
+
+    private func urlScheme() throws -> String {
         if AppConstants.isRunningTest { return "https://my.test.url" }
 
         let bundle = AppInfo.applicationBundle
         guard let appToken = bundle.object(forInfoDictionaryKey: wallpaperURLScheme) as? String,
               !appToken.isEmpty
-        else {
-            browserLog.debug("Error fetching wallpapers: asset scheme not configured in Info.plist")
-            return nil
-        }
+        else { throw DataServiceError.noBundledURL }
 
         return appToken
-    }
-
-    // MARK: Helpers
-    func stringWithImageSuffixAdded(to path: String) -> String {
-        return "\(path).png"
     }
 }

@@ -67,7 +67,7 @@ class WallpaperDataServiceTests: XCTestCase {
                 expectedMetadata,
                 "The metadata that was decoded from data was not what was expected.")
         } catch {
-            XCTFail("We should not fail the extraction process, but did with \(error.localizedDescription)")
+            XCTFail("We should not fail the extraction process, but did with error: \(error)")
         }
     }
 

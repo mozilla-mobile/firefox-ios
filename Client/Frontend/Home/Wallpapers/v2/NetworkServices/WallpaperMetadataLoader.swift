@@ -14,9 +14,7 @@ class WallpaperMetadataLoader {
     }
 
     func loadMetadataWith(_ scheme: String) async throws -> WallpaperMetadata {
-        guard let url = metadataPath(using: scheme) else {
-            throw WallpaperDataService.WallpaperDataServiceError.invalidURL
-        }
+        guard let url = metadataPath(using: scheme) else { throw URLError(.badURL) }
 
         let (data, _) = try await network.data(from: url)
 
