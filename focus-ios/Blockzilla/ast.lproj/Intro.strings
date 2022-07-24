@@ -1,5 +1,5 @@
 /* Description for the 'History' panel in the First Run tour. */
-"Intro.Slides.History.Description" = "Llimpia tol to historial de restolar, contraseñes y cookies cuando quieras con un calcu.";
+"Intro.Slides.History.Description" = "Llimpia cuando quieras y con un calcu les cookies, l'historial de restolar y les contraseñes.";
 
 /* Title for the third  panel 'History' in the First Run tour. */
 "Intro.Slides.History.Title" = "El to historial ye historia";
@@ -8,10 +8,10 @@
 "Intro.Slides.Next.Button" = "Siguiente";
 
 /* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "¿Guetes daqué diferente? Escueyi un motor de gueta distintu.";
+"Intro.Slides.Search.Description" = "¿Busques daqué diferente? Escueyi un motor de busca distintu.";
 
 /* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Les guetes al to xeitu";
+"Intro.Slides.Search.Title" = "La busca al to xeitu";
 
 /* Button to skip onboarding in Focus */
 "Intro.Slides.Skip.Button" = "Saltar";

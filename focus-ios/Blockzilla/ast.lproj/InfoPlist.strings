@@ -1,8 +1,11 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Esto déxate facer y xubir semeyes.";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Esto déxate desbloquiar l'aplicación.";
+
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "Los sitios que visites podríen solicitar el to allugamientu.";
+"NSLocationWhenInUseUsageDescription" = "Los sitios que visites puen solicitar el to allugamientu.";
 
 /* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Esto déxate facer y xubir vídeos.";
