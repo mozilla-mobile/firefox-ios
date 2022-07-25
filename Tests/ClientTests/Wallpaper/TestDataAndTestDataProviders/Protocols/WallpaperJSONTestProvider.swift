@@ -8,6 +8,7 @@ enum WallpaperJSONId: String {
     case goodData = "wallpaperGoodData"
     case badLastUpdatedDate = "wallpaperBadLastUpdatedDate"
     case noAvailabilityRange = "wallpaperNoAvailabilityRange"
+    case noLocales = "wallpaperNoLocales"
     case availabilityStart = "wallpaperAvailabilityStart"
     case availabilityEnd = "wallpaperAvailabilityEnd"
     case badTextColour = "wallpaperBadTextColour"

@@ -14,7 +14,7 @@ struct WallpaperCollection: Codable, Equatable {
     }
 
     let id: String
-    let availableLocales: [String]
-    let availability: WallpaperCollectionAvailability
+    let availableLocales: [String]?
+    let availability: WallpaperCollectionAvailability?
     let wallpapers: [Wallpaper]
 }

@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AdjustAppToken</key>
+	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>AppIdentifierPrefix</key>
 	<string>$(APP_IDENTIFIER_PREFIX)</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
@@ -100,12 +102,10 @@
 		<string>QuickLinkSelectionIntent</string>
 		<string>org.mozilla.ios.firefox.browsing</string>
 	</array>
-	<key>PocketEnvironmentAPIKey</key>
-	<string>$(POCKET_API_KEY)</string>
-	<key>AdjustAppToken</key>
-	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>NimbusURL</key>
 	<string>$(NIMBUS_URL)</string>
+	<key>PocketEnvironmentAPIKey</key>
+	<string>$(POCKET_API_KEY)</string>
 	<key>SentryCloudDSN</key>
 	<string>$(SENTRY_CLOUD_DSN)</string>
 	<key>UIAppFonts</key>
@@ -151,6 +151,8 @@
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).QRCode</string>
 		</dict>
 	</array>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>processing</string>
@@ -181,8 +183,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UTImportedTypeDeclarations</key>
 	<array>

@@ -691,6 +691,7 @@
 		C857CD47288B49E200E0AB39 /* WallpaperNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857CD46288B49E200E0AB39 /* WallpaperNetworking.swift */; };
 		C857CD49288B4F1200E0AB39 /* WallpaperNetworkModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857CD48288B4F1200E0AB39 /* WallpaperNetworkModule.swift */; };
 		C857CD4C288B51D000E0AB39 /* NetworkingMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857CD4A288B519600E0AB39 /* NetworkingMock.swift */; };
+		C85BA13E288F162E009E8C01 /* wallpaperNoLocales.json in Resources */ = {isa = PBXBuildFile; fileRef = C85BA13D288F162E009E8C01 /* wallpaperNoLocales.json */; };
 		C8611C8E1F71904C00C3DE7D /* DiskImageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */; };
 		C8611CB01F71AEBA00C3DE7D /* NoImageModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */; };
 		C8656D75270F834600E199EA /* FlaggableFeatureOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8656D74270F834600E199EA /* FlaggableFeatureOptions.swift */; };
@@ -3666,6 +3667,7 @@
 		C857CD46288B49E200E0AB39 /* WallpaperNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperNetworking.swift; sourceTree = "<group>"; };
 		C857CD48288B4F1200E0AB39 /* WallpaperNetworkModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperNetworkModule.swift; sourceTree = "<group>"; };
 		C857CD4A288B519600E0AB39 /* NetworkingMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingMock.swift; sourceTree = "<group>"; };
+		C85BA13D288F162E009E8C01 /* wallpaperNoLocales.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperNoLocales.json; sourceTree = "<group>"; };
 		C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoImageModeTests.swift; sourceTree = "<group>"; };
 		C8656D74270F834600E199EA /* FlaggableFeatureOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlaggableFeatureOptions.swift; sourceTree = "<group>"; };
 		C8656D76270F858900E199EA /* TabsSettingsViewControler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsSettingsViewControler.swift; sourceTree = "<group>"; };
@@ -6194,7 +6196,7 @@
 		C84655ED28873C4800861B4A /* Wallpaper */ = {
 			isa = PBXGroup;
 			children = (
-				C8F217B3288EDDCD00F4A810 /* TestDataProviders */,
+				C8F217B3288EDDCD00F4A810 /* TestDataAndTestDataProviders */,
 				C84655F028873C8300861B4A /* WallpaperDataServiceTests.swift */,
 				C8F217B8288EE68200F4A810 /* WallpaperNetworkingTests.swift */,
 				C846560328881BED00861B4A /* Mocks */,
@@ -6394,13 +6396,13 @@
 			path = RustFxA;
 			sourceTree = "<group>";
 		};
-		C8F217B3288EDDCD00F4A810 /* TestDataProviders */ = {
+		C8F217B3288EDDCD00F4A810 /* TestDataAndTestDataProviders */ = {
 			isa = PBXGroup;
 			children = (
 				C8F217BB288F101D00F4A810 /* JSONFiles */,
 				C8F217BA288F101700F4A810 /* Protocols */,
 			);
-			path = TestDataProviders;
+			path = TestDataAndTestDataProviders;
 			sourceTree = "<group>";
 		};
 		C8F217BA288F101700F4A810 /* Protocols */ = {
@@ -6419,6 +6421,7 @@
 				C857CD382889EFD200E0AB39 /* wallpaperGoodData.json */,
 				C8F217A7288EDCC500F4A810 /* wallpaperBadLastUpdatedDate.json */,
 				C8F217A9288EDCD500F4A810 /* wallpaperNoAvailabilityRange.json */,
+				C85BA13D288F162E009E8C01 /* wallpaperNoLocales.json */,
 				C8F217AB288EDCE600F4A810 /* wallpaperAvailabilityStart.json */,
 				C8F217AD288EDCF100F4A810 /* wallpaperAvailabilityEnd.json */,
 				C8F217AF288EDD0B00F4A810 /* wallpaperBadTextColour.json */,
@@ -8820,6 +8823,7 @@
 				C857CD3A2889EFD200E0AB39 /* wallpaperGoodData.json in Resources */,
 				C8F217AA288EDCD500F4A810 /* wallpaperNoAvailabilityRange.json in Resources */,
 				3B61CD631F2A769D00D38DE1 /* pocketglobalfeed.json in Resources */,
+				C85BA13E288F162E009E8C01 /* wallpaperNoLocales.json in Resources */,
 				C8F217AC288EDCE600F4A810 /* wallpaperAvailabilityStart.json in Resources */,
 				8A11C80F2731916E00AC7318 /* defaultOnlyTestList.json in Resources */,
 				C8B0F5EB283B7BF9007AE65D /* pocketsponsoredfeed.json in Resources */,
@@ -14820,7 +14824,7 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = I;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec;
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE_SPECIFIER = "";
