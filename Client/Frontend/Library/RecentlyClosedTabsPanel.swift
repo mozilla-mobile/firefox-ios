@@ -22,9 +22,12 @@ protocol RecentlyClosedPanelDelegate: AnyObject {
 }
 
 class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
+
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    var state: LibraryPanelMainState = .history(state: .inFolder)
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     let profile: Profile
+    var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
 
     fileprivate lazy var tableViewController = RecentlyClosedTabsPanelSiteTableViewController(profile: profile)
 
@@ -124,6 +127,15 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.recentlyClosedTabs.count
+    }
+
+    // MARK: - Libray Toolbar actions
+    func handleBackButton() {
+        // no implementation needed
+    }
+
+    func handleDoneButton() {
+        // no implementation needed
     }
 
 }

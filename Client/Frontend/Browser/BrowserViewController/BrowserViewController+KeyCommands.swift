@@ -36,7 +36,7 @@ extension BrowserViewController {
             return
         }
 
-        libraryViewController.selectedPanel = .history
+        libraryViewController.viewModel.selectedPanel = .history
         NotificationCenter.default.post(name: .OpenClearRecentHistory, object: nil)
     }
 

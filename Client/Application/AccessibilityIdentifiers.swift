@@ -92,6 +92,10 @@ public struct AccessibilityIdentifiers {
         static let bottomSearchButton = "historyBottomSearchButton"
         static let bottomDeleteButton = "historyBottomDeleteButton"
 
+        struct BookmarksPanel {
+            static let tableView = "Bookmarks List"
+        }
+
         struct HistoryPanel {
             static let tableView = "History List"
             static let clearHistoryCell = "HistoryPanel.clearHistory"

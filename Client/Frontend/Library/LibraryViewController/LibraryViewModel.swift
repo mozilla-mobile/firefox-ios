@@ -4,24 +4,29 @@
 
 import Foundation
 
-class LibraryViewModel: FeatureFlaggable {
+class LibraryViewModel {
 
     let profile: Profile
     let tabManager: TabManager
     let panelDescriptors: [LibraryPanelDescriptor]
-
-    fileprivate var panelState = LibraryPanelViewState()
+    var selectedPanel: LibraryPanelType?
     var currentPanelState: LibraryPanelMainState {
-        get { return panelState.currentState }
-        set { panelState.currentState = newValue }
+        guard let index = selectedPanel?.rawValue,
+              let panel = panelDescriptors[index].shownPanel as? LibraryPanel else {
+            return .bookmarks(state: .mainView)
+        }
+
+        return panel.state
     }
 
-    var shouldShowSearch: Bool {
-        return featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) && currentPanelState == .history(state: .mainView) || currentPanelState == .history(state: .search)
+    var currentPanel: LibraryPanel? {
+        guard let index = selectedPanel?.rawValue else { return nil }
+
+        return panelDescriptors[index].shownPanel as? LibraryPanel
     }
 
     var segmentedControlItems: [UIImage] {
-        [UIImage(named: ImageIdentifiers.libraryBookmars) ?? UIImage(),
+        [UIImage(named: ImageIdentifiers.libraryBookmarks) ?? UIImage(),
          UIImage(named: ImageIdentifiers.libraryHistory) ?? UIImage(),
          UIImage(named: ImageIdentifiers.libraryDownloads) ?? UIImage(),
          UIImage(named: ImageIdentifiers.libraryReadingList) ?? UIImage()]
@@ -30,6 +35,12 @@ class LibraryViewModel: FeatureFlaggable {
     init(withProfile profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
-        self.panelDescriptors = LibraryPanels(profile: profile, tabManager: tabManager).enabledPanels
+        self.panelDescriptors = LibraryPanelHelper(profile: profile, tabManager: tabManager).enabledPanels
+    }
+
+    func setupNavigationController() {
+        guard let index = selectedPanel?.rawValue else { return }
+
+        panelDescriptors[index].setupNavigationController()
     }
 }

@@ -47,3 +47,9 @@ extension UICollectionView: Loggable {
         register(T.self, forCellWithReuseIdentifier: T.cellIdentifier)
     }
 }
+
+extension UITableView {
+    func register<T: ReusableCell>(cellType: T.Type) {
+        register(T.self, forCellReuseIdentifier: T.cellIdentifier)
+    }
+}

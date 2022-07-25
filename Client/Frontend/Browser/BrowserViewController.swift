@@ -976,9 +976,7 @@ class BrowserViewController: UIViewController {
         libraryViewController.delegate = self
         self.libraryViewController = libraryViewController
 
-        if panel != nil {
-            libraryViewController.selectedPanel = panel
-        }
+        libraryViewController.setupOpenPanel(panelType: panel ?? . bookmarks)
 
         // Reset history panel pagination to get latest history visit
         if let historyPanel = libraryViewController.viewModel.panelDescriptors.first(where: {$0.panelType == .history}),
@@ -1116,7 +1114,7 @@ class BrowserViewController: UIViewController {
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
 
             guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
-                  let bookmarkNode = bookmarkFolder.children?.last
+                  let bookmarkNode = bookmarkFolder.children?.last as? FxBookmarkNode
             else { return }
 
             let detailController = BookmarkDetailPanel(profile: self.profile,
