@@ -5,7 +5,6 @@
 import Foundation
 
 protocol DataObserver {
-    var profile: Profile { get }
     var delegate: DataObserverDelegate? { get set }
 
     func refreshIfNeeded(refresh forced: Bool)

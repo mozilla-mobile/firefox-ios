@@ -9,20 +9,22 @@ import Storage
 // Manages the top site
 class TopSiteHistoryManager: DataObserver, Loggable {
 
-    let profile: Profile
+    private let profile: Profile
 
     weak var delegate: DataObserverDelegate?
-    var notificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationCenter
 
     private let topSiteCacheSize: Int32 = 32
     private let events: [Notification.Name] = [.FirefoxAccountChanged, .ProfileDidFinishSyncing, .PrivateDataClearedHistory]
     private let dataQueue = DispatchQueue(label: "com.moz.topSiteHistory.queue")
+    private let topSitesProvider: TopSitesProvider
 
-    lazy var topSitesProvider: TopSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
-                                                                                 prefs: profile.prefs)
-
-    init(profile: Profile) {
+    init(profile: Profile,
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.profile = profile
+        self.topSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
+                                                               prefs: profile.prefs)
+        self.notificationCenter = notificationCenter
         profile.history.setTopSitesCacheSize(topSiteCacheSize)
 
         setupNotifications(forObserver: self, observing: events)

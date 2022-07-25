@@ -20,16 +20,14 @@ struct TopSitesUIInterface {
 }
 
 // Laurie - documentation
-protocol DimensionManager {
+protocol TopSitesDimension {
     func getSectionDimension(for sites: [TopSite],
                              numberOfRows: Int,
                              interface: TopSitesUIInterface
     ) -> TopSitesSectionDimension
-
-    func widthDimension(for numberOfHorizontalItems: Int) -> NSCollectionLayoutDimension
 }
 
-class DimensionManagerImplementation: DimensionManager {
+class TopSitesDimensionImplementation: TopSitesDimension {
 
     struct UX {
         static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
@@ -45,11 +43,6 @@ class DimensionManagerImplementation: DimensionManager {
                                            numberOfTilesPerRow: numberOfTilesPerRow)
         return TopSitesSectionDimension(numberOfRows: numberOfRows,
                                         numberOfTilesPerRow: numberOfTilesPerRow)
-    }
-
-    // The width dimension of a cell
-    func widthDimension(for numberOfHorizontalItems: Int) -> NSCollectionLayoutDimension {
-        return .fractionalWidth(CGFloat(1 / numberOfHorizontalItems))
     }
 
     // Adjust number of rows depending on the what the users want, and how many sites we actually have.

@@ -13,7 +13,7 @@ protocol TopSitesManagerDelegate: AnyObject {
 protocol TopSitesDataAdaptor {
     var numberOfRows: Int { get }
 
-    // TODO: Laurie
+    // TODO: Laurie documentation
     func getTopSitesData() -> [TopSite]
 
     /// Top sites are composed of pinned sites, history, Contiles and Google top site.
@@ -48,6 +48,8 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         self.googleTopSiteManager = googleTopSiteManager
         self.contileProvider = contileProvider
         topSiteHistoryManager.delegate = self
+
+        loadTopSitesData()
     }
 
     func getTopSitesData() -> [TopSite] {
@@ -74,10 +76,6 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         sites.removeDuplicates()
 
         topSites = sites.map { TopSite(site: $0) }
-
-        // Laurie - needed?
-        // Refresh data in the background so we'll have fresh data next time we show
-//        topSiteHistoryManager.refreshIfNeeded(forceTopSites: false)
     }
 
     // MARK: - Data loading
@@ -89,10 +87,9 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         loadTopSites(group: group)
 
         group.notify(queue: dataQueue) { [weak self] in
-            // Laurie - needed?
             // Pre-loading the data with a default number of tiles so we always show section when needed
             self?.recalculateTopSiteData(for: 8)
-
+            self?.delegate?.didLoadNewData()
             dataLoadingCompletion?()
         }
     }
@@ -250,6 +247,5 @@ extension TopSitesDataAdaptorImplementation: DataObserverDelegate {
     func didInvalidateDataSource(refresh forced: Bool) {
         guard forced else { return }
         loadTopSitesData()
-//        delegate?.reloadTopSites()
     }
 }

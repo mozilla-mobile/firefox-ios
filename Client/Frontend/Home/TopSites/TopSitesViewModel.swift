@@ -21,7 +21,7 @@ class TopSitesViewModel {
     private let profile: Profile
     private var sentImpressionTelemetry = [String: Bool]()
     private var topSites: [TopSite] = []
-    private let dimensionManager: DimensionManager
+    private let dimensionManager: TopSitesDimension
 
     private let topSitesDataAdaptor: TopSitesDataAdaptor
     private let topSiteHistoryManager: TopSiteHistoryManager
@@ -30,7 +30,7 @@ class TopSitesViewModel {
     init(profile: Profile, isZeroSearch: Bool = false) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
-        self.dimensionManager = DimensionManagerImplementation()
+        self.dimensionManager = TopSitesDimensionImplementation()
 
         self.topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
         self.googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
@@ -192,8 +192,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 // MARK: - FxHomeTopSitesManagerDelegate
 extension TopSitesViewModel: TopSitesManagerDelegate {
     func didLoadNewData() {
-        // Laurie - still needed? - test it with sync
-//        guard shouldShow else { return }
+        topSites = topSitesDataAdaptor.getTopSitesData()
         delegate?.reloadData()
     }
 }
