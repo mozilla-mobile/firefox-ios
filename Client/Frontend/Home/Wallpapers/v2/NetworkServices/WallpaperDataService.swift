@@ -13,11 +13,11 @@ class WallpaperDataService: Loggable {
         case noBundledURL
     }
 
-    private let networking: Networking
+    private let networking: WallpaperNetworking
     private let wallpaperURLScheme = "MozWallpaperURLScheme"
 
     // MARK: - Initializers
-    init(with networkingModule: Networking = WallpaperNetworkingModule()) {
+    init(with networkingModule: WallpaperNetworking = WallpaperNetworkingModule()) {
         self.networking = networkingModule
     }
 

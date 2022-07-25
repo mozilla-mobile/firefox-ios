@@ -7,9 +7,9 @@ import Foundation
 class WallpaperMetadataLoader {
     static let versionEndpoint = "v1"
 
-    private let network: Networking
+    private let network: WallpaperNetworking
 
-    init(networkModule: Networking) {
+    init(networkModule: WallpaperNetworking) {
         self.network = networkModule
     }
 

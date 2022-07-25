@@ -11,10 +11,10 @@ class WallpaperImageLoader {
     }
 
     // MARK: - Properties
-    private let network: Networking
+    private let network: WallpaperNetworking
 
     // MARK: - Initializers
-    init(networkModule: Networking) {
+    init(networkModule: WallpaperNetworking) {
         self.network = networkModule
     }
 

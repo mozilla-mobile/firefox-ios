@@ -4,10 +4,6 @@
         {
             "id": "firefox",
             "available-locales": ["en-US", "es-US", "en-CA", "fr-CA"],
-            "availability-range": {
-                "start": "2002-11-28",
-                "end": "2022-09-10"
-            },
             "wallpapers": [
                 {
                     "id": "beachVibes",

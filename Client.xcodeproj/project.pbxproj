@@ -685,10 +685,10 @@
 		C8501F4F2850FB72003B09AB /* WallpaperMigrationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8501F4E2850FB72003B09AB /* WallpaperMigrationUtility.swift */; };
 		C8501F5128510DA1003B09AB /* WallpaperMigrationUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8501F5028510DA1003B09AB /* WallpaperMigrationUtilityTests.swift */; };
 		C857CD392889EFD200E0AB39 /* wallpaperNewUpdates.json in Resources */ = {isa = PBXBuildFile; fileRef = C857CD372889EFD200E0AB39 /* wallpaperNewUpdates.json */; };
-		C857CD3A2889EFD200E0AB39 /* wallpaperInitial.json in Resources */ = {isa = PBXBuildFile; fileRef = C857CD382889EFD200E0AB39 /* wallpaperInitial.json */; };
+		C857CD3A2889EFD200E0AB39 /* wallpaperGoodData.json in Resources */ = {isa = PBXBuildFile; fileRef = C857CD382889EFD200E0AB39 /* wallpaperGoodData.json */; };
 		C857CD3C288B321400E0AB39 /* WallpaperDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857CD3B288B321400E0AB39 /* WallpaperDateFormatter.swift */; };
 		C857CD45288B460500E0AB39 /* WallpaperMetadataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857CD44288B460500E0AB39 /* WallpaperMetadataLoader.swift */; };
-		C857CD47288B49E200E0AB39 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857CD46288B49E200E0AB39 /* Networking.swift */; };
+		C857CD47288B49E200E0AB39 /* WallpaperNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857CD46288B49E200E0AB39 /* WallpaperNetworking.swift */; };
 		C857CD49288B4F1200E0AB39 /* WallpaperNetworkModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857CD48288B4F1200E0AB39 /* WallpaperNetworkModule.swift */; };
 		C857CD4C288B51D000E0AB39 /* NetworkingMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857CD4A288B519600E0AB39 /* NetworkingMock.swift */; };
 		C8611C8E1F71904C00C3DE7D /* DiskImageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */; };
@@ -751,7 +751,7 @@
 		C8E78BDD27F4A1E700C48BAA /* HistoryDeletionUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E78BDC27F4A1E700C48BAA /* HistoryDeletionUtilityTests.swift */; };
 		C8EB60C41F1FB12500F9B5B3 /* navigationDelegate.html in Resources */ = {isa = PBXBuildFile; fileRef = C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */; };
 		C8EB60DC1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */; };
-		C8F217A8288EDCC500F4A810 /* wallpaperBadUpdatedDate.json in Resources */ = {isa = PBXBuildFile; fileRef = C8F217A7288EDCC500F4A810 /* wallpaperBadUpdatedDate.json */; };
+		C8F217A8288EDCC500F4A810 /* wallpaperBadLastUpdatedDate.json in Resources */ = {isa = PBXBuildFile; fileRef = C8F217A7288EDCC500F4A810 /* wallpaperBadLastUpdatedDate.json */; };
 		C8F217AA288EDCD500F4A810 /* wallpaperNoAvailabilityRange.json in Resources */ = {isa = PBXBuildFile; fileRef = C8F217A9288EDCD500F4A810 /* wallpaperNoAvailabilityRange.json */; };
 		C8F217AC288EDCE600F4A810 /* wallpaperAvailabilityStart.json in Resources */ = {isa = PBXBuildFile; fileRef = C8F217AB288EDCE600F4A810 /* wallpaperAvailabilityStart.json */; };
 		C8F217AE288EDCF100F4A810 /* wallpaperAvailabilityEnd.json in Resources */ = {isa = PBXBuildFile; fileRef = C8F217AD288EDCF100F4A810 /* wallpaperAvailabilityEnd.json */; };
@@ -759,6 +759,7 @@
 		C8F217B2288EDD9500F4A810 /* WallpaperJSONTestProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F217B1288EDD9500F4A810 /* WallpaperJSONTestProvider.swift */; };
 		C8F217B5288EE04C00F4A810 /* WallpaperMetadataTestProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F217B4288EE04C00F4A810 /* WallpaperMetadataTestProvider.swift */; };
 		C8F217B7288EE37E00F4A810 /* WallpaperTestDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F217B6288EE37E00F4A810 /* WallpaperTestDataProvider.swift */; };
+		C8F217B9288EE68200F4A810 /* WallpaperNetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F217B8288EE68200F4A810 /* WallpaperNetworkingTests.swift */; };
 		C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */; };
 		C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */; };
 		CA03B26A247F1D9E00382B62 /* BreachAlertsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */; };
@@ -3659,10 +3660,10 @@
 		C8501F4E2850FB72003B09AB /* WallpaperMigrationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMigrationUtility.swift; sourceTree = "<group>"; };
 		C8501F5028510DA1003B09AB /* WallpaperMigrationUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMigrationUtilityTests.swift; sourceTree = "<group>"; };
 		C857CD372889EFD200E0AB39 /* wallpaperNewUpdates.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperNewUpdates.json; sourceTree = "<group>"; };
-		C857CD382889EFD200E0AB39 /* wallpaperInitial.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperInitial.json; sourceTree = "<group>"; };
+		C857CD382889EFD200E0AB39 /* wallpaperGoodData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperGoodData.json; sourceTree = "<group>"; };
 		C857CD3B288B321400E0AB39 /* WallpaperDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperDateFormatter.swift; sourceTree = "<group>"; };
 		C857CD44288B460500E0AB39 /* WallpaperMetadataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMetadataLoader.swift; sourceTree = "<group>"; };
-		C857CD46288B49E200E0AB39 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+		C857CD46288B49E200E0AB39 /* WallpaperNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperNetworking.swift; sourceTree = "<group>"; };
 		C857CD48288B4F1200E0AB39 /* WallpaperNetworkModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperNetworkModule.swift; sourceTree = "<group>"; };
 		C857CD4A288B519600E0AB39 /* NetworkingMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingMock.swift; sourceTree = "<group>"; };
 		C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoImageModeTests.swift; sourceTree = "<group>"; };
@@ -3721,7 +3722,7 @@
 		C8E78BDC27F4A1E700C48BAA /* HistoryDeletionUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDeletionUtilityTests.swift; sourceTree = "<group>"; };
 		C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = navigationDelegate.html; sourceTree = "<group>"; };
 		C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationDelegateTests.swift; sourceTree = "<group>"; };
-		C8F217A7288EDCC500F4A810 /* wallpaperBadUpdatedDate.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperBadUpdatedDate.json; sourceTree = "<group>"; };
+		C8F217A7288EDCC500F4A810 /* wallpaperBadLastUpdatedDate.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperBadLastUpdatedDate.json; sourceTree = "<group>"; };
 		C8F217A9288EDCD500F4A810 /* wallpaperNoAvailabilityRange.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperNoAvailabilityRange.json; sourceTree = "<group>"; };
 		C8F217AB288EDCE600F4A810 /* wallpaperAvailabilityStart.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperAvailabilityStart.json; sourceTree = "<group>"; };
 		C8F217AD288EDCF100F4A810 /* wallpaperAvailabilityEnd.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperAvailabilityEnd.json; sourceTree = "<group>"; };
@@ -3729,6 +3730,7 @@
 		C8F217B1288EDD9500F4A810 /* WallpaperJSONTestProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperJSONTestProvider.swift; sourceTree = "<group>"; };
 		C8F217B4288EE04C00F4A810 /* WallpaperMetadataTestProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMetadataTestProvider.swift; sourceTree = "<group>"; };
 		C8F217B6288EE37E00F4A810 /* WallpaperTestDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperTestDataProvider.swift; sourceTree = "<group>"; };
+		C8F217B8288EE68200F4A810 /* WallpaperNetworkingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperNetworkingTests.swift; sourceTree = "<group>"; };
 		C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+WebViewDelegates.swift"; sourceTree = "<group>"; };
 		C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+KeyCommands.swift"; sourceTree = "<group>"; };
 		C93C44278F08256D907675AD /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Shared.strings; sourceTree = "<group>"; };
@@ -6149,7 +6151,7 @@
 		C84655DD2887386200861B4A /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				C857CD46288B49E200E0AB39 /* Networking.swift */,
+				C857CD46288B49E200E0AB39 /* WallpaperNetworking.swift */,
 				C84655FE2887A06B00861B4A /* WallpaperFilePathProvider.swift */,
 				C857CD3B288B321400E0AB39 /* WallpaperDateFormatter.swift */,
 			);
@@ -6192,8 +6194,9 @@
 		C84655ED28873C4800861B4A /* Wallpaper */ = {
 			isa = PBXGroup;
 			children = (
-				C8F217B3288EDDCD00F4A810 /* JSON */,
+				C8F217B3288EDDCD00F4A810 /* TestDataProviders */,
 				C84655F028873C8300861B4A /* WallpaperDataServiceTests.swift */,
+				C8F217B8288EE68200F4A810 /* WallpaperNetworkingTests.swift */,
 				C846560328881BED00861B4A /* Mocks */,
 				C8501F5028510DA1003B09AB /* WallpaperMigrationUtilityTests.swift */,
 			);
@@ -6391,21 +6394,37 @@
 			path = RustFxA;
 			sourceTree = "<group>";
 		};
-		C8F217B3288EDDCD00F4A810 /* JSON */ = {
+		C8F217B3288EDDCD00F4A810 /* TestDataProviders */ = {
 			isa = PBXGroup;
 			children = (
+				C8F217BB288F101D00F4A810 /* JSONFiles */,
+				C8F217BA288F101700F4A810 /* Protocols */,
+			);
+			path = TestDataProviders;
+			sourceTree = "<group>";
+		};
+		C8F217BA288F101700F4A810 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				C8F217B6288EE37E00F4A810 /* WallpaperTestDataProvider.swift */,
 				C8F217B1288EDD9500F4A810 /* WallpaperJSONTestProvider.swift */,
 				C8F217B4288EE04C00F4A810 /* WallpaperMetadataTestProvider.swift */,
-				C857CD382889EFD200E0AB39 /* wallpaperInitial.json */,
-				C8F217A7288EDCC500F4A810 /* wallpaperBadUpdatedDate.json */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		C8F217BB288F101D00F4A810 /* JSONFiles */ = {
+			isa = PBXGroup;
+			children = (
+				C857CD382889EFD200E0AB39 /* wallpaperGoodData.json */,
+				C8F217A7288EDCC500F4A810 /* wallpaperBadLastUpdatedDate.json */,
 				C8F217A9288EDCD500F4A810 /* wallpaperNoAvailabilityRange.json */,
 				C8F217AB288EDCE600F4A810 /* wallpaperAvailabilityStart.json */,
 				C8F217AD288EDCF100F4A810 /* wallpaperAvailabilityEnd.json */,
 				C8F217AF288EDD0B00F4A810 /* wallpaperBadTextColour.json */,
 				C857CD372889EFD200E0AB39 /* wallpaperNewUpdates.json */,
-				C8F217B6288EE37E00F4A810 /* WallpaperTestDataProvider.swift */,
 			);
-			path = JSON;
+			path = JSONFiles;
 			sourceTree = "<group>";
 		};
 		C8F457A61F1FD75A000CB895 /* BrowserViewController */ = {
@@ -8797,8 +8816,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C8F217A8288EDCC500F4A810 /* wallpaperBadUpdatedDate.json in Resources */,
-				C857CD3A2889EFD200E0AB39 /* wallpaperInitial.json in Resources */,
+				C8F217A8288EDCC500F4A810 /* wallpaperBadLastUpdatedDate.json in Resources */,
+				C857CD3A2889EFD200E0AB39 /* wallpaperGoodData.json in Resources */,
 				C8F217AA288EDCD500F4A810 /* wallpaperNoAvailabilityRange.json in Resources */,
 				3B61CD631F2A769D00D38DE1 /* pocketglobalfeed.json in Resources */,
 				C8F217AC288EDCE600F4A810 /* wallpaperAvailabilityStart.json in Resources */,
@@ -9613,7 +9632,7 @@
 				EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */,
 				8AD40FCF27BADC6B00672675 /* URLTextField.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
-				C857CD47288B49E200E0AB39 /* Networking.swift in Sources */,
+				C857CD47288B49E200E0AB39 /* WallpaperNetworking.swift in Sources */,
 				8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */,
 				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* LegacyTheme.swift in Sources */,
@@ -10064,6 +10083,7 @@
 				8AF0CFF527A0B0ED00C1A4A2 /* QuickActionsTests.swift in Sources */,
 				2F44FA1B1A9D426A00FD20CC /* TestHashExtensions.swift in Sources */,
 				8A04136B2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift in Sources */,
+				C8F217B9288EE68200F4A810 /* WallpaperNetworkingTests.swift in Sources */,
 				8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */,
 				3B39EDBA1E16E18900EF029F /* CustomSearchEnginesTest.swift in Sources */,
 				8AEE284B276A973400C7104D /* RatingPromptManagerTests.swift in Sources */,
@@ -14800,7 +14820,7 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
+				PRODUCT_BUNDLE_IDENTIFIER = I;
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -5,8 +5,8 @@
 import Foundation
 
 enum WallpaperJSONId: String {
-    case initial = "wallpaperInitial"
-    case badUpdatedDate = "wallpaperBadUpdatedDate"
+    case goodData = "wallpaperGoodData"
+    case badLastUpdatedDate = "wallpaperBadLastUpdatedDate"
     case noAvailabilityRange = "wallpaperNoAvailabilityRange"
     case availabilityStart = "wallpaperAvailabilityStart"
     case availabilityEnd = "wallpaperAvailabilityEnd"

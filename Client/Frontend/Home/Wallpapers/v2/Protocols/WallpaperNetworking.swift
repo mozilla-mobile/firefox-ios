@@ -9,6 +9,6 @@ enum SessionErrors: Error {
     case dataUnavailable
 }
 
-protocol Networking {
+protocol WallpaperNetworking {
     func data(from url: URL) async throws -> (Data, URLResponse)
 }

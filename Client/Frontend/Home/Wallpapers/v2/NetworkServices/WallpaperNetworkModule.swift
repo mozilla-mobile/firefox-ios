@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class WallpaperNetworkingModule: Networking {
+class WallpaperNetworkingModule: WallpaperNetworking {
     func data(from url: URL) async throws -> (Data, URLResponse) {
         return try await withCheckedThrowingContinuation { continuation in
             URLSession.shared.dataTask(with: url) { data, response, error in

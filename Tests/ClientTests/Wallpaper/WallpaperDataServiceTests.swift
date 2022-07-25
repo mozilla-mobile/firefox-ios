@@ -8,7 +8,6 @@ import XCTest
 @testable import Client
 
 class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
-
     typealias ServiceError = WallpaperDataService.DataServiceError
 
     var networking: NetworkingMock!
@@ -21,34 +20,10 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
         networking = nil
     }
 
-    func testSetupWorksAsExpected() async {
-        do {
-            _ = try await networking.data(from: URL(string: "mozilla.com")!)
-            XCTFail("This test should throw an error.")
-        } catch {
-            XCTAssertEqual(error as? URLError,
-                           URLError(.notConnectedToInternet),
-                           "Initial result was different than what was expected.")
-        }
-    }
-
-    func testChangingNetworkingReturnResult() async {
-        networking.result = .failure(URLError(.badServerResponse))
-
-        do {
-            _ = try await networking.data(from: URL(string: "mozilla.com")!)
-            XCTFail("This test should throw an error.")
-        } catch {
-            XCTAssertEqual(error as? URLError,
-                           URLError(.badServerResponse),
-                           "Response result was different than what was expected.")
-        }
-    }
-
     // MARK: - Test metadata functions
-    func testExtractWallpaperMetadata() async {
-        let data = getDataFromJSONFile(named: .initial)
-        let expectedMetadata = getExpectedMetadata(for: .initial)
+    func testExtractGoodDataToWallpaperMetadata() async {
+        let data = getDataFromJSONFile(named: .goodData)
+        let expectedMetadata = getExpectedMetadata(for: .goodData)
 
         networking.result = .success(data)
         let sut = WallpaperDataService(with: networking)
@@ -64,9 +39,23 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
         }
     }
 
-    // MARK: - Test fetching images
+    func testExtractBadLastUpdatedDateToWallpaperMetadata() async {
+        let data = getDataFromJSONFile(named: .badLastUpdatedDate)
+
+        networking.result = .success(data)
+        let sut = WallpaperDataService(with: networking)
+
+        do {
+            _ = try await sut.getMetadata()
+            XCTFail("We should fail the extraction process")
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
 }
 
-// MARK: - Test helpers
+// MARK: - Test fetching images
 extension WallpaperDataServiceTests {
+
 }

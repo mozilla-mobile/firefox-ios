@@ -13,7 +13,7 @@ protocol WallpaperMetadataTestProvider {
 extension WallpaperMetadataTestProvider {
     func getExpectedMetadata(for jsonType: WallpaperJSONId) -> WallpaperMetadata {
         switch jsonType {
-        case .initial: return getInitialMetadata()
+        case .goodData: return getInitialMetadata()
         default:
             fatalError("No such expected data exists")
         }
@@ -38,7 +38,12 @@ extension WallpaperMetadataTestProvider {
                     ])
             ])
     }
-    
+
+//    private func getBadLastUpdatedDateMetadata() throws -> WallpaperMetadata {
+//
+//
+//    }
+
     private func dateWith(year: Int, month: Int, day: Int) -> Date {
         var dateComponents = DateComponents()
         dateComponents.year = year
