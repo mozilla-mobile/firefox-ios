@@ -71,8 +71,7 @@ class GleanPlumbMessageStore: GleanPlumbMessagingStoreProtocol {
     /// Depending on the surface, we may do different things with dismissal. But for the MVP,
     /// dismissal expires the message.
     func onMessageDismissed(_ message: GleanPlumbMessage) {
-        var messageToTrack = onMessageExpired(message.metadata, shouldReport: false)
-
+        let messageToTrack = onMessageExpired(message.metadata, shouldReport: false)
         messageToTrack.dismissals += 1
 
         set(key: message.id, metadata: messageToTrack)
@@ -81,19 +80,19 @@ class GleanPlumbMessageStore: GleanPlumbMessagingStoreProtocol {
     /// Updates a message's metadata and reports expiration Telemetry when applicable.
     /// A message expires in three ways (dismissal, interaction and max impressions), but only
     /// impressions should report an expired message.
-    func onMessageExpired(_ message: GleanPlumbMessageMetaData, shouldReport: Bool) -> GleanPlumbMessageMetaData {
-        var messageToTrack = message
-        messageToTrack.isExpired = true
+    func onMessageExpired(_ messageData: GleanPlumbMessageMetaData, shouldReport: Bool) -> GleanPlumbMessageMetaData {
+        messageData.isExpired = true
 
         if shouldReport {
             TelemetryWrapper.recordEvent(category: .information,
                                          method: .view,
                                          object: .homeTabBanner,
                                          value: .messageExpired,
-                                         extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id])
+                                         extras:
+                                            [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageData.id])
         }
 
-        return messageToTrack
+        return messageData
     }
 
     // MARK: - Private helpers

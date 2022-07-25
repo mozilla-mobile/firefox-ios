@@ -23,14 +23,52 @@ class GleanPlumbMessageStoreTests: XCTestCase {
         sut = nil
     }
 
-    func testManagerOnMessageExpired_WhenDismiss() {
-
+    func testImpression_OnMessageDisplayed() {
         let message = createMessage(messageId: messageId)
         sut.onMessageDisplayed(message)
-        let metadata = sut.getMessageMetadata(messageId: messageId)
 
-        XCTAssertEqual(metadata.impressions, 1)
-        XCTAssertFalse(metadata.isExpired)
+        XCTAssertEqual(message.metadata.impressions, 1)
+        XCTAssertFalse(message.metadata.isExpired)
+    }
+
+    func testOnMessageExpired_WhenPressed() {
+        let message = createMessage(messageId: messageId)
+        sut.onMessageDisplayed(message)
+        sut.onMessagePressed(message)
+
+        XCTAssertEqual(message.metadata.impressions, 1)
+        XCTAssertTrue(message.metadata.isExpired)
+    }
+
+    func testOnMessageExpired_WhenDismiss() {
+        let message = createMessage(messageId: messageId)
+        sut.onMessageDisplayed(message)
+        sut.onMessageDismissed(message)
+
+
+        XCTAssertEqual(message.metadata.impressions, 1)
+        XCTAssertTrue(message.metadata.isExpired)
+    }
+
+    func testOnMessageNotExpired_AfterEqualToMaxDisplayed() {
+        let message = createMessage(messageId: messageId)
+        sut.onMessageDisplayed(message)
+        sut.onMessageDisplayed(message)
+        sut.onMessageDisplayed(message)
+
+        XCTAssertEqual(message.metadata.impressions, 3)
+        XCTAssertTrue(message.metadata.isExpired)
+    }
+
+    func testManagerOnMessageExpired_AfterMaxDisplayed() {
+        let message = createMessage(messageId: messageId)
+        sut.onMessageDisplayed(message)
+        sut.onMessageDisplayed(message)
+        sut.onMessageDisplayed(message)
+        sut.onMessageDisplayed(message)
+
+        XCTAssertEqual(message.metadata.impressions, 4)
+        XCTAssertTrue(message.metadata.isExpired)
     }
 
     // MARK: - Helper function

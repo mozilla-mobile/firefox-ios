@@ -61,7 +61,7 @@ struct GleanPlumbMessage {
 }
 
 /// `MessageMeta` is where we store parts of the message that help us aggregate, query and determine non-expired messages.
-struct GleanPlumbMessageMetaData: Codable {
+class GleanPlumbMessageMetaData: Codable {
 
     /// The message Key.
     let id: String
@@ -74,4 +74,11 @@ struct GleanPlumbMessageMetaData: Codable {
 
     /// A message expiry status.
     var isExpired: Bool
+
+    init(id: String, impressions: Int, dismissals: Int, isExpired: Bool) {
+        self.id = id
+        self.impressions = impressions
+        self.dismissals = dismissals
+        self.isExpired = isExpired
+    }
 }
