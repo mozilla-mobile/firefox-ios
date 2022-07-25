@@ -114,7 +114,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
         // com.agilebits.onepassword-ios.extension
         // com.app77.ios.pwsafe2.find-login-action-password-actionExtension
         // If your extension's bundle identifier does not contain "password", simply submit a pull request by adding your bundle identifier.
-        return (activityType.range(of: "password") != nil)
+        return (activityType.contains("password"))
             || (activityType == "com.lastpass.ilastpass.LastPassExt")
             || (activityType == "in.sinew.Walletx.WalletxExt")
             || (activityType == "com.8bit.bitwarden.find-login-action-extension")
@@ -123,6 +123,6 @@ extension ShareExtensionHelper: UIActivityItemSource {
 
     private func isOpenByCopy(activityType: UIActivity.ActivityType?) -> Bool {
         guard let activityType = activityType?.rawValue else { return false }
-        return activityType.lowercased().range(of: "remoteopeninapplication-bycopy") != nil
+        return activityType.lowercased().contains("remoteopeninapplication-bycopy")
     }
 }

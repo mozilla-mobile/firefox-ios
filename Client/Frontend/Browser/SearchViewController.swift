@@ -431,15 +431,19 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         let currentTabs = self.remoteClientTabs
         self.filteredRemoteClientTabs = currentTabs.filter { value in
             let tab = value.tab
+
             if InternalURL.isValid(url: tab.URL) {
                 return false
             }
-            if tab.title.lowercased().range(of: searchString.lowercased()) != nil {
+
+            if tab.title.lowercased().contains(searchString.lowercased()) {
                 return true
             }
-            if tab.URL.absoluteString.lowercased().range(of: searchString.lowercased()) != nil {
+
+            if tab.URL.absoluteString.lowercased().contains(searchString.lowercased()) {
                 return true
             }
+
             return false
         }
     }

@@ -460,7 +460,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
     }
 
     override func updateConstraints() {
-        if UIWindow.isLandscape && !(DeviceInfo.deviceModel().range(of: "iPad") != nil) {
+        if UIWindow.isLandscape && !(DeviceInfo.deviceModel().contains("iPad")) {
             instructionsLabel.snp.remakeConstraints { make in
                 make.top.equalTo(titleLabel.snp.bottom).offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
                 make.width.equalTo(RemoteTabsErrorCell.UX.EmptyStateInstructionsWidth)
