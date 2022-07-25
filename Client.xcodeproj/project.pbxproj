@@ -481,6 +481,8 @@
 		7BF5A1EE1B429B3100EA9DD8 /* SyncCommandsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1ED1B429B3100EA9DD8 /* SyncCommandsTests.swift */; };
 		884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CA7482344A301002E4711 /* TextContentDetector.swift */; };
 		8A01891C275E9C2A00923EFE /* ClearHistoryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A01891B275E9C2A00923EFE /* ClearHistoryHelper.swift */; };
+		8A03294E288F1F0800AD9B89 /* DimensionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A03294D288F1F0800AD9B89 /* DimensionManager.swift */; };
+		8A032950288F251B00AD9B89 /* TileActionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A03294F288F251B00AD9B89 /* TileActionManager.swift */; };
 		8A04136928258DF600D20B10 /* SponsoredTileTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A04136828258DF600D20B10 /* SponsoredTileTelemetry.swift */; };
 		8A04136B2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */; };
 		8A05123927D17EC3009930CC /* LegacyWallpaperStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A05123827D17EC3009930CC /* LegacyWallpaperStorageUtility.swift */; };
@@ -2937,6 +2939,8 @@
 		890045908C7B76449D0FEA78 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		89AE47D2B80AF49BFB9763BA /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		8A01891B275E9C2A00923EFE /* ClearHistoryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearHistoryHelper.swift; sourceTree = "<group>"; };
+		8A03294D288F1F0800AD9B89 /* DimensionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimensionManager.swift; sourceTree = "<group>"; };
+		8A03294F288F251B00AD9B89 /* TileActionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileActionManager.swift; sourceTree = "<group>"; };
 		8A04136828258DF600D20B10 /* SponsoredTileTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsoredTileTelemetry.swift; sourceTree = "<group>"; };
 		8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsoredTileTelemetryTests.swift; sourceTree = "<group>"; };
 		8A05123827D17EC3009930CC /* LegacyWallpaperStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyWallpaperStorageUtility.swift; sourceTree = "<group>"; };
@@ -5837,6 +5841,8 @@
 				8AB8572A27D944B70075C173 /* DataManagement */,
 				8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */,
 				8AB8571C27D929350075C173 /* TopSitesViewModel.swift */,
+				8A03294F288F251B00AD9B89 /* TileActionManager.swift */,
+				8A03294D288F1F0800AD9B89 /* DimensionManager.swift */,
 				8A2D593D27DC0AA100713EC9 /* TopSite.swift */,
 				8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */,
 				3BB50E101D6274CD004B33DF /* TopSiteItemCell.swift */,
@@ -9595,6 +9601,7 @@
 				8A6B77CE2811CD11001110D2 /* URLCaching.swift in Sources */,
 				C825E9832832A425006CB811 /* NimbusSearchBarLayer.swift in Sources */,
 				CA03B26A247F1D9E00382B62 /* BreachAlertsClient.swift in Sources */,
+				8A03294E288F1F0800AD9B89 /* DimensionManager.swift in Sources */,
 				6ACB550C28633860007A6ABD /* TabManagerNavDelegate.swift in Sources */,
 				43DDB96C240995A70058A068 /* ETPModel.swift in Sources */,
 				435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */,
@@ -9705,6 +9712,7 @@
 				8A2783F1275FFDC50080D29D /* KeyboardPressesHandler.swift in Sources */,
 				D8D33A7D1FBD080300A20A28 /* SnapKitExtensions.swift in Sources */,
 				E650755C1E37F747006961AC /* Swizzling.m in Sources */,
+				8A032950288F251B00AD9B89 /* TileActionManager.swift in Sources */,
 				74821FC51DB56A2500EEEA72 /* OpenWithSettingsViewController.swift in Sources */,
 				C84656012887A0F700861B4A /* WallpaperMetadataTracker.swift in Sources */,
 				E571EE782875694C0051D9AA /* PocketSponsoredStoriesProvider.swift in Sources */,

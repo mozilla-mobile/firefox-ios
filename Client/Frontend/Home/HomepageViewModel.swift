@@ -86,7 +86,7 @@ class HomepageViewModel: FeatureFlaggable {
         self.isZeroSearch = isZeroSearch
 
         self.headerViewModel = HomeLogoHeaderViewModel(profile: profile)
-        self.topSiteViewModel = TopSitesViewModel(profile: profile)
+        self.topSiteViewModel = TopSitesViewModelImplementation(profile: profile)
         self.jumpBackInViewModel = JumpBackInViewModel(
             profile: profile,
             isPrivate: isPrivate,

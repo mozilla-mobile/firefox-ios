@@ -9,37 +9,24 @@ struct TopSitesSectionDimension {
     var numberOfTilesPerRow: Int
 }
 
+struct TopSitesUIInterface {
+    var isLandscape: Bool = UIWindow.isLandscape
+    var isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone
+    var horizontalSizeClass: UIUserInterfaceSizeClass
+
+    init(trait: UITraitCollection) {
+        horizontalSizeClass = trait.horizontalSizeClass
+    }
+}
+
 // Laurie - documentation
 protocol DimensionManager {
     func getSectionDimension(for sites: [TopSite],
                              numberOfRows: Int,
-                             trait: UITraitCollection,
-                             isLandscape: Bool,
-                             isIphone: Bool
+                             interface: TopSitesUIInterface
     ) -> TopSitesSectionDimension
 
     func widthDimension(for numberOfHorizontalItems: Int) -> NSCollectionLayoutDimension
-
-    var defaultDimension: TopSitesSectionDimension { get }
-}
-
-extension DimensionManager {
-    func getSectionDimension(for sites: [TopSite],
-                             numberOfRows: Int,
-                             trait: UITraitCollection,
-                             isLandscape: Bool = UIWindow.isLandscape,
-                             isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone
-    ) -> TopSitesSectionDimension {
-        return self.getSectionDimension(for: sites,
-                                        numberOfRows: numberOfRows,
-                                        trait: trait,
-                                        isLandscape: isLandscape,
-                                        isIphone: isIphone)
-    }
-
-    var defaultDimension: TopSitesSectionDimension {
-        return TopSitesSectionDimension(numberOfRows: 2, numberOfTilesPerRow: 6)
-    }
 }
 
 class DimensionManagerImplementation: DimensionManager {
@@ -48,23 +35,11 @@ class DimensionManagerImplementation: DimensionManager {
         static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     }
 
-    var sectionDimension: TopSitesSectionDimension!
-
-    init() {
-        sectionDimension = defaultDimension
-    }
-
     func getSectionDimension(for sites: [TopSite],
                              numberOfRows: Int,
-                             trait: UITraitCollection,
-                             isLandscape: Bool,
-                             isIphone: Bool
+                             interface: TopSitesUIInterface
     ) -> TopSitesSectionDimension {
-        let topSitesInterface = UITopSitesInterface(isLandscape: isLandscape,
-                                                    isIphone: isIphone,
-                                                    horizontalSizeClass: trait.horizontalSizeClass)
-
-        let numberOfTilesPerRow = getNumberOfTilesPerRow(for: topSitesInterface)
+        let numberOfTilesPerRow = getNumberOfTilesPerRow(for: interface)
         let numberOfRows = getNumberOfRows(for: sites,
                                            numberOfRows: numberOfRows,
                                            numberOfTilesPerRow: numberOfTilesPerRow)
@@ -97,7 +72,7 @@ class DimensionManagerImplementation: DimensionManager {
     /// Get the number of tiles per row the user will see. This depends on the UI interface the user has.
     /// - Parameter interface: Tile number is based on layout, this param contains the parameters needed to computer the tile number
     /// - Returns: The number of tiles per row the user will see
-    private func getNumberOfTilesPerRow(for interface: UITopSitesInterface) -> Int {
+    private func getNumberOfTilesPerRow(for interface: TopSitesUIInterface) -> Int {
         if interface.isIphone {
             return interface.isLandscape ? 8 : 4
 

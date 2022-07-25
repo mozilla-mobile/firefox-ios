@@ -136,7 +136,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     private func getRemoveBookmarkAction(site: Site) -> SingleActionViewModel {
         return SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle, iconString: ImageIdentifiers.actionRemoveBookmark, tapHandler: { _ in
             self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
-                self.viewModel.topSiteViewModel.tileManager.refreshIfNeeded(forceTopSites: false)
+                self.viewModel.topSiteViewModel.refreshIfNeeded(forceTopSites: false)
                 site.setBookmarked(false)
             }
 
@@ -157,7 +157,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                                                                 withUserData: userData,
                                                                                 toApplication: .shared)
             site.setBookmarked(true)
-            self.viewModel.topSiteViewModel.tileManager.refreshIfNeeded(forceTopSites: true)
+            self.viewModel.topSiteViewModel.refreshIfNeeded(forceTopSites: true)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .activityStream)
         })
     }
