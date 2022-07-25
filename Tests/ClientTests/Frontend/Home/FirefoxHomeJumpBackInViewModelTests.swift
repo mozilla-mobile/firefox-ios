@@ -169,8 +169,8 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.updateData {
-            // Refresh data for specific layout
-            self.subject.refreshData(for: trait, isPortrait: true)
+            self.subject.updateSectionLayout(for: trait, isPortrait: true, device: .phone) // get section layout calculated
+            self.subject.refreshData(for: trait, device: .phone) // Refresh data for specific layout
             expectation.fulfill()
         }
 
@@ -198,8 +198,8 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.updateData {
-            // Refresh data for specific layout
-            self.subject.refreshData(for: trait, isPortrait: true)
+            self.subject.updateSectionLayout(for: trait, isPortrait: true, device: .phone) // get section layout calculated
+            self.subject.refreshData(for: trait, device: .phone) // Refresh data for specific layout
             expectation.fulfill()
         }
 
@@ -226,8 +226,8 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.updateData {
-            // Refresh data for specific layout
-            self.subject.refreshData(for: trait)
+            self.subject.updateSectionLayout(for: trait, isPortrait: false, device: .phone) // get section layout calculated
+            self.subject.refreshData(for: trait, device: .phone) // Refresh data for specific layout
             expectation.fulfill()
         }
 
@@ -259,8 +259,8 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.updateData {
-            // Refresh data for specific layout
-            self.subject.refreshData(for: trait)
+            self.subject.updateSectionLayout(for: trait, isPortrait: false, device: .phone) // get section layout calculated
+            self.subject.refreshData(for: trait, device: .phone) // Refresh data for specific layout
             expectation.fulfill()
         }
 
@@ -270,7 +270,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.jumpBackInList.tabs.count, 2, "iPhone landscape has 1 tabs in it's jumpbackin layout, up until 1")
+        XCTAssertEqual(subject.jumpBackInList.tabs.count, 2, "iPhone landscape has 2 tabs in it's jumpbackin layout, up until 2")
         XCTAssertEqual(subject.jumpBackInList.tabs[0], tab1)
         XCTAssertEqual(subject.jumpBackInList.tabs[1], tab2)
         XCTAssertFalse(subject.jumpBackInList.tabs.contains(tab3))
