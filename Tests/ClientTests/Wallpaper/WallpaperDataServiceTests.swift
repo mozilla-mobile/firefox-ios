@@ -7,55 +7,49 @@ import XCTest
 
 @testable import Client
 
-class WallpaperDataServiceTests: XCTestCase {
+class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
+
     typealias ServiceError = WallpaperDataService.DataServiceError
 
-    // MARK: - Test metadata functions
-    func testGetData_SimulatingNoInternet() async {
-        let networking = NetworkingMock()
-        let sut = WallpaperDataService(with: networking)
+    var networking: NetworkingMock!
 
+    override func setUp() {
+        networking = NetworkingMock()
+    }
+
+    override func tearDown() {
+        networking = nil
+    }
+
+    func testSetupWorksAsExpected() async {
         do {
-            _ = try await sut.getMetadata()
+            _ = try await networking.data(from: URL(string: "mozilla.com")!)
             XCTFail("This test should throw an error.")
-        } catch let error {
-            XCTAssertEqual(error as? URLError, URLError(.notConnectedToInternet))
+        } catch {
+            XCTAssertEqual(error as? URLError,
+                           URLError(.notConnectedToInternet),
+                           "Initial result was different than what was expected.")
         }
     }
 
-    func testGetData_SimulatingBadResponse() async {
-        let networking = NetworkingMock()
+    func testChangingNetworkingReturnResult() async {
         networking.result = .failure(URLError(.badServerResponse))
-        let sut = WallpaperDataService(with: networking)
 
         do {
-            _ = try await sut.getMetadata()
+            _ = try await networking.data(from: URL(string: "mozilla.com")!)
             XCTFail("This test should throw an error.")
-        } catch let error {
-            XCTAssertEqual(error as? URLError, URLError(.badServerResponse))
+        } catch {
+            XCTAssertEqual(error as? URLError,
+                           URLError(.badServerResponse),
+                           "Response result was different than what was expected.")
         }
     }
 
+    // MARK: - Test metadata functions
     func testExtractWallpaperMetadata() async {
-        let data = convertLocalJSONToData()
-        let lastUpdatedDate = dateWith(year: 2001, month: 02, day: 03)
-        let startDate = dateWith(year: 2002, month: 11, day: 28)
-        let endDate = dateWith(year: 2022, month: 09, day: 10)
-        let expectedMetadata = WallpaperMetadata(
-            lastUpdated: lastUpdatedDate,
-            collections: [
-                WallpaperCollection(
-                    id: "firefox",
-                    availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
-                    availability: WallpaperCollectionAvailability(
-                        start: startDate,
-                        end: endDate),
-                    wallpapers: [
-                        Wallpaper(id: "beachVibes", textColour: "0xADD8E6")
-                    ])
-            ])
+        let data = getDataFromJSONFile(named: .initial)
+        let expectedMetadata = getExpectedMetadata(for: .initial)
 
-        let networking = NetworkingMock()
         networking.result = .success(data)
         let sut = WallpaperDataService(with: networking)
 
@@ -71,60 +65,8 @@ class WallpaperDataServiceTests: XCTestCase {
     }
 
     // MARK: - Test fetching images
-
-    // MARK: - Test bulding URLs
-//    func testBuildingURLForMetadata() {
-//        let sut = WallpaperDataService()
-//
-//        let suffix = "\(WallpaperDataService.metadataEndpoint)\(WallpaperDataService.versionEndpoint)"
-//
-//        let expectedURL = URL(string: "https://my.test.url\(suffix)")?.absoluteString
-//        let actualURL = sut.buildURLWith(for: .metadata)?.absoluteString
-//
-//        XCTAssertEqual(actualURL, expectedURL, "beep boop")
-//    }
-//
-//    func testBuildingURLForImage() {
-//        let sut = WallpaperDataService()
-//
-//        let path = "/imageName/imageName_thumbnail"
-//
-//        let expectedURL = URL(string: "https://my.test.url\(path).png")?.absoluteString
-//        let actualURL = sut.buildURLWith(for: .image, using: path)?.absoluteString
-//
-//        XCTAssertEqual(
-//            actualURL,
-//            expectedURL,
-//            "The urls do not match, when it is expected that they should")
-//    }
 }
 
 // MARK: - Test helpers
 extension WallpaperDataServiceTests {
-    private func convertLocalJSONToData() -> Data {
-        let bundle = Bundle(for: type(of: self))
-
-        guard let url = bundle.url(forResource: "wallpaperInitial", withExtension: "json") else {
-            fatalError("Missing file: User.json")
-        }
-
-        guard let data = try? Data(contentsOf: url) else {
-            fatalError("Test")
-        }
-
-        return data
-    }
-
-    private func dateWith(year: Int, month: Int, day: Int) -> Date {
-        var dateComponents = DateComponents()
-        dateComponents.year = year
-        dateComponents.month = month
-        dateComponents.day = day
-        let userCalendar = Calendar(identifier: .gregorian)
-        guard let expectedDate = userCalendar.date(from: dateComponents) else {
-            fatalError("Error creating expected date.")
-        }
-
-        return expectedDate
-    }
 }
