@@ -47,10 +47,10 @@ class AdjustTelemetryHelperTests: XCTestCase {
 
         GleanMetrics.Pings.shared.firstSession.testBeforeNextSubmit { _ in
 
-            XCTAssertEqual("campaign", try GleanMetrics.Adjust.campaign.testGetValue())
-            XCTAssertEqual("adGroup", try GleanMetrics.Adjust.adGroup.testGetValue())
-            XCTAssertEqual("creative", try GleanMetrics.Adjust.creative.testGetValue())
-            XCTAssertEqual("network", try GleanMetrics.Adjust.network.testGetValue())
+            XCTAssertEqual("campaign", GleanMetrics.Adjust.campaign.testGetValue())
+            XCTAssertEqual("adGroup", GleanMetrics.Adjust.adGroup.testGetValue())
+            XCTAssertEqual("creative", GleanMetrics.Adjust.creative.testGetValue())
+            XCTAssertEqual("network", GleanMetrics.Adjust.network.testGetValue())
             expectation.fulfill()
         }
 
