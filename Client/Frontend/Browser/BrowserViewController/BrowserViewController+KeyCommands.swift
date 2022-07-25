@@ -41,7 +41,7 @@ extension BrowserViewController {
     }
 
     @objc private func addBookmarkKeyCommand() {
-        if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
+        if let tab = tabManager.selectedTab, homepageViewController == nil {
             guard let url = tab.canonicalURL?.displayURL else { return }
             addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
         }
@@ -53,7 +53,7 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "reload"])
 
-        if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
+        if let tab = tabManager.selectedTab, homepageViewController == nil {
             tab.reload()
         }
     }
@@ -64,7 +64,7 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "go-back"])
 
-        if let tab = tabManager.selectedTab, tab.canGoBack, firefoxHomeViewController == nil {
+        if let tab = tabManager.selectedTab, tab.canGoBack, homepageViewController == nil {
             tab.goBack()
         }
     }
@@ -93,7 +93,7 @@ extension BrowserViewController {
     }
 
     private func findInPage(withText text: String) {
-        if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
+        if let tab = tabManager.selectedTab, homepageViewController == nil {
             self.tab(tab, didSelectFindInPageForSelection: text)
         }
     }
@@ -267,7 +267,7 @@ extension BrowserViewController {
 
     @objc private func zoomIn() {
         guard let currentTab = tabManager.selectedTab,
-              firefoxHomeViewController == nil
+              homepageViewController == nil
         else { return }
 
         currentTab.zoomIn()
@@ -275,7 +275,7 @@ extension BrowserViewController {
 
     @objc private func zoomOut() {
         guard let currentTab = tabManager.selectedTab,
-              firefoxHomeViewController == nil
+              homepageViewController == nil
         else { return }
 
         currentTab.zoomOut()
@@ -283,7 +283,7 @@ extension BrowserViewController {
 
     @objc private func resetZoom() {
         guard let currentTab = tabManager.selectedTab,
-              firefoxHomeViewController == nil
+              homepageViewController == nil
         else { return }
 
         currentTab.resetZoom()

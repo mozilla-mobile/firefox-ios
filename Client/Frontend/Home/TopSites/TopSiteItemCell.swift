@@ -234,9 +234,7 @@ extension TopSiteItemCell: NotificationThemeable {
         titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
         faviconBG.backgroundColor = UIColor.theme.homePanel.shortcutBackground
         faviconBG.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        sponsoredLabel.textColor = theme == .dark ? UIColor.Photon.LightGrey40 : UIColor.Photon.DarkGrey05
+        sponsoredLabel.textColor = UIColor.theme.homePanel.sponsored
     }
 }
 
