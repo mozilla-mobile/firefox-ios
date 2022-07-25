@@ -67,7 +67,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     var shouldResetHistory = false
     var hiddenSections: [Sections] = []
 
-    private var hasRecentlyClosed: Bool {
+    var hasRecentlyClosed: Bool {
         return profile.recentlyClosedTabs.tabs.count > 0
     }
 

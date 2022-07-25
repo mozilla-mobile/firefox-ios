@@ -49,7 +49,7 @@ class PhotonActionSheet: UIViewController {
 
     // MARK: - Variables
     private var tableView = UITableView(frame: .zero, style: .grouped)
-    private var viewModel: PhotonActionSheetViewModel!
+    let viewModel: PhotonActionSheetViewModel
     private var constraints = [NSLayoutConstraint]()
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
@@ -249,8 +249,8 @@ class PhotonActionSheet: UIViewController {
     }
 
     private func applyBackgroundBlur() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        guard let screenshot = appDelegate.window?.screenshot() else { return }
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+              let screenshot = appDelegate.window?.screenshot() else { return }
 
         let blurredImage = screenshot.applyBlur(withRadius: 5,
                                                 blurType: BOXFILTER,
