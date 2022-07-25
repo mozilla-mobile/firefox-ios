@@ -5817,6 +5817,15 @@
 			path = Bookmarks;
 			sourceTree = "<group>";
 		};
+		8A032951288F27CA00AD9B89 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */,
+				3BB50E101D6274CD004B33DF /* TopSiteItemCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		8A33222027DFE64C008F809E /* TestingHelperClasses */ = {
 			isa = PBXGroup;
 			children = (
@@ -5838,14 +5847,13 @@
 		8AB8571B27D929240075C173 /* TopSites */ = {
 			isa = PBXGroup;
 			children = (
+				8A032951288F27CA00AD9B89 /* Cell */,
 				8AB8572A27D944B70075C173 /* DataManagement */,
-				8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */,
 				8AB8571C27D929350075C173 /* TopSitesViewModel.swift */,
 				8A03294F288F251B00AD9B89 /* TileActionManager.swift */,
 				8A03294D288F1F0800AD9B89 /* DimensionManager.swift */,
 				8A2D593D27DC0AA100713EC9 /* TopSite.swift */,
 				8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */,
-				3BB50E101D6274CD004B33DF /* TopSiteItemCell.swift */,
 				8A5BD95B2878AA74000FE773 /* PinnedSite.swift */,
 			);
 			path = TopSites;
