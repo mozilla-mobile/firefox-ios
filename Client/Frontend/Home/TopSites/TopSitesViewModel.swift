@@ -23,18 +23,11 @@ class TopSitesViewModel {
         static let cellEstimatedSize: CGSize = CGSize(width: 100, height: 120)
     }
 
-    struct SectionDimension {
-        var numberOfRows: Int
-        var numberOfTilesPerRow: Int
-    }
-
     private let profile: Profile
     var isZeroSearch: Bool
     private var sentImpressionTelemetry = [String: Bool]()
-
-    var sectionDimension: SectionDimension = TopSitesViewModel.defaultDimension
-    static var defaultDimension = SectionDimension(numberOfRows: 2, numberOfTilesPerRow: 6)
-
+    private var topSites: [TopSite] = []
+    var dimensionManager: DimensionManager
     var tilePressedHandler: ((Site, Bool) -> Void)?
     var tileLongPressedHandler: ((Site, UIView?) -> Void)?
     weak var delegate: TopSitesViewModelDelegate?
@@ -46,57 +39,9 @@ class TopSitesViewModel {
     init(profile: Profile, isZeroSearch: Bool = false) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
+
+        self.dimensionManager = DimensionManagerImplementation()
         tileManager.delegate = self
-    }
-
-    func getSectionDimension(for trait: UITraitCollection,
-                             isLandscape: Bool = UIWindow.isLandscape,
-                             isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone
-    ) -> SectionDimension {
-        let topSitesInterface = UITopSitesInterface(isLandscape: isLandscape,
-                                                    isIphone: isIphone,
-                                                    horizontalSizeClass: trait.horizontalSizeClass)
-
-        let numberOfTilesPerRow = getNumberOfTilesPerRow(for: topSitesInterface)
-        let numberOfRows = getNumberOfRows(numberOfTilesPerRow: numberOfTilesPerRow)
-        return SectionDimension(numberOfRows: numberOfRows, numberOfTilesPerRow: numberOfTilesPerRow)
-    }
-
-    // The width dimension of a cell
-    static func widthDimension(for numberOfHorizontalItems: Int) -> NSCollectionLayoutDimension {
-        return .fractionalWidth(CGFloat(1 / numberOfHorizontalItems))
-    }
-
-    // Adjust number of rows depending on the what the users want, and how many sites we actually have.
-    // We hide rows that are only composed of empty cells
-    /// - Parameter numberOfTilesPerRow: The number of tiles per row the user will see
-    /// - Returns: The number of rows the user will see on screen
-    private func getNumberOfRows(numberOfTilesPerRow: Int) -> Int {
-        let totalCellCount = numberOfTilesPerRow * tileManager.numberOfRows
-        let emptyCellCount = totalCellCount - tileManager.siteCount
-
-        // If there's no empty cell, no clean up is necessary
-        guard emptyCellCount > 0 else { return tileManager.numberOfRows }
-
-        let numberOfEmptyCellRows = Double(emptyCellCount / numberOfTilesPerRow)
-        return tileManager.numberOfRows - Int(numberOfEmptyCellRows.rounded(.down))
-    }
-
-    /// Get the number of tiles per row the user will see. This depends on the UI interface the user has.
-    /// - Parameter interface: Tile number is based on layout, this param contains the parameters needed to computer the tile number
-    /// - Returns: The number of tiles per row the user will see
-    private func getNumberOfTilesPerRow(for interface: UITopSitesInterface) -> Int {
-        if interface.isIphone {
-            return interface.isLandscape ? 8 : 4
-
-        } else {
-            // The number of items in a row is equal to the number of top sites in a row * 2
-            var numItems = Int(UX.numberOfItemsPerRowForSizeClassIpad[interface.horizontalSizeClass])
-            if !interface.isLandscape || (interface.horizontalSizeClass == .compact && interface.isLandscape) {
-                numItems = numItems - 1
-            }
-            return numItems * 2
-        }
     }
 
     func tilePressed(site: TopSite, position: Int) {
@@ -187,7 +132,9 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
         refreshData(for: traitCollection)
 
-        let sectionDimension = getSectionDimension(for: traitCollection)
+        let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
+                                                                    numberOfRows: tileManager.numberOfRows,
+                                                                    trait: traitCollection)
         let items = sectionDimension.numberOfRows * sectionDimension.numberOfTilesPerRow
         return items
     }
@@ -204,7 +151,9 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
             heightDimension: .estimated(UX.cellEstimatedSize.height)
         )
 
-        let sectionDimension = getSectionDimension(for: traitCollection)
+        let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
+                                                                    numberOfRows: tileManager.numberOfRows,
+                                                                    trait: traitCollection)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: sectionDimension.numberOfTilesPerRow)
         let section = NSCollectionLayoutSection(group: group)
 
@@ -226,7 +175,9 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     func refreshData(for traitCollection: UITraitCollection) {
-        sectionDimension = getSectionDimension(for: traitCollection)
+        let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
+                                                                    numberOfRows: tileManager.numberOfRows,
+                                                                    trait: traitCollection)
         tileManager.calculateTopSiteData(numberOfTilesPerRow: sectionDimension.numberOfTilesPerRow)
     }
 }
