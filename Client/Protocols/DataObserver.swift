@@ -8,16 +8,9 @@ protocol DataObserver {
     var profile: Profile { get }
     var delegate: DataObserverDelegate? { get set }
 
-    func refreshIfNeeded(forceTopSites: Bool)
+    func refreshIfNeeded(refresh forced: Bool)
 }
 
 protocol DataObserverDelegate: AnyObject {
-    func didInvalidateDataSources(refresh forced: Bool, topSitesRefreshed: Bool)
-    func willInvalidateDataSources(forceTopSites: Bool)
-}
-
-// Make these delegate methods optional by providing default implementations
-extension DataObserverDelegate {
-    func didInvalidateDataSources(refresh forced: Bool, topSitesRefreshed: Bool) {}
-    func willInvalidateDataSources(forceTopSites: Bool) {}
+    func didInvalidateDataSource(refresh forced: Bool)
 }

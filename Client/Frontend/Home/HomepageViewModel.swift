@@ -86,7 +86,7 @@ class HomepageViewModel: FeatureFlaggable {
         self.isZeroSearch = isZeroSearch
 
         self.headerViewModel = HomeLogoHeaderViewModel(profile: profile)
-        self.topSiteViewModel = TopSitesViewModelImplementation(profile: profile)
+        self.topSiteViewModel = TopSitesViewModel(profile: profile)
         self.jumpBackInViewModel = JumpBackInViewModel(
             profile: profile,
             isPrivate: isPrivate,
@@ -213,19 +213,14 @@ class HomepageViewModel: FeatureFlaggable {
     }
 }
 
-// MARK: - FxHomeTopSitesViewModelDelegate
-extension HomepageViewModel: TopSitesViewModelDelegate {
-    func reloadTopSites() {
-        updateData(section: topSiteViewModel)
-    }
-}
-
+// MARK: - HomeHistoryHighlightsDelegate
 extension HomepageViewModel: HomeHistoryHighlightsDelegate {
     func reloadHighlights() {
         updateData(section: historyHighlightsViewModel)
     }
 }
 
+// MARK: - HomepageDataModelDelegate
 extension HomepageViewModel: HomepageDataModelDelegate {
     func reloadData() {
         ensureMainThread {

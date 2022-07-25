@@ -7,10 +7,23 @@ import Shared
 import Storage
 
 protocol TopSitesManagerDelegate: AnyObject {
-    func reloadTopSites()
+    func didLoadNewData()
 }
 
-class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
+protocol TopSitesDataAdaptor {
+    var numberOfRows: Int { get }
+
+    // TODO: Laurie
+    func getTopSitesData() -> [TopSite]
+
+    /// Top sites are composed of pinned sites, history, Contiles and Google top site.
+    /// Google top site is always first, then comes the contiles, pinned sites and history top sites.
+    /// We only add Google top site or Contiles if number of pins doesn't exeeds the available number shown of tiles.
+    /// - Parameter numberOfTilesPerRow: The number of tiles per row shown to the user
+    func recalculateTopSiteData(for numberOfTilesPerRow: Int)
+}
+
+class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, HasNimbusSponsoredTiles {
 
     private let profile: Profile
     private var topSites: [TopSite] = []
@@ -21,53 +34,64 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
     private var contiles: [Contile] = []
 
     weak var delegate: TopSitesManagerDelegate?
-    lazy var topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
-    lazy var googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
-    lazy var contileProvider: ContileProviderInterface = ContileProvider()
+    private let topSiteHistoryManager: TopSiteHistoryManager
+    private let googleTopSiteManager: GoogleTopSiteManager
+    private let contileProvider: ContileProviderInterface
 
-    init(profile: Profile) {
+    init(profile: Profile,
+         topSiteHistoryManager: TopSiteHistoryManager,
+         googleTopSiteManager: GoogleTopSiteManager,
+         contileProvider: ContileProviderInterface = ContileProvider()
+    ) {
         self.profile = profile
+        self.topSiteHistoryManager = topSiteHistoryManager
+        self.googleTopSiteManager = googleTopSiteManager
+        self.contileProvider = contileProvider
         topSiteHistoryManager.delegate = self
     }
 
-    func getSite(index: Int) -> TopSite? {
-        guard let topSite = topSites[safe: index] else { return nil }
-        return topSite
+    func getTopSitesData() -> [TopSite] {
+        return topSites
     }
 
-    func getSiteDetail(index: Int) -> Site? {
-        guard let siteDetail = topSites[safe: index]?.site else { return nil }
-        return siteDetail
-    }
+    func recalculateTopSiteData(for numberOfTilesPerRow: Int) {
+        var sites = historySites
+        let availableSpaceCount = getAvailableSpaceCount(numberOfTilesPerRow: numberOfTilesPerRow)
+        let shouldAddGoogle = shouldAddGoogle(availableSpaceCount: availableSpaceCount)
 
-    var hasData: Bool {
-        return !topSites.isEmpty
-    }
+        // Add Sponsored tile
+        if shouldAddSponsoredTiles {
+            addSponsoredTiles(sites: &sites,
+                              shouldAddGoogle: shouldAddGoogle,
+                              availableSpaceCount: availableSpaceCount)
+        }
 
-    var siteCount: Int {
-        return topSites.count
-    }
+        // Add Google Tile
+        if shouldAddGoogle {
+            addGoogleTopSite(sites: &sites)
+        }
 
-    func removePinTopSite(site: Site) {
-        googleTopSiteManager.removeGoogleTopSite(site: site)
-        topSiteHistoryManager.removeTopSite(site: site)
-    }
+        sites.removeDuplicates()
 
-    func refreshIfNeeded(forceTopSites: Bool) {
-        topSiteHistoryManager.refreshIfNeeded(forceTopSites: forceTopSites)
+        topSites = sites.map { TopSite(site: $0) }
+
+        // Laurie - needed?
+        // Refresh data in the background so we'll have fresh data next time we show
+//        topSiteHistoryManager.refreshIfNeeded(forceTopSites: false)
     }
 
     // MARK: - Data loading
 
     // Loads the data source of top sites
-    func loadTopSitesData(dataLoadingCompletion: (() -> Void)? = nil) {
+    private func loadTopSitesData(dataLoadingCompletion: (() -> Void)? = nil) {
         let group = DispatchGroup()
         loadContiles(group: group)
         loadTopSites(group: group)
 
         group.notify(queue: dataQueue) { [weak self] in
+            // Laurie - needed?
             // Pre-loading the data with a default number of tiles so we always show section when needed
-            self?.calculateTopSiteData(numberOfTilesPerRow: 8)
+            self?.recalculateTopSiteData(for: 8)
 
             dataLoadingCompletion?()
         }
@@ -97,35 +121,6 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
     }
 
     // MARK: - Tiles placement calculation
-
-    /// Top sites are composed of pinned sites, history, Contiles and Google top site.
-    /// Google top site is always first, then comes the contiles, pinned sites and history top sites.
-    /// We only add Google top site or Contiles if number of pins doesn't exeeds the available number shown of tiles.
-    /// - Parameter numberOfTilesPerRow: The number of tiles per row shown to the user
-    func calculateTopSiteData(numberOfTilesPerRow: Int) {
-        var sites = historySites
-        let availableSpaceCount = getAvailableSpaceCount(numberOfTilesPerRow: numberOfTilesPerRow)
-        let shouldAddGoogle = shouldAddGoogle(availableSpaceCount: availableSpaceCount)
-
-        // Add Sponsored tile
-        if shouldAddSponsoredTiles {
-            addSponsoredTiles(sites: &sites,
-                              shouldAddGoogle: shouldAddGoogle,
-                              availableSpaceCount: availableSpaceCount)
-        }
-
-        // Add Google Tile
-        if shouldAddGoogle {
-            addGoogleTopSite(sites: &sites)
-        }
-
-        sites.removeDuplicates()
-
-        topSites = sites.map { TopSite(site: $0) }
-
-        // Refresh data in the background so we'll have fresh data next time we show
-        refreshIfNeeded(forceTopSites: false)
-    }
 
     /// Get available space count for the sponsored tiles and Google tiles
     /// - Parameter numberOfTilesPerRow: Comes from top sites view model and accounts for different layout (landscape, portrait, iPhone, iPad, etc).
@@ -250,10 +245,11 @@ private extension Array where Element == Site {
 }
 
 // MARK: - DataObserverDelegate
-extension TopSitesManager: DataObserverDelegate {
+extension TopSitesDataAdaptorImplementation: DataObserverDelegate {
 
-    func didInvalidateDataSources(refresh forced: Bool, topSitesRefreshed: Bool) {
+    func didInvalidateDataSource(refresh forced: Bool) {
         guard forced else { return }
-        delegate?.reloadTopSites()
+        loadTopSitesData()
+//        delegate?.reloadTopSites()
     }
 }

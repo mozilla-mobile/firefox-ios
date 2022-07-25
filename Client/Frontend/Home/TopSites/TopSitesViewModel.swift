@@ -6,37 +6,14 @@ import Foundation
 import Shared
 import Storage
 
-protocol TopSitesViewModelDelegate: AnyObject {
-    func reloadTopSites()
-}
-
-protocol TopSitesViewModel where Self: HomepageViewModelProtocol {
-    var delegate: TopSitesViewModelDelegate? { get set }
-    var isZeroSearch: Bool { get set }
-    var tilePressedHandler: ((Site, Bool) -> Void)? { get set }
-    var tileLongPressedHandler: ((Site, UIView?) -> Void)? { get set }
-
-    // Tile actions
-    func tilePressed(site: TopSite, position: Int)
-    func hideURLFromTopSites(_ site: Site)
-    func removePinTopSite(_ site: Site)
-    func pinTopSite(_ site: Site)
-
-    // Data
-    func refreshIfNeeded(forceTopSites: Bool)
-
-    // Telemetry
-    func sendImpressionTelemetry(_ homeTopSite: TopSite, position: Int)
-}
-
-class TopSitesViewModelImplementation: TopSitesViewModel {
+class TopSitesViewModel {
 
     struct UX {
         static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
         static let cellEstimatedSize: CGSize = CGSize(width: 100, height: 120)
     }
 
-    weak var delegate: TopSitesViewModelDelegate?
+    weak var delegate: HomepageDataModelDelegate?
     var isZeroSearch: Bool
     var tilePressedHandler: ((Site, Bool) -> Void)?
     var tileLongPressedHandler: ((Site, UIView?) -> Void)?
@@ -44,16 +21,24 @@ class TopSitesViewModelImplementation: TopSitesViewModel {
     private let profile: Profile
     private var sentImpressionTelemetry = [String: Bool]()
     private var topSites: [TopSite] = []
-    private var dimensionManager: DimensionManager
-    private var tileManager: TopSitesManager
+    private let dimensionManager: DimensionManager
+
+    private let topSitesDataAdaptor: TopSitesDataAdaptor
+    private let topSiteHistoryManager: TopSiteHistoryManager
+    private let googleTopSiteManager: GoogleTopSiteManager
 
     init(profile: Profile, isZeroSearch: Bool = false) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
-
         self.dimensionManager = DimensionManagerImplementation()
-        self.tileManager = TopSitesManager(profile: profile)
-        tileManager.delegate = self
+
+        self.topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
+        self.googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
+        let adaptor = TopSitesDataAdaptorImplementation(profile: profile,
+                                                        topSiteHistoryManager: topSiteHistoryManager,
+                                                        googleTopSiteManager: googleTopSiteManager)
+        topSitesDataAdaptor = adaptor
+        adaptor.delegate = self
     }
 
     func tilePressed(site: TopSite, position: Int) {
@@ -102,32 +87,33 @@ class TopSitesViewModelImplementation: TopSitesViewModel {
 
     func hideURLFromTopSites(_ site: Site) {
         guard let host = site.tileURL.normalizedHost else { return }
-        tileManager.topSiteHistoryManager.removeDefaultTopSitesTile(site: site)
+        topSiteHistoryManager.removeDefaultTopSitesTile(site: site)
 
         profile.history.removeHostFromTopSites(host).uponQueue(.main) { [weak self] result in
             guard result.isSuccess, let self = self else { return }
-            self.tileManager.refreshIfNeeded(forceTopSites: true)
+            self.refreshIfNeeded(refresh: true)
         }
-    }
-
-    func removePinTopSite(_ site: Site) {
-        tileManager.removePinTopSite(site: site)
     }
 
     func pinTopSite(_ site: Site) {
         profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.tileManager.refreshIfNeeded(forceTopSites: true)
+            self.refreshIfNeeded(refresh: true)
         }
     }
 
-    func refreshIfNeeded(forceTopSites: Bool) {
-        tileManager.refreshIfNeeded(forceTopSites: forceTopSites)
+    func removePinTopSite(_ site: Site) {
+        googleTopSiteManager.removeGoogleTopSite(site: site)
+        topSiteHistoryManager.removeTopSite(site: site)
+    }
+
+    func refreshIfNeeded(refresh forced: Bool) {
+        topSiteHistoryManager.refreshIfNeeded(refresh: forced)
     }
 }
 
 // MARK: HomeViewModelProtocol
-extension TopSitesViewModelImplementation: HomepageViewModelProtocol, FeatureFlaggable {
+extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
     var sectionType: HomepageSectionType {
         return .topSites
@@ -150,7 +136,7 @@ extension TopSitesViewModelImplementation: HomepageViewModelProtocol, FeatureFla
 
         let interface = TopSitesUIInterface(trait: traitCollection)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
-                                                                    numberOfRows: tileManager.numberOfRows,
+                                                                    numberOfRows: topSitesDataAdaptor.numberOfRows,
                                                                     interface: interface)
         let items = sectionDimension.numberOfRows * sectionDimension.numberOfTilesPerRow
         return items
@@ -170,7 +156,7 @@ extension TopSitesViewModelImplementation: HomepageViewModelProtocol, FeatureFla
 
         let interface = TopSitesUIInterface(trait: traitCollection)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
-                                                                    numberOfRows: tileManager.numberOfRows,
+                                                                    numberOfRows: topSitesDataAdaptor.numberOfRows,
                                                                     interface: interface)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: sectionDimension.numberOfTilesPerRow)
         let section = NSCollectionLayoutSection(group: group)
@@ -185,38 +171,40 @@ extension TopSitesViewModelImplementation: HomepageViewModelProtocol, FeatureFla
     }
 
     var hasData: Bool {
-        return tileManager.hasData
+        return !topSites.isEmpty
     }
 
     func updateData(completion: @escaping () -> Void) {
-        tileManager.loadTopSitesData(dataLoadingCompletion: completion)
+        topSites = topSitesDataAdaptor.getTopSitesData()
+        completion()
     }
 
     func refreshData(for traitCollection: UITraitCollection) {
         let interface = TopSitesUIInterface(trait: traitCollection)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
-                                                                    numberOfRows: tileManager.numberOfRows,
+                                                                    numberOfRows: topSitesDataAdaptor.numberOfRows,
                                                                     interface: interface)
-        tileManager.calculateTopSiteData(numberOfTilesPerRow: sectionDimension.numberOfTilesPerRow)
+        topSitesDataAdaptor.recalculateTopSiteData(for: sectionDimension.numberOfTilesPerRow)
+        topSites = topSitesDataAdaptor.getTopSitesData()
     }
 }
 
 // MARK: - FxHomeTopSitesManagerDelegate
-extension TopSitesViewModelImplementation: TopSitesManagerDelegate {
-    func reloadTopSites() {
-        // Laurie - still needed?
-        guard shouldShow else { return }
-        delegate?.reloadTopSites()
+extension TopSitesViewModel: TopSitesManagerDelegate {
+    func didLoadNewData() {
+        // Laurie - still needed? - test it with sync
+//        guard shouldShow else { return }
+        delegate?.reloadData()
     }
 }
 
 // MARK: - FxHomeSectionHandler
-extension TopSitesViewModelImplementation: HomepageSectionHandler {
+extension TopSitesViewModel: HomepageSectionHandler {
 
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath),
-           let contentItem = tileManager.getSite(index: indexPath.row) {
+           let contentItem = topSites[safe: indexPath.row] {
             cell.configure(contentItem, position: indexPath.row)
             sendImpressionTelemetry(contentItem, position: indexPath.row)
             return cell
@@ -238,14 +226,14 @@ extension TopSitesViewModelImplementation: HomepageSectionHandler {
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
 
-        guard let site = tileManager.getSite(index: indexPath.row) else { return }
+        guard let site = topSites[safe: indexPath.row]  else { return }
 
         tilePressed(site: site, position: indexPath.row)
     }
 
     func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
         guard let tileLongPressedHandler = tileLongPressedHandler,
-              let site = tileManager.getSiteDetail(index: indexPath.row)
+              let site = topSites[safe: indexPath.row]?.site
         else { return }
 
         let sourceView = collectionView.cellForItem(at: indexPath)
