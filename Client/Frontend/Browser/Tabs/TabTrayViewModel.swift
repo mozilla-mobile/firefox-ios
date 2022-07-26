@@ -34,14 +34,14 @@ class TabTrayViewModel {
             }
         }
 
-        var imageName: String {
+        var image: UIImage? {
             switch self {
             case .tabs:
-                return ImageIdentifiers.navTabCounter
+                return UIImage(named: ImageIdentifiers.navTabCounter)
             case .privateTabs:
-                return ImageIdentifiers.privateMaskSmall
+                return UIImage(named: ImageIdentifiers.privateMaskSmall)
             case .syncedTabs:
-                return ImageIdentifiers.syncedDevicesIcon
+                return UIImage(named: ImageIdentifiers.syncedDevicesIcon)
             }
         }
     }

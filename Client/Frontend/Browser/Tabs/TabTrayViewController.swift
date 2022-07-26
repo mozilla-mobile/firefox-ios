@@ -139,9 +139,9 @@ class TabTrayViewController: UIViewController {
 
     lazy var iPhoneNavigationMenuIdentifiers: UISegmentedControl = {
         return UISegmentedControl(items: [
-            UIImage(named: TabTrayViewModel.Segment.tabs.imageName)!.overlayWith(image: countLabel),
-            UIImage(named: TabTrayViewModel.Segment.privateTabs.imageName)!,
-            UIImage(named: TabTrayViewModel.Segment.syncedTabs.imageName)!])
+            TabTrayViewModel.Segment.tabs.image!.overlayWith(image: countLabel),
+            TabTrayViewModel.Segment.privateTabs.image!,
+            TabTrayViewModel.Segment.syncedTabs.image!])
     }()
 
     // Toolbars
