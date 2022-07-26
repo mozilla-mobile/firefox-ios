@@ -12,4 +12,3 @@ class RecentlySavedDelegateMock: RecentlySavedDelegate {
         didLoadNewDataCallCount += 1
     }
 }
-
