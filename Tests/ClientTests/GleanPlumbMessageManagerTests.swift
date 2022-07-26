@@ -15,10 +15,11 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        messagingStore = MockGleanPlumbMessageStore(messageId: messageId)
-        sut = GleanPlumbMessageManager(messagingStore: messagingStore)
+
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
+        messagingStore = MockGleanPlumbMessageStore(messageId: messageId)
+        sut = GleanPlumbMessageManager(messagingStore: messagingStore)
     }
 
     override func tearDown() {
