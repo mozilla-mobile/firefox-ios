@@ -313,22 +313,23 @@ features:
             ALWAYS:                   "true"
             NEVER:                    "false"
           actions:
-            OPEN_SETTINGS:               ://deep-link?url=settings/general
-            OPEN_SETTINGS_NEW_TAB:       ://deep-link?url=settings/newtab
-            OPEN_SETTINGS_HOMESCREEN:    ://deep-link?url=settings/homepage
-            OPEN_SETTINGS_WALLPAPERS:    ://deep-link?url=settings/wallpaper
-            OPEN_SETTINGS_EMAIL:         ://deep-link?url=settings/mailto
-            OPEN_SETTINGS_SEARCH_ENGINE: ://deep-link?url=settings/search
-            OPEN_SETTINGS_PRIVACY:       ://deep-link?url=settings/clear-private-data
-            OPEN_SETTINGS_FXA:           ://deep-link?url=settings/fxa
-            OPEN_SETTINGS_THEME:         ://deep-link?url=settings/theme
-            VIEW_BOOKMARKS:              ://deep-link?url=homepanel/bookmarks
-            VIEW_TOP_SITES:              ://deep-link?url=homepanel/top-sites
-            VIEW_READING_LIST:           ://deep-link?url=homepanel/reading-list
-            VIEW_HISTORY:                ://deep-link?url=homepanel/history
-            VIEW_DOWNLOADS:              ://deep-link?url=homepanel/downloads
-            ENABLE_PRIVATE_BROWSING:     ://deep-link?url=homepanel/new-private-tab
-            MAKE_DEFAULT_BROWSER:        ://deep-link?url=default-browser/system-settings
+            OPEN_SETTINGS:                      ://deep-link?url=settings/general
+            OPEN_SETTINGS_NEW_TAB:              ://deep-link?url=settings/newtab
+            OPEN_SETTINGS_HOMESCREEN:           ://deep-link?url=settings/homepage
+            OPEN_SETTINGS_WALLPAPERS:           ://deep-link?url=settings/wallpaper
+            OPEN_SETTINGS_EMAIL:                ://deep-link?url=settings/mailto
+            OPEN_SETTINGS_SEARCH_ENGINE:        ://deep-link?url=settings/search
+            OPEN_SETTINGS_PRIVACY:              ://deep-link?url=settings/clear-private-data
+            OPEN_SETTINGS_FXA:                  ://deep-link?url=settings/fxa
+            OPEN_SETTINGS_THEME:                ://deep-link?url=settings/theme
+            VIEW_BOOKMARKS:                     ://deep-link?url=homepanel/bookmarks
+            VIEW_TOP_SITES:                     ://deep-link?url=homepanel/top-sites
+            VIEW_READING_LIST:                  ://deep-link?url=homepanel/reading-list
+            VIEW_HISTORY:                       ://deep-link?url=homepanel/history
+            VIEW_DOWNLOADS:                     ://deep-link?url=homepanel/downloads
+            ENABLE_PRIVATE_BROWSING:            ://deep-link?url=homepanel/new-private-tab
+            MAKE_DEFAULT_BROWSER:               ://deep-link?url=default-browser/system-settings
+            MAKE_DEFAULT_BROWSER_WITH_TUTORIAL: ://deep-link?url=default-browser/tutorial
           styles:
             FALLBACK:
               priority: 40
@@ -352,7 +353,7 @@ features:
             default-browser:
               title: Default Browser/DefaultBrowserCard.Title
               text: Default Browser/DefaultBrowserCard.Description
-              action: "MAKE_DEFAULT_BROWSER"
+              action: "MAKE_DEFAULT_BROWSER_WITH_TUTORIAL"
               trigger: ["I_AM_NOT_DEFAULT_BROWSER", "SUPPORTS_DEFAULT_BROWSER"]
               style: "FALLBACK"
               # Use string interpolation because $TABLE_NAME/$KEY doesn't exist in en.lproj/Default Browser.strings
