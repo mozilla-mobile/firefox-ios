@@ -15,10 +15,11 @@ import Combine
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     enum Section: String {
-        case general, privacy, usageData, studies, search, siri, integration, mozilla, secret
+        case defaultBrowser, general, privacy, usageData, studies, search, siri, integration, mozilla, secret
 
         var headerText: String? {
             switch self {
+            case .defaultBrowser: return nil
             case .general: return UIConstants.strings.general
             case .privacy: return UIConstants.strings.toggleSectionPrivacy
             case .usageData: return nil
@@ -32,7 +33,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
 
         static func getSections() -> [Section] {
-            var sections = [.general, .privacy, .usageData, .studies, .search, .siri, integration, .mozilla]
+            var sections = [.defaultBrowser, .general, .privacy, .usageData, .studies, .search, .siri, integration, .mozilla]
             if Settings.getToggle(.displaySecretMenu) {
                 sections.append(.secret)
             }
@@ -283,6 +284,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
         switch sections[indexPath.section] {
+        case .defaultBrowser:
+            let defaultBrowserCell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "defaultBrowserCell")
+            defaultBrowserCell.textLabel?.text = String(format: UIConstants.strings.setAsDefaultBrowserLabel)
+            defaultBrowserCell.accessibilityIdentifier = "settingsViewController.defaultBrowserCell"
+            cell = defaultBrowserCell
         case .general:
             let themeCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "themeCell")
             themeCell.labelText = String(format: UIConstants.strings.theme)
@@ -371,6 +377,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func numberOfRows(for section: Section) -> Int {
         switch section {
+        case .defaultBrowser: return 1
         case .general: return 1
         case .privacy:
             if authenticationManager.canEvaluatePolicy { return 3 }
@@ -417,6 +424,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 footer.detailTextButton.addGestureRecognizer(tapGesture)
             }
             return footer
+        } else if section == getSectionIndex(.defaultBrowser) {
+            let footer = ActionFooterView(frame: .zero)
+            footer.textLabel.text = String(format: UIConstants.strings.setAsDefaultBrowserDescriptionLabel)
+            return footer
         } else {
             return nil
         }
@@ -429,6 +440,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch sections[indexPath.section] {
+        case .defaultBrowser:
+            GleanMetrics.SettingsScreen.setAsDefaultBrowserPressed.add()
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
         case .general:
             let themeVC = ThemeViewController(themeManager: themeManager)
             navigationController?.pushViewController(themeVC, animated: true)

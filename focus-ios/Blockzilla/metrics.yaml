@@ -59,6 +59,21 @@ mozilla_products:
     expires: "2022-09-01"
 
 settings_screen:
+  set_as_default_browser_pressed:
+    type: counter
+    description: |
+      Counts the number of times setting as default
+      browser menu option is tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3328
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3344
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2023-07-20"
+
   autocomplete_domain_added:
     type: counter
     description: |
