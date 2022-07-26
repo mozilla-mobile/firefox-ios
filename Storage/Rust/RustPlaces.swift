@@ -9,7 +9,7 @@ import Shared
 private let log = Logger.syncLogger
 
 public protocol BookmarksHandler {
-    func getRecentBookmarks(limit: UInt) async -> [BookmarkItemData]
+    func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)
 }
 
 public class RustPlaces: BookmarksHandler {
@@ -173,15 +173,13 @@ public class RustPlaces: BookmarksHandler {
         }
     }
 
-    public func getRecentBookmarks(limit: UInt) async -> [BookmarkItemData] {
+    public func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void) {
         let deferredResponse = withReader { connection in
             return try connection.getRecentBookmarks(limit: limit)
         }
 
-        return await withCheckedContinuation { continuation in
-            deferredResponse.upon { bookmarks in
-                continuation.resume(returning: bookmarks.successValue ?? [])
-            }
+        deferredResponse.upon { result in
+            completion(result.successValue ?? [])
         }
     }
 

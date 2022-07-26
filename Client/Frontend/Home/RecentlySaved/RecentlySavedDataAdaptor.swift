@@ -71,9 +71,8 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
     // MARK: - Bookmarks
 
     private func getRecentBookmarks() {
-        Task {
-            let result = await bookmarksHandler.getRecentBookmarks(limit: bookmarkItemsLimit)
-            let bookmarks = result.map { RecentlySavedBookmark(bookmark: $0) }
+        bookmarksHandler.getRecentBookmarks(limit: bookmarkItemsLimit) { bookmarks in
+            let bookmarks = bookmarks.map { RecentlySavedBookmark(bookmark: $0) }
             self.updateRecentBookmarks(bookmarks: bookmarks)
         }
     }
@@ -96,9 +95,8 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
 
     private func getReadingLists() {
         let maxItems = readingListItemsLimit
-        Task {
-            let result = await readingList.getAvailableRecords()
-            let items = result.prefix(maxItems)
+        readingList.getAvailableRecords { readingList in
+            let items = readingList.prefix(maxItems)
             self.updateReadingList(readingList: Array(items))
         }
     }
