@@ -505,6 +505,9 @@
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "新增捷徑";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "已新增捷徑";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "複製網址";
 

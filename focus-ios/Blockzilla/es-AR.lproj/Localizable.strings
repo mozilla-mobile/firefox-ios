@@ -505,6 +505,9 @@
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "Agregado a atajos";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Agregado a atajos";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Copiar dirección";
 
