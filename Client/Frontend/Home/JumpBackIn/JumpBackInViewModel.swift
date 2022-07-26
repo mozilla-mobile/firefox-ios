@@ -191,8 +191,8 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     func updateSectionLayout(for traitCollection: UITraitCollection,
-                       isPortrait: Bool = UIWindow.isPortrait,
-                       device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+                             isPortrait: Bool = UIWindow.isPortrait,
+                             device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         let isPhoneInLandscape = device == .phone && !isPortrait
 
         if hasSyncedTab, traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
