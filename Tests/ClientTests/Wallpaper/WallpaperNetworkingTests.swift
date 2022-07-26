@@ -12,10 +12,12 @@ class WallpaperNetworkingTests: XCTestCase {
     var networking: NetworkingMock!
 
     override func setUp() {
+        super.setUp()
         networking = NetworkingMock()
     }
 
     override func tearDown() {
+        super.tearDown()
         networking = nil
     }
 

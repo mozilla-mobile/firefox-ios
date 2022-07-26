@@ -14,10 +14,12 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
 
     // MARK: - Setup & Teardown
     override func setUp() {
+        super.setUp()
         networking = NetworkingMock()
     }
 
     override func tearDown() {
+        super.tearDown()
         networking = nil
     }
 

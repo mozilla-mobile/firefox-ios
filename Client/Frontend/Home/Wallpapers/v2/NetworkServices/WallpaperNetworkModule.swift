@@ -17,9 +17,7 @@ class WallpaperNetworkingModule: WallpaperNetworking {
                     return
                 }
 
-                guard let response = response as? HTTPURLResponse,
-                      (200...299).contains(response.statusCode)
-                else {
+                guard let response = validatedHTTPResponse(response, statusCode: 200..<300) else {
                     continuation.resume(throwing: URLError(.badServerResponse))
                     return
                 }
