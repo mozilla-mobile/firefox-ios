@@ -8,10 +8,11 @@ import XCTest
 @testable import Client
 
 class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
-    typealias ServiceError = WallpaperDataService.DataServiceError
 
+    // MARK: - Properties
     var networking: NetworkingMock!
 
+    // MARK: - Setup & Teardown
     override func setUp() {
         networking = NetworkingMock()
     }

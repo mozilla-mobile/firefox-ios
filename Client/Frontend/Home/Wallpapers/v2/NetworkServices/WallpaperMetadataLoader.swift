@@ -5,22 +5,35 @@
 import Foundation
 
 class WallpaperMetadataLoader {
-    static let versionEndpoint = "v1"
 
-    private let network: WallpaperNetworking
-
-    init(networkModule: WallpaperNetworking) {
-        self.network = networkModule
+    // MARK: - Properties
+    enum WallpaperMetadataEndpoint: String {
+        case v1
     }
 
+    private let networkModule: WallpaperNetworking
+
+    // MARK: - Initialization
+    init(networkModule: WallpaperNetworking) {
+        self.networkModule = networkModule
+    }
+
+    // MARK: - Interface
+
+    /// Given a specified URL, it will attempt to reach out to the server, fetch the
+    /// latest JSON, and return it as a `WallpaperMetadata` item
     func fetchMetadataWith(_ scheme: String) async throws -> WallpaperMetadata {
         guard let url = metadataPath(using: scheme) else { throw URLError(.badURL) }
 
-        let (data, _) = try await network.data(from: url)
+        let (data, _) = try await networkModule.data(from: url)
 
         return try decodeMetadata(from: data)
     }
 
+    // MARK: - Private methods
+
+    /// Given some data, if that data is a valid JSON file, it attempts to decode it
+    /// into a `WallpaperMetadata` object
     private func decodeMetadata(from data: Data) throws -> WallpaperMetadata {
 
         let dateFormatter = DateFormatter()
@@ -32,7 +45,8 @@ class WallpaperMetadataLoader {
         return try decoder.decode(WallpaperMetadata.self, from: data)
     }
 
+    /// Builds the path to the metadata endpoint on the server
     private func metadataPath(using scheme: String) -> URL? {
-        return URL(string: "\(scheme)/metadata/\(WallpaperMetadataLoader.versionEndpoint)")
+        return URL(string: "\(scheme)/metadata/\(WallpaperMetadataEndpoint.v1.rawValue)/")
     }
 }

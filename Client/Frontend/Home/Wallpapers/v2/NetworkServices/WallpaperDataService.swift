@@ -22,6 +22,8 @@ class WallpaperDataService: Loggable {
     }
 
     // MARK: - Methods
+
+    /// Main interface for fetching metadata from the server
     func getMetadata() async throws -> WallpaperMetadata {
         let scheme = try urlScheme()
         let loader = WallpaperMetadataLoader(networkModule: networking)
@@ -29,6 +31,7 @@ class WallpaperDataService: Loggable {
         return try await loader.fetchMetadataWith(scheme)
     }
 
+    /// Main interface for fetching images from the server
     func getImageWith(path: String) async throws -> UIImage {
         let scheme = try urlScheme()
         let loader = WallpaperImageLoader(networkModule: networking)
@@ -36,6 +39,7 @@ class WallpaperDataService: Loggable {
         return try await loader.fetchImage(using: scheme, andPath: path)
     }
 
+    /// Builds a URL for the server based on the specified environment.
     private func urlScheme() throws -> String {
         if AppConstants.isRunningTest { return "https://my.test.url" }
 

@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-enum SessionErrors: Error {
+enum WallpaperServiceError: Error {
     case dataUnavailable
 }
 

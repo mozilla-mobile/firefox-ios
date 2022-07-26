@@ -6,6 +6,8 @@ import Foundation
 import Shared
 
 class WallpaperNetworkingModule: WallpaperNetworking {
+
+    /// A basic async/await wrapper
     func data(from url: URL) async throws -> (Data, URLResponse) {
         return try await withCheckedThrowingContinuation { continuation in
             URLSession.shared.dataTask(with: url) { data, response, error in
@@ -25,7 +27,7 @@ class WallpaperNetworkingModule: WallpaperNetworking {
                 guard let data = data,
                       !data.isEmpty
                 else {
-                    continuation.resume(throwing: SessionErrors.dataUnavailable)
+                    continuation.resume(throwing: WallpaperServiceError.dataUnavailable)
                     return
                 }
 
