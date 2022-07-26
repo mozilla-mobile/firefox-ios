@@ -26,6 +26,14 @@ protocol SiteImageHelperProtocol {
                        completion: @escaping (UIImage?) -> Void)
 }
 
+extension SiteImageHelperProtocol {
+    func fetchImageFor(site: Site,
+                       imageType: SiteImageType,
+                       shouldFallback: Bool,
+                       metadataProvider: LPMetadataProvider = LPMetadataProvider(),
+                       completion: @escaping (UIImage?) -> Void) {}
+}
+
 /// A helper that'll fetch an image, and fallback to other image options if specified.
 class SiteImageHelper: SiteImageHelperProtocol {
 

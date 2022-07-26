@@ -53,8 +53,7 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
         }
         siteImageHelper.fetchImageFor(site: site,
                                       imageType: .heroImage,
-                                      shouldFallback: true,
-                                      metadataProvider: LPMetadataProvider()) { image in
+                                      shouldFallback: true) { image in
             self.heroImages[site.url] = image
         }
         return nil

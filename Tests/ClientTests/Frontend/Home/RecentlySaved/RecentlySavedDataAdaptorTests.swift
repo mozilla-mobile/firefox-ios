@@ -32,6 +32,7 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
         mockBookmarksHandler = nil
         spyNotificationCenter = nil
         subject = nil
+        mockDelegate = nil
     }
 
     // MARK: - getRecentlySavedData
