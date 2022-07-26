@@ -28,7 +28,6 @@ class GleanPlumbMessageUtility: Loggable {
             browserLog.error("GleanPlumbMessageHelper could not be created! With error \(error)")
             return nil
         }
-
     }
 
     /// We check whether this message is triggered by evaluating message JEXLs.

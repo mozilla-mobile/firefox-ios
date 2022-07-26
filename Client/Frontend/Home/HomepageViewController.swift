@@ -333,12 +333,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     // MARK: - Home Tab Banner
 
     private var shouldDisplayHomeTabBanner: Bool {
-        let message = messagingManager.getNextMessage(for: .newTabCard)
-        if #available(iOS 14.0, *), message != nil || !UserDefaults.standard.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage) {
-            return true
-        } else {
-            return false
-        }
+        return messagingManager.hasMessage(for: .newTabCard)
     }
 
     private func showHomeTabBanner() {

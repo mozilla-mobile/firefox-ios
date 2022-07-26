@@ -35,6 +35,7 @@ enum SettingsPage: String {
 }
 
 enum DefaultBrowserPath: String {
+    case tutorial = "tutorial"
     case systemSettings = "system-settings"
 }
 
@@ -169,7 +170,7 @@ enum NavigationPath {
                                           and: bvc)
 
         case .defaultBrowser(let path):
-            NavigationPath.handleDefaultBrowser(path: path)
+            NavigationPath.handleDefaultBrowser(path: path, with: bvc)
         }
     }
 
@@ -335,10 +336,12 @@ enum NavigationPath {
         }
     }
 
-    private static func handleDefaultBrowser(path: DefaultBrowserPath) {
+    private static func handleDefaultBrowser(path: DefaultBrowserPath, with bvc: BrowserViewController) {
         switch path {
         case .systemSettings:
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+        case .tutorial:
+            bvc.presentDBOnboardingViewController(true)
         }
     }
 }
