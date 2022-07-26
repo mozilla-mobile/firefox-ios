@@ -204,7 +204,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         } else if traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
             sectionLayout = .compactJumpBackIn
         } else {
-            sectionLayout = hasAccount ? .regularWithSyncedTab : .regular
+            sectionLayout = hasSyncedTabFeatureEnabled ? .regularWithSyncedTab : .regular
         }
     }
 }
@@ -279,18 +279,18 @@ private extension JumpBackInViewModel {
 // MARK: - Private: Synced tab data
 private extension JumpBackInViewModel {
 
-    var hasAccount: Bool {
+    var hasSyncedTabFeatureEnabled: Bool {
         return profile.hasSyncableAccount() &&
                 featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly)
     }
 
     var hasSyncedTab: Bool {
-        return hasAccount && mostRecentSyncedTab != nil
+        return hasSyncedTabFeatureEnabled && mostRecentSyncedTab != nil
     }
 
     func updateRemoteTabs(completion: @escaping () -> Void) {
         // Short circuit if the user is not logged in or feature not enabled
-        guard hasAccount else {
+        guard hasSyncedTabFeatureEnabled else {
             mostRecentSyncedTab = nil
             completion()
             return
@@ -619,7 +619,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         jumpBackInList = createJumpBackInList(
             from: recentTabs,
             withMaxItemsToDisplay: sectionLayout.maxItemsToDisplay(displayGroup: .jumpBackIn,
-                                                                   hasAccount: hasAccount,
+                                                                   hasAccount: hasSyncedTabFeatureEnabled,
                                                                    device: device),
             and: recentGroups)
     }
