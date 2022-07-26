@@ -80,6 +80,10 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     /// Perform any startup setup if necessary.
     func onStartup() { }
 
+    func hasMessage(for surface: MessageSurfaceId) -> Bool {
+        return getNextMessage(for: surface) != nil
+    }
+
     /// Returns the next valid and triggered message for the surface, if one exists.
     func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
         /// All these are non-expired, well formed, and descending priority ordered messages for a requested surface.

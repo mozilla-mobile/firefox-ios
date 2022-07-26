@@ -245,19 +245,13 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
     @objc private func dismissCard() {
         self.dismissClosure?()
 
-        guard let message = message else { return }
-
-        /// Update value to save DefaultBrowserMessage was dismissed
-        UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
-        messagingManager.onMessageDismissed(message)
+        message.map(messagingManager.onMessageDismissed)
     }
 
     /// The surface needs to handle CTAs a certain way when there's a message.
     @objc func handleCTA() {
         self.dismissClosure?()
 
-        guard let message = message else { return }
-
-        messagingManager.onMessagePressed(message)
+        message.map(messagingManager.onMessagePressed)
     }
 }

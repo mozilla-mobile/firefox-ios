@@ -333,8 +333,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     // MARK: - Home Tab Banner
 
     private var shouldDisplayHomeTabBanner: Bool {
-        let message = messagingManager.getNextMessage(for: .newTabCard)
-        return message != nil
+        return messagingManager.hasMessage(for: .newTabCard)
     }
 
     private func showHomeTabBanner() {

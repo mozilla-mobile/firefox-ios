@@ -307,7 +307,7 @@ features:
             USER_FR_SPEAKER:          "'fr' in locale"
             DEVICE_ANDROID:           os == 'Android'
             DEVICE_IOS:               os == 'iOS'
-            I_AM_DEFAULT_BROWSER: "is_default_browser"
+            I_AM_DEFAULT_BROWSER:     "is_default_browser"
             I_AM_NOT_DEFAULT_BROWSER: "is_default_browser == false"
             SUPPORTS_DEFAULT_BROWSER: os_version|versionCompare('14.!') >= 0
             ALWAYS:                   "true"

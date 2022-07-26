@@ -16,7 +16,6 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         sut = GleanPlumbMessageManager()
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
-
     }
 
     override func tearDown() {
