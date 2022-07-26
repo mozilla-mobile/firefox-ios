@@ -3,25 +3,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
 import DesignSystem
-
-public protocol ShortcutViewDelegate: AnyObject {
-    func shortcutTapped(shortcut: Shortcut)
-    func removeFromShortcutsAction(shortcut: Shortcut)
-    func rename(shortcut: Shortcut)
-    func dismissShortcut()
-}
+import UIComponents
+import Combine
 
 public class ShortcutView: UIView {
     public var contextMenuIsDisplayed = false
-    public private(set) var shortcut: Shortcut
-    public weak var delegate: ShortcutViewDelegate?
+    public private(set) var viewModel: ShortcutViewModel
 
     public private(set) lazy var outerView: UIView = {
         let outerView = UIView()
         outerView.backgroundColor = .above
+        outerView.accessibilityIdentifier = "outerView"
         outerView.layer.cornerRadius = 8
+        outerView.translatesAutoresizingMaskIntoConstraints = false
         return outerView
     }()
 
@@ -29,6 +24,12 @@ public class ShortcutView: UIView {
         let innerView = UIView()
         innerView.backgroundColor = .foundation
         innerView.layer.cornerRadius = 4
+        innerView.translatesAutoresizingMaskIntoConstraints = false
+        innerView.addSubview(letterLabel)
+        NSLayoutConstraint.activate([
+            letterLabel.centerXAnchor.constraint(equalTo: innerView.centerXAnchor),
+            letterLabel.centerYAnchor.constraint(equalTo: innerView.centerYAnchor)
+        ])
         return innerView
     }()
 
@@ -36,6 +37,7 @@ public class ShortcutView: UIView {
         let letterLabel = UILabel()
         letterLabel.textColor = .primaryText
         letterLabel.font = .title20
+        letterLabel.translatesAutoresizingMaskIntoConstraints = false
         return letterLabel
     }()
 
@@ -45,7 +47,16 @@ public class ShortcutView: UIView {
         nameLabel.font = .footnote12
         nameLabel.numberOfLines = 2
         nameLabel.textAlignment = .center
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
         return nameLabel
+    }()
+
+    private lazy var faviImageView: AsyncImageView = {
+        let image = AsyncImageView()
+        image.layer.cornerRadius = 4
+        image.clipsToBounds = true
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
     }()
 
     public struct LayoutConfiguration {
@@ -65,41 +76,56 @@ public class ShortcutView: UIView {
         )
     }
 
-    public init(shortcut: Shortcut, layoutConfiguration: LayoutConfiguration) {
-        self.shortcut = shortcut
+    private var cancellables: Set<AnyCancellable> = []
+
+    public init(shortcutViewModel: ShortcutViewModel,
+                layoutConfiguration: LayoutConfiguration = .default) {
+        self.viewModel = shortcutViewModel
 
         super.init(frame: CGRect.zero)
-        self.frame = CGRect(x: 0, y: 0, width: layoutConfiguration.width, height: layoutConfiguration.height)
+
+        viewModel
+            .$shortcut
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.nameLabel.text = $0.name
+
+                if let url = $0.imageURL {
+                    let shortcutImage = $0.capital.flatMap { self.viewModel.faviconWithLetter?($0) } ?? .defaultFavicon
+                    self.faviImageView.load(imageURL: url, defaultImage: shortcutImage)
+                } else {
+                    self.letterLabel.text = $0.capital
+                }
+            }
+            .store(in: &cancellables)
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTap))
         self.addGestureRecognizer(tap)
 
         addSubview(outerView)
-        outerView.snp.makeConstraints { make in
-            make.width.height.equalTo(layoutConfiguration.width)
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview()
-        }
 
-        outerView.addSubview(innerView)
-        innerView.snp.makeConstraints { make in
-            make.width.height.equalTo(layoutConfiguration.inset)
-            make.center.equalTo(outerView)
-        }
+        NSLayoutConstraint.activate([
+            outerView.widthAnchor.constraint(equalToConstant: layoutConfiguration.width),
+            outerView.heightAnchor.constraint(equalToConstant: layoutConfiguration.width),
+            outerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            outerView.topAnchor.constraint(equalTo: topAnchor)
+        ])
 
-        letterLabel.text = shortcut.name.first.map(String.init)?.capitalized
-        innerView.addSubview(letterLabel)
-        letterLabel.snp.makeConstraints { make in
-            make.center.equalTo(innerView)
-        }
+        let centerView = viewModel.shortcut.imageURL != nil ? faviImageView : innerView
+        outerView.addSubview(centerView)
+        NSLayoutConstraint.activate([
+            centerView.widthAnchor.constraint(equalToConstant: layoutConfiguration.inset),
+            centerView.heightAnchor.constraint(equalToConstant: layoutConfiguration.inset),
+            centerView.centerXAnchor.constraint(equalTo: outerView.centerXAnchor),
+            centerView.centerYAnchor.constraint(equalTo: outerView.centerYAnchor)
+        ])
 
-        nameLabel.text = shortcut.name
         addSubview(nameLabel)
-        nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(outerView.snp.bottom).offset(8)
-            make.centerX.equalToSuperview()
-            make.trailing.lessThanOrEqualToSuperview().offset(8)
-        }
+        NSLayoutConstraint.activate([
+            nameLabel.topAnchor.constraint(equalTo: outerView.bottomAnchor, constant: 8),
+            nameLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 8)
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -107,13 +133,7 @@ public class ShortcutView: UIView {
     }
 
     @objc private func didTap() {
-        delegate?.shortcutTapped(shortcut: shortcut)
-    }
-
-    public func rename(shortcut: Shortcut) {
-        self.shortcut = shortcut
-        nameLabel.text = shortcut.name
-        letterLabel.text = shortcut.name.first.map(String.init)?.capitalized
+        viewModel.send(action: .tapped)
     }
 }
 

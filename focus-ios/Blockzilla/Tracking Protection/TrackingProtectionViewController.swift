@@ -220,12 +220,12 @@ class TrackingProtectionViewController: UIViewController {
         if case .settings = state { return 0 }  else { return 48 }
     }
     var state: TrackingProtectionState
-    let favIconPublisher: AnyPublisher<UIImage, Never>?
+    let favIconPublisher: AnyPublisher<URL?, Never>?
     private let onboardingEventsHandler: OnboardingEventsHandler
     private var cancellable: AnyCancellable?
 
     // MARK: - VC Lifecycle
-    init(state: TrackingProtectionState, onboardingEventsHandler: OnboardingEventsHandler, favIconPublisher: AnyPublisher<UIImage, Never>? = nil) {
+    init(state: TrackingProtectionState, onboardingEventsHandler: OnboardingEventsHandler, favIconPublisher: AnyPublisher<URL?, Never>? = nil) {
         self.state = state
         self.onboardingEventsHandler = onboardingEventsHandler
         self.favIconPublisher = favIconPublisher

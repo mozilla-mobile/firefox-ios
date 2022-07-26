@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import XCTest
@@ -12,54 +12,47 @@ class ShortcutsTest: BaseTestCase {
         super.tearDown()
     }
 
-    func testAddRemoveShortCut() {
+    func testAddRemoveShortcut() {
         addShortcut(website: "mozilla.org")
 
         // Tap on erase button to go to homepage and check the shortcut created
         app.eraseButton.tap()
 
         // Verify the shortcut is created
-        waitForExistence(app.otherElements.staticTexts["M"], timeout: 5)
         XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists)
 
         // Remove created shortcut
-        app.otherElements.staticTexts["M"].press(forDuration: 2)
+        app.otherElements["outerView"].press(forDuration: 2)
         waitForExistence(app.collectionViews.cells.buttons["Remove from Shortcuts"])
         app.collectionViews.cells.buttons["Remove from Shortcuts"].tap()
-        waitForNoExistence(app.otherElements.staticTexts["M"])
+        waitForNoExistence(app.otherElements.staticTexts["Mozilla"])
         XCTAssertFalse(app.otherElements.staticTexts["Mozilla"].exists)
     }
 
-    func testAdd4Shortcuts() {
+    func testAddRenameShortcut() {
         addShortcut(website: "mozilla.org")
-//        addShortcut(website: "example.com")
-//        addShortcut(website: "pocket.com")
-//        addShortcut(website: "wikipedia.com")
 
         // Tap on erase button to go to homepage and check the shortcut created
         app.eraseButton.tap()
 
         // Verify the shortcut is created
-        waitForExistence(app.otherElements.staticTexts["M"], timeout: 5)
         XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists)
-        // XCTAssertTrue(app.otherElements.staticTexts["Example"].exists)
-        // XCTAssertTrue(app.otherElements.staticTexts["Getpocket"].exists)
-        // XCTAssertTrue(app.otherElements.staticTexts["Wikipedia"].exists)
 
-        // Change device orientation
-        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
-        // Verify the shortcut is created
-        waitForExistence(app.otherElements.staticTexts["M"], timeout: 5)
-        XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists)
-        // XCTAssertTrue(app.otherElements.staticTexts["Example"].exists)
-        // XCTAssertTrue(app.otherElements.staticTexts["Getpocket"].exists)
-        // XCTAssertTrue(app.otherElements.staticTexts["Wikipedia"].exists)
+        // Rename shortcut
+        app.otherElements["outerView"].press(forDuration: 2)
+        waitForExistence(app.collectionViews.cells.buttons["Rename Shortcut"])
+        app.collectionViews.cells.buttons["Rename Shortcut"].tap()
+        let textField = app.alerts.textFields.element
+        textField.clearAndEnterText(text: "Cheese")
+        app.alerts.buttons["Save"].tap()
+
+        waitForExistence(app.otherElements.staticTexts["Cheese"])
+        XCTAssertTrue(app.otherElements.staticTexts["Cheese"].exists)
     }
 
     func testShortcutShownWhileTypingURLBar() {
         addShortcut(website: "example.com")
         app.urlTextField.tap()
-        waitForExistence(app.otherElements.staticTexts["E"], timeout: 5)
         XCTAssertTrue(app.otherElements.staticTexts["Example"].exists)
 
         app.urlTextField.typeText("foo")

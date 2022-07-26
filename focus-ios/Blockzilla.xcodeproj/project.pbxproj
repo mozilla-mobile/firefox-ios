@@ -83,7 +83,6 @@
 		C82F45F528193DA5000D7D84 /* ShortcutView+UIContextMenuInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F45F428193DA5000D7D84 /* ShortcutView+UIContextMenuInteractionDelegate.swift */; };
 		C82F45F728193EE8000D7D84 /* AppShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = C82F45F628193EE8000D7D84 /* AppShortcuts */; };
 		C82F45F9281A76EF000D7D84 /* ShortcutsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F45F8281A76EF000D7D84 /* ShortcutsPresenter.swift */; };
-		C8337DF42710898800093D42 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE42710898800093D42 /* ImageLoader.swift */; };
 		C8337DF52710898800093D42 /* ToggleItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE62710898800093D42 /* ToggleItem.swift */; };
 		C8337DF62710898800093D42 /* TrackingProtectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE72710898800093D42 /* TrackingProtectionState.swift */; };
 		C8337DF72710898800093D42 /* SecureConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE82710898800093D42 /* SecureConnectionStatus.swift */; };
@@ -91,7 +90,6 @@
 		C8337DF92710898800093D42 /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DEA2710898800093D42 /* TrackingProtectionViewController.swift */; };
 		C8337DFA2710898800093D42 /* SubtitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DEC2710898800093D42 /* SubtitleCell.swift */; };
 		C8337DFB2710898800093D42 /* TrackingHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DED2710898800093D42 /* TrackingHeaderView.swift */; };
-		C8337DFC2710898800093D42 /* AsyncImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DEE2710898800093D42 /* AsyncImageView.swift */; };
 		C8337DFD2710898800093D42 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DEF2710898800093D42 /* ImageCell.swift */; };
 		C8337DFE2710898800093D42 /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DF02710898800093D42 /* SwitchTableViewCell.swift */; };
 		C8337DFF2710898800093D42 /* SheetModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DF22710898800093D42 /* SheetModalViewController.swift */; };
@@ -206,6 +204,7 @@
 		E4BF2DF51BACE92400DA9D68 /* ContentBlocker.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
+		E5CB2ED9288E909800CE6428 /* UIAlertController+Rename.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */; };
 		EB84F96D2093799900BA6739 /* TrackingProtectionPageStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */; };
 		EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96E209380CE00BA6739 /* URLExtensions.swift */; };
 		EB84F9712093815500BA6739 /* effective_tld_names.dat in Resources */ = {isa = PBXBuildFile; fileRef = EB84F9702093815500BA6739 /* effective_tld_names.dat */; };
@@ -623,7 +622,6 @@
 		C82F45F228193628000D7D84 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		C82F45F428193DA5000D7D84 /* ShortcutView+UIContextMenuInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShortcutView+UIContextMenuInteractionDelegate.swift"; sourceTree = "<group>"; };
 		C82F45F8281A76EF000D7D84 /* ShortcutsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsPresenter.swift; sourceTree = "<group>"; };
-		C8337DE42710898800093D42 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		C8337DE62710898800093D42 /* ToggleItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleItem.swift; sourceTree = "<group>"; };
 		C8337DE72710898800093D42 /* TrackingProtectionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionState.swift; sourceTree = "<group>"; };
 		C8337DE82710898800093D42 /* SecureConnectionStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureConnectionStatus.swift; sourceTree = "<group>"; };
@@ -631,7 +629,6 @@
 		C8337DEA2710898800093D42 /* TrackingProtectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionViewController.swift; sourceTree = "<group>"; };
 		C8337DEC2710898800093D42 /* SubtitleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubtitleCell.swift; sourceTree = "<group>"; };
 		C8337DED2710898800093D42 /* TrackingHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingHeaderView.swift; sourceTree = "<group>"; };
-		C8337DEE2710898800093D42 /* AsyncImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncImageView.swift; sourceTree = "<group>"; };
 		C8337DEF2710898800093D42 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		C8337DF02710898800093D42 /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		C8337DF22710898800093D42 /* SheetModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetModalViewController.swift; sourceTree = "<group>"; };
@@ -985,6 +982,7 @@
 		E4D0AB881E300EFE00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4D0AB891E300EFF00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4D0AB8A1E300F0000DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Rename.swift"; sourceTree = "<group>"; };
 		EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionPageStats.swift; sourceTree = "<group>"; };
 		EB84F96E209380CE00BA6739 /* URLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
 		EB84F9702093815500BA6739 /* effective_tld_names.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = effective_tld_names.dat; sourceTree = "<group>"; };
@@ -1240,7 +1238,6 @@
 			isa = PBXGroup;
 			children = (
 				EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */,
-				C8337DE42710898800093D42 /* ImageLoader.swift */,
 				C8337DE52710898800093D42 /* Model */,
 				C8337DE92710898800093D42 /* TrackingProtectionDelegate.swift */,
 				C8337DEA2710898800093D42 /* TrackingProtectionViewController.swift */,
@@ -1266,7 +1263,6 @@
 			children = (
 				C8337DEC2710898800093D42 /* SubtitleCell.swift */,
 				C8337DED2710898800093D42 /* TrackingHeaderView.swift */,
-				C8337DEE2710898800093D42 /* AsyncImageView.swift */,
 				C8337DEF2710898800093D42 /* ImageCell.swift */,
 				C8337DF02710898800093D42 /* SwitchTableViewCell.swift */,
 			);
@@ -1427,6 +1423,7 @@
 				EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */,
 				D30DF93D1DC1634F0064736C /* Toast.swift */,
 				C82F45F428193DA5000D7D84 /* ShortcutView+UIContextMenuInteractionDelegate.swift */,
+				E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */,
 			);
 			path = UIComponents;
 			sourceTree = "<group>";
@@ -2377,6 +2374,7 @@
 				D3E3CA7D1DA827AD0079C94B /* HomeViewController.swift in Sources */,
 				840057542735301600E48144 /* SettingsTableViewCell.swift in Sources */,
 				D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */,
+				E5CB2ED9288E909800CE6428 /* UIAlertController+Rename.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,
 				C80F901C26C554B800F5112B /* PhotonActionSheetCell.swift in Sources */,
 				6028814027B2C6BB00CAF588 /* OnboardingConstants.swift in Sources */,
@@ -2395,7 +2393,6 @@
 				C8337E002710898800093D42 /* SheetMetrics.swift in Sources */,
 				D3E251F91DAF064B005918DC /* Utils.swift in Sources */,
 				C8337DF72710898800093D42 /* SecureConnectionStatus.swift in Sources */,
-				C8337DFC2710898800093D42 /* AsyncImageView.swift in Sources */,
 				D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */,
 				D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */,
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
@@ -2404,7 +2401,6 @@
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
 				C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */,
-				C8337DF42710898800093D42 /* ImageLoader.swift in Sources */,
 				F8714D2127A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift in Sources */,
 				C82F45F9281A76EF000D7D84 /* ShortcutsPresenter.swift in Sources */,
 				F8BC6A0727224B170026AB9F /* NimbusExtensions.swift in Sources */,

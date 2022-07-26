@@ -4,10 +4,12 @@
 
 import UIKit
 import Combine
+import UIComponents
 
 class TrackingHeaderView: UIView {
     private lazy var faviImageView: AsyncImageView = {
         let image = AsyncImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
 
@@ -63,8 +65,17 @@ class TrackingHeaderView: UIView {
         }
     }
 
-    func configure(domain: String, publisher: AnyPublisher<UIImage, Never>) {
+    var cancellable: AnyCancellable?
+
+    func configure(domain: String, publisher: AnyPublisher<URL?, Never>) {
         self.domainLabel.text = domain
-        self.faviImageView.load(from: publisher)
+        cancellable = publisher
+            .sink { url in
+                guard let url = url else {
+                    self.faviImageView.defaultImage = .defaultFavicon
+                    return
+                }
+                self.faviImageView.load(imageURL: url, defaultImage: .defaultFavicon)
+            }
     }
 }

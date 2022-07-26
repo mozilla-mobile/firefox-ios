@@ -7,10 +7,12 @@ import Foundation
 public struct Shortcut: Equatable, Encodable, Hashable {
     public var url: URL
     public var name: String
+    public var imageURL: URL?
 
-    public init(url: URL, name: String = "") {
+    public init(url: URL, name: String = "", imageURL: URL? = nil) {
         self.url = url
         self.name = name.isEmpty ? Shortcut.defaultName(for: url) : name
+        self.imageURL = imageURL == nil ? URL(string: "/favicon.ico", relativeTo: url) : imageURL
     }
 }
 
@@ -32,10 +34,17 @@ extension Shortcut {
     }
 }
 
+extension Shortcut {
+    var capital: String? {
+        name.first.map(String.init)?.capitalized
+    }
+}
+
 extension Shortcut: Decodable {
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         url = try values.decode(URL.self, forKey: .url)
         name = (try? values.decode(String.self, forKey: .name)) ?? Shortcut.defaultName(for: url)
+        imageURL = (try? values.decode(URL.self, forKey: .imageURL)) ?? URL(string: "/favicon.ico", relativeTo: url)
     }
 }

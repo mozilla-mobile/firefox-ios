@@ -102,8 +102,14 @@ class BrowserViewController: UIViewController {
         self.whatsNewEventsHandler = whatsNewEventsHandler
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
-        shortcutManager.delegate = self
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
+
+        self.shortcutManager.onTap = self.shortcutTapped(url:)
+        self.shortcutManager.onDismiss = self.dismissShortcut
+        self.shortcutManager.onRemove = self.removeFromShortcuts
+        self.shortcutManager.onShowRenameAlert = self.showRenameAlert(shortcut:)
+        self.shortcutManager.shortcutsDidUpdate = self.shortcutsDidUpdate
+        self.shortcutManager.shortcutDidRemove = self.shortcutDidRemove(shortcut:)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -384,12 +390,12 @@ class BrowserViewController: UIViewController {
                     shortcutsBackground.isHidden = true
 
                 case .editingURL(let text):
-                    let shouldShowShortcuts = text.isEmpty && !shortcutManager.shortcuts.isEmpty
+                    let shouldShowShortcuts = text.isEmpty && !shortcutManager.shortcutsViewModels.isEmpty
                     shortcutsContainer.isHidden = !shouldShowShortcuts
                     shortcutsBackground.isHidden = !urlBar.inBrowsingMode ? true : !shouldShowShortcuts
 
                 case .activeURLBar:
-                    let shouldShowShortcuts = !shortcutManager.shortcuts.isEmpty
+                    let shouldShowShortcuts = !shortcutManager.shortcutsViewModels.isEmpty
                     shortcutsContainer.isHidden = !shouldShowShortcuts
                     shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
 
@@ -406,15 +412,14 @@ class BrowserViewController: UIViewController {
     }
 
     private func addShortcuts() {
-        if !shortcutManager.shortcuts.isEmpty {
-            for shortcut in shortcutManager.shortcuts {
+        if !shortcutManager.shortcutsViewModels.isEmpty {
+            for shortcutViewModel in shortcutManager.shortcutsViewModels {
                 let config: ShortcutView.LayoutConfiguration = isIPadRegularDimensions ? .iPad : .default
-                let shortcutView = ShortcutView(shortcut: shortcut, layoutConfiguration: config)
+                let shortcutView = ShortcutView(shortcutViewModel: shortcutViewModel, layoutConfiguration: config)
                 let interaction = UIContextMenuInteraction(delegate: shortcutView)
                 shortcutView.outerView.addInteraction(interaction)
                 shortcutView.setContentCompressionResistancePriority(.required, for: .horizontal)
                 shortcutView.setContentHuggingPriority(.required, for: .horizontal)
-                shortcutView.delegate = self
                 shortcutsContainer.addArrangedSubview(shortcutView)
                 shortcutView.snp.makeConstraints { make in
                     make.width.equalTo(config.width)
@@ -422,7 +427,7 @@ class BrowserViewController: UIViewController {
                 }
             }
         }
-        if shortcutManager.shortcuts.count < ShortcutsManager.maximumNumberOfShortcuts {
+        if shortcutManager.hasSpace {
             shortcutsContainer.addArrangedSubview(UIView())
         }
     }
@@ -1242,19 +1247,12 @@ extension BrowserViewController: URLBarDelegate {
 
         guard let modalDelegate = modalDelegate else { return }
 
-        let favIconPublisher: AnyPublisher<UIImage, Never> =
+        let favIconPublisher: AnyPublisher<URL?, Never> =
         webViewController
             .getMetadata()
             .map(\.icon)
-            .tryMap {
-                if let url = $0.flatMap(URL.init(string:)) {
-                    return url
-                } else {
-                    throw WebViewController.MetadataError.missingURL
-                }
-            }
-            .flatMap { url in ImageLoader().loadImage(url) }
-            .replaceError(with: .defaultFavicon)
+            .map { $0.flatMap(URL.init(string:)) }
+            .replaceError(with: nil)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
 
@@ -1314,67 +1312,6 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return .none
-    }
-}
-
-extension BrowserViewController: ShortcutViewDelegate {
-    func rename(shortcut: Shortcut) {
-        let alert = UIAlertController(title: UIConstants.strings.renameShortcut, message: nil, preferredStyle: .alert)
-        alert.addTextField { textfield in
-            textfield.placeholder = UIConstants.strings.renameShortcutAlertPlaceholder
-            textfield.text = shortcut.name
-            textfield.clearButtonMode = .always
-            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textfield, queue: OperationQueue.main, using: { _ in
-                alert.actions.last?.isEnabled = !(textfield.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? false)
-            })
-        }
-
-        alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertSecondaryAction, style: .cancel, handler: { [unowned self] _ in
-            self.urlBar.activateTextField()
-        }))
-        alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertPrimaryAction, style: .default, handler: { [unowned alert, unowned self] action in
-            let newName = (alert.textFields?.first?.text ?? shortcut.name).trimmingCharacters(in: .whitespacesAndNewlines)
-            self.shortcutManager.rename(shortcut: shortcut, newName: newName)
-            self.urlBar.activateTextField()
-        }))
-        self.show(alert, sender: nil)
-    }
-
-    func dismissShortcut() {
-        guard isIPadRegularDimensions else { return }
-        urlBarDidDismiss(urlBar)
-    }
-
-    func shortcutTapped(shortcut: Shortcut) {
-        ensureBrowsingMode()
-        urlBar.url = shortcut.url
-        deactivateUrlBarOnHomeView()
-        submit(url: shortcut.url)
-        GleanMetrics.Shortcuts.shortcutOpenedCounter.add()
-    }
-
-    func removeFromShortcutsAction(shortcut: Shortcut) {
-        shortcutManager.remove(shortcut: shortcut)
-        self.shortcutsBackground.isHidden = self.shortcutManager.shortcuts.count == 0 || !self.urlBar.inBrowsingMode ? true : false
-        GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
-    }
-}
-
-extension BrowserViewController: ShortcutsManagerDelegate {
-
-    func shortcutsDidUpdate() {
-        for subview in shortcutsContainer.subviews {
-            subview.removeFromSuperview()
-        }
-        addShortcuts()
-    }
-    func shortcutDidUpdate(shortcut: Shortcut) {
-        for subview in shortcutsContainer.subviews {
-            let subview = subview as? ShortcutView
-            if let subviewShortcut = subview?.shortcut, subviewShortcut.url == shortcut.url {
-                subview?.rename(shortcut: shortcut)
-            }
-        }
     }
 }
 
@@ -1970,19 +1907,75 @@ extension BrowserViewController: MenuActionable {
     }
 
     func addToShortcuts(url: URL) {
-        let shortcut = Shortcut(url: url)
-        self.shortcutManager.add(shortcut: shortcut)
-        GleanMetrics.Shortcuts.shortcutAddedCounter.add()
-        TipManager.shortcutsTip = false
+        Task {
+            let imageURL = try? await webViewController.getMetadata().icon.flatMap(URL.init(string:))
+            let shortcut = Shortcut(url: url, imageURL: imageURL)
+            self.shortcutManager.add(shortcutViewModel: .init(shortcut: shortcut))
 
-        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "add_to_shortcuts"))
+            GleanMetrics.Shortcuts.shortcutAddedCounter.add()
+            TipManager.shortcutsTip = false
+
+            GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "add_to_shortcuts"))
+            Toast(text: UIConstants.strings.shareMenuAddToShortcutsConfirmMessage).show()
+        }
     }
 
     func removeShortcut(url: URL) {
-        let shortcut = Shortcut(url: url)
-        self.shortcutManager.remove(shortcut: shortcut)
+        self.shortcutManager.remove(url)
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_browser_menu"].add()
-
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "remove_from_shortcuts"))
+    }
+}
+
+// MARK: - Shortcuts Actions
+
+extension BrowserViewController {
+    func showRenameAlert(shortcut: Shortcut) {
+        let alert = UIAlertController.renameAlertController(
+            currentName: shortcut.name,
+            renameAction: { newName in
+                self.shortcutManager.rename(shortcut: shortcut, newName: newName)
+                self.urlBar.activateTextField()
+
+            }, cancelAction: {
+                self.urlBar.activateTextField()
+
+            })
+        self.show(alert, sender: nil)
+    }
+
+    func removeFromShortcuts() {
+        self.shortcutsBackground.isHidden = self.shortcutManager.shortcutsViewModels.isEmpty || !self.urlBar.inBrowsingMode ? true : false
+        GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
+    }
+
+    func dismissShortcut() {
+        guard isIPadRegularDimensions else { return }
+        urlBarDidDismiss(urlBar)
+    }
+
+    func shortcutTapped(url: URL) {
+        ensureBrowsingMode()
+        urlBar.url = url
+        deactivateUrlBarOnHomeView()
+        submit(url: url)
+        GleanMetrics.Shortcuts.shortcutOpenedCounter.add()
+    }
+
+    func shortcutDidRemove(shortcut: ShortcutViewModel) {
+        for subview in shortcutsContainer.subviews where subview is ShortcutView {
+            let subview = subview as? ShortcutView
+            if let subviewShortcut = subview?.viewModel, subviewShortcut.shortcut.url == shortcut.shortcut.url {
+                subview?.removeFromSuperview()
+                shortcutsContainer.addArrangedSubview(UIView())
+            }
+        }
+    }
+
+    func shortcutsDidUpdate() {
+        for subview in shortcutsContainer.subviews {
+            subview.removeFromSuperview()
+        }
+        addShortcuts()
     }
 }

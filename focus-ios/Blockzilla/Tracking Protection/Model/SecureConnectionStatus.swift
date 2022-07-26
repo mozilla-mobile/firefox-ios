@@ -8,11 +8,3 @@ struct SecureConnectionStatus: Equatable {
     let url: URL
     let isSecureConnection: Bool
 }
-
-extension SecureConnectionStatus {
-    var faviconURL: URL? {
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        components?.path = "/favicon.ico"
-        return components?.url
-    }
-}
