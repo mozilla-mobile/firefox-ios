@@ -28,7 +28,7 @@ extension WallpaperJSONTestProvider {
         }
 
         guard let data = try? Data(contentsOf: url) else {
-            fatalError("Test")
+            fatalError("Failure on Data(contentsOf:) with data: '\(data)'")
         }
 
         return data
