@@ -8,13 +8,20 @@ import LinkPresentation
 import Storage
 
 class SiteImageHelperMock: SiteImageHelperProtocol {
+
+    var getfetchImageForCallCount = 0
+    var getfetchImageForCompletion: ((UIImage?) -> Void)?
+
     func fetchImageFor(site: Site,
                        imageType: SiteImageType,
                        shouldFallback: Bool,
                        metadataProvider: LPMetadataProvider,
                        completion: @escaping (UIImage?) -> Void) {
-
+        getfetchImageForCallCount += 1
+        getfetchImageForCompletion = completion
     }
 
-    
+    func callFetchImageForCompletion(with image: UIImage?) {
+        getfetchImageForCompletion?(image)
+    }
 }

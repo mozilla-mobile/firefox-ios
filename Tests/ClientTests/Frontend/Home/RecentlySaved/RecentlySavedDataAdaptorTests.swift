@@ -14,6 +14,7 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
     var mockReadingList: ReadingListMock!
     var mockBookmarksHandler: BookmarksHandlerMock!
     var spyNotificationCenter: SpyNotificationCenter!
+    var mockDelegate: RecentlySavedDelegateMock?
 
     override func setUp() {
         super.setUp()
@@ -21,7 +22,7 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
         mockReadingList = ReadingListMock()
         mockBookmarksHandler = BookmarksHandlerMock()
         spyNotificationCenter = SpyNotificationCenter()
-
+        mockDelegate = RecentlySavedDelegateMock()
     }
 
     override func tearDown() {
@@ -47,6 +48,7 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
         XCTAssert(savedData.count == 4)
         XCTAssert(mockReadingList.getAvailableRecordsCallCount == 1)
         XCTAssert(mockBookmarksHandler.getRecentBookmarksCallCount == 1)
+        XCTAssert(mockDelegate?.didLoadNewDataCallCount == 2)
     }
 
     // With no bookmarks and reading
@@ -61,6 +63,7 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
         XCTAssert(savedData.count == 3)
         XCTAssert(mockReadingList.getAvailableRecordsCallCount == 1)
         XCTAssert(mockBookmarksHandler.getRecentBookmarksCallCount == 1)
+        XCTAssert(mockDelegate?.didLoadNewDataCallCount == 2)
     }
 
     // With bookmarks and no reading
@@ -75,6 +78,7 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
         XCTAssert(savedData.count == 1)
         XCTAssert(mockReadingList.getAvailableRecordsCallCount == 1)
         XCTAssert(mockBookmarksHandler.getRecentBookmarksCallCount == 1)
+        XCTAssert(mockDelegate?.didLoadNewDataCallCount == 2)
     }
 
     // With no bookmarks and no reading
@@ -89,15 +93,48 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
         XCTAssert(savedData.count == 0)
         XCTAssert(mockReadingList.getAvailableRecordsCallCount == 1)
         XCTAssert(mockBookmarksHandler.getRecentBookmarksCallCount == 1)
+        XCTAssert(mockDelegate?.didLoadNewDataCallCount == 2)
+    }
+
+    // MARK: - getHeroImage
+
+    // Without image cached
+    func testGetHeroImage_withoutImageCached() {
+        initializeSubject()
+
+        let site = Site(url: "www.google.com", title: "google")
+        let image = subject.getHeroImage(forSite: site)
+
+        XCTAssert(mockSiteImageHelper.getfetchImageForCallCount == 1)
+        XCTAssert(image == nil)
+        XCTAssert(mockDelegate?.didLoadNewDataCallCount == 0)
+    }
+
+    // With image cached
+    func testGetHeroImage_withImageCached() {
+        initializeSubject()
+
+        let site = Site(url: "www.google.com", title: "google")
+        _ = subject.getHeroImage(forSite: site)
+
+        mockSiteImageHelper.callFetchImageForCompletion(with: UIImage())
+
+        let image = subject.getHeroImage(forSite: site)
+
+        XCTAssert(mockSiteImageHelper.getfetchImageForCallCount == 1)
+        XCTAssert(image != nil)
+        XCTAssert(mockDelegate?.didLoadNewDataCallCount == 1)
     }
 
     // MARK: - Helper functions
 
     private func initializeSubject() {
-        subject = RecentlySavedDataAdaptorImplementation(siteImageHelper: mockSiteImageHelper,
-                                                         readingList: mockReadingList,
-                                                         bookmarksHandler: mockBookmarksHandler,
-                                                         notificationCenter: spyNotificationCenter)
+        let subject = RecentlySavedDataAdaptorImplementation(siteImageHelper: mockSiteImageHelper,
+                                                             readingList: mockReadingList,
+                                                             bookmarksHandler: mockBookmarksHandler,
+                                                             notificationCenter: spyNotificationCenter)
+        subject.delegate = mockDelegate
+        self.subject = subject
     }
 
     private func getMockBookmarks() -> [BookmarkItemData] {
