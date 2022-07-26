@@ -19,8 +19,17 @@ struct TopSitesUIInterface {
     }
 }
 
-// Laurie - documentation
+/// Top sites dimension are subject to change depending on the user's number of rows,
+/// on which device it's showing, if it's landscape or portrait. The dimension should also
+/// excludes empty rows from showing. TopSitesDimension support those calculation.
 protocol TopSitesDimension {
+
+    /// Get the top sites section dimension to show in the homepage
+    /// - Parameters:
+    ///   - sites: The top sites that we need to show
+    ///   - numberOfRows: The number of rows the user has it's preference set to
+    ///   - interface: The interface where the top sites are being shown (ex in landscape, iPhone and it's horizontal size class)
+    /// - Returns: The top site dimension including it's numberOfRows and numberOfTilesPerRow
     func getSectionDimension(for sites: [TopSite],
                              numberOfRows: Int,
                              interface: TopSitesUIInterface
