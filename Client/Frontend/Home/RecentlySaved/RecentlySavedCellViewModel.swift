@@ -155,6 +155,7 @@ extension RecentlySavedCellViewModel: HomepageSectionHandler {
 
 extension RecentlySavedCellViewModel: RecentlySavedDelegate {
     func didLoadNewData() {
+        recentItems = recentlySavedDataAdaptor.getRecentlySavedData()
         delegate?.reloadData()
     }
 }

@@ -43,6 +43,8 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
         self.readingList = readingList
         self.bookmarksHandler = bookmarksHandler
 
+        setupNotifications(forObserver: self, observing: [.ReadingListUpdated, .BookmarksUpdated])
+
         getRecentBookmarks()
         getReadingLists()
     }
