@@ -45,7 +45,6 @@ class GleanPlumbMessageStoreTests: XCTestCase {
         sut.onMessageDisplayed(message)
         sut.onMessageDismissed(message)
 
-
         XCTAssertEqual(message.metadata.impressions, 1)
         XCTAssertTrue(message.metadata.isExpired)
     }
