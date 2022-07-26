@@ -33,6 +33,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     private var historySites: [Site] = []
     private var contiles: [Contile] = []
 
+    var notificationCenter: NotificationCenter
     weak var delegate: TopSitesManagerDelegate?
     private let topSiteHistoryManager: TopSiteHistoryManager
     private let googleTopSiteManager: GoogleTopSiteManager
@@ -41,15 +42,27 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     init(profile: Profile,
          topSiteHistoryManager: TopSiteHistoryManager,
          googleTopSiteManager: GoogleTopSiteManager,
-         contileProvider: ContileProviderInterface = ContileProvider()
+         contileProvider: ContileProviderInterface = ContileProvider(),
+         notificationCenter: NotificationCenter = NotificationCenter.default
     ) {
         self.profile = profile
         self.topSiteHistoryManager = topSiteHistoryManager
         self.googleTopSiteManager = googleTopSiteManager
         self.contileProvider = contileProvider
+        self.notificationCenter = notificationCenter
         topSiteHistoryManager.delegate = self
 
+        setupNotifications(forObserver: self,
+                           observing: [.FirefoxAccountChanged,
+                                       .ProfileDidFinishSyncing,
+                                       .PrivateDataClearedHistory,
+                                       .TopSitesUpdated])
+
         loadTopSitesData()
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
     }
 
     func getTopSitesData() -> [TopSite] {
@@ -247,5 +260,20 @@ extension TopSitesDataAdaptorImplementation: DataObserverDelegate {
     func didInvalidateDataSource(refresh forced: Bool) {
         guard forced else { return }
         loadTopSitesData()
+    }
+}
+
+// MARK: - Notifiable protocol
+extension TopSitesDataAdaptorImplementation: Notifiable, Loggable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .ProfileDidFinishSyncing,
+                .FirefoxAccountChanged,
+                .PrivateDataClearedHistory,
+                .TopSitesUpdated:
+            topSiteHistoryManager.refreshIfNeeded(refresh: true)
+        default:
+            browserLog.warning("Received unexpected notification \(notification.name)")
+        }
     }
 }

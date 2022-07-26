@@ -12,26 +12,16 @@ class TopSiteHistoryManager: DataObserver, Loggable {
     private let profile: Profile
 
     weak var delegate: DataObserverDelegate?
-    var notificationCenter: NotificationCenter
 
     private let topSiteCacheSize: Int32 = 32
-    private let events: [Notification.Name] = [.FirefoxAccountChanged, .ProfileDidFinishSyncing, .PrivateDataClearedHistory]
     private let dataQueue = DispatchQueue(label: "com.moz.topSiteHistory.queue")
     private let topSitesProvider: TopSitesProvider
 
-    init(profile: Profile,
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
+    init(profile: Profile) {
         self.profile = profile
         self.topSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
                                                                prefs: profile.prefs)
-        self.notificationCenter = notificationCenter
         profile.history.setTopSitesCacheSize(topSiteCacheSize)
-
-        setupNotifications(forObserver: self, observing: events)
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     /// RefreshIfNeeded will refresh the underlying caches for TopSites.
@@ -80,17 +70,5 @@ class TopSiteHistoryManager: DataObserver, Loggable {
         var deletedSuggestedSites = profile.prefs.arrayForKey(topSitesProvider.defaultSuggestedSitesKey) as? [String] ?? []
         deletedSuggestedSites.append(siteURL)
         profile.prefs.setObject(deletedSuggestedSites, forKey: topSitesProvider.defaultSuggestedSitesKey)
-    }
-}
-
-// MARK: - Notifiable protocol
-extension TopSiteHistoryManager: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .ProfileDidFinishSyncing, .FirefoxAccountChanged, .PrivateDataClearedHistory:
-            refreshIfNeeded(refresh: true)
-        default:
-            browserLog.warning("Received unexpected notification \(notification.name)")
-        }
     }
 }
