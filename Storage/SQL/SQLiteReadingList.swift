@@ -51,17 +51,15 @@ extension SQLiteReadingList: ReadingList {
         }
     }
 
-    public func deleteRecord(_ record: ReadingListItem) -> Success {
-        notificationCenter.post(name: .ReadingListUpdated, object: self)
+    public func deleteRecord(_ record: ReadingListItem, completion: ((Bool) -> Void)? = nil) {
         let sql = "DELETE FROM items WHERE client_id = ?"
         let args: Args = [record.id]
-        return db.run(sql, withArgs: args)
-    }
+        let deferredResponse = db.run(sql, withArgs: args)
 
-    public func deleteAllRecords() -> Success {
-        notificationCenter.post(name: .ReadingListUpdated, object: self)
-        let sql = "DELETE FROM items"
-        return db.run(sql)
+        deferredResponse.upon { result in
+            self.notificationCenter.post(name: .ReadingListUpdated, object: self)
+            completion?(result.isSuccess)
+        }
     }
 
     public func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Deferred<Maybe<ReadingListItem>> {

@@ -24,13 +24,7 @@ class ReadingListMock: ReadingList {
         return deferMaybe([])
     }
 
-    func deleteRecord(_ record: ReadingListItem) -> Success {
-        return succeed()
-    }
-
-    func deleteAllRecords() -> Success {
-        return succeed()
-    }
+    func deleteRecord(_ record: ReadingListItem, completion: ((Bool) -> Void)?) {}
 
     func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Deferred<Maybe<ReadingListItem>> {
         return deferMaybe(ReadingListStorageError("Function not mocked"))

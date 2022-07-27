@@ -4,7 +4,6 @@
 
 import Foundation
 import Storage
-import LinkPresentation
 
 protocol RecentlySavedDataAdaptor {
     func getHeroImage(forSite site: Site) -> UIImage?

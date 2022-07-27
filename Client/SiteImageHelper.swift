@@ -31,7 +31,13 @@ extension SiteImageHelperProtocol {
                        imageType: SiteImageType,
                        shouldFallback: Bool,
                        metadataProvider: LPMetadataProvider = LPMetadataProvider(),
-                       completion: @escaping (UIImage?) -> Void) {}
+                       completion: @escaping (UIImage?) -> Void) {
+        self.fetchImageFor(site: site,
+                           imageType: imageType,
+                           shouldFallback: shouldFallback,
+                           metadataProvider: metadataProvider,
+                           completion: completion)
+    }
 }
 
 /// A helper that'll fetch an image, and fallback to other image options if specified.

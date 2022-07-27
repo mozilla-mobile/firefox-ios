@@ -389,14 +389,15 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
     fileprivate func deleteItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .readingListPanel)
-            if profile.readingList.deleteRecord(record).value.isSuccess {
-                records?.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .automatic)
+            profile.readingList.deleteRecord(record, completion: { success in
+                guard success else { return }
+                self.records?.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: .automatic)
                 // reshow empty state if no records left
-                if records?.count == 0 {
-                    refreshReadingList()
+                if self.records?.count == 0 {
+                    self.refreshReadingList()
                 }
-            }
+            })
         }
     }
 

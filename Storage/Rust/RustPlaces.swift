@@ -268,9 +268,10 @@ public class RustPlaces: BookmarksHandler {
 
     @discardableResult
     public func createBookmark(parentGUID: GUID, url: String, title: String?, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
-        notificationCenter.post(name: .BookmarksUpdated, object: self)
         return withWriter { connection in
-            return try connection.createBookmark(parentGUID: parentGUID, url: url, title: title, position: position)
+            let response = try connection.createBookmark(parentGUID: parentGUID, url: url, title: title, position: position)
+            self.notificationCenter.post(name: .BookmarksUpdated, object: self)
+            return response
         }
     }
 
