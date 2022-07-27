@@ -3,21 +3,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
 
 public extension UIViewController {
-    func install(_ child: UIViewController, on view: UIView, insets: UIEdgeInsets = .zero) {
+    func install(_ child: UIViewController, on view: UIView) {
         addChild(child)
 
         child.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(child.view)
 
-        child.view.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(insets.top)
-            $0.bottom.equalToSuperview().inset(insets.bottom)
-            $0.leading.equalToSuperview().inset(insets.left)
-            $0.trailing.equalToSuperview().inset(insets.right)
-        }
+        NSLayoutConstraint.activate([
+            child.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            child.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            child.view.topAnchor.constraint(equalTo: view.topAnchor),
+            child.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
 
         child.didMove(toParent: self)
     }

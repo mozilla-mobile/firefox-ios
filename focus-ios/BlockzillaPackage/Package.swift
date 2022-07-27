@@ -23,9 +23,6 @@ let package = Package(
             name: "UIComponents",
             targets: ["UIComponents"])
     ],
-    dependencies: [
-        .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.0.1")
-    ],
     targets: [
         .target(
             name: "UIComponents",
@@ -34,10 +31,7 @@ let package = Package(
             ]
         ),
         .target(
-            name: "UIHelpers",
-            dependencies: [
-                .product(name: "SnapKit", package: "SnapKit")
-            ]
+            name: "UIHelpers"
         ),
         .target(
             name: "DesignSystem"
