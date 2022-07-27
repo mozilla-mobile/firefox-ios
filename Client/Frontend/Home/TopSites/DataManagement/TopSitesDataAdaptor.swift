@@ -10,7 +10,7 @@ protocol TopSitesManagerDelegate: AnyObject {
     func didLoadNewData()
 }
 
-/// Data adaptor to fetch the top sites data asyncroniously
+/// Data adaptor to fetch the top sites data asynchronously
 /// The data gets updated from notifications on specific user actions
 protocol TopSitesDataAdaptor {
 
@@ -47,6 +47,11 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     private let googleTopSiteManager: GoogleTopSiteManager
     private let contileProvider: ContileProviderInterface
     private let dispatchGroup: DispatchGroupInterface
+
+    // Pre-loading the data with a default number of tiles so we always show section when needed
+    // If this isn't done, then no data will be found from the view model and section won't show
+    // This gets ajusted once we actually know in which UI we're showing top sites.
+    private let defaultTopSitesRowCount = 8
 
     init(profile: Profile,
          topSiteHistoryManager: TopSiteHistoryManager,
@@ -104,14 +109,13 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
 
     // MARK: - Data loading
 
-    // Loads the data source of top sites. Internal for conveniance of testing
+    // Loads the data source of top sites. Internal for convenience of testing
     func loadTopSitesData(dataLoadingCompletion: (() -> Void)? = nil) {
         loadContiles()
         loadTopSites()
 
         dispatchGroup.notify(queue: dataQueue) { [weak self] in
-            // Pre-loading the data with a default number of tiles so we always show section when needed
-            self?.recalculateTopSiteData(for: 8)
+            self?.recalculateTopSiteData(for: self?.defaultTopSitesRowCount)
             self?.delegate?.didLoadNewData()
             dataLoadingCompletion?()
         }
