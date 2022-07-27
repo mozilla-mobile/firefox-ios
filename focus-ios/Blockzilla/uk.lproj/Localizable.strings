@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "БЕЗПЕКА";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Встановити типовим браузером";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Автоматично відкривати посилання з вебсайтів, електронних листів та повідомлень у %@.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Системна тема";
 

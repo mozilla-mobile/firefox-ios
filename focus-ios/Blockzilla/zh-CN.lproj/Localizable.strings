@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "安全";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "设为默认浏览器";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "将网站、电子邮件及聊天工具中的链接设为在 %@ 中自动打开。";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "系统主题";
 
