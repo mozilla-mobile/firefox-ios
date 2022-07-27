@@ -232,7 +232,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 }
 
 extension SQLiteRemoteClientsAndTabs: RemoteDevices {
-    open func replaceRemoteDevices(_ remoteDevices: [RemoteDevice]) -> Success {
+    public func replaceRemoteDevices(_ remoteDevices: [RemoteDevice]) -> Success {
         // Drop corrupted records and our own record too.
         let remoteDevices = remoteDevices.filter { $0.id != nil && $0.type != nil && !$0.isCurrentDevice }
 
