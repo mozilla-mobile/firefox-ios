@@ -100,38 +100,18 @@ class TestSQLiteReadingList: XCTestCase {
             break
         }
 
-        let result2 = readingList.deleteRecord(result1.successValue!).value
-        switch result2 {
-        case .failure(let error):
-            XCTFail(error.description)
-        case .success:
-            break
-        }
+        readingList.deleteRecord(result1.successValue!) { success in
+            if !success {
+                XCTFail("Failed to delete reading list item")
+            }
 
-        let result3 = readingList.getRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance").value
-        switch result3 {
-        case .failure:
-            break
-        case .success:
-            XCTFail("ReadingListItem should have been deleted")
-        }
-    }
-
-    func testDeleteAllRecords() {
-        _ = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
-        _ = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        _ = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
-
-        let getAllResult1 = readingList.getAvailableRecords().value
-        if let records = getAllResult1.successValue {
-            XCTAssertNotEqual(0, records.count)
-        }
-
-        _ = deleteAllRecords()
-
-        let getAllResult2 = getAllRecords()
-        if let records = getAllResult2.successValue {
-            XCTAssertEqual(0, records.count)
+            let result3 = self.readingList.getRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance").value
+            switch result3 {
+            case .failure:
+                break
+            case .success:
+                XCTFail("ReadingListItem should have been deleted")
+            }
         }
     }
 
@@ -164,12 +144,6 @@ class TestSQLiteReadingList: XCTestCase {
 
     func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListItem> {
         let result = readingList.createRecordWithURL(url, title: title, addedBy: addedBy).value
-        XCTAssertTrue(result.isSuccess)
-        return result
-    }
-
-    func deleteAllRecords() -> Maybe<Void> {
-        let result = readingList.deleteAllRecords().value
         XCTAssertTrue(result.isSuccess)
         return result
     }
