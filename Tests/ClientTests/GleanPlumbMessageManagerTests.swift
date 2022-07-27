@@ -29,8 +29,23 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         sut = nil
     }
 
+    func testManagerHasMessage() {
+        let messageForSurface = sut.hasMessage(for: .newTabCard)
+        XCTAssertTrue(messageForSurface)
+    }
+
+    func testManagerGetMessage() {
+        guard let message = sut.getNextMessage(for: .newTabCard) else {
+            XCTFail("Expected to retrieve message")
+            return
+        }
+
+        sut.onMessageDisplayed(message)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.shown)
+    }
+
     func testManagerOnMessageDisplayed() {
-        let message = createMessage(messageId: "messageID")
+        let message = createMessage(messageId: messageId)
         sut.onMessageDisplayed(message)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertFalse(messageMetadata.isExpired)
@@ -39,7 +54,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     }
 
     func testManagerOnMessagePressed() {
-        let message = createMessage(messageId: "messageID")
+        let message = createMessage(messageId: messageId)
         sut.onMessagePressed(message)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
@@ -47,7 +62,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     }
 
     func testManagerOnMessageDismissed() {
-        let message = createMessage(messageId: "messageID")
+        let message = createMessage(messageId: messageId)
         sut.onMessageDismissed(message)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertEqual(messageMetadata.dismissals, 1)
@@ -66,7 +81,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
                                                         isExpired: false)
         return GleanPlumbMessage(id: messageId,
                                  data: MockMessageData(),
-                                 action: "MAKE_DEFAULT",
+                                 action: "MAKE_DEFAULT_BROWSER",
                                  triggers: ["ALWAYS"],
                                  style: styleData,
                                  metadata: messageMetadata)
