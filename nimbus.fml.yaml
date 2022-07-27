@@ -156,7 +156,7 @@ features:
         type: SponsoredTiles
         default:
           {
-            "status": false,
+            "status": true,
             "max-number-of-tiles": 2
           }
       wallpaper-feature:
