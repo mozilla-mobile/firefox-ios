@@ -10,12 +10,20 @@ protocol TopSitesManagerDelegate: AnyObject {
     func didLoadNewData()
 }
 
+/// Data adaptor to fetch the top sites data asyncroniously
+/// The data gets updated from notifications on specific user actions
 protocol TopSitesDataAdaptor {
+
+    /// The prefered number of rows by the user, this can be from 1 to 4
+    /// Note that this isn't necessarely the number of rows that will appear since empty rows won't show.
+    /// In other words, the number of rows shown depends on the actual data and the user preference.
     var numberOfRows: Int { get }
 
-    // TODO: Laurie documentation
+    /// Get top sites data, already calculated and ready to be shown to the user
     func getTopSitesData() -> [TopSite]
 
+    /// Calculate top site data
+    /// This calculation is dependent on the number of tiles per row that is shown in the user interface.
     /// Top sites are composed of pinned sites, history, Contiles and Google top site.
     /// Google top site is always first, then comes the contiles, pinned sites and history top sites.
     /// We only add Google top site or Contiles if number of pins doesn't exeeds the available number shown of tiles.
