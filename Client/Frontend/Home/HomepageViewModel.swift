@@ -116,6 +116,7 @@ class HomepageViewModel: FeatureFlaggable {
         topSiteViewModel.delegate = self
         historyHighlightsViewModel.delegate = self
         recentlySavedViewModel.delegate = self
+        jumpBackInViewModel.delegate = self
 
         updateEnabledSections()
     }

@@ -203,6 +203,7 @@ class TopTabsViewController: UIViewController {
     }
 
     @objc func newTabTapped() {
+        NotificationCenter.default.post(name: .TopTabsTabCreated, object: nil)
         self.delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
     }
 

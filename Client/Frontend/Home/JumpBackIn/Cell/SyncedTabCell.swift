@@ -8,9 +8,9 @@ struct FxHomeSyncedTabCellViewModel {
     let titleText: String
     let descriptionText: String
     let url: URL
-    let tag: Int
     var syncedDeviceImage: UIImage?
     var heroImage: UIImage?
+    var fallbackFaviconImage: UIImage?
     var accessibilityLabel: String {
         return "\(cardTitleText): \(titleText), \(descriptionText)"
     }
@@ -162,14 +162,12 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     func configure(viewModel: FxHomeSyncedTabCellViewModel,
                    onTapShowAllAction: ((UIButton) -> Void)?,
                    onOpenSyncedTabAction: ((URL) -> Void)?) {
-        tag = viewModel.tag
         itemTitle.text = viewModel.titleText
-        heroImage.image = viewModel.heroImage
         descriptionLabel.text = viewModel.descriptionText
         accessibilityLabel = viewModel.accessibilityLabel
         cardTitle.text = viewModel.cardTitleText
 
-        syncedDeviceImage.image = viewModel.syncedDeviceImage
+        configureImages(viewModel: viewModel)
 
         let textAttributes: [NSAttributedString.Key: Any] = [ .underlineStyle: NSUnderlineStyle.single.rawValue ]
         let attributeString = NSMutableAttributedString(
@@ -196,7 +194,24 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         openSyncedTabAction?()
     }
 
-    func setFallBackFaviconVisibility(isHidden: Bool) {
+    private func configureImages(viewModel: FxHomeSyncedTabCellViewModel) {
+        if viewModel.heroImage == nil {
+            // Sets a small favicon in place of the hero image in case there's no hero image
+            fallbackFaviconImage.image = viewModel.fallbackFaviconImage
+
+        } else if viewModel.heroImage?.size.width == viewModel.heroImage?.size.height {
+            // If hero image is a square use it as a favicon
+            fallbackFaviconImage.image = viewModel.heroImage
+
+        } else {
+            setFallBackFaviconVisibility(isHidden: true)
+            heroImage.image = viewModel.heroImage
+        }
+
+        syncedDeviceImage.image = viewModel.syncedDeviceImage
+    }
+
+    private func setFallBackFaviconVisibility(isHidden: Bool) {
         fallbackFaviconBackground.isHidden = isHidden
         fallbackFaviconImage.isHidden = isHidden
     }

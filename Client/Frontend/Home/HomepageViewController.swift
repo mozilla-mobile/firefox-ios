@@ -75,9 +75,6 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
 
         setupNotifications(forObserver: self,
                            observing: [.HomePanelPrefsChanged,
-                                       .TopTabsTabClosed,
-                                       .TabsTrayDidClose,
-                                       .TabsTrayDidSelectHomeTab,
                                        .TabsPrivacyModeChanged,
                                        .DynamicFontChanged])
     }
@@ -678,10 +675,7 @@ extension HomepageViewController: Notifiable {
             case .TabsPrivacyModeChanged:
                 self.adjustPrivacySensitiveSections(notification: notification)
 
-            case .TabsTrayDidClose,
-                    .TopTabsTabClosed,
-                    .TabsTrayDidSelectHomeTab,
-                    .HomePanelPrefsChanged:
+            case .HomePanelPrefsChanged:
                 self.reloadAll()
 
             case .DynamicFontChanged:
