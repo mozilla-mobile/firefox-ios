@@ -253,7 +253,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                   let record = profile.readingList.getRecordWithURL(url).value.successValue
             else { break }
 
-            profile.readingList.deleteRecord(record) // TODO Check result, can this fail?
+            profile.readingList.deleteRecord(record, completion: nil)
             readerModeBar.added = false
             readerModeBar.unread = false
         }

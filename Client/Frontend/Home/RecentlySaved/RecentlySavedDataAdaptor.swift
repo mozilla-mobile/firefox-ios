@@ -6,7 +6,6 @@ import Foundation
 import Storage
 
 protocol RecentlySavedDataAdaptor {
-    var recentItems: [RecentlySavedItem] { get }
     func getHeroImage(forSite site: Site) -> UIImage?
     func getRecentlySavedData() -> [RecentlySavedItem]
 }
@@ -20,10 +19,10 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
     var notificationCenter: NotificationCenter
     private let bookmarkItemsLimit: UInt = 5
     private let readingListItemsLimit: Int = 5
-    private let dataQueue = DispatchQueue(label: "com.moz.recentlySaved.queue")
     private let recentItemsHelper = RecentItemsHelper()
-    private var siteImageHelper: SiteImageHelper
-    private var profile: Profile
+    private var siteImageHelper: SiteImageHelperProtocol
+    private var readingList: ReadingList
+    private var bookmarksHandler: BookmarksHandler
     private var recentBookmarks = [RecentlySavedBookmark]()
     private var readingListItems = [ReadingListItem]()
     private var heroImages = [String: UIImage]() {
@@ -32,22 +31,18 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
         }
     }
 
-    var recentItems: [RecentlySavedItem] {
-        var items = [RecentlySavedItem]()
-        items.append(contentsOf: recentBookmarks)
-        items.append(contentsOf: readingListItems)
-
-        return items
-    }
-
     weak var delegate: RecentlySavedDelegate?
 
-    init(siteImageHelper: SiteImageHelper,
-         profile: Profile,
+    init(siteImageHelper: SiteImageHelperProtocol,
+         readingList: ReadingList,
+         bookmarksHandler: BookmarksHandler,
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.siteImageHelper = siteImageHelper
-        self.profile = profile
         self.notificationCenter = notificationCenter
+        self.readingList = readingList
+        self.bookmarksHandler = bookmarksHandler
+
+        setupNotifications(forObserver: self, observing: [.ReadingListUpdated, .BookmarksUpdated])
 
         getRecentBookmarks()
         getReadingLists()
@@ -57,7 +52,9 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
         if let heroImage = heroImages[site.url] {
             return heroImage
         }
-        siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: true) { image in
+        siteImageHelper.fetchImageFor(site: site,
+                                      imageType: .heroImage,
+                                      shouldFallback: true) { image in
             self.heroImages[site.url] = image
         }
         return nil
@@ -74,11 +71,10 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
     // MARK: - Bookmarks
 
     private func getRecentBookmarks() {
-        profile.places.getRecentBookmarks(limit: bookmarkItemsLimit).uponQueue(dataQueue, block: { [weak self] result in
-            let resultBookmarks: [BookmarkItemData] = result.successValue ?? []
-            let bookmarks = resultBookmarks.map { RecentlySavedBookmark(bookmark: $0) }
-            self?.updateRecentBookmarks(bookmarks: bookmarks)
-        })
+        bookmarksHandler.getRecentBookmarks(limit: bookmarkItemsLimit) { bookmarks in
+            let bookmarks = bookmarks.map { RecentlySavedBookmark(bookmark: $0) }
+            self.updateRecentBookmarks(bookmarks: bookmarks)
+        }
     }
 
     private func updateRecentBookmarks(bookmarks: [RecentlySavedBookmark]) {
@@ -99,10 +95,10 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
 
     private func getReadingLists() {
         let maxItems = readingListItemsLimit
-        profile.readingList.getAvailableRecords().uponQueue(dataQueue, block: { [weak self] result in
-            let items = result.successValue?.prefix(maxItems) ?? []
-            self?.updateReadingList(readingList: Array(items))
-        })
+        readingList.getAvailableRecords { readingList in
+            let items = readingList.prefix(maxItems)
+            self.updateReadingList(readingList: Array(items))
+        }
     }
 
     private func updateReadingList(readingList: [ReadingListItem]) {

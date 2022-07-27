@@ -8,12 +8,12 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
-class ReadingListStorageError: MaybeErrorType {
+public class ReadingListStorageError: MaybeErrorType {
     var message: String
-    init(_ message: String) {
+    public init(_ message: String) {
         self.message = message
     }
-    var description: String {
+    public var description: String {
         return message
     }
 }
@@ -32,6 +32,18 @@ open class SQLiteReadingList {
 }
 
 extension SQLiteReadingList: ReadingList {
+
+    public func getAvailableRecords(completion: @escaping ([ReadingListItem]) -> Void) {
+        let sql = "SELECT \(allColumns) FROM items ORDER BY client_last_modified DESC"
+        let deferredResponse = db.runQuery(sql, args: nil, factory: SQLiteReadingList.ReadingListItemFactory) >>== { cursor in
+            return deferMaybe(cursor.asArray())
+        }
+
+        deferredResponse.upon { result in
+            completion(result.successValue ?? [])
+        }
+    }
+
     public func getAvailableRecords() -> Deferred<Maybe<[ReadingListItem]>> {
         let sql = "SELECT \(allColumns) FROM items ORDER BY client_last_modified DESC"
         return db.runQuery(sql, args: nil, factory: SQLiteReadingList.ReadingListItemFactory) >>== { cursor in
@@ -39,17 +51,15 @@ extension SQLiteReadingList: ReadingList {
         }
     }
 
-    public func deleteRecord(_ record: ReadingListItem) -> Success {
-        notificationCenter.post(name: .ReadingListUpdated, object: self)
+    public func deleteRecord(_ record: ReadingListItem, completion: ((Bool) -> Void)? = nil) {
         let sql = "DELETE FROM items WHERE client_id = ?"
         let args: Args = [record.id]
-        return db.run(sql, withArgs: args)
-    }
+        let deferredResponse = db.run(sql, withArgs: args)
 
-    public func deleteAllRecords() -> Success {
-        notificationCenter.post(name: .ReadingListUpdated, object: self)
-        let sql = "DELETE FROM items"
-        return db.run(sql)
+        deferredResponse.upon { result in
+            self.notificationCenter.post(name: .ReadingListUpdated, object: self)
+            completion?(result.isSuccess)
+        }
     }
 
     public func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Deferred<Maybe<ReadingListItem>> {
