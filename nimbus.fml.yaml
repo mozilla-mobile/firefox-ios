@@ -207,7 +207,7 @@ features:
         type: SponsoredTiles
         default:
           {
-            "status": true,
+            "status": false,
             "max-number-of-tiles": 2
           }
       pocket-sponsored-stories:
