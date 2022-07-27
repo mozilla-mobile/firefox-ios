@@ -51,7 +51,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     // Pre-loading the data with a default number of tiles so we always show section when needed
     // If this isn't done, then no data will be found from the view model and section won't show
     // This gets ajusted once we actually know in which UI we're showing top sites.
-    private let defaultTopSitesRowCount = 8
+    private static let defaultTopSitesRowCount = 8
 
     init(profile: Profile,
          topSiteHistoryManager: TopSiteHistoryManager,
@@ -115,7 +115,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         loadTopSites()
 
         dispatchGroup.notify(queue: dataQueue) { [weak self] in
-            self?.recalculateTopSiteData(for: self?.defaultTopSitesRowCount)
+            self?.recalculateTopSiteData(for: TopSitesDataAdaptorImplementation.defaultTopSitesRowCount)
             self?.delegate?.didLoadNewData()
             dataLoadingCompletion?()
         }
