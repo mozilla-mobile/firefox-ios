@@ -267,7 +267,7 @@ private extension Array where Element == Site {
 // MARK: - DataObserverDelegate
 extension TopSitesDataAdaptorImplementation: DataObserverDelegate {
 
-    func didInvalidateDataSource(refresh forced: Bool) {
+    func didInvalidateDataSource(forceRefresh forced: Bool) {
         guard forced else { return }
         loadTopSitesData()
     }
@@ -281,7 +281,7 @@ extension TopSitesDataAdaptorImplementation: Notifiable, Loggable {
                 .FirefoxAccountChanged,
                 .PrivateDataClearedHistory,
                 .TopSitesUpdated:
-            topSiteHistoryManager.refreshIfNeeded(refresh: true)
+            topSiteHistoryManager.refreshIfNeeded(forceRefresh: true)
         default:
             browserLog.warning("Received unexpected notification \(notification.name)")
         }

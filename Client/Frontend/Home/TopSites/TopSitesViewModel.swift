@@ -108,7 +108,7 @@ class TopSitesViewModel {
     }
 
     func refreshIfNeeded(refresh forced: Bool) {
-        topSiteHistoryManager.refreshIfNeeded(refresh: forced)
+        topSiteHistoryManager.refreshIfNeeded(forceRefresh: forced)
     }
 }
 

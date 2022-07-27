@@ -27,7 +27,7 @@ class TopSiteHistoryManager: DataObserver, Loggable {
     /// RefreshIfNeeded will refresh the underlying caches for TopSites.
     /// By default this will only refresh topSites if KeyTopSitesCacheIsValid is false
     /// - Parameter forced: Refresh can be forced by setting this to true
-    func refreshIfNeeded(refresh forced: Bool) {
+    func refreshIfNeeded(forceRefresh forced: Bool) {
         guard !profile.isShutdown else { return }
 
         // KeyTopSitesCacheIsValid is false when we want to invalidate. Thats why this logic is so backwards
@@ -40,7 +40,7 @@ class TopSiteHistoryManager: DataObserver, Loggable {
 
         profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites).uponQueue(dataQueue) { [weak self] _ in
             guard let self = self else { return }
-            self.delegate?.didInvalidateDataSource(refresh: forced)
+            self.delegate?.didInvalidateDataSource(forceRefresh: forced)
         }
     }
 
@@ -54,7 +54,7 @@ class TopSiteHistoryManager: DataObserver, Loggable {
     func removeTopSite(site: Site) {
         profile.history.removeFromPinnedTopSites(site).uponQueue(dataQueue) { [weak self] result in
             guard result.isSuccess, let self = self else { return }
-            self.refreshIfNeeded(refresh: true)
+            self.refreshIfNeeded(forceRefresh: true)
         }
     }
 
