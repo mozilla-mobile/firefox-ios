@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 ///  Responsible for fetching data from the server.
-class WallpaperDataService: Loggable {
+class WallpaperDataService {
 
     // MARK: - Properties
     enum DataServiceError: Error {

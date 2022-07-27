@@ -148,8 +148,3 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
     }
 
 }
-
-// MARK: - Test fetching images
-extension WallpaperDataServiceTests {
-
-}
