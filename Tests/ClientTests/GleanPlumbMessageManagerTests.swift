@@ -18,12 +18,17 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
+        resetUserDefaults()
+
         messagingStore = MockGleanPlumbMessageStore(messageId: messageId)
         sut = GleanPlumbMessageManager(messagingStore: messagingStore)
     }
 
     override func tearDown() {
         super.tearDown()
+        
+        resetUserDefaults()
+
         messagingStore = nil
         sut = nil
     }
@@ -65,10 +70,15 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         XCTAssertTrue(messageMetadata.isExpired)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.dismissed)
     }
+
+    private func resetUserDefaults() {
+        let key = "\(GleanPlumbMessageStore.rootKey)\(messageId)"
+        UserDefaults.standard.removeObject(forKey: key)
+    }
 }
 
 // MARK: - MockGleanPlumbMessageStore
-class MockGleanPlumbMessageStore: GleanPlumbMessagingStoreProtocol {
+class MockGleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
 
     private var metadata: GleanPlumbMessageMetaData
     var messageId: String
