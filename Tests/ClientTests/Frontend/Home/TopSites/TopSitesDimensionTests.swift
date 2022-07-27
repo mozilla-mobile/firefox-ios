@@ -108,7 +108,7 @@ class TopSitesDimensionTests: XCTestCase {
     func testSectionDimension_twoEmptyRow_shouldBeRemoved() {
         let sut = createSut()
         let trait = MockTraitCollection()
-        let interface = TopSitesUIInterface(isLandscape: true, isIphone: true, trait: trait)
+        let interface = TopSitesUIInterface(isLandscape: false, isIphone: true, trait: trait)
 
         let dimension = sut.getSectionDimension(for: createSites(count: 4), numberOfRows: 3, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 1)

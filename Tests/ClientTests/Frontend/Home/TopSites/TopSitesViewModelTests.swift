@@ -15,6 +15,8 @@ class TopSitesViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         self.profile = MockProfile(databasePrefix: "FxHomeTopSitesViewModelTests")
+
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
@@ -61,31 +63,8 @@ extension TopSitesViewModelTests {
     func createViewModel(overridenSiteCount: Int = 40, overridenNumberOfRows: Int = 2) -> TopSitesViewModel {
         let viewModel = TopSitesViewModel(profile: self.profile,
                                           isZeroSearch: false)
-
-        let managerStub = TopSitesManagerStub(profile: profile)
-        managerStub.overridenSiteCount = overridenSiteCount
-        managerStub.overridenNumberOfRows = overridenNumberOfRows
-        viewModel.tileManager = managerStub
-
         trackForMemoryLeaks(viewModel)
-        trackForMemoryLeaks(managerStub)
-        trackForMemoryLeaks(managerStub.googleTopSiteManager)
-        trackForMemoryLeaks(managerStub.topSiteHistoryManager)
 
         return viewModel
-    }
-}
-
-// MARK: TopSitesManagerStub
-private class TopSitesManagerStub: TopSitesManager {
-
-    var overridenSiteCount = 40
-    override var siteCount: Int {
-        return overridenSiteCount
-    }
-
-    var overridenNumberOfRows = 2
-    override var numberOfRows: Int {
-        return overridenNumberOfRows
     }
 }

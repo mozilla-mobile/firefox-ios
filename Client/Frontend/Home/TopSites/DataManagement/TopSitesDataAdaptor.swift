@@ -46,18 +46,21 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     private let topSiteHistoryManager: TopSiteHistoryManager
     private let googleTopSiteManager: GoogleTopSiteManager
     private let contileProvider: ContileProviderInterface
+    private let dispatchGroup: DispatchGroupInterface
 
     init(profile: Profile,
          topSiteHistoryManager: TopSiteHistoryManager,
          googleTopSiteManager: GoogleTopSiteManager,
          contileProvider: ContileProviderInterface = ContileProvider(),
-         notificationCenter: NotificationCenter = NotificationCenter.default
+         notificationCenter: NotificationCenter = NotificationCenter.default,
+         dispatchGroup: DispatchGroupInterface = DispatchGroup()
     ) {
         self.profile = profile
         self.topSiteHistoryManager = topSiteHistoryManager
         self.googleTopSiteManager = googleTopSiteManager
         self.contileProvider = contileProvider
         self.notificationCenter = notificationCenter
+        self.dispatchGroup = dispatchGroup
         topSiteHistoryManager.delegate = self
 
         setupNotifications(forObserver: self,
@@ -101,13 +104,12 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
 
     // MARK: - Data loading
 
-    // Loads the data source of top sites
-    private func loadTopSitesData(dataLoadingCompletion: (() -> Void)? = nil) {
-        let group = DispatchGroup()
-        loadContiles(group: group)
-        loadTopSites(group: group)
+    // Loads the data source of top sites. Internal for conveniance of testing
+    func loadTopSitesData(dataLoadingCompletion: (() -> Void)? = nil) {
+        loadContiles()
+        loadTopSites()
 
-        group.notify(queue: dataQueue) { [weak self] in
+        dispatchGroup.notify(queue: dataQueue) { [weak self] in
             // Pre-loading the data with a default number of tiles so we always show section when needed
             self?.recalculateTopSiteData(for: 8)
             self?.delegate?.didLoadNewData()
@@ -115,26 +117,26 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         }
     }
 
-    private func loadContiles(group: DispatchGroup) {
+    private func loadContiles() {
         guard shouldLoadSponsoredTiles else { return }
 
-        group.enter()
+        dispatchGroup.enter()
         contileProvider.fetchContiles { [weak self] result in
             if case .success(let contiles) = result {
                 self?.contiles = contiles
             }
-            group.leave()
+            self?.dispatchGroup.leave()
         }
     }
 
-    private func loadTopSites(group: DispatchGroup) {
-        group.enter()
+    private func loadTopSites() {
+        dispatchGroup.enter()
 
         topSiteHistoryManager.getTopSites { [weak self] sites in
             if let sites = sites {
                 self?.historySites = sites
             }
-            group.leave()
+            self?.dispatchGroup.leave()
         }
     }
 
