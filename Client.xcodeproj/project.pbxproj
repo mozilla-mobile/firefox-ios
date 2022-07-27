@@ -5945,6 +5945,7 @@
 		8AE80BAB2891955400BC12EA /* TopSites */ = {
 			isa = PBXGroup;
 			children = (
+				8A7A93ED2810ADF2005E7E1B /* ContileProviderTests.swift */,
 				8A33221E27DFE318008F809E /* TopSitesManagerTests.swift */,
 				3B6F40171DC7849C00656CC6 /* TopSitesViewModelTests.swift */,
 				8AE80BAC2891957C00BC12EA /* TopSitesDimensionTests.swift */,
@@ -7394,7 +7395,6 @@
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
 				8A86DAD7277298DE00D7BFFF /* ClosedTabsStoreTests.swift */,
 				C889D7CD2858C4B500121E1D /* ContextMenuHelperTests.swift */,
-				8A7A93ED2810ADF2005E7E1B /* ContileProviderTests.swift */,
 				8ADED7EF276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift */,
 				3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */,
 				431C0D1C25C9D76B00395CE4 /* DefaultBrowserOnboardingTests */,
