@@ -4,9 +4,4 @@
 
 import Foundation
 
-/// A single wallpaper instance.
-struct Wallpaper: Codable {
-    let id: String
-    let textColour: String
-    let accessibilityLabel: String
-}
+protocol WallpaperTestDataProvider: WallpaperJSONTestProvider, WallpaperMetadataTestProvider {}

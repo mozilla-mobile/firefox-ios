@@ -1,0 +1,19 @@
+{
+    "last-updated-date": "2022-02-01",
+    "collections": [
+        {
+            "id": "firefox",
+            "available-locales": ["en-US", "es-US", "en-CA", "fr-CA"],
+            "availability-range": {
+                "start": "2022-06-27",
+                "end": "2022-09-30"
+            },
+            "wallpapers": [
+                {
+                    "id": "beachVibes",
+                    "text-color": "0xADD8E6",
+                }
+            ]
+        }
+    ]
+}

@@ -3,11 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
-/// Describes a wallpaper collection.
-struct WallpaperCollection: Codable {
-    let id: String
-    let availableLocales: [String]
-    let availability: WallpaperCollectionAvailability
-    let wallpapers: [Wallpaper]
+enum WallpaperServiceError: Error {
+    case dataUnavailable
+}
+
+protocol WallpaperNetworking {
+    func data(from url: URL) async throws -> (Data, URLResponse)
 }
