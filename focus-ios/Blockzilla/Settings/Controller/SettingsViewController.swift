@@ -426,7 +426,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             return footer
         } else if section == getSectionIndex(.defaultBrowser) {
             let footer = ActionFooterView(frame: .zero)
-            footer.textLabel.text = String(format: UIConstants.strings.setAsDefaultBrowserDescriptionLabel)
+            footer.textLabel.text = String(format: UIConstants.strings.setAsDefaultBrowserDescriptionLabel, AppInfo.productName)
             return footer
         } else {
             return nil

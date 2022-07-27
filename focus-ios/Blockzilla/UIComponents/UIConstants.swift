@@ -238,7 +238,7 @@ struct UIConstants {
         static let settingsTrackingProtectionOff = NSLocalizedString("Settings.trackingProtectionOff", value: "Off", comment: "Status off for tracking protection in settings screen")
         static let settingsToggleOtherSubtitle = NSLocalizedString("Settings.toggleOtherSubtitle", value: "May break some videos and Web pages", comment: "Label subtitle for toggle on main screen")
         static let setAsDefaultBrowserLabel = NSLocalizedString("Settings.setAsDefaultBrowser", value: "Set as Default Browser", comment: "Label title for set as default browser row")
-        static let setAsDefaultBrowserDescriptionLabel = NSLocalizedString("Settings.setAsDefaultBrowserDescription", value: "Set links from websites, emails and messages to open automatically in Focus.", comment: "Description for set as default browser option")
+        static let setAsDefaultBrowserDescriptionLabel = NSLocalizedString("Settings.setAsDefaultBrowserDescription", value: "Set links from websites, emails and messages to open automatically in %@.", comment: "%@ is the name of the app. Description for set as default browser option")
         static let learnMore = NSLocalizedString("Settings.learnMore", value: "Learn more.", comment: "Subtitle for Send Anonymous Usage Data toggle on main screen")
         static let toggleHomeScreenTips = NSLocalizedString("Settings.toggleHomeScreenTips", value: "Show home screen tips", comment: "Show home screen tips toggle label on settings screen")
         static let toggleSectionSafari = NSLocalizedString("Settings.safariTitle", value: "SAFARI INTEGRATION", comment: "Label for Safari integration section")
