@@ -35,6 +35,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
                                                 left: 7.5,
                                                 bottom: 15,
                                                 right: 7.5)
+        button.accessibilityLabel = String.ContextualHints.ContextualHintsCloseAccessibility
     }
 
     private lazy var descriptionLabel: UILabel = .build { [weak self] label in
