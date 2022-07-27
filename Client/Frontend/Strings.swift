@@ -249,10 +249,15 @@ extension String {
                 value: "Your search for \"%@\"",
                 comment: "On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did.",
                 lastUpdated: .v39)
-            public static let TabPickup = MZLocalizedString(
+            public static let SyncedTabTitle = MZLocalizedString(
                 "FirefoxHomepage.JumpBackIn.TabPickup.v104",
                 value: "Tab pickup",
                 comment: "If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab.",
+                lastUpdated: .v104)
+            public static let SyncedTabShowAllButtonTitle = MZLocalizedString(
+                "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104",
+                value: "See all synced tabs",
+                comment: "Button title shown for tab pickup on the Firefox homepage in the Jump Back In section.",
                 lastUpdated: .v104)
         }
 

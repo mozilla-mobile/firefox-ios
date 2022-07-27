@@ -1802,8 +1802,8 @@ extension BrowserViewController: HomePanelDelegate {
         show(toast: toast)
     }
 
-    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab? = nil) {
-        showTabTray(withFocusOnUnselectedTab: tabToFocus)
+    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: TabTrayViewModel.Segment?) {
+        showTabTray(withFocusOnUnselectedTab: tabToFocus, focusedSegment: focusedSegment)
     }
 
     func homePanelDidPresentContextualHintOf(type: ContextualHintViewType) {

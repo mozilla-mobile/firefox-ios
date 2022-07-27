@@ -18,8 +18,30 @@ enum SiteImageType: Int {
     }
 }
 
+protocol SiteImageHelperProtocol {
+    func fetchImageFor(site: Site,
+                       imageType: SiteImageType,
+                       shouldFallback: Bool,
+                       metadataProvider: LPMetadataProvider,
+                       completion: @escaping (UIImage?) -> Void)
+}
+
+extension SiteImageHelperProtocol {
+    func fetchImageFor(site: Site,
+                       imageType: SiteImageType,
+                       shouldFallback: Bool,
+                       metadataProvider: LPMetadataProvider = LPMetadataProvider(),
+                       completion: @escaping (UIImage?) -> Void) {
+        self.fetchImageFor(site: site,
+                           imageType: imageType,
+                           shouldFallback: shouldFallback,
+                           metadataProvider: metadataProvider,
+                           completion: completion)
+    }
+}
+
 /// A helper that'll fetch an image, and fallback to other image options if specified.
-class SiteImageHelper {
+class SiteImageHelper: SiteImageHelperProtocol {
 
     private static let cache = NSCache<NSString, UIImage>()
     private let throttler = Throttler(seconds: 0.5, on: .main)
