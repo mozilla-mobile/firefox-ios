@@ -18,27 +18,19 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
-        resetUserDefaults()
-
         messagingStore = MockGleanPlumbMessageStore(messageId: messageId)
         sut = GleanPlumbMessageManager(messagingStore: messagingStore)
     }
 
     override func tearDown() {
         super.tearDown()
-        
-        resetUserDefaults()
 
         messagingStore = nil
         sut = nil
     }
 
     func testManagerOnMessageDisplayed() {
-        guard let message = sut.getNextMessage(for: .newTabCard) else {
-            XCTFail("Message was expected")
-            return
-        }
-
+        let message = createMessage(messageId: "messageID")
         sut.onMessageDisplayed(message)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertFalse(messageMetadata.isExpired)
@@ -47,11 +39,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     }
 
     func testManagerOnMessagePressed() {
-        guard let message = sut.getNextMessage(for: .newTabCard) else {
-            XCTFail("Message was expected")
-            return
-        }
-
+        let message = createMessage(messageId: "messageID")
         sut.onMessagePressed(message)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
@@ -59,11 +47,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     }
 
     func testManagerOnMessageDismissed() {
-        guard let message = sut.getNextMessage(for: .newTabCard) else {
-            XCTFail("Message was expected")
-            return
-        }
-
+        let message = createMessage(messageId: "messageID")
         sut.onMessageDismissed(message)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertEqual(messageMetadata.dismissals, 1)
@@ -71,9 +55,21 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.dismissed)
     }
 
-    private func resetUserDefaults() {
-        let key = "\(GleanPlumbMessageStore.rootKey)\(messageId)"
-        UserDefaults.standard.removeObject(forKey: key)
+    // MARK: - Helper function
+
+    private func createMessage(messageId: String) -> GleanPlumbMessage {
+        let styleData = MockStyleData(priority: 50, maxDisplayCount: 3)
+
+        let messageMetadata = GleanPlumbMessageMetaData(id: messageId,
+                                                        impressions: 0,
+                                                        dismissals: 0,
+                                                        isExpired: false)
+        return GleanPlumbMessage(id: messageId,
+                                 data: MockMessageData(),
+                                 action: "MAKE_DEFAULT",
+                                 triggers: ["ALWAYS"],
+                                 style: styleData,
+                                 metadata: messageMetadata)
     }
 }
 
