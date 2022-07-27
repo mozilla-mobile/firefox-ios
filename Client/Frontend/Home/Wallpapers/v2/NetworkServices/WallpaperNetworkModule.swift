@@ -7,10 +7,16 @@ import Shared
 
 class WallpaperNetworkingModule: WallpaperNetworking {
 
+    private var urlSession: URLSessionProtocol
+
+    init(with urlSession: URLSessionProtocol = URLSession.shared) {
+        self.urlSession = urlSession
+    }
+
     /// A basic async/await wrapper
     func data(from url: URL) async throws -> (Data, URLResponse) {
         return try await withCheckedThrowingContinuation { continuation in
-            URLSession.shared.dataTask(with: url) { data, response, error in
+            urlSession.dataTaskWith(url) { data, response, error in
 
                 if let error = error {
                     continuation.resume(throwing: error)
