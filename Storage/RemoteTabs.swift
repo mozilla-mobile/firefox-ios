@@ -35,7 +35,12 @@ public protocol RemoteClientsAndTabs: SyncCommands {
     func deleteClient(guid: GUID) -> Success
 }
 
-public struct RemoteTab: Equatable {
+public protocol RemoteTabInterface {
+    var URL: Foundation.URL { get }
+    var title: String { get }
+}
+
+public struct RemoteTab: RemoteTabInterface, Equatable {
     public let clientGUID: String?
     public let URL: Foundation.URL
     public let title: String

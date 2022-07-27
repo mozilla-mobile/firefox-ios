@@ -25,8 +25,8 @@ class JumpBackInViewModel: FeatureFlaggable {
     weak var browserBarViewDelegate: BrowserBarViewDelegate?
     weak var delegate: HomepageDataModelDelegate?
 
-    private var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
-    private var mostRecentSyncedTab: JumpBackInSyncedTab?
+    var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
+    var mostRecentSyncedTab: JumpBackInSyncedTab?
 
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var jumpBackInDataAdaptor: JumpBackInDataAdaptor
@@ -36,25 +36,20 @@ class JumpBackInViewModel: FeatureFlaggable {
     private var isPrivate: Bool
     private var hasSentJumpBackInSectionEvent = false
     private let tabManager: TabManagerProtocol
-    private var sectionLayout: JumpBackInSectionLayout = .compactJumpBackIn // we use the compact layout as default
+    var sectionLayout: JumpBackInSectionLayout = .compactJumpBackIn // We use the compact layout as default
 
     init(
         isZeroSearch: Bool = false,
         profile: Profile,
         isPrivate: Bool,
-        tabManager: TabManagerProtocol
+        tabManager: TabManagerProtocol,
+        adaptor: JumpBackInDataAdaptor
     ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.isPrivate = isPrivate
         self.tabManager = tabManager
-
-        let siteImageHelper = SiteImageHelper(profile: profile)
-        let adaptor = JumpBackInDataAdaptorImplementation(profile: profile,
-                                                          tabManager: tabManager,
-                                                          siteImageHelper: siteImageHelper)
         self.jumpBackInDataAdaptor = adaptor
-        adaptor.delegate = self
     }
 
     func switchTo(group: ASGroup<Tab>) {

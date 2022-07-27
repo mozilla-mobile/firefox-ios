@@ -5,7 +5,11 @@
 import Shared
 import SwiftyJSON
 
-public struct RemoteClient: Equatable {
+public protocol RemoteClientInterface {
+    var name: String { get }
+}
+
+public struct RemoteClient: RemoteClientInterface, Equatable {
     public let guid: GUID?
     public let modified: Timestamp
 

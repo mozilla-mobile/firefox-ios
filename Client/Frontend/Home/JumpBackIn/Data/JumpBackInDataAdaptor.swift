@@ -44,7 +44,9 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     private var recentGroups: [ASGroup<Tab>]?
     private var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
     private var mostRecentSyncedTab: JumpBackInSyncedTab?
-    private let dispatchGroup: DispatchGroup
+
+    private let dispatchGroup: DispatchGroupInterface
+    private let userInteractiveQueue: DispatchQueueInterface
 
     weak var delegate: JumpBackInDelegate?
 
@@ -52,12 +54,14 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     init(profile: Profile,
          tabManager: TabManagerProtocol,
          siteImageHelper: SiteImageHelperProtocol,
-         dispatchGroup: DispatchGroup = DispatchGroup(),
+         dispatchGroup: DispatchGroupInterface = DispatchGroup(),
+         userInteractiveQueue: DispatchQueueInterface = DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.profile = profile
         self.tabManager = tabManager
         self.siteImageHelper = siteImageHelper
         self.dispatchGroup = dispatchGroup
+        self.userInteractiveQueue = userInteractiveQueue
         self.notificationCenter = notificationCenter
 
         setupNotifications(forObserver: self, observing: [.TabsTrayDidClose,
@@ -220,7 +224,7 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         }
 
         // Get cached tabs
-        DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass).async {
+        userInteractiveQueue.async {
             self.profile.getCachedClientsAndTabs().uponQueue(.global(qos: .userInteractive)) { result in
                 guard let clientAndTabs = result.successValue, clientAndTabs.count > 0 else {
                     self.mostRecentSyncedTab = nil
@@ -283,3 +287,52 @@ extension JumpBackInDataAdaptorImplementation: Notifiable {
         }
     }
 }
+
+// TODO: Laurie - To delete when other PR is merged to main
+
+protocol DispatchGroupInterface {
+    func enter()
+    func leave()
+    func notify(qos: DispatchQoS,
+                flags: DispatchWorkItemFlags,
+                queue: DispatchQueue,
+                execute work: @escaping @convention(block) () -> Void)
+}
+
+extension DispatchGroupInterface {
+    func notify(qos: DispatchQoS = .unspecified,
+                flags: DispatchWorkItemFlags = [],
+                queue: DispatchQueue,
+                execute work: @escaping @convention(block) () -> Void) {
+        notify(qos: qos,
+               flags: flags,
+               queue: queue,
+               execute: work)
+    }
+}
+
+extension DispatchGroup: DispatchGroupInterface {}
+
+// TODO: Laurie - Bring this to it's own file when other PR is merged
+
+protocol DispatchQueueInterface {
+    func async(group: DispatchGroup?,
+               qos: DispatchQoS,
+               flags: DispatchWorkItemFlags,
+               execute work: @escaping @convention(block) () -> Void)
+}
+
+extension DispatchQueueInterface {
+    func async(group: DispatchGroup? = nil,
+               qos: DispatchQoS = .unspecified,
+               flags: DispatchWorkItemFlags = [],
+               execute work: @escaping @convention(block) () -> Void) {
+        async(group: group,
+              qos: qos,
+              flags: flags,
+              execute: work)
+    }
+
+}
+
+extension DispatchQueue: DispatchQueueInterface {}

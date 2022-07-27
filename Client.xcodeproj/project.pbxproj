@@ -591,6 +591,7 @@
 		8AE80BBA2891C0C300BC12EA /* JumpBackInSectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE80BB92891C0C300BC12EA /* JumpBackInSectionLayout.swift */; };
 		8AE80BBC2891C20D00BC12EA /* JumpBackInList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE80BBB2891C20D00BC12EA /* JumpBackInList.swift */; };
 		8AE80BBE2891C21A00BC12EA /* JumpBackInSyncedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE80BBD2891C21A00BC12EA /* JumpBackInSyncedTab.swift */; };
+		8AE80BC62891E0FC00BC12EA /* JumpBackInDataAdaptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE80BC42891DEF200BC12EA /* JumpBackInDataAdaptorTests.swift */; };
 		8AED23C527AC1F9500DE7E97 /* BaseContentStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AED23C427AC1F9500DE7E97 /* BaseContentStackView.swift */; };
 		8AEE284B276A973400C7104D /* RatingPromptManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEE284A276A973400C7104D /* RatingPromptManagerTests.swift */; };
 		8AEE62C92756BA34003207D1 /* LoginsHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8AEE62C62756BA34003207D1 /* LoginsHelper.js */; };
@@ -971,7 +972,7 @@
 		E15A8B2F286D03AA004BB2B8 /* PushCryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B0647C1E7ADAC2000BE173 /* PushCryptoTests.swift */; };
 		E1877A81286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */; };
 		E1877A832875DEDE00F5BDF2 /* SyncedTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1877A822875DEDE00F5BDF2 /* SyncedTabCell.swift */; };
-		E1AEC176286E0CF500062E29 /* FirefoxHomeJumpBackInViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC16F286E0CF500062E29 /* FirefoxHomeJumpBackInViewModelTests.swift */; };
+		E1AEC176286E0CF500062E29 /* JumpBackInViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC16F286E0CF500062E29 /* JumpBackInViewModelTests.swift */; };
 		E1AEC177286E0CF500062E29 /* HomeHistoryHighlightsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC170286E0CF500062E29 /* HomeHistoryHighlightsViewModelTests.swift */; };
 		E1AEC178286E0CF500062E29 /* HomepageViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC171286E0CF500062E29 /* HomepageViewControllerTests.swift */; };
 		E1AEC179286E0CF500062E29 /* FirefoxHomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC172286E0CF500062E29 /* FirefoxHomeViewModelTests.swift */; };
@@ -4334,7 +4335,7 @@
 		E1634E1AB9F05311CD6C8C6C /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewNavigationHandler.swift; sourceTree = "<group>"; };
 		E1877A822875DEDE00F5BDF2 /* SyncedTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabCell.swift; sourceTree = "<group>"; };
-		E1AEC16F286E0CF500062E29 /* FirefoxHomeJumpBackInViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxHomeJumpBackInViewModelTests.swift; sourceTree = "<group>"; };
+		E1AEC16F286E0CF500062E29 /* JumpBackInViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JumpBackInViewModelTests.swift; sourceTree = "<group>"; };
 		E1AEC170286E0CF500062E29 /* HomeHistoryHighlightsViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeHistoryHighlightsViewModelTests.swift; sourceTree = "<group>"; };
 		E1AEC171286E0CF500062E29 /* HomepageViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomepageViewControllerTests.swift; sourceTree = "<group>"; };
 		E1AEC172286E0CF500062E29 /* FirefoxHomeViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxHomeViewModelTests.swift; sourceTree = "<group>"; };
@@ -5980,6 +5981,15 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		8AE80BC32891DAB000BC12EA /* JumpBackIn */ = {
+			isa = PBXGroup;
+			children = (
+				8AE80BC42891DEF200BC12EA /* JumpBackInDataAdaptorTests.swift */,
+				E1AEC16F286E0CF500062E29 /* JumpBackInViewModelTests.swift */,
+			);
+			path = JumpBackIn;
+			sourceTree = "<group>";
+		};
 		8AED23C327AC1F8700DE7E97 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -6886,8 +6896,8 @@
 			isa = PBXGroup;
 			children = (
 				8AE80BAB2891955400BC12EA /* TopSites */,
+				8AE80BC32891DAB000BC12EA /* JumpBackIn */,
 				5A3A7DD42889CF140065F81A /* RecentlySaved */,
-				E1AEC16F286E0CF500062E29 /* FirefoxHomeJumpBackInViewModelTests.swift */,
 				E1AEC170286E0CF500062E29 /* HomeHistoryHighlightsViewModelTests.swift */,
 				E1AEC171286E0CF500062E29 /* HomepageViewControllerTests.swift */,
 				E1AEC172286E0CF500062E29 /* FirefoxHomeViewModelTests.swift */,
@@ -10086,7 +10096,7 @@
 				E4CD9F1D1A6D9C2800318571 /* WebServerTests.swift in Sources */,
 				431C0D1E25C9DC4D00395CE4 /* DefaultBrowserOnboardingTests.swift in Sources */,
 				213B67A827CE721E000542F5 /* StartAtHomeHelperTests.swift in Sources */,
-				E1AEC176286E0CF500062E29 /* FirefoxHomeJumpBackInViewModelTests.swift in Sources */,
+				E1AEC176286E0CF500062E29 /* JumpBackInViewModelTests.swift in Sources */,
 				E1AEC17A286E0CF500062E29 /* WebViewNavigationHandlerTests.swift in Sources */,
 				D3D488591ABB54CD00A93597 /* FileAccessorTests.swift in Sources */,
 				E571EE7E28756A130051D9AA /* PocketStoryProviderTests.swift in Sources */,
@@ -10131,6 +10141,7 @@
 				8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */,
 				C84655F228873D3400861B4A /* WallpaperDataServiceMock.swift in Sources */,
 				3943A81D1E9807C700D4F6DC /* FxAPushMessageTest.swift in Sources */,
+				8AE80BC62891E0FC00BC12EA /* JumpBackInDataAdaptorTests.swift in Sources */,
 				E60D032A1D5118DB002FE3F6 /* SyncStatusResolverTests.swift in Sources */,
 				8ADED7F0276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift in Sources */,
 				E683F0A61E92E0820035D990 /* MockableHistory.swift in Sources */,
