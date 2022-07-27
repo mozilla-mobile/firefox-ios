@@ -224,6 +224,9 @@ extension HomepageViewModel: HomeHistoryHighlightsDelegate {
 
 extension HomepageViewModel: HomepageDataModelDelegate {
     func reloadData() {
-        delegate?.reloadData()
+        ensureMainThread {
+            self.updateEnabledSections()
+            self.delegate?.reloadData()
+        }
     }
 }
