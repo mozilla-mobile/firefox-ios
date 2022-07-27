@@ -17,6 +17,12 @@ struct TopSitesUIInterface {
     init(trait: UITraitCollection) {
         horizontalSizeClass = trait.horizontalSizeClass
     }
+
+    init(isLandscape: Bool, isIphone: Bool, trait: UITraitCollection) {
+        self.isLandscape = isLandscape
+        self.isIphone = isIphone
+        horizontalSizeClass = trait.horizontalSizeClass
+    }
 }
 
 /// Top sites dimension are subject to change depending on the user's number of rows,
