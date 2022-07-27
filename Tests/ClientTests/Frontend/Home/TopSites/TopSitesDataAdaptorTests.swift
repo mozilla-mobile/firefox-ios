@@ -8,7 +8,7 @@ import Shared
 import Storage
 import XCTest
 
-class TopSitesManagerTests: XCTestCase, FeatureFlaggable {
+class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
 
     private var profile: MockProfile!
     private var contileProviderMock: ContileProviderMock!
@@ -492,7 +492,7 @@ extension ContileProviderMock {
 }
 
 // MARK: TopSitesManagerTests
-extension TopSitesManagerTests {
+extension TopSitesDataAdaptorTests {
 
     func createSut(addPinnedSiteCount: Int = 0,
                    siteCount: Int = 10,
