@@ -108,7 +108,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         if tableView.isEditing {
-            disableEditMode()
+            self.tableView.setEditing(false, animated: true)
         }
         super.viewWillTransition(to: size, with: coordinator)
     }
