@@ -64,6 +64,17 @@ public struct AccessibilityIdentifiers {
         struct JumpBackIn {
             static let itemCell = "JumpBackInCell"
         }
+
+        struct SyncedTab {
+            static let itemCell = "SyncedTabCell"
+            static let cardTitle = "SyncedTabCardTitle"
+            static let showAllButton = "SyncedTabShowAllButton"
+            static let heroImage = "SyncedTabHeroImage"
+            static let itemTitle = "SyncedTabItemTitle"
+            static let favIconImage = "SyncedTabFavIconImage"
+            static let fallbackFavIconImage = "SyncedTabFallbackFavIconImage"
+            static let descriptionLabel = "SyncedTabDescriptionLabel"
+        }
     }
 
     struct GeneralizedIdentifiers {

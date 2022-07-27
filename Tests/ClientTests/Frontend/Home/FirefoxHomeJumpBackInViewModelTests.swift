@@ -22,6 +22,10 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
 
         mockProfile = MockProfile()
         mockTabManager = MockTabManager()
+        stubBrowserViewController = BrowserViewController(
+            profile: mockProfile,
+            tabManager: TabManager(profile: mockProfile, imageStore: nil)
+        )
         mockBrowserBarViewDelegate = MockBrowserBarViewDelegate()
 
         subject = JumpBackInViewModel(
@@ -31,6 +35,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
             tabManager: mockTabManager
         )
         subject.browserBarViewDelegate = mockBrowserBarViewDelegate
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 
     override func tearDown() {
@@ -149,7 +154,8 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(mockTabManager.lastSelectedTabs[0], tab1)
     }
 
-    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_onIphoneLayout_has2() {
+    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_onIphoneLayout_noAccount_has2() {
+        mockProfile.hasSyncableAccountMock = false
         subject.featureFlags.set(feature: .tabTrayGroups, to: false)
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
@@ -163,8 +169,8 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.updateData {
-            // Refresh data for specific layout
-            self.subject.refreshData(for: trait)
+            self.subject.updateSectionLayout(for: trait, isPortrait: true, device: .phone) // get section layout calculated
+            self.subject.refreshData(for: trait, device: .phone) // Refresh data for specific layout
             expectation.fulfill()
         }
 
@@ -176,7 +182,9 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         XCTAssertFalse(subject.jumpBackInList.tabs.contains(tab3))
     }
 
-    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_oniPhoneLandscapeLayout_has3() {
+    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_onIphoneLayout_hasAccount_has1() {
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
+                                                       tabs: remoteTabs(idRange: 1...3))]
         subject.featureFlags.set(feature: .tabTrayGroups, to: false)
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
@@ -184,14 +192,42 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
         let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
 
-        // Ipad layout
+        // iPhone layout
+        let trait = FakeTraitCollection()
+        trait.overridenHorizontalSizeClass = .compact
+        trait.overridenVerticalSizeClass = .regular
+
+        subject.updateData {
+            self.subject.updateSectionLayout(for: trait, isPortrait: true, device: .phone) // get section layout calculated
+            self.subject.refreshData(for: trait, device: .phone) // Refresh data for specific layout
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 10.0)
+
+        XCTAssertEqual(subject.jumpBackInList.tabs.count, 1, "iPhone portrait has 1 tab in it's jumpbackin layout")
+        XCTAssertEqual(subject.jumpBackInList.tabs[0], tab1)
+        XCTAssertFalse(subject.jumpBackInList.tabs.contains(tab2))
+        XCTAssertFalse(subject.jumpBackInList.tabs.contains(tab3))
+    }
+
+    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_oniPhoneLandscapeLayout_noAccount_has3() {
+        mockProfile.hasSyncableAccountMock = false
+        subject.featureFlags.set(feature: .tabTrayGroups, to: false)
+        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
+        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
+        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
+        let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
+
+        // iPhone landscape layout
         let trait = FakeTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
 
         subject.updateData {
-            // Refresh data for specific layout
-            self.subject.refreshData(for: trait)
+            self.subject.updateSectionLayout(for: trait, isPortrait: false, device: .phone) // get section layout calculated
+            self.subject.refreshData(for: trait, device: .phone) // Refresh data for specific layout
             expectation.fulfill()
         }
 
@@ -207,18 +243,43 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(subject.jumpBackInList.tabs[2], tab3)
     }
 
+    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_oniPhoneLandscapeLayout_hasAccount_has2() {
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
+                                                       tabs: remoteTabs(idRange: 1...3))]
+        subject.featureFlags.set(feature: .tabTrayGroups, to: false)
+        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
+        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
+        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
+        let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
+
+        // iPhone landscape layout
+        let trait = FakeTraitCollection()
+        trait.overridenHorizontalSizeClass = .regular
+        trait.overridenVerticalSizeClass = .regular
+
+        subject.updateData {
+            self.subject.updateSectionLayout(for: trait, isPortrait: false, device: .phone) // get section layout calculated
+            self.subject.refreshData(for: trait, device: .phone) // Refresh data for specific layout
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 5.0)
+        guard subject.jumpBackInList.tabs.count > 0 else {
+            XCTFail("Incorrect number of tabs in subject")
+            return
+        }
+
+        XCTAssertEqual(subject.jumpBackInList.tabs.count, 2, "iPhone landscape has 2 tabs in it's jumpbackin layout, up until 2")
+        XCTAssertEqual(subject.jumpBackInList.tabs[0], tab1)
+        XCTAssertEqual(subject.jumpBackInList.tabs[1], tab2)
+        XCTAssertFalse(subject.jumpBackInList.tabs.contains(tab3))
+    }
+
     // MARK: Syncable Tabs
 
     func test_updateData_mostRecentTab_noSyncableAccount() {
-        let profile = MockProfile()
-        profile.hasSyncableAccountMock = false
-        subject = JumpBackInViewModel(
-            isZeroSearch: false,
-            profile: profile,
-            isPrivate: false,
-            tabManager: mockTabManager
-        )
-
+        mockProfile.hasSyncableAccountMock = false
         let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
         subject.updateData {
             expectation.fulfill()
@@ -229,13 +290,6 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     }
 
     func test_updateData_mostRecentTab_noCachedClients() {
-        subject = JumpBackInViewModel(
-            isZeroSearch: false,
-            profile: MockProfile(),
-            isPrivate: false,
-            tabManager: mockTabManager
-        )
-
         let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
         subject.updateData {
             expectation.fulfill()
@@ -246,15 +300,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     }
 
     func test_updateData_mostRecentTab_noDesktopClients() {
-        let profile = MockProfile()
-        profile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs(idRange: 1...2))]
-        subject = JumpBackInViewModel(
-            isZeroSearch: false,
-            profile: profile,
-            isPrivate: false,
-            tabManager: mockTabManager
-        )
-
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs(idRange: 1...2))]
         let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
         subject.updateData {
             expectation.fulfill()
@@ -265,16 +311,9 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     }
 
     func test_updateData_mostRecentTab_oneDesktopClient() {
-        let profile = MockProfile()
         let remoteClient = remoteDesktopClient()
         let remoteTabs = remoteTabs(idRange: 1...3)
-        profile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs)]
-        subject = JumpBackInViewModel(
-            isZeroSearch: false,
-            profile: profile,
-            isPrivate: false,
-            tabManager: mockTabManager
-        )
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs)]
 
         let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
         subject.updateData {
@@ -287,17 +326,10 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     }
 
     func test_updateData_mostRecentTab_multipleDesktopClients() {
-        let profile = MockProfile()
         let remoteClient = remoteDesktopClient(name: "Fake Client 2")
         let remoteClientTabs = remoteTabs(idRange: 7...9)
-        profile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(), tabs: remoteTabs(idRange: 1...5)),
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(), tabs: remoteTabs(idRange: 1...5)),
                                      ClientAndTabs(client: remoteClient, tabs: remoteClientTabs)]
-        subject = JumpBackInViewModel(
-            isZeroSearch: false,
-            profile: profile,
-            isPrivate: false,
-            tabManager: mockTabManager
-        )
 
         let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
         subject.updateData {

@@ -29,14 +29,16 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
 }
 
 extension BrowserViewController: URLBarDelegate {
-    func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil) {
+    func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
+                     focusedSegment: TabTrayViewModel.Segment? = nil) {
         updateFindInPageVisibility(visible: false)
 
         self.tabTrayViewController = TabTrayViewController(
             tabTrayDelegate: self,
             profile: profile,
             tabToFocus: tabToFocus,
-            tabManager: tabManager)
+            tabManager: tabManager,
+            focusedSegment: focusedSegment)
 
         tabTrayViewController?.openInNewTab = { url, isPrivate in
             let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)

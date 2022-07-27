@@ -32,16 +32,85 @@ struct JumpBackInSyncedTab {
 class JumpBackInViewModel: FeatureFlaggable {
 
     struct UX {
-        static let verticalCellSpacing: CGFloat = 8
-        static let iPadHorizontalSpacing: CGFloat = 48
-        static let iPadCellSpacing: CGFloat = 16
-        static let iPhoneLandscapeCellWidth: CGFloat = 0.475
-        static let iPhonePortraitCellWidth: CGFloat = 0.93
+        static let jumpBackInCellHeight: CGFloat = 112
+        static let syncedTabCellPortraitCompactHeight: CGFloat = 182
+        static let syncedTabCellHeight: CGFloat = 232
+        static let maxDisplayedSyncedTabs: Int = 1
+        static let maxJumpBackInItemsPerGroup: Int = 2
+    }
+
+    enum DisplayGroup {
+        case jumpBackIn
+        case syncedTab
+    }
+
+    enum SectionLayout: Equatable {
+        case compactJumpBackIn // just JumpBackIn is displayed
+        case compactSyncedTab // just synced tab is displayed
+        case compactJumpBackInAndSyncedTab // jumpBackIn is displayed first and then synced tab
+        case regular // only jumpBackIn
+        case regularWithSyncedTab // synced tab is displayed first and then jumpBackIn
+
+        // The width dimension of a cell / group; takes into account how many groups will be displayed
+        var widthDimension: NSCollectionLayoutDimension {
+            switch self {
+            case .compactJumpBackIn, .compactSyncedTab, .compactJumpBackInAndSyncedTab:
+                return .fractionalWidth(1)
+            case .regular, .regularWithSyncedTab:
+                return UIDevice.current.userInterfaceIdiom == .pad ?
+                    .fractionalWidth(7.66/24) : .fractionalWidth(7.8/16) // iPad or iPhone in landscape
+            }
+        }
+
+        func indexOfJumpBackInItem(for indexPath: IndexPath) -> Int? {
+            switch self {
+            case .compactJumpBackIn:
+                return indexPath.row
+            case .compactSyncedTab:
+                return nil
+            case .compactJumpBackInAndSyncedTab:
+                return indexPath.row == 1 ? nil : indexPath.row
+            case .regular:
+                return indexPath.row
+            case .regularWithSyncedTab:
+                return indexPath.row == 0 ? nil : indexPath.row - 1
+            }
+        }
+
+        // The maximum number of items to display in the whole section
+        func maxItemsToDisplay(displayGroup: DisplayGroup,
+                               hasAccount: Bool,
+                               device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Int {
+            switch displayGroup {
+            case .jumpBackIn:
+                return maxJumpBackInItemsToDisplay(device: device)
+            case .syncedTab:
+                return hasAccount ? JumpBackInViewModel.UX.maxDisplayedSyncedTabs : 0
+            }
+        }
+
+        // The maximum number of Jump Back In items to display in the whole section
+        private func maxJumpBackInItemsToDisplay(device: UIUserInterfaceIdiom) -> Int {
+            switch self {
+            case .compactJumpBackIn:
+                return 2
+            case .compactSyncedTab:
+                return 0
+            case .compactJumpBackInAndSyncedTab:
+                return 1
+            case .regular:
+                return device == .pad ? 6 : 4 // iPad or iPhone in landscape
+            case .regularWithSyncedTab:
+                return device == .pad ? 4 : 2 // iPad or iPhone in landscape
+            }
+        }
     }
 
     // MARK: - Properties
     var headerButtonAction: ((UIButton) -> Void)?
     var onTapGroup: ((Tab) -> Void)?
+    var syncedTabsShowAllAction: ((UIButton) -> Void)?
+    var openSyncedTabAction: ((URL) -> Void)?
 
     weak var browserBarViewDelegate: BrowserBarViewDelegate?
 
@@ -49,15 +118,16 @@ class JumpBackInViewModel: FeatureFlaggable {
     var mostRecentSyncedTab: JumpBackInSyncedTab?
 
     private var recentTabs: [Tab] = [Tab]()
-    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
-
     private var recentGroups: [ASGroup<Tab>]?
+
+    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
 
     var isZeroSearch: Bool
     private let profile: Profile
     private var isPrivate: Bool
     private var hasSentJumpBackInSectionEvent = false
     private let tabManager: TabManagerProtocol
+    private var sectionLayout: SectionLayout = .compactJumpBackIn // we use the compact layout as default
 
     init(
         isZeroSearch: Bool = false,
@@ -70,38 +140,6 @@ class JumpBackInViewModel: FeatureFlaggable {
         self.isPrivate = isPrivate
         self.isPrivate = isPrivate
         self.tabManager = tabManager
-    }
-
-    // The dimension of a cell
-    static var widthDimension: NSCollectionLayoutDimension {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            return .absolute(HomeHorizontalCell.UX.cellWidth) // iPad
-        } else if UIWindow.isLandscape {
-            return .fractionalWidth(UX.iPhoneLandscapeCellWidth) // iPhone in landscape
-        } else {
-            return .fractionalWidth(UX.iPhonePortraitCellWidth) // iPhone in portrait
-        }
-    }
-
-    // The maximum number of items to display in the whole section
-    func getMaxItemsToDisplay(isPortrait: Bool) -> Int {
-        guard UIDevice.current.userInterfaceIdiom != .pad else {
-            return 3
-        }
-
-        return isPortrait ? 2 : 4
-    }
-
-    static var maxNumberOfItemsInColumn: Int {
-        return UIDevice.current.userInterfaceIdiom == .pad ? 1 : 2
-    }
-
-    var numberOfItemsInColumn: Int {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            return 1
-        } else {
-            return jumpBackInList.itemsToDisplay > 1 ? 2 : 1
-        }
     }
 
     func switchTo(group: ASGroup<Tab>) {
@@ -141,18 +179,6 @@ class JumpBackInViewModel: FeatureFlaggable {
         )
     }
 
-    func getFaviconImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
-        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
-            completion(image)
-        }
-    }
-
-    func getHeroImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
-        siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: false) { image in
-            completion(image)
-        }
-    }
-
     func sendImpressionTelemetry() {
         if !hasSentJumpBackInSectionEvent {
             TelemetryWrapper.recordEvent(category: .action,
@@ -164,9 +190,33 @@ class JumpBackInViewModel: FeatureFlaggable {
         }
     }
 
-    // MARK: - Private
+    func updateSectionLayout(for traitCollection: UITraitCollection,
+                             isPortrait: Bool = UIWindow.isPortrait,
+                             device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+        let isPhoneInLandscape = device == .phone && !isPortrait
 
-    private func createJumpBackInList(
+        if hasSyncedTab, traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
+            if hasJumpBackIn {
+                sectionLayout = .compactJumpBackInAndSyncedTab
+            } else {
+                sectionLayout = .compactSyncedTab
+            }
+        } else if traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
+            sectionLayout = .compactJumpBackIn
+        } else {
+            sectionLayout = hasSyncedTabFeatureEnabled ? .regularWithSyncedTab : .regular
+        }
+    }
+}
+
+// MARK: - Private: Jump Back In data
+private extension JumpBackInViewModel {
+
+    var hasJumpBackIn: Bool {
+        return !recentTabs.isEmpty || !(recentGroups?.isEmpty ?? true)
+    }
+
+    func createJumpBackInList(
         from tabs: [Tab],
         withMaxItemsToDisplay maxItems: Int,
         and groups: [ASGroup<Tab>]? = nil
@@ -183,7 +233,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         return JumpBackInList(group: recentGroup, tabs: recentTabs)
     }
 
-    private func filter(
+    func filter(
         tabs: [Tab],
         from recentGroup: ASGroup<Tab>?,
         usingGroupCount groupCount: Int,
@@ -206,7 +256,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     /// Update data with tab and search term group managers, saving it in view model for further usage
-    private func updateJumpBackInData(completion: @escaping () -> Void) {
+    func updateJumpBackInData(completion: @escaping () -> Void) {
         recentTabs = tabManager.recentlyAccessedNormalTabs
 
         if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser) {
@@ -224,19 +274,29 @@ class JumpBackInViewModel: FeatureFlaggable {
             completion()
         }
     }
+}
 
-    private func updateRemoteTabs(completion: @escaping () -> Void) {
+// MARK: - Private: Synced tab data
+private extension JumpBackInViewModel {
+
+    var hasSyncedTabFeatureEnabled: Bool {
+        return profile.hasSyncableAccount() &&
+                featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly)
+    }
+
+    var hasSyncedTab: Bool {
+        return hasSyncedTabFeatureEnabled && mostRecentSyncedTab != nil
+    }
+
+    func updateRemoteTabs(completion: @escaping () -> Void) {
         // Short circuit if the user is not logged in or feature not enabled
-        guard profile.hasSyncableAccount(),
-              featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly)
-        else {
+        guard hasSyncedTabFeatureEnabled else {
             mostRecentSyncedTab = nil
             completion()
             return
         }
 
         // Get cached tabs
-
         DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass).async {
             self.profile.getCachedClientsAndTabs().uponQueue(.global(qos: .userInteractive)) { result in
                 guard let clientAndTabs = result.successValue, clientAndTabs.count > 0 else {
@@ -287,156 +347,10 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 }
 
-// MARK: HomeViewModelProtocol
-extension JumpBackInViewModel: HomepageViewModelProtocol {
+// MARK: - Private: Configure UI
+private extension JumpBackInViewModel {
 
-    var sectionType: HomepageSectionType {
-        return .jumpBackIn
-    }
-
-    var headerViewModel: LabelButtonHeaderViewModel {
-        return LabelButtonHeaderViewModel(title: HomepageSectionType.jumpBackIn.title,
-                                          titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
-                                          isButtonHidden: false,
-                                          buttonTitle: .RecentlySavedShowAllText,
-                                          buttonAction: headerButtonAction,
-                                          buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn)
-    }
-
-    var isEnabled: Bool {
-        guard featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildAndUser) else { return false }
-
-        return !isPrivate
-    }
-
-    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
-        refreshData(for: traitCollection)
-        return jumpBackInList.itemsToDisplay
-    }
-
-    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(HomeHorizontalCell.UX.cellHeight)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: JumpBackInViewModel.widthDimension,
-            heightDimension: .estimated(HomeHorizontalCell.UX.cellHeight)
-        )
-
-        let itemsNumber = numberOfItemsInSection(for: traitCollection)
-        let count = min(JumpBackInViewModel.maxNumberOfItemsInColumn, itemsNumber)
-        let subItems = Array(repeating: item, count: count)
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
-        group.interItemSpacing = HomeHorizontalCell.UX.interItemSpacing
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
-                                                      bottom: 0, trailing: HomeHorizontalCell.UX.interGroupSpacing)
-
-        let section = NSCollectionLayoutSection(group: group)
-        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                heightDimension: .estimated(34))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize,
-                                                                 elementKind: UICollectionView.elementKindSectionHeader,
-                                                                 alignment: .top)
-        section.boundarySupplementaryItems = [header]
-
-        let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset,
-                                                        bottom: HomepageViewModel.UX.spacingBetweenSections, trailing: 0)
-        section.orthogonalScrollingBehavior = .continuous
-        return section
-    }
-
-    var hasData: Bool {
-        return !recentTabs.isEmpty || !(recentGroups?.isEmpty ?? true)
-    }
-
-    func updateData(completion: @escaping () -> Void) {
-        // Has to be on main due to tab manager needing main tread
-        // This can be fixed when tab manager has been revisited
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else {
-                completion()
-                return
-            }
-
-            let dispatchGroup = DispatchGroup()
-            dispatchGroup.enter()
-            self.updateJumpBackInData {
-                dispatchGroup.leave()
-            }
-
-            dispatchGroup.enter()
-            self.updateRemoteTabs {
-                dispatchGroup.leave()
-            }
-
-            dispatchGroup.notify(queue: .main) {
-                completion()
-            }
-        }
-    }
-
-    func refreshData(for traitCollection: UITraitCollection) {
-        let isPortrait = traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular
-        jumpBackInList = createJumpBackInList(
-            from: recentTabs,
-            withMaxItemsToDisplay: getMaxItemsToDisplay(isPortrait: isPortrait),
-            and: recentGroups)
-    }
-
-    func updatePrivacyConcernedSection(isPrivate: Bool) {
-        self.isPrivate = isPrivate
-    }
-}
-
-// MARK: FxHomeSectionHandler
-extension JumpBackInViewModel: HomepageSectionHandler {
-
-    func configure(_ collectionView: UICollectionView,
-                   at indexPath: IndexPath) -> UICollectionViewCell {
-
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: sectionType.cellIdentifier, for: indexPath)
-        guard let jumpBackInCell = cell as? HomeHorizontalCell else { return UICollectionViewCell() }
-
-        if indexPath.row == (jumpBackInList.itemsToDisplay - 1),
-           let group = jumpBackInList.group {
-            configureCellForGroups(group: group, cell: jumpBackInCell, indexPath: indexPath)
-        } else if let item = jumpBackInList.tabs[safe: indexPath.row] {
-            configureCellForTab(item: item, cell: jumpBackInCell, indexPath: indexPath)
-        } else {
-            // TODO: Fix in the meantime we implement FXIOS-4310 && FXIOS-4095 for the reloading of the homepage.
-            // We're in a state we shouldn't be in (an indexPath that gets configured when there's no tabs for it)
-            // so for now we invalidate to avoid a crash. This happens only in a particular edge case,
-            // but this code needs to be removed asap with proper homepage section reload.
-            collectionView.collectionViewLayout.invalidateLayout()
-        }
-        return jumpBackInCell
-    }
-
-    func configure(_ cell: UICollectionViewCell,
-                   at indexPath: IndexPath) -> UICollectionViewCell {
-        // Setup is done through configure(collectionView:indexPath:), shouldn't be called
-        return UICollectionViewCell()
-    }
-
-    func didSelectItem(at indexPath: IndexPath,
-                       homePanelDelegate: HomePanelDelegate?,
-                       libraryPanelDelegate: LibraryPanelDelegate?) {
-
-        if indexPath.row == jumpBackInList.itemsToDisplay - 1,
-           let group = jumpBackInList.group {
-            switchTo(group: group)
-
-        } else {
-            let tab = jumpBackInList.tabs[indexPath.row]
-            switchTo(tab: tab)
-        }
-    }
-
-    private func configureCellForGroups(group: ASGroup<Tab>, cell: HomeHorizontalCell, indexPath: IndexPath) {
+    func configureJumpBackInCellForGroups(group: ASGroup<Tab>, cell: HomeHorizontalCell, indexPath: IndexPath) {
         let firstGroupItem = group.groupedItems.first
         let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
 
@@ -455,7 +369,7 @@ extension JumpBackInViewModel: HomepageSectionHandler {
         }
     }
 
-    private func configureCellForTab(item: Tab, cell: HomeHorizontalCell, indexPath: IndexPath) {
+    func configureJumpBackInCellForTab(item: Tab, cell: HomeHorizontalCell, indexPath: IndexPath) {
         let itemURL = item.lastKnownUrl?.absoluteString ?? ""
         let site = Site(url: itemURL, title: item.displayTitle)
         let descriptionText = site.tileURL.shortDisplayString.capitalized
@@ -488,6 +402,293 @@ extension JumpBackInViewModel: HomepageSectionHandler {
 
             cell.setFallBackFaviconVisibility(isHidden: true)
             cell.heroImage.image = image
+        }
+    }
+
+    func configureSyncedTabCellForTab(item: JumpBackInSyncedTab, cell: SyncedTabCell, indexPath: IndexPath) {
+        let itemURL = item.tab.URL.absoluteString
+        let site = Site(url: itemURL, title: item.tab.title)
+        let descriptionText = item.client.name
+        let image = UIImage(named: ImageIdentifiers.syncedDevicesIcon)
+
+        let cellViewModel = FxHomeSyncedTabCellViewModel(titleText: site.title,
+                                                         descriptionText: descriptionText,
+                                                         url: item.tab.URL,
+                                                         tag: indexPath.item,
+                                                         syncedDeviceImage: image)
+        cell.configure(viewModel: cellViewModel,
+                       onTapShowAllAction: syncedTabsShowAllAction,
+                       onOpenSyncedTabAction: openSyncedTabAction)
+
+        /// Sets a small favicon in place of the hero image in case there's no hero image
+        getFaviconImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
+
+            if cell.heroImage.image == nil {
+                cell.fallbackFaviconImage.image = image
+            }
+        }
+
+        /// Replace the fallback favicon image when it's ready or available
+        getHeroImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
+
+            // If image is a square use it as a favicon
+            if image?.size.width == image?.size.height {
+                cell.fallbackFaviconImage.image = image
+                return
+            }
+
+            cell.setFallBackFaviconVisibility(isHidden: true)
+            cell.heroImage.image = image
+        }
+    }
+
+    func getFaviconImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
+        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
+            completion(image)
+        }
+    }
+
+    func getHeroImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
+        siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: false) { image in
+            completion(image)
+        }
+    }
+
+    private func defaultSection(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        let groupWidth = sectionLayout.widthDimension
+
+        // Items
+        let syncedTabItemSize = NSCollectionLayoutSize(
+            widthDimension: groupWidth,
+            heightDimension: .estimated(JumpBackInViewModel.UX.syncedTabCellHeight))
+        let syncedTabItem = NSCollectionLayoutItem(layoutSize: syncedTabItemSize)
+
+        let jumpBackInItemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(JumpBackInViewModel.UX.jumpBackInCellHeight))
+        let jumpBackInItem = NSCollectionLayoutItem(layoutSize: jumpBackInItemSize)
+
+        // Nested Group (Jump Back In)
+        let nestedGroupSize = NSCollectionLayoutSize(widthDimension: groupWidth,
+                                                       heightDimension: .fractionalHeight(1))
+        let nestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: nestedGroupSize,
+                                                             subitems: [jumpBackInItem, jumpBackInItem])
+        nestedGroup.interItemSpacing = HomeHorizontalCell.UX.interItemSpacing
+
+        // Main Group
+        let mainGroupHeight: CGFloat = JumpBackInViewModel.UX.syncedTabCellHeight
+        let mainGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                   heightDimension: .estimated(mainGroupHeight))
+
+        let maxJumpBackInPerGroup = JumpBackInViewModel.UX.maxJumpBackInItemsPerGroup
+        let jumpBackInItems = jumpBackInList.itemsToDisplay
+        let numberOfGroups = ceil(Double(jumpBackInItems) / Double(maxJumpBackInPerGroup))
+        var subItems: [NSCollectionLayoutItem] = Array(repeating: nestedGroup, count: Int(numberOfGroups))
+
+        if hasSyncedTab {
+            subItems.insert(syncedTabItem, at: 0)
+        }
+        let mainGroup = NSCollectionLayoutGroup.horizontal(layoutSize: mainGroupSize,
+                                                           subitems: subItems)
+        mainGroup.interItemSpacing = HomeHorizontalCell.UX.interItemSpacing
+
+        return NSCollectionLayoutSection(group: mainGroup)
+    }
+
+    // compact layout with synced tab
+    private func sectionWithSyncedTabCompact(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        // Items
+        let syncedTabCellHeight = JumpBackInViewModel.UX.syncedTabCellPortraitCompactHeight
+        let syncedTabItemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(syncedTabCellHeight))
+        let syncedTabItem = NSCollectionLayoutItem(layoutSize: syncedTabItemSize)
+
+        let jumpBackInItemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(JumpBackInViewModel.UX.jumpBackInCellHeight))
+        let jumpBackInItem = NSCollectionLayoutItem(layoutSize: jumpBackInItemSize)
+
+        // Main Group
+        let groupWidth = sectionLayout.widthDimension
+        let groupHeight: CGFloat = syncedTabCellHeight + JumpBackInViewModel.UX.jumpBackInCellHeight +
+                                    HomeHorizontalCell.UX.interItemSpacing.spacing
+        let groupSize = NSCollectionLayoutSize(widthDimension: groupWidth,
+                                               heightDimension: .estimated(groupHeight))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize,
+                                                     subitems: [jumpBackInItem, syncedTabItem])
+        group.interItemSpacing = HomeHorizontalCell.UX.interItemSpacing
+
+        return NSCollectionLayoutSection(group: group)
+    }
+}
+
+// MARK: HomeViewModelProtocol
+extension JumpBackInViewModel: HomepageViewModelProtocol {
+
+    var sectionType: HomepageSectionType {
+        return .jumpBackIn
+    }
+
+    var headerViewModel: LabelButtonHeaderViewModel {
+        return LabelButtonHeaderViewModel(trailingInset: 0,
+                                          title: HomepageSectionType.jumpBackIn.title,
+                                          titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
+                                          isButtonHidden: false,
+                                          buttonTitle: .RecentlySavedShowAllText,
+                                          buttonAction: headerButtonAction,
+                                          buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn)
+    }
+
+    var isEnabled: Bool {
+        guard featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildAndUser) else { return false }
+
+        return !isPrivate
+    }
+
+    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
+        refreshData(for: traitCollection)
+        return jumpBackInList.itemsToDisplay + (hasSyncedTab ? JumpBackInViewModel.UX.maxDisplayedSyncedTabs : 0)
+    }
+
+    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        var section: NSCollectionLayoutSection
+        updateSectionLayout(for: traitCollection,
+                            isPortrait: UIWindow.isPortrait,
+                            device: UIDevice.current.userInterfaceIdiom)
+
+        switch sectionLayout {
+        case .compactSyncedTab, .compactJumpBackInAndSyncedTab:
+            section = sectionWithSyncedTabCompact(for: traitCollection)
+        case .compactJumpBackIn, .regular, .regularWithSyncedTab:
+            section = defaultSection(for: traitCollection)
+        }
+
+        // Supplementary Item
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                heightDimension: .estimated(34))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize,
+                                                                 elementKind: UICollectionView.elementKindSectionHeader,
+                                                                 alignment: .top)
+        section.boundarySupplementaryItems = [header]
+
+        let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                        leading: leadingInset,
+                                                        bottom: HomepageViewModel.UX.spacingBetweenSections,
+                                                        trailing: leadingInset)
+        section.interGroupSpacing = HomeHorizontalCell.UX.interGroupSpacing
+
+        return section
+    }
+
+    var hasData: Bool {
+        return hasJumpBackIn || hasSyncedTab
+    }
+
+    func updateData(completion: @escaping () -> Void) {
+        // Has to be on main due to tab manager needing main tread
+        // This can be fixed when tab manager has been revisited
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {
+                completion()
+                return
+            }
+
+            let dispatchGroup = DispatchGroup()
+            dispatchGroup.enter()
+            self.updateJumpBackInData {
+                dispatchGroup.leave()
+            }
+
+            dispatchGroup.enter()
+            self.updateRemoteTabs {
+                dispatchGroup.leave()
+            }
+
+            dispatchGroup.notify(queue: .main) {
+                completion()
+            }
+        }
+    }
+
+    func refreshData(for traitCollection: UITraitCollection,
+                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+        jumpBackInList = createJumpBackInList(
+            from: recentTabs,
+            withMaxItemsToDisplay: sectionLayout.maxItemsToDisplay(displayGroup: .jumpBackIn,
+                                                                   hasAccount: hasSyncedTabFeatureEnabled,
+                                                                   device: device),
+            and: recentGroups)
+    }
+
+    func updatePrivacyConcernedSection(isPrivate: Bool) {
+        self.isPrivate = isPrivate
+    }
+}
+
+// MARK: FxHomeSectionHandler
+extension JumpBackInViewModel: HomepageSectionHandler {
+
+    func configure(_ collectionView: UICollectionView,
+                   at indexPath: IndexPath) -> UICollectionViewCell {
+        if let jumpBackInItemRow = sectionLayout.indexOfJumpBackInItem(for: indexPath) {
+            // JumpBackIn cell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeHorizontalCell.cellIdentifier,
+                                                          for: indexPath)
+            guard let jumpBackInCell = cell as? HomeHorizontalCell else { return UICollectionViewCell() }
+
+            if jumpBackInItemRow == (jumpBackInList.itemsToDisplay - 1),
+               let group = jumpBackInList.group {
+                configureJumpBackInCellForGroups(group: group, cell: jumpBackInCell, indexPath: indexPath)
+            } else if let item = jumpBackInList.tabs[safe: jumpBackInItemRow] {
+                configureJumpBackInCellForTab(item: item, cell: jumpBackInCell, indexPath: indexPath)
+            } else {
+                // TODO: Fix in the meantime we implement FXIOS-4310 && FXIOS-4095 for the reloading of the homepage.
+                // We're in a state we shouldn't be in (an indexPath that gets configured when there's no tabs for it)
+                // so for now we invalidate to avoid a crash. This happens only in a particular edge case,
+                // but this code needs to be removed asap with proper homepage section reload.
+                collectionView.collectionViewLayout.invalidateLayout()
+            }
+            return jumpBackInCell
+        } else if hasSyncedTab {
+            // SyncedTab cell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SyncedTabCell.cellIdentifier,
+                                                          for: indexPath)
+            guard let syncedTabCell = cell as? SyncedTabCell,
+                    let mostRecentSyncedTab = mostRecentSyncedTab
+            else { return UICollectionViewCell() }
+            configureSyncedTabCellForTab(item: mostRecentSyncedTab, cell: syncedTabCell, indexPath: indexPath)
+            return syncedTabCell
+        }
+
+        // something went wrong
+        return UICollectionViewCell()
+    }
+
+    func configure(_ cell: UICollectionViewCell,
+                   at indexPath: IndexPath) -> UICollectionViewCell {
+        // Setup is done through configure(collectionView:indexPath:), shouldn't be called
+        return UICollectionViewCell()
+    }
+
+    func didSelectItem(at indexPath: IndexPath,
+                       homePanelDelegate: HomePanelDelegate?,
+                       libraryPanelDelegate: LibraryPanelDelegate?) {
+        if let jumpBackInItemRow = sectionLayout.indexOfJumpBackInItem(for: indexPath) {
+            // JumpBackIn cell
+            if jumpBackInItemRow == jumpBackInList.itemsToDisplay - 1,
+               let group = jumpBackInList.group {
+                switchTo(group: group)
+
+            } else if let tab = jumpBackInList.tabs[safe: jumpBackInItemRow] {
+                switchTo(tab: tab)
+            }
+        } else if hasSyncedTab {
+            // SyncedTab cell
+            // do nothing, will be handled in cell depending on area tapped
         }
     }
 }

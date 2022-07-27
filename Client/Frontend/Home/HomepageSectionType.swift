@@ -29,7 +29,7 @@ enum HomepageSectionType: Int, CaseIterable {
         case .logoHeader: return HomeLogoHeaderCell.cellIdentifier
         case .topSites: return "" // Top sites has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .pocket: return "" // Pocket has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
-        case .jumpBackIn: return HomeHorizontalCell.cellIdentifier
+        case .jumpBackIn: return "" // JumpBackIn has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .recentlySaved: return RecentlySavedCell.cellIdentifier
         case .historyHighlights: return HistoryHighlightsCell.cellIdentifier
         case .customizeHome: return CustomizeHomepageSectionView.cellIdentifier
@@ -46,6 +46,7 @@ enum HomepageSectionType: Int, CaseIterable {
                 RecentlySavedCell.self,
                 HistoryHighlightsCell.self,
                 CustomizeHomepageSectionView.self,
+                SyncedTabCell.self
         ]
     }
 

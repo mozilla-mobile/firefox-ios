@@ -207,6 +207,10 @@ class HomepageViewModel: FeatureFlaggable {
         guard let actualSectionNumber = shownSections[safe: shownSection]?.rawValue else { return nil }
         return childViewModels[safe: actualSectionNumber]
     }
+
+    func indexOfShownSection(_ type: HomepageSectionType) -> Int? {
+        return shownSections.firstIndex(of: type)
+    }
 }
 
 // MARK: - FxHomeTopSitesViewModelDelegate
