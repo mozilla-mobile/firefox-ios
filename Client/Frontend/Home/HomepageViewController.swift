@@ -333,6 +333,8 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         }
 
         present(contextualHintViewController, animated: true, completion: nil)
+
+        UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
     }
 
     // MARK: - Home Tab Banner
