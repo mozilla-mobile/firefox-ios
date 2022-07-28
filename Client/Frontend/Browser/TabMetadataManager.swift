@@ -166,6 +166,7 @@ class TabMetadataManager {
     /// if the title isEmpty we don't record because title can be overriden
     /// - Parameters:
     ///   - url: Site URL from webview
+    ///   - searchData: Tab Group Data
     ///   - title: Site title from webview can be empty for slow loading pages
     private func updateOpenURLOnlyState(searchData: TabGroupData, title: String?) {
         tabGroupData = searchData
