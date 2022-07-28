@@ -213,19 +213,14 @@ class HomepageViewModel: FeatureFlaggable {
     }
 }
 
-// MARK: - FxHomeTopSitesViewModelDelegate
-extension HomepageViewModel: TopSitesViewModelDelegate {
-    func reloadTopSites() {
-        updateData(section: topSiteViewModel)
-    }
-}
-
+// MARK: - HomeHistoryHighlightsDelegate
 extension HomepageViewModel: HomeHistoryHighlightsDelegate {
     func reloadHighlights() {
         updateData(section: historyHighlightsViewModel)
     }
 }
 
+// MARK: - HomepageDataModelDelegate
 extension HomepageViewModel: HomepageDataModelDelegate {
     func reloadData() {
         ensureMainThread {

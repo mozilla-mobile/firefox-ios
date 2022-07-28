@@ -552,6 +552,8 @@ class BrowserViewController: UIViewController {
     private func presentContextualHint() {
         if shouldShowIntroScreen { return }
         present(contextHintVC, animated: true)
+
+        UIAccessibility.post(notification: .layoutChanged, argument: contextHintVC)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

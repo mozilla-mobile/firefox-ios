@@ -164,7 +164,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
 
         // iPhone layout
-        let trait = FakeTraitCollection()
+        let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
         trait.overridenVerticalSizeClass = .regular
 
@@ -193,7 +193,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
 
         // iPhone layout
-        let trait = FakeTraitCollection()
+        let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
         trait.overridenVerticalSizeClass = .regular
 
@@ -221,7 +221,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
 
         // iPhone landscape layout
-        let trait = FakeTraitCollection()
+        let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
 
@@ -254,7 +254,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
 
         // iPhone landscape layout
-        let trait = FakeTraitCollection()
+        let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
 
