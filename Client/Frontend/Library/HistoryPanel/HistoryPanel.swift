@@ -460,13 +460,14 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
 
         viewModel.removeHistoryItems(item: [historyItem], at: indexPath.section)
 
-        applySnapshot(animatingDifferences: true)
+        if viewModel.isSearchInProgress {
+            applySearchSnapshot()
+        } else {
+            applySnapshot(animatingDifferences: true)
+        }
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-
-        // Adding support to delete item during search in next ticket
-        guard !viewModel.isSearchInProgress else { return nil }
 
         // For UX consistency, every cell in history panel SHOULD have a trailing action.
         let deleteAction = UIContextualAction(style: .destructive, title: .HistoryPanelDelete) { [weak self] (_, _, completion) in
@@ -757,9 +758,10 @@ extension HistoryPanel {
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
 
-        if indexPath.section != HistoryPanelSections.additionalHistoryActions.rawValue {
-            presentContextMenu(for: indexPath)
+        if let _ = diffableDatasource?.itemIdentifier(for: indexPath) as? HistoryActionablesModel {
+            return
         }
+        presentContextMenu(for: indexPath)
     }
 
     @objc private func onRefreshPulled() {
