@@ -53,7 +53,7 @@ WKNavigationTypeOther = -1,
  *
  * (Furthermore, we probably shouldn't ever need something like SiteVisit
  * to reach the UI: we care about "last visited", "visit count", or just
- * "places ordered by frequency" — we don't care about lists of visits.)
+ * "places ordered by frecency" — we don't care about lists of visits.)
  */
 
 open class Visit: Hashable {
