@@ -319,6 +319,10 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     private func deleteSingle(site: Site) {
         groupedSites.remove(site)
         profile.history.removeHistoryForURL(site.url)
+
+        if isSearchInProgress, let indexToRemove = searchResultSites.firstIndex(of: site) {
+            searchResultSites.remove(at: indexToRemove)
+        }
     }
 
     private func getDeletableSection(date: Date) -> [Sections]? {

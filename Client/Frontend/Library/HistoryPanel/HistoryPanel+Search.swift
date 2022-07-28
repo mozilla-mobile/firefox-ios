@@ -16,6 +16,8 @@ extension HistoryPanel: UISearchBarDelegate {
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel.isSearchInProgress = !searchText.isEmpty
+
         guard let searchText = searchBar.text, !searchText.isEmpty else {
             handleEmptySearch()
             return
@@ -29,7 +31,6 @@ extension HistoryPanel: UISearchBarDelegate {
         updatePanelState(newState: .history(state: .search))
         bottomStackView.isHidden = false
         searchbar.becomeFirstResponder()
-        viewModel.isSearchInProgress = true
     }
 
     func exitSearchState() {
@@ -41,28 +42,18 @@ extension HistoryPanel: UISearchBarDelegate {
     }
 
     func performSearch(term: String) {
-        viewModel.performSearch(term: term.lowercased()) { hasResults in
-            guard hasResults else {
-                self.handleNoResults()
-                return
-            }
-
+        viewModel.performSearch(term: term.lowercased()) { _ in
             self.applySearchSnapshot()
-            self.updateEmptyPanelState()
         }
     }
 
-    private func applySearchSnapshot() {
+    func applySearchSnapshot() {
         // Create search results snapshot and apply
         var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, AnyHashable>()
         snapshot.appendSections([HistoryPanelSections.searchResults])
         snapshot.appendItems(self.viewModel.searchResultSites)
         self.diffableDatasource?.apply(snapshot, animatingDifferences: false)
-    }
-
-    private func handleNoResults() {
-        applySearchSnapshot()
-        updateEmptyPanelState()
+        self.updateEmptyPanelState()
     }
 
     private func handleEmptySearch() {
