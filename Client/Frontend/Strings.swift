@@ -1061,12 +1061,6 @@ extension String {
         }
 
         public struct Sync {
-            // TODO: Delete FxASignInToSync string with FXIOS-4392 since we'll be using ButtonTitle
-            public static let FxASignInToSync = MZLocalizedString(
-                "FxA.SignIntoSync",
-                value: "Sign in to Sync",
-                comment: "Button label to sign into Sync",
-                lastUpdated: .unknown)
             public static let ButtonTitle = MZLocalizedString(
                 "Settings.Sync.ButtonTitle.v103",
                 value: "Sync and Save Data",
