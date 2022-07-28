@@ -132,14 +132,11 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
     // MARK: Jump back in data
 
-    func updateData(dataCompletion: (() -> Void)? = nil) {
+    private func updateData() {
         // Has to be on main due to tab manager needing main tread
         // This can be fixed when tab manager has been revisited
         mainQueue.async { [weak self] in
-            guard let self = self else {
-                dataCompletion?()
-                return
-            }
+            guard let self = self else { return }
 
             self.dispatchGroup.enter()
             self.updateJumpBackInData {
@@ -154,7 +151,6 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
             self.dispatchGroup.notify(queue: .main) {
                 self.refreshData()
                 self.delegate?.didLoadNewData()
-                dataCompletion?()
             }
         }
     }
