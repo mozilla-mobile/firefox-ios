@@ -827,6 +827,8 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
 
     func presentCFROnView() {
         present(contextualHintViewController, animated: true, completion: nil)
+
+        UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
     }
 
     private func prepareJumpBackInContextualHint(on title: UILabel) {
