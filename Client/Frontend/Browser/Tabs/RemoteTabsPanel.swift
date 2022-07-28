@@ -403,7 +403,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
         instructionsLabel.numberOfLines = 0
         contentView.addSubview(instructionsLabel)
 
-        signInButton.setTitle(.Settings.Sync.FxASignInToSync, for: [])
+        signInButton.setTitle(.Settings.Sync.ButtonTitle, for: [])
         signInButton.setTitleColor(UIColor.Photon.White100, for: [])
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = UX.EmptyStateSignInButtonCornerRadius
