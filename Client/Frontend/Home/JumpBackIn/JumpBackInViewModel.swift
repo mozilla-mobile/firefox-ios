@@ -114,7 +114,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         } else if traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
             sectionLayout = .compactJumpBackIn
         } else {
-            sectionLayout = jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled ? .regularWithSyncedTab : .regular
+            sectionLayout = hasSyncedTab ? .regularWithSyncedTab : .regular
         }
     }
 
