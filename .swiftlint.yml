@@ -66,8 +66,6 @@ disabled_rules: # rule identifiers to exclude from running
 opt_in_rules: # some rules are only opt-in
 # These rules were originally opted into. Disabling for now to get
 # Swiftlint up and running.
-  # - return_arrow_whitespace
-  # - trailing_semicolon
   # - statement_position
   # - explicit_init
   # - file_header
@@ -93,7 +91,7 @@ opt_in_rules: # some rules are only opt-in
   - duplicate_imports
   - duplicate_enum_cases
   - opening_brace
-  - unused_import
+  - return_arrow_whitespace
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - build

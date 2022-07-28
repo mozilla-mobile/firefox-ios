@@ -105,7 +105,8 @@ class MarketingSnapshotTests: XCTestCase {
 extension XCUIElementQuery {
     func firstWithName(name: String) -> XCUIElement {
         let values = self.containingPredicate(NSPredicate(format: "label = '\(name)'"))
-        if values.count > 0 {
+        let valuesCount = values.count
+        if valuesCount > 0 {
             return values.elementBoundByIndex(0)
         }
 

@@ -416,6 +416,9 @@ class NavigationTest: BaseTestCase {
 
         let addressBar = app.textFields["address"]
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+
+        // These instances are false positives of the swiftlint configuration
+        // swiftlint:disable empty_count
         XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
         app.typeText("example.com\n")
 

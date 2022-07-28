@@ -101,7 +101,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         // Get current order
         guard let tabDisplayOrderDecoded = TabDisplayOrder.decode() else { return nil }
         var decodedTabUUID = tabDisplayOrderDecoded.regularTabUUID
-        guard decodedTabUUID.count > 0 else { return nil }
+        guard !decodedTabUUID.isEmpty else { return nil }
         let filteredTabCopy: [Tab] = filteredTabs.map { $0 }
         var filteredTabUUIDs: [String] = filteredTabs.map { $0.tabUUID }
         var regularOrderedTabs: [Tab] = []
@@ -952,7 +952,7 @@ extension TabDisplayManager: TabManagerDelegate {
 
     func getIndexToPlaceTab(placeNextToParentTab: Bool) -> Int {
         // Place new tab at the end by default unless it has been opened from parent tab
-        var indexToPlaceTab = dataStore.count > 0 ? dataStore.count : 0
+        var indexToPlaceTab = !dataStore.isEmpty ? dataStore.count : 0
 
         // Open a link from website next to it
         if placeNextToParentTab, let selectedTabUUID = tabManager.selectedTab?.tabUUID {

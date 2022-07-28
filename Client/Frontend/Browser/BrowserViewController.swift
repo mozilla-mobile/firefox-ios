@@ -779,7 +779,8 @@ class BrowserViewController: UIViewController {
 
             // This assumes that the DB returns rows in some kind of sane order.
             // It does in practice, so WFM.
-            if cursor.count > 0 {
+            let cursorCount = cursor.count
+            if cursorCount > 0 {
 
                 // Filter out any tabs received by a push notification to prevent dupes.
                 let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
