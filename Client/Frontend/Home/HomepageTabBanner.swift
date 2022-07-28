@@ -18,9 +18,8 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
 
     struct UX {
         static let cardSize = CGSize(width: 360, height: 224)
-        static let logoSize = CGSize(width: 64, height: 64)
         static let learnHowButtonSize: CGSize = CGSize(width: 304, height: 44)
-        static let textSpacing: CGFloat = 10
+        static let textSpacing: CGFloat = 8
         static let cardCornerRadius: CGFloat = 12
         static let dismissButtonSize = CGSize(width: 16, height: 16)
         static let dismissButtonSpacing: CGFloat = 12
@@ -45,8 +44,8 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
     private lazy var bannerTitle: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
-                                                                       maxSize: UX.bannerTitleMaxFontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
+                                                                   maxSize: UX.bannerTitleMaxFontSize)
         label.adjustsFontForContentSizeCategory = true
         label.textColor = UIColor.theme.homeTabBanner.textColor
     }
@@ -71,11 +70,6 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
         button.addTarget(self, action: #selector(self?.handleCTA), for: .touchUpInside)
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: UX.buttonEdgeSpacing,
                                                 bottom: 0, right: UX.buttonEdgeSpacing)
-    }
-
-    private lazy var image: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: ImageIdentifiers.logo)
-        imageView.contentMode = .scaleAspectFit
     }
 
     private lazy var dismissButton: UIButton = .build { [weak self] button in
@@ -129,7 +123,7 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
     // MARK: - Layout
 
     private func setupLayout() {
-        cardView.addSubviews(ctaButton, image, textStackView, dismissButton)
+        cardView.addSubviews(ctaButton, textStackView, dismissButton)
         containerView.addSubview(cardView)
         scrollView.addSubview(containerView)
         addSubview(scrollView)
@@ -164,18 +158,13 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
             cardView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             cardView.widthAnchor.constraint(equalToConstant: UX.cardSize.width),
 
-            image.centerYAnchor.constraint(equalTo: textStackView.centerYAnchor),
-            image.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.standardSpacing),
-            image.widthAnchor.constraint(equalToConstant: UX.logoSize.width),
-            image.heightAnchor.constraint(equalToConstant: UX.logoSize.height),
-
             textStackView.topAnchor.constraint(equalTo: dismissButton.bottomAnchor),
-            textStackView.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: UX.standardSpacing),
+            textStackView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.standardSpacing),
             textStackView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
             textStackView.bottomAnchor.constraint(equalTo: ctaButton.topAnchor, constant: -UX.standardSpacing),
 
             dismissButton.topAnchor.constraint(equalTo: cardView.topAnchor, constant: UX.dismissButtonSpacing),
-            dismissButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.dismissButtonSpacing),
+            dismissButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
             dismissButton.heightAnchor.constraint(equalToConstant: UX.dismissButtonSize.height),
             dismissButton.widthAnchor.constraint(equalToConstant: UX.dismissButtonSize.width),
 
