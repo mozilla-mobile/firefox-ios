@@ -207,23 +207,25 @@ class HomepageViewModel: FeatureFlaggable {
         guard let actualSectionNumber = shownSections[safe: shownSection]?.rawValue else { return nil }
         return childViewModels[safe: actualSectionNumber]
     }
-}
 
-// MARK: - FxHomeTopSitesViewModelDelegate
-extension HomepageViewModel: TopSitesViewModelDelegate {
-    func reloadTopSites() {
-        updateData(section: topSiteViewModel)
+    func indexOfShownSection(_ type: HomepageSectionType) -> Int? {
+        return shownSections.firstIndex(of: type)
     }
 }
 
+// MARK: - HomeHistoryHighlightsDelegate
 extension HomepageViewModel: HomeHistoryHighlightsDelegate {
     func reloadHighlights() {
         updateData(section: historyHighlightsViewModel)
     }
 }
 
+// MARK: - HomepageDataModelDelegate
 extension HomepageViewModel: HomepageDataModelDelegate {
     func reloadData() {
-        delegate?.reloadData()
+        ensureMainThread {
+            self.updateEnabledSections()
+            self.delegate?.reloadData()
+        }
     }
 }

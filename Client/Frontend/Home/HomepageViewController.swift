@@ -243,7 +243,12 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
             presentedViewController?.dismiss(animated: false, completion: nil)
         }
 
-        // Adjust layout for rotation, cells needs to be relayout
+        // reload JumpBackIn section as the order of cells and their size can change depending on size class
+        if let index = viewModel.indexOfShownSection(.jumpBackIn) {
+            collectionView.reloadSections(IndexSet([index]))
+        }
+
+        // Adjust layout for rotation, cells need to re-layout
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
@@ -328,6 +333,8 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         }
 
         present(contextualHintViewController, animated: true, completion: nil)
+
+        UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
     }
 
     // MARK: - Home Tab Banner
@@ -455,6 +462,14 @@ private extension HomepageViewController {
 
         viewModel.jumpBackInViewModel.headerButtonAction = { [weak self] button in
             self?.openTabTray(button)
+        }
+
+        viewModel.jumpBackInViewModel.syncedTabsShowAllAction = { [weak self] button in
+            self?.homePanelDelegate?.homePanelDidRequestToOpenTabTray(focusedSegment: .syncedTabs)
+        }
+
+        viewModel.jumpBackInViewModel.openSyncedTabAction = { [weak self] tabURL in
+            self?.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(tabURL, isPrivate: false, selectNewTab: true)
         }
 
         // History highlights

@@ -193,15 +193,3 @@ private class SearchBarPreferenceDelegateMock: SearchBarPreferenceDelegate {
         completion()
     }
 }
-
-// MARK: - SpyNotificationCenter
-class SpyNotificationCenter: NotificationCenter {
-
-    var notificationNameSent: NSNotification.Name?
-    var notificationObjectSent: Any?
-    override func post(name aName: NSNotification.Name, object anObject: Any?) {
-        super.post(name: aName, object: anObject)
-        notificationNameSent = aName
-        notificationObjectSent = anObject
-    }
-}

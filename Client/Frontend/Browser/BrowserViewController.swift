@@ -552,6 +552,8 @@ class BrowserViewController: UIViewController {
     private func presentContextualHint() {
         if shouldShowIntroScreen { return }
         present(contextHintVC, animated: true)
+
+        UIAccessibility.post(notification: .layoutChanged, argument: contextHintVC)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -1802,8 +1804,8 @@ extension BrowserViewController: HomePanelDelegate {
         show(toast: toast)
     }
 
-    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab? = nil) {
-        showTabTray(withFocusOnUnselectedTab: tabToFocus)
+    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: TabTrayViewModel.Segment?) {
+        showTabTray(withFocusOnUnselectedTab: tabToFocus, focusedSegment: focusedSegment)
     }
 
     func homePanelDidPresentContextualHintOf(type: ContextualHintViewType) {
