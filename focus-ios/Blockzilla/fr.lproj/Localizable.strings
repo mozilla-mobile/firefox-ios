@@ -433,6 +433,9 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SÉCURITÉ";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Définir comme navigateur par défaut";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Thème du système";
 

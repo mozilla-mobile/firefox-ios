@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "DIOGELWCH";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Gosod fel y Porwr Ragosodedig";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Gosod dolenni o wefannau, e-byst, a negeseuon i agor yn awtomatig yn %@.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Thema System";
 

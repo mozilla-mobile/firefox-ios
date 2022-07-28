@@ -247,6 +247,21 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Serriñ";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Kregiñ gant ar merdeiñ";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Dilemel roll-istor ar merdeiñ, ar gerioù-tremen, an toupinoù ha mirout ouzh ar bruderezhioù strobus da heuliañ ac'hanoc'h gant ur c'hlik nemetken!";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ eo ur merdeer gouestlet d'ar vuhez prevez gant ur gwarez a-enep an heuliañ hag ur stanker danvezioù.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Gwelloc'h eget ur mod incognito";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Degemer mat war Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Nullañ";
 
@@ -267,6 +282,12 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "Fellout a ra da “%@” haeziñ ho skeudennoù";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "N'eo ket diarvar ar c'hennask";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Kennask suraet";
 
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Goulenn al lec'hienn evit an urzhiataerioù";
@@ -322,6 +343,9 @@
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Strivañ a ra Mozilla evit dastum ar pezh hon eus ezhomm hepken evit gwellaat ha kinnig %@ d'an holl.";
 
+/* Title for section in settings menu */
+"Settings.general" = "Hollek";
+
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Gouzout hiroc'h.";
 
@@ -367,6 +391,9 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Testenn glask da implij";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Skouer: searchengine.example.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Pegit pe enankit un destenn da glask. M'eo dleet e c'hallit amsaviñ an termen klasket gant: %s.";
 
@@ -390,6 +417,12 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "DIOGELROEZ";
+
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Lakaat evel merdeer dre ziouer";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Digeriñ liammoù al lec'hiennoù, posteloù ha kemennadennoù e %@ en un doare emgefreek.";
 
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Neuz ar reizhiad";
@@ -433,6 +466,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Kas roadennoù arver";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Studioù";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Implijit Touch ID evit dibrennañ an arload";
 
@@ -460,6 +496,9 @@
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "Ouzhpennañ d'ar berradennoù";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Ouzhpennet d'ar berradennoù";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Eilañ ar chomlec'h";
 
@@ -484,6 +523,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Digeriñ e Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Digeriñ er merdeer dre ziouer";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Digeriñ e Firefox";
 
@@ -492,6 +534,18 @@
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Lemel diouzh ar berradennoù";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Adenvel ar verradenn";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Anv ar verradenn";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Enrollañ";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Nullañ";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Bruderezh";
@@ -517,6 +571,24 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL da zigeriñ";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Morailhañ %@ p'emañ digor ul lec'hienn:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Gweredekaat Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Gweredekaat Touch ID";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Lenn hiroc'h diwar-benn an dra-se hag an hizivadennoù all evit %@.";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri, diverk ma dalc'h war %@ .”";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri, digor al lec'hienn a blij din ar muiañ.”";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Implijit Touch ID evit distreiñ da %@";
 
@@ -531,6 +603,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Kennask suraet";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Gwiriet gant %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Heulieroù endalc'had";

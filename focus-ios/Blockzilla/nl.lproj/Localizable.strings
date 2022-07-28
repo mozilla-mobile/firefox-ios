@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "BEVEILIGING";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Als standaardbrowser instellen";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Koppelingen van websites, e-mail en berichten automatisch in %@ openen.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Systeemthema";
 
