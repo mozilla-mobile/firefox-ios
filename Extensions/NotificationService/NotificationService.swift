@@ -183,7 +183,7 @@ extension SyncDataDisplay {
         let title: String
         let body: String
 
-        if tabs.count == 0 {
+        if tabs.isEmpty {
             title = .SentTab_NoTabArrivingNotification_title
             #if MOZ_CHANNEL_BETA || DEBUG
                 body = "DEBUG: Sent Tabs with no tab"
@@ -204,7 +204,7 @@ extension SyncDataDisplay {
                 // because we have only just introduced "displayURL" as a key.
                 body = (tabs[0]["displayURL"] as? String) ??
                     (tabs[0]["url"] as! String)
-            } else if deviceNames.count == 0 {
+            } else if deviceNames.isEmpty {
                 body = .SentTab_TabArrivingNotification_NoDevice_body
             } else {
                 body = String(format: .SentTab_TabArrivingNotification_WithDevice_body, AppInfo.displayName)

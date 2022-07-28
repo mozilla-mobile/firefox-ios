@@ -31,10 +31,12 @@ class TestSwiftData: XCTestCase {
         XCTAssertNil(addSite(table, url: "http://url0", title: "title0"), "Added url0.")
     }
 
+    // swiftlint:disable empty_xctest_method
     override func tearDown() {
         // Restore static flags to their default values.
         SwiftData.EnableWAL = true
     }
+    // swiftlint:enable empty_xctest_method
 
     func testNoWAL() {
         SwiftData.EnableWAL = false

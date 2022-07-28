@@ -869,7 +869,7 @@ extension TabManager {
 
     func restoreTabs(_ forced: Bool = false) {
         defer { checkForSingleTab() }
-        guard forced || count == 0,
+        guard forced || tabs.isEmpty,
               !AppConstants.isRunningUITests,
               !DebugSettingsBundleOptions.skipSessionRestore,
               store.hasTabsToRestoreAtStartup

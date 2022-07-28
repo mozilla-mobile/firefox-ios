@@ -49,7 +49,7 @@ class TabsPayloadTests: XCTestCase {
         let tabsPayload2 = TabsPayload("{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [null, {}, [], 123, false, true, \"\"]}")
         XCTAssertTrue(tabsPayload2.isValid())
         let tabs2 = tabsPayload2.tabs
-        XCTAssert(tabs2.count == 0)
+        XCTAssert(tabs2.isEmpty)
     }
 
     func testTabWithCorrectTabLastUsed() {
@@ -92,7 +92,7 @@ null, \"lastUsed\": \"1492316843992\"}]}
             let tabsPayload = TabsPayload(payload)
             XCTAssertTrue(tabsPayload.isValid(), "Should not be valid: \(payload)")
             let tabs = tabsPayload.tabs
-            XCTAssert(tabs.count == 0, "Should not have valid tabs: \(payload)")
+            XCTAssert(tabs.isEmpty, "Should not have valid tabs: \(payload)")
         }
     }
 }

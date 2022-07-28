@@ -175,7 +175,7 @@ class SnackBar: UIView {
             make.top.equalTo(titleView.snp.bottom).offset(UIConstants.DefaultPadding)
             make.bottom.equalTo(self.snp.bottom)
             make.leading.trailing.equalTo(self)
-            if self.buttonsView.subviews.count > 0 {
+            if !self.buttonsView.subviews.isEmpty {
                 make.height.equalTo(UIConstants.SnackbarButtonHeight)
             } else {
                 make.height.equalTo(0)

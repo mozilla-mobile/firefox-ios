@@ -489,7 +489,7 @@ class NSURLExtensionsTests: XCTestCase {
 
             let original = url.absoluteDisplayString
             let matches = detector.matches(in: original, options: [], range: NSRange(location: 0, length: original.count))
-            guard matches.count > 0 else {
+            guard !matches.isEmpty else {
                 print("\(url) doesn't match as a URL")
                 continue
             }

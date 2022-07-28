@@ -130,7 +130,7 @@ final class LoginListViewModel {
         //     prevent race conditions between data/UI indexing.
         return self.helper.computeSectionsFromLogins(logins).uponQueue(.main) { result in
             guard let (titles, sections) = result.successValue,
-                  logins.count > 0
+                  !logins.isEmpty
             else {
                 self.count = 0
                 self.titles = []

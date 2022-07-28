@@ -1073,7 +1073,7 @@ class BrowserViewController: UIViewController {
 
     func addBookmark(url: String, title: String? = nil, favicon: Favicon? = nil) {
         var title = (title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        if title.count == 0 {
+        if title.isEmpty {
             title = url
         }
 
