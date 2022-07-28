@@ -6,7 +6,6 @@ import UIKit
 
 public enum AppName: String, CustomStringConvertible {
     case shortName = "Firefox"
-    case longName = "Firefox Daylight"
 
     public var description: String {
         return self.rawValue
