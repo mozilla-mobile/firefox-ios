@@ -627,7 +627,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATapOnContinueButton) { userState in
-            app.webViews.buttons["Continue"].tap()
+            app.webViews.buttons["Sign up or sign in"].tap()
         }
         screenState.gesture(forAction: Action.FxATapOnSignInButton) { userState in
             app.webViews.buttons.element(boundBy: 0).tap()
