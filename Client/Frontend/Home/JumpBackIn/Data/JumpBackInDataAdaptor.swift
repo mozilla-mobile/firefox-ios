@@ -45,6 +45,7 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     private var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
     private var mostRecentSyncedTab: JumpBackInSyncedTab?
 
+    private let mainQueue: DispatchQueueInterface
     private let dispatchGroup: DispatchGroupInterface
     private let userInteractiveQueue: DispatchQueueInterface
 
@@ -55,14 +56,17 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
          tabManager: TabManagerProtocol,
          siteImageHelper: SiteImageHelperProtocol,
          dispatchGroup: DispatchGroupInterface = DispatchGroup(),
+         mainQueue: DispatchQueueInterface = DispatchQueue.main,
          userInteractiveQueue: DispatchQueueInterface = DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.profile = profile
         self.tabManager = tabManager
         self.siteImageHelper = siteImageHelper
+        self.notificationCenter = notificationCenter
+
+        self.mainQueue = mainQueue
         self.dispatchGroup = dispatchGroup
         self.userInteractiveQueue = userInteractiveQueue
-        self.notificationCenter = notificationCenter
 
         setupNotifications(forObserver: self, observing: [.TabsTrayDidClose,
                                                           .TopTabsTabClosed,
@@ -131,7 +135,7 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     func updateData(dataCompletion: (() -> Void)? = nil) {
         // Has to be on main due to tab manager needing main tread
         // This can be fixed when tab manager has been revisited
-        DispatchQueue.main.async { [weak self] in
+        mainQueue.async { [weak self] in
             guard let self = self else {
                 dataCompletion?()
                 return
@@ -224,14 +228,9 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         }
 
         // Get cached tabs
-        userInteractiveQueue.async {
-            self.profile.getCachedClientsAndTabs().uponQueue(.global(qos: .userInteractive)) { result in
-                guard let clientAndTabs = result.successValue, clientAndTabs.count > 0 else {
-                    self.mostRecentSyncedTab = nil
-                    completion()
-                    return
-                }
-                self.createMostRecentSyncedTab(from: clientAndTabs, completion: completion)
+        userInteractiveQueue.async { [weak self] in
+            self?.profile.getCachedClientsAndTabs { [weak self] result in
+                self?.createMostRecentSyncedTab(from: result, completion: completion)
             }
         }
     }
@@ -241,7 +240,7 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         let desktopClientAndTabs = clientAndTabs.filter { $0.tabs.count > 0 &&
             ClientType.fromFxAType($0.client.type) == .Desktop }
 
-        guard !desktopClientAndTabs.isEmpty else {
+        guard !desktopClientAndTabs.isEmpty, clientAndTabs.count > 0 else {
             mostRecentSyncedTab = nil
             completion()
             return

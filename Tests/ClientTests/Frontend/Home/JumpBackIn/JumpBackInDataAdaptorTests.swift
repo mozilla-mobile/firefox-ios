@@ -3,204 +3,269 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import Client
+import Storage
 import XCTest
+import WebKit
 
-// Laurie: rework test to adapt to adaptor
+// NOTE:
+// Tab groups not tested at the moment since it depends on RustPlaces concrete object.
+// Need protocol to be able to fix this
+
 class JumpBackInDataAdaptorTests: XCTestCase {
 
-    //    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_onIphoneLayout_noAccount_has2() {
-    //        let sut = createSut()
-    //        mockProfile.hasSyncableAccountMock = false
-    //        sut.featureFlags.set(feature: .tabTrayGroups, to: false)
-    //        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
-    //        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
-    //        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
-    //        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
-    //        let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
-    //
-    //        // iPhone layout
-    //        let trait = FakeTraitCollection()
-    //        trait.overridenHorizontalSizeClass = .compact
-    //        trait.overridenVerticalSizeClass = .regular
-    //
-    //        sut.updateData {
-    //            sut.updateSectionLayout(for: trait, isPortrait: true, device: .phone) // get section layout calculated
-    //            sut.refreshData(for: trait, device: .phone) // Refresh data for specific layout
-    //            expectation.fulfill()
-    //        }
-    //
-    //        wait(for: [expectation], timeout: 5.0)
-    //
-    //        XCTAssertEqual(sut.jumpBackInList.tabs.count, 2, "iPhone portrait has 2 tabs in it's jumpbackin layout")
-    //        XCTAssertEqual(sut.jumpBackInList.tabs[0], tab1)
-    //        XCTAssertEqual(sut.jumpBackInList.tabs[1], tab2)
-    //        XCTAssertFalse(sut.jumpBackInList.tabs.contains(tab3))
-    //    }
-    //
-    //    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_onIphoneLayout_hasAccount_has1() {
-    //        let sut = createSut()
-    //        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
-    //                                                       tabs: remoteTabs(idRange: 1...3))]
-    //        sut.featureFlags.set(feature: .tabTrayGroups, to: false)
-    //        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
-    //        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
-    //        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
-    //        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
-    //        let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
-    //
-    //        // iPhone layout
-    //        let trait = FakeTraitCollection()
-    //        trait.overridenHorizontalSizeClass = .compact
-    //        trait.overridenVerticalSizeClass = .regular
-    //
-    //        sut.updateData {
-    //            sut.updateSectionLayout(for: trait, isPortrait: true, device: .phone) // get section layout calculated
-    //            sut.refreshData(for: trait, device: .phone) // Refresh data for specific layout
-    //            expectation.fulfill()
-    //        }
-    //
-    //        wait(for: [expectation], timeout: 10.0)
-    //
-    //        XCTAssertEqual(sut.jumpBackInList.tabs.count, 1, "iPhone portrait has 1 tab in it's jumpbackin layout")
-    //        XCTAssertEqual(sut.jumpBackInList.tabs[0], tab1)
-    //        XCTAssertFalse(sut.jumpBackInList.tabs.contains(tab2))
-    //        XCTAssertFalse(sut.jumpBackInList.tabs.contains(tab3))
-    //    }
-    //
-    //    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_oniPhoneLandscapeLayout_noAccount_has3() {
-    //        let sut = createSut()
-    //        mockProfile.hasSyncableAccountMock = false
-    //        sut.featureFlags.set(feature: .tabTrayGroups, to: false)
-    //        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
-    //        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
-    //        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
-    //        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
-    //        let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
-    //
-    //        // iPhone landscape layout
-    //        let trait = FakeTraitCollection()
-    //        trait.overridenHorizontalSizeClass = .regular
-    //        trait.overridenVerticalSizeClass = .regular
-    //
-    //        sut.updateData {
-    //            sut.updateSectionLayout(for: trait, isPortrait: false, device: .phone) // get section layout calculated
-    //            sut.refreshData(for: trait, device: .phone) // Refresh data for specific layout
-    //            expectation.fulfill()
-    //        }
-    //
-    //        wait(for: [expectation], timeout: 1.0)
-    //        guard sut.jumpBackInList.tabs.count > 0 else {
-    //            XCTFail("Incorrect number of tabs in subject")
-    //            return
-    //        }
-    //
-    //        XCTAssertEqual(sut.jumpBackInList.tabs.count, 3, "iPhone landscape has 3 tabs in it's jumpbackin layout, up until 4")
-    //        XCTAssertEqual(sut.jumpBackInList.tabs[0], tab1)
-    //        XCTAssertEqual(sut.jumpBackInList.tabs[1], tab2)
-    //        XCTAssertEqual(sut.jumpBackInList.tabs[2], tab3)
-    //    }
-    //
-    //    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_oniPhoneLandscapeLayout_hasAccount_has2() {
-    //        let sut = createSut()
-    //        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
-    //                                                       tabs: remoteTabs(idRange: 1...3))]
-    //        sut.featureFlags.set(feature: .tabTrayGroups, to: false)
-    //        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
-    //        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
-    //        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
-    //        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
-    //        let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
-    //
-    //        // iPhone landscape layout
-    //        let trait = FakeTraitCollection()
-    //        trait.overridenHorizontalSizeClass = .regular
-    //        trait.overridenVerticalSizeClass = .regular
-    //
-    //        sut.updateData {
-    //            sut.updateSectionLayout(for: trait, isPortrait: false, device: .phone) // get section layout calculated
-    //            sut.refreshData(for: trait, device: .phone) // Refresh data for specific layout
-    //            expectation.fulfill()
-    //        }
-    //
-    //        wait(for: [expectation], timeout: 5.0)
-    //        guard sut.jumpBackInList.tabs.count > 0 else {
-    //            XCTFail("Incorrect number of tabs in subject")
-    //            return
-    //        }
-    //
-    //        XCTAssertEqual(sut.jumpBackInList.tabs.count, 2, "iPhone landscape has 2 tabs in it's jumpbackin layout, up until 2")
-    //        XCTAssertEqual(sut.jumpBackInList.tabs[0], tab1)
-    //        XCTAssertEqual(sut.jumpBackInList.tabs[1], tab2)
-    //        XCTAssertFalse(sut.jumpBackInList.tabs.contains(tab3))
-    //    }
-    //
-    //    // MARK: Syncable Tabs
-    //
-    //    func test_updateData_mostRecentTab_noSyncableAccount() {
-    //        let sut = createSut()
-    //        mockProfile.hasSyncableAccountMock = false
-    //        let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
-    //        sut.updateData {
-    //            expectation.fulfill()
-    //        }
-    //
-    //        wait(for: [expectation], timeout: 5.0)
-    //        XCTAssertNil(sut.mostRecentSyncedTab, "There should be no most recent tab")
-    //    }
-    //
-    //    func test_updateData_mostRecentTab_noCachedClients() {
-    //        let sut = createSut()
-    //        let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
-    //        sut.updateData {
-    //            expectation.fulfill()
-    //        }
-    //
-    //        wait(for: [expectation], timeout: 5.0)
-    //        XCTAssertNil(sut.mostRecentSyncedTab, "There should be no most recent tab")
-    //    }
-    //
-    //    func test_updateData_mostRecentTab_noDesktopClients() {
-    //        let sut = createSut()
-    //        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs(idRange: 1...2))]
-    //        let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
-    //        sut.updateData {
-    //            expectation.fulfill()
-    //        }
-    //
-    //        wait(for: [expectation], timeout: 5.0)
-    //        XCTAssertNil(sut.mostRecentSyncedTab, "There should be no most recent tab")
-    //    }
-    //
-    //    func test_updateData_mostRecentTab_oneDesktopClient() {
-    //        let sut = createSut()
-    //        let remoteClient = remoteDesktopClient()
-    //        let remoteTabs = remoteTabs(idRange: 1...3)
-    //        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs)]
-    //
-    //        let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
-    //        sut.updateData {
-    //            expectation.fulfill()
-    //        }
-    //
-    //        wait(for: [expectation], timeout: 5.0)
-    //        XCTAssertEqual(sut.mostRecentSyncedTab?.client, remoteClient)
-    //        XCTAssertEqual(sut.mostRecentSyncedTab?.tab, remoteTabs.last)
-    //    }
-    //
-    //    func test_updateData_mostRecentTab_multipleDesktopClients() {
-    //        let sut = createSut()
-    //        let remoteClient = remoteDesktopClient(name: "Fake Client 2")
-    //        let remoteClientTabs = remoteTabs(idRange: 7...9)
-    //        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(), tabs: remoteTabs(idRange: 1...5)),
-    //                                     ClientAndTabs(client: remoteClient, tabs: remoteClientTabs)]
-    //
-    //        let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
-    //        sut.updateData {
-    //            expectation.fulfill()
-    //        }
-    //
-    //        wait(for: [expectation], timeout: 5.0)
-    //        XCTAssertEqual(sut.mostRecentSyncedTab?.client, remoteClient)
-    //        XCTAssertEqual(sut.mostRecentSyncedTab?.tab, remoteClientTabs.last)
-    //    }
+    var mockTabManager: MockTabManager!
+    var mockProfile: MockProfile!
+
+    override func setUp() {
+        super.setUp()
+        mockProfile = MockProfile()
+        mockTabManager = MockTabManager()
+
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        mockProfile = nil
+        mockTabManager = nil
+    }
+
+    func testEmptyData_tabTrayGroupsDisabled() {
+        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        let sut = createSut()
+        let jumpBackIn = sut.getJumpBackInData()
+        let synced = sut.getSyncedTabData()
+
+        XCTAssertEqual(jumpBackIn.itemsToDisplay, 0)
+        XCTAssertNil(synced)
+    }
+
+    func testCompactJumpBackIn_tabTrayGroupsDisabled_withMoreJumpBackInTabs() {
+        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        mockProfile.hasSyncableAccountMock = false
+        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
+        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
+        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
+
+        let sut = createSut()
+        sut.refreshData(maxItemToDisplay: 2)
+
+        let jumpBackIn = sut.getJumpBackInData()
+        XCTAssertEqual(jumpBackIn.tabs.count, 2, "iPhone portrait has 2 tabs in it's jumpbackin layout")
+        XCTAssertEqual(jumpBackIn.tabs[0], tab1)
+        XCTAssertEqual(jumpBackIn.tabs[1], tab2)
+        XCTAssertFalse(jumpBackIn.tabs.contains(tab3))
+    }
+
+    func testCompactJumpBackIn_tabTrayGroupsDisabled_withLessJumpBackInTabs() {
+        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        mockProfile.hasSyncableAccountMock = false
+        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1]
+
+        let sut = createSut()
+        sut.refreshData(maxItemToDisplay: 2)
+
+        let jumpBackIn = sut.getJumpBackInData()
+        XCTAssertEqual(jumpBackIn.tabs.count, 1, "With a max of 2 items, only shows 1 item when only 1 is available")
+        XCTAssertEqual(jumpBackIn.tabs[0], tab1)
+    }
+
+    func testCompactJumpBackInAndSyncedTab_tabTrayGroupsDisabled_withMoreJumpBackInTabsAndRemoteTabs() {
+        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
+                                                       tabs: remoteTabs(idRange: 1...3))]
+        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
+        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
+        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
+
+        let sut = createSut()
+        sut.refreshData(maxItemToDisplay: 1)
+
+        let jumpBackIn = sut.getJumpBackInData()
+        XCTAssertEqual(jumpBackIn.tabs.count, 1, "iPhone portrait has 1 tab in it's jumpbackin layout")
+        XCTAssertEqual(jumpBackIn.tabs[0], tab1)
+        XCTAssertFalse(jumpBackIn.tabs.contains(tab2))
+        XCTAssertFalse(jumpBackIn.tabs.contains(tab3))
+
+        let syncTab = sut.getSyncedTabData()
+        XCTAssertNotNil(syncTab, "iPhone portrait will show 1 sync tab")
+    }
+
+    func testRegularIphone_tabTrayGroupsDisabled() {
+        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
+        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
+        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
+
+        let sut = createSut()
+        sut.refreshData(maxItemToDisplay: 4)
+
+        let jumpBackIn = sut.getJumpBackInData()
+        XCTAssertEqual(jumpBackIn.tabs.count, 3, "iPhone landscape has 3 tabs in it's jumpbackin layout, up until 4")
+        XCTAssertEqual(jumpBackIn.tabs[0], tab1)
+        XCTAssertEqual(jumpBackIn.tabs[1], tab2)
+        XCTAssertEqual(jumpBackIn.tabs[2], tab3)
+
+        let syncTab = sut.getSyncedTabData()
+        XCTAssertNil(syncTab)
+    }
+
+    func testRegularWithSyncedTabIphone_tabTrayGroupsDisabled_withSyncTab() {
+        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
+        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
+        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
+                                                       tabs: remoteTabs(idRange: 1...3))]
+
+        let sut = createSut()
+        sut.refreshData(maxItemToDisplay: 2)
+
+        let jumpBackIn = sut.getJumpBackInData()
+        XCTAssertEqual(jumpBackIn.tabs.count, 2, "iPhone landscape has 2 tabs in it's jumpbackin layout, up until 2")
+        XCTAssertEqual(jumpBackIn.tabs[0], tab1)
+        XCTAssertEqual(jumpBackIn.tabs[1], tab2)
+        XCTAssertFalse(jumpBackIn.tabs.contains(tab3))
+
+        let syncTab = sut.getSyncedTabData()
+        XCTAssertNotNil(syncTab, "iPhone landscape will show 1 sync tab")
+    }
+
+    func testSyncTab_whenNoSyncTabsData_notReturned() {
+        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        let sut = createSut()
+
+        let syncTab = sut.getSyncedTabData()
+        XCTAssertNil(syncTab, "No sync tab since there's no remote tabs")
+    }
+
+    func testSyncTab_whenNoSyncAccount_notReturned() {
+        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        mockProfile.hasSyncableAccountMock = false
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
+                                                       tabs: remoteTabs(idRange: 1...3))]
+        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        let sut = createSut()
+
+        let syncTab = sut.getSyncedTabData()
+        XCTAssertNil(syncTab, "No sync tab since hasSyncableAccount is off")
+    }
+
+    func testSyncTab_noDesktopClients_notReturned() {
+        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        mockProfile.hasSyncableAccountMock = false
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs(idRange: 1...2))]
+        let sut = createSut()
+
+        let syncTab = sut.getSyncedTabData()
+        XCTAssertNil(syncTab, "No sync tab since there's no desktop client")
+    }
+
+    func testSyncTab_oneDesktopClient_returned() {
+        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        let remoteClient = remoteDesktopClient()
+        let remoteTabs = remoteTabs(idRange: 1...3)
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs)]
+
+        let sut = createSut()
+
+        let syncTab = sut.getSyncedTabData()
+        XCTAssertEqual(syncTab?.client.name, remoteClient.name)
+        XCTAssertEqual(syncTab?.tab.title, remoteTabs.last?.title)
+        XCTAssertEqual(syncTab?.tab.URL, remoteTabs.last?.URL)
+    }
+
+    func testSyncTab_multipleDesktopClients_returnsLast() {
+        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        let remoteClient = remoteDesktopClient(name: "Fake Client 2")
+        let remoteClientTabs = remoteTabs(idRange: 7...9)
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(), tabs: remoteTabs(idRange: 1...5)),
+                                     ClientAndTabs(client: remoteClient, tabs: remoteClientTabs)]
+
+        let sut = createSut()
+
+        let syncTab = sut.getSyncedTabData()
+        XCTAssertEqual(syncTab?.client.name, remoteClient.name)
+        XCTAssertEqual(syncTab?.tab.title, remoteClientTabs.last?.title)
+        XCTAssertEqual(syncTab?.tab.URL, remoteClientTabs.last?.URL)
+    }
+}
+
+// MARK: Helpers
+extension JumpBackInDataAdaptorTests {
+
+    func createSut(file: StaticString = #file, line: UInt = #line) -> JumpBackInDataAdaptorImplementation {
+        let dispatchGroup = MockDispatchGroup()
+        let dispatchQueue = MockDispatchQueue()
+        let siteImageHelper = SiteImageHelperMock()
+        let notificationCenter = SpyNotificationCenter()
+
+        let sut = JumpBackInDataAdaptorImplementation(profile: mockProfile,
+                                                      tabManager: mockTabManager,
+                                                      siteImageHelper: siteImageHelper,
+                                                      dispatchGroup: dispatchGroup,
+                                                      mainQueue: dispatchQueue,
+                                                      userInteractiveQueue: dispatchQueue,
+                                                      notificationCenter: notificationCenter)
+
+        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeaks(siteImageHelper, file: file, line: line)
+        trackForMemoryLeaks(dispatchGroup, file: file, line: line)
+        trackForMemoryLeaks(dispatchQueue, file: file, line: line)
+
+        return sut
+    }
+
+    func createTab(profile: MockProfile,
+                   configuration: WKWebViewConfiguration = WKWebViewConfiguration(),
+                   urlString: String? = "www.website.com") -> Tab {
+        let tab = Tab(profile: profile, configuration: configuration)
+
+        if let urlString = urlString {
+            tab.url = URL(string: urlString)!
+        }
+        return tab
+    }
+
+    var remoteClient: RemoteClient {
+        return RemoteClient(guid: nil,
+                            name: "Fake client",
+                            modified: 1,
+                            type: nil,
+                            formfactor: nil,
+                            os: nil,
+                            version: nil,
+                            fxaDeviceId: nil)
+    }
+
+    func remoteDesktopClient(name: String = "Fake client") -> RemoteClient {
+        return RemoteClient(guid: nil,
+                            name: name,
+                            modified: 1,
+                            type: "desktop",
+                            formfactor: nil,
+                            os: nil,
+                            version: nil,
+                            fxaDeviceId: nil)
+    }
+
+    func remoteTabs(idRange: ClosedRange<Int> = 1...1) -> [RemoteTab] {
+        var remoteTabs: [RemoteTab] = []
+
+        for i in idRange {
+            let tab = RemoteTab(clientGUID: String(i),
+                                URL: URL(string: "www.mozilla.org")!,
+                                title: "Mozilla \(i)",
+                                history: [],
+                                lastUsed: UInt64(i),
+                                icon: nil)
+            remoteTabs.append(tab)
+        }
+        return remoteTabs
+    }
 }

@@ -7,6 +7,6 @@ import Storage
 
 /// The filtered jumpBack in synced tab to display to the user.
 struct JumpBackInSyncedTab {
-    let client: RemoteClientInterface
-    let tab: RemoteTabInterface
+    let client: RemoteClient
+    let tab: RemoteTab
 }

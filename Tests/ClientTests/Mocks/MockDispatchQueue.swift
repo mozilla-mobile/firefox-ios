@@ -9,7 +9,7 @@ class MockDispatchQueue: DispatchQueueInterface {
     func async(group: DispatchGroup?,
                qos: DispatchQoS,
                flags: DispatchWorkItemFlags,
-               execute work: @escaping () -> Void) {
+               execute work: @escaping @convention(block) () -> Void) {
         work()
     }
 }

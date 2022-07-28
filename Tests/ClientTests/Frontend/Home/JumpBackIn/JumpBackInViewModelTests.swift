@@ -180,7 +180,7 @@ class JumpBackInViewModelTests: XCTestCase {
     func testMaxJumpBackInItemsToDisplay_compactSyncedTab() {
         let sut = createSut()
         sut.featureFlags.set(feature: .jumpBackInSyncedTab, to: true)
-        adaptor.syncedTab = JumpBackInSyncedTab(client: MockRemoteClient(), tab: MockRemoteTab())
+        adaptor.syncedTab = JumpBackInSyncedTab(client: remoteClient, tab: remoteTab)
         sut.updateData {}
 
         let trait = MockTraitCollection()
@@ -198,7 +198,7 @@ class JumpBackInViewModelTests: XCTestCase {
     func testMaxJumpBackInItemsToDisplay_compactJumpBackInAndSyncedTab() {
         let sut = createSut()
         sut.featureFlags.set(feature: .jumpBackInSyncedTab, to: true)
-        adaptor.syncedTab = JumpBackInSyncedTab(client: MockRemoteClient(), tab: MockRemoteTab())
+        adaptor.syncedTab = JumpBackInSyncedTab(client: remoteClient, tab: remoteTab)
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1])
         sut.updateData {}
@@ -331,7 +331,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
     func testRefreshData_syncedTab() {
         let sut = createSut()
-        adaptor.syncedTab = JumpBackInSyncedTab(client: MockRemoteClient(), tab: MockRemoteTab())
+        adaptor.syncedTab = JumpBackInSyncedTab(client: remoteClient, tab: remoteTab)
         sut.refreshData(for: MockTraitCollection())
 
         XCTAssertEqual(sut.jumpBackInList.tabs.count, 0)
@@ -360,7 +360,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
     func testDidLoadNewData_syncedTab() {
         let sut = createSut()
-        adaptor.syncedTab = JumpBackInSyncedTab(client: MockRemoteClient(), tab: MockRemoteTab())
+        adaptor.syncedTab = JumpBackInSyncedTab(client: remoteClient, tab: remoteTab)
         sut.didLoadNewData()
 
         XCTAssertEqual(sut.jumpBackInList.tabs.count, 0)
@@ -410,30 +410,13 @@ extension JumpBackInViewModelTests {
                             fxaDeviceId: nil)
     }
 
-    func remoteDesktopClient(name: String = "Fake client") -> RemoteClient {
-        return RemoteClient(guid: nil,
-                            name: name,
-                            modified: 1,
-                            type: "desktop",
-                            formfactor: nil,
-                            os: nil,
-                            version: nil,
-                            fxaDeviceId: nil)
-    }
-
-    func remoteTabs(idRange: ClosedRange<Int> = 1...1) -> [RemoteTab] {
-        var remoteTabs: [RemoteTab] = []
-
-        for i in idRange {
-            let tab = RemoteTab(clientGUID: String(i),
-                                URL: URL(string: "www.mozilla.org")!,
-                                title: "Mozilla \(i)",
-                                history: [],
-                                lastUsed: UInt64(i),
-                                icon: nil)
-            remoteTabs.append(tab)
-        }
-        return remoteTabs
+    var remoteTab: RemoteTab {
+        return RemoteTab(clientGUID: "1",
+                         URL: URL(string: "www.mozilla.org")!,
+                         title: "Mozilla 1",
+                         history: [],
+                         lastUsed: 1,
+                         icon: nil)
     }
 }
 
@@ -474,16 +457,4 @@ class MockBrowserBarViewDelegate: BrowserBarViewDelegate {
     func leaveOverlayMode(didCancel cancel: Bool) {
         leaveOverlayModeCount += 1
     }
-}
-
-// MARK: MockRemoteClient
-class MockRemoteClient: RemoteClientInterface {
-    var name: String { "name"}
-}
-
-// MARK: MockRemoteTab
-class MockRemoteTab: RemoteTabInterface {
-    var URL: URL { Foundation.URL(string: "www.test.com")! }
-
-    var title: String { "title" }
 }
