@@ -165,7 +165,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let sut = createSut()
 
         // iPhone layout
-        let trait = FakeTraitCollection()
+        let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
         trait.overridenVerticalSizeClass = .regular
 
@@ -183,7 +183,7 @@ class JumpBackInViewModelTests: XCTestCase {
         adaptor.syncedTab = JumpBackInSyncedTab(client: MockRemoteClient(), tab: MockRemoteTab())
         sut.updateData {}
 
-        let trait = FakeTraitCollection()
+        let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
         trait.overridenVerticalSizeClass = .regular
 
@@ -203,7 +203,7 @@ class JumpBackInViewModelTests: XCTestCase {
         adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1])
         sut.updateData {}
 
-        let trait = FakeTraitCollection()
+        let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
         trait.overridenVerticalSizeClass = .regular
 
@@ -222,7 +222,7 @@ class JumpBackInViewModelTests: XCTestCase {
         adaptor.mockHasSyncedTabFeatureEnabled = false
         sut.updateData {}
 
-        let trait = FakeTraitCollection()
+        let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
 
@@ -241,7 +241,7 @@ class JumpBackInViewModelTests: XCTestCase {
         adaptor.mockHasSyncedTabFeatureEnabled = false
         sut.updateData {}
 
-        let trait = FakeTraitCollection()
+        let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
 
@@ -259,7 +259,7 @@ class JumpBackInViewModelTests: XCTestCase {
         adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1])
         sut.updateData {}
 
-        let trait = FakeTraitCollection()
+        let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
 
@@ -277,7 +277,7 @@ class JumpBackInViewModelTests: XCTestCase {
         adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1])
         sut.updateData {}
 
-        let trait = FakeTraitCollection()
+        let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
 
@@ -313,7 +313,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
     func testRefreshData_noData() {
         let sut = createSut()
-        sut.refreshData(for: FakeTraitCollection())
+        sut.refreshData(for: MockTraitCollection())
 
         XCTAssertEqual(sut.jumpBackInList.tabs.count, 0)
         XCTAssertNil(sut.mostRecentSyncedTab)
@@ -323,7 +323,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let sut = createSut()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1])
-        sut.refreshData(for: FakeTraitCollection())
+        sut.refreshData(for: MockTraitCollection())
 
         XCTAssertEqual(sut.jumpBackInList.tabs.count, 1)
         XCTAssertNil(sut.mostRecentSyncedTab)
@@ -332,13 +332,13 @@ class JumpBackInViewModelTests: XCTestCase {
     func testRefreshData_syncedTab() {
         let sut = createSut()
         adaptor.syncedTab = JumpBackInSyncedTab(client: MockRemoteClient(), tab: MockRemoteTab())
-        sut.refreshData(for: FakeTraitCollection())
+        sut.refreshData(for: MockTraitCollection())
 
         XCTAssertEqual(sut.jumpBackInList.tabs.count, 0)
         XCTAssertNotNil(sut.mostRecentSyncedTab)
     }
 
-    // MARK: Did laod new data
+    // MARK: Did load new data
 
     func testDidLoadNewData_noNewData() {
         let sut = createSut()
@@ -486,28 +486,4 @@ class MockRemoteTab: RemoteTabInterface {
     var URL: URL { Foundation.URL(string: "www.test.com")! }
 
     var title: String { "title" }
-}
-
-// TODO: Laurie
-
-class MockDispatchGroup: DispatchGroupInterface {
-    func enter() {}
-
-    func leave() {}
-
-    func notify(qos: DispatchQoS,
-                flags: DispatchWorkItemFlags,
-                queue: DispatchQueue,
-                execute work: @escaping @convention(block) () -> Void) {
-        work()
-    }
-}
-
-class MockDispatchQueue: DispatchQueueInterface {
-    func async(group: DispatchGroup?,
-               qos: DispatchQoS,
-               flags: DispatchWorkItemFlags,
-               execute work: @escaping () -> Void) {
-        work()
-    }
 }
