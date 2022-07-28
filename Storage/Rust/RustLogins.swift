@@ -412,6 +412,13 @@ public class LoginRecordError: MaybeErrorType {
     }
 }
 
+public class RustLoginsError: MaybeErrorType {
+    public let description: String
+    public init(description: String) {
+        self.description = description
+    }
+}
+
 public class RustLogins {
     let sqlCipherDatabasePath: String
     let perFieldDatabasePath: String
@@ -501,7 +508,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
+                let error = RustLoginsError(description: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -539,7 +546,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
+                let error = RustLoginsError(description: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -623,7 +630,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
+                let error = RustLoginsError(description: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -644,7 +651,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
+                let error = RustLoginsError(description: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -666,7 +673,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
+                let error = RustLoginsError(description: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -687,7 +694,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
+                let error = RustLoginsError(description: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -713,7 +720,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
+                let error = RustLoginsError(description: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -734,7 +741,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
+                let error = RustLoginsError(description: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -755,7 +762,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
+                let error = RustLoginsError(description: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
