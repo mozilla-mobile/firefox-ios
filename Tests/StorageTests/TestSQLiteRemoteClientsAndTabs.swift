@@ -141,13 +141,13 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
     func testReplaceRemoteDevices() {
         let device1 = RemoteDevice(id: "fx1", name: "Device 1", type: "mobile", isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
         let device2 = RemoteDevice(id: "fx2", name: "Device 2 (local)", type: "desktop", isCurrentDevice: true, lastAccessTime: nil, availableCommands: [:])
-        let device3 = RemoteDevice(id: nil, name: "Device 3 (fauly)", type: "desktop", isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
-        let device4 = RemoteDevice(id: "fx4", name: "Device 4 (fauly)", type: nil, isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
+        let device3 = RemoteDevice(id: nil, name: "Device 3 (faulty)", type: "desktop", isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
+        let device4 = RemoteDevice(id: "fx4", name: "Device 4 (faulty)", type: nil, isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
 
         clientsAndTabs.replaceRemoteDevices([device1, device2, device3, device4]).succeeded()
 
         let devices = clientsAndTabs.db.runQuery("SELECT * FROM remote_devices", args: nil, factory: SQLiteRemoteClientsAndTabs.remoteDeviceFactory).value.successValue!.asArray()
-        XCTAssertEqual(devices.count, 1) // Fauly devices + local device were not inserted.
+        XCTAssertEqual(devices.count, 1) // Faulty devices + local device were not inserted.
 
         let device5 = RemoteDevice(id: "fx5", name: "Device 5", type: "mobile", isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
         clientsAndTabs.replaceRemoteDevices([device5]).succeeded()
