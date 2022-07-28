@@ -44,7 +44,7 @@ class TabsPayloadTests: XCTestCase {
         let tabsPayload1 = TabsPayload("{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{}]}")
         XCTAssertTrue(tabsPayload1.isValid())
         let tabs1 = tabsPayload1.tabs
-        XCTAssert(tabs1.count == 0)
+        XCTAssert(tabs1.isEmpty)
 
         let tabsPayload2 = TabsPayload("{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [null, {}, [], 123, false, true, \"\"]}")
         XCTAssertTrue(tabsPayload2.isValid())
