@@ -27,7 +27,7 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .Settings.Sync.FxASignInToSync, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: .Settings.Sync.ButtonTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override var accessibilityIdentifier: String? { return "SignInToSync" }

@@ -469,7 +469,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         let needsReAuth = rustAccount.accountNeedsReauth()
 
         guard let userProfile = rustAccount.userProfile else {
-            return SingleActionViewModel(title: .AppMenu.AppMenuBackUpAndSyncData,
+            return SingleActionViewModel(title: .AppMenu.SyncAndSaveData,
                                          iconString: ImageIdentifiers.sync,
                                          tapHandler: action).items
         }

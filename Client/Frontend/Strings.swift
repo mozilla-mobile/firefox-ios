@@ -1061,24 +1061,11 @@ extension String {
         }
 
         public struct Sync {
-            // TODO: Delete FxASignInToSync string with FXIOS-4392 since we'll be using ButtonTitle
-            public static let FxASignInToSync = MZLocalizedString(
-                "FxA.SignIntoSync",
-                value: "Sign in to Sync",
-                comment: "Button label to sign into Sync",
-                lastUpdated: .unknown)
             public static let ButtonTitle = MZLocalizedString(
                 "Settings.Sync.ButtonTitle.v103",
                 value: "Sync and Save Data",
                 comment: "Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data.",
                 lastUpdated: .v103)
-
-            // TODO: Delete FxASyncUsageDetails string with FXIOS-4392 since we'll be using ButtonDescription
-            public static let FxASyncUsageDetails = MZLocalizedString(
-                "FxA.SyncExplain",
-                value: "Get your tabs, bookmarks, and passwords from your other devices.",
-                comment: "Label explaining what sync does",
-                lastUpdated: .unknown)
             public static let ButtonDescription = MZLocalizedString(
                 "Settings.Sync.ButtonDescription.v103",
                 value: "Sign in to sync tabs, bookmarks, passwords, and more.",
@@ -1086,12 +1073,6 @@ extension String {
                 lastUpdated: .unknown)
 
             public struct SignInView {
-                // TODO: Delete FxASignInTitle string with FXIOS-4392 since we'll be using Title
-                public static let FxASignInTitle = MZLocalizedString(
-                    "fxa.signin.turn-on-sync",
-                    value: "Turn on Sync",
-                    comment: "FxA sign in view title",
-                    lastUpdated: .unknown)
                 public static let Title = MZLocalizedString(
                     "Settings.Sync.SignInView.Title.v103",
                     value: "Sync and Save Data",
@@ -3087,13 +3068,6 @@ extension String {
             "Menu.Share.v99",
             value: "Share",
             comment: "Label for the share button in the menu page. Pressing this button open the share menu to share the current website.",
-            lastUpdated: .v99)
-
-        // TODO: Delete AppMenuBackUpAndSyncData string with FXIOS-4392 since we'll be using SyncAndSaveData
-        public static let AppMenuBackUpAndSyncData = MZLocalizedString(
-            "Menu.SignInToSync.Label.v99",
-            value: "Sign in to Sync",
-            comment: "Label for the button, displayed in the menu, takes you to sync sign in when pressed.",
             lastUpdated: .v99)
         public static let SyncAndSaveData = MZLocalizedString(
             "Menu.SyncAndSaveData.v103",
