@@ -7,10 +7,31 @@ import Shared
 import Storage
 
 protocol TopSitesManagerDelegate: AnyObject {
-    func reloadTopSites()
+    func didLoadNewData()
 }
 
-class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
+/// Data adaptor to fetch the top sites data asynchronously
+/// The data gets updated from notifications on specific user actions
+protocol TopSitesDataAdaptor {
+
+    /// The prefered number of rows by the user, this can be from 1 to 4
+    /// Note that this isn't necessarely the number of rows that will appear since empty rows won't show.
+    /// In other words, the number of rows shown depends on the actual data and the user preference.
+    var numberOfRows: Int { get }
+
+    /// Get top sites data, already calculated and ready to be shown to the user
+    func getTopSitesData() -> [TopSite]
+
+    /// Calculate top site data
+    /// This calculation is dependent on the number of tiles per row that is shown in the user interface.
+    /// Top sites are composed of pinned sites, history, Contiles and Google top site.
+    /// Google top site is always first, then comes the contiles, pinned sites and history top sites.
+    /// We only add Google top site or Contiles if number of pins doesn't exeeds the available number shown of tiles.
+    /// - Parameter numberOfTilesPerRow: The number of tiles per row shown to the user
+    func recalculateTopSiteData(for numberOfTilesPerRow: Int)
+}
+
+class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, HasNimbusSponsoredTiles {
 
     private let profile: Profile
     private var topSites: [TopSite] = []
@@ -20,89 +41,51 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
     private var historySites: [Site] = []
     private var contiles: [Contile] = []
 
+    var notificationCenter: NotificationCenter
     weak var delegate: TopSitesManagerDelegate?
-    lazy var topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
-    lazy var googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
-    lazy var contileProvider: ContileProviderInterface = ContileProvider()
+    private let topSiteHistoryManager: TopSiteHistoryManager
+    private let googleTopSiteManager: GoogleTopSiteManager
+    private let contileProvider: ContileProviderInterface
+    private let dispatchGroup: DispatchGroupInterface
 
-    init(profile: Profile) {
+    // Pre-loading the data with a default number of tiles so we always show section when needed
+    // If this isn't done, then no data will be found from the view model and section won't show
+    // This gets ajusted once we actually know in which UI we're showing top sites.
+    private static let defaultTopSitesRowCount = 8
+
+    init(profile: Profile,
+         topSiteHistoryManager: TopSiteHistoryManager,
+         googleTopSiteManager: GoogleTopSiteManager,
+         contileProvider: ContileProviderInterface = ContileProvider(),
+         notificationCenter: NotificationCenter = NotificationCenter.default,
+         dispatchGroup: DispatchGroupInterface = DispatchGroup()
+    ) {
         self.profile = profile
+        self.topSiteHistoryManager = topSiteHistoryManager
+        self.googleTopSiteManager = googleTopSiteManager
+        self.contileProvider = contileProvider
+        self.notificationCenter = notificationCenter
+        self.dispatchGroup = dispatchGroup
         topSiteHistoryManager.delegate = self
+
+        setupNotifications(forObserver: self,
+                           observing: [.FirefoxAccountChanged,
+                                       .ProfileDidFinishSyncing,
+                                       .PrivateDataClearedHistory,
+                                       .TopSitesUpdated])
+
+        loadTopSitesData()
     }
 
-    func getSite(index: Int) -> TopSite? {
-        guard let topSite = topSites[safe: index] else { return nil }
-        return topSite
+    deinit {
+        notificationCenter.removeObserver(self)
     }
 
-    func getSiteDetail(index: Int) -> Site? {
-        guard let siteDetail = topSites[safe: index]?.site else { return nil }
-        return siteDetail
+    func getTopSitesData() -> [TopSite] {
+        return topSites
     }
 
-    var hasData: Bool {
-        return !topSites.isEmpty
-    }
-
-    var siteCount: Int {
-        return topSites.count
-    }
-
-    func removePinTopSite(site: Site) {
-        googleTopSiteManager.removeGoogleTopSite(site: site)
-        topSiteHistoryManager.removeTopSite(site: site)
-    }
-
-    func refreshIfNeeded(forceTopSites: Bool) {
-        topSiteHistoryManager.refreshIfNeeded(forceTopSites: forceTopSites)
-    }
-
-    // MARK: - Data loading
-
-    // Loads the data source of top sites
-    func loadTopSitesData(dataLoadingCompletion: (() -> Void)? = nil) {
-        let group = DispatchGroup()
-        loadContiles(group: group)
-        loadTopSites(group: group)
-
-        group.notify(queue: dataQueue) { [weak self] in
-            // Pre-loading the data with a default number of tiles so we always show section when needed
-            self?.calculateTopSiteData(numberOfTilesPerRow: 8)
-
-            dataLoadingCompletion?()
-        }
-    }
-
-    private func loadContiles(group: DispatchGroup) {
-        guard shouldLoadSponsoredTiles else { return }
-
-        group.enter()
-        contileProvider.fetchContiles { [weak self] result in
-            if case .success(let contiles) = result {
-                self?.contiles = contiles
-            }
-            group.leave()
-        }
-    }
-
-    private func loadTopSites(group: DispatchGroup) {
-        group.enter()
-
-        topSiteHistoryManager.getTopSites { [weak self] sites in
-            if let sites = sites {
-                self?.historySites = sites
-            }
-            group.leave()
-        }
-    }
-
-    // MARK: - Tiles placement calculation
-
-    /// Top sites are composed of pinned sites, history, Contiles and Google top site.
-    /// Google top site is always first, then comes the contiles, pinned sites and history top sites.
-    /// We only add Google top site or Contiles if number of pins doesn't exeeds the available number shown of tiles.
-    /// - Parameter numberOfTilesPerRow: The number of tiles per row shown to the user
-    func calculateTopSiteData(numberOfTilesPerRow: Int) {
+    func recalculateTopSiteData(for numberOfTilesPerRow: Int) {
         var sites = historySites
         let availableSpaceCount = getAvailableSpaceCount(numberOfTilesPerRow: numberOfTilesPerRow)
         let shouldAddGoogle = shouldAddGoogle(availableSpaceCount: availableSpaceCount)
@@ -122,10 +105,46 @@ class TopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
         sites.removeDuplicates()
 
         topSites = sites.map { TopSite(site: $0) }
-
-        // Refresh data in the background so we'll have fresh data next time we show
-        refreshIfNeeded(forceTopSites: false)
     }
+
+    // MARK: - Data loading
+
+    // Loads the data source of top sites. Internal for convenience of testing
+    func loadTopSitesData(dataLoadingCompletion: (() -> Void)? = nil) {
+        loadContiles()
+        loadTopSites()
+
+        dispatchGroup.notify(queue: dataQueue) { [weak self] in
+            self?.recalculateTopSiteData(for: TopSitesDataAdaptorImplementation.defaultTopSitesRowCount)
+            self?.delegate?.didLoadNewData()
+            dataLoadingCompletion?()
+        }
+    }
+
+    private func loadContiles() {
+        guard shouldLoadSponsoredTiles else { return }
+
+        dispatchGroup.enter()
+        contileProvider.fetchContiles { [weak self] result in
+            if case .success(let contiles) = result {
+                self?.contiles = contiles
+            }
+            self?.dispatchGroup.leave()
+        }
+    }
+
+    private func loadTopSites() {
+        dispatchGroup.enter()
+
+        topSiteHistoryManager.getTopSites { [weak self] sites in
+            if let sites = sites {
+                self?.historySites = sites
+            }
+            self?.dispatchGroup.leave()
+        }
+    }
+
+    // MARK: - Tiles placement calculation
 
     /// Get available space count for the sponsored tiles and Google tiles
     /// - Parameter numberOfTilesPerRow: Comes from top sites view model and accounts for different layout (landscape, portrait, iPhone, iPad, etc).
@@ -250,10 +269,25 @@ private extension Array where Element == Site {
 }
 
 // MARK: - DataObserverDelegate
-extension TopSitesManager: DataObserverDelegate {
+extension TopSitesDataAdaptorImplementation: DataObserverDelegate {
 
-    func didInvalidateDataSources(refresh forced: Bool, topSitesRefreshed: Bool) {
+    func didInvalidateDataSource(forceRefresh forced: Bool) {
         guard forced else { return }
-        delegate?.reloadTopSites()
+        loadTopSitesData()
+    }
+}
+
+// MARK: - Notifiable protocol
+extension TopSitesDataAdaptorImplementation: Notifiable, Loggable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .ProfileDidFinishSyncing,
+                .FirefoxAccountChanged,
+                .PrivateDataClearedHistory,
+                .TopSitesUpdated:
+            topSiteHistoryManager.refreshIfNeeded(forceRefresh: true)
+        default:
+            browserLog.warning("Received unexpected notification \(notification.name)")
+        }
     }
 }

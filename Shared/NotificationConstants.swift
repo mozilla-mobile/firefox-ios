@@ -84,6 +84,7 @@ extension Notification.Name {
 
     // MARK: Settings
 
-    public static let ReadingListUpdated = Notification.Name("ReadingListUpdated")
     public static let BookmarksUpdated = Notification.Name("BookmarksUpdated")
+    public static let ReadingListUpdated = Notification.Name("ReadingListUpdated")
+    public static let TopSitesUpdated = Notification.Name("TopSitesUpdated")
 }
