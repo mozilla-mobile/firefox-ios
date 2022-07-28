@@ -16,7 +16,7 @@ func makeDeletedHistoryRecord(_ guid: GUID) -> Record<HistoryPayload> {
     // Local modified time is ignored in upload serialization.
     let modified: Timestamp = 0
 
-    // Sortindex for history is frecency. Make deleted items more frecent than almost
+    // Sortindex for history is frequency. Make deleted items more frequent than almost
     // anything.
     let sortindex = 5_000_000
 
@@ -33,7 +33,7 @@ func makeDeletedHistoryRecord(_ guid: GUID) -> Record<HistoryPayload> {
 func makeHistoryRecord(_ place: Place, visits: [Visit]) -> Record<HistoryPayload> {
     let id = place.guid
     let modified: Timestamp = 0    // Ignored in upload serialization.
-    let sortindex = 1              // TODO: frecency!
+    let sortindex = 1              // TODO: frequency!
     let ttl = HistoryTTLInSeconds
     let json = JSON([
         "id": id,

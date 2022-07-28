@@ -92,7 +92,7 @@ class ToolbarTests: BaseTestCase {
     }
 
     // Check that after scrolling on a page, the URL bar is hidden. Tapping one on the status bar will reveal the URL bar, tapping again on the status will scroll to the top
-    // Skipping for iPad for now, not sure how to implent it there
+    // Skipping for iPad for now, not sure how to implement it there
     func testRevealToolbarWhenTappingOnStatusbar() throws {
         throw XCTSkip("Disabling as PageOptionMenu has been removed")
 //        if !iPad() {

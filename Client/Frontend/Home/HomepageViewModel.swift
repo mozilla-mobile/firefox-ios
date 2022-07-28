@@ -38,7 +38,7 @@ class HomepageViewModel: FeatureFlaggable {
 
     // MARK: - Properties
 
-    // Privacy of home page is controlled throught notifications since tab manager selected tab
+    // Privacy of home page is controlled through notifications since tab manager selected tab
     // isn't always the proper privacy mode that should be reflected on the home page
     var isPrivate: Bool {
         didSet {
@@ -59,7 +59,7 @@ class HomepageViewModel: FeatureFlaggable {
         }
     }
 
-    /// Record view appeared is sent multitple times, this avoids recording telemetry mutltiple times for one appearence
+    /// Record view appeared is sent multiple times, this avoids recording telemetry multiple times for one appearance
     private var viewAppeared: Bool = false
 
     var shownSections = [HomepageSectionType]()

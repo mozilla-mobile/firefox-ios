@@ -143,7 +143,7 @@ class BookmarkingTests: BaseTestCase {
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "http://www.olx.ro")
 
-        // Site table existes but is empty
+        // Site table exists but is empty
         waitForExistence(app.tables["SiteTable"])
         XCTAssertEqual(app.tables["SiteTable"].cells.count, 0)
         typeOnSearchBar(text: "\r")
@@ -278,7 +278,7 @@ class BookmarkingTests: BaseTestCase {
         waitForTabsButton()
         bookmark()
 
-        // Check that it appers in Bookmarks panel
+        // Check that it appears in Bookmarks panel
         navigator.goto(LibraryPanel_Bookmarks)
         waitForExistence(app.tables["Bookmarks List"], timeout: 5)
         app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()

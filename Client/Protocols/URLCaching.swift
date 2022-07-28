@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-/// Protocol to provide a caching functionnality for network calls
+/// Protocol to provide a caching functionality for network calls
 protocol URLCaching {
     var urlCache: URLCache { get }
 
@@ -15,7 +15,7 @@ protocol URLCaching {
 }
 
 extension URLCaching {
-    // The default maximum cache age, 1 hour in milliseconds, can be overriden
+    // The default maximum cache age, 1 hour in milliseconds, can be overridden
     var maxCacheAge: Timestamp { OneMinuteInMilliseconds * 60 }
     private var cacheAgeKey: String { "cache-time" }
 

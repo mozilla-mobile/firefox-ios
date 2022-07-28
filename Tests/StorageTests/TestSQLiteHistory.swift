@@ -941,7 +941,7 @@ class TestSQLiteHistory: XCTestCase {
         self.deleteDatabases()
     }
 
-    // Test that our visit partitioning for frecency is correct.
+    // Test that our visit partitioning for frequency is correct.
     func testHistoryLocalAndRemoteVisits() {
         let db = BrowserDB(filename: "testHistoryLocalAndRemoteVisits.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
@@ -1237,7 +1237,7 @@ class TestSQLiteHistory: XCTestCase {
             >>> { history.addLocalVisit(siteVisit3) }
             >>> checkSitesByFrecency { (sites: Cursor) -> Success in
                 XCTAssertEqual(2, sites.count)
-                // They're in order of frecency.
+                // They're in order of frequency.
                 XCTAssertEqual(site1Changed.title, sites[0]!.title)
                 XCTAssertEqual(site2.title, sites[1]!.title)
                 return succeed()
@@ -1265,7 +1265,7 @@ class TestSQLiteHistory: XCTestCase {
             checkDeletedCount(1)
             >>> checkSitesByFrecency { (sites: Cursor) -> Success in
                     XCTAssertEqual(1, sites.count)
-                    // They're in order of frecency.
+                    // They're in order of frequency.
                     XCTAssertEqual(site1Changed.title, sites[0]!.title)
                     return succeed()
             }

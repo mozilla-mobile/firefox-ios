@@ -292,7 +292,7 @@ class HistoryTests: BaseTestCase {
     }
 
     // Private function created to select desired option from the "Clear Recent History" list
-    // We used this aproch to avoid code duplication
+    // We used this approach to avoid code duplication
     private func tapOnClearRecentHistoryOption(optionSelected: String) {
         app.sheets.buttons[optionSelected].tap()
     }
@@ -320,7 +320,7 @@ class HistoryTests: BaseTestCase {
         for entry in oldHistoryEntries {
             XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
         }
-        // Go to 'goolge.com' to create a recent history entry.
+        // Go to 'google.com' to create a recent history entry.
         navigateToGoogle()
         navigator.performAction(Action.ClearRecentHistory)
         // Recent data will be removed after calling tapOnClearRecentHistoryOption(optionSelected: "Today").

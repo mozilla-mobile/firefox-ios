@@ -79,7 +79,7 @@ open class RustFirefoxAccounts {
 
             RustFirefoxAccounts.shared.accountManager.fill(manager)
 
-            // After everthing is setup, register for push notifications
+            // After everything is setup, register for push notifications
             if manager.hasAccount() {
                 NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
             }

@@ -147,7 +147,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         clientsAndTabs.replaceRemoteDevices([device1, device2, device3, device4]).succeeded()
 
         let devices = clientsAndTabs.db.runQuery("SELECT * FROM remote_devices", args: nil, factory: SQLiteRemoteClientsAndTabs.remoteDeviceFactory).value.successValue!.asArray()
-        XCTAssertEqual(devices.count, 1) // Fauly devices + local device were not inserted.
+        XCTAssertEqual(devices.count, 1) // Fault devices + local device were not inserted.
 
         let device5 = RemoteDevice(id: "fx5", name: "Device 5", type: "mobile", isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
         clientsAndTabs.replaceRemoteDevices([device5]).succeeded()

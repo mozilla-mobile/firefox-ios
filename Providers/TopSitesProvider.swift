@@ -8,17 +8,17 @@ import UIKit
 import Storage
 import SyncTelemetry
 
-/// A provider for frecency and pinned top sites, used for the home page and widgets
+/// A provider for frequency and pinned top sites, used for the home page and widgets
 protocol TopSitesProvider {
 
-    /// Get top sites from frecency and pinned tiles
+    /// Get top sites from frequency and pinned tiles
     func getTopSites(numberOfMaxItems: Int,
                      completion: @escaping ([Site]?) -> Void)
 
     /// Fetches the default top sites
     func defaultTopSites(_ prefs: Prefs) -> [Site]
 
-    /// Default maximum number of items fetched for frecency
+    /// Default maximum number of items fetched for frequency
     static var numberOfMaxItems: Int { get }
 
     /// Hide with search param is defined by adMarketplace, indicates this URL was registered through sponsored clicks
@@ -111,7 +111,7 @@ private extension TopSitesProviderImplementation {
     }
 
     func calculateTopSites(completion: ([Site]?) -> Void) {
-        // Filter out frecency history which resulted from sponsored tiles clicks
+        // Filter out frequency history which resulted from sponsored tiles clicks
         let sites = frecencySites.filter { !$0.url.contains(hideWithSearchParam) }
 
         // How sites are merged together. We compare against the url's base domain.
