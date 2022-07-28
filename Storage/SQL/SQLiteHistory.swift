@@ -163,7 +163,7 @@ private let topSitesQuery = """
         """
 
 /**
- * The init for this will perform the heaviest part of the frequency query
+ * The init for this will perform the heaviest part of the frecency query
  * and create a temporary table that can be queried quickly. Currently this accounts for
  * >75% of the query time.
  * The scope/lifetime of this object is important as the data is 'frozen' until a new instance is created.
@@ -285,8 +285,8 @@ private struct SQLiteFrecentHistory: FrecentHistory {
 
         // Next: limit to only those that have been visited at all within the last six months.
         // (Don't do that in the innermost: we want to get the full count, even if some visits are older.)
-        // Discard all but the 1000 most frequent.
-        // Compute and return the frequency for all 1000 URLs.
+        // Discard all but the 1000 most frecent.
+        // Compute and return the frecency for all 1000 URLs.
         let frecenciedSQL = """
             SELECT *, (\(localFrecencySQL) + \(remoteFrecencySQL)) AS frecency
             FROM (\(ungroupedSQL))
@@ -301,9 +301,9 @@ private struct SQLiteFrecentHistory: FrecentHistory {
             LIMIT 1000
             """
 
-        // Next: merge by domain and select the URL with the max frequency of a domain, ordering by that sum frecency and reducing to a (typically much lower) limit.
-        // NOTE: When using GROUP BY we need to be explicit about which URL to use when grouping. By using "max(frequency)" the result row
-        //       for that domain will contain the projected URL corresponding to the history item with the max frequency, https://sqlite.org/lang_select.html#resultset
+        // Next: merge by domain and select the URL with the max frecency of a domain, ordering by that sum frecency and reducing to a (typically much lower) limit.
+        // NOTE: When using GROUP BY we need to be explicit about which URL to use when grouping. By using "max(frecency)" the result row
+        //       for that domain will contain the projected URL corresponding to the history item with the max frecency, https://sqlite.org/lang_select.html#resultset
         //       This is the behavior we want in order to ensure that the most popular URL for a domain is used for the top sites tile.
         // TODO: make is_bookmarked here accurate by joining against ViewAllBookmarks.
         // TODO: ensure that the same URL doesn't appear twice in the list, either from duplicate

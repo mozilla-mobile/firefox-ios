@@ -40,7 +40,7 @@ public protocol BrowserHistory {
 }
 
 /**
- * An interface for fast repeated frequency queries.
+ * An interface for fast repeated frecency queries.
  */
 public protocol FrecentHistory {
     func getSites(matchingSearchQuery filter: String?, limit: Int) -> Deferred<Maybe<Cursor<Site>>>
