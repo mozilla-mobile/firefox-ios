@@ -46,7 +46,7 @@ class LoginDetailViewController: SensitiveViewController {
         tableView.delegate = self
         tableView.dataSource = self
 
-        // Add empty footer view to prevent seperators from being drawn past the last item.
+        // Add empty footer view to prevent separators from being drawn past the last item.
         tableView.tableFooterView = UIView()
     }
 

@@ -93,7 +93,7 @@ class BrowserViewController: UIViewController {
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
 
-    // Header can contain the top url bar, bottomContainer only containts toolbar
+    // Header can contain the top url bar, bottomContainer only contains toolbar
     // OverKeyboardContainer contains the reader mode and maybe the bottom url bar
     var header: BaseAlphaStackView = .build { _ in }
     var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
@@ -1846,7 +1846,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
         let searchSettingsTableViewController = SearchSettingsTableViewController()
         searchSettingsTableViewController.model = self.profile.searchEngines
         searchSettingsTableViewController.profile = self.profile
-        // Update saerch icon when the searchengine changes
+        // Update search icon when the searchengine changes
         searchSettingsTableViewController.updateSearchIcon = {
             self.urlBar.updateSearchEngineImage()
             self.searchController?.reloadSearchEngines()

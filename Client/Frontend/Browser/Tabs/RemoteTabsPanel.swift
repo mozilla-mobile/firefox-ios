@@ -419,7 +419,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
         emptyStateImageView.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(instructionsLabel)
 
-            // Sets proper top constraint for iPhone 6 in portait and for iPad.
+            // Sets proper top constraint for iPhone 6 in portrait and for iPad.
             make.centerY.equalTo(contentView).offset(UX.EmptyTabContentOffset + 30).priority(100)
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.

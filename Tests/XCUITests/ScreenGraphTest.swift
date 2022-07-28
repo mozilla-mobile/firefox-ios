@@ -33,7 +33,7 @@ extension XCTestCase {
 }
 
 extension ScreenGraphTest {
-    // Temoporary disable since it is failing intermittently on BB
+    // Temporary disable since it is failing intermittently on BB
     func testUserStateChanges() {
         XCTAssertNil(navigator.userState.url, "Current url is empty")
 

@@ -51,7 +51,7 @@ class AppLaunchUtil {
         Logger.syncLogger.newLogWithDate(logDate)
         Logger.browserLogger.newLogWithDate(logDate)
 
-        // Initialize the feature flag subsytem.
+        // Initialize the feature flag subsystem.
         // Among other things, it toggles on and off Nimbus, Contile, Adjust.
         // i.e. this must be run before initializing those systems.
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -60,7 +60,7 @@ class AppLaunchUtil {
         // Migrate wallpaper folder
         WallpaperMigrationUtility(with: profile).attemptMigration()
 
-        // Start intialzing the Nimbus SDK. This should be done after Glean
+        // Start initializing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
 
@@ -119,7 +119,7 @@ class AppLaunchUtil {
     }
 
     private func initializeExperiments() {
-        // We intialize the generated FxNimbus singleton very early on with a lazily
+        // We initialize the generated FxNimbus singleton very early on with a lazily
         // constructed singleton.
         FxNimbus.shared.initialize(with: { Experiments.shared })
         // We also make sure that any cache invalidation happens after each applyPendingExperiments().

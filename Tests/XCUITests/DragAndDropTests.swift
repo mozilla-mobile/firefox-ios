@@ -14,7 +14,7 @@ let exampleDomainTitle = "Example Domain"
 let twitterTitle = "Twitter"
 
 class DragAndDropTests: BaseTestCase {
-/* Disble test suite since in theory it does not make sense with Chron tabs implementation
+/* Disable test suite since in theory it does not make sense with Chron tabs implementation
     override func tearDown() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         super.tearDown()

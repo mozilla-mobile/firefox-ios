@@ -1167,7 +1167,7 @@ extension TelemetryWrapper {
 // MARK: - Firefox Home Page
 extension TelemetryWrapper {
 
-    /// Bundle the extras dictionnary for the home page origin
+    /// Bundle the extras dictionary for the home page origin
     static func getOriginExtras(isZeroSearch: Bool) -> [String: String] {
         let origin = isZeroSearch ? TelemetryWrapper.EventValue.fxHomepageOriginZeroSearch : TelemetryWrapper.EventValue.fxHomepageOriginOther
         return [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: origin.rawValue]

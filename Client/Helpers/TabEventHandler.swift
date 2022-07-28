@@ -63,7 +63,7 @@ protocol TabEventHandler: AnyObject {
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool)
 }
 
-// Provide default implmentations, because we don't want to litter the code with
+// Provide default implementations, because we don't want to litter the code with
 // empty methods, and `@objc optional` doesn't really work very well.
 extension TabEventHandler {
     func tab(_ tab: Tab, didChangeURL url: URL) {}

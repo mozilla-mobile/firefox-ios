@@ -4,7 +4,7 @@
 
 import MozillaAppServices
 
-/// This procol will give access to the `Experiments` singleton and require
+/// This protocol will give access to the `Experiments` singleton and require
 /// the conforming class to set up an experiment.
 protocol UserResearch {
     func setupExperiment()

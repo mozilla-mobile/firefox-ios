@@ -38,7 +38,7 @@ class TopTabsViewController: UIViewController {
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.cellIdentifier
     var profile: Profile
 
-    // MARK: - UI ELements
+    // MARK: - UI Elements
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
         collectionView.register(cellType: TopTabCell.self)
@@ -245,7 +245,7 @@ class TopTabsViewController: UIViewController {
               !collectionView.frame.isEmpty
         else { return }
 
-        // Check wether first or last tab is being selected.
+        // Check whether first or last tab is being selected.
         if index == 0 {
             topTabFader.setFader(forSides: .right)
 

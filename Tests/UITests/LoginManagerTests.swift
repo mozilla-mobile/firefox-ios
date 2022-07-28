@@ -399,7 +399,7 @@ class LoginManagerTests: KIFTestCase {
             tester().tapRow(at: path, inTableViewWithAccessibilityIdentifier: "Login List")
         }
 
-        // Go up, down and back up to for some recyling
+        // Go up, down and back up to for some recycling
         tester().scrollView(withAccessibilityIdentifier: "Login List", byFractionOfSizeHorizontal: 0, vertical: 1)
         tester().scrollView(withAccessibilityIdentifier: "Login List", byFractionOfSizeHorizontal: 0, vertical: 1)
         tester().scrollView(withAccessibilityIdentifier: "Login List", byFractionOfSizeHorizontal: 0, vertical: 1)

@@ -94,7 +94,7 @@ class NavigationTest: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        // Open FxAccount from settings menu and check the Sign in to Firefox scren
+        // Open FxAccount from settings menu and check the Sign in to Firefox screen
         let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts["Sign in to Sync"]
         signInToFirefoxStaticText.tap()
         checkFirefoxSyncScreenShownViaSettings()
@@ -107,7 +107,7 @@ class NavigationTest: BaseTestCase {
         closeButtonFxView.tap()
     }
 
-    // Beacuse the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
+    // Because the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
     private func checkFirefoxSyncScreenShownViaSettings() {
         waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
         app.buttons["EmailSignIn.button"].tap()
@@ -124,7 +124,7 @@ class NavigationTest: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
-        // Open FxAccount from remote tab panel and check the Sign in to Firefox scren
+        // Open FxAccount from remote tab panel and check the Sign in to Firefox screen
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleSyncMode)
 
@@ -143,7 +143,7 @@ class NavigationTest: BaseTestCase {
         navigator.goto(TabTray)
         navigator.openURL(website_1["url"]!)
         waitForValueContains(app.textFields["url"], value: website_1["value"]!)
-        // Element at the TOP. TBChanged once the web page is correclty shown
+        // Element at the TOP. TBChanged once the web page is correctly shown
         let topElement = app.links.staticTexts["Mozilla"].firstMatch
 
         // Element at the BOTTOM

@@ -66,7 +66,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     // Default favicons and background colors provided via mozilla/tippy-top-sites
     private class func getBundledIcons() -> [String: BundledIconType] {
 
-        // Alows us to access bundle from extensions
+        // Allows us to access bundle from extensions
         // Also found in `SentryIntegration`. Taken from: https://stackoverflow.com/questions/26189060/get-the-main-app-bundle-from-within-extension
         var bundle = Bundle.main
         if bundle.bundleURL.pathExtension == "appex" {
@@ -219,7 +219,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
     class func getFaviconFromDiskCache(imageKey: String) -> UIImage? {
         guard checkWidgetKitImageCache(imageKey: imageKey) else { return nil }
-        // image cache found now we retrive image
+        // image cache found now we retrieve image
         let fileManager = FileManager.default
         guard let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier) else { return nil }
         let imageKeyDirectoryUrl = container.appendingPathComponent("Library/Caches/fxfavicon/\(imageKey)")

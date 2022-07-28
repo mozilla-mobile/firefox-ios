@@ -24,7 +24,7 @@ public class ConfigurableGradientView: UIView {
         return CAGradientLayer.self
     }
 
-    /// The main interfact through which the gradient view is configured.
+    /// The main interface through which the gradient view is configured.
     ///
     /// - Parameters:
     ///   - colors: An array outlining the colors through which the gradient will shift.

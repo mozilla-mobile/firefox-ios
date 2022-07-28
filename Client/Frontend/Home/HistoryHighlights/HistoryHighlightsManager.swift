@@ -54,8 +54,8 @@ class HistoryHighlightsManager {
     /// Fetches HistoryHighlight from A~S, and then filters currently open
     /// tabs against history highlights in order to avoid duplicated items. Then,
     /// if `shouldGroupHighlights` is set to true, applies group logic and finally, 
-    /// collates indivdual HistoryHighlight with `ASGroup<HistoryHighlight>`
-    /// to return the top nine results alternating betwen them.
+    /// collates individual HistoryHighlight with `ASGroup<HistoryHighlight>`
+    /// to return the top nine results alternating between them.
     ///
     /// - Parameters:
     ///   - profile: The user's `Profile` info
@@ -133,7 +133,7 @@ class HistoryHighlightsManager {
     /// - Parameters:
     ///   - groups: Search Groups of `ASGroup<HistoryHighlight>`
     ///   - highlights: Individual `HistoryHighlight`
-    /// - Returns: A  `HighlightItem` arrray alternating `HistoryHighlight` and search `ASGroup<HistoryHighlight>`
+    /// - Returns: A  `HighlightItem` array alternating `HistoryHighlight` and search `ASGroup<HistoryHighlight>`
     private static func collateForRecentlySaved(from groups: [ASGroup<HistoryHighlight>]?,
                                                 and highlights: [HistoryHighlight]) -> [HighlightItem] {
         guard let groups = groups, !groups.isEmpty else { return highlights }

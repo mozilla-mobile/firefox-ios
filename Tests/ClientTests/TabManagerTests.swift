@@ -541,7 +541,7 @@ class TabManagerTests: XCTestCase {
     }
 
     // Private tabs and regular tabs are in the same tabs array.
-    // Make sure that when a private tab is added inbetween regular tabs it isnt accidently selected when removing a regular tab
+    // Make sure that when a private tab is added inbetween regular tabs it isnt accidentally selected when removing a regular tab
     func testTabsIndex() {
         // We add 2 tabs. Then a private one before adding another normal tab and selecting it.
         // Make sure that when the last one is deleted we dont switch to the private tab

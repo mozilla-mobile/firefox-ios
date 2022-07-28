@@ -76,7 +76,7 @@ class ReadabilityOperation: Operation {
                     // TODO Fail
                 }
             case .error:
-                // TODO Not entitely sure what to do on error. Needs UX discussion and followup bug.
+                // TODO Not entirely sure what to do on error. Needs UX discussion and followup bug.
                 break
             }
         }

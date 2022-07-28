@@ -7,7 +7,7 @@ import Foundation
 /// A protocol for any object to inherit the `cellIdentifier` string property.
 ///
 /// Intended for use with views that must register/deque cells, this allows
-/// a cleaner impelementation of the cell identifier by bypassing it being
+/// a cleaner implementation of the cell identifier by bypassing it being
 /// hardcoded which is prone to error.
 ///
 /// As defined in the extensions, this will generally, where adhering to the

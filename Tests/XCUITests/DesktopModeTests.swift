@@ -128,7 +128,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.nowAt(BrowserTab)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        // Workaround to be sure the snackbar dissapers
+        // Workaround to be sure the snackbar disappears
         waitUntilPageLoad()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton], timeout: 5)
         app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].tap()

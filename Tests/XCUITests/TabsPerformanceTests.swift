@@ -102,7 +102,7 @@ class TabsPerformanceTest: BaseTestCase {
     // 2. Open tabs Tray
     // 3. Open 1 new tab
     // 4. Close 1 tab
-    // 5. Cloase all tabs
+    // 5. Close all tabs
     // 6. Switch to private browsing
     // 7. Switch back from private browsing
     // 8. Create new tab in private browsing

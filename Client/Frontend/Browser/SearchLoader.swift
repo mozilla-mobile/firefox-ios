@@ -141,7 +141,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
         // If the pre-path component (including the scheme) starts with the query, just use it as is.
         var prePathURL = (url as NSString).substring(with: match.range(at: 0))
         if prePathURL.hasPrefix(query) {
-            // Trailing slashes in the autocompleteTextField cause issues with Swype keyboard. Bug 1194714
+            // Trailing slashes in the autocompleteTextField cause issues with Swipe keyboard. Bug 1194714
             if prePathURL.hasSuffix("/") {
                 prePathURL.remove(at: prePathURL.index(before: prePathURL.endIndex))
             }

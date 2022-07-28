@@ -5,7 +5,7 @@
 import Foundation
 import Storage
 @testable import Client
-// Disabling due to failure in iOS 13/Xcode 11. Investigation requiered
+// Disabling due to failure in iOS 13/Xcode 11. Investigation required
 /*
 class ReopenLastTabTests: KIFTestCase {
     
