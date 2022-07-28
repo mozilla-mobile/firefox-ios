@@ -43,6 +43,8 @@ class ClearHistoryHelper {
                 self.profile.history.removeHistoryFromDate(date).uponQueue(.global(qos: .userInteractive)) { result in
                     guard let completion = didComplete else { return }
                     self.profile.recentlyClosedTabs.removeTabsFromDate(startOfDay)
+
+                    NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
                     completion(startOfDay)
                 }
             }

@@ -1,0 +1,28 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Foundation
+
+protocol DispatchGroupInterface {
+    func enter()
+    func leave()
+    func notify(qos: DispatchQoS,
+                flags: DispatchWorkItemFlags,
+                queue: DispatchQueue,
+                execute work: @escaping @convention(block) () -> Void)
+}
+
+extension DispatchGroupInterface {
+    func notify(qos: DispatchQoS = .unspecified,
+                flags: DispatchWorkItemFlags = [],
+                queue: DispatchQueue,
+                execute work: @escaping @convention(block) () -> Void) {
+        notify(qos: qos,
+               flags: flags,
+               queue: queue,
+               execute: work)
+    }
+}
+
+extension DispatchGroup: DispatchGroupInterface {}
