@@ -607,6 +607,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     override func applyTheme() {
         super.applyTheme()
+        searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
         reloadData()
     }
 

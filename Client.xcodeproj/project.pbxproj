@@ -76,6 +76,7 @@
 		213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */; };
 		213B67A827CE721E000542F5 /* StartAtHomeHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */; };
 		21534904288201E300FADB4D /* GleanPlumbMessageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */; };
+		215349062886007900FADB4D /* GleanPlumbMessageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */; };
 		215A5F9F283D38B800FF4053 /* WallpapersCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A5F9E283D38B800FF4053 /* WallpapersCardViewController.swift */; };
 		215B457F27D7FD4B00E5E800 /* TabGroupData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B457E27D7FD4B00E5E800 /* TabGroupData.swift */; };
 		215B458027D7FD7D00E5E800 /* TabGroupData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B457E27D7FD4B00E5E800 /* TabGroupData.swift */; };
@@ -1904,6 +1905,7 @@
 		213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeHelper.swift; sourceTree = "<group>"; };
 		213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeHelperTests.swift; sourceTree = "<group>"; };
 		215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageManagerTests.swift; sourceTree = "<group>"; };
+		215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageStoreTests.swift; sourceTree = "<group>"; };
 		215A5F9E283D38B800FF4053 /* WallpapersCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpapersCardViewController.swift; sourceTree = "<group>"; };
 		215B457E27D7FD4B00E5E800 /* TabGroupData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupData.swift; sourceTree = "<group>"; };
 		215B458127DA420400E5E800 /* TabMetadataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMetadataManager.swift; sourceTree = "<group>"; };
@@ -7512,6 +7514,7 @@
 				43DF9D982874C0690038F33A /* ImageLoadingHandlerTests.swift */,
 				21737FB528789EA9000A9A92 /* HistoryPanelViewModelTests.swift */,
 				215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */,
+				215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -10151,6 +10154,7 @@
 				8A5BD95A28788A3D000FE773 /* TopSitesHelperTests.swift in Sources */,
 				39C137972655798A003DC662 /* NimbusIntegrationTests.swift in Sources */,
 				215B458427DA87FC00E5E800 /* TabMetadataManagerTests.swift in Sources */,
+				215349062886007900FADB4D /* GleanPlumbMessageStoreTests.swift in Sources */,
 				0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */,
 				8A33222227DFE658008F809E /* NimbusMock.swift in Sources */,
 				8A8629E72880B7330096DDB1 /* BookmarksPanelTests.swift in Sources */,
