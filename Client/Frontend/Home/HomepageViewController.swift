@@ -8,7 +8,7 @@ import Storage
 import SyncTelemetry
 import MozillaAppServices
 
-class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageManagable {
+class HomepageViewController: UIViewController, HomePanel {
 
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
@@ -33,7 +33,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     private var contextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
 
-    private var homeTabBanner: HomepageTabBanner?
+    private var homeTabBanner: HomepageMessageCard?
 
     // Content stack views contains the home tab banner and collection view.
     // Home tab banner cannot be added to collection view since it's pinned at the top of the view.
@@ -114,7 +114,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        if shouldDisplayHomeTabBanner {
+        if viewModel.shouldDisplayHomeTabBanner {
             showHomeTabBanner()
         }
     }
@@ -308,7 +308,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     // MARK: - Contextual hint
     private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
         guard contextualHintViewController.shouldPresentHint(),
-              !shouldDisplayHomeTabBanner
+              !viewModel.shouldDisplayHomeTabBanner
         else { return }
 
         contextualHintViewController.configure(
@@ -334,10 +334,6 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     }
 
     // MARK: - Home Tab Banner
-
-    private var shouldDisplayHomeTabBanner: Bool {
-        return messagingManager.hasMessage(for: .newTabCard)
-    }
 
     private func showHomeTabBanner() {
         createHomeTabBannerCard()

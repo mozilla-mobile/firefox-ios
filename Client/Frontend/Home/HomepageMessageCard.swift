@@ -11,7 +11,7 @@ import UIKit
 /// The HomeTabBanner is one UI surface that is being targeted for experimentation with `GleanPlumb` AKA Messaging.
 /// When there are GleanPlumbMessages, the card will get populated with that data. Otherwise, we'll continue showing the
 /// default browser message AKA the evergreen.
-class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
+class HomepageMessageCard: UIView {
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner
     typealias BannerCopy = String.FirefoxHomepage.HomeTabBanner.EvergreenMessage
@@ -34,11 +34,11 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
 
     // MARK: - Properties
 
+    private var viewModel: HomepageMessageCardProtocol = HomepageMessageCardViewModel()
     private var heightConstraint: NSLayoutConstraint?
     private var maxHeight: CGFloat = CGFloat.greatestFiniteMagnitude
 
     public var dismissClosure: (() -> Void)?
-    var message: GleanPlumbMessage?
 
     // UI
     private lazy var bannerTitle: UILabel = .build { label in
@@ -109,9 +109,7 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
         super.init(frame: frame)
 
         setupLayout()
-
-        if let message = messagingManager.getNextMessage(for: .newTabCard) {
-            self.message = message
+        if let message = viewModel.getMessage(for: .newTabCard) {
             applyGleanMessage(message)
         }
     }
@@ -226,7 +224,7 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
         }
 
         descriptionText.text = message.data.text
-        messagingManager.onMessageDisplayed(message)
+        viewModel.handleMessageDiplayed()
     }
 
     // MARK: Actions
@@ -234,13 +232,13 @@ class HomepageTabBanner: UIView, GleanPlumbMessageManagable {
     @objc private func dismissCard() {
         self.dismissClosure?()
 
-        message.map(messagingManager.onMessageDismissed)
+        viewModel.handleMessageDismiss()
     }
 
     /// The surface needs to handle CTAs a certain way when there's a message.
     @objc func handleCTA() {
         self.dismissClosure?()
 
-        message.map(messagingManager.onMessagePressed)
+        viewModel.handleMessagePressed()
     }
 }

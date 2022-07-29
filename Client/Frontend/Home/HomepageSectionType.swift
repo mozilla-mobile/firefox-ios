@@ -6,6 +6,7 @@ import Foundation
 
 enum HomepageSectionType: Int, CaseIterable {
     case logoHeader
+    case messageCard
     case topSites
     case jumpBackIn
     case recentlySaved
@@ -27,6 +28,8 @@ enum HomepageSectionType: Int, CaseIterable {
     var cellIdentifier: String {
         switch self {
         case .logoHeader: return HomeLogoHeaderCell.cellIdentifier
+        // TODO: Yoana return cell identifier once HomeTabBanner is update to CollectionViewCell
+        case .messageCard: return ""
         case .topSites: return "" // Top sites has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .pocket: return "" // Pocket has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .jumpBackIn: return "" // JumpBackIn has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol

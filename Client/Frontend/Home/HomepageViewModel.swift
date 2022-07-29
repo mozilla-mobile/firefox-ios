@@ -67,12 +67,17 @@ class HomepageViewModel: FeatureFlaggable {
     // Child View models
     private var childViewModels: [HomepageViewModelProtocol]
     var headerViewModel: HomeLogoHeaderViewModel
+    var tabBannerViewModel: HomepageMessageCardViewModel
     var topSiteViewModel: TopSitesViewModel
     var recentlySavedViewModel: RecentlySavedCellViewModel
     var jumpBackInViewModel: JumpBackInViewModel
     var historyHighlightsViewModel: HistoryHightlightsViewModel
     var pocketViewModel: PocketViewModel
     var customizeButtonViewModel: CustomizeHomepageSectionViewModel
+
+    var shouldDisplayHomeTabBanner: Bool {
+        return tabBannerViewModel.shouldDisplayHomeTabBanner
+    }
 
     // MARK: - Initializers
     init(profile: Profile,
@@ -85,6 +90,7 @@ class HomepageViewModel: FeatureFlaggable {
         self.isZeroSearch = isZeroSearch
 
         self.headerViewModel = HomeLogoHeaderViewModel(profile: profile)
+        self.tabBannerViewModel = HomepageMessageCardViewModel()
         self.topSiteViewModel = TopSitesViewModel(profile: profile)
         self.jumpBackInViewModel = JumpBackInViewModel(
             profile: profile,
@@ -103,6 +109,7 @@ class HomepageViewModel: FeatureFlaggable {
         )
         self.customizeButtonViewModel = CustomizeHomepageSectionViewModel()
         self.childViewModels = [headerViewModel,
+//                                tabBannerViewModel,
                                 topSiteViewModel,
                                 jumpBackInViewModel,
                                 recentlySavedViewModel,
