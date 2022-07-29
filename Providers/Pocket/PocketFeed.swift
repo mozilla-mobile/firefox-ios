@@ -113,7 +113,9 @@ class Pocket: PocketStoriesProviding, FeatureFlaggable, URLCaching {
     }
 
     private var shouldUseMockData: Bool {
-        guard let pocketKey = pocketKey else { return false }
+        guard let pocketKey = pocketKey else {
+            return featureFlags.isCoreFeatureEnabled(.useMockData) ? true : false
+        }
 
         return featureFlags.isCoreFeatureEnabled(.useMockData) && pocketKey.isEmpty
     }
