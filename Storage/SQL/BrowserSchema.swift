@@ -660,7 +660,7 @@ open class BrowserSchema: Schema {
             is_deleted IS 0
         """
 
-    // This smushes together remote and local visits. So it goes.
+    // This smashes together remote and local visits. So it goes.
     fileprivate let historyVisitsView = """
         CREATE VIEW view_history_visits AS
         SELECT h.url AS url, max(v.date) AS visitDate, h.domain_id AS domain_id

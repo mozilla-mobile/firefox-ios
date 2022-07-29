@@ -163,7 +163,7 @@ class HistoryHighlightsTests: XCTestCase {
                          ("mozilla", "/group"),
                          ("amazon", "/group")]
         entryProvider.createHistoryEntry(siteEntry: testSites)
-        // 2 groups and 1 invidual item
+        // 2 groups and 1 individual item
         let expectedCount = 3
 
         let expectation = expectation(description: "Highlights")

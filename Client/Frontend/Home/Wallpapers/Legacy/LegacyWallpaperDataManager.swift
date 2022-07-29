@@ -28,11 +28,10 @@ private struct LegacyWallpaperCollection {
     /// region or time limited.
     ///
     /// - Parameters:
-    ///   - names: An array of the names of the wallpapers included in the collection.
+    ///   - wallpaperFileNames: An array of the names of the wallpapers included in the collection.
     ///   - type: The collection type.
-    ///   - expiryDate: An optional expiry date, on and after which the wallpapers in
-    ///         the array are no longer shown. If May 1, 2022, the collection is no
-    ///         longer visible on May 1, 2022.
+    ///   - shipDate: An optional shipping date
+    ///   - expiryDate: An optional expiry date, on and after which the wallpapers in the array are no longer shown.
     ///   - locales: An optional set of locales used to limit the regions to which
     ///         wallpapers in the collection are shown.
     init(wallpaperFileNames: [WallpaperID],

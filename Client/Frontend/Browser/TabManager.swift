@@ -611,7 +611,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
         DispatchQueue.main.async { [unowned self] in
             // select normal tab if there are no private tabs, we need to do this
-            // to accomodate for the case when a user dismisses tab tray while
+            // to accommodate for the case when a user dismisses tab tray while
             // they are in private mode and there are no tabs
             if isPrivate && self.privateTabs.count < 1 && !self.normalTabs.isEmpty {
                 self.selectTab(mostRecentTab(inTabs: self.normalTabs) ?? self.normalTabs.last,
@@ -968,7 +968,7 @@ extension TabManager: WKNavigationDelegate {
     }
 
     // The main frame JSContext is available, and DOM parsing has begun.
-    // Do not excute JS at this point that requires running prior to DOM parsing.
+    // Do not execute JS at this point that requires running prior to DOM parsing.
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         guard let tab = self[webView] else { return }
 

@@ -48,7 +48,7 @@ class SearchTermGroupsUtility {
     ///   - ordering: Order in which we want to return groups, `.orderedAscending` or
     ///   `.orderedDescending`. `.orderedSame` is also possible, but will return the exact
     ///   order of the group that was provided. Note: this does not affect the groups' items,
-    ///   which will alway return in ascending order.
+    ///   which will always return in ascending order.
     ///   - completion: completion handler that contains `[ASGroup<T>]`  dictionary and a
     ///   filteredItems list, `[T]`, which is comprised of items from the original input
     ///   that are not part of a group.
@@ -92,12 +92,12 @@ class SearchTermGroupsUtility {
         return searchTermMetaDataGroup
     }
 
-    /// Creates filtered dicionary of items from an array of provided items, grouped by
+    /// Creates filtered dictionary of items from an array of provided items, grouped by
     /// relevant search term, based on the provided search term metadata.
     ///
     /// - Parameters:
-    ///   - items: The original list of items contaning metadata upon which to sort
-    ///   - searchTermMetadata: Application Serivces provided metadata
+    ///   - items: The original list of items containing metadata upon which to sort
+    ///   - searchTermMetadata: Application Services provided metadata
     /// - Returns: A tuple with a filtered dictionary of groups and a tracking array
     private static func createGroupDictionaryAndSoloItems<T: Equatable>(from items: [T], and searchTermMetadata: [String: [HistoryMetadata]]) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
 
@@ -224,7 +224,7 @@ class SearchTermGroupsUtility {
         }
     }
 
-    /// Orders items in a group, chronologically, in an asecending order
+    /// Orders items in a group, chronologically, in an ascending order
     ///
     /// - Parameter group: A group in which items must be sorted
     /// - Returns: The items in the group, sorted chronologically, in ascending order

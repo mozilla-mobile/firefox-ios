@@ -6,7 +6,7 @@ import Storage
 import Shared
 import UIKit
 
-/// The Home Tab Banner is the card that appears at the top of the FIrefox Homepage.
+/// The Home Tab Banner is the card that appears at the top of the Firefox Homepage.
 /// 
 /// The HomeTabBanner is one UI surface that is being targeted for experimentation with `GleanPlumb` AKA Messaging.
 /// When there are GleanPlumbMessages, the card will get populated with that data. Otherwise, we'll continue showing the
