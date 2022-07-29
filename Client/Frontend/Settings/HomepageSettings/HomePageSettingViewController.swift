@@ -185,7 +185,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
         typealias a11y = AccessibilityIdentifiers.Settings.Homepage.StartAtHome
 
-        let onOptionSelected: ((Bool, StartAtHomeSetting) -> Void) = { state, option in
+        let onOptionSelected: (Bool, StartAtHomeSetting) -> Void = { state, option in
             self.featureFlags.set(feature: .startAtHome, to: option)
             self.tableView.reloadData()
 
