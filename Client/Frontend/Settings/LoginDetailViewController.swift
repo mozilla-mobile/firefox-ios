@@ -35,9 +35,9 @@ private class CenteredDetailCell: ThemedTableViewCell {
 }
 
 class LoginDetailViewController: SensitiveViewController {
-    fileprivate let profile: Profile
+    private let profile: Profile
 
-    fileprivate lazy var tableView: UITableView = .build { [weak self] tableView in
+    private lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
 
         tableView.separatorColor = UIColor.theme.tableView.separator
@@ -50,22 +50,22 @@ class LoginDetailViewController: SensitiveViewController {
         tableView.tableFooterView = UIView()
     }
 
-    fileprivate weak var websiteField: UITextField?
-    fileprivate weak var usernameField: UITextField?
-    fileprivate weak var passwordField: UITextField?
+    private weak var websiteField: UITextField?
+    private weak var usernameField: UITextField?
+    private weak var passwordField: UITextField?
     // Used to temporarily store a reference to the cell the user is showing the menu controller for
-    fileprivate var menuControllerCell: LoginDetailTableViewCell?
-    fileprivate var deleteAlert: UIAlertController?
+    private var menuControllerCell: LoginDetailTableViewCell?
+    private var deleteAlert: UIAlertController?
     weak var settingsDelegate: SettingsDelegate?
-    fileprivate var breach: BreachRecord?
-    fileprivate var login: LoginRecord {
+    private var breach: BreachRecord?
+    private var login: LoginRecord {
         didSet {
             tableView.reloadData()
         }
     }
     var webpageNavigationHandler: ((_ url: URL?) -> Void)?
 
-    fileprivate var isEditingFieldData: Bool = false {
+    private var isEditingFieldData: Bool = false {
         didSet {
             if isEditingFieldData != oldValue {
                 tableView.reloadData()
@@ -163,7 +163,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.descriptionLabel.returnKeyType = .default
             loginCell.displayDescriptionAsPassword = true
             loginCell.isEditingFieldData = isEditingFieldData
-            loginCell.separatorInset = .zero
+            setCellSeparatorHidden(loginCell)
             passwordField = loginCell.descriptionLabel
             passwordField?.accessibilityIdentifier = "passwordField"
             return loginCell
@@ -192,7 +192,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             cell.detailTextLabel?.numberOfLines = 2
             cell.detailTextLabel?.textAlignment = .center
             cell.backgroundColor = view.backgroundColor
-            cell.separatorInset = .zero
+            setCellSeparatorHidden(cell)
             return cell
 
         case .deleteItem:
@@ -202,16 +202,30 @@ extension LoginDetailViewController: UITableViewDataSource {
             deleteCell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraits.button
             deleteCell.backgroundColor = UIColor.theme.tableView.rowBackground
-            deleteCell.separatorInset = .zero
+            setCellSeparatorFullWidth(deleteCell)
             return deleteCell
         }
     }
 
-    fileprivate func cell(forIndexPath indexPath: IndexPath) -> LoginDetailTableViewCell {
+    private func cell(forIndexPath indexPath: IndexPath) -> LoginDetailTableViewCell {
         let loginCell = LoginDetailTableViewCell()
         loginCell.selectionStyle = .none
         loginCell.delegate = self
         return loginCell
+    }
+
+    private func setCellSeparatorHidden(_ cell: UITableViewCell) {
+        // Prevent seperator from showing by pushing it off screen by the width of the cell
+        cell.separatorInset = UIEdgeInsets(top: 0,
+                                           left: 0,
+                                           bottom: 0,
+                                           right: view.frame.width)
+    }
+
+    private func setCellSeparatorFullWidth(_ cell: UITableViewCell) {
+        cell.separatorInset = .zero
+        cell.layoutMargins = .zero
+        cell.preservesSuperviewLayoutMargins = false
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -376,7 +390,7 @@ extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
         }
     }
 
-    fileprivate func cellForItem(_ item: InfoItem) -> LoginDetailTableViewCell? {
+    private func cellForItem(_ item: InfoItem) -> LoginDetailTableViewCell? {
         return tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
     }
 
