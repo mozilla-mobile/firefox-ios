@@ -48,7 +48,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
 
     // This is an optional variable used if we wish to focus a tab that is not the
     // currently selected tab. This allows us to force the scroll behaviour to move
-    // whereever we need to focus the user's attention.
+    // wherever we need to focus the user's attention.
     var tabToFocus: Tab?
 
     override var canBecomeFirstResponder: Bool {
@@ -827,6 +827,8 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
 
     func presentCFROnView() {
         present(contextualHintViewController, animated: true, completion: nil)
+
+        UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
     }
 
     private func prepareJumpBackInContextualHint(on title: UILabel) {

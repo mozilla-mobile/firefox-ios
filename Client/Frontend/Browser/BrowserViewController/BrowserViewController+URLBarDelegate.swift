@@ -29,14 +29,16 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
 }
 
 extension BrowserViewController: URLBarDelegate {
-    func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil) {
+    func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
+                     focusedSegment: TabTrayViewModel.Segment? = nil) {
         updateFindInPageVisibility(visible: false)
 
         self.tabTrayViewController = TabTrayViewController(
             tabTrayDelegate: self,
             profile: profile,
             tabToFocus: tabToFocus,
-            tabManager: tabManager)
+            tabManager: tabManager,
+            focusedSegment: focusedSegment)
 
         tabTrayViewController?.openInNewTab = { url, isPrivate in
             let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
@@ -215,7 +217,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
-        if let selectedTab = tabManager.selectedTab, firefoxHomeViewController == nil {
+        if let selectedTab = tabManager.selectedTab, homepageViewController == nil {
             // Only scroll to top if we are not showing the home view controller
             selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
         }
@@ -317,7 +319,7 @@ extension BrowserViewController: URLBarDelegate {
                 toast.removeFromSuperview()
             }
 
-            showFirefoxHome(inline: false)
+            showHomepage(inline: false)
         }
     }
 

@@ -121,7 +121,7 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
         }
     }
 
-    /// Sets up features with default channel availablility. For ease of use, please add
+    /// Sets up features with default channel availability. For ease of use, please add
     /// new features alphabetically. These features are only core features in the
     /// application. See the relevant documentation on `CoreFlaggableFeature` and
     /// `NimbusFlaggableFeature` for more explanation on the differences.

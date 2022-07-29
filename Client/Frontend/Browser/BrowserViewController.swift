@@ -51,7 +51,7 @@ class BrowserViewController: UIViewController {
         .title,
     ]
 
-    var firefoxHomeViewController: HomepageViewController?
+    var homepageViewController: HomepageViewController?
     var libraryViewController: LibraryViewController?
     var libraryDrawerViewController: DrawerViewController?
     var webViewContainer: UIView!
@@ -93,7 +93,7 @@ class BrowserViewController: UIViewController {
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
 
-    // Header can contain the top url bar, bottomContainer only containts toolbar
+    // Header can contain the top url bar, bottomContainer only contains toolbar
     // OverKeyboardContainer contains the reader mode and maybe the bottom url bar
     var header: BaseAlphaStackView = .build { _ in }
     var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
@@ -356,7 +356,7 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.alpha = 1
         webViewContainer.alpha = 0
         urlBar.locationContainer.alpha = 0
-        firefoxHomeViewController?.view.alpha = 0
+        homepageViewController?.view.alpha = 0
         topTabsViewController?.switchForegroundStatus(isInForeground: false)
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
@@ -368,7 +368,7 @@ class BrowserViewController: UIViewController {
         UIView.animate(withDuration: 0.2, delay: 0, options: UIView.AnimationOptions(), animations: {
             self.webViewContainer.alpha = 1
             self.urlBar.locationContainer.alpha = 1
-            self.firefoxHomeViewController?.view.alpha = 1
+            self.homepageViewController?.view.alpha = 1
             self.topTabsViewController?.switchForegroundStatus(isInForeground: true)
             self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
             self.presentedViewController?.view.alpha = 1
@@ -523,7 +523,6 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         presentIntroViewController()
-        presentDBOnboardingViewController()
         presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
 
@@ -553,6 +552,8 @@ class BrowserViewController: UIViewController {
     private func presentContextualHint() {
         if shouldShowIntroScreen { return }
         present(contextHintVC, animated: true)
+
+        UIAccessibility.post(notification: .layoutChanged, argument: contextHintVC)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -675,7 +676,7 @@ class BrowserViewController: UIViewController {
 
         // Remake constraints even if we're already showing the home controller.
         // The home controller may change sizes if we tap the URL bar while on about:home.
-        firefoxHomeViewController?.view.snp.remakeConstraints { make in
+        homepageViewController?.view.snp.remakeConstraints { make in
             make.top.equalTo(header.snp.bottom)
             make.left.right.equalTo(view)
             let homePageBottomOffset: CGFloat = isBottomSearchBar ? urlBarHeightConstraintValue ?? 0 : 0
@@ -860,61 +861,60 @@ class BrowserViewController: UIViewController {
         statusBarOverlay.isHidden = false
     }
 
-    /// Show the firefox home page
-    /// - Parameter inline: Inline is true when the firefox homepage is created from the tab tray, a long press on the tab bar to open a new tab or by pressing the home page button on the tab bar.
-    ///                     Inline is false when it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
-    func showFirefoxHome(inline: Bool) {
-        if self.firefoxHomeViewController == nil {
-            // Firefox home page tracking i.e. being shown from awesomebar vs bottom right hamburger menu
-            let trackingValue: TelemetryWrapper.EventValue = inline ? .openHomeFromPhotonMenuButton : .openHomeFromAwesomebar
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .firefoxHomepage, value: trackingValue, extras: nil)
-
-            let firefoxHomeViewController = HomepageViewController(
-                profile: profile,
-                tabManager: tabManager,
-                urlBar: urlBar,
-                isZeroSearch: !inline)
-            firefoxHomeViewController.homePanelDelegate = self
-            firefoxHomeViewController.libraryPanelDelegate = self
-            firefoxHomeViewController.browserBarViewDelegate = self
-            self.firefoxHomeViewController = firefoxHomeViewController
-            addChild(firefoxHomeViewController)
-            view.addSubview(firefoxHomeViewController.view)
-            firefoxHomeViewController.didMove(toParent: self)
-            view.bringSubviewToFront(overKeyboardContainer)
+    /// Show the home page
+    /// - Parameter inline: Inline is true when the homepage is created from the tab tray, a long press
+    /// on the tab bar to open a new tab or by pressing the home page button on the tab bar. Inline is false when
+    /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
+    func showHomepage(inline: Bool) {
+        if self.homepageViewController == nil {
+            createHomepage(inline: inline)
         }
 
         if self.readerModeBar != nil {
             hideReaderModeBar(animated: false)
         }
 
-        firefoxHomeViewController?.applyTheme()
+        homepageViewController?.applyTheme()
+        homepageViewController?.recordHomepageAppeared(isZeroSearch: !inline)
 
         // We have to run this animation, even if the view is already showing
         // because there may be a hide animation running and we want to be sure
         // to override its results.
         UIView.animate(withDuration: 0.2, animations: { () -> Void in
-            self.firefoxHomeViewController?.view.alpha = 1
+            self.homepageViewController?.view.alpha = 1
         }, completion: { finished in
-            if finished {
-                self.webViewContainer.accessibilityElementsHidden = true
-                UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
-            }
+            guard finished else { return }
+            self.webViewContainer.accessibilityElementsHidden = true
+            UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         })
         view.setNeedsUpdateConstraints()
         urlBar.locationView.reloadButton.reloadButtonState = .disabled
     }
 
-    func hideFirefoxHome(completion: (() -> Void)? = nil) {
-        guard let firefoxHomeViewController = self.firefoxHomeViewController else { return }
+    /// Once the homepage is created, browserViewController keeps a reference to it, never setting it to nil during
+    /// an app session. The homepage can be nil in the case of a user having a Blank Page or custom URL as it's new tab and homepage
+    private func createHomepage(inline: Bool) {
+        let homepageViewController = HomepageViewController(
+            profile: profile,
+            tabManager: tabManager,
+            urlBar: urlBar)
+        homepageViewController.homePanelDelegate = self
+        homepageViewController.libraryPanelDelegate = self
+        homepageViewController.browserBarViewDelegate = self
+        self.homepageViewController = homepageViewController
+        addChild(homepageViewController)
+        view.addSubview(homepageViewController.view)
+        homepageViewController.didMove(toParent: self)
+        view.bringSubviewToFront(overKeyboardContainer)
+    }
 
-        self.firefoxHomeViewController = nil
+    func hideHomepage(completion: (() -> Void)? = nil) {
+        guard let homepageViewController = self.homepageViewController else { return }
+
+        homepageViewController.recordHomepageDisappeared()
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
-            firefoxHomeViewController.view.alpha = 0
+            homepageViewController.view.alpha = 0
         }, completion: { _ in
-            firefoxHomeViewController.willMove(toParent: nil)
-            firefoxHomeViewController.view.removeFromSuperview()
-            firefoxHomeViewController.removeFromParent()
             self.webViewContainer.accessibilityElementsHidden = false
             UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
 
@@ -929,13 +929,13 @@ class BrowserViewController: UIViewController {
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
         guard let url = url else {
-            hideFirefoxHome()
+            hideHomepage()
             urlBar.locationView.reloadButton.reloadButtonState = .disabled
             return
         }
 
         if isAboutHomeURL {
-            showFirefoxHome(inline: true)
+            showHomepage(inline: true)
 
             if userHasPressedHomeButton {
                 userHasPressedHomeButton = false
@@ -945,7 +945,7 @@ class BrowserViewController: UIViewController {
             }
 
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
-            hideFirefoxHome()
+            hideHomepage()
             urlBar.shouldHideReloadButton(shouldUseiPadSetup())
         }
 
@@ -977,9 +977,7 @@ class BrowserViewController: UIViewController {
         libraryViewController.delegate = self
         self.libraryViewController = libraryViewController
 
-        if panel != nil {
-            libraryViewController.selectedPanel = panel
-        }
+        libraryViewController.setupOpenPanel(panelType: panel ?? . bookmarks)
 
         // Reset history panel pagination to get latest history visit
         if let historyPanel = libraryViewController.viewModel.panelDescriptors.first(where: {$0.panelType == .history}),
@@ -990,10 +988,10 @@ class BrowserViewController: UIViewController {
         let controller: DismissableNavigationViewController
         controller = DismissableNavigationViewController(rootViewController: libraryViewController)
         controller.onViewWillDisappear = {
-            self.firefoxHomeViewController?.reloadAll()
+            self.homepageViewController?.reloadAll()
         }
         controller.onViewDismissed = {
-            self.firefoxHomeViewController?.reloadAll()
+            self.homepageViewController?.reloadAll()
         }
         self.present(controller, animated: true, completion: nil)
     }
@@ -1041,7 +1039,7 @@ class BrowserViewController: UIViewController {
             make.bottom.equalTo(constraintTarget)
         }
 
-        firefoxHomeViewController?.view?.isHidden = true
+        homepageViewController?.view?.isHidden = true
 
         searchController.didMove(toParent: self)
     }
@@ -1051,7 +1049,7 @@ class BrowserViewController: UIViewController {
         searchController.willMove(toParent: nil)
         searchController.view.removeFromSuperview()
         searchController.removeFromParent()
-        firefoxHomeViewController?.view?.isHidden = false
+        homepageViewController?.view?.isHidden = false
 
         keyboardBackdrop?.removeFromSuperview()
         keyboardBackdrop = nil
@@ -1117,7 +1115,7 @@ class BrowserViewController: UIViewController {
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
 
             guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
-                  let bookmarkNode = bookmarkFolder.children?.last
+                  let bookmarkNode = bookmarkFolder.children?.last as? FxBookmarkNode
             else { return }
 
             let detailController = BookmarkDetailPanel(profile: self.profile,
@@ -1806,8 +1804,8 @@ extension BrowserViewController: HomePanelDelegate {
         show(toast: toast)
     }
 
-    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab? = nil) {
-        showTabTray(withFocusOnUnselectedTab: tabToFocus)
+    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: TabTrayViewModel.Segment?) {
+        showTabTray(withFocusOnUnselectedTab: tabToFocus, focusedSegment: focusedSegment)
     }
 
     func homePanelDidPresentContextualHintOf(type: ContextualHintViewType) {
@@ -1848,7 +1846,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
         let searchSettingsTableViewController = SearchSettingsTableViewController()
         searchSettingsTableViewController.model = self.profile.searchEngines
         searchSettingsTableViewController.profile = self.profile
-        // Update saerch icon when the searchengine changes
+        // Update search icon when the searchengine changes
         searchSettingsTableViewController.updateSearchIcon = {
             self.urlBar.updateSearchEngineImage()
             self.searchController?.reloadSearchEngines()
@@ -1874,7 +1872,7 @@ extension BrowserViewController: TabManagerDelegate {
         // Reset the scroll position for the ActivityStreamPanel so that it
         // is always presented scrolled to the top when switching tabs.
         if !isRestoring, selected != previous,
-           let activityStreamPanel = firefoxHomeViewController {
+           let activityStreamPanel = homepageViewController {
             activityStreamPanel.scrollToTop()
         }
 
@@ -2143,7 +2141,7 @@ extension BrowserViewController {
             dBOnboardingViewController.modalPresentationStyle = .popover
         }
         dBOnboardingViewController.viewModel.goToSettings = {
-            self.firefoxHomeViewController?.dismissHomeTabBanner()
+            self.homepageViewController?.dismissHomeTabBanner()
             dBOnboardingViewController.dismiss(animated: true) {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
             }
@@ -2497,7 +2495,7 @@ extension BrowserViewController: NotificationThemeable {
                                             toolbar,
                                             readerModeBar,
                                             topTabsViewController,
-                                            firefoxHomeViewController,
+                                            homepageViewController,
                                             searchController,
                                             libraryViewController,
                                             libraryDrawerViewController]

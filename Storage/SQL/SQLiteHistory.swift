@@ -135,11 +135,15 @@ open class SQLiteHistory {
     let favicons: SQLiteFavicons
     let prefs: Prefs
     let clearTopSitesQuery: (String, Args?) = ("DELETE FROM cached_top_sites", nil)
+    let notificationCenter: NotificationCenter
 
-    required public init(db: BrowserDB, prefs: Prefs) {
+    required public init(db: BrowserDB,
+                         prefs: Prefs,
+                         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.db = db
         self.favicons = SQLiteFavicons(db: self.db)
         self.prefs = prefs
+        self.notificationCenter = notificationCenter
     }
 
     public func getSites(forURLs urls: [String]) -> Deferred<Maybe<Cursor<Site?>>> {
@@ -407,6 +411,8 @@ extension SQLiteHistory: BrowserHistory {
             return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
         }
 
+        notificationCenter.post(name: .TopSitesUpdated, object: self)
+
         // do a fuzzy delete so dupes can be removed
         let query: (String, Args?) = ("DELETE FROM pinned_top_sites where domain = ?", [host])
         return db.run([query]) >>== {
@@ -438,6 +444,8 @@ extension SQLiteHistory: BrowserHistory {
         guard let guid = site.guid, let host = (site.url as String).asURL?.normalizedHost else {
             return deferMaybe(DatabaseError(description: "Invalid site \(site.url)"))
         }
+
+        notificationCenter.post(name: .TopSitesUpdated, object: self)
 
         let args: Args = [site.url, now, site.title, site.id, guid, host]
         let arglist = BrowserDB.varlist(args.count)
@@ -509,6 +517,8 @@ extension SQLiteHistory: BrowserHistory {
         if isIgnoredURL(site.url as String) {
             return deferMaybe(IgnoredSiteError())
         }
+
+        notificationCenter.post(name: .TopSitesUpdated, object: self)
 
         return db.withConnection { conn -> Void in
             let now = Date.now()

@@ -126,7 +126,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             }
         }
 
-        // So that the seperator line goes all the way to the left edge.
+        // So that the separator line goes all the way to the left edge.
         cell.separatorInset = .zero
 
         return cell

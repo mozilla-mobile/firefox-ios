@@ -81,7 +81,7 @@ class HomePageSettingsUITests: BaseTestCase {
         waitForExistence(app.menuItems["Paste"])
         app.menuItems["Paste"].tap()
         waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
-        // Check that the webpage has been correclty copied into the correct field
+        // Check that the webpage has been correctly copied into the correct field
         let value = app.textFields["HomeAsCustomURLTextField"].value as! String
         XCTAssertEqual(value, websiteUrl1)
     }

@@ -627,7 +627,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATapOnContinueButton) { userState in
-            app.webViews.buttons["Continue"].tap()
+            app.webViews.buttons["Sign up or sign in"].tap()
         }
         screenState.gesture(forAction: Action.FxATapOnSignInButton) { userState in
             app.webViews.buttons.element(boundBy: 0).tap()
@@ -661,7 +661,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.tables.cells["ClearAllWebsiteData"].tap()
             app.alerts.buttons["OK"].tap()
         }
-        // The swipeDown() is a workaround for an intermitent issue that the search filed is not always in view.
+        // The swipeDown() is a workaround for an intermittent issue that the search filed is not always in view.
         screenState.gesture(forAction: Action.TapOnFilterWebsites) { userState in
             app.searchFields["Filter Sites"].tap()
         }
@@ -762,7 +762,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(TabTray) { screenState in
 
-        // Both iPad and iPhone use the same accesibility identifiers for buttons,
+        // Both iPad and iPhone use the same accessibility identifiers for buttons,
         // even thought they may be in separate locations design wise.
         screenState.tap(app.buttons["newTabButtonTabTray"],
                         forAction: Action.OpenNewTabFromTabTray,

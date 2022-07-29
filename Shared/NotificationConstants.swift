@@ -74,6 +74,8 @@ extension Notification.Name {
 
     public static let OpenClearRecentHistory = Notification.Name("OpenClearRecentHistory")
 
+    public static let LibraryPanelStateDidChange = Notification.Name("LibraryPanelStateDidChange")
+
     // MARK: Tab manager
 
     // Tab manager creates a toast for undo recently closed tabs and a notification is
@@ -82,6 +84,7 @@ extension Notification.Name {
 
     // MARK: Settings
 
-    public static let ReadingListUpdated = Notification.Name("ReadingListUpdated")
     public static let BookmarksUpdated = Notification.Name("BookmarksUpdated")
+    public static let ReadingListUpdated = Notification.Name("ReadingListUpdated")
+    public static let TopSitesUpdated = Notification.Name("TopSitesUpdated")
 }

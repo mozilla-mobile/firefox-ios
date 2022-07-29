@@ -6,7 +6,7 @@ import Foundation
 
 /*
  Size classes are the way Apple requires us to specify our UI.
- Split view on iPad can make a landscape app appear with the demensions of an iPhone app
+ Split view on iPad can make a landscape app appear with the dimensions of an iPhone app
  Use UXSizeClasses to specify things like offsets/itemsizes with respect to size classes
  For a primer on size classes https://useyourloaf.com/blog/size-classes/
  */

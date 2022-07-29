@@ -25,7 +25,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }
 
     private lazy var closeButton: UIButton = .build { [weak self] button in
-        button.setImage(UIImage(named: "find_close")?.withRenderingMode(.alwaysTemplate),
+        button.setImage(UIImage(named: ImageIdentifiers.contextualHintClose)?.withRenderingMode(.alwaysTemplate),
                         for: .normal)
         button.tintColor = .white
         button.addTarget(self,
@@ -35,6 +35,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
                                                 left: 7.5,
                                                 bottom: 15,
                                                 right: 7.5)
+        button.accessibilityLabel = String.ContextualHints.ContextualHintsCloseAccessibility
     }
 
     private lazy var descriptionLabel: UILabel = .build { [weak self] label in
