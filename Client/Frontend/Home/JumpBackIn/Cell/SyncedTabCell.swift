@@ -4,7 +4,7 @@
 
 import UIKit
 
-struct FxHomeSyncedTabCellViewModel {
+struct SyncedTabCellViewModel {
     let titleText: String
     let descriptionText: String
     let url: URL
@@ -159,7 +159,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Helpers
 
-    func configure(viewModel: FxHomeSyncedTabCellViewModel,
+    func configure(viewModel: SyncedTabCellViewModel,
                    onTapShowAllAction: ((UIButton) -> Void)?,
                    onOpenSyncedTabAction: ((URL) -> Void)?) {
         itemTitle.text = viewModel.titleText
@@ -194,7 +194,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         openSyncedTabAction?()
     }
 
-    private func configureImages(viewModel: FxHomeSyncedTabCellViewModel) {
+    private func configureImages(viewModel: SyncedTabCellViewModel) {
         if viewModel.heroImage == nil {
             // Sets a small favicon in place of the hero image in case there's no hero image
             fallbackFaviconImage.image = viewModel.fallbackFaviconImage

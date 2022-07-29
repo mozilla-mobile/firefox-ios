@@ -161,7 +161,7 @@ private extension JumpBackInViewModel {
         let descriptionText = item.client.name
         let image = UIImage(named: ImageIdentifiers.syncedDevicesIcon)
 
-        let cellViewModel = FxHomeSyncedTabCellViewModel(titleText: site.title,
+        let cellViewModel = SyncedTabCellViewModel(titleText: site.title,
                                                          descriptionText: descriptionText,
                                                          url: item.tab.URL,
                                                          syncedDeviceImage: image,
