@@ -26,6 +26,7 @@ es-AR
 es-CL
 es-MX
 eu
+et
 fa
 fi
 fr
@@ -73,6 +74,7 @@ ro
 ru
 sat
 ses
+si
 sk
 sl
 sq
