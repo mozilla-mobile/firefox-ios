@@ -283,11 +283,11 @@ class TabManagerTests: XCTestCase {
         manager.selectTab(manager.addTab(isPrivate: true))
         XCTAssertEqual(manager.privateTabs.count, 1, "There should be one new private tab")
         manager.willSwitchTabMode(leavingPBM: true)
-        XCTAssertEqual(manager.privateTabs.count, 0, "After willSwitchTabMode there should be no more private tabs")
+        XCTAssertEqual(manager.privateTabs.count, 1, "After willSwitchTabMode there should be one private tab as we clear private tab on normal tab selection")
 
         manager.selectTab(manager.addTab(isPrivate: true))
         manager.selectTab(manager.addTab(isPrivate: true))
-        XCTAssertEqual(manager.privateTabs.count, 2, "Private tabs should not be deleted when another one is added")
+        XCTAssertEqual(manager.privateTabs.count, 3, "Private tabs should not be deleted when another one is added")
         manager.selectTab(manager.addTab())
         XCTAssertEqual(manager.privateTabs.count, 0, "But once we add a normal tab we've switched out of private mode. Private tabs should be deleted")
         XCTAssertEqual(manager.normalTabs.count, 2, "The original normal tab and the new one should both still exist")
@@ -444,7 +444,7 @@ class TabManagerTests: XCTestCase {
         // Setup
         manager.addDelegate(delegate)
         profile.prefs.setBool(true, forKey: "settings.closePrivateTabs")
-        delegate.expect([didAdd, didAdd, didSelect, didAdd, didSelect])
+        delegate.expect([didAdd, didAdd, didSelect, didAdd, didSelect, didSelect])
 
         // Create one private and one normal tab
         let tab = manager.addTab()
@@ -456,16 +456,17 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(manager.selectedTab?.isPrivate, true, "The selected tab should be the private tab")
         XCTAssertEqual(manager.privateTabs.count, 1, "There should only be one private tab")
 
-        // switch to normal mode. Which should delete the private tabs
+        // switch to normal mode and select a normal tab
+        // this will delete the private tabs due to close private tab settings
         manager.willSwitchTabMode(leavingPBM: true)
+        manager.selectTab(tab)
 
         // make sure tabs are cleared properly and indexes are reset
         XCTAssertEqual(manager.privateTabs.count, 0, "Private tab should have been deleted")
-        XCTAssertEqual(manager.selectedIndex, -1, "The selected index should have been reset")
+        XCTAssertEqual(manager.selectedIndex, 0, "The selected index should have been reset")
 
         // didSelect should still be called when switching between a nil tab
         let didSelectNewTab = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
-            XCTAssertNil(tabs[1], "there should be no previous tab")
             let next = tabs[0]!
             XCTAssertFalse(next.isPrivate)
         }
