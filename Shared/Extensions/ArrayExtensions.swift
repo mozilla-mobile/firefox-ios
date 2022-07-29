@@ -37,13 +37,13 @@ public extension Array {
     }
 
     // Performs a union operator using the result of f(Element) as the value to base uniqueness on.
-    func union<T: Hashable>(_ arr: [Element], f: ((Element) -> T)) -> [Element] {
+    func union<T: Hashable>(_ arr: [Element], f: (Element) -> T) -> [Element] {
         let result = self + arr
         return result.unique(f)
     }
 
     // Returns unique values in an array using the result of f()
-    func unique<T: Hashable>(_ f: ((Element) -> T)) -> [Element] {
+    func unique<T: Hashable>(_ f: (Element) -> T) -> [Element] {
         var map: [T: Element] = [T: Element]()
         return self.compactMap { a in
             let t = f(a)
