@@ -107,10 +107,13 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        if tableView.isEditing {
-            self.tableView.setEditing(false, animated: true)
-        }
         super.viewWillTransition(to: size, with: coordinator)
+
+        coordinator.animate(alongsideTransition: nil) { _ in
+            if self.state == .bookmarks(state: .inFolderEditMode) {
+                self.tableView.setEditing(true, animated: true)
+            }
+        }
     }
 
     override func applyTheme() {
