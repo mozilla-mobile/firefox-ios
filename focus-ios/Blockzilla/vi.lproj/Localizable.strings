@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "BẢO MẬT";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Đặt làm trình duyệt mặc định";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Đặt các liên kết từ trang web, email và tin nhắn để tự động mở trong %@.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Chủ đề hệ thống";
 

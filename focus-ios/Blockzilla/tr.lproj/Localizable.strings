@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "GÜVENLİK";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Saptanmış tarayıcı yap";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Web siteleri, e-postalar ve mesajlardaki bağlantılar otomatik olarak %@ uygulamasında açılsın.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Sistem teması";
 

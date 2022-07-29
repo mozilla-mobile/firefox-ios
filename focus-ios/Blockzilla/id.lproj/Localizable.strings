@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "KEAMANAN";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Setel sebagai Peramban Baku";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Setel tautan dari situs web, surel, dan pesan untuk secara otomatis dibuka di %@.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Tema Sistem";
 

@@ -436,6 +436,9 @@
 /* Label title for set as default browser row */
 "Settings.setAsDefaultBrowser" = "Définir comme navigateur par défaut";
 
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Faites en sorte que les liens des sites web, des e-mails et des messages s’ouvrent automatiquement dans %@.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Thème du système";
 
