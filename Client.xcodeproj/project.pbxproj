@@ -12330,7 +12330,6 @@
 				DF46B9A72755297000657F75 /* ne-NP */,
 				967AF16D275FF4C70099E161 /* tt */,
 				8A99DB9C27C6DD3E007EA6BD /* is */,
-				D44E76022891A7A9004D740F /* et */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
