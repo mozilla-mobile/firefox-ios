@@ -203,7 +203,6 @@ class TopTabsViewController: UIViewController {
     }
 
     @objc func newTabTapped() {
-        NotificationCenter.default.post(name: .TopTabsTabCreated, object: nil)
         self.delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
     }
 
@@ -262,6 +261,7 @@ class TopTabsViewController: UIViewController {
 extension TopTabsViewController: TabDisplayer {
 
     func focusSelectedTab() {
+        NotificationCenter.default.post(name: .TopTabsTabSelected, object: nil)
         self.scrollToCurrentTab(true)
         self.handleFadeOutAfterTabSelection()
     }
