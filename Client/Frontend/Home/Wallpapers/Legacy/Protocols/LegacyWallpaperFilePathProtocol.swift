@@ -26,6 +26,7 @@ extension LegacyWallpaperFilePathProtocol {
     /// application's document directory.
     ///
     /// - Parameter key: The key to be used as the file's containing folder
+    /// - Parameter fileManager: The file manager to use to persist and retrieve the wallpaper.
     /// - Returns: A URL containing the correct path for the key.
     func folderPath(forKey key: String,
                     with fileManager: FileManager = FileManager.default

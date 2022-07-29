@@ -216,6 +216,8 @@ private extension Array where Element == Site {
     /// Add sponsored tiles to the top sites.
     /// - Parameters:
     ///   - sponsoredTileSpaces: The number of spaces available for sponsored tiles
+    ///   - contiles: An array of Contiles a type of tiles belonging in the Shortcuts section on the Firefox home page.
+    ///   - maxNumberOfSponsoredTile: maximum number of sponsored tiles
     ///   - sites: The top sites to add the sponsored tile to
     mutating func addSponsoredTiles(sponsoredTileSpaces: Int, contiles: [Contile], maxNumberOfSponsoredTile: Int) {
         guard maxNumberOfSponsoredTile > 0 else { return }
