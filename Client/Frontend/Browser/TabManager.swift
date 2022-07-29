@@ -302,10 +302,6 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
         // Clear every time entering/exiting this mode.
         Tab.ChangeUserAgent.privateModeHostList = Set<String>()
-
-        if shouldClearPrivateTabs() && leavingPBM {
-            removeAllPrivateTabs()
-        }
     }
 
     func expireSnackbars() {
