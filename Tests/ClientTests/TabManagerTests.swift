@@ -635,4 +635,48 @@ private extension TabManagerTests {
         }
         waitForExpectations(timeout: 10.0, handler: nil)
     }
+
+    // MARK: - Add multiple tabs next to parent
+
+    func testInsertMultipleTabsNextToParentTab_TopTabTray() {
+        let manager = TabManager(profile: profile, imageStore: nil)
+        manager.tabDisplayType = .TopTabTray
+
+        let parentTab = manager.addTab()
+        manager.selectTab(parentTab)
+
+        let childTab1 = manager.addTab(afterTab: parentTab)
+        let childTab2 = manager.addTab(afterTab: parentTab)
+        let childTab3 = manager.addTab(afterTab: parentTab)
+
+        // Expected Order:
+        // parentTab, childTab3, childTab2, childTab1
+
+        XCTAssertEqual(manager.tabs.count, 4)
+        XCTAssertEqual(manager.tabs[0].tabUUID, parentTab.tabUUID)
+        XCTAssertEqual(manager.tabs[1].tabUUID, childTab3.tabUUID)
+        XCTAssertEqual(manager.tabs[2].tabUUID, childTab2.tabUUID)
+        XCTAssertEqual(manager.tabs[3].tabUUID, childTab1.tabUUID)
+    }
+
+    func testInsertMultipleTabsNextToParentTab_TabGrid() {
+        let manager = TabManager(profile: profile, imageStore: nil)
+        manager.tabDisplayType = .TabGrid // <- default
+
+        let parentTab = manager.addTab()
+        manager.selectTab(parentTab)
+
+        let childTab1 = manager.addTab(afterTab: parentTab)
+        let childTab2 = manager.addTab(afterTab: parentTab)
+        let childTab3 = manager.addTab(afterTab: parentTab)
+
+        // Expected Order:
+        // parentTab, childTab1, childTab2, childTab3
+
+        XCTAssertEqual(manager.tabs.count, 4)
+        XCTAssertEqual(manager.tabs[0].tabUUID, parentTab.tabUUID)
+        XCTAssertEqual(manager.tabs[1].tabUUID, childTab1.tabUUID)
+        XCTAssertEqual(manager.tabs[2].tabUUID, childTab2.tabUUID)
+        XCTAssertEqual(manager.tabs[3].tabUUID, childTab3.tabUUID)
+    }
 }
