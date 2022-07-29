@@ -78,7 +78,7 @@ class NotificationService: UNNotificationServiceExtension {
 }
 
 class SyncDataDisplay {
-    var contentHandler: ((UNNotificationContent) -> Void)
+    var contentHandler: (UNNotificationContent) -> Void
     var notificationContent: UNMutableNotificationContent
 
     var tabQueue: TabQueue?

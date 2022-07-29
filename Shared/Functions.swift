@@ -193,7 +193,7 @@ public func optFilter<K, V>(_ source: [K: V?]) -> [K: V] {
 /**
  * Map a function over the values of a map.
  */
-public func mapValues<K, T, U>(_ source: [K: T], f: ((T) -> U)) -> [K: U] {
+public func mapValues<K, T, U>(_ source: [K: T], f: (T) -> U) -> [K: U] {
     var m = [K: U]()
     for (k, v) in source {
         m[k] = f(v)

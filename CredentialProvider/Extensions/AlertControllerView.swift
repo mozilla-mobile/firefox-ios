@@ -14,7 +14,7 @@ protocol AlertControllerView {
 
 class AlertActionButtonConfiguration {
     let title: String
-    let tapAction: (() -> Void)
+    let tapAction: () -> Void
     let style: UIAlertAction.Style
     let checked: Bool
 

@@ -1322,7 +1322,7 @@ open class BrowserProfile: Profile {
                     return deferMaybe(readyResult.failureValue!)
                 }
                 return self.takeActionsOnEngineStateChanges(success) >>== { ready in
-                    let updateEnginePref: ((String, Bool) -> Void) = { engine, enabled in
+                    let updateEnginePref: (String, Bool) -> Void = { engine, enabled in
                         self.prefsForSync.setBool(enabled, forKey: "engine.\(engine).enabled")
                     }
                     ready.engineConfiguration?.enabled.forEach { updateEnginePref($0, true) }
