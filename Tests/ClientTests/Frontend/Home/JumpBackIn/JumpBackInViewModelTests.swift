@@ -291,7 +291,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(sut.sectionLayout, .regularWithSyncedTab)
     }
 
-    func testMaxJumpBackInItemsToDisplay_regularWithSyncedTabIphone_hasNoSyncTabFallsIntoRegular() {
+    func testMaxJumpBackInItemsToDisplay_regularWithSyncedTabIphone_hasNoSyncedTabFallsIntoRegularLayout() {
         let sut = createSut()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1])
@@ -309,7 +309,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(sut.sectionLayout, .regular)
     }
 
-    func testMaxJumpBackInItemsToDisplay_regularWithSyncedTabIpad_hasNoSyncTabFallsIntoRegular() {
+    func testMaxJumpBackInItemsToDisplay_regularWithSyncedTabIpad_hasNoSyncedTabFallsIntoRegularLayout() {
         let sut = createSut()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1])

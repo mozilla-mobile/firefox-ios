@@ -55,7 +55,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.showAllButton
     }
 
-    let heroImage: UIImageView = .build { imageView in
+    private let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
@@ -80,7 +80,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         stackView.distribution = .fillProportionally
     }
 
-    let syncedDeviceImage: UIImageView = .build { imageView in
+    private let syncedDeviceImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.favIconImage
@@ -94,7 +94,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     }
 
     // Used as a fallback if hero image isn't set
-    let fallbackFaviconImage: UIImageView = .build { imageView in
+    private let fallbackFaviconImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.backgroundColor = UIColor.clear
