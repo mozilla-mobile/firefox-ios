@@ -94,7 +94,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     /// - Parameters:
     ///   - profile: User Profile info
     ///   - parentType: FxASignInParentType is an enum parent page that presented this VC. Parameter used in telemetry button events.
-    ///   - parameter: deepLinkParams: URL args passed in from deep link that propagate to FxA web view
+    ///   - deepLinkParams: URL args passed in from deep link that propagate to FxA web view
     init(profile: Profile, parentType: FxASignInParentType, deepLinkParams: FxALaunchParams?) {
         self.deepLinkParams = deepLinkParams
         self.profile = profile
@@ -204,6 +204,7 @@ extension FirefoxAccountSignInViewController {
     ///     - deepLinkParams: FxALaunchParams from deeplink query
     ///     - flowType: FxAPageType is used to determine if email login, qr code login, or user settings page should be presented
     ///     - referringPage: ReferringPage enum is used to handle telemetry events correctly for the view event and the FxA sign in tap events, need to know which route we took to get to them
+    ///     - profile:
     static func getSignInOrFxASettingsVC(_ deepLinkParams: FxALaunchParams? = nil, flowType: FxAPageType, referringPage: ReferringPage, profile: Profile) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         let parentType: FxASignInParentType

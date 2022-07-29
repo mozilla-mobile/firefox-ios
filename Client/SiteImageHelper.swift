@@ -57,7 +57,7 @@ class SiteImageHelper: SiteImageHelperProtocol {
 
     /// Given a `Site`, this will fetch the type of image you're looking for while allowing you to fallback to the next `SiteImageType`.
     /// - Parameters:
-    ///   - url: The site to fetch an image from.
+    ///   - site: The site to fetch an image from.
     ///   - imageType: The `SiteImageType` that will work for you.
     ///   - shouldFallback: Allow a fallback image to be given in the case where the `SiteImageType` you specify is not available.
     ///   - metadataProvider: Metadata provider for hero image type. Default is normally used, replaced in case of tests
