@@ -121,7 +121,7 @@ class ContextualHintViewModel {
         case .toolbarLocation:
             switch arrowDirection {
             case .up:
-                return CFRStrings.Toolbar.SearchBarPlacementForExistingUsers
+                return CFRStrings.Toolbar.SearchBarTopPlacement
             default:
                 return CFRStrings.Toolbar.SearchBarPlacementForNewUsers
             }
