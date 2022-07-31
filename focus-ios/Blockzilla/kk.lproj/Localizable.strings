@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ҚАУІПСІЗДІК";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Негізгі браузер қылу";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Веб-сайттар, эл. пошта хаттары және хабарламалардан сілтемелерді %@ ішінде автоматты түрде ашылатындай етіп баптау.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Жүйелік тема";
 

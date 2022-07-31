@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ความปลอดภัย";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "ตั้งเป็นเบราว์เซอร์เริ่มต้น";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "ตั้งลิงก์จากเว็บไซต์ อีเมล และข้อความให้เปิดโดยอัตโนมัติใน %@";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "ชุดตกแต่งระบบ";
 

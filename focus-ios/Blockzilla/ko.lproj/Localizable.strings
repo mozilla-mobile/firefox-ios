@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "보안";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "기본 브라우저로 설정";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "%@에서 자동으로 열리도록 웹 사이트, 이메일 및 메시지의 링크를 설정합니다.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "시스템 테마";
 
@@ -504,6 +510,9 @@
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "바로가기 추가";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "바로가기에 추가됨";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "주소 복사";
