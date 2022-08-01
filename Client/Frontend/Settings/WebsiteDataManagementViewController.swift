@@ -268,27 +268,28 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
-        headerView?.isDynamicTypeEnabled = true
-        headerView?.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
-        headerView?.showBorder(for: .top, true)
-        headerView?.showBorder(for: .bottom, true)
+        headerView.isDynamicTypeEnabled = true
+        headerView.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
+
+        headerView.showBorder(for: .top, true)
+        headerView.showBorder(for: .bottom, true)
 
         // top section: no top border (this is a plain table)
         guard let section = Section(rawValue: section) else { return headerView }
 
         if section == .sites {
-            headerView?.showBorder(for: .top, false)
+            headerView.showBorder(for: .top, false)
 
             // no records: no bottom border (would make 2 with the one from the clear button)
             let emptyRecords = viewModel.siteRecords.isEmpty
             if emptyRecords {
-                headerView?.showBorder(for: .bottom, false)
+                headerView.showBorder(for: .bottom, false)
             }
         } else if section == .clearButton {
-            headerView?.showBorder(for: .top, false)
-            headerView?.showBorder(for: .bottom, true)
+            headerView.showBorder(for: .top, false)
+            headerView.showBorder(for: .bottom, true)
         }
 
         return headerView
@@ -307,9 +308,10 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
-        footerView?.showBorder(for: .top, true)
-        footerView?.showBorder(for: .bottom, true)
+        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+
+        footerView.showBorder(for: .top, true)
+        footerView.showBorder(for: .bottom, true)
         return footerView
     }
 

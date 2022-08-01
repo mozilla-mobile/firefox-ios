@@ -97,7 +97,8 @@ class LoginListViewController: SensitiveViewController {
         self.title = .Settings.Passwords.LoginsAndPasswordsTitle
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: CellReuseIdentifier)
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderId)
+        tableView.register(ThemedTableSectionHeaderFooterView.self,
+                           forHeaderFooterViewReuseIdentifier: SectionHeaderId)
 
         tableView.accessibilityIdentifier = "Login List"
         tableView.dataSource = loginDataSource
@@ -122,8 +123,14 @@ class LoginListViewController: SensitiveViewController {
         searchController.hidesNavigationBarDuringPresentation = UIDevice.current.userInterfaceIdiom != .pad
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(remoteLoginsDidChange), name: .DataRemoteLoginChangesWereApplied, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(dismissAlertController), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(remoteLoginsDidChange),
+                                       name: .DataRemoteLoginChangesWereApplied,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(dismissAlertController),
+                                       name: UIApplication.didEnterBackgroundNotification,
+                                       object: nil)
 
         setupDefaultNavButtons()
         view.addSubview(tableView)

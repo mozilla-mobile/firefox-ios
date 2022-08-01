@@ -179,15 +179,16 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+
         var sectionTitle: String?
         if section == SectionToggles {
             sectionTitle = .SettingsClearPrivateDataSectionName
         } else {
             sectionTitle = nil
         }
-        headerView?.isDynamicTypeEnabled = true
-        headerView?.titleLabel.text = sectionTitle
+        headerView.isDynamicTypeEnabled = true
+        headerView.titleLabel.text = sectionTitle
         return headerView
     }
 

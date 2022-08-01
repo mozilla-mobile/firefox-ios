@@ -803,8 +803,10 @@ class SettingsTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionSetting = settings[section]
-        guard let sectionFooter = sectionSetting.footerTitle?.string else { return nil }
-        let footerView = ThemedTableSectionHeaderFooterView()
+
+        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView,
+                let sectionFooter = sectionSetting.footerTitle?.string else { return nil }
+
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
         footerView.applyTheme()

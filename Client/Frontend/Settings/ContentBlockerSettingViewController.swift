@@ -225,6 +225,8 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     // The first section header gets a More Info link
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let _defaultFooter = super.tableView(tableView, viewForFooterInSection: section) as? ThemedTableSectionHeaderFooterView
+        _defaultFooter?.isDynamicTypeEnabled = true
+
         guard let defaultFooter = _defaultFooter, section > 0 else {
             return _defaultFooter
         }
@@ -237,7 +239,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         let title: String = .TrackerProtectionLearnMore
 
         var attributes = [NSAttributedString.Key: AnyObject]()
-        attributes[NSAttributedString.Key.font] = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        attributes[NSAttributedString.Key.font] = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
         attributes[NSAttributedString.Key.foregroundColor] = UIColor.theme.general.highlightBlue
 
         let button = UIButton()
@@ -252,6 +254,10 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         }
 
         return defaultFooter
+    }
+
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
     }
 
     @objc func moreInfoTapped() {
