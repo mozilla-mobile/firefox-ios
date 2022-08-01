@@ -4,63 +4,15 @@
 
 import UIKit
 
-private struct RecentlyVisitedCellUX {
-    static let generalCornerRadius: CGFloat = 10
-    static let heroImageDimension: CGFloat = 24
-    static let shadowRadius: CGFloat = 0
-    static let shadowOffset: CGFloat = 2
-}
-
-struct HistoryHighlightsViewModel {
-    let title: String
-    let description: String?
-    let favIconImage: UIImage?
-    let corners: UIRectCorner?
-    let hideBottomLine: Bool
-    let isFillerCell: Bool
-    let shouldAddShadow: Bool
-    var accessibilityLabel: String {
-        if let description = description {
-            return "\(title), \(description)"
-        } else {
-            return title
-        }
-    }
-
-    init(title: String,
-         description: String?,
-         shouldHideBottomLine: Bool,
-         with corners: UIRectCorner? = nil,
-         and heroImage: UIImage? = nil,
-         andIsFillerCell: Bool = false,
-         shouldAddShadow: Bool = false) {
-
-        self.title = title
-        self.description = description
-        self.hideBottomLine = shouldHideBottomLine
-        self.corners = corners
-        self.favIconImage = heroImage
-        self.isFillerCell = andIsFillerCell
-        self.shouldAddShadow = shouldAddShadow
-    }
-
-    // Filler cell init
-    init(shouldHideBottomLine: Bool,
-         with corners: UIRectCorner? = nil,
-         shouldAddShadow: Bool) {
-
-        self.init(title: "",
-                  description: "",
-                  shouldHideBottomLine: shouldHideBottomLine,
-                  with: corners,
-                  and: nil,
-                  andIsFillerCell: true,
-                  shouldAddShadow: shouldAddShadow)
-    }
-}
-
 /// A cell used in FxHomeScreen's History Highlights section.
 class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
+
+    struct UX {
+        static let generalCornerRadius: CGFloat = 10
+        static let heroImageDimension: CGFloat = 24
+        static let shadowRadius: CGFloat = 0
+        static let shadowOffset: CGFloat = 2
+    }
 
     // MARK: - UI Elements
     var shadowViewLayer: CAShapeLayer?
@@ -69,7 +21,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = RecentlyVisitedCellUX.generalCornerRadius
+        imageView.layer.cornerRadius = UX.generalCornerRadius
         imageView.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
     }
 
@@ -135,7 +87,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Public methods
-    public func updateCell(with options: HistoryHighlightsViewModel) {
+    public func updateCell(with options: HistoryHighlightsModel) {
         itemTitle.text = options.title
         if let descriptionCount = options.description {
             itemDescription.text = descriptionCount
@@ -146,7 +98,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         accessibilityLabel = options.accessibilityLabel
 
         if let corners = options.corners {
-            addRoundedCorners([corners], radius: RecentlyVisitedCellUX.generalCornerRadius)
+            addRoundedCorners([corners], radius: UX.generalCornerRadius)
         }
 
         if options.shouldAddShadow {
@@ -171,8 +123,8 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
         NSLayoutConstraint.activate([
             heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            heroImage.heightAnchor.constraint(equalToConstant: RecentlyVisitedCellUX.heroImageDimension),
-            heroImage.widthAnchor.constraint(equalToConstant: RecentlyVisitedCellUX.heroImageDimension),
+            heroImage.heightAnchor.constraint(equalToConstant: UX.heroImageDimension),
+            heroImage.widthAnchor.constraint(equalToConstant: UX.heroImageDimension),
             heroImage.centerYAnchor.constraint(equalTo: textStack.centerYAnchor),
 
             textStack.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 12),
@@ -191,12 +143,12 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
         shadowLayer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         shadowLayer.shadowOffset = CGSize(width: 0,
-                                          height: RecentlyVisitedCellUX.shadowOffset)
+                                          height: UX.shadowOffset)
         shadowLayer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
-        shadowLayer.shadowRadius = RecentlyVisitedCellUX.shadowRadius
+        shadowLayer.shadowRadius = UX.shadowRadius
 
-        let radiusSize = CGSize(width: RecentlyVisitedCellUX.generalCornerRadius,
-                                height: RecentlyVisitedCellUX.generalCornerRadius)
+        let radiusSize = CGSize(width: UX.generalCornerRadius,
+                                height: UX.generalCornerRadius)
         shadowLayer.shadowPath = UIBezierPath(roundedRect: bounds,
                                               byRoundingCorners: cornersToRound,
                                               cornerRadii: radiusSize).cgPath
