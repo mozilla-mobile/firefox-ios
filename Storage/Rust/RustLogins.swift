@@ -782,7 +782,7 @@ public class RustLogins {
             return
         }
 
-        let migrationSucceeded = migrateLoginsWithMetrics(
+        let migrationSucceeded = migrateLoginsFromSqlcipher(
             path: self.perFieldDatabasePath,
             newEncryptionKey: key,
             sqlcipherPath: self.sqlCipherDatabasePath,
