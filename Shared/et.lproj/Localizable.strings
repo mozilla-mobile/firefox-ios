@@ -1,302 +1,395 @@
-/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
-"+" = "+";
-
 /* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "-" = "-";
 
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
 /* Authentication prompt message with no realm. Parameter is the hostname of the site */
-"A username and password are being requested by %@." = "A username and password are being requested by %@.";
+"A username and password are being requested by %@." = "Sait %@ nõuab kasutajanime ja parooli.";
 
 /* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
-"A username and password are being requested by %@. The site says: %@" = "A username and password are being requested by %1$@. The site says: %2$@";
+"A username and password are being requested by %@. The site says: %@" = "Sait %1$@ nõuab kasutajanime ja parooli. Sait ütleb: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "Aa" = "Aa";
 
 /* About settings section title */
-"About" = "About";
+"About" = "Teave";
+
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Lisa otseteedesse";
 
 /* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Pin to Top Sites";
+"ActivityStream.ContextMenu.PinTopsite" = "Kinnita top saitide hulka";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Kinnita";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Eemalda otseteede hulgast";
 
 /* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Remove Pinned Site";
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Eemalda kinnitatud sait";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Eemalda kohakinnitus";
 
 /* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "Bookmarked";
+"ActivityStream.Highlights.Bookmark" = "Järjehoidjatest";
 
 /* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "Visited";
+"ActivityStream.Highlights.Visited" = "Külastatud";
+
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Hiljutised kaardid";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Kaarte: %d";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "Sinu otsing fraasile \"%@\"";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Hiljuti salvestatud";
 
 /* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "Recent Bookmarks";
+"ActivityStream.NewRecentBookmarks.Title" = "Hiljutised järjehoidjad";
 
 /* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "More";
+"ActivityStream.Pocket.MoreLink" = "Rohkem";
 
 /* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "Trending on Pocket";
+"ActivityStream.Pocket.SectionTitle" = "Populaarsed Pocketis";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "Pocketi poolt soovitatud";
 
 /* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "Trending";
+"ActivityStream.Pocket.Trending" = "Menukad";
 
 /* Section title label for recently visited websites */
-"ActivityStream.RecentHistory.Title" = "Recently Visited";
+"ActivityStream.RecentHistory.Title" = "Hiljuti külastatud";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "Hiljuti salvestatud";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Kuva kõiki";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "Eemalda";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "Otseteed";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "Rows: %d";
+"ActivityStream.TopSites.RowCount" = "Ridu: %d";
 
 /* The title for the setting page which lets you select the number of top site rows */
-"ActivityStream.TopSites.RowSettingFooter" = "Set Rows";
+"ActivityStream.TopSites.RowSettingFooter" = "Ridade määramine";
 
 /* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Top Sites";
+"ActivityStream.TopSites.SectionTitle" = "Top saidid";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
-"Add Tab" = "Add Tab";
+"Add Tab" = "Lisa kaart";
 
 /* Accessibility label for action adding current page to reading list.
    Name for button adding current article to reading list in reader mode */
-"Add to Reading List" = "Add to Reading List";
-
-/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Dismiss" = "OK";
-
-/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Message" = "An error occured while adding the pass to Wallet. Please try again later.";
-
-/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Title" = "Failed to Add Pass";
+"Add to Reading List" = "Lisa lugemisnimekirja";
 
 /* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
-"Added page to Reading List" = "Added page to Reading List";
+"Added page to Reading List" = "Leht lisati lugemisnimekirja";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "Olgu";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Pääsme lisamisel Walletisse esines viga. Palun proovi hiljem uuesti.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Pääsme lisamine ebaõnnestus";
 
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
-"Address and Search" = "Address and Search";
+"Address and Search" = "Aadress ja otsing";
+
+/* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
+"Address.Bar.v99" = "Aadressiriba";
 
 /* Used as a button label for crash dialog prompt */
-"Always Send" = "Always Send";
+"Always Send" = "Saada alati";
 
 /* Tile title for Amazon */
 "Amazon" = "Amazon";
 
 /* Authentication prompt title */
-"Authentication required" = "Authentication required";
+"Authentication required" = "Vajalik autentimine";
+
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "Otsi otsingumootoriga %@ otse aadressiribalt";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "Otsi otsingumootoriga %@";
 
 /* Accessibility label for the Back button in the tab toolbar. */
-"Back" = "Back";
+"Back" = "Tagasi";
 
 /* Block pop-up windows setting */
-"Block Pop-up Windows" = "Block Pop-up Windows";
+"Block Pop-up Windows" = "Hüpikaknad blokitakse";
 
 /* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Bookmark";
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Järjehoidja";
 
 /* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Folder";
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Kaust";
 
 /* The label for the Title field when editing a bookmark */
-"Bookmark.DetailFieldTitle.Label" = "Title";
+"Bookmark.DetailFieldTitle.Label" = "Pealkiri";
 
 /* The label for the URL field when editing a bookmark */
 "Bookmark.DetailFieldURL.Label" = "URL";
 
 /* Toggle bookmarks syncing setting */
-"Bookmarks" = "Bookmarks";
+"Bookmarks" = "Järjehoidjad";
+
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "Lisa";
+
+/* A label indicating the action of bookmarking all currently open non private tabs. */
+"Bookmarks.Actions.BookmarkAllTabs" = "Lisa kõik kaardid järjehoidjatesse";
+
+/* A label indicating the action of bookmarking the current tab. */
+"Bookmarks.Actions.BookmarkCurrentTab" = "Lisa praegune kaart järjehoidjatesse";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
-"Bookmarks.Edit.Button" = "Edit";
+"Bookmarks.Edit.Button" = "Muuda";
 
 /* The button to edit a bookmark */
-"Bookmarks.EditBookmark.Label" = "Edit Bookmark";
+"Bookmarks.EditBookmark.Label" = "Järjehoidja muutmine";
 
 /* The button to edit a folder */
-"Bookmarks.EditFolder.Label" = "Edit Folder";
+"Bookmarks.EditFolder.Label" = "Muuda kausta";
 
 /* The label to show the location of the folder where the bookmark is located */
-"Bookmarks.Folder.Label" = "Folder";
+"Bookmarks.Folder.Label" = "Kaust";
 
 /* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Location";
+"Bookmarks.FolderLocation.Label" = "Asukoht";
 
 /* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Folder Name";
+"Bookmarks.FolderName.Label" = "Kausta nimi";
+
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "Töölaua järjehoidjad";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "Viimati järjehoidjatesse lisatud";
 
 /* The button to create a new bookmark */
-"Bookmarks.NewBookmark.Label" = "New Bookmark";
+"Bookmarks.NewBookmark.Label" = "Uus järjehoidja";
 
 /* The button to create a new folder */
-"Bookmarks.NewFolder.Label" = "New Folder";
+"Bookmarks.NewFolder.Label" = "Uus kaust";
 
 /* The button to create a new separator */
-"Bookmarks.NewSeparator.Label" = "New Separator";
+"Bookmarks.NewSeparator.Label" = "Uus eraldaja";
+
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "Otsi järjehoidjatest";
 
 /* The label for the title of a bookmark */
-"Bookmarks.Title.Label" = "Title";
+"Bookmarks.Title.Label" = "Pealkiri";
 
 /* The label for the URL of a bookmark */
 "Bookmarks.URL.Label" = "URL";
 
 /* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "Bookmarks you save will show up here.";
+"BookmarksPanel.EmptyState.Title" = "Lisatud järjehoidjad ilmuvad siia.";
 
 /* Describes the date on which the breach occurred */
-"BreachAlerts.BreachDate" = "This breach occurred on";
+"BreachAlerts.BreachDate" = "See rikkumine toimus";
 
 /* Description of what a breach is */
-"BreachAlerts.Description" = "Passwords were leaked or stolen since you last changed your password. To protect this account, log in to the site and change your password.";
+"BreachAlerts.Description" = "Paroolid lekkisid või varastati pärast viimast parooli muutmist. Selle konto kaitsmiseks logi saiti sisse ja muuda oma parool.";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
-"BreachAlerts.LearnMoreButton" = "Learn more";
+"BreachAlerts.LearnMoreButton" = "Rohkem teavet";
 
 /* Leads to a link to the breached website */
-"BreachAlerts.Link" = "Go to";
+"BreachAlerts.Link" = "Mine saidile";
 
 /* Title for the Breached Login Detail View. */
-"BreachAlerts.Title" = "Website Breach";
+"BreachAlerts.Title" = "Veebisaidi rünne";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
-"Brightness" = "Brightness";
+"Brightness" = "Heledus";
 
 /* Label for Cancel button */
-"Cancel" = "Cancel";
+"Cancel" = "Loobu";
 
 /* Accessibility hint for the color theme setting buttons in reader mode display settings */
-"Changes color theme." = "Changes color theme.";
+"Changes color theme." = "Muudab värviteemat.";
 
 /* Accessibility hint for the font type buttons in reader mode display settings */
-"Changes font type." = "Changes font type.";
+"Changes font type." = "Muudab fondi tüüpi.";
 
 /* The button to open a new tab with the copied link */
-"ClipboardToast.GoToCopiedLink.Button" = "Go";
+"ClipboardToast.GoToCopiedLink.Button" = "Mine";
 
 /* Message displayed when the user has a copied link on the clipboard */
-"ClipboardToast.GoToCopiedLink.Title" = "Go to copied link?";
+"ClipboardToast.GoToCopiedLink.Title" = "Kas minna kopeeritud lingile?";
 
 /* Accessibility label for action denoting closing a tab in tab list (tray) */
-"Close" = "Close";
+"Close" = "Sulge";
 
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
-"Closing tab" = "Closing tab";
+"Closing tab" = "Kaardi sulgemine";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "arvuti";
 
 /* Context menu item for bookmarking a link URL */
-"ContextMenu.BookmarkLinkButtonTitle" = "Bookmark Link";
+"ContextMenu.BookmarkLinkButtonTitle" = "Lisa link järjehoidjatesse";
 
 /* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Switch";
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Lülitu";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "New Private Tab opened";
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Avati uus privaatne kaart";
 
 /* The button text in the Button Toast for switching to a fresh New Tab. */
-"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Switch";
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Lülitu";
 
 /* The label text in the Button Toast for switching to a fresh New Tab. */
-"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "New Tab opened";
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Avati uus kaart";
 
 /* Context menu item for copying an image to the clipboard */
-"ContextMenu.CopyImageButtonTitle" = "Copy Image";
+"ContextMenu.CopyImageButtonTitle" = "Kopeeri pilt";
 
 /* Context menu item for copying an image URL to the clipboard */
-"ContextMenu.CopyImageLinkButtonTitle" = "Copy Image Link";
+"ContextMenu.CopyImageLinkButtonTitle" = "Kopeeri pildi link";
 
 /* Context menu item for copying a link URL to the clipboard */
-"ContextMenu.CopyLinkButtonTitle" = "Copy Link";
+"ContextMenu.CopyLinkButtonTitle" = "Kopeeri link";
 
 /* Context menu item for downloading a link URL */
-"ContextMenu.DownloadLinkButtonTitle" = "Download Link";
+"ContextMenu.DownloadLinkButtonTitle" = "Laadi lingil olev sisu alla";
 
 /* Context menu item for opening a link in a new tab */
-"ContextMenu.OpenInNewTabButtonTitle" = "Open in New Tab";
+"ContextMenu.OpenInNewTabButtonTitle" = "Ava uuel kaardil";
+
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Ava link uuel privaatsel kaardil";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "Ava link uuel kaardil";
 
 /* Context menu item for saving an image */
-"ContextMenu.SaveImageButtonTitle" = "Save Image";
+"ContextMenu.SaveImageButtonTitle" = "Salvesta pilt";
 
 /* Context menu item for sharing a link URL */
-"ContextMenu.ShareLinkButtonTitle" = "Share Link";
+"ContextMenu.ShareLinkButtonTitle" = "Jaga linki";
 
-/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "Could not add page to Reading List. Maybe it’s already there?";
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "Info lihtsamaks sisestamiseks saad nüüd tööriistariba alla liigutada";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
+"ContextualHint.SearchBarPlacement.NewUsers" = "Info sisestamise lihtsustamiseks on tööriistariba nüüd vaikimisi allosas.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.Homepage.PersonalizedHome" = "Isikupärastatud Firefoxi avaleht teeb lihtsamaks jätkamise sealt, kus pooleli jäi. Leia oma hiljutised kaardid, järjehoidjad ja otsingutulemused.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "Tööriistariba sätted";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "Kaardid, mida sa pole vaadanud 2 nädalat, liigutatakse siia.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Lülita see sätetes välja";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
-"Could not add page to Reading list" = "Could not add page to Reading list";
+"Could not add page to Reading list" = "Lehte polnud võimalik lugemisnimekirja lisada";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Lehte polnud võimalik lugemisnimekirja lisada. Võib-olla on see juba lisatud?";
 
 /* Error message that is shown in settings when there was a problem loading */
-"Could not load page." = "Could not load page.";
+"Could not load page." = "Lehte polnud võimalik laadida.";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "For iOS 13 users, Firefox now automatically switches to a dark theme when your phone is set to Dark Mode. To change this behavior, go to Settings > Theme.";
+"CoverSheet.v22.DarkMode.Description" = "iOS 13 kasutajate jaoks lülitub Firefox nüüd automaatselt tumedale teemale, kui sinu telefon kasutab tumedat teemat. Käitumise muutmiseks ava Sätted > Teema.";
 
 /* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "Dark theme now includes a dark keyboard and dark splash screen.";
+"CoverSheet.v22.DarkMode.Title" = "Tume teema sisaldab nüüd tumedat klaviatuuri ja käivituskuva.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Description" = "Built-in Enhanced Tracking Protection helps stop ads from following you around. Turn on Strict to block even more trackers, ads, and popups. ";
+"CoverSheet.v24.ETP.Description" = "Sisseehitatud täiustatud jälitamisvastane kaitse aitab takistada reklaamidel sinu jälgimist. Lülita sisse range kaitse, et blokkida veel rohkem jälitajaid, reklaame ja hüpikaknaid.";
 
 /* Text for the new ETP settings button */
-"CoverSheet.v24.ETP.Settings.Button" = "Go to Settings";
+"CoverSheet.v24.ETP.Settings.Button" = "Mine sätetesse";
 
 /* Title for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Title" = "Protection Against Ad Tracking";
+"CoverSheet.v24.ETP.Title" = "Kaitse reklaamide jälgimise vastu";
 
 /* See http://mzl.la/1Qtkf0j */
-"Create an account" = "Create an account";
+"Create an account" = "Loo konto";
 
 /* Dark theme setting in Reading View settings */
-"Dark" = "Dark";
+"Dark" = "Tume";
 
 /* Accessibility label for button decreasing font size in display settings of reader mode */
-"Decrease text size" = "Decrease text size";
+"Decrease text size" = "Vähenda teksti suurust";
 
 /* Accessibility label for default search engine setting.
    Title for default search engine picker.
    Title for default search engine settings section. */
-"Default Search Engine" = "Default Search Engine";
+"Default Search Engine" = "Vaikeotsingumootor";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
-"Display Settings" = "Display Settings";
-
-/* Done button on left side of the Settings view controller title bar */
-"Done" = "Done";
+"Display Settings" = "Kuvamise sätted";
 
 /* Used as a button label for crash dialog prompt */
-"Don’t Send" = "Don’t Send";
+"Don’t Send" = "Ära saada";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Valmis";
 
 /* Panel accessibility label */
-"Downloads" = "Downloads";
+"Downloads" = "Allalaadimised";
 
 /* The label of the button the user will press to start downloading a file */
-"Downloads.Alert.DownloadNow" = "Download Now";
+"Downloads.Alert.DownloadNow" = "Laadi kohe alla";
 
 /* Button confirming the cancellation of the download. */
-"Downloads.CancelDialog.Cancel" = "Cancel";
+"Downloads.CancelDialog.Cancel" = "Katkesta";
 
 /* Alert dialog body when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Message" = "Are you sure you want to cancel this download?";
+"Downloads.CancelDialog.Message" = "Kas oled kindel, et soovid selle allalaadimise katkestada?";
 
 /* Button declining the cancellation of the download. */
-"Downloads.CancelDialog.Resume" = "Resume";
+"Downloads.CancelDialog.Resume" = "Jätka";
 
 /* Alert dialog title when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Title" = "Cancel Download";
+"Downloads.CancelDialog.Title" = "Allalaadimise katkestamine";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Downloads aren’t supported in Firefox yet.";
+"Downloads.Error.Message" = "Allalaadimised pole veel Firefoxis toetatud.";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
-"Downloads.Toast.Cancelled.LabelText" = "Download Cancelled";
+"Downloads.Toast.Cancelled.LabelText" = "Allalaadimine katkestati";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
-"Downloads.Toast.Failed.LabelText" = "Download Failed";
+"Downloads.Toast.Failed.LabelText" = "Allalaadimine ebaõnnestus";
 
 /* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "Retry";
+"Downloads.Toast.Failed.RetryButton" = "Proovi uuesti";
 
 /* The button to open a new tab with the Downloads home panel */
-"Downloads.Toast.GoToDownloads.Button" = "Downloads";
+"Downloads.Toast.GoToDownloads.Button" = "Allalaadimised";
 
 /* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
-"Downloads.Toast.MultipleFiles.DescriptionText" = "1 of %d files";
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1. fail, kokku %d";
 
 /* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
 "Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
@@ -305,1408 +398,1931 @@
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
 /* Action button for deleting downloaded files in the Downloads panel. */
-"DownloadsPanel.Delete.Title" = "Delete";
+"DownloadsPanel.Delete.Title" = "Kustuta";
 
 /* Title for the Downloads Panel empty state. */
-"DownloadsPanel.EmptyState.Title" = "Downloaded files will show up here.";
+"DownloadsPanel.EmptyState.Title" = "Allalaaditud faile kuvatakse siin.";
 
 /* Action button for sharing downloaded files in the Downloads panel. */
-"DownloadsPanel.Share.Title" = "Share";
+"DownloadsPanel.Share.Title" = "Jaga";
 
 /* Text message in the settings table view */
-"Enter your password to connect" = "Enter your password to connect";
+"Enter your password to connect" = "Ühenduse loomiseks sisesta oma parool";
 
 /* Label for button to perform advanced actions on the error page */
-"ErrorPages.Advanced.Button" = "Advanced";
+"ErrorPages.Advanced.Button" = "Edasijõudnuile";
 
 /* Warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning1.Text" = "Warning: we can’t confirm your connection to this website is secure.";
+"ErrorPages.AdvancedWarning1.Text" = "Hoiatus: meil pole võimalik kinnitada, et ühendus selle saidiga on turvaline.";
 
 /* Additional warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning2.Text" = "It may be a misconfiguration or tampering by an attacker. Proceed if you accept the potential risk.";
+"ErrorPages.AdvancedWarning2.Text" = "Tegemist võib olla häälestusveaga või ründaja rikkumisega. Jätka ainult siis, kui nõustud võimaliku riskiga.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "The owner of %@ has configured their website improperly. To protect your information from being stolen, Firefox has not connected to this website.";
+"ErrorPages.CertWarning.Description" = "Saidi %@ omanik on oma veebilehe valesti häälestanud. Sinu andmete kaitsmiseks varastamise eest ei loonud Firefox selle veebilehega ühendust.";
 
 /* Title on the certificate error page */
-"ErrorPages.CertWarning.Title" = "This Connection is Untrusted";
+"ErrorPages.CertWarning.Title" = "Seda ühendust ei usaldata";
 
 /* Label for button to go back from the error page */
-"ErrorPages.GoBack.Button" = "Go Back";
+"ErrorPages.GoBack.Button" = "Mine tagasi";
 
 /* Button label to temporarily continue to the site from the certificate error page */
-"ErrorPages.VisitOnce.Button" = "Visit site anyway";
+"ErrorPages.VisitOnce.Button" = "Külasta saiti igal juhul";
 
 /* Question shown to user when tapping a link that opens the App Store app */
-"ExternalLink.AppStore.ConfirmationTitle" = "Open this link in the App Store?";
+"ExternalLink.AppStore.ConfirmationTitle" = "Kas avada see link App Store'is?";
 
 /* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
-"ExternalLink.AppStore.GenericConfirmationTitle" = "Open this link in external app?";
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Kas avada see link välises äpis?";
 
 /* Tile title for Facebook */
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox Home Page";
+"Firefox.HomePage.Title" = "Firefoxi avaleht";
+
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "Kohanda avalehte";
+
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "Avasta veel";
+
+/* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Pocket.Minutes.v99" = "%d min";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "Mõtlema panevad lood";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "Eemalda";
+
+/* Label showing how many sites there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.SitesCount.v101" = "Saite: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "Sätted";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Meie sponsijatest ja sinu privaatsusest";
+
+/* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "Sponsitud";
 
 /* Accessibility Label for the tab toolbar Forward button */
-"Forward" = "Forward";
+"Forward" = "Edasi";
 
 /* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Wrong email? Disconnect below to start over.";
+"FxA.AccountVerificationDetails" = "Vale e-post? Uuesti alustamiseks katkesta ühendus allpool.";
 
 /* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "Account Verification Required";
+"FxA.AccountVerificationRequired" = "Vajalik on konto kinnitamine";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "You need to verify %@. Check your email for the verification link from Firefox.";
+"FxA.AccountVerificationRequiredSurface" = "Pead kinnitama aadressi %@. Kontrolli oma e-posti Firefoxi kinnituslingi leidmiseks.";
 
 /* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Connect Another Device";
+"FxA.ConnectAnotherDevice" = "Ühenda teine seade";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox Account";
+"FxA.FirefoxAccount" = "Firefoxi konto";
 
 /* Button label to go to Firefox Account settings */
-"FxA.ManageAccount" = "Manage Account & Devices";
+"FxA.ManageAccount" = "Halda kontot ja seadmeid";
 
 /* Label when no internet is present */
-"FxA.NoInternetConnection" = "No Internet Connection";
+"FxA.NoInternetConnection" = "Internetiühendus puudub";
 
 /* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Open Sync Preferences";
+"FxA.OpenSyncPreferences" = "Ava Synci sätted";
+
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "Skanni aadressil firefox.com/pair kuvatav QR-kood";
 
 /* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "Remove";
+"FxA.RemoveAccount" = "Eemalda";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Remove the Firefox Account associated with this device to sign in as a different user.";
+"FxA.RemoveAccountAlertMessage" = "Teise kasutajana sisselogimiseks eemalda selle seadmega seotud Firefoxi konto.";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "Remove Account";
+"FxA.RemoveAccountAlertTitle" = "Konto eemaldamine";
 
 /* Button label to resend email */
-"FxA.ResendEmail" = "Resend Email";
+"FxA.ResendEmail" = "Saada e-kiri uuesti";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Logi sisse oma kaameraga";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "Sünkroniseeri Firefoxi kontoga seadmete vahel.";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "Loo Firefoxi konto.";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Ava Firefox oma arvutis ja mine aadressile firefox.com/pair";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Skannimiseks valmis";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "Lülita Sync sisse";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Kasuta selle asemel e-posti aadressi";
 
 /* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Sign in to Sync";
+"FxA.SignIntoSync" = "Logi Synci sisse";
 
 /* Label explaining what sync does */
-"FxA.SyncExplain" = "Get your tabs, bookmarks, and passwords from your other devices.";
+"FxA.SyncExplain" = "Hangi oma kaardid, järjehoidjad ja paroolid oma teistest seadmetest.";
 
 /* Button label to Sync your Firefox Account */
-"FxA.SyncNow" = "Sync Now";
+"FxA.SyncNow" = "Sünkroniseeri kohe";
 
 /* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "Take Your Web With You";
+"FxA.TakeYourWebWithYou" = "Võta oma veeb endaga kaasa";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync has connected to %@";
+"FxAPush_DeviceConnected_body" = "Firefox Sync on ühendatud seadmega %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
-"FxAPush_DeviceConnected_title" = "Sync Connected";
-
-/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "This device has been successfully disconnected from Firefox Sync.";
-
-/* Title of a notification displayed when this device has been disconnected by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync Disconnected";
-
-/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "A device has disconnected from Firefox Sync";
+"FxAPush_DeviceConnected_title" = "Sync on ühendatud";
 
 /* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
-"FxAPush_DeviceDisconnected_body" = "%@ has been successfully disconnected.";
+"FxAPush_DeviceDisconnected_body" = "Seade %@ on edukalt lahti ühendatud.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "See seade ühendati edukalt Firefox Syncist lahti.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync ühendati lahti";
 
 /* Title of a notification displayed when named device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_title" = "Sync Disconnected";
+"FxAPush_DeviceDisconnected_title" = "Sync ühendati lahti";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Seade on Firefox Syncist lahti ühendatud";
+
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefoxi logo - taustapildi muutmise nupp.";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "Get your open tabs, bookmarks, and passwords from your other devices.";
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Hangi oma avatud kaardid, järjehoidjad ja paroolid oma teistest seadmetest.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
-"Help" = "Help";
+"Help" = "Abi";
 
 /* Toggle history syncing setting */
-"History" = "History";
+"History" = "Ajalugu";
 
 /* Title for button in the history panel to clear recent history */
-"HistoryPanel.ClearHistoryButtonTitle" = "Clear Recent History…";
+"HistoryPanel.ClearHistoryButtonTitle" = "Kustuta hiljutine ajalugu…";
 
 /* Option title to clear all browsing history. */
-"HistoryPanel.ClearHistoryMenuOptionEverything" = "Everything";
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "Kõik";
 
 /* Button to perform action to clear history for the last hour */
-"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "The Last Hour";
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "Viimane tund";
 
 /* Button to perform action to clear history for today only */
-"HistoryPanel.ClearHistoryMenuOptionToday" = "Today";
+"HistoryPanel.ClearHistoryMenuOptionToday" = "Tänane päev";
 
 /* Button to perform action to clear history for yesterday and today */
-"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Today and Yesterday";
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Tänane ja eilne";
 
 /* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Clearing Recent History will remove history, cookies, and other browser data.";
+"HistoryPanel.ClearHistoryMenuTitle" = "Hiljutise ajaloo kustutamine kustutab ajaloo, küpsised ja muud brauseri andmed.";
 
 /* Title for the History Panel empty state. */
-"HistoryPanel.EmptyState.Title" = "Websites you’ve visited recently will show up here.";
+"HistoryPanel.EmptyState.Title" = "Viimati külastatud veebisaidid ilmuvad siia.";
 
 /* Description for the empty synced tabs null state in the History Panel */
-"HistoryPanel.EmptySyncedTabsNullState.Description" = "Your tabs from other devices show up here.";
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Siin kuvatakse kaarte teistest seadmetest.";
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Sign in to view a list of tabs from your other devices.";
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Teistes seadmetes avatud kaartide nimekirja nägemiseks logi sisse.";
 
 /* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Your account needs to be verified.";
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Sinu konto vajab kinnitamist.";
 
 /* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Want to see your tabs from other devices here?";
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Soovid siin näha teistes seadmetes avatud kaarte?";
 
 /* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Turn on tab syncing to view a list of tabs from your other devices.";
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Teistes seadmetes avatud kaartide nägemiseks lülita sisse kaartide sünkroniseerimine.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
 
 /* Title for the Back to History button in the History Panel */
-"HistoryPanel.HistoryBackButton.Title" = "History";
+"HistoryPanel.HistoryBackButton.Title" = "Ajalugu";
 
 /* Title for the Recently Closed button in the History Panel */
-"HistoryPanel.RecentlyClosedTabsButton.Title" = "Recently Closed";
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Viimati suletud";
 
 /* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d device(s) connected";
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d seade(t) ühendatud";
 
 /* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "Synced Devices";
+"HistoryPanel.SyncedTabsCell.Title" = "Sünkroniseeritud seadmed";
+
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Avaleht";
 
 /* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "Cancel";
+"HomePage.Set.Dialog.Cancel" = "Loobu";
 
 /* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "You can change this at any time in Settings";
+"HomePage.Set.Dialog.Message" = "Saad seda sätetest igal ajal muuta";
 
 /* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Set Homepage";
+"HomePage.Set.Dialog.OK" = "Määra avaleht";
 
 /* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Do you want to use this web page as your home page?";
+"HomePage.Set.Dialog.Title" = "Kas soovid seda veebilehte kasutada oma avalehena?";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.Bookmark" = "Bookmark";
+"HomePanel.ContextMenu.Bookmark" = "Lisa järjehoidjatesse";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.DeleteFromHistory" = "Delete from History";
+"HomePanel.ContextMenu.DeleteFromHistory" = "Kustuta ajaloost";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Open in New Private Tab";
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Ava uuel privaatsel kaardil";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Ava privaatsel kaardil";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewTab" = "Open in New Tab";
+"HomePanel.ContextMenu.OpenInNewTab" = "Ava uuel kaardil";
 
 /* The title for the Remove context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.Remove" = "Remove";
+"HomePanel.ContextMenu.Remove" = "Eemalda";
 
 /* The title for the Remove Bookmark context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.RemoveBookmark" = "Remove Bookmark";
+"HomePanel.ContextMenu.RemoveBookmark" = "Eemalda järjehoidja";
 
 /* The title for the Share context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.Share" = "Share";
+"HomePanel.ContextMenu.Share" = "Jaga";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"Hotkeys.Back.DiscoveryTitle" = "Back";
+"Hotkeys.Back.DiscoveryTitle" = "Tagasi";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"Hotkeys.CloseTab.DiscoveryTitle" = "Close Tab";
+"Hotkeys.CloseTab.DiscoveryTitle" = "Sulge kaart";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"Hotkeys.Find.DiscoveryTitle" = "Find";
+"Hotkeys.Find.DiscoveryTitle" = "Otsi";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"Hotkeys.Forward.DiscoveryTitle" = "Forward";
+"Hotkeys.Forward.DiscoveryTitle" = "Edasi";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"Hotkeys.NewPrivateTab.DiscoveryTitle" = "New Private Tab";
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Uus privaatne kaart";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"Hotkeys.NewTab.DiscoveryTitle" = "New Tab";
+"Hotkeys.NewTab.DiscoveryTitle" = "Uus kaart";
 
 /* Label to switch to normal browsing mode */
-"Hotkeys.NormalMode.DiscoveryTitle" = "Normal Browsing Mode";
+"Hotkeys.NormalMode.DiscoveryTitle" = "Tavaline lehitsemisrežiim";
 
 /* Label to switch to private browsing mode */
-"Hotkeys.PrivateMode.DiscoveryTitle" = "Private Browsing Mode";
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Privaatne lehitsemisrežiim";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"Hotkeys.Reload.DiscoveryTitle" = "Reload Page";
+"Hotkeys.Reload.DiscoveryTitle" = "Laadi leht uuesti";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Select Location Bar";
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Vali asukohariba";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"Hotkeys.ShowNextTab.DiscoveryTitle" = "Show Next Tab";
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Kuva järgmine kaart";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Show Previous Tab";
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Kuva eelmine kaart";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Lülita automaatne sulgemine sisse";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox sulgeb kaardid, mida sa pole viimase kuu jooksul vaadanud.";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
+"InactiveTabs.TabTray.AutoClosePrompt.Title" = "Kas sulgeda automaatselt kuu aja pärast?";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "Sulge kõik mitteaktiivsed kaardid";
 
 /* Accessibility label for button increasing font size in display settings of reader mode */
-"Increase text size" = "Increase text size";
+"Increase text size" = "Suurenda teksti suurust";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "just praegu";
+
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "Tegelik suurus";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "Lisa järjehoidjatesse";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "Kustuta hiljutine ajalugu";
+
+/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.DownloadLink" = "Laadi lingil olev sisu alla";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "Otsi uuesti";
+
+/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.NewNormalTab" = "Uus tavaline kaart";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInBackground" = "Ava link taustal";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInNewTab" = "Ava link uuel kaardil";
+
+/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.SavePageAs" = "Salvesta veebileht kui…";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "Järjehoidjad";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Edit" = "Muuda";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.File" = "Fail";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "Ajalugu";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "Tööriistad";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.View" = "Vaade";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "Aken";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "Sätted";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "Kuva järjehoidjad";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "Kuva allalaadimisi";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "Kuva esimest kaarti";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "Kuva ajalugu";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "Kuva viimast kaarti";
+
+/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowTabNumber" = "Kuva kaardinumbreid 1-9";
+
+/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.UndoCloseTab" = "Võta kaardi sulgemine tagasi";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "Suurenda";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "Vähenda";
 
 /* History tableview section header */
-"Last month" = "Last month";
+"Last month" = "Eelmine kuu";
 
 /* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Last synced: %@";
+"Last synced: %@" = "Viimane sünkroniseerimine: %@";
 
 /* History tableview section header */
-"Last week" = "Last week";
+"Last week" = "Eelmine nädal";
+
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Loobu";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Kustuta";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Kas kustutada kõik saidid grupist %@?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Eemaldab ajaloo (sh teistest seadmetest sünkroniseeritud ajaloo), küpsised ja muud lehitsemise andmed.";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "Ajalugu ei leitud";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "Hiljuti suletud kaardid";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Sisesta otsitav fraas";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
+"LibraryPanel.History.SyncedFromOtherDevices.v99" = "Sünkroniseeritud teistest seadmetest";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "Sünkroniseeritud ajalugu";
+
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "Vanemad";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
-"Licenses" = "Licenses";
+"Licenses" = "Litsentsid";
 
 /* Light theme setting in Reading View settings */
-"Light" = "Light";
+"Light" = "Hele";
 
 /* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
-"Load original page" = "Load original page";
+"Load original page" = "Laadi algne leht";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
-"Loading content…" = "Loading content…";
+"Loading content…" = "Sisu laadimine…";
 
 /* Authentication prompt log in button */
-"Log in" = "Log in";
+"Log in" = "Logi sisse";
 
 /* Toggle logins syncing setting */
-"Logins" = "Logins";
+"Logins" = "Kasutajakontod";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Rohkem teavet";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "Kasutajanimede ja paroolide salvestamiseks ning automaatseks täitmiseks luba Face ID, Touch ID või seadme pääsukood.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Jätka";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Rohkem teavet";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Sinu kasutajanimed ja paroolid on nüüd kaitstud Face ID, Touch ID või pääsukoodi poolt.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Automaatse täitmise funktsiooni kasutamiseks peab sul olema seadme pääsukood lubatud.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Võta oma paroolid kõikjale kaasa";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Täida Firefoxi paroolid automaatselt";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Lülita automaatne täitmine sisse";
 
 /* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "Modified";
+"LoginsDetailView.LoginModified" = "Muudetud";
 
 /* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "Login";
+"LoginsDetailView.LoginTitle" = "Kasutajakonto";
 
 /* Button to not save the user's password */
-"LoginsHelper.DontSave.Button" = "Don’t Save";
+"LoginsHelper.DontSave.Button" = "Ära salvesta";
 
 /* Button to not update the user's password */
-"LoginsHelper.DontUpdate.Button" = "Don’t Update";
+"LoginsHelper.DontUpdate.Button" = "Ära uuenda";
 
 /* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "Save login %1$@ for %2$@?";
+"LoginsHelper.PromptSaveLogin.Title" = "Kas salvestada kasutajanimi %1$@ saidi %2$@ jaoks?";
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "Save password for %@?";
+"LoginsHelper.PromptSavePassword.Title" = "Kas salvestada saidi %@ parool?";
 
 /* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Update login for %@?";
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Kas uuendada saidi %@ kasutajatunnused?";
 
 /* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Update login %1$@ for %2$@?";
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Kas uuendada kasutajakonto %1$@ saidi %2$@ jaoks?";
 
 /* Button to save the user's password */
-"LoginsHelper.SaveLogin.Button" = "Save Login";
+"LoginsHelper.SaveLogin.Button" = "Salvesta kasutajakonto";
 
 /* Button to update the user's password */
-"LoginsHelper.Update.Button" = "Update";
+"LoginsHelper.Update.Button" = "Uuenda";
 
 /* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "Login";
+"LoginsList.LoginsListFilterLogin" = "Kasutajanimi";
 
 /* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "All";
+"LoginsList.LoginsListFilterSearchAll" = "Kõik";
 
 /* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "Website";
+"LoginsList.LoginsListFilterWebsite" = "Sait";
 
 /* Placeholder test for search box in logins list view. */
-"LoginsList.LoginsListSearchPlaceholder" = "Filter";
+"LoginsList.LoginsListSearchPlaceholder" = "Filtreeri";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Salvestatud kasutajatunnuseid kuvatakse siin. Kui salvestasid oma kasutajatunnused teises seadmes olevasse Firefoxi, siis logi sisse oma Firefoxi kontosse.";
+
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Kasutajakontosid ei leitud";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Otsingule ei leitud vasteid.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Sobivaid kasutajatunnuseid ei leitud";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Loobu";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Otsi kasutajakontosid";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Parooli valimine täitmiseks";
 
 /* Title for the list of logins */
-"LoginsList.Title" = "SAVED LOGINS";
+"LoginsList.Title" = "SALVESTATUD KASUTAJAKONTOD";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Looks like Firefox crashed previously. Would you like to restore your tabs?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Paistab, et Firefox jooksis varem kokku. Kas soovid oma kaardid taastada?";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
-"Mark as Read" = "Mark as Read";
+"Mark as Read" = "Märgi loetuks";
 
 /* Name for Mark as unread button in reader mode
    Title for the button that marks a reading list item as unread */
-"Mark as Unread" = "Mark as Unread";
+"Mark as Unread" = "Märgi mitteloetuks";
+
+/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
+"Menu.AddBookmark.AlternateLabel.v99" = "Lisa järjehoidjatesse";
 
 /* Toast displayed to the user after a bookmark has been added. */
-"Menu.AddBookmark.Confirm" = "Bookmark Added";
+"Menu.AddBookmark.Confirm" = "Järjehoidja lisatud";
+
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "Lisa";
 
 /* Toast displayed to the user after adding the item to the Top Sites. */
-"Menu.AddPin.Confirm" = "Pinned To Top Sites";
+"Menu.AddPin.Confirm" = "Kinnitatud top saitidesse";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "Lisatud otseteedesse";
+
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "Lisa";
 
 /* Toast displayed to the user after adding the item to their reading list. */
-"Menu.AddToReadingList.Confirm" = "Added To Reading List";
+"Menu.AddToReadingList.Confirm" = "Lisatud lugemisnimekirja";
+
+/* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
+"Menu.AddToShortcuts.v99" = "Lisa otseteedesse";
+
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "Järjehoidjad";
 
 /* The title for the button that lets you copy the url from the location bar. */
-"Menu.Copy.Title" = "Copy Address";
+"Menu.Copy.Title" = "Kopeeri aadress";
 
 /* Toast displayed to user after copy url pressed. */
-"Menu.CopyURL.Confirm" = "URL Copied To Clipboard";
+"Menu.CopyURL.Confirm" = "URL kopeeriti vahemällu";
+
+/* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
+"Menu.CustomizeHomePage.v99" = "Kohanda avalehte";
+
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Allalaadimised";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "Enhanced Tracking Protection is OFF for this site.";
+"Menu.EnhancedTrackingProtectionOff.Title" = "Täiustatud jälitamisvastane kaitse on sellel saidil VÄLJAS.";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "Enhanced Tracking Protection is ON for this site.";
+"Menu.EnhancedTrackingProtectionOn.Title" = "Täiustatud jälitamisvastane kaitse on sellel saidil SEES.";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox blocks cross-site trackers, social trackers, cryptominers, and fingerprinters.";
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox blokib saidiülesed jälitajad, sotsiaalsed jälitajad, krüptokaevurid ja seadmetuvastajad.";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox blocks cross-site trackers, social trackers, cryptominers, fingerprinters, and tracking content.";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox blokib saidiülesed jälitajad, sotsiaalsed jälitajad, krüptokaevurid, seadmetuvastajad ja jälitava sisu.";
+
+/* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
+"Menu.Help.v99" = "Abi";
+
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "Ajalugu";
 
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
-"Menu.Library.StopReload" = "Stop";
+"Menu.Library.StopReload" = "Peata";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "Halda kontot %@";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "Uus kaart";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "Lülita öörežiim välja";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "Enable Night Mode";
+"Menu.NightModeTurnOn.Label" = "Luba öörežiim";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "Lülita öörežiim välja";
 
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "Block Images";
+"Menu.NoImageModeBlockImages.Label" = "Bloki pildid";
+
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "Kuva pilte";
 
 /* Label for title in page action menu. */
-"Menu.PageActions.Title" = "Page Actions";
+"Menu.PageActions.Title" = "Lehe toimingud";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "Paroolid";
 
 /* The title for the button that lets you paste into the location bar */
-"Menu.Paste.Title" = "Paste";
+"Menu.Paste.Title" = "Aseta";
 
 /* The title for the button that lets you paste and go to a URL */
-"Menu.PasteAndGo.Title" = "Paste & Go";
+"Menu.PasteAndGo.Title" = "Aseta ja mine";
 
-/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
-"Menu.ReloadWithTrackingProtection.Title" = "Reload With Tracking Protection";
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "Lugemisnimekiri";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
-"Menu.ReloadWithoutTrackingProtection.Title" = "Reload Without Tracking Protection";
+"Menu.ReloadWithoutTrackingProtection.Title" = "Laadi uuesti jälitamisvastase kaitseta";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "Laadi uuesti koos jälitamisvastase kaitsega";
 
 /* Toast displayed to the user after a bookmark has been removed. */
-"Menu.RemoveBookmark.Confirm" = "Bookmark Removed";
+"Menu.RemoveBookmark.Confirm" = "Järjehoidja eemaldatud";
+
+/* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
+"Menu.RemoveBookmark.Label.v99" = "Eemalda";
+
+/* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
+"Menu.RemovedFromShortcuts.v99" = "Eemalda otseteede hulgast";
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "Removed From Top Sites";
+"Menu.RemovePin.Confirm" = "Eemalda top saitide seast";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2.v99" = "Eemalda otseteede hulgast";
+
+/* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
+"Menu.RemoveReadingList.AlternateLabel.v99" = "Eemalda lugemisnimekirjast";
+
+/* Toast displayed to confirm to the user that his reading list item was correctly removed. */
+"Menu.RemoveReadingList.Confirm.v99" = "Lugemisnimekirjast eemaldatud";
+
+/* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
+"Menu.RemoveReadingList.Label.v99" = "Eemalda";
+
+/* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
+"Menu.Share.v99" = "Jaga";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
-"Menu.TabSent.Confirm" = "Tab Sent";
+"Menu.TabSent.Confirm" = "Kaart on saadetud";
+
+/* Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu */
+"Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "Järjehoidjad";
+
+/* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "Avaleht";
 
 /* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "Blocked";
+"Menu.TrackingProtection.BlockedTitle" = "Blokitud";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Verifitseerija: %@";
 
 /* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "No trackers known to Firefox were detected on this page.";
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Sellelt lehelt ei tuvastatud ühtki Firefoxile teada olevat jälitajat.";
 
 /* The title for tracking protection settings */
-"Menu.TrackingProtection.ProtectionSettings.Title" = "Protection Settings";
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Kaitse sätted";
 
 /* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "Protections for %@";
+"Menu.TrackingProtection.TitlePrefix" = "Saidil %@ rakenduvad kaitsed";
 
 /* The title that shows the number of content cookies blocked */
-"Menu.TrackingProtectionBlockedContent.Title" = "Tracking content";
+"Menu.TrackingProtectionBlockedContent.Title" = "Jälitav sisu";
 
 /* The title that shows the number of social URLs blocked */
-"Menu.TrackingProtectionBlockedSocial.Title" = "Social Trackers";
+"Menu.TrackingProtectionBlockedSocial.Title" = "Sotsiaalmeedia jälitajad";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox is blocking parts of the page that may track your browsing.";
+"Menu.TrackingProtectionBlocking.Description" = "Firefox blokib selle lehe osasid, mis võivad sinu tegevust jälitada.";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Block online trackers";
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Jälitajad blokitakse";
 
 /* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "Cross-Site Tracking Cookies";
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Saitideülesed jälitamisküpsised";
 
 /* The title that shows the number of cross-site URLs blocked */
-"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Cross-Site Trackers";
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Saitideülesed jälitajad";
 
 /* The title that shows the number of cryptomining scripts blocked */
-"Menu.TrackingProtectionCryptominersBlocked.Title" = "Cryptominers";
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Krüptorahakaevurid";
 
 /* Description of content trackers. */
-"Menu.TrackingProtectionDescription.ContentTrackers" = "Websites may load outside ads, videos, and other content that contains hidden trackers. Blocking this can make websites load faster, but some buttons, forms, and login fields, might not work.";
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Saidid võivad laadida väliseid reklaame, videoid ja muud sisu, mis sisaldab peidetud jälitajaid. Jälitava sisu blokkimine võib panna saidi kiiremini avanema, kuid mõned nupud, vormid ja sisselogimise väljad ei pruugi enam toimida.";
 
 /* Description of cross-site trackers. */
-"Menu.TrackingProtectionDescription.CrossSiteNew" = "These cookies follow you from site to site to gather data about what you do online. They are set by third parties such as advertisers and analytics companies.";
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Need küpsised jälitavad sind saidilt saidile, et koguda infot sinu veebitegevuse kohta. Neid määravad kolmandad osapooled, näiteks reklaamijad ja analüüsiettevõtted.";
 
 /* Description of cryptominers. */
-"Menu.TrackingProtectionDescription.CryptominersNew" = "Cryptominers secretly use your system’s computing power to mine digital money. Cryptomining scripts drain your battery, slow down your computer, and can increase your energy bill.";
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Krüptorahakaevurid kasutavad salaja sinu süsteemi arvutusressursse digitaalse raha kaevandamiseks. Krüptoraha kaevandamise skriptid tühjendavad sinu seadme akut, aeglustavad sinu arvutit ja suurendavad sinu elektriarvet.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "The settings on your browser and computer are unique. Fingerprinters collect a variety of these unique settings to create a profile of you, which can be used to track you as you browse.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Sinu brauseri ja seadme sätted on unikaalsed. Seadmetuvastajad koguvad erinevaid unikaalseid sätteid, et luua sinu profiil, mida saab kasutada sinu jälitamiseks.";
 
 /* Description of social network trackers. */
-"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Social networks place trackers on other websites to build a more complete and targeted profile of you. Blocking these trackers reduces how much social media companies can see what do you online.";
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Suhtlusvõrgustikud paigaldavad jälitajaid teistele saitidele, et luua sinust täielikum ja sihipärasem profiil. Nende jälitajate blokkimine vähendab seda, kui palju sotsiaalvõrgustikud sinu kohta näevad.";
 
 /* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "Disabled for this site";
+"Menu.TrackingProtectionDisable1.Title" = "Keela sellel saidil";
 
 /* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "Tracking Protection is now off for this site.";
+"Menu.TrackingProtectionDisabled.Title" = "Jälitamisvastane kaitse on nüüd sellel saidil väljas.";
 
 /* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "Enable Tracking Protection";
+"Menu.TrackingProtectionEnable.Title" = "Luba jälitamisvastane kaitse";
 
 /* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "Enabled for this site";
+"Menu.TrackingProtectionEnable1.Title" = "Luba sellel saidil";
 
 /* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "Tracking Protection is now on for this site.";
+"Menu.TrackingProtectionEnabled.Title" = "Jälitamisvastane kaitse on nüüd sellel saidil sees.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
-"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Fingerprinters";
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Seadmetuvastajad";
 
 /* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Blocked Cross-Site Tracking Cookies";
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Blokitud saitideülesed jälitajad";
 
 /* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "Blocked Cryptominers";
+"Menu.TrackingProtectionListTitle.Cryptominers" = "Blokitud krüptorahakaevurid";
 
 /* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "Blocked Fingerprinters";
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "Blokitud seadmetuvastajad";
 
 /* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "Blocked Social Trackers";
+"Menu.TrackingProtectionListTitle.Social" = "Blokitud sotsiaalmeedia jälitajad";
 
 /* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "Learn more about how Tracking Protection blocks online trackers that collect your browsing data across multiple websites.";
+"Menu.TrackingProtectionMoreInfo.Description" = "Vaata rohkem teavet sellest, kuidas jälitamisvastane kaitse blokib jälitajad, kes koguvad andmeid sinu veebilehitsemise kohta üle mitme veebilehe.";
 
 /* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "No tracking elements detected on this page.";
+"Menu.TrackingProtectionNoBlocking.Description" = "Sellel lehel ei tuvastatud jälitavaid elemente.";
 
 /* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "The site includes elements that may track your browsing. You have disabled protection.";
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "See sait sisaldab elemente, mis võivad sinu tegevust jälitada. Kaitse on keelatud.";
 
 /* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "Enable for this site";
+"Menu.TrackingProtectionWhitelistRemove.Title" = "Luba sellel saidil";
 
 /* The title for the option to view the What's new page. */
-"Menu.WhatsNew.Title" = "What's New";
+"Menu.WhatsNew.Title" = "Mis on uut?";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "mobiilseade";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "rohkem kui kuu aega tagasi";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "rohkem kui nädal tagasi";
 
 /* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
-"Navigation Toolbar" = "Navigation Toolbar";
+"Navigation Toolbar" = "Asukohariba";
 
 /* Accessibility label for the New Tab button in the tab toolbar.
    Accessibility Label for the tab toolbar New tab button */
-"New Tab" = "New Tab";
+"New Tab" = "Uus kaart";
 
 /* Restore Tabs Negative Action */
-"No" = "No";
+"No" = "Ei";
 
 /* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
-"No tabs" = "No tabs";
+"No tabs" = "Kaardid puuduvad";
 
 /* OK button */
-"OK" = "OK";
+"OK" = "Olgu";
 
 /* Restore Tabs Affirmative Action */
-"Okay" = "Okay";
+"Okay" = "Olgu";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "Alusta veebilehitsemist";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about. */
+"Onboarding.WhatsNew.Description" = "Nüüd on lihtsam jätkata sealt, kus pooleli jäi.";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
+"Onboarding.WhatsNew.PersonalizedHome.Description" = "Liigu oma avatud kaartide, järjehoidjate ja lehitsemise ajaloo juurde.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Description" = "Külasta oma viimaseid otsinguid uuesti avalehelt.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Title" = "Hiljutised otsingud";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Description" = "Sama otsingu lehed grupeeritakse kokku.";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Title" = "Puhtamad kaartide grupid";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
+   The title for the new onboarding card letting users know what is new in Firefox iOS */
+"Onboarding.WhatsNew.Title" = "Mis on uut Firefoxis";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Oops! Firefox crashed";
+"Oops! Firefox crashed" = "Oih! Firefox jooksis kokku";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Artiklite avamiseks lugemisrežiimis puuduta raamatu ikooni, kui see ilmub aadressiribale.";
 
 /* See http://mzl.la/1G7uHo7 */
-"Open Settings" = "Open Settings";
+"Open Settings" = "Ava sätted";
 
 /* Toggle tabs syncing setting */
-"Open Tabs" = "Open Tabs";
-
-/* See http://mzl.la/1LXbDOL */
-"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Open articles in Reader View by tapping the book icon when it appears in the title bar.";
+"Open Tabs" = "Avatud kaardid";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox cannot open the page because it has an invalid address.";
+"OpenURL.Error.Message" = "Firefox ei saa seda lehte avada, sest sellel on vigane aadress.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
-"OpenURL.Error.Title" = "Cannot Open Page";
+"OpenURL.Error.Title" = "Lehe avamine pole võimalik";
 
 /* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "Page Options Menu";
+"Page Options Menu" = "Lehe sätete menüü";
 
 /* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "Panel Chooser";
+"Panel Chooser" = "Paneeli valija";
 
 /* Password textbox in Authentication prompt */
-"Password" = "Password";
+"Password" = "Parool";
 
 /* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "You don’t have any credentials synced from your Firefox Account";
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Firefoxi kontolt pole ühtki parooli sünkroniseeritud";
 
 /* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "Available Credentials:";
+"PasswordAutoFill.PasswordsListTitle" = "Saadaolevad kasutajakontod:";
 
 /* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox Credentials";
+"PasswordAutoFill.SectionTitle" = "Firefoxi kasutajakontod";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "This allows you to save the image to your Camera Roll.";
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "See võimaldab salvestada pildi Camera Rolli.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox would like to access your Photos";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox soovib ligipääsu sinu piltidele";
 
 /* Button for closing the menu action sheet */
-"PhotonMenu.close" = "Close";
+"PhotonMenu.close" = "Sulge";
 
 /* Privacy section title */
-"Privacy" = "Privacy";
+"Privacy" = "Privaatsus";
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
-"Privacy Policy" = "Privacy Policy";
+"Privacy Policy" = "Privaatsusreeglid";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Ühendus pole turvaline";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Turvaline ühendus";
 
 /* Title for quick-search engines settings section. */
-"Quick-Search Engines" = "Quick-Search Engines";
+"Quick-Search Engines" = "Kiirotsingumootorid";
+
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "Hinda App Store'is";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "loetud";
 
 /* Accessibility label for the Reader View button */
-"Reader View" = "Reader View";
+"Reader View" = "Lugemisvaade";
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
-"ReaderMode.Available.VoiceOverAnnouncement" = "Reader Mode available";
+"ReaderMode.Available.VoiceOverAnnouncement" = "Saadaval on lugemisvaade";
 
 /* Panel accessibility label */
-"Reading list" = "Reading list";
+"Reading list" = "Lugemisnimekiri";
 
 /* Title for the Recently Closed Tabs Panel */
-"RecentlyClosedTabsPanel.Title" = "Recently Closed";
+"RecentlyClosedTabsPanel.Title" = "Viimati suletud";
+
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Kuva kõiki";
 
 /* Accessibility Label for the tab toolbar Reload button */
-"Reload" = "Reload";
+"Reload" = "Laadi uuesti";
 
 /* Accessibility label for the reload button */
-"Reload page" = "Reload page";
+"Reload page" = "Laadi leht uuesti";
 
 /* Title for the button that removes a reading list item */
-"Remove" = "Remove";
+"Remove" = "Eemalda";
 
 /* Name for button removing current article from reading list in reader mode */
-"Remove from Reading List" = "Remove from Reading List";
+"Remove from Reading List" = "Eemalda lugemisnimekirjast";
 
 /* Cancel button text shown in reopen-alert at home page. */
-"ReopenAlert.Actions.Cancel" = "Cancel";
+"ReopenAlert.Actions.Cancel" = "Loobu";
 
 /* Reopen button text shown in reopen-alert at home page. */
-"ReopenAlert.Actions.Reopen" = "Reopen";
+"ReopenAlert.Actions.Reopen" = "Ava uuesti";
 
 /* Reopen alert title shown at home page. */
-"ReopenAlert.Title" = "Reopen Last Closed Tab";
+"ReopenAlert.Title" = "Ava viimati suletud kaart uuesti";
 
 /* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "Reopen Closed Tab";
+"ReopenClosedTab.KeyCodeTitle" = "Ava suletud kaart uuesti";
 
 /* Accessibility label for button resetting font size in display settings of reader mode */
-"Reset text size" = "Reset text size";
+"Reset text size" = "Lähtesta fondi suurus";
 
 /* Font type setting in the reading view settings */
-"Sans-serif" = "Sans-serif";
+"Sans-serif" = "Seriifideta";
 
 /* See http://mzl.la/1LXbDOL */
-"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Save pages to your Reading List by tapping the book plus icon in the Reader View controls.";
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Salvesta lehed lugemisnimekirja, puudutades lugemisvaates plussmärgiga raamatu ikooni.";
 
 /* OK button to dismiss the error prompt. */
-"ScanQRCode.Error.OK.Button" = "OK";
+"ScanQRCode.Error.OK.Button" = "Olgu";
 
 /* Text for the instructions label, displayed in the QR scanner view */
-"ScanQRCode.Instructions.Label" = "Align QR code within frame to scan";
+"ScanQRCode.Instructions.Label" = "Skannimiseks mahuta QR-kood raami sisse";
 
 /* Text of the prompt that is shown to the user when the data is invalid */
-"ScanQRCode.InvalidDataError.Message" = "The data is invalid";
+"ScanQRCode.InvalidDataError.Message" = "Andmed on vigased";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Please allow Firefox to access your device’s camera in ‘Settings’ -> ‘Privacy’ -> ‘Camera’.";
+"ScanQRCode.PermissionError.Message" = "Palun luba Firefoxile ligipääs oma seadme kaamerale, avades selleks ‘Settings’ -> ‘Privacy’ -> ‘Camera’.";
+
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "Ava oma seadmes ‘Settings’ > ‘Firefox’. Seejärel luba kaamera ligipääs.";
 
 /* Title for the QR code scanner view. */
-"ScanQRCode.View.Title" = "Scan QR Code";
+"ScanQRCode.View.Title" = "QR-koodi skannimine";
 
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
    Open search section of settings */
-"Search" = "Search";
+"Search" = "Otsing";
 
 /* The text shown in the URL bar on about:home */
-"Search or enter address" = "Search or enter address";
+"Search or enter address" = "Otsi või sisesta aadress";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "Lülitu kaardile";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
-"Search.ThirdPartyEngines.AddMessage" = "The new search engine will appear in the quick search bar.";
+"Search.ThirdPartyEngines.AddMessage" = "Uus otsingumootor ilmub kiirotsinguribale.";
 
 /* The success message that appears after a user sucessfully adds a new search engine */
-"Search.ThirdPartyEngines.AddSuccess" = "Added Search engine!";
+"Search.ThirdPartyEngines.AddSuccess" = "Otsingumootor lisatud!";
 
 /* The title that asks the user to Add the search provider */
-"Search.ThirdPartyEngines.AddTitle" = "Add Search Provider?";
+"Search.ThirdPartyEngines.AddTitle" = "Kas lisada otsingupakkuja?";
 
 /* The cancel button if you do not want to add a search engine. */
-"Search.ThirdPartyEngines.Cancel" = "Cancel";
+"Search.ThirdPartyEngines.Cancel" = "Loobu";
 
 /* A message explaining fault in custom search engine form. */
-"Search.ThirdPartyEngines.DuplicateErrorMessage" = "A search engine with this title or URL has already been added.";
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Selle nime või URLiga otsingumootor on juba lisatud.";
 
 /* A title stating that we failed to add custom search engine. */
-"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Failed";
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Ebaõnnestus";
 
 /* A title explaining that we failed to add a search engine */
-"Search.ThirdPartyEngines.FailedMessage" = "The search provider could not be added.";
+"Search.ThirdPartyEngines.FailedMessage" = "Otsingupakkujat polnud võimalik lisada.";
 
 /* A title explaining that we failed to add a search engine */
-"Search.ThirdPartyEngines.FailedTitle" = "Failed";
+"Search.ThirdPartyEngines.FailedTitle" = "Ebaõnnestus";
 
 /* A message explaining fault in custom search engine form. */
-"Search.ThirdPartyEngines.FormErrorMessage" = "Please fill all fields correctly.";
+"Search.ThirdPartyEngines.FormErrorMessage" = "Palun täida kõik väljad korrektselt.";
 
 /* A title stating that we failed to add custom search engine. */
-"Search.ThirdPartyEngines.FormErrorTitle" = "Failed";
+"Search.ThirdPartyEngines.FormErrorTitle" = "Ebaõnnestus";
 
 /* The confirmation button */
-"Search.ThirdPartyEngines.OK" = "OK";
+"Search.ThirdPartyEngines.OK" = "Olgu";
 
 /* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "Searches for the suggestion";
+"Searches for the suggestion" = "Soovituste otsimine";
 
 /* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Secure connection";
-
-/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
-"Send Feedback" = "Send Feedback";
-
-/* Used as a button label for crash dialog prompt */
-"Send Report" = "Send Report";
+"Secure connection" = "Turvaline ühendus";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Send a crash report so Mozilla can fix the problem?";
+"Send a crash report so Mozilla can fix the problem?" = "Kas saata vearaport, et Mozilla saaks probleemi lahendada?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Saada tagasisidet";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Saada raport";
 
 /* Button title for cancelling share screen
    Close button in top navigation bar */
-"SendTo.Cancel.Button" = "Cancel";
+"SendTo.Cancel.Button" = "Loobu";
 
 /* Header for the list of devices table */
-"SendTo.DeviceList.Text" = "Available devices:";
+"SendTo.DeviceList.Text" = "Saadaolevad seadmed:";
 
 /* Message in error prompt explaining why the URL is invalid. */
-"SendTo.Error.Message" = "Only HTTP and HTTPS links can be shared.";
+"SendTo.Error.Message" = "Jagada saab ainult HTTP- ja HTTPS-linke.";
 
 /* OK button to dismiss the error prompt. */
-"SendTo.Error.OK.Button" = "OK";
+"SendTo.Error.OK.Button" = "Olgu";
 
 /* Title of error prompt displayed when an invalid URL is shared. */
-"SendTo.Error.Title" = "The link you are trying to share cannot be shared.";
+"SendTo.Error.Title" = "Valitud linki pole võimalik jagada.";
 
 /* Title of the dialog that allows you to send a tab to a different device */
-"SendTo.NavBar.Title" = "Send Tab";
+"SendTo.NavBar.Title" = "Kaardi saatmine";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "You don’t have any other devices connected to this Firefox Account available to sync.";
+"SendTo.NoDevicesFound.Message" = "Sul ei ole selle Firefoxi kontoga teisi sünkroniseeritavaid seadmeid ühendatud.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Please open Firefox, go to Settings and sign in to continue.";
+"SendTo.NotSignedIn.Message" = "Jätkamiseks ava Firefox, mine sätetesse ja logi sisse.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "You are not signed in to your Firefox Account.";
+"SendTo.NotSignedIn.Title" = "Sa pole oma Firefoxi kontosse sisse logitud.";
 
 /* Navigation bar button to Send the current page to a device */
-"SendTo.SendAction.Text" = "Send";
+"SendTo.SendAction.Text" = "Saada";
 
 /* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Sign In to Firefox";
+"SendTo.SignIn.Button" = "Logi Firefoxi sisse";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "Saabus uus kaart teisest seadmest.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Kaart on vastu võetud";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "Uus kaart saabus äppi %@";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "Kaart võeti vastu seadmest %@";
 
 /* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "Add to Reading List";
+"SentTab.AddToReadingListAction.Title" = "Lisa lugemisnimekirja";
 
 /* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "Bookmark";
+"SentTab.BookmarkAction.title" = "Lisa järjehoidjatesse";
 
 /* Body of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.body" = "Tap to begin";
+"SentTab.NoTabArrivingNotification.body" = "Alustamiseks puuduta";
 
 /* Title of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
-"SentTab.ViewAction.title" = "View";
-
-/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
-"SentTab_TabArrivingNotification_NoDevice_body" = "New tab arrived from another device.";
-
-/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
-"SentTab_TabArrivingNotification_NoDevice_title" = "Tab received";
-
-/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
-"SentTab_TabArrivingNotification_WithDevice_body" = "New tab arrived in %@";
-
-/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
-"SentTab_TabArrivingNotification_WithDevice_title" = "Tab received from %@";
+"SentTab.ViewAction.title" = "Vaata";
 
 /* Sepia theme setting in Reading View settings */
-"Sepia" = "Sepia";
+"Sepia" = "Seepia";
 
 /* Font type setting in the reading view settings */
-"Serif" = "Serif";
+"Serif" = "Seriifidega";
 
 /* Title in the settings view controller title bar */
-"Settings" = "Settings";
+"Settings" = "Sätted";
 
 /* The button text in Search Settings that opens the Custom Search Engine view. */
-"Settings.AddCustomEngine" = "Add Search Engine";
+"Settings.AddCustomEngine" = "Lisa otsingumootor";
 
 /* The text on the Save button when saving a custom search engine */
-"Settings.AddCustomEngine.SaveButtonText" = "Save";
+"Settings.AddCustomEngine.SaveButtonText" = "Salvesta";
 
 /* The title of the  Custom Search Engine view. */
-"Settings.AddCustomEngine.Title" = "Add Search Engine";
+"Settings.AddCustomEngine.Title" = "Otsingumootori lisamine";
 
 /* The title for the field which sets the title for a custom search engine. */
-"Settings.AddCustomEngine.TitleLabel" = "Title";
+"Settings.AddCustomEngine.TitleLabel" = "Nimi";
 
 /* The placeholder for Title Field when saving a custom search engine. */
-"Settings.AddCustomEngine.TitlePlaceholder" = "Search Engine";
+"Settings.AddCustomEngine.TitlePlaceholder" = "Otsingumootor";
 
 /* The title for URL Field */
 "Settings.AddCustomEngine.URLLabel" = "URL";
 
 /* The placeholder for URL Field when saving a custom search engine */
-"Settings.AddCustomEngine.URLPlaceholder" = "URL (Replace Query with %s)";
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (asenda päring kombinatsiooniga %s)";
 
 /* Button in Data Management that clears private data for the selected items. */
-"Settings.ClearAllWebsiteData.Clear.Button" = "Clear All Website Data";
+"Settings.ClearAllWebsiteData.Clear.Button" = "Kustuta kõik saidi andmed";
 
 /* Button in settings that clears private data for the selected items. */
-"Settings.ClearPrivateData.Clear.Button" = "Clear Private Data";
+"Settings.ClearPrivateData.Clear.Button" = "Kustuta privaatsed andmed";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
-"Settings.ClearPrivateData.SectionName" = "Clear Private Data";
+"Settings.ClearPrivateData.SectionName" = "Kustuta privaatsed andmed";
 
 /* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Clear Private Data";
+"Settings.ClearPrivateData.Title" = "Privaatsete andmete kustutamine";
+
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Kustuta saidid: %1$@";
 
 /* Copy app version alert shown in settings. */
-"Settings.CopyAppVersion.Title" = "Copied to clipboard";
-
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "Always";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Only when using Tracking Protection";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "Send websites a Do Not Track signal that you don’t want to be tracked";
+"Settings.CopyAppVersion.Title" = "Kopeeriti vahemällu";
 
 /* Default text in search bar for Data Management */
-"Settings.DataManagement.SearchLabel" = "Filter Sites";
+"Settings.DataManagement.SearchLabel" = "Filtreeri saite";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
-"Settings.DataManagement.SectionName" = "Data Management";
+"Settings.DataManagement.SectionName" = "Andmehaldus";
 
 /* Title displayed in header of the setting panel. */
-"Settings.DataManagement.Title" = "Data Management";
+"Settings.DataManagement.Title" = "Andmehaldus";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.";
+"Settings.Disconnect.Body" = "Firefox lõpetab sinu kontoga sünkroniseerimise, aga ei kustuta lehitsemise andmeid sellest seadmest.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
-"Settings.Disconnect.Button" = "Disconnect Sync";
+"Settings.Disconnect.Button" = "Katkesta ühendus Synciga";
 
 /* Cancel action button in alert when user is prompted for disconnect */
-"Settings.Disconnect.CancelButton" = "Cancel";
+"Settings.Disconnect.CancelButton" = "Loobu";
 
 /* Destructive action button in alert when user is prompted for disconnect */
-"Settings.Disconnect.DestructiveButton" = "Disconnect";
+"Settings.Disconnect.DestructiveButton" = "Ühenda lahti";
 
 /* Title of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Title" = "Disconnect Sync?";
+"Settings.Disconnect.Title" = "Kas katkestada ühendus Synciga?";
 
 /* Section header for brightness slider. */
-"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Threshold";
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Lävi";
 
 /* Display (theme) settings label to show if manually switch theme is enabled. */
-"Settings.DisplayTheme.Manual.StatusLabel" = "Manual";
+"Settings.DisplayTheme.Manual.StatusLabel" = "Käsitsi";
 
 /* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
-"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Pick which theme you want";
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Vali soovitud teema";
 
 /* Display (theme) setting to choose the theme manually. */
-"Settings.DisplayTheme.Manual.SwitchTitle" = "Manually";
+"Settings.DisplayTheme.Manual.SwitchTitle" = "Käsitsi";
 
 /* Option choice in display theme settings for dark theme */
-"Settings.DisplayTheme.OptionDark" = "Dark";
+"Settings.DisplayTheme.OptionDark" = "Tume";
 
 /* Option choice in display theme settings for light theme */
-"Settings.DisplayTheme.OptionLight" = "Light";
+"Settings.DisplayTheme.OptionLight" = "Hele";
 
 /* Display (theme) settings footer describing how the brightness slider works. */
-"Settings.DisplayTheme.SectionFooter" = "The theme will automatically change based on your display brightness. You can set the threshold where the theme changes. The circle indicates your display's current brightness.";
+"Settings.DisplayTheme.SectionFooter" = "Teema muutub automaatselt vastavalt sinu seadme ekraani heledusele. Saad määrata lävendi, kust maalt teema muutub. Ring tähistab sinu ekraani praegust heledust.";
 
 /* Switch mode settings section title */
-"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Switch Mode";
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Lülitumise režiim";
 
 /* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
-"Settings.DisplayTheme.SwitchSubtitle" = "Switch automatically based on screen brightness";
+"Settings.DisplayTheme.SwitchSubtitle" = "Automaatne lülitumine ekraani heleduse alusel";
 
 /* Display (theme) settings label to show if automatically switch theme is enabled.
    Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
-"Settings.DisplayTheme.SwitchTitle" = "Automatically";
+"Settings.DisplayTheme.SwitchTitle" = "Automaatselt";
 
 /* System theme settings section title */
-"Settings.DisplayTheme.SystemTheme.SectionHeader" = "System Theme";
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Süsteemi teema";
 
 /* System theme settings switch to choose whether to use the same theme as the system */
-"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Use System Light/Dark Mode";
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Kasutatakse süsteemset hele/tume režiimi";
 
 /* Theme picker settings section title */
-"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Theme Picker";
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Teemavalija";
 
 /* Title in main app settings for Theme settings */
-"Settings.DisplayTheme.Title.v2" = "Theme";
+"Settings.DisplayTheme.Title.v2" = "Teema";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "Alati";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "Ainult jälitamisvastase kaitse kasutamisel";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "Saitidele saadetakse signaal, et sa ei soovi olla jälitatud";
 
 /* Label used for the device name settings section. */
-"Settings.FxA.DeviceName" = "Device Name";
+"Settings.FxA.DeviceName" = "Seadme nimi";
 
 /* Label used as a section title in the Firefox Accounts Settings screen. */
-"Settings.FxA.Sync.SectionName" = "Sync Settings";
+"Settings.FxA.Sync.SectionName" = "Synci sätted";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox Account";
+"Settings.FxA.Title" = "Firefoxi konto";
 
 /* General settings section title */
-"Settings.General.SectionName" = "General";
+"Settings.General.SectionName" = "Üldine";
+
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "Vali, mida kuvatakse avalehena.";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description.v101" = "Vali Firefoxi avalehel sisalduv.";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "Hiljutised kaardid";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "Pocketi poolt soovitatud";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentlySaved" = "Hiljuti salvestatud";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
+"Settings.Home.Option.RecentlyVisited" = "Hiljuti külastatud";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "Otseteed";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "Avaleht pärast neljatunnist tegevusetust";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "Avaleht";
+
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "Vali, mida näed Firefoxi naastes.";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Never" = "Viimane kaart";
+
+/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
+"Settings.Home.Option.StartAtHome.Title" = "Avatav vaade";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title.v101" = "Avalehele kaasatakse";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "Taustapilt";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefoxi taustapilt, ametüsti muster.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefoxi taustapilt, rannamägede muster.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefoxi taustapilt, helesinine muster.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Vaikimis selge taustapilt.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefoxi taustapilt, päikesetõusu muster.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Avalehe taustapilti ringlemise lüliti";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefoxi taustapilt, hämariku mägede muster.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "AVAKUVA";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Taustapilti saab muuta Firefoxi logo puudutades";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "Taustapilt";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "Taustpilt uuendatud!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Vaata";
 
 /* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "Clear";
+"Settings.HomePage.Clear.Button" = "Tühjenda";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
-"Settings.HomePage.SectionName" = "Homepage";
+"Settings.HomePage.SectionName" = "Avaleht";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "Ridu";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Ridu";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Otseteed";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Otseteed";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Sponsitud otseteed";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "Väljas";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "Sees";
 
 /* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Homepage Settings";
+"Settings.HomePage.Title" = "Avalehe sätted";
 
 /* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Enter a webpage";
+"Settings.HomePage.URL.Placeholder" = "Sisesta veebilehe aadress";
 
 /* Title of the setting section containing the URL of the current home page. */
-"Settings.HomePage.URL.Title" = "Current Homepage";
+"Settings.HomePage.URL.Title" = "Praegune avaleht";
 
 /* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Use Copied Link";
+"Settings.HomePage.UseCopiedLink.Button" = "Kasuta kopeeritud linki";
 
 /* Button in settings to use the current page as home page. */
-"Settings.HomePage.UseCurrent.Button" = "Use Current Page";
+"Settings.HomePage.UseCurrent.Button" = "Kasuta aktiivset veebilehte";
 
 /* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "Use Default";
+"Settings.HomePage.UseDefault.Button" = "Kasuta vaikeväärtust";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
-"Settings.LoginsAndPasswordsTitle" = "Logins & Passwords";
+"Settings.LoginsAndPasswordsTitle" = "Kasutajatunnused ja paroolid";
 
 /* Label used to set a custom url as the new tab option (homepage). */
-"Settings.NewTab.CustomURL" = "Custom URL";
+"Settings.NewTab.CustomURL" = "Kohandatud URL";
 
 /* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "When you open a New Tab:";
+"Settings.NewTab.Description" = "Uue kaardi avamisel:";
 
 /* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "Customize Top Sites";
+"Settings.NewTab.Option.ASTitle" = "Top saitide kohandamine";
 
 /* Option in settings to show a blank page when you open a new tab */
-"Settings.NewTab.Option.BlankPage" = "Blank Page";
+"Settings.NewTab.Option.BlankPage" = "Tühi leht";
 
 /* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "Bookmarks";
+"Settings.NewTab.Option.Bookmarks" = "Järjehoidjad";
 
 /* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "The sites you visit most";
+"Settings.NewTab.Option.CustomizeFooter" = "Enim külastatud saidid";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "Saidid, mida oled külastanud või mille oled salvestanud";
 
 /* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Customize Firefox Home";
+"Settings.NewTab.Option.CustomizeTitle" = "Firefoxi avalehe kohandamine";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox Home";
+"Settings.NewTab.Option.FirefoxHome" = "Firefoxi avaleht";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "Recent Bookmarks";
+"Settings.NewTab.Option.HighlightsBookmarks" = "Hiljutised järjehoidjad";
 
 /* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "Visited";
+"Settings.NewTab.Option.HighlightsHistory" = "Külastatud";
 
 /* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "History";
+"Settings.NewTab.Option.History" = "Ajalugu";
 
 /* Option in settings to show your homepage when you open a new tab */
-"Settings.NewTab.Option.HomePage" = "Homepage";
+"Settings.NewTab.Option.HomePage" = "Avaleht";
 
 /* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "Trending on Pocket";
+"Settings.NewTab.Option.Pocket" = "Populaarsed Pocketis";
 
 /* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "Great content from around the web.";
+"Settings.NewTab.Option.PocketFooter" = "Suurepärane sisu kogu veebist.";
 
 /* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "Show your Reading List";
+"Settings.NewTab.Option.ReadingList" = "Kuvatakse lugemisnimekirja";
+
+/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
+"Settings.NewTab.Option.RecommendedByPocket" = "%@i poolt soovitatud";
+
+/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
+"Settings.NewTab.Option.RecommendedByPocketDescription" = "Erakordne sisu, mille kureeris %1$@, %2$@ perekonna liige";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
-"Settings.NewTab.SectionName" = "New Tab";
+"Settings.NewTab.SectionName" = "Uus kaart";
 
 /* Title displayed in header of the setting panel. */
-"Settings.NewTab.Title" = "New Tab";
+"Settings.NewTab.Title" = "Uus kaart";
 
 /* Label at the top of the New Tab screen after entering New Tab in settings */
-"Settings.NewTab.TopSectionName" = "Show";
+"Settings.NewTab.TopSectionName" = "Kuvatakse";
 
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
-"Settings.NewTab.TopSectionNameFooter" = "Choose what to load when opening a new tab";
+"Settings.NewTab.TopSectionNameFooter" = "Vali, mida soovid uue kaardi avamisel laadida";
+
+/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
+"Settings.NoImageModeBlockImages.Label.v99" = "Pildid blokitakse";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "When Opening Firefox";
+"Settings.OfferClipboardBar.Status" = "Firefoxi avamisel";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Title" = "Offer to Open Copied Links";
+"Settings.OfferClipboardBar.Title" = "Pakutakse kopeeritud linkide avamist";
 
 /* Title for Open With Settings */
-"Settings.OpenWith.PageTitle" = "Open mail links with";
+"Settings.OpenWith.PageTitle" = "E-posti lingid avatakse";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
-"Settings.OpenWith.SectionName" = "Mail App";
+"Settings.OpenWith.SectionName" = "Äpiga Mail";
 
 /* Setting to enable the built-in password manager */
-"Settings.SaveLogins.Title" = "Save Logins";
+"Settings.SaveLogins.Title" = "Kasutajakontod salvestatakse";
 
 /* Button displayed at the top of the search settings. */
-"Settings.Search.Done.Button" = "Done";
+"Settings.Search.Done.Button" = "Valmis";
 
 /* Button displayed at the top of the search settings. */
-"Settings.Search.Edit.Button" = "Edit";
+"Settings.Search.Edit.Button" = "Muuda";
 
 /* title for a link that explains how mozilla collects telemetry */
-"Settings.SendUsage.Link" = "Learn More.";
+"Settings.SendUsage.Link" = "Rohkem teavet.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla strives to only collect what we need to provide and improve Firefox for everyone.";
+"Settings.SendUsage.Message" = "Mozilla püüab koguda ainult seda, mida vajame, et teha Firefox kõigi jaoks paremaks.";
 
 /* The title for the setting to send usage data. */
-"Settings.SendUsage.Title" = "Send Usage Data";
+"Settings.SendUsage.Title" = "Saadetakse kasutusandmeid";
 
 /* Description displayed under the ”Show Link Previews” option */
-"Settings.ShowLinkPreviews.Status" = "When Long-pressing Links";
+"Settings.ShowLinkPreviews.Status" = "Linkide pikalt puudutamisel";
 
 /* Title of setting to enable link previews when long-pressing links. */
-"Settings.ShowLinkPreviews.Title" = "Show Link Previews";
+"Settings.ShowLinkPreviews.Title" = "Kuvatakse linkide eelvaateid";
 
 /* Setting to show Logins & Passwords quick access in the application menu */
-"Settings.ShowLoginsInAppMenu.Title" = "Show in Application Menu";
+"Settings.ShowLoginsInAppMenu.Title" = "Kuvatakse äpi menüüs";
 
 /* The description of the open new tab siri shortcut */
-"Settings.Siri.OpenTabShortcut" = "Open New Tab";
+"Settings.Siri.OpenTabShortcut" = "Ava uus kaart";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Use Siri shortcuts to quickly open Firefox via Siri";
+"Settings.Siri.SectionDescription" = "Kasuta Siri otseteid, et avada Firefox kiiresti";
 
 /* The option that takes you to the siri shortcuts settings page */
-"Settings.Siri.SectionName" = "Siri Shortcuts";
+"Settings.Siri.SectionName" = "Siri otseteed";
+
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "Aktiivsed";
+
+/* Section title for all studies that are completed */
+"Settings.Studies.Completed.SectionName" = "Lõpetatud";
+
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "Eemalda";
+
+/* Title displayed in header of the Studies panel */
+"Settings.Studies.SectionName" = "Uuringud";
+
+/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
+"Settings.Studies.Title" = "Uuringud";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "Rohkem teavet.";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = "Firefox võib aegajalt paigaldada ja käivitada uuringuid.";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "Väljas";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "Sees";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "Uuringud";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Mitteaktiivsed kaardid";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Kaardid, mida sa pole vaadanud 2 nädalat, liigutatakse mitteaktiivsete kaartide alla.";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "Kaartide grupid";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "Kohanda kaartide vaadet";
+
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "Kaardid";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "All";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "Tööriistariba";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "Üleval";
 
 /* Dismiss button for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Button" = "OK, Got It";
+"Settings.TrackingProtection.Alert.Button" = "Olgu, sain aru";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "If a site doesn’t work as expected, tap the shield in the address bar and turn off Enhanced Tracking Protection for that page.";
+"Settings.TrackingProtection.Alert.Description" = "Kui sait ei tööta ootuspäraselt, siis puuduta aadressiribal olevat kilpi ning lülita selle lehe jaoks täiustatud jälitamisvastane kaitse välja.";
 
 /* Title for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Title" = "Heads up!";
+"Settings.TrackingProtection.Alert.Title" = "Tähelepanu!";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "You can choose which list Firefox will use to block Web elements that may track your browsing activity.";
+"Settings.TrackingProtection.BlockListsHeader" = "Siin on võimalik valida nimekirja, mille alusel Firefox sinu tegevust jälitavaid veebielemente blokib.";
 
 /* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "Balanced for protection and performance.";
+"Settings.TrackingProtection.Info.BasicTitle" = "Tasakaalustatud kaitse ja jõudluse jaoks.";
 
 /* The Title on info view which shows a list of all blocked websites */
-"Settings.TrackingProtection.Info.BlocksTitle" = "BLOCKS";
+"Settings.TrackingProtection.Info.BlocksTitle" = "BLOKITUD";
 
 /* Explanation of strict mode. */
-"Settings.TrackingProtection.Info.StrictTitle" = "Offers stronger protection, but may cause some sites to break.";
+"Settings.TrackingProtection.Info.StrictTitle" = "Tugevam kaitse, võib põhjustada mõnel saidil probleeme.";
 
 /* 'Learn more' info link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.LearnMore" = "Learn more";
+"Settings.TrackingProtection.LearnMore" = "Rohkem teavet";
 
 /* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "More Info…";
+"Settings.TrackingProtection.MoreInfo" = "Rohkem teavet…";
 
 /* Additional information about your Enhanced Tracking Protection */
-"Settings.TrackingProtection.ProtectionCellFooter" = "Reduces targeted ads and helps stop advertisers from tracking your browsing.";
+"Settings.TrackingProtection.ProtectionCellFooter" = "Vähendab sihitud reklaame ja takistab reklaamijatel sinu tegevuse jälitamist.";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "If a site doesn’t work as expected, tap the shield in the address bar and turn off Enhanced Tracking Protection for that page.";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Kui sait ei tööta ootuspäraselt, siis puuduta aadressiribal olevat kilpi ning lülita selle lehe jaoks täiustatud jälitamisvastane kaitse välja.";
 
 /* Description for standard level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Allows some ad tracking so websites function properly.";
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Mõned jälitavad reklaamid on lubatud, nii et saidid töötaksid ootuspäraselt.";
 
 /* Description for strict level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Blocks more trackers, ads, and popups. Pages load faster, but some functionality may not work.";
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Blokib rohkem jälitajaid, reklaame ja hüpikaknaid. Lehed laadivad kiiremini, aga mõned lehtedel olevad funktsionaalsused võivad katki minna.";
 
 /* Title for tracking protection options section where level can be selected. */
-"Settings.TrackingProtection.ProtectionLevelTitle" = "Protection Level";
+"Settings.TrackingProtection.ProtectionLevelTitle" = "Kaitsetase";
 
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
-"Settings.TrackingProtection.SectionName" = "Tracking Protection";
+"Settings.TrackingProtection.SectionName" = "Jälitamisvastane kaitse";
 
 /* Additional information about the strict level setting */
-"Settings.TrackingProtection.StrictLevelInfoFooter" = "Blocking trackers could impact the functionality of some websites.";
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "Jälitajate blokkimine võib mõjutada mõne saidi funktsionaalsust.";
 
 /* Tracking protection settings option for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BasicBlockList" = "Standard (default)";
+"Settings.TrackingProtectionOption.BasicBlockList" = "Tavaline (vaikimisi)";
 
 /* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Allows some trackers so websites function properly.";
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Mõned jälitajad on lubatud, nii et saidid töötaksid ootuspäraselt.";
 
 /* Tracking protection settings option for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrict" = "Strict";
+"Settings.TrackingProtectionOption.BlockListStrict" = "Range";
 
 /* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Blocks known trackers. Some websites may not function properly.";
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Blokib teadaolevad jälitajad. Mõned saidid võivad töötada ebakorrektselt.";
 
 /* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Tracking is the collection of your browsing data across multiple websites.";
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Jälitamise all peetakse silmas sinu brauseri andmete kogumist mitmetel saitidel.";
 
 /* Settings option to specify that Tracking Protection is on */
-"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Enhanced Tracking Protection";
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Täiustatud jälitamisvastane kaitse";
 
 /* Translation settings footer describing how language detection and translation happens. */
-"Settings.TranslateSnackBar.SectionFooter" = "The web page language is detected on the device, and a translation from a remote service is offered.";
+"Settings.TranslateSnackBar.SectionFooter" = "Saidi keel tuvastatakse seadmes ja pakutakse tõlget kaugteenusest.";
 
 /* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "Services";
+"Settings.TranslateSnackBar.SectionHeader" = "Teenused";
 
 /* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchSubtitle" = "Offer to translate any site written in a language that is different from your default language.";
+"Settings.TranslateSnackBar.SwitchSubtitle" = "Tõlkimist pakutakse kõigi saitide kohta, mis pole sinu vaikekeeles.";
 
 /* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchTitle" = "Offer Translation";
+"Settings.TranslateSnackBar.SwitchTitle" = "Tõlkimise pakkumine";
 
 /* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "Translation";
+"Settings.TranslateSnackBar.Title" = "Tõlkimine";
 
 /* Title of link to help page to find out how to solve Sync issues */
-"Settings.TroubleShootSync.Title" = "Troubleshoot";
+"Settings.TroubleShootSync.Title" = "Probleemide lahendamine";
 
 /* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "Delete";
+"Settings.WebsiteData.ButtonDelete" = "Kustuta";
 
 /* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "Done";
+"Settings.WebsiteData.ButtonDone" = "Valmis";
 
 /* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "Edit";
+"Settings.WebsiteData.ButtonEdit" = "Muuda";
 
 /* Button shows all websites on website data tableview */
-"Settings.WebsiteData.ButtonShowMore" = "Show More";
+"Settings.WebsiteData.ButtonShowMore" = "Kuva rohkem";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
-"Settings.WebsiteData.ConfirmPrompt" = "This action will clear all of your website data. It cannot be undone.";
+"Settings.WebsiteData.ConfirmPrompt" = "See tegevus kustutab kõik sinu saidi andmed. Seda pole võimalik tagasi võtta.";
+
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "See tegevus kustutab kõik valitud andmed. Seda pole võimalik tagasi võtta.";
 
 /* Title displayed in header of the Data Management panel. */
-"Settings.WebsiteData.Title" = "Website Data";
+"Settings.WebsiteData.Title" = "Saidi andmed";
 
 /* Action label on share extension to add page to the Firefox reading list. */
-"ShareExtension.AddToReadingListAction.Title" = "Add to Reading List";
+"ShareExtension.AddToReadingListAction.Title" = "Lisa lugemisnimekirja";
 
 /* Share extension label shown after user has performed 'Add to Reading List' action. */
-"ShareExtension.AddToReadingListActionDone.Title" = "Added to Reading List";
+"ShareExtension.AddToReadingListActionDone.Title" = "Lisatud lugemisnimekirja";
 
 /* Action label on share extension to bookmark the page in Firefox. */
-"ShareExtension.BookmarkThisPageAction.Title" = "Bookmark This Page";
+"ShareExtension.BookmarkThisPageAction.Title" = "Lisa see veebileht järjehoidjatesse";
 
 /* Share extension label shown after user has performed 'Bookmark this Page' action. */
-"ShareExtension.BookmarkThisPageActionDone.Title" = "Bookmarked";
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Järjehoidjatesse lisatud";
 
 /* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
-"ShareExtension.LoadInBackgroundAction.Title" = "Load in Background";
+"ShareExtension.LoadInBackgroundAction.Title" = "Laadi taustal";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Loading in Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Laaditakse Firefoxis";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Open in Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ava Firefoxis";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "Open in Private Mode";
+"ShareExtension.OpenInPrivateModeAction.Title" = "Ava privaatses režiimis";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Search in Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Otsi Firefoxis";
 
 /* Label for show search suggestions setting. */
-"Show Search Suggestions" = "Show Search Suggestions";
+"Show Search Suggestions" = "Kuvatakse otsingusoovitusi";
 
 /* Accessibility label for the tabs button in the (top) tab toolbar
    Accessibility Label for the tabs button in the tab toolbar */
-"Show Tabs" = "Show Tabs";
+"Show Tabs" = "Kuva kaarte";
 
 /* Show the on-boarding screen again from the settings */
-"Show Tour" = "Show Tour";
+"Show Tour" = "Kuva ringkäiku";
 
 /* Accessibility Label for the tab toolbar Stop button */
-"Stop" = "Stop";
+"Stop" = "Peata";
 
 /* Support section title */
-"Support" = "Support";
+"Support" = "Tugi";
 
 /* Accessibility hint for tab tray's displayed tab. */
-"Swipe right or left with three fingers to close the tab." = "Swipe right or left with three fingers to close the tab.";
+"Swipe right or left with three fingers to close the tab." = "Kaardi sulgemiseks lohista kolme sõrmega paremale või vasakule.";
 
 /* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Normal Browsing Mode";
+"SwitchToNonPBM.KeyCodeTitle" = "Tavaline lehitsemisrežiim";
 
 /* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Private Browsing Mode";
+"SwitchToPBM.KeyCodeTitle" = "Privaatne lehitsemisrežiim";
 
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Sync your tabs, bookmarks, passwords and more.";
+"Sync your tabs, bookmarks, passwords and more." = "Sünkroniseeri oma kaardid, järjehoidjad, paroolid ja muud asjad.";
 
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "Sync your tabs, passwords and more.";
+"Sync your tabs, passwords and more." = "Sünkroniseeri oma kaardid, paroolid ja muud asjad.";
 
 /* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "Your first sync may take a while";
+"Sync.FirstTimeMessage.Label" = "Esimene sünkroniseerimine võib aega võtta";
 
 /* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "No account? Create one to sync Firefox between devices.";
+"Sync.NoAccount.Description" = "Pole kontot? Loo üks, et sünkroniseerida Firefoxi seadmete vahel.";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Syncing";
+"Sync.Syncing.Label" = "Sünkroniseerimine";
 
 /* Message displayed when the user's account is syncing with ellipsis at the end */
-"Sync.SyncingEllipsis.Label" = "Syncing…";
-
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Bookmarks";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Remote Clients";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Syncing has failed";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "History";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "Logins";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Sync is unavailable";
-
-/* Title for Sync status message when Sync failed due to being offline */
-"SyncState.Offline.Title" = "Sync is offline";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "Sync is experiencing issues syncing %@";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "Tabs";
+"Sync.SyncingEllipsis.Label" = "Sünkroniseerimine…";
 
 /* Panel accessibility label */
-"Synced Tabs" = "Synced Tabs";
+"Synced Tabs" = "Sünkroniseeritud kaardid";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Järjehoidjad";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Kaugkliendid";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Sünkroniseerimine ebaõnnestus";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Ajalugu";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Kasutajakontod";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Sync pole kättesaadav";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sync on võrguta";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "%@ - Syncil on sünkroniseerimisega probleeme";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Kaardid";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
-"Tab %@ of %@" = "Tab %1$@ of %2$@";
+"Tab %@ of %@" = "Kaart %1$@, kokku %2$@ kaarti";
 
 /* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"Tab.ShowTabTray.KeyCodeTitle" = "Show All Tabs";
-
-/* Accessibility label for the Add Tab button in the Tab Tray. */
-"TabTray.AddTab.Button" = "Add Tab";
-
-/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseAllTabs.KeyCodeTitle" = "Close All Tabs";
-
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "Close Selected Tab";
-
-/* The section header for tabs opened last week */
-"TabTray.LastWeek.Header" = "Last Week";
-
-/* The title on the button to copy the tab address. */
-"TabTray.MoreMenu.Copy" = "Copy";
-
-/* The section header for tabs opened before last week */
-"TabTray.Older.Header" = "Older";
-
-/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenNewTab.KeyCodeTitle" = "Open New Tab";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "Open Selected Tab";
-
-/* The button title to see more options to perform on the tab. */
-"TabTray.SwipeMenu.More" = "More";
-
-/* The title for the tab tray */
-"TabTray.Title" = "Open Tabs";
-
-/* The section header for tabs opened today */
-"TabTray.Today.Header" = "Today";
-
-/* The section header for tabs opened yesterday */
-"TabTray.Yesterday.Header" = "Yesterday";
+"Tab.ShowTabTray.KeyCodeTitle" = "Kuva kõiki kaarte";
 
 /* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
-"Tabs %@ to %@ of %@" = "Tabs %1$@ to %2$@ of %3$@";
+"Tabs %@ to %@ of %@" = "Kaardid %1$@ kuni %2$@, kokku %3$@";
 
 /* Accessibility label for the Tabs Tray view. */
-"Tabs Tray" = "Tabs Tray";
+"Tabs Tray" = "Kaartide salv";
 
 /* The button to undo the delete all tabs */
-"Tabs.DeleteAllUndo.Button" = "Undo";
+"Tabs.DeleteAllUndo.Button" = "Võta tagasi";
 
 /* The label indicating that all the tabs were closed */
-"Tabs.DeleteAllUndo.Title" = "%d tab(s) closed";
+"Tabs.DeleteAllUndo.Title" = "Suleti %d kaart(i)";
 
 /* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "Search Tabs";
+"Tabs.Search.PlaceholderText" = "Otsi kaartide hulgast";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Lisa kaart";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "Sulge kõik kaardid";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "Sulge valitud kaart";
+
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "Hetkel valitud kaart.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Muud kaardid";
+
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Mitteaktiivsed kaardid";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "Eelmine nädal";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "Kopeeri";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "Vanemad";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Ava uus kaart";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "Ava valitud kaart";
+
+/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
+"TabTray.OtherTabs.Title" = "Teised kaardid";
+
+/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
+"TabTray.RecentlyClosed.Description" = "Kaardid on siin saadaval 30 päeva. Pärast seda aega suletakse kaardid automaatselt.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Viimati suletud";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Privaatsed";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "Sünkroniseeritud";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "Kaardid";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "Rohkem";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Avatud kaardid";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "Täna";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "Eile";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
-"The page could not be displayed in Reader View." = "The page could not be displayed in Reader View.";
+"The page could not be displayed in Reader View." = "Lehte polnud võimalik lugemisvaates kuvada.";
 
 /* Error message in the remote tabs panel */
-"There was a problem accessing tabs from your other devices. Try again in a few moments." = "There was a problem accessing tabs from your other devices. Try again in a few moments.";
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Teiste seadmete kaartidele ligipääsemisel esines probleem. Proovi mõne hetke pärast uuesti.";
 
 /* Error displayed when reader mode cannot be enabled */
-"There was an error converting the page" = "There was an error converting the page";
+"There was an error converting the page" = "Lugemisvaate aktiveerimisel esines probleem";
+
+/* Relative date for date in past week. */
+"this week" = "see nädal";
 
 /* label for Not Now button */
-"Toasts.NotNow" = "Not Now";
+"Toasts.NotNow" = "Mitte praegu";
 
 /* Open App Store button */
-"Toasts.OpenAppStore" = "Open App Store";
+"Toasts.OpenAppStore" = "Ava App Store";
 
 /* Label for button to undo the action just performed */
-"Toasts.Undo" = "Undo";
+"Toasts.Undo" = "Võta tagasi";
 
 /* History tableview section header */
-"Today" = "Today";
+"Today" = "Täna";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "täna kell %@";
 
 /* Accessibility label for the Menu button. */
-"Toolbar.Menu.AccessibilityLabel" = "Menu";
+"Toolbar.Menu.AccessibilityLabel" = "Menüü";
 
 /* Accessibility label for the Close All Tabs menu button. */
-"Toolbar.Menu.CloseAllTabs" = "Close All Tabs";
+"Toolbar.Menu.CloseAllTabs" = "Sulge kõik kaardid";
 
 /* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Your most visited sites will show up here.";
+"TopSites.EmptyState.Description" = "Siin kuvatakse enim külastatud saidid.";
 
 /* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Welcome to Top Sites";
+"TopSites.EmptyState.Title" = "Tere tulemast top saitidesse";
 
 /* Button shown in editing mode to remove this site from the top sites panel. */
-"TopSites.RemovePage.Button" = "Remove page — %@";
+"TopSites.RemovePage.Button" = "Eemalda leht — %@";
 
 /* Button to disallow the page to be translated to the user locale language */
-"TranslationToastHandler.PromptTranslate.Cancel" = "No";
+"TranslationToastHandler.PromptTranslate.Cancel" = "Ei";
 
 /* Button to allow the page to be translated to the user locale language */
-"TranslationToastHandler.PromptTranslate.OK" = "Yes";
+"TranslationToastHandler.PromptTranslate.OK" = "Jah";
 
 /* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
-"TranslationToastHandler.PromptTranslate.Title" = "This page appears to be in %1$@. Translate to %2$@ with %3$@?";
+"TranslationToastHandler.PromptTranslate.Title" = "See leht näib olevat keeles %1$@. Kas soovid selle tõlkida teenusega %3$@ keelde %2$@?";
 
 /* Tile title for Twitter */
 "Twitter" = "Twitter";
 
 /* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
-"UIMenuItem.PasteGo" = "Paste & Go";
+"UIMenuItem.PasteGo" = "Aseta ja mine";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Search with Firefox";
+"UIMenuItem.SearchWithFirefox" = "Otsi Firefoxiga";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "lugemata";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Upgrade Firefox to connect";
+"Upgrade Firefox to connect" = "Ühendamiseks uuenda Firefoxi";
 
 /* Debug option */
 "Use stage servers" = "Use stage servers";
 
 /* Username textbox in Authentication prompt */
-"Username" = "Username";
+"Username" = "Kasutajanimi";
 
 /* Text message in the settings table view */
-"Verify your email address" = "Verify your email address";
+"Verify your email address" = "Kinnita oma e-posti aadress";
 
 /* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Version %1$@ (%2$@)";
+"Version %@ (%@)" = "Versioon %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
-"Web content" = "Web content";
+"Web content" = "Veebisisu";
 
 /* See http://mzl.la/1LXbDOL */
-"Welcome to your Reading List" = "Welcome to your Reading List";
+"Welcome to your Reading List" = "Tere tulemast lugemisnimekirja";
 
 /* Restore Tabs Prompt Title */
-"Well, this is embarrassing." = "Well, this is embarrassing.";
+"Well, this is embarrassing." = "Nonii, see on nüüd küll piinlik.";
 
 /* Tile title for Wikipedia */
-"Wikipedia" = "Wikipedia";
+"Wikipedia" = "Vikipeedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "eile";
 
 /* History tableview section header */
-"Yesterday" = "Yesterday";
+"Yesterday" = "Eile";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "You don’t have any tabs open in Firefox on your other devices.";
+"You don’t have any tabs open in Firefox on your other devices." = "Sul pole teistes seadmetes olevates Firefoxides kaarte avatud.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Sinu õigused";
 
 /* Tile title for YouTube */
 "YouTube" = "YouTube";
-
-/* Your Rights settings section title */
-"Your Rights" = "Your Rights";
-
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "computer";
-
-/* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "Scan the QR code shown at firefox.com/pair";
-
-/* FxA sign in view subtitle */
-"fxa.signin.camera-signin" = "Sign In with Your Camera";
-
-/* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "Sync Firefox between devices with an account.";
-
-/* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Create Firefox account.";
-
-/* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "On your computer open Firefox and go to firefox.com/pair";
-
-/* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "Ready to Scan";
-
-/* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "Turn on Sync";
-
-/* FxA sign in view email login button */
-"fxa.signin.use-email-instead" = "Use Email Instead";
-
-/* Relative time for a tab that was visited within the last few moments. */
-"just now" = "just now";
-
-/* Accessibility label for Mobile Device image in remote tabs list */
-"mobile device" = "mobile device";
-
-/* Relative date for dates older than a month and less than two months. */
-"more than a month ago" = "more than a month ago";
-
-/* Description for a date more than a week ago, but less than a month ago. */
-"more than a week ago" = "more than a week ago";
-
-/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
-"read" = "read";
-
-/* Relative date for date in past week. */
-"this week" = "this week";
-
-/* Relative date for date older than a minute. */
-"today at %@" = "today at %@";
-
-/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
-"unread" = "unread";
-
-/* Relative date for yesterday. */
-"yesterday" = "yesterday";
 

@@ -1,8 +1,24 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Firefox kasutab sinu kaamerat QR-koodide skannimiseks ning fotode ja videote tegemiseks.";
 
-NSLocationWhenInUseUsageDescription = "Websites you visit may request your location.";
-NSPhotoLibraryAddUsageDescription = "This lets you save photos.";
-NSCameraUsageDescription = "Firefox uses your camera to scan QR codes and take photos and video.";
-NSMicrophoneUsageDescription = "Firefox uses your microphone to record and upload audio.";
-ShortcutItemTitleNewTab = "New Tab";
-ShortcutItemTitleNewPrivateTab = "New Private Tab";
-ShortcutItemTitleQRCode = "Scan QR Code";
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox vajab salvestatud kasutajatunnustele ligipääsemiseks Face ID'd.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Külastatavad saidid võivad küsida sinu asukohta.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Firefox kasutab mikrofoni heli salvestamiseks ja üleslaadimiseks.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "See võimaldab sul salvestada fotosid.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Uus privaatne kaart";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Uus kaart";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Skanni QR-kood";
+
