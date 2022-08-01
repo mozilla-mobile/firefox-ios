@@ -186,12 +186,13 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         } else {
             sectionTitle = nil
         }
+        headerView?.isDynamicTypeEnabled = true
         headerView?.titleLabel.text = sectionTitle
         return headerView
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return SettingsUX.TableViewHeaderFooterHeight
+        return UITableView.automaticDimension
     }
 
     @objc func switchValueChanged(_ toggle: UISwitch) {

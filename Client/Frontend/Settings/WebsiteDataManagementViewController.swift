@@ -269,6 +269,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
+        headerView?.isDynamicTypeEnabled = true
         headerView?.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
 
         headerView?.showBorder(for: .top, true)
@@ -299,7 +300,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         case .clearButton:
             return 10 // Controls the space between the site list and the button
         case .sites:
-            return SettingsUX.TableViewHeaderFooterHeight
+            return UITableView.automaticDimension
         case .showMore:
             return 0
         }

@@ -367,7 +367,7 @@ extension LoginListViewController: UITableViewDelegate {
         }
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderId) as? ThemedTableSectionHeaderFooterView else { return nil }
         headerView.titleLabel.text = .LoginsListTitle
-        headerView.titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmall
+        headerView.isDynamicTypeEnabled = true
         // not using a grouped table: show header borders
         headerView.showBorder(for: .top, true)
         headerView.showBorder(for: .bottom, true)

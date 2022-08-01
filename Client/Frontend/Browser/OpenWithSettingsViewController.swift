@@ -11,6 +11,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
 
     fileprivate let prefs: Prefs
     fileprivate var currentChoice: String = "mailto"
+    fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
 
     init(prefs: Prefs) {
         self.prefs = prefs
@@ -27,13 +28,10 @@ class OpenWithSettingsViewController: ThemedTableViewController {
 
         tableView.accessibilityIdentifier = "OpenWithPage.Setting.Options"
 
-        let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
-        let headerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
-        headerView.titleLabel.text = .SettingsOpenWithPageTitle.uppercased()
         let footerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
 
-        tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
+        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
 
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
@@ -108,5 +106,16 @@ class OpenWithSettingsViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.currentChoice = mailProviderSource[indexPath.row].scheme
         tableView.reloadData()
+    }
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        headerView.isDynamicTypeEnabled = true
+        headerView.titleLabel.text = .SettingsOpenWithPageTitle.uppercased()
+        return headerView
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
     }
 }

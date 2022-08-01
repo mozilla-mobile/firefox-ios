@@ -76,6 +76,7 @@ class ThemeSettingsController: ThemedTableViewController {
                 return isAutoBrightnessOn ? .DisplayThemeBrightnessThresholdSectionHeader : .ThemePickerSectionHeader
             }
         }()
+        headerView.isDynamicTypeEnabled = true
         headerView.titleLabel.text = headerView.titleLabel.text?.uppercased()
 
         return headerView

@@ -203,7 +203,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 44
+        return UITableView.automaticDimension
     }
 
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -218,6 +218,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         } else {
             sectionTitle = .SearchSettingsQuickSearchEnginesTitle
         }
+        headerView.isDynamicTypeEnabled = true
         headerView.titleLabel.text = sectionTitle
 
         return headerView

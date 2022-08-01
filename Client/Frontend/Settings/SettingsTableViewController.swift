@@ -791,12 +791,12 @@ class SettingsTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        headerView.isDynamicTypeEnabled = true
 
         let sectionSetting = settings[section]
         if let sectionTitle = sectionSetting.title?.string {
             headerView.titleLabel.text = sectionTitle.uppercased()
         }
-
         headerView.applyTheme()
         return headerView
     }
@@ -821,6 +821,10 @@ class SettingsTableViewController: ThemedTableViewController {
             return UITableView.automaticDimension
         }
         return 0
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

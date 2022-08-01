@@ -134,6 +134,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
+        headerView?.isDynamicTypeEnabled = true
         headerView?.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
 
         headerView?.showBorder(for: .top, true)
@@ -157,7 +158,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         let section = Section(rawValue: section)!
         switch section {
         case .clearButton: return 10 // Controls the space between the site list and the button
-        case .sites: return SettingsUX.TableViewHeaderFooterHeight
+        case .sites: return UITableView.automaticDimension
         }
     }
 
