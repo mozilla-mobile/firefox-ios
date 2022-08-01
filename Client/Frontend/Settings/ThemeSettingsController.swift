@@ -65,7 +65,7 @@ class ThemeSettingsController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
-        
+
         let section = Section(rawValue: section) ?? .automaticBrightness
         headerView.titleLabel.text = {
             switch section {
@@ -77,7 +77,7 @@ class ThemeSettingsController: ThemedTableViewController {
                 return isAutoBrightnessOn ? .DisplayThemeBrightnessThresholdSectionHeader : .ThemePickerSectionHeader
             }
         }()
-        headerView.isDynamicTypeEnabled = true
+
         headerView.titleLabel.text = headerView.titleLabel.text?.uppercased()
 
         return headerView

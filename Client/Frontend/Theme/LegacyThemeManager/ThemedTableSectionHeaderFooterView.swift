@@ -40,13 +40,9 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Notificat
             updateTitleAlignmentConstraints()
         }
     }
-    var isDynamicTypeEnabled: Bool = false {
-        didSet {
-            updateTitleFont()
-        }
-    }
 
     lazy var titleLabel: UILabel = .build { label in
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
         label.numberOfLines = 0
     }
 
@@ -61,7 +57,6 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Notificat
         setDefaultBordersValues()
         setupInitialConstraints()
         applyTheme()
-        updateTitleFont()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -111,13 +106,5 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Notificat
     private func updateTitleAlignmentConstraints() {
         titleTopConstraint.constant = titleAlignment.topConstraintConstant
         titleBottomConstraint.constant = titleAlignment.bottomConstraintConstant
-    }
-
-    private func updateTitleFont() {
-        if self.isDynamicTypeEnabled {
-            titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
-        } else {
-            titleLabel.font = UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.regular)
-        }
     }
 }

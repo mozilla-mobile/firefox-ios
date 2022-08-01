@@ -791,7 +791,6 @@ class SettingsTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
-        headerView.isDynamicTypeEnabled = true
 
         let sectionSetting = settings[section]
         if let sectionTitle = sectionSetting.title?.string {

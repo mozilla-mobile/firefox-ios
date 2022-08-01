@@ -110,7 +110,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
-        headerView.isDynamicTypeEnabled = true
+        
         headerView.titleLabel.text = .SettingsOpenWithPageTitle.uppercased()
         return headerView
     }

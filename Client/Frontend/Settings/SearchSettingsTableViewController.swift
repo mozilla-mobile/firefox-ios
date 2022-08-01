@@ -219,7 +219,6 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         } else {
             sectionTitle = .SearchSettingsQuickSearchEnginesTitle
         }
-        headerView.isDynamicTypeEnabled = true
         headerView.titleLabel.text = sectionTitle
 
         return headerView

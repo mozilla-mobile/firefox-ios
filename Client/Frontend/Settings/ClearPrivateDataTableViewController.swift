@@ -187,7 +187,6 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         } else {
             sectionTitle = nil
         }
-        headerView.isDynamicTypeEnabled = true
         headerView.titleLabel.text = sectionTitle
         return headerView
     }

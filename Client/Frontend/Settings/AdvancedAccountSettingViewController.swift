@@ -112,9 +112,9 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! ThemedTableSectionHeaderFooterView
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        
         let sectionSetting = settings[section]
-        headerView.isDynamicTypeEnabled = true
         headerView.titleLabel.text = sectionSetting.title?.string
 
         switch section {

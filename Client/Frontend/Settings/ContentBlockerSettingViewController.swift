@@ -225,7 +225,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     // The first section header gets a More Info link
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let _defaultFooter = super.tableView(tableView, viewForFooterInSection: section) as? ThemedTableSectionHeaderFooterView
-        _defaultFooter?.isDynamicTypeEnabled = true
 
         guard let defaultFooter = _defaultFooter, section > 0 else {
             return _defaultFooter

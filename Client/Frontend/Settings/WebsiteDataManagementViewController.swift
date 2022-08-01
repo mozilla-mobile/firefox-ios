@@ -270,7 +270,6 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
-        headerView.isDynamicTypeEnabled = true
         headerView.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
 
         headerView.showBorder(for: .top, true)
