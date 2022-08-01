@@ -17,7 +17,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     typealias BannerCopy = String.FirefoxHomepage.HomeTabBanner.EvergreenMessage
 
     struct UX {
-        static let cardSizeMaxWidth: CGFloat = 224
+        static let cardSizeMaxWidth: CGFloat = 360
         static let buttonHeight: CGFloat = 44
         static let textSpacing: CGFloat = 8
         static let cardCornerRadius: CGFloat = 12
@@ -33,9 +33,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Properties
-
-    private var viewModel: HomepageMessageCardProtocol = HomepageMessageCardViewModel()
-    public var dismissClosure: (() -> Void)?
+    private var viewModel: HomepageMessageCardProtocol!
 
     // UI
     private lazy var bannerTitle: UILabel = .build { label in
@@ -56,7 +54,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         label.textColor = UIColor.theme.homeTabBanner.textColor
     }
 
-    private lazy var ctaButton: ResizableButton = .build { [weak self] button in
+    private lazy var ctaButton: ActionButton = .build { [weak self] button in
         button.backgroundColor = UIColor.Photon.Blue50
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
                                                                                     maxSize: UX.buttonMaxFontSize)
@@ -102,7 +100,9 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure() {
+    func configure(viewModel: HomepageMessageCardViewModel) {
+        self.viewModel = viewModel
+
         if let message = viewModel.getMessage(for: .newTabCard) {
             applyGleanMessage(message)
         }
@@ -117,7 +117,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         NSLayoutConstraint.activate([
             cardView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
             cardView.topAnchor.constraint(equalTo: topAnchor),
-            cardView.trailingAnchor.constraint(greaterThanOrEqualTo: trailingAnchor),
+            cardView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
             cardView.bottomAnchor.constraint(equalTo: bottomAnchor),
             cardView.centerXAnchor.constraint(equalTo: centerXAnchor),
             cardView.widthAnchor.constraint(equalToConstant: UX.cardSizeMaxWidth),
@@ -173,15 +173,11 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 
     // MARK: Actions
     @objc private func dismissCard() {
-        self.dismissClosure?()
-
         viewModel.handleMessageDismiss()
     }
 
     /// The surface needs to handle CTAs a certain way when there's a message.
     @objc func handleCTA() {
-        self.dismissClosure?()
-
         viewModel.handleMessagePressed()
     }
 }

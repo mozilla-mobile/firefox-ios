@@ -2153,7 +2153,6 @@ extension BrowserViewController {
             dBOnboardingViewController.modalPresentationStyle = .popover
         }
         dBOnboardingViewController.viewModel.goToSettings = {
-            self.homepageViewController?.dismissHomeTabBanner()
             dBOnboardingViewController.dismiss(animated: true) {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
             }

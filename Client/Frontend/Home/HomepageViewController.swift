@@ -317,12 +317,6 @@ class HomepageViewController: UIViewController, HomePanel {
 
         UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
     }
-
-    // MARK: - Home Tab Banner
-
-    public func dismissHomeTabBanner() {
-       // TODO: Yoana Access message section and remove
-    }
 }
 
 // MARK: - CollectionView Data Source
@@ -392,6 +386,11 @@ private extension HomepageViewController {
         // Header view
         viewModel.headerViewModel.onTapAction = { [weak self] _ in
             self?.changeHomepageWallpaper()
+        }
+
+        // Message card
+        viewModel.messageCardViewModel.dismissClosure = { [weak self] in
+            self?.viewModel.updateEnabledSections()
         }
 
         // Top sites

@@ -14,6 +14,8 @@ protocol HomepageMessageCardProtocol {
 class HomepageMessageCardViewModel: HomepageMessageCardProtocol, GleanPlumbMessageManagable {
 
     var message: GleanPlumbMessage?
+    var dismissClosure: (() -> Void)?
+    var onTapAction: ((UIButton) -> Void)?
 
     var shouldDisplayMessageCard: Bool {
         return messagingManager.hasMessage(for: .newTabCard)
@@ -32,10 +34,14 @@ class HomepageMessageCardViewModel: HomepageMessageCardProtocol, GleanPlumbMessa
 
     func handleMessagePressed() {
         message.map(messagingManager.onMessagePressed)
+
+        dismissClosure?()
     }
 
     func handleMessageDismiss() {
         message.map(messagingManager.onMessageDismissed)
+
+        dismissClosure?()
     }
 }
 
@@ -80,8 +86,11 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
 extension HomepageMessageCardViewModel: HomepageSectionHandler {
 
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let messageCell = cell as? HomepageMessageCardCell else { return UICollectionViewCell() }
-        messageCell.configure()
+        guard let messageCell = cell as? HomepageMessageCardCell else {
+            return UICollectionViewCell()
+        }
+
+        messageCell.configure(viewModel: self)
         return messageCell
     }
 }

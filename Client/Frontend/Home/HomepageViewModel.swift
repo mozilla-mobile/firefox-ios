@@ -67,16 +67,16 @@ class HomepageViewModel: FeatureFlaggable {
     // Child View models
     private var childViewModels: [HomepageViewModelProtocol]
     var headerViewModel: HomeLogoHeaderViewModel
-    var tabBannerViewModel: HomepageMessageCardViewModel
+    var messageCardViewModel: HomepageMessageCardViewModel
     var topSiteViewModel: TopSitesViewModel
     var recentlySavedViewModel: RecentlySavedCellViewModel
     var jumpBackInViewModel: JumpBackInViewModel
-    var historyHighlightsViewModel: HistoryHightlightsViewModel
+    var historyHighlightsViewModel: HistoryHighlightsViewModel
     var pocketViewModel: PocketViewModel
     var customizeButtonViewModel: CustomizeHomepageSectionViewModel
 
     var shouldDisplayHomeTabBanner: Bool {
-        return tabBannerViewModel.shouldDisplayMessageCard
+        return messageCardViewModel.shouldDisplayMessageCard
     }
 
     // MARK: - Initializers
@@ -90,7 +90,7 @@ class HomepageViewModel: FeatureFlaggable {
         self.isZeroSearch = isZeroSearch
 
         self.headerViewModel = HomeLogoHeaderViewModel(profile: profile)
-        self.tabBannerViewModel = HomepageMessageCardViewModel()
+        self.messageCardViewModel = HomepageMessageCardViewModel()
         self.topSiteViewModel = TopSitesViewModel(profile: profile)
         self.jumpBackInViewModel = JumpBackInViewModel(
             profile: profile,
@@ -98,7 +98,7 @@ class HomepageViewModel: FeatureFlaggable {
             tabManager: tabManager)
         self.recentlySavedViewModel = RecentlySavedCellViewModel(
             profile: profile)
-        self.historyHighlightsViewModel = HistoryHightlightsViewModel(
+        self.historyHighlightsViewModel = HistoryHighlightsViewModel(
             with: profile,
             isPrivate: isPrivate,
             tabManager: tabManager,
@@ -109,7 +109,7 @@ class HomepageViewModel: FeatureFlaggable {
         )
         self.customizeButtonViewModel = CustomizeHomepageSectionViewModel()
         self.childViewModels = [headerViewModel,
-                                tabBannerViewModel,
+                                messageCardViewModel,
                                 topSiteViewModel,
                                 jumpBackInViewModel,
                                 recentlySavedViewModel,
