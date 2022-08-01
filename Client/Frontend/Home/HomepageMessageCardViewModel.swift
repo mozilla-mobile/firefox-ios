@@ -6,7 +6,7 @@ import Foundation
 
 protocol HomepageMessageCardProtocol {
     func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage?
-    func handleMessageDiplayed()
+    func handleMessageDisplayed()
     func handleMessagePressed()
     func handleMessageDismiss()
 }
@@ -15,7 +15,7 @@ class HomepageMessageCardViewModel: HomepageMessageCardProtocol, GleanPlumbMessa
 
     var message: GleanPlumbMessage?
 
-    var shouldDisplayHomeTabBanner: Bool {
+    var shouldDisplayMessageCard: Bool {
         return messagingManager.hasMessage(for: .newTabCard)
     }
 
@@ -26,7 +26,7 @@ class HomepageMessageCardViewModel: HomepageMessageCardProtocol, GleanPlumbMessa
         return message
     }
 
-    func handleMessageDiplayed() {
+    func handleMessageDisplayed() {
         message.map(messagingManager.onMessageDisplayed)
     }
 
@@ -46,18 +46,20 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                              heightDimension: .estimated(100))
+                                              heightDimension: .estimated(180))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .estimated(100))
+                                               heightDimension: .estimated(180))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
         let section = NSCollectionLayoutSection(group: group)
 
-        let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset,
-                                                        bottom: 16, trailing: 0)
+        let horizontalInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                        leading: horizontalInset,
+                                                        bottom: 16,
+                                                        trailing: horizontalInset)
 
         return section
     }
@@ -71,6 +73,15 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
     }
 
     var isEnabled: Bool {
-        return shouldDisplayHomeTabBanner
+        return shouldDisplayMessageCard
+    }
+}
+
+extension HomepageMessageCardViewModel: HomepageSectionHandler {
+
+    func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
+        guard let messageCell = cell as? HomepageMessageCardCell else { return UICollectionViewCell() }
+        messageCell.configure()
+        return messageCell
     }
 }

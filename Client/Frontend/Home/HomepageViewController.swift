@@ -33,10 +33,7 @@ class HomepageViewController: UIViewController, HomePanel {
     private var contextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
 
-    private var homeTabBanner: HomepageMessageCard?
-
-    // Content stack views contains the home tab banner and collection view.
-    // Home tab banner cannot be added to collection view since it's pinned at the top of the view.
+    // Content stack views contains collection view.
     lazy var contentStackView: UIStackView = .build { stackView in
         stackView.backgroundColor = .clear
         stackView.axis = .vertical
@@ -111,14 +108,6 @@ class HomepageViewController: UIViewController, HomePanel {
         reloadAll()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        if viewModel.shouldDisplayHomeTabBanner {
-            showHomeTabBanner()
-        }
-    }
-
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         contextualHintViewController.stopTimer()
@@ -132,9 +121,6 @@ class HomepageViewController: UIViewController, HomePanel {
         if UIDevice.current.userInterfaceIdiom == .pad {
             reloadOnRotation()
         }
-
-        // Adjust home tab banner height on rotation
-        homeTabBanner?.adjustMaxHeight(size.height * 0.6)
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -259,7 +245,6 @@ class HomepageViewController: UIViewController, HomePanel {
     }
 
     func applyTheme() {
-        homeTabBanner?.applyTheme()
         view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
     }
 
@@ -335,31 +320,8 @@ class HomepageViewController: UIViewController, HomePanel {
 
     // MARK: - Home Tab Banner
 
-    private func showHomeTabBanner() {
-        createHomeTabBannerCard()
-
-        guard let homeTabBanner = homeTabBanner,
-              !contentStackView.subviews.contains(homeTabBanner) else { return }
-
-        contentStackView.addArrangedViewToTop(homeTabBanner)
-
-        homeTabBanner.adjustMaxHeight(view.frame.height * 0.7)
-        homeTabBanner.dismissClosure = { [weak self] in
-            self?.dismissHomeTabBanner()
-        }
-    }
-
-    private func createHomeTabBannerCard() {
-        guard homeTabBanner == nil else { return }
-
-        homeTabBanner = .build { card in
-            card.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        }
-    }
-
     public func dismissHomeTabBanner() {
-        homeTabBanner?.removeFromSuperview()
-        homeTabBanner = nil
+       // TODO: Yoana Access message section and remove
     }
 }
 
@@ -669,11 +631,6 @@ extension HomepageViewController: Notifiable {
                     .TabsTrayDidSelectHomeTab,
                     .HomePanelPrefsChanged:
                 self.reloadAll()
-
-            case .DynamicFontChanged:
-                self.homeTabBanner?.adjustMaxHeight(self.view.frame.height * 0.7)
-                self.homeTabBanner?.setNeedsLayout()
-                self.homeTabBanner?.layoutIfNeeded()
 
             default: break
             }

@@ -76,7 +76,7 @@ class HomepageViewModel: FeatureFlaggable {
     var customizeButtonViewModel: CustomizeHomepageSectionViewModel
 
     var shouldDisplayHomeTabBanner: Bool {
-        return tabBannerViewModel.shouldDisplayHomeTabBanner
+        return tabBannerViewModel.shouldDisplayMessageCard
     }
 
     // MARK: - Initializers
@@ -109,7 +109,7 @@ class HomepageViewModel: FeatureFlaggable {
         )
         self.customizeButtonViewModel = CustomizeHomepageSectionViewModel()
         self.childViewModels = [headerViewModel,
-//                                tabBannerViewModel,
+                                tabBannerViewModel,
                                 topSiteViewModel,
                                 jumpBackInViewModel,
                                 recentlySavedViewModel,

@@ -11,14 +11,14 @@ import UIKit
 /// The HomeTabBanner is one UI surface that is being targeted for experimentation with `GleanPlumb` AKA Messaging.
 /// When there are GleanPlumbMessages, the card will get populated with that data. Otherwise, we'll continue showing the
 /// default browser message AKA the evergreen.
-class HomepageMessageCard: UIView {
+class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner
     typealias BannerCopy = String.FirefoxHomepage.HomeTabBanner.EvergreenMessage
 
     struct UX {
-        static let cardSize = CGSize(width: 360, height: 224)
-        static let learnHowButtonSize: CGSize = CGSize(width: 304, height: 44)
+        static let cardSizeMaxWidth: CGFloat = 224
+        static let buttonHeight: CGFloat = 44
         static let textSpacing: CGFloat = 8
         static let cardCornerRadius: CGFloat = 12
         static let dismissButtonSize = CGSize(width: 16, height: 16)
@@ -35,9 +35,6 @@ class HomepageMessageCard: UIView {
     // MARK: - Properties
 
     private var viewModel: HomepageMessageCardProtocol = HomepageMessageCardViewModel()
-    private var heightConstraint: NSLayoutConstraint?
-    private var maxHeight: CGFloat = CGFloat.greatestFiniteMagnitude
-
     public var dismissClosure: (() -> Void)?
 
     // UI
@@ -53,7 +50,6 @@ class HomepageMessageCard: UIView {
     private lazy var descriptionText: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.adjustsFontSizeToFitWidth = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                    maxSize: UX.descriptionTextMaxFontSize)
         label.adjustsFontForContentSizeCategory = true
@@ -95,66 +91,36 @@ class HomepageMessageCard: UIView {
         view.layer.masksToBounds = true
     }
 
-    private lazy var scrollView: FadeScrollView = .build { view in
-        view.backgroundColor = .clear
-    }
-
-    private lazy var containerView: UIView = .build { view in
-        view.backgroundColor = .clear
-    }
-
     // MARK: - Inits
-
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         setupLayout()
-        if let message = viewModel.getMessage(for: .newTabCard) {
-            applyGleanMessage(message)
-        }
     }
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func configure() {
+        if let message = viewModel.getMessage(for: .newTabCard) {
+            applyGleanMessage(message)
+        }
+    }
+
     // MARK: - Layout
 
     private func setupLayout() {
         cardView.addSubviews(ctaButton, textStackView, dismissButton)
-        containerView.addSubview(cardView)
-        scrollView.addSubview(containerView)
-        addSubview(scrollView)
-
-        let frameGuide = scrollView.frameLayoutGuide
-        let contentGuide = scrollView.contentLayoutGuide
+        addSubview(cardView)
 
         NSLayoutConstraint.activate([
-            // Constraints that set the size and position of the scroll view relative to its superview
-            scrollView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            scrollView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-
-            // Constraints that set the size of the scrollable content area inside the scrollview
-            frameGuide.leadingAnchor.constraint(equalTo: leadingAnchor),
-            frameGuide.topAnchor.constraint(equalTo: topAnchor),
-            frameGuide.trailingAnchor.constraint(equalTo: trailingAnchor),
-            frameGuide.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-            contentGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            contentGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
-            contentGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            contentGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            contentGuide.widthAnchor.constraint(equalTo: frameGuide.widthAnchor),
-
-            cardView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.standardSpacing),
-            cardView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.bottomCardSafeSpace),
-            cardView.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor, constant: UX.standardSpacing),
-            cardView.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -UX.standardSpacing),
-            cardView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            cardView.widthAnchor.constraint(equalToConstant: UX.cardSize.width),
+            cardView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
+            cardView.topAnchor.constraint(equalTo: topAnchor),
+            cardView.trailingAnchor.constraint(greaterThanOrEqualTo: trailingAnchor),
+            cardView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            cardView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            cardView.widthAnchor.constraint(equalToConstant: UX.cardSizeMaxWidth),
 
             textStackView.topAnchor.constraint(equalTo: dismissButton.bottomAnchor),
             textStackView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.standardSpacing),
@@ -169,30 +135,8 @@ class HomepageMessageCard: UIView {
             ctaButton.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.standardSpacing),
             ctaButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
             ctaButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -UX.standardSpacing),
-            ctaButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.learnHowButtonSize.height),
+            ctaButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight),
         ])
-
-        heightConstraint = heightAnchor.constraint(equalToConstant: 999)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        // Set the view height based on card height, needed since we have dynamic height
-        // of a scroll view in a stack view
-        guard cardView.frame.height != 0 else { return }
-
-        let idealHeight = cardView.frame.height + UX.standardSpacing + UX.bottomCardSafeSpace
-        let newHeight = min(maxHeight, idealHeight)
-
-        heightConstraint?.constant = newHeight
-        heightConstraint?.isActive = true
-    }
-
-    // Currently limiting the banner height so user can still access the collection view (on bigger font sizes)
-    // If banner content is greater than max threshold, the banner will scroll
-    func adjustMaxHeight(_ maxHeight: CGFloat) {
-        self.maxHeight = maxHeight
     }
 
     func applyTheme() {
@@ -224,11 +168,10 @@ class HomepageMessageCard: UIView {
         }
 
         descriptionText.text = message.data.text
-        viewModel.handleMessageDiplayed()
+        viewModel.handleMessageDisplayed()
     }
 
     // MARK: Actions
-
     @objc private func dismissCard() {
         self.dismissClosure?()
 
