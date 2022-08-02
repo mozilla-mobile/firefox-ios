@@ -20,8 +20,6 @@ class ThemeSettingsController: ThemedTableViewController {
         case lightDarkPicker
     }
 
-    fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
-
     // A non-interactable slider is underlaid to show the current screen brightness indicator
     private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
 
@@ -52,7 +50,8 @@ class ThemeSettingsController: ThemedTableViewController {
         tableView.accessibilityIdentifier = "DisplayTheme.Setting.Options"
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
 
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
+        tableView.register(ThemedTableSectionHeaderFooterView.self,
+                           forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
         NotificationCenter.default.addObserver(self, selector: #selector(brightnessChanged), name: UIScreen.brightnessDidChangeNotification, object: nil)
     }
@@ -64,7 +63,8 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! ThemedTableSectionHeaderFooterView
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+
         let section = Section(rawValue: section) ?? .automaticBrightness
         headerView.titleLabel.text = {
             switch section {
@@ -76,6 +76,7 @@ class ThemeSettingsController: ThemedTableViewController {
                 return isAutoBrightnessOn ? .DisplayThemeBrightnessThresholdSectionHeader : .ThemePickerSectionHeader
             }
         }()
+
         headerView.titleLabel.text = headerView.titleLabel.text?.uppercased()
 
         return headerView

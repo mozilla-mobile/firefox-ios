@@ -549,12 +549,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         return super.tableView(tableView, heightForRowAt: indexPath)
     }
 
-    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        guard let headerView = view as? ThemedTableSectionHeaderFooterView else { return }
-
-        headerView.applyTheme()
-    }
-
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard section == SearchListSection.remoteTabs.rawValue,
               hasFirefoxSuggestions else { return 0 }

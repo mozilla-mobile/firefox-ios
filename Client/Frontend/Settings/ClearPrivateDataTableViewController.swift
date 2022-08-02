@@ -9,7 +9,6 @@ private let SectionArrow = 0
 private let SectionToggles = 1
 private let SectionButton = 2
 private let NumberOfSections = 3
-private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 private let TogglesPrefKey = "clearprivatedata.toggles"
 
 private let log = Logger.browserLogger
@@ -67,7 +66,8 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
         title = .SettingsDataManagementTitle
 
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
+        tableView.register(ThemedTableSectionHeaderFooterView.self,
+                           forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
         tableView.tableFooterView = footer
@@ -179,19 +179,20 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+
         var sectionTitle: String?
         if section == SectionToggles {
             sectionTitle = .SettingsClearPrivateDataSectionName
         } else {
             sectionTitle = nil
         }
-        headerView?.titleLabel.text = sectionTitle
+        headerView.titleLabel.text = sectionTitle
         return headerView
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return SettingsUX.TableViewHeaderFooterHeight
+        return UITableView.automaticDimension
     }
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
