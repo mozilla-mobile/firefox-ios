@@ -15,7 +15,6 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         static let count = 2
     }
 
-    private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
     let viewModel: WebsiteDataManagementViewModel
     private var tableView: UITableView!
 
@@ -42,7 +41,8 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: "Cell")
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
+        tableView.register(ThemedTableSectionHeaderFooterView.self,
+                           forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
         view.addSubview(tableView)
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
@@ -133,21 +133,22 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
-        headerView?.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
-        headerView?.showBorder(for: .top, true)
-        headerView?.showBorder(for: .bottom, true)
+        headerView.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
+
+        headerView.showBorder(for: .top, true)
+        headerView.showBorder(for: .bottom, true)
 
         // top section: no top border (this is a plain table)
         guard let section = Section(rawValue: section) else { return headerView }
         if section == .sites {
-            headerView?.showBorder(for: .top, false)
+            headerView.showBorder(for: .top, false)
 
             // no records: no bottom border (would make 2 with the one from the clear button)
             let emptyRecords = viewModel.siteRecords.isEmpty
             if emptyRecords {
-                headerView?.showBorder(for: .bottom, false)
+                headerView.showBorder(for: .bottom, false)
             }
         }
         return headerView
@@ -157,7 +158,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         let section = Section(rawValue: section)!
         switch section {
         case .clearButton: return 10 // Controls the space between the site list and the button
-        case .sites: return SettingsUX.TableViewHeaderFooterHeight
+        case .sites: return UITableView.automaticDimension
         }
     }
 

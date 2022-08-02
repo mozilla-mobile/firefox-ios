@@ -37,7 +37,6 @@ class LegacyWallpaperSettingsViewController: UIViewController {
     private lazy var collectionView: DynamicHeightCollectionView = {
         let collectionView = DynamicHeightCollectionView(frame: .zero,
                                                          collectionViewLayout: getCompositionalLayout())
-
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
@@ -71,6 +70,9 @@ class LegacyWallpaperSettingsViewController: UIViewController {
     }
 
     private lazy var switchLine: UIView = .build { _ in }
+
+    private lazy var contentView: UIView = .build { _ in }
+    private lazy var scrollView: UIScrollView = .build { _ in }
 
     // MARK: - Variables
     var notificationCenter: NotificationCenter
@@ -119,24 +121,38 @@ class LegacyWallpaperSettingsViewController: UIViewController {
 
     // MARK: - View setup
     private func setupView() {
-        view.addSubview(collectionTitle)
+        contentView.addSubview(collectionTitle)
         collectionContainer.addSubview(collectionView)
-        view.addSubview(collectionContainer)
+        contentView.addSubview(collectionContainer)
 
         switchContainer.addSubview(switchTitle)
         switchContainer.addSubview(logoSwitch)
         switchContainer.addSubview(switchLine)
-        view.addSubview(switchContainer)
+        contentView.addSubview(switchContainer)
+        scrollView.addSubview(contentView)
+        view.addSubview(scrollView)
 
         NSLayoutConstraint.activate([
-            // Collection View
-            collectionTitle.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            collectionTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 19),
-            collectionTitle.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            // Scroll view
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
-            collectionContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+
+            // Collection View
+            collectionTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            collectionTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 19),
+            collectionTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+
+            collectionContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionContainer.topAnchor.constraint(equalTo: collectionTitle.bottomAnchor, constant: 9),
-            collectionContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
             collectionView.leadingAnchor.constraint(equalTo: collectionContainer.leadingAnchor, constant: 28),
             collectionView.topAnchor.constraint(equalTo: collectionContainer.topAnchor, constant: 32),
@@ -153,15 +169,18 @@ class LegacyWallpaperSettingsViewController: UIViewController {
             switchTitle.trailingAnchor.constraint(equalTo: logoSwitch.leadingAnchor, constant: -8),
             switchTitle.bottomAnchor.constraint(equalTo: switchContainer.bottomAnchor, constant: -11),
 
-            switchLine.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            switchLine.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             switchLine.topAnchor.constraint(equalTo: switchContainer.bottomAnchor),
-            switchLine.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            switchLine.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             switchLine.heightAnchor.constraint(equalToConstant: 0.5),
 
-            switchContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            switchContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             switchContainer.topAnchor.constraint(equalTo: collectionContainer.bottomAnchor, constant: 8),
-            switchContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            switchContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            switchContainer.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
         ])
+
+        logoSwitch.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .horizontal)
     }
 
     private func setupCurrentState() {
