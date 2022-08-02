@@ -1561,7 +1561,8 @@ open class BrowserSchema: Schema {
     }
 
     fileprivate func fillDomainNamesFromCursor(_ cursor: Cursor<String>, db: SQLiteDBConnection) -> Bool {
-        if cursor.count == 0 {
+        let cursorCount = cursor.count
+        if cursorCount == 0 {
             return true
         }
 

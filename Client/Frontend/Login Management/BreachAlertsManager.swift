@@ -110,9 +110,9 @@ final public class BreachAlertsManager {
     func findUserBreaches(_ logins: [LoginRecord]) -> Maybe<Set<LoginRecord>> {
         var result = Set<LoginRecord>()
 
-        if self.breaches.count <= 0 {
+        if self.breaches.isEmpty {
             return Maybe(failure: BreachAlertsError(description: "cannot compare to an empty list of breaches"))
-        } else if logins.count <= 0 {
+        } else if logins.isEmpty {
             return Maybe(failure: BreachAlertsError(description: "cannot compare to an empty list of logins"))
         }
 

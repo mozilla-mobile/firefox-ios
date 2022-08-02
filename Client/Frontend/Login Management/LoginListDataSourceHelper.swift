@@ -54,7 +54,7 @@ class LoginListDataSourceHelper {
     }
 
     func computeSectionsFromLogins(_ logins: [LoginRecord]) -> Deferred<Maybe<([Character], [Character: [LoginRecord]])>> {
-        guard logins.count > 0 else {
+        guard !logins.isEmpty else {
             return deferMaybe( ([Character](), [Character: [LoginRecord]]()) )
         }
 

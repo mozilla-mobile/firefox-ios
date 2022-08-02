@@ -48,7 +48,9 @@ final class ContentBlockerGenTests: XCTestCase {
         XCTAssert(result.first! == test)
     }
 
+    // swiftlint:disable empty_xctest_method
     static var allTests = [
         ("testParsing", testParsing),
     ]
+    // swiftlint:enable empty_xctest_method
 }

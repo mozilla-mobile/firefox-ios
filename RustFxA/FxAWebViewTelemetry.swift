@@ -49,7 +49,7 @@ class FxAWebViewTelemetry {
 
         var pathElements = urlComponents.path.components(separatedBy: "/")
         pathElements.reverse()
-        guard let element = pathElements.first(where: { $0 != "" }),
+        guard let element = pathElements.first(where: { !$0.isEmpty }),
               let flow = FxAUrlPathStartedFlow(rawValue: element)
         else { return nil }
 

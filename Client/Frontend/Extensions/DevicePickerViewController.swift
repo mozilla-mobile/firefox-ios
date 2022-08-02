@@ -93,7 +93,7 @@ class DevicePickerViewController: UITableViewController {
 
             let currentIds = self.devices.map { $0.id ?? "" }.sorted()
             let newIds = state.remoteDevices.map { $0.id }.sorted()
-            if currentIds.count > 0, currentIds == newIds {
+            if !currentIds.isEmpty, currentIds == newIds {
                 return
             }
 

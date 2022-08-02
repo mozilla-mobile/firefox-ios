@@ -191,7 +191,7 @@ class OpenSearchParser {
         }
 
         let shortName = shortNameIndexer[0].stringValue
-        if shortName == "" {
+        if shortName.isEmpty {
             print("ShortName must contain text")
             return nil
         }

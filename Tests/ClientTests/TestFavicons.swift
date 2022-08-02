@@ -30,7 +30,7 @@ class TestFavicons: ProfileTest {
         let url = URL(string: "https://instagram.com")
         FaviconFetcher.getForURL(url!, profile: profile).uponQueue(.main) { result in
             guard let favicons = result.successValue,
-                  favicons.count > 0,
+                  !favicons.isEmpty,
                   let url = favicons.first?.url.asURL
             else {
                 XCTFail("Favicons were not found.")

@@ -66,33 +66,32 @@ disabled_rules: # rule identifiers to exclude from running
 opt_in_rules: # some rules are only opt-in
 # These rules were originally opted into. Disabling for now to get
 # Swiftlint up and running.
-  # - closing_brace
-  # - opening_brace
-  # - return_arrow_whitespace
-  # - trailing_semicolon
   # - statement_position
   # - explicit_init
   # - file_header
   # - deployment_target
   # - discouraged_optional_collection
-  # - duplicate_imports
-  # - empty_string
   # - overridden_super_call
   # - prohibited_interface_builder
   # - prohibited_super_call
   # - protocol_property_accessors_order
   # - redundant_objc_attribute
   # - redundant_type_annotation
-  # - unused_import
   # Find all the available rules by running:
   # swiftlint rules
 
-opt_in_rules:
-
+  - closing_brace
   - contains_over_filter_count
   - contains_over_filter_is_empty
   - contains_over_first_not_nil
   - contains_over_range_nil_comparison
+  - empty_count
+  - empty_string
+  - empty_xctest_method
+  - duplicate_imports
+  - duplicate_enum_cases
+  - opening_brace
+  - return_arrow_whitespace
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - build

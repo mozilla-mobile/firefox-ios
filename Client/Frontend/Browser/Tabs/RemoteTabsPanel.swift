@@ -604,12 +604,12 @@ class RemoteTabsTableViewController: UITableViewController {
 
     func updateDelegateClientAndTabData(_ clientAndTabs: [ClientAndTabs]) {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
-        if clientAndTabs.count == 0 {
+        if clientAndTabs.isEmpty {
             self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
                                                                     error: .noClients)
         } else {
-            let nonEmptyClientAndTabs = clientAndTabs.filter { $0.tabs.count > 0 }
-            if nonEmptyClientAndTabs.count == 0 {
+            let nonEmptyClientAndTabs = clientAndTabs.filter { !$0.tabs.isEmpty }
+            if nonEmptyClientAndTabs.isEmpty {
                 self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
                                                                         error: .noTabs)
             } else {

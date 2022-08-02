@@ -213,7 +213,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         guard let tabToFocus = tabToFocus else { return }
 
         if let tabGroups = tabDisplayManager.tabGroups,
-           tabGroups.count > 0,
+           !tabGroups.isEmpty,
            tabGroups.contains(where: { $0.groupedItems.contains(where: { $0 == tabToFocus }) }) {
             focusGroup(from: tabGroups, with: tabToFocus)
 
@@ -673,7 +673,7 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
             }
 
         case .regularTabs, .none:
-            guard tabDisplayManager.filteredTabs.count > 0 else { return CGSize(width: 0, height: 0) }
+            guard !tabDisplayManager.filteredTabs.isEmpty else { return CGSize(width: 0, height: 0) }
             return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
         }
     }
@@ -681,7 +681,7 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
     private func calculateInactiveTabSizeHelper(_ collectionView: UICollectionView) -> CGSize {
         guard !tabDisplayManager.isPrivate,
               let inactiveTabViewModel = tabDisplayManager.inactiveViewModel,
-              inactiveTabViewModel.activeTabs.count > 0
+              !inactiveTabViewModel.activeTabs.isEmpty
         else {
             return CGSize(width: 0, height: 0)
         }

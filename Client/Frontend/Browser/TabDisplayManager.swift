@@ -101,7 +101,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         // Get current order
         guard let tabDisplayOrderDecoded = TabDisplayOrder.decode() else { return nil }
         var decodedTabUUID = tabDisplayOrderDecoded.regularTabUUID
-        guard decodedTabUUID.count > 0 else { return nil }
+        guard !decodedTabUUID.isEmpty else { return nil }
         let filteredTabCopy: [Tab] = filteredTabs.map { $0 }
         var filteredTabUUIDs: [String] = filteredTabs.map { $0.tabUUID }
         var regularOrderedTabs: [Tab] = []
@@ -125,7 +125,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             }
         }
 
-        return regularOrderedTabs.count > 0 ? regularOrderedTabs : nil
+        return !regularOrderedTabs.isEmpty ? regularOrderedTabs : nil
     }
 
     func saveRegularOrderedTabs(from tabs: [Tab]) {
@@ -199,7 +199,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL, .didSetScreenshot)
         self.dataStore.removeAll()
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
-            guard tabsToDisplay.count > 0 else { return }
+            guard !tabsToDisplay.isEmpty else { return }
             let orderedRegularTabs = tabDisplayType == .TopTabTray ? tabsToDisplay : self.getRegularOrderedTabs() ?? tabsToDisplay
             if self.getRegularOrderedTabs() == nil {
                 self.saveRegularOrderedTabs(from: tabsToDisplay)
@@ -475,7 +475,11 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     }
 
     func recordGroupedTabTelemetry() {
-        if shouldEnableGroupedTabs, !isPrivate, let tabGroups = tabGroups, tabGroups.count > 0 {
+        if shouldEnableGroupedTabs,
+           !isPrivate,
+           let tabGroups = tabGroups,
+           !tabGroups.isEmpty {
+
             let groupWithTwoTabs = tabGroups.filter { $0.groupedItems.count == 2 }.count
             let groupsWithTwoMoreTab = tabGroups.filter { $0.groupedItems.count > 2 }.count
             let tabsInAllGroup = tabsInAllGroups?.count ?? 0
@@ -505,11 +509,11 @@ extension TabDisplayManager: UICollectionViewDataSource {
         switch TabDisplaySection(rawValue: section) {
         case .inactiveTabs:
             // Hide inactive tray if there are no inactive tabs
-            guard let vm = inactiveViewModel, vm.inactiveTabs.count > 0 else { return 0 }
+            guard let vm = inactiveViewModel, !vm.inactiveTabs.isEmpty else { return 0 }
             return shouldEnableInactiveTabs ? (isPrivate ? 0 : 1) : 0
         case .groupedTabs:
             // Hide grouped tab section if there are no grouped tabs
-            guard let groups = tabGroups, groups.count > 0 else { return 0 }
+            guard let groups = tabGroups, !groups.isEmpty else { return 0 }
             return shouldEnableGroupedTabs ? (isPrivate ? 0 : 1) : 0
         case .regularTabs:
             return dataStore.count
@@ -629,7 +633,9 @@ extension TabDisplayManager: InactiveTabsDelegate {
         let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
 
         // Refresh store when we have no inactive tabs in the list
-        guard let inactiveVm = self.inactiveViewModel, inactiveVm.inactiveTabs.count > 0 else {
+        guard let inactiveVm = self.inactiveViewModel,
+              !inactiveVm.inactiveTabs.isEmpty
+        else {
             refreshStore()
             return
         }
@@ -649,7 +655,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
         generator.impactOccurred()
 
         // Close all inactive tabs
-        if let inactiveTabs = inactiveViewModel?.inactiveTabs, inactiveTabs.count > 0 {
+        if let inactiveTabs = inactiveViewModel?.inactiveTabs, !inactiveTabs.isEmpty {
             removeInactiveTabAndReloadView(tabs: inactiveTabs)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabCloseAllButton, extras: nil)
         }
@@ -946,7 +952,7 @@ extension TabDisplayManager: TabManagerDelegate {
 
     func getIndexToPlaceTab(placeNextToParentTab: Bool) -> Int {
         // Place new tab at the end by default unless it has been opened from parent tab
-        var indexToPlaceTab = dataStore.count > 0 ? dataStore.count : 0
+        var indexToPlaceTab = !dataStore.isEmpty ? dataStore.count : 0
 
         // Open a link from website next to it
         if placeNextToParentTab, let selectedTabUUID = tabManager.selectedTab?.tabUUID {

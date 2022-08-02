@@ -2,12 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-@testable import Account
-@testable import Client
 import Shared
 import UIKit
-
 import XCTest
+
+@testable import Account
+@testable import Client
 
 private let ProductionTokenServerEndpointURL = URL(string: "https://token.services.mozilla.com/1.0/sync/1.5")!
 

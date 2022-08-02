@@ -91,7 +91,7 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
 
         let savedData = subject.getRecentlySavedData()
 
-        XCTAssert(savedData.count == 0)
+        XCTAssert(savedData.isEmpty)
         XCTAssert(mockReadingList.getAvailableRecordsCallCount == 1)
         XCTAssert(mockBookmarksHandler.getRecentBookmarksCallCount == 1)
         XCTAssert(mockDelegate?.didLoadNewDataCallCount == 2)

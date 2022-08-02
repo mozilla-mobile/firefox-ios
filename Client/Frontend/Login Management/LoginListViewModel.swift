@@ -18,6 +18,7 @@ final class LoginListViewModel {
     private(set) var profile: Profile
     private(set) var isDuringSearchControllerDismiss = false
     private(set) var count = 0
+    private(set) var hasData: Bool = false
     weak var searchController: UISearchController?
     weak var delegate: LoginViewModelDelegate?
     private(set) var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
@@ -130,15 +131,17 @@ final class LoginListViewModel {
         //     prevent race conditions between data/UI indexing.
         return self.helper.computeSectionsFromLogins(logins).uponQueue(.main) { result in
             guard let (titles, sections) = result.successValue,
-                  logins.count > 0
+                  !logins.isEmpty
             else {
                 self.count = 0
+                self.hasData = false
                 self.titles = []
                 self.loginRecordSections = [:]
                 return
             }
 
             self.count = logins.count
+            self.hasData = !logins.isEmpty
             self.titles = titles
             self.loginRecordSections = sections
 

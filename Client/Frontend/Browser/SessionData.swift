@@ -66,7 +66,7 @@ class SessionData: NSObject, NSCoding {
         self.urls = migrate(urls: urls)
         self.lastUsedTime = lastUsedTime
 
-        assert(urls.count > 0, "Session has at least one entry")
+        assert(!urls.isEmpty, "Session has at least one entry")
         assert(currentPage > -urls.count && currentPage <= 0, "Session index is valid")
     }
 

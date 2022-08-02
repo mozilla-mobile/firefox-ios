@@ -346,7 +346,7 @@ extension URL {
         // brackets for IPv6 hosts, whereas the latter strips them.
         guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
               var host = components.host,
-              host != ""
+              !host.isEmpty
         else { return nil }
 
         if let range = host.range(of: "^(www|mobile|m)\\.", options: .regularExpression) {
@@ -526,7 +526,7 @@ public struct InternalURL {
     public var stripAuthorization: String {
         guard var components = URLComponents(string: url.absoluteString), let items = components.queryItems else { return url.absoluteString }
         components.queryItems = items.filter { !Param.uuidkey.matches($0.name) }
-        if let items = components.queryItems, items.count == 0 {
+        if let items = components.queryItems, items.isEmpty {
             components.queryItems = nil // This cleans up the url to not end with a '?'
         }
         return components.url?.absoluteString ?? ""
@@ -689,7 +689,7 @@ private extension URL {
                                      .backwards,      // Search from the end.
                                      .anchored]         // Stick to the end.
                 let suffixlessHost = host.replacingOccurrences(of: suffix, with: "", options: literalFromEnd, range: nil)
-                let suffixlessTokens = suffixlessHost.components(separatedBy: ".").filter { $0 != "" }
+                let suffixlessTokens = suffixlessHost.components(separatedBy: ".").filter { !$0.isEmpty }
                 let maxAdditionalCount = max(0, suffixlessTokens.count - additionalPartCount)
                 let additionalParts = suffixlessTokens[maxAdditionalCount..<suffixlessTokens.count]
                 let partsString = additionalParts.joined(separator: ".")

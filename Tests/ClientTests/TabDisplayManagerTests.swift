@@ -293,6 +293,10 @@ class WeakListMock<T: AnyObject>: WeakList<T> {
     override var count: Int {
         return countToReturn
     }
+
+    override var isEmpty: Bool {
+        return countToReturn <= 0
+    }
 }
 
 class MockCollectionView: UICollectionView {

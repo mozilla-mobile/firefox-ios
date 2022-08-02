@@ -237,7 +237,8 @@ class SearchTests: BaseTestCase {
 
         let addressBar = app.textFields["address"]
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
-        XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
+        let keyboardCount = app.keyboards.count
+        XCTAssert(keyboardCount > 0, "The keyboard is not shown")
 
         app.textFields["address"].typeText("www.google.com\n")
         waitUntilPageLoad()
@@ -266,6 +267,7 @@ class SearchTests: BaseTestCase {
         app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
 
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
-        XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
+        let keyboardsCount = app.keyboards.count
+        XCTAssert(keyboardsCount > 0, "The keyboard is not shown")
     }
 }

@@ -145,9 +145,10 @@ extension BrowserViewController: WKUIDelegate {
             var setAddTabAdSearchParam = false
             let addTab = { (rURL: URL, isPrivate: Bool) in
                 let adUrl = rURL.absoluteString
-                if currentTab == self.tabManager.selectedTab, currentTab.adsTelemetryUrlList.count > 0,
-                    currentTab.adsTelemetryUrlList.contains(adUrl),
-                    !currentTab.adsProviderName.isEmpty {
+                if currentTab == self.tabManager.selectedTab,
+                   !currentTab.adsTelemetryUrlList.isEmpty,
+                   currentTab.adsTelemetryUrlList.contains(adUrl),
+                   !currentTab.adsProviderName.isEmpty {
 
                     AdsTelemetryHelper.trackAdsClickedOnPage(providerName: currentTab.adsProviderName)
                         currentTab.adsTelemetryUrlList.removeAll()
@@ -365,7 +366,9 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
         guard let tab = tabManager[webView] else { return }
 
-        if tab.adsTelemetryUrlList.count > 0, !tab.adsProviderName.isEmpty, let webUrl = webView.url {
+        if !tab.adsTelemetryUrlList.isEmpty,
+           !tab.adsProviderName.isEmpty,
+           let webUrl = webView.url {
             tab.adsTelemetryRedirectUrlList.append(webUrl)
         }
     }
@@ -452,7 +455,10 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if tab == tabManager.selectedTab, navigationAction.navigationType == .linkActivated, tab.adsTelemetryUrlList.count > 0 {
+        if tab == tabManager.selectedTab,
+           navigationAction.navigationType == .linkActivated,
+           !tab.adsTelemetryUrlList.isEmpty {
+
             let adUrl = url.absoluteString
             if tab.adsTelemetryUrlList.contains(adUrl) {
                 if !tab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName) }
@@ -770,13 +776,13 @@ extension BrowserViewController: WKNavigationDelegate {
         // Only update search term data with valid search term data
         if metadataManager.shouldUpdateSearchTermData(webViewUrl: webView.url?.absoluteString) {
 
-            if tab.adsTelemetryRedirectUrlList.count > 0,
+            if !tab.adsTelemetryRedirectUrlList.isEmpty,
                !tab.adsProviderName.isEmpty,
-                tab.adsTelemetryUrlList.count > 0,
+               !tab.adsTelemetryUrlList.isEmpty,
                !tab.adsProviderName.isEmpty,
-                let startingRedirectHost = tab.startingSearchUrlWithAds?.host,
-                let lastRedirectHost = tab.adsTelemetryRedirectUrlList.last?.host,
-                lastRedirectHost != startingRedirectHost {
+               let startingRedirectHost = tab.startingSearchUrlWithAds?.host,
+               let lastRedirectHost = tab.adsTelemetryRedirectUrlList.last?.host,
+               lastRedirectHost != startingRedirectHost {
 
                 AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
                 tab.adsTelemetryUrlList.removeAll()

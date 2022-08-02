@@ -4,6 +4,7 @@
 
 import XCTest
 
+// swiftlint:disable empty_count
 // Tests for both platforms
 class DesktopModeTestsIpad: IpadOnlyTestCase {
     func testLongPressReload() {

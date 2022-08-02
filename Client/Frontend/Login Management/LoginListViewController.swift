@@ -464,7 +464,7 @@ extension LoginListViewController: LoginViewModelDelegate {
     func loginSectionsDidUpdate() {
         loadingView.isHidden = true
         tableView.reloadData()
-        navigationItem.rightBarButtonItem?.isEnabled = viewModel.count > 0
+        navigationItem.rightBarButtonItem?.isEnabled = viewModel.hasData
         restoreSelectedRows()
     }
 

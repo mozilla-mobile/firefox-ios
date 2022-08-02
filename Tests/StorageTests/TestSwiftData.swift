@@ -32,6 +32,7 @@ class TestSwiftData: XCTestCase {
     }
 
     override func tearDown() {
+        super.tearDown()
         // Restore static flags to their default values.
         SwiftData.EnableWAL = true
     }

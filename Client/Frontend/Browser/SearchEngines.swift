@@ -195,7 +195,7 @@ class SearchEngines {
         let possibilities = possibilitiesForLanguageIdentifier(languageIdentifier)
         let engineNames = defaultSearchPrefs.visibleDefaultEngines(for: possibilities, and: region)
         let defaultEngineName = defaultSearchPrefs.searchDefault(for: possibilities, and: region)
-        assert(engineNames.count > 0, "No search engines")
+        assert(!engineNames.isEmpty, "No search engines")
 
         return engineNames.map({ (name: $0, path: pluginDirectory.appendingPathComponent("\($0).xml").path) })
             .filter({

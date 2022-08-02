@@ -51,7 +51,7 @@ struct TopSitesView: View {
     var body: some View {
         VStack {
             HStack {
-                if entry.sites.count == 0 {
+                if entry.sites.isEmpty {
                     ForEach(0..<4, id: \.self) { _ in
                         emptySquare
                     }

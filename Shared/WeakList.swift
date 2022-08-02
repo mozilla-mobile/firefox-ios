@@ -42,6 +42,10 @@ open class WeakList<T: AnyObject>: Sequence {
         return items.count
     }
 
+    open var isEmpty: Bool {
+        return items.isEmpty
+    }
+
     open func removeAll() {
         items.removeAll()
     }

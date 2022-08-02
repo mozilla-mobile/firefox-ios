@@ -154,8 +154,9 @@ extension FaviconFetcher {
         FaviconFetcher.getForURL(url.domainURL, profile: profile).uponQueue(.main) { result in
             var iconURL: URL?
 
-            if let favicons = result.successValue, favicons.count > 0, let faviconImageURL =
-                favicons.first?.url.asURL {
+            if let favicons = result.successValue,
+               !favicons.isEmpty,
+               let faviconImageURL = favicons.first?.url.asURL {
                 iconURL = faviconImageURL
             } else {
                 return deferred.fill(Maybe(failure: FaviconError()))

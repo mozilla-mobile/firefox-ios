@@ -36,7 +36,7 @@ public class ContentBlockerGenLib {
     }
 
     func buildUnlessDomain(_ domains: [String]) -> String {
-        guard domains.count > 0 else { return "" }
+        guard !domains.isEmpty else { return "" }
         let result = domains.reduce("", { $0 + "\"*\($1)\"," }).dropLast()
         return "[" + result + "]"
     }
