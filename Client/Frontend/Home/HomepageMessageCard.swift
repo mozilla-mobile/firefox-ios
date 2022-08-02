@@ -20,23 +20,31 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         static let cardSizeMaxWidth: CGFloat = 360
         static let buttonHeight: CGFloat = 44
         static let textSpacing: CGFloat = 8
-        static let cardCornerRadius: CGFloat = 12
+        static let cornerRadius: CGFloat = 12
         static let dismissButtonSize = CGSize(width: 16, height: 16)
         static let dismissButtonSpacing: CGFloat = 12
         static let standardSpacing: CGFloat = 16
-        static let buttonCornerRadius: CGFloat = 8
+        static let buttonEdgeSpacing: CGFloat = 16
+        static let topCardSafeSpace: CGFloat = 16
+        static let bottomCardSafeSpace: CGFloat = 32
+        // Max font size
         static let bannerTitleMaxFontSize: CGFloat = 55
         static let descriptionTextMaxFontSize: CGFloat = 49
         static let buttonMaxFontSize: CGFloat = 53
-        static let buttonEdgeSpacing: CGFloat = 16
-        static let topCardSafeSpace: CGFloat = 8
-        static let bottomCardSafeSpace: CGFloat = 32
+        // Shadow
+        static let shadowRadius: CGFloat = 4
+        static let shadowOffset: CGFloat = 2
+        static let shadowOpacity: Float = 0.12
     }
 
     // MARK: - Properties
     private var viewModel: HomepageMessageCardProtocol!
 
     // UI
+    private lazy var titleContainerView: UIView = .build { view in
+        view.backgroundColor = .clear
+    }
+
     private lazy var bannerTitle: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
@@ -57,10 +65,9 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 
     private lazy var ctaButton: ActionButton = .build { [weak self] button in
         button.backgroundColor = UIColor.Photon.Blue50
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .callout,
                                                                                     maxSize: UX.buttonMaxFontSize)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.layer.masksToBounds = true
+        button.layer.cornerRadius = UX.cornerRadius
         button.accessibilityIdentifier = a11y.ctaButton
         button.addTarget(self, action: #selector(self?.handleCTA), for: .touchUpInside)
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: UX.buttonEdgeSpacing,
@@ -74,19 +81,16 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         button.accessibilityLabel = BannerCopy.HomeTabBannerCloseAccessibility
     }
 
-    private lazy var textStackView: UIStackView = .build { [weak self] stackView in
-        guard let self = self else { return }
-        stackView.addArrangedSubview(self.bannerTitle)
-        stackView.addArrangedSubview(self.descriptionText)
+    private lazy var textStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.alignment = .fill
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fill
         stackView.spacing = UX.textSpacing
     }
 
     private lazy var cardView: UIView = .build { view in
         view.backgroundColor = UIColor.theme.homeTabBanner.backgroundColor
-        view.layer.cornerRadius = UX.cardCornerRadius
+        view.layer.cornerRadius = UX.cornerRadius
         view.layer.masksToBounds = true
     }
 
@@ -112,23 +116,32 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     // MARK: - Layout
 
     private func setupLayout() {
+        titleContainerView.addSubviews(bannerTitle)
+        textStackView.addArrangedSubview(titleContainerView)
+        textStackView.addArrangedSubview(descriptionText)
+
         cardView.addSubviews(ctaButton, textStackView, dismissButton)
-        addSubview(cardView)
+        contentView.addSubview(cardView)
 
         NSLayoutConstraint.activate([
-            cardView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
-            cardView.topAnchor.constraint(equalTo: topAnchor, constant: UX.topCardSafeSpace),
-            cardView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
-            cardView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomCardSafeSpace),
-            cardView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            cardView.widthAnchor.constraint(equalToConstant: UX.cardSizeMaxWidth),
+            cardView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor),
+            cardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.topCardSafeSpace),
+            cardView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
+            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.bottomCardSafeSpace),
+            cardView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            cardView.widthAnchor.constraint(equalToConstant: UX.cardSizeMaxWidth).priority(.defaultHigh),
 
-            textStackView.topAnchor.constraint(equalTo: dismissButton.bottomAnchor),
+            textStackView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: UX.standardSpacing),
             textStackView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.standardSpacing),
             textStackView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
             textStackView.bottomAnchor.constraint(equalTo: ctaButton.topAnchor, constant: -UX.standardSpacing),
 
-            dismissButton.topAnchor.constraint(equalTo: cardView.topAnchor, constant: UX.dismissButtonSpacing),
+            bannerTitle.topAnchor.constraint(equalTo: titleContainerView.topAnchor),
+            bannerTitle.leadingAnchor.constraint(equalTo: titleContainerView.leadingAnchor),
+            bannerTitle.trailingAnchor.constraint(equalTo: titleContainerView.trailingAnchor, constant: -UX.standardSpacing),
+            bannerTitle.bottomAnchor.constraint(equalTo: titleContainerView.bottomAnchor),
+
+            dismissButton.topAnchor.constraint(equalTo: textStackView.topAnchor),
             dismissButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
             dismissButton.heightAnchor.constraint(equalToConstant: UX.dismissButtonSize.height),
             dismissButton.widthAnchor.constraint(equalToConstant: UX.dismissButtonSize.width),
@@ -138,6 +151,17 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
             ctaButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -UX.standardSpacing),
             ctaButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight),
         ])
+        addShadow()
+    }
+
+    private func addShadow() {
+        contentView.layer.cornerRadius = UX.cornerRadius
+        contentView.layer.shadowRadius = UX.shadowRadius
+        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
+        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        contentView.layer.shadowOpacity = UX.shadowOpacity
+        contentView.layer.shouldRasterize = true
+        contentView.layer.rasterizationScale = UIScreen.main.scale
     }
 
     func applyTheme() {
@@ -165,7 +189,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         if let title = message.data.title {
             bannerTitle.text = title
         } else {
-            textStackView.removeArrangedView(bannerTitle)
+            textStackView.removeArrangedView(titleContainerView)
         }
 
         descriptionText.text = message.data.text

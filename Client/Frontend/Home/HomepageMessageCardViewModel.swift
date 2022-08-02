@@ -22,9 +22,12 @@ class HomepageMessageCardViewModel: HomepageMessageCardProtocol, GleanPlumbMessa
     }
 
     func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
-        guard let message = messagingManager.getNextMessage(for: .newTabCard) else { return nil }
+        guard let message = message else {
+            let retrievedMessage = messagingManager.getNextMessage(for: .newTabCard)
+            message = retrievedMessage
+            return retrievedMessage
+        }
 
-        self.message = message
         return message
     }
 
