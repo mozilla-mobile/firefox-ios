@@ -3,9 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
-/// Metadata, fetched from the server, to update wallpaper availability.
-struct WallpaperMetadata: Codable {
-    let lastUpdated: Date
-    let collections: [WallpaperCollection]
+enum WallpaperServiceError: Error {
+    case dataUnavailable
+}
+
+protocol WallpaperNetworking {
+    func data(from url: URL) async throws -> (Data, URLResponse)
 }
