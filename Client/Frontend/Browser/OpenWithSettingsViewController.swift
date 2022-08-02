@@ -11,7 +11,6 @@ class OpenWithSettingsViewController: ThemedTableViewController {
 
     fileprivate let prefs: Prefs
     fileprivate var currentChoice: String = "mailto"
-    fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
 
     init(prefs: Prefs) {
         self.prefs = prefs
@@ -28,7 +27,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
 
         tableView.accessibilityIdentifier = "OpenWithPage.Setting.Options"
         tableView.register(ThemedTableSectionHeaderFooterView.self,
-                           forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
+                           forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(appDidBecomeActive),
@@ -109,7 +108,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         headerView.titleLabel.text = .SettingsOpenWithPageTitle.uppercased()
         return headerView
@@ -120,7 +119,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
         return footerView
     }
 

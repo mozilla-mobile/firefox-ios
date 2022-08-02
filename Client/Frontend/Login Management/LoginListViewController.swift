@@ -17,7 +17,6 @@ private extension UITableView {
 }
 
 let CellReuseIdentifier = "cell-reuse-id"
-let SectionHeaderId = "section-header-id"
 let LoginsSettingsSection = 0
 
 class LoginListViewController: SensitiveViewController {
@@ -98,7 +97,7 @@ class LoginListViewController: SensitiveViewController {
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: CellReuseIdentifier)
         tableView.register(ThemedTableSectionHeaderFooterView.self,
-                           forHeaderFooterViewReuseIdentifier: SectionHeaderId)
+                           forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
         tableView.accessibilityIdentifier = "Login List"
         tableView.dataSource = loginDataSource
@@ -372,7 +371,7 @@ extension LoginListViewController: UITableViewDelegate {
         if section != 1 {
             return nil
         }
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderId) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
         headerView.titleLabel.text = .LoginsListTitle
         // not using a grouped table: show header borders
         headerView.showBorder(for: .top, true)

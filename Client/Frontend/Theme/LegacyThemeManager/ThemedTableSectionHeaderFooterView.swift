@@ -4,7 +4,7 @@
 
 import UIKit
 
-class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, NotificationThemeable {
+class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableCell, NotificationThemeable {
 
     private struct UX {
         static let titleHorizontalPadding: CGFloat = 15

@@ -681,7 +681,6 @@ class SettingsTableViewController: ThemedTableViewController {
     typealias SettingsGenerator = (SettingsTableViewController, SettingsDelegate?) -> [SettingSection]
 
     fileprivate let Identifier = "CellIdentifier"
-    fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
     var settings = [SettingSection]()
 
     weak var settingsDelegate: SettingsDelegate?
@@ -700,7 +699,8 @@ class SettingsTableViewController: ThemedTableViewController {
         super.viewDidLoad()
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier)
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
+        tableView.register(ThemedTableSectionHeaderFooterView.self,
+                           forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
         tableView.tableFooterView = UIView(frame: CGRect(width: view.frame.width, height: 30))
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 44
@@ -790,7 +790,7 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         let sectionSetting = settings[section]
         if let sectionTitle = sectionSetting.title?.string {
@@ -803,7 +803,7 @@ class SettingsTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionSetting = settings[section]
 
-        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView,
+        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView,
                 let sectionFooter = sectionSetting.footerTitle?.string else { return nil }
 
         footerView.titleLabel.text = sectionFooter

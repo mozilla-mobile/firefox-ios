@@ -18,7 +18,6 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     fileprivate let SectionOrder = 1
     fileprivate let NumberOfSections = 2
     fileprivate let IconSize = CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize)
-    fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
 
     fileprivate var showDeletion = false
 
@@ -45,7 +44,8 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         // So that we push the default search engine controller on selection.
         tableView.allowsSelectionDuringEditing = true
 
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
+        tableView.register(ThemedTableSectionHeaderFooterView.self,
+                           forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
         // Insert Done button if being presented outside of the Settings Nav stack
         if !(self.navigationController is ThemedNavigationController) {
@@ -211,7 +211,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         var sectionTitle: String
         if section == SectionDefault {
@@ -225,7 +225,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         footerView.applyTheme()
         return footerView

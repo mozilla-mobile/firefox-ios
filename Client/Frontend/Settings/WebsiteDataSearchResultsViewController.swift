@@ -15,7 +15,6 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         static let count = 2
     }
 
-    private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
     let viewModel: WebsiteDataManagementViewModel
     private var tableView: UITableView!
 
@@ -42,7 +41,8 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: "Cell")
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
+        tableView.register(ThemedTableSectionHeaderFooterView.self,
+                           forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
         view.addSubview(tableView)
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
@@ -133,7 +133,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         headerView.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
 
