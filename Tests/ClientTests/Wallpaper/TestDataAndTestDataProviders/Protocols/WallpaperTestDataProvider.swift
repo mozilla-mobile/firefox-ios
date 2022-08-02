@@ -4,10 +4,4 @@
 
 import Foundation
 
-/// Describes a wallpaper collection.
-struct WallpaperCollection: Codable {
-    let id: String
-    let availableLocales: [String]
-    let availability: WallpaperCollectionAvailability
-    let wallpapers: [Wallpaper]
-}
+protocol WallpaperTestDataProvider: WallpaperJSONTestProvider, WallpaperMetadataTestProvider {}

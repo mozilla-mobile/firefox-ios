@@ -1,0 +1,18 @@
+{
+    "last-updated-date": "2001-02-03",
+    "collections": [
+        {
+            "id": "firefox",
+            "available-locales": ["en-US", "es-US", "en-CA", "fr-CA"],
+            "availability-range": {
+                "start": "2002-11-28"
+            },
+            "wallpapers": [
+                {
+                    "id": "beachVibes",
+                    "text-color": "0xADD8E6",
+                }
+            ]
+        }
+    ]
+}
