@@ -159,7 +159,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
     }
 
-    @objc func dynamicFontChanged(_ notification: Notification) {
+    func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == .DynamicFontChanged else { return }
 
         reloadData()
@@ -311,7 +311,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
     }
 
-    @objc func didSelectEngine(_ sender: UIButton) {
+    func didSelectEngine(_ sender: UIButton) {
         // The UIButtons are the same cardinality and order as the array of quick search engines.
         // Subtract 1 from index to account for magnifying glass accessory.
         guard let index = searchEngineScrollViewContent.subviews.firstIndex(of: sender) else {
@@ -332,7 +332,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: "")
     }
 
-    @objc func didClickSearchButton() {
+    func didClickSearchButton() {
         self.searchDelegate?.presentSearchSettingsController()
     }
 
@@ -723,7 +723,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         return cell
     }
 
-    @objc func append(_ sender: UIButton) {
+    func append(_ sender: UIButton) {
         let buttonPosition = sender.convert(CGPoint(), to: tableView)
         if let indexPath = tableView.indexPathForRow(at: buttonPosition), let newQuery = suggestions?[indexPath.row] {
             searchDelegate?.searchViewController(self, didAppend: newQuery + " ")

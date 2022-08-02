@@ -540,7 +540,7 @@ extension BookmarksPanel: Notifiable {
 
 // MARK: - Toolbar button actions
 extension BookmarksPanel {
-    @objc func bottomLeftButtonAction() {
+    func bottomLeftButtonAction() {
         if state == .bookmarks(state: .inFolderEditMode) {
             presentInFolderActions()
         }
@@ -577,7 +577,7 @@ extension BookmarksPanel {
         return true
     }
 
-    @objc func bottomRightButtonAction() {
+    func bottomRightButtonAction() {
         guard case .bookmarks(let subState) = state else { return }
 
         switch subState {
