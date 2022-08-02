@@ -391,6 +391,7 @@ private extension HomepageViewController {
         // Message card
         viewModel.messageCardViewModel.dismissClosure = { [weak self] in
             self?.viewModel.updateEnabledSections()
+            self?.reloadAll()
         }
 
         // Top sites

@@ -29,7 +29,8 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         static let descriptionTextMaxFontSize: CGFloat = 49
         static let buttonMaxFontSize: CGFloat = 53
         static let buttonEdgeSpacing: CGFloat = 16
-        static let bottomCardSafeSpace: CGFloat = 8
+        static let topCardSafeSpace: CGFloat = 8
+        static let bottomCardSafeSpace: CGFloat = 32
     }
 
     // MARK: - Properties
@@ -116,9 +117,9 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 
         NSLayoutConstraint.activate([
             cardView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
-            cardView.topAnchor.constraint(equalTo: topAnchor),
+            cardView.topAnchor.constraint(equalTo: topAnchor, constant: UX.topCardSafeSpace),
             cardView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
-            cardView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            cardView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomCardSafeSpace),
             cardView.centerXAnchor.constraint(equalTo: centerXAnchor),
             cardView.widthAnchor.constraint(equalToConstant: UX.cardSizeMaxWidth),
 
