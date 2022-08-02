@@ -237,8 +237,9 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         // TODO: Get a dedicated string for this.
         let title: String = .TrackerProtectionLearnMore
 
+        let font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
         var attributes = [NSAttributedString.Key: AnyObject]()
-        attributes[NSAttributedString.Key.font] = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
+        attributes[NSAttributedString.Key.font] = font
         attributes[NSAttributedString.Key.foregroundColor] = UIColor.theme.general.highlightBlue
 
         let button = UIButton()
