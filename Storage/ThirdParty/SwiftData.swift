@@ -1316,7 +1316,7 @@ open class SDRow: Sequence {
     // Allow iterating through the row.
     public func makeIterator() -> AnyIterator<Any> {
         let nextIndex = 0
-        return AnyIterator() {
+        return AnyIterator {
             if nextIndex < self.columnNames.count {
                 return self.getValue(nextIndex)
             }

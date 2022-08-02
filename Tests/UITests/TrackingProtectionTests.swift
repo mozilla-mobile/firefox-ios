@@ -37,7 +37,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         wait(for: [setup], timeout: 5)
 
         let clear = self.expectation(description: "clearing")
-        ContentBlocker.shared.clearSafelist() { clear.fulfill() }
+        ContentBlocker.shared.clearSafelist { clear.fulfill() }
         waitForExpectations(timeout: 15, handler: nil)
 
         register(self, forTabEvents: .didChangeContentBlocking)
@@ -160,7 +160,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         let url = URL(string: "http://localhost")!
 
         let clear = self.expectation(description: "clearing")
-        ContentBlocker.shared.clearSafelist() { clear.fulfill() }
+        ContentBlocker.shared.clearSafelist { clear.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
         checkStrictTrackingProtection(isBlocking: true)
 
@@ -182,7 +182,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         checkStrictTrackingProtection(isBlocking: false)
 
         let clear1 = self.expectation(description: "clearing")
-        ContentBlocker.shared.clearSafelist() { clear1.fulfill() }
+        ContentBlocker.shared.clearSafelist { clear1.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
         checkStrictTrackingProtection(isBlocking: true)
         openTPSetting()
