@@ -66,7 +66,7 @@ class PocketViewModel {
     }
 
     var numberOfCells: Int {
-        return pocketStoriesViewModels.count != 0 ? pocketStoriesViewModels.count + 1 : 0
+        return !pocketStoriesViewModels.isEmpty ? pocketStoriesViewModels.count + 1 : 0
     }
 
     func isStoryCell(index: Int) -> Bool {

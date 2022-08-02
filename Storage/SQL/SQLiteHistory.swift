@@ -739,7 +739,8 @@ extension SQLiteHistory: SyncableHistory {
 
         return db.runQueryConcurrently(query, args: args, factory: factory)
             >>== { cursor in
-                if cursor.count == 0 {
+                let cursorCount = cursor.count
+                if cursorCount == 0 {
                     return deferMaybe(NoSuchRecordError(guid: guid))
                 }
                 return deferMaybe(cursor[0]!)

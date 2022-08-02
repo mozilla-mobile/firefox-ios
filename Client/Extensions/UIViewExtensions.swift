@@ -96,7 +96,7 @@ extension UIView {
      */
     static func findSubViewWithFirstResponder(_ view: UIView) -> UIView? {
         let subviews = view.subviews
-        if subviews.count == 0 {
+        if subviews.isEmpty {
             return nil
         }
         for subview: UIView in subviews {

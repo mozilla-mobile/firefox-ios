@@ -299,7 +299,7 @@ private extension JumpBackInViewModel {
         // Get cached tabs
         DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass).async {
             self.profile.getCachedClientsAndTabs().uponQueue(.global(qos: .userInteractive)) { result in
-                guard let clientAndTabs = result.successValue, clientAndTabs.count > 0 else {
+                guard let clientAndTabs = result.successValue, !clientAndTabs.isEmpty else {
                     self.mostRecentSyncedTab = nil
                     completion()
                     return
@@ -311,7 +311,7 @@ private extension JumpBackInViewModel {
 
     private func createMostRecentSyncedTab(from clientAndTabs: [ClientAndTabs], completion: @escaping () -> Void) {
         // filter clients for non empty desktop clients
-        let desktopClientAndTabs = clientAndTabs.filter { $0.tabs.count > 0 &&
+        let desktopClientAndTabs = clientAndTabs.filter { !$0.tabs.isEmpty &&
             ClientType.fromFxAType($0.client.type) == .Desktop }
 
         guard !desktopClientAndTabs.isEmpty else {

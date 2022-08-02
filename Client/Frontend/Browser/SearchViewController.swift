@@ -90,7 +90,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     static var userAgent: String?
 
     var hasFirefoxSuggestions: Bool {
-        return data.count != 0 || !filteredOpenedTabs.isEmpty || !filteredRemoteClientTabs.isEmpty || !searchHighlights.isEmpty
+        let dataCount = data.count
+        return dataCount != 0
+            || !filteredOpenedTabs.isEmpty
+            || !filteredRemoteClientTabs.isEmpty
+            || !searchHighlights.isEmpty
     }
 
     init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager, featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search ) {
@@ -781,8 +785,8 @@ extension SearchViewController {
     func handleKeyCommands(sender: UIKeyCommand) {
         let initialSection = SearchListSection.bookmarksAndHistory.rawValue
         guard let current = tableView.indexPathForSelectedRow else {
-            let count = tableView(tableView, numberOfRowsInSection: initialSection)
-            if sender.input == UIKeyCommand.inputDownArrow, count > 0 {
+            let initialSectionCount = tableView(tableView, numberOfRowsInSection: initialSection)
+            if sender.input == UIKeyCommand.inputDownArrow, initialSectionCount > 0 {
                 let next = IndexPath(item: 0, section: initialSection)
                 self.tableView(tableView, didHighlightRowAt: next)
                 tableView.selectRow(at: next, animated: false, scrollPosition: .top)

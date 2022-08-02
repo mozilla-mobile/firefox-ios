@@ -235,7 +235,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         if let newRecords = profile.readingList.getAvailableRecords().value.successValue {
             records = newRecords
 
-            if records?.count == 0 {
+            if let records = records, records.isEmpty {
                 tableView.isScrollEnabled = false
                 DispatchQueue.main.async { self.tableView.backgroundView = self.emptyStateView }
             } else {
@@ -394,7 +394,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
                 self.records?.remove(at: indexPath.row)
                 self.tableView.deleteRows(at: [indexPath], with: .automatic)
                 // reshow empty state if no records left
-                if self.records?.count == 0 {
+                if let records = self.records, records.isEmpty {
                     self.refreshReadingList()
                 }
             })
