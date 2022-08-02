@@ -2057,7 +2057,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
     }
 
-    @objc func tabManagerUpdateCount() {
+    func tabManagerUpdateCount() {
         updateTabCountUsingTabManager(self.tabManager)
     }
 }

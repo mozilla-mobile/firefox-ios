@@ -331,7 +331,7 @@ extension AutocompleteTextField: MenuHelperInterface {
         return super.canPerformAction(action, withSender: sender)
     }
 
-    @objc func menuHelperPasteAndGo() {
+    func menuHelperPasteAndGo() {
         autocompleteDelegate?.autocompletePasteAndGo(self)
     }
 }

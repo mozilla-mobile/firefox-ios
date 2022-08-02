@@ -717,12 +717,12 @@ extension HistoryPanel {
         }
     }
 
-    @objc func bottomSearchButtonAction() {
+    func bottomSearchButtonAction() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .searchHistory)
         startSearchState()
     }
 
-    @objc func bottomDeleteButtonAction() {
+    func bottomDeleteButtonAction() {
         // Leave search mode when clearing history
         updatePanelState(newState: .history(state: .mainView))
 

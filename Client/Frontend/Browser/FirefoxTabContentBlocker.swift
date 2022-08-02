@@ -70,7 +70,7 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         ContentBlocker.shared.setupTrackingProtection(forTab: tab, isEnabled: isEnabled, rules: rules)
     }
 
-    @objc override func notifiedTabSetupRequired() {
+    override func notifiedTabSetupRequired() {
         setupForTab()
         if let tab = tab as? Tab {
             TabEvent.post(.didChangeContentBlocking, for: tab)
