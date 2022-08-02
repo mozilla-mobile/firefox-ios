@@ -1,0 +1,23 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>eBay</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAD60lEQVRYCe1YXWwUVRT+5m+33f6yLCVSSgGLYi1SmiitNBurNhKyNH1QQjSRWAExTQzxJ+oDSrAaYiQFjT4Q/yi+GJtgoyYm2BaJLRVWmqIF1/5EaulK27XdnV06Mzuz13uvdmSjaX3oZnngJmfm3HPuPd8355yd2RkQQvC3bKXnDioqlVQNFpth+Khw3FnwplQhzhGXYUKgBx+AL6ikY9QxAh0UuSYd6BSzkxGIUCUnTQRURoCkCZzDiukEZ9g3CdzYGdDiCQg7f8THXVMpa5U5M5ChzOleEFLy9VH0rm4YgUFuctxxO5xVG233uGri20AMM0YCFcWZKCvMsH2wYjAvH4M10QHJXQWp6FHMiE4kSBwuhweiIP2zlmq6qVKbDEXK5Ldikgj9gdCzLyJ+6Wc4KsoB04Te24eM6nvhie1AbWk2/L/OYOqaZQfafk8+jjUshxQ6CePsNkDOgZhfARIbREINwF+4Fd9NdWNz6ZuoKNph79Pi02jtfQIr3ZtQXfI82MOIhF7eR65U3UciHx1nUz4i7x0loxsqCZ68QJbsvUiGJ/RZF3mnfZLbX237nRgXXyFaz8MkEQ/bfq27jkyfcJLDnWXk7VPlJG7O2L6OwGvk9a8LyNBEO7fxImudp0E0DYJDQfTTVi5CXi7E7GzOfLfXjVUeh30VjTWLUZAr45Oeaci3PgPJ44Xxw05o7eugfXMnSHQACk2/d8UuqNoYzo+28L3XjBD8Ix9g7VIfVnvu5zbeA0TX+ST81mEb5Hol35VcQ0EAshwiNMOioOtpyWKQVz0FoeABQMqAdeUzIBrAXRTIH2zFmeEjKF/+GLqGm2EmdHjXvGSH5xnIrKUb6VjWcxqF588kCbN/3humpWLaX+NSUMflkIFNRRGauSCU0gNQyg5yEvIKWm9L4wtFQUTNbfsQMyZx6pc30PtbC9Yt2wZP1prZUOAZyN7+CMxgEGOVXuTubuDOyNEP4fJtoXo9+sd0rN8/gOce8mBCtdB8chLuLBkH6m8B+lyIDxwClDwItPPjQ0doCYZsgJIltSimDecfeR+SqMBb8oLtY4r9NDRHRhA+eAhaz1m+wLVlM3IaHkfTTy7Ub8hD12AM+9vG6U+LoKF6EfY+6EHhIgWJcB/M4XdhjbdDkJyQVzdCdFfCCn5J9T0QnEvRHzyBtgt7cHfxLtSubfpvAknWBZ60fO/DVbUfjV4/vS8sTorOeyDJssCTwNWvMDp9DhtXPv0vcAZll2CBcf93uJRnYD4mNwncEBlQ56tTCv1RlgF/CgHmC32OEWieb1UK/c1pfzmdJcDOdVTYq3OU/1NIzYHFZhjsUwDH/hOz3IVIi6fdLgAAAABJRU5ErkJggg==</Image>
+  <Url type="text/html" method="get" template="https://www.ebay.es/sch/" >
+  <Param name="kw" value="{searchTerms}"/>
+  <Param name="toolid" value="20004"/>
+  <Param name="campid" value="5338192028"/>
+  <Param name="mkevt" value="1"/>
+  <Param name="mkcid" value="1"/>
+  <Param name="mkrid" value="1185-53479-19255-0"/>
+  </Url>
+  <Url type="application/x-suggestions+json" template="https://autosug.ebay.com/autosug" >
+  <Param name="kwd" value="{searchTerms}"/>
+  <Param name="sId" value="186"/>
+  <Param name="fmt" value="osr"/>
+  </Url>
+ <SearchForm>https://www.ebay.es/</SearchForm>
+</SearchPlugin>
