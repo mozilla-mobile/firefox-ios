@@ -90,7 +90,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     static var userAgent: String?
 
     var hasFirefoxSuggestions: Bool {
-        return data.count != 0 || !filteredOpenedTabs.isEmpty || !filteredRemoteClientTabs.isEmpty || !searchHighlights.isEmpty
+        let dataCount = data.count
+        return dataCount != 0
+            || !filteredOpenedTabs.isEmpty
+            || !filteredRemoteClientTabs.isEmpty
+            || !searchHighlights.isEmpty
     }
 
     init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager, featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search ) {
@@ -159,7 +163,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
     }
 
-    @objc func dynamicFontChanged(_ notification: Notification) {
+    func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == .DynamicFontChanged else { return }
 
         reloadData()
@@ -311,7 +315,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
     }
 
-    @objc func didSelectEngine(_ sender: UIButton) {
+    func didSelectEngine(_ sender: UIButton) {
         // The UIButtons are the same cardinality and order as the array of quick search engines.
         // Subtract 1 from index to account for magnifying glass accessory.
         guard let index = searchEngineScrollViewContent.subviews.firstIndex(of: sender) else {
@@ -332,7 +336,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: "")
     }
 
-    @objc func didClickSearchButton() {
+    func didClickSearchButton() {
         self.searchDelegate?.presentSearchSettingsController()
     }
 
@@ -723,7 +727,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         return cell
     }
 
-    @objc func append(_ sender: UIButton) {
+    func append(_ sender: UIButton) {
         let buttonPosition = sender.convert(CGPoint(), to: tableView)
         if let indexPath = tableView.indexPathForRow(at: buttonPosition), let newQuery = suggestions?[indexPath.row] {
             searchDelegate?.searchViewController(self, didAppend: newQuery + " ")
@@ -781,8 +785,8 @@ extension SearchViewController {
     func handleKeyCommands(sender: UIKeyCommand) {
         let initialSection = SearchListSection.bookmarksAndHistory.rawValue
         guard let current = tableView.indexPathForSelectedRow else {
-            let count = tableView(tableView, numberOfRowsInSection: initialSection)
-            if sender.input == UIKeyCommand.inputDownArrow, count > 0 {
+            let initialSectionCount = tableView(tableView, numberOfRowsInSection: initialSection)
+            if sender.input == UIKeyCommand.inputDownArrow, initialSectionCount > 0 {
                 let next = IndexPath(item: 0, section: initialSection)
                 self.tableView(tableView, didHighlightRowAt: next)
                 tableView.selectRow(at: next, animated: false, scrollPosition: .top)

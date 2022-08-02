@@ -502,7 +502,7 @@ open class Sync15StorageClient {
 
         // Special case "": we want /1.5/1234567 and not /1.5/1234567/.  See note about trailing slashes above.
         let url: URL
-        if path == "" {
+        if path.isEmpty {
             url = self.serverURI // No trailing slash.
         } else {
             url = self.serverURI.appendingPathComponent(path)

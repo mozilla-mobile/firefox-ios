@@ -6,7 +6,7 @@ import XCTest
 import MappaMundi
 
 class FxScreenGraphTests: XCTestCase {
-    func testRenderDotFile() {
+//    func testRenderDotFile() {
         // This will render to $HOME/Library/Caches/tools.mappamundi/graph.dot, falling back to $HOME/Library/Caches/graph.dot
         // Shell command:
         // % dot -Tpng $HOME/Library/Caches/tools.mappamundi/graph.dot -ograph.png
@@ -15,5 +15,5 @@ class FxScreenGraphTests: XCTestCase {
         // To install:
         // % brew install graphviz
         // MMTestUtils.render(graph: createScreenGraph(for: self, with: XCUIApplication()))
-    }
+//    }
 }

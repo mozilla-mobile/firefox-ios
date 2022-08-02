@@ -147,7 +147,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         subject.switchTo(tab: tab1)
 
         XCTAssertTrue(mockBrowserBarViewDelegate.inOverlayMode)
-        guard mockTabManager.lastSelectedTabs.count > 0 else {
+        guard !mockTabManager.lastSelectedTabs.isEmpty else {
             XCTFail("No tabs were selected in mock tab manager.")
             return
         }
@@ -232,7 +232,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         }
 
         wait(for: [expectation], timeout: 1.0)
-        guard subject.jumpBackInList.tabs.count > 0 else {
+        guard !subject.jumpBackInList.tabs.isEmpty else {
             XCTFail("Incorrect number of tabs in subject")
             return
         }
@@ -265,7 +265,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         }
 
         wait(for: [expectation], timeout: 5.0)
-        guard subject.jumpBackInList.tabs.count > 0 else {
+        guard !subject.jumpBackInList.tabs.isEmpty else {
             XCTFail("Incorrect number of tabs in subject")
             return
         }

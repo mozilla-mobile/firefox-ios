@@ -130,13 +130,17 @@ class CustomSearchViewController: SettingsTableViewController {
             return URL(string: string)
         }
 
-        let titleField = CustomSearchEngineTextView(placeholder: .SettingsAddCustomEngineTitlePlaceholder, settingIsValid: { text in
-            return text != nil && text != ""
-        }, settingDidChange: {fieldText in
-            guard let title = fieldText else { return }
-            self.engineTitle = title
-            self.updateSaveButton()
-        })
+        let titleField = CustomSearchEngineTextView(
+            placeholder: .SettingsAddCustomEngineTitlePlaceholder,
+            settingIsValid: { text in
+                if let text = text { return !text.isEmpty }
+
+                return false
+            }, settingDidChange: {fieldText in
+                guard let title = fieldText else { return }
+                self.engineTitle = title
+                self.updateSaveButton()
+            })
         titleField.textField.text = engineTitle
         titleField.textField.accessibilityIdentifier = "customEngineTitle"
 
@@ -260,18 +264,18 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     }
 
     func textViewDidBeginEditing(_ textView: UITextView) {
-        placeholderLabel.isHidden = textField.text != ""
+        placeholderLabel.isHidden = !textField.text.isEmpty
     }
 
     func textViewDidChange(_ textView: UITextView) {
-        placeholderLabel.isHidden = textField.text != ""
+        placeholderLabel.isHidden = !textField.text.isEmpty
         settingDidChange?(textView.text)
         let color = isValid(textField.text) ? UIColor.theme.tableView.rowText : UIColor.theme.general.destructiveRed
         textField.textColor = color
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
-        placeholderLabel.isHidden = textField.text != ""
+        placeholderLabel.isHidden = !textField.text.isEmpty
         settingDidChange?(textView.text)
     }
 }

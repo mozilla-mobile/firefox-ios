@@ -6,7 +6,7 @@ import Foundation
 
 /// Describes the start and end date of a collection's availability. Either case being
 /// `nil` implies forever availability in that time direction.
-struct WallpaperCollectionAvailability: Codable {
-    let start: String?
-    let end: String?
+struct WallpaperCollectionAvailability: Codable, Equatable {
+    let start: Date?
+    let end: Date?
 }
