@@ -25,13 +25,7 @@ class WallpaperImageLoader {
     }
 
     // MARK: - Methods
-    func fetchImage(
-        using scheme: String,
-        andPath path: String
-    ) async throws -> UIImage {
-        guard let url = formatImageURLWith(scheme: scheme, andPath: path) else {
-            throw URLError(.badURL)
-        }
+    func fetchImage(from url: URL) async throws -> UIImage {
 
         let (data, _) = try await network.data(from: url)
 
@@ -40,9 +34,5 @@ class WallpaperImageLoader {
         }
 
         return image
-    }
-
-    private func formatImageURLWith(scheme: String, andPath path: String) -> URL? {
-        return URL(string: "\(scheme)\(path).png")
     }
 }

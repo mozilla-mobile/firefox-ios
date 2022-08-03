@@ -7,10 +7,6 @@ import Foundation
 class WallpaperMetadataLoader {
 
     // MARK: - Properties
-    enum WallpaperMetadataEndpoint: String {
-        case v1
-    }
-
     private let networkModule: WallpaperNetworking
 
     // MARK: - Initialization
@@ -22,9 +18,7 @@ class WallpaperMetadataLoader {
 
     /// Given a specified URL, it will attempt to reach out to the server, fetch the
     /// latest JSON, and return it as a `WallpaperMetadata` item
-    func fetchMetadataWith(_ scheme: String) async throws -> WallpaperMetadata {
-        guard let url = metadataPath(using: scheme) else { throw URLError(.badURL) }
-
+    func fetchMetadata(from url: URL) async throws -> WallpaperMetadata {
         let (data, _) = try await networkModule.data(from: url)
 
         return try decodeMetadata(from: data)
@@ -43,10 +37,5 @@ class WallpaperMetadataLoader {
         decoder.dateDecodingStrategy = .formatted(dateFormatter)
 
         return try decoder.decode(WallpaperMetadata.self, from: data)
-    }
-
-    /// Builds the path to the metadata endpoint on the server
-    private func metadataPath(using scheme: String) -> URL? {
-        return URL(string: "\(scheme)/metadata/\(WallpaperMetadataEndpoint.v1.rawValue)/")
     }
 }
