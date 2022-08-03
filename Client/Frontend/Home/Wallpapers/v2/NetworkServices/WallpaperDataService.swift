@@ -25,29 +25,17 @@ class WallpaperDataService {
 
     /// Main interface for fetching metadata from the server
     func getMetadata() async throws -> WallpaperMetadata {
-        let scheme = try urlScheme()
+        let url = try WallpaperURLProvider().url(for: .metadata)
         let loader = WallpaperMetadataLoader(networkModule: networking)
 
-        return try await loader.fetchMetadataWith(scheme)
+        return try await loader.fetchMetadata(from: url)
     }
 
     /// Main interface for fetching images from the server
     func getImageWith(path: String) async throws -> UIImage {
-        let scheme = try urlScheme()
+        let url = try WallpaperURLProvider().url(for: .imageURL, withComponent: path)
         let loader = WallpaperImageLoader(networkModule: networking)
 
-        return try await loader.fetchImage(using: scheme, andPath: path)
-    }
-
-    /// Builds a URL for the server based on the specified environment.
-    private func urlScheme() throws -> String {
-        if AppConstants.isRunningTest { return "https://my.test.url" }
-
-        let bundle = AppInfo.applicationBundle
-        guard let appToken = bundle.object(forInfoDictionaryKey: wallpaperURLScheme) as? String,
-              !appToken.isEmpty
-        else { throw DataServiceError.noBundledURL }
-
-        return appToken
+        return try await loader.fetchImage(from: url)
     }
 }
