@@ -14,7 +14,7 @@ struct WallpaperURLProvider {
     // MARK: - Properties
     enum URLProviderError: Error {
         case noBundledURL
-        case problemBuildingURL
+        case invalidURL
     }
 
     enum WallpaperMetadataEndpoint: String {
@@ -42,7 +42,7 @@ struct WallpaperURLProvider {
     private func metadataURL() throws -> URL {
         let scheme = try urlScheme()
         guard let url = URL(string: "\(scheme)/metadata/\(currentMetadataEndpoint.rawValue)/wallpapers.json") else {
-            throw URLProviderError.problemBuildingURL
+            throw URLProviderError.invalidURL
         }
 
         return url
@@ -51,7 +51,7 @@ struct WallpaperURLProvider {
     private func imageURL(with path: String) throws -> URL {
         let scheme = try urlScheme()
         guard let url = URL(string: "\(scheme)/\(path).png") else {
-            throw URLProviderError.problemBuildingURL
+            throw URLProviderError.invalidURL
         }
 
         return url
