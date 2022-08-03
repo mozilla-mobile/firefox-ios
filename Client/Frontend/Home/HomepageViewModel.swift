@@ -213,7 +213,7 @@ extension HomepageViewModel: HomeHistoryHighlightsDelegate {
 // MARK: - HomepageDataModelDelegate
 extension HomepageViewModel: HomepageDataModelDelegate {
     func reloadView() {
-        self.updateEnabledSections()
-        self.delegate?.reloadView()
+        updateEnabledSections()
+        delegate?.reloadView()
     }
 }
