@@ -4,6 +4,7 @@ anp
 ar
 ast
 az
+be
 bg
 bn
 bo
@@ -25,8 +26,8 @@ es
 es-AR
 es-CL
 es-MX
-eu
 et
+eu
 fa
 fi
 fr
