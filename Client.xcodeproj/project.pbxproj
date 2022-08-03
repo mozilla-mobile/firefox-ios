@@ -500,9 +500,6 @@
 		8A161413282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A161412282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift */; };
 		8A2783F1275FFDC50080D29D /* KeyboardPressesHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */; };
 		8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */; };
-		8A2B1A5D28216C4D0061216B /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5A28216C4C0061216B /* Debug.xcconfig */; };
-		8A2B1A5E28216C4D0061216B /* Common.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5B28216C4C0061216B /* Common.xcconfig */; };
-		8A2B1A5F28216C4D0061216B /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5C28216C4D0061216B /* Release.xcconfig */; };
 		8A2D593E27DC0AA100713EC9 /* TopSite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2D593D27DC0AA100713EC9 /* TopSite.swift */; };
 		8A3233FC286270CF003E1C33 /* FxBookmarkNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3233FB286270CF003E1C33 /* FxBookmarkNode.swift */; };
 		8A3233FE28627446003E1C33 /* LocalDesktopFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3233FD28627446003E1C33 /* LocalDesktopFolder.swift */; };
@@ -597,7 +594,7 @@
 		8AF0CFF527A0B0ED00C1A4A2 /* QuickActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF0CFF427A0B0ED00C1A4A2 /* QuickActionsTests.swift */; };
 		8AFA263227B6E9AB00D0C33B /* ToolbarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFA263127B6E9AB00D0C33B /* ToolbarBadge.swift */; };
 		8AFD6275282C51D300451BC8 /* DynamicSwiftyJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4302EDBB2819D6250070D373 /* DynamicSwiftyJson.framework */; };
-		8AFD6276282C51D300451BC8 /* DynamicSwiftyJson.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4302EDBB2819D6250070D373 /* DynamicSwiftyJson.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8AFD6276282C51D300451BC8 /* DynamicSwiftyJson.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4302EDBB2819D6250070D373 /* DynamicSwiftyJson.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8AFE4C2127480D0C00B97C65 /* TabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE4C2027480D0B00B97C65 /* TabTrayViewControllerTests.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
 		8DCD3BCD1ED5B7FA00446D38 /* FxADeepLinkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD3BCC1ED5B7FA00446D38 /* FxADeepLinkingTests.swift */; };
@@ -650,7 +647,7 @@
 		C820439A2523DC4500740B71 /* libStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libStorage.a */; };
 		C82043AE2523DC8B00740B71 /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		C82043AF2523DC9600740B71 /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
-		C82043C32523DD6A00740B71 /* Sync.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
+		C82043C32523DD6A00740B71 /* Sync.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C820443825241D3100740B71 /* libSyncTelemetry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E69DB0751E97DEA9008A67E6 /* libSyncTelemetry.a */; };
 		C825E9832832A425006CB811 /* NimbusSearchBarLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C825E9822832A425006CB811 /* NimbusSearchBarLayer.swift */; };
 		C82A94F2269F68ED00624AA7 /* FeatureFlagsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82A94E6269CB77F00624AA7 /* FeatureFlagsManager.swift */; };
@@ -728,7 +725,7 @@
 		C877037A25222F30006E38EB /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		C877039625222FDC006E38EB /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		C877039725222FE6006E38EB /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
-		C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
+		C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C87D8B802818333F00A6307D /* NimbusManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87D8B7F2818333F00A6307D /* NimbusManager.swift */; };
 		C87DC85627B2C8B0006EFCE2 /* LegacyWallpaperNetworkUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87DC85527B2C8B0006EFCE2 /* LegacyWallpaperNetworkUtility.swift */; };
 		C87DC85A27B2C8DE006EFCE2 /* LegacyWallpaperFilePathProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87DC85927B2C8DE006EFCE2 /* LegacyWallpaperFilePathProtocol.swift */; };
@@ -6912,12 +6909,10 @@
 			isa = PBXGroup;
 			children = (
 				C869916628919331007ACC5C /* URLSession */,
-				8A7368AC27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift */,
 				8AB8572827D9411A0075C173 /* DataObserver.swift */,
 				C87DC85D27B2CA49006EFCE2 /* Loggable.swift */,
 				C8044BD527B96A4E00CEE7AD /* Notifiable.swift */,
 				DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */,
-				8AE1E1D127B1ADC40024C45E /* TopBottomInterchangeable.swift */,
 				8A6B77CD2811CD11001110D2 /* URLCaching.swift */,
 				8AE1E1D127B1ADC40024C45E /* TopBottomInterchangeable.swift */,
 				8A7368AC27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift */,
@@ -8430,7 +8425,7 @@
 				DefaultBuildSystemTypeForWorkspace = Latest;
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
 					047F9B2624E1FE1C00CD7DF7 = {
@@ -8907,7 +8902,6 @@
 				E1AF3561286DE5F800960045 /* Smoketest4.xctestplan in Resources */,
 				EB84945722D4FA8A0004C2E2 /* disconnect-block-fingerprinting.json in Resources */,
 				E4B7B7681A793CF20022C5E0 /* FiraSans-Bold.ttf in Resources */,
-				8A2B1A5D28216C4D0061216B /* Debug.xcconfig in Resources */,
 				E4B7B7781A793CF20022C5E0 /* FiraSans-Italic.ttf in Resources */,
 				0BA1E00E1B03FB0B007675AF /* NetError.html in Resources */,
 				23BEA768251A99ED00A014BF /* NewYorkMedium-BoldItalic.otf in Resources */,
@@ -8919,9 +8913,7 @@
 				C8954A4C2729AD31001C7283 /* FxColours.xcassets in Resources */,
 				8AEE62C92756BA34003207D1 /* LoginsHelper.js in Resources */,
 				EBC9D38922D4D56F0011D881 /* disconnect-block-cookies-advertising.json in Resources */,
-				8A2B1A5F28216C4D0061216B /* Release.xcconfig in Resources */,
 				D0E17FB6201F847600F1FCB5 /* FxASignIn.js in Resources */,
-				8A2B1A5E28216C4D0061216B /* Common.xcconfig in Resources */,
 				E4424B3C1AC71FB400F44C38 /* FiraSans-Book.ttf in Resources */,
 				39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */,
 				D0FCF8071FE4772D004A7995 /* MainFrameAtDocumentEnd.js in Resources */,
@@ -9858,7 +9850,6 @@
 				8A161413282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift in Sources */,
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				8AB8572C27D945FA0075C173 /* TopSitesDataAdaptor.swift in Sources */,
-				C84655EA28873B1700861B4A /* WallpaperDataService.swift in Sources */,
 				EBC4869F2195F58300CDA48D /* SessionRestoreHandler.swift in Sources */,
 				C889569A27E8D1AC00E3779E /* InactiveTabHeader.swift in Sources */,
 				7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */,
@@ -12794,7 +12785,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
@@ -13020,7 +13011,7 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.XCUITests;
 				PROVISIONING_PROFILE_SPECIFIER = "org.mozilla.ios.XCUITests 2021-08-12";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Tests/XCUITests/XCUITests-Bridging-Header.h";
 				TEST_TARGET_NAME = Client;
@@ -13034,7 +13025,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.XCUITests;
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.XCUITests";
 				TEST_TARGET_NAME = Client;
 			};
@@ -13047,7 +13038,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.XCUITests;
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.XCUITests";
 				TEST_TARGET_NAME = Client;
 			};
@@ -13058,7 +13049,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
@@ -13084,7 +13075,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13108,7 +13099,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13133,7 +13124,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13157,7 +13148,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
@@ -13182,7 +13173,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13205,7 +13196,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13229,7 +13220,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13317,7 +13308,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
@@ -13343,7 +13334,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13367,7 +13358,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13392,7 +13383,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13416,7 +13407,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
@@ -13442,7 +13433,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13466,7 +13457,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13491,7 +13482,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13515,7 +13506,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
@@ -13541,7 +13532,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13565,7 +13556,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13590,7 +13581,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13614,7 +13605,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
@@ -13640,7 +13631,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13664,7 +13655,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13689,7 +13680,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13713,7 +13704,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
@@ -13739,7 +13730,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13763,7 +13754,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13788,7 +13779,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13812,7 +13803,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
@@ -13838,7 +13829,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13862,7 +13853,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13887,7 +13878,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -13931,6 +13922,31 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961891B62B8C800DD640F /* Firefox.xcconfig */;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -14002,7 +14018,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -14225,6 +14241,31 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -14296,7 +14337,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -14444,7 +14485,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.XCUITests;
 				PROVISIONING_PROFILE_SPECIFIER = "org.mozilla.ios.XCUITests 2021-08-12";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Tests/XCUITests/XCUITests-Bridging-Header.h";
 				TEST_TARGET_NAME = Client;
@@ -14485,6 +14526,31 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -14556,7 +14622,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -14634,7 +14700,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -14970,6 +15036,31 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961861B62B8A700DD640F /* Fennec.xcconfig */;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
