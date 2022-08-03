@@ -15,7 +15,6 @@ class HomepageMessageCardViewModel: HomepageMessageCardProtocol, GleanPlumbMessa
 
     var message: GleanPlumbMessage?
     var dismissClosure: (() -> Void)?
-    var onTapAction: ((UIButton) -> Void)?
 
     var shouldDisplayMessageCard: Bool {
         return messagingManager.hasMessage(for: .newTabCard)
@@ -43,7 +42,6 @@ class HomepageMessageCardViewModel: HomepageMessageCardProtocol, GleanPlumbMessa
 
     func handleMessageDismiss() {
         message.map(messagingManager.onMessageDismissed)
-
         dismissClosure?()
     }
 }

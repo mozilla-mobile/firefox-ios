@@ -18,27 +18,31 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let cardSizeMaxWidth: CGFloat = 360
-        static let buttonHeight: CGFloat = 44
         static let textSpacing: CGFloat = 8
         static let cornerRadius: CGFloat = 12
         static let dismissButtonSize = CGSize(width: 16, height: 16)
         static let dismissButtonSpacing: CGFloat = 12
         static let standardSpacing: CGFloat = 16
-        static let buttonEdgeSpacing: CGFloat = 16
+        static let buttonVerticalInset: CGFloat = 12
+        static let buttonHorizontalInset: CGFloat = 16
         static let topCardSafeSpace: CGFloat = 16
         static let bottomCardSafeSpace: CGFloat = 32
         // Max font size
-        static let bannerTitleMaxFontSize: CGFloat = 55
-        static let descriptionTextMaxFontSize: CGFloat = 49
-        static let buttonMaxFontSize: CGFloat = 53
+        static let bannerTitleFontSize: CGFloat = 16
+        static let descriptionTextFontSize: CGFloat = 15
+        static let buttonFontSize: CGFloat = 16
         // Shadow
         static let shadowRadius: CGFloat = 4
-        static let shadowOffset: CGFloat = 2
+        static let shadowOffset: CGFloat = 4
         static let shadowOpacity: Float = 0.12
     }
 
     // MARK: - Properties
-    private var viewModel: HomepageMessageCardProtocol!
+    private var viewModel: HomepageMessageCardProtocol?
+    var notificationCenter: NotificationCenter = NotificationCenter.default
+    private var shadowLayer: CAShapeLayer?
+
+    var kvoToken: NSKeyValueObservation?
 
     // UI
     private lazy var titleContainerView: UIView = .build { view in
@@ -49,29 +53,35 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
-                                                                   maxSize: UX.bannerTitleMaxFontSize)
+                                                                   size: UX.bannerTitleFontSize)
         label.adjustsFontForContentSizeCategory = true
+        label.accessibilityIdentifier = a11y.titleLabel
         label.textColor = UIColor.theme.homeTabBanner.textColor
     }
 
     private lazy var descriptionText: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                   maxSize: UX.descriptionTextMaxFontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+                                                                   size: UX.descriptionTextFontSize)
         label.adjustsFontForContentSizeCategory = true
+        label.accessibilityIdentifier = a11y.descriptionLabel
         label.textColor = UIColor.theme.homeTabBanner.textColor
     }
 
     private lazy var ctaButton: ActionButton = .build { [weak self] button in
         button.backgroundColor = UIColor.Photon.Blue50
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .callout,
-                                                                                    maxSize: UX.buttonMaxFontSize)
-        button.layer.cornerRadius = UX.cornerRadius
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
+                                                                                    size: UX.buttonFontSize)
+
+        button.layer.cornerRadius = UIFontMetrics.default.scaledValue(for: UX.cornerRadius)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = a11y.ctaButton
         button.addTarget(self, action: #selector(self?.handleCTA), for: .touchUpInside)
-        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: UX.buttonEdgeSpacing,
-                                                bottom: 0, right: UX.buttonEdgeSpacing)
+        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
+                                                left: UX.buttonHorizontalInset,
+                                                bottom: UX.buttonVerticalInset,
+                                                right: UX.buttonHorizontalInset)
     }
 
     private lazy var dismissButton: UIButton = .build { [weak self] button in
@@ -91,7 +101,6 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     private lazy var cardView: UIView = .build { view in
         view.backgroundColor = UIColor.theme.homeTabBanner.backgroundColor
         view.layer.cornerRadius = UX.cornerRadius
-        view.layer.masksToBounds = true
     }
 
     // MARK: - Inits
@@ -99,10 +108,17 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         super.init(frame: frame)
 
         setupLayout()
+        observeCardViewBounds()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
     }
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        kvoToken?.invalidate()
     }
 
     func configure(viewModel: HomepageMessageCardViewModel) {
@@ -149,19 +165,37 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
             ctaButton.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.standardSpacing),
             ctaButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
             ctaButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -UX.standardSpacing),
-            ctaButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight),
         ])
         addShadow()
     }
 
+    // Observing cardView bounds change to set the shadow correctly because initially
+    // the view bounds is incorrect causing weird shadow effect
+    private func observeCardViewBounds() {
+        kvoToken = cardView.observe(\.bounds, options: .new) { [weak self] _, _ in
+            self?.updateShadowPath()
+        }
+    }
+
     private func addShadow() {
-        contentView.layer.cornerRadius = UX.cornerRadius
-        contentView.layer.shadowRadius = UX.shadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
-        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = UX.shadowOpacity
-        contentView.layer.shouldRasterize = true
-        contentView.layer.rasterizationScale = UIScreen.main.scale
+        guard shadowLayer == nil else { return }
+
+        let layer = CAShapeLayer()
+        layer.fillColor = UIColor.theme.homeTabBanner.backgroundColor.cgColor
+        layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        layer.shadowOffset = CGSize(width: 0.0, height: UX.shadowOffset)
+        layer.shadowOpacity = UX.shadowOpacity
+        layer.shadowRadius = UX.shadowRadius
+        shadowLayer = layer
+        updateShadowPath()
+        cardView.layer.insertSublayer(layer, at: 0)
+    }
+
+    private func updateShadowPath() {
+        guard let shadowLayer = shadowLayer else { return }
+
+        shadowLayer.path = UIBezierPath(roundedRect: cardView.bounds, cornerRadius: UX.cornerRadius).cgPath
+        shadowLayer.shadowPath = shadowLayer.path
     }
 
     func applyTheme() {
@@ -193,16 +227,27 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         }
 
         descriptionText.text = message.data.text
-        viewModel.handleMessageDisplayed()
+        viewModel?.handleMessageDisplayed()
     }
 
     // MARK: Actions
     @objc private func dismissCard() {
-        viewModel.handleMessageDismiss()
+        viewModel?.handleMessageDismiss()
     }
 
     /// The surface needs to handle CTAs a certain way when there's a message.
     @objc func handleCTA() {
-        viewModel.handleMessagePressed()
+        viewModel?.handleMessagePressed()
+    }
+}
+
+// MARK: - Notifiable
+extension HomepageMessageCardCell: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
     }
 }
