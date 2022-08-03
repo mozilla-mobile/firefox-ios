@@ -278,15 +278,6 @@ class BrowserViewController: UIViewController {
             }
             .store(in: &cancellables)
 
-        whatsNewEventsHandler
-            .$shouldShowWhatsNew
-            .sink { [unowned self] shouldShow in
-                homeViewController.toolbar.toolset.setHighlightWhatsNew(shouldHighlight: shouldShow)
-                browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: shouldShow)
-                urlBar.setHighlightWhatsNew(shouldHighlight: shouldShow)
-            }
-            .store(in: &cancellables)
-
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
         guard let url = initialUrl else { return }

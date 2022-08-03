@@ -443,10 +443,6 @@ class URLBar: UIView {
         urlTextField.endEditing(true)
     }
 
-    public func setHighlightWhatsNew(shouldHighlight: Bool) {
-        toolset.setHighlightWhatsNew(shouldHighlight: shouldHighlight)
-    }
-
     @objc func addCustomURL() {
         guard let url = self.url else { return }
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.quickAddCustomDomainButton)
