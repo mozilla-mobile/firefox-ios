@@ -83,7 +83,7 @@
 "Light" = "එළිය";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
-"Loading content…" = "අන්තර්ගත පූරණය වේ...";
+"Loading content…" = "අන්තර්ගත පූරණය වේ…";
 
 /* Authentication prompt log in button */
 "Log in" = "පිවිසුම";

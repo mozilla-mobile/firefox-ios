@@ -1,12 +1,30 @@
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Button" = "Go to Settings";
+"DefaultBrowserCard.Button" = "Mine sätetesse";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Vaata juhendit";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Set links from websites, emails, and Messages to open automatically in Firefox.";
+"DefaultBrowserCard.Description" = "Määra Firefox automaatselt avama linke, e-posti ja sõnumeid.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Title" = "Switch Your Default Browser";
+"DefaultBrowserCard.Title" = "Vaikebrauseri vahetamine";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "Mine sätetesse";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. Mine sätetesse";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. Puuduta valikut Default Browser App";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Vali Firefox";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "Default Browser App";
 
 /* Menu option for setting Firefox as default browser. */
-"Settings.DefaultBrowserMenuItem" = "Set as Default Browser";
+"Settings.DefaultBrowserMenuItem" = "Määra vaikebrauseriks";
 

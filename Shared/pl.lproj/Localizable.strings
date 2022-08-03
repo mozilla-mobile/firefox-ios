@@ -695,7 +695,7 @@
 "Hotkeys.NormalMode.DiscoveryTitle" = "Zwykłe przeglądanie";
 
 /* Label to switch to private browsing mode */
-"Hotkeys.PrivateMode.DiscoveryTitle" = "Przeglądanie prywatne";
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Tryb prywatny";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.Reload.DiscoveryTitle" = "Odśwież stronę";
@@ -1094,9 +1094,6 @@
 
 /* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
 "Menu.Share.v99" = "Udostępnij";
-
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.SignInToSync.Label.v99" = "Zaloguj się do synchronizacji";
 
 /* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
 "Menu.SyncAndSaveData.v103" = "Synchronizuj i zachowuj dane";
@@ -2153,7 +2150,7 @@
 "SwitchToNonPBM.KeyCodeTitle" = "Zwykłe przeglądanie";
 
 /* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Przeglądanie prywatne";
+"SwitchToPBM.KeyCodeTitle" = "Tryb prywatny";
 
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
 "Sync your tabs, bookmarks, passwords and more." = "Synchronizuj karty, zakładki, hasła i inne";

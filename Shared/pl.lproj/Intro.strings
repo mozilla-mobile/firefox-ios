@@ -32,7 +32,7 @@
 "Intro.Slides.Mail.Title" = "Ustawienia poczty";
 
 /* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Stuknij ikonę maski, by przejść do przeglądania prywatnego";
+"Intro.Slides.Private.Description" = "Stuknij ikonę maski, by przejść do trybu prywatnego";
 
 /* Title for the third panel 'Private Browsing' in the First Run tour. */
 "Intro.Slides.Private.Title" = "Przeglądaj, jak gdyby nikt nie patrzył";

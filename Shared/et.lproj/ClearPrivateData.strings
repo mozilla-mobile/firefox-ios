@@ -1,18 +1,21 @@
 /* Settings item for clearing browsing history */
-"Browsing History" = "Browsing History";
+"Browsing History" = "Lehitsemise ajalugu";
 
 /* Settings item for clearing the cache */
-"Cache" = "Cache";
+"Cache" = "Vahemälu";
 
 /* Settings item for clearing cookies */
-"Cookies" = "Cookies";
+"Cookies" = "Küpsised";
 
 /* Settings item for deleting downloaded files */
-"Downloaded Files" = "Downloaded Files";
+"Downloaded Files" = "Allalaaditud failid";
 
 /* Settings item for clearing website data */
-"Offline Website Data" = "Offline Website Data";
+"Offline Website Data" = "Võrguta režiimis töötavate lehtede andmed";
 
 /* Settings item for clearing passwords and login data */
-"Saved Logins" = "Saved Logins";
+"Saved Logins" = "Salvestatud kasutajakontod";
+
+/* A settings item that allows a user to use Apple's \"Spotlight Search\" in Data Management's Website Data option to search for and select an item to delete. */
+"Spotlight Index" = "Spotlighti indeks";
 

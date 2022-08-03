@@ -469,6 +469,12 @@
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Nhà tài trợ của chúng tôi & quyền riêng tư của bạn";
 
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Xem các thẻ đã đồng bộ hóa";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Thẻ đã đồng bộ trên thiết bị khác";
+
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
 "FirefoxHomepage.Pocket.Sponsored.v103" = "Được tài trợ";
 
@@ -826,6 +832,9 @@
 /* Within the History Panel, users can open an action menu to clear recent history. */
 "LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Xóa lịch sử (bao gồm cả lịch sử được đồng bộ hóa từ các thiết bị khác), cookie và dữ liệu duyệt web khác.";
 
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "Xóa";
+
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "Không tìm thấy lịch sử";
 
@@ -1094,9 +1103,6 @@
 
 /* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
 "Menu.Share.v99" = "Chia sẻ";
-
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.SignInToSync.Label.v99" = "Đăng nhập vào đồng bộ hóa";
 
 /* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
 "Menu.SyncAndSaveData.v103" = "Đồng bộ hóa và lưu dữ liệu";
@@ -1430,7 +1436,7 @@
 "Search.Awesomebar.SwitchToTab" = "Chuyển sang thẻ";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox Suggest";
+"Search.SuggestSectionTitle.v102" = "Đề xuất của Firefox";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Công cụ tìm kiếm mới sẽ xuất hiện trong thanh tìm kiếm nhanh.";
@@ -2225,7 +2231,7 @@
 "Tabs.Search.PlaceholderText" = "Tìm kiếm thẻ";
 
 /* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
-"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Xem các thẻ không hoạt động";
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Xem thẻ không hoạt động";
 
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Ẩn các thẻ không hoạt động";
