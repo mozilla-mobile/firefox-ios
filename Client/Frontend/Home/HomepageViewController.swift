@@ -649,7 +649,8 @@ extension HomepageViewController: HomepageViewModelDelegate {
     func reloadView() {
         ensureMainThread { [weak self] in
             guard let self = self,
-                  self.view.alpha != 0 else { return }
+                  self.view.alpha != 0
+            else { return }
             self.collectionView.reloadData()
         }
     }
