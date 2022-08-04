@@ -78,6 +78,7 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
         switch featureID {
         case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
         case .searchBarPosition: return SearchBarPosition(rawValue: userSetting) as? T
+        case .wallpaperVersion: return WallpaperVersion(rawValue: userSetting) as? T
         }
     }
 
@@ -86,6 +87,7 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
         switch featureID {
         case .startAtHome: return .startAtHome
         case .searchBarPosition: return .bottomSearchBar
+        case .wallpaperVersion: return .wallpaperVersion
         }
     }
 
@@ -118,6 +120,8 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
             if let option = desiredState as? SearchBarPosition {
                 feature.setUserPreference(to: option.rawValue)
             }
+
+        case .wallpaperVersion: return
         }
     }
 
