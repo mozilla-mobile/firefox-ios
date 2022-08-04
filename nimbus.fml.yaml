@@ -365,6 +365,7 @@ features:
               style: "FALLBACK"
               # Use string interpolation because $TABLE_NAME/$KEY doesn't exist in en.lproj/Default Browser.strings
               button-label: \(String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerButton)
+
   wallpaper-feature:
     description: This property defines the configuration for the wallpaper feature
     variables:
