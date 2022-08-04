@@ -31,6 +31,9 @@ final class NimbusFeatureFlagLayer {
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
 
+        case .contextualHintForToolbar:
+            return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
+
         case .wallpapers:
             return checkNimbusForWallpapersFeature(using: nimbus)
 
@@ -111,6 +114,22 @@ final class NimbusFeatureFlagLayer {
 
     private func checkNimbusForJumpBackInSyncedTabFeature(using nimbus: FxNimbus) -> Bool {
         return nimbus.features.homescreenFeature.value().jumpBackInSyncedTab
+    }
+
+    private func checkNimbusForContextualHintsFeature(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus
+    ) -> Bool {
+        let config = nimbus.features.contextualHintFeature.value()
+        var nimbusID: ContextualHint
+
+        switch featureID {
+        case .contextualHintForToolbar: nimbusID = ContextualHint.toolbarContextualHint
+        default: return false
+        }
+
+        guard let status = config.featuresEnabled[nimbusID] else { return false }
+        return status
     }
 
     private func checkNimbusForWallpapersFeature(using nimbus: FxNimbus) -> Bool {

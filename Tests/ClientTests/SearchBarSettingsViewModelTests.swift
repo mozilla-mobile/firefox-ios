@@ -29,7 +29,7 @@ class SearchBarSettingsViewModelTests: XCTestCase {
     // MARK: Default
     func testDefaultSearchPosition() {
         let viewModel = createViewModel()
-        XCTAssertEqual(viewModel.searchBarPosition, .bottom)
+        XCTAssertEqual(viewModel.searchBarPosition, .top)
     }
 
     // MARK: Saved
@@ -97,7 +97,7 @@ class SearchBarSettingsViewModelTests: XCTestCase {
         let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
         let searchBarPosition = viewModel.searchBarPosition
 
-        XCTAssertEqual(searchBarPosition, .bottom)
+        XCTAssertEqual(searchBarPosition, .top)
         XCTAssertNil(spyNotificationCenter.notificationNameSent)
         XCTAssertNil(spyNotificationCenter.notificationObjectSent)
     }
