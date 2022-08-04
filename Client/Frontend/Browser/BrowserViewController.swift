@@ -875,12 +875,18 @@ class BrowserViewController: UIViewController {
             hideReaderModeBar(animated: false)
         }
 
+        homepageViewController?.view.layer.removeAllAnimations()
+
+        // Return early if the home page is already showing
+        guard homepageViewController?.view.alpha != 1 else { return }
+
         homepageViewController?.applyTheme()
         homepageViewController?.recordHomepageAppeared(isZeroSearch: !inline)
 
-        // We have to run this animation, even if the view is already showing
-        // because there may be a hide animation running and we want to be sure
-        // to override its results.
+        // Hack to force updates on the view
+        homepageViewController?.view.alpha = 0.001
+        homepageViewController?.reloadAll()
+
         UIView.animate(withDuration: 0.2, animations: { () -> Void in
             self.homepageViewController?.view.alpha = 1
         }, completion: { finished in
@@ -911,6 +917,11 @@ class BrowserViewController: UIViewController {
 
     func hideHomepage(completion: (() -> Void)? = nil) {
         guard let homepageViewController = self.homepageViewController else { return }
+
+        self.homepageViewController?.view.layer.removeAllAnimations()
+
+        // Return early if the home page is already hidden
+        guard self.homepageViewController?.view.alpha != 0 else { return }
 
         homepageViewController.recordHomepageDisappeared()
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
