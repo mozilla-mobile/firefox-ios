@@ -4,10 +4,11 @@
 
 import UIKit
 
-private struct Color {
-    var red: CGFloat
-    var green: CGFloat
-    var blue: CGFloat
+public struct Color {
+    public var red: CGFloat
+    public var green: CGFloat
+    public var blue: CGFloat
+    public var alpha: CGFloat
 }
 
 extension UIColor {
@@ -50,5 +51,14 @@ extension UIColor {
         }
 
         return color
+    }
+
+    public var components: Color {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        return Color(red: red, green: green, blue: blue, alpha: alpha)
     }
 }

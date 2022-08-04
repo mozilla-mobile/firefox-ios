@@ -25,6 +25,14 @@ private let rfc822DateFormatter: DateFormatter = {
     return dateFormatter
 }()
 
+public struct DateDifference {
+    public var month: Int?
+    public var day: Int?
+    public var hour: Int?
+    public var minute: Int?
+    public var second: Int?
+}
+
 extension TimeInterval {
     public static func fromMicrosecondTimestamp(_ microsecondTimestamp: MicrosecondTimestamp) -> TimeInterval {
         return Double(microsecondTimestamp) / 1000000
@@ -114,14 +122,18 @@ extension Date {
         return rfc822DateFormatter.string(from: self)
     }
 
-    public static func difference(recent: Date, previous: Date) -> (month: Int?, day: Int?, hour: Int?, minute: Int?, second: Int?) {
-        let day = Calendar.current.dateComponents([.day], from: previous, to: recent).day
-        let month = Calendar.current.dateComponents([.month], from: previous, to: recent).month
-        let hour = Calendar.current.dateComponents([.hour], from: previous, to: recent).hour
-        let minute = Calendar.current.dateComponents([.minute], from: previous, to: recent).minute
-        let second = Calendar.current.dateComponents([.second], from: previous, to: recent).second
+    public static func differenceBetween(_ firstDate: Date, and previousDate: Date) -> DateDifference {
+        let day = Calendar.current.dateComponents([.day], from: previousDate, to: firstDate).day
+        let month = Calendar.current.dateComponents([.month], from: previousDate, to: firstDate).month
+        let hour = Calendar.current.dateComponents([.hour], from: previousDate, to: firstDate).hour
+        let minute = Calendar.current.dateComponents([.minute], from: previousDate, to: firstDate).minute
+        let second = Calendar.current.dateComponents([.second], from: previousDate, to: firstDate).second
 
-        return (month: month, day: day, hour: hour, minute: minute, second: second)
+        return DateDifference(month: month,
+                              day: day,
+                              hour: hour,
+                              minute: minute,
+                              second: second)
     }
 
     static func - (lhs: Date, rhs: Date) -> TimeInterval {

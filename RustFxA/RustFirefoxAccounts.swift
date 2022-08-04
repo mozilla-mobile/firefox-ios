@@ -187,8 +187,14 @@ open class RustFirefoxAccounts {
         }
     }
 
+    struct MigrationTokens {
+        let session: String
+        let ksync: String
+        let kxcs: String
+    }
+
     /// When migrating to new rust FxA, grab the old session tokens and try to re-use them.
-    private class func migrationTokens() -> (session: String, ksync: String, kxcs: String)? {
+    private class func migrationTokens() -> MigrationTokens? {
         // Keychain forKey("profile.account"), return dictionary, from there
         // forKey("account.state.<guid>"), guid is dictionary["stateKeyLabel"]
         // that returns JSON string.
@@ -214,7 +220,7 @@ open class RustFirefoxAccounts {
               let kxcs = json["kXCS"] as? String
         else { return nil }
 
-        return (session: sessionToken, ksync: ksync, kxcs: kxcs)
+        return MigrationTokens(session: sessionToken, ksync: ksync, kxcs: kxcs)
     }
 
     /// This is typically used to add a UI indicator that FxA needs attention (usually re-login manually).

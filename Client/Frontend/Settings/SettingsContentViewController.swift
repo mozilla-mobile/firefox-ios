@@ -94,9 +94,9 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
 
         // Destructuring let causes problems.
         let ret = makeInterstitialViews()
-        self.interstitialView = ret.0
-        self.interstitialSpinnerView = ret.1
-        self.interstitialErrorView = ret.2
+        self.interstitialView = ret.view
+        self.interstitialSpinnerView = ret.activityView
+        self.interstitialErrorView = ret.label
         view.addSubview(interstitialView)
         self.interstitialView.snp.remakeConstraints { make in
             make.edges.equalTo(self.view)
@@ -122,7 +122,13 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         return webView
     }
 
-    fileprivate func makeInterstitialViews() -> (UIView, UIActivityIndicatorView, UILabel) {
+    struct InterstitialViews {
+        let view: UIView
+        let activityView: UIActivityIndicatorView
+        let label: UILabel
+    }
+
+    fileprivate func makeInterstitialViews() -> InterstitialViews {
         let view = UIView()
 
         // Keeping the background constant prevents a pop of mismatched color.
@@ -154,7 +160,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
             return
         }
 
-        return (view, spinner, error)
+        return InterstitialViews(view: view, activityView: spinner, label: error)
     }
 
     @objc func didTimeOut() {

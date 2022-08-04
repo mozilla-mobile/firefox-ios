@@ -29,7 +29,6 @@ disabled_rules: # rule identifiers to exclude from running
 - inclusive_language
 - inert_defer
 - is_disjoint
-- large_tuple
 - legacy_hashing
 - legacy_random
 - line_length
@@ -85,6 +84,7 @@ opt_in_rules: # some rules are only opt-in
   - contains_over_filter_is_empty
   - contains_over_first_not_nil
   - contains_over_range_nil_comparison
+  - empty_collection_literal
   - empty_count
   - empty_string
   - empty_xctest_method
