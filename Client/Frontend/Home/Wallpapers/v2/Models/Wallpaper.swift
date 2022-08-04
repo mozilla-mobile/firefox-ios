@@ -13,6 +13,21 @@ struct Wallpaper: Equatable {
 
     let id: String
     let textColour: UIColor
+
+    // TODO: This following properties will need to be replaced with fetching the
+    // resource from the local folder once that functionality is in. For now, we're
+    // just returning an existing image to enable development of UI related work.
+    var thumbnail: UIImage {
+        return UIImage(imageLiteralResourceName: "\(id)")
+    }
+
+    var portrait: UIImage {
+        return UIImage(imageLiteralResourceName: "\(id)")
+    }
+
+    var landscape: UIImage {
+        return UIImage(imageLiteralResourceName: "\(id)_ls")
+    }
 }
 
 extension Wallpaper: Decodable {
