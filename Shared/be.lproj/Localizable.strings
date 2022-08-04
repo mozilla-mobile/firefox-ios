@@ -1,0 +1,325 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ запытвае імя карыстальніка і пароль.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ запытвае імя карыстальніка і пароль. Сайт паведамляе: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Аб праграме";
+
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Дадаць у цэтлікі";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Замацаваць у Папулярных сайтах";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Замацаваць";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Выдаліць з цэтлікаў";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Выдаліць замацаваны сайт";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Адмацаваць";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "У закладках";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "Наведанае";
+
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Назад да";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Карткі: %d";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "Вынік пошуку \"%@\"";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Нядаўна захаваныя";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "Нядаўнія закладкі";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "Больш";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "Тэндэнцыі ў Pocket";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "Рэкамендавана Pocket";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "Тэндэнцыі";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Нядаўна наведаныя";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "Нядаўна захаваныя";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Паказаць усе";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "Выдаліць";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "Цэтлікі";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "Радкі: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Колькасць радкоў";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "Папулярныя сайты";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Дадаць картку";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Дадаць у спіс для чытання";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Старонка дададзена ў спіс для чытання";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Падчас дадання карткі да Wallet узнікла памылка. Калі ласка, паспрабуйце зноў пазней.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Не атрымалася дадаць картку";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Адрас і пошук";
+
+/* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
+"Address.Bar.v99" = "Адрасны радок";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Заўседы адпраўляць";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Патрабуецца аўтэнтыфікацыя";
+
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "Пошук ў %@ наўпрост з адраснага радка";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "Пошук з дапамогай %@";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Назад";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Блакаваць выплыўныя вокны";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Закладка";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Папка";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "Загаловак";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Закладкі";
+
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "Дадаць";
+
+/* A label indicating the action of bookmarking all currently open non private tabs. */
+"Bookmarks.Actions.BookmarkAllTabs" = "Закладкі на ўсе карткі";
+
+/* A label indicating the action of bookmarking the current tab. */
+"Bookmarks.Actions.BookmarkCurrentTab" = "Зрабіць закладку на гэту картку";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Змяніць";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "Змяніць закладку";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "Рэдагаваць папку";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Папка";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Месцазнаходжанне";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Назва папкі";
+
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "Закладкі працоўнага стала";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "Нядаўнія закладкі";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "Дадаць закладку";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Новая папка";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "Новы межнік";
+
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "Шукаць у закладках";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Загаловак";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "Захаваныя вамі закладкі будуць паказвацца тут.";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "Гэтая ўцечка адбылася";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "З моманту апошняй змены вамім пароля на гэтым сайце адбылася ўцечка альбо крадзеж пароляў. Каб абараніць гэты акаўнт, увайдзіце на сайт і змяніце пароль.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Даведацца больш";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Перайсці да сайта";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Уцечка з сайта";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Яркасць";
+
+/* Label for Cancel button */
+"Cancel" = "Скасаваць";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Змяняе каляровую тэму.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Змяняе тып шрыфта.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Перайсці";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Перайсці па скапіяванай спасылцы?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Закрыць";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Картка закрываецца";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Дадаць закладку на спасылку";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Перайсці";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Адкрыта новая прыватная картка";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Перайсці";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Адкрыта новая картка";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Капіяваць відарыс";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Капіраваць спасылку на відарыс";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Капіяваць спасылку";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Сцягнуць спасылку";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "Адкрыць у новай картцы";
+
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Адкрыць спасылку ў новай прыватнай картцы";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "Адкрыць спасылку ў новай картцы";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "Захаваць відарыс";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "Падзяліцца спасылкай";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "Цяпер вы можаце перанесці паліцу прылад уніз, каб было зручней уводзіць даныя";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
+"ContextualHint.SearchBarPlacement.NewUsers" = "Каб было зручней уводзіць даныя, паліца прылад цяпер тыпова знаходзіцца ўнізе.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.Homepage.PersonalizedHome" = "Ваша персаналізаваная галоўная старонка Firefox цяпер палягчае працяг адтуль, дзе вы спыніліся. Знайдзіце свае апошнія карткі, закладкі і вынікі пошуку.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "Налады паліцы прылад";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "Карткі, якія вы не праглядалі на працягу двух тыдняў, будуць перанесеныя сюды.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Адключыць у наладах";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Немагчыма дадаць старонку ў спіс для чытання";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Немагчыма дадаць старонку ў спіс для чытання. Можа, яна ўжо ў спісе?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Немагчыма загрузіць старонку.";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "Для карыстальнікаў iOS 13 Firefox цяпер аўтаматычна пераключаецца на цёмную тэму, калі ваш тэлефон усталяваны ў цёмны рэжым. Каб змяніць гэтыя паводзіны, перайдзіце ў Налады > Тэма.";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "Цёмная тэма цяпер уключае цёмную клавіятуру і цёмны пачатковы экран.";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Аўтазапаўненне пароляў Firefox";
+

@@ -3338,6 +3338,18 @@
 		A83E5B191C1DA8BF0026D912 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
 		A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPasteboardExtensionsTests.swift; sourceTree = "<group>"; };
 		A85D41918FA2054086E47FAF /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/Search.strings; sourceTree = "<group>"; };
+		A85F9E4A289A4C9800DCBF19 /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A85F9E4B289A4C9800DCBF19 /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
+		A85F9E4C289A4C9800DCBF19 /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		A85F9E4D289A4C9800DCBF19 /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
+		A85F9E4E289A4C9800DCBF19 /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
+		A85F9E4F289A4C9800DCBF19 /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
+		A85F9E50289A4C9800DCBF19 /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = "be.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		A85F9E51289A4C9800DCBF19 /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/ErrorPages.strings; sourceTree = "<group>"; };
+		A85F9E52289A4C9800DCBF19 /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/FindInPage.strings; sourceTree = "<group>"; };
+		A85F9E53289A4C9800DCBF19 /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
+		A85F9E54289A4C9800DCBF19 /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/Intro.strings; sourceTree = "<group>"; };
+		A85F9E55289A4C9800DCBF19 /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A89C40A5962D0F1AA741A8CB /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		A8C749F09910140DE40B8780 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		A8D94EB6B92E778F3F7C2797 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/FindInPage.strings; sourceTree = "<group>"; };
@@ -8699,6 +8711,7 @@
 				tt,
 				et,
 				"en-US",
+				be,
 			);
 			mainGroup = F84B21B51A090F8100AAB793;
 			packageReferences = (
@@ -10980,6 +10993,7 @@
 				967AF159275FF4C60099E161 /* tt */,
 				D468309328914E1900CCDE3A /* et */,
 				D4BF6AA92893DDA7001B5130 /* en-US */,
+				A85F9E4C289A4C9800DCBF19 /* be */,
 			);
 			name = AuthenticationManager.strings;
 			sourceTree = "<group>";
@@ -11082,6 +11096,7 @@
 				967AF15A275FF4C60099E161 /* tt */,
 				D468309428914E1A00CCDE3A /* et */,
 				D4BF6AAA2893DDA7001B5130 /* en-US */,
+				A85F9E4D289A4C9800DCBF19 /* be */,
 			);
 			name = ClearHistoryConfirm.strings;
 			sourceTree = "<group>";
@@ -11183,6 +11198,7 @@
 				967AF158275FF4C60099E161 /* tt */,
 				D468309228914E1800CCDE3A /* et */,
 				D4BF6AA82893DDA7001B5130 /* en-US */,
+				A85F9E4B289A4C9800DCBF19 /* be */,
 			);
 			name = 3DTouchActions.strings;
 			sourceTree = "<group>";
@@ -11284,6 +11300,7 @@
 				967AF15B275FF4C70099E161 /* tt */,
 				D468309528914E1B00CCDE3A /* et */,
 				D4BF6AAB2893DDA7001B5130 /* en-US */,
+				A85F9E4E289A4C9800DCBF19 /* be */,
 			);
 			name = ClearPrivateData.strings;
 			sourceTree = "<group>";
@@ -11384,6 +11401,7 @@
 				967AF160275FF4C70099E161 /* tt */,
 				D468309A28914E2100CCDE3A /* et */,
 				D4BF6AB02893DDA8001B5130 /* en-US */,
+				A85F9E53289A4C9800DCBF19 /* be */,
 			);
 			name = HistoryPanel.strings;
 			sourceTree = "<group>";
@@ -11486,6 +11504,7 @@
 				967AF162275FF4C70099E161 /* tt */,
 				D468309C28914E2400CCDE3A /* et */,
 				D4BF6AB22893DDA8001B5130 /* en-US */,
+				A85F9E55289A4C9800DCBF19 /* be */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -11587,6 +11606,7 @@
 				51614CF895A46ADD3C81ACC1 /* gd */,
 				967AF157275FF4C60099E161 /* tt */,
 				D468309128914E1600CCDE3A /* et */,
+				A85F9E4A289A4C9800DCBF19 /* be */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -11788,6 +11808,7 @@
 				967AF15E275FF4C70099E161 /* tt */,
 				D468309828914E1F00CCDE3A /* et */,
 				D4BF6AAE2893DDA8001B5130 /* en-US */,
+				A85F9E51289A4C9800DCBF19 /* be */,
 			);
 			name = ErrorPages.strings;
 			sourceTree = "<group>";
@@ -11971,6 +11992,7 @@
 				8A99DB9727C6DD3E007EA6BD /* is */,
 				D468309728914E1D00CCDE3A /* et */,
 				D4BF6AAD2893DDA7001B5130 /* en-US */,
+				A85F9E50289A4C9800DCBF19 /* be */,
 			);
 			name = "Default Browser.strings";
 			sourceTree = "<group>";
@@ -12071,6 +12093,7 @@
 				967AF161275FF4C70099E161 /* tt */,
 				D468309B28914E2300CCDE3A /* et */,
 				D4BF6AB12893DDA8001B5130 /* en-US */,
+				A85F9E54289A4C9800DCBF19 /* be */,
 			);
 			name = Intro.strings;
 			sourceTree = "<group>";
@@ -12371,6 +12394,7 @@
 				967AF15F275FF4C70099E161 /* tt */,
 				D468309928914E2000CCDE3A /* et */,
 				D4BF6AAF2893DDA8001B5130 /* en-US */,
+				A85F9E52289A4C9800DCBF19 /* be */,
 			);
 			name = FindInPage.strings;
 			sourceTree = "<group>";
@@ -12770,6 +12794,7 @@
 				967AF15C275FF4C70099E161 /* tt */,
 				D468309628914E1C00CCDE3A /* et */,
 				D4BF6AAC2893DDA7001B5130 /* en-US */,
+				A85F9E4F289A4C9800DCBF19 /* be */,
 			);
 			name = ClearPrivateDataConfirm.strings;
 			sourceTree = "<group>";
