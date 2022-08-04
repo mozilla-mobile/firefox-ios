@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ZABEZPEČENÍ";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Nastavit jako výchozí prohlížeč";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Nastavte si automatické otevírání odkazů, e-mailů a zpráv v aplikaci %@.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Podle systému";
 
@@ -504,6 +510,9 @@
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "Přidat zkratku";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Přidáno do zkratek";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Zkopírovat adresu";
