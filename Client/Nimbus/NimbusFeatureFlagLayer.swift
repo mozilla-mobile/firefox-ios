@@ -134,6 +134,7 @@ final class NimbusFeatureFlagLayer {
 
     private func checkNimbusForWallpapersFeature(using nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.homescreenFeature.value()
+
         return config.wallpaperFeature.status
     }
 
