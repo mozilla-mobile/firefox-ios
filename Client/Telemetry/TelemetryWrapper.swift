@@ -435,7 +435,7 @@ extension TelemetryWrapper {
         case firefoxHomepage = "firefox-homepage"
         case wallpaperSettings = "wallpaper-settings"
         case contextualHint = "contextual-hint"
-        case jumpBackInImpressions = "jump-back-in-impressions"
+        case jumpBackInTileImpressions = "jump-back-in-tile-impressions"
         case syncedTabTileImpressions = "synced-tab-tile-impressions"
         case historyImpressions = "history-highlights-impressions"
         case recentlySavedBookmarkImpressions = "recently-saved-bookmark-impressions"
@@ -1007,8 +1007,8 @@ extension TelemetryWrapper {
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.jumpBackInShowAllOrigin[homePageOrigin].add()
             }
-        case (.action, .view, .jumpBackInImpressions, _, _):
-            GleanMetrics.FirefoxHomePage.jumpBackInSectionView.add()
+        case (.action, .view, .jumpBackInTileImpressions, _, _):
+            GleanMetrics.FirefoxHomePage.jumpBackInTileView.add()
         case (.action, .tap, .firefoxHomepage, .jumpBackInSectionTabOpened, let extras):
             GleanMetrics.FirefoxHomePage.jumpBackInTabOpened.add()
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
