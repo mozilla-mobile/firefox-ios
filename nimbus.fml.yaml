@@ -504,7 +504,7 @@ types:
     StyleData:
       description: >
         A group of properities (predominantly visual) to
-        describe the style of the message.
+        the describe style of the message.
       fields:
         priority:
           type: Int
@@ -527,7 +527,7 @@ types:
           description: Whether or not the feature is enabled
           default: false
         version:
-          type: WallpaperVersion
+          type: WallpaperVariantVersion
           description: Which version of the wallpaper sytem to use
           default: legacy
 
@@ -614,7 +614,7 @@ types:
         show-none:
           description: The surface should show no message.
 
-    WallpaperVersion:
+    WallpaperVariantVersion:
       description: An enum to identify which version of the wallpaper system to use
       variants:
         legacy:
