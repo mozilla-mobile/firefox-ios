@@ -34,9 +34,6 @@ final class NimbusFeatureFlagLayer {
         case .contextualHintForToolbar:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
-        case .wallpapers:
-            return checkNimbusForWallpapersFeature(using: nimbus)
-
         case .sponsoredPocket:
             return checkNimbusForPocketSponsoredStoriesFeature(using: nimbus)
 
@@ -52,6 +49,10 @@ final class NimbusFeatureFlagLayer {
 
         case .startAtHome:
             return checkNimbusConfigForStartAtHome(using: nimbus) != .disabled
+
+        case .wallpapers,
+                .wallpaperVersion:
+            return checkNimbusForWallpapersFeature(using: nimbus)
         }
     }
 
@@ -133,8 +134,15 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkNimbusForWallpapersFeature(using nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.homescreenFeature.value()
-        return config.wallpaperFeature.status
+        let config = nimbus.features.wallpaperFeature.value()
+
+        return config.configuration.status
+    }
+
+    public func checkNimbusForWallpapersVersion(using nimbus: FxNimbus = FxNimbus.shared) -> String {
+        let config = nimbus.features.wallpaperFeature.value()
+
+        return config.configuration.version.rawValue
     }
 
     private func checkNimbusForPocketSponsoredStoriesFeature(using nimbus: FxNimbus) -> Bool {

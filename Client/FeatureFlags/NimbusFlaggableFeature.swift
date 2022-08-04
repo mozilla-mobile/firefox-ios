@@ -29,6 +29,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case tabTrayGroups
     case topSites
     case wallpapers
+    case wallpaperVersion
 }
 
 /// This enum is a constraint for any feature flag options that have more than
@@ -36,6 +37,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 enum NimbusFeatureFlagWithCustomOptionsID {
     case startAtHome
     case searchBarPosition
+    case wallpaperVersion
 }
 
 struct NimbusFlaggableFeature: HasNimbusSearchBar {
@@ -82,7 +84,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .reportSiteIssue,
                 .shakeToRestore,
                 .searchHighlights,
-                .jumpBackInSyncedTab:
+                .jumpBackInSyncedTab,
+                .wallpaperVersion:
             return nil
         }
     }
@@ -134,14 +137,16 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         }
 
         switch featureID {
-        case .startAtHome:
-            return nimbusLayer.checkNimbusConfigForStartAtHome().rawValue
-
         case .bottomSearchBar:
             return nimbusSearchBar.getDefaultPosition().rawValue
 
-        default:
-            return nil
+        case .startAtHome:
+            return nimbusLayer.checkNimbusConfigForStartAtHome().rawValue
+
+        case .wallpaperVersion:
+            return nimbusLayer.checkNimbusForWallpapersVersion()
+
+        default: return nil
         }
     }
 
