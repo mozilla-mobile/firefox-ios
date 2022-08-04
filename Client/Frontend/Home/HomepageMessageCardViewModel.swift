@@ -17,17 +17,32 @@ class HomepageMessageCardViewModel: HomepageMessageCardProtocol, GleanPlumbMessa
     var dismissClosure: (() -> Void)?
 
     var shouldDisplayMessageCard: Bool {
-        return messagingManager.hasMessage(for: .newTabCard)
+        guard let message = getMessage(for: .newTabCard) else { return false }
+
+        return !message.isExpired
     }
 
-    func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
+    /// Returns the message to show, on the first call we retrieve the message from messaging framework and save it
+    /// once it's saved we return the message directly to avoid calling messaging multiple times
+    /// - Parameter surface: Message surface id
+    /// - Returns: An optional message if is available for the surface
+    func getMessage(for surface: MessageSurfaceId = .newTabCard) -> GleanPlumbMessage? {
         guard let message = message else {
-            let retrievedMessage = messagingManager.getNextMessage(for: .newTabCard)
-            message = retrievedMessage
-            return retrievedMessage
+            return getValidMessage(for: surface)
         }
 
         return message
+    }
+
+    /// Call messagingManager to retrieve next valid message for
+    /// - Returns: The next valid message for the surface from the messaging framework
+    /// - Parameter surface: Message surface id
+    private func getValidMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
+        guard let validMessage = messagingManager.getNextMessage(for: .newTabCard) else {return nil }
+
+        message = validMessage
+        handleMessageDisplayed()
+        return validMessage
     }
 
     func handleMessageDisplayed() {
@@ -36,7 +51,6 @@ class HomepageMessageCardViewModel: HomepageMessageCardProtocol, GleanPlumbMessa
 
     func handleMessagePressed() {
         message.map(messagingManager.onMessagePressed)
-
         dismissClosure?()
     }
 

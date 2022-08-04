@@ -227,7 +227,6 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         }
 
         descriptionText.text = message.data.text
-        viewModel?.handleMessageDisplayed()
     }
 
     // MARK: Actions
