@@ -243,8 +243,9 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
             presentedViewController?.dismiss(animated: false, completion: nil)
         }
 
-        // Adjust layout for rotation, cells needs to be relayout
+        // Force the entire collectionview to re-layout
         collectionView.collectionViewLayout.invalidateLayout()
+        reloadView()
     }
 
     private func adjustPrivacySensitiveSections(notification: Notification) {
@@ -640,18 +641,12 @@ extension HomepageViewController: UIPopoverPresentationControllerDelegate {
 
 // MARK: FirefoxHomeViewModelDelegate
 extension HomepageViewController: HomepageViewModelDelegate {
-
-    func reloadSection(section: HomepageViewModelProtocol) {
+    func reloadView() {
         ensureMainThread { [weak self] in
-            guard let self = self else { return }
-            self.viewModel.updateEnabledSections()
-            self.viewModel.reloadSection(section, with: self.collectionView)
-        }
-    }
-
-    func reloadData() {
-        ensureMainThread { [weak self] in
-            self?.collectionView.reloadData()
+            guard let self = self,
+                  self.view.alpha != 0
+            else { return }
+            self.collectionView.reloadData()
         }
     }
 }
