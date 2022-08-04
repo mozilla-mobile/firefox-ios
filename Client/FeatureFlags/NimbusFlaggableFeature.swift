@@ -11,6 +11,7 @@ import UIKit
 /// Please add new features alphabetically.
 enum NimbusFeatureFlagID: String, CaseIterable {
     case bottomSearchBar
+    case contextualHintForToolbar
     case historyHighlights
     case historyGroups
     case inactiveTabs
@@ -77,7 +78,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.CustomWallpaper
 
         // Cases where users do not have the option to manipulate a setting.
-        case .reportSiteIssue,
+        case .contextualHintForToolbar,
+                .reportSiteIssue,
                 .shakeToRestore,
                 .searchHighlights,
                 .jumpBackInSyncedTab:

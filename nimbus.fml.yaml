@@ -125,14 +125,14 @@ features:
             search-highlights: true
             position:
               is-position-feature-enabled: true
-              is-bottom: true
+              is-bottom: false
       - channel: beta
         value:
           awesome-bar:
             search-highlights: true
             position:
               is-position-feature-enabled: true
-              is-bottom: true
+              is-bottom: false
   homescreenFeature:
     description: The homescreen that the user goes to when they press home or new tab.
     variables:
@@ -256,6 +256,22 @@ features:
           {
             "inactive-tabs": true,
           }
+  contextual-hint-feature:
+    description: This set holds all features pertaining to the usage of contextual hints, whether it's to introduce new features or remind users of existing ones.
+    variables:
+      features-enabled:
+        description: This property provides a lookup table of whether specific context hints are enabled.
+        type: Map<ContextualHint, Boolean>
+        default: 
+        {
+          "toolbar-contextual-hint": true
+        }
+    defaults:
+      - channel: developer
+        value: {
+          "toolbar-contextual-hint": true
+        }
+
   messaging:
     description: >
       Configuration for the messaging system.
@@ -546,6 +562,12 @@ types:
       variants:
         inactive-tabs:
           description: Tabs that have been automatically closed for the user.
+    
+    ContextualHint:
+      description: The identifiers for a individual contextual hints.
+      variants:
+        toolbar-contextual-hint:
+          description: The contextual hint bubble that appears to indicate that the toolbar location is adjustable.
 
     SearchTermGroups:
       description: The identifiers for the different types of search term groups.

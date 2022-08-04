@@ -71,7 +71,7 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
     }
 
     func testDefaultNimbusCustomFlags() {
-        XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.bottom)
+        XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)
         XCTAssertEqual(featureFlags.getCustomState(for: .startAtHome), StartAtHomeSetting.afterFourHours)
     }
 
@@ -98,11 +98,13 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         mockProfile.prefs.clearAll()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
 
-        XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.bottom)
-        mockProfile.prefs.setString(SearchBarPosition.top.rawValue,
-                                    forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+        // Search Bar position
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)
+        mockProfile.prefs.setString(SearchBarPosition.bottom.rawValue,
+                                    forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+        XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.bottom)
 
+        // StartAtHome
         XCTAssertEqual(featureFlags.getCustomState(for: .startAtHome), StartAtHomeSetting.afterFourHours)
         mockProfile.prefs.setString(StartAtHomeSetting.always.rawValue,
                                     forKey: PrefsKeys.FeatureFlags.StartAtHome)
@@ -119,9 +121,9 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
 
     func testManagerInterfaceForUpdatingCustomFlags() {
         // Search Bar
-        XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.bottom)
-        featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.top)
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)
+        featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
+        XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.bottom)
 
         // StartAtHome
         XCTAssertEqual(featureFlags.getCustomState(for: .startAtHome), StartAtHomeSetting.afterFourHours)
