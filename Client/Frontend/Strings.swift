@@ -149,6 +149,12 @@ extension String {
                     value: "Your personalized Firefox homepage now makes it easier to pick up where you left off. Find your recent tabs, bookmarks, and search results.",
                     comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature.",
                     lastUpdated: .v39)
+                public static let SyncedTab = MZLocalizedString(
+                    "ContextualHints.FirefoxHomepage.JumpBackIn.SyncedTab.v106",
+                    tableName: "JumpBackIn",
+                    value: "Your tabs are syncing! Pick up where you left off on your other device.",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. When a user is logged in and has a tab synced from desktop, this popup indicates which tab that is within the Jump Back In section.",
+                    lastUpdated: .v106)
             }
         }
 

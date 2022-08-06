@@ -77,6 +77,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
     // MARK: - Properties
     private var viewModel: ContextualHintViewModel
+
     private var onViewSummoned: (() -> Void)?
     var onViewDismissed: (() -> Void)?
     private var onActionTapped: (() -> Void)?
@@ -264,7 +265,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         withActionBeforeAppearing preAction: (() -> Void)? = nil,
         actionOnDismiss postAction: (() -> Void)? = nil,
         andActionForButton buttonAction: (() -> Void)? = nil,
-        andShouldStartTimerRightAway shouldStartTimer: Bool = true
+        andShouldStartTimerRightAway shouldStartTimer: Bool = true,
+        onHintConfigured completion: (() -> Void)? = nil
     ) {
         stopTimer()
         self.modalPresentationStyle = .popover
@@ -282,6 +284,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         if viewModel.shouldPresentContextualHint() && shouldStartTimer {
             viewModel.startTimer()
         }
+
+        completion?()
     }
 
     public func stopTimer() {

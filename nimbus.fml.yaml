@@ -251,16 +251,27 @@ features:
     description: This set holds all features pertaining to the usage of contextual hints, whether it's to introduce new features or remind users of existing ones.
     variables:
       features-enabled:
-        description: This property provides a lookup table of whether specific context hints are enabled.
+        description: This property provides a lookup table of whether specific contextual hints are enabled.
         type: Map<ContextualHint, Boolean>
         default: 
         {
-          "toolbar-contextual-hint": true
+          "toolbar-contextual-hint": true,
+          "jump-back-in-synced-tab-contextual-hint": false
         }
     defaults:
+      - channel: beta
+        value: {
+          "features-enabled": {
+            "toolbar-contextual-hint": true,
+            "jump-back-in-synced-tab-contextual-hint": true
+          }
+        }
       - channel: developer
         value: {
-          "toolbar-contextual-hint": true
+          "features-enabled": {
+            "toolbar-contextual-hint": true,
+            "jump-back-in-synced-tab-contextual-hint": true
+          }
         }
 
   messaging:
@@ -598,6 +609,8 @@ types:
       variants:
         toolbar-contextual-hint:
           description: The contextual hint bubble that appears to indicate that the toolbar location is adjustable.
+        jump-back-in-synced-tab-contextual-hint:
+          description: The contextual hint bubble that appears to indicate a synced tab has appeared within the Jump Back In section.
 
     SearchTermGroups:
       description: The identifiers for the different types of search term groups.
