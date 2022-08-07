@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SEGURTASUNA";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Ezarri nabigatzaile lehenetsi gisa";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Ireki webgune, posta elektroniko eta mezuetako loturak %@(e)n automatikoki.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Sistemaren itxura";
 

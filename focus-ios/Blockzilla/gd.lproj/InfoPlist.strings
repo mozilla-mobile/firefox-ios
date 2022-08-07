@@ -13,3 +13,6 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Bheir seo comas dhut dealbhan a shàbhaladh is a luchdadh suas.";
 
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Suath bàn is fosgail";
+
