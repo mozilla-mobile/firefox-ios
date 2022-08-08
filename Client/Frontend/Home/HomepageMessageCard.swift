@@ -38,7 +38,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Properties
-    private var viewModel: HomepageMessageCardProtocol?
+    private var viewModel: MessageSurfaceProtocol?
     var notificationCenter: NotificationCenter = NotificationCenter.default
     private var shadowLayer: CAShapeLayer?
 

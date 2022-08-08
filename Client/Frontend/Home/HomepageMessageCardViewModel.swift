@@ -4,14 +4,14 @@
 
 import Foundation
 
-protocol HomepageMessageCardProtocol {
+protocol MessageSurfaceProtocol {
     func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage?
     func handleMessageDisplayed()
     func handleMessagePressed()
     func handleMessageDismiss()
 }
 
-class HomepageMessageCardViewModel: HomepageMessageCardProtocol, GleanPlumbMessageManagable {
+class HomepageMessageCardViewModel: MessageSurfaceProtocol, GleanPlumbMessageManagable {
 
     var message: GleanPlumbMessage?
     var dismissClosure: (() -> Void)?
