@@ -152,7 +152,7 @@ class JumpBackInViewModelTests: XCTestCase {
         sut.switchTo(tab: tab1)
 
         XCTAssertTrue(mockBrowserBarViewDelegate.inOverlayMode)
-        guard mockTabManager.lastSelectedTabs.count > 0 else {
+        guard !mockTabManager.lastSelectedTabs.isEmpty else {
             XCTFail("No tabs were selected in mock tab manager.")
             return
         }
