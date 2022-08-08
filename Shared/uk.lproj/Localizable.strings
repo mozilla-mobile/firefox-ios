@@ -294,7 +294,7 @@
 "ContextualHint.SearchBarPlacement.ExistingUsers" = "Тепер ви можете перемістити панель інструментів донизу для зручнішого введення даних";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
-"ContextualHint.SearchBarPlacement.NewUsers" = "Щоб зручніше вводити дані, тепер панель інструментів знаходиться внизу.";
+"ContextualHint.SearchBarPlacement.NewUsers" = "Щоб зручніше вводити дані, тепер панель інструментів розташовано внизу.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "Відтепер ваша персоналізована сторінка домівки Firefox полегшує продовження роботи з місця, де ви зупинилися. Знайдіть останні вкладки, закладки та результати пошуку.";
@@ -1241,13 +1241,13 @@
 "Okay" = "Гаразд";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
-"Onboarding.IntroAction.v102" = "Початок роботи";
+"Onboarding.IntroAction.v102" = "Розпочнімо";
 
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
 "Onboarding.IntroDescriptionPart1.v102" = "Незалежний. Некомерційний. Для добрих справ.";
 
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
-"Onboarding.IntroDescriptionPart2.v102" = "Відданий забезпеченню кращого інтернету для кожного.";
+"Onboarding.IntroDescriptionPart2.v102" = "Відданий забезпеченню кращого інтернету для всіх.";
 
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "Не зараз";
@@ -1262,7 +1262,7 @@
 "Onboarding.SyncTitle.v102" = "Синхронізуйте, щоб залишатися в потоці";
 
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
-"Onboarding.WallpaperAction.v102" = "Встановіть шпалери";
+"Onboarding.WallpaperAction.v102" = "Встановити шпалери";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
 "Onboarding.WallpaperTitle.v102" = "Оберіть шпалери Firefox";
@@ -1918,7 +1918,7 @@
 "Settings.SendUsage.Link" = "Докладніше.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla намагається збирати лише дані, що необхідні для роботи і вдосконалення Firefox.";
+"Settings.SendUsage.Message" = "Mozilla намагається збирати лише дані, необхідні для роботи й вдосконалення Firefox.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Надсилати дані про використання";

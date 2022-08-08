@@ -320,6 +320,356 @@
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "Цёмная тэма цяпер уключае цёмную клавіятуру і цёмны пачатковы экран.";
 
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "Убудаваная ўзмоцненая ахова ад сачэння дапамагае спыніць рэкламу, якая вас пераследуе. Уключыце Строгую ахову каб заблакаваць яшчэ болей трэкераў, рэкламы і выплыўных вокнаў.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "Перайсці ў налады";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Ахова ад рэкламнага сачэння";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Стварыць уліковы запіс";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Цёмная";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Паменшыць памер тэксту";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Прадвызначаны пашукавік";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "Закрыць";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Налады адлюстравання";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Не адпраўляць";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Гатова";
+
+/* Panel accessibility label */
+"Downloads" = "Сцягванні";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "Сцягнуць зараз";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "Скасаваць";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "Вы ўпэўненыя, што хочаце скасаваць сцягванне?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "Працягнуць";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "Скасаваць сцягванне";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Сцягванні пакуль не падтрымліваюцца Firefox.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "Сцягванне скасавана";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "Няўдача сцягвання";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "Паўтарыць";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "Сцягванні";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 з %d файлаў";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Выдаліць";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "Сцягнутыя файлы з'явяцца тут.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "Падзяліцца";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "Увядзіце ваш пароль каб злучыцца";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Дадаткова";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Папярэджанне: мы не можам пацвердзіць, што ваша злучэнне з гэтым вэб-сайтам бяспечнаe.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Гэта можа быць праз няправільную канфігурацыю альбо праз атаку зламысніка. Працягвайце, калі вы прымаеце патэнцыйную рызыку.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Уладальнік %@ наладзіў свой вэб-сайт няправільна. Каб абараніць вашы звесткі ад крадзяжу, Firefox не злучыўся з гэтым вэб-сайтам.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Гэтаму злучэнню няма даверу";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Вярнуцца";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Усё роўна наведаць сайт";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "Адкрыць спасылку ў App Store?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Адкрыць спасылку ў знешняй праграме?";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Хатняя старонка Firefox";
+
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "Уладкаваць хатнюю старонку";
+
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "Адкрыйце для сябе яшчэ больш";
+
+/* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Pocket.Minutes.v99" = "%d хв";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "Гісторыі, якія прымушаюць задумацца";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "Выдаліць";
+
+/* Label showing how many sites there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.SitesCount.v101" = "Сайты: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "Налады";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Нашы спонсары і ваша прыватнасць";
+
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Усе сінхранізаваныя карткі";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Сінхранізаваныя карткі";
+
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Pocket.Sponsored.v103" = "Спансаравана";
+
+/* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "Спонсарскі";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Наперад";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "Няправільны адрас электроннай пошты? Адлучыцеся ніжэй каб пачаць нанова.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "Патрабуецца пацверджанне ўліковага запісу";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "Вам трэба пацвердзіць %@. Пашукайце ў сваёй пошце спасылку для пацверждання, дасланую Firefox.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "Злучыць іншую прыладу";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Уліковы запіс Firefox";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "Кіраванне ўліковым запісам і прыладамі";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "Няма інтэрнэт-злучэння";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Адкрыць налады сінхранізацыі";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "Выдаліць";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "Выдаліць уліковы запіс Firefox, звязаны з гэтай праладай, каб увайсці як іншы карыстальнік.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "Выдаліць уліковы запіс";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "Перадаслаць ліст";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "Увайсці ў сінхранізацыю";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "Атрымайце доступ да картак, закладак і пароляў з іншых прылад.";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Сінхранізаваць зараз";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "Вазьміце сваё Сеціва з сабой";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Сінхранізацыя Firefox злучана з %@";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Сінхранізацыя падключана";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ была паспяхова адключана.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Гэта прылада паспяхова адключана ад сінхранізацыі Firefox.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Сінхранізацыя адключана";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Сінхранізацыя адключана";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Прылада адключана ад сінхранізацыі Firefox";
+
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Лагатып Firefox, змяніць шпалеры.";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Атрымайце доступ да адкрытых картак, закладак і пароляў з іншых прылад.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Даведка";
+
+/* Toggle history syncing setting */
+"History" = "Гісторыя";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "Ачысціць нядаўнюю гісторыю…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "Усё";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "За апошнюю гадзіну";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "За сёння";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "За сёння і ўчора";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "Ачыстка нядаўняй гісторыі выдаліць гісторыю, кукі і іншыя даныя браўзера.";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Вэб-сайты, якія вы наведвалі нядаўна, з'явяцца тут.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Карткі з іншых прылад паказваюцца тут.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Увайдзіце, каб бачыць спіс картак з вашых іншых прылад.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Ваш уліковы запіс патрабуе пацвярджэння.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Хочаце бачыць свае карткі з іншых прылад?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Уключыце сінхранізацыю картак, каб бачыць спіс картак з вашых іншых прылад.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Сінхранізацыя Firefox";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Гісторыя";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Нядаўна закрытыя";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "Падключаныя прылады: %d";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Сінхранізаваныя прылады";
+
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Хатняя старонка";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Скасаваць";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Вы заўсёды можаце змяніць гэта ў наладах";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Усталяваць хатнюю старонку";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Вы хочаце выкарыстоўваць гэтую старонку як хатнюю?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Закладка";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Выдаліць з гісторыі";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Адкрыць у новай прыватнай картцы";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Адкрыць у прыватнай картцы";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Адкрыць у новай картцы";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Выдаліць";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Выдаліць закладку";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Падзяліцца";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Назад";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Закрыць картку";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Знайсці";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Наперад";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Прыватная картка";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Новая картка";
+
 /* Label displaying welcome view title */
 "Logins.WelcomeView.Title2" = "Аўтазапаўненне пароляў Firefox";
 
