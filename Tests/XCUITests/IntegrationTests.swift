@@ -56,7 +56,7 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         sleep(5)
-        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
+        waitForExistence(app.navigationBars["Sync and Save Data"], timeout: 20)
         userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
         userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
         navigator.performAction(Action.FxATypeEmail)
