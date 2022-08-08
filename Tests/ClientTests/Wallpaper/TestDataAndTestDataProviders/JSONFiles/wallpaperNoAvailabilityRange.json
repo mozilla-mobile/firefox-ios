@@ -4,6 +4,7 @@
         {
             "id": "firefox",
             "available-locales": ["en-US", "es-US", "en-CA", "fr-CA"],
+            "availability-range": null,
             "wallpapers": [
                 {
                     "id": "beachVibes",

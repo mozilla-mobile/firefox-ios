@@ -3,6 +3,7 @@
     "collections": [
         {
             "id": "firefox",
+            "available-locales": null,
             "availability-range": {
                 "start": "2002-11-28",
                 "end": "2022-09-10"
