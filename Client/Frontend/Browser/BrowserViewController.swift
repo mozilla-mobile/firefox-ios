@@ -876,6 +876,7 @@ class BrowserViewController: UIViewController {
         }
 
         homepageViewController?.view.layer.removeAllAnimations()
+        view.setNeedsUpdateConstraints()
 
         // Return early if the home page is already showing
         guard homepageViewController?.view.alpha != 1 else { return }
@@ -894,7 +895,6 @@ class BrowserViewController: UIViewController {
             self.webViewContainer.accessibilityElementsHidden = true
             UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         })
-        view.setNeedsUpdateConstraints()
         urlBar.locationView.reloadButton.reloadButtonState = .disabled
     }
 
