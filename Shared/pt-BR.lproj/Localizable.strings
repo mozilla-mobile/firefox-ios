@@ -68,7 +68,7 @@
 "ActivityStream.Pocket.Trending" = "Em alta";
 
 /* Section title label for recently visited websites */
-"ActivityStream.RecentHistory.Title" = "Visitados recentemente";
+"ActivityStream.RecentHistory.Title" = "Visitado recentemente";
 
 /* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
 "ActivityStream.RecentlySaved.SectionTitle" = "Salvo recentemente";
