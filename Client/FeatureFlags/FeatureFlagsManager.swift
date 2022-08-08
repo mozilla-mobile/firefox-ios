@@ -78,6 +78,7 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
         switch featureID {
         case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
         case .searchBarPosition: return SearchBarPosition(rawValue: userSetting) as? T
+        case .wallpaperVersion: return WallpaperVersion(rawValue: userSetting) as? T
         }
     }
 
@@ -86,6 +87,7 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
         switch featureID {
         case .startAtHome: return .startAtHome
         case .searchBarPosition: return .bottomSearchBar
+        case .wallpaperVersion: return .wallpaperVersion
         }
     }
 
@@ -118,10 +120,12 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
             if let option = desiredState as? SearchBarPosition {
                 feature.setUserPreference(to: option.rawValue)
             }
+
+        case .wallpaperVersion: return
         }
     }
 
-    /// Sets up features with default channel availablility. For ease of use, please add
+    /// Sets up features with default channel availability. For ease of use, please add
     /// new features alphabetically. These features are only core features in the
     /// application. See the relevant documentation on `CoreFlaggableFeature` and
     /// `NimbusFlaggableFeature` for more explanation on the differences.

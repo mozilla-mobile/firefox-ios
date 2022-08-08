@@ -20,7 +20,7 @@ public final class GCDReadWriteLock: ReadWriteLock {
 
     public func withReadLock<T>(block: () -> T) -> T {
         var result: T!
-        queue.sync() {
+        queue.sync {
             result = block()
         }
         return result

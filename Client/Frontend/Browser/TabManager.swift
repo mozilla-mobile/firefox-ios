@@ -67,6 +67,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     fileprivate let store: TabManagerStore
     fileprivate let profile: Profile
     fileprivate var isRestoringTabs = false
+    var tabDisplayType: TabDisplayType = .TabGrid
 
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
@@ -301,10 +302,6 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
         // Clear every time entering/exiting this mode.
         Tab.ChangeUserAgent.privateModeHostList = Set<String>()
-
-        if shouldClearPrivateTabs() && leavingPBM {
-            removeAllPrivateTabs()
-        }
     }
 
     func expireSnackbars() {
@@ -400,12 +397,17 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         var placeNextToParentTab = false
         if parent == nil || parent?.isPrivate != tab.isPrivate {
             tabs.append(tab)
+
         } else if let parent = parent, var insertIndex = tabs.firstIndex(of: parent) {
             placeNextToParentTab = true
             insertIndex += 1
-            while insertIndex < tabs.count && tabs[insertIndex].isDescendentOf(parent) {
+
+            // If we are on iPad (.TopTabTray), the new tab should be inserted immediately after the parent tab.
+            // In this scenario the while loop shouldn't be executed.
+            while insertIndex < tabs.count && tabs[insertIndex].isDescendentOf(parent) && tabDisplayType == .TabGrid {
                 insertIndex += 1
             }
+
             tab.parent = parent
             tabs.insert(tab, at: insertIndex)
         }
@@ -611,7 +613,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
         DispatchQueue.main.async { [unowned self] in
             // select normal tab if there are no private tabs, we need to do this
-            // to accomodate for the case when a user dismisses tab tray while
+            // to accommodate for the case when a user dismisses tab tray while
             // they are in private mode and there are no tabs
             if isPrivate && self.privateTabs.count < 1 && !self.normalTabs.isEmpty {
                 self.selectTab(mostRecentTab(inTabs: self.normalTabs) ?? self.normalTabs.last,
@@ -869,7 +871,7 @@ extension TabManager {
 
     func restoreTabs(_ forced: Bool = false) {
         defer { checkForSingleTab() }
-        guard forced || count == 0,
+        guard forced || tabs.isEmpty,
               !AppConstants.isRunningUITests,
               !DebugSettingsBundleOptions.skipSessionRestore,
               store.hasTabsToRestoreAtStartup
@@ -968,7 +970,7 @@ extension TabManager: WKNavigationDelegate {
     }
 
     // The main frame JSContext is available, and DOM parsing has begun.
-    // Do not excute JS at this point that requires running prior to DOM parsing.
+    // Do not execute JS at this point that requires running prior to DOM parsing.
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         guard let tab = self[webView] else { return }
 

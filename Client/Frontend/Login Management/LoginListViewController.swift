@@ -17,7 +17,6 @@ private extension UITableView {
 }
 
 let CellReuseIdentifier = "cell-reuse-id"
-let SectionHeaderId = "section-header-id"
 let LoginsSettingsSection = 0
 
 class LoginListViewController: SensitiveViewController {
@@ -97,7 +96,8 @@ class LoginListViewController: SensitiveViewController {
         self.title = .Settings.Passwords.LoginsAndPasswordsTitle
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: CellReuseIdentifier)
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderId)
+        tableView.register(ThemedTableSectionHeaderFooterView.self,
+                           forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
         tableView.accessibilityIdentifier = "Login List"
         tableView.dataSource = loginDataSource
@@ -122,8 +122,14 @@ class LoginListViewController: SensitiveViewController {
         searchController.hidesNavigationBarDuringPresentation = UIDevice.current.userInterfaceIdiom != .pad
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(remoteLoginsDidChange), name: .DataRemoteLoginChangesWereApplied, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(dismissAlertController), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(remoteLoginsDidChange),
+                                       name: .DataRemoteLoginChangesWereApplied,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(dismissAlertController),
+                                       name: UIApplication.didEnterBackgroundNotification,
+                                       object: nil)
 
         setupDefaultNavButtons()
         view.addSubview(tableView)
@@ -365,9 +371,8 @@ extension LoginListViewController: UITableViewDelegate {
         if section != 1 {
             return nil
         }
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderId) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
         headerView.titleLabel.text = .LoginsListTitle
-        headerView.titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmall
         // not using a grouped table: show header borders
         headerView.showBorder(for: .top, true)
         headerView.showBorder(for: .bottom, true)
@@ -429,11 +434,11 @@ extension LoginListViewController: KeyboardHelperDelegate {
 // MARK: - SearchInputViewDelegate
 extension LoginListViewController: SearchInputViewDelegate {
 
-    @objc func searchInputView(_ searchView: SearchInputView, didChangeTextTo text: String) {
+    func searchInputView(_ searchView: SearchInputView, didChangeTextTo text: String) {
         loadLogins(text)
     }
 
-    @objc func searchInputViewBeganEditing(_ searchView: SearchInputView) {
+    func searchInputViewBeganEditing(_ searchView: SearchInputView) {
         // Trigger a cancel for editing
         cancelSelection()
 
@@ -442,7 +447,7 @@ extension LoginListViewController: SearchInputViewDelegate {
         loadLogins()
     }
 
-    @objc func searchInputViewFinishedEditing(_ searchView: SearchInputView) {
+    func searchInputViewFinishedEditing(_ searchView: SearchInputView) {
         setupDefaultNavButtons()
         loadLogins()
     }
@@ -464,7 +469,7 @@ extension LoginListViewController: LoginViewModelDelegate {
     func loginSectionsDidUpdate() {
         loadingView.isHidden = true
         tableView.reloadData()
-        navigationItem.rightBarButtonItem?.isEnabled = viewModel.count > 0
+        navigationItem.rightBarButtonItem?.isEnabled = viewModel.hasData
         restoreSelectedRows()
     }
 

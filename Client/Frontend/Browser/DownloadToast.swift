@@ -178,7 +178,7 @@ class DownloadToast: Toast {
         viewController?.present(alert, animated: true, completion: nil)
     }
 
-    @objc override func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
+    override func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
         // Intentional NOOP to override superclass behavior for dismissing the toast.
     }
 }

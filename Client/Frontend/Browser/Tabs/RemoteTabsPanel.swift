@@ -403,7 +403,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
         instructionsLabel.numberOfLines = 0
         contentView.addSubview(instructionsLabel)
 
-        signInButton.setTitle(.Settings.Sync.FxASignInToSync, for: [])
+        signInButton.setTitle(.Settings.Sync.ButtonTitle, for: [])
         signInButton.setTitleColor(UIColor.Photon.White100, for: [])
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = UX.EmptyStateSignInButtonCornerRadius
@@ -419,7 +419,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
         emptyStateImageView.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(instructionsLabel)
 
-            // Sets proper top constraint for iPhone 6 in portait and for iPad.
+            // Sets proper top constraint for iPhone 6 in portrait and for iPad.
             make.centerY.equalTo(contentView).offset(UX.EmptyTabContentOffset + 30).priority(100)
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
@@ -604,12 +604,12 @@ class RemoteTabsTableViewController: UITableViewController {
 
     func updateDelegateClientAndTabData(_ clientAndTabs: [ClientAndTabs]) {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
-        if clientAndTabs.count == 0 {
+        if clientAndTabs.isEmpty {
             self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
                                                                     error: .noClients)
         } else {
-            let nonEmptyClientAndTabs = clientAndTabs.filter { $0.tabs.count > 0 }
-            if nonEmptyClientAndTabs.count == 0 {
+            let nonEmptyClientAndTabs = clientAndTabs.filter { !$0.tabs.isEmpty }
+            if nonEmptyClientAndTabs.isEmpty {
                 self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
                                                                         error: .noTabs)
             } else {

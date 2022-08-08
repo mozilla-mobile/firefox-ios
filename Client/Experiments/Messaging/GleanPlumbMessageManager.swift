@@ -63,14 +63,15 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     static let shared = GleanPlumbMessageManager()
 
     private let messagingUtility: GleanPlumbMessageUtility
-    private let messagingStore: GleanPlumbMessageStore
+    private let messagingStore: GleanPlumbMessageStoreProtocol
     private let feature = FxNimbus.shared.features.messaging.value()
 
     // MARK: - Inits
 
-    init(messagingUtility: GleanPlumbMessageUtility = GleanPlumbMessageUtility()) {
+    init(messagingUtility: GleanPlumbMessageUtility = GleanPlumbMessageUtility(),
+         messagingStore: GleanPlumbMessageStoreProtocol = GleanPlumbMessageStore()) {
         self.messagingUtility = messagingUtility
-        self.messagingStore = GleanPlumbMessageStore(messagingUtility: messagingUtility)
+        self.messagingStore = messagingStore
 
         onStartup()
     }

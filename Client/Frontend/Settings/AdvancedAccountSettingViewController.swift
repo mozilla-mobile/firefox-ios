@@ -49,7 +49,6 @@ private class CustomFxAContentServerEnableSetting: BoolSetting {
   }
 
 class AdvancedAccountSettingViewController: SettingsTableViewController {
-    fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
     fileprivate var customFxAContentURI: String?
     fileprivate var customSyncTokenServerURI: String?
 
@@ -112,7 +111,8 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! ThemedTableSectionHeaderFooterView
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+
         let sectionSetting = settings[section]
         headerView.titleLabel.text = sectionSetting.title?.string
 

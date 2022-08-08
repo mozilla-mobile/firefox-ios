@@ -216,6 +216,8 @@ private extension Array where Element == Site {
     /// Add sponsored tiles to the top sites.
     /// - Parameters:
     ///   - sponsoredTileSpaces: The number of spaces available for sponsored tiles
+    ///   - contiles: An array of Contiles a type of tiles belonging in the Shortcuts section on the Firefox home page.
+    ///   - maxNumberOfSponsoredTile: maximum number of sponsored tiles
     ///   - sites: The top sites to add the sponsored tile to
     mutating func addSponsoredTiles(sponsoredTileSpaces: Int, contiles: [Contile], maxNumberOfSponsoredTile: Int) {
         guard maxNumberOfSponsoredTile > 0 else { return }
@@ -264,7 +266,7 @@ private extension Array where Element == Site {
     // We don't add a sponsored tile if that domain site is already pinned by the user.
     private func siteIsAlreadyPresent(site: Site) -> Bool {
         let siteDomain = site.url.asURL?.shortDomain
-        return filter { ($0.url.asURL?.shortDomain == siteDomain) && (($0 as? PinnedSite) != nil) }.count > 0
+        return !filter { ($0.url.asURL?.shortDomain == siteDomain) && (($0 as? PinnedSite) != nil) }.isEmpty
     }
 }
 

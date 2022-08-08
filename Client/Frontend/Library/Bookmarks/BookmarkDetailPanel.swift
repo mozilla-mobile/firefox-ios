@@ -232,13 +232,13 @@ class BookmarkDetailPanel: SiteTableViewController {
     }
 
     // MARK: - Button Actions
-    @objc func topRightButtonAction() {
+    func topRightButtonAction() {
         save().uponQueue(.main) { _ in
             self.dismiss(animated: true)
         }
     }
 
-    @objc func topLeftButtonAction() {
+    func topLeftButtonAction() {
         self.dismiss(animated: true)
     }
 

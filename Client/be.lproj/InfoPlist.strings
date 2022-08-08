@@ -1,0 +1,24 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Firefox выкарыстоўвае камеру, каб сканаваць QR-коды, здымаць фота і відэа.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox патрабуе Face ID для доступу да захаваных лагінаў.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Вэб-сайты, якія вы наведваеце, могуць запытваць ваша месцазнаходжанне.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Firefox выкарыстоўвае мікрафон для запісу і зацягвання аўдыя.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Гэта дазваляе захоўваць фота.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Прыватная картка";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Новая картка";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Сканаваць QR-код";
+

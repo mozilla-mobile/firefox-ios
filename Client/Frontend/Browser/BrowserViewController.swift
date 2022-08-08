@@ -93,7 +93,7 @@ class BrowserViewController: UIViewController {
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
 
-    // Header can contain the top url bar, bottomContainer only containts toolbar
+    // Header can contain the top url bar, bottomContainer only contains toolbar
     // OverKeyboardContainer contains the reader mode and maybe the bottom url bar
     var header: BaseAlphaStackView = .build { _ in }
     var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
@@ -356,7 +356,6 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.alpha = 1
         webViewContainer.alpha = 0
         urlBar.locationContainer.alpha = 0
-        homepageViewController?.view.alpha = 0
         topTabsViewController?.switchForegroundStatus(isInForeground: false)
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
@@ -368,7 +367,6 @@ class BrowserViewController: UIViewController {
         UIView.animate(withDuration: 0.2, delay: 0, options: UIView.AnimationOptions(), animations: {
             self.webViewContainer.alpha = 1
             self.urlBar.locationContainer.alpha = 1
-            self.homepageViewController?.view.alpha = 1
             self.topTabsViewController?.switchForegroundStatus(isInForeground: true)
             self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
             self.presentedViewController?.view.alpha = 1
@@ -538,7 +536,9 @@ class BrowserViewController: UIViewController {
     }
 
     private func prepareURLOnboardingContextualHint() {
-        guard contextHintVC.shouldPresentHint() else { return }
+        guard contextHintVC.shouldPresentHint(),
+              featureFlags.isFeatureEnabled(.contextualHintForToolbar, checking: .buildOnly)
+        else { return }
 
         contextHintVC.configure(
             anchor: urlBar,
@@ -779,7 +779,8 @@ class BrowserViewController: UIViewController {
 
             // This assumes that the DB returns rows in some kind of sane order.
             // It does in practice, so WFM.
-            if cursor.count > 0 {
+            let cursorCount = cursor.count
+            if cursorCount > 0 {
 
                 // Filter out any tabs received by a push notification to prevent dupes.
                 let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
@@ -874,12 +875,18 @@ class BrowserViewController: UIViewController {
             hideReaderModeBar(animated: false)
         }
 
+        homepageViewController?.view.layer.removeAllAnimations()
+
+        // Return early if the home page is already showing
+        guard homepageViewController?.view.alpha != 1 else { return }
+
         homepageViewController?.applyTheme()
         homepageViewController?.recordHomepageAppeared(isZeroSearch: !inline)
 
-        // We have to run this animation, even if the view is already showing
-        // because there may be a hide animation running and we want to be sure
-        // to override its results.
+        // Hack to force updates on the view
+        homepageViewController?.view.alpha = 0.001
+        homepageViewController?.reloadAll()
+
         UIView.animate(withDuration: 0.2, animations: { () -> Void in
             self.homepageViewController?.view.alpha = 1
         }, completion: { finished in
@@ -910,6 +917,11 @@ class BrowserViewController: UIViewController {
 
     func hideHomepage(completion: (() -> Void)? = nil) {
         guard let homepageViewController = self.homepageViewController else { return }
+
+        self.homepageViewController?.view.layer.removeAllAnimations()
+
+        // Return early if the home page is already hidden
+        guard self.homepageViewController?.view.alpha != 0 else { return }
 
         homepageViewController.recordHomepageDisappeared()
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
@@ -1073,7 +1085,7 @@ class BrowserViewController: UIViewController {
 
     func addBookmark(url: String, title: String? = nil, favicon: Favicon? = nil) {
         var title = (title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        if title.count == 0 {
+        if title.isEmpty {
             title = url
         }
 
@@ -1846,7 +1858,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
         let searchSettingsTableViewController = SearchSettingsTableViewController()
         searchSettingsTableViewController.model = self.profile.searchEngines
         searchSettingsTableViewController.profile = self.profile
-        // Update saerch icon when the searchengine changes
+        // Update search icon when the searchengine changes
         searchSettingsTableViewController.updateSearchIcon = {
             self.urlBar.updateSearchEngineImage()
             self.searchController?.reloadSearchEngines()
@@ -2059,7 +2071,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
     }
 
-    @objc func tabManagerUpdateCount() {
+    func tabManagerUpdateCount() {
         updateTabCountUsingTabManager(self.tabManager)
     }
 }

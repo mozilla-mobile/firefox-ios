@@ -160,7 +160,7 @@ class SearchTests: BaseTestCase {
         let tablesQuery2 = app.tables
         tablesQuery2.staticTexts[searchEngine].tap()
 
-        navigator.openURL("foo")
+        navigator.openURL("foo bar")
         // Workaroud needed after xcode 11.3 update Issue 5937
         // waitForExistence(app.webViews.firstMatch, timeout: 3)
         waitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
@@ -175,7 +175,7 @@ class SearchTests: BaseTestCase {
         changeSearchEngine(searchEngine: "Bing")
         changeSearchEngine(searchEngine: "DuckDuckGo")
         changeSearchEngine(searchEngine: "Google")
-        changeSearchEngine(searchEngine: "Twitter")
+        changeSearchEngine(searchEngine: "eBay")
         changeSearchEngine(searchEngine: "Wikipedia")
         // Last check failing intermittently, temporary disabled
         // changeSearchEngine(searchEngine: "Amazon.com")
@@ -237,7 +237,8 @@ class SearchTests: BaseTestCase {
 
         let addressBar = app.textFields["address"]
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
-        XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
+        let keyboardCount = app.keyboards.count
+        XCTAssert(keyboardCount > 0, "The keyboard is not shown")
 
         app.textFields["address"].typeText("www.google.com\n")
         waitUntilPageLoad()
@@ -266,6 +267,7 @@ class SearchTests: BaseTestCase {
         app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
 
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
-        XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
+        let keyboardsCount = app.keyboards.count
+        XCTAssert(keyboardsCount > 0, "The keyboard is not shown")
     }
 }

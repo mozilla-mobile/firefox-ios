@@ -107,10 +107,11 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        if tableView.isEditing {
-            self.tableView.setEditing(false, animated: true)
-        }
         super.viewWillTransition(to: size, with: coordinator)
+
+        if self.state == .bookmarks(state: .inFolderEditMode) {
+            self.tableView.setEditing(true, animated: true)
+        }
     }
 
     override func applyTheme() {
@@ -539,7 +540,7 @@ extension BookmarksPanel: Notifiable {
 
 // MARK: - Toolbar button actions
 extension BookmarksPanel {
-    @objc func bottomLeftButtonAction() {
+    func bottomLeftButtonAction() {
         if state == .bookmarks(state: .inFolderEditMode) {
             presentInFolderActions()
         }
@@ -576,7 +577,7 @@ extension BookmarksPanel {
         return true
     }
 
-    @objc func bottomRightButtonAction() {
+    func bottomRightButtonAction() {
         guard case .bookmarks(let subState) = state else { return }
 
         switch subState {

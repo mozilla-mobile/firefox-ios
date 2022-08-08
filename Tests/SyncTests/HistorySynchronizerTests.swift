@@ -181,10 +181,16 @@ extension MockSyncableHistory: SyncableHistory {
 }
 
 class HistorySynchronizerTests: XCTestCase {
+    struct RecordResult {
+        let synchronizer: HistorySynchronizer
+        let prefs: Prefs
+        let scratchpad: Scratchpad
+    }
+
     private func applyRecords(
         records: [Record<HistoryPayload>],
         toStorage storage: SyncableHistory & ResettableSyncStorage
-    ) -> (synchronizer: HistorySynchronizer, prefs: Prefs, scratchpad: Scratchpad) {
+    ) -> RecordResult {
         let delegate = MockSyncDelegate()
 
         // We can use these useless values because we're directly injecting decrypted
@@ -204,7 +210,8 @@ class HistorySynchronizerTests: XCTestCase {
 
         waitForExpectations(timeout: 10, handler: nil)
         XCTAssertTrue(succeeded, "Application succeeded.")
-        return (synchronizer, prefs, scratchpad)
+
+        return RecordResult(synchronizer: synchronizer, prefs: prefs, scratchpad: scratchpad)
     }
 
     func testRecordSerialization() {
@@ -255,7 +262,8 @@ class HistorySynchronizerTests: XCTestCase {
         let pA = HistoryPayload.fromJSON(JSON(parseJSON: jA))!
         let rA = Record<HistoryPayload>(id: "aaaaaa", payload: pA, modified: earliest + 10000, sortindex: 123, ttl: 1000000)
 
-        let (_, prefs, _) = self.applyRecords(records: [rA], toStorage: empty)
+        let recordsResult = self.applyRecords(records: [rA], toStorage: empty)
+        let prefs = recordsResult.prefs
 
         // The record was stored. This is checking our mock implementation, but real storage should work, too!
 
