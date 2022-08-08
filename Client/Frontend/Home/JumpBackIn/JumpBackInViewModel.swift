@@ -388,8 +388,10 @@ extension JumpBackInViewModel: HomepageSectionHandler {
 
 extension JumpBackInViewModel: JumpBackInDelegate {
     func didLoadNewData() {
-        jumpBackInList = jumpBackInDataAdaptor.getJumpBackInData()
-        mostRecentSyncedTab = jumpBackInDataAdaptor.getSyncedTabData()
-        delegate?.reloadData()
+        ensureMainThread {
+            self.jumpBackInList = self.jumpBackInDataAdaptor.getJumpBackInData()
+            self.mostRecentSyncedTab = self.jumpBackInDataAdaptor.getSyncedTabData()
+            self.delegate?.reloadView()
+        }
     }
 }
