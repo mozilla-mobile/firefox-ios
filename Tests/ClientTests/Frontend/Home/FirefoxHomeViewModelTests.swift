@@ -9,22 +9,34 @@ import XCTest
 class FirefoxHomeViewModelTests: XCTestCase {
 
     var reloadSectionCompleted: ((HomepageViewModelProtocol) -> Void)?
+    var profile: MockProfile!
+
+    override func setUp() {
+        super.setUp()
+
+        profile = MockProfile()
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        profile = nil
+        reloadSectionCompleted = nil
+    }
 
     // MARK: Number of sections
     func testNumberOfSection_withoutUpdatingData() {
-        let profile = MockProfile()
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
                                           urlBar: URLBarView(profile: profile))
-        XCTAssertEqual(viewModel.shownSections.count, 3)
+        XCTAssertEqual(viewModel.shownSections.count, 2)
     }
 
     func testNumberOfSection_updatingData_adds2Sections() throws {
         throw XCTSkip("Disabled until homepage's reload issue is solved")
 //        let collectionView = UICollectionView(frame: CGRect.zero,
 //                                              collectionViewLayout: UICollectionViewLayout())
-//        let profile = MockProfile()
 //        let viewModel = FirefoxHomeViewModel(profile: profile,
 //                                             isPrivate: false)
 //        viewModel.delegate = self
@@ -46,22 +58,19 @@ class FirefoxHomeViewModelTests: XCTestCase {
 
     // MARK: Orders of sections
     func testSectionOrder_addingJumpBackIn() {
-        let profile = MockProfile()
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
                                           urlBar: URLBarView(profile: profile))
 
         viewModel.addShownSection(section: HomepageSectionType.jumpBackIn)
-        XCTAssertEqual(viewModel.shownSections.count, 4)
+        XCTAssertEqual(viewModel.shownSections.count, 3)
         XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
-        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.messageCard)
-        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.jumpBackIn)
-        XCTAssertEqual(viewModel.shownSections[3], HomepageSectionType.customizeHome)
+        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.jumpBackIn)
+        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.customizeHome)
     }
 
     func testSectionOrder_addingThreeSections() {
-        let profile = MockProfile()
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
@@ -71,7 +80,7 @@ class FirefoxHomeViewModelTests: XCTestCase {
         viewModel.addShownSection(section: HomepageSectionType.jumpBackIn)
         viewModel.addShownSection(section: HomepageSectionType.pocket)
 
-        XCTAssertEqual(viewModel.shownSections.count, 4)
+        XCTAssertEqual(viewModel.shownSections.count, 5)
         XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
         XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.messageCard)
         XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.jumpBackIn)
@@ -80,7 +89,6 @@ class FirefoxHomeViewModelTests: XCTestCase {
     }
 
     func testSectionOrder_addingAndRemovingSections() {
-        let profile = MockProfile()
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
@@ -97,7 +105,6 @@ class FirefoxHomeViewModelTests: XCTestCase {
     }
 
     func testSectionOrder_addingAndRemovingMoreSections() {
-        let profile = MockProfile()
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
