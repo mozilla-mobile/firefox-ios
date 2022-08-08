@@ -17,7 +17,7 @@ class FirefoxHomeViewModelTests: XCTestCase {
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
                                           urlBar: URLBarView(profile: profile))
-        XCTAssertEqual(viewModel.shownSections.count, 2)
+        XCTAssertEqual(viewModel.shownSections.count, 3)
     }
 
     func testNumberOfSection_updatingData_adds2Sections() throws {
@@ -53,26 +53,30 @@ class FirefoxHomeViewModelTests: XCTestCase {
                                           urlBar: URLBarView(profile: profile))
 
         viewModel.addShownSection(section: HomepageSectionType.jumpBackIn)
-        XCTAssertEqual(viewModel.shownSections.count, 3)
+        XCTAssertEqual(viewModel.shownSections.count, 4)
         XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
-        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.jumpBackIn)
-        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.customizeHome)
+        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.messageCard)
+        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.jumpBackIn)
+        XCTAssertEqual(viewModel.shownSections[3], HomepageSectionType.customizeHome)
     }
 
-    func testSectionOrder_addingTwoSections() {
+    func testSectionOrder_addingThreeSections() {
         let profile = MockProfile()
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
                                           urlBar: URLBarView(profile: profile))
 
+        viewModel.addShownSection(section: HomepageSectionType.messageCard)
         viewModel.addShownSection(section: HomepageSectionType.jumpBackIn)
         viewModel.addShownSection(section: HomepageSectionType.pocket)
+
         XCTAssertEqual(viewModel.shownSections.count, 4)
         XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
-        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.jumpBackIn)
-        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.pocket)
-        XCTAssertEqual(viewModel.shownSections[3], HomepageSectionType.customizeHome)
+        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.messageCard)
+        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.jumpBackIn)
+        XCTAssertEqual(viewModel.shownSections[3], HomepageSectionType.pocket)
+        XCTAssertEqual(viewModel.shownSections[4], HomepageSectionType.customizeHome)
     }
 
     func testSectionOrder_addingAndRemovingSections() {
@@ -82,6 +86,7 @@ class FirefoxHomeViewModelTests: XCTestCase {
                                           tabManager: MockTabManager(),
                                           urlBar: URLBarView(profile: profile))
 
+        viewModel.removeShownSection(section: HomepageSectionType.messageCard)
         viewModel.addShownSection(section: HomepageSectionType.jumpBackIn)
         viewModel.addShownSection(section: HomepageSectionType.pocket)
         viewModel.removeShownSection(section: HomepageSectionType.customizeHome)
@@ -101,6 +106,7 @@ class FirefoxHomeViewModelTests: XCTestCase {
         viewModel.addShownSection(section: HomepageSectionType.jumpBackIn)
         viewModel.addShownSection(section: HomepageSectionType.pocket)
         viewModel.addShownSection(section: HomepageSectionType.historyHighlights)
+        viewModel.removeShownSection(section: HomepageSectionType.messageCard)
         viewModel.removeShownSection(section: HomepageSectionType.customizeHome)
         XCTAssertEqual(viewModel.shownSections.count, 4)
         XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
