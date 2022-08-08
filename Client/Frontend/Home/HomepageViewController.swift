@@ -22,7 +22,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         }
     }
 
-    var notificationCenter: NotificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
