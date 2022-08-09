@@ -26,6 +26,8 @@ public struct AccessibilityIdentifiers {
         static let collectionView = "FxCollectionView"
 
         struct HomeTabBanner {
+            static let titleLabel = "HomeTabBanner.titleLabel"
+            static let descriptionLabel = "HomeTabBanner.descriptionLabel"
             static let ctaButton = "HomeTabBanner.ctaButton"
         }
 

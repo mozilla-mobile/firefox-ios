@@ -8,7 +8,7 @@ import Storage
 import SyncTelemetry
 import MozillaAppServices
 
-class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageManagable {
+class HomepageViewController: UIViewController, HomePanel {
 
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
@@ -33,10 +33,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     private var contextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
 
-    private var homeTabBanner: HomepageTabBanner?
-
-    // Content stack views contains the home tab banner and collection view.
-    // Home tab banner cannot be added to collection view since it's pinned at the top of the view.
+    // Content stack views contains collection view.
     lazy var contentStackView: UIStackView = .build { stackView in
         stackView.backgroundColor = .clear
         stackView.axis = .vertical
@@ -111,14 +108,6 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         reloadAll()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        if shouldDisplayHomeTabBanner {
-            showHomeTabBanner()
-        }
-    }
-
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         contextualHintViewController.stopTimer()
@@ -132,9 +121,6 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         if UIDevice.current.userInterfaceIdiom == .pad {
             reloadOnRotation()
         }
-
-        // Adjust home tab banner height on rotation
-        homeTabBanner?.adjustMaxHeight(size.height * 0.6)
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -259,7 +245,6 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     }
 
     func applyTheme() {
-        homeTabBanner?.applyTheme()
         view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
     }
 
@@ -308,7 +293,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     // MARK: - Contextual hint
     private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
         guard contextualHintViewController.shouldPresentHint(),
-              !shouldDisplayHomeTabBanner
+              !viewModel.shouldDisplayHomeTabBanner
         else { return }
 
         contextualHintViewController.configure(
@@ -331,39 +316,6 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         present(contextualHintViewController, animated: true, completion: nil)
 
         UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
-    }
-
-    // MARK: - Home Tab Banner
-
-    private var shouldDisplayHomeTabBanner: Bool {
-        return messagingManager.hasMessage(for: .newTabCard)
-    }
-
-    private func showHomeTabBanner() {
-        createHomeTabBannerCard()
-
-        guard let homeTabBanner = homeTabBanner,
-              !contentStackView.subviews.contains(homeTabBanner) else { return }
-
-        contentStackView.addArrangedViewToTop(homeTabBanner)
-
-        homeTabBanner.adjustMaxHeight(view.frame.height * 0.7)
-        homeTabBanner.dismissClosure = { [weak self] in
-            self?.dismissHomeTabBanner()
-        }
-    }
-
-    private func createHomeTabBannerCard() {
-        guard homeTabBanner == nil else { return }
-
-        homeTabBanner = .build { card in
-            card.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        }
-    }
-
-    public func dismissHomeTabBanner() {
-        homeTabBanner?.removeFromSuperview()
-        homeTabBanner = nil
     }
 }
 
@@ -434,6 +386,12 @@ private extension HomepageViewController {
         // Header view
         viewModel.headerViewModel.onTapAction = { [weak self] _ in
             self?.changeHomepageWallpaper()
+        }
+
+        // Message card
+        viewModel.messageCardViewModel.dismissClosure = { [weak self] in
+            self?.viewModel.updateEnabledSections()
+            self?.reloadAll()
         }
 
         // Top sites
@@ -673,11 +631,6 @@ extension HomepageViewController: Notifiable {
                     .TabsTrayDidSelectHomeTab,
                     .HomePanelPrefsChanged:
                 self.reloadAll()
-
-            case .DynamicFontChanged:
-                self.homeTabBanner?.adjustMaxHeight(self.view.frame.height * 0.7)
-                self.homeTabBanner?.setNeedsLayout()
-                self.homeTabBanner?.layoutIfNeeded()
 
             default: break
             }

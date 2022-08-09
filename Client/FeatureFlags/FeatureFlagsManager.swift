@@ -130,7 +130,7 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
     /// application. See the relevant documentation on `CoreFlaggableFeature` and
     /// `NimbusFlaggableFeature` for more explanation on the differences.
     ///
-    /// This should ONLY be called when instatiating the feature flag system,
+    /// This should ONLY be called when instantiating the feature flag system,
     /// and never again.
     public func initializeDeveloperFeatures(with profile: Profile) {
         self.profile = profile

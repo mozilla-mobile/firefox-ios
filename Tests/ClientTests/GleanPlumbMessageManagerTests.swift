@@ -112,22 +112,20 @@ class MockGleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
         metadata.impressions += 1
 
         if metadata.impressions > maxImpression {
-            _ = onMessageExpired(metadata, shouldReport: true)
+            onMessageExpired(metadata, shouldReport: true)
         }
     }
 
     func onMessagePressed(_ message: GleanPlumbMessage) {
-        _ = onMessageExpired(metadata, shouldReport: false)
+        onMessageExpired(metadata, shouldReport: false)
     }
 
     func onMessageDismissed(_ message: GleanPlumbMessage) {
         metadata.dismissals += 1
-        _ = onMessageExpired(metadata, shouldReport: false)
+        onMessageExpired(metadata, shouldReport: false)
     }
 
-    func onMessageExpired(_ message: GleanPlumbMessageMetaData, shouldReport: Bool) -> GleanPlumbMessageMetaData {
+    func onMessageExpired(_ message: GleanPlumbMessageMetaData, shouldReport: Bool) {
         metadata.isExpired = true
-
-        return metadata
     }
 }

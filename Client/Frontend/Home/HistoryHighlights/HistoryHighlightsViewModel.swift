@@ -10,7 +10,55 @@ protocol HomeHistoryHighlightsDelegate: AnyObject {
     func reloadHighlights()
 }
 
-class HistoryHightlightsViewModel {
+struct HistoryHighlightsModel {
+    let title: String
+    let description: String?
+    let favIconImage: UIImage?
+    let corners: UIRectCorner?
+    let hideBottomLine: Bool
+    let isFillerCell: Bool
+    let shouldAddShadow: Bool
+    var accessibilityLabel: String {
+        if let description = description {
+            return "\(title), \(description)"
+        } else {
+            return title
+        }
+    }
+
+    init(title: String,
+         description: String?,
+         shouldHideBottomLine: Bool,
+         with corners: UIRectCorner? = nil,
+         and heroImage: UIImage? = nil,
+         andIsFillerCell: Bool = false,
+         shouldAddShadow: Bool = false) {
+
+        self.title = title
+        self.description = description
+        self.hideBottomLine = shouldHideBottomLine
+        self.corners = corners
+        self.favIconImage = heroImage
+        self.isFillerCell = andIsFillerCell
+        self.shouldAddShadow = shouldAddShadow
+    }
+
+    // Filler cell init
+    init(shouldHideBottomLine: Bool,
+         with corners: UIRectCorner? = nil,
+         shouldAddShadow: Bool) {
+
+        self.init(title: "",
+                  description: "",
+                  shouldHideBottomLine: shouldHideBottomLine,
+                  with: corners,
+                  and: nil,
+                  andIsFillerCell: true,
+                  shouldAddShadow: shouldAddShadow)
+    }
+}
+
+class HistoryHighlightsViewModel {
 
     struct UX {
         static let maxNumberOfItemsPerColumn = 3
@@ -149,7 +197,7 @@ class HistoryHightlightsViewModel {
 }
 
 // MARK: HomeViewModelProtocol
-extension HistoryHightlightsViewModel: HomepageViewModelProtocol, FeatureFlaggable {
+extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
     var sectionType: HomepageSectionType {
         return .historyHighlights
@@ -227,7 +275,7 @@ extension HistoryHightlightsViewModel: HomepageViewModelProtocol, FeatureFlaggab
 }
 
 // MARK: FxHomeSectionHandler
-extension HistoryHightlightsViewModel: HomepageSectionHandler {
+extension HistoryHighlightsViewModel: HomepageSectionHandler {
 
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
@@ -372,7 +420,7 @@ extension HistoryHightlightsViewModel: HomepageSectionHandler {
         let itemURL = item.siteUrl?.absoluteString ?? ""
         let site = Site(url: itemURL, title: item.displayTitle)
 
-        let cellOptions = HistoryHighlightsViewModel(title: item.displayTitle,
+        let cellOptions = HistoryHighlightsModel(title: item.displayTitle,
                                                      description: nil,
                                                      shouldHideBottomLine: hideBottomLine,
                                                      with: cornersToRound,
@@ -395,7 +443,7 @@ extension HistoryHightlightsViewModel: HomepageSectionHandler {
 
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
 
-        let cellOptions = HistoryHighlightsViewModel(title: item.displayTitle,
+        let cellOptions = HistoryHighlightsModel(title: item.displayTitle,
                                                      description: item.description,
                                                      shouldHideBottomLine: hideBottomLine,
                                                      with: cornersToRound,
@@ -414,7 +462,7 @@ extension HistoryHightlightsViewModel: HomepageSectionHandler {
 
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
 
-        let cellOptions = HistoryHighlightsViewModel(shouldHideBottomLine: hideBottomLine,
+        let cellOptions = HistoryHighlightsModel(shouldHideBottomLine: hideBottomLine,
                                                      with: cornersToRound,
                                                      shouldAddShadow: shouldAddShadow)
 
@@ -424,7 +472,7 @@ extension HistoryHightlightsViewModel: HomepageSectionHandler {
 }
 
 // MARK: - FxHomeTopSitesManagerDelegate
-extension HistoryHightlightsViewModel: HomeHistoryHighlightsDelegate {
+extension HistoryHighlightsViewModel: HomeHistoryHighlightsDelegate {
     func reloadHighlights() {
         delegate?.reloadHighlights()
     }
