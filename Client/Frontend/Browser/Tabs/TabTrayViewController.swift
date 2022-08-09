@@ -32,7 +32,7 @@ class TabTrayViewController: UIViewController {
     var viewModel: TabTrayViewModel
     var openInNewTab: ((_ url: URL, _ isPrivate: Bool) -> Void)?
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)?
-    var notificationCenter: NotificationCenter
+    var notificationCenter: NotificationProtocol
     var nimbus: FxNimbus
 
     // MARK: - UI Elements
@@ -163,7 +163,7 @@ class TabTrayViewController: UIViewController {
          tabToFocus: Tab? = nil,
          tabManager: TabManager,
          focusedSegment: TabTrayViewModel.Segment? = nil,
-         and notificationCenter: NotificationCenter = NotificationCenter.default,
+         and notificationCenter: NotificationProtocol = NotificationCenter.default,
          with nimbus: FxNimbus = FxNimbus.shared
     ) {
         self.nimbus = nimbus
@@ -425,7 +425,7 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
     }
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        notificationCenter.post(name: .TabsTrayDidClose, object: nil)
+        notificationCenter.post(name: .TabsTrayDidClose)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
 }
@@ -445,7 +445,7 @@ extension TabTrayViewController {
     }
 
     @objc func didTapDone() {
-        notificationCenter.post(name: .TabsTrayDidClose, object: nil)
+        notificationCenter.post(name: .TabsTrayDidClose)
         self.dismiss(animated: true, completion: nil)
     }
 }

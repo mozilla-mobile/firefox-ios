@@ -21,8 +21,6 @@ struct JumpBackInCellViewModel {
 class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
-        static let cellHeight: CGFloat = 112
-        static let cellWidth: CGFloat = 350
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
         static let generalCornerRadius: CGFloat = 12
@@ -97,7 +95,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Variables
-    var notificationCenter: NotificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Inits
 

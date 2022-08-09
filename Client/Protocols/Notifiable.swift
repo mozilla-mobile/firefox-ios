@@ -4,8 +4,20 @@
 
 import Foundation
 
+@objc protocol NotificationProtocol {
+    func post(name: NSNotification.Name)
+    func addObserver(_ observer: Any, selector aSelector: Selector, name aName: NSNotification.Name?, object anObject: Any?)
+    func removeObserver(_ observer: Any)
+}
+
+extension NotificationCenter: NotificationProtocol {
+    func post(name: NSNotification.Name) {
+        self.post(name: name, object: nil)
+    }
+}
+
 @objc protocol Notifiable {
-    var notificationCenter: NotificationCenter { get set }
+    var notificationCenter: NotificationProtocol { get set }
     func handleNotifications(_ notification: Notification)
 }
 

@@ -16,7 +16,7 @@ protocol RecentlySavedDelegate: AnyObject {
 
 class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
 
-    var notificationCenter: NotificationCenter
+    var notificationCenter: NotificationProtocol
     private let bookmarkItemsLimit: UInt = 5
     private let readingListItemsLimit: Int = 5
     private let recentItemsHelper = RecentItemsHelper()
@@ -36,7 +36,7 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
     init(siteImageHelper: SiteImageHelperProtocol,
          readingList: ReadingList,
          bookmarksHandler: BookmarksHandler,
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.siteImageHelper = siteImageHelper
         self.notificationCenter = notificationCenter
         self.readingList = readingList
