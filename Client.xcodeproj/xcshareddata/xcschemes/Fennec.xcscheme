@@ -331,7 +331,13 @@
                   Identifier = "ETPCoverSheetTests">
                </Test>
                <Test
+                  Identifier = "TabManagerTests/testPrivatePreference_togglePBMDeletesPrivate()">
+               </Test>
+               <Test
                   Identifier = "TestFavicons/testFaviconFetcherParse()">
+               </Test>
+               <Test
+                  Identifier = "VersionSettingTests/testCopyAppVersion()">
                </Test>
             </SkippedTests>
          </TestableReference>
