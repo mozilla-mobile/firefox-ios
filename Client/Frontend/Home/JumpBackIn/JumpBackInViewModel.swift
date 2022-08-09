@@ -125,7 +125,8 @@ class JumpBackInViewModel: FeatureFlaggable {
     var isZeroSearch: Bool
     private let profile: Profile
     private var isPrivate: Bool
-    private var hasSentJumpBackInSectionEvent = false
+    private var hasSentJumpBackInTileEvent = false
+    private var hasSentSyncedTabTileEvent = false
     private let tabManager: TabManagerProtocol
     private var sectionLayout: SectionLayout = .compactJumpBackIn // we use the compact layout as default
 
@@ -180,13 +181,22 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     func sendImpressionTelemetry() {
-        if !hasSentJumpBackInSectionEvent {
+        if !hasSentJumpBackInTileEvent, hasJumpBackIn {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .view,
-                                         object: .jumpBackInImpressions,
+                                         object: .jumpBackInTileImpressions,
                                          value: nil,
                                          extras: nil)
-            hasSentJumpBackInSectionEvent = true
+            hasSentJumpBackInTileEvent = true
+        }
+
+        if !hasSentSyncedTabTileEvent, hasSyncedTab {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .view,
+                                         object: .syncedTabTileImpressions,
+                                         value: nil,
+                                         extras: nil)
+            hasSentSyncedTabTileEvent = true
         }
     }
 
