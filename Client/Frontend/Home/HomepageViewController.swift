@@ -72,9 +72,6 @@ class HomepageViewController: UIViewController, HomePanel {
 
         setupNotifications(forObserver: self,
                            observing: [.HomePanelPrefsChanged,
-                                       .TopTabsTabClosed,
-                                       .TabsTrayDidClose,
-                                       .TabsTrayDidSelectHomeTab,
                                        .TabsPrivacyModeChanged,
                                        .DynamicFontChanged])
     }
@@ -646,10 +643,7 @@ extension HomepageViewController: Notifiable {
             case .TabsPrivacyModeChanged:
                 self.adjustPrivacySensitiveSections(notification: notification)
 
-            case .TabsTrayDidClose,
-                    .TopTabsTabClosed,
-                    .TabsTrayDidSelectHomeTab,
-                    .HomePanelPrefsChanged:
+            case .HomePanelPrefsChanged:
                 self.reloadAll()
 
             default: break

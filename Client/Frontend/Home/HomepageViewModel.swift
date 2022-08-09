@@ -92,10 +92,18 @@ class HomepageViewModel: FeatureFlaggable {
         self.headerViewModel = HomeLogoHeaderViewModel(profile: profile)
         self.messageCardViewModel = HomepageMessageCardViewModel()
         self.topSiteViewModel = TopSitesViewModel(profile: profile)
+
+        let siteImageHelper = SiteImageHelper(profile: profile)
+        let adaptor = JumpBackInDataAdaptorImplementation(profile: profile,
+                                                          tabManager: tabManager,
+                                                          siteImageHelper: siteImageHelper)
         self.jumpBackInViewModel = JumpBackInViewModel(
             profile: profile,
             isPrivate: isPrivate,
-            tabManager: tabManager)
+            tabManager: tabManager,
+            adaptor: adaptor)
+        adaptor.delegate = jumpBackInViewModel
+
         self.recentlySavedViewModel = RecentlySavedCellViewModel(
             profile: profile)
         self.historyHighlightsViewModel = HistoryHighlightsViewModel(
@@ -122,6 +130,7 @@ class HomepageViewModel: FeatureFlaggable {
         topSiteViewModel.delegate = self
         historyHighlightsViewModel.delegate = self
         recentlySavedViewModel.delegate = self
+        jumpBackInViewModel.delegate = self
 
         updateEnabledSections()
     }

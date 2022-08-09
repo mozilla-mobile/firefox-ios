@@ -6,11 +6,9 @@ import Foundation
 import Storage
 import UIKit
 
-struct FxHomeHorizontalCellViewModel {
+struct JumpBackInCellViewModel {
     let titleText: String
     let descriptionText: String
-    let tag: Int
-    var hasFavicon: Bool // Pocket has no favicon
     var favIconImage: UIImage?
     var heroImage: UIImage?
     var accessibilityLabel: String {
@@ -18,9 +16,9 @@ struct FxHomeHorizontalCellViewModel {
     }
 }
 
-// MARK: - FxHomeHorizontalCell
-/// A cell used in FxHomeScreen's Jump Back In and Pocket sections
-class HomeHorizontalCell: UICollectionViewCell, ReusableCell {
+// MARK: - JumpBackInCell
+/// A cell used in Home page Jump Back In section
+class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
@@ -39,7 +37,7 @@ class HomeHorizontalCell: UICollectionViewCell, ReusableCell {
     private var faviconFirstBaselineConstraint: NSLayoutConstraint?
 
     // MARK: - UI Elements
-    let heroImage: UIImageView = .build { imageView in
+    private let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
@@ -63,7 +61,7 @@ class HomeHorizontalCell: UICollectionViewCell, ReusableCell {
         stackView.distribution = .fillProportionally
     }
 
-    let faviconImage: UIImageView = .build { imageView in
+    private let faviconImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
@@ -78,7 +76,7 @@ class HomeHorizontalCell: UICollectionViewCell, ReusableCell {
     }
 
     // Used as a fallback if hero image isn't set
-    let fallbackFaviconImage: UIImageView = .build { imageView in
+    private let fallbackFaviconImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.backgroundColor = UIColor.clear
@@ -138,22 +136,32 @@ class HomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Helpers
 
-    func configure(viewModel: FxHomeHorizontalCellViewModel) {
-        tag = viewModel.tag
+    func configure(viewModel: JumpBackInCellViewModel) {
+        configureImages(viewModel: viewModel)
+
         itemTitle.text = viewModel.titleText
-        heroImage.image = viewModel.heroImage
         descriptionLabel.text = viewModel.descriptionText
         accessibilityLabel = viewModel.accessibilityLabel
-
-        if viewModel.hasFavicon {
-            faviconImage.image = viewModel.favIconImage
-        } else {
-            descriptionContainer.removeArrangedSubview(faviconImage)
-            faviconImage.isHidden = true
-        }
     }
 
-    func setFallBackFaviconVisibility(isHidden: Bool) {
+    private func configureImages(viewModel: JumpBackInCellViewModel) {
+        if viewModel.heroImage == nil {
+            // Sets a small favicon in place of the hero image in case there's no hero image
+            fallbackFaviconImage.image = viewModel.favIconImage
+
+        } else if viewModel.heroImage?.size.width == viewModel.heroImage?.size.height {
+            // If hero image is a square use it as a favicon
+            fallbackFaviconImage.image = viewModel.heroImage
+
+        } else {
+            setFallBackFaviconVisibility(isHidden: true)
+            heroImage.image = viewModel.heroImage
+        }
+
+        faviconImage.image = viewModel.favIconImage
+    }
+
+    private func setFallBackFaviconVisibility(isHidden: Bool) {
         fallbackFaviconBackground.isHidden = isHidden
         fallbackFaviconImage.isHidden = isHidden
     }
@@ -227,7 +235,7 @@ class HomeHorizontalCell: UICollectionViewCell, ReusableCell {
 }
 
 // MARK: - Theme
-extension HomeHorizontalCell: NotificationThemeable {
+extension JumpBackInCell: NotificationThemeable {
     func applyTheme() {
         if LegacyThemeManager.instance.currentName == .dark {
             [itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
@@ -246,7 +254,7 @@ extension HomeHorizontalCell: NotificationThemeable {
 }
 
 // MARK: - Notifiable
-extension HomeHorizontalCell: Notifiable {
+extension JumpBackInCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:
