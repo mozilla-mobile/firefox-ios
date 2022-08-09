@@ -20,33 +20,41 @@ class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
 
     private let pocketAPI: PocketStoriesProviding
     private let pocketSponsoredAPI: PocketSponsoredStoriesProviding
+    private let storyProvider: StoryProvider
     private var pocketStoriesViewModels = [PocketStandardCellViewModel]()
 
     weak var delegate: PocketDelegate?
-    var onTapAction: ((IndexPath) -> Void)?
+    var onTapAction: ((IndexPath) -> Void)? {
+        didSet {
+            guard let onTapAction = onTapAction else { return }
+            pocketStoriesViewModels.forEach { $0.onTap = onTapAction }
+        }
+    }
+
+    var dataCompletion: (() -> Void)?
 
     init(pocketAPI: PocketStoriesProviding,
          pocketSponsoredAPI: PocketSponsoredStoriesProviding,
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         dataCompletion: (() -> Void)? = nil) {
         self.pocketAPI = pocketAPI
         self.pocketSponsoredAPI = pocketSponsoredAPI
         self.notificationCenter = notificationCenter
+        self.storyProvider = StoryProvider(pocketAPI: pocketAPI,
+                                           pocketSponsoredAPI: pocketSponsoredAPI)
+        self.dataCompletion = dataCompletion
+
         setupNotifications(forObserver: self, observing: [UIApplication.willEnterForegroundNotification])
 
         Task {
             await updatePocketSites()
+            dataCompletion?()
         }
     }
 
     func getPocketData() -> [PocketStandardCellViewModel] {
         return pocketStoriesViewModels
     }
-
-    private lazy var storyProvider: StoryProvider = {
-        StoryProvider(pocketAPI: pocketAPI, pocketSponsoredAPI: pocketSponsoredAPI) { [weak self] in
-            self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .buildAndUser) == true
-        }
-    }()
 
     private func updatePocketSites() async {
         let stories = await storyProvider.fetchPocketStories()
@@ -60,8 +68,6 @@ class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
     }
 
     private func bind(pocketStoryViewModel: PocketStandardCellViewModel) {
-        guard let onTapAction = onTapAction else { return }
-        pocketStoryViewModel.onTap = onTapAction
         pocketStoriesViewModels.append(pocketStoryViewModel)
     }
 }
@@ -72,6 +78,7 @@ extension PocketDataAdaptorImplementation: Notifiable {
         case UIApplication.willEnterForegroundNotification:
             Task {
                 await updatePocketSites()
+                dataCompletion?()
             }
         default: break
         }

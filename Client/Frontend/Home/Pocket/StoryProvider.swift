@@ -4,7 +4,7 @@
 
 import Foundation
 
-class StoryProvider {
+class StoryProvider: FeatureFlaggable {
     private let numberOfPocketStories: Int
     private let sponsoredIndices: [Int]
 
@@ -12,19 +12,16 @@ class StoryProvider {
         pocketAPI: PocketStoriesProviding,
         pocketSponsoredAPI: PocketSponsoredStoriesProviding,
         numberOfPocketStories: Int = 11,
-        sponsoredIndices: [Int] = [1, 9],
-        showSponsoredStories: @escaping () -> Bool
+        sponsoredIndices: [Int] = [1, 9]
     ) {
         self.pocketAPI = pocketAPI
         self.pocketSponsoredAPI = pocketSponsoredAPI
         self.numberOfPocketStories = numberOfPocketStories
         self.sponsoredIndices = sponsoredIndices
-        self.showSponsoredStories = showSponsoredStories
     }
 
     private let pocketAPI: PocketStoriesProviding
     private let pocketSponsoredAPI: PocketSponsoredStoriesProviding
-    private var showSponsoredStories: () -> Bool
 
     private func insert(
         sponsoredStories: [PocketStory],
@@ -50,7 +47,8 @@ class StoryProvider {
         // Convert global feed to PocketStory
         var globalTemp = global.map(PocketStory.init)
 
-        if showSponsoredStories(), let sponsored = try? await pocketSponsoredAPI.fetchSponsoredStories() {
+        if featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .buildAndUser),
+           let sponsored = try? await pocketSponsoredAPI.fetchSponsoredStories() {
             // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
             let sponsoredTemp = Array(sponsored.map(PocketStory.init).prefix(sponsoredIndices.count))
             globalTemp = Array(globalTemp.prefix(numberOfPocketStories - sponsoredIndices.count))
