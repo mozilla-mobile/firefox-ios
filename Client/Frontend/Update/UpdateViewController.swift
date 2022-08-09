@@ -4,43 +4,7 @@
 
 import Foundation
 import UIKit
-import SnapKit
 import Shared
-
-// Update view UX constants
-struct UpdateViewControllerUX {
-    struct DoneButton {
-        static let paddingTop: CGFloat = 20
-        static let paddingRight: CGFloat = -20
-        static let height: CGFloat = 20
-    }
-
-    struct ImageView {
-        static let paddingTop: CGFloat = 50
-        static let paddingLeft: CGFloat = 18
-        static let height: CGFloat = 70
-    }
-
-    struct TitleLabel {
-        static let paddingTop: CGFloat = 15
-        static let paddingLeft: CGFloat = 18
-        static let height: CGFloat = 40
-    }
-
-    struct MidTableView {
-        static let cellIdentifier = "UpdatedCoverSheetTableViewCellIdentifier"
-        static let paddingTop: CGFloat = 20
-        static let paddingBottom: CGFloat = -10
-    }
-
-    struct StartBrowsingButton {
-        static let colour = UIColor.Photon.Blue50
-        static let cornerRadius: CGFloat = 10
-        static let font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        static let height: CGFloat = 46
-        static let edgeInset: CGFloat = 18
-    }
-}
 
 /* The layout for update view controller.
     
@@ -66,33 +30,58 @@ struct UpdateViewControllerUX {
  */
 
 class UpdateViewController: UIViewController {
+
+    // Update view UX constants
+    struct UX {
+        static let doneButtonPadding: CGFloat = 20
+        static let doneButtonHeight: CGFloat = 20
+        static let imagePaddingTop: CGFloat = 50
+        static let imagePaddingLeft: CGFloat = 18
+        static let imageSize: CGFloat = 70
+        static let titlePaddingTop: CGFloat = 15
+        static let titlePaddingLeft: CGFloat = 18
+        static let titleHeight: CGFloat = 40
+        static let cellIdentifier = "UpdatedCoverSheetTableViewCellIdentifier"
+        static let tableViewPaddingTop: CGFloat = 20
+        static let tableViewPaddingBottom: CGFloat = -10
+
+        static let primaryButtonColour = UIColor.Photon.Blue50
+        static let primaryButtonCornerRadius: CGFloat = 10
+        static let primaryButtonFont = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        static let primaryButtonHeight: CGFloat = 46
+        static let primaryButtonEdgeInset: CGFloat = 18
+    }
+
     // Public constants 
-    let viewModel: UpdateViewModel = UpdateViewModel()
+    var viewModel: UpdateViewModel
     static let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-    // Private vars
+
+    // MARK: - Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
         return UpdateViewController.theme == .dark ? .white : .black
     }
+
     private var fxBackgroundThemeColour: UIColor {
         return UpdateViewController.theme == .dark ? .black : .white
     }
+
     private lazy var updatesTableView: UITableView = {
         let tableView = UITableView(frame: CGRect.zero, style: .grouped)
-        tableView.register(UpdateCoverSheetTableViewCell.self, forCellReuseIdentifier: UpdateViewControllerUX.MidTableView.cellIdentifier)
+        tableView.register(UpdateCoverSheetTableViewCell.self, forCellReuseIdentifier: UX.cellIdentifier)
         tableView.backgroundColor = fxBackgroundThemeColour
         tableView.separatorStyle = .none
-        tableView.sectionHeaderHeight = 0
-        tableView.sectionFooterHeight = 0
         tableView.rowHeight = UITableView.automaticDimension
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
+
     private lazy var titleImageView: UIImageView = .build { imgView in
         imgView.image = self.viewModel.updateCoverSheetModel?.titleImage
         imgView.contentMode = .scaleAspectFit
         imgView.clipsToBounds = true
     }
+
     private lazy var titleLabel: UILabel = .build { label in
         label.text = self.viewModel.updateCoverSheetModel?.titleText
         label.textColor = self.fxTextThemeColour
@@ -100,20 +89,25 @@ class UpdateViewController: UIViewController {
         label.textAlignment = .left
         label.numberOfLines = 0
     }
-    private var doneButton: UIButton = .build { button in
+
+    private lazy var doneButton: UIButton = .build { button in
         button.setTitle(.SettingsSearchDoneButton, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         button.setTitleColor(UIColor.systemBlue, for: .normal)
-    }
-    private lazy var startBrowsingButton: UIButton = .build { button in
-        button.setTitle(.StartBrowsingButtonTitle, for: .normal)
-        button.titleLabel?.font = UpdateViewControllerUX.StartBrowsingButton.font
-        button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UpdateViewControllerUX.StartBrowsingButton.colour
+        button.addTarget(self, action: #selector(self.dismissAnimated), for: .touchUpInside)
     }
 
-    init() {
+    private lazy var startBrowsingButton: UIButton = .build { button in
+        button.setTitle(.StartBrowsingButtonTitle, for: .normal)
+        button.titleLabel?.font = UX.primaryButtonFont
+        button.layer.cornerRadius = UX.primaryButtonCornerRadius
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UX.primaryButtonColour
+        button.addTarget(self, action: #selector(self.startBrowsing), for: .touchUpInside)
+    }
+
+    init(viewModel: UpdateViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -123,83 +117,46 @@ class UpdateViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        initialViewSetup()
-        setupTopView()
-        setupMidView()
-        setupBottomView()
+
+        setupView()
     }
 
-    private func initialViewSetup() {
-        self.view.backgroundColor = fxBackgroundThemeColour
-
-        // Initialize
-        self.view.addSubview(doneButton)
-        self.view.addSubview(titleImageView)
-        self.view.addSubview(titleLabel)
-        self.view.addSubview(startBrowsingButton)
-        self.view.addSubview(updatesTableView)
-    }
-
-    private func setupTopView() {
-        // Done button target setup
-        doneButton.addTarget(self, action: #selector(dismissAnimated), for: .touchUpInside)
-
-        // Done button constraints setup
-        // This button is located at top right hence top, right and height
-        NSLayoutConstraint.activate([
-            doneButton.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: UpdateViewControllerUX.DoneButton.paddingTop),
-            doneButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: UpdateViewControllerUX.DoneButton.paddingRight),
-            doneButton.heightAnchor.constraint(equalToConstant: UpdateViewControllerUX.DoneButton.height)
-        ])
-
-        // The top imageview constraints setup
-        // This imageview is located at the top left of the view hence top, left, height, width
-        NSLayoutConstraint.activate([
-            titleImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: UpdateViewControllerUX.ImageView.paddingLeft),
-            titleImageView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: UpdateViewControllerUX.ImageView.paddingTop),
-            titleImageView.heightAnchor.constraint(equalToConstant: UpdateViewControllerUX.ImageView.height),
-            titleImageView.widthAnchor.constraint(equalToConstant: UpdateViewControllerUX.ImageView.height)
-        ])
-
-        // Top title label constraints setup
-        // This is the bigger tittle that is located right below the top image hence left, right, height and top (relating to imageview)
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: titleImageView.bottomAnchor, constant: UpdateViewControllerUX.TitleLabel.paddingTop),
-            titleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: UpdateViewControllerUX.TitleLabel.paddingLeft),
-            titleLabel.rightAnchor.constraint(equalTo: view.rightAnchor),
-            titleLabel.heightAnchor.constraint(equalToConstant: UpdateViewControllerUX.TitleLabel.height)
-        ])
-    }
-
-    private func setupMidView() {
-        // Mid tableview setup
-        // Mid tableview hosts the items for updated cover sheet
-        self.updatesTableView.delegate = self
-        self.updatesTableView.dataSource = self
-        // Mid tableview constraints
-        // The tableview sits b/w top and bottom view hence top, bottom constraints with equal width of the superview
-        NSLayoutConstraint.activate([
-            updatesTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UpdateViewControllerUX.MidTableView.paddingTop),
-            updatesTableView.bottomAnchor.constraint(equalTo: startBrowsingButton.topAnchor, constant: UpdateViewControllerUX.MidTableView.paddingBottom),
-            updatesTableView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            updatesTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
-    }
-
-    private func setupBottomView() {
-        // Bottom start browsing target setup
-        startBrowsingButton.addTarget(self, action: #selector(startBrowsing), for: .touchUpInside)
+    private func setupView() {
+        view.backgroundColor = fxBackgroundThemeColour
+        view.addSubviews(doneButton, titleImageView, titleLabel, startBrowsingButton, updatesTableView)
+        updatesTableView.delegate = self
+        updatesTableView.dataSource = self
 
         // Bottom start button constraints
         // Bottom start button sits at the bottom of the screen with some padding on left and right hence left, right, bottom, height
         let h = view.frame.height
         // On large iPhone screens, bump this up from the bottom
         let offset: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 20 : (h > 800 ? 60 : 20)
+
         NSLayoutConstraint.activate([
-            startBrowsingButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: UpdateViewControllerUX.StartBrowsingButton.edgeInset),
-            startBrowsingButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -UpdateViewControllerUX.StartBrowsingButton.edgeInset),
+            doneButton.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: UX.doneButtonPadding),
+            doneButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.doneButtonPadding),
+            doneButton.heightAnchor.constraint(equalToConstant: UX.doneButtonHeight),
+
+            titleImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.imagePaddingLeft),
+            titleImageView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: UX.imagePaddingTop),
+            titleImageView.heightAnchor.constraint(equalToConstant: UX.imageSize),
+            titleImageView.widthAnchor.constraint(equalToConstant: UX.imageSize),
+
+            titleLabel.topAnchor.constraint(equalTo: titleImageView.bottomAnchor, constant: UX.titlePaddingTop),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.titlePaddingLeft),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            titleLabel.heightAnchor.constraint(equalToConstant: UX.titleHeight),
+
+            updatesTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.tableViewPaddingTop),
+            updatesTableView.bottomAnchor.constraint(equalTo: startBrowsingButton.topAnchor, constant: UX.tableViewPaddingBottom),
+            updatesTableView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            updatesTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            startBrowsingButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.primaryButtonEdgeInset),
+            startBrowsingButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.primaryButtonEdgeInset),
             startBrowsingButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -offset),
-            startBrowsingButton.heightAnchor.constraint(equalToConstant: UpdateViewControllerUX.StartBrowsingButton.height)
+            startBrowsingButton.heightAnchor.constraint(equalToConstant: UX.primaryButtonHeight)
         ])
     }
 
@@ -229,7 +186,7 @@ extension UpdateViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: UpdateViewControllerUX.MidTableView.cellIdentifier, for: indexPath) as? UpdateCoverSheetTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: UX.cellIdentifier, for: indexPath) as? UpdateCoverSheetTableViewCell
         let currentLastItem = viewModel.updates[indexPath.row]
         cell?.updateCoverSheetCellDescriptionLabel.text = currentLastItem.updateText
         cell?.updateCoverSheetCellImageView.image = currentLastItem.updateImage

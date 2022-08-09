@@ -29,6 +29,17 @@ import Shared
  */
 
 class ETPCoverSheetViewController: UIViewController {
+
+    struct UX {
+        static let doneButtonPadding: CGFloat = 20
+        static let doneButtonHeight: CGFloat = 20
+        static let primaryButtonColour = UIColor.Photon.Blue50
+        static let primaryButtonCornerRadius: CGFloat = 10
+        static let primaryButtonFont = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        static let primaryButtonHeight: CGFloat = 46
+        static let primaryButtonEdgeInset: CGFloat = 18
+    }
+
     // Public constants
     let viewModel = ETPViewModel()
     static let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
@@ -74,16 +85,16 @@ class ETPCoverSheetViewController: UIViewController {
     private lazy var goToSettingsButton: UIButton = {
         let button = UIButton()
         button.setTitle(.CoverSheetETPSettingsButton, for: .normal)
-        button.titleLabel?.font = UpdateViewControllerUX.StartBrowsingButton.font
-        button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
+        button.titleLabel?.font = UX.primaryButtonFont
+        button.layer.cornerRadius = UX.primaryButtonCornerRadius
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UpdateViewControllerUX.StartBrowsingButton.colour
+        button.backgroundColor = UX.primaryButtonColour
         return button
     }()
     private lazy var startBrowsingButton: UIButton = {
         let button = UIButton()
         button.setTitle(.StartBrowsingButtonTitle, for: .normal)
-        button.titleLabel?.font = UpdateViewControllerUX.StartBrowsingButton.font
+        button.titleLabel?.font = UX.primaryButtonFont
         button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
         button.backgroundColor = .clear
         return button
@@ -128,9 +139,9 @@ class ETPCoverSheetViewController: UIViewController {
         // Done button constraints setup
         // This button is located at top right hence top, right and height
         doneButton.snp.makeConstraints { make in
-            make.top.equalTo(view.snp.topMargin).offset(UpdateViewControllerUX.DoneButton.paddingTop)
-            make.right.equalToSuperview().inset(UpdateViewControllerUX.DoneButton.paddingRight)
-            make.height.equalTo(UpdateViewControllerUX.DoneButton.height)
+            make.top.equalTo(view.snp.topMargin).offset(UX.doneButtonPadding)
+            make.right.equalToSuperview().inset(-UX.doneButtonPadding)
+            make.height.equalTo(UX.doneButtonHeight)
         }
         // The top imageview constraints setup
         topImageView.snp.makeConstraints { make in
@@ -155,20 +166,20 @@ class ETPCoverSheetViewController: UIViewController {
     private func setupBottomView() {
         // Bottom start button constraints
         goToSettingsButton.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(UpdateViewControllerUX.StartBrowsingButton.edgeInset)
+            make.left.right.equalToSuperview().inset(UX.primaryButtonEdgeInset)
             make.bottom.equalTo(startBrowsingButton.snp.top).offset(-16)
-            make.height.equalTo(UpdateViewControllerUX.StartBrowsingButton.height)
+            make.height.equalTo(UX.primaryButtonHeight)
         }
         // Bottom goto settings button
         goToSettingsButton.addTarget(self, action: #selector(goToSettings), for: .touchUpInside)
         // Bottom start button constraints
         startBrowsingButton.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(UpdateViewControllerUX.StartBrowsingButton.edgeInset)
+            make.left.right.equalToSuperview().inset(UX.primaryButtonEdgeInset)
             let h = view.frame.height
             // On large iPhone screens, bump this up from the bottom
             let offset: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 20 : (h > 800 ? 60 : 20)
             make.bottom.equalTo(view.safeArea.bottom).inset(offset)
-            make.height.equalTo(UpdateViewControllerUX.StartBrowsingButton.height)
+            make.height.equalTo(UX.primaryButtonHeight)
         }
         // Bottom start browsing target setup
         startBrowsingButton.addTarget(self, action: #selector(startBrowsing), for: .touchUpInside)
