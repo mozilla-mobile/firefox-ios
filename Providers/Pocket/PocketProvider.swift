@@ -65,7 +65,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
         }
     }
 
-    private func getGlobalFeed(items: Int = 2, completion: @escaping (StoryResult) -> Void) {
+    private func getGlobalFeed(items: Int, completion: @escaping (StoryResult) -> Void) {
 
         guard let request = createGlobalFeedRequest(items: items) else {
             return completion(.failure(Error.failure))
