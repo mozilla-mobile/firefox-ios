@@ -235,18 +235,6 @@ class DynamicFontHelper: NSObject {
         return fontMetrics.scaledFont(for: font, maximumPointSize: min(fontDescriptor.pointSize, maxSize))
     }
 
-    /// Return a font that will dynamically scale up to a certain size
-    /// - Parameters:
-    ///   - textStyle: The desired textStyle for the font
-    ///   - size: The size of the font
-    /// - Returns: The UIFont with the specified font size and style
-    func preferredFont(withTextStyle textStyle: UIFont.TextStyle, size: CGFloat) -> UIFont {
-        let fontMetrics = UIFontMetrics(forTextStyle: textStyle)
-        let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
-        let font = UIFont(descriptor: fontDescriptor, size: size)
-        return fontMetrics.scaledFont(for: font)
-    }
-
     /// Return a bold font that will dynamically scale up to a certain size
     /// - Parameters:
     ///   - textStyle: The desired textStyle for the font
@@ -255,5 +243,33 @@ class DynamicFontHelper: NSObject {
     /// - Returns: The UIFont with the specified bold font size and style
     func preferredBoldFont(withTextStyle textStyle: UIFont.TextStyle, maxSize: CGFloat? = nil) -> UIFont {
         return preferredFont(withTextStyle: textStyle, weight: .bold, maxSize: maxSize)
+    }
+
+    /// Return a font that will dynamically scale up to a certain size
+    /// - Parameters:
+    ///   - textStyle: The desired textStyle for the font
+    ///   - size: The size of the font
+    /// - Returns: The UIFont with the specified font size and style
+    func preferredFont(withTextStyle textStyle: UIFont.TextStyle, size: CGFloat, weight: UIFont.Weight? = nil) -> UIFont {
+        let fontMetrics = UIFontMetrics(forTextStyle: textStyle)
+        let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
+
+        var font: UIFont
+        if let weight = weight {
+            font = UIFont.systemFont(ofSize: size, weight: weight)
+        } else {
+            font = UIFont(descriptor: fontDescriptor, size: size)
+        }
+
+        return fontMetrics.scaledFont(for: font)
+    }
+
+    /// Return a bold font that will dynamically scale up to a certain size
+    /// - Parameters:
+    ///   - textStyle: The desired textStyle for the font
+    ///   - size: The size of the font
+    /// - Returns: The UIFont with the specified font size, style and bold weight
+    func preferredBoldFont(withTextStyle textStyle: UIFont.TextStyle, size: CGFloat) -> UIFont {
+        return preferredFont(withTextStyle: textStyle, size: size, weight: .bold)
     }
 }

@@ -59,7 +59,6 @@ protocol GleanPlumbMessageManagerProtocol {
 class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     // MARK: - Properties
-
     static let shared = GleanPlumbMessageManager()
 
     private let messagingUtility: GleanPlumbMessageUtility
@@ -228,12 +227,18 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             return nil
         }
 
+        let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
+        if messageMetadata.impressions >= style.maxDisplayCount || messageMetadata.isExpired {
+            _ = messagingStore.onMessageExpired(messageMetadata, shouldReport: true)
+            return nil
+        }
+
         return GleanPlumbMessage(id: messageId,
                                  data: message,
                                  action: action,
                                  triggers: triggers,
                                  style: style,
-                                 metadata: messagingStore.getMessageMetadata(messageId: messageId))
+                                 metadata: messageMetadata)
     }
 
     /// From the list of messages that are well-formed and non-expired, we return the next / first triggered message.

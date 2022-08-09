@@ -49,27 +49,6 @@ class GleanPlumbMessageStoreTests: XCTestCase {
         XCTAssertTrue(message.metadata.isExpired)
     }
 
-    func testOnMessageNotExpired_AfterEqualToMaxDisplayed() {
-        let message = createMessage(messageId: messageId)
-        sut.onMessageDisplayed(message)
-        sut.onMessageDisplayed(message)
-        sut.onMessageDisplayed(message)
-
-        XCTAssertEqual(message.metadata.impressions, 3)
-        XCTAssertTrue(message.metadata.isExpired)
-    }
-
-    func testManagerOnMessageExpired_AfterMaxDisplayed() {
-        let message = createMessage(messageId: messageId)
-        sut.onMessageDisplayed(message)
-        sut.onMessageDisplayed(message)
-        sut.onMessageDisplayed(message)
-        sut.onMessageDisplayed(message)
-
-        XCTAssertEqual(message.metadata.impressions, 4)
-        XCTAssertTrue(message.metadata.isExpired)
-    }
-
     // MARK: - Helper function
     private func createMessage(messageId: String) -> GleanPlumbMessage {
         let styleData = MockStyleData(priority: 50, maxDisplayCount: 3)

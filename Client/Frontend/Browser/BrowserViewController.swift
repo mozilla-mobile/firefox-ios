@@ -120,9 +120,8 @@ class BrowserViewController: UIViewController {
     var keyboardBackdrop: UIView?
 
     var scrollController = TabScrollingController()
-    fileprivate var keyboardState: KeyboardState?
+    private var keyboardState: KeyboardState?
     var hasTriedToPresentETPAlready = false
-    var hasTriedToPresentDBCardAlready = false
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
@@ -2136,13 +2135,11 @@ extension BrowserViewController {
 
     // Default browser onboarding
     func presentDBOnboardingViewController(_ force: Bool = false) {
-        guard #available(iOS 14.0, *),
-              !hasTriedToPresentDBCardAlready || force
-        else { return }
+        guard #available(iOS 14.0, *) else { return }
 
-        hasTriedToPresentDBCardAlready = true
-        let shouldShow = DefaultBrowserOnboardingViewModel.shouldShowDefaultBrowserOnboarding(userPrefs: profile.prefs)
-        guard force || shouldShow else { return }
+        guard force || DefaultBrowserOnboardingViewModel.shouldShowDefaultBrowserOnboarding(userPrefs: profile.prefs)
+            else { return }
+
         let dBOnboardingViewController = DefaultBrowserOnboardingViewController()
         if topTabsVisible {
             dBOnboardingViewController.preferredContentSize = CGSize(
@@ -2153,7 +2150,6 @@ extension BrowserViewController {
             dBOnboardingViewController.modalPresentationStyle = .popover
         }
         dBOnboardingViewController.viewModel.goToSettings = {
-            self.homepageViewController?.dismissHomeTabBanner()
             dBOnboardingViewController.dismiss(animated: true) {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
             }

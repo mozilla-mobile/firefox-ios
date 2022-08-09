@@ -23,8 +23,6 @@ struct FxHomeHorizontalCellViewModel {
 class HomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
-        static let cellHeight: CGFloat = 112
-        static let cellWidth: CGFloat = 350
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
         static let generalCornerRadius: CGFloat = 12
