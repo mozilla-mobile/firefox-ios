@@ -21,15 +21,10 @@
     },
     {
       "skippedTests" : [
-        "AdjustTelemetryHelperTests\/testDeeplinkHandleEvent_GleanCalled()",
-        "AdjustTelemetryHelperTests\/testFirstSessionPing()",
         "ETPCoverSheetTests",
         "TabManagerTests\/testDeleteSelectedTab()",
         "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
         "TestFavicons\/testFaviconFetcherParse()",
-        "UIPasteboardExtensionsTests",
-        "UIPasteboardExtensionsTests\/testAddGIFImage()",
-        "UIPasteboardExtensionsTests\/testAddPNGImage()",
         "VersionSettingTests",
         "VersionSettingTests\/testCopyAppVersion()"
       ],
