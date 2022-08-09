@@ -618,8 +618,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 app.webViews.textFields.firstMatch.tap()
                 app.webViews.textFields.firstMatch.typeText(userState.fxaUsername!)
             } else {
-                app.textFields["Email"].tap()
-                app.textFields["Email"].typeText(userState.fxaUsername!)
+                app.textFields["Enter your email"].tap()
+                app.textFields["Enter your email"].typeText(userState.fxaUsername!)
             }
         }
         screenState.gesture(forAction: Action.FxATypePassword) { userState in
