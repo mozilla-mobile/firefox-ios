@@ -33,7 +33,7 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Properties
-    var notificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
     var inactiveTabsViewModel: InactiveTabViewModel?
     var hasExpanded = false
     weak var delegate: InactiveTabsDelegate?

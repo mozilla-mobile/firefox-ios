@@ -13,7 +13,7 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
     var mockSiteImageHelper: SiteImageHelperMock!
     var mockReadingList: ReadingListMock!
     var mockBookmarksHandler: BookmarksHandlerMock!
-    var spyNotificationCenter: SpyNotificationCenter!
+    var mockNotificationCenter: MockNotificationCenter!
     var mockDelegate: RecentlySavedDelegateMock?
 
     override func setUp() {
@@ -21,7 +21,7 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
         mockSiteImageHelper = SiteImageHelperMock()
         mockReadingList = ReadingListMock()
         mockBookmarksHandler = BookmarksHandlerMock()
-        spyNotificationCenter = SpyNotificationCenter()
+        mockNotificationCenter = MockNotificationCenter()
         mockDelegate = RecentlySavedDelegateMock()
     }
 
@@ -30,7 +30,7 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
         mockSiteImageHelper = nil
         mockReadingList = nil
         mockBookmarksHandler = nil
-        spyNotificationCenter = nil
+        mockNotificationCenter = nil
         subject = nil
         mockDelegate = nil
     }
@@ -127,14 +127,55 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
         XCTAssert(mockDelegate?.didLoadNewDataCallCount == 1)
     }
 
+    // MARK: - Bookmark Notifications
+
+    func testBookmarksUpdateFromNotification() {
+        initializeSubject()
+
+        mockReadingList.callGetAvailableRecordsCompletion(with: [])
+        mockBookmarksHandler.callGetRecentBookmarksCompletion(with: [])
+
+        mockNotificationCenter.post(name: .BookmarksUpdated)
+
+        mockBookmarksHandler.callGetRecentBookmarksCompletion(with: getMockBookmarks())
+
+        let savedData = subject.getRecentlySavedData()
+
+        XCTAssert(savedData.count == 1)
+        XCTAssert(mockReadingList.getAvailableRecordsCallCount == 1)
+        XCTAssert(mockBookmarksHandler.getRecentBookmarksCallCount == 2)
+        XCTAssert(mockDelegate?.didLoadNewDataCallCount == 3)
+    }
+
+    // MARK: - Reading List Notifications
+
+    func testReadingListUpdateFromNotification() {
+        initializeSubject()
+
+        mockReadingList.callGetAvailableRecordsCompletion(with: [])
+        mockBookmarksHandler.callGetRecentBookmarksCompletion(with: [])
+
+        mockNotificationCenter.post(name: .ReadingListUpdated)
+
+        mockReadingList.callGetAvailableRecordsCompletion(with: getMockReadingList())
+
+        let savedData = subject.getRecentlySavedData()
+
+        XCTAssert(savedData.count == 3)
+        XCTAssert(mockReadingList.getAvailableRecordsCallCount == 2)
+        XCTAssert(mockBookmarksHandler.getRecentBookmarksCallCount == 1)
+        XCTAssert(mockDelegate?.didLoadNewDataCallCount == 3)
+    }
+
     // MARK: - Helper functions
 
     private func initializeSubject() {
         let subject = RecentlySavedDataAdaptorImplementation(siteImageHelper: mockSiteImageHelper,
                                                              readingList: mockReadingList,
                                                              bookmarksHandler: mockBookmarksHandler,
-                                                             notificationCenter: spyNotificationCenter)
+                                                             notificationCenter: mockNotificationCenter)
         subject.delegate = mockDelegate
+        mockNotificationCenter.notifiableListener = subject
         self.subject = subject
     }
 

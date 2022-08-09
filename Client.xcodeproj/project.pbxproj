@@ -423,6 +423,7 @@
 		5A3A7DDC2889EC5D0065F81A /* BookmarksHandlerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A7DDB2889EC5D0065F81A /* BookmarksHandlerMock.swift */; };
 		5A430D792853DFDD00782BFF /* OrientationLockUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A430D782853DFDD00782BFF /* OrientationLockUtility.swift */; };
 		5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */; };
+		5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */; };
 		5F130D2E2483508E00B0F7D0 /* FxAWebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F130D2D2483508E00B0F7D0 /* FxAWebViewModel.swift */; };
 		5F97DD5F27FB0FE800AD3C60 /* GleanTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F97DD5E27FB0FE800AD3C60 /* GleanTelemetryTests.swift */; };
 		5FA2233C27F74071005B3D87 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA2233B27F74071005B3D87 /* Glean */; };
@@ -2604,6 +2605,7 @@
 		5A3A7DDB2889EC5D0065F81A /* BookmarksHandlerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksHandlerMock.swift; sourceTree = "<group>"; };
 		5A430D782853DFDD00782BFF /* OrientationLockUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationLockUtility.swift; sourceTree = "<group>"; };
 		5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
+		5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockNotificationCenter.swift; sourceTree = "<group>"; };
 		5ABD40B68B3D03806BC6819C /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/LoginManager.strings"; sourceTree = "<group>"; };
 		5AC24B85BF0D2FCC2F1EB6D3 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		5AC549C0BA565EB2B08B87EC /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -6494,6 +6496,7 @@
 				E683F0A51E92E0820035D990 /* MockableHistory.swift */,
 				2165B2C32860CB34004C0786 /* MockAdjustTelemetryData.swift */,
 				8AE80BB42891AE6700BC12EA /* MockDispatchGroup.swift */,
+				5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */,
 				281B2BE91ADF4D90002917DC /* MockProfile.swift */,
 				8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */,
 				8AE80BAE2891960300BC12EA /* MockTraitCollection.swift */,
@@ -10311,6 +10314,7 @@
 				4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */,
 				A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */,
 				8AE80BB12891A39F00BC12EA /* SpyNotificationCenter.swift in Sources */,
+				5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */,
 				8A355E5E27D267A400B9AF34 /* RecentItemsHelperTests.swift in Sources */,
 				C8699153289177FB007ACC5C /* WallpaperDataServiceTests.swift in Sources */,
 				8AFE4C2127480D0C00B97C65 /* TabTrayViewControllerTests.swift in Sources */,

@@ -21,7 +21,7 @@ class LibraryViewController: UIViewController {
     }
 
     var viewModel: LibraryViewModel
-    var notificationCenter: NotificationCenter
+    var notificationCenter: NotificationProtocol
     weak var delegate: LibraryPanelDelegate?
     var onViewDismissed: (() -> Void)?
 
@@ -61,7 +61,7 @@ class LibraryViewController: UIViewController {
     }()
 
     // MARK: - Initializers
-    init(profile: Profile, tabManager: TabManager, notificationCenter: NotificationCenter = NotificationCenter.default) {
+    init(profile: Profile, tabManager: TabManager, notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = LibraryViewModel(withProfile: profile, tabManager: tabManager)
         self.notificationCenter = notificationCenter
 

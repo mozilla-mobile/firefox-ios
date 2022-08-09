@@ -32,7 +32,7 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Variables
-    var notificationCenter: NotificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var userDefaults: UserDefaults = UserDefaults.standard
 
     // MARK: - Initializers

@@ -13,7 +13,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     // MARK: - Variables
 
     private var homeTopSite: TopSite?
-    var notificationCenter: NotificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     struct UX {
         static let borderColor = UIColor(white: 0, alpha: 0.1)

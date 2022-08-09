@@ -200,7 +200,7 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     var tabs: [Tab]?
     var selectedTab: Tab?
     var searchGroupName: String = ""
-    var notificationCenter: NotificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()

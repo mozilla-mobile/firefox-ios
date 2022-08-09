@@ -43,7 +43,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     var webViewContainerBackdrop = UIView()
     var collectionView: UICollectionView!
     var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
-    var notificationCenter: NotificationCenter
+    var notificationCenter: NotificationProtocol
     var contextualHintViewController: ContextualHintViewController
 
     // This is an optional variable used if we wish to focus a tab that is not the
@@ -77,7 +77,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
          profile: Profile,
          tabTrayDelegate: TabTrayDelegate? = nil,
          tabToFocus: Tab? = nil,
-         notificationCenter: NotificationCenter = NotificationCenter.default
+         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.tabManager = tabManager
         self.profile = profile
@@ -362,7 +362,7 @@ extension GridTabViewController {
         } else if self.tabManager.normalTabs.count == 1, let tab = self.tabManager.normalTabs.first {
             self.tabManager.selectTab(tab)
             self.dismissTabTray()
-            notificationCenter.post(name: .TabsTrayDidClose, object: nil)
+            notificationCenter.post(name: .TabsTrayDidClose)
         }
     }
 
@@ -407,7 +407,7 @@ extension GridTabViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         if let tab = tabDisplayManager.dataStore.at(index) {
             if tab.isFxHomeTab {
-                notificationCenter.post(name: .TabsTrayDidSelectHomeTab, object: nil)
+                notificationCenter.post(name: .TabsTrayDidSelectHomeTab)
             }
             tabManager.selectTab(tab)
             dismissTabTray()
@@ -523,7 +523,7 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
         case .removedLastTab:
             // when removing the last tab (only in normal mode) we will automatically open a new tab.
             // When that happens focus it by dismissing the tab tray
-            notificationCenter.post(name: .TabsTrayDidClose, object: nil)
+            notificationCenter.post(name: .TabsTrayDidClose)
             if !tabDisplayManager.isPrivate {
                 self.dismissTabTray()
             }

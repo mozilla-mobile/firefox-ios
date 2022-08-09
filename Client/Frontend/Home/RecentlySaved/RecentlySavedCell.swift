@@ -33,7 +33,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
     }
 
     // MARK: - Variables
-    var notificationCenter: NotificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Inits
 

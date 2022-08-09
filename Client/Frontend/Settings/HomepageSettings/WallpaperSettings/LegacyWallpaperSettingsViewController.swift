@@ -75,12 +75,12 @@ class LegacyWallpaperSettingsViewController: UIViewController {
     private lazy var scrollView: UIScrollView = .build { _ in }
 
     // MARK: - Variables
-    var notificationCenter: NotificationCenter
+    var notificationCenter: NotificationProtocol
     private var viewModel: LegacyWallpaperSettingsViewModel
 
     // MARK: - Initializers
     init(with viewModel: LegacyWallpaperSettingsViewModel,
-         and notificationCenter: NotificationCenter = NotificationCenter.default) {
+         and notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
