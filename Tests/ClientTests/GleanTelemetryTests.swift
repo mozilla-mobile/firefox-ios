@@ -48,7 +48,7 @@ class GleanTelemetryTests: XCTestCase {
 
         let syncPingWasSent = expectation(description: "The tempSync ping was sent")
         GleanMetrics.Pings.shared.tempSync.testBeforeNextSubmit { _ in
-            XCTAssert(GleanMetrics.Sync.syncUuid.testHasValue())
+            XCTAssertNotNil(GleanMetrics.Sync.syncUuid.testGetValue())
             syncPingWasSent.fulfill()
         }
 

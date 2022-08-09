@@ -25,7 +25,7 @@
 
 set -e
 
-GLEAN_PARSER_VERSION=4.4.0
+GLEAN_PARSER_VERSION=6.1.1
 
 # CMDNAME is used in the usage text below.
 # shellcheck disable=SC2034
@@ -53,12 +53,13 @@ ARGS:
                If not specified the plugin will use the \$SCRIPT_INPUT_FILE_{N} environment variables.
 
 OPTIONS:
-    -a, --allow-reserved             Allow reserved names.
-    -o, --output  <PATH>             Folder to place generated code in. Default: \$SOURCE_ROOT/\$PROJECT/Generated
-    -g, --glean-namespace <NAME>     The Glean namespace to use in generated code.
-    -m, --markdown <PATH>            Generate markdown documentation in provided directory.
-    -b, --build-date <TEXT>          Set a specific build date or disable build date generation with `0`.
-    -h, --help                       Display this help message.
+    -a, --allow-reserved               Allow reserved names.
+    -o, --output  <PATH>               Folder to place generated code in. Default: \$SOURCE_ROOT/\$PROJECT/Generated
+    -g, --glean-namespace <NAME>       The Glean namespace to use in generated code.
+    -m, --markdown <PATH>              Generate markdown documentation in provided directory.
+    -b, --build-date <TEXT>            Set a specific build date or disable build date generation with `0`.
+        --expire-by-version <INTEGER>  Expire metrics by version, with the provided major version.
+    -h, --help                         Display this help message.
 HEREDOC
 )
 
@@ -71,6 +72,7 @@ ALLOW_RESERVED=""
 GLEAN_NAMESPACE=Glean
 DOCS_DIRECTORY=""
 BUILD_DATE=""
+EXPIRE_VERSION=""
 declare -a YAML_FILES=()
 OUTPUT_DIR="${SOURCE_ROOT}/${PROJECT}/Generated"
 
@@ -94,6 +96,10 @@ while (( "$#" )); do
             ;;
         -b|--build-date)
             BUILD_DATE="--option build_date=$2"
+            shift 2
+            ;;
+        --expire-by-version)
+            EXPIRE_VERSION="--expire-by-version $2"
             shift 2
             ;;
         -h|--help)
@@ -170,6 +176,7 @@ PARSER_OUTPUT=$("${VENVDIR}"/bin/python -m glean_parser \
     -o "${OUTPUT_DIR}" \
     -s "glean_namespace=${GLEAN_NAMESPACE}" \
     $BUILD_DATE \
+    $EXPIRE_VERSION \
     $ALLOW_RESERVED \
     "${YAML_FILES[@]}" 2>&1) || { echo "$PARSER_OUTPUT"; echo "error: glean_parser failed. See errors above."; exit 1; }
 
