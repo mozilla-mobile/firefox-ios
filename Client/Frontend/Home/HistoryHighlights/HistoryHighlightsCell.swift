@@ -62,7 +62,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Variables
-    var notificationCenter: NotificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Inits
 

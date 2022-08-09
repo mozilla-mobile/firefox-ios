@@ -80,7 +80,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     var profile: Profile
     var cfrDelegate: InactiveTabsCFRProtocol?
     private var nimbus: FxNimbus?
-    var notificationCenter: NotificationCenter
+    var notificationCenter: NotificationProtocol
 
     lazy var filteredTabs = [Tab]()
     var tabDisplayOrder: TabDisplayOrder = TabDisplayOrder()

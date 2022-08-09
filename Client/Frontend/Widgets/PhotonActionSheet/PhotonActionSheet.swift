@@ -51,7 +51,7 @@ class PhotonActionSheet: UIViewController {
     private var tableView = UITableView(frame: .zero, style: .grouped)
     let viewModel: PhotonActionSheetViewModel
     private var constraints = [NSLayoutConstraint]()
-    var notificationCenter: NotificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)

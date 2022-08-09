@@ -41,7 +41,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     private var historySites: [Site] = []
     private var contiles: [Contile] = []
 
-    var notificationCenter: NotificationCenter
+    var notificationCenter: NotificationProtocol
     weak var delegate: TopSitesManagerDelegate?
     private let topSiteHistoryManager: TopSiteHistoryManager
     private let googleTopSiteManager: GoogleTopSiteManager
@@ -57,7 +57,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
          topSiteHistoryManager: TopSiteHistoryManager,
          googleTopSiteManager: GoogleTopSiteManager,
          contileProvider: ContileProviderInterface = ContileProvider(),
-         notificationCenter: NotificationCenter = NotificationCenter.default,
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
          dispatchGroup: DispatchGroupInterface = DispatchGroup()
     ) {
         self.profile = profile

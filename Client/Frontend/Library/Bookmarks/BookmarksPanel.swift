@@ -24,7 +24,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     // MARK: - Properties
     var libraryPanelDelegate: LibraryPanelDelegate?
-    var notificationCenter: NotificationCenter
+    var notificationCenter: NotificationProtocol
     var state: LibraryPanelMainState
     let viewModel: BookmarksPanelViewModel
 
@@ -72,7 +72,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     // MARK: - Init
 
     init(viewModel: BookmarksPanelViewModel,
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
 
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter

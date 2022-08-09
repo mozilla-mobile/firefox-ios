@@ -29,7 +29,7 @@ class WallpaperSettingCollectionCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Variables
-    var notificationCenter: NotificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     override var isSelected: Bool {
         didSet { selectedView.alpha = isSelected ? 1.0 : 0.0 }

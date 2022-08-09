@@ -18,7 +18,7 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Variables
-    var notificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Initializers
     override init(frame: CGRect) {

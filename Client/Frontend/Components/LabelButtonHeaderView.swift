@@ -57,7 +57,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
     }
 
     private var viewModel: LabelButtonHeaderViewModel?
-    var notificationCenter: NotificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Initializers
     override init(frame: CGRect) {

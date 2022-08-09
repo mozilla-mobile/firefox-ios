@@ -105,7 +105,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Variables
-    var notificationCenter: NotificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var sponsoredImageCenterConstraint: NSLayoutConstraint?
     private var sponsoredImageFirstBaselineConstraint: NSLayoutConstraint?
 

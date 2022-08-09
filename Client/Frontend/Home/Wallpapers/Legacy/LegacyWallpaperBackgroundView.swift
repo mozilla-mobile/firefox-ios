@@ -19,7 +19,7 @@ class LegacyWallpaperBackgroundView: UIView {
 
     // MARK: - Variables
     private var wallpaperManager = LegacyWallpaperManager()
-    var notificationCenter: NotificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Initializers & Setup
     override init(frame: CGRect) {
