@@ -222,6 +222,11 @@ open class MockProfile: Client.Profile {
     }
 
     var mockClientAndTabs = [ClientAndTabs]()
+
+    public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void) {
+        completion(mockClientAndTabs)
+    }
+
     public func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
         return deferMaybe(mockClientAndTabs)
     }

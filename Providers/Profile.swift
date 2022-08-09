@@ -139,6 +139,8 @@ protocol Profile: AnyObject {
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
     func getCachedClients()-> Deferred<Maybe<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
+
+    func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void)
     func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
 
     func cleanupHistoryIfNeeded()
@@ -556,6 +558,13 @@ open class BrowserProfile: Profile {
     public func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
         return self.syncManager.syncClientsThenTabs()
         >>> { self.getTabsWithNativeClients() }
+    }
+
+    public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void) {
+        let defferedResponse = self.getTabsWithNativeClients()
+        defferedResponse.upon { result in
+            completion(result.successValue ?? [])
+        }
     }
 
     public func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {

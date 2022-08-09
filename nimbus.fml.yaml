@@ -208,7 +208,7 @@ features:
             "status": true
           },
           "pocket-sponsored-stories": false,
-          "jump-back-in-synced-tab": false
+          "jump-back-in-synced-tab": true
         }
   search-term-groups-feature:
     description: The feature that controls whether or not search term groups are enabled.

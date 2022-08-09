@@ -262,6 +262,7 @@ class TopTabsViewController: UIViewController {
 extension TopTabsViewController: TabDisplayer {
 
     func focusSelectedTab() {
+        NotificationCenter.default.post(name: .TopTabsTabSelected, object: nil)
         self.scrollToCurrentTab(true)
         self.handleFadeOutAfterTabSelection()
     }
