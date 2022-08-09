@@ -948,16 +948,15 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
-  jump_back_in_section_view:
+  jump_back_in_tile_view:
     type: counter
     description: |
-      Counts the number of times a user sees the
-      Jump Back In section on the homepage
+      Counts the number of times a user sees a Jump Back In tile
+      in the Jump Back In section on the homepage
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11519
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11519
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
@@ -1021,6 +1020,75 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
+  synced_tab_tile_view:
+    type: counter
+    description: |
+      Counts the number of times a user sees the
+      Synced Tab tile on the homepage
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11519
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11519
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+  synced_tab_show_all:
+    type: counter
+    description: |
+      Counts the number of times a user taps the
+      Show All button of Synced Tab in the Jump Back In section.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11519
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11519
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+  synced_tab_show_all_origin:
+    type: labeled_counter
+    description: |
+      Counts the number of times a user taps the
+      Show All button of Synced Tab in the Jump Back In section,
+      with a home page origin.
+    labels:
+      - zero-search
+      - origin-other
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11519
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11519
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+  synced_tab_opened:
+    type: counter
+    description: |
+      Counts the number of times a user taps to open a
+      synced tab from the Jump Back In section
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11519
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11519
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+  synced_tab_opened_origin:
+    type: labeled_counter
+    description: |
+      Counts the number of times a user taps to open a
+      synced tab from the Jump Back In section,
+      with a home page origin.
+    labels:
+      - zero-search
+      - origin-other
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11519
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11519
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+
   customize_homepage_button:
     type: counter
     description: |
