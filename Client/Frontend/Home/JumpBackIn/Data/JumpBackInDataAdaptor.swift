@@ -24,7 +24,7 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
     // MARK: Properties
 
-    var notificationCenter: NotificationCenter
+    var notificationCenter: NotificationProtocol
     private let profile: Profile
     private let tabManager: TabManagerProtocol
     private var siteImageHelper: SiteImageHelperProtocol
@@ -58,7 +58,7 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
          dispatchGroup: DispatchGroupInterface = DispatchGroup(),
          mainQueue: DispatchQueueInterface = DispatchQueue.main,
          userInteractiveQueue: DispatchQueueInterface = DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass),
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
         self.tabManager = tabManager
         self.siteImageHelper = siteImageHelper
