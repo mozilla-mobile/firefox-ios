@@ -111,10 +111,13 @@ class HomepageViewModel: FeatureFlaggable {
             isPrivate: isPrivate,
             tabManager: tabManager,
             urlBar: urlBar)
-        self.pocketViewModel = PocketViewModel(
-            pocketAPI: Pocket(),
-            pocketSponsoredAPI: MockPocketSponsoredStoriesProvider()
-        )
+
+        let pocketDataAdaptor = PocketDataAdaptorImplementation(
+            pocketAPI: PocketProvider(),
+            pocketSponsoredAPI: MockPocketSponsoredStoriesProvider())
+        self.pocketViewModel = PocketViewModel(pocketDataAdaptor: pocketDataAdaptor)
+        pocketDataAdaptor.delegate = pocketViewModel
+
         self.customizeButtonViewModel = CustomizeHomepageSectionViewModel()
         self.childViewModels = [headerViewModel,
                                 messageCardViewModel,
@@ -130,6 +133,7 @@ class HomepageViewModel: FeatureFlaggable {
         topSiteViewModel.delegate = self
         historyHighlightsViewModel.delegate = self
         recentlySavedViewModel.delegate = self
+        pocketViewModel.delegate = self
         jumpBackInViewModel.delegate = self
 
         updateEnabledSections()

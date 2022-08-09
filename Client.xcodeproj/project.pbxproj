@@ -526,6 +526,8 @@
 		8A6B77CC2811C468001110D2 /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B77CB2811C468001110D2 /* URLProtocolStub.swift */; };
 		8A6B77CE2811CD11001110D2 /* URLCaching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B77CD2811CD11001110D2 /* URLCaching.swift */; };
 		8A7368AD27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7368AC27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift */; };
+		8A7653BD28A2C61D00924ABF /* PocketDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653BC28A2C61D00924ABF /* PocketDataAdaptor.swift */; };
+		8A7653BF28A2C92600924ABF /* PocketStandardCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653BE28A2C92600924ABF /* PocketStandardCellViewModel.swift */; };
 		8A7A93EE2810ADF2005E7E1B /* ContileProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7A93ED2810ADF2005E7E1B /* ContileProviderTests.swift */; };
 		8A8629E2288096C40096DDB1 /* BookmarksFolderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8629E1288096C40096DDB1 /* BookmarksFolderCell.swift */; };
 		8A8629E72880B7330096DDB1 /* BookmarksPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8629E52880B69C0096DDB1 /* BookmarksPanelTests.swift */; };
@@ -763,7 +765,7 @@
 		C8B07A4128199500000AFCE7 /* NimbusFlaggableFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */; };
 		C8B0F5EB283B7BF9007AE65D /* pocketsponsoredfeed.json in Resources */ = {isa = PBXBuildFile; fileRef = C8B0F5EA283B7BF9007AE65D /* pocketsponsoredfeed.json */; };
 		C8B0F5ED283B7C9F007AE65D /* PocketStandardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5EC283B7C9F007AE65D /* PocketStandardCell.swift */; };
-		C8B0F5F4283B7CCE007AE65D /* PocketFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5EF283B7CCE007AE65D /* PocketFeed.swift */; };
+		C8B0F5F4283B7CCE007AE65D /* PocketProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5EF283B7CCE007AE65D /* PocketProvider.swift */; };
 		C8B0F5F5283B7CCE007AE65D /* PocketSponsoredStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5F1283B7CCE007AE65D /* PocketSponsoredStory.swift */; };
 		C8B0F5F6283B7CCE007AE65D /* PocketStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5F2283B7CCE007AE65D /* PocketStory.swift */; };
 		C8B0F5F7283B7CCE007AE65D /* PocketFeedStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5F3283B7CCE007AE65D /* PocketFeedStory.swift */; };
@@ -3022,6 +3024,8 @@
 		8A6B77CB2811C468001110D2 /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolStub.swift; sourceTree = "<group>"; };
 		8A6B77CD2811CD11001110D2 /* URLCaching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLCaching.swift; sourceTree = "<group>"; };
 		8A7368AC27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanRemoveQuickActionBookmark.swift; sourceTree = "<group>"; };
+		8A7653BC28A2C61D00924ABF /* PocketDataAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketDataAdaptor.swift; sourceTree = "<group>"; };
+		8A7653BE28A2C92600924ABF /* PocketStandardCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketStandardCellViewModel.swift; sourceTree = "<group>"; };
 		8A7A93ED2810ADF2005E7E1B /* ContileProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContileProviderTests.swift; sourceTree = "<group>"; };
 		8A8629E1288096C40096DDB1 /* BookmarksFolderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksFolderCell.swift; sourceTree = "<group>"; };
 		8A8629E52880B69C0096DDB1 /* BookmarksPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksPanelTests.swift; sourceTree = "<group>"; };
@@ -3775,7 +3779,7 @@
 		C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusFlaggableFeature.swift; sourceTree = "<group>"; };
 		C8B0F5EA283B7BF9007AE65D /* pocketsponsoredfeed.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pocketsponsoredfeed.json; sourceTree = "<group>"; };
 		C8B0F5EC283B7C9F007AE65D /* PocketStandardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketStandardCell.swift; sourceTree = "<group>"; };
-		C8B0F5EF283B7CCE007AE65D /* PocketFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketFeed.swift; sourceTree = "<group>"; };
+		C8B0F5EF283B7CCE007AE65D /* PocketProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketProvider.swift; sourceTree = "<group>"; };
 		C8B0F5F1283B7CCE007AE65D /* PocketSponsoredStory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketSponsoredStory.swift; sourceTree = "<group>"; };
 		C8B0F5F2283B7CCE007AE65D /* PocketStory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketStory.swift; sourceTree = "<group>"; };
 		C8B0F5F3283B7CCE007AE65D /* PocketFeedStory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketFeedStory.swift; sourceTree = "<group>"; };
@@ -6528,7 +6532,9 @@
 			isa = PBXGroup;
 			children = (
 				C8B0F5EC283B7C9F007AE65D /* PocketStandardCell.swift */,
+				8A7653BE28A2C92600924ABF /* PocketStandardCellViewModel.swift */,
 				8A9AC46A276D11280047F5B0 /* PocketViewModel.swift */,
+				8A7653BC28A2C61D00924ABF /* PocketDataAdaptor.swift */,
 				8ABC5AED284532C900FEA552 /* PocketDiscoverCell.swift */,
 				E58368A9287D632F0087A449 /* StoryProvider.swift */,
 			);
@@ -6567,7 +6573,7 @@
 				E571EE752875694C0051D9AA /* PocketSponsoredStoriesProvider.swift */,
 				E571EE732875694C0051D9AA /* PocketSponsoredStoriesProviding.swift */,
 				C8B0F5F0283B7CCE007AE65D /* Model */,
-				C8B0F5EF283B7CCE007AE65D /* PocketFeed.swift */,
+				C8B0F5EF283B7CCE007AE65D /* PocketProvider.swift */,
 			);
 			path = Pocket;
 			sourceTree = "<group>";
@@ -10046,7 +10052,8 @@
 				E118B9292862674E00C84831 /* InactiveTabItemCellModel.swift in Sources */,
 				E650754E1E37F6AE006961AC /* GeometryExtensions.swift in Sources */,
 				8AE1E1D227B1ADC40024C45E /* TopBottomInterchangeable.swift in Sources */,
-				C8B0F5F4283B7CCE007AE65D /* PocketFeed.swift in Sources */,
+				8A7653BD28A2C61D00924ABF /* PocketDataAdaptor.swift in Sources */,
+				C8B0F5F4283B7CCE007AE65D /* PocketProvider.swift in Sources */,
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,
@@ -10205,6 +10212,7 @@
 				C869912E28917688007ACC5C /* WallpaperDataService.swift in Sources */,
 				E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */,
 				8A9AC46B276D11280047F5B0 /* PocketViewModel.swift in Sources */,
+				8A7653BF28A2C92600924ABF /* PocketStandardCellViewModel.swift in Sources */,
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
 				C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */,
 				5A430D792853DFDD00782BFF /* OrientationLockUtility.swift in Sources */,
