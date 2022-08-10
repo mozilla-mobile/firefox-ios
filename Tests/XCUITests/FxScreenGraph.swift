@@ -618,8 +618,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 app.webViews.textFields.firstMatch.tap()
                 app.webViews.textFields.firstMatch.typeText(userState.fxaUsername!)
             } else {
-                app.textFields["Email"].tap()
-                app.textFields["Email"].typeText(userState.fxaUsername!)
+                app.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField].tap()
+                app.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField].typeText(userState.fxaUsername!)
             }
         }
         screenState.gesture(forAction: Action.FxATypePassword) { userState in
@@ -627,7 +627,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATapOnContinueButton) { userState in
-            app.webViews.buttons["Sign up or sign in"].tap()
+            app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].tap()
         }
         screenState.gesture(forAction: Action.FxATapOnSignInButton) { userState in
             app.webViews.buttons.element(boundBy: 0).tap()

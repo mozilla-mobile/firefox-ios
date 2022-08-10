@@ -95,7 +95,7 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         // Open FxAccount from settings menu and check the Sign in to Firefox screen
-        let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts["Sign in to Sync"]
+        let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton]
         signInToFirefoxStaticText.tap()
         checkFirefoxSyncScreenShownViaSettings()
 
@@ -103,19 +103,19 @@ class NavigationTest: BaseTestCase {
         let closeButton = app.navigationBars["Client.FxAWebView"].buttons.element(boundBy: 0)
         closeButton.tap()
 
-        let closeButtonFxView = app.navigationBars["Turn on Sync"].buttons["Settings"]
+        let closeButtonFxView = app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar].buttons["Settings"]
         closeButtonFxView.tap()
     }
 
     // Because the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
     private func checkFirefoxSyncScreenShownViaSettings() {
-        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 20)
         app.buttons["EmailSignIn.button"].tap()
         waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 20)
 
         let email = app.webViews.textFields.element(boundBy: 0)
         // Verify the placeholdervalues here for the textFields
-        let mailPlaceholder = "Email"
+        let mailPlaceholder = "Enter your email"
         let defaultMailPlaceholder = email.placeholderValue!
         XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
     }
@@ -128,7 +128,7 @@ class NavigationTest: BaseTestCase {
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleSyncMode)
 
-        app.tables.buttons["Sign in to Sync"].tap()
+        app.tables.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].tap()
         waitForExistence(app.buttons["EmailSignIn.button"], timeout: 10)
         app.buttons["EmailSignIn.button"].tap()
         checkFirefoxSyncScreenShown()

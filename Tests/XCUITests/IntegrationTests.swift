@@ -56,7 +56,7 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         sleep(5)
-        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 20)
         userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
         userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
         navigator.performAction(Action.FxATypeEmail)
@@ -91,8 +91,8 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
-        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
-        waitForExistence(app.webViews.textFields["Email"], timeout: 20)
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 20)
+        waitForExistence(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField], timeout: 20)
 
         // Wait for element not present on FxA sign in page China FxA server
         waitForNoExistence(app.webViews.otherElements.staticTexts["Firefox Monitor"])

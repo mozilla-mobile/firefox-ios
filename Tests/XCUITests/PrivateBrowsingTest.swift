@@ -126,8 +126,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-
-        waitForNoExistence(app.cells.staticTexts[url2Label])
+        waitForNoExistence(app.cells.staticTexts["Internet for people, not profit — Mozilla. Currently selected tab."])
         checkOpenTabsAfterClosingPrivateMode()
     }
 
