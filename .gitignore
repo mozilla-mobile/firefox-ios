@@ -19,6 +19,7 @@ DerivedData
 *.xcuserstate
 *.xcscmblueprint
 
+# fastlane
 /fastlane/scripts/upload.sh
 /fastlane/README.md
 /firefox-ios-l10n
@@ -64,7 +65,6 @@ python-env/
 # IDEA
 .idea
 
-Carthage/
 # Required for Glean
 /Client/Generated
 /Sync/Generated
