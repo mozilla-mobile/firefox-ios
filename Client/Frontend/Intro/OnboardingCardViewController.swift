@@ -67,6 +67,20 @@ class OnboardingCardViewController: UIViewController {
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
     }
 
+    // Only available for Welcome card and default cases
+    private lazy var descriptionBoldLabel: UILabel = .build { label in
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
+            withTextStyle: .title3,
+            maxSize: 53)
+        label.isHidden = true
+        label.adjustsFontForContentSizeCategory = true
+        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionBoldLabel"
+    }
+
+
+
     private lazy var descriptionLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -146,6 +160,7 @@ class OnboardingCardViewController: UIViewController {
     func setupView() {
         contentStackView.addArrangedSubview(imageView)
         contentStackView.addArrangedSubview(titleLabel)
+        contentStackView.addArrangedSubview(descriptionBoldLabel)
         contentStackView.addArrangedSubview(descriptionLabel)
         contentContainerView.addSubviews(contentStackView)
 
@@ -205,6 +220,8 @@ class OnboardingCardViewController: UIViewController {
 
     private func updateLayout() {
         titleLabel.text = viewModel.title
+        descriptionBoldLabel.isHidden = viewModel.cardType != .welcome
+        descriptionBoldLabel.text = .Onboarding.IntroDescriptionPart1
         descriptionLabel.isHidden = viewModel.description?.isEmpty ?? true
         descriptionLabel.text = viewModel.description
         secondaryButton.isHidden = viewModel.secondaryAction?.isEmpty ?? true
@@ -219,6 +236,7 @@ class OnboardingCardViewController: UIViewController {
         view.backgroundColor = UIColor.theme.homePanel.panelBackground
         titleLabel.textColor = UIColor.theme.homeTabBanner.textColor
         descriptionLabel.textColor = UIColor.theme.homeTabBanner.textColor
+        descriptionBoldLabel.textColor = UIColor.theme.homeTabBanner.textColor
     }
 
     @objc func primaryAction() {

@@ -59,13 +59,39 @@ class UpdateViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.theme.browser.background
-        setupPageController()
         setupView()
     }
 
     // MARK: View setup
-    private func setupPageController() {
+    private func setupView() {
+        view.backgroundColor = UIColor.theme.browser.background
+        if viewModel.hasSingleCard {
+            setupSingleInfoCard()
+        } else {
+            setupMultipleCards()
+            setupMultipleCardsConstraints()
+        }
+    }
+
+    private func setupSingleInfoCard() {
+        let viewModel = viewModel.getCardViewModel(index: 0)
+        let cardViewController = OnboardingCardViewController(viewModel: viewModel!,
+                                                              delegate: self)
+
+        addChild(cardViewController)
+        view.addSubview(cardViewController.view)
+        cardViewController.didMove(toParent: self)
+        view.addSubview(closeButton)
+
+        NSLayoutConstraint.activate([
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
+            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
+        ])
+    }
+
+    private func setupMultipleCards() {
         // Create onboarding card views
         var cardViewController: OnboardingCardViewController
 
@@ -84,7 +110,7 @@ class UpdateViewController: UIViewController {
         }
     }
 
-    private func setupView() {
+    private func setupMultipleCardsConstraints() {
         addChild(pageController)
         view.addSubview(pageController.view)
         pageController.didMove(toParent: self)

@@ -32,6 +32,9 @@ class UpdateViewModel: InformationContainerModel {
     // The list below is for the version(s) we would like to show the coversheet for.
     let supportedAppVersion = ["22.0, 104.0"]
 
+    var hasSingleCard: Bool {
+        return enabledCards.count == 1
+    }
     var enabledCards: [IntroViewModel.InformationCards] {
         if hasSyncAccount {
             return [.welcome]
@@ -41,7 +44,8 @@ class UpdateViewModel: InformationContainerModel {
     }
 
     var isCleanInstall: Bool {
-        return profile.prefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first == nil
+        return profile.prefs.stringForKey(LatestAppVersionProfileKey)?
+            .components(separatedBy: ".").first == nil
     }
 
     var hasSyncAccount: Bool {
