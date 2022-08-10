@@ -120,7 +120,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         favicon.tintColor = UIColor.theme.tabTray.faviconTint
         favicon.contentMode = .scaleAspectFit
         favicon.backgroundColor = .clear
-        
+
         if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
             ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
                                                                    limit: ImageLoadingConstants.NoLimitImageSize) { image, error in

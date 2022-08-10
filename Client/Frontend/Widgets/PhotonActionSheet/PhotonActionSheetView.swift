@@ -313,7 +313,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
                     guard error == nil, let image = image, self.accessibilityLabel == action.currentTitle else {
                         return
                     }
-                    
+
                     self.statusIcon.image = image.createScaled(PhotonActionSheet.UX.IconSize)
                     self.statusIcon.layer.cornerRadius = PhotonActionSheet.UX.IconSize.width / 2
                 }
