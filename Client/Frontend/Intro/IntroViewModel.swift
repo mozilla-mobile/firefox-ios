@@ -20,7 +20,7 @@ struct IntroViewModel {
         }
     }
 
-    var enabledCards: [OnboardingCards]  = OnboardingCards.allCases
+    var enabledCards: [OnboardingCards] = OnboardingCards.allCases
 
     func getCardViewModel(index: Int) -> OnboardingCardProtocol {
         let currentCard = enabledCards[index]

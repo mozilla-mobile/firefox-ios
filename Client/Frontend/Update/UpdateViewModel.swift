@@ -6,13 +6,36 @@ import Foundation
 import Shared
 
 class UpdateViewModel {
+//    enum UpdateCards: Int, CaseIterable {
+//        case welcome
+//        case signSync
+//
+//        var telemetryValue: String {
+//            switch self {
+//            case .welcome: return "welcome"
+//            case .signSync: return "signToSync"
+//            }
+//        }
+//    }
+
+    var enabledCards: [IntroViewModel.OnboardingCards] {
+        return [.welcome]
+//        if hasSyncAccount {
+//            return [.welcome]
+//        }
+//
+//        return [.welcome, .signSync]
+    }
+
     //  Internal vars
     var updateCoverSheetModel: UpdateCoverSheetModel?
     var startBrowsing: (() -> Void)?
-    let userPrefs: Prefs
+    let profile: Profile
+    static let prefsKey: String = PrefsKeys.KeyLastVersionNumber
 
     // Constants
-    let updates: [Update] = [Update(updateImage: #imageLiteral(resourceName: "darkModeUpdate"), updateText: "\(String.CoverSheetV22DarkModeTitle)\n\n\(String.CoverSheetV22DarkModeDescription)")]
+    let updates: [Update] = [Update(updateImage: #imageLiteral(resourceName: "darkModeUpdate"),
+                                    updateText: "\(String.CoverSheetV22DarkModeTitle)\n\n\(String.CoverSheetV22DarkModeDescription)")]
 
     // We only show coversheet for specific app updates and not all.
     // The list below is for the version(s) we would like to show the coversheet for.
@@ -20,43 +43,72 @@ class UpdateViewModel {
     let supportedAppVersion = ["22.0, 104.0"]
 
     var isCleanInstall: Bool {
-        if userPrefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first == nil {
-            return true
-        }
-        return false
+        return profile.prefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first == nil
     }
 
-    init(userPrefs: Prefs) {
-        self.userPrefs = userPrefs
+    var hasSyncAccount: Bool {
+        return profile.hasSyncableAccount()
+    }
+
+    init(profile: Profile) {
+        self.profile = profile
         setupUpdateModel()
     }
 
+    func getCardViewModel(index: Int) -> OnboardingCardProtocol? {
+        let currentCard = enabledCards[index]
+
+        switch currentCard {
+        case .welcome:
+            return OnboardingCardViewModel(cardType: currentCard,
+                                           image: UIImage(named: ImageIdentifiers.onboardingWelcome),
+                                           title: .CardTitleWelcome,
+                                           description: .Onboarding.IntroDescriptionPart2,
+                                           primaryAction: .Onboarding.IntroAction,
+                                           secondaryAction: nil,
+                                           a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
+        case .signSync:
+            return OnboardingCardViewModel(cardType: currentCard,
+                                           image: UIImage(named: ImageIdentifiers.onboardingSync),
+                                           title: .Onboarding.SyncTitle,
+                                           description: .Onboarding.SyncDescription,
+                                           primaryAction: .Onboarding.SyncAction,
+                                           secondaryAction: .WhatsNew.RecentButtonTitle,
+                                           a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
+        default:
+            return nil
+        }
+    }
+
     private func setupUpdateModel() {
-        updateCoverSheetModel = UpdateCoverSheetModel(titleImage: #imageLiteral(resourceName: "splash"), titleText: .AppMenu.WhatsNewString, updates: updates)
+        updateCoverSheetModel = UpdateCoverSheetModel(titleImage: #imageLiteral(resourceName: "splash"),
+                                                      titleText: .AppMenu.WhatsNewString,
+                                                      updates: updates)
     }
 
     func shouldShowUpdateSheet(appVersion: String = AppInfo.appVersion) -> Bool {
+        // Only shown if is not clean install and is a supported version
         guard !isCleanInstall, !supportedAppVersion.contains(appVersion) else {
-            // We don't show it but save the currentVersion number
-            userPrefs.setString(appVersion, forKey: PrefsKeys.KeyLastVersionNumber)
+            saveAppVersion(for: appVersion)
             return false
         }
 
-        // Its not a new install so first we check if there is a version number already saved
-        if let savedVersion = userPrefs.stringForKey(PrefsKeys.KeyLastVersionNumber) {
-           // Version number saved in user prefs is not the same as current version, return true
-           if savedVersion != appVersion {
-               userPrefs.setString(appVersion, forKey: PrefsKeys.KeyLastVersionNumber)
-               return true
-             // Version number saved in user prefs matches the current version, return false
-           } else {
-               return false
-           }
-        } else {
-            // Only way the version is not saved if the user is coming from an app that didn't have this feature
-            // as its not a clean install. Hence we should still show the update screen but save the version
-            userPrefs.setString(appVersion, forKey: PrefsKeys.KeyLastVersionNumber)
+        // we check if there is a version number already saved
+        guard let savedVersion =  profile.prefs.stringForKey(UpdateViewModel.prefsKey) else {
+            // Save version and show page
+            saveAppVersion(for: appVersion)
             return true
         }
+
+        // Version number saved in user prefs is not the same as current version
+        if savedVersion != appVersion {
+            saveAppVersion(for: appVersion)
+        }
+
+        return savedVersion != appVersion
+    }
+
+    private func saveAppVersion(for appVersion: String) {
+        profile.prefs.setString(appVersion, forKey: UpdateViewModel.prefsKey)
     }
 }

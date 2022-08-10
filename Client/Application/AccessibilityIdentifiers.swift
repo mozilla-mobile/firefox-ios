@@ -129,6 +129,13 @@ public struct AccessibilityIdentifiers {
         static let pageControl = "PageControl"
     }
 
+    struct Update {
+        static let welcomeCard = "Update.WelcomeCard"
+        static let signSyncCard = "Update.SignSyncCard"
+        static let closeButton = "Update.CloseButton"
+        static let pageControl = "Update.PageControl"
+    }
+
     struct Settings {
         static let tableViewController = "AppSettingsTableViewController.tableView"
 

@@ -6,8 +6,7 @@ import Foundation
 import UIKit
 import Shared
 
-class IntroViewController: UIViewController, OnViewDismissable {
-    var onViewDismissed: (() -> Void)?
+class IntroViewController: UIViewController {
     private var viewModel: IntroViewModel
     private let profile: Profile
     private var onboardingCards = [OnboardingCardViewController]()
@@ -64,12 +63,6 @@ class IntroViewController: UIViewController, OnViewDismissable {
         view.backgroundColor = UIColor.theme.browser.background
         setupPageController()
         setupLayout()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        onViewDismissed?()
-        onViewDismissed = nil
     }
 
     // MARK: View setup

@@ -522,7 +522,7 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         presentIntroViewController()
-        presentUpdateViewController()
+        presentUpdateViewController(true)
         screenshotHelper.viewIsVisible = true
 
         super.viewDidAppear(animated)
@@ -2181,7 +2181,7 @@ extension BrowserViewController {
     }
 
     func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) {
-        let viewModel = UpdateViewModel(userPrefs: profile.prefs)
+        let viewModel = UpdateViewModel(profile: profile)
         if force || viewModel.shouldShowUpdateSheet() {
             let updateViewController = UpdateViewController(viewModel: viewModel)
             updateViewController.viewModel.startBrowsing = {
@@ -2211,7 +2211,7 @@ extension BrowserViewController {
     private func showProperIntroVC() {
         let introViewModel = IntroViewModel()
         let introViewController = IntroViewController(viewModel: introViewModel, profile: profile)
-        introViewController.didFinishClosure = { controller, fxaLoginFlow in
+        introViewController.didFinishClosure = { controller, _ in
             self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
             controller.dismiss(animated: true)
         }
