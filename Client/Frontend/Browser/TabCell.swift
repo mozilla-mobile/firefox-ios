@@ -181,9 +181,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
             ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
                                                                    limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
-                guard error == nil, let image = image else {
-                    return
-                }
+                guard error == nil, let image = image else { return }
                 self.favicon.image = image
             }
         }
