@@ -338,9 +338,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         if let favIconURL = viewModel.favIcon {
             ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: favIconURL,
                                                                    limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
-                guard error == nil, let image = image else {
-                    return
-                }
+                guard error == nil, let image = image else { return }
 
                 self.heroImage.image = image
             }
