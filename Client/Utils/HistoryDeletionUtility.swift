@@ -95,10 +95,9 @@ class HistoryDeletionUtility {
         guard let date = dateFor(dateOption) else { return nil }
         let dateInMilliseconds = date.toMillisecondsSince1970()
 
-        // ROUX! this needs to be updated to the new A-S thing
         return await withCheckedContinuation { continuation in
             profile.places
-                .deleteHistoryMetadataOlderThan(olderThan: dateInMilliseconds)
+                .deleteHistoryMetadata(since: dateInMilliseconds)
                 .uponQueue(.global(qos: .userInteractive)) { result in
                     continuation.resume(returning: result.isSuccess)
                 }
@@ -114,6 +113,8 @@ class HistoryDeletionUtility {
 
             profile.recentlyClosedTabs.removeTabsFromDate(date)
         }
+
+        NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
     }
 
     // MARK: - Helper functions
