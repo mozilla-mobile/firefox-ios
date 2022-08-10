@@ -33,7 +33,7 @@ class MessageCardDataAdaptorImplementation: MessageCardDataAdaptor, GleanPlumbMe
     /// An expired message will not trigger a reload of the section
     /// - Parameter surface: Message surface id
     private func updateMessage(for surface: MessageSurfaceId = .newTabCard) {
-        guard let validMessage = messagingManager.getNextMessage(for: .newTabCard) else { return }
+        guard let validMessage = messagingManager.getNextMessage(for: surface) else { return }
 
         if !validMessage.isExpired {
             message = validMessage
