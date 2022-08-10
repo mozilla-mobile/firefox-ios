@@ -143,9 +143,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
         ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: viewModel.imageURL,
                                                                limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
-            guard error == nil, let image = image else {
-                return
-            }
+            guard error == nil, let image = image else { return }
             self.heroImageView.image = image
         }
 
