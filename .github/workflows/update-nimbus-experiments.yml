@@ -7,7 +7,7 @@ on:
 jobs:
   update-nimbus-experiments:
     name: "Update Nimbus Experiments"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: "Checkout Main Branch"
         uses: actions/checkout@v2
@@ -16,7 +16,7 @@ jobs:
           ref: main
       - name: "Update Experiments JSON"
         id: update-experiments-json
-        uses: jeddai/update-initial-experiments@v1
+        uses: mozilla-mobile/update-initial-experiments@v1
         with:
           repo-path: firefox-ios
           output-path: Client/Experiments/initial_experiments.json
