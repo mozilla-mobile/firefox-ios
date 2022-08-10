@@ -522,7 +522,7 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         presentIntroViewController()
-        presentUpdateViewController(true)
+        presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
 
         super.viewDidAppear(animated)

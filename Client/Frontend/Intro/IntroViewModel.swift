@@ -5,24 +5,31 @@
 import Foundation
 import Shared
 
-struct IntroViewModel {
-    enum OnboardingCards: Int, CaseIterable {
+struct IntroViewModel: InformationContainerModel {
+    enum InformationCards: Int, CaseIterable {
         case welcome
         case wallpapers
         case signSync
+
+        case updateWelcome
+        case updateSignSync
 
         var telemetryValue: String {
             switch self {
             case .welcome: return "welcome"
             case .wallpapers: return "wallpaper"
             case .signSync: return "signToSync"
+            case .updateWelcome: return "update.welcome"
+            case .updateSignSync: return "update.signToSync"
             }
         }
     }
 
-    var enabledCards: [OnboardingCards] = OnboardingCards.allCases
+    var enabledCards: [InformationCards] {
+        return [.welcome, .wallpapers, .signSync]
+    }
 
-    func getCardViewModel(index: Int) -> OnboardingCardProtocol {
+    func getCardViewModel(index: Int) -> OnboardingCardProtocol? {
         let currentCard = enabledCards[index]
 
         switch currentCard {
@@ -50,19 +57,9 @@ struct IntroViewModel {
                                            primaryAction: .Onboarding.SyncAction,
                                            secondaryAction: .WhatsNew.RecentButtonTitle,
                                            a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
+        default:
+            return nil
         }
-    }
-
-    func getNextIndex(currentIndex: Int, goForward: Bool) -> Int? {
-        if goForward && currentIndex + 1 < enabledCards.count {
-            return currentIndex + 1
-        }
-
-        if !goForward && currentIndex > 0 {
-            return currentIndex - 1
-        }
-
-        return nil
     }
 
     func sendCloseButtonTelemetry(index: Int) {

@@ -72,10 +72,10 @@ class IntroViewController: UIViewController {
         for (index, cardType) in viewModel.enabledCards.enumerated() {
             let viewModel = viewModel.getCardViewModel(index: index)
             if cardType == .wallpapers {
-                cardViewController = WallpaperCardViewController(viewModel: viewModel,
+                cardViewController = WallpaperCardViewController(viewModel: viewModel!,
                                                                  delegate: self)
             } else {
-                cardViewController = OnboardingCardViewController(viewModel: viewModel,
+                cardViewController = OnboardingCardViewController(viewModel: viewModel!,
                                                                   delegate: self)
             }
             onboardingCards.append(cardViewController)
@@ -120,7 +120,7 @@ class IntroViewController: UIViewController {
     }
 
     // Used to programmatically set the pageViewController to show next card
-    private func moveToNextPage(cardType: IntroViewModel.OnboardingCards) {
+    private func moveToNextPage(cardType: IntroViewModel.InformationCards) {
         if let nextViewController = getNextOnboardingCard(index: cardType.rawValue, goForward: true) {
             pageControl.currentPage = cardType.rawValue + 1
             pageController.setViewControllers([nextViewController], direction: .forward, animated: false)
@@ -165,7 +165,7 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 }
 
 extension IntroViewController: OnboardingCardDelegate {
-    func showNextPage(_ cardType: IntroViewModel.OnboardingCards) {
+    func showNextPage(_ cardType: IntroViewModel.InformationCards) {
         guard cardType != viewModel.enabledCards.last else {
             self.didFinishClosure?(self, nil)
             return
@@ -174,18 +174,20 @@ extension IntroViewController: OnboardingCardDelegate {
         moveToNextPage(cardType: cardType)
     }
 
-    func primaryAction(_ cardType: IntroViewModel.OnboardingCards) {
+    func primaryAction(_ cardType: IntroViewModel.InformationCards) {
         switch cardType {
         case .welcome, .wallpapers:
             moveToNextPage(cardType: cardType)
         case .signSync:
             presentSignToSync()
+        default:
+            break
         }
     }
 
     // Extra step to make sure pageControl.currentPage is the right index card
     // because UIPageViewControllerDataSource call fails
-    func pageChanged(_ cardType: IntroViewModel.OnboardingCards) {
+    func pageChanged(_ cardType: IntroViewModel.InformationCards) {
         if let cardIndex = viewModel.enabledCards.firstIndex(of: cardType),
            cardIndex != pageControl.currentPage {
             pageControl.currentPage = cardIndex

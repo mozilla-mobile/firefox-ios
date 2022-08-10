@@ -169,7 +169,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_onboardingCardViewWithExtras_GleanIsCalled() {
         let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
-        let extras = [cardTypeKey: "\(IntroViewModel.OnboardingCards.welcome.telemetryValue)"]
+        let extras = [cardTypeKey: "\(IntroViewModel.InformationCards.welcome.telemetryValue)"]
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .onboardingCardView, value: nil, extras: extras)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
@@ -177,7 +177,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_onboardingPrimaryButtonWithExtras_GleanIsCalled() {
         let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
-        let extras = [cardTypeKey: "\(IntroViewModel.OnboardingCards.welcome.telemetryValue)"]
+        let extras = [cardTypeKey: "\(IntroViewModel.InformationCards.welcome.telemetryValue)"]
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .onboardingPrimaryButton, value: nil, extras: extras)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
@@ -185,7 +185,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_onboardingSecondaryButtonWithExtras_GleanIsCalled() {
         let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
-        let extras = [cardTypeKey: "\(IntroViewModel.OnboardingCards.welcome.telemetryValue)"]
+        let extras = [cardTypeKey: "\(IntroViewModel.InformationCards.welcome.telemetryValue)"]
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .onboardingSecondaryButton, value: nil, extras: extras)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
@@ -207,7 +207,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_onboardingCloseWithExtras_GleanIsCalled() {
         let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
-        let extras = [cardTypeKey: "\(IntroViewModel.OnboardingCards.welcome.telemetryValue)"]
+        let extras = [cardTypeKey: "\(IntroViewModel.InformationCards.welcome.telemetryValue)"]
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .onboardingClose, value: nil, extras: extras)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.closeTap)

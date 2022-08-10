@@ -5,7 +5,7 @@
 import Foundation
 
 protocol OnboardingCardProtocol {
-    var cardType: IntroViewModel.OnboardingCards { get set }
+    var cardType: IntroViewModel.InformationCards { get set }
     var image: UIImage? { get set }
     var title: String { get set }
     var description: String? { get set }
@@ -18,16 +18,15 @@ protocol OnboardingCardProtocol {
 }
 
 struct OnboardingCardViewModel: OnboardingCardProtocol {
-    var cardType: IntroViewModel.OnboardingCards
+    var cardType: IntroViewModel.InformationCards
     var image: UIImage?
     var title: String
     var description: String?
     var primaryAction: String
     var secondaryAction: String?
     var a11yIdRoot: String
-    var welcomeCardBoldText: String = .Onboarding.IntroDescriptionPart1
 
-    init(cardType: IntroViewModel.OnboardingCards,
+    init(cardType: IntroViewModel.InformationCards,
          image: UIImage?,
          title: String,
          description: String?,

@@ -5,42 +5,40 @@
 import Foundation
 import Shared
 
-class UpdateViewModel {
-//    enum UpdateCards: Int, CaseIterable {
-//        case welcome
-//        case signSync
-//
-//        var telemetryValue: String {
-//            switch self {
-//            case .welcome: return "welcome"
-//            case .signSync: return "signToSync"
-//            }
-//        }
-//    }
+protocol InformationContainerModel {
+    var enabledCards: [IntroViewModel.InformationCards] { get }
+}
 
-    var enabledCards: [IntroViewModel.OnboardingCards] {
-        return [.welcome]
-//        if hasSyncAccount {
-//            return [.welcome]
-//        }
-//
-//        return [.welcome, .signSync]
+extension InformationContainerModel {
+    func getNextIndex(currentIndex: Int, goForward: Bool) -> Int? {
+        if goForward && currentIndex + 1 < enabledCards.count {
+            return currentIndex + 1
+        }
+
+        if !goForward && currentIndex > 0 {
+            return currentIndex - 1
+        }
+
+        return nil
     }
+}
 
-    //  Internal vars
-    var updateCoverSheetModel: UpdateCoverSheetModel?
+class UpdateViewModel: InformationContainerModel {
+
     var startBrowsing: (() -> Void)?
     let profile: Profile
     static let prefsKey: String = PrefsKeys.KeyLastVersionNumber
 
-    // Constants
-    let updates: [Update] = [Update(updateImage: #imageLiteral(resourceName: "darkModeUpdate"),
-                                    updateText: "\(String.CoverSheetV22DarkModeTitle)\n\n\(String.CoverSheetV22DarkModeDescription)")]
-
-    // We only show coversheet for specific app updates and not all.
     // The list below is for the version(s) we would like to show the coversheet for.
-    // TODO: Yoana update to v106 after
     let supportedAppVersion = ["22.0, 104.0"]
+
+    var enabledCards: [IntroViewModel.InformationCards] {
+        if hasSyncAccount {
+            return [.welcome]
+        }
+
+        return [.welcome, .signSync]
+    }
 
     var isCleanInstall: Bool {
         return profile.prefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first == nil
@@ -52,7 +50,6 @@ class UpdateViewModel {
 
     init(profile: Profile) {
         self.profile = profile
-        setupUpdateModel()
     }
 
     func getCardViewModel(index: Int) -> OnboardingCardProtocol? {
@@ -78,12 +75,6 @@ class UpdateViewModel {
         default:
             return nil
         }
-    }
-
-    private func setupUpdateModel() {
-        updateCoverSheetModel = UpdateCoverSheetModel(titleImage: #imageLiteral(resourceName: "splash"),
-                                                      titleText: .AppMenu.WhatsNewString,
-                                                      updates: updates)
     }
 
     func shouldShowUpdateSheet(appVersion: String = AppInfo.appVersion) -> Bool {
