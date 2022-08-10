@@ -11,7 +11,7 @@ sync:
     description: >
       Unique identifier for this sync, used to correlate together
       individual pings for data types that were synchronized together
-      (history, bookmarks, logins).
+      (history, bookmarks, logins, and tabs).
       If a data type is synchronized by itself via the legacy 'sync' API
       (as opposed to the Sync Manager),
       then this field will not be set on the corresponding ping.
@@ -20,12 +20,16 @@ sync:
       - temp-history-sync
       - temp-bookmarks-sync
       - temp-logins-sync
+      - temp-rust-tabs-sync
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3237
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11285#issuecomment-1184886514
     data_sensitivity:
       - technical
+      - highly_sensitive
     notification_emails:
       - sync-core@mozilla.com
     expires: 2023-01-01
