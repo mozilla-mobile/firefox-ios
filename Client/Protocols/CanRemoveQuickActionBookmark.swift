@@ -16,7 +16,7 @@ extension CanRemoveQuickActionBookmark {
         // Get most recent bookmark
         profile.places.getRecentBookmarks(limit: 1).uponQueue(.main) { result in
             guard let bookmarkItems = result.successValue else { return }
-            if bookmarkItems.count == 0 {
+            if bookmarkItems.isEmpty {
                 // Remove the openLastBookmark shortcut
                 QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(.openLastBookmark, fromApplication: .shared)
             } else {

@@ -48,7 +48,18 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView)
 }
 
-class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
+protocol URLBarViewProtocol {
+    var inOverlayMode: Bool { get }
+    func leaveOverlayMode(didCancel cancel: Bool)
+}
+
+extension URLBarViewProtocol {
+    func leaveOverlayMode(didCancel cancel: Bool = false) {
+        self.leaveOverlayMode(didCancel: cancel)
+    }
+}
+
+class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchangeable {
     // Additional UIAppearance-configurable properties
     @objc dynamic var locationBorderColor: UIColor = URLBarViewUX.TextFieldBorderColor {
         didSet {
@@ -538,7 +549,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         }
     }
 
-    func leaveOverlayMode(didCancel cancel: Bool = false) {
+    func leaveOverlayMode(didCancel cancel: Bool) {
         locationTextField?.resignFirstResponder()
         animateToOverlayState(overlayMode: false, didCancel: cancel)
         delegate?.urlBarDidLeaveOverlayMode(self)

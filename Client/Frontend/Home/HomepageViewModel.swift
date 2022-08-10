@@ -5,7 +5,11 @@
 import MozillaAppServices
 
 protocol HomepageViewModelDelegate: AnyObject {
-    func reloadSection(section: HomepageViewModelProtocol)
+    func reloadView()
+}
+
+protocol HomepageDataModelDelegate: AnyObject {
+    func reloadView()
 }
 
 class HomepageViewModel: FeatureFlaggable {
@@ -33,7 +37,7 @@ class HomepageViewModel: FeatureFlaggable {
 
     // MARK: - Properties
 
-    // Privacy of home page is controlled throught notifications since tab manager selected tab
+    // Privacy of home page is controlled through notifications since tab manager selected tab
     // isn't always the proper privacy mode that should be reflected on the home page
     var isPrivate: Bool {
         didSet {
@@ -45,49 +49,75 @@ class HomepageViewModel: FeatureFlaggable {
 
     let nimbus: FxNimbus
     let profile: Profile
-    var isZeroSearch: Bool
+    var isZeroSearch: Bool {
+        didSet {
+            topSiteViewModel.isZeroSearch = isZeroSearch
+            jumpBackInViewModel.isZeroSearch = isZeroSearch
+            recentlySavedViewModel.isZeroSearch = isZeroSearch
+            pocketViewModel.isZeroSearch = isZeroSearch
+        }
+    }
+
+    /// Record view appeared is sent multiple times, this avoids recording telemetry multiple times for one appearance
+    private var viewAppeared: Bool = false
+
     var shownSections = [HomepageSectionType]()
     weak var delegate: HomepageViewModelDelegate?
 
     // Child View models
     private var childViewModels: [HomepageViewModelProtocol]
     var headerViewModel: HomeLogoHeaderViewModel
+    var messageCardViewModel: HomepageMessageCardViewModel
     var topSiteViewModel: TopSitesViewModel
     var recentlySavedViewModel: RecentlySavedCellViewModel
     var jumpBackInViewModel: JumpBackInViewModel
-    var historyHighlightsViewModel: HistoryHightlightsViewModel
+    var historyHighlightsViewModel: HistoryHighlightsViewModel
     var pocketViewModel: PocketViewModel
     var customizeButtonViewModel: CustomizeHomepageSectionViewModel
 
+    var shouldDisplayHomeTabBanner: Bool {
+        return messageCardViewModel.shouldDisplayMessageCard
+    }
+
     // MARK: - Initializers
     init(profile: Profile,
-         isZeroSearch: Bool = false,
          isPrivate: Bool,
-         nimbus: FxNimbus = FxNimbus.shared) {
+         tabManager: TabManagerProtocol,
+         urlBar: URLBarViewProtocol,
+         nimbus: FxNimbus = FxNimbus.shared,
+         isZeroSearch: Bool = false) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
 
         self.headerViewModel = HomeLogoHeaderViewModel(profile: profile)
-        self.topSiteViewModel = TopSitesViewModel(
-            profile: profile,
-            isZeroSearch: isZeroSearch)
+        self.messageCardViewModel = HomepageMessageCardViewModel()
+        self.topSiteViewModel = TopSitesViewModel(profile: profile)
+
+        let siteImageHelper = SiteImageHelper(profile: profile)
+        let adaptor = JumpBackInDataAdaptorImplementation(profile: profile,
+                                                          tabManager: tabManager,
+                                                          siteImageHelper: siteImageHelper)
         self.jumpBackInViewModel = JumpBackInViewModel(
-            isZeroSearch: isZeroSearch,
             profile: profile,
-            isPrivate: isPrivate)
+            isPrivate: isPrivate,
+            tabManager: tabManager,
+            adaptor: adaptor)
+        adaptor.delegate = jumpBackInViewModel
+
         self.recentlySavedViewModel = RecentlySavedCellViewModel(
-            isZeroSearch: isZeroSearch,
             profile: profile)
-        self.historyHighlightsViewModel = HistoryHightlightsViewModel(
+        self.historyHighlightsViewModel = HistoryHighlightsViewModel(
             with: profile,
-            isPrivate: isPrivate)
+            isPrivate: isPrivate,
+            tabManager: tabManager,
+            urlBar: urlBar)
         self.pocketViewModel = PocketViewModel(
             pocketAPI: Pocket(),
-            pocketSponsoredAPI: MockPocketSponsoredStoriesProvider(),
-            isZeroSearch: isZeroSearch
+            pocketSponsoredAPI: MockPocketSponsoredStoriesProvider()
         )
         self.customizeButtonViewModel = CustomizeHomepageSectionViewModel()
         self.childViewModels = [headerViewModel,
+                                messageCardViewModel,
                                 topSiteViewModel,
                                 jumpBackInViewModel,
                                 recentlySavedViewModel,
@@ -99,6 +129,8 @@ class HomepageViewModel: FeatureFlaggable {
         self.nimbus = nimbus
         topSiteViewModel.delegate = self
         historyHighlightsViewModel.delegate = self
+        recentlySavedViewModel.delegate = self
+        jumpBackInViewModel.delegate = self
 
         updateEnabledSections()
     }
@@ -106,12 +138,28 @@ class HomepageViewModel: FeatureFlaggable {
     // MARK: - Interfaces
 
     func recordViewAppeared() {
+        guard !viewAppeared else { return }
+
+        viewAppeared = true
         nimbus.features.homescreenFeature.recordExposure()
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .firefoxHomepage,
                                      value: .fxHomepageOrigin,
                                      extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+
+        // Firefox home page tracking i.e. being shown from awesomebar vs bottom right hamburger menu
+        let trackingValue: TelemetryWrapper.EventValue = isZeroSearch
+        ? .openHomeFromAwesomebar : .openHomeFromPhotonMenuButton
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .open,
+                                     object: .firefoxHomepage,
+                                     value: trackingValue,
+                                     extras: nil)
+    }
+
+    func recordViewDisappeared() {
+        viewAppeared = false
     }
 
     // MARK: - Fetch section data
@@ -125,20 +173,11 @@ class HomepageViewModel: FeatureFlaggable {
 
     private func updateData(section: HomepageViewModelProtocol) {
         section.updateData {
-            self.delegate?.reloadSection(section: section)
+            self.reloadView()
         }
     }
 
     // MARK: - Manage sections and order
-
-    /// Add the section if it doesn't
-    func reloadSection(_ section: HomepageViewModelProtocol, with collectionView: UICollectionView) {
-        if !shownSections.contains(section.sectionType) {
-            addShownSection(section: section.sectionType)
-        }
-
-        collectionView.reloadData()
-    }
 
     func addShownSection(section: HomepageSectionType) {
         let positionToInsert = getPositionToInsert(section: section)
@@ -174,17 +213,23 @@ class HomepageViewModel: FeatureFlaggable {
         guard let actualSectionNumber = shownSections[safe: shownSection]?.rawValue else { return nil }
         return childViewModels[safe: actualSectionNumber]
     }
-}
 
-// MARK: - FxHomeTopSitesViewModelDelegate
-extension HomepageViewModel: TopSitesViewModelDelegate {
-    func reloadTopSites() {
-        updateData(section: topSiteViewModel)
+    func indexOfShownSection(_ type: HomepageSectionType) -> Int? {
+        return shownSections.firstIndex(of: type)
     }
 }
 
+// MARK: - HomeHistoryHighlightsDelegate
 extension HomepageViewModel: HomeHistoryHighlightsDelegate {
     func reloadHighlights() {
         updateData(section: historyHighlightsViewModel)
+    }
+}
+
+// MARK: - HomepageDataModelDelegate
+extension HomepageViewModel: HomepageDataModelDelegate {
+    func reloadView() {
+        updateEnabledSections()
+        delegate?.reloadView()
     }
 }

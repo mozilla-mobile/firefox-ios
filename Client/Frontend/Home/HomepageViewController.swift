@@ -8,7 +8,7 @@ import Storage
 import SyncTelemetry
 import MozillaAppServices
 
-class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageManagable {
+class HomepageViewController: UIViewController, HomePanel {
 
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
@@ -22,21 +22,18 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         }
     }
 
-    var notificationCenter: NotificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    private var isZeroSearch: Bool
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
-    private var tabManager: TabManager
+    private var tabManager: TabManagerProtocol
+    private var urlBar: URLBarViewProtocol
     private var wallpaperManager: LegacyWallpaperManager
     private lazy var wallpaperView: LegacyWallpaperBackgroundView = .build { _ in }
     private var contextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
 
-    private var homeTabBanner: HomepageTabBanner?
-
-    // Content stack views contains the home tab banner and collection view.
-    // Home tab banner cannot be added to collection view since it's pinned at the top of the view.
+    // Content stack views contains collection view.
     lazy var contentStackView: UIStackView = .build { stackView in
         stackView.backgroundColor = .clear
         stackView.axis = .vertical
@@ -48,17 +45,18 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
 
     // MARK: - Initializers
     init(profile: Profile,
-         tabManager: TabManager,
-         isZeroSearch: Bool = false,
+         tabManager: TabManagerProtocol,
+         urlBar: URLBarViewProtocol,
          wallpaperManager: LegacyWallpaperManager = LegacyWallpaperManager()
     ) {
-        self.isZeroSearch = isZeroSearch
+        self.urlBar = urlBar
         self.tabManager = tabManager
         self.wallpaperManager = wallpaperManager
         let isPrivate = tabManager.selectedTab?.isPrivate ?? true
         self.viewModel = HomepageViewModel(profile: profile,
-                                           isZeroSearch: isZeroSearch,
-                                           isPrivate: isPrivate)
+                                           isPrivate: isPrivate,
+                                           tabManager: tabManager,
+                                           urlBar: urlBar)
 
         let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
                                                           with: viewModel.profile)
@@ -72,13 +70,8 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
             return self.getPopoverSourceRect(sourceView: popoverView)
         }
 
-        viewModel.delegate = self
-
         setupNotifications(forObserver: self,
                            observing: [.HomePanelPrefsChanged,
-                                       .TopTabsTabClosed,
-                                       .TabsTrayDidClose,
-                                       .TabsTrayDidSelectHomeTab,
                                        .TabsPrivacyModeChanged,
                                        .DynamicFontChanged])
     }
@@ -100,6 +93,9 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         configureContentStackView()
         configureCollectionView()
 
+        // Delay setting up the view model delegate to ensure the views have been configured first
+        viewModel.delegate = self
+
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
@@ -107,20 +103,6 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         applyTheme()
         setupSectionsAction()
         reloadAll()
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        if shouldDisplayHomeTabBanner {
-            showHomeTabBanner()
-        }
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        viewModel.recordViewAppeared()
-
-        super.viewDidAppear(animated)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -136,9 +118,6 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         if UIDevice.current.userInterfaceIdiom == .pad {
             reloadOnRotation()
         }
-
-        // Adjust home tab banner height on rotation
-        homeTabBanner?.adjustMaxHeight(size.height * 0.6)
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -229,6 +208,16 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
 
     // MARK: - Helpers
 
+    /// Called to update the appearance source of the home page, and send tracking telemetry
+    func recordHomepageAppeared(isZeroSearch: Bool) {
+        viewModel.isZeroSearch = isZeroSearch
+        viewModel.recordViewAppeared()
+    }
+
+    func recordHomepageDisappeared() {
+        viewModel.recordViewDisappeared()
+    }
+
     /// On iPhone, we call reloadOnRotation when the trait collection has changed, to ensure calculation
     /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
     /// since it's `.regular` on both. We reloadOnRotation from viewWillTransition in that case.
@@ -237,8 +226,9 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
             presentedViewController?.dismiss(animated: false, completion: nil)
         }
 
-        // Adjust layout for rotation, cells needs to be relayout
+        // Force the entire collectionview to re-layout
         collectionView.collectionViewLayout.invalidateLayout()
+        reloadView()
     }
 
     private func adjustPrivacySensitiveSections(notification: Notification) {
@@ -252,7 +242,6 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     }
 
     func applyTheme() {
-        homeTabBanner?.applyTheme()
         view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
     }
 
@@ -265,7 +254,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     }
 
     @objc private func dismissKeyboard() {
-        currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode() : nil
+        currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? urlBar.leaveOverlayMode() : nil
     }
 
     func updatePocketCellsWithVisibleRatio(cells: [UICollectionViewCell], relativeRect: CGRect) {
@@ -301,7 +290,7 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
     // MARK: - Contextual hint
     private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
         guard contextualHintViewController.shouldPresentHint(),
-              !shouldDisplayHomeTabBanner
+              !viewModel.shouldDisplayHomeTabBanner
         else { return }
 
         contextualHintViewController.configure(
@@ -322,44 +311,8 @@ class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageMana
         }
 
         present(contextualHintViewController, animated: true, completion: nil)
-    }
 
-    // MARK: - Home Tab Banner
-
-    private var shouldDisplayHomeTabBanner: Bool {
-        let message = messagingManager.getNextMessage(for: .newTabCard)
-        if #available(iOS 14.0, *), message != nil || !UserDefaults.standard.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage) {
-            return true
-        } else {
-            return false
-        }
-    }
-
-    private func showHomeTabBanner() {
-        createHomeTabBannerCard()
-
-        guard let homeTabBanner = homeTabBanner,
-              !contentStackView.subviews.contains(homeTabBanner) else { return }
-
-        contentStackView.addArrangedViewToTop(homeTabBanner)
-
-        homeTabBanner.adjustMaxHeight(view.frame.height * 0.7)
-        homeTabBanner.dismissClosure = { [weak self] in
-            self?.dismissHomeTabBanner()
-        }
-    }
-
-    private func createHomeTabBannerCard() {
-        guard homeTabBanner == nil else { return }
-
-        homeTabBanner = .build { card in
-            card.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        }
-    }
-
-    public func dismissHomeTabBanner() {
-        homeTabBanner?.removeFromSuperview()
-        homeTabBanner = nil
+        UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
     }
 }
 
@@ -432,6 +385,12 @@ private extension HomepageViewController {
             self?.changeHomepageWallpaper()
         }
 
+        // Message card
+        viewModel.messageCardViewModel.dismissClosure = { [weak self] in
+            self?.viewModel.updateEnabledSections()
+            self?.reloadAll()
+        }
+
         // Top sites
         viewModel.topSiteViewModel.tilePressedHandler = { [weak self] site, isGoogle in
             guard let url = site.url.asURL else { return }
@@ -454,6 +413,34 @@ private extension HomepageViewController {
 
         viewModel.jumpBackInViewModel.headerButtonAction = { [weak self] button in
             self?.openTabTray(button)
+        }
+
+        viewModel.jumpBackInViewModel.syncedTabsShowAllAction = { [weak self] button in
+            self?.homePanelDelegate?.homePanelDidRequestToOpenTabTray(focusedSegment: .syncedTabs)
+
+            var extras: [String: String]?
+            if let isZeroSearch = self?.viewModel.isZeroSearch {
+                extras = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+            }
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .firefoxHomepage,
+                                         value: .jumpBackInSectionSyncedTabShowAll,
+                                         extras: extras)
+        }
+
+        viewModel.jumpBackInViewModel.openSyncedTabAction = { [weak self] tabURL in
+            self?.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(tabURL, isPrivate: false, selectNewTab: true)
+
+            var extras: [String: String]?
+            if let isZeroSearch = self?.viewModel.isZeroSearch {
+                extras = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+            }
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .firefoxHomepage,
+                                         value: .jumpBackInSectionSyncedTabOpened,
+                                         extras: extras)
         }
 
         // History highlights
@@ -538,7 +525,7 @@ private extension HomepageViewController {
                                          method: .tap,
                                          object: .firefoxHomepage,
                                          value: .jumpBackInSectionShowAll,
-                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
         }
     }
 
@@ -550,7 +537,7 @@ private extension HomepageViewController {
                                          method: .tap,
                                          object: .firefoxHomepage,
                                          value: .recentlySavedSectionShowAll,
-                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
         }
     }
 
@@ -634,12 +621,12 @@ extension HomepageViewController: UIPopoverPresentationControllerDelegate {
 
 // MARK: FirefoxHomeViewModelDelegate
 extension HomepageViewController: HomepageViewModelDelegate {
-
-    func reloadSection(section: HomepageViewModelProtocol) {
+    func reloadView() {
         ensureMainThread { [weak self] in
-            guard let self = self else { return }
-            self.viewModel.updateEnabledSections()
-            self.viewModel.reloadSection(section, with: self.collectionView)
+            guard let self = self,
+                  self.view.alpha != 0
+            else { return }
+            self.collectionView.reloadData()
         }
     }
 }
@@ -656,16 +643,8 @@ extension HomepageViewController: Notifiable {
             case .TabsPrivacyModeChanged:
                 self.adjustPrivacySensitiveSections(notification: notification)
 
-            case .TabsTrayDidClose,
-                    .TopTabsTabClosed,
-                    .TabsTrayDidSelectHomeTab,
-                    .HomePanelPrefsChanged:
+            case .HomePanelPrefsChanged:
                 self.reloadAll()
-
-            case .DynamicFontChanged:
-                self.homeTabBanner?.adjustMaxHeight(self.view.frame.height * 0.7)
-                self.homeTabBanner?.setNeedsLayout()
-                self.homeTabBanner?.layoutIfNeeded()
 
             default: break
             }

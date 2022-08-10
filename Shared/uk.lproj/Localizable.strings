@@ -35,7 +35,7 @@
 "ActivityStream.ContextMenu.UnpinTopsite" = "Відкріпити";
 
 /* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "Закладено";
+"ActivityStream.Highlights.Bookmark" = "Додано до закладок";
 
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "Відвідано";
@@ -156,10 +156,10 @@
 "Bookmarks.Actions.Add" = "Додати";
 
 /* A label indicating the action of bookmarking all currently open non private tabs. */
-"Bookmarks.Actions.BookmarkAllTabs" = "Закласти всі вкладки";
+"Bookmarks.Actions.BookmarkAllTabs" = "Додати до закладок усі вкладки";
 
 /* A label indicating the action of bookmarking the current tab. */
-"Bookmarks.Actions.BookmarkCurrentTab" = "Закласти поточну вкладку";
+"Bookmarks.Actions.BookmarkCurrentTab" = "Додати цю вкладку до закладок";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "Змінити";
@@ -294,7 +294,7 @@
 "ContextualHint.SearchBarPlacement.ExistingUsers" = "Тепер ви можете перемістити панель інструментів донизу для зручнішого введення даних";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
-"ContextualHint.SearchBarPlacement.NewUsers" = "Щоб зручніше вводити дані, тепер панель інструментів знаходиться внизу.";
+"ContextualHint.SearchBarPlacement.NewUsers" = "Щоб зручніше вводити дані, тепер панель інструментів розташовано внизу.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "Відтепер ваша персоналізована сторінка домівки Firefox полегшує продовження роботи з місця, де ви зупинилися. Знайдіть останні вкладки, закладки та результати пошуку.";
@@ -468,6 +468,12 @@
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Наші спонсори та ваша приватність";
+
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Переглянути всі синхронізовані вкладки";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Синхронізовані вкладки";
 
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
 "FirefoxHomepage.Pocket.Sponsored.v103" = "Спонсоровано";
@@ -826,6 +832,9 @@
 /* Within the History Panel, users can open an action menu to clear recent history. */
 "LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Вилучає історію (включно з історією, синхронізованою з інших пристроїв), куки та інші дані вебперегляду.";
 
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "Видалити";
+
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "Історію не знайдено";
 
@@ -1095,9 +1104,6 @@
 /* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
 "Menu.Share.v99" = "Поділитися";
 
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.SignInToSync.Label.v99" = "Увійти для синхронізації";
-
 /* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
 "Menu.SyncAndSaveData.v103" = "Синхронізувати та зберегти дані";
 
@@ -1235,13 +1241,13 @@
 "Okay" = "Гаразд";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
-"Onboarding.IntroAction.v102" = "Початок роботи";
+"Onboarding.IntroAction.v102" = "Розпочнімо";
 
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
 "Onboarding.IntroDescriptionPart1.v102" = "Незалежний. Некомерційний. Для добрих справ.";
 
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
-"Onboarding.IntroDescriptionPart2.v102" = "Відданий забезпеченню кращого інтернету для кожного.";
+"Onboarding.IntroDescriptionPart2.v102" = "Відданий забезпеченню кращого інтернету для всіх.";
 
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "Не зараз";
@@ -1256,7 +1262,7 @@
 "Onboarding.SyncTitle.v102" = "Синхронізуйте, щоб залишатися в потоці";
 
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
-"Onboarding.WallpaperAction.v102" = "Встановіть шпалери";
+"Onboarding.WallpaperAction.v102" = "Встановити шпалери";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
 "Onboarding.WallpaperTitle.v102" = "Оберіть шпалери Firefox";
@@ -1912,7 +1918,7 @@
 "Settings.SendUsage.Link" = "Докладніше.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla намагається збирати лише дані, що необхідні для роботи і вдосконалення Firefox.";
+"Settings.SendUsage.Message" = "Mozilla намагається збирати лише дані, необхідні для роботи й вдосконалення Firefox.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Надсилати дані про використання";
@@ -2008,7 +2014,7 @@
 "Settings.TrackingProtection.Alert.Title" = "Увага!";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Ви можете вибрати список, який буде використовувати Firefox для блокування вебелементів, що можуть відстежувати вашу діяльність в Інтернеті.";
+"Settings.TrackingProtection.BlockListsHeader" = "Ви можете вибрати список, який Firefox використовуватиме для блокування вебелементів, які можуть стежити за вашою діяльністю в Інтернеті.";
 
 /* Explanation of basic mode. */
 "Settings.TrackingProtection.Info.BasicTitle" = "Збалансований рівень захисту і швидкодії.";
@@ -2113,7 +2119,7 @@
 "ShareExtension.BookmarkThisPageAction.Title" = "Додати закладку";
 
 /* Share extension label shown after user has performed 'Bookmark this Page' action. */
-"ShareExtension.BookmarkThisPageActionDone.Title" = "Закладено";
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Додано до закладок";
 
 /* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
 "ShareExtension.LoadInBackgroundAction.Title" = "Завантажити на задньому плані";

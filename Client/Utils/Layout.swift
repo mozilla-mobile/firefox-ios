@@ -16,7 +16,7 @@ extension NSLayoutConstraint {
 
 extension NSLayoutAnchor where AnchorType == NSLayoutXAxisAnchor {
     /// Similar to `constraint(equalTo:)` except that it also takes an optional
-    /// multipllier, constant and priority. This makes it really easy to inline
+    /// multiplier, constant and priority. This makes it really easy to inline
     /// constraints in a call to `NSLayoutConstraint.activate()`.
     func constraint(
         equalTo anchor: NSLayoutAnchor<AnchorType>,
@@ -39,7 +39,7 @@ extension NSLayoutAnchor where AnchorType == NSLayoutXAxisAnchor {
 
 extension NSLayoutAnchor where AnchorType == NSLayoutYAxisAnchor {
     /// Similar to `constraint(equalTo:)` except that it also takes an optional
-    /// multipllier, constant and priority. This makes it really easy to inline
+    /// multiplier, constant and priority. This makes it really easy to inline
     /// constraints in a call to `NSLayoutConstraint.activate()`.
     func constraint(
         equalTo anchor: NSLayoutAnchor<AnchorType>,

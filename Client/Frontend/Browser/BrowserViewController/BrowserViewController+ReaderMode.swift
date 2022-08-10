@@ -114,8 +114,10 @@ extension BrowserViewController {
 
         if backList.count > 1 && backList.last?.url == readerModeURL {
             webView.go(to: backList.last!)
-        } else if forwardList.count > 0 && forwardList.first?.url == readerModeURL {
+
+        } else if !forwardList.isEmpty && forwardList.first?.url == readerModeURL {
             webView.go(to: forwardList.first!)
+
         } else {
             // Store the readability result in the cache and load it. This will later move to the ReadabilityHelper.
             webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).readerize()") { object, error in
@@ -148,8 +150,10 @@ extension BrowserViewController {
 
         if backList.count > 1 && backList.last?.url == originalURL {
             webView.go(to: backList.last!)
-        } else if forwardList.count > 0 && forwardList.first?.url == originalURL {
+
+        } else if !forwardList.isEmpty && forwardList.first?.url == originalURL {
             webView.go(to: forwardList.first!)
+
         } else if let nav = webView.load(URLRequest(url: originalURL)) {
             ignoreNavigationInTab(tab, navigation: nav)
         }
@@ -253,7 +257,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                   let record = profile.readingList.getRecordWithURL(url).value.successValue
             else { break }
 
-            profile.readingList.deleteRecord(record) // TODO Check result, can this fail?
+            profile.readingList.deleteRecord(record, completion: nil)
             readerModeBar.added = false
             readerModeBar.unread = false
         }

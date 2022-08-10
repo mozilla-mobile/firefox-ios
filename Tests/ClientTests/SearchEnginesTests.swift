@@ -8,7 +8,7 @@ import XCTest
 import Shared
 
 private let DefaultSearchEngineName = "Google"
-private let ExpectedEngineNames = ["Amazon.com", "Bing", "DuckDuckGo", "Google", "Twitter", "Wikipedia"]
+private let ExpectedEngineNames = ["Amazon.com", "Bing", "DuckDuckGo", "Google", "eBay", "Wikipedia"]
 
 class SearchEnginesTests: XCTestCase {
 
@@ -163,13 +163,13 @@ class SearchEnginesTests: XCTestCase {
             ["Google", "Bing", "DuckDuckGo", "Wikipedia (zh)"])
         XCTAssertEqual(
             SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "en-CA")).compactMap({$0.shortName}),
-            ["Google", "Bing", "Amazon.com", "DuckDuckGo", "Twitter", "Wikipedia"])
+            ["Google", "Amazon.com", "Bing", "DuckDuckGo", "eBay", "Wikipedia"])
         XCTAssertEqual(
             SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "de-DE")).compactMap({$0.shortName}),
-            ["Google", "Bing", "Amazon.de", "DuckDuckGo", "Qwant", "Twitter", "Wikipedia (de)", "Ecosia"])
+            ["Google", "Amazon.de", "Bing", "DuckDuckGo", "eBay", "Ecosia", "Qwant", "Wikipedia (de)"])
         XCTAssertEqual(
             SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "en-US")).compactMap({$0.shortName}),
-            ["Google", "Bing", "Amazon.com", "DuckDuckGo", "Twitter", "Wikipedia"])
+            ["Google", "Amazon.com", "Bing", "DuckDuckGo", "eBay", "Wikipedia"])
     }
 
     func testGetOrderedEngines() {

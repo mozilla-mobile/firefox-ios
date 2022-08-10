@@ -8,7 +8,7 @@ import XCTest
 
 class HomeHistoryHighlightsViewModelTests: XCTestCase {
 
-    private var sut: HistoryHightlightsViewModel!
+    private var sut: HistoryHighlightsViewModel!
     private var profile: MockProfile!
     private var tabManager: TabManager!
     private var entryProvider: HistoryHighlightsTestEntryProvider!
@@ -20,9 +20,10 @@ class HomeHistoryHighlightsViewModelTests: XCTestCase {
         profile._reopen()
         tabManager = TabManager(profile: profile, imageStore: nil)
         entryProvider = HistoryHighlightsTestEntryProvider(with: profile, and: tabManager)
-        sut = HistoryHightlightsViewModel(with: profile,
-                                                isPrivate: false,
-                                                tabManager: tabManager)
+        sut = HistoryHighlightsViewModel(with: profile,
+                                          isPrivate: false,
+                                          tabManager: tabManager,
+                                          urlBar: URLBarView(profile: profile))
     }
 
     override func tearDown() {

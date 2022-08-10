@@ -178,7 +178,7 @@ class NSURLExtensionsTests: XCTestCase {
         XCTAssertEqual(url.normalizedHost!, "[::1]")
     }
 
-    private func checkUrls(goodurls: [String], badurls: [String], checker: ((InternalURL) -> Bool)) {
+    private func checkUrls(goodurls: [String], badurls: [String], checker: (InternalURL) -> Bool) {
         goodurls.forEach {
             var result = false
             if let url = InternalURL(URL(string: $0)!) { result = checker(url) }
@@ -489,7 +489,7 @@ class NSURLExtensionsTests: XCTestCase {
 
             let original = url.absoluteDisplayString
             let matches = detector.matches(in: original, options: [], range: NSRange(location: 0, length: original.count))
-            guard matches.count > 0 else {
+            guard !matches.isEmpty else {
                 print("\(url) doesn't match as a URL")
                 continue
             }

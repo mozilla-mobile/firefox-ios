@@ -17,7 +17,7 @@
 "On" = "Włączone";
 
 /* Title displayed for when there are no open tabs while in private mode */
-"Private Browsing" = "Przeglądanie prywatne";
+"Private Browsing" = "Tryb prywatny";
 
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "Tryb prywatny";

@@ -25,7 +25,7 @@ public struct Strings {
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 private enum StringLastUpdatedAppVersion {
-    case v39, v96, v97, v98, v99, v100, v101, v102, v103
+    case v39, v96, v97, v98, v99, v100, v101, v102, v103, v104, v105, v106
 
     // Used for all cases before version 39.
     case unknown
@@ -136,6 +136,12 @@ extension String {
 extension String {
     public struct ContextualHints {
 
+        public static let ContextualHintsCloseAccessibility = MZLocalizedString(
+            "ContextualHintsCloseButtonAccessibility.v105",
+            value: "Close",
+            comment: "Accessibility label for action denoting closing contextual hint.",
+            lastUpdated: .v105)
+
         public struct FirefoxHomepage {
             public struct JumpBackIn {
                 public static let PersonalizedHome = MZLocalizedString(
@@ -177,8 +183,13 @@ extension String {
                 value: "Toolbar Settings",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar.",
                 lastUpdated: .v98)
+            public static let SearchBarTopPlacement = MZLocalizedString(
+                "ContextualHints.Toolbar.Top.Description.v106",
+                tableName: "ToolbarLocation",
+                value: "Move the toolbar to the bottom in settings if that's more your style.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. ",
+                lastUpdated: .v106)
         }
-
     }
 }
 
@@ -249,6 +260,16 @@ extension String {
                 value: "Your search for \"%@\"",
                 comment: "On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did.",
                 lastUpdated: .v39)
+            public static let SyncedTabTitle = MZLocalizedString(
+                "FirefoxHomepage.JumpBackIn.TabPickup.v104",
+                value: "Tab pickup",
+                comment: "If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab.",
+                lastUpdated: .v104)
+            public static let SyncedTabShowAllButtonTitle = MZLocalizedString(
+                "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104",
+                value: "See all synced tabs",
+                comment: "Button title shown for tab pickup on the Firefox homepage in the Jump Back In section.",
+                lastUpdated: .v104)
         }
 
         public struct Pocket {
@@ -632,6 +653,11 @@ extension String {
                 value: "Delete",
                 comment: "Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button.",
                 lastUpdated: .v100)
+            public static let Delete = MZLocalizedString(
+                "LibraryPanel.History.DeleteGroupedItem.v104",
+                value: "Delete",
+                comment: "Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item.",
+                lastUpdated: .v104)
         }
 
         public struct ReadingList {
@@ -1040,24 +1066,11 @@ extension String {
         }
 
         public struct Sync {
-            // TODO: Delete FxASignInToSync string with FXIOS-4392 since we'll be using ButtonTitle
-            public static let FxASignInToSync = MZLocalizedString(
-                "FxA.SignIntoSync",
-                value: "Sign in to Sync",
-                comment: "Button label to sign into Sync",
-                lastUpdated: .unknown)
             public static let ButtonTitle = MZLocalizedString(
                 "Settings.Sync.ButtonTitle.v103",
                 value: "Sync and Save Data",
                 comment: "Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data.",
                 lastUpdated: .v103)
-
-            // TODO: Delete FxASyncUsageDetails string with FXIOS-4392 since we'll be using ButtonDescription
-            public static let FxASyncUsageDetails = MZLocalizedString(
-                "FxA.SyncExplain",
-                value: "Get your tabs, bookmarks, and passwords from your other devices.",
-                comment: "Label explaining what sync does",
-                lastUpdated: .unknown)
             public static let ButtonDescription = MZLocalizedString(
                 "Settings.Sync.ButtonDescription.v103",
                 value: "Sign in to sync tabs, bookmarks, passwords, and more.",
@@ -1065,12 +1078,6 @@ extension String {
                 lastUpdated: .unknown)
 
             public struct SignInView {
-                // TODO: Delete FxASignInTitle string with FXIOS-4392 since we'll be using Title
-                public static let FxASignInTitle = MZLocalizedString(
-                    "fxa.signin.turn-on-sync",
-                    value: "Turn on Sync",
-                    comment: "FxA sign in view title",
-                    lastUpdated: .unknown)
                 public static let Title = MZLocalizedString(
                     "Settings.Sync.SignInView.Title.v103",
                     value: "Sync and Save Data",
@@ -3066,13 +3073,6 @@ extension String {
             "Menu.Share.v99",
             value: "Share",
             comment: "Label for the share button in the menu page. Pressing this button open the share menu to share the current website.",
-            lastUpdated: .v99)
-
-        // TODO: Delete AppMenuBackUpAndSyncData string with FXIOS-4392 since we'll be using SyncAndSaveData
-        public static let AppMenuBackUpAndSyncData = MZLocalizedString(
-            "Menu.SignInToSync.Label.v99",
-            value: "Sign in to Sync",
-            comment: "Label for the button, displayed in the menu, takes you to sync sign in when pressed.",
             lastUpdated: .v99)
         public static let SyncAndSaveData = MZLocalizedString(
             "Menu.SyncAndSaveData.v103",

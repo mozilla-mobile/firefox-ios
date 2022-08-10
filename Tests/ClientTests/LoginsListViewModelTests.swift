@@ -12,12 +12,19 @@ class LoginsListViewModelTests: XCTestCase {
     var dataSource: LoginDataSource!
 
     override func setUp() {
+        super.setUp()
         let mockProfile = MockProfile()
         let searchController = UISearchController()
         self.viewModel = LoginListViewModel(profile: mockProfile, searchController: searchController)
         self.dataSource = LoginDataSource(viewModel: self.viewModel)
         self.viewModel.setBreachAlertsManager(MockBreachAlertsClient())
         self.addLogins()
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        viewModel = nil
+        dataSource = nil
     }
 
     private func addLogins() {

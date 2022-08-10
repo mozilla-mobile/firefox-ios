@@ -72,7 +72,7 @@ class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
     }
 
     /// Stores an image on disk as a png data representation, for the given key.
-    /// The key should be the image's name unless saving a user seleceted
+    /// The key should be the image's name unless saving a user selected
     /// wallpaper, in which case, the key should be the appropriate PrefsKey.
     ///
     /// The function throws if there is an error saving the image.

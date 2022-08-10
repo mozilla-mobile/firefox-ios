@@ -458,7 +458,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     }
 
     private func syncMenuButton(showFxA: @escaping (FXASyncClosure) -> Void) -> PhotonRowActions? {
-        let action: ((SingleActionViewModel) -> Void) = { action in
+        let action: (SingleActionViewModel) -> Void = { action in
             let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
             let params = FXASyncClosure(fxaParams, .emailLoginFlow, .appMenu)
             showFxA(params)
@@ -469,7 +469,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         let needsReAuth = rustAccount.accountNeedsReauth()
 
         guard let userProfile = rustAccount.userProfile else {
-            return SingleActionViewModel(title: .AppMenu.AppMenuBackUpAndSyncData,
+            return SingleActionViewModel(title: .AppMenu.SyncAndSaveData,
                                          iconString: ImageIdentifiers.sync,
                                          tapHandler: action).items
         }
@@ -639,7 +639,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
                   let record = self.profile.readingList.getRecordWithURL(url).value.successValue
             else { return }
 
-            self.profile.readingList.deleteRecord(record)
+            self.profile.readingList.deleteRecord(record, completion: nil)
             self.delegate?.showToast(message: .AppMenu.RemoveFromReadingListConfirmMessage, toastAction: .removeFromReadingList, url: nil)
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .pageActionMenu)
         }
@@ -754,7 +754,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
 
     // MARK: Password
 
-    typealias NavigationHandlerType = ((_ url: URL?) -> Void)
+    typealias NavigationHandlerType = (_ url: URL?) -> Void
     private func getPasswordAction(navigationController: UINavigationController?) -> PhotonRowActions? {
         guard LoginListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs),
               let navigationController = navigationController

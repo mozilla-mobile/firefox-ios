@@ -31,8 +31,8 @@ final class NimbusFeatureFlagLayer {
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
 
-        case .wallpapers:
-            return checkNimbusForWallpapersFeature(using: nimbus)
+        case .contextualHintForToolbar:
+            return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
         case .sponsoredPocket:
             return checkNimbusForPocketSponsoredStoriesFeature(using: nimbus)
@@ -49,6 +49,10 @@ final class NimbusFeatureFlagLayer {
 
         case .startAtHome:
             return checkNimbusConfigForStartAtHome(using: nimbus) != .disabled
+
+        case .wallpapers,
+                .wallpaperVersion:
+            return checkNimbusForWallpapersFeature(using: nimbus)
         }
     }
 
@@ -113,9 +117,32 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.homescreenFeature.value().jumpBackInSyncedTab
     }
 
+    private func checkNimbusForContextualHintsFeature(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus
+    ) -> Bool {
+        let config = nimbus.features.contextualHintFeature.value()
+        var nimbusID: ContextualHint
+
+        switch featureID {
+        case .contextualHintForToolbar: nimbusID = ContextualHint.toolbarContextualHint
+        default: return false
+        }
+
+        guard let status = config.featuresEnabled[nimbusID] else { return false }
+        return status
+    }
+
     private func checkNimbusForWallpapersFeature(using nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.homescreenFeature.value()
-        return config.wallpaperFeature.status
+        let config = nimbus.features.wallpaperFeature.value()
+
+        return config.configuration.status
+    }
+
+    public func checkNimbusForWallpapersVersion(using nimbus: FxNimbus = FxNimbus.shared) -> String {
+        let config = nimbus.features.wallpaperFeature.value()
+
+        return config.configuration.version.rawValue
     }
 
     private func checkNimbusForPocketSponsoredStoriesFeature(using nimbus: FxNimbus) -> Bool {

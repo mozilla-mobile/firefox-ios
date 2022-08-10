@@ -162,17 +162,21 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
 }
 
 class ReadingListPanel: UITableViewController, LibraryPanel {
+
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     let profile: Profile
+    var state: LibraryPanelMainState
+    var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
 
-    fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
-    fileprivate var records: [ReadingListItem]?
+    private var records: [ReadingListItem]?
 
     init(profile: Profile) {
         self.profile = profile
+        self.state = .readingList
         super.init(nibName: nil, bundle: nil)
 
         [ Notification.Name.FirefoxAccountChanged,
@@ -231,7 +235,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         if let newRecords = profile.readingList.getAvailableRecords().value.successValue {
             records = newRecords
 
-            if records?.count == 0 {
+            if let records = records, records.isEmpty {
                 tableView.isScrollEnabled = false
                 DispatchQueue.main.async { self.tableView.backgroundView = self.emptyStateView }
             } else {
@@ -385,14 +389,15 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
     fileprivate func deleteItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .readingListPanel)
-            if profile.readingList.deleteRecord(record).value.isSuccess {
-                records?.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .automatic)
+            profile.readingList.deleteRecord(record, completion: { success in
+                guard success else { return }
+                self.records?.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: .automatic)
                 // reshow empty state if no records left
-                if records?.count == 0 {
-                    refreshReadingList()
+                if let records = self.records, records.isEmpty {
+                    self.refreshReadingList()
                 }
-            }
+            })
         }
     }
 

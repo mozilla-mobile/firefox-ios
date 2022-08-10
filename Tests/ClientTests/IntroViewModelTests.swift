@@ -10,10 +10,12 @@ class IntroViewModelTests: XCTestCase {
     var viewModel: IntroViewModel!
 
     override func setUp() {
+        super.setUp()
         viewModel = IntroViewModel()
     }
 
     override func tearDown() {
+        super.tearDown()
         viewModel = nil
     }
 

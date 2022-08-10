@@ -32,19 +32,23 @@ class MockBrowserSyncManager: BrowserProfile.BrowserSyncManager {
 }
 
 class GleanTelemetryTests: XCTestCase {
-    override func setUpWithError() throws {
+
+    override func setUp() {
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
+
+        RustFirefoxAccounts.startup(prefs: MockProfilePrefs()).uponQueue(.main) { _ in
+            print("RustFirefoxAccounts started")
+        }
     }
 
-    let profile = MockBrowserProfile(localName: "GleanTelemetryTests")
-
     func testSyncPingIsSentOnSyncOperation() throws {
+        let profile = MockBrowserProfile(localName: "GleanTelemetryTests")
         let syncManager = MockBrowserSyncManager(profile: profile)
 
         let syncPingWasSent = expectation(description: "The tempSync ping was sent")
         GleanMetrics.Pings.shared.tempSync.testBeforeNextSubmit { _ in
-            XCTAssert(GleanMetrics.Sync.syncUuid.testHasValue())
+            XCTAssertNotNil(GleanMetrics.Sync.syncUuid.testGetValue())
             syncPingWasSent.fulfill()
         }
 

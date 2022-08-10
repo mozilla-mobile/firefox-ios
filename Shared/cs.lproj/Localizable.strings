@@ -463,6 +463,9 @@
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Naši sponzoři a vaše soukromí";
 
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Zobrazit synchronizované panely";
+
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
 "FirefoxHomepage.Pocket.Sponsored.v103" = "Sponzorováno";
 
@@ -1080,9 +1083,6 @@
 /* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
 "Menu.Share.v99" = "Sdílet";
 
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.SignInToSync.Label.v99" = "Přihlásit se ke službě Sync";
-
 /* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
 "Menu.SyncAndSaveData.v103" = "Synchronizace a ukládání dat";
 
@@ -1230,6 +1230,9 @@
 
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "Teď ne";
+
+/* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
+"Onboarding.SyncAction.v102" = "Registrace a přihlášení";
 
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "Nastavit tapetu";

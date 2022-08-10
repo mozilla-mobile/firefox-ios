@@ -32,7 +32,7 @@ class TabTrayViewController: UIViewController {
     var viewModel: TabTrayViewModel
     var openInNewTab: ((_ url: URL, _ isPrivate: Bool) -> Void)?
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)?
-    var notificationCenter: NotificationCenter
+    var notificationCenter: NotificationProtocol
     var nimbus: FxNimbus
 
     // MARK: - UI Elements
@@ -123,21 +123,25 @@ class TabTrayViewController: UIViewController {
         }
 
         navigationMenu.accessibilityIdentifier = "navBarTabTray"
-        navigationMenu.selectedSegmentIndex = viewModel.tabManager.selectedTab?.isPrivate ?? false ? 1 : 0
+
+        var segmentToFocus = viewModel.segmentToFocus
+        if segmentToFocus == nil {
+            segmentToFocus = viewModel.tabManager.selectedTab?.isPrivate ?? false ? .privateTabs : .tabs
+        }
+        navigationMenu.selectedSegmentIndex = segmentToFocus?.rawValue ?? TabTrayViewModel.Segment.tabs.rawValue
         navigationMenu.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         return navigationMenu
     }()
 
     lazy var iPadNavigationMenuIdentifiers: UISegmentedControl = {
-        return UISegmentedControl(items: [String.TabTraySegmentedControlTitlesTabs,
-                                          String.TabTraySegmentedControlTitlesPrivateTabs,
-                                          String.TabTraySegmentedControlTitlesSyncedTabs])
+        return UISegmentedControl(items: TabTrayViewModel.Segment.allCases.map { $0.label })
     }()
 
     lazy var iPhoneNavigationMenuIdentifiers: UISegmentedControl = {
-        return UISegmentedControl(items: [UIImage(named: ImageIdentifiers.navTabCounter)!.overlayWith(image: countLabel),
-                                          UIImage(named: ImageIdentifiers.privateMaskSmall)!,
-                                          UIImage(named: ImageIdentifiers.syncedDevicesIcon)!])
+        return UISegmentedControl(items: [
+            TabTrayViewModel.Segment.tabs.image!.overlayWith(image: countLabel),
+            TabTrayViewModel.Segment.privateTabs.image!,
+            TabTrayViewModel.Segment.syncedTabs.image!])
     }()
 
     // Toolbars
@@ -158,7 +162,8 @@ class TabTrayViewController: UIViewController {
          profile: Profile,
          tabToFocus: Tab? = nil,
          tabManager: TabManager,
-         and notificationCenter: NotificationCenter = NotificationCenter.default,
+         focusedSegment: TabTrayViewModel.Segment? = nil,
+         and notificationCenter: NotificationProtocol = NotificationCenter.default,
          with nimbus: FxNimbus = FxNimbus.shared
     ) {
         self.nimbus = nimbus
@@ -166,7 +171,8 @@ class TabTrayViewController: UIViewController {
         self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate,
                                           profile: profile,
                                           tabToFocus: tabToFocus,
-                                          tabManager: tabManager)
+                                          tabManager: tabManager,
+                                          segmentToFocus: focusedSegment)
 
         super.init(nibName: nil, bundle: nil)
 
@@ -192,6 +198,7 @@ class TabTrayViewController: UIViewController {
         viewSetup()
         applyTheme()
         updatePrivateUIState()
+        panelChanged()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -263,12 +270,13 @@ class TabTrayViewController: UIViewController {
     }
 
     @objc func panelChanged() {
-        switch navigationMenu.selectedSegmentIndex {
-        case 0:
+        let segment = TabTrayViewModel.Segment(rawValue: navigationMenu.selectedSegmentIndex)
+        switch segment {
+        case .tabs:
             switchBetweenLocalPanels(withPrivateMode: false)
-        case 1:
+        case .privateTabs:
             switchBetweenLocalPanels(withPrivateMode: true)
-        case 2:
+        case .syncedTabs:
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .syncPanel, extras: nil)
             if children.first == viewModel.tabTrayView {
                 hideCurrentPanel()
@@ -320,7 +328,7 @@ class TabTrayViewController: UIViewController {
 
     private func updateToolbarItems(forSyncTabs showSyncItems: Bool = false) {
         if shouldUseiPadSetup() {
-            if navigationMenu.selectedSegmentIndex == 2 {
+            if navigationMenu.selectedSegmentIndex == TabTrayViewModel.Segment.syncedTabs.rawValue {
                 navigationItem.rightBarButtonItems = (showSyncItems ? [doneButton, fixedSpace, syncTabButton] : [doneButton])
                 navigationItem.leftBarButtonItem = nil
             } else {
@@ -329,7 +337,7 @@ class TabTrayViewController: UIViewController {
             }
         } else {
             var newToolbarItems: [UIBarButtonItem]? = bottomToolbarItems
-            if navigationMenu.selectedSegmentIndex == 2 {
+            if navigationMenu.selectedSegmentIndex == TabTrayViewModel.Segment.syncedTabs.rawValue {
                 newToolbarItems = showSyncItems ? bottomToolbarItemsForSync : nil
             }
             setToolbarItems(newToolbarItems, animated: true)
@@ -417,7 +425,7 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
     }
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        notificationCenter.post(name: .TabsTrayDidClose, object: nil)
+        notificationCenter.post(name: .TabsTrayDidClose)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
 }
@@ -437,7 +445,7 @@ extension TabTrayViewController {
     }
 
     @objc func didTapDone() {
-        notificationCenter.post(name: .TabsTrayDidClose, object: nil)
+        notificationCenter.post(name: .TabsTrayDidClose)
         self.dismiss(animated: true, completion: nil)
     }
 }

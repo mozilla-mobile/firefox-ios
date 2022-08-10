@@ -27,7 +27,7 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .Settings.Sync.FxASignInToSync, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: .Settings.Sync.ButtonTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override var accessibilityIdentifier: String? { return "SignInToSync" }
@@ -243,7 +243,7 @@ class SyncNowSetting: WithAccountSetting {
         cell.accessoryType = accessoryType
         cell.isUserInteractionEnabled = !profile.syncManager.isSyncing && DeviceInfo.hasConnectivity()
 
-        // Animation that loops continously until stopped
+        // Animation that loops continuously until stopped
         continuousRotateAnimation.fromValue = 0.0
         continuousRotateAnimation.toValue = CGFloat(Double.pi)
         continuousRotateAnimation.isRemovedOnCompletion = true
@@ -682,7 +682,7 @@ class VersionSetting: Setting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "\(AppName.longName) \(AppInfo.appVersion) (\(AppInfo.buildNumber))", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "\(AppName.shortName) \(AppInfo.appVersion) (\(AppInfo.buildNumber))", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -932,7 +932,7 @@ class LoginsSetting: Setting {
         deselectRow()
 
         guard let navController = navigationController else { return }
-        let navigationHandler: ((_ url: URL?) -> Void) = { url in
+        let navigationHandler: (_ url: URL?) -> Void = { url in
             guard let url = url else { return }
             UIWindow.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
             self.delegate?.settingsOpenURLInNewTab(url)

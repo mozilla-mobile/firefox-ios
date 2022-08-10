@@ -111,7 +111,7 @@ class ShareViewController: UIViewController {
 
     private func setupRows() {
         let pageInfoRow = makePageInfoRow(addTo: stackView)
-        pageInfoRowTitleLabel = pageInfoRow.pageTitleLabel
+        pageInfoRowTitleLabel = pageInfoRow.titleLabel
         pageInfoRowUrlLabel = pageInfoRow.urlLabel
         makeSeparator(addTo: stackView)
 
@@ -167,7 +167,13 @@ class ShareViewController: UIViewController {
         }
     }
 
-    private func makePageInfoRow(addTo parent: UIStackView) -> (row: UIStackView, pageTitleLabel: UILabel, urlLabel: UILabel) {
+    struct PageInfoRow {
+        let row: UIStackView
+        let titleLabel: UILabel
+        let urlLabel: UILabel
+    }
+
+    private func makePageInfoRow(addTo parent: UIStackView) -> PageInfoRow {
         let row = UIStackView()
         row.axis = .horizontal
         row.alignment = .center
@@ -194,7 +200,7 @@ class ShareViewController: UIViewController {
 
         pageTitleLabel.font = UIFont.boldSystemFont(ofSize: UX.baseFont.pointSize)
 
-        return (row, pageTitleLabel, urlLabel)
+        return PageInfoRow(row: row, titleLabel: pageTitleLabel, urlLabel: urlLabel)
     }
 
     private func makeActionRow(addTo parent: UIStackView, label: String, imageName: String, action: Selector, hasNavigation: Bool) {

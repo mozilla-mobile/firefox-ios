@@ -1059,9 +1059,6 @@
 /* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
 "Menu.Share.v99" = "बाड्नुहोस्";
 
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.SignInToSync.Label.v99" = "सिङ्क गर्न साइन इन गर्नुहोस्";
-
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ट्याब पठाइयो";
 

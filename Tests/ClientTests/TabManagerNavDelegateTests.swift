@@ -11,7 +11,10 @@ class TabManagerNavDelegateTests: XCTestCase {
     let navigation = WKNavigation()
 
     func test_webViewDidCommit_sendsCorrectMessage() {
-        let (sut, delegate1, delegate2) = makeSUT()
+        let sutConstructor = makeSUT()
+        let sut = sutConstructor.sut
+        let delegate1 = sutConstructor.delegate1
+        let delegate2 = sutConstructor.delegate2
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -22,7 +25,10 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewDidFail_sendsCorrectMessage() {
-        let (sut, delegate1, delegate2) = makeSUT()
+        let sutConstructor = makeSUT()
+        let sut = sutConstructor.sut
+        let delegate1 = sutConstructor.delegate1
+        let delegate2 = sutConstructor.delegate2
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -33,7 +39,10 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewDidFailProvisionalNavigation_sendsCorrectMessage() {
-        let (sut, delegate1, delegate2) = makeSUT()
+        let sutConstructor = makeSUT()
+        let sut = sutConstructor.sut
+        let delegate1 = sutConstructor.delegate1
+        let delegate2 = sutConstructor.delegate2
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -44,7 +53,10 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewDidFinish_sendsCorrectMessage() {
-        let (sut, delegate1, delegate2) = makeSUT()
+        let sutConstructor = makeSUT()
+        let sut = sutConstructor.sut
+        let delegate1 = sutConstructor.delegate1
+        let delegate2 = sutConstructor.delegate2
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -55,7 +67,10 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewWebContentProcessDidTerminate_sendsCorrectMessage() {
-        let (sut, delegate1, delegate2) = makeSUT()
+        let sutConstructor = makeSUT()
+        let sut = sutConstructor.sut
+        let delegate1 = sutConstructor.delegate1
+        let delegate2 = sutConstructor.delegate2
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -66,7 +81,10 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewDidReceiveServerRedirectForProvisionalNavigation_sendsCorrectMessage() {
-        let (sut, delegate1, delegate2) = makeSUT()
+        let sutConstructor = makeSUT()
+        let sut = sutConstructor.sut
+        let delegate1 = sutConstructor.delegate1
+        let delegate2 = sutConstructor.delegate2
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -77,7 +95,10 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewDidStartProvisionalNavigation_sendsCorrectMessage() {
-        let (sut, delegate1, delegate2) = makeSUT()
+        let sutConstructor = makeSUT()
+        let sut = sutConstructor.sut
+        let delegate1 = sutConstructor.delegate1
+        let delegate2 = sutConstructor.delegate2
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -88,7 +109,10 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewDecidePolicyFor_actionPolicy_sendsCorrectMessage() {
-        let (sut, delegate1, delegate2) = makeSUT()
+        let sutConstructor = makeSUT()
+        let sut = sutConstructor.sut
+        let delegate1 = sutConstructor.delegate1
+        let delegate2 = sutConstructor.delegate2
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -101,7 +125,10 @@ class TabManagerNavDelegateTests: XCTestCase {
     }
 
     func test_webViewDecidePolicyFor_responsePolicy_sendsCorrectMessage() {
-        let (sut, delegate1, delegate2) = makeSUT()
+        let sutConstructor = makeSUT()
+        let sut = sutConstructor.sut
+        let delegate1 = sutConstructor.delegate1
+        let delegate2 = sutConstructor.delegate2
 
         sut.insert(delegate1)
         sut.insert(delegate2)
@@ -116,22 +143,35 @@ class TabManagerNavDelegateTests: XCTestCase {
 
 // MARK: - Helpers
 
-private func makeSUT() -> (sut: TabManagerNavDelegate, delegate1: WKNavigationDelegateSpy, delegate2: WKNavigationDelegateSpy) {
-    let sut = TabManagerNavDelegate()
-    let delegate1 = WKNavigationDelegateSpy()
-    let delegate2 = WKNavigationDelegateSpy()
+private extension TabManagerNavDelegateTests {
+    struct SUT {
+        let sut: TabManagerNavDelegate
+        let delegate1: WKNavigationDelegateSpy
+        let delegate2: WKNavigationDelegateSpy
+    }
 
-    return (sut, delegate1, delegate2)
+    func makeSUT(file: StaticString = #file, line: UInt = #line) -> SUT {
+        let sut = TabManagerNavDelegate()
+        let delegate1 = WKNavigationDelegateSpy()
+        let delegate2 = WKNavigationDelegateSpy()
+
+        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeaks(delegate1, file: file, line: line)
+        trackForMemoryLeaks(delegate2, file: file, line: line)
+
+        return SUT(sut: sut, delegate1: delegate1, delegate2: delegate2)
+    }
+
+    func anyWebView() -> WKWebView {
+        return WKWebView(frame: CGRect(width: 100, height: 100))
+    }
+
+    func anyError() -> NSError {
+        return NSError(domain: "any error", code: 0)
+    }
 }
 
-private func anyWebView() -> WKWebView {
-    return WKWebView(frame: CGRect(width: 100, height: 100))
-}
-
-private func anyError() -> NSError {
-    return NSError(domain: "any error", code: 0)
-}
-
+// MARK: - WKNavigationDelegateSpy
 private class WKNavigationDelegateSpy: NSObject, WKNavigationDelegate {
     enum Message {
         case webViewDidCommit

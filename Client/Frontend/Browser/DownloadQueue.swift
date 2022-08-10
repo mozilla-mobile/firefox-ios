@@ -40,7 +40,7 @@ class Download: NSObject {
 
         let basePath = downloadsPath.appendingPathComponent(filename)
         let fileExtension = basePath.pathExtension
-        let filenameWithoutExtension = fileExtension.count > 0 ? String(filename.dropLast(fileExtension.count + 1)) : filename
+        let filenameWithoutExtension = !fileExtension.isEmpty ? String(filename.dropLast(fileExtension.count + 1)) : filename
 
         var proposedPath = basePath
         var count = 0

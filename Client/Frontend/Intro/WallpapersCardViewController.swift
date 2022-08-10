@@ -97,7 +97,7 @@ class WallpaperCardViewController: OnboardingCardViewController {
         collectionView.reloadData()
     }
 
-    @objc override func primaryAction() {
+    override func primaryAction() {
         wallpaperManager.updateSelectedWallpaperIndex(to: selectedWallpaper)
         super.primaryAction()
     }

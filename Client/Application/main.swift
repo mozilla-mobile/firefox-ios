@@ -4,16 +4,22 @@
 
 import Shared
 
-private var appDelegate: AppDelegate.Type
+private var appDelegate: String?
 
-if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {
-    appDelegate = TestAppDelegate.self
+// For performance or UI tests, run the UITestAppDelegate
+// For unit tests, run no app delegate as unit tests are testing enclosed units of code and shouldn't rely
+// on App delegate for their setup and behavior
+// For everything else, run the normal app delegate
+if AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
+    appDelegate = NSStringFromClass(UITestAppDelegate.self)
+} else if AppConstants.isRunningTest {
+    appDelegate = nil
 } else {
-    appDelegate = AppDelegate.self
+    appDelegate = NSStringFromClass(AppDelegate.self)
 }
 
 // Ignore SIGPIPE exceptions globally
 // https://stackoverflow.com/questions/108183/how-to-prevent-sigpipes-or-handle-them-properly
 signal(SIGPIPE, SIG_IGN)
 
-_ = UIApplicationMain(CommandLine.argc, CommandLine.unsafeArgv, NSStringFromClass(UIApplication.self), NSStringFromClass(appDelegate))
+_ = UIApplicationMain(CommandLine.argc, CommandLine.unsafeArgv, NSStringFromClass(UIApplication.self), appDelegate)

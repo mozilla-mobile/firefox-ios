@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "Loobu";
+
+/* The confirmation button that clears history even when Sync is connected. */
+"OK" = "Olgu";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"This action will clear all of your private data, including history from your synced devices." = "See tegevus kustutab kõik sinu privaatsed andmed, kaasa arvatud ajaloo sinu sünkroniseeritud seadmetest.";
+

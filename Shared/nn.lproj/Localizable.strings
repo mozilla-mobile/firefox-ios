@@ -469,6 +469,12 @@
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Sponsorane våre og ditt personvern";
 
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Sjå alle synkroniserte faner";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Synkroniserte faner";
+
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
 "FirefoxHomepage.Pocket.Sponsored.v103" = "Sponsa";
 
@@ -826,6 +832,9 @@
 /* Within the History Panel, users can open an action menu to clear recent history. */
 "LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Fjernar historikk (inkludert historikk synkronisert frå andre einingar), infokapslar og andre nettlesingsdata.";
 
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "Slett";
+
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "Fann ingen historikk";
 
@@ -1095,9 +1104,6 @@
 /* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
 "Menu.Share.v99" = "Del";
 
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.SignInToSync.Label.v99" = "Logg inn på Sync";
-
 /* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
 "Menu.SyncAndSaveData.v103" = "Synkroniser og lagre data";
 
@@ -1240,11 +1246,20 @@
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
 "Onboarding.IntroDescriptionPart1.v102" = "Uavhengig. Ideell. For alltid.";
 
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v102" = "Forplikta til løftet om eit betre Internett for alle.";
+
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "Ikkje no";
 
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "Registrer deg og logg inn";
+
+/* Description for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. */
+"Onboarding.SyncDescription.v102" = "Hopp enkelt frå ein skjerm til ein annan med automatisk synkronisering av faner og bokmerke på tvers av einingar.";
+
+/* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
+"Onboarding.SyncTitle.v102" = "Synkroniser for å ikkje sleppe tråden";
 
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "Vel bakgrunnsbilde";
@@ -1689,6 +1704,9 @@
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "Snarvegar";
 
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off */
+"Settings.Home.Option.SponsoredPocket.v103" = "Sponsa historier";
+
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
 "Settings.Home.Option.StartAtHome.AfterFourHours" = "Startside etter fire timar inaktivitet";
 
@@ -1875,6 +1893,18 @@
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "E-postapp";
 
+/* Touch ID prompt subtitle when accessing logins and passwords */
+"Settings.Passwords.FingerPrintReason.v103" = "Bruk fingeravtrykket ditt for å få tilgang til passord no.";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "Passorda dine er no verna av Face ID, Touch ID eller ein einingskode.";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "Lagre passord";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "Passord";
+
 /* Setting to enable the built-in password manager */
 "Settings.SaveLogins.Title" = "Lagre innloggingar";
 
@@ -1940,6 +1970,15 @@
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Undersøkingar";
+
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "Logg inn for å synkronisere faner, bokmerke, passord med meir.";
+
+/* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
+"Settings.Sync.ButtonTitle.v103" = "Synkroniser og lagre data";
+
+/* Title for the page where the user sign in to their Firefox Sync account. */
+"Settings.Sync.SignInView.Title.v103" = "Synkroniser og lagre data";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Uverksam fane";
@@ -2190,6 +2229,12 @@
 
 /* The placeholder text for the tab search bar */
 "Tabs.Search.PlaceholderText" = "Søk i faner";
+
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Vis inaktive faner";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Gøym inaktive faner";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Legg til fane";

@@ -60,12 +60,12 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
 
     // MARK: - Variables
     var viewModel: EnhancedTrackingProtectionDetailsVM
-    var notificationCenter: NotificationCenter
+    var notificationCenter: NotificationProtocol
 
     // MARK: - View Lifecycle
 
     init(with viewModel: EnhancedTrackingProtectionDetailsVM,
-         and notificationCenter: NotificationCenter = NotificationCenter.default) {
+         and notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)

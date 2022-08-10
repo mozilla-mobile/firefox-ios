@@ -94,8 +94,6 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         static let count = 3
     }
 
-    private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
-
     fileprivate let loadingView = SettingsLoadingView()
 
     fileprivate var showMoreButton: ThemedTableViewCell?
@@ -122,7 +120,8 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.allowsSelectionDuringEditing = true
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
+        tableView.register(ThemedTableSectionHeaderFooterView.self,
+                           forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
         footer.showBorder(for: .top, true)
@@ -268,26 +267,27 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
-        headerView?.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
-        headerView?.showBorder(for: .top, true)
-        headerView?.showBorder(for: .bottom, true)
+        headerView.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
+
+        headerView.showBorder(for: .top, true)
+        headerView.showBorder(for: .bottom, true)
 
         // top section: no top border (this is a plain table)
         guard let section = Section(rawValue: section) else { return headerView }
 
         if section == .sites {
-            headerView?.showBorder(for: .top, false)
+            headerView.showBorder(for: .top, false)
 
             // no records: no bottom border (would make 2 with the one from the clear button)
             let emptyRecords = viewModel.siteRecords.isEmpty
             if emptyRecords {
-                headerView?.showBorder(for: .bottom, false)
+                headerView.showBorder(for: .bottom, false)
             }
         } else if section == .clearButton {
-            headerView?.showBorder(for: .top, false)
-            headerView?.showBorder(for: .bottom, true)
+            headerView.showBorder(for: .top, false)
+            headerView.showBorder(for: .bottom, true)
         }
 
         return headerView
@@ -299,16 +299,17 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         case .clearButton:
             return 10 // Controls the space between the site list and the button
         case .sites:
-            return SettingsUX.TableViewHeaderFooterHeight
+            return UITableView.automaticDimension
         case .showMore:
             return 0
         }
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
-        footerView?.showBorder(for: .top, true)
-        footerView?.showBorder(for: .bottom, true)
+        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+
+        footerView.showBorder(for: .top, true)
+        footerView.showBorder(for: .bottom, true)
         return footerView
     }
 

@@ -469,6 +469,12 @@
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Os nossos patrocinadores e a sua privacidade";
 
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Ver todos os separadores sincronizados";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Escolha de separador";
+
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
 "FirefoxHomepage.Pocket.Sponsored.v103" = "Patrocinado";
 
@@ -826,6 +832,9 @@
 /* Within the History Panel, users can open an action menu to clear recent history. */
 "LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Remove o histórico (incluindo o histórico sincronizado de outros dispositivos), cookies e outros dados de navegação.";
 
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "Apagar";
+
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "Sem histórico";
 
@@ -1094,9 +1103,6 @@
 
 /* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
 "Menu.Share.v99" = "Partilhar";
-
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.SignInToSync.Label.v99" = "Iniciar sessão para sincronizar";
 
 /* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
 "Menu.SyncAndSaveData.v103" = "Sincronizar e guardar dados";
@@ -1887,6 +1893,18 @@
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "Aplicação de correio";
 
+/* Touch ID prompt subtitle when accessing logins and passwords */
+"Settings.Passwords.FingerPrintReason.v103" = "Utilize a sua impressão digital para aceder agora às palavras-passe.";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "As suas palavras-passe estão agora protegidas pelo Face ID, Touch ID ou um código do dispositivo.";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "Guardar palavras-passe";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "Palavras-passe";
+
 /* Setting to enable the built-in password manager */
 "Settings.SaveLogins.Title" = "Guardar credenciais";
 
@@ -1952,6 +1970,15 @@
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Estudos";
+
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "Inicie sessão para sincronizar os separadores, marcadores, palavras-passe e mais.";
+
+/* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
+"Settings.Sync.ButtonTitle.v103" = "Sincronizar e guardar dados";
+
+/* Title for the page where the user sign in to their Firefox Sync account. */
+"Settings.Sync.SignInView.Title.v103" = "Sincronizar e guardar dados";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Separadores inativos";
@@ -2202,6 +2229,12 @@
 
 /* The placeholder text for the tab search bar */
 "Tabs.Search.PlaceholderText" = "Pesquisar separadores";
+
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Ver separadores inativos";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Ocultar separadores inativos";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Adicionar separador";

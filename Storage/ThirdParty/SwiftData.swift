@@ -368,9 +368,9 @@ public protocol SQLiteDBConnection {
     func executeChange(_ sqlStr: String) throws -> Void
     func executeChange(_ sqlStr: String, withArgs args: Args?) throws -> Void
 
-    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T>
-    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
-    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T) -> Cursor<T>
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T, withArgs args: Args?) -> Cursor<T>
+    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T, withArgs args: Args?) -> Cursor<T>
 
     func transaction<T>(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> T) throws -> T
 
@@ -399,13 +399,13 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
         throw fail("Non-open connection; can't execute change.")
     }
 
-    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T> {
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T) -> Cursor<T> {
         return Cursor<T>(err: fail("Non-open connection; can't execute query."))
     }
-    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T, withArgs args: Args?) -> Cursor<T> {
         return Cursor<T>(err: fail("Non-open connection; can't execute query."))
     }
-    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
+    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T, withArgs args: Args?) -> Cursor<T> {
         return Cursor<T>(err: fail("Non-open connection; can't execute query."))
     }
 
@@ -1066,14 +1066,14 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         }
     }
 
-    public func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T> {
+    public func executeQuery<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T) -> Cursor<T> {
         return self.executeQuery(sqlStr, factory: factory, withArgs: nil)
     }
 
     func explain(query sqlStr: String, withArgs args: Args?) {
         do {
             let qp = try SQLiteDBStatement(connection: self, query: "EXPLAIN QUERY PLAN \(sqlStr)", args: args)
-            let qpFactory: ((SDRow) -> String) = { row in
+            let qpFactory: (SDRow) -> String = { row in
                 return "id: \(row[0] as! Int), order: \(row[1] as! Int), from: \(row[2] as! Int), details: \(row[3] as! String)"
             }
             let qpCursor = FilledSQLiteCursor<String>(statement: qp, factory: qpFactory)
@@ -1086,7 +1086,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
     /// Queries the database.
     /// Returns a cursor pre-filled with the complete result set.
-    public func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
+    public func executeQuery<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T, withArgs args: Args?) -> Cursor<T> {
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {
@@ -1178,7 +1178,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
      * Returns a live cursor that holds the query statement and database connection.
      * Instances of this class *must not* leak outside of the connection queue!
      */
-    public func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
+    public func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T, withArgs args: Args?) -> Cursor<T> {
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {
@@ -1316,7 +1316,7 @@ open class SDRow: Sequence {
     // Allow iterating through the row.
     public func makeIterator() -> AnyIterator<Any> {
         let nextIndex = 0
-        return AnyIterator() {
+        return AnyIterator {
             if nextIndex < self.columnNames.count {
                 return self.getValue(nextIndex)
             }

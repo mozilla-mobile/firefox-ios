@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Valmis";
+
+/* Text selection menu item */
+"Find in Page" = "Otsi lehelt";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Järgmine lehel olev tulemus";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Eelmine lehel olev tulemus";
+

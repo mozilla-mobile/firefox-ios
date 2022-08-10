@@ -11,6 +11,7 @@ import UIKit
 /// Please add new features alphabetically.
 enum NimbusFeatureFlagID: String, CaseIterable {
     case bottomSearchBar
+    case contextualHintForToolbar
     case historyHighlights
     case historyGroups
     case inactiveTabs
@@ -28,6 +29,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case tabTrayGroups
     case topSites
     case wallpapers
+    case wallpaperVersion
 }
 
 /// This enum is a constraint for any feature flag options that have more than
@@ -35,6 +37,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 enum NimbusFeatureFlagWithCustomOptionsID {
     case startAtHome
     case searchBarPosition
+    case wallpaperVersion
 }
 
 struct NimbusFlaggableFeature: HasNimbusSearchBar {
@@ -77,10 +80,12 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.CustomWallpaper
 
         // Cases where users do not have the option to manipulate a setting.
-        case .reportSiteIssue,
+        case .contextualHintForToolbar,
+                .reportSiteIssue,
                 .shakeToRestore,
                 .searchHighlights,
-                .jumpBackInSyncedTab:
+                .jumpBackInSyncedTab,
+                .wallpaperVersion:
             return nil
         }
     }
@@ -132,14 +137,16 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         }
 
         switch featureID {
-        case .startAtHome:
-            return nimbusLayer.checkNimbusConfigForStartAtHome().rawValue
-
         case .bottomSearchBar:
             return nimbusSearchBar.getDefaultPosition().rawValue
 
-        default:
-            return nil
+        case .startAtHome:
+            return nimbusLayer.checkNimbusConfigForStartAtHome().rawValue
+
+        case .wallpaperVersion:
+            return nimbusLayer.checkNimbusForWallpapersVersion()
+
+        default: return nil
         }
     }
 

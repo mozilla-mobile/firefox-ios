@@ -67,8 +67,8 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     var shouldResetHistory = false
     var hiddenSections: [Sections] = []
 
-    private var hasRecentlyClosed: Bool {
-        return profile.recentlyClosedTabs.tabs.count > 0
+    var hasRecentlyClosed: Bool {
+        return !profile.recentlyClosedTabs.tabs.isEmpty
     }
 
     var emptyStateText: String {
@@ -319,6 +319,10 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     private func deleteSingle(site: Site) {
         groupedSites.remove(site)
         profile.history.removeHistoryForURL(site.url)
+
+        if isSearchInProgress, let indexToRemove = searchResultSites.firstIndex(of: site) {
+            searchResultSites.remove(at: indexToRemove)
+        }
     }
 
     private func getDeletableSection(date: Date) -> [Sections]? {

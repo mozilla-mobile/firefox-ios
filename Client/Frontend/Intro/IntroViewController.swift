@@ -126,11 +126,11 @@ class IntroViewController: UIViewController, OnViewDismissable {
         return onboardingCards[index]
     }
 
-    // Used to programatically set the pageViewController to show next card
+    // Used to programmatically set the pageViewController to show next card
     private func moveToNextPage(cardType: IntroViewModel.OnboardingCards) {
         if let nextViewController = getNextOnboardingCard(index: cardType.rawValue, goForward: true) {
             pageControl.currentPage = cardType.rawValue + 1
-            pageController.setViewControllers([nextViewController], direction: .forward, animated: true)
+            pageController.setViewControllers([nextViewController], direction: .forward, animated: false)
         }
     }
 

@@ -139,6 +139,8 @@ protocol Profile: AnyObject {
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
     func getCachedClients()-> Deferred<Maybe<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
+
+    func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void)
     func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
 
     func cleanupHistoryIfNeeded()
@@ -556,6 +558,13 @@ open class BrowserProfile: Profile {
     public func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
         return self.syncManager.syncClientsThenTabs()
         >>> { self.getTabsWithNativeClients() }
+    }
+
+    public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void) {
+        let defferedResponse = self.getTabsWithNativeClients()
+        defferedResponse.upon { result in
+            completion(result.successValue ?? [])
+        }
     }
 
     public func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
@@ -1235,8 +1244,8 @@ open class BrowserProfile: Profile {
                         engineResults: results,
                         stats: statsSession.hasStarted() ? statsSession.end() : nil
                     )
-                    gleanHelper.end(result)
                     self.endSyncing(result)
+                    gleanHelper.end(result)
                 }
 
                 // The actual work of synchronizing doesn't start until we append
@@ -1262,7 +1271,7 @@ open class BrowserProfile: Profile {
             } catch let error {
                 SentryIntegration.shared.send(message: "Synchronizers appended after sync was finished. This is a bug",
                                               tag: .clientSynchronizer,
-                                              severity: .fatal,
+                                              severity: .error,
                                               description: error.localizedDescription)
                 return deferStatuses()
             }
@@ -1322,7 +1331,7 @@ open class BrowserProfile: Profile {
                     return deferMaybe(readyResult.failureValue!)
                 }
                 return self.takeActionsOnEngineStateChanges(success) >>== { ready in
-                    let updateEnginePref: ((String, Bool) -> Void) = { engine, enabled in
+                    let updateEnginePref: (String, Bool) -> Void = { engine, enabled in
                         self.prefsForSync.setBool(enabled, forKey: "engine.\(engine).enabled")
                     }
                     ready.engineConfiguration?.enabled.forEach { updateEnginePref($0, true) }

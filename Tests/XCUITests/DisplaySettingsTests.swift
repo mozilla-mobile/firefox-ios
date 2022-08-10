@@ -42,13 +42,13 @@ class DisplaySettingTests: BaseTestCase {
         XCTAssertFalse(app.cells.staticTexts["Light"].exists)
         XCTAssertFalse(app.cells.staticTexts["Dark"].exists)
 
-        // Now select the Manaul mode
+        // Now select the Manual mode
         navigator.performAction(Action.SelectManually)
         XCTAssertFalse(app.tables.otherElements["THRESHOLD"].exists)
         XCTAssertTrue(app.cells.staticTexts["Light"].exists)
         XCTAssertTrue(app.cells.staticTexts["Dark"].exists)
 
-        // Enable back syste theme
+        // Enable back system theme
         navigator.performAction(Action.SystemThemeSwitch)
         let switchValueAfter = app.switches["SystemThemeSwitchValue"].value!
         XCTAssertEqual(switchValueAfter as! String, "1")

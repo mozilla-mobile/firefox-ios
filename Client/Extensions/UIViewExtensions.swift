@@ -96,7 +96,7 @@ extension UIView {
      */
     static func findSubViewWithFirstResponder(_ view: UIView) -> UIView? {
         let subviews = view.subviews
-        if subviews.count == 0 {
+        if subviews.isEmpty {
             return nil
         }
         for subview: UIView in subviews {
@@ -106,6 +106,35 @@ extension UIView {
             return findSubViewWithFirstResponder(subview)
         }
         return nil
+    }
+
+    /// Shortcut to set the view's background colour to `.clear`, set the view's
+    /// `clipsToBounds` property set to true, and then add a blur effect on the view,
+    /// using the desired blur style.
+    ///
+    /// - Parameter style: The strength of the blur desired
+    func addBlurEffectWithClearBackgroundAndClipping(using style: UIBlurEffect.Style) {
+        self.clipsToBounds = true
+        self.backgroundColor = .clear
+        self.addBlurEffect(using: style)
+    }
+
+    /// Shortcut to set a blur effect on a view, given a specified style of blur desired.
+    ///
+    /// - Parameter style: The strength of the blur desired
+    func addBlurEffect(using style: UIBlurEffect.Style) {
+        let blurEffect = UIBlurEffect(style: style)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(blurEffectView)
+        self.sendSubviewToBack(blurEffectView)
+
+        NSLayoutConstraint.activate([
+            blurEffectView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            blurEffectView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            blurEffectView.topAnchor.constraint(equalTo: self.topAnchor),
+            blurEffectView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
     }
 }
 

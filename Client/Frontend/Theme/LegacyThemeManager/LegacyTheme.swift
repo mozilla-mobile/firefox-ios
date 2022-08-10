@@ -212,6 +212,8 @@ class HomePanelColor {
 
     var customizeHomepageButtonBackground: UIColor { return UIColor.Photon.LightGrey30 }
     var customizeHomepageButtonText: UIColor { return UIColor.Photon.DarkGrey90 }
+
+    var sponsored: UIColor { return UIColor.Photon.DarkGrey05 }
 }
 
 class SnackBarColor {
@@ -233,7 +235,7 @@ class GeneralColor {
 }
 
 class HomeTabBannerColor {
-    var backgroundColor: UIColor { return UIColor.Photon.Grey30 }
+    var backgroundColor: UIColor { return UIColor.white }
     var textColor: UIColor { return UIColor.black }
     var closeButtonBackground: UIColor { return UIColor.Photon.Grey20 }
     var closeButton: UIColor { return UIColor.Photon.Grey80 }

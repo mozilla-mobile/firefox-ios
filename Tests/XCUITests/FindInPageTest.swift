@@ -20,7 +20,7 @@ class FindInPageTests: BaseTestCase {
 
     func testFindInLargeDoc() {
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
-        // Workaround until FxSGraph is fixed to allow the previos way with goto
+        // Workaround until FxSGraph is fixed to allow the previous way with goto
         navigator.nowAt(BrowserTab)
 
         waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
@@ -84,7 +84,7 @@ class FindInPageTests: BaseTestCase {
 
     func testFindInPageTwoWordsSearchLargeDoc() {
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
-        // Workaround until FxSGraph is fixed to allow the previos way with goto
+        // Workaround until FxSGraph is fixed to allow the previous way with goto
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)

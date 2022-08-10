@@ -32,12 +32,13 @@ class TabManagerStore: FeatureFlaggable {
     }
 
     var hasTabsToRestoreAtStartup: Bool {
-        return archivedStartupTabs.0.count > 0
+        return !archivedStartupTabs.0.isEmpty
     }
 
     fileprivate func tabsStateArchivePath() -> String? {
         let profilePath: String?
-        if  AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {      profilePath = (UIApplication.shared.delegate as? TestAppDelegate)?.dirForTestProfile
+        if  AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
+            profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
         } else {
             profilePath = fileManager.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
         }
@@ -121,7 +122,7 @@ class TabManagerStore: FeatureFlaggable {
 
     func restoreTabs(savedTabs: [SavedTab], clearPrivateTabs: Bool, tabManager: TabManager) -> Tab? {
         assertIsMainThread("Restoration is a main-only operation")
-        guard !lockedForReading, savedTabs.count > 0 else { return nil }
+        guard !lockedForReading, !savedTabs.isEmpty else { return nil }
         lockedForReading = true
         defer { lockedForReading = false }
 
@@ -159,7 +160,7 @@ class TabManagerStore: FeatureFlaggable {
 // Functions for testing
 extension TabManagerStore {
     func testTabCountOnDisk() -> Int {
-        assert(AppConstants.IsRunningTest)
+        assert(AppConstants.isRunningTest)
         return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).0.count
     }
 }

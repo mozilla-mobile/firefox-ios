@@ -57,7 +57,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
     }
 
     private var viewModel: LabelButtonHeaderViewModel?
-    var notificationCenter: NotificationCenter = NotificationCenter.default
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -72,7 +72,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
     func setConstraints(viewModel: LabelButtonHeaderViewModel) {
         NSLayoutConstraint.activate([
-            moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomButtonSpace),
+            moreButton.bottomAnchor.constraint(equalTo: titleLabel.lastBaselineAnchor, constant: 0),
             moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -viewModel.trailingInset),
 
             titleLabel.topAnchor.constraint(equalTo: topAnchor),

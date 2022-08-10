@@ -125,14 +125,14 @@ features:
             search-highlights: true
             position:
               is-position-feature-enabled: true
-              is-bottom: true
+              is-bottom: false
       - channel: beta
         value:
           awesome-bar:
             search-highlights: true
             position:
               is-position-feature-enabled: true
-              is-bottom: true
+              is-bottom: false
   homescreenFeature:
     description: The homescreen that the user goes to when they press home or new tab.
     variables:
@@ -156,17 +156,8 @@ features:
         type: SponsoredTiles
         default:
           {
-            "status": false,
-            "max-number-of-tiles": 2
-          }
-      wallpaper-feature:
-        description: >
-          This property defines the wallpaper feature on the
-          homepage, which is not a section therein.
-        type: GeneralFeature
-        default:
-          {
             "status": true,
+            "max-number-of-tiles": 2
           }
       pocket-sponsored-stories:
         description: >
@@ -217,7 +208,7 @@ features:
             "status": true
           },
           "pocket-sponsored-stories": false,
-          "jump-back-in-synced-tab": false
+          "jump-back-in-synced-tab": true
         }
   search-term-groups-feature:
     description: The feature that controls whether or not search term groups are enabled.
@@ -256,6 +247,22 @@ features:
           {
             "inactive-tabs": true,
           }
+  contextual-hint-feature:
+    description: This set holds all features pertaining to the usage of contextual hints, whether it's to introduce new features or remind users of existing ones.
+    variables:
+      features-enabled:
+        description: This property provides a lookup table of whether specific context hints are enabled.
+        type: Map<ContextualHint, Boolean>
+        default: 
+        {
+          "toolbar-contextual-hint": true
+        }
+    defaults:
+      - channel: developer
+        value: {
+          "toolbar-contextual-hint": true
+        }
+
   messaging:
     description: >
       Configuration for the messaging system.
@@ -307,26 +314,33 @@ features:
             USER_FR_SPEAKER:          "'fr' in locale"
             DEVICE_ANDROID:           os == 'Android'
             DEVICE_IOS:               os == 'iOS'
+            I_AM_DEFAULT_BROWSER:     "is_default_browser"
+            I_AM_NOT_DEFAULT_BROWSER: "is_default_browser == false"
+            SUPPORTS_DEFAULT_BROWSER: os_version|versionCompare('14.!') >= 0
             ALWAYS:                   "true"
             NEVER:                    "false"
           actions:
-            OPEN_SETTINGS:               ://deep-link?url=settings/general
-            OPEN_SETTINGS_NEW_TAB:       ://deep-link?url=settings/newtab
-            OPEN_SETTINGS_HOMESCREEN:    ://deep-link?url=settings/homepage
-            OPEN_SETTINGS_WALLPAPERS:    ://deep-link?url=settings/wallpaper
-            OPEN_SETTINGS_EMAIL:         ://deep-link?url=settings/mailto
-            OPEN_SETTINGS_SEARCH_ENGINE: ://deep-link?url=settings/search
-            OPEN_SETTINGS_PRIVACY:       ://deep-link?url=settings/clear-private-data
-            OPEN_SETTINGS_FXA:           ://deep-link?url=settings/fxa
-            OPEN_SETTINGS_THEME:         ://deep-link?url=settings/theme
-            VIEW_BOOKMARKS:              ://deep-link?url=homepanel/bookmarks
-            VIEW_TOP_SITES:              ://deep-link?url=homepanel/top-sites
-            VIEW_READING_LIST:           ://deep-link?url=homepanel/reading-list
-            VIEW_HISTORY:                ://deep-link?url=homepanel/history
-            VIEW_DOWNLOADS:              ://deep-link?url=homepanel/downloads
-            ENABLE_PRIVATE_BROWSING:     ://deep-link?url=homepanel/new-private-tab
-            MAKE_DEFAULT_BROWSER:        ://deep-link?url=default-browser/system-settings
+            OPEN_SETTINGS:                      ://deep-link?url=settings/general
+            OPEN_SETTINGS_NEW_TAB:              ://deep-link?url=settings/newtab
+            OPEN_SETTINGS_HOMESCREEN:           ://deep-link?url=settings/homepage
+            OPEN_SETTINGS_WALLPAPERS:           ://deep-link?url=settings/wallpaper
+            OPEN_SETTINGS_EMAIL:                ://deep-link?url=settings/mailto
+            OPEN_SETTINGS_SEARCH_ENGINE:        ://deep-link?url=settings/search
+            OPEN_SETTINGS_PRIVACY:              ://deep-link?url=settings/clear-private-data
+            OPEN_SETTINGS_FXA:                  ://deep-link?url=settings/fxa
+            OPEN_SETTINGS_THEME:                ://deep-link?url=settings/theme
+            VIEW_BOOKMARKS:                     ://deep-link?url=homepanel/bookmarks
+            VIEW_TOP_SITES:                     ://deep-link?url=homepanel/top-sites
+            VIEW_READING_LIST:                  ://deep-link?url=homepanel/reading-list
+            VIEW_HISTORY:                       ://deep-link?url=homepanel/history
+            VIEW_DOWNLOADS:                     ://deep-link?url=homepanel/downloads
+            ENABLE_PRIVATE_BROWSING:            ://deep-link?url=homepanel/new-private-tab
+            MAKE_DEFAULT_BROWSER:               ://deep-link?url=default-browser/system-settings
+            MAKE_DEFAULT_BROWSER_WITH_TUTORIAL: ://deep-link?url=default-browser/tutorial
           styles:
+            FALLBACK:
+              priority: 40
+              max-display-count: 20
             DEFAULT:
               priority: 50
               max-display-count: 5
@@ -342,6 +356,42 @@ features:
             URGENT:
               priority: 100
               max-display-count: 10
+          messages:
+            default-browser:
+              title: Default Browser/DefaultBrowserCard.Title
+              text: Default Browser/DefaultBrowserCard.Description
+              action: "MAKE_DEFAULT_BROWSER_WITH_TUTORIAL"
+              trigger: ["I_AM_NOT_DEFAULT_BROWSER", "SUPPORTS_DEFAULT_BROWSER"]
+              style: "FALLBACK"
+              # Use string interpolation because $TABLE_NAME/$KEY doesn't exist in en.lproj/Default Browser.strings
+              button-label: \(String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerButton)
+
+  wallpaper-feature:
+    description: This property defines the configuration for the wallpaper feature
+    variables:
+      configuration:
+        description: This property defines the configuration for the wallpaper feature
+        type: WallpaperConfiguration
+        default:
+          {
+            "status": true,
+            "version": legacy,
+          }
+    defaults:
+      - channel: beta
+        value: {
+          "configuration": {
+            "status": true,
+            "version": legacy,
+          }
+        }
+      - channel: developer
+        value: {
+          "configuration": {
+            "status": true,
+            "version": legacy,
+          }
+        }
 
 types:
   objects:
@@ -455,7 +505,7 @@ types:
     StyleData:
       description: >
         A group of properities (predominantly visual) to
-        describe the style of the message.
+        the describe style of the message.
       fields:
         priority:
           type: Int
@@ -469,6 +519,18 @@ types:
             How many sessions will this message be shown to the user
             before it is expired.
           default: 5
+
+    WallpaperConfiguration:
+      description: "The configuration for the a feature that can be enabled or disabled"
+      fields:
+        status:
+          type: Boolean
+          description: Whether or not the feature is enabled
+          default: false
+        version:
+          type: WallpaperVariantVersion
+          description: Which version of the wallpaper sytem to use
+          default: legacy
 
   enums:
     IconType:
@@ -530,6 +592,12 @@ types:
       variants:
         inactive-tabs:
           description: Tabs that have been automatically closed for the user.
+    
+    ContextualHint:
+      description: The identifiers for a individual contextual hints.
+      variants:
+        toolbar-contextual-hint:
+          description: The contextual hint bubble that appears to indicate that the toolbar location is adjustable.
 
     SearchTermGroups:
       description: The identifiers for the different types of search term groups.
@@ -546,3 +614,11 @@ types:
           description: The next eligible message should be shown.
         show-none:
           description: The surface should show no message.
+
+    WallpaperVariantVersion:
+      description: An enum to identify which version of the wallpaper system to use
+      variants:
+        legacy:
+          description: The legacy wallpaper version
+        v2:
+          description: The 2022 MR version

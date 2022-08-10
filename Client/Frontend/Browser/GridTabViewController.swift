@@ -43,12 +43,12 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     var webViewContainerBackdrop = UIView()
     var collectionView: UICollectionView!
     var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
-    var notificationCenter: NotificationCenter
+    var notificationCenter: NotificationProtocol
     var contextualHintViewController: ContextualHintViewController
 
     // This is an optional variable used if we wish to focus a tab that is not the
     // currently selected tab. This allows us to force the scroll behaviour to move
-    // whereever we need to focus the user's attention.
+    // wherever we need to focus the user's attention.
     var tabToFocus: Tab?
 
     override var canBecomeFirstResponder: Bool {
@@ -77,7 +77,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
          profile: Profile,
          tabTrayDelegate: TabTrayDelegate? = nil,
          tabToFocus: Tab? = nil,
-         notificationCenter: NotificationCenter = NotificationCenter.default
+         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.tabManager = tabManager
         self.profile = profile
@@ -213,7 +213,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         guard let tabToFocus = tabToFocus else { return }
 
         if let tabGroups = tabDisplayManager.tabGroups,
-           tabGroups.count > 0,
+           !tabGroups.isEmpty,
            tabGroups.contains(where: { $0.groupedItems.contains(where: { $0 == tabToFocus }) }) {
             focusGroup(from: tabGroups, with: tabToFocus)
 
@@ -362,7 +362,7 @@ extension GridTabViewController {
         } else if self.tabManager.normalTabs.count == 1, let tab = self.tabManager.normalTabs.first {
             self.tabManager.selectTab(tab)
             self.dismissTabTray()
-            notificationCenter.post(name: .TabsTrayDidClose, object: nil)
+            notificationCenter.post(name: .TabsTrayDidClose)
         }
     }
 
@@ -407,7 +407,7 @@ extension GridTabViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         if let tab = tabDisplayManager.dataStore.at(index) {
             if tab.isFxHomeTab {
-                notificationCenter.post(name: .TabsTrayDidSelectHomeTab, object: nil)
+                notificationCenter.post(name: .TabsTrayDidSelectHomeTab)
             }
             tabManager.selectTab(tab)
             dismissTabTray()
@@ -523,7 +523,7 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
         case .removedLastTab:
             // when removing the last tab (only in normal mode) we will automatically open a new tab.
             // When that happens focus it by dismissing the tab tray
-            notificationCenter.post(name: .TabsTrayDidClose, object: nil)
+            notificationCenter.post(name: .TabsTrayDidClose)
             if !tabDisplayManager.isPrivate {
                 self.dismissTabTray()
             }
@@ -673,7 +673,7 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
             }
 
         case .regularTabs, .none:
-            guard tabDisplayManager.filteredTabs.count > 0 else { return CGSize(width: 0, height: 0) }
+            guard !tabDisplayManager.filteredTabs.isEmpty else { return CGSize(width: 0, height: 0) }
             return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
         }
     }
@@ -681,7 +681,7 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
     private func calculateInactiveTabSizeHelper(_ collectionView: UICollectionView) -> CGSize {
         guard !tabDisplayManager.isPrivate,
               let inactiveTabViewModel = tabDisplayManager.inactiveViewModel,
-              inactiveTabViewModel.activeTabs.count > 0
+              !inactiveTabViewModel.activeTabs.isEmpty
         else {
             return CGSize(width: 0, height: 0)
         }
@@ -827,6 +827,8 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
 
     func presentCFROnView() {
         present(contextualHintViewController, animated: true, completion: nil)
+
+        UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
     }
 
     private func prepareJumpBackInContextualHint(on title: UILabel) {

@@ -273,7 +273,9 @@ class TelemetryWrapper {
         let currentWallpaper = LegacyWallpaperManager().currentWallpaper
 
         if case .themed = currentWallpaper.type {
-            GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.name].add()
+            // Need to lowercase the name for labeled counter. Ref:
+            // https://mozilla.github.io/glean/book/reference/metrics/index.html#label-format)
+            GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.name.lowercased()].add()
         }
 
     }
@@ -433,7 +435,8 @@ extension TelemetryWrapper {
         case firefoxHomepage = "firefox-homepage"
         case wallpaperSettings = "wallpaper-settings"
         case contextualHint = "contextual-hint"
-        case jumpBackInImpressions = "jump-back-in-impressions"
+        case jumpBackInTileImpressions = "jump-back-in-tile-impressions"
+        case syncedTabTileImpressions = "synced-tab-tile-impressions"
         case historyImpressions = "history-highlights-impressions"
         case recentlySavedBookmarkImpressions = "recently-saved-bookmark-impressions"
         case recentlySavedReadingItemImpressions = "recently-saved-reading-items-impressions"
@@ -486,6 +489,8 @@ extension TelemetryWrapper {
         case jumpBackInSectionShowAll = "jump-back-in-section-show-all"
         case jumpBackInSectionTabOpened = "jump-back-in-section-tab-opened"
         case jumpBackInSectionGroupOpened = "jump-back-in-section-group-opened"
+        case jumpBackInSectionSyncedTabShowAll = "jump-back-in-section-synced-tab-show-all"
+        case jumpBackInSectionSyncedTabOpened = "jump-back-in-section-synced-tab-opened"
         case recentlySavedSectionShowAll = "recently-saved-section-show-all"
         case recentlySavedBookmarkItemAction = "recently-saved-bookmark-item-action"
         case recentlySavedBookmarkItemView = "recently-saved-bookmark-item-view"
@@ -1002,8 +1007,8 @@ extension TelemetryWrapper {
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.jumpBackInShowAllOrigin[homePageOrigin].add()
             }
-        case (.action, .view, .jumpBackInImpressions, _, _):
-            GleanMetrics.FirefoxHomePage.jumpBackInSectionView.add()
+        case (.action, .view, .jumpBackInTileImpressions, _, _):
+            GleanMetrics.FirefoxHomePage.jumpBackInTileView.add()
         case (.action, .tap, .firefoxHomepage, .jumpBackInSectionTabOpened, let extras):
             GleanMetrics.FirefoxHomePage.jumpBackInTabOpened.add()
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
@@ -1014,6 +1019,18 @@ extension TelemetryWrapper {
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.jumpBackInGroupOpenOrigin[homePageOrigin].add()
             }
+        case (.action, .tap, .firefoxHomepage, .jumpBackInSectionSyncedTabShowAll, let extras):
+            GleanMetrics.FirefoxHomePage.syncedTabShowAll.add()
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.syncedTabShowAllOrigin[homePageOrigin].add()
+            }
+        case (.action, .tap, .firefoxHomepage, .jumpBackInSectionSyncedTabOpened, let extras):
+            GleanMetrics.FirefoxHomePage.syncedTabOpened.add()
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.syncedTabOpenedOrigin[homePageOrigin].add()
+            }
+        case (.action, .view, .syncedTabTileImpressions, _, _):
+            GleanMetrics.FirefoxHomePage.syncedTabTileView.add()
 
         case (.action, .tap, .firefoxHomepage, .customizeHomepageButton, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
@@ -1165,7 +1182,7 @@ extension TelemetryWrapper {
 // MARK: - Firefox Home Page
 extension TelemetryWrapper {
 
-    /// Bundle the extras dictionnary for the home page origin
+    /// Bundle the extras dictionary for the home page origin
     static func getOriginExtras(isZeroSearch: Bool) -> [String: String] {
         let origin = isZeroSearch ? TelemetryWrapper.EventValue.fxHomepageOriginZeroSearch : TelemetryWrapper.EventValue.fxHomepageOriginOther
         return [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: origin.rawValue]

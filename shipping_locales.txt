@@ -4,6 +4,7 @@ anp
 ar
 ast
 az
+be
 bg
 bn
 bo
@@ -25,6 +26,7 @@ es
 es-AR
 es-CL
 es-MX
+et
 eu
 fa
 fi
@@ -73,6 +75,7 @@ ro
 ru
 sat
 ses
+si
 sk
 sl
 sq

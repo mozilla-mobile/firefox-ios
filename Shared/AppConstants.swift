@@ -6,7 +6,6 @@ import UIKit
 
 public enum AppName: String, CustomStringConvertible {
     case shortName = "Firefox"
-    case longName = "Firefox Daylight"
 
     public var description: String {
         return self.rawValue
@@ -38,9 +37,13 @@ public struct KeychainKey {
 }
 
 public struct AppConstants {
-    public static let IsRunningTest = NSClassFromString("XCTestCase") != nil || ProcessInfo.processInfo.arguments.contains(LaunchArguments.Test)
+    public static let isRunningTest = NSClassFromString("XCTestCase") != nil
+    || AppConstants.isRunningUITests
+    || AppConstants.isRunningPerfTests
 
-    public static let IsRunningPerfTest = NSClassFromString("XCTestCase") != nil || ProcessInfo.processInfo.arguments.contains(LaunchArguments.PerformanceTest)
+    public static let isRunningUITests = ProcessInfo.processInfo.arguments.contains(LaunchArguments.Test)
+
+    public static let isRunningPerfTests = ProcessInfo.processInfo.arguments.contains(LaunchArguments.PerformanceTest)
 
     public static let FxAiOSClientId = "1b1a3e44c54fbb58"
 

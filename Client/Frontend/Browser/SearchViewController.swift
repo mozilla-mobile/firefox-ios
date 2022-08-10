@@ -90,7 +90,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     static var userAgent: String?
 
     var hasFirefoxSuggestions: Bool {
-        return data.count != 0 || !filteredOpenedTabs.isEmpty || !filteredRemoteClientTabs.isEmpty || !searchHighlights.isEmpty
+        let dataCount = data.count
+        return dataCount != 0
+            || !filteredOpenedTabs.isEmpty
+            || !filteredRemoteClientTabs.isEmpty
+            || !searchHighlights.isEmpty
     }
 
     init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager, featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search ) {
@@ -159,7 +163,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
     }
 
-    @objc func dynamicFontChanged(_ notification: Notification) {
+    func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == .DynamicFontChanged else { return }
 
         reloadData()
@@ -311,7 +315,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
     }
 
-    @objc func didSelectEngine(_ sender: UIButton) {
+    func didSelectEngine(_ sender: UIButton) {
         // The UIButtons are the same cardinality and order as the array of quick search engines.
         // Subtract 1 from index to account for magnifying glass accessory.
         guard let index = searchEngineScrollViewContent.subviews.firstIndex(of: sender) else {
@@ -332,7 +336,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: "")
     }
 
-    @objc func didClickSearchButton() {
+    func didClickSearchButton() {
         self.searchDelegate?.presentSearchSettingsController()
     }
 
@@ -431,15 +435,19 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         let currentTabs = self.remoteClientTabs
         self.filteredRemoteClientTabs = currentTabs.filter { value in
             let tab = value.tab
+
             if InternalURL.isValid(url: tab.URL) {
                 return false
             }
-            if tab.title.lowercased().range(of: searchString.lowercased()) != nil {
+
+            if tab.title.lowercased().contains(searchString.lowercased()) {
                 return true
             }
-            if tab.URL.absoluteString.lowercased().range(of: searchString.lowercased()) != nil {
+
+            if tab.URL.absoluteString.lowercased().contains(searchString.lowercased()) {
                 return true
             }
+
             return false
         }
     }
@@ -506,7 +514,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             recordSearchListSelectionTelemetry(type: .searchSuggestions)
             // Assume that only the default search engine can provide search suggestions.
             let engine = searchEngines.defaultEngine
-            guard let suggestion = suggestions?[indexPath.row] else { return }
+            guard let suggestions = suggestions else { return }
+            guard let suggestion = suggestions[safe: indexPath.row] else { return }
             if let url = engine.searchURLForQuery(suggestion) {
                 Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
                 GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
@@ -538,12 +547,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return super.tableView(tableView, heightForRowAt: indexPath)
-    }
-
-    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        guard let headerView = view as? ThemedTableSectionHeaderFooterView else { return }
-
-        headerView.applyTheme()
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -602,6 +605,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     override func applyTheme() {
         super.applyTheme()
+        searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
         reloadData()
     }
 
@@ -717,7 +721,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         return cell
     }
 
-    @objc func append(_ sender: UIButton) {
+    func append(_ sender: UIButton) {
         let buttonPosition = sender.convert(CGPoint(), to: tableView)
         if let indexPath = tableView.indexPathForRow(at: buttonPosition), let newQuery = suggestions?[indexPath.row] {
             searchDelegate?.searchViewController(self, didAppend: newQuery + " ")
@@ -775,8 +779,8 @@ extension SearchViewController {
     func handleKeyCommands(sender: UIKeyCommand) {
         let initialSection = SearchListSection.bookmarksAndHistory.rawValue
         guard let current = tableView.indexPathForSelectedRow else {
-            let count = tableView(tableView, numberOfRowsInSection: initialSection)
-            if sender.input == UIKeyCommand.inputDownArrow, count > 0 {
+            let initialSectionCount = tableView(tableView, numberOfRowsInSection: initialSection)
+            if sender.input == UIKeyCommand.inputDownArrow, initialSectionCount > 0 {
                 let next = IndexPath(item: 0, section: initialSection)
                 self.tableView(tableView, didHighlightRowAt: next)
                 tableView.selectRow(at: next, animated: false, scrollPosition: .top)

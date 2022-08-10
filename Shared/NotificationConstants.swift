@@ -66,6 +66,8 @@ extension Notification.Name {
 
     public static let TopTabsTabClosed = Notification.Name("TopTabsTabClosed")
 
+    public static let TopTabsTabSelected = Notification.Name("TopTabsTabSelected")
+
     public static let TabsTrayDidClose = Notification.Name("TabsTrayDidClose")
 
     public static let TabsTrayDidSelectHomeTab = Notification.Name("TabsTrayDidSelectHomeTab")
@@ -74,9 +76,17 @@ extension Notification.Name {
 
     public static let OpenClearRecentHistory = Notification.Name("OpenClearRecentHistory")
 
+    public static let LibraryPanelStateDidChange = Notification.Name("LibraryPanelStateDidChange")
+
     // MARK: Tab manager
 
     // Tab manager creates a toast for undo recently closed tabs and a notification is
     // fired when user taps on undo button on Toast
     public static let DidTapUndoCloseAllTabToast = Notification.Name("DidTapUndoCloseAllTabToast")
+
+    // MARK: Settings
+
+    public static let BookmarksUpdated = Notification.Name("BookmarksUpdated")
+    public static let ReadingListUpdated = Notification.Name("ReadingListUpdated")
+    public static let TopSitesUpdated = Notification.Name("TopSitesUpdated")
 }

@@ -20,7 +20,7 @@ class PocketViewModel {
     private let pocketAPI: Pocket
     private let pocketSponsoredAPI: PocketSponsoredStoriesProviding
 
-    private let isZeroSearch: Bool
+    var isZeroSearch: Bool
     private var hasSentPocketSectionEvent = false
 
     private lazy var storyProvider: StoryProvider = {
@@ -35,7 +35,9 @@ class PocketViewModel {
 
     private(set) var pocketStoriesViewModels: [PocketStandardCellViewModel] = []
 
-    init(pocketAPI: Pocket, pocketSponsoredAPI: PocketSponsoredStoriesProviding, isZeroSearch: Bool) {
+    init(pocketAPI: Pocket,
+         pocketSponsoredAPI: PocketSponsoredStoriesProviding,
+         isZeroSearch: Bool = false) {
         self.isZeroSearch = isZeroSearch
         self.pocketAPI = pocketAPI
         self.pocketSponsoredAPI = pocketSponsoredAPI
@@ -64,7 +66,7 @@ class PocketViewModel {
     }
 
     var numberOfCells: Int {
-        return pocketStoriesViewModels.count != 0 ? pocketStoriesViewModels.count + 1 : 0
+        return !pocketStoriesViewModels.isEmpty ? pocketStoriesViewModels.count + 1 : 0
     }
 
     func isStoryCell(index: Int) -> Bool {
