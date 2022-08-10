@@ -26,8 +26,7 @@ class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
     weak var delegate: PocketDelegate?
     var onTapAction: ((IndexPath) -> Void)? {
         didSet {
-            guard let onTapAction = onTapAction else { return }
-            pocketStoriesViewModels.forEach { $0.onTap = onTapAction }
+            setViewModelsTapAction()
         }
     }
 
@@ -69,6 +68,12 @@ class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
 
     private func bind(pocketStoryViewModel: PocketStandardCellViewModel) {
         pocketStoriesViewModels.append(pocketStoryViewModel)
+        setViewModelsTapAction()
+    }
+
+    private func setViewModelsTapAction() {
+        guard let onTapAction = onTapAction else { return }
+        pocketStoriesViewModels.forEach { $0.onTap = onTapAction }
     }
 }
 
