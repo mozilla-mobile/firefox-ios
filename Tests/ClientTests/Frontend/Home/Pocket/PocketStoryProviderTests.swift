@@ -6,7 +6,7 @@ import XCTest
 import Shared
 @testable import Client
 
-class PocketStoryProviderTests: XCTestCase {
+class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
     var sut: StoryProvider!
 
     override func setUp() {
@@ -20,7 +20,7 @@ class PocketStoryProviderTests: XCTestCase {
     }
 
     func testIfSponsoredAreDisabled_FetchingStories_ReturnsTheNonSponsoredList() async {
-        FeatureFlagsManager.shared.set(feature: .sponsoredPocket, to: false)
+        featureFlags.set(feature: .sponsoredPocket, to: false)
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
@@ -37,7 +37,7 @@ class PocketStoryProviderTests: XCTestCase {
     }
 
     func testIfSponsoredAreEnabled_FetchingStoriesWithZeroSponsors_ReturnsTheNonSponsoredList() async {
-        FeatureFlagsManager.shared.set(feature: .sponsoredPocket, to: true)
+        featureFlags.set(feature: .sponsoredPocket, to: true)
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
@@ -54,7 +54,7 @@ class PocketStoryProviderTests: XCTestCase {
     }
 
     func testIfSponsoredAreEnabled_FetchingStoriesWithSponsors_ReturnsStoryList() async {
-        FeatureFlagsManager.shared.set(feature: .sponsoredPocket, to: true)
+        featureFlags.set(feature: .sponsoredPocket, to: true)
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
@@ -80,7 +80,7 @@ class PocketStoryProviderTests: XCTestCase {
     }
 
     func testIfSponsoredAreEnabled_FetchingStoriesWithSponsors_ReturnsInCorrectOrder() async {
-        FeatureFlagsManager.shared.set(feature: .sponsoredPocket, to: true)
+        featureFlags.set(feature: .sponsoredPocket, to: true)
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
@@ -113,7 +113,7 @@ class PocketStoryProviderTests: XCTestCase {
     }
 
     func testReturningMoreSponsores_ShowsOnlyTheCountFromIndeces() async {
-        FeatureFlagsManager.shared.set(feature: .sponsoredPocket, to: true)
+        featureFlags.set(feature: .sponsoredPocket, to: true)
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
@@ -145,7 +145,7 @@ class PocketStoryProviderTests: XCTestCase {
     }
 
     func testReturningEmptyFeed_ShowsOnlyTheSponsoredStories() async {
-        FeatureFlagsManager.shared.set(feature: .sponsoredPocket, to: true)
+        featureFlags.set(feature: .sponsoredPocket, to: true)
         let sponsoredStories: [PocketSponsoredStory] = [
             .make(title: "sponsored1"),
             .make(title: "sponsored2"),
@@ -170,7 +170,7 @@ class PocketStoryProviderTests: XCTestCase {
     }
 
     func testReturningFailureForSponsoredStories_ShowsOnlyTheFeed() async {
-        FeatureFlagsManager.shared.set(feature: .sponsoredPocket, to: true)
+        featureFlags.set(feature: .sponsoredPocket, to: true)
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
@@ -195,7 +195,7 @@ class PocketStoryProviderTests: XCTestCase {
     }
 
     func testReturningFailureForFeedStories_ShowsOnlyTheSponsored() async {
-        FeatureFlagsManager.shared.set(feature: .sponsoredPocket, to: true)
+        featureFlags.set(feature: .sponsoredPocket, to: true)
         let stories: [PocketSponsoredStory] = [
             .make(title: "sponsored1"),
             .make(title: "sponsored2"),
@@ -215,7 +215,7 @@ class PocketStoryProviderTests: XCTestCase {
     }
 
     func testReturningFailureForSponsoredStories_ShowsOnlyTheRequestedNumberInFeed() async {
-        FeatureFlagsManager.shared.set(feature: .sponsoredPocket, to: true)
+        featureFlags.set(feature: .sponsoredPocket, to: true)
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
