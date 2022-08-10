@@ -1,9 +1,8 @@
 name: "Update Nimbus Experiments"
 
 on:
-  # schedule:
-  #   - cron: '*/30 * * * *'
-  pull_request: {}
+  schedule:
+    - cron: '*/30 * * * *'
 
 jobs:
   update-nimbus-experiments:
@@ -21,8 +20,7 @@ jobs:
         with:
           repo-path: firefox-ios
           output-path: Client/Experiments/initial_experiments.json
-          # experimenter-url: https://experimenter.services.mozilla.com/api/v6/experiments/?is_first_run=true
-          experimenter-url: https://stage.experimenter.nonprod.dataops.mozgcp.net/api/v6/experiments/?is_first_run=true
+          experimenter-url: https://experimenter.services.mozilla.com/api/v6/experiments/?is_first_run=true
           app-name: firefox_ios
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
@@ -35,3 +33,4 @@ jobs:
           title: "Update initial experiments JSON for Nimbus"
           body: "This (automated) PR updates the initial_experiments.json on the `main` branch"
           delete-branch: true
+          labels: Needs Code Review
