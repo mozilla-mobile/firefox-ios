@@ -28,7 +28,7 @@ class UpdateViewController: UIViewController {
         button.setImage(closeImage, for: .normal)
         button.tintColor = .secondaryLabel
         button.addTarget(self, action: #selector(self.dismissAnimated), for: .touchUpInside)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Update.closeButton
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.closeButton
     }
 
     private lazy var pageController: UIPageViewController = {
@@ -44,7 +44,7 @@ class UpdateViewController: UIViewController {
         pageControl.currentPageIndicatorTintColor = UIColor.Photon.Blue50
         pageControl.pageIndicatorTintColor = UIColor.Photon.LightGrey40
         pageControl.isUserInteractionEnabled = false
-        pageControl.accessibilityIdentifier = AccessibilityIdentifiers.Update.pageControl
+        pageControl.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.pageControl
     }
 
     init(viewModel: UpdateViewModel) {
@@ -96,10 +96,11 @@ class UpdateViewController: UIViewController {
         var cardViewController: OnboardingCardViewController
 
         for (index, _) in viewModel.enabledCards.enumerated() {
-            let viewModel = viewModel.getCardViewModel(index: index)
-            cardViewController = OnboardingCardViewController(viewModel: viewModel!,
-                                                                  delegate: self)
-            informationCards.append(cardViewController)
+            if let viewModel = viewModel.getCardViewModel(index: index) {
+                cardViewController = OnboardingCardViewController(viewModel: viewModel,
+                                                                      delegate: self)
+                informationCards.append(cardViewController)
+            }
         }
 
         if let firstViewController = informationCards.first {
@@ -169,7 +170,6 @@ class UpdateViewController: UIViewController {
 extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
 
-        return nil
         guard let onboardingVC = viewController as? OnboardingCardViewController,
               let index = getCardIndex(viewController: onboardingVC) else {
               return nil

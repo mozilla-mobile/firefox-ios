@@ -29,37 +29,39 @@ struct IntroViewModel: InformationContainerModel {
         return [.welcome, .wallpapers, .signSync]
     }
 
-    func getCardViewModel(index: Int) -> OnboardingCardProtocol? {
-        let currentCard = enabledCards[index]
-
-        switch currentCard {
+    func getInfoModel(cardType: IntroViewModel.InformationCards) -> InfoModelProtocol? {
+        switch cardType {
         case .welcome:
-            return OnboardingCardViewModel(cardType: currentCard,
-                                           image: UIImage(named: ImageIdentifiers.onboardingWelcome),
-                                           title: .CardTitleWelcome,
-                                           description: .Onboarding.IntroDescriptionPart2,
-                                           primaryAction: .Onboarding.IntroAction,
-                                           secondaryAction: nil,
-                                           a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
+            return CoverSheetInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcome),
+                                       title: .CardTitleWelcome,
+                                       description: .Onboarding.IntroDescriptionPart2,
+                                       primaryAction: .Onboarding.IntroAction,
+                                       secondaryAction: nil,
+                                       a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
         case .wallpapers:
-            return OnboardingCardViewModel(cardType: currentCard,
-                                           image: nil,
-                                           title: .Onboarding.WallpaperTitle,
-                                           description: nil,
-                                           primaryAction: .Onboarding.WallpaperAction,
-                                           secondaryAction: .Onboarding.LaterAction,
-                                           a11yIdRoot: AccessibilityIdentifiers.Onboarding.wallpapersCard)
+            return CoverSheetInfoModel(image: nil,
+                                       title: .Onboarding.WallpaperTitle,
+                                       description: nil,
+                                       primaryAction: .Onboarding.WallpaperAction,
+                                       secondaryAction: .Onboarding.LaterAction,
+                                       a11yIdRoot: AccessibilityIdentifiers.Onboarding.wallpapersCard)
         case .signSync:
-            return OnboardingCardViewModel(cardType: currentCard,
-                                           image: UIImage(named: ImageIdentifiers.onboardingSync),
-                                           title: .Onboarding.SyncTitle,
-                                           description: .Onboarding.SyncDescription,
-                                           primaryAction: .Onboarding.SyncAction,
-                                           secondaryAction: .WhatsNew.RecentButtonTitle,
-                                           a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
+            return CoverSheetInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSync),
+                                       title: .Onboarding.SyncTitle,
+                                       description: .Onboarding.SyncDescription,
+                                       primaryAction: .Onboarding.SyncAction,
+                                       secondaryAction: .WhatsNew.RecentButtonTitle,
+                                       a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
         default:
             return nil
         }
+    }
+
+    func getCardViewModel(index: Int) -> OnboardingCardProtocol? {
+        let currentCard = enabledCards[index]
+        guard let infoModel = getInfoModel(cardType: currentCard) else { return nil }
+
+        return OnboardingCardViewModel(cardType: currentCard, infoModel: infoModel)
     }
 
     func sendCloseButtonTelemetry(index: Int) {

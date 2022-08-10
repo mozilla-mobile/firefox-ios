@@ -6,12 +6,7 @@ import Foundation
 
 protocol OnboardingCardProtocol {
     var cardType: IntroViewModel.InformationCards { get set }
-    var image: UIImage? { get set }
-    var title: String { get set }
-    var description: String? { get set }
-    var primaryAction: String { get set }
-    var secondaryAction: String? { get set }
-    var a11yIdRoot: String { get set }
+    var infoModel: InfoModelProtocol { get set }
 
     func sendCardViewTelemetry()
     func sendTelemetryButton(isPrimaryAction: Bool)
@@ -19,28 +14,13 @@ protocol OnboardingCardProtocol {
 
 struct OnboardingCardViewModel: OnboardingCardProtocol {
     var cardType: IntroViewModel.InformationCards
-    var image: UIImage?
-    var title: String
-    var description: String?
-    var primaryAction: String
-    var secondaryAction: String?
-    var a11yIdRoot: String
+    var infoModel: InfoModelProtocol
 
     init(cardType: IntroViewModel.InformationCards,
-         image: UIImage?,
-         title: String,
-         description: String?,
-         primaryAction: String,
-         secondaryAction: String?,
-         a11yIdRoot: String) {
+         infoModel: InfoModelProtocol) {
 
         self.cardType = cardType
-        self.image = image
-        self.title = title
-        self.description = description
-        self.primaryAction = primaryAction
-        self.secondaryAction = secondaryAction
-        self.a11yIdRoot = a11yIdRoot
+        self.infoModel = infoModel
     }
 
     func sendCardViewTelemetry() {

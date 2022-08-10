@@ -5,24 +5,6 @@
 import Foundation
 import Shared
 
-protocol InformationContainerModel {
-    var enabledCards: [IntroViewModel.InformationCards] { get }
-}
-
-extension InformationContainerModel {
-    func getNextIndex(currentIndex: Int, goForward: Bool) -> Int? {
-        if goForward && currentIndex + 1 < enabledCards.count {
-            return currentIndex + 1
-        }
-
-        if !goForward && currentIndex > 0 {
-            return currentIndex - 1
-        }
-
-        return nil
-    }
-}
-
 class UpdateViewModel: InformationContainerModel {
 
     var startBrowsing: (() -> Void)?
@@ -37,10 +19,10 @@ class UpdateViewModel: InformationContainerModel {
     }
     var enabledCards: [IntroViewModel.InformationCards] {
         if hasSyncAccount {
-            return [.welcome]
+            return [.updateWelcome]
         }
 
-        return [.welcome, .signSync]
+        return [.updateWelcome, .updateSignSync]
     }
 
     var isCleanInstall: Bool {
@@ -56,29 +38,33 @@ class UpdateViewModel: InformationContainerModel {
         self.profile = profile
     }
 
-    func getCardViewModel(index: Int) -> OnboardingCardProtocol? {
-        let currentCard = enabledCards[index]
-
+    func getInfoModel(currentCard: IntroViewModel.InformationCards) -> InfoModelProtocol? {
         switch currentCard {
-        case .welcome:
-            return OnboardingCardViewModel(cardType: currentCard,
-                                           image: UIImage(named: ImageIdentifiers.onboardingWelcome),
-                                           title: .CardTitleWelcome,
-                                           description: .Onboarding.IntroDescriptionPart2,
-                                           primaryAction: .Onboarding.IntroAction,
-                                           secondaryAction: nil,
-                                           a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
-        case .signSync:
-            return OnboardingCardViewModel(cardType: currentCard,
-                                           image: UIImage(named: ImageIdentifiers.onboardingSync),
-                                           title: .Onboarding.SyncTitle,
-                                           description: .Onboarding.SyncDescription,
-                                           primaryAction: .Onboarding.SyncAction,
-                                           secondaryAction: .WhatsNew.RecentButtonTitle,
-                                           a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
+        case .updateWelcome:
+            return CoverSheetInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcome),
+                                       title: .Upgrade.WelcomeTitle,
+                                       description: .Upgrade.WelcomeDescription,
+                                       primaryAction: .Upgrade.WelcomeAction,
+                                       secondaryAction: nil,
+                                       a11yIdRoot: AccessibilityIdentifiers.Upgrade.welcomeCard)
+        case .updateSignSync:
+            return CoverSheetInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSync),
+                                       title: .Upgrade.SyncSignTitle,
+                                       description: .Upgrade.SyncSignDescription,
+                                       primaryAction: .Upgrade.SyncAction,
+                                       secondaryAction: .Onboarding.LaterAction,
+                                       a11yIdRoot: AccessibilityIdentifiers.Upgrade.signSyncCard)
         default:
             return nil
         }
+    }
+
+    func getCardViewModel(index: Int) -> OnboardingCardProtocol? {
+        let currentCard = enabledCards[index]
+        guard let infoModel = getInfoModel(currentCard: currentCard) else { return nil }
+
+        return OnboardingCardViewModel(cardType: currentCard,
+                                       infoModel: infoModel)
     }
 
     func shouldShowUpdateSheet(appVersion: String = AppInfo.appVersion) -> Bool {

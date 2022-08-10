@@ -70,15 +70,16 @@ class IntroViewController: UIViewController {
         // Create onboarding card views
         var cardViewController: OnboardingCardViewController
         for (index, cardType) in viewModel.enabledCards.enumerated() {
-            let viewModel = viewModel.getCardViewModel(index: index)
-            if cardType == .wallpapers {
-                cardViewController = WallpaperCardViewController(viewModel: viewModel!,
-                                                                 delegate: self)
-            } else {
-                cardViewController = OnboardingCardViewController(viewModel: viewModel!,
-                                                                  delegate: self)
+            if let viewModel = viewModel.getCardViewModel(index: index) {
+                if cardType == .wallpapers {
+                    cardViewController = WallpaperCardViewController(viewModel: viewModel,
+                                                                     delegate: self)
+                } else {
+                    cardViewController = OnboardingCardViewController(viewModel: viewModel,
+                                                                      delegate: self)
+                }
+                onboardingCards.append(cardViewController)
             }
-            onboardingCards.append(cardViewController)
         }
 
         if let firstViewController = onboardingCards.first {

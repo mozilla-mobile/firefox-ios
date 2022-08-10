@@ -54,7 +54,7 @@ class OnboardingCardViewController: UIViewController {
 
     private lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)ImageView"
+        imageView.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)ImageView"
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -64,7 +64,7 @@ class OnboardingCardViewController: UIViewController {
             withTextStyle: .title1,
             maxSize: 58)
         label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
+        label.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)TitleLabel"
     }
 
     // Only available for Welcome card and default cases
@@ -76,10 +76,8 @@ class OnboardingCardViewController: UIViewController {
             maxSize: 53)
         label.isHidden = true
         label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionBoldLabel"
+        label.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)DescriptionBoldLabel"
     }
-
-
 
     private lazy var descriptionLabel: UILabel = .build { label in
         label.numberOfLines = 0
@@ -88,7 +86,7 @@ class OnboardingCardViewController: UIViewController {
             withTextStyle: .body,
             maxSize: 53)
         label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionLabel"
+        label.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)DescriptionLabel"
     }
 
     lazy var buttonStackView: UIStackView = .build { stack in
@@ -107,7 +105,7 @@ class OnboardingCardViewController: UIViewController {
         button.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
-        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)PrimaryButton"
+        button.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)PrimaryButton"
     }
 
     private lazy var secondaryButton: ResizableButton = .build { button in
@@ -119,7 +117,7 @@ class OnboardingCardViewController: UIViewController {
         button.setTitleColor(UIColor.Photon.DarkGrey90, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
-        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)SecondaryButton"
+        button.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)SecondaryButton"
     }
 
     init(viewModel: OnboardingCardProtocol, delegate: OnboardingCardDelegate?) {
@@ -219,17 +217,17 @@ class OnboardingCardViewController: UIViewController {
     }
 
     private func updateLayout() {
-        titleLabel.text = viewModel.title
+        titleLabel.text = viewModel.infoModel.title
         descriptionBoldLabel.isHidden = viewModel.cardType != .welcome
         descriptionBoldLabel.text = .Onboarding.IntroDescriptionPart1
-        descriptionLabel.isHidden = viewModel.description?.isEmpty ?? true
-        descriptionLabel.text = viewModel.description
-        secondaryButton.isHidden = viewModel.secondaryAction?.isEmpty ?? true
+        descriptionLabel.isHidden = viewModel.infoModel.description?.isEmpty ?? true
+        descriptionLabel.text = viewModel.infoModel.description
+        secondaryButton.isHidden = viewModel.infoModel.secondaryAction?.isEmpty ?? true
 
-        imageView.image = viewModel.image
-        imageView.isHidden = viewModel.image == nil
-        primaryButton.setTitle(viewModel.primaryAction, for: .normal)
-        secondaryButton.setTitle(viewModel.secondaryAction, for: .normal)
+        imageView.image = viewModel.infoModel.image
+        imageView.isHidden = viewModel.infoModel.image == nil
+        primaryButton.setTitle(viewModel.infoModel.primaryAction, for: .normal)
+        secondaryButton.setTitle(viewModel.infoModel.secondaryAction, for: .normal)
     }
 
     private func applyTheme() {
