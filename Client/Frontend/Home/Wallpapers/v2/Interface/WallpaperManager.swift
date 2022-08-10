@@ -44,11 +44,13 @@ class WallpaperManager {
         return [
             WallpaperCollection(
                 id: "classicFirefox",
+                learnMoreUrl: nil,
                 availableLocales: nil,
                 availability: nil,
                 wallpapers: wallpapersForClassic),
             WallpaperCollection(
                 id: "otherCollection",
+                learnMoreUrl: URL(string: "https://www.mozilla.com"),
                 availableLocales: nil,
                 availability: nil,
                 wallpapers: wallpapersForOther),
