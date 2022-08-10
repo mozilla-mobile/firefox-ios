@@ -103,8 +103,6 @@ extension HomepageMessageCardViewModel: HomepageSectionHandler {
             return UICollectionViewCell()
         }
 
-        handleMessageDisplayed()
-
         messageCell.configure(viewModel: self)
         return messageCell
     }
@@ -113,6 +111,8 @@ extension HomepageMessageCardViewModel: HomepageSectionHandler {
 // MARK: - MessageCardDelegate
 extension HomepageMessageCardViewModel: MessageCardDelegate {
     func didLoadNewData() {
+        handleMessageDisplayed()
+
         ensureMainThread {
             self.message = self.dataAdaptor.getMessageCardData()
             self.delegate?.reloadView()

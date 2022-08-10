@@ -90,7 +90,6 @@ class HomepageViewModel: FeatureFlaggable {
         self.isZeroSearch = isZeroSearch
 
         self.headerViewModel = HomeLogoHeaderViewModel(profile: profile)
-
         let messageCardAdaptor = MessageCardDataAdaptorImplementation()
         self.messageCardViewModel = HomepageMessageCardViewModel(dataAdaptor: messageCardAdaptor)
         messageCardAdaptor.delegate = messageCardViewModel

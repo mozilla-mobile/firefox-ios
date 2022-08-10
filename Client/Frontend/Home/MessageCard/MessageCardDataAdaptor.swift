@@ -14,25 +14,21 @@ protocol MessageCardDelegate: AnyObject {
 
 class MessageCardDataAdaptorImplementation: MessageCardDataAdaptor, GleanPlumbMessageManagable {
 
-    weak var delegate: MessageCardDelegate?
+    weak var delegate: MessageCardDelegate? {
+        didSet {
+            updateMessage()
+        }
+    }
     private var message: GleanPlumbMessage?
-    var notificationCenter: NotificationProtocol
 
     func getMessageCardData() -> GleanPlumbMessage? {
         return message
     }
 
-    init(notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.notificationCenter = notificationCenter
-        setupNotifications(forObserver: self, observing: [UIApplication.willEnterForegroundNotification])
-
-        updateMessage()
-    }
-
     /// Call messagingManager to retrieve the message for new tab card
     /// An expired message will not trigger a reload of the section
     /// - Parameter surface: Message surface id
-    private func updateMessage(for surface: MessageSurfaceId = .newTabCard) {
+    func updateMessage(for surface: MessageSurfaceId = .newTabCard) {
         guard let validMessage = messagingManager.getNextMessage(for: surface) else { return }
 
         if !validMessage.isExpired {
@@ -40,14 +36,4 @@ class MessageCardDataAdaptorImplementation: MessageCardDataAdaptor, GleanPlumbMe
             delegate?.didLoadNewData()
         }
     }
-}
-
-extension MessageCardDataAdaptorImplementation: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-         switch notification.name {
-         case UIApplication.willEnterForegroundNotification:
-             updateMessage()
-         default: break
-         }
-     }
 }
