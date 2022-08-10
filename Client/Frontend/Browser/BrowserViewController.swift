@@ -93,7 +93,7 @@ class BrowserViewController: UIViewController {
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
 
-    // Header can contain the top url bar, bottomContainer only contains toolbar
+    // Header can contain the top url bar, bottomContainer only containts toolbar
     // OverKeyboardContainer contains the reader mode and maybe the bottom url bar
     var header: BaseAlphaStackView = .build { _ in }
     var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
@@ -120,8 +120,9 @@ class BrowserViewController: UIViewController {
     var keyboardBackdrop: UIView?
 
     var scrollController = TabScrollingController()
-    private var keyboardState: KeyboardState?
+    fileprivate var keyboardState: KeyboardState?
     var hasTriedToPresentETPAlready = false
+    var hasTriedToPresentDBCardAlready = false
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
@@ -355,6 +356,7 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.alpha = 1
         webViewContainer.alpha = 0
         urlBar.locationContainer.alpha = 0
+        homepageViewController?.view.alpha = 0
         topTabsViewController?.switchForegroundStatus(isInForeground: false)
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
@@ -366,6 +368,7 @@ class BrowserViewController: UIViewController {
         UIView.animate(withDuration: 0.2, delay: 0, options: UIView.AnimationOptions(), animations: {
             self.webViewContainer.alpha = 1
             self.urlBar.locationContainer.alpha = 1
+            self.homepageViewController?.view.alpha = 1
             self.topTabsViewController?.switchForegroundStatus(isInForeground: true)
             self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
             self.presentedViewController?.view.alpha = 1
@@ -520,6 +523,7 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         presentIntroViewController()
+        presentDBOnboardingViewController()
         presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
 
@@ -535,9 +539,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func prepareURLOnboardingContextualHint() {
-        guard contextHintVC.shouldPresentHint(),
-              featureFlags.isFeatureEnabled(.contextualHintForToolbar, checking: .buildOnly)
-        else { return }
+        guard contextHintVC.shouldPresentHint() else { return }
 
         contextHintVC.configure(
             anchor: urlBar,
@@ -551,8 +553,6 @@ class BrowserViewController: UIViewController {
     private func presentContextualHint() {
         if shouldShowIntroScreen { return }
         present(contextHintVC, animated: true)
-
-        UIAccessibility.post(notification: .layoutChanged, argument: contextHintVC)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -778,8 +778,7 @@ class BrowserViewController: UIViewController {
 
             // This assumes that the DB returns rows in some kind of sane order.
             // It does in practice, so WFM.
-            let cursorCount = cursor.count
-            if cursorCount > 0 {
+            if cursor.count > 0 {
 
                 // Filter out any tabs received by a push notification to prevent dupes.
                 let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
@@ -874,19 +873,12 @@ class BrowserViewController: UIViewController {
             hideReaderModeBar(animated: false)
         }
 
-        homepageViewController?.view.layer.removeAllAnimations()
-        view.setNeedsUpdateConstraints()
-
-        // Return early if the home page is already showing
-        guard homepageViewController?.view.alpha != 1 else { return }
-
         homepageViewController?.applyTheme()
         homepageViewController?.recordHomepageAppeared(isZeroSearch: !inline)
 
-        // Hack to force updates on the view
-        homepageViewController?.view.alpha = 0.001
-        homepageViewController?.reloadAll()
-
+        // We have to run this animation, even if the view is already showing
+        // because there may be a hide animation running and we want to be sure
+        // to override its results.
         UIView.animate(withDuration: 0.2, animations: { () -> Void in
             self.homepageViewController?.view.alpha = 1
         }, completion: { finished in
@@ -916,11 +908,6 @@ class BrowserViewController: UIViewController {
 
     func hideHomepage(completion: (() -> Void)? = nil) {
         guard let homepageViewController = self.homepageViewController else { return }
-
-        self.homepageViewController?.view.layer.removeAllAnimations()
-
-        // Return early if the home page is already hidden
-        guard self.homepageViewController?.view.alpha != 0 else { return }
 
         homepageViewController.recordHomepageDisappeared()
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
@@ -988,7 +975,9 @@ class BrowserViewController: UIViewController {
         libraryViewController.delegate = self
         self.libraryViewController = libraryViewController
 
-        libraryViewController.setupOpenPanel(panelType: panel ?? . bookmarks)
+        if panel != nil {
+            libraryViewController.selectedPanel = panel
+        }
 
         // Reset history panel pagination to get latest history visit
         if let historyPanel = libraryViewController.viewModel.panelDescriptors.first(where: {$0.panelType == .history}),
@@ -1084,7 +1073,7 @@ class BrowserViewController: UIViewController {
 
     func addBookmark(url: String, title: String? = nil, favicon: Favicon? = nil) {
         var title = (title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        if title.isEmpty {
+        if title.count == 0 {
             title = url
         }
 
@@ -1126,7 +1115,7 @@ class BrowserViewController: UIViewController {
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
 
             guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
-                  let bookmarkNode = bookmarkFolder.children?.last as? FxBookmarkNode
+                  let bookmarkNode = bookmarkFolder.children?.last
             else { return }
 
             let detailController = BookmarkDetailPanel(profile: self.profile,
@@ -1815,8 +1804,8 @@ extension BrowserViewController: HomePanelDelegate {
         show(toast: toast)
     }
 
-    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: TabTrayViewModel.Segment?) {
-        showTabTray(withFocusOnUnselectedTab: tabToFocus, focusedSegment: focusedSegment)
+    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab? = nil) {
+        showTabTray(withFocusOnUnselectedTab: tabToFocus)
     }
 
     func homePanelDidPresentContextualHintOf(type: ContextualHintViewType) {
@@ -1857,7 +1846,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
         let searchSettingsTableViewController = SearchSettingsTableViewController()
         searchSettingsTableViewController.model = self.profile.searchEngines
         searchSettingsTableViewController.profile = self.profile
-        // Update search icon when the searchengine changes
+        // Update saerch icon when the searchengine changes
         searchSettingsTableViewController.updateSearchIcon = {
             self.urlBar.updateSearchEngineImage()
             self.searchController?.reloadSearchEngines()
@@ -2070,7 +2059,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
     }
 
-    func tabManagerUpdateCount() {
+    @objc func tabManagerUpdateCount() {
         updateTabCountUsingTabManager(self.tabManager)
     }
 }
@@ -2135,11 +2124,13 @@ extension BrowserViewController {
 
     // Default browser onboarding
     func presentDBOnboardingViewController(_ force: Bool = false) {
-        guard #available(iOS 14.0, *) else { return }
+        guard #available(iOS 14.0, *),
+              !hasTriedToPresentDBCardAlready || force
+        else { return }
 
-        guard force || DefaultBrowserOnboardingViewModel.shouldShowDefaultBrowserOnboarding(userPrefs: profile.prefs)
-            else { return }
-
+        hasTriedToPresentDBCardAlready = true
+        let shouldShow = DefaultBrowserOnboardingViewModel.shouldShowDefaultBrowserOnboarding(userPrefs: profile.prefs)
+        guard force || shouldShow else { return }
         let dBOnboardingViewController = DefaultBrowserOnboardingViewController()
         if topTabsVisible {
             dBOnboardingViewController.preferredContentSize = CGSize(
@@ -2150,6 +2141,7 @@ extension BrowserViewController {
             dBOnboardingViewController.modalPresentationStyle = .popover
         }
         dBOnboardingViewController.viewModel.goToSettings = {
+            self.homepageViewController?.dismissHomeTabBanner()
             dBOnboardingViewController.dismiss(animated: true) {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
             }
