@@ -30,7 +30,8 @@ class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
         }
     }
 
-    var dataCompletion: (() -> Void)?
+    // Used for unit tests since pocket use async/await
+    private var dataCompletion: (() -> Void)?
 
     init(pocketAPI: PocketStoriesProviding,
          pocketSponsoredAPI: PocketSponsoredStoriesProviding,

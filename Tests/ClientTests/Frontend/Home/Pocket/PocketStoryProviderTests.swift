@@ -262,7 +262,7 @@ extension PocketFeedStory {
     }
 }
 
-extension PocketSponsoredStory {
+fileprivate extension PocketSponsoredStory {
     static func make(title: String) -> PocketSponsoredStory {
         PocketSponsoredStory(
             id: 1,
