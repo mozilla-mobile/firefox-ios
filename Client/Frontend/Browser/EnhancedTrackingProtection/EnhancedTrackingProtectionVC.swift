@@ -337,10 +337,10 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         heroImage.tintColor = UIColor.theme.etpMenu.defaultImageTints
         if let favIconURL = viewModel.favIcon {
             ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: favIconURL,
-                                                                   limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+                                                                   limit: ImageLoadingConstants.NoLimitImageSize) {
+                [weak self] image, error in
                 guard error == nil, let image = image else { return }
-
-                self.heroImage.image = image
+                self?.heroImage.image = image
             }
         }
 
