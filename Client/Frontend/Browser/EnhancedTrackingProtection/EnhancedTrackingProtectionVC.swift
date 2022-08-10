@@ -333,11 +333,15 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     private func updateViewDetails() {
+        heroImage.image = UIImage(named: "defaultFavicon")
+        heroImage.tintColor = UIColor.theme.etpMenu.defaultImageTints
         if let favIconURL = viewModel.favIcon {
-            heroImage.sd_setImage(with: favIconURL, placeholderImage: UIImage(named: "defaultFavicon"), options: [], completed: nil)
-        } else {
-            heroImage.image = UIImage(named: "defaultFavicon")!
-            heroImage.tintColor = UIColor.theme.etpMenu.defaultImageTints
+            ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: favIconURL,
+                                                                   limit: ImageLoadingConstants.NoLimitImageSize) {
+                [weak self] image, error in
+                guard error == nil, let image = image else { return }
+                self?.heroImage.image = image
+            }
         }
 
         siteDomainLabel.text = viewModel.websiteTitle

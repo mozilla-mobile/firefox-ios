@@ -116,13 +116,17 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         let hideCloseButton = frame.width < 148 && !selected
         closeButton.isHidden = hideCloseButton
 
+        favicon.image = UIImage(named: "defaultFavicon")
+        favicon.tintColor = UIColor.theme.tabTray.faviconTint
+        favicon.contentMode = .scaleAspectFit
+        favicon.backgroundColor = .clear
+
         if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
-            favicon.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultFavicon"), options: [], completed: nil)
-        } else {
-            favicon.image = UIImage(named: "defaultFavicon")
-            favicon.tintColor = UIColor.theme.tabTray.faviconTint
-            favicon.contentMode = .scaleAspectFit
-            favicon.backgroundColor = .clear
+            ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
+                                                                   limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+                guard error == nil, let image = image else { return }
+                self.favicon.image = image
+            }
         }
     }
 

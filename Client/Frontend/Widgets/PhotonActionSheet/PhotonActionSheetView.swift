@@ -306,9 +306,15 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         case .URL:
             let image = UIImage(named: name)?.createScaled(PhotonActionSheet.UX.IconSize)
             statusIcon.layer.cornerRadius = PhotonActionSheet.UX.IconSize.width / 2
-            statusIcon.sd_setImage(with: action.iconURL, placeholderImage: image, options: [.avoidAutoSetImage]) { (img, err, _, _) in
-                if let img = img, self.accessibilityLabel == action.currentTitle {
-                    self.statusIcon.image = img.createScaled(PhotonActionSheet.UX.IconSize)
+            statusIcon.image = image
+            if let actionIconUrl = action.iconURL {
+                ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: actionIconUrl,
+                                                                       limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+                    guard error == nil, let image = image, self.accessibilityLabel == action.currentTitle else {
+                        return
+                    }
+
+                    self.statusIcon.image = image.createScaled(PhotonActionSheet.UX.IconSize)
                     self.statusIcon.layer.cornerRadius = PhotonActionSheet.UX.IconSize.width / 2
                 }
             }

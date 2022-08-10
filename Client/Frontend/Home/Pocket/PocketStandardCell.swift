@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Shared
 
 class PocketStandardCellViewModel {
     var title: String { story.title }
@@ -140,7 +141,12 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         descriptionLabel.text = viewModel.description
         accessibilityLabel = viewModel.accessibilityLabel
 
-        heroImageView.sd_setImage(with: viewModel.imageURL)
+        ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: viewModel.imageURL,
+                                                               limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+            guard error == nil, let image = image else { return }
+            self.heroImageView.image = image
+        }
+
         sponsoredStack.isHidden = viewModel.sponsor == nil
         descriptionLabel.font = viewModel.sponsor == nil
         ? DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
