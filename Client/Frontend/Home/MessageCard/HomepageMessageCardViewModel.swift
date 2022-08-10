@@ -111,11 +111,10 @@ extension HomepageMessageCardViewModel: HomepageSectionHandler {
 // MARK: - MessageCardDelegate
 extension HomepageMessageCardViewModel: MessageCardDelegate {
     func didLoadNewData() {
-        handleMessageDisplayed()
-
         ensureMainThread {
             self.message = self.dataAdaptor.getMessageCardData()
             self.delegate?.reloadView()
+            self.handleMessageDisplayed()
         }
     }
 }
