@@ -13,6 +13,11 @@ enum HistoryDeletionUtilityDateOptions {
     case allTime
 }
 
+protocol HistoryDeletionProtocol {
+    func delete(_ sites: [String]) async -> Bool
+    func deleteHistoryFrom(_ dateOption: HistoryDeletionUtilityDateOptions) async -> HistoryDeletionUtilityDateOptions
+}
+
 class HistoryDeletionUtility {
 
     private var profile: Profile
@@ -21,12 +26,23 @@ class HistoryDeletionUtility {
         self.profile = profile
     }
 
-    // MARK: URL based deletion functions
-    public func delete(_ sites: [String]) async -> Bool {
+    // MARK: Interface
+    func delete(_ sites: [String]) async -> Bool {
         deleteFromHistory(sites)
         return await deleteMetadata(sites)
     }
 
+    func deleteHistoryFrom(_ dateOption: HistoryDeletionUtilityDateOptions) async -> HistoryDeletionUtilityDateOptions {
+
+        deleteWKWebsiteDataSince(dateOption, for: WKWebsiteDataStore.allWebsiteDataTypes())
+        _ = await deleteProfileHistorySince(dateOption)
+        _ = await deleteProfileMetadataSince(dateOption)
+        clearRecentlyClosedTabs(using: dateOption)
+
+        return dateOption
+    }
+
+    // MARK: URL based deletion functions
     private func deleteFromHistory(_ sites: [String]) {
         sites.forEach { profile.history.removeHistoryForURL($0) }
     }
@@ -48,23 +64,15 @@ class HistoryDeletionUtility {
     }
 
     // MARK: - Date based deletion functions
-    public func deleteHistoryFrom(_ dateOption: HistoryDeletionUtilityDateOptions) async -> HistoryDeletionUtilityDateOptions {
-
-        await deleteWKWebsiteDataSince(dateOption, for: WKWebsiteDataStore.allWebsiteDataTypes())
-        _ = await deleteProfileHistorySince(dateOption)
-        _ = await deleteProfileMetadataSince(dateOption)
-        clearRecentlyClosedTabs(using: dateOption)
-
-        return dateOption
-    }
-
     private func deleteWKWebsiteDataSince(
         _ dateOption: HistoryDeletionUtilityDateOptions,
         for types: Set<String>
-    ) async {
+    ) {
         guard let date = dateFor(dateOption, requiringAllTimeAsPresent: false) else { return }
 
-        await WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: date)
+        // Using checkedContinuation because we should not use Apple's async/await APIs
+        // until our min supported version is iOS15.
+        WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: date, completionHandler: { })
     }
 
     private func deleteProfileHistorySince(_ dateOption: HistoryDeletionUtilityDateOptions) async -> Bool? {
