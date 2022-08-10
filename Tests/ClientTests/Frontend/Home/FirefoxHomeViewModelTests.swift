@@ -35,7 +35,9 @@ class FirefoxHomeViewModelTests: XCTestCase {
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
                                           urlBar: URLBarView(profile: profile))
-        XCTAssertEqual(viewModel.shownSections.count, 3)
+        XCTAssertEqual(viewModel.shownSections.count, 2)
+        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
+        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.jumpBackIn)
     }
 
     func testNumberOfSection_updatingData_adds2Sections() throws {
