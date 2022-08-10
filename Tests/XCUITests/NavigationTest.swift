@@ -95,7 +95,7 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         // Open FxAccount from settings menu and check the Sign in to Firefox screen
-        let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts["Sync and Save Data"]
+        let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton]
         signInToFirefoxStaticText.tap()
         checkFirefoxSyncScreenShownViaSettings()
 
@@ -103,13 +103,13 @@ class NavigationTest: BaseTestCase {
         let closeButton = app.navigationBars["Client.FxAWebView"].buttons.element(boundBy: 0)
         closeButton.tap()
 
-        let closeButtonFxView = app.navigationBars["Sync and Save Data"].buttons["Settings"]
+        let closeButtonFxView = app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar].buttons["Settings"]
         closeButtonFxView.tap()
     }
 
     // Because the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
     private func checkFirefoxSyncScreenShownViaSettings() {
-        waitForExistence(app.navigationBars["Sync and Save Data"], timeout: 20)
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 20)
         app.buttons["EmailSignIn.button"].tap()
         waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 20)
 
@@ -128,7 +128,7 @@ class NavigationTest: BaseTestCase {
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleSyncMode)
 
-        app.tables.buttons["Sync and Save Data"].tap()
+        app.tables.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].tap()
         waitForExistence(app.buttons["EmailSignIn.button"], timeout: 10)
         app.buttons["EmailSignIn.button"].tap()
         checkFirefoxSyncScreenShown()
