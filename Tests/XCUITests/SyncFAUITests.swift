@@ -36,15 +36,15 @@ class SyncUITests: BaseTestCase {
     }
 
     private func verifyFxASigninScreen() {
-        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 30)
-        waitForExistence(app.webViews.textFields["Email"], timeout: 10)
-        XCTAssertTrue(app.webViews.textFields["Email"].exists)
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 30)
+        waitForExistence(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField], timeout: 10)
+        XCTAssertTrue(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField].exists)
 
         // Verify the placeholdervalues here for the textFields
-        let mailPlaceholder = "Email"
-        let defaultMailPlaceholder = app.webViews.textFields["Email"].placeholderValue!
+        let mailPlaceholder = "Enter your email"
+        let defaultMailPlaceholder = app.webViews.textFields["Enter your email"].placeholderValue!
         XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
-        XCTAssertTrue(app.webViews.buttons["Continue"].exists)
+        XCTAssertTrue(app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].exists)
     }
 
     func testTypeOnGivenFields() {
@@ -52,10 +52,10 @@ class SyncUITests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 60)
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 60)
 
         // Tap Sign in without any value in email Password focus on Email
-        waitForExistence(app.webViews.buttons["Continue"], timeout: 20)
+        waitForExistence(app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton], timeout: 20)
         navigator.performAction(Action.FxATapOnContinueButton)
         waitForExistence(app.webViews.staticTexts["Valid email required"])
 
@@ -81,7 +81,7 @@ class SyncUITests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
         waitForExistence(app.webViews.firstMatch, timeout: 20)
-        waitForExistence(app.webViews.textFields["Email"], timeout: 40)
+        waitForExistence(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField], timeout: 40)
         userState.fxaUsername = "foo1bar2@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnContinueButton)
@@ -94,7 +94,7 @@ class SyncUITests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.webViews.textFields["Email"], timeout: 20)
+        waitForExistence(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField], timeout: 20)
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "iosmztest@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
@@ -115,8 +115,8 @@ class SyncUITests: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         // QR does not work on sim but checking that the button works, no crash
         navigator.performAction(Action.OpenEmailToQR)
-        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 5)
-        app.navigationBars["Turn on Sync"].buttons["Close"].tap()
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 5)
+        app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar].buttons["Close"].tap()
         waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 }

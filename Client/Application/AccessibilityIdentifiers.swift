@@ -158,6 +158,10 @@ public struct AccessibilityIdentifiers {
 
         struct FirefoxAccount {
             static let qrButton = "QRCodeSignIn.button"
+            static let continueButton = "Sign up or sign in"
+            static let emailTextField = "Enter your email"
+            static let fxaNavigationBar = "Sync and Save Data"
+            static let fxaSettingsButton = "Sync and Save Data"
         }
 
         struct Search {

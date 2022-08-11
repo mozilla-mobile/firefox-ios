@@ -90,7 +90,9 @@ class HomepageViewModel: FeatureFlaggable {
         self.isZeroSearch = isZeroSearch
 
         self.headerViewModel = HomeLogoHeaderViewModel(profile: profile)
-        self.messageCardViewModel = HomepageMessageCardViewModel()
+        let messageCardAdaptor = MessageCardDataAdaptorImplementation()
+        self.messageCardViewModel = HomepageMessageCardViewModel(dataAdaptor: messageCardAdaptor)
+        messageCardAdaptor.delegate = messageCardViewModel
         self.topSiteViewModel = TopSitesViewModel(profile: profile)
 
         let siteImageHelper = SiteImageHelper(profile: profile)
@@ -131,6 +133,7 @@ class HomepageViewModel: FeatureFlaggable {
         historyHighlightsViewModel.delegate = self
         recentlySavedViewModel.delegate = self
         jumpBackInViewModel.delegate = self
+        messageCardViewModel.delegate = self
 
         updateEnabledSections()
     }

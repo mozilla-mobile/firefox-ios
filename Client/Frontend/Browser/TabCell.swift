@@ -176,11 +176,14 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         isAccessibilityElement = true
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
 
+        favicon.image = UIImage(named: "defaultFavicon")
+        favicon.tintColor = UIColor.theme.tabTray.faviconTint
         if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
-            favicon.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultFavicon"), options: [], completed: nil)
-        } else {
-            favicon.image = UIImage(named: "defaultFavicon")
-            favicon.tintColor = UIColor.theme.tabTray.faviconTint
+            ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
+                                                                   limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+                guard error == nil, let image = image else { return }
+                self.favicon.image = image
+            }
         }
 
         if selected {

@@ -251,6 +251,37 @@ class TelemetryWrapperTests: XCTestCase {
         let wallpaperName = LegacyWallpaperManager().currentWallpaper.name.lowercased()
         XCTAssertEqual(GleanMetrics.WallpaperAnalytics.themedWallpaper[wallpaperName].testGetValue(), 1)
     }
+
+    // MARK: - Awesomebar result tap
+    func test_AwesomebarResults_GleanIsCalledForSearchSuggestion() {
+        let extra = [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.searchSuggestion.rawValue]
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .awesomebarResults,
+                                     extras: extra)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.searchResultTap)
+    }
+
+    func test_AwesomebarResults_GleanIsCalledRemoteTabs() {
+        let extra = [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.remoteTab.rawValue]
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .awesomebarResults,
+                                     extras: extra)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.searchResultTap)
+    }
+
+    func test_AwesomebarResults_GleanIsCalledHighlights() {
+        let extra = [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.searchHighlights.rawValue]
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .awesomebarResults,
+                                     extras: extra)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.searchResultTap)
+    }
 }
 
 // MARK: - Helper functions to test telemetry
