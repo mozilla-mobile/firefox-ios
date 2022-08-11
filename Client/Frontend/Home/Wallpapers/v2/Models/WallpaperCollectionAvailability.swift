@@ -9,4 +9,11 @@ import Foundation
 struct WallpaperCollectionAvailability: Codable, Equatable {
     let start: Date?
     let end: Date?
+
+    var isAvailable: Bool {
+        let now = Date()
+        let start = start ?? now - 1
+        let end = end ?? now + 1
+        return start < now && end > now
+    }
 }

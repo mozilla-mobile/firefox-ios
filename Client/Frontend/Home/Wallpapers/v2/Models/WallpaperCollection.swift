@@ -17,4 +17,13 @@ struct WallpaperCollection: Codable, Equatable {
     let availableLocales: [String]?
     let availability: WallpaperCollectionAvailability?
     let wallpapers: [Wallpaper]
+
+    // determines if the collection is available at this moment
+    var isAvailableNow: Bool {
+        guard let availability = availability else {
+            return true
+        }
+
+        return availability.isAvailable
+    }
 }
