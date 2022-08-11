@@ -894,7 +894,6 @@ class BrowserViewController: UIViewController {
             self.webViewContainer.accessibilityElementsHidden = true
             UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         })
-        urlBar.locationView.reloadButton.reloadButtonState = .disabled
     }
 
     /// Once the homepage is created, browserViewController keeps a reference to it, never setting it to nil during
