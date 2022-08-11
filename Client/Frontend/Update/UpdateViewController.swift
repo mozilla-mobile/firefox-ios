@@ -27,7 +27,7 @@ class UpdateViewController: UIViewController {
 
     // MARK: - Private vars
     private lazy var backgroundImageView: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
+        imageView.image = UIImage(named: ImageIdentifiers.upgradeBackground)
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.backgroundImage
     }
 
@@ -89,13 +89,17 @@ class UpdateViewController: UIViewController {
         addChild(cardViewController)
         view.addSubview(cardViewController.view)
         cardViewController.didMove(toParent: self)
-        view.addSubview(closeButton)
+        view.addSubviews(backgroundImageView, closeButton)
 
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
+
+            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
+            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 
@@ -123,7 +127,7 @@ class UpdateViewController: UIViewController {
         addChild(pageController)
         view.addSubview(pageController.view)
         pageController.didMove(toParent: self)
-        view.addSubviews(pageControl, closeButton)
+        view.addSubviews(backgroundImageView, pageControl, closeButton)
 
         NSLayoutConstraint.activate([
             pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -135,6 +139,10 @@ class UpdateViewController: UIViewController {
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
+
+            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 

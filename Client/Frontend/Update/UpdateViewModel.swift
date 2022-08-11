@@ -68,7 +68,7 @@ class UpdateViewModel: InformationContainerModel {
                                        secondaryAction: nil,
                                        a11yIdRoot: AccessibilityIdentifiers.Upgrade.welcomeCard)
         case .updateSignSync:
-            return CoverSheetInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSync),
+            return CoverSheetInfoModel(image: nil,
                                        title: .Upgrade.SyncSignTitle,
                                        description: .Upgrade.SyncSignDescription,
                                        primaryAction: .Upgrade.SyncAction,
