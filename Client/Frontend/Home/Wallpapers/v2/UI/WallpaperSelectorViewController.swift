@@ -26,6 +26,7 @@ class WallpaperSelectorViewController: UIViewController {
         label.adjustsFontForContentSizeCategory = true
         label.text = .Onboarding.WallpaperSelectorTitle
         label.textAlignment = .center
+        label.numberOfLines = 0
     }
 
     private lazy var instructionLabel: UILabel = .build { label in
@@ -35,6 +36,7 @@ class WallpaperSelectorViewController: UIViewController {
         label.text = .Onboarding.WallpaperSelectorDescription
         label.textColor = .Photon.Ink80
         label.textAlignment = .center
+        label.numberOfLines = 0
     }
 
     private lazy var collectionView: UICollectionView = {
@@ -55,6 +57,8 @@ class WallpaperSelectorViewController: UIViewController {
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    size: 16)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.textAlignment = .center
         button.setTitle(.Onboarding.WallpaperSelectorAction, for: .normal)
         button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
     }
