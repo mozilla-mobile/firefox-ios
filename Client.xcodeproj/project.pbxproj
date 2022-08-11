@@ -424,7 +424,7 @@
 		5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */; };
 		5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */; };
 		5AB4237E28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */; };
-		5AF6254328A57A4600A90253 /* HistoryHighlightsDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254228A57A4600A90253 /* HistoryHighlightsDataAdaptor.swift */; };
+		5AF6254328A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254228A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift */; };
 		5AF6254528A57B6700A90253 /* MockHistoryHighlightsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254428A57B6700A90253 /* MockHistoryHighlightsManager.swift */; };
 		5AF6254728A58AC100A90253 /* MockHistoryHighlightsDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254628A58AC100A90253 /* MockHistoryHighlightsDataAdaptor.swift */; };
 		5AF6254928A58BB400A90253 /* MockHistoryHighlightsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254828A58BB400A90253 /* MockHistoryHighlightsDelegate.swift */; };
@@ -2628,7 +2628,7 @@
 		5ABD40B68B3D03806BC6819C /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/LoginManager.strings"; sourceTree = "<group>"; };
 		5AC24B85BF0D2FCC2F1EB6D3 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		5AC549C0BA565EB2B08B87EC /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
-		5AF6254228A57A4600A90253 /* HistoryHighlightsDataAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsDataAdaptor.swift; sourceTree = "<group>"; };
+		5AF6254228A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsDataAdaptorTests.swift; sourceTree = "<group>"; };
 		5AF6254428A57B6700A90253 /* MockHistoryHighlightsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHistoryHighlightsManager.swift; sourceTree = "<group>"; };
 		5AF6254628A58AC100A90253 /* MockHistoryHighlightsDataAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHistoryHighlightsDataAdaptor.swift; sourceTree = "<group>"; };
 		5AF6254828A58BB400A90253 /* MockHistoryHighlightsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHistoryHighlightsDelegate.swift; sourceTree = "<group>"; };
@@ -5872,7 +5872,7 @@
 			isa = PBXGroup;
 			children = (
 				E1AEC170286E0CF500062E29 /* HistoryHighlightsViewModelTests.swift */,
-				5AF6254228A57A4600A90253 /* HistoryHighlightsDataAdaptor.swift */,
+				5AF6254228A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift */,
 				5AF6254428A57B6700A90253 /* MockHistoryHighlightsManager.swift */,
 				5AF6254628A58AC100A90253 /* MockHistoryHighlightsDataAdaptor.swift */,
 				5AF6254828A58BB400A90253 /* MockHistoryHighlightsDelegate.swift */,
@@ -10444,7 +10444,7 @@
 				6A5F591D28627C0100FABA92 /* TabManagerNavDelegateTests.swift in Sources */,
 				E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */,
 				E571EE7D28756A130051D9AA /* PocketSponsoredStoriesProviderTests.swift in Sources */,
-				5AF6254328A57A4600A90253 /* HistoryHighlightsDataAdaptor.swift in Sources */,
+				5AF6254328A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift in Sources */,
 				8AE80BAD2891957C00BC12EA /* TopSitesDimensionTests.swift in Sources */,
 				D82ED2641FEB3C420059570B /* DefaultSearchPrefsTests.swift in Sources */,
 				CA24B53B24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift in Sources */,

@@ -156,27 +156,7 @@ class HistoryHighlightsViewModel {
     }
 
     func delete(_ item: HighlightItem) {
-//        let deletionUtility = HistoryDeletionUtility(with: profile)
-//        let urls = extractDeletableURLs(from: item)
-//
-//        deletionUtility.delete(urls) { [weak self] success in
-//            if success { self?.delegate?.reloadHighlights() }
-//        }
-    }
-
-    // MARK: - Private Methods
-    private func extractDeletableURLs(from item: HighlightItem) -> [String] {
-        var urls = [String]()
-        if item.type == .item, let url = item.siteUrl?.absoluteString {
-            urls = [url]
-
-        } else if item.type == .group, let items = item.group {
-            items.forEach { groupedItem in
-                if let url = groupedItem.siteUrl?.absoluteString { urls.append(url) }
-            }
-        }
-
-        return urls
+        historyHighlightsDataAdaptor.delete(item)
     }
 }
 

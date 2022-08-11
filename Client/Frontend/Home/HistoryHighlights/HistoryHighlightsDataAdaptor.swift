@@ -8,6 +8,7 @@ protocol HistoryHighlightsDataAdaptor {
     var delegate: HistoryHighlightsDelegate? { get set }
 
     func getHistoryHightlights() -> [HighlightItem]
+    func delete(_ item: HighlightItem)
 }
 
 protocol HistoryHighlightsDelegate: AnyObject {
@@ -20,6 +21,7 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
     private var historyManager: HistoryHighlightsManagerProtocol
     private var profile: Profile
     private var tabManager: TabManagerProtocol
+    private var deletionUtility: HistoryDeletionUtility
     var notificationCenter: NotificationProtocol
     weak var delegate: HistoryHighlightsDelegate?
 
@@ -31,6 +33,7 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
         self.profile = profile
         self.tabManager = tabManager
         self.notificationCenter = notificationCenter
+        self.deletionUtility = HistoryDeletionUtility(with: profile)
 
         setupNotifications(forObserver: self,
                            observing: [.HistoryUpdated])
@@ -41,6 +44,18 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
         return historyItems
     }
 
+    func delete(_ item: HighlightItem) {
+        let urls = extractDeletableURLs(from: item)
+
+        deletionUtility.delete(urls) { [weak self] success in
+            if success {
+                self?.loadHistory()
+            }
+        }
+    }
+
+    // MARK: - Private Methods
+
     private func loadHistory() {
         historyManager.getHighlightsData(
             with: profile,
@@ -50,6 +65,20 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
                 self?.historyItems = highlights ?? []
                 self?.delegate?.didLoadNewData()
         }
+    }
+
+    private func extractDeletableURLs(from item: HighlightItem) -> [String] {
+        var urls = [String]()
+        if item.type == .item, let url = item.siteUrl?.absoluteString {
+            urls = [url]
+
+        } else if item.type == .group, let items = item.group {
+            items.forEach { groupedItem in
+                if let url = groupedItem.siteUrl?.absoluteString { urls.append(url) }
+            }
+        }
+
+        return urls
     }
 }
 

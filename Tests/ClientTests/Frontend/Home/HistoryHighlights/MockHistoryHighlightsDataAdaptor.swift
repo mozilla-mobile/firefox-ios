@@ -12,4 +12,6 @@ class MockHistoryHighlightsDataAdaptor: HistoryHighlightsDataAdaptor {
     func getHistoryHightlights() -> [HighlightItem] {
         return mockHistoryItems
     }
+
+    func delete(_ item: HighlightItem) {}
 }
