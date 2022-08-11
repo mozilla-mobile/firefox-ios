@@ -15,11 +15,12 @@ extension WallpaperMetadataTestProvider {
     private var startDate: Date { return dateWith(year: 2002, month: 11, day: 28) }
     private var endDate: Date { dateWith(year: 2022, month: 09, day: 10) }
     private var textColour: UIColor { return UIColor(colorString: "0xADD8E6") }
-    private var learnMoreURL: URL { return URL(string: "https://www.mozilla.com")! }
+    private var learnMoreURL: String { return "https://www.mozilla.com" }
 
     func getExpectedMetadata(for jsonType: WallpaperJSONId) -> WallpaperMetadata {
         switch jsonType {
         case .goodData: return getInitialMetadata()
+        case .noLearnMoreURL: return getNoLearnMoreURLMetadata()
         case .noAvailabilityRange: return getFullAvailabilityMetadata()
         case .noLocales: return getNoLocalesMetadata()
         case .availabilityStart: return getAvailabilityStartMetadata()
@@ -35,7 +36,25 @@ extension WallpaperMetadataTestProvider {
             collections: [
                 WallpaperCollection(
                     id: "firefox",
-                    learnMoreUrl: learnMoreURL,
+                    learnMoreURL: learnMoreURL,
+                    availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
+                    availability: WallpaperCollectionAvailability(
+                        start: startDate,
+                        end: endDate),
+                    wallpapers: [
+                        Wallpaper(id: "beachVibes",
+                                  textColour: textColour)
+                    ])
+            ])
+    }
+
+    private func getNoLearnMoreURLMetadata() -> WallpaperMetadata {
+        return WallpaperMetadata(
+            lastUpdated: lastUpdatedDate,
+            collections: [
+                WallpaperCollection(
+                    id: "firefox",
+                    learnMoreURL: nil,
                     availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
                     availability: WallpaperCollectionAvailability(
                         start: startDate,
@@ -53,7 +72,7 @@ extension WallpaperMetadataTestProvider {
             collections: [
                 WallpaperCollection(
                     id: "firefox",
-                    learnMoreUrl: learnMoreURL,
+                    learnMoreURL: learnMoreURL,
                     availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
                     availability: nil,
                     wallpapers: [
@@ -69,7 +88,7 @@ extension WallpaperMetadataTestProvider {
             collections: [
                 WallpaperCollection(
                     id: "firefox",
-                    learnMoreUrl: learnMoreURL,
+                    learnMoreURL: learnMoreURL,
                     availableLocales: nil,
                     availability: WallpaperCollectionAvailability(
                         start: startDate,
@@ -87,7 +106,7 @@ extension WallpaperMetadataTestProvider {
             collections: [
                 WallpaperCollection(
                     id: "firefox",
-                    learnMoreUrl: learnMoreURL,
+                    learnMoreURL: learnMoreURL,
                     availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
                     availability: WallpaperCollectionAvailability(
                         start: startDate,
@@ -105,7 +124,7 @@ extension WallpaperMetadataTestProvider {
             collections: [
                 WallpaperCollection(
                     id: "firefox",
-                    learnMoreUrl: learnMoreURL,
+                    learnMoreURL: learnMoreURL,
                     availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
                     availability: WallpaperCollectionAvailability(
                         start: nil,

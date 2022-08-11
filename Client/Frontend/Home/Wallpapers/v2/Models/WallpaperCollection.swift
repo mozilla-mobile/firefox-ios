@@ -5,45 +5,37 @@
 import Foundation
 
 /// Describes a wallpaper collection.
-struct WallpaperCollection: Equatable {
+struct WallpaperCollection: Codable, Equatable {
     enum CodingKeys: String, CodingKey {
         case id
-        case learnMoreURL = "learn-more-url"
+        case learnMoreURLString = "learn-more-url"
         case availableLocales = "available-locales"
         case availability = "availability-range"
         case wallpapers
     }
 
     let id: String
-    let learnMoreUrl: URL?
+    private let learnMoreURLString: String?
     let availableLocales: [String]?
     let availability: WallpaperCollectionAvailability?
     let wallpapers: [Wallpaper]
-}
 
-extension WallpaperCollection: Decodable {
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-
-        id = try values.decode(String.self, forKey: .id)
-        availableLocales = try values.decode([String].self, forKey: .availableLocales)
-        availability = try values.decode(WallpaperCollectionAvailability.self, forKey: .availability)
-        wallpapers = try values.decode([Wallpaper].self, forKey: .wallpapers)
-
-        let learnMoreString = try values.decode(String.self, forKey: .learnMoreURL)
-        learnMoreUrl = URL(string: learnMoreString)
+    init(
+        id: String,
+        learnMoreURL: String?,
+        availableLocales: [String]?,
+        availability: WallpaperCollectionAvailability?,
+        wallpapers: [Wallpaper]
+    ) {
+        self.id = id
+        self.learnMoreURLString = learnMoreURL
+        self.availableLocales = availableLocales
+        self.availability = availability
+        self.wallpapers = wallpapers
     }
-}
 
-extension WallpaperCollection: Encodable {
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-
-        let urlString = learnMoreUrl?.absoluteString
-        try container.encode(id, forKey: .id)
-        try container.encode(urlString, forKey: .learnMoreURL)
-        try container.encode(availableLocales, forKey: .availableLocales)
-        try container.encode(availability, forKey: .availability)
-        try container.encode(wallpapers, forKey: .wallpapers)
+    var learnMoreUrl: URL? {
+        guard let urlString = learnMoreURLString else { return nil }
+        return URL(string: urlString)
     }
 }
