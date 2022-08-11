@@ -45,8 +45,7 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
         historyManager.getHighlightsData(
             with: profile,
             and: tabManager.tabs,
-            shouldGroupHighlights: true,
-            resultCount: 2) { [weak self] highlights in
+            shouldGroupHighlights: true) { [weak self] highlights in
 
                 self?.historyItems = highlights ?? []
                 self?.delegate?.didLoadNewData()

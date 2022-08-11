@@ -7,6 +7,9 @@ import Shared
 import Storage
 import MozillaAppServices
 
+private let defaultHighlightCount = 9
+private let searchLimit = 1000
+
 extension HistoryHighlight {
     var urlFromString: URL? {
         return URL(string: url)
@@ -29,6 +32,23 @@ protocol HistoryHighlightsManagerProtocol {
         completion: @escaping ([HighlightItem]?) -> Void)
 }
 
+extension HistoryHighlightsManagerProtocol {
+    func getHighlightsData(
+        with profile: Profile,
+        and tabs: [Tab],
+        shouldGroupHighlights: Bool = false,
+        resultCount: Int = defaultHighlightCount,
+        completion: @escaping ([HighlightItem]?) -> Void) {
+
+        self.getHighlightsData(
+            with: profile,
+            and: tabs,
+            shouldGroupHighlights: shouldGroupHighlights,
+            resultCount: resultCount,
+            completion: completion)
+    }
+}
+
 class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
 
     // MARK: - Variables
@@ -37,8 +57,6 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
     // their requirements or input.
     private let defaultViewTimeWeight = 10.0
     private let defaultFrequencyWeight = 4.0
-    private static let defaultHighlightCount = 9
-    private static let searchLimit = 1000
 
     func searchHighlightsData(
         searchQuery: String,
@@ -49,7 +67,7 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
 
         getHighlightsData(with: profile,
                           and: tabs,
-                          resultCount: HistoryHighlightsManager.searchLimit) { results in
+                          resultCount: searchLimit) { results in
 
             var searchResults = [HighlightItem]()
 
