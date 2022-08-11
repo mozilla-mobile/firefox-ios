@@ -483,6 +483,7 @@
 		7BF5A1EA1B41640500EA9DD8 /* SyncQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1E91B41640500EA9DD8 /* SyncQueue.swift */; };
 		7BF5A1EE1B429B3100EA9DD8 /* SyncCommandsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1ED1B429B3100EA9DD8 /* SyncCommandsTests.swift */; };
 		884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CA7482344A301002E4711 /* TextContentDetector.swift */; };
+		8A0017C128A3FF6100FEFC8B /* MessageCardDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0017C028A3FF6100FEFC8B /* MessageCardDataAdaptor.swift */; };
 		8A01891C275E9C2A00923EFE /* ClearHistoryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A01891B275E9C2A00923EFE /* ClearHistoryHelper.swift */; };
 		8A03294E288F1F0800AD9B89 /* TopSitesDimension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A03294D288F1F0800AD9B89 /* TopSitesDimension.swift */; };
 		8A04136928258DF600D20B10 /* SponsoredTileTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A04136828258DF600D20B10 /* SponsoredTileTelemetry.swift */; };
@@ -2979,6 +2980,7 @@
 		88D54F3084E96EFC11C8C7DB /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		890045908C7B76449D0FEA78 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		89AE47D2B80AF49BFB9763BA /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LoginManager.strings; sourceTree = "<group>"; };
+		8A0017C028A3FF6100FEFC8B /* MessageCardDataAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCardDataAdaptor.swift; sourceTree = "<group>"; };
 		8A01891B275E9C2A00923EFE /* ClearHistoryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearHistoryHelper.swift; sourceTree = "<group>"; };
 		8A03294D288F1F0800AD9B89 /* TopSitesDimension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesDimension.swift; sourceTree = "<group>"; };
 		8A04136828258DF600D20B10 /* SponsoredTileTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsoredTileTelemetry.swift; sourceTree = "<group>"; };
@@ -5927,6 +5929,16 @@
 			path = Menu;
 			sourceTree = "<group>";
 		};
+		8A0017BF28A3FED300FEFC8B /* MessageCard */ = {
+			isa = PBXGroup;
+			children = (
+				2386E4E524F8358E0072EF17 /* HomepageMessageCard.swift */,
+				21112967289480630082C08B /* HomepageMessageCardViewModel.swift */,
+				8A0017C028A3FF6100FEFC8B /* MessageCardDataAdaptor.swift */,
+			);
+			path = MessageCard;
+			sourceTree = "<group>";
+		};
 		8A032951288F27CA00AD9B89 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -7795,21 +7807,20 @@
 		F84B22211A09122500AAB793 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				8AB8572F27D94CAD0075C173 /* HomepageViewModelProtocol.swift */,
-				8AB59589284145B30090F4AE /* HomepageSectionHandler.swift */,
-				2386E4E524F8358E0072EF17 /* HomepageMessageCard.swift */,
-				21112967289480630082C08B /* HomepageMessageCardViewModel.swift */,
-				1DFE57FE27BAE3150025DE58 /* HomepageSectionType.swift */,
-				3BB50E1F1D627539004B33DF /* HomepageViewController.swift */,
-				8A6A796C27F773550022D6C6 /* HomepageContextMenuHelper.swift */,
-				1DFE57FC27BADD7C0025DE58 /* HomepageViewModel.swift */,
-				8AB8574527D97CB00075C173 /* HomepageContextMenuProtocol.swift */,
-				8AB8574727D97CD40075C173 /* HomePanelType.swift */,
-				8AB8574927D97CE90075C173 /* HomePanelDelegate.swift */,
 				8AB5958628412B620090F4AE /* CustomizeHome */,
 				DF036E41274FD3FC002E834E /* HistoryHighlights */,
+				8A6A796C27F773550022D6C6 /* HomepageContextMenuHelper.swift */,
+				8AB8574527D97CB00075C173 /* HomepageContextMenuProtocol.swift */,
+				8AB59589284145B30090F4AE /* HomepageSectionHandler.swift */,
+				1DFE57FE27BAE3150025DE58 /* HomepageSectionType.swift */,
+				3BB50E1F1D627539004B33DF /* HomepageViewController.swift */,
+				1DFE57FC27BADD7C0025DE58 /* HomepageViewModel.swift */,
+				8AB8572F27D94CAD0075C173 /* HomepageViewModelProtocol.swift */,
+				8AB8574927D97CE90075C173 /* HomePanelDelegate.swift */,
+				8AB8574727D97CD40075C173 /* HomePanelType.swift */,
 				C87DC85F27B2CC1A006EFCE2 /* JumpBackIn */,
 				8AB8573527D950F30075C173 /* LogoHeader */,
+				8A0017BF28A3FED300FEFC8B /* MessageCard */,
 				C87DC86127B2CC27006EFCE2 /* Pocket */,
 				C87DC86027B2CC21006EFCE2 /* RecentlySaved */,
 				8AB8571B27D929240075C173 /* TopSites */,
@@ -9962,6 +9973,7 @@
 				1DA3CE6324EEE83200422BB2 /* SavedTab+ConfigureExtension.swift in Sources */,
 				C87DC85627B2C8B0006EFCE2 /* LegacyWallpaperNetworkUtility.swift in Sources */,
 				392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */,
+				8A0017C128A3FF6100FEFC8B /* MessageCardDataAdaptor.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* OpenInHelper.swift in Sources */,
 				8AD40FC727BADC3400672675 /* ToolbarTextField.swift in Sources */,
 				CA90753824929B22005B794D /* NoLoginsView.swift in Sources */,
