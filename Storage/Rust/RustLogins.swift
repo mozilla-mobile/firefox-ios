@@ -11,6 +11,27 @@ private let log = Logger.syncLogger
 typealias LoginsStoreError = LoginsStorageError
 public typealias LoginRecord = EncryptedLogin
 
+public extension LoginsStoreError {
+    var descriptionValue: String {
+       switch self {
+       case .InvalidRecord:
+           return "InvalidRecord"
+       case .NoSuchRecord:
+           return "NoSuchRecord"
+       case .IncorrectKey:
+           return "IncorrectKey"
+       case .Interrupted:
+           return "Interrupted"
+       case .SyncAuthInvalid:
+           return "SyncAuthInvalid"
+       case .RequestFailed:
+           return "RequestFailed"
+       case .UnexpectedLoginsStorageError:
+           return "UnexpectedLoginsStorageError"
+       }
+   }
+}
+
 public extension EncryptedLogin {
     init(credentials: URLCredential, protectionSpace: URLProtectionSpace) {
         let hostname: String
@@ -373,35 +394,107 @@ public class RustLoginEncryptionKeys {
             let canary = try createCanary(text: canaryPhrase, encryptionKey: secret)
 
             keychain.set(secret, forKey: loginPerFieldKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-            keychain.set(canary, forKey: canaryPhraseKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+            keychain.set(canary,
+                         forKey: canaryPhraseKey,
+                         withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
 
             return secret
         } catch let err as NSError {
-            SentryIntegration.shared.sendWithStacktrace(message: "Error creating logins encryption key", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
-            throw LoginEncryptionKeyError.noKeyCreated
+            if let loginsStoreError = err as? LoginsStoreError {
+                sendLoginsStoreErrorToSentry(
+                    err: loginsStoreError,
+                    errorDomain: err.domain,
+                    errorMessage: "Error while creating and storing logins key")
+
+                throw LoginEncryptionKeyError.noKeyCreated
+            } else {
+                SentryIntegration.shared.sendWithStacktrace(
+                    message: "Unknown error while creating and storing logins key",
+                    tag: SentryTag.rustLogins,
+                    severity: .error,
+                    description: err.localizedDescription)
+
+                throw LoginEncryptionKeyError.noKeyCreated
+            }
         }
     }
 
     func decryptSecureFields(login: EncryptedLogin) -> Login? {
-        guard let key = self.keychain.string(forKey: self.loginPerFieldKeychainKey) else { return nil }
+        guard let key = self.keychain.string(forKey: self.loginPerFieldKeychainKey) else {
+            return nil
+        }
 
         do {
             return try decryptLogin(login: login, encryptionKey: key)
         } catch let err as NSError {
-            SentryIntegration.shared.sendWithStacktrace(message: "Error decrypting login", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
-            return nil
+            if let loginsStoreError = err as? LoginsStoreError {
+                sendLoginsStoreErrorToSentry(
+                    err: loginsStoreError,
+                    errorDomain: err.domain,
+                    errorMessage: "Error while decrypting login")
+            } else {
+                SentryIntegration.shared.sendWithStacktrace(
+                    message: "Unknown error while decrypting login",
+                    tag: SentryTag.rustLogins,
+                    severity: .error,
+                    description: err.localizedDescription)
+            }
         }
+        return nil
     }
 
-    func encryptSecureFields(login: Login, encryptionKey: String? = nil) -> EncryptedLogin? {
-        guard let key = self.keychain.string(forKey: self.loginPerFieldKeychainKey) else { return nil }
+    func encryptSecureFields(
+        login: Login,
+        encryptionKey: String? = nil
+    ) -> EncryptedLogin? {
+        guard let key = self.keychain.string(forKey: self.loginPerFieldKeychainKey) else {
+            return nil
+        }
 
         do {
             return try encryptLogin(login: login, encryptionKey: key)
         } catch let err as NSError {
-            SentryIntegration.shared.sendWithStacktrace(message: "Error encrypting login", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
-            return nil
+            if let loginsStoreError = err as? LoginsStoreError {
+                sendLoginsStoreErrorToSentry(
+                    err: loginsStoreError,
+                    errorDomain: err.domain,
+                    errorMessage: "Error while encrypting login")
+            } else {
+                SentryIntegration.shared.sendWithStacktrace(
+                    message: "Unknown error while encrypting login",
+                    tag: SentryTag.rustLogins,
+                    severity: .error,
+                    description: err.localizedDescription)
+            }
         }
+        return nil
+    }
+
+    private func sendLoginsStoreErrorToSentry(
+        err: LoginsStoreError,
+        errorDomain: String,
+        errorMessage: String
+    ) {
+        var errDescription: String
+        var errMessage: String
+
+        switch err {
+        case .InvalidRecord(let message),
+        .NoSuchRecord(let message),
+        .IncorrectKey(let message),
+        .Interrupted(let message),
+        .SyncAuthInvalid(let message),
+        .RequestFailed(let message),
+        .UnexpectedLoginsStorageError(let message):
+            errMessage = message
+            errDescription = err.descriptionValue
+        }
+
+        SentryIntegration.shared.sendWithStacktrace(
+            message: errorMessage,
+            tag: SentryTag.rustLogins,
+            severity: .error,
+            description: "\(errorDomain) - \(errDescription): \(errMessage)")
     }
 }
 
@@ -444,7 +537,7 @@ public class RustLogins {
                 // state unless we can move the existing file to a backup
                 // location and start over.
                 SentryIntegration.shared.sendWithStacktrace(
-                    message: "Unspecified or other error when opening Rust Logins database",
+                    message: "Logins store error when opening Rust Logins database",
                     tag: SentryTag.rustLogins,
                     severity: .error,
                     description: loginsStoreError.localizedDescription)
@@ -514,13 +607,13 @@ public class RustLogins {
                     switch loginsStoreError {
                     case let .SyncAuthInvalid(message):
                         SentryIntegration.shared.sendWithStacktrace(
-                            message: "Panicked when syncing Logins database",
+                            message: "Authentication failed when syncing Logins database",
                             tag: SentryTag.rustLogins,
                             severity: .error,
                             description: message)
                     default:
                         SentryIntegration.shared.sendWithStacktrace(
-                            message: "Unspecified or other error when syncing Logins database",
+                            message: "Unknown or other error when syncing Logins database",
                             tag: SentryTag.rustLogins,
                             severity: .error,
                             description: loginsStoreError.localizedDescription)
