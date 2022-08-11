@@ -745,32 +745,29 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
 // MARK: - Telemetry
 private extension SearchViewController {
-     func recordSearchListSelectionTelemetry(type: SearchListSection, isBookmark: Bool = false) {
+    func recordSearchListSelectionTelemetry(type: SearchListSection, isBookmark: Bool = false) {
+
         let key = TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue
+        var extra: String
         switch type {
         case .searchSuggestions:
-            TelemetryWrapper.recordEvent(category: .action, method: .tap,
-                                         object: .awesomebarResults,
-                                         extras: [key: TelemetryWrapper.EventValue.searchSuggestion.rawValue])
+            extra = TelemetryWrapper.EventValue.searchSuggestion.rawValue
         case .remoteTabs:
-            TelemetryWrapper.recordEvent(category: .action, method: .tap,
-                                         object: .awesomebarResults,
-                                         extras: [key: TelemetryWrapper.EventValue.remoteTab.rawValue])
+            extra = TelemetryWrapper.EventValue.remoteTab.rawValue
         case .openedTabs:
-            TelemetryWrapper.recordEvent(category: .action, method: .tap,
-                                         object: .awesomebarResults,
-                                         extras: [key: TelemetryWrapper.EventValue.openedTab.rawValue])
+            extra = TelemetryWrapper.EventValue.openedTab.rawValue
         case .bookmarksAndHistory:
-            let extra = isBookmark ? TelemetryWrapper.EventValue.bookmarkItem.rawValue :
+            extra = isBookmark ? TelemetryWrapper.EventValue.bookmarkItem.rawValue :
                         TelemetryWrapper.EventValue.historyItem.rawValue
-            TelemetryWrapper.recordEvent(category: .action, method: .tap,
-                                         object: .awesomebarResults, extras: [key: extra])
         case .searchHighlights:
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .open,
-                                         object: .awesomebarResults,
-                                         extras: [key: TelemetryWrapper.EventValue.searchSuggestion.rawValue])
+            extra = TelemetryWrapper.EventValue.searchHighlights.rawValue
+
         }
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .awesomebarResults,
+                                     extras: [key: extra])
     }
 }
 

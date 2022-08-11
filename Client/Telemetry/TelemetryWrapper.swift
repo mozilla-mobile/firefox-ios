@@ -531,6 +531,7 @@ extension TelemetryWrapper {
         case openedTab = "opened-tab"
         case bookmarkItem = "bookmark-item"
         case searchSuggestion = "search-suggestion"
+        case searchHighlights = "search-highlights"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
