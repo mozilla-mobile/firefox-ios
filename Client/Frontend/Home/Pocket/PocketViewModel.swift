@@ -32,12 +32,6 @@ class PocketViewModel {
          isZeroSearch: Bool = false) {
         self.dataAdaptor = pocketDataAdaptor
         self.isZeroSearch = isZeroSearch
-
-        dataAdaptor.onTapAction = { [weak self] indexPath in
-            self?.recordTapOnStory(index: indexPath.row)
-            let siteUrl = self?.pocketStoriesViewModels[indexPath.row].url
-            siteUrl.map { self?.onTapTileAction?($0) }
-        }
     }
 
     // The dimension of a cell
@@ -88,6 +82,25 @@ class PocketViewModel {
     }
 
     // MARK: - Private
+
+    private func updateData() {
+        let stories = dataAdaptor.getPocketData()
+        pocketStoriesViewModels = []
+        // Add the story in the view models list
+        for story in stories {
+            bind(pocketStoryViewModel: .init(story: story))
+        }
+    }
+
+    private func bind(pocketStoryViewModel: PocketStandardCellViewModel) {
+        pocketStoryViewModel.onTap = { [weak self] indexPath in
+            self?.recordTapOnStory(index: indexPath.row)
+            let siteUrl = self?.pocketStoriesViewModels[indexPath.row].url
+            siteUrl.map { self?.onTapTileAction?($0) }
+        }
+
+        pocketStoriesViewModels.append(pocketStoryViewModel)
+    }
 
     private func showDiscoverMore() {
         onTapTileAction?(PocketProvider.MoreStoriesURL)
@@ -147,6 +160,7 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
+        // Including discover more cell
         return !pocketStoriesViewModels.isEmpty ? pocketStoriesViewModels.count + 1 : 0
     }
 
@@ -154,9 +168,7 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         // For Pocket, the user preference check returns a user preference if it exists in
         // UserDefaults, and, if it does not, it will return a default preference based on
         // a (nimbus pocket section enabled && Pocket.isLocaleSupported) check
-        guard featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser) else { return false }
-
-        return true
+        return featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser)
     }
 
     var hasData: Bool {
@@ -164,7 +176,7 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     func updateData(completion: @escaping () -> Void) {
-        pocketStoriesViewModels = dataAdaptor.getPocketData()
+        updateData()
         completion()
     }
 }
@@ -221,7 +233,7 @@ extension PocketViewModel: HomepageSectionHandler {
 extension PocketViewModel: PocketDelegate {
     func didLoadNewData() {
         ensureMainThread {
-            self.pocketStoriesViewModels = self.dataAdaptor.getPocketData()
+            self.updateData()
             self.delegate?.reloadView()
         }
     }

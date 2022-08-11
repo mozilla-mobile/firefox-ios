@@ -5,9 +5,7 @@
 import Foundation
 
 protocol PocketDataAdaptor {
-    var onTapAction: ((IndexPath) -> Void)? { get set }
-
-    func getPocketData() -> [PocketStandardCellViewModel]
+    func getPocketData() -> [PocketStory]
 }
 
 protocol PocketDelegate: AnyObject {
@@ -21,14 +19,9 @@ class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
     private let pocketAPI: PocketStoriesProviding
     private let pocketSponsoredAPI: PocketSponsoredStoriesProviding
     private let storyProvider: StoryProvider
-    private var pocketStoriesViewModels = [PocketStandardCellViewModel]()
+    private var pocketStories = [PocketStory]()
 
     weak var delegate: PocketDelegate?
-    var onTapAction: ((IndexPath) -> Void)? {
-        didSet {
-            setViewModelsTapAction()
-        }
-    }
 
     // Used for unit tests since pocket use async/await
     private var dataCompletion: (() -> Void)?
@@ -48,33 +41,17 @@ class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
 
         Task {
             await updatePocketSites()
-            dataCompletion?()
         }
     }
 
-    func getPocketData() -> [PocketStandardCellViewModel] {
-        return pocketStoriesViewModels
+    func getPocketData() -> [PocketStory] {
+        return pocketStories
     }
 
     private func updatePocketSites() async {
-        let stories = await storyProvider.fetchPocketStories()
-        pocketStoriesViewModels = []
-        // Add the story in the view models list
-        for story in stories {
-            bind(pocketStoryViewModel: .init(story: story))
-        }
-
+        pocketStories = await storyProvider.fetchPocketStories()
         delegate?.didLoadNewData()
-    }
-
-    private func bind(pocketStoryViewModel: PocketStandardCellViewModel) {
-        pocketStoriesViewModels.append(pocketStoryViewModel)
-        setViewModelsTapAction()
-    }
-
-    private func setViewModelsTapAction() {
-        guard let onTapAction = onTapAction else { return }
-        pocketStoriesViewModels.forEach { $0.onTap = onTapAction }
+        dataCompletion?()
     }
 }
 
@@ -84,7 +61,6 @@ extension PocketDataAdaptorImplementation: Notifiable {
         case UIApplication.willEnterForegroundNotification:
             Task {
                 await updatePocketSites()
-                dataCompletion?()
             }
         default: break
         }
