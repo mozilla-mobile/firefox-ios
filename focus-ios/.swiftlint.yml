@@ -1,6 +1,5 @@
 disabled_rules: # rule identifiers to exclude from running
   - missing_docs
-  - valid_docs
   - class_delegate_protocol
   - block_based_kvo
   - closure_parameter_position
@@ -188,6 +187,7 @@ disabled_rules: # rule identifiers to exclude from running
   - valid_ibinspectable
   - vertical_parameter_alignment
   - vertical_parameter_alignment_on_call
+  - void_function_in_ternary
   - weak_delegate
   - xct_specific_matcher
   - xctfail_message
@@ -216,23 +216,5 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - rust-components-swift/
   - Blockzilla/Generated/Metrics.swift
   - l10n-screenshots-dd/
-
-# configurable rules can be customized from this configuration file
-# binary rules can set their severity level
-# trailing_semicolon: error
-# empty_count: error
-# closing_brace: error
-# opening_brace: error
-# return_arrow_whitespace: error
-# statement_position: error
-# colon: error
-comma: error
-# force_try: warning
-# force_cast: warning
-
-
-file_header:
-  required_string: "/* This Source Code Form is subject to the terms of the Mozilla Public\n * License, v. 2.0. If a copy of the MPL was not distributed with this\n * file, You can obtain one at http://mozilla.org/MPL/2.0/. */"
-line_length: 1000
 
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)
