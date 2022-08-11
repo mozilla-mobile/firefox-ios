@@ -26,11 +26,16 @@ class UpdateViewController: UIViewController {
     var didFinishClosure: ((UpdateViewController) -> Void)?
 
     // MARK: - Private vars
+    private lazy var backgroundImageView: UIImageView = .build { imageView in
+        imageView.contentMode = .scaleAspectFit
+        imageView.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.backgroundImage
+    }
+
     private lazy var closeButton: UIButton = .build { button in
         let closeImage = UIImage(named: ImageIdentifiers.closeLargeButton)
         button.setImage(closeImage, for: .normal)
         button.tintColor = .secondaryLabel
-        button.addTarget(self, action: #selector(self.dismissAnimated), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.dismissUpdate), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.closeButton
     }
 
@@ -134,16 +139,9 @@ class UpdateViewController: UIViewController {
     }
 
     // Button Actions
-    @objc private func dismissAnimated() {
+    @objc private func dismissUpdate() {
         didFinishClosure?(self)
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedUpdateCoverSheet)
-    }
-
-    @objc private func startBrowsing() {
-        didFinishClosure?(self)
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .dismissUpdateCoverSheetAndStartBrowsing)
+        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
 
     private func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {

@@ -761,7 +761,6 @@ private extension SearchViewController {
                         TelemetryWrapper.EventValue.historyItem.rawValue
         case .searchHighlights:
             extra = TelemetryWrapper.EventValue.searchHighlights.rawValue
-
         }
 
         TelemetryWrapper.recordEvent(category: .action,

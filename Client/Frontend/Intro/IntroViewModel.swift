@@ -14,6 +14,15 @@ struct IntroViewModel: InformationContainerModel {
         case updateWelcome
         case updateSignSync
 
+        var isOnboardingScreen: Bool {
+            switch self {
+            case .welcome, .wallpapers, .signSync:
+                return true
+            case .updateWelcome, .updateSignSync:
+                return false
+            }
+        }
+
         var telemetryValue: String {
             switch self {
             case .welcome: return "welcome"

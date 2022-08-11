@@ -384,6 +384,12 @@ extension TelemetryWrapper {
         case onboardingSecondaryButton = "onboarding-card-secondary-button"
         case onboardingSelectWallpaper = "onboarding-select-wallpaper"
         case onboarding = "onboarding"
+        // MARK: New Upgrade screen
+        case upgradeClose = "upgrade-close"
+        case upgradeCardView = "upgrade-card-view"
+        case upgradePrimaryButton = "upgrade-card-primary-button"
+        case upgradeSecondaryButton = "upgrade-card-secondary-button"
+        case upgrade = "upgrade"
         case dismissDefaultBrowserCard = "default-browser-card"
         case goToSettingsDefaultBrowserCard = "default-browser-card-go-to-settings"
         case dismissDefaultBrowserOnboarding = "default-browser-onboarding"

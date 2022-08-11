@@ -7,12 +7,11 @@ import Shared
 
 class UpdateViewModel: InformationContainerModel {
 
-//    var startBrowsing: (() -> Void)?
     let profile: Profile
     static let prefsKey: String = PrefsKeys.KeyLastVersionNumber
 
     // The list below is for the version(s) we would like to show the coversheet for.
-    let supportedAppVersion = ["22.0, 104.0"]
+    let supportedAppVersion = ["22.0", "104.0"]
 
     var hasSingleCard: Bool {
         return enabledCards.count == 1
@@ -36,6 +35,27 @@ class UpdateViewModel: InformationContainerModel {
 
     init(profile: Profile) {
         self.profile = profile
+    }
+
+    func shouldShowUpdateSheet(appVersion: String = AppInfo.appVersion) -> Bool {
+        // Only shown if is not clean install and is a supported version
+        guard !isCleanInstall, supportedAppVersion.contains(appVersion) else {
+            saveAppVersion(for: appVersion)
+            return false
+        }
+
+        // we check if there is a version number already saved
+        guard let savedVersion =  profile.prefs.stringForKey(UpdateViewModel.prefsKey) else {
+            saveAppVersion(for: appVersion)
+            return true
+        }
+
+        // Version number saved in user prefs is not the same as current version
+        if savedVersion != appVersion {
+            saveAppVersion(for: appVersion)
+        }
+
+        return savedVersion != appVersion
     }
 
     func getInfoModel(currentCard: IntroViewModel.InformationCards) -> InfoModelProtocol? {
@@ -71,26 +91,13 @@ class UpdateViewModel: InformationContainerModel {
         return enabledCards.firstIndex(of: cardType)
     }
 
-    func shouldShowUpdateSheet(appVersion: String = AppInfo.appVersion) -> Bool {
-        // Only shown if is not clean install and is a supported version
-        guard !isCleanInstall, !supportedAppVersion.contains(appVersion) else {
-            saveAppVersion(for: appVersion)
-            return false
-        }
+    func sendCloseButtonTelemetry(index: Int) {
+        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: enabledCards[index].telemetryValue]
 
-        // we check if there is a version number already saved
-        guard let savedVersion =  profile.prefs.stringForKey(UpdateViewModel.prefsKey) else {
-            // Save version and show page
-            saveAppVersion(for: appVersion)
-            return true
-        }
-
-        // Version number saved in user prefs is not the same as current version
-        if savedVersion != appVersion {
-            saveAppVersion(for: appVersion)
-        }
-
-        return savedVersion != appVersion
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .onboardingClose,
+                                     extras: extra)
     }
 
     private func saveAppVersion(for appVersion: String) {

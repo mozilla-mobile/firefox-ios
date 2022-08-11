@@ -130,6 +130,7 @@ public struct AccessibilityIdentifiers {
     }
 
     struct Upgrade {
+        static let backgroundImage = "Upgrade.BackgroundImage"
         static let welcomeCard = "Upgrade.WelcomeCard"
         static let signSyncCard = "Upgrade.SignSyncCard"
         static let closeButton = "Upgrade.CloseButton"
