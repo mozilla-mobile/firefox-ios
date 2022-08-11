@@ -23,7 +23,7 @@ extension PocketStoriesProviding {
     }
 }
 
-class Pocket: PocketStoriesProviding, FeatureFlaggable, URLCaching {
+class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
 
     private class PocketError: MaybeErrorType {
         var description = "Failed to load from API"
@@ -38,7 +38,7 @@ class Pocket: PocketStoriesProviding, FeatureFlaggable, URLCaching {
     static let MoreStoriesURL = URL(string: "https://getpocket.com/explore?src=ff_ios&cdn=0")!
 
     // Allow endPoint to be overriden for testing
-    init(endPoint: String = Pocket.GlobalFeed) {
+    init(endPoint: String = PocketProvider.GlobalFeed) {
         self.pocketGlobalFeed = endPoint
     }
 
@@ -65,7 +65,7 @@ class Pocket: PocketStoriesProviding, FeatureFlaggable, URLCaching {
         }
     }
 
-    private func getGlobalFeed(items: Int = 2, completion: @escaping (StoryResult) -> Void) {
+    private func getGlobalFeed(items: Int, completion: @escaping (StoryResult) -> Void) {
 
         guard let request = createGlobalFeedRequest(items: items) else {
             return completion(.failure(Error.failure))
@@ -93,7 +93,7 @@ class Pocket: PocketStoriesProviding, FeatureFlaggable, URLCaching {
 
     // Returns nil if the locale is not supported
     static func IslocaleSupported(_ locale: String) -> Bool {
-        return Pocket.SupportedLocales.contains(locale)
+        return PocketProvider.SupportedLocales.contains(locale)
     }
 
     // Create the URL request to query the Pocket API. The max items that the query can return is 20
