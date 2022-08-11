@@ -522,7 +522,7 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         presentIntroViewController()
-        presentUpdateViewController()
+        presentUpdateViewController(true)
         screenshotHelper.viewIsVisible = true
 
         super.viewDidAppear(animated)
@@ -2184,12 +2184,8 @@ extension BrowserViewController {
         let viewModel = UpdateViewModel(profile: profile)
         if force || viewModel.shouldShowUpdateSheet() {
             let updateViewController = UpdateViewController(viewModel: viewModel)
-            updateViewController.viewModel.startBrowsing = {
-                updateViewController.dismiss(animated: true) {
-                    if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                        _ = self.navigationController?.popToRootViewController(animated: true)
-                    }
-                }
+            updateViewController.didFinishClosure = { viewController in
+                viewController.dismiss(animated: true)
             }
 
             if topTabsVisible {

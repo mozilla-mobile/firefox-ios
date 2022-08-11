@@ -7,7 +7,7 @@ import Shared
 
 class UpdateViewModel: InformationContainerModel {
 
-    var startBrowsing: (() -> Void)?
+//    var startBrowsing: (() -> Void)?
     let profile: Profile
     static let prefsKey: String = PrefsKeys.KeyLastVersionNumber
 
@@ -65,6 +65,10 @@ class UpdateViewModel: InformationContainerModel {
 
         return OnboardingCardViewModel(cardType: currentCard,
                                        infoModel: infoModel)
+    }
+
+    func positionForCard(cardType: IntroViewModel.InformationCards) -> Int? {
+        return enabledCards.firstIndex(of: cardType)
     }
 
     func shouldShowUpdateSheet(appVersion: String = AppInfo.appVersion) -> Bool {

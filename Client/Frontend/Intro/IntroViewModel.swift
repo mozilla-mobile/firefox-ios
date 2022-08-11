@@ -23,6 +23,16 @@ struct IntroViewModel: InformationContainerModel {
             case .updateSignSync: return "update.signToSync"
             }
         }
+
+        var position: Int {
+            switch self {
+            case .welcome: return 0
+            case .wallpapers: return 1
+            case .signSync: return 2
+            case .updateWelcome: return 0
+            case .updateSignSync: return 1
+            }
+        }
     }
 
     var enabledCards: [InformationCards] {

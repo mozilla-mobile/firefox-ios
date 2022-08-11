@@ -22,6 +22,9 @@ class UpdateViewController: UIViewController {
     private var informationCards = [OnboardingCardViewController]()
     static let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
 
+    // Closure delegate
+    var didFinishClosure: ((UpdateViewController) -> Void)?
+
     // MARK: - Private vars
     private lazy var closeButton: UIButton = .build { button in
         let closeImage = UIImage(named: ImageIdentifiers.closeLargeButton)
@@ -132,13 +135,15 @@ class UpdateViewController: UIViewController {
 
     // Button Actions
     @objc private func dismissAnimated() {
-        self.dismiss(animated: true, completion: nil)
+        didFinishClosure?(self)
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedUpdateCoverSheet)
     }
 
     @objc private func startBrowsing() {
-        viewModel.startBrowsing?()
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissUpdateCoverSheetAndStartBrowsing)
+        didFinishClosure?(self)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .press,
+                                     object: .dismissUpdateCoverSheetAndStartBrowsing)
     }
 
     private func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
@@ -149,8 +154,8 @@ class UpdateViewController: UIViewController {
 
     // Used to programmatically set the pageViewController to show next card
     private func moveToNextPage(cardType: IntroViewModel.InformationCards) {
-        if let nextViewController = getNextOnboardingCard(index: cardType.rawValue, goForward: true) {
-            pageControl.currentPage = cardType.rawValue + 1
+        if let nextViewController = getNextOnboardingCard(index: cardType.position, goForward: true) {
+            pageControl.currentPage = cardType.position + 1
             pageController.setViewControllers([nextViewController], direction: .forward, animated: false)
         }
     }
@@ -163,6 +168,27 @@ class UpdateViewController: UIViewController {
         guard let index = viewModel.enabledCards.firstIndex(of: cardType) else { return nil }
 
         return index
+    }
+
+    private func presentSignToSync(_ fxaOptions: FxALaunchParams? = nil,
+                                  flowType: FxAPageType = .emailLoginFlow,
+                                  referringPage: ReferringPage = .onboarding) {
+        let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions,
+                                                                                      flowType: flowType,
+                                                                                      referringPage: referringPage,
+                                                                                       profile: viewModel.profile)
+        let controller: DismissableNavigationViewController
+        let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(dismissSignInViewController))
+        singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
+        controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
+        self.present(controller, animated: true)
+    }
+
+    @objc func dismissSignInViewController() {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -192,15 +218,29 @@ extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewContro
 
 extension UpdateViewController: OnboardingCardDelegate {
     func showNextPage(_ cardType: IntroViewModel.InformationCards) {
+        guard cardType != viewModel.enabledCards.last else {
+            self.didFinishClosure?(self)
+            return
+        }
 
+        moveToNextPage(cardType: cardType)
     }
 
     func primaryAction(_ cardType: IntroViewModel.InformationCards) {
-
+        switch cardType {
+        case .updateWelcome:
+            moveToNextPage(cardType: cardType)
+        case .updateSignSync:
+            presentSignToSync()
+        default:
+            break
+        }
     }
 
+    // Extra step to make sure pageControl.currentPage is the right index card
+    // because UIPageViewControllerDataSource call fails
     func pageChanged(_ cardType: IntroViewModel.InformationCards) {
-        if let cardIndex = viewModel.enabledCards.firstIndex(of: cardType),
+        if let cardIndex = viewModel.positionForCard(cardType: cardType),
            cardIndex != pageControl.currentPage {
             pageControl.currentPage = cardIndex
         }
