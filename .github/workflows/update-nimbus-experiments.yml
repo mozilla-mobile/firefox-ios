@@ -1,0 +1,36 @@
+name: "Update Nimbus Experiments"
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+
+jobs:
+  update-nimbus-experiments:
+    name: "Update Nimbus Experiments"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Main Branch"
+        uses: actions/checkout@v2
+        with:
+          path: firefox-ios
+          ref: main
+      - name: "Update Experiments JSON"
+        id: update-experiments-json
+        uses: mozilla-mobile/update-initial-experiments@v1
+        with:
+          repo-path: firefox-ios
+          output-path: Client/Experiments/initial_experiments.json
+          experimenter-url: https://experimenter.services.mozilla.com/api/v6/experiments/?is_first_run=true
+          app-name: firefox_ios
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        if: steps.update-experiments-json.outputs.changed == 1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: firefox-ios
+          branch: automation/update-nimbus-experiments
+          commit-message: "update initial_experiments.json based on the current first-run experiments in experimenter"
+          title: "Update initial experiments JSON for Nimbus"
+          body: "This (automated) PR updates the initial_experiments.json on the `main` branch"
+          delete-branch: true
+          labels: Needs Code Review
