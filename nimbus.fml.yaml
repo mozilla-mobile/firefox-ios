@@ -188,7 +188,7 @@ features:
           "wallpaper-feature": {
             "status": true
           },
-          "pocket-sponsored-stories": false,
+          "pocket-sponsored-stories": true,
           "jump-back-in-synced-tab": true
         }
       - channel: beta

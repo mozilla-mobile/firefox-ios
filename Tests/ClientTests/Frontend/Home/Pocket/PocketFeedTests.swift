@@ -42,7 +42,7 @@ class PocketStoriesTests: XCTestCase {
 
     func testPocketStoriesCaching() {
         let expect = expectation(description: "Pocket")
-        let PocketFeed = Pocket(endPoint: pocketAPI)
+        let PocketFeed = PocketProvider(endPoint: pocketAPI)
         let feedNumber = 11
 
         PocketFeed.fetchStories(items: feedNumber) { result in
