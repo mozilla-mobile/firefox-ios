@@ -718,6 +718,21 @@ extension String {
             value: "Sign Up and Log In",
             comment: "Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding.",
             lastUpdated: .v102)
+        public static let WallpaperSelectorTitle = MZLocalizedString(
+            "Onboarding.Wallpaper.Title.v105",
+            value: "Try a splash of color",
+            comment: "Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.",
+            lastUpdated: .v105)
+        public static let WallpaperSelectorDescription = MZLocalizedString(
+            "Onboarding.Wallpaper.Description.v105",
+            value: "Choose a wallpaper that speaks to you.",
+            comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.",
+            lastUpdated: .v105)
+        public static let WallpaperSelectorAction = MZLocalizedString(
+            "Onboarding.Wallpaper.Action.v105",
+            value: "Explore more wallpapers",
+            comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper.",
+            lastUpdated: .v105)
     }
 }
 
