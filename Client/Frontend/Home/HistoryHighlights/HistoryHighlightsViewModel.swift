@@ -224,7 +224,7 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     }
 
     var hasData: Bool {
-        return !(historyItems.isEmpty)
+        return !historyItems.isEmpty
     }
 
     func updateData(completion: @escaping () -> Void) {
