@@ -19,6 +19,7 @@ class WallpaperSelectorViewController: UIViewController {
 
     // Views
     private lazy var contentView: UIView = .build { _ in }
+    private var collectionViewHeightConstraint: NSLayoutConstraint!
 
     private lazy var headerLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
@@ -53,11 +54,9 @@ class WallpaperSelectorViewController: UIViewController {
         return collectionView
     }()
 
-    private lazy var settingsButton: UIButton = .build { button in
+    private lazy var settingsButton: ResizableButton = .build { button in
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    size: 16)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.titleLabel?.numberOfLines = 0
         button.titleLabel?.textAlignment = .center
         button.setTitle(.Onboarding.WallpaperSelectorAction, for: .normal)
         button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
@@ -86,6 +85,11 @@ class WallpaperSelectorViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
+
+        // make collection view fixed height so the bottom sheet can size correctly
+        let height = collectionView.collectionViewLayout.collectionViewContentSize.height
+        collectionViewHeightConstraint.constant = height
+        view.layoutIfNeeded()
     }
 }
 
@@ -119,13 +123,16 @@ private extension WallpaperSelectorViewController {
         contentView.addSubviews(headerLabel, instructionLabel, collectionView, settingsButton)
         view.addSubview(contentView)
 
+        collectionViewHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 300)
+        collectionViewHeightConstraint.priority = UILayoutPriority(999)
+
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: view.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 48),
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 34),
             headerLabel.bottomAnchor.constraint(equalTo: instructionLabel.topAnchor, constant: -4),
             headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -34),
@@ -137,6 +144,7 @@ private extension WallpaperSelectorViewController {
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: settingsButton.topAnchor, constant: -28),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            collectionViewHeightConstraint,
 
             settingsButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 34),
             settingsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -43),
