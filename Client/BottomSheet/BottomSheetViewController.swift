@@ -24,9 +24,8 @@ class BottomSheetViewController: UIViewController {
         view.backgroundColor = .clear
         view.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(self.closeTapped)))
     }
-    private lazy var contentView: UIView = .build { view in
-        view.backgroundColor = .white
-    }
+    private lazy var contentShadowView: UIView = .build { _ in }
+    private lazy var contentView: UIView = .build { _ in }
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: ImageIdentifiers.contextualHintClose), for: .normal)
         button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
@@ -78,13 +77,13 @@ class BottomSheetViewController: UIViewController {
 
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrollView.addRoundedCorners([.topLeft, .topRight], radius: viewModel.cornerRadius)
+        contentView.addRoundedCorners([.topLeft, .topRight], radius: viewModel.cornerRadius)
 
-        contentView.layer.backgroundColor = UIColor.clear.cgColor
-        contentView.layer.shadowColor = UIColor.black.cgColor
-        contentView.layer.shadowOffset = CGSize(width: 0, height: -5.0)
-        contentView.layer.shadowOpacity = 0.2
-        contentView.layer.shadowRadius = 20.0
+        contentShadowView.layer.backgroundColor = UIColor.clear.cgColor
+        contentShadowView.layer.shadowColor = UIColor.black.cgColor
+        contentShadowView.layer.shadowOffset = CGSize(width: 0, height: -5.0)
+        contentShadowView.layer.shadowOpacity = 0.2
+        contentShadowView.layer.shadowRadius = 20.0
     }
 
     public func dismissViewController() {
@@ -102,10 +101,11 @@ private extension BottomSheetViewController {
 
     func setupView() {
         scrollView.addSubview(scrollContentView)
+        contentShadowView.addSubview(contentView)
         contentView.addSubviews(closeButton, scrollView)
-        view.addSubviews(topTapView, contentView)
+        view.addSubviews(topTapView, contentShadowView)
 
-        contentViewBottomConstraint = contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        contentViewBottomConstraint = contentShadowView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         let scrollViewHeightConstraint = scrollView.heightAnchor.constraint(
             greaterThanOrEqualTo: scrollContentView.heightAnchor)
 
@@ -115,11 +115,16 @@ private extension BottomSheetViewController {
             topTapView.bottomAnchor.constraint(equalTo: contentView.topAnchor),
             topTapView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
-            contentView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor,
+            contentShadowView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor,
                                              constant: BottomSheetViewController.UX.minVisibleTopSpace),
-            contentView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            contentShadowView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             contentViewBottomConstraint,
-            contentView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            contentShadowView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+
+            contentView.topAnchor.constraint(greaterThanOrEqualTo: contentShadowView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: contentShadowView.leadingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: contentShadowView.bottomAnchor),
+            contentView.trailingAnchor.constraint(equalTo: contentShadowView.trailingAnchor),
 
             closeButton.topAnchor.constraint(equalTo: contentView.topAnchor,
                                              constant: BottomSheetViewController.UX.topSpace),
