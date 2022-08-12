@@ -119,5 +119,10 @@ class FirefoxHomeViewModelTests: XCTestCase {
 
 // MARK: - FirefoxHomeViewModelDelegate
 extension FirefoxHomeViewModelTests: HomepageViewModelDelegate {
-    func reloadView() {}
+
+    func reloadSection(section: HomepageViewModelProtocol) {
+        reloadSectionCompleted?(section)
+    }
+
+    func reloadData() {}
 }

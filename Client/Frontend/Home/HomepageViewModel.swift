@@ -5,11 +5,12 @@
 import MozillaAppServices
 
 protocol HomepageViewModelDelegate: AnyObject {
-    func reloadView()
+    func reloadSection(section: HomepageViewModelProtocol)
+    func reloadData()
 }
 
 protocol HomepageDataModelDelegate: AnyObject {
-    func reloadView()
+    func reloadData()
 }
 
 class HomepageViewModel: FeatureFlaggable {
@@ -157,11 +158,20 @@ class HomepageViewModel: FeatureFlaggable {
 
     private func updateData(section: HomepageViewModelProtocol) {
         section.updateData {
-            self.reloadView()
+            self.delegate?.reloadSection(section: section)
         }
     }
 
     // MARK: - Manage sections and order
+
+    /// Add the section if it doesn't
+    func reloadSection(_ section: HomepageViewModelProtocol, with collectionView: UICollectionView) {
+        if !shownSections.contains(section.sectionType) {
+            addShownSection(section: section.sectionType)
+        }
+
+        collectionView.reloadData()
+    }
 
     func addShownSection(section: HomepageSectionType) {
         let positionToInsert = getPositionToInsert(section: section)
@@ -213,8 +223,10 @@ extension HomepageViewModel: HomeHistoryHighlightsDelegate {
 }
 
 extension HomepageViewModel: HomepageDataModelDelegate {
-    func reloadView() {
-        updateEnabledSections()
-        delegate?.reloadView()
+    func reloadData() {
+        ensureMainThread {
+            self.updateEnabledSections()
+            self.delegate?.reloadData()
+        }
     }
 }
