@@ -108,11 +108,15 @@ class HomepageViewModel: FeatureFlaggable {
 
         self.recentlySavedViewModel = RecentlySavedCellViewModel(
             profile: profile)
+        let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
+            profile: profile,
+            tabManager: tabManager)
         self.historyHighlightsViewModel = HistoryHighlightsViewModel(
             with: profile,
             isPrivate: isPrivate,
             tabManager: tabManager,
-            urlBar: urlBar)
+            urlBar: urlBar,
+            historyHighlightsDataAdaptor: historyDataAdaptor)
 
         let pocketDataAdaptor = PocketDataAdaptorImplementation(
             pocketAPI: PocketProvider(),
@@ -223,13 +227,6 @@ class HomepageViewModel: FeatureFlaggable {
 
     func indexOfShownSection(_ type: HomepageSectionType) -> Int? {
         return shownSections.firstIndex(of: type)
-    }
-}
-
-// MARK: - HomeHistoryHighlightsDelegate
-extension HomepageViewModel: HomeHistoryHighlightsDelegate {
-    func reloadHighlights() {
-        updateData(section: historyHighlightsViewModel)
     }
 }
 

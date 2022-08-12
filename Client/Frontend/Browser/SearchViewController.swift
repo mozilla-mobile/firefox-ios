@@ -69,6 +69,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
     private var searchHighlights = [HighlightItem]()
+    private var highlightManager: HistoryHighlightsManagerProtocol
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -97,10 +98,15 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             || !searchHighlights.isEmpty
     }
 
-    init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager, featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search ) {
+    init(profile: Profile,
+         viewModel: SearchViewModel,
+         tabManager: TabManager,
+         featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
+         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
         self.viewModel = viewModel
         self.tabManager = tabManager
         self.searchFeature = featureConfig
+        self.highlightManager = highlightManager
         super.init(profile: profile)
 
         if #available(iOS 15.0, *) {
@@ -153,10 +159,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private func loadSearchHighlights() {
         guard featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly) else { return }
 
-        HistoryHighlightsManager.searchHighlightsData(searchQuery: searchQuery,
-                                                      profile: profile,
-                                                      tabs: tabManager.tabs,
-                                                      resultCount: 3) { results in
+        highlightManager.searchHighlightsData(
+            searchQuery: searchQuery,
+            profile: profile,
+            tabs: tabManager.tabs,
+            resultCount: 3) { results in
+
             guard let results = results else { return }
             self.searchHighlights = results
             self.tableView.reloadData()

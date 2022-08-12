@@ -6,10 +6,6 @@ import Foundation
 import Storage
 import UIKit
 
-protocol HomeHistoryHighlightsDelegate: AnyObject {
-    func reloadHighlights()
-}
-
 struct HistoryHighlightsModel {
     let title: String
     let description: String?
@@ -69,33 +65,29 @@ class HistoryHighlightsViewModel {
     }
 
     // MARK: - Properties & Variables
-    var historyItems: [HighlightItem]?
+    var historyItems = [HighlightItem]()
     private var profile: Profile
     private var isPrivate: Bool
     private var tabManager: TabManagerProtocol
     private var urlBar: URLBarViewProtocol
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var hasSentSectionEvent = false
-
+    private var historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor
     var onTapItem: ((HighlightItem) -> Void)?
     var historyHighlightLongPressHandler: ((HighlightItem, UIView?) -> Void)?
     var headerButtonAction: ((UIButton) -> Void)?
-    weak var delegate: HomeHistoryHighlightsDelegate?
+    weak var delegate: HomepageDataModelDelegate?
 
     // MARK: - Variables
     /// We calculate the number of columns dynamically based on the numbers of items
     /// available such that we always have the appropriate number of columns for the
     /// rest of the dynamic calculations.
     var numberOfColumns: Int {
-        guard let count = historyItems?.count else { return 0 }
-
-        return Int(ceil(Double(count) / Double(UX.maxNumberOfItemsPerColumn)))
+        return Int(ceil(Double(historyItems.count) / Double(UX.maxNumberOfItemsPerColumn)))
     }
 
     var numberOfRows: Int {
-        guard let count = historyItems?.count else { return 0 }
-
-        return count < UX.maxNumberOfItemsPerColumn ? count : UX.maxNumberOfItemsPerColumn
+        return historyItems.count < UX.maxNumberOfItemsPerColumn ? historyItems.count : UX.maxNumberOfItemsPerColumn
     }
 
     /// Group weight used to create collection view compositional layout
@@ -117,13 +109,14 @@ class HistoryHighlightsViewModel {
     init(with profile: Profile,
          isPrivate: Bool,
          tabManager: TabManagerProtocol,
-         urlBar: URLBarViewProtocol) {
+         urlBar: URLBarViewProtocol,
+         historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor) {
         self.profile = profile
         self.isPrivate = isPrivate
         self.tabManager = tabManager
         self.urlBar = urlBar
-
-        loadItems {}
+        self.historyHighlightsDataAdaptor = historyHighlightsDataAdaptor
+        self.historyHighlightsDataAdaptor.delegate = self
     }
 
     // MARK: - Public methods
@@ -157,42 +150,13 @@ class HistoryHighlightsViewModel {
     }
 
     func getItemDetailsAt(index: Int) -> HighlightItem? {
-        guard let selectedItem = historyItems?[safe: index] else { return nil }
+        guard let selectedItem = historyItems[safe: index] else { return nil }
 
         return selectedItem
     }
 
     func delete(_ item: HighlightItem) {
-        let deletionUtility = HistoryDeletionUtility(with: profile)
-        let urls = extractDeletableURLs(from: item)
-
-        deletionUtility.delete(urls) { [weak self] success in
-            if success { self?.delegate?.reloadHighlights() }
-        }
-    }
-
-    func loadItems(completion: @escaping () -> Void) {
-        HistoryHighlightsManager.getHighlightsData(with: profile,
-                                                   and: tabManager.tabs,
-                                                   shouldGroupHighlights: true) { [weak self] highlights in
-            self?.historyItems = highlights
-            completion()
-        }
-    }
-
-    // MARK: - Private Methods
-    private func extractDeletableURLs(from item: HighlightItem) -> [String] {
-        var urls = [String]()
-        if item.type == .item, let url = item.siteUrl?.absoluteString {
-            urls = [url]
-
-        } else if item.type == .group, let items = item.group {
-            items.forEach { groupedItem in
-                if let url = groupedItem.siteUrl?.absoluteString { urls.append(url) }
-            }
-        }
-
-        return urls
+        historyHighlightsDataAdaptor.delete(item)
     }
 }
 
@@ -248,25 +212,23 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     }
 
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
-        guard let count = historyItems?.count else {  return 0 }
-
         // If there are less than or equal items to the max number of items allowed per column,
         // we can return the standard count, as we don't need to display filler cells.
         // However, if there's more items, filler cells needs to be accounted for, so sections
         // are always a multiple of the max number of items allowed per column.
-        if count <= UX.maxNumberOfItemsPerColumn {
-            return count
+        if historyItems.count <= UX.maxNumberOfItemsPerColumn {
+            return historyItems.count
         } else {
             return numberOfColumns * UX.maxNumberOfItemsPerColumn
         }
     }
 
     var hasData: Bool {
-        return !(historyItems?.isEmpty ?? true)
+        return !historyItems.isEmpty
     }
 
     func updateData(completion: @escaping () -> Void) {
-        loadItems(completion: completion)
+        historyItems = historyHighlightsDataAdaptor.getHistoryHightlights()
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
@@ -284,13 +246,13 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
         recordSectionHasShown()
 
         let hideBottomLine = isBottomCell(indexPath: indexPath,
-                                          totalItems: historyItems?.count)
+                                          totalItems: historyItems.count)
         let cornersToRound = determineCornerToRound(indexPath: indexPath,
-                                                    totalItems: historyItems?.count)
+                                                    totalItems: historyItems.count)
         let shouldAddShadow = isBottomOfColumn(with: indexPath.row,
-                                               totalItems: historyItems?.count ?? 0)
+                                               totalItems: historyItems.count)
 
-        guard let item = historyItems?[safe: indexPath.row] else {
+        guard let item = historyItems[safe: indexPath.row] else {
             return configureFillerCell(cell,
                                        hideBottomLine: hideBottomLine,
                                        cornersToRound: cornersToRound,
@@ -314,7 +276,7 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
 
-        if let highlight = historyItems?[safe: indexPath.row] {
+        if let highlight = historyItems[safe: indexPath.row] {
             switchTo(highlight)
         }
     }
@@ -471,9 +433,13 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
     }
 }
 
-// MARK: - FxHomeTopSitesManagerDelegate
-extension HistoryHighlightsViewModel: HomeHistoryHighlightsDelegate {
-    func reloadHighlights() {
-        delegate?.reloadHighlights()
+// MARK: - HistoryHighlightsDelegate
+
+extension HistoryHighlightsViewModel: HistoryHighlightsDelegate {
+    func didLoadNewData() {
+        ensureMainThread {
+            self.historyItems = self.historyHighlightsDataAdaptor.getHistoryHightlights()
+            self.delegate?.reloadView()
+        }
     }
 }
