@@ -5,32 +5,26 @@
 import Foundation
 import Shared
 
-class UpdateViewModel: InformationContainerModel {
+class UpdateViewModel: InformationContainerModel, FeatureFlaggable {
 
     let profile: Profile
     static let prefsKey: String = PrefsKeys.KeyLastVersionNumber
 
-    // The list below is for the version(s) we would like to show the coversheet for.
-    let supportedAppVersion = ["22.0", "104.0"]
-
-    var hasSingleCard: Bool {
+    var shouldShowSingleCard: Bool {
         return enabledCards.count == 1
     }
+
     var enabledCards: [IntroViewModel.InformationCards] {
-        if hasSyncAccount {
+        if profile.hasSyncableAccount() {
             return [.updateWelcome]
         }
 
         return [.updateWelcome, .updateSignSync]
     }
 
-    var isCleanInstall: Bool {
-        return profile.prefs.stringForKey(LatestAppVersionProfileKey)?
-            .components(separatedBy: ".").first == nil
-    }
-
-    var hasSyncAccount: Bool {
-        return profile.hasSyncableAccount()
+    // If the feature is enabled and is not clean install
+    var shouldShowFeature: Bool {
+        return featureFlags.isFeatureEnabled(.upgradeOnboarding, checking: .buildOnly) && profile.prefs.stringForKey(LatestAppVersionProfileKey) != nil
     }
 
     init(profile: Profile) {
@@ -38,14 +32,13 @@ class UpdateViewModel: InformationContainerModel {
     }
 
     func shouldShowUpdateSheet(appVersion: String = AppInfo.appVersion) -> Bool {
-        // Only shown if is not clean install and is a supported version
-        guard !isCleanInstall, supportedAppVersion.contains(appVersion) else {
+        guard shouldShowFeature else {
             saveAppVersion(for: appVersion)
             return false
         }
 
         // we check if there is a version number already saved
-        guard let savedVersion =  profile.prefs.stringForKey(UpdateViewModel.prefsKey) else {
+        guard let savedVersion = profile.prefs.stringForKey(UpdateViewModel.prefsKey) else {
             saveAppVersion(for: appVersion)
             return true
         }
@@ -53,12 +46,33 @@ class UpdateViewModel: InformationContainerModel {
         // Version number saved in user prefs is not the same as current version
         if savedVersion != appVersion {
             saveAppVersion(for: appVersion)
+            return true
         }
 
-        return savedVersion != appVersion
+        return false
     }
 
-    func getInfoModel(currentCard: IntroViewModel.InformationCards) -> InfoModelProtocol? {
+    func getCardViewModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardProtocol? {
+        guard let infoModel = getInfoModel(currentCard: cardType) else { return nil }
+
+        return OnboardingCardViewModel(cardType: cardType,
+                                       infoModel: infoModel)
+    }
+
+    func positionForCard(cardType: IntroViewModel.InformationCards) -> Int? {
+        return enabledCards.firstIndex(of: cardType)
+    }
+
+    func sendCloseButtonTelemetry(index: Int) {
+        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: enabledCards[index].telemetryValue]
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .onboardingClose,
+                                     extras: extra)
+    }
+
+    private func getInfoModel(currentCard: IntroViewModel.InformationCards) -> InfoModelProtocol? {
         switch currentCard {
         case .updateWelcome:
             return CoverSheetInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcome),
@@ -74,30 +88,10 @@ class UpdateViewModel: InformationContainerModel {
                                        primaryAction: .Upgrade.SyncAction,
                                        secondaryAction: .Onboarding.LaterAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Upgrade.signSyncCard)
-        default:
+        case .welcome, .wallpapers, .signSync:
+            // Cases not supported by the upgrade screen
             return nil
         }
-    }
-
-    func getCardViewModel(index: Int) -> OnboardingCardProtocol? {
-        let currentCard = enabledCards[index]
-        guard let infoModel = getInfoModel(currentCard: currentCard) else { return nil }
-
-        return OnboardingCardViewModel(cardType: currentCard,
-                                       infoModel: infoModel)
-    }
-
-    func positionForCard(cardType: IntroViewModel.InformationCards) -> Int? {
-        return enabledCards.firstIndex(of: cardType)
-    }
-
-    func sendCloseButtonTelemetry(index: Int) {
-        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: enabledCards[index].telemetryValue]
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .onboardingClose,
-                                     extras: extra)
     }
 
     private func saveAppVersion(for appVersion: String) {

@@ -73,7 +73,7 @@ class UpdateViewController: UIViewController {
     // MARK: View setup
     private func setupView() {
         view.backgroundColor = UIColor.theme.browser.background
-        if viewModel.hasSingleCard {
+        if viewModel.shouldShowSingleCard {
             setupSingleInfoCard()
         } else {
             setupMultipleCards()
@@ -82,8 +82,9 @@ class UpdateViewController: UIViewController {
     }
 
     private func setupSingleInfoCard() {
-        let viewModel = viewModel.getCardViewModel(index: 0)
-        let cardViewController = OnboardingCardViewController(viewModel: viewModel!,
+        guard let viewModel = viewModel.getCardViewModel(cardType: viewModel.enabledCards[0]) else { return }
+
+        let cardViewController = OnboardingCardViewController(viewModel: viewModel,
                                                               delegate: self)
 
         addChild(cardViewController)
@@ -107,8 +108,8 @@ class UpdateViewController: UIViewController {
         // Create onboarding card views
         var cardViewController: OnboardingCardViewController
 
-        for (index, _) in viewModel.enabledCards.enumerated() {
-            if let viewModel = viewModel.getCardViewModel(index: index) {
+        for cardType in viewModel.enabledCards {
+            if let viewModel = viewModel.getCardViewModel(cardType: cardType) {
                 cardViewController = OnboardingCardViewController(viewModel: viewModel,
                                                                       delegate: self)
                 informationCards.append(cardViewController)

@@ -793,6 +793,34 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
+        // MARK: Upgrade onboarding
+        case (.action, .view, .upgradeCardView, _, let extras):
+            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
+                let cardTypeExtra = GleanMetrics.Upgrade.CardViewExtra(cardType: type)
+                GleanMetrics.Upgrade.cardView.record(cardTypeExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .tap, .upgradePrimaryButton, _, let extras):
+            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
+                let cardTypeExtra = GleanMetrics.Upgrade.PrimaryButtonTapExtra(cardType: type)
+                GleanMetrics.Upgrade.primaryButtonTap.record(cardTypeExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .tap, .upgradeSecondaryButton, _, let extras):
+            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
+                let cardTypeExtra = GleanMetrics.Upgrade.SecondaryButtonTapExtra(cardType: type)
+                GleanMetrics.Upgrade.secondaryButtonTap.record(cardTypeExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .tap, .upgradeClose, _, let extras):
+            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
+                GleanMetrics.Upgrade.closeTap.record(GleanMetrics.Upgrade.CloseTapExtra(cardType: type))
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
 
         // MARK: Widget
         case (.action, .open, .mediumTabsOpenUrl, _, _):
