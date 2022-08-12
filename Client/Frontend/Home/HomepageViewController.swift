@@ -610,11 +610,11 @@ extension HomepageViewController: UIPopoverPresentationControllerDelegate {
 // MARK: FirefoxHomeViewModelDelegate
 extension HomepageViewController: HomepageViewModelDelegate {
     func reloadView() {
-        viewModel.updateEnabledSections()
         ensureMainThread { [weak self] in
             guard let self = self,
                   self.view.alpha != 0
             else { return }
+            self.viewModel.updateEnabledSections()
             self.collectionView.reloadData()
         }
     }

@@ -173,16 +173,6 @@ class HomepageViewModel: FeatureFlaggable {
         viewAppeared = false
     }
 
-    // MARK: - Fetch section data
-
-//    func updateData() {
-//        childViewModels.forEach { section in
-//            guard section.isEnabled else { return }
-//            section.updateData()
-//        }
-//        reloadView()
-//    }
-
     // MARK: - Manage sections
 
     func updateEnabledSections() {
@@ -204,7 +194,6 @@ class HomepageViewModel: FeatureFlaggable {
 // MARK: - HomepageDataModelDelegate
 extension HomepageViewModel: HomepageDataModelDelegate {
     func reloadView() {
-        updateEnabledSections()
         delegate?.reloadView()
     }
 }
