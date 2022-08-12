@@ -46,6 +46,6 @@ class HistoryHighlightsViewModelTests: XCTestCase {
 
         sut.didLoadNewData()
 
-        XCTAssertEqual(self.sut.getItemDetailsAt(index: 0)?.displayTitle, "mozilla")
+        XCTAssertEqual(sut.getItemDetailsAt(index: 0)?.displayTitle, "mozilla")
     }
 }
