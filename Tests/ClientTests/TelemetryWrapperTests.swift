@@ -213,6 +213,39 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.closeTap)
     }
 
+    // MARK: - Upgrade onboarding
+    func test_upgradeCardViewWithExtras_GleanIsCalled() {
+        let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
+        let extras = [cardTypeKey: "\(IntroViewModel.InformationCards.updateWelcome.telemetryValue)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .upgradeCardView, value: nil, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.cardView)
+    }
+
+    func test_upgradePrimaryButtonWithExtras_GleanIsCalled() {
+        let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
+        let extras = [cardTypeKey: "\(IntroViewModel.InformationCards.updateWelcome.telemetryValue)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .upgradePrimaryButton, value: nil, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.primaryButtonTap)
+    }
+
+    func test_upgradeSecondaryButtonWithExtras_GleanIsCalled() {
+        let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
+        let extras = [cardTypeKey: "\(IntroViewModel.InformationCards.updateWelcome.telemetryValue)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .upgradeSecondaryButton, value: nil, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.secondaryButtonTap)
+    }
+
+    func test_upgradeCloseWithExtras_GleanIsCalled() {
+        let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
+        let extras = [cardTypeKey: "\(IntroViewModel.InformationCards.updateWelcome.telemetryValue)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .upgradeClose, value: nil, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.closeTap)
+    }
+
     // MARK: - Migration
 
     func test_SDWebImageDiskCacheClear_GleanIsCalled() {

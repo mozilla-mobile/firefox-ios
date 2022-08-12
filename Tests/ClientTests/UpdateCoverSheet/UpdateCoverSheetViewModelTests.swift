@@ -17,6 +17,7 @@ class UpdateCoverSheetViewModelTests: XCTestCase {
         profile._reopen()
         viewModel = UpdateViewModel(profile: profile)
         UserDefaults.standard.removeObject(forKey: UpdateViewModel.prefsKey)
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
@@ -27,8 +28,39 @@ class UpdateCoverSheetViewModelTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: UpdateViewModel.prefsKey)
     }
 
+    // MARK: Enable cards
+    func testEnabledCards_ForHasSyncAccount() {
+        profile.hasSyncableAccountMock = true
+        let enableCards = viewModel.enabledCards
+
+        XCTAssertEqual(enableCards.count, 1)
+        XCTAssertEqual(enableCards[0], .updateWelcome)
+    }
+
+    func testEnabledCards_ForSyncAccountDisabled() {
+        profile.hasSyncableAccountMock = false
+        let enableCards = viewModel.enabledCards
+
+        XCTAssertEqual(enableCards.count, 2)
+        XCTAssertEqual(enableCards[0], .updateWelcome)
+        XCTAssertEqual(enableCards[1], .updateSignSync)
+    }
+
+    // MARK: Has Single card
+    func testHasSingleCard_ForHasSyncAccount() {
+        profile.hasSyncableAccountMock = true
+        XCTAssertEqual(viewModel.shouldShowSingleCard, true)
+    }
+
+    func testHasSingleCard_ForSyncAccountDisabled() {
+        profile.hasSyncableAccountMock = false
+        XCTAssertEqual(viewModel.shouldShowSingleCard, false)
+    }
+
+    // MARK: ShouldShowFeature
     func testShouldNotShowCoverSheetCleanInstall() {
         let currentTestAppVersion = "22.0"
+
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
         XCTAssertEqual(profile.prefs.stringForKey(UpdateViewModel.prefsKey), currentTestAppVersion)
         XCTAssertFalse(shouldShow)
@@ -37,22 +69,11 @@ class UpdateCoverSheetViewModelTests: XCTestCase {
     func testShouldNotShowCoverSheetForSameVersion() {
         let currentTestAppVersion = "22.0"
 
-        // Setting clean install to false and currentAppVersion
+        // Setting clean install to false
         profile.prefs.setString(currentTestAppVersion, forKey: LatestAppVersionProfileKey)
         profile.prefs.setString(currentTestAppVersion, forKey: UpdateViewModel.prefsKey)
-
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
-        XCTAssertFalse(shouldShow)
-    }
-
-    func testShouldNotShowCoverSheetForUnsupportedVersion() {
-        let currentTestAppVersion = "18.0"
-
-        // Setting clean install to false and currentAppVersion
-        profile.prefs.setString(currentTestAppVersion, forKey: LatestAppVersionProfileKey)
-        profile.prefs.setString(currentTestAppVersion, forKey: UpdateViewModel.prefsKey)
-
-        let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
+        XCTAssertEqual(profile.prefs.stringForKey(UpdateViewModel.prefsKey), currentTestAppVersion)
         XCTAssertFalse(shouldShow)
     }
 
@@ -60,7 +81,8 @@ class UpdateCoverSheetViewModelTests: XCTestCase {
         let olderTestAppVersion = "21.0"
         let updatedTestAppVersion = "22.0"
 
-        profile.prefs.setString(updatedTestAppVersion, forKey: LatestAppVersionProfileKey)
+        // Setting clean install to false
+        profile.prefs.setString(olderTestAppVersion, forKey: LatestAppVersionProfileKey)
         profile.prefs.setString(olderTestAppVersion, forKey: UpdateViewModel.prefsKey)
 
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: updatedTestAppVersion)
@@ -70,9 +92,38 @@ class UpdateCoverSheetViewModelTests: XCTestCase {
 
     func testShouldShowCoverSheetForVersionNil() {
         let currentTestAppVersion = "22.0"
+
+        // Setting clean install to false
         profile.prefs.setString(currentTestAppVersion, forKey: LatestAppVersionProfileKey)
 
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
         XCTAssertTrue(shouldShow)
+    }
+
+    func testShouldSaveVersion_CleanInstall() {
+        let currentTestAppVersion = "22.0"
+
+        profile.prefs.setString(currentTestAppVersion, forKey: LatestAppVersionProfileKey)
+        _ = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
+        XCTAssertEqual(profile.prefs.stringForKey(UpdateViewModel.prefsKey), currentTestAppVersion)
+    }
+
+    func testShouldSaveVersion_UnsavedVersion() {
+        let currentTestAppVersion = "22.0"
+
+        _ = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
+        XCTAssertEqual(profile.prefs.stringForKey(UpdateViewModel.prefsKey), currentTestAppVersion)
+    }
+
+    func testGetViewModel_ForValidUpgradeCard() {
+        profile.hasSyncableAccountMock = false
+        XCTAssertNotNil(viewModel.getCardViewModel(cardType: .updateWelcome))
+        XCTAssertNotNil(viewModel.getCardViewModel(cardType: .updateSignSync))
+    }
+
+    func testGetViewModel_ForInvalidUpgradeCard() {
+        XCTAssertNil(viewModel.getCardViewModel(cardType: .welcome))
+        XCTAssertNil(viewModel.getCardViewModel(cardType: .wallpapers))
+        XCTAssertNil(viewModel.getCardViewModel(cardType: .signSync))
     }
 }
