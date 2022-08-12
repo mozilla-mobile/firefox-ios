@@ -896,6 +896,9 @@ class BrowserViewController: UIViewController {
             self.webViewContainer.accessibilityElementsHidden = true
             UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         })
+
+        // Make sure reload button is hidden on homepage
+        urlBar.locationView.reloadButton.reloadButtonState = .disabled
     }
 
     /// Once the homepage is created, browserViewController keeps a reference to it, never setting it to nil during
@@ -936,6 +939,9 @@ class BrowserViewController: UIViewController {
             }
             completion?()
         })
+
+        // Make sure reload button is working after leaving homepage
+        urlBar.locationView.reloadButton.reloadButtonState = .reload
     }
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
