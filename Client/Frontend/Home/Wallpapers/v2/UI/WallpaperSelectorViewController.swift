@@ -176,11 +176,13 @@ private extension WallpaperSelectorViewController {
 
             let section = NSCollectionLayoutSection(group: group)
             let width = environment.container.contentSize.width
-            let inset = (width - 3 * WallpaperSelectorUX.cardWidth - 2 * WallpaperSelectorUX.inset) / 2.0
+            let inset = (width -
+                         CGFloat(subitemsCount) * WallpaperSelectorUX.cardWidth -
+                         CGFloat(subitemsCount - 1) * WallpaperSelectorUX.inset) / 2.0
             section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                             leading: inset,
                                                             bottom: 0,
-                                                            trailing: 0)
+                                                            trailing: inset)
             section.interGroupSpacing = WallpaperSelectorUX.inset
             return section
         }, configuration: config)
