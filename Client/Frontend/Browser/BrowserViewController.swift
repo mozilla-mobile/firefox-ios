@@ -463,6 +463,8 @@ class BrowserViewController: UIViewController {
                                                name: .SearchBarPositionDidChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didTapUndoCloseAllTabToast),
                                                name: .DidTapUndoCloseAllTabToast, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(homePanelDidPresentContextualHintWith),
+                                               name: .DidPresentContextualHint, object: nil)
     }
 
     func addSubviews() {
@@ -894,6 +896,8 @@ class BrowserViewController: UIViewController {
             self.webViewContainer.accessibilityElementsHidden = true
             UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         })
+
+        // Make sure reload button is hidden on homepage
         urlBar.locationView.reloadButton.reloadButtonState = .disabled
     }
 
@@ -935,6 +939,9 @@ class BrowserViewController: UIViewController {
             }
             completion?()
         })
+
+        // Make sure reload button is working after leaving homepage
+        urlBar.locationView.reloadButton.reloadButtonState = .reload
     }
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
@@ -1819,12 +1826,27 @@ extension BrowserViewController: HomePanelDelegate {
         showTabTray(withFocusOnUnselectedTab: tabToFocus, focusedSegment: focusedSegment)
     }
 
-    func homePanelDidPresentContextualHintOf(type: ContextualHintViewType) {
+    func homePanelDidPresentContextualHintOf(type: ContextualHintType) {
         switch type {
         case .jumpBackIn,
+                .jumpBackInSyncedTab,
                 .toolbarLocation:
             self.urlBar.leaveOverlayMode()
         default: break
+        }
+    }
+
+    /// We leave overlay mode this way when a contextual hint is too far out of reach from
+    /// accessing `homePanelDidPresentContextualHintOf(type: ContextualHintType)`
+    @objc func homePanelDidPresentContextualHintWith(notification: NSNotification) {
+        guard let userInfo = notification.userInfo,
+              let hint = userInfo["contextualHint"] as? ContextualHintType
+        else { return }
+
+        switch hint {
+        case .jumpBackIn, .jumpBackInSyncedTab, .toolbarLocation:
+            self.urlBar.leaveOverlayMode()
+        case .inactiveTabs: break
         }
     }
 

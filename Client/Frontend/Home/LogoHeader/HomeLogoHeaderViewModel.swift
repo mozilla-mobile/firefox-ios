@@ -8,7 +8,7 @@ import Shared
 class HomeLogoHeaderViewModel {
 
     struct UX {
-        static let botttomSpacing: CGFloat = 12
+        static let bottomSpacing: CGFloat = 12
     }
 
     private let profile: Profile
@@ -43,7 +43,7 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset,
-                                                        bottom: UX.botttomSpacing, trailing: 0)
+                                                        bottom: UX.bottomSpacing, trailing: 0)
 
         return section
     }
