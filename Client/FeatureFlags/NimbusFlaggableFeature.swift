@@ -12,6 +12,7 @@ import UIKit
 enum NimbusFeatureFlagID: String, CaseIterable {
     case bottomSearchBar
     case contextualHintForToolbar
+    case contextualHintForJumpBackIn
     case contextualHintForJumpBackInSyncedTab
     case historyHighlights
     case historyGroups
@@ -81,7 +82,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.CustomWallpaper
 
         // Cases where users do not have the option to manipulate a setting.
-        case .contextualHintForJumpBackInSyncedTab,
+        case .contextualHintForJumpBackIn,
+                .contextualHintForJumpBackInSyncedTab,
                 .contextualHintForToolbar,
                 .reportSiteIssue,
                 .shakeToRestore,

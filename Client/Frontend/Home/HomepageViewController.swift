@@ -290,6 +290,7 @@ class HomepageViewController: UIViewController, HomePanel {
     // MARK: - Contextual hint
     private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
         guard contextualHintViewController.shouldPresentHint(),
+              viewModel.jumpBackInViewModel.isFlagForHintEnabled(),
               !viewModel.shouldDisplayHomeTabBanner
         else { return }
 
