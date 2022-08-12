@@ -128,9 +128,7 @@ private extension BottomSheetViewController {
             scrollContentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             scrollContentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
 
-            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                            constant: BottomSheetViewController.UX.topSpace +
-                                            BottomSheetViewController.UX.closeButtonWidthHeight),
+            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -138,6 +136,7 @@ private extension BottomSheetViewController {
         ])
 
         scrollViewHeightConstraint.priority = .defaultLow
+        contentView.bringSubviewToFront(closeButton)
     }
 
     func setupChildViewController() {

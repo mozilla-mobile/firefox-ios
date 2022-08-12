@@ -35,7 +35,6 @@ class WallpaperSelectorViewController: UIViewController {
                                                                    size: 12)
         label.adjustsFontForContentSizeCategory = true
         label.text = .Onboarding.WallpaperSelectorDescription
-        label.textColor = .Photon.Ink80
         label.textAlignment = .center
         label.numberOfLines = 0
     }
@@ -59,7 +58,6 @@ class WallpaperSelectorViewController: UIViewController {
                                                                    size: 16)
         button.titleLabel?.textAlignment = .center
         button.setTitle(.Onboarding.WallpaperSelectorAction, for: .normal)
-        button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
     }
 
     // MARK: - Initializers
@@ -132,7 +130,7 @@ private extension WallpaperSelectorViewController {
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 48),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 34),
             headerLabel.bottomAnchor.constraint(equalTo: instructionLabel.topAnchor, constant: -4),
             headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -34),
@@ -203,5 +201,17 @@ extension WallpaperSelectorViewController: NotificationThemeable, Notifiable {
     }
 
     func applyTheme() {
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            contentView.backgroundColor = UIColor.Photon.DarkGrey40
+            headerLabel.textColor = UIColor.Photon.LightGrey05
+            instructionLabel.textColor = UIColor.Photon.LightGrey05
+            settingsButton.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
+        } else {
+            contentView.backgroundColor = UIColor.Photon.LightGrey10
+            headerLabel.textColor = UIColor.Photon.Ink80
+            instructionLabel.textColor = UIColor.Photon.DarkGrey05
+            settingsButton.setTitleColor(UIColor.Photon.Blue50, for: .normal)
+        }
     }
 }
