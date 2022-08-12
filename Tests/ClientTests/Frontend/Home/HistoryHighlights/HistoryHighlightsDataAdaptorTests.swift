@@ -45,9 +45,9 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
 
         let results = subject.getHistoryHightlights()
 
-        XCTAssert(results.count == 1)
-        XCTAssert(historyManager.getHighlightsDataCallCount == 1)
-        XCTAssert(delegate.didLoadNewDataCallCount == 1)
+        XCTAssertEqual(results.count, 1)
+        XCTAssertEqual(historyManager.getHighlightsDataCallCount, 1)
+        XCTAssertEqual(delegate.didLoadNewDataCallCount, 1)
     }
 
     // Loads history on first launch without data
@@ -57,8 +57,8 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         let results = subject.getHistoryHightlights()
 
         XCTAssert(results.isEmpty)
-        XCTAssert(historyManager.getHighlightsDataCallCount == 1)
-        XCTAssert(delegate.didLoadNewDataCallCount == 1)
+        XCTAssertEqual(historyManager.getHighlightsDataCallCount, 1)
+        XCTAssertEqual(delegate.didLoadNewDataCallCount, 1)
     }
 
     // Reloads for notification
@@ -73,8 +73,8 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
 
         let results = subject.getHistoryHightlights()
 
-        XCTAssert(results.count == 2)
-        XCTAssert(historyManager.getHighlightsDataCallCount == 2)
-        XCTAssert(delegate.didLoadNewDataCallCount == 2)
+        XCTAssertEqual(results.count, 2)
+        XCTAssertEqual(historyManager.getHighlightsDataCallCount, 2)
+        XCTAssertEqual(delegate.didLoadNewDataCallCount, 2)
     }
 }
