@@ -9,14 +9,15 @@ import Shared
 @testable import Storage
 
 class HistoryHighlightsTests: XCTestCase {
-    typealias manager = HistoryHighlightsManager
 
+    private var manager: HistoryHighlightsManager!
     private var profile: MockProfile!
     private var entryProvider: HistoryHighlightsTestEntryProvider!
 
     override func setUp() {
         super.setUp()
 
+        manager = HistoryHighlightsManager()
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
         profile._reopen()
         let tabManager = TabManager(profile: profile, imageStore: nil)
@@ -26,6 +27,7 @@ class HistoryHighlightsTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
 
+        manager = nil
         profile._shutdown()
         profile = nil
         entryProvider = nil

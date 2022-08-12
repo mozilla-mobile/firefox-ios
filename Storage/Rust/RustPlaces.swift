@@ -383,26 +383,36 @@ public class RustPlaces: BookmarksHandler {
     public func noteHistoryMetadataObservation(key: HistoryMetadataKey, observation: HistoryMetadataObservation) -> Deferred<Maybe<Void>> {
         return withWriter { connection in
             if let title = observation.title {
-                return try connection.noteHistoryMetadataObservationTitle(key: key, title: title)
+                let response: Void = try connection.noteHistoryMetadataObservationTitle(key: key, title: title)
+                self.notificationCenter.post(name: .HistoryUpdated, object: nil)
+                return response
             }
             if let documentType = observation.documentType {
-                return try connection.noteHistoryMetadataObservationDocumentType(key: key, documentType: documentType)
+                let response: Void = try connection.noteHistoryMetadataObservationDocumentType(key: key, documentType: documentType)
+                self.notificationCenter.post(name: .HistoryUpdated, object: nil)
+                return response
             }
             if let viewTime = observation.viewTime {
-                return try connection.noteHistoryMetadataObservationViewTime(key: key, viewTime: viewTime)
+                let response: Void = try connection.noteHistoryMetadataObservationViewTime(key: key, viewTime: viewTime)
+                self.notificationCenter.post(name: .HistoryUpdated, object: nil)
+                return response
             }
         }
     }
 
     public func deleteHistoryMetadataOlderThan(olderThan: Int64) -> Deferred<Maybe<Void>> {
         return withWriter { connection in
-            return try connection.deleteHistoryMetadataOlderThan(olderThan: olderThan)
+            let response: Void = try connection.deleteHistoryMetadataOlderThan(olderThan: olderThan)
+            self.notificationCenter.post(name: .HistoryUpdated, object: nil)
+            return response
         }
     }
 
     public func deleteHistoryMetadata(key: HistoryMetadataKey) -> Deferred<Maybe<Void>> {
         return withWriter { connection in
-            return try connection.deleteHistoryMetadata(key: key)
+            let response: Void = try connection.deleteHistoryMetadata(key: key)
+            self.notificationCenter.post(name: .HistoryUpdated, object: nil)
+            return response
         }
     }
 
