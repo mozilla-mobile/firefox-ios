@@ -171,15 +171,21 @@ private extension JumpBackInViewModel {
         let descriptionText = item.client.name
         let image = UIImage(named: ImageIdentifiers.syncedDevicesIcon)
 
-        let cellViewModel = SyncedTabCellViewModel(titleText: site.title,
-                                                         descriptionText: descriptionText,
-                                                         url: item.tab.URL,
-                                                         syncedDeviceImage: image,
-                                                         heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site),
-                                                         fallbackFaviconImage: jumpBackInDataAdaptor.getFaviconImage(forSite: site))
-        cell.configure(viewModel: cellViewModel,
-                       onTapShowAllAction: syncedTabsShowAllAction,
-                       onOpenSyncedTabAction: openSyncedTabAction)
+        let cellViewModel = SyncedTabCellViewModel(
+            profile: profile,
+            titleText: site.title,
+            descriptionText: descriptionText,
+            url: item.tab.URL,
+            syncedDeviceImage: image,
+            heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site),
+            fallbackFaviconImage: jumpBackInDataAdaptor.getFaviconImage(forSite: site)
+        )
+
+        cell.configure(
+            viewModel: cellViewModel,
+            onTapShowAllAction: syncedTabsShowAllAction,
+            onOpenSyncedTabAction: openSyncedTabAction
+        )
     }
 
     private func defaultSection(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
