@@ -163,8 +163,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             searchQuery: searchQuery,
             profile: profile,
             tabs: tabManager.tabs,
-            resultCount: 3)
-        { results in
+            resultCount: 3) { results in
+
             guard let results = results else { return }
             self.searchHighlights = results
             self.tableView.reloadData()
