@@ -110,14 +110,13 @@ class HomepageViewModel: FeatureFlaggable {
             profile: profile)
         let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
             profile: profile,
-            tabManager: tabManager,
-            urlBar: urlBar,
-            historyHighlightsDataAdaptor: historyDataAdaptor)
+            tabManager: tabManager)
         self.historyHighlightsViewModel = HistoryHighlightsViewModel(
             with: profile,
             isPrivate: isPrivate,
             tabManager: tabManager,
-            urlBar: urlBar)
+            urlBar: urlBar,
+            historyHighlightsDataAdaptor: historyDataAdaptor)
 
         let pocketDataAdaptor = PocketDataAdaptorImplementation(
             pocketAPI: PocketProvider(),
