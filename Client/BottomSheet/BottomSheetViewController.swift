@@ -17,7 +17,7 @@ class BottomSheetViewController: UIViewController {
     private let childViewController: UIViewController
 
     // Views
-    private lazy var scrollView: UIScrollView = .build { scrollView in
+    private lazy var scrollView: FadeScrollView = .build { scrollView in
         scrollView.showsHorizontalScrollIndicator = false
     }
     private lazy var topTapView: UIView = .build { view in
