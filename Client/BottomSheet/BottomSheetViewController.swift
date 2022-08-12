@@ -78,7 +78,13 @@ class BottomSheetViewController: UIViewController {
 
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        contentView.addRoundedCorners([.topLeft, .topRight], radius: viewModel.cornerRadius)
+        scrollView.addRoundedCorners([.topLeft, .topRight], radius: viewModel.cornerRadius)
+
+        contentView.layer.backgroundColor = UIColor.clear.cgColor
+        contentView.layer.shadowColor = UIColor.black.cgColor
+        contentView.layer.shadowOffset = CGSize(width: 0, height: -5.0)
+        contentView.layer.shadowOpacity = 0.2
+        contentView.layer.shadowRadius = 20.0
     }
 
     public func dismissViewController() {

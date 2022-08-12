@@ -13,7 +13,7 @@ public struct BottomSheetViewModel {
     public init() {
         cornerRadius = 8
         animationTransitionDuration = 0.3
-        backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        backgroundColor = UIColor.black.withAlphaComponent(0)
     }
 
     public init(cornerRadius: CGFloat,
