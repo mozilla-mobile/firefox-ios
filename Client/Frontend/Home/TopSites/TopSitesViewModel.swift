@@ -233,9 +233,11 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
 // MARK: - FxHomeTopSitesManagerDelegate
 extension TopSitesViewModel: TopSitesManagerDelegate {
-    func reloadTopSites() {
-        guard self.shouldShow else { return }
-        self.delegate?.reloadTopSites()
+    func didLoadNewData() {
+        ensureMainThread {
+            self.topSites = self.topSitesDataAdaptor.getTopSitesData()
+            self.delegate?.reloadView()
+        }
     }
 }
 
