@@ -151,6 +151,7 @@ extension RecentlySavedCellViewModel: RecentlySavedDelegate {
     func didLoadNewData() {
         ensureMainThread {
             self.recentItems = self.recentlySavedDataAdaptor.getRecentlySavedData()
+            guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }
     }

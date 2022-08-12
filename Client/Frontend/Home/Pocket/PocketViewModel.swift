@@ -229,6 +229,7 @@ extension PocketViewModel: PocketDelegate {
     func didLoadNewData() {
         ensureMainThread {
             self.updateData()
+            guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }
     }

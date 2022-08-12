@@ -108,6 +108,7 @@ extension HomepageMessageCardViewModel: MessageCardDelegate {
     func didLoadNewData() {
         ensureMainThread {
             self.message = self.dataAdaptor.getMessageCardData()
+            guard self.isEnabled else { return }
             self.delegate?.reloadView()
             self.handleMessageDisplayed()
         }

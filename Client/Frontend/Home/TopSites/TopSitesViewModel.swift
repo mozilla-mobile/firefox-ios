@@ -189,6 +189,7 @@ extension TopSitesViewModel: TopSitesManagerDelegate {
     func didLoadNewData() {
         ensureMainThread {
             self.topSites = self.topSitesDataAdaptor.getTopSitesData()
+            guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }
     }

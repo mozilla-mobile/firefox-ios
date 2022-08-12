@@ -435,6 +435,7 @@ extension HistoryHighlightsViewModel: HistoryHighlightsDelegate {
     func didLoadNewData() {
         ensureMainThread {
             self.historyItems = self.historyHighlightsDataAdaptor.getHistoryHightlights()
+            guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }
     }
