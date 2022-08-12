@@ -104,7 +104,8 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
                                                             for: indexPath) as? WallpaperCollectionViewCell else {
             return UICollectionViewCell()
         }
-        let cellViewModel = WallpaperCellViewModel(image: viewModel.wallpapers[safe: indexPath.row]?.thumbnail)
+        let cellViewModel = WallpaperCellViewModel(image: viewModel.wallpapers[safe: indexPath.row]?.thumbnail,
+                                                   isSelected: indexPath.row == 0)
         cell.viewModel = cellViewModel
         return cell
     }

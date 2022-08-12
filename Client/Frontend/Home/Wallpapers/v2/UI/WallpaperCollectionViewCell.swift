@@ -20,7 +20,7 @@ class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
 
     private lazy var selectedView: UIView = .build { selectedView in
         selectedView.layer.cornerRadius = 10
-        selectedView.layer.borderWidth = 4
+        selectedView.layer.borderWidth = 3
         selectedView.backgroundColor = .clear
         selectedView.alpha = 0.0
     }
@@ -32,10 +32,6 @@ class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
         }
     }
     var notificationCenter: NotificationProtocol = NotificationCenter.default
-
-    override var isSelected: Bool {
-        didSet { selectedView.alpha = isSelected ? 1.0 : 0.0 }
-    }
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -67,8 +63,9 @@ class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
 private extension WallpaperCollectionViewCell {
 
     func updateContent() {
-        guard let image = viewModel?.image else { return }
-        imageView.image = image
+        guard let viewModel = viewModel else { return }
+        imageView.image = viewModel.image
+        selectedView.alpha = viewModel.isSelected ? 1.0 : 0.0
     }
 
     func setupView() {
