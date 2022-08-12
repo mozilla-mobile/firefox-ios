@@ -88,10 +88,6 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
     var hasData: Bool {
         return shouldDisplayMessageCard
     }
-
-    func updateData() {
-        message = dataAdaptor.getMessageCardData()
-    }
 }
 
 // MARK: - HomepageSectionHandler

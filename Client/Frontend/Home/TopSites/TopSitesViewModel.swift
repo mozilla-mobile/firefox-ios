@@ -174,10 +174,6 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return !topSites.isEmpty
     }
 
-    func updateData() {
-        topSites = topSitesDataAdaptor.getTopSitesData()
-    }
-
     func refreshData(for traitCollection: UITraitCollection) {
         let interface = TopSitesUIInterface(trait: traitCollection)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,

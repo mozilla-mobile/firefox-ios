@@ -320,11 +320,6 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return hasJumpBackIn || hasSyncedTab
     }
 
-    func updateData() {
-        jumpBackInList = jumpBackInDataAdaptor.getJumpBackInData()
-        mostRecentSyncedTab = jumpBackInDataAdaptor.getSyncedTabData()
-    }
-
     func refreshData(for traitCollection: UITraitCollection,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         let maxItemToDisplay = sectionLayout.maxItemsToDisplay(

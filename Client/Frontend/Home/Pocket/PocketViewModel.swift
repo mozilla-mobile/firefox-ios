@@ -96,6 +96,15 @@ class PocketViewModel {
     private func showDiscoverMore() {
         onTapTileAction?(PocketProvider.MoreStoriesURL)
     }
+
+    private func updateData() {
+        let stories = dataAdaptor.getPocketData()
+        pocketStoriesViewModels = []
+        // Add the story in the view models list
+        for story in stories {
+            bind(pocketStoryViewModel: .init(story: story))
+        }
+    }
 }
 
 // MARK: HomeViewModelProtocol
@@ -164,15 +173,6 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
     var hasData: Bool {
         return !pocketStoriesViewModels.isEmpty
-    }
-
-    func updateData() {
-        let stories = dataAdaptor.getPocketData()
-        pocketStoriesViewModels = []
-        // Add the story in the view models list
-        for story in stories {
-            bind(pocketStoryViewModel: .init(story: story))
-        }
     }
 }
 

@@ -26,9 +26,6 @@ protocol HomepageViewModelProtocol {
     // Returns true when section has data and is enabled
     var shouldShow: Bool { get }
 
-    // Update section data from backend, completes when data has finished loading
-    func updateData()
-
     // Refresh data after reloadOnRotation, so layout can be adjusted
     // Can also be used to prepare data for a specific trait collection when UI is ready to show
     func refreshData(for traitCollection: UITraitCollection)
@@ -42,10 +39,6 @@ extension HomepageViewModelProtocol {
 
     var shouldShow: Bool {
         return isEnabled && hasData
-    }
-
-    func updateData() {
-        // When no data has to be loaded for a section
     }
 
     func refreshData(for traitCollection: UITraitCollection) {}

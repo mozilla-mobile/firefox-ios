@@ -227,10 +227,6 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
         return !historyItems.isEmpty
     }
 
-    func updateData() {
-        historyItems = historyHighlightsDataAdaptor.getHistoryHightlights()
-    }
-
     func updatePrivacyConcernedSection(isPrivate: Bool) {
         self.isPrivate = isPrivate
     }

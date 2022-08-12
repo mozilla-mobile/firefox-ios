@@ -175,13 +175,13 @@ class HomepageViewModel: FeatureFlaggable {
 
     // MARK: - Fetch section data
 
-    func updateData() {
-        childViewModels.forEach { section in
-            guard section.isEnabled else { return }
-            section.updateData()
-        }
-        reloadView()
-    }
+//    func updateData() {
+//        childViewModels.forEach { section in
+//            guard section.isEnabled else { return }
+//            section.updateData()
+//        }
+//        reloadView()
+//    }
 
     // MARK: - Manage sections
 
