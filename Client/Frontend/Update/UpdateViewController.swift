@@ -12,18 +12,15 @@ class UpdateViewController: UIViewController {
     struct UX {
         static let closeButtonTopPadding: CGFloat = 32
         static let closeButtonRightPadding: CGFloat = 16
-        static let closeButtonSize: CGFloat = 30
+        static let closeButtonSize: CGFloat = 32
         static let pageControlHeight: CGFloat = 40
         static let pageControlBottomPadding: CGFloat = 8
     }
 
     // Public constants 
     var viewModel: UpdateViewModel
-    private var informationCards = [OnboardingCardViewController]()
-    static let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-
-    // Closure delegate
     var didFinishClosure: ((UpdateViewController) -> Void)?
+    private var informationCards = [OnboardingCardViewController]()
 
     // MARK: - Private vars
     private lazy var backgroundImageView: UIImageView = .build { imageView in
@@ -32,7 +29,7 @@ class UpdateViewController: UIViewController {
     }
 
     private lazy var closeButton: UIButton = .build { button in
-        let closeImage = UIImage(named: ImageIdentifiers.closeLargeButton)
+        let closeImage = UIImage(named: ImageIdentifiers.upgradeCloseButton)
         button.setImage(closeImage, for: .normal)
         button.tintColor = .secondaryLabel
         button.addTarget(self, action: #selector(self.dismissUpdate), for: .touchUpInside)
@@ -86,11 +83,10 @@ class UpdateViewController: UIViewController {
 
         let cardViewController = OnboardingCardViewController(viewModel: viewModel,
                                                               delegate: self)
-
+        view.addSubviews(backgroundImageView, closeButton)
         addChild(cardViewController)
         view.addSubview(cardViewController.view)
         cardViewController.didMove(toParent: self)
-        view.addSubviews(backgroundImageView, closeButton)
 
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
@@ -125,10 +121,11 @@ class UpdateViewController: UIViewController {
     }
 
     private func setupMultipleCardsConstraints() {
+        view.addSubview(backgroundImageView)
         addChild(pageController)
         view.addSubview(pageController.view)
         pageController.didMove(toParent: self)
-        view.addSubviews(backgroundImageView, pageControl, closeButton)
+        view.addSubviews(pageControl, closeButton)
 
         NSLayoutConstraint.activate([
             pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -253,3 +250,21 @@ extension UpdateViewController: OnboardingCardDelegate {
         }
     }
 }
+
+// MARK: UIViewController setup
+extension UpdateViewController {
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+
+    override var shouldAutorotate: Bool {
+        return false
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        // This actually does the right thing on iPad where the modally
+        // presented version happily rotates with the iPad orientation.
+        return .portrait
+    }
+}
+
