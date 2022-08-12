@@ -9,7 +9,7 @@ class BottomSheetViewController: UIViewController {
     private struct UX {
         static let defaultHeight: CGFloat = 200
         static let minVisibleTopSpace: CGFloat = 40
-        static let closeButtonWidthHeight: CGFloat = 22
+        static let closeButtonWidthHeight: CGFloat = 30
         static let topSpace: CGFloat = 16
     }
 
