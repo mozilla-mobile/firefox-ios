@@ -83,6 +83,15 @@ class PocketViewModel {
 
     // MARK: - Private
 
+    private func updateData() {
+        let stories = dataAdaptor.getPocketData()
+        pocketStoriesViewModels = []
+        // Add the story in the view models list
+        for story in stories {
+            bind(pocketStoryViewModel: .init(story: story))
+        }
+    }
+
     private func bind(pocketStoryViewModel: PocketStandardCellViewModel) {
         pocketStoryViewModel.onTap = { [weak self] indexPath in
             self?.recordTapOnStory(index: indexPath.row)
@@ -95,15 +104,6 @@ class PocketViewModel {
 
     private func showDiscoverMore() {
         onTapTileAction?(PocketProvider.MoreStoriesURL)
-    }
-
-    private func updateData() {
-        let stories = dataAdaptor.getPocketData()
-        pocketStoriesViewModels = []
-        // Add the story in the view models list
-        for story in stories {
-            bind(pocketStoryViewModel: .init(story: story))
-        }
     }
 }
 

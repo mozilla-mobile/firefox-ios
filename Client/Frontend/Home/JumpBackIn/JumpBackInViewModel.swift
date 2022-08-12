@@ -346,9 +346,7 @@ extension JumpBackInViewModel: HomepageSectionHandler {
         if let jumpBackInItemRow = sectionLayout.indexOfJumpBackInItem(for: indexPath) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier,
                                                           for: indexPath)
-            guard let jumpBackInCell = cell as? JumpBackInCell else {
-                return UICollectionViewCell()
-            }
+            guard let jumpBackInCell = cell as? JumpBackInCell else { return UICollectionViewCell() }
 
             if jumpBackInItemRow == (jumpBackInList.itemsToDisplay - 1),
                let group = jumpBackInList.group {
@@ -364,9 +362,7 @@ extension JumpBackInViewModel: HomepageSectionHandler {
                                                           for: indexPath)
             guard let syncedTabCell = cell as? SyncedTabCell,
                     let mostRecentSyncedTab = mostRecentSyncedTab
-            else {
-                return UICollectionViewCell()
-            }
+            else { return UICollectionViewCell() }
             configureSyncedTabCellForTab(item: mostRecentSyncedTab, cell: syncedTabCell, indexPath: indexPath)
             return syncedTabCell
         }
