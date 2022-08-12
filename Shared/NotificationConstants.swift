@@ -78,6 +78,8 @@ extension Notification.Name {
 
     public static let LibraryPanelStateDidChange = Notification.Name("LibraryPanelStateDidChange")
 
+    public static let DidPresentContextualHint = Notification.Name("DidPresentContextualHint")
+
     // MARK: Tab manager
 
     // Tab manager creates a toast for undo recently closed tabs and a notification is

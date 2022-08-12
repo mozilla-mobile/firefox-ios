@@ -10,9 +10,13 @@ class SyncedTabCellTests: XCTestCase {
 
     func testConfigureSyncTab_hasNoLeaks() {
         let testUrl = URL(string: "www.test.com")!
-        let viewModel = SyncedTabCellViewModel(titleText: "Title",
-                                               descriptionText: "Description",
-                                               url: testUrl)
+
+        let viewModel = SyncedTabCellViewModel(
+            profile: MockProfile(),
+            titleText: "Title",
+            descriptionText: "Description",
+            url: testUrl
+        )
 
         let testButton = UIButton(frame: CGRect.zero)
         let syncedTabsShowAllAction = { button in

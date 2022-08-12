@@ -31,7 +31,7 @@ final class NimbusFeatureFlagLayer {
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
 
-        case .contextualHintForToolbar:
+        case .contextualHintForJumpBackInSyncedTab, .contextualHintForToolbar:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
         case .sponsoredPocket:
@@ -126,6 +126,7 @@ final class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .contextualHintForToolbar: nimbusID = ContextualHint.toolbarContextualHint
+        case .contextualHintForJumpBackInSyncedTab: nimbusID = ContextualHint.jumpBackInSyncedTabContextualHint
         default: return false
         }
 
