@@ -27,7 +27,7 @@ class BottomSheetViewController: UIViewController {
     private lazy var contentShadowView: UIView = .build { _ in }
     private lazy var contentView: UIView = .build { _ in }
     private lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage(named: ImageIdentifiers.contextualHintClose), for: .normal)
+        button.setImage(UIImage(named: ImageIdentifiers.bottomSheetClose), for: .normal)
         button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
     }
     private lazy var scrollContentView: UIView = .build { _ in }
