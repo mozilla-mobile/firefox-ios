@@ -227,7 +227,7 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
         return !historyItems.isEmpty
     }
 
-    func updateData(completion: @escaping () -> Void) {
+    func updateData() {
         historyItems = historyHighlightsDataAdaptor.getHistoryHightlights()
     }
 

@@ -320,10 +320,9 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return hasJumpBackIn || hasSyncedTab
     }
 
-    func updateData(completion: @escaping () -> Void) {
+    func updateData() {
         jumpBackInList = jumpBackInDataAdaptor.getJumpBackInData()
         mostRecentSyncedTab = jumpBackInDataAdaptor.getSyncedTabData()
-        completion()
     }
 
     func refreshData(for traitCollection: UITraitCollection,

@@ -174,9 +174,8 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return !topSites.isEmpty
     }
 
-    func updateData(completion: @escaping () -> Void) {
+    func updateData() {
         topSites = topSitesDataAdaptor.getTopSitesData()
-        completion()
     }
 
     func refreshData(for traitCollection: UITraitCollection) {

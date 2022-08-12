@@ -181,7 +181,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let sut = createSut()
         sut.featureFlags.set(feature: .jumpBackInSyncedTab, to: true)
         adaptor.syncedTab = JumpBackInSyncedTab(client: remoteClient, tab: remoteTab)
-        sut.updateData {}
+        sut.updateData()
 
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
@@ -201,7 +201,7 @@ class JumpBackInViewModelTests: XCTestCase {
         adaptor.syncedTab = JumpBackInSyncedTab(client: remoteClient, tab: remoteTab)
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1])
-        sut.updateData {}
+        sut.updateData()
 
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
@@ -220,7 +220,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1])
         adaptor.mockHasSyncedTabFeatureEnabled = false
-        sut.updateData {}
+        sut.updateData()
 
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
@@ -239,7 +239,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1])
         adaptor.mockHasSyncedTabFeatureEnabled = false
-        sut.updateData {}
+        sut.updateData()
 
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
@@ -258,7 +258,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1])
         adaptor.syncedTab = JumpBackInSyncedTab(client: remoteClient, tab: remoteTab)
-        sut.updateData {}
+        sut.updateData()
 
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
@@ -277,7 +277,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1])
         adaptor.syncedTab = JumpBackInSyncedTab(client: remoteClient, tab: remoteTab)
-        sut.updateData {}
+        sut.updateData()
 
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
@@ -295,7 +295,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let sut = createSut()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1])
-        sut.updateData {}
+        sut.updateData()
 
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
@@ -313,7 +313,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let sut = createSut()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1])
-        sut.updateData {}
+        sut.updateData()
 
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular

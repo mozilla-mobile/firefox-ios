@@ -87,8 +87,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         profile.syncManager.applicationDidBecomeActive()
         webServerUtil?.setUpWebServer()
 
-        browserViewController.homepageViewController?.reloadAll()
-
         /// When transitioning to scenes, each scene's BVC needs to resume its file download queue.
         browserViewController.downloadQueue.resumeAll()
 

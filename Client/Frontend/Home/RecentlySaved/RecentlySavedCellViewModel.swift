@@ -100,9 +100,8 @@ extension RecentlySavedCellViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     }
 
     /// Using dispatch group to know when data has completely loaded for both sources (recent bookmarks and reading list items)
-    func updateData(completion: @escaping () -> Void) {
+    func updateData() {
         recentItems = recentlySavedDataAdaptor.getRecentlySavedData()
-        completion()
     }
 }
 

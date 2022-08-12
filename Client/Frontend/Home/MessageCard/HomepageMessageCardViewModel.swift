@@ -89,9 +89,8 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
         return shouldDisplayMessageCard
     }
 
-    func updateData(completion: @escaping () -> Void) {
+    func updateData() {
         message = dataAdaptor.getMessageCardData()
-        completion()
     }
 }
 

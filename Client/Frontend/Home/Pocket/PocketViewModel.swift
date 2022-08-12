@@ -83,15 +83,6 @@ class PocketViewModel {
 
     // MARK: - Private
 
-    private func updateData() {
-        let stories = dataAdaptor.getPocketData()
-        pocketStoriesViewModels = []
-        // Add the story in the view models list
-        for story in stories {
-            bind(pocketStoryViewModel: .init(story: story))
-        }
-    }
-
     private func bind(pocketStoryViewModel: PocketStandardCellViewModel) {
         pocketStoryViewModel.onTap = { [weak self] indexPath in
             self?.recordTapOnStory(index: indexPath.row)
@@ -175,9 +166,13 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return !pocketStoriesViewModels.isEmpty
     }
 
-    func updateData(completion: @escaping () -> Void) {
-        updateData()
-        completion()
+    func updateData() {
+        let stories = dataAdaptor.getPocketData()
+        pocketStoriesViewModels = []
+        // Add the story in the view models list
+        for story in stories {
+            bind(pocketStoryViewModel: .init(story: story))
+        }
     }
 }
 

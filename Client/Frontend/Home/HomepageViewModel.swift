@@ -178,37 +178,12 @@ class HomepageViewModel: FeatureFlaggable {
     func updateData() {
         childViewModels.forEach { section in
             guard section.isEnabled else { return }
-            self.updateData(section: section)
+            section.updateData()
         }
+        reloadView()
     }
 
-    private func updateData(section: HomepageViewModelProtocol) {
-        section.updateData {
-            self.reloadView()
-        }
-    }
-
-    // MARK: - Manage sections and order
-
-    func addShownSection(section: HomepageSectionType) {
-        let positionToInsert = getPositionToInsert(section: section)
-        if positionToInsert >= shownSections.count {
-            shownSections.append(section)
-        } else {
-            shownSections.insert(section, at: positionToInsert)
-        }
-    }
-
-    func removeShownSection(section: HomepageSectionType) {
-        if let index = shownSections.firstIndex(of: section) {
-            shownSections.remove(at: index)
-        }
-    }
-
-    func getPositionToInsert(section: HomepageSectionType) -> Int {
-        let indexes = shownSections.filter { $0.rawValue < section.rawValue }
-        return indexes.count
-    }
+    // MARK: - Manage sections
 
     func updateEnabledSections() {
         shownSections.removeAll()
@@ -223,10 +198,6 @@ class HomepageViewModel: FeatureFlaggable {
     func getSectionViewModel(shownSection: Int) -> HomepageViewModelProtocol? {
         guard let actualSectionNumber = shownSections[safe: shownSection]?.rawValue else { return nil }
         return childViewModels[safe: actualSectionNumber]
-    }
-
-    func indexOfShownSection(_ type: HomepageSectionType) -> Int? {
-        return shownSections.firstIndex(of: type)
     }
 }
 
