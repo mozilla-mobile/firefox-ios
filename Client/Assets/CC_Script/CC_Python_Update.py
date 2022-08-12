@@ -1,6 +1,4 @@
 import requests
-import filecmp
-import difflib
 
 CREDENTIAL_PROVIDER_JS_URL = "https://hg.mozilla.org/mozilla-central/raw-file/tip/toolkit/components/passwordmgr/LoginManagerChild.jsm"
 LOGINS_MANAGER_JSM_PATH = "./Client/Assets/CC_Script/LoginManagerChild.jsm"
@@ -18,8 +16,6 @@ def download_and_update_credential_provider_script():
                 f.write(chunk)
     except requests.exceptions.HTTPError as err:
         raise SystemExit(err)
-
-def compare_file()
 
 def main():
     download_and_update_credential_provider_script()
