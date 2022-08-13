@@ -250,6 +250,30 @@
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Tòisich air brabhsadh";
 
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Suath bàn an eachdraidh brabhsaidh, na faclan-faire is briosgaidean agus cuir casg air sanasachd o bhith gad leantainn ann an aon bhriogadh!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Chan eil an eachdraidh gad leantainn mun cuairt";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "Tha %@ na bhrabhsair prìobhaideachd sònraichte le dìon o thracadh is bacadh susbainte.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Nas fheàrr na dìreach gun urra";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Rèitich na roghainnean is cuir romhad dè na leigeas tu ris, a bheag no a mhòr.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Dìon a-rèir do thoil fhèin";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Thoir prìobhaideachd a’ bhrabhsaidh gu ìre nas àirde.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Fàilte gu Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Sguir dheth";
 
@@ -322,14 +346,29 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Bac tracaichean susbainte";
 
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Dorcha";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "Cuiridh %@ na sgrìobhas tu ann am bàr an t-seòlaidh gun einnsan-luirg agad.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Tha Mozilla an dealas dìreach an dàta a chruinneachadh a dh’fheumas sinn airson %@ a sholar is a leasachadh dhan a h-uile duine.";
 
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "Faodaidh %@ rannsachadh a stàladh is a ruith o àm gu àm.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Coitcheann";
+
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Barrachd fiosrachaidh.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Soilleir";
+
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "De làimh";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Rangaich %@";
@@ -367,6 +406,9 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "An sreang luirg a thèid a chleachdadh";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Mar eisimpleir: searchengine.example.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Cuir sreang luirg a-steach. Ma bhios feum, cuir na leanas an àite a’ bhriathair-luirg: %s.";
 
@@ -391,8 +433,35 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "TÈARAINTEACHD";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Suidhich mar am brabhsair bunaiteach";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Suidhich ceanglaichean o làraichean-lìn, puist-d agus teachdaireachdan airson ’s gun tèid am fosgladh gu fèin-obrachail ann am %@.";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Ùrlar an t-siostaim";
+
+/* Theme section in settings menu */
+"Settings.theme" = "An t-ùrlar";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Ròghnaichear an ùrlair";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Sanasachd";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Anailiseachd";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Bac cruthan-clò lìn";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Susbaint";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Sòisealta";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Cleachd Face ID airson a’ ghlas a thoirt far na h-aplacaid";
@@ -412,11 +481,23 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Cuir an dàta cleachdaidh";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Rannsachadh";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Cleachd Touch ID airson a’ ghlas a thoirt far na h-aplacaid";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "’S urrainn dha Touch ID a’ ghlas a thoirt far %@ ma tha URL fosgailte san aplacaid mu thràth";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Dheth";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Air";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Cleachd modh soilleir/dorcha an t-siostaim";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Na tha ùr";
@@ -426,6 +507,12 @@
 
 /* Text for a share button */
 "share" = "Co-roinn";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Cuir ris na h-ath-ghoiridean";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Chaidh a chur ris na h-ath-ghoiridean";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Dèan lethbhreac dhen t-seòladh";
@@ -439,6 +526,9 @@
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Gnìomhan na duilleige";
 
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Thoir air falbh on na h-ath-ghoiridean";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Iarr an làrach desktop";
 
@@ -448,11 +538,29 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Fosgail ann an Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Fosgail sa bhrabhsair bhunaiteach";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Fosgail ann am Firefox";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Co-roinn an duilleag le…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Thoir air falbh on na h-ath-ghoiridean";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Thoir ainm ùr air an ath-ghoirid";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Ainm na h-ath-ghoirid";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Sàbhail";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Sguir dheth";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Cuir ris";
@@ -478,6 +586,72 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "An URL a tha ri fhosgladh";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Glais %@ nuair a bhios làrach fosgailte:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Cuir Face ID air";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Cuir Touch ID air";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Leugh barrachd mu dhèidhinn seo agus mu ùrachaidhean eile air %@.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Seadh, gu dearbha, tha dreach ùr air!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "“Gnìomhan duilleige” > “Iarr tionndadh desktop na làraich”";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "A bheil thu ag iarraidh tionndadh desktop slàn de làrach?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "Chaidh tracaichean am bacadh, %@ dhiubh, gu ruige seo";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Dèan thusa brabhsadh. Nì %@ am bacadh.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Tagh “Cuir ris na h-ath-ghoiridean” o chlàr-taice %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Cruthaich ath-ghoiridean ris na làraichean air an tadhail thu as trice:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Cuir ath-ghoirid Siri ris";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri, suath bàn an seisean %@ agam.”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Cuir ath-ghoirid Siri ris";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri, fosgail an làrach as fheàrr leam.”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Feuch is cuir dheth an dìon o thracadh";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "A bheil susbaint na làraich a dhìth no a’ dèanamh rudan neònach?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Tadhail air na roghainnean airson roghainnean sònraichte a thaobh prìobhaideachd ⁊ tèarainteachd a stiùireadh.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Tha na bun-roghainnean seo a’ toirt dhut dìon làidir. Ach chan eil e doirbh an cur air gleus ach am freagair iad ort-sa.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "Cha do leig %@ leis an làrach seo brath fhaighinn ort. Thoir gnogag air an sgiath airson fiosrachadh dè na rudan a bhac sinn.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Thoir gnogag air an sgudal uair sam bith airson gach fuigheall dhen t-seisean làithreach a chur gu neoini.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Tha thu fo dhìon!";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Cleachd Touch ID a thilleadh a %@";
 
@@ -486,6 +660,15 @@
 
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Tracaichean anailiseach";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Chan eil an ceangal tèarainte";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Tha an ceangal tèarainte";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Air a dhearbhadh le %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Tracaichean susbaint";
@@ -502,11 +685,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Barrachd fiosrachaidh";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Barrachd roghainnean";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Tracaichean sòisealta";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Tha an dìon DHETH rè an t-seisein seo";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Tha an dìon AIR rè an t-seisein seo";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Cuir à comas gus an dùin thu %@ no gus an doir thu gnogag air “SUATH ÀS”.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Dìon adhartach o thracadh";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "Cùm an dàta agad agad fhèin. Dìonaidh %@ thu o mhòran dhe na tracaichean as cumanta a leanas mun cuairt thu air an lìon.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Tracaichean a chaidh am bacadh o %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Tracaichean is sgriobtaichean a tha gam bacadh";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Cuir ceangal ris airson a choileanadh gu fèin-obrachail";
@@ -519,6 +723,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "SUATH ÀS";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Chaidh eachdraidh a’ bhrabhsaidh fhalamhachadh";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Lorg san duilleag: %@";
