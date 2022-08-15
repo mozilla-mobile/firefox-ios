@@ -43,7 +43,7 @@ final class AdjustHelper: FeatureFlaggable {
         AdjustHelper.setEnabled(shouldEnable)
     }
 
-    /// Used to enable or disable Adjust SDK and it's features. We disable third party sharing by default.
+    /// Used to enable or disable Adjust SDK and it's features.
     /// If user has disabled Send Anonymous Usage Data then we ask Adjust to erase the user's data as well.
     static func setEnabled(_ enabled: Bool) {
         Adjust.setEnabled(enabled)
