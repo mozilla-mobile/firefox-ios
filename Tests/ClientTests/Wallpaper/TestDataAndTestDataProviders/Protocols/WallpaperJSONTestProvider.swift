@@ -6,6 +6,7 @@ import Foundation
 
 enum WallpaperJSONId: String {
     case goodData = "wallpaperGoodData"
+    case noLearnMoreURL = "wallpaperNoLearnMoreURL"
     case badLastUpdatedDate = "wallpaperBadLastUpdatedDate"
     case noAvailabilityRange = "wallpaperNoAvailabilityRange"
     case noLocales = "wallpaperNoLocales"

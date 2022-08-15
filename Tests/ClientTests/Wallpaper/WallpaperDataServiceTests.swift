@@ -42,6 +42,24 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
         }
     }
 
+    func testSuccessfullyExtractWallpaperMetadata_WithNoURL() async {
+        let data = getDataFromJSONFile(named: .noLearnMoreURL)
+        let expectedMetadata = getExpectedMetadata(for: .noLearnMoreURL)
+
+        networking.result = .success(data)
+        let sut = WallpaperDataService(with: networking)
+
+        do {
+            let actualMetadata = try await sut.getMetadata()
+            XCTAssertEqual(
+                actualMetadata,
+                expectedMetadata,
+                "The metadata that was decoded from data was not what was expected.")
+        } catch {
+            XCTFail("We should not fail the extraction process, but did with error: \(error)")
+        }
+    }
+
     func testSuccessfullyExtractWallpaperMetadata_WithNoAvailabilityRange() async {
         let data = getDataFromJSONFile(named: .noAvailabilityRange)
         let expectedMetadata = getExpectedMetadata(for: .noAvailabilityRange)

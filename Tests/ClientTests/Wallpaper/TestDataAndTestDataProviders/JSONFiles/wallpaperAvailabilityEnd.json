@@ -3,8 +3,10 @@
     "collections": [
         {
             "id": "firefox",
+            "learn-more-url": "https://www.mozilla.com",
             "available-locales": ["en-US", "es-US", "en-CA", "fr-CA"],
             "availability-range": {
+                "start": null,
                 "end": "2022-09-10"
             },
             "wallpapers": [

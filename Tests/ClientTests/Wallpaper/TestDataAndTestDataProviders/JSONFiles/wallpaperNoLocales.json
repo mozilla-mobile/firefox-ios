@@ -3,6 +3,8 @@
     "collections": [
         {
             "id": "firefox",
+            "learn-more-url": "https://www.mozilla.com",
+            "available-locales": null,
             "availability-range": {
                 "start": "2002-11-28",
                 "end": "2022-09-10"

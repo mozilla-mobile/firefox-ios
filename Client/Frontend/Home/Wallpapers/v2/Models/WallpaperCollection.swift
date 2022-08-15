@@ -8,13 +8,34 @@ import Foundation
 struct WallpaperCollection: Codable, Equatable {
     enum CodingKeys: String, CodingKey {
         case id
+        case learnMoreURLString = "learn-more-url"
         case availableLocales = "available-locales"
         case availability = "availability-range"
         case wallpapers
     }
 
     let id: String
+    private let learnMoreURLString: String?
     let availableLocales: [String]?
     let availability: WallpaperCollectionAvailability?
     let wallpapers: [Wallpaper]
+
+    init(
+        id: String,
+        learnMoreURL: String?,
+        availableLocales: [String]?,
+        availability: WallpaperCollectionAvailability?,
+        wallpapers: [Wallpaper]
+    ) {
+        self.id = id
+        self.learnMoreURLString = learnMoreURL
+        self.availableLocales = availableLocales
+        self.availability = availability
+        self.wallpapers = wallpapers
+    }
+
+    var learnMoreUrl: URL? {
+        guard let urlString = learnMoreURLString else { return nil }
+        return URL(string: urlString)
+    }
 }
