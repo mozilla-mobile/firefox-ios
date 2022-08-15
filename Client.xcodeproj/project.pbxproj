@@ -5791,12 +5791,12 @@
 			path = WebcompatAtDocumentStart;
 			sourceTree = "<group>";
 		};
-		43446CED2412DDB100F5C643 /* UpdateCoverSheet */ = {
+		43446CED2412DDB100F5C643 /* UpdateViewModel */ = {
 			isa = PBXGroup;
 			children = (
 				43446CEF2412DDBE00F5C643 /* UpdateViewModelTests.swift */,
 			);
-			path = UpdateCoverSheet;
+			path = UpdateViewModel;
 			sourceTree = "<group>";
 		};
 		43446CF12412F9A800F5C643 /* ETPCoverSheet */ = {
@@ -7712,7 +7712,7 @@
 				3BFCBF1F1E04B1C50070C042 /* UIImageViewExtensionsTests.swift */,
 				A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */,
 				8AE1E1D827B1BD380024C45E /* UIStackViewExtensionsTests.swift */,
-				43446CED2412DDB100F5C643 /* UpdateCoverSheet */,
+				43446CED2412DDB100F5C643 /* UpdateViewModel */,
 				DACDE995225E537900C8F37F /* VersionSettingTests.swift */,
 				C84655ED28873C4800861B4A /* Wallpaper */,
 				E4CD9F1C1A6D9C2800318571 /* WebServerTests.swift */,
