@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-struct IntroViewModel: InformationContainerModel {
+struct IntroViewModel: OnboardingViewModelProtocol {
     enum InformationCards: Int, CaseIterable {
         case welcome
         case wallpapers
@@ -48,24 +48,24 @@ struct IntroViewModel: InformationContainerModel {
         return [.welcome, .wallpapers, .signSync]
     }
 
-    func getInfoModel(cardType: IntroViewModel.InformationCards) -> InfoModelProtocol? {
+    func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol? {
         switch cardType {
         case .welcome:
-            return CoverSheetInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcome),
+            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcome),
                                        title: .CardTitleWelcome,
                                        description: .Onboarding.IntroDescriptionPart2,
                                        primaryAction: .Onboarding.IntroAction,
                                        secondaryAction: nil,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
         case .wallpapers:
-            return CoverSheetInfoModel(image: nil,
+            return OnboardingInfoModel(image: nil,
                                        title: .Onboarding.WallpaperTitle,
                                        description: nil,
                                        primaryAction: .Onboarding.WallpaperAction,
                                        secondaryAction: .Onboarding.LaterAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.wallpapersCard)
         case .signSync:
-            return CoverSheetInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSync),
+            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSync),
                                        title: .Onboarding.SyncTitle,
                                        description: .Onboarding.SyncDescription,
                                        primaryAction: .Onboarding.SyncAction,
@@ -76,11 +76,10 @@ struct IntroViewModel: InformationContainerModel {
         }
     }
 
-    func getCardViewModel(index: Int) -> OnboardingCardProtocol? {
-        let currentCard = enabledCards[index]
-        guard let infoModel = getInfoModel(cardType: currentCard) else { return nil }
+    func getCardViewModel(cardType: InformationCards) -> OnboardingCardProtocol? {
+        guard let infoModel = getInfoModel(cardType: cardType) else { return nil }
 
-        return OnboardingCardViewModel(cardType: currentCard, infoModel: infoModel)
+        return OnboardingCardViewModel(cardType: cardType, infoModel: infoModel)
     }
 
     func sendCloseButtonTelemetry(index: Int) {

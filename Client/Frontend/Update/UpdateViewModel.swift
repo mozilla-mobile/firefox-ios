@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class UpdateViewModel: InformationContainerModel, FeatureFlaggable {
+class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
     let profile: Profile
     static let prefsKey: String = PrefsKeys.KeyLastVersionNumber
@@ -52,12 +52,6 @@ class UpdateViewModel: InformationContainerModel, FeatureFlaggable {
         return false
     }
 
-    func getCardViewModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardProtocol? {
-        guard let infoModel = getInfoModel(currentCard: cardType) else { return nil }
-
-        return OnboardingCardViewModel(cardType: cardType,
-                                       infoModel: infoModel)
-    }
 
     func positionForCard(cardType: IntroViewModel.InformationCards) -> Int? {
         return enabledCards.firstIndex(of: cardType)
@@ -72,17 +66,17 @@ class UpdateViewModel: InformationContainerModel, FeatureFlaggable {
                                      extras: extra)
     }
 
-    private func getInfoModel(currentCard: IntroViewModel.InformationCards) -> InfoModelProtocol? {
-        switch currentCard {
+    func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol? {
+        switch cardType {
         case .updateWelcome:
-            return CoverSheetInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcome),
+            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcome),
                                        title: .Upgrade.WelcomeTitle,
                                        description: .Upgrade.WelcomeDescription,
                                        primaryAction: .Upgrade.WelcomeAction,
                                        secondaryAction: nil,
                                        a11yIdRoot: AccessibilityIdentifiers.Upgrade.welcomeCard)
         case .updateSignSync:
-            return CoverSheetInfoModel(image: nil,
+            return OnboardingInfoModel(image: nil,
                                        title: .Upgrade.SyncSignTitle,
                                        description: .Upgrade.SyncSignDescription,
                                        primaryAction: .Upgrade.SyncAction,

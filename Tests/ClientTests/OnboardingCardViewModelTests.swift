@@ -129,8 +129,8 @@ class OnboardingCardViewModelTests: XCTestCase {
     }
 
     // MARK: Private
-    private func createInfoModel() -> InfoModelProtocol {
-        return CoverSheetInfoModel(image: nil,
+    private func createInfoModel() -> OnboardingModelProtocol {
+        return OnboardingInfoModel(image: nil,
                                    title: "Title",
                                    description: "Description",
                                    primaryAction: "Button1",

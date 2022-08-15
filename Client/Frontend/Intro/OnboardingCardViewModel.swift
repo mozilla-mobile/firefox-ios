@@ -6,7 +6,7 @@ import Foundation
 
 protocol OnboardingCardProtocol {
     var cardType: IntroViewModel.InformationCards { get set }
-    var infoModel: InfoModelProtocol { get set }
+    var infoModel: OnboardingModelProtocol { get set }
 
     func sendCardViewTelemetry()
     func sendTelemetryButton(isPrimaryAction: Bool)
@@ -14,10 +14,10 @@ protocol OnboardingCardProtocol {
 
 struct OnboardingCardViewModel: OnboardingCardProtocol {
     var cardType: IntroViewModel.InformationCards
-    var infoModel: InfoModelProtocol
+    var infoModel: OnboardingModelProtocol
 
     init(cardType: IntroViewModel.InformationCards,
-         infoModel: InfoModelProtocol) {
+         infoModel: OnboardingModelProtocol) {
 
         self.cardType = cardType
         self.infoModel = infoModel

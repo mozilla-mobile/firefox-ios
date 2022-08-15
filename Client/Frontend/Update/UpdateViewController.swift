@@ -6,7 +6,16 @@ import Foundation
 import UIKit
 import Shared
 
-class UpdateViewController: UIViewController {
+protocol OnboardingViewControllerProtocol {
+    var didFinishClosure: (() -> Void)? { get }
+
+    func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController?
+    func moveToNextPage(cardType: IntroViewModel.InformationCards)
+    func getCardIndex(viewController: OnboardingCardViewController) -> Int?
+    func showNextPage(_ cardType: IntroViewModel.InformationCards)
+}
+
+class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
     // Update view UX constants
     struct UX {
@@ -19,7 +28,7 @@ class UpdateViewController: UIViewController {
 
     // Public constants 
     var viewModel: UpdateViewModel
-    var didFinishClosure: ((UpdateViewController) -> Void)?
+    var didFinishClosure: (() -> Void)?
     private var informationCards = [OnboardingCardViewController]()
 
     // MARK: - Private vars
@@ -28,7 +37,7 @@ class UpdateViewController: UIViewController {
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.backgroundImage
     }
 
-    private lazy var closeButton: UIButton = .build { button in
+    internal lazy var closeButton: UIButton = .build { button in
         let closeImage = UIImage(named: ImageIdentifiers.upgradeCloseButton)
         button.setImage(closeImage, for: .normal)
         button.tintColor = .secondaryLabel
@@ -146,18 +155,18 @@ class UpdateViewController: UIViewController {
 
     // Button Actions
     @objc private func dismissUpdate() {
-        didFinishClosure?(self)
+        didFinishClosure?()
         viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
 
-    private func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
+    func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
         guard let index = viewModel.getNextIndex(currentIndex: index, goForward: goForward) else { return nil }
 
         return informationCards[index]
     }
 
     // Used to programmatically set the pageViewController to show next card
-    private func moveToNextPage(cardType: IntroViewModel.InformationCards) {
+    func moveToNextPage(cardType: IntroViewModel.InformationCards) {
         if let nextViewController = getNextOnboardingCard(index: cardType.position, goForward: true) {
             pageControl.currentPage = cardType.position + 1
             pageController.setViewControllers([nextViewController], direction: .forward, animated: false)
@@ -166,7 +175,7 @@ class UpdateViewController: UIViewController {
 
     // Due to restrictions with PageViewController we need to get the index of the current view controller
     // to calculate the next view controller
-    private func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
+    func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
         let cardType = viewController.viewModel.cardType
 
         guard let index = viewModel.enabledCards.firstIndex(of: cardType) else { return nil }
@@ -223,7 +232,7 @@ extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewContro
 extension UpdateViewController: OnboardingCardDelegate {
     func showNextPage(_ cardType: IntroViewModel.InformationCards) {
         guard cardType != viewModel.enabledCards.last else {
-            self.didFinishClosure?(self)
+            self.didFinishClosure?()
             return
         }
 
@@ -267,4 +276,3 @@ extension UpdateViewController {
         return .portrait
     }
 }
-

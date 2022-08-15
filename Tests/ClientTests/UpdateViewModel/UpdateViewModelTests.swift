@@ -7,7 +7,7 @@ import Foundation
 import XCTest
 import Shared
 
-class UpdateCoverSheetViewModelTests: XCTestCase {
+class UpdateViewModelTests: XCTestCase {
     var profile: MockProfile!
     var viewModel: UpdateViewModel!
 

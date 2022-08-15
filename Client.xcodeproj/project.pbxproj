@@ -75,6 +75,7 @@
 		21112968289480630082C08B /* HomepageMessageCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21112967289480630082C08B /* HomepageMessageCardViewModel.swift */; };
 		211F00AC27F4D918001D9189 /* HistoryPanel+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211F00AB27F4D918001D9189 /* HistoryPanel+Search.swift */; };
 		21371FA228A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA128A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift */; };
+		21371FA428AA7A8D00BC3F37 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA328AA7A8D00BC3F37 /* OnboardingViewModel.swift */; };
 		213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */; };
 		213B67A827CE721E000542F5 /* StartAtHomeHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */; };
 		21534904288201E300FADB4D /* GleanPlumbMessageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */; };
@@ -310,14 +311,14 @@
 		433F87D52788F01500693368 /* KIF in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87D42788F01500693368 /* KIF */; };
 		43446CE7240D9F3000F5C643 /* ETP.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43446CE5240D9F3000F5C643 /* ETP.xcassets */; };
 		43446CEA2412066500F5C643 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CE92412066500F5C643 /* UIViewControllerExtension.swift */; };
-		43446CF02412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CEF2412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift */; };
+		43446CF02412DDBE00F5C643 /* UpdateViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CEF2412DDBE00F5C643 /* UpdateViewModelTests.swift */; };
 		43446CF32412F9FF00F5C643 /* ETPCoverSheetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CF22412F9FF00F5C643 /* ETPCoverSheetTests.swift */; };
 		4345441D26D2E52600D5EEAA /* SearchTermGroupsUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345441C26D2E52600D5EEAA /* SearchTermGroupsUtility.swift */; };
 		434E733725EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434E733625EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift */; };
 		435222C125882E3800FCA5B6 /* WidgetKitTopSiteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435222C025882E3800FCA5B6 /* WidgetKitTopSiteModel.swift */; };
 		435222C225882E3800FCA5B6 /* WidgetKitTopSiteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435222C025882E3800FCA5B6 /* WidgetKitTopSiteModel.swift */; };
 		435C85F02788F4D00072B526 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = 435C85EF2788F4D00072B526 /* Glean */; };
-		435D660323D793DF0046EFA2 /* UpdateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D660223D793DF0046EFA2 /* UpdateModel.swift */; };
+		435D660323D793DF0046EFA2 /* OnboardingInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D660223D793DF0046EFA2 /* OnboardingInfoModel.swift */; };
 		435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D660423D794B90046EFA2 /* UpdateViewModel.swift */; };
 		435D7CC5246209AA0043ACB9 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D7CC4246209AA0043ACB9 /* IntroViewController.swift */; };
 		435E34B3254A6A6000406D92 /* TimeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650758F1E37F7AB006961AC /* TimeConstants.swift */; };
@@ -1942,6 +1943,7 @@
 		21112967289480630082C08B /* HomepageMessageCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageMessageCardViewModel.swift; sourceTree = "<group>"; };
 		211F00AB27F4D918001D9189 /* HistoryPanel+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryPanel+Search.swift"; sourceTree = "<group>"; };
 		21371FA128A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewModelTests.swift; sourceTree = "<group>"; };
+		21371FA328AA7A8D00BC3F37 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeHelper.swift; sourceTree = "<group>"; };
 		213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeHelperTests.swift; sourceTree = "<group>"; };
 		215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageManagerTests.swift; sourceTree = "<group>"; };
@@ -2396,12 +2398,12 @@
 		433E0DEC26FCE37C00B78CC5 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		43446CE5240D9F3000F5C643 /* ETP.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ETP.xcassets; sourceTree = "<group>"; };
 		43446CE92412066500F5C643 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UIViewControllerExtension.swift; path = Extensions/UIViewControllerExtension.swift; sourceTree = "<group>"; };
-		43446CEF2412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCoverSheetViewModelTests.swift; sourceTree = "<group>"; };
+		43446CEF2412DDBE00F5C643 /* UpdateViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateViewModelTests.swift; sourceTree = "<group>"; };
 		43446CF22412F9FF00F5C643 /* ETPCoverSheetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETPCoverSheetTests.swift; sourceTree = "<group>"; };
 		4345441C26D2E52600D5EEAA /* SearchTermGroupsUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTermGroupsUtility.swift; sourceTree = "<group>"; };
 		434E733625EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+URLBarDelegate.swift"; sourceTree = "<group>"; };
 		435222C025882E3800FCA5B6 /* WidgetKitTopSiteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetKitTopSiteModel.swift; sourceTree = "<group>"; };
-		435D660223D793DF0046EFA2 /* UpdateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateModel.swift; sourceTree = "<group>"; };
+		435D660223D793DF0046EFA2 /* OnboardingInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingInfoModel.swift; sourceTree = "<group>"; };
 		435D660423D794B90046EFA2 /* UpdateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateViewModel.swift; sourceTree = "<group>"; };
 		435D7CC4246209AA0043ACB9 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		4368F828279665220013419B /* Sentry.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Sentry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -5792,7 +5794,7 @@
 		43446CED2412DDB100F5C643 /* UpdateCoverSheet */ = {
 			isa = PBXGroup;
 			children = (
-				43446CEF2412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift */,
+				43446CEF2412DDBE00F5C643 /* UpdateViewModelTests.swift */,
 			);
 			path = UpdateCoverSheet;
 			sourceTree = "<group>";
@@ -5818,8 +5820,9 @@
 			children = (
 				43A5643623CD1E1B00B6857D /* Update.xcassets */,
 				43A5643523CD1E1B00B6857D /* UpdateViewController.swift */,
-				435D660223D793DF0046EFA2 /* UpdateModel.swift */,
 				435D660423D794B90046EFA2 /* UpdateViewModel.swift */,
+				435D660223D793DF0046EFA2 /* OnboardingInfoModel.swift */,
+				21371FA328AA7A8D00BC3F37 /* OnboardingViewModel.swift */,
 			);
 			path = Update;
 			sourceTree = "<group>";
@@ -9870,7 +9873,7 @@
 				CA8226F324C11DB7008A6F38 /* LoginListTableViewCell.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				048B4C8324A53F26001B56E8 /* ButtonWithSublabel.swift in Sources */,
-				435D660323D793DF0046EFA2 /* UpdateModel.swift in Sources */,
+				435D660323D793DF0046EFA2 /* OnboardingInfoModel.swift in Sources */,
 				8AD40FCB27BADC4B00672675 /* StatefulButton.swift in Sources */,
 				C84655E62887398700861B4A /* WallpaperCollection.swift in Sources */,
 				DFB2610B277CA7D300DDDD38 /* LegacyWallpaperSettingsViewController.swift in Sources */,
@@ -10245,6 +10248,7 @@
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				21112968289480630082C08B /* HomepageMessageCardViewModel.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
+				21371FA428AA7A8D00BC3F37 /* OnboardingViewModel.swift in Sources */,
 				D3BE7B261B054D4400641031 /* main.swift in Sources */,
 				21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */,
 				EB8A0A77206ABCE000A9859A /* WebPagesForTesting.swift in Sources */,
@@ -10445,7 +10449,7 @@
 				3B61CD591F2A750800D38DE1 /* PocketFeedTests.swift in Sources */,
 				C8E1BC0A28085AA700C62964 /* NimbusFeatureFlagLayerTests.swift in Sources */,
 				C8D0D6F4281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift in Sources */,
-				43446CF02412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift in Sources */,
+				43446CF02412DDBE00F5C643 /* UpdateViewModelTests.swift in Sources */,
 				8AE1E1D927B1BD380024C45E /* UIStackViewExtensionsTests.swift in Sources */,
 				3B6F40181DC7849C00656CC6 /* TopSitesViewModelTests.swift in Sources */,
 				C869915528917803007ACC5C /* WallpaperMetadataTestProvider.swift in Sources */,

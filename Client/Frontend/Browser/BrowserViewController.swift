@@ -2184,8 +2184,8 @@ extension BrowserViewController {
         let viewModel = UpdateViewModel(profile: profile)
         if force || viewModel.shouldShowUpdateSheet() {
             let updateViewController = UpdateViewController(viewModel: viewModel)
-            updateViewController.didFinishClosure = { viewController in
-                viewController.dismiss(animated: true)
+            updateViewController.didFinishClosure = {
+                updateViewController.dismiss(animated: true)
             }
 
             if topTabsVisible {

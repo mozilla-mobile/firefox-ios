@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol InfoModelProtocol {
+protocol OnboardingModelProtocol {
     var image: UIImage? { get set }
     var title: String { get set }
     var description: String? { get set }
@@ -15,7 +15,7 @@ protocol InfoModelProtocol {
     init(image: UIImage?, title: String, description: String?, primaryAction: String, secondaryAction: String?, a11yIdRoot: String)
 }
 
-struct CoverSheetInfoModel: InfoModelProtocol {
+struct OnboardingInfoModel: OnboardingModelProtocol {
     var image: UIImage?
     var title: String
     var description: String?
@@ -35,23 +35,5 @@ struct CoverSheetInfoModel: InfoModelProtocol {
         self.primaryAction = primaryAction
         self.secondaryAction = secondaryAction
         self.a11yIdRoot = a11yIdRoot
-    }
-}
-
-protocol InformationContainerModel {
-    var enabledCards: [IntroViewModel.InformationCards] { get }
-}
-
-extension InformationContainerModel {
-    func getNextIndex(currentIndex: Int, goForward: Bool) -> Int? {
-        if goForward && currentIndex + 1 < enabledCards.count {
-            return currentIndex + 1
-        }
-
-        if !goForward && currentIndex > 0 {
-            return currentIndex - 1
-        }
-
-        return nil
     }
 }
