@@ -8,8 +8,6 @@ private struct WallpaperSelectorUX {
     static let cardWidth: CGFloat = 97
     static let cardHeight: CGFloat = 88
     static let inset: CGFloat = 8
-    static let cardsPerRow: Int = 3
-    static let cardsPerRowIpad: Int = 4
 }
 
 class WallpaperSelectorViewController: UIViewController {
@@ -41,7 +39,7 @@ class WallpaperSelectorViewController: UIViewController {
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero,
-                                                         collectionViewLayout: getCompositionalLayout())
+                                              collectionViewLayout: getCompositionalLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
@@ -89,6 +87,20 @@ class WallpaperSelectorViewController: UIViewController {
         collectionViewHeightConstraint.constant = height
         view.layoutIfNeeded()
     }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
+            || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
+            updateOnRotation()
+        }
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        updateOnRotation()
+    }
 }
 
 // MARK: - CollectionView Data Source
@@ -116,7 +128,6 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
 private extension WallpaperSelectorViewController {
 
     func setupView() {
-        view.backgroundColor = .white
         configureCollectionView()
 
         contentView.addSubviews(headerLabel, instructionLabel, collectionView, settingsButton)
@@ -158,6 +169,8 @@ private extension WallpaperSelectorViewController {
     }
 
     func getCompositionalLayout() -> UICollectionViewCompositionalLayout {
+        viewModel.updateSectionLayout(for: traitCollection)
+
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .vertical
 
@@ -168,15 +181,14 @@ private extension WallpaperSelectorViewController {
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                    heightDimension: .absolute(WallpaperSelectorUX.cardHeight))
-            let subitemsCount = UIDevice.current.userInterfaceIdiom == .pad ?
-                WallpaperSelectorUX.cardsPerRowIpad : WallpaperSelectorUX.cardsPerRow
+            let subitemsCount = self.viewModel.sectionLayout.itemsPerRow
             let subItems: [NSCollectionLayoutItem] = Array(repeating: item, count: Int(subitemsCount))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                            subitems: subItems)
             group.interItemSpacing = .fixed(WallpaperSelectorUX.inset)
 
             let section = NSCollectionLayoutSection(group: group)
-            let width = environment.container.contentSize.width
+            let width = environment.container.effectiveContentSize.width
             let inset = (width -
                          CGFloat(subitemsCount) * WallpaperSelectorUX.cardWidth -
                          CGFloat(subitemsCount - 1) * WallpaperSelectorUX.inset) / 2.0
@@ -189,6 +201,13 @@ private extension WallpaperSelectorViewController {
         }, configuration: config)
 
         return layout
+    }
+
+    /// On iPhone, we call updateOnRotation when the trait collection has changed, to ensure calculation
+    /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
+    /// since it's `.regular` on both. We updateOnRotation from viewWillTransition in that case.
+    private func updateOnRotation() {
+        configureCollectionView()
     }
 }
 

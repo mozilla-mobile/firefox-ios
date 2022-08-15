@@ -25,7 +25,7 @@ class BottomSheetViewController: UIViewController {
         view.backgroundColor = .clear
         view.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(self.closeTapped)))
     }
-    private lazy var contentShadowView: UIView = .build { _ in }
+    private lazy var sheetView: UIView = .build { _ in }
     private lazy var contentView: UIView = .build { _ in }
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: ImageIdentifiers.bottomSheetClose), for: .normal)
@@ -57,7 +57,7 @@ class BottomSheetViewController: UIViewController {
     // MARK: View lifecyle
     override public func viewDidLoad() {
         super.viewDidLoad()
-        contentView.alpha = 1
+        sheetView.alpha = 1
         setupChildViewController()
 
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(panGesture))
@@ -87,13 +87,18 @@ class BottomSheetViewController: UIViewController {
 
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        contentView.addRoundedCorners([.topLeft, .topRight], radius: viewModel.cornerRadius)
 
-        contentShadowView.layer.backgroundColor = UIColor.clear.cgColor
-        contentShadowView.layer.shadowColor = UIColor.black.cgColor
-        contentShadowView.layer.shadowOffset = CGSize(width: 0, height: -5.0)
-        contentShadowView.layer.shadowOpacity = 0.2
-        contentShadowView.layer.shadowRadius = 20.0
+        contentView.clipsToBounds = true
+        contentView.layer.cornerRadius = viewModel.cornerRadius
+        contentView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+
+        sheetView.layer.backgroundColor = UIColor.clear.cgColor
+        sheetView.layer.shadowColor = UIColor.black.cgColor
+        sheetView.layer.shadowOffset = CGSize(width: 0, height: -5.0)
+        sheetView.layer.shadowOpacity = 0.2
+        sheetView.layer.shadowRadius = 20.0
+        sheetView.layer.shadowPath = UIBezierPath(roundedRect: sheetView.bounds,
+                                                  cornerRadius: viewModel.cornerRadius).cgPath
     }
 
     public func dismissViewController() {
@@ -111,30 +116,30 @@ private extension BottomSheetViewController {
 
     func setupView() {
         scrollView.addSubview(scrollContentView)
-        contentShadowView.addSubview(contentView)
+        sheetView.addSubview(contentView)
         contentView.addSubviews(closeButton, scrollView)
-        view.addSubviews(topTapView, contentShadowView)
+        view.addSubviews(topTapView, sheetView)
 
-        contentViewBottomConstraint = contentShadowView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        contentViewBottomConstraint = sheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         let scrollViewHeightConstraint = scrollView.heightAnchor.constraint(
             greaterThanOrEqualTo: scrollContentView.heightAnchor)
 
         NSLayoutConstraint.activate([
-            topTapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            topTapView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            topTapView.bottomAnchor.constraint(equalTo: contentView.topAnchor),
-            topTapView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            topTapView.topAnchor.constraint(equalTo: view.topAnchor),
+            topTapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topTapView.bottomAnchor.constraint(equalTo: sheetView.topAnchor, constant: viewModel.cornerRadius),
+            topTapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            contentShadowView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor,
+            sheetView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor,
                                              constant: BottomSheetViewController.UX.minVisibleTopSpace),
-            contentShadowView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            sheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentViewBottomConstraint,
-            contentShadowView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            sheetView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            contentView.topAnchor.constraint(greaterThanOrEqualTo: contentShadowView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: contentShadowView.leadingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: contentShadowView.bottomAnchor),
-            contentView.trailingAnchor.constraint(equalTo: contentShadowView.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: sheetView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: sheetView.bottomAnchor),
+            contentView.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
 
             closeButton.topAnchor.constraint(equalTo: contentView.topAnchor,
                                              constant: BottomSheetViewController.UX.topSpace),
@@ -191,7 +196,7 @@ private extension BottomSheetViewController {
                            initialSpringVelocity: 1,
                            options: .curveEaseOut,
                            animations: {
-                self.contentView.transform = CGAffineTransform(translationX: 0, y: self.viewTranslation.y)
+                self.sheetView.transform = CGAffineTransform(translationX: 0, y: self.viewTranslation.y)
             })
         case .ended:
             if viewTranslation.y < 200 {
@@ -201,7 +206,7 @@ private extension BottomSheetViewController {
                                initialSpringVelocity: 1,
                                options: .curveEaseOut,
                                animations: {
-                    self.contentView.transform = .identity
+                    self.sheetView.transform = .identity
                 })
             } else {
                 dismissViewController()

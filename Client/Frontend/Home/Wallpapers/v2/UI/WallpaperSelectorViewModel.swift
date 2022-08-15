@@ -6,8 +6,33 @@ import Foundation
 
 class WallpaperSelectorViewModel {
 
-    private let maxWallpapers = UIDevice.current.userInterfaceIdiom == .pad ? 8 : 6
+    enum WallpaperSelectorLayout: Equatable {
+        case compact
+        case regular
+
+        // The maximum number of items to display in the whole section
+        var maxItemsToDisplay: Int {
+            switch self {
+            case .compact:
+                return 6
+            case .regular:
+                return 8
+            }
+        }
+
+        // The maximum number of items to display per row
+        var itemsPerRow: Int {
+            switch self {
+            case .compact:
+                return 3
+            case .regular:
+                return 4
+            }
+        }
+    }
+
     private var wallpaperManager: WallpaperManager
+    var sectionLayout: WallpaperSelectorLayout = .compact // We use the compact layout as default
     var wallpapers: [Wallpaper] = []
 
     init(wallpaperManager: WallpaperManager = WallpaperManager()) {
@@ -15,19 +40,28 @@ class WallpaperSelectorViewModel {
         setupWallpapers()
     }
 
+    func updateSectionLayout(for traitCollection: UITraitCollection) {
+        if traitCollection.horizontalSizeClass == .compact {
+            sectionLayout = .compact
+        } else {
+            sectionLayout = .regular
+        }
+        setupWallpapers()
+    }
+
     private func setupWallpapers() {
-        let wallPaperPerCollection = maxWallpapers / 2
+        wallpapers = []
+        let wallPaperPerCollection = sectionLayout.maxItemsToDisplay / 2
 
         wallpaperManager.availableCollections.forEach { collection in
-            guard wallpapers.count < maxWallpapers else { return }
+            guard wallpapers.count < sectionLayout.maxItemsToDisplay else { return }
 
             var numberOfWallpapers = collection.wallpapers.count > (wallPaperPerCollection - 1) ?
                 wallPaperPerCollection : collection.wallpapers.count
-            if numberOfWallpapers + wallpapers.count > maxWallpapers {
-                numberOfWallpapers = maxWallpapers - wallpapers.count
+            if numberOfWallpapers + wallpapers.count > sectionLayout.maxItemsToDisplay {
+                numberOfWallpapers = sectionLayout.maxItemsToDisplay - wallpapers.count
             }
             wallpapers.append(contentsOf: collection.wallpapers[0...(numberOfWallpapers - 1)])
         }
     }
-
 }
