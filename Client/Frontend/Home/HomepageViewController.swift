@@ -344,7 +344,7 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.getSectionViewModel(shownSection: section)?.numberOfItemsInSection(for: traitCollection) ?? 0
+        return viewModel.getSectionViewModel(shownSection: section)?.numberOfItemsInSection() ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
