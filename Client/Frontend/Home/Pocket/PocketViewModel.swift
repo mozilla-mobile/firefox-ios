@@ -174,11 +174,6 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     var hasData: Bool {
         return !pocketStoriesViewModels.isEmpty
     }
-
-    func updateData(completion: @escaping () -> Void) {
-        updateData()
-        completion()
-    }
 }
 
 // MARK: FxHomeSectionHandler
@@ -234,6 +229,7 @@ extension PocketViewModel: PocketDelegate {
     func didLoadNewData() {
         ensureMainThread {
             self.updateData()
+            guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }
     }

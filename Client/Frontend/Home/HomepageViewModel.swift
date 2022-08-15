@@ -108,11 +108,15 @@ class HomepageViewModel: FeatureFlaggable {
 
         self.recentlySavedViewModel = RecentlySavedCellViewModel(
             profile: profile)
+        let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
+            profile: profile,
+            tabManager: tabManager)
         self.historyHighlightsViewModel = HistoryHighlightsViewModel(
             with: profile,
             isPrivate: isPrivate,
             tabManager: tabManager,
-            urlBar: urlBar)
+            urlBar: urlBar,
+            historyHighlightsDataAdaptor: historyDataAdaptor)
 
         let pocketDataAdaptor = PocketDataAdaptorImplementation(
             pocketAPI: PocketProvider(),
@@ -169,42 +173,7 @@ class HomepageViewModel: FeatureFlaggable {
         viewAppeared = false
     }
 
-    // MARK: - Fetch section data
-
-    func updateData() {
-        childViewModels.forEach { section in
-            guard section.isEnabled else { return }
-            self.updateData(section: section)
-        }
-    }
-
-    private func updateData(section: HomepageViewModelProtocol) {
-        section.updateData {
-            self.reloadView()
-        }
-    }
-
-    // MARK: - Manage sections and order
-
-    func addShownSection(section: HomepageSectionType) {
-        let positionToInsert = getPositionToInsert(section: section)
-        if positionToInsert >= shownSections.count {
-            shownSections.append(section)
-        } else {
-            shownSections.insert(section, at: positionToInsert)
-        }
-    }
-
-    func removeShownSection(section: HomepageSectionType) {
-        if let index = shownSections.firstIndex(of: section) {
-            shownSections.remove(at: index)
-        }
-    }
-
-    func getPositionToInsert(section: HomepageSectionType) -> Int {
-        let indexes = shownSections.filter { $0.rawValue < section.rawValue }
-        return indexes.count
-    }
+    // MARK: - Manage sections
 
     func updateEnabledSections() {
         shownSections.removeAll()
@@ -220,23 +189,11 @@ class HomepageViewModel: FeatureFlaggable {
         guard let actualSectionNumber = shownSections[safe: shownSection]?.rawValue else { return nil }
         return childViewModels[safe: actualSectionNumber]
     }
-
-    func indexOfShownSection(_ type: HomepageSectionType) -> Int? {
-        return shownSections.firstIndex(of: type)
-    }
-}
-
-// MARK: - HomeHistoryHighlightsDelegate
-extension HomepageViewModel: HomeHistoryHighlightsDelegate {
-    func reloadHighlights() {
-        updateData(section: historyHighlightsViewModel)
-    }
 }
 
 // MARK: - HomepageDataModelDelegate
 extension HomepageViewModel: HomepageDataModelDelegate {
     func reloadView() {
-        updateEnabledSections()
         delegate?.reloadView()
     }
 }

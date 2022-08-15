@@ -3,6 +3,7 @@
     "collections": [
         {
             "id": "firefox",
+            "learn-more-url": "https://www.mozilla.com",
             "available-locales": ["en-US", "es-US", "en-CA", "fr-CA"],
             "availability-range": {
                 "start": "2022-06-27",

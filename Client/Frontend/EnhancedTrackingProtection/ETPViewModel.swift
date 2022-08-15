@@ -15,6 +15,13 @@ class ETPViewModel {
     // we would like to show the coversheet for.
     static let etpCoverSheetSupportedAppVersion = ["24.0"]
 
+    static func isCleanInstall(userPrefs: Prefs) -> Bool {
+        if userPrefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first == nil {
+            return true
+        }
+        return false
+    }
+
     init() {
         setupUpdateModel()
     }

@@ -20,18 +20,18 @@ class IntroViewModelTests: XCTestCase {
     }
 
     func testGetWelcomeViewModel() {
-        let cardType = viewModel.getCardViewModel(index: 0).cardType
-        XCTAssertTrue(cardType == IntroViewModel.OnboardingCards.welcome)
+        let cardViewModel = viewModel.getCardViewModel(cardType: .welcome)
+        XCTAssertEqual(cardViewModel?.cardType, IntroViewModel.InformationCards.welcome)
     }
 
     func testGetWallpaperViewModel() {
-        let cardType = viewModel.getCardViewModel(index: 1).cardType
-        XCTAssertTrue(cardType == IntroViewModel.OnboardingCards.wallpapers)
+        let cardViewModel = viewModel.getCardViewModel(cardType: .wallpapers)
+        XCTAssertEqual(cardViewModel?.cardType, IntroViewModel.InformationCards.wallpapers)
     }
 
     func testGetSyncViewModel() {
-        let cardType = viewModel.getCardViewModel(index: 2).cardType
-        XCTAssertTrue(cardType == IntroViewModel.OnboardingCards.signSync)
+        let cardViewModel = viewModel.getCardViewModel(cardType: .signSync)
+        XCTAssertEqual(cardViewModel?.cardType, IntroViewModel.InformationCards.signSync)
     }
 
     func testNextIndexAfterLastCard() {
