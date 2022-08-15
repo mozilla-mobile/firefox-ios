@@ -19,7 +19,7 @@ class WallpaperSelectorViewModel {
         let wallPaperPerCollection = maxWallpapers / 2
 
         wallpaperManager.availableCollections.forEach { collection in
-            guard collection.isAvailableNow, wallpapers.count < maxWallpapers else { return }
+            guard wallpapers.count < maxWallpapers else { return }
 
             var numberOfWallpapers = collection.wallpapers.count > (wallPaperPerCollection - 1) ?
                 wallPaperPerCollection : collection.wallpapers.count
