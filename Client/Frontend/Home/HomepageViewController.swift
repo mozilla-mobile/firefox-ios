@@ -613,7 +613,7 @@ extension HomepageViewController: HomepageViewModelDelegate {
             guard let self = self,
                   self.view.alpha != 0
             else { return }
-            self.viewModel.refreshData()
+            self.viewModel.refreshData(for: self.traitCollection)
             self.viewModel.updateEnabledSections()
             self.collectionView.reloadData()
         }

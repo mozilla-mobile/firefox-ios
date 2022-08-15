@@ -183,9 +183,9 @@ class HomepageViewModel: FeatureFlaggable {
         }
     }
 
-    func refreshData() {
+    func refreshData(for traitCollection: UITraitCollection) {
         childViewModels.forEach {
-            $0.refreshData()
+            $0.refreshData(for: traitCollection)
         }
     }
 

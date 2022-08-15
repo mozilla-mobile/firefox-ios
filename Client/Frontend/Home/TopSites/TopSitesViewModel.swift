@@ -138,7 +138,6 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
-        self.traitCollection = traitCollection
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(UX.cellEstimatedSize.height)
@@ -170,8 +169,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return !topSites.isEmpty
     }
 
-    func refreshData() {
-        guard let traitCollection = traitCollection else { return }
+    func refreshData(for traitCollection: UITraitCollection) {
         let interface = TopSitesUIInterface(trait: traitCollection)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
                                                                     numberOfRows: topSitesDataAdaptor.numberOfRows,
