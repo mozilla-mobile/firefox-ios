@@ -174,11 +174,6 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return !topSites.isEmpty
     }
 
-    func updateData(completion: @escaping () -> Void) {
-        topSites = topSitesDataAdaptor.getTopSitesData()
-        completion()
-    }
-
     func refreshData(for traitCollection: UITraitCollection) {
         let interface = TopSitesUIInterface(trait: traitCollection)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
@@ -194,6 +189,7 @@ extension TopSitesViewModel: TopSitesManagerDelegate {
     func didLoadNewData() {
         ensureMainThread {
             self.topSites = self.topSitesDataAdaptor.getTopSitesData()
+            guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }
     }

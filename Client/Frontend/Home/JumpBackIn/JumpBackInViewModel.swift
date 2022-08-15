@@ -320,12 +320,6 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return hasJumpBackIn || hasSyncedTab
     }
 
-    func updateData(completion: @escaping () -> Void) {
-        jumpBackInList = jumpBackInDataAdaptor.getJumpBackInData()
-        mostRecentSyncedTab = jumpBackInDataAdaptor.getSyncedTabData()
-        completion()
-    }
-
     func refreshData(for traitCollection: UITraitCollection,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         let maxItemToDisplay = sectionLayout.maxItemsToDisplay(
@@ -407,6 +401,7 @@ extension JumpBackInViewModel: JumpBackInDelegate {
         ensureMainThread {
             self.jumpBackInList = self.jumpBackInDataAdaptor.getJumpBackInData()
             self.mostRecentSyncedTab = self.jumpBackInDataAdaptor.getSyncedTabData()
+            guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }
     }

@@ -227,10 +227,6 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
         return !historyItems.isEmpty
     }
 
-    func updateData(completion: @escaping () -> Void) {
-        historyItems = historyHighlightsDataAdaptor.getHistoryHightlights()
-    }
-
     func updatePrivacyConcernedSection(isPrivate: Bool) {
         self.isPrivate = isPrivate
     }
@@ -383,10 +379,10 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
         let site = Site(url: itemURL, title: item.displayTitle)
 
         let cellOptions = HistoryHighlightsModel(title: item.displayTitle,
-                                                     description: nil,
-                                                     shouldHideBottomLine: hideBottomLine,
-                                                     with: cornersToRound,
-                                                     shouldAddShadow: shouldAddShadow)
+                                                 description: nil,
+                                                 shouldHideBottomLine: hideBottomLine,
+                                                 with: cornersToRound,
+                                                 shouldAddShadow: shouldAddShadow)
 
         cell.updateCell(with: cellOptions)
 
@@ -406,10 +402,10 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
 
         let cellOptions = HistoryHighlightsModel(title: item.displayTitle,
-                                                     description: item.description,
-                                                     shouldHideBottomLine: hideBottomLine,
-                                                     with: cornersToRound,
-                                                     shouldAddShadow: shouldAddShadow)
+                                                 description: item.description,
+                                                 shouldHideBottomLine: hideBottomLine,
+                                                 with: cornersToRound,
+                                                 shouldAddShadow: shouldAddShadow)
 
         cell.updateCell(with: cellOptions)
 
@@ -425,8 +421,8 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
 
         let cellOptions = HistoryHighlightsModel(shouldHideBottomLine: hideBottomLine,
-                                                     with: cornersToRound,
-                                                     shouldAddShadow: shouldAddShadow)
+                                                 with: cornersToRound,
+                                                 shouldAddShadow: shouldAddShadow)
 
         cell.updateCell(with: cellOptions)
         return cell
@@ -439,6 +435,7 @@ extension HistoryHighlightsViewModel: HistoryHighlightsDelegate {
     func didLoadNewData() {
         ensureMainThread {
             self.historyItems = self.historyHighlightsDataAdaptor.getHistoryHightlights()
+            guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }
     }

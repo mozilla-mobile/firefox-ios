@@ -887,7 +887,7 @@ class BrowserViewController: UIViewController {
 
         // Hack to force updates on the view
         homepageViewController?.view.alpha = 0.001
-        homepageViewController?.reloadAll()
+        homepageViewController?.reloadView()
 
         UIView.animate(withDuration: 0.2, animations: { () -> Void in
             self.homepageViewController?.view.alpha = 1
@@ -1005,12 +1005,6 @@ class BrowserViewController: UIViewController {
 
         let controller: DismissableNavigationViewController
         controller = DismissableNavigationViewController(rootViewController: libraryViewController)
-        controller.onViewWillDisappear = {
-            self.homepageViewController?.reloadAll()
-        }
-        controller.onViewDismissed = {
-            self.homepageViewController?.reloadAll()
-        }
         self.present(controller, animated: true, completion: nil)
     }
 
