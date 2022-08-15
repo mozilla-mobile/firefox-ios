@@ -53,15 +53,15 @@ class WallpaperSelectorViewController: UIViewController {
 
     private lazy var settingsButton: ResizableButton = .build { button in
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   size: 16)
+                                                                                size: 16)
         button.titleLabel?.textAlignment = .center
         button.setTitle(.Onboarding.WallpaperSelectorAction, for: .normal)
     }
 
     // MARK: - Initializers
-    init(wallpaperManager: WallpaperManager = WallpaperManager(),
+    init(viewModel: WallpaperSelectorViewModel,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        viewModel = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager)
+        self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -76,6 +76,7 @@ class WallpaperSelectorViewController: UIViewController {
         setupView()
         applyTheme()
         setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
+        settingsButton.addTarget(self, action: #selector(self.settingsButtonTapped), for: .touchUpInside)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -206,8 +207,13 @@ private extension WallpaperSelectorViewController {
     /// On iPhone, we call updateOnRotation when the trait collection has changed, to ensure calculation
     /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
     /// since it's `.regular` on both. We updateOnRotation from viewWillTransition in that case.
-    private func updateOnRotation() {
+    func updateOnRotation() {
         configureCollectionView()
+    }
+
+    /// Settings button tapped
+    @objc func settingsButtonTapped(_ sender: UIButton) {
+        viewModel.openSettingsAction()
     }
 }
 

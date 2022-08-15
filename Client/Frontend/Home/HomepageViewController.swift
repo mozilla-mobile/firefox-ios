@@ -299,8 +299,10 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
               wallpaperVersion == .v2
         else { return }
 
-        //homePanelDidRequestToOpenSettings
-        let viewController = WallpaperSelectorViewController()
+        let viewModel = WallpaperSelectorViewModel(wallpaperManager: WallpaperManager(), openSettingsAction: {
+            self.homePanelDidRequestToOpenSettings(at: .wallpaper)
+        })
+        let viewController = WallpaperSelectorViewController(viewModel: viewModel)
         let bottomSheetViewModel = BottomSheetViewModel()
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,

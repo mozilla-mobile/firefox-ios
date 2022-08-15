@@ -31,12 +31,14 @@ class WallpaperSelectorViewModel {
         }
     }
 
-    private var wallpaperManager: WallpaperManager
+    private var wallpaperManager: WallpaperManagerInterface
+    var openSettingsAction: (() -> Void)
     var sectionLayout: WallpaperSelectorLayout = .compact // We use the compact layout as default
     var wallpapers: [Wallpaper] = []
 
-    init(wallpaperManager: WallpaperManager = WallpaperManager()) {
+    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(), openSettingsAction: @escaping (() -> Void)) {
         self.wallpaperManager = wallpaperManager
+        self.openSettingsAction = openSettingsAction
         setupWallpapers()
     }
 
