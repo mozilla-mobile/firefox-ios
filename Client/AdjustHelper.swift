@@ -23,6 +23,7 @@ final class AdjustHelper: FeatureFlaggable {
 
         // This is required for adjust to work properly with ASA and we avoid directly disabling
         // third-party sharing as there is a specific method provided to us by adjust for that.
+        // Note: These settings are persisted on the adjust backend as well
         if sendUsageData {
             if let adjustThirdPartySharing = ADJThirdPartySharing(isEnabledNumberBool: true) {
                 Adjust.trackThirdPartySharing(adjustThirdPartySharing)
