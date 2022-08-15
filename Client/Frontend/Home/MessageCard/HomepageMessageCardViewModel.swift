@@ -88,11 +88,6 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
     var hasData: Bool {
         return shouldDisplayMessageCard
     }
-
-    func updateData(completion: @escaping () -> Void) {
-        message = dataAdaptor.getMessageCardData()
-        completion()
-    }
 }
 
 // MARK: - HomepageSectionHandler
@@ -113,6 +108,7 @@ extension HomepageMessageCardViewModel: MessageCardDelegate {
     func didLoadNewData() {
         ensureMainThread {
             self.message = self.dataAdaptor.getMessageCardData()
+            guard self.isEnabled else { return }
             self.delegate?.reloadView()
             self.handleMessageDisplayed()
         }

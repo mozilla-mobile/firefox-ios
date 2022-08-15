@@ -102,7 +102,7 @@ class HomepageViewController: UIViewController, HomePanel {
 
         applyTheme()
         setupSectionsAction()
-        reloadAll()
+        reloadView()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -237,8 +237,7 @@ class HomepageViewController: UIViewController, HomePanel {
         else { return }
 
         viewModel.isPrivate = isPrivate
-        viewModel.updateEnabledSections()
-        reloadAll()
+        reloadView()
     }
 
     func applyTheme() {
@@ -363,16 +362,6 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
     }
 }
 
-// MARK: - Data Management
-
-extension HomepageViewController {
-
-    /// Reload all data including refreshing cells content and fetching data from backend
-    func reloadAll() {
-        viewModel.updateData()
-    }
-}
-
 // MARK: - Actions Handling
 
 private extension HomepageViewController {
@@ -387,8 +376,7 @@ private extension HomepageViewController {
 
         // Message card
         viewModel.messageCardViewModel.dismissClosure = { [weak self] in
-            self?.viewModel.updateEnabledSections()
-            self?.reloadAll()
+            self?.reloadView()
         }
 
         // Top sites
@@ -626,6 +614,7 @@ extension HomepageViewController: HomepageViewModelDelegate {
             guard let self = self,
                   self.view.alpha != 0
             else { return }
+            self.viewModel.updateEnabledSections()
             self.collectionView.reloadData()
         }
     }
@@ -637,14 +626,12 @@ extension HomepageViewController: Notifiable {
         ensureMainThread { [weak self] in
             guard let self = self else { return }
 
-            self.viewModel.updateEnabledSections()
-
             switch notification.name {
             case .TabsPrivacyModeChanged:
                 self.adjustPrivacySensitiveSections(notification: notification)
 
             case .HomePanelPrefsChanged:
-                self.reloadAll()
+                self.reloadView()
 
             default: break
             }
