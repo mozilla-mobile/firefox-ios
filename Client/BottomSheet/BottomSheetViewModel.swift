@@ -9,18 +9,26 @@ public struct BottomSheetViewModel {
     public var cornerRadius: CGFloat
     public var animationTransitionDuration: TimeInterval
     public var backgroundColor: UIColor
+    public var sheetLightThemeBackgroundColor: UIColor
+    public var sheetDarkThemeBackgroundColor: UIColor
 
     public init() {
         cornerRadius = 8
         animationTransitionDuration = 0.3
-        backgroundColor = UIColor.black.withAlphaComponent(0)
+        backgroundColor = .clear
+        sheetLightThemeBackgroundColor = UIColor.Photon.LightGrey10
+        sheetDarkThemeBackgroundColor = UIColor.Photon.DarkGrey40
     }
 
     public init(cornerRadius: CGFloat,
                 animationTransitionDuration: TimeInterval,
-                backgroundColor: UIColor ) {
+                backgroundColor: UIColor,
+                sheetLightThemeBackgroundColor: UIColor,
+                sheetDarkThemeBackgroundColor: UIColor) {
         self.cornerRadius = cornerRadius
         self.animationTransitionDuration = animationTransitionDuration
         self.backgroundColor = backgroundColor
+        self.sheetLightThemeBackgroundColor = sheetLightThemeBackgroundColor
+        self.sheetDarkThemeBackgroundColor = sheetDarkThemeBackgroundColor
     }
 }

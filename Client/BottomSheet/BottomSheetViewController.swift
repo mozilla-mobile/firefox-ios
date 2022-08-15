@@ -13,6 +13,7 @@ class BottomSheetViewController: UIViewController {
         static let topSpace: CGFloat = 16
     }
 
+    internal var notificationCenter: NotificationProtocol
     private let viewModel: BottomSheetViewModel
     private let childViewController: UIViewController
 
@@ -36,9 +37,12 @@ class BottomSheetViewController: UIViewController {
     private var viewTranslation = CGPoint(x: 0, y: 0)
 
     // MARK: Init
-    public init(viewModel: BottomSheetViewModel, childViewController: UIViewController) {
+    public init(viewModel: BottomSheetViewModel,
+                childViewController: UIViewController,
+                notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
         self.childViewController = childViewController
+        self.notificationCenter = notificationCenter
 
         super.init(nibName: nil, bundle: nil)
 
@@ -61,9 +65,15 @@ class BottomSheetViewController: UIViewController {
         gesture.delegate = self
 
         setupView()
+        applyTheme()
 
         contentViewBottomConstraint.constant = childViewController.view.frame.height
         view.layoutIfNeeded()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        applyTheme()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -212,5 +222,26 @@ extension BottomSheetViewController: UIGestureRecognizerDelegate {
                                   shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
         ) -> Bool {
         return false
+    }
+}
+
+// MARK: - Themable & Notifiable
+extension BottomSheetViewController: NotificationThemeable, Notifiable {
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
+    }
+
+    func applyTheme() {
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            contentView.backgroundColor = viewModel.sheetDarkThemeBackgroundColor
+        } else {
+            contentView.backgroundColor = viewModel.sheetLightThemeBackgroundColor
+        }
     }
 }
