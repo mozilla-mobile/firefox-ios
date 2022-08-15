@@ -2118,7 +2118,7 @@ extension BrowserViewController {
     func presentETPCoverSheetViewController(_ force: Bool = false) {
         guard !hasTriedToPresentETPAlready else { return }
         hasTriedToPresentETPAlready = true
-        let cleanInstall = UpdateViewModel.isCleanInstall(userPrefs: profile.prefs)
+        let cleanInstall = ETPViewModel.isCleanInstall(userPrefs: profile.prefs)
         let shouldShow = ETPViewModel.shouldShowETPCoverSheet(userPrefs: profile.prefs, isCleanInstall: cleanInstall)
         guard force || shouldShow else { return }
         let etpCoverSheetViewController = ETPCoverSheetViewController()
@@ -2174,18 +2174,12 @@ extension BrowserViewController {
         present(dBOnboardingViewController, animated: true, completion: nil)
     }
 
-    @discardableResult func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
-        let cleanInstall = UpdateViewModel.isCleanInstall(userPrefs: profile.prefs)
-        let coverSheetSupportedAppVersion = UpdateViewModel.coverSheetSupportedAppVersion
-        if force || UpdateViewModel.shouldShowUpdateSheet(userPrefs: profile.prefs, isCleanInstall: cleanInstall, supportedAppVersions: coverSheetSupportedAppVersion) {
-            let updateViewController = UpdateViewController()
-
-            updateViewController.viewModel.startBrowsing = {
-                updateViewController.dismiss(animated: true) {
-                    if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                        _ = self.navigationController?.popToRootViewController(animated: true)
-                    }
-                }
+    func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) {
+        let viewModel = UpdateViewModel(profile: profile)
+        if viewModel.shouldShowUpdateSheet(force: force) {
+            let updateViewController = UpdateViewController(viewModel: viewModel)
+            updateViewController.didFinishClosure = {
+                updateViewController.dismiss(animated: true)
             }
 
             if topTabsVisible {
@@ -2199,23 +2193,15 @@ extension BrowserViewController {
 
             // On iPad we present it modally in a controller
             present(updateViewController, animated: animated) {
-                // On first run (and forced) open up the homepage in the background.
-                if let homePageURL = NewTabHomePageAccessors.getHomePage(self.profile.prefs),
-                   let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
-                    tab.loadRequest(URLRequest(url: homePageURL))
-                }
+                self.setupHomepageOnBackground()
             }
-
-            return true
         }
-
-        return false
     }
 
     private func showProperIntroVC() {
         let introViewModel = IntroViewModel()
         let introViewController = IntroViewController(viewModel: introViewModel, profile: profile)
-        introViewController.didFinishClosure = { controller, fxaLoginFlow in
+        introViewController.didFinishClosure = { controller, _ in
             self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
             controller.dismiss(animated: true)
         }
@@ -2233,11 +2219,15 @@ extension BrowserViewController {
             introViewController.modalPresentationStyle = .fullScreen
         }
         present(introViewController, animated: true) {
-            // On first run (and forced) open up the homepage in the background.
-            if let homePageURL = NewTabHomePageAccessors.getHomePage(self.profile.prefs),
-               let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
-                tab.loadRequest(URLRequest(url: homePageURL))
-            }
+            self.setupHomepageOnBackground()
+        }
+    }
+
+    // On first run (and forced) open up the homepage in the background.
+    private func setupHomepageOnBackground() {
+        if let homePageURL = NewTabHomePageAccessors.getHomePage(self.profile.prefs),
+           let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
+            tab.loadRequest(URLRequest(url: homePageURL))
         }
     }
 

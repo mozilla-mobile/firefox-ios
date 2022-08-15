@@ -35,6 +35,8 @@ struct DBOnboardingUX {
     static let containerViewHeight = 350
     static let containerViewHeightSmall = 300
     static let containerViewHeightXSmall = 250
+    static let buttonCornerRadius: CGFloat = 10
+    static let buttonColour = UIColor.Photon.Blue50
 }
 
 class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissable {
@@ -124,9 +126,9 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     private lazy var goToSettingsButton: UIButton = .build { [weak self] button in
         guard let self = self else { return }
         button.setTitle(.DefaultBrowserOnboardingButton, for: .normal)
-        button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
+        button.layer.cornerRadius = DBOnboardingUX.buttonCornerRadius
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UpdateViewControllerUX.StartBrowsingButton.colour
+        button.backgroundColor = DBOnboardingUX.buttonColour
         button.accessibilityIdentifier = "HomeTabBanner.goToSettingsButton"
         button.addTarget(self, action: #selector(self.goToSettings), for: .touchUpInside)
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, maxSize: 40)

@@ -5,58 +5,92 @@
 import Foundation
 import Shared
 
-class UpdateViewModel {
-    //  Internal vars
-    var updateCoverSheetModel: UpdateCoverSheetModel?
-    var startBrowsing: (() -> Void)?
+class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
-    // Constants
-    let updates: [Update] = [Update(updateImage: #imageLiteral(resourceName: "darkModeUpdate"), updateText: "\(String.CoverSheetV22DarkModeTitle)\n\n\(String.CoverSheetV22DarkModeDescription)")]
+    let profile: Profile
+    static let prefsKey: String = PrefsKeys.KeyLastVersionNumber
 
-    // We only show coversheet for specific app updates and not all. The list below is for the version(s)
-    // we would like to show the coversheet for.
-    static let coverSheetSupportedAppVersion = ["22.0"]
-
-    init() {
-        setupUpdateModel()
+    var shouldShowSingleCard: Bool {
+        return enabledCards.count == 1
     }
 
-    private func setupUpdateModel() {
-        updateCoverSheetModel = UpdateCoverSheetModel(titleImage: #imageLiteral(resourceName: "splash"), titleText: .AppMenu.WhatsNewString, updates: updates)
+    var enabledCards: [IntroViewModel.InformationCards] {
+        if profile.hasSyncableAccount() {
+            return [.updateWelcome]
+        }
+
+        return [.updateWelcome, .updateSignSync]
     }
 
-    static func isCleanInstall(userPrefs: Prefs) -> Bool {
-        if userPrefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first == nil {
+    // If the feature is enabled and is not clean install
+    var shouldShowFeature: Bool {
+        return featureFlags.isFeatureEnabled(.upgradeOnboarding, checking: .buildOnly) && profile.prefs.stringForKey(LatestAppVersionProfileKey) != nil
+    }
+
+    init(profile: Profile) {
+        self.profile = profile
+    }
+
+    func shouldShowUpdateSheet(force: Bool = false,
+                               appVersion: String = AppInfo.appVersion) -> Bool {
+        guard !force else { return true }
+
+        guard shouldShowFeature else {
+            saveAppVersion(for: appVersion)
+            return false
+        }
+
+        // we check if there is a version number already saved
+        guard let savedVersion = profile.prefs.stringForKey(UpdateViewModel.prefsKey) else {
+            saveAppVersion(for: appVersion)
             return true
         }
+
+        // Version number saved in user prefs is not the same as current version
+        if savedVersion != appVersion {
+            saveAppVersion(for: appVersion)
+            return true
+        }
+
         return false
     }
 
-    static func shouldShowUpdateSheet(userPrefs: Prefs, currentAppVersion: String = AppInfo.appVersion, isCleanInstall: Bool, supportedAppVersions: [String] = []) -> Bool {
-        var willShow = false
-        if isCleanInstall {
-            // We don't show it but save the currentVersion number
-            userPrefs.setString(currentAppVersion, forKey: PrefsKeys.KeyLastVersionNumber)
-            willShow = false
-        } else {
-            // Its not a new install so first we check if there is a version number already saved
-            if let savedVersion = userPrefs.stringForKey(PrefsKeys.KeyLastVersionNumber) {
-               // Version number saved in user prefs is not the same as current version, return true
-               if savedVersion != currentAppVersion {
-                   userPrefs.setString(currentAppVersion, forKey: PrefsKeys.KeyLastVersionNumber)
-                   willShow = true
-                 // Version number saved in user prefs matches the current version, return false
-               } else if savedVersion == currentAppVersion {
-                   willShow = false
-               }
-            } else {
-                // Only way the version is not saved if the user is coming from an app that didn't have this feature
-                // as its not a clean install. Hence we should still show the update screen but save the version
-                userPrefs.setString(currentAppVersion, forKey: PrefsKeys.KeyLastVersionNumber)
-                willShow = true
-            }
+    func positionForCard(cardType: IntroViewModel.InformationCards) -> Int? {
+        return enabledCards.firstIndex(of: cardType)
+    }
+
+    func sendCloseButtonTelemetry(index: Int) {
+        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: enabledCards[index].telemetryValue]
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .onboardingClose,
+                                     extras: extra)
+    }
+
+    func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol? {
+        switch cardType {
+        case .updateWelcome:
+            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcome),
+                                       title: .Upgrade.WelcomeTitle,
+                                       description: .Upgrade.WelcomeDescription,
+                                       primaryAction: .Upgrade.WelcomeAction,
+                                       secondaryAction: nil,
+                                       a11yIdRoot: AccessibilityIdentifiers.Upgrade.welcomeCard)
+        case .updateSignSync:
+            return OnboardingInfoModel(image: nil,
+                                       title: .Upgrade.SyncSignTitle,
+                                       description: .Upgrade.SyncSignDescription,
+                                       primaryAction: .Upgrade.SyncAction,
+                                       secondaryAction: .Onboarding.LaterAction,
+                                       a11yIdRoot: AccessibilityIdentifiers.Upgrade.signSyncCard)
+        case .welcome, .wallpapers, .signSync:
+            // Cases not supported by the upgrade screen
+            return nil
         }
-        // Final version check to only show for specific app versions
-        return willShow && supportedAppVersions.contains(currentAppVersion)
+    }
+
+    private func saveAppVersion(for appVersion: String) {
+        profile.prefs.setString(appVersion, forKey: UpdateViewModel.prefsKey)
     }
 }
