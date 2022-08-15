@@ -34,7 +34,7 @@ class HistoryDeletionUtility {
 
     func deleteHistoryFrom(_ dateOption: HistoryDeletionUtilityDateOptions) async -> HistoryDeletionUtilityDateOptions {
 
-        deleteWKWebsiteDataSince(dateOption, for: WKWebsiteDataStore.allWebsiteDataTypes())
+        await deleteWKWebsiteDataSince(dateOption, for: WKWebsiteDataStore.allWebsiteDataTypes())
         _ = await deleteProfileHistorySince(dateOption)
         _ = await deleteProfileMetadataSince(dateOption)
         clearRecentlyClosedTabs(using: dateOption)
@@ -67,12 +67,16 @@ class HistoryDeletionUtility {
     private func deleteWKWebsiteDataSince(
         _ dateOption: HistoryDeletionUtilityDateOptions,
         for types: Set<String>
-    ) {
+    ) async {
         guard let date = dateFor(dateOption, requiringAllTimeAsPresent: false) else { return }
 
-        // Using checkedContinuation because we should not use Apple's async/await APIs
-        // until our min supported version is iOS15.
-        WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: date, completionHandler: { })
+        await MainActor.run {
+            WKWebsiteDataStore.default().removeData(
+                ofTypes: types,
+                modifiedSince: date,
+                completionHandler: { }
+            )
+        }
     }
 
     private func deleteProfileHistorySince(_ dateOption: HistoryDeletionUtilityDateOptions) async -> Bool? {

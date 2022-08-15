@@ -47,10 +47,9 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
     func delete(_ item: HighlightItem) {
         let urls = extractDeletableURLs(from: item)
 
-        deletionUtility.delete(urls) { [weak self] success in
-            if success {
-                self?.loadHistory()
-            }
+        Task {
+            let successful = await deletionUtility.delete(urls)
+            if successful { self.loadHistory() }
         }
     }
 

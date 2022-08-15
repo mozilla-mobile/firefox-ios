@@ -157,13 +157,6 @@ class HistoryHighlightsViewModel {
 
     func delete(_ item: HighlightItem) {
         historyHighlightsDataAdaptor.delete(item)
-        let deletionUtility = HistoryDeletionUtility(with: profile)
-        let urls = extractDeletableURLs(from: item)
-
-        Task {
-            let successful = await deletionUtility.delete(urls)
-            if successful { delegate?.reloadHighlights() }
-        }
     }
 }
 
