@@ -57,6 +57,17 @@ class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
         super.prepareForReuse()
         imageView.image = nil
     }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        layer.backgroundColor = UIColor.clear.cgColor
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 5.0)
+        layer.shadowOpacity = 0.3
+        layer.shadowRadius = 6.0
+        layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: 10).cgPath
+    }
 }
 
 // MARK: - Private
