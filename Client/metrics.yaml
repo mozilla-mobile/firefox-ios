@@ -567,6 +567,73 @@ onboarding:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-12-10"
 
+# Upgrade onboarding metrics
+upgrade:
+  card_view:
+    type: event
+    description: |
+      Records when an upgrade card is shown
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented upgrade card (welcome / sign to sync)
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-02-28"
+  primary_button_tap:
+    type: event
+    description: |
+        Records when the primary button is tap during the upgrade onboarding
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented upgrade card (welcome / sign to sync)
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-02-28"
+  secondary_button_tap:
+    type: event
+    description: |
+        Records when the secondary button is tap during the upgrade onboarding
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented upgrade card (welcome / sign to sync)
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-02-28"
+  close_tap:
+    type: event
+    description: |
+      Records when the user closes the upgrade onboarding.
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          The card presented when the upgrade was closed
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-02-28"
+
 # Top Site
 top_sites:
   tile_pressed:

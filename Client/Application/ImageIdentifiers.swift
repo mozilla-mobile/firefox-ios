@@ -76,6 +76,8 @@ public struct ImageIdentifiers {
     public static let syncedDevicesIcon = "synced_devices"
     public static let trashIcon = "forget"
     public static let trashIconMonocrome = "trash-icon"
+    public static let upgradeBackground = "onboardingBackground"
+    public static let upgradeCloseButton = "updateCloseButton"
     public static let warning = "menu-warning"
     public static let whatsNew = "whatsnew"
     public static let xMark = "nav-stop"

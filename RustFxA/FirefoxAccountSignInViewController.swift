@@ -11,6 +11,7 @@ enum FxASignInParentType {
     case settings
     case appMenu
     case onboarding
+    case upgrade
     case tabTray
 }
 
@@ -104,6 +105,9 @@ class FirefoxAccountSignInViewController: UIViewController {
             self.fxaDismissStyle = .dismiss
         case .onboarding:
             self.telemetryObject = .onboarding
+            self.fxaDismissStyle = .dismiss
+        case .upgrade:
+            self.telemetryObject = .upgradeOnboarding
             self.fxaDismissStyle = .dismiss
         case .settings:
             self.telemetryObject = .settings

@@ -53,6 +53,9 @@ final class NimbusFeatureFlagLayer {
         case .wallpapers,
                 .wallpaperVersion:
             return checkNimbusForWallpapersFeature(using: nimbus)
+
+        case .upgradeOnboarding:
+            return checkNimbusForUpgradeOnboardingFeature(using: nimbus)
         }
     }
 
@@ -153,6 +156,12 @@ final class NimbusFeatureFlagLayer {
     private func checkSponsoredTilesFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.homescreenFeature.value()
         return config.sponsoredTiles.status
+    }
+
+    private func checkNimbusForUpgradeOnboardingFeature(using nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.upgradeOnboardingFeature.value()
+
+        return config.enabled
     }
 
     private func checkTabTrayFeature(for featureID: NimbusFeatureFlagID,

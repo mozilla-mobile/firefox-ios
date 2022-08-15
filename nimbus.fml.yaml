@@ -69,6 +69,18 @@ features:
         value: {
           "setting": after-four-hours
         }
+  upgrade-onboarding-feature:
+    description: The feature that controls whether to show or not Upgrade onboarding
+    variables:
+      enabled:
+        description: If this is true, we show the Upgrade onboarding screen when the user upgrade the version.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: developer
+        value: {
+          "enabled": true
+        }
   spotlight-search:
     description: Add pages as items findable with Spotlight.
     variables:

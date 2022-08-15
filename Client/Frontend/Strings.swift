@@ -727,6 +727,42 @@ extension String {
     }
 }
 
+// MARK: - Upgrade CoverSheet
+extension String {
+    public struct Upgrade {
+        public static let WelcomeTitle = MZLocalizedString(
+            "Upgrade.Welcome.Title.v106",
+            value: "Welcome to a more personal internet",
+            comment: "Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades firefox version",
+            lastUpdated: .v106)
+        public static let WelcomeDescription = MZLocalizedString(
+            "Upgrade.Welcome.Description.v106",
+            value: "New colors. New convenience. Same commitment to people over profits.",
+            comment: "Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades firefox version",
+            lastUpdated: .v106)
+        public static let WelcomeAction = MZLocalizedString(
+            "Upgrade.Welcome.Action.v106",
+            value: "Get Started",
+            comment: "Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade.",
+            lastUpdated: .v106)
+        public static let SyncSignTitle = MZLocalizedString(
+            "Upgrade.SyncSign.Description.v106",
+            value: "Switching screens is easier than ever",
+            comment: "Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades firefox version",
+            lastUpdated: .v106)
+        public static let SyncSignDescription = MZLocalizedString(
+            "Upgrade.SyncSign.Description.v106",
+            value: "Pick up where you left off with tabs from other devices now on your homepage.",
+            comment: "Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades firefox version",
+            lastUpdated: .v106)
+        public static let SyncAction = MZLocalizedString(
+            "Upgrade.SyncSign.Action.v106",
+            value: "Sign In",
+            comment: "Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade.",
+            lastUpdated: .v106)
+    }
+}
+
 // MARK: - Passwords and Logins
 extension String {
     public struct PasswordsAndLogins {

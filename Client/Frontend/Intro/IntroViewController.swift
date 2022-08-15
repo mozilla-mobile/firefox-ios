@@ -6,8 +6,7 @@ import Foundation
 import UIKit
 import Shared
 
-class IntroViewController: UIViewController, OnViewDismissable {
-    var onViewDismissed: (() -> Void)?
+class IntroViewController: UIViewController {
     private var viewModel: IntroViewModel
     private let profile: Profile
     private var onboardingCards = [OnboardingCardViewController]()
@@ -66,26 +65,21 @@ class IntroViewController: UIViewController, OnViewDismissable {
         setupLayout()
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        onViewDismissed?()
-        onViewDismissed = nil
-    }
-
     // MARK: View setup
     private func setupPageController() {
         // Create onboarding card views
         var cardViewController: OnboardingCardViewController
-        for (index, cardType) in viewModel.enabledCards.enumerated() {
-            let viewModel = viewModel.getCardViewModel(index: index)
-            if cardType == .wallpapers {
-                cardViewController = WallpaperCardViewController(viewModel: viewModel,
-                                                                 delegate: self)
-            } else {
-                cardViewController = OnboardingCardViewController(viewModel: viewModel,
-                                                                  delegate: self)
+        for cardType in viewModel.enabledCards {
+            if let viewModel = viewModel.getCardViewModel(cardType: cardType) {
+                if cardType == .wallpapers {
+                    cardViewController = WallpaperCardViewController(viewModel: viewModel,
+                                                                     delegate: self)
+                } else {
+                    cardViewController = OnboardingCardViewController(viewModel: viewModel,
+                                                                      delegate: self)
+                }
+                onboardingCards.append(cardViewController)
             }
-            onboardingCards.append(cardViewController)
         }
 
         if let firstViewController = onboardingCards.first {
@@ -127,7 +121,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
     }
 
     // Used to programmatically set the pageViewController to show next card
-    private func moveToNextPage(cardType: IntroViewModel.OnboardingCards) {
+    private func moveToNextPage(cardType: IntroViewModel.InformationCards) {
         if let nextViewController = getNextOnboardingCard(index: cardType.rawValue, goForward: true) {
             pageControl.currentPage = cardType.rawValue + 1
             pageController.setViewControllers([nextViewController], direction: .forward, animated: false)
@@ -172,7 +166,7 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 }
 
 extension IntroViewController: OnboardingCardDelegate {
-    func showNextPage(_ cardType: IntroViewModel.OnboardingCards) {
+    func showNextPage(_ cardType: IntroViewModel.InformationCards) {
         guard cardType != viewModel.enabledCards.last else {
             self.didFinishClosure?(self, nil)
             return
@@ -181,18 +175,20 @@ extension IntroViewController: OnboardingCardDelegate {
         moveToNextPage(cardType: cardType)
     }
 
-    func primaryAction(_ cardType: IntroViewModel.OnboardingCards) {
+    func primaryAction(_ cardType: IntroViewModel.InformationCards) {
         switch cardType {
         case .welcome, .wallpapers:
             moveToNextPage(cardType: cardType)
         case .signSync:
             presentSignToSync()
+        default:
+            break
         }
     }
 
     // Extra step to make sure pageControl.currentPage is the right index card
     // because UIPageViewControllerDataSource call fails
-    func pageChanged(_ cardType: IntroViewModel.OnboardingCards) {
+    func pageChanged(_ cardType: IntroViewModel.InformationCards) {
         if let cardIndex = viewModel.enabledCards.firstIndex(of: cardType),
            cardIndex != pageControl.currentPage {
             pageControl.currentPage = cardIndex
@@ -217,7 +213,7 @@ extension IntroViewController: OnboardingCardDelegate {
     }
 
     @objc func dismissSignInViewController() {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
 

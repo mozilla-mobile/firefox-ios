@@ -4,116 +4,65 @@
 
 import Foundation
 import UIKit
-import SnapKit
 import Shared
 
-// Update view UX constants
-struct UpdateViewControllerUX {
-    struct DoneButton {
-        static let paddingTop: CGFloat = 20
-        static let paddingRight: CGFloat = -20
-        static let height: CGFloat = 20
-    }
+protocol OnboardingViewControllerProtocol {
+    var didFinishClosure: (() -> Void)? { get }
 
-    struct ImageView {
-        static let paddingTop: CGFloat = 50
-        static let paddingLeft: CGFloat = 18
-        static let height: CGFloat = 70
-    }
-
-    struct TitleLabel {
-        static let paddingTop: CGFloat = 15
-        static let paddingLeft: CGFloat = 18
-        static let height: CGFloat = 40
-    }
-
-    struct MidTableView {
-        static let cellIdentifier = "UpdatedCoverSheetTableViewCellIdentifier"
-        static let paddingTop: CGFloat = 20
-        static let paddingBottom: CGFloat = -10
-    }
-
-    struct StartBrowsingButton {
-        static let colour = UIColor.Photon.Blue50
-        static let cornerRadius: CGFloat = 10
-        static let font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        static let height: CGFloat = 46
-        static let edgeInset: CGFloat = 18
-    }
+    func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController?
+    func moveToNextPage(cardType: IntroViewModel.InformationCards)
+    func getCardIndex(viewController: OnboardingCardViewController) -> Int?
+    func showNextPage(_ cardType: IntroViewModel.InformationCards)
 }
 
-/* The layout for update view controller.
-    
- |----------------|
- |            Done|
- |Image           | (Top View)
- |                |
- |Title Multiline |
- |----------------|
- |(TableView)     |
- |                |
- | [img] Descp.   | (Mid View)
- |                |
- | [img] Descp.   |
- |                |
- |                |
- |----------------|
- |                |
- |                |
- |    [Button]    | (Bottom View)
- |----------------|
- 
- */
+class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
-class UpdateViewController: UIViewController {
+    // Update view UX constants
+    struct UX {
+        static let closeButtonTopPadding: CGFloat = 32
+        static let closeButtonRightPadding: CGFloat = 16
+        static let closeButtonSize: CGFloat = 32
+        static let pageControlHeight: CGFloat = 40
+        static let pageControlBottomPadding: CGFloat = 8
+    }
+
     // Public constants 
-    let viewModel: UpdateViewModel = UpdateViewModel()
-    static let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-    // Private vars
-    private var fxTextThemeColour: UIColor {
-        // For dark theme we want to show light colours and for light we want to show dark colours
-        return UpdateViewController.theme == .dark ? .white : .black
-    }
-    private var fxBackgroundThemeColour: UIColor {
-        return UpdateViewController.theme == .dark ? .black : .white
-    }
-    private lazy var updatesTableView: UITableView = {
-        let tableView = UITableView(frame: CGRect.zero, style: .grouped)
-        tableView.register(UpdateCoverSheetTableViewCell.self, forCellReuseIdentifier: UpdateViewControllerUX.MidTableView.cellIdentifier)
-        tableView.backgroundColor = fxBackgroundThemeColour
-        tableView.separatorStyle = .none
-        tableView.sectionHeaderHeight = 0
-        tableView.sectionFooterHeight = 0
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
-    }()
-    private lazy var titleImageView: UIImageView = .build { imgView in
-        imgView.image = self.viewModel.updateCoverSheetModel?.titleImage
-        imgView.contentMode = .scaleAspectFit
-        imgView.clipsToBounds = true
-    }
-    private lazy var titleLabel: UILabel = .build { label in
-        label.text = self.viewModel.updateCoverSheetModel?.titleText
-        label.textColor = self.fxTextThemeColour
-        label.font = UIFont.systemFont(ofSize: 34)
-        label.textAlignment = .left
-        label.numberOfLines = 0
-    }
-    private var doneButton: UIButton = .build { button in
-        button.setTitle(.SettingsSearchDoneButton, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        button.setTitleColor(UIColor.systemBlue, for: .normal)
-    }
-    private lazy var startBrowsingButton: UIButton = .build { button in
-        button.setTitle(.StartBrowsingButtonTitle, for: .normal)
-        button.titleLabel?.font = UpdateViewControllerUX.StartBrowsingButton.font
-        button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UpdateViewControllerUX.StartBrowsingButton.colour
+    var viewModel: UpdateViewModel
+    var didFinishClosure: (() -> Void)?
+    private var informationCards = [OnboardingCardViewController]()
+
+    // MARK: - Private vars
+    private lazy var backgroundImageView: UIImageView = .build { imageView in
+        imageView.image = UIImage(named: ImageIdentifiers.upgradeBackground)
+        imageView.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.backgroundImage
     }
 
-    init() {
+    internal lazy var closeButton: UIButton = .build { button in
+        let closeImage = UIImage(named: ImageIdentifiers.upgradeCloseButton)
+        button.setImage(closeImage, for: .normal)
+        button.tintColor = .secondaryLabel
+        button.addTarget(self, action: #selector(self.dismissUpdate), for: .touchUpInside)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.closeButton
+    }
+
+    private lazy var pageController: UIPageViewController = {
+        let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        pageVC.dataSource = self
+        pageVC.delegate = self
+        return pageVC
+    }()
+
+    private lazy var pageControl: UIPageControl = .build { pageControl in
+        pageControl.currentPage = 0
+        pageControl.numberOfPages = self.viewModel.enabledCards.count
+        pageControl.currentPageIndicatorTintColor = UIColor.Photon.Blue50
+        pageControl.pageIndicatorTintColor = UIColor.Photon.LightGrey40
+        pageControl.isUserInteractionEnabled = false
+        pageControl.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.pageControl
+    }
+
+    init(viewModel: UpdateViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -123,117 +72,210 @@ class UpdateViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        initialViewSetup()
-        setupTopView()
-        setupMidView()
-        setupBottomView()
+
+        setupView()
     }
 
-    private func initialViewSetup() {
-        self.view.backgroundColor = fxBackgroundThemeColour
-
-        // Initialize
-        self.view.addSubview(doneButton)
-        self.view.addSubview(titleImageView)
-        self.view.addSubview(titleLabel)
-        self.view.addSubview(startBrowsingButton)
-        self.view.addSubview(updatesTableView)
+    // MARK: View setup
+    private func setupView() {
+        view.backgroundColor = UIColor.theme.browser.background
+        if viewModel.shouldShowSingleCard {
+            setupSingleInfoCard()
+        } else {
+            setupMultipleCards()
+            setupMultipleCardsConstraints()
+        }
     }
 
-    private func setupTopView() {
-        // Done button target setup
-        doneButton.addTarget(self, action: #selector(dismissAnimated), for: .touchUpInside)
+    private func setupSingleInfoCard() {
+        guard let viewModel = viewModel.getCardViewModel(cardType: viewModel.enabledCards[0]) else { return }
 
-        // Done button constraints setup
-        // This button is located at top right hence top, right and height
-        NSLayoutConstraint.activate([
-            doneButton.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: UpdateViewControllerUX.DoneButton.paddingTop),
-            doneButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: UpdateViewControllerUX.DoneButton.paddingRight),
-            doneButton.heightAnchor.constraint(equalToConstant: UpdateViewControllerUX.DoneButton.height)
-        ])
+        let cardViewController = OnboardingCardViewController(viewModel: viewModel,
+                                                              delegate: self)
+        view.addSubviews(backgroundImageView, closeButton)
+        addChild(cardViewController)
+        view.addSubview(cardViewController.view)
+        cardViewController.didMove(toParent: self)
 
-        // The top imageview constraints setup
-        // This imageview is located at the top left of the view hence top, left, height, width
         NSLayoutConstraint.activate([
-            titleImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: UpdateViewControllerUX.ImageView.paddingLeft),
-            titleImageView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: UpdateViewControllerUX.ImageView.paddingTop),
-            titleImageView.heightAnchor.constraint(equalToConstant: UpdateViewControllerUX.ImageView.height),
-            titleImageView.widthAnchor.constraint(equalToConstant: UpdateViewControllerUX.ImageView.height)
-        ])
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
+            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
 
-        // Top title label constraints setup
-        // This is the bigger tittle that is located right below the top image hence left, right, height and top (relating to imageview)
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: titleImageView.bottomAnchor, constant: UpdateViewControllerUX.TitleLabel.paddingTop),
-            titleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: UpdateViewControllerUX.TitleLabel.paddingLeft),
-            titleLabel.rightAnchor.constraint(equalTo: view.rightAnchor),
-            titleLabel.heightAnchor.constraint(equalToConstant: UpdateViewControllerUX.TitleLabel.height)
+            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
+            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 
-    private func setupMidView() {
-        // Mid tableview setup
-        // Mid tableview hosts the items for updated cover sheet
-        self.updatesTableView.delegate = self
-        self.updatesTableView.dataSource = self
-        // Mid tableview constraints
-        // The tableview sits b/w top and bottom view hence top, bottom constraints with equal width of the superview
-        NSLayoutConstraint.activate([
-            updatesTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UpdateViewControllerUX.MidTableView.paddingTop),
-            updatesTableView.bottomAnchor.constraint(equalTo: startBrowsingButton.topAnchor, constant: UpdateViewControllerUX.MidTableView.paddingBottom),
-            updatesTableView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            updatesTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
+    private func setupMultipleCards() {
+        // Create onboarding card views
+        var cardViewController: OnboardingCardViewController
+
+        for cardType in viewModel.enabledCards {
+            if let viewModel = viewModel.getCardViewModel(cardType: cardType) {
+                cardViewController = OnboardingCardViewController(viewModel: viewModel,
+                                                                      delegate: self)
+                informationCards.append(cardViewController)
+            }
+        }
+
+        if let firstViewController = informationCards.first {
+            pageController.setViewControllers([firstViewController],
+                                              direction: .forward,
+                                              animated: true,
+                                              completion: nil)
+        }
     }
 
-    private func setupBottomView() {
-        // Bottom start browsing target setup
-        startBrowsingButton.addTarget(self, action: #selector(startBrowsing), for: .touchUpInside)
+    private func setupMultipleCardsConstraints() {
+        view.addSubview(backgroundImageView)
+        addChild(pageController)
+        view.addSubview(pageController.view)
+        pageController.didMove(toParent: self)
+        view.addSubviews(pageControl, closeButton)
 
-        // Bottom start button constraints
-        // Bottom start button sits at the bottom of the screen with some padding on left and right hence left, right, bottom, height
-        let h = view.frame.height
-        // On large iPhone screens, bump this up from the bottom
-        let offset: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 20 : (h > 800 ? 60 : 20)
         NSLayoutConstraint.activate([
-            startBrowsingButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: UpdateViewControllerUX.StartBrowsingButton.edgeInset),
-            startBrowsingButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -UpdateViewControllerUX.StartBrowsingButton.edgeInset),
-            startBrowsingButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -offset),
-            startBrowsingButton.heightAnchor.constraint(equalToConstant: UpdateViewControllerUX.StartBrowsingButton.height)
+            pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                                                constant: -UX.pageControlBottomPadding),
+            pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
+            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
+
+            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 
     // Button Actions
-    @objc private func dismissAnimated() {
-        self.dismiss(animated: true, completion: nil)
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedUpdateCoverSheet)
+    @objc private func dismissUpdate() {
+        didFinishClosure?()
+        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
 
-    @objc private func startBrowsing() {
-        viewModel.startBrowsing?()
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissUpdateCoverSheetAndStartBrowsing)
+    func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
+        guard let index = viewModel.getNextIndex(currentIndex: index, goForward: goForward) else { return nil }
+
+        return informationCards[index]
+    }
+
+    // Used to programmatically set the pageViewController to show next card
+    func moveToNextPage(cardType: IntroViewModel.InformationCards) {
+        if let nextViewController = getNextOnboardingCard(index: cardType.position, goForward: true) {
+            pageControl.currentPage = cardType.position + 1
+            pageController.setViewControllers([nextViewController], direction: .forward, animated: false)
+        }
+    }
+
+    // Due to restrictions with PageViewController we need to get the index of the current view controller
+    // to calculate the next view controller
+    func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
+        let cardType = viewController.viewModel.cardType
+
+        guard let index = viewModel.enabledCards.firstIndex(of: cardType) else { return nil }
+
+        return index
+    }
+
+    private func presentSignToSync(_ fxaOptions: FxALaunchParams? = nil,
+                                   flowType: FxAPageType = .emailLoginFlow,
+                                   referringPage: ReferringPage = .onboarding) {
+
+        let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
+            fxaOptions,
+            flowType: flowType,
+            referringPage: referringPage,
+            profile: viewModel.profile)
+
+        let controller: DismissableNavigationViewController
+        let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(dismissSignInViewController))
+        singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
+        controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
+        self.present(controller, animated: true)
+    }
+
+    @objc func dismissSignInViewController() {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
-extension UpdateViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return CGFloat.leastNormalMagnitude
+// MARK: UIPageViewControllerDataSource & UIPageViewControllerDelegate
+extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+
+        guard let onboardingVC = viewController as? OnboardingCardViewController,
+              let index = getCardIndex(viewController: onboardingVC) else {
+              return nil
+        }
+
+        pageControl.currentPage = index
+        return getNextOnboardingCard(index: index, goForward: false)
     }
 
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return CGFloat.leastNormalMagnitude
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        guard let onboardingVC = viewController as? OnboardingCardViewController,
+              let index = getCardIndex(viewController: onboardingVC) else {
+              return nil
+        }
+
+        pageControl.currentPage = index
+        return getNextOnboardingCard(index: index, goForward: true)
+    }
+}
+
+extension UpdateViewController: OnboardingCardDelegate {
+    func showNextPage(_ cardType: IntroViewModel.InformationCards) {
+        guard cardType != viewModel.enabledCards.last else {
+            self.didFinishClosure?()
+            return
+        }
+
+        moveToNextPage(cardType: cardType)
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.updates.count
+    func primaryAction(_ cardType: IntroViewModel.InformationCards) {
+        switch cardType {
+        case .updateWelcome:
+            moveToNextPage(cardType: cardType)
+        case .updateSignSync:
+            presentSignToSync()
+        default:
+            break
+        }
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: UpdateViewControllerUX.MidTableView.cellIdentifier, for: indexPath) as? UpdateCoverSheetTableViewCell
-        let currentLastItem = viewModel.updates[indexPath.row]
-        cell?.updateCoverSheetCellDescriptionLabel.text = currentLastItem.updateText
-        cell?.updateCoverSheetCellImageView.image = currentLastItem.updateImage
-        cell?.fxThemeSupport()
-        return cell!
+    // Extra step to make sure pageControl.currentPage is the right index card
+    // because UIPageViewControllerDataSource call fails
+    func pageChanged(_ cardType: IntroViewModel.InformationCards) {
+        if let cardIndex = viewModel.positionForCard(cardType: cardType),
+           cardIndex != pageControl.currentPage {
+            pageControl.currentPage = cardIndex
+        }
+    }
+}
+
+// MARK: UIViewController setup
+extension UpdateViewController {
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+
+    override var shouldAutorotate: Bool {
+        return false
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        // This actually does the right thing on iPad where the modally
+        // presented version happily rotates with the iPad orientation.
+        return .portrait
     }
 }
