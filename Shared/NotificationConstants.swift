@@ -78,6 +78,8 @@ extension Notification.Name {
 
     public static let LibraryPanelStateDidChange = Notification.Name("LibraryPanelStateDidChange")
 
+    public static let DidPresentContextualHint = Notification.Name("DidPresentContextualHint")
+
     // MARK: Tab manager
 
     // Tab manager creates a toast for undo recently closed tabs and a notification is
@@ -89,4 +91,5 @@ extension Notification.Name {
     public static let BookmarksUpdated = Notification.Name("BookmarksUpdated")
     public static let ReadingListUpdated = Notification.Name("ReadingListUpdated")
     public static let TopSitesUpdated = Notification.Name("TopSitesUpdated")
+    public static let HistoryUpdated = Notification.Name("HistoryUpdated")
 }

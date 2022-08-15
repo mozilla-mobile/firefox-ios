@@ -98,12 +98,6 @@ extension RecentlySavedCellViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     var hasData: Bool {
         return !recentItems.isEmpty
     }
-
-    /// Using dispatch group to know when data has completely loaded for both sources (recent bookmarks and reading list items)
-    func updateData(completion: @escaping () -> Void) {
-        recentItems = recentlySavedDataAdaptor.getRecentlySavedData()
-        completion()
-    }
 }
 
 // MARK: FxHomeSectionHandler
@@ -157,6 +151,7 @@ extension RecentlySavedCellViewModel: RecentlySavedDelegate {
     func didLoadNewData() {
         ensureMainThread {
             self.recentItems = self.recentlySavedDataAdaptor.getRecentlySavedData()
+            guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }
     }

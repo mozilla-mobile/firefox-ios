@@ -98,7 +98,7 @@ class TelemetryWrapperTests: XCTestCase {
     // MARK: - CFR Analytics
 
     func test_contextualHintDismissButton_GleanIsCalled() {
-        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: ContextualHintViewType.toolbarLocation.rawValue]
+        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: ContextualHintType.toolbarLocation.rawValue]
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .contextualHint, value: .dismissCFRFromButton, extras: extra)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.CfrAnalytics.dismissCfrFromButton)
@@ -110,7 +110,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func test_contextualHintDismissOutsideTap_GleanIsCalled() {
-        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: ContextualHintViewType.toolbarLocation.rawValue]
+        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: ContextualHintType.toolbarLocation.rawValue]
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .contextualHint, value: .dismissCFRFromOutsideTap, extras: extra)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.CfrAnalytics.dismissCfrFromOutsideTap)
@@ -122,7 +122,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func test_contextualHintPressAction_GleanIsCalled() {
-        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: ContextualHintViewType.toolbarLocation.rawValue]
+        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: ContextualHintType.toolbarLocation.rawValue]
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .contextualHint, value: .pressCFRActionButton, extras: extra)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.CfrAnalytics.pressCfrActionButton)
@@ -250,6 +250,37 @@ class TelemetryWrapperTests: XCTestCase {
         testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
         let wallpaperName = LegacyWallpaperManager().currentWallpaper.name.lowercased()
         XCTAssertEqual(GleanMetrics.WallpaperAnalytics.themedWallpaper[wallpaperName].testGetValue(), 1)
+    }
+
+    // MARK: - Awesomebar result tap
+    func test_AwesomebarResults_GleanIsCalledForSearchSuggestion() {
+        let extra = [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.searchSuggestion.rawValue]
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .awesomebarResults,
+                                     extras: extra)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.searchResultTap)
+    }
+
+    func test_AwesomebarResults_GleanIsCalledRemoteTabs() {
+        let extra = [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.remoteTab.rawValue]
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .awesomebarResults,
+                                     extras: extra)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.searchResultTap)
+    }
+
+    func test_AwesomebarResults_GleanIsCalledHighlights() {
+        let extra = [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.searchHighlights.rawValue]
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .awesomebarResults,
+                                     extras: extra)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.searchResultTap)
     }
 }
 

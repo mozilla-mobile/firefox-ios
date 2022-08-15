@@ -6,7 +6,7 @@ contextual-hint-feature:
   variables:
     features-enabled:
       type: json
-      description: This property provides a lookup table of whether specific context hints are enabled.
+      description: This property provides a lookup table of whether specific contextual hints are enabled.
 general-app-features:
   description: The feature that contains feature flags for the entire application
   hasExposure: true
@@ -107,8 +107,8 @@ start-at-home-feature:
       description: This property provides a default setting for the startAtHomeFeature
       enum:
         - after-four-hours
-        - disabled
         - always
+        - disabled
 tabTrayFeature:
   description: The tab tray screen that the user goes to when they open the tab tray.
   hasExposure: true

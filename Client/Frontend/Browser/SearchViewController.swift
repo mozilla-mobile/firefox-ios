@@ -69,6 +69,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
     private var searchHighlights = [HighlightItem]()
+    private var highlightManager: HistoryHighlightsManagerProtocol
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -97,10 +98,15 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             || !searchHighlights.isEmpty
     }
 
-    init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager, featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search ) {
+    init(profile: Profile,
+         viewModel: SearchViewModel,
+         tabManager: TabManager,
+         featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
+         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
         self.viewModel = viewModel
         self.tabManager = tabManager
         self.searchFeature = featureConfig
+        self.highlightManager = highlightManager
         super.init(profile: profile)
 
         if #available(iOS 15.0, *) {
@@ -153,10 +159,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private func loadSearchHighlights() {
         guard featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly) else { return }
 
-        HistoryHighlightsManager.searchHighlightsData(searchQuery: searchQuery,
-                                                      profile: profile,
-                                                      tabs: tabManager.tabs,
-                                                      resultCount: 3) { results in
+        highlightManager.searchHighlightsData(
+            searchQuery: searchQuery,
+            profile: profile,
+            tabs: tabManager.tabs,
+            resultCount: 3) { results in
+
             guard let results = results else { return }
             self.searchHighlights = results
             self.tableView.reloadData()
@@ -745,32 +753,29 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
 // MARK: - Telemetry
 private extension SearchViewController {
-     func recordSearchListSelectionTelemetry(type: SearchListSection, isBookmark: Bool = false) {
+    func recordSearchListSelectionTelemetry(type: SearchListSection, isBookmark: Bool = false) {
+
         let key = TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue
+        var extra: String
         switch type {
         case .searchSuggestions:
-            TelemetryWrapper.recordEvent(category: .action, method: .tap,
-                                         object: .awesomebarResults,
-                                         extras: [key: TelemetryWrapper.EventValue.searchSuggestion.rawValue])
+            extra = TelemetryWrapper.EventValue.searchSuggestion.rawValue
         case .remoteTabs:
-            TelemetryWrapper.recordEvent(category: .action, method: .tap,
-                                         object: .awesomebarResults,
-                                         extras: [key: TelemetryWrapper.EventValue.remoteTab.rawValue])
+            extra = TelemetryWrapper.EventValue.remoteTab.rawValue
         case .openedTabs:
-            TelemetryWrapper.recordEvent(category: .action, method: .tap,
-                                         object: .awesomebarResults,
-                                         extras: [key: TelemetryWrapper.EventValue.openedTab.rawValue])
+            extra = TelemetryWrapper.EventValue.openedTab.rawValue
         case .bookmarksAndHistory:
-            let extra = isBookmark ? TelemetryWrapper.EventValue.bookmarkItem.rawValue :
+            extra = isBookmark ? TelemetryWrapper.EventValue.bookmarkItem.rawValue :
                         TelemetryWrapper.EventValue.historyItem.rawValue
-            TelemetryWrapper.recordEvent(category: .action, method: .tap,
-                                         object: .awesomebarResults, extras: [key: extra])
         case .searchHighlights:
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .open,
-                                         object: .awesomebarResults,
-                                         extras: [key: TelemetryWrapper.EventValue.searchSuggestion.rawValue])
+            extra = TelemetryWrapper.EventValue.searchHighlights.rawValue
+
         }
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .awesomebarResults,
+                                     extras: [key: extra])
     }
 }
 

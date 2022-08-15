@@ -3,31 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-
-class PocketStandardCellViewModel {
-    var title: String { story.title }
-    var imageURL: URL { story.imageURL }
-    var url: URL? { story.url }
-    var sponsor: String? { story.sponsor }
-    var description: String {
-        if let sponsor = story.sponsor {
-            return sponsor
-        } else {
-            return "\(story.domain) • \(String.localizedStringWithFormat(String.FirefoxHomepage.Pocket.NumberOfMinutes, story.timeToRead ?? 0))"
-        }
-    }
-    var accessibilityLabel: String {
-        return "\(title), \(description)"
-    }
-
-    var onTap: (IndexPath) -> Void = { _ in }
-
-    private let story: PocketStory
-
-    init(story: PocketStory) {
-        self.story = story
-    }
-}
+import Shared
 
 // MARK: - PocketStandardCell
 /// A cell used in FxHomeScreen's Pocket section
@@ -45,8 +21,6 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         static let stackViewShadowRadius: CGFloat = 4
         static let stackViewShadowOffset: CGFloat = 2
         static let heroImageSize =  CGSize(width: 108, height: 80)
-        static let fallbackFaviconSize = CGSize(width: 56, height: 56)
-        static let faviconSize = CGSize(width: 24, height: 24)
         static let sponsoredIconSize = CGSize(width: 12, height: 12)
         static let sponsoredStackSpacing: CGFloat = 8
     }
@@ -140,7 +114,12 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         descriptionLabel.text = viewModel.description
         accessibilityLabel = viewModel.accessibilityLabel
 
-        heroImageView.sd_setImage(with: viewModel.imageURL)
+        ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: viewModel.imageURL,
+                                                               limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+            guard error == nil, let image = image else { return }
+            self.heroImageView.image = image
+        }
+
         sponsoredStack.isHidden = viewModel.sponsor == nil
         descriptionLabel.font = viewModel.sponsor == nil
         ? DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
