@@ -183,6 +183,12 @@ class HomepageViewModel: FeatureFlaggable {
         }
     }
 
+    func refreshData() {
+        childViewModels.forEach {
+            $0.refreshData()
+        }
+    }
+
     // MARK: - Section ViewModel helper
 
     func getSectionViewModel(shownSection: Int) -> HomepageViewModelProtocol? {

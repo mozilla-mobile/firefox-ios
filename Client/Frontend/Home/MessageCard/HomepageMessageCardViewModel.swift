@@ -17,6 +17,7 @@ class HomepageMessageCardViewModel: MessageSurfaceProtocol, GleanPlumbMessageMan
     weak var delegate: HomepageDataModelDelegate?
     var message: GleanPlumbMessage?
     var dismissClosure: (() -> Void)?
+    var traitCollection: UITraitCollection?
 
     init(dataAdaptor: MessageCardDataAdaptor) {
         self.dataAdaptor = dataAdaptor
@@ -54,6 +55,7 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        self.traitCollection = traitCollection
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(180))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -73,7 +75,7 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
         return section
     }
 
-    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
+    func numberOfItemsInSection() -> Int {
         return 1
     }
 

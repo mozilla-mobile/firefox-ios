@@ -7,6 +7,7 @@ import Foundation
 /// Customize button is always present at the bottom of the page
 class CustomizeHomepageSectionViewModel {
     var onTapAction: ((UIButton) -> Void)?
+    var traitCollection: UITraitCollection?
 }
 
 // MARK: HomeViewModelProtocol
@@ -21,6 +22,7 @@ extension CustomizeHomepageSectionViewModel: HomepageViewModelProtocol {
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        self.traitCollection = traitCollection
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -36,7 +38,7 @@ extension CustomizeHomepageSectionViewModel: HomepageViewModelProtocol {
         return section
     }
 
-    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
+    func numberOfItemsInSection() -> Int {
         return 1
     }
 

@@ -9,10 +9,13 @@ protocol HomepageViewModelProtocol {
 
     var sectionType: HomepageSectionType { get }
 
+    // Trait collection of the section
+    var traitCollection: UITraitCollection? { get }
+
     // Layout section so FirefoxHomeViewController view controller can setup the section
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection
 
-    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int
+    func numberOfItemsInSection() -> Int
 
     // The header view model to setup the header for this section
     var headerViewModel: LabelButtonHeaderViewModel { get }
@@ -26,9 +29,8 @@ protocol HomepageViewModelProtocol {
     // Returns true when section has data and is enabled
     var shouldShow: Bool { get }
 
-    // Refresh data after reloadOnRotation, so layout can be adjusted
-    // Can also be used to prepare data for a specific trait collection when UI is ready to show
-    func refreshData(for traitCollection: UITraitCollection)
+    // Refresh data from adaptor to ensure it refresh the right state before laying itself out
+    func refreshData()
 
     // Update section that are privacy sensitive, only implement when needed
     func updatePrivacyConcernedSection(isPrivate: Bool)
@@ -41,7 +43,7 @@ extension HomepageViewModelProtocol {
         return isEnabled && hasData
     }
 
-    func refreshData(for traitCollection: UITraitCollection) {}
+    func refreshData() {}
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {}
 }

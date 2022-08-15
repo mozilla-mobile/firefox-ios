@@ -73,6 +73,7 @@ class HistoryHighlightsViewModel {
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var hasSentSectionEvent = false
     private var historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor
+    var traitCollection: UITraitCollection?
     var onTapItem: ((HighlightItem) -> Void)?
     var historyHighlightLongPressHandler: ((HighlightItem, UIView?) -> Void)?
     var headerButtonAction: ((UIButton) -> Void)?
@@ -183,6 +184,7 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        self.traitCollection = traitCollection
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                heightDimension: .estimated(UX.estimatedCellHeight))
@@ -211,7 +213,7 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
         return section
     }
 
-    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
+    func numberOfItemsInSection() -> Int {
         // If there are less than or equal items to the max number of items allowed per column,
         // we can return the standard count, as we don't need to display filler cells.
         // However, if there's more items, filler cells needs to be accounted for, so sections

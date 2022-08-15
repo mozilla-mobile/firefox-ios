@@ -27,6 +27,7 @@ class JumpBackInViewModel: FeatureFlaggable {
 
     var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
     var mostRecentSyncedTab: JumpBackInSyncedTab?
+    var traitCollection: UITraitCollection?
 
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var jumpBackInDataAdaptor: JumpBackInDataAdaptor
@@ -280,16 +281,13 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return !isPrivate
     }
 
-    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
-        refreshData(for: traitCollection)
+    func numberOfItemsInSection() -> Int {
         return jumpBackInList.itemsToDisplay + (hasSyncedTab ? JumpBackInViewModel.UX.maxDisplayedSyncedTabs : 0)
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        self.traitCollection = traitCollection
         var section: NSCollectionLayoutSection
-        updateSectionLayout(for: traitCollection,
-                            isPortrait: UIWindow.isPortrait,
-                            device: UIDevice.current.userInterfaceIdiom)
 
         switch sectionLayout {
         case .compactSyncedTab, .compactJumpBackInAndSyncedTab:
@@ -320,8 +318,9 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return hasJumpBackIn || hasSyncedTab
     }
 
-    func refreshData(for traitCollection: UITraitCollection,
-                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+    func refreshData() {
+        guard let traitCollection = traitCollection else { return }
+        let device = UIDevice.current.userInterfaceIdiom
         let maxItemToDisplay = sectionLayout.maxItemsToDisplay(
             displayGroup: .jumpBackIn,
             hasAccount: jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled,
@@ -331,6 +330,10 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
 
         jumpBackInList = jumpBackInDataAdaptor.getJumpBackInData()
         mostRecentSyncedTab = jumpBackInDataAdaptor.getSyncedTabData()
+
+        updateSectionLayout(for: traitCollection,
+                            isPortrait: UIWindow.isPortrait,
+                            device: UIDevice.current.userInterfaceIdiom)
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {

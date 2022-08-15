@@ -21,6 +21,7 @@ class RecentlySavedCellViewModel {
     private var recentlySavedDataAdaptor: RecentlySavedDataAdaptor
     private var recentItems = [RecentlySavedItem]()
     var headerButtonAction: ((UIButton) -> Void)?
+    var traitCollection: UITraitCollection?
 
     weak var delegate: HomepageDataModelDelegate?
 
@@ -56,6 +57,7 @@ extension RecentlySavedCellViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        self.traitCollection = traitCollection
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .absolute(UX.cellWidth),
             heightDimension: .estimated(UX.cellHeight)
@@ -87,7 +89,7 @@ extension RecentlySavedCellViewModel: HomepageViewModelProtocol, FeatureFlaggabl
         return section
     }
 
-    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
+    func numberOfItemsInSection() -> Int {
         return recentItems.count
     }
 
