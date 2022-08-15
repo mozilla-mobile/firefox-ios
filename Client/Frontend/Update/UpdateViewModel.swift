@@ -31,7 +31,10 @@ class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         self.profile = profile
     }
 
-    func shouldShowUpdateSheet(appVersion: String = AppInfo.appVersion) -> Bool {
+    func shouldShowUpdateSheet(force: Bool = false,
+                               appVersion: String = AppInfo.appVersion) -> Bool {
+        guard !force else { return true }
+
         guard shouldShowFeature else {
             saveAppVersion(for: appVersion)
             return false
@@ -51,7 +54,6 @@ class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
         return false
     }
-
 
     func positionForCard(cardType: IntroViewModel.InformationCards) -> Int? {
         return enabledCards.firstIndex(of: cardType)

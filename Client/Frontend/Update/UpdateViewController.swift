@@ -184,12 +184,15 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     private func presentSignToSync(_ fxaOptions: FxALaunchParams? = nil,
-                                  flowType: FxAPageType = .emailLoginFlow,
-                                  referringPage: ReferringPage = .onboarding) {
-        let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions,
-                                                                                      flowType: flowType,
-                                                                                      referringPage: referringPage,
-                                                                                       profile: viewModel.profile)
+                                   flowType: FxAPageType = .emailLoginFlow,
+                                   referringPage: ReferringPage = .onboarding) {
+
+        let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
+            fxaOptions,
+            flowType: flowType,
+            referringPage: referringPage,
+            profile: viewModel.profile)
+
         let controller: DismissableNavigationViewController
         let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
                                          style: .plain,

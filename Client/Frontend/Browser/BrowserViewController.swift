@@ -2182,7 +2182,7 @@ extension BrowserViewController {
 
     func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) {
         let viewModel = UpdateViewModel(profile: profile)
-        if force || viewModel.shouldShowUpdateSheet() {
+        if viewModel.shouldShowUpdateSheet(force: force) {
             let updateViewController = UpdateViewController(viewModel: viewModel)
             updateViewController.didFinishClosure = {
                 updateViewController.dismiss(animated: true)

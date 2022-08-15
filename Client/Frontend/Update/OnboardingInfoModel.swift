@@ -28,7 +28,8 @@ struct OnboardingInfoModel: OnboardingModelProtocol {
          description: String?,
          primaryAction: String,
          secondaryAction: String?,
-         a11yIdRoot: String) {
+         a11yIdRoot: String
+    ) {
         self.image = image
         self.title = title
         self.description = description
