@@ -72,8 +72,7 @@ class HomepageViewController: UIViewController, HomePanel {
 
         setupNotifications(forObserver: self,
                            observing: [.HomePanelPrefsChanged,
-                                       .TabsPrivacyModeChanged,
-                                       .DynamicFontChanged])
+                                       .TabsPrivacyModeChanged])
     }
 
     required init?(coder aDecoder: NSCoder) {

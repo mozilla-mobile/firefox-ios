@@ -204,9 +204,9 @@ private extension JumpBackInViewModel {
 
         // Nested Group (Jump Back In)
         let nestedGroupSize = NSCollectionLayoutSize(widthDimension: groupWidth,
-                                                       heightDimension: .fractionalHeight(1))
+                                                     heightDimension: .fractionalHeight(1))
         let nestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: nestedGroupSize,
-                                                             subitems: [jumpBackInItem, jumpBackInItem])
+                                                           subitems: [jumpBackInItem, jumpBackInItem])
         nestedGroup.interItemSpacing = JumpBackInCell.UX.interItemSpacing
 
         // Main Group
