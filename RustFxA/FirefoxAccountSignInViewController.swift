@@ -107,7 +107,7 @@ class FirefoxAccountSignInViewController: UIViewController {
             self.telemetryObject = .onboarding
             self.fxaDismissStyle = .dismiss
         case .upgrade:
-            self.telemetryObject = .upgrade
+            self.telemetryObject = .upgradeOnboarding
             self.fxaDismissStyle = .dismiss
         case .settings:
             self.telemetryObject = .settings

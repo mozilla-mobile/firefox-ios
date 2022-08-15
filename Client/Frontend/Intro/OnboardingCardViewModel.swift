@@ -26,7 +26,7 @@ struct OnboardingCardViewModel: OnboardingCardProtocol {
     func sendCardViewTelemetry() {
         let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: cardType.telemetryValue]
         let eventObject: TelemetryWrapper.EventObject = cardType.isOnboardingScreen ?
-            . onboardingCardView : .upgradeCardView
+            . onboardingCardView : .upgradeOnboardingCardView
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
@@ -45,9 +45,9 @@ struct OnboardingCardViewModel: OnboardingCardProtocol {
         case (false, true):
             eventObject = TelemetryWrapper.EventObject.onboardingSecondaryButton
         case (true, false):
-            eventObject = TelemetryWrapper.EventObject.upgradePrimaryButton
+            eventObject = TelemetryWrapper.EventObject.upgradeOnboardingPrimaryButton
         case (false, false):
-            eventObject = TelemetryWrapper.EventObject.upgradeSecondaryButton
+            eventObject = TelemetryWrapper.EventObject.upgradeOnboardingSecondaryButton
         }
 
         TelemetryWrapper.recordEvent(category: .action,

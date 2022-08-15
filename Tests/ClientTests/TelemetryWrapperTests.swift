@@ -217,7 +217,7 @@ class TelemetryWrapperTests: XCTestCase {
     func test_upgradeCardViewWithExtras_GleanIsCalled() {
         let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
         let extras = [cardTypeKey: "\(IntroViewModel.InformationCards.updateWelcome.telemetryValue)"]
-        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .upgradeCardView, value: nil, extras: extras)
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .upgradeOnboardingCardView, value: nil, extras: extras)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.cardView)
     }
@@ -225,7 +225,7 @@ class TelemetryWrapperTests: XCTestCase {
     func test_upgradePrimaryButtonWithExtras_GleanIsCalled() {
         let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
         let extras = [cardTypeKey: "\(IntroViewModel.InformationCards.updateWelcome.telemetryValue)"]
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .upgradePrimaryButton, value: nil, extras: extras)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .upgradeOnboardingPrimaryButton, value: nil, extras: extras)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.primaryButtonTap)
     }
@@ -233,7 +233,7 @@ class TelemetryWrapperTests: XCTestCase {
     func test_upgradeSecondaryButtonWithExtras_GleanIsCalled() {
         let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
         let extras = [cardTypeKey: "\(IntroViewModel.InformationCards.updateWelcome.telemetryValue)"]
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .upgradeSecondaryButton, value: nil, extras: extras)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .upgradeOnboardingSecondaryButton, value: nil, extras: extras)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.secondaryButtonTap)
     }
@@ -241,7 +241,7 @@ class TelemetryWrapperTests: XCTestCase {
     func test_upgradeCloseWithExtras_GleanIsCalled() {
         let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
         let extras = [cardTypeKey: "\(IntroViewModel.InformationCards.updateWelcome.telemetryValue)"]
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .upgradeClose, value: nil, extras: extras)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .upgradeOnboardingClose, value: nil, extras: extras)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.closeTap)
     }

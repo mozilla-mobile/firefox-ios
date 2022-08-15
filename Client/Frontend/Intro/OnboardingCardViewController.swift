@@ -24,6 +24,7 @@ class OnboardingCardViewController: UIViewController {
         static let titleFontSize: CGFloat = 34
         static let descriptionBoldFontSize: CGFloat = 20
         static let descriptionFontSize: CGFloat = 17
+        static let imageViewMaxHeight: CGFloat = 160
 
         // small device
         static let smallStackViewSpacing: CGFloat = 8
@@ -218,7 +219,9 @@ class OnboardingCardViewController: UIViewController {
 
             buttonStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.stackViewPadding),
             buttonStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.stackViewPadding),
-            buttonStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewPadding)
+            buttonStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewPadding),
+
+            imageView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.imageViewMaxHeight).priority(.defaultLow)
         ])
 
         contentStackView.spacing = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacing : UX.stackViewSpacing
@@ -234,7 +237,6 @@ class OnboardingCardViewController: UIViewController {
         secondaryButton.isHidden = viewModel.infoModel.secondaryAction?.isEmpty ?? true
 
         imageView.image = viewModel.infoModel.image
-        imageView.isHidden = viewModel.infoModel.image == nil
         primaryButton.setTitle(viewModel.infoModel.primaryAction, for: .normal)
         secondaryButton.setTitle(viewModel.infoModel.secondaryAction, for: .normal)
     }

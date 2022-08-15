@@ -759,7 +759,7 @@ extension String {
             "Upgrade.SyncSign.Action.v106",
             value: "Sign In",
             comment: "Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade.",
-            lastUpdated: .v102)
+            lastUpdated: .v106)
     }
 }
 
