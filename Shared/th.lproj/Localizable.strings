@@ -1252,6 +1252,9 @@
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "ลงทะเบียนและเข้าสู่ระบบ";
 
+/* Description for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. */
+"Onboarding.SyncDescription.v102" = "ซิงค์แท็บและที่คั่นหน้าในอุปกรณ์ต่าง ๆ โดยอัตโนมัติเพื่อการข้ามหน้าจออย่างราบรื่น";
+
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "ตั้งค่ารูปพื้นหลัง";
 

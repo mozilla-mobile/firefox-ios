@@ -469,6 +469,12 @@
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "ᱟᱞᱮ ᱠᱟᱹᱢᱤᱠᱚ ᱟᱨ ᱟᱢᱟᱜ ᱱᱤᱥᱚᱱ ᱠᱚ";
 
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "ᱤᱧᱟᱜ ᱡᱷᱚᱛᱚ ᱟᱹᱭᱩᱨ ᱢᱤᱫ ᱠᱟᱱ ᱴᱮᱵᱽ ᱠᱚ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "ᱴᱮᱵᱽ ᱵᱟᱪᱷᱟᱣ";
+
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
 "FirefoxHomepage.Pocket.Sponsored.v103" = "ᱠᱟᱹᱢᱤᱼᱤᱭᱟᱹ";
 
@@ -825,6 +831,9 @@
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
 "LibraryPanel.History.ClearHistoryMenuTitle.v100" = "ᱦᱤᱛᱟᱹᱞ (ᱮᱴᱟᱜ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱟᱹᱭᱩᱨ ᱢᱤᱫ ᱠᱟᱱ ᱦᱤᱛᱟᱹᱞ ᱢᱮᱥᱟ ᱠᱟᱛᱮ), ᱠᱩᱠᱤᱡᱽ ᱟᱨ ᱮᱴᱟᱜ ᱯᱟᱱᱛᱮᱭᱟᱜ ᱰᱟᱴᱟ ᱠᱚ ᱚᱪᱚᱜᱽ ᱟᱭ ᱾";
+
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "ᱢᱮᱴᱟᱣ ᱢᱮ";
 
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "ᱱᱚᱰᱮ ᱱᱟᱜᱟᱢ ᱵᱟᱝ ᱧᱟᱢ ᱞᱮᱱᱟ";
@@ -1237,11 +1246,17 @@
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
 "Onboarding.IntroDescriptionPart1.v102" = "ᱥᱟᱹᱫᱷᱤᱱ ᱾ ᱵᱟᱝ ᱞᱟᱵᱷ ᱾ ᱵᱮᱥ ᱞᱟᱹᱜᱤᱫ ᱾";
 
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v102" = "ᱡᱚᱛᱚ ᱦᱚᱲ ᱞᱟᱹᱜᱤᱫ ᱢᱤᱫ ᱱᱟᱯᱟᱭ ᱤᱱᱴᱟᱨᱱᱮᱴ ᱨᱮᱭᱟᱜ ᱩᱫᱩᱜ ᱞᱟ.ᱜᱤᱫ ᱴᱷᱟᱹᱣᱠᱟᱹ ᱾";
+
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "ᱱᱤᱛᱚᱜ ᱫᱚ ᱵᱟᱝᱟ";
 
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "ᱥᱩᱦᱤ ᱮᱢ ᱢᱮ ᱟᱨ ᱵᱚᱞᱚᱱ ᱢᱮ";
+
+/* Description for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. */
+"Onboarding.SyncDescription.v102" = "ᱟᱨᱟᱢ ᱥᱠᱨᱤᱱ ᱦᱚᱯᱤᱝ ᱞᱟᱹᱜᱤᱫ ᱟᱡ ᱛᱮ ᱡᱷᱚᱛᱚ ᱥᱟᱫᱷᱚᱱ ᱟᱨ ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ ᱟᱹᱭᱩᱨ ᱢᱤᱫ ᱠᱟᱜᱼᱟᱭ ᱾ ";
 
 /* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
 "Onboarding.SyncTitle.v102" = "ᱟᱢᱟᱜ ᱯᱨᱚᱵᱷᱟᱣ ᱨᱮ ᱛᱟᱦᱮᱸ ᱞᱟᱹᱜᱤᱫ ᱥᱭᱝᱠ ᱢᱮ";
