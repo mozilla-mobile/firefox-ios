@@ -110,9 +110,9 @@ class JumpBackInViewModel: FeatureFlaggable {
         }
     }
 
-    func updateSectionLayout(for traitCollection: UITraitCollection,
-                             isPortrait: Bool = UIWindow.isPortrait,
-                             device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+    private func updateSectionLayout(for traitCollection: UITraitCollection,
+                                     isPortrait: Bool = UIWindow.isPortrait,
+                                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         let isPhoneInLandscape = device == .phone && !isPortrait
 
         if hasSyncedTab, traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
@@ -208,9 +208,9 @@ private extension JumpBackInViewModel {
 
         // Nested Group (Jump Back In)
         let nestedGroupSize = NSCollectionLayoutSize(widthDimension: groupWidth,
-                                                       heightDimension: .fractionalHeight(1))
+                                                     heightDimension: .fractionalHeight(1))
         let nestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: nestedGroupSize,
-                                                             subitems: [jumpBackInItem, jumpBackInItem])
+                                                           subitems: [jumpBackInItem, jumpBackInItem])
         nestedGroup.interItemSpacing = JumpBackInCell.UX.interItemSpacing
 
         // Main Group
@@ -269,8 +269,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        return LabelButtonHeaderViewModel(trailingInset: 0,
-                                          title: HomepageSectionType.jumpBackIn.title,
+        return LabelButtonHeaderViewModel(title: HomepageSectionType.jumpBackIn.title,
                                           titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
                                           isButtonHidden: false,
                                           buttonTitle: .RecentlySavedShowAllText,
@@ -284,17 +283,12 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return !isPrivate
     }
 
-    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
-        refreshData(for: traitCollection)
+    func numberOfItemsInSection() -> Int {
         return jumpBackInList.itemsToDisplay + (hasSyncedTab ? JumpBackInViewModel.UX.maxDisplayedSyncedTabs : 0)
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         var section: NSCollectionLayoutSection
-        updateSectionLayout(for: traitCollection,
-                            isPortrait: UIWindow.isPortrait,
-                            device: UIDevice.current.userInterfaceIdiom)
-
         switch sectionLayout {
         case .compactSyncedTab, .compactJumpBackInAndSyncedTab:
             section = sectionWithSyncedTabCompact(for: traitCollection)
@@ -314,7 +308,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                         leading: leadingInset,
                                                         bottom: HomepageViewModel.UX.spacingBetweenSections,
-                                                        trailing: leadingInset)
+                                                        trailing: 0)
         section.interGroupSpacing = JumpBackInCell.UX.interGroupSpacing
 
         return section
@@ -325,6 +319,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     }
 
     func refreshData(for traitCollection: UITraitCollection,
+                     isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         let maxItemToDisplay = sectionLayout.maxItemsToDisplay(
             displayGroup: .jumpBackIn,
@@ -335,6 +330,10 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
 
         jumpBackInList = jumpBackInDataAdaptor.getJumpBackInData()
         mostRecentSyncedTab = jumpBackInDataAdaptor.getSyncedTabData()
+
+        updateSectionLayout(for: traitCollection,
+                            isPortrait: isPortrait,
+                            device: device)
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {

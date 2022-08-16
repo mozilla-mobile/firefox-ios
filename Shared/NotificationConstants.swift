@@ -64,9 +64,7 @@ extension Notification.Name {
 
     public static let UpdateLabelOnTabClosed = Notification.Name("UpdateLabelOnTabClosed")
 
-    public static let TopTabsTabClosed = Notification.Name("TopTabsTabClosed")
-
-    public static let TopTabsTabSelected = Notification.Name("TopTabsTabSelected")
+    public static let ShowHomepage = Notification.Name("ShowHomepage")
 
     public static let TabsTrayDidClose = Notification.Name("TabsTrayDidClose")
 

@@ -183,6 +183,12 @@ class HomepageViewModel: FeatureFlaggable {
         }
     }
 
+    func refreshData(for traitCollection: UITraitCollection) {
+        childViewModels.forEach {
+            $0.refreshData(for: traitCollection)
+        }
+    }
+
     // MARK: - Section ViewModel helper
 
     func getSectionViewModel(shownSection: Int) -> HomepageViewModelProtocol? {

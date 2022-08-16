@@ -22,6 +22,7 @@ class TopSitesViewModel {
     private var sentImpressionTelemetry = [String: Bool]()
     private var topSites: [TopSite] = []
     private let dimensionManager: TopSitesDimension
+    private var numberOfItems: Int = 0
 
     private let topSitesDataAdaptor: TopSitesDataAdaptor
     private let topSiteHistoryManager: TopSiteHistoryManager
@@ -131,15 +132,8 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return featureFlags.isFeatureEnabled(.topSites, checking: .buildAndUser)
     }
 
-    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
-        refreshData(for: traitCollection)
-
-        let interface = TopSitesUIInterface(trait: traitCollection)
-        let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
-                                                                    numberOfRows: topSitesDataAdaptor.numberOfRows,
-                                                                    interface: interface)
-        let items = sectionDimension.numberOfRows * sectionDimension.numberOfTilesPerRow
-        return items
+    func numberOfItemsInSection() -> Int {
+        return numberOfItems
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
@@ -174,13 +168,16 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return !topSites.isEmpty
     }
 
-    func refreshData(for traitCollection: UITraitCollection) {
+    func refreshData(for traitCollection: UITraitCollection,
+                     isPortrait: Bool = UIWindow.isPortrait,
+                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         let interface = TopSitesUIInterface(trait: traitCollection)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
                                                                     numberOfRows: topSitesDataAdaptor.numberOfRows,
                                                                     interface: interface)
         topSitesDataAdaptor.recalculateTopSiteData(for: sectionDimension.numberOfTilesPerRow)
         topSites = topSitesDataAdaptor.getTopSitesData()
+        numberOfItems = sectionDimension.numberOfRows * sectionDimension.numberOfTilesPerRow
     }
 }
 
