@@ -44,7 +44,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         }
     }
 
-    var enabledCards: [InformationCards] {
+    var enabledCards: [IntroViewModel.InformationCards] {
         guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion) else {
             return [.welcome, .wallpapers, .signSync]
         }
