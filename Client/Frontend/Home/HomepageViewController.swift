@@ -228,7 +228,9 @@ class HomepageViewController: UIViewController, HomePanel {
 
         // Force the entire collectionview to re-layout
         collectionView.collectionViewLayout.invalidateLayout()
-        reloadView()
+        DispatchQueue.main.async {
+            self.reloadView()
+        }
     }
 
     private func adjustPrivacySensitiveSections(notification: Notification) {
