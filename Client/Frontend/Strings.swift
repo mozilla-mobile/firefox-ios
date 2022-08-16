@@ -746,7 +746,7 @@ extension String {
             comment: "Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade.",
             lastUpdated: .v106)
         public static let SyncSignTitle = MZLocalizedString(
-            "Upgrade.SyncSign.Description.v106",
+            "Upgrade.SyncSign.Title.v106",
             value: "Switching screens is easier than ever",
             comment: "Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades firefox version",
             lastUpdated: .v106)
