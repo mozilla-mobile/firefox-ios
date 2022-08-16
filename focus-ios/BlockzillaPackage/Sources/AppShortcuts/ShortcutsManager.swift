@@ -109,6 +109,14 @@ public extension ShortcutsManager {
     func isSaved(url: URL) -> Bool {
         shortcutsViewModels.contains(where: { $0.shortcut.url == url })
     }
+
+    func update(faviconURL: URL, for url: URL) {
+        guard let index = shortcutsViewModels.firstIndex(where: { $0.shortcut.url == url }) else { return }
+        guard faviconURL != shortcutsViewModels[index].shortcut.imageURL else { return }
+        shortcutsViewModels[index].shortcut.imageURL = faviconURL
+        saveShortcuts()
+        shortcutsDidUpdate?()
+    }
 }
 
 public extension ShortcutsManager {
