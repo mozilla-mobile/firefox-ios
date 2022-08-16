@@ -72,8 +72,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
         setupNotifications(forObserver: self,
                            observing: [.HomePanelPrefsChanged,
-                                       .TabsPrivacyModeChanged,
-                                       .DynamicFontChanged])
+                                       .TabsPrivacyModeChanged])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -235,7 +234,9 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
         // Force the entire collectionview to re-layout
         collectionView.collectionViewLayout.invalidateLayout()
-        reloadView()
+        DispatchQueue.main.async {
+            self.reloadView()
+        }
     }
 
     private func adjustPrivacySensitiveSections(notification: Notification) {
@@ -315,6 +316,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     // MARK: - Contextual hint
     private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
         guard contextualHintViewController.shouldPresentHint(),
+              viewModel.jumpBackInViewModel.isFlagForHintEnabled(),
               !viewModel.shouldDisplayHomeTabBanner
         else { return }
 
@@ -371,7 +373,7 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.getSectionViewModel(shownSection: section)?.numberOfItemsInSection(for: traitCollection) ?? 0
+        return viewModel.getSectionViewModel(shownSection: section)?.numberOfItemsInSection() ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -640,6 +642,7 @@ extension HomepageViewController: HomepageViewModelDelegate {
             guard let self = self,
                   self.view.alpha != 0
             else { return }
+            self.viewModel.refreshData(for: self.traitCollection)
             self.viewModel.updateEnabledSections()
             self.collectionView.reloadData()
         }

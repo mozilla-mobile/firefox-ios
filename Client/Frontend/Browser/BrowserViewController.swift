@@ -888,6 +888,7 @@ class BrowserViewController: UIViewController {
         // Hack to force updates on the view
         homepageViewController?.view.alpha = 0.001
         homepageViewController?.reloadView()
+        NotificationCenter.default.post(name: .ShowHomepage, object: nil)
 
         UIView.animate(withDuration: 0.2, animations: { () -> Void in
             self.homepageViewController?.view.alpha = 1
