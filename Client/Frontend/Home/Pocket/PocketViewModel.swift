@@ -159,7 +159,7 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return section
     }
 
-    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
+    func numberOfItemsInSection() -> Int {
         // Including discover more cell
         return !pocketStoriesViewModels.isEmpty ? pocketStoriesViewModels.count + 1 : 0
     }
@@ -174,6 +174,10 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     var hasData: Bool {
         return !pocketStoriesViewModels.isEmpty
     }
+
+    func refreshData(for traitCollection: UITraitCollection,
+                     isPortrait: Bool = UIWindow.isPortrait,
+                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
 }
 
 // MARK: FxHomeSectionHandler

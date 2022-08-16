@@ -169,7 +169,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .compact
         trait.overridenVerticalSizeClass = .regular
 
-        sut.updateSectionLayout(for: trait, isPortrait: true, device: .phone)
+        sut.refreshData(for: trait, isPortrait: true, device: .phone)
         let jumpBackInItemsMax = sut.sectionLayout.maxItemsToDisplay(displayGroup: .jumpBackIn,
                                                                      hasAccount: false,
                                                                      device: .phone)
@@ -185,8 +185,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
         trait.overridenVerticalSizeClass = .regular
-        sut.refreshData(for: trait)
-        sut.updateSectionLayout(for: trait, isPortrait: false, device: .pad)
+        sut.refreshData(for: trait, isPortrait: false, device: .pad)
         let jumpBackInItemsMax = sut.sectionLayout.maxItemsToDisplay(displayGroup: .jumpBackIn,
                                                                      hasAccount: true,
                                                                      device: .pad)
@@ -204,8 +203,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
         trait.overridenVerticalSizeClass = .regular
-        sut.refreshData(for: trait)
-        sut.updateSectionLayout(for: trait, isPortrait: false, device: .pad)
+        sut.refreshData(for: trait, isPortrait: false, device: .pad)
         let jumpBackInItemsMax = sut.sectionLayout.maxItemsToDisplay(displayGroup: .jumpBackIn,
                                                                      hasAccount: true,
                                                                      device: .pad)
@@ -222,8 +220,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
-        sut.refreshData(for: trait)
-        sut.updateSectionLayout(for: trait, isPortrait: true, device: .phone)
+        sut.refreshData(for: trait, isPortrait: true, device: .phone)
         let jumpBackInItemsMax = sut.sectionLayout.maxItemsToDisplay(displayGroup: .jumpBackIn,
                                                                      hasAccount: true,
                                                                      device: .phone)
@@ -240,8 +237,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
-        sut.refreshData(for: trait)
-        sut.updateSectionLayout(for: trait, isPortrait: true, device: .pad)
+        sut.refreshData(for: trait, isPortrait: true, device: .pad)
         let jumpBackInItemsMax = sut.sectionLayout.maxItemsToDisplay(displayGroup: .jumpBackIn,
                                                                      hasAccount: true,
                                                                      device: .pad)
@@ -258,8 +254,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
-        sut.refreshData(for: trait)
-        sut.updateSectionLayout(for: trait, isPortrait: true, device: .phone)
+        sut.refreshData(for: trait, isPortrait: true, device: .phone)
         let jumpBackInItemsMax = sut.sectionLayout.maxItemsToDisplay(displayGroup: .jumpBackIn,
                                                                      hasAccount: true,
                                                                      device: .phone)
@@ -276,8 +271,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
-        sut.refreshData(for: trait)
-        sut.updateSectionLayout(for: trait, isPortrait: true, device: .pad)
+        sut.refreshData(for: trait, isPortrait: true, device: .pad)
         let jumpBackInItemsMax = sut.sectionLayout.maxItemsToDisplay(displayGroup: .jumpBackIn,
                                                                      hasAccount: true,
                                                                      device: .pad)
@@ -293,8 +287,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
-        sut.refreshData(for: trait)
-        sut.updateSectionLayout(for: trait, isPortrait: true, device: .phone)
+        sut.refreshData(for: trait, isPortrait: true, device: .phone)
         let jumpBackInItemsMax = sut.sectionLayout.maxItemsToDisplay(displayGroup: .jumpBackIn,
                                                                      hasAccount: true,
                                                                      device: .phone)
@@ -310,8 +303,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
-        sut.refreshData(for: trait)
-        sut.updateSectionLayout(for: trait, isPortrait: true, device: .pad)
+        sut.refreshData(for: trait, isPortrait: true, device: .pad)
         let jumpBackInItemsMax = sut.sectionLayout.maxItemsToDisplay(displayGroup: .jumpBackIn,
                                                                      hasAccount: true,
                                                                      device: .pad)

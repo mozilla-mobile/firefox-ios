@@ -68,9 +68,8 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         self.dispatchGroup = dispatchGroup
         self.userInteractiveQueue = userInteractiveQueue
 
-        setupNotifications(forObserver: self, observing: [.TabsTrayDidClose,
-                                                          .TopTabsTabClosed,
-                                                          .TopTabsTabSelected,
+        setupNotifications(forObserver: self, observing: [.ShowHomepage,
+                                                          .TabsTrayDidClose,
                                                           .TabsTrayDidSelectHomeTab])
 
         updateData()
@@ -273,9 +272,8 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 extension JumpBackInDataAdaptorImplementation: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .TabsTrayDidClose,
-                .TopTabsTabClosed,
-                .TopTabsTabSelected,
+        case .ShowHomepage,
+                .TabsTrayDidClose,
                 .TabsTrayDidSelectHomeTab:
             updateData()
         default: break
