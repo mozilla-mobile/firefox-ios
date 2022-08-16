@@ -269,8 +269,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        return LabelButtonHeaderViewModel(trailingInset: 0,
-                                          title: HomepageSectionType.jumpBackIn.title,
+        return LabelButtonHeaderViewModel(title: HomepageSectionType.jumpBackIn.title,
                                           titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
                                           isButtonHidden: false,
                                           buttonTitle: .RecentlySavedShowAllText,
@@ -309,7 +308,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                         leading: leadingInset,
                                                         bottom: HomepageViewModel.UX.spacingBetweenSections,
-                                                        trailing: leadingInset)
+                                                        trailing: 0)
         section.interGroupSpacing = JumpBackInCell.UX.interGroupSpacing
 
         return section
