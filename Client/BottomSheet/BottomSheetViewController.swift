@@ -95,7 +95,6 @@ class BottomSheetViewController: UIViewController {
         sheetView.layer.backgroundColor = UIColor.clear.cgColor
         sheetView.layer.shadowColor = UIColor.black.cgColor
         sheetView.layer.shadowOffset = CGSize(width: 0, height: -5.0)
-        sheetView.layer.shadowOpacity = 0.2
         sheetView.layer.shadowRadius = 20.0
         sheetView.layer.shadowPath = UIBezierPath(roundedRect: sheetView.bounds,
                                                   cornerRadius: viewModel.cornerRadius).cgPath
@@ -245,8 +244,10 @@ extension BottomSheetViewController: NotificationThemeable, Notifiable {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
             contentView.backgroundColor = viewModel.sheetDarkThemeBackgroundColor
+            sheetView.layer.shadowOpacity = 0.5
         } else {
             contentView.backgroundColor = viewModel.sheetLightThemeBackgroundColor
+            sheetView.layer.shadowOpacity = 0.2
         }
     }
 }
