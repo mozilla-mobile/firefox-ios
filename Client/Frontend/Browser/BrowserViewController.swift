@@ -524,9 +524,7 @@ class BrowserViewController: UIViewController {
         super.viewDidAppear(animated)
 
         presentIntroViewController()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            self.presentUpdateViewController()
-        }
+        presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
 
         if let toast = self.pendingToast {
