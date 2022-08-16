@@ -17,7 +17,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         self.profile = profile
     }
 
-    /// Determine if this hint is eligible to present.
+    /// Determine if this hint is eligible to present, outside of Nimbus flag settings.
     func canPresent(_ hintType: ContextualHintType) -> Bool {
         guard isDeviceReady else { return false }
 
@@ -52,8 +52,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     /// - the JumpBackInSyncedTab CFR has NOT been presented already
     /// - the JumpBackIn CFR has NOT been presented yet
     private var canJumpBackInBePresented: Bool {
-        guard UIDevice.current.userInterfaceIdiom != .pad,
-              let hasPresentedToolbarCFR = profile.prefs.boolForKey(CFRPrefsKeys.ToolbarOnboardingKey.rawValue),
+        guard let hasPresentedToolbarCFR = profile.prefs.boolForKey(CFRPrefsKeys.ToolbarOnboardingKey.rawValue),
               hasPresentedToolbarCFR,
               !hasHintBeenConfigured(.jumpBackInSyncedTab),
               !hasAlreadyBeenPresented(.jumpBackInSyncedTab)

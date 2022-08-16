@@ -41,9 +41,9 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
     // MARK: - Interface
 
     func shouldPresentContextualHint() -> Bool {
-        let contextualHintPresLogic = ContextualHintEligibilityUtility(with: profile)
+        let hintEligibilityUtility = ContextualHintEligibilityUtility(with: profile)
 
-        return contextualHintPresLogic.canPresent(hintType)
+        return hintEligibilityUtility.canPresent(hintType)
     }
 
     func markContextualHintPresented() {
