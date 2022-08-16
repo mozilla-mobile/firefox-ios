@@ -3,8 +3,14 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import SnapKit
 
 extension UIView {
+
+    var safeArea: ConstraintBasicAttributesDSL {
+        return self.safeAreaLayoutGuide.snp
+    }
+
     /**
      * Takes a screenshot of the view with the given size.
      */
