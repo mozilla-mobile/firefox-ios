@@ -168,7 +168,9 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return !topSites.isEmpty
     }
 
-    func refreshData(for traitCollection: UITraitCollection) {
+    func refreshData(for traitCollection: UITraitCollection,
+                     isPortrait: Bool = UIWindow.isPortrait,
+                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         let interface = TopSitesUIInterface(trait: traitCollection)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
                                                                     numberOfRows: topSitesDataAdaptor.numberOfRows,

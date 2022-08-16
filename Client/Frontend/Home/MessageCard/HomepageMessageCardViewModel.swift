@@ -88,6 +88,10 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
     var hasData: Bool {
         return shouldDisplayMessageCard
     }
+
+    func refreshData(for traitCollection: UITraitCollection,
+                     isPortrait: Bool = UIWindow.isPortrait,
+                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
 }
 
 // MARK: - HomepageSectionHandler

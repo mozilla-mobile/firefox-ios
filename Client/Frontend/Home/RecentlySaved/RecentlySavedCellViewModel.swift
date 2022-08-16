@@ -98,6 +98,10 @@ extension RecentlySavedCellViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     var hasData: Bool {
         return !recentItems.isEmpty
     }
+
+    func refreshData(for traitCollection: UITraitCollection,
+                     isPortrait: Bool = UIWindow.isPortrait,
+                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
 }
 
 // MARK: FxHomeSectionHandler

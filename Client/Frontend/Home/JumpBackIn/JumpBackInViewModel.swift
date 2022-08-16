@@ -110,9 +110,9 @@ class JumpBackInViewModel: FeatureFlaggable {
         }
     }
 
-    func updateSectionLayout(for traitCollection: UITraitCollection,
-                             isPortrait: Bool = UIWindow.isPortrait,
-                             device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+    private func updateSectionLayout(for traitCollection: UITraitCollection,
+                                     isPortrait: Bool = UIWindow.isPortrait,
+                                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         let isPhoneInLandscape = device == .phone && !isPortrait
 
         if hasSyncedTab, traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
@@ -315,8 +315,9 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return hasJumpBackIn || hasSyncedTab
     }
 
-    func refreshData(for traitCollection: UITraitCollection) {
-        let device = UIDevice.current.userInterfaceIdiom
+    func refreshData(for traitCollection: UITraitCollection,
+                     isPortrait: Bool = UIWindow.isPortrait,
+                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         let maxItemToDisplay = sectionLayout.maxItemsToDisplay(
             displayGroup: .jumpBackIn,
             hasAccount: jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled,
@@ -328,8 +329,8 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         mostRecentSyncedTab = jumpBackInDataAdaptor.getSyncedTabData()
 
         updateSectionLayout(for: traitCollection,
-                            isPortrait: UIWindow.isPortrait,
-                            device: UIDevice.current.userInterfaceIdiom)
+                            isPortrait: isPortrait,
+                            device: device)
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {

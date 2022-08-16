@@ -27,7 +27,9 @@ protocol HomepageViewModelProtocol {
     var shouldShow: Bool { get }
 
     // Refresh data from adaptor to ensure it refresh the right state before laying itself out
-    func refreshData(for traitCollection: UITraitCollection)
+    func refreshData(for traitCollection: UITraitCollection,
+                     isPortrait: Bool,
+                     device: UIUserInterfaceIdiom)
 
     // Update section that are privacy sensitive, only implement when needed
     func updatePrivacyConcernedSection(isPrivate: Bool)
@@ -40,7 +42,11 @@ extension HomepageViewModelProtocol {
         return isEnabled && hasData
     }
 
-    func refreshData(for traitCollection: UITraitCollection) {}
-
     func updatePrivacyConcernedSection(isPrivate: Bool) {}
+
+    func refreshData(for traitCollection: UITraitCollection,
+                     isPortrait: Bool = UIWindow.isPortrait,
+                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+        refreshData(for: traitCollection, isPortrait: isPortrait, device: device)
+    }
 }

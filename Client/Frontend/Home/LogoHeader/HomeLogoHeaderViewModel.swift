@@ -55,6 +55,10 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     var isEnabled: Bool {
         return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
     }
+
+    func refreshData(for traitCollection: UITraitCollection,
+                     isPortrait: Bool = UIWindow.isPortrait,
+                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
 }
 
 extension HomeLogoHeaderViewModel: HomepageSectionHandler {
