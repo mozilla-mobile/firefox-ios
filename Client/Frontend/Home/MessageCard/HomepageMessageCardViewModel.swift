@@ -73,7 +73,7 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
         return section
     }
 
-    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
+    func numberOfItemsInSection() -> Int {
         return 1
     }
 
@@ -88,6 +88,10 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
     var hasData: Bool {
         return shouldDisplayMessageCard
     }
+
+    func refreshData(for traitCollection: UITraitCollection,
+                     isPortrait: Bool = UIWindow.isPortrait,
+                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
 }
 
 // MARK: - HomepageSectionHandler
