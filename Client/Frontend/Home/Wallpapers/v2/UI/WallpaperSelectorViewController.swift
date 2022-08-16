@@ -4,13 +4,14 @@
 
 import UIKit
 
-private struct WallpaperSelectorUX {
-    static let cardWidth: CGFloat = 97
-    static let cardHeight: CGFloat = 88
-    static let inset: CGFloat = 8
-}
-
 class WallpaperSelectorViewController: UIViewController {
+
+    private struct UX {
+        static let cardWidth: CGFloat = 97
+        static let cardHeight: CGFloat = 88
+        static let inset: CGFloat = 8
+        static let cardShadowHeight: CGFloat = 14
+    }
 
     private var viewModel: WallpaperSelectorViewModel
     internal var notificationCenter: NotificationProtocol
@@ -45,6 +46,7 @@ class WallpaperSelectorViewController: UIViewController {
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.isScrollEnabled = false
         collectionView.register(
             WallpaperCollectionViewCell.self,
             forCellWithReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier)
@@ -84,7 +86,8 @@ class WallpaperSelectorViewController: UIViewController {
         applyTheme()
 
         // make collection view fixed height so the bottom sheet can size correctly
-        let height = collectionView.collectionViewLayout.collectionViewContentSize.height
+        let height = collectionView.collectionViewLayout.collectionViewContentSize.height +
+            WallpaperSelectorViewController.UX.cardShadowHeight
         collectionViewHeightConstraint.constant = height
         view.layoutIfNeeded()
     }
@@ -153,7 +156,7 @@ private extension WallpaperSelectorViewController {
             instructionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -34),
 
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: settingsButton.topAnchor, constant: -28),
+            collectionView.bottomAnchor.constraint(equalTo: settingsButton.topAnchor, constant: -14),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             collectionViewHeightConstraint,
 
@@ -176,28 +179,28 @@ private extension WallpaperSelectorViewController {
         config.scrollDirection = .vertical
 
         let layout = UICollectionViewCompositionalLayout(sectionProvider: { ix, environment in
-            let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(WallpaperSelectorUX.cardWidth),
+            let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(WallpaperSelectorViewController.UX.cardWidth),
                                                   heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: .absolute(WallpaperSelectorUX.cardHeight))
+                                                   heightDimension: .absolute(WallpaperSelectorViewController.UX.cardHeight))
             let subitemsCount = self.viewModel.sectionLayout.itemsPerRow
             let subItems: [NSCollectionLayoutItem] = Array(repeating: item, count: Int(subitemsCount))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                            subitems: subItems)
-            group.interItemSpacing = .fixed(WallpaperSelectorUX.inset)
+            group.interItemSpacing = .fixed(WallpaperSelectorViewController.UX.inset)
 
             let section = NSCollectionLayoutSection(group: group)
             let width = environment.container.effectiveContentSize.width
             let inset = (width -
-                         CGFloat(subitemsCount) * WallpaperSelectorUX.cardWidth -
-                         CGFloat(subitemsCount - 1) * WallpaperSelectorUX.inset) / 2.0
+                         CGFloat(subitemsCount) * WallpaperSelectorViewController.UX.cardWidth -
+                         CGFloat(subitemsCount - 1) * WallpaperSelectorViewController.UX.inset) / 2.0
             section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                             leading: inset,
                                                             bottom: 0,
                                                             trailing: inset)
-            section.interGroupSpacing = WallpaperSelectorUX.inset
+            section.interGroupSpacing = WallpaperSelectorViewController.UX.inset
             return section
         }, configuration: config)
 

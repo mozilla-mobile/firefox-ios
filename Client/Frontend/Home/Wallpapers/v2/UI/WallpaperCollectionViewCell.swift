@@ -65,7 +65,7 @@ class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOffset = CGSize(width: 0, height: 5.0)
         layer.shadowOpacity = 0.2
-        layer.shadowRadius = 6.0
+        layer.shadowRadius = 4.0
         layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: 10).cgPath
     }
 }
