@@ -21,14 +21,21 @@ class ClearHistorySheetProvider {
     ///   - didComplete: Did complete a recent history clear up action
     func showClearRecentHistory(
         onViewController viewController: UIViewController,
-        didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil) {
+        didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
+    ) {
 
+        let alert = createAlertAndConfigureWithArrowIfNeeded(from: viewController)
+        setupActions(for: alert)
+        viewController.present(alert, animated: true)
+    }
+
+    func createAlertAndConfigureWithArrowIfNeeded(from viewController: UIViewController) -> UIAlertController {
         let alert = UIAlertController(title: .LibraryPanel.History.ClearHistoryMenuTitle,
                                       message: nil,
                                       preferredStyle: .actionSheet)
 
         // This will run on the iPad-only, and sets the alert to be centered with no arrow.
-        guard let view = viewController.view else { return }
+        guard let view = viewController.view else { return alert }
         if let popoverController = alert.popoverPresentationController {
             popoverController.sourceView = view
             popoverController.sourceRect = CGRect(x: view.bounds.midX,
@@ -38,38 +45,57 @@ class ClearHistorySheetProvider {
             popoverController.permittedArrowDirections = []
         }
 
-        typealias DateOptions = HistoryDeletionUtilityDateOptions
-        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-4187
-//        [(String.ClearHistoryMenuOptionTheLastHour, DateOptions.lastHour),
-         [(String.ClearHistoryMenuOptionToday, DateOptions.today),
-         (String.ClearHistoryMenuOptionTodayAndYesterday, DateOptions.yesterday)]
-            .forEach { (name, timeRange) in
-                let action = UIAlertAction(title: name, style: .destructive) { _ in
-                    Task {
-                        let deletionUlitily = HistoryDeletionUtility(with: self.profile)
-                        let timeframe = await deletionUlitily.deleteHistoryFrom(timeRange)
+        return alert
+    }
 
-                        didComplete?(timeframe)
-                    }
-                }
-                alert.addAction(action)
-            }
-
-            alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive) { _ in
-            Task {
-                let deletionUlitily = HistoryDeletionUtility(with: self.profile)
-                let timeframe = await deletionUlitily.deleteHistoryFrom(.allTime)
-                await MainActor.run {
-                    self.tabManager.clearAllTabsHistory()
-                }
-                NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
-
-                didComplete?(timeframe)
-            }
-        })
-
+    func setupActions(
+        for alert: UIAlertController,
+        didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
+    ) {
+        addDeleteSomeData(for: alert, didComplete: didComplete)
+        addDeleteEverythingOption(for: alert, didComplete: didComplete)
         let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
         alert.addAction(cancelAction)
-        viewController.present(alert, animated: true)
+    }
+
+    func addDeleteSomeData(
+        for alert: UIAlertController,
+        didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
+    ) {
+
+        typealias DateOptions = HistoryDeletionUtilityDateOptions
+
+        [
+            // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-4187
+//            (String.ClearHistoryMenuOptionTheLastHour, DateOptions.lastHour),
+            (String.ClearHistoryMenuOptionToday, DateOptions.today),
+            (String.ClearHistoryMenuOptionTodayAndYesterday, DateOptions.yesterday)
+        ].forEach { (name, timeRange) in
+
+            let action = UIAlertAction(title: name, style: .destructive) { _ in
+
+                let deletionUlitily = HistoryDeletionUtility(with: self.profile)
+                deletionUlitily.deleteHistoryFrom(timeRange) { dateOption in
+                    didComplete?(dateOption)
+                }
+            }
+
+            alert.addAction(action)
+        }
+    }
+
+    func addDeleteEverythingOption(
+        for alert: UIAlertController,
+        didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
+    ) {
+        alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive) { _ in
+
+            let deletionUlitily = HistoryDeletionUtility(with: self.profile)
+            deletionUlitily.deleteHistoryFrom(.allTime) { dateOption in
+                self.tabManager.clearAllTabsHistory()
+                NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
+                didComplete?(dateOption)
+            }
+        })
     }
 }

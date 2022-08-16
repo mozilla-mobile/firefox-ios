@@ -117,6 +117,14 @@ tabTrayFeature:
     sections-enabled:
       type: json
       description: "This property provides a lookup table of whether or not the given section should be enabled. If the section is enabled, it should be toggleable in the settings screen, and on by default."
+upgrade-onboarding-feature:
+  description: The feature that controls whether to show or not Upgrade onboarding
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    enabled:
+      type: boolean
+      description: "If this is true, we show the Upgrade onboarding screen when the user upgrade the version."
 wallpaper-feature:
   description: This property defines the configuration for the wallpaper feature
   hasExposure: true
