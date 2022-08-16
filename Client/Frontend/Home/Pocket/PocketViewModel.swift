@@ -19,7 +19,6 @@ class PocketViewModel {
 
     var isZeroSearch: Bool
     private var hasSentPocketSectionEvent = false
-    var traitCollection: UITraitCollection?
 
     var onTapTileAction: ((URL) -> Void)?
     var onLongPressTileAction: ((Site, UIView?) -> Void)?
@@ -123,7 +122,6 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
-        self.traitCollection = traitCollection
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(PocketStandardCell.UX.cellHeight)

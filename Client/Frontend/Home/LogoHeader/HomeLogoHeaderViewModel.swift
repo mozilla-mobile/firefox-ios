@@ -13,7 +13,6 @@ class HomeLogoHeaderViewModel {
 
     private let profile: Profile
     var onTapAction: ((UIButton) -> Void)?
-    var traitCollection: UITraitCollection?
 
     init(profile: Profile) {
         self.profile = profile
@@ -32,7 +31,6 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
-        self.traitCollection = traitCollection
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)

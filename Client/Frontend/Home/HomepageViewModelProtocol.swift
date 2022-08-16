@@ -9,9 +9,6 @@ protocol HomepageViewModelProtocol {
 
     var sectionType: HomepageSectionType { get }
 
-    // Trait collection of the section
-    var traitCollection: UITraitCollection? { get }
-
     // Layout section so FirefoxHomeViewController view controller can setup the section
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection
 

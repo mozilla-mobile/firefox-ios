@@ -17,7 +17,6 @@ class TopSitesViewModel {
     var isZeroSearch: Bool
     var tilePressedHandler: ((Site, Bool) -> Void)?
     var tileLongPressedHandler: ((Site, UIView?) -> Void)?
-    var traitCollection: UITraitCollection?
 
     private let profile: Profile
     private var sentImpressionTelemetry = [String: Bool]()

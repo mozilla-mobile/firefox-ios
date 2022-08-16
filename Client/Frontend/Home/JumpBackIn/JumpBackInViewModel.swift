@@ -27,7 +27,6 @@ class JumpBackInViewModel: FeatureFlaggable {
 
     var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
     var mostRecentSyncedTab: JumpBackInSyncedTab?
-    var traitCollection: UITraitCollection?
 
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var jumpBackInDataAdaptor: JumpBackInDataAdaptor
