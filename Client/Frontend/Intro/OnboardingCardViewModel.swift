@@ -5,58 +5,50 @@
 import Foundation
 
 protocol OnboardingCardProtocol {
-    var cardType: IntroViewModel.OnboardingCards { get set }
-    var image: UIImage? { get set }
-    var title: String { get set }
-    var description: String? { get set }
-    var primaryAction: String { get set }
-    var secondaryAction: String? { get set }
-    var a11yIdRoot: String { get set }
+    var cardType: IntroViewModel.InformationCards { get set }
+    var infoModel: OnboardingModelProtocol { get set }
 
     func sendCardViewTelemetry()
     func sendTelemetryButton(isPrimaryAction: Bool)
 }
 
 struct OnboardingCardViewModel: OnboardingCardProtocol {
-    var cardType: IntroViewModel.OnboardingCards
-    var image: UIImage?
-    var title: String
-    var description: String?
-    var primaryAction: String
-    var secondaryAction: String?
-    var a11yIdRoot: String
-    var welcomeCardBoldText: String = .Onboarding.IntroDescriptionPart1
+    var cardType: IntroViewModel.InformationCards
+    var infoModel: OnboardingModelProtocol
 
-    init(cardType: IntroViewModel.OnboardingCards,
-         image: UIImage?,
-         title: String,
-         description: String?,
-         primaryAction: String,
-         secondaryAction: String?,
-         a11yIdRoot: String) {
+    init(cardType: IntroViewModel.InformationCards,
+         infoModel: OnboardingModelProtocol) {
 
         self.cardType = cardType
-        self.image = image
-        self.title = title
-        self.description = description
-        self.primaryAction = primaryAction
-        self.secondaryAction = secondaryAction
-        self.a11yIdRoot = a11yIdRoot
+        self.infoModel = infoModel
     }
 
     func sendCardViewTelemetry() {
         let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: cardType.telemetryValue]
+        let eventObject: TelemetryWrapper.EventObject = cardType.isOnboardingScreen ?
+            . onboardingCardView : .upgradeOnboardingCardView
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
-                                     object: .onboardingCardView,
+                                     object: eventObject,
                                      value: nil,
                                      extras: extra)
     }
 
     func sendTelemetryButton(isPrimaryAction: Bool) {
-        let eventObject = isPrimaryAction ? TelemetryWrapper.EventObject.onboardingPrimaryButton : TelemetryWrapper.EventObject.onboardingSecondaryButton
+        let eventObject: TelemetryWrapper.EventObject
         let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: cardType.telemetryValue]
+
+        switch (isPrimaryAction, cardType.isOnboardingScreen) {
+        case (true, true):
+            eventObject = TelemetryWrapper.EventObject.onboardingPrimaryButton
+        case (false, true):
+            eventObject = TelemetryWrapper.EventObject.onboardingSecondaryButton
+        case (true, false):
+            eventObject = TelemetryWrapper.EventObject.upgradeOnboardingPrimaryButton
+        case (false, false):
+            eventObject = TelemetryWrapper.EventObject.upgradeOnboardingSecondaryButton
+        }
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
