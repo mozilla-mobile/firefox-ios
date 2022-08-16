@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import Storage
 import XCGLogger
+import Glean
 
 private let log = Logger.browserLogger
 
@@ -54,8 +55,10 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
 
     var query: String = "" {
         didSet {
+            let timerid = GleanMetrics.Awesomebar.queryTime.start()
             guard self.profile is BrowserProfile else {
                 assertionFailure("nil profile")
+                GleanMetrics.Awesomebar.queryTime.cancel(timerid)
                 return
             }
 
@@ -63,11 +66,13 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
 
             if query.isEmpty {
                 load(Cursor(status: .success, msg: "Empty query"))
+                GleanMetrics.Awesomebar.queryTime.cancel(timerid)
                 return
             }
 
             guard let deferredHistory = frecentHistory.getSites(matchingSearchQuery: query, limit: 100) as? CancellableDeferred else {
                 assertionFailure("FrecentHistory query should be cancellable")
+                GleanMetrics.Awesomebar.queryTime.cancel(timerid)
                 return
             }
 
@@ -78,6 +83,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
             all([deferredHistory, deferredBookmarks]).uponQueue(.main) { results in
                 defer {
                     self.currentDeferredHistoryQuery = nil
+                    GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
                 }
 
                 guard !deferredHistory.cancelled else { return }
