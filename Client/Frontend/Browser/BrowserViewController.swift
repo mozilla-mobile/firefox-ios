@@ -521,11 +521,11 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
         presentIntroViewController()
         presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
-
-        super.viewDidAppear(animated)
 
         if let toast = self.pendingToast {
             self.pendingToast = nil

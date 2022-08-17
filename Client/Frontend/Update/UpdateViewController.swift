@@ -245,7 +245,7 @@ extension UpdateViewController: OnboardingCardDelegate {
     func primaryAction(_ cardType: IntroViewModel.InformationCards) {
         switch cardType {
         case .updateWelcome:
-            moveToNextPage(cardType: cardType)
+            showNextPage(cardType)
         case .updateSignSync:
             presentSignToSync()
         default:
