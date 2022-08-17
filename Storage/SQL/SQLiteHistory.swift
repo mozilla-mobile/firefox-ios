@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import XCGLogger
+import Glean
 
 private let log = Logger.syncLogger
 public let TopSiteCacheSize: Int32 = 16
@@ -144,6 +145,17 @@ open class SQLiteHistory {
         self.favicons = SQLiteFavicons(db: self.db)
         self.prefs = prefs
         self.notificationCenter = notificationCenter
+
+        // We report the number of visits a user has
+        // this is helpful in determining what the size of users' history visits
+        // is like, to help guide testing the migration to the
+        // application-services implementation and testing the
+        // performance of the awesomebar.
+        self.countVisits { numVisits in
+            if let numVisits = numVisits {
+                GleanMetrics.History.numVisits.set(Int64(numVisits))
+            }
+        }
     }
 
     public func getSites(forURLs urls: [String]) -> Deferred<Maybe<Cursor<Site?>>> {
@@ -156,6 +168,24 @@ open class SQLiteHistory {
 
         let args: Args = []
         return db.runQueryConcurrently(sql, args: args, factory: SQLiteHistory.iconHistoryColumnFactory)
+    }
+
+    public func countVisits(callback: @escaping (Int?) -> Void) {
+        let sql = "SELECT COUNT(*) FROM visits"
+        db.runQueryConcurrently(sql, args: nil, factory: SQLiteHistory.countAllVisitsFactory).uponQueue(.main) { result in
+            guard result.isSuccess else {
+                callback(nil)
+                return
+            }
+            // The result of a count query is only one row
+            if let res = result.successValue?.asArray().first {
+                if let res = res {
+                    callback(res)
+                    return
+                }
+            }
+            callback(nil)
+        }
     }
 }
 
