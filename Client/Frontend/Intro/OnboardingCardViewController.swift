@@ -230,7 +230,7 @@ class OnboardingCardViewController: UIViewController {
 
     private func updateLayout() {
         titleLabel.text = viewModel.infoModel.title
-        descriptionBoldLabel.isHidden = viewModel.cardType != .welcome
+        descriptionBoldLabel.isHidden = !viewModel.shouldShowDescriptionBold
         descriptionBoldLabel.text = .Onboarding.IntroDescriptionPart1
         descriptionLabel.isHidden = viewModel.infoModel.description?.isEmpty ?? true
         descriptionLabel.text = viewModel.infoModel.description

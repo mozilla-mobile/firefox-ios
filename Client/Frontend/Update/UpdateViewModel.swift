@@ -18,6 +18,10 @@ class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         return enabledCards.count == 1
     }
 
+    var isMROnboardingVersion: Bool {
+        return true
+    }
+
     var enabledCards: [IntroViewModel.InformationCards] {
         if hasSyncableAccount {
             return [.updateWelcome]
