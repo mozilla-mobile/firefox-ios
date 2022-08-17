@@ -127,6 +127,13 @@ public struct AccessibilityIdentifiers {
         static let signSyncCard = "SignSyncCard"
         static let closeButton = "CloseButton"
         static let pageControl = "PageControl"
+
+        struct Wallpaper {
+            static let card = "wallpaperCard"
+            static let title = "wallpaperOnboardingTitle"
+            static let description = "wallpaperOnboardingDescription"
+            static let settingsButton = "wallpaperOnboardingSettingsButton"
+        }
     }
 
     struct Upgrade {

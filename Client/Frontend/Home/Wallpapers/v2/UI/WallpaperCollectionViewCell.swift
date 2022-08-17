@@ -77,6 +77,9 @@ private extension WallpaperCollectionViewCell {
         guard let viewModel = viewModel else { return }
         imageView.image = viewModel.image
         selectedView.alpha = viewModel.isSelected ? 1.0 : 0.0
+        accessibilityIdentifier = viewModel.a11yId
+        accessibilityLabel = viewModel.a11yLabel
+        isAccessibilityElement = true
     }
 
     func setupView() {

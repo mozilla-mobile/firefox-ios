@@ -740,6 +740,16 @@ extension String {
             value: "Explore more wallpapers",
             comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper.",
             lastUpdated: .v105)
+        public static let ClassicWallpaper = MZLocalizedString(
+            "Onboarding.Wallpaper.Accessibility.Classic.v105",
+            value: "Classic Wallpaper",
+            comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.",
+            lastUpdated: .v105)
+        public static let LimitedEditionWallpaper = MZLocalizedString(
+            "Onboarding.Wallpaper.Accessibility.LimitedEdition.v105",
+            value: "Limited Edition",
+            comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.",
+            lastUpdated: .v105)
     }
 }
 

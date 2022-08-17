@@ -30,6 +30,7 @@ class BottomSheetViewController: UIViewController {
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: ImageIdentifiers.bottomSheetClose), for: .normal)
         button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
+        button.accessibilityLabel = .CloseButtonTitle
     }
     private lazy var scrollContentView: UIView = .build { _ in }
     private var contentViewBottomConstraint: NSLayoutConstraint!

@@ -27,6 +27,7 @@ class WallpaperSelectorViewController: UIViewController {
         label.text = .Onboarding.WallpaperSelectorTitle
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.title
     }
 
     private lazy var instructionLabel: UILabel = .build { label in
@@ -36,6 +37,7 @@ class WallpaperSelectorViewController: UIViewController {
         label.text = .Onboarding.WallpaperSelectorDescription
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.description
     }
 
     private lazy var collectionView: UICollectionView = {
@@ -58,6 +60,7 @@ class WallpaperSelectorViewController: UIViewController {
                                                                                 size: 16)
         button.titleLabel?.textAlignment = .center
         button.setTitle(.Onboarding.WallpaperSelectorAction, for: .normal)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.settingsButton
     }
 
     // MARK: - Initializers
@@ -112,16 +115,16 @@ class WallpaperSelectorViewController: UIViewController {
 extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.wallpapers.count
+        return viewModel.wallpaperCellModels.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier,
-                                                            for: indexPath) as? WallpaperCollectionViewCell else {
+                                                            for: indexPath) as? WallpaperCollectionViewCell,
+                let cellViewModel = viewModel.wallpaperCellModels[safe: indexPath.row] else {
             return UICollectionViewCell()
         }
-        let cellViewModel = WallpaperCellViewModel(image: viewModel.wallpapers[safe: indexPath.row]?.thumbnail,
-                                                   isSelected: indexPath.row == 0)
+
         cell.viewModel = cellViewModel
         return cell
     }

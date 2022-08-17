@@ -6,5 +6,7 @@ import Foundation
 
 struct WallpaperCellViewModel {
     let image: UIImage?
+    let a11yId: String
+    let a11yLabel: String
     let isSelected: Bool
 }

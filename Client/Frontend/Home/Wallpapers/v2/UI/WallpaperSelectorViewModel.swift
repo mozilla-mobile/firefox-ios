@@ -29,12 +29,22 @@ class WallpaperSelectorViewModel {
                 return 4
             }
         }
+
+        // The maximum number of seasonal items to display
+        var maxNumberOfSeasonalItems: Int {
+            switch self {
+            case .compact:
+                return 3
+            case .regular:
+                return 5
+            }
+        }
     }
 
     private var wallpaperManager: WallpaperManagerInterface
     var openSettingsAction: (() -> Void)
     var sectionLayout: WallpaperSelectorLayout = .compact // We use the compact layout as default
-    var wallpapers: [Wallpaper] = []
+    var wallpaperCellModels: [WallpaperCellViewModel] = []
 
     init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(), openSettingsAction: @escaping (() -> Void)) {
         self.wallpaperManager = wallpaperManager
@@ -50,20 +60,57 @@ class WallpaperSelectorViewModel {
         }
         setupWallpapers()
     }
+}
+private extension WallpaperSelectorViewModel {
 
-    private func setupWallpapers() {
-        wallpapers = []
-        let wallPaperPerCollection = sectionLayout.maxItemsToDisplay / 2
+    func setupWallpapers() {
+        wallpaperCellModels = []
+        let classicCollection = wallpaperManager.availableCollections.first { $0.type == .classic }
+        let seasonalCollection = wallpaperManager.availableCollections.first { $0.type == .limitedEdition }
 
-        wallpaperManager.availableCollections.forEach { collection in
-            guard wallpapers.count < sectionLayout.maxItemsToDisplay else { return }
+        let seasonalCellModels = createCellModels(for: seasonalCollection,
+                                                  maxNumber: sectionLayout.maxNumberOfSeasonalItems)
 
-            var numberOfWallpapers = collection.wallpapers.count > (wallPaperPerCollection - 1) ?
-                wallPaperPerCollection : collection.wallpapers.count
-            if numberOfWallpapers + wallpapers.count > sectionLayout.maxItemsToDisplay {
-                numberOfWallpapers = sectionLayout.maxItemsToDisplay - wallpapers.count
+        let maxNumberOfClassic = sectionLayout.maxItemsToDisplay - seasonalCellModels.count
+        let classicCellModels = createCellModels(for: classicCollection,
+                                                 maxNumber: maxNumberOfClassic)
+
+        wallpaperCellModels.append(contentsOf: classicCellModels)
+        wallpaperCellModels.append(contentsOf: seasonalCellModels)
+    }
+
+    func createCellModels(for collection: WallpaperCollection?, maxNumber: Int) -> [WallpaperCellViewModel] {
+        guard let collection = collection else { return [] }
+
+        var cellModels: [WallpaperCellViewModel] = []
+        for (index, wallpaper) in collection.wallpapers.enumerated() {
+            if cellModels.count < maxNumber {
+                cellModels.append(cellViewModel(for: wallpaper,
+                                                collectionType: collection.type,
+                                                number: index + 1))
             }
-            wallpapers.append(contentsOf: collection.wallpapers[0...(numberOfWallpapers - 1)])
         }
+        return cellModels
+    }
+
+    func cellViewModel(for wallpaper: Wallpaper,
+                       collectionType: WallpaperCollectionType,
+                       number: Int
+    ) -> WallpaperCellViewModel {
+        let a11yId = "\(AccessibilityIdentifiers.Onboarding.Wallpaper.card)_\(number)"
+        var a11yLabel: String
+
+        switch collectionType {
+        case .classic:
+            a11yLabel = "\(String.Onboarding.ClassicWallpaper) \(number)"
+        case .limitedEdition:
+            a11yLabel = "\(String.Onboarding.LimitedEditionWallpaper) \(number)"
+        }
+
+        let cellViewModel = WallpaperCellViewModel(image: wallpaper.thumbnail,
+                                                   a11yId: a11yId,
+                                                   a11yLabel: a11yLabel,
+                                                   isSelected: wallpaperManager.currentWallpaper == wallpaper)
+        return cellViewModel
     }
 }
