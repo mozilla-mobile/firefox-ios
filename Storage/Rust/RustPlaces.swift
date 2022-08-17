@@ -40,6 +40,7 @@ public class RustPlaces: BookmarksHandler {
         do {
             api = try PlacesAPI(path: databasePath)
             isOpen = true
+            notificationCenter.post(name: .RustPlacesOpened, object: nil)
             return nil
         } catch let err as NSError {
             if let placesError = err as? PlacesError {
