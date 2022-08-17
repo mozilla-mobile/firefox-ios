@@ -120,8 +120,15 @@ extension WallpaperCollectionViewCell: Notifiable, NotificationThemeable {
     }
 
     func applyTheme() {
-        contentView.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        borderView.layer.borderColor = UIColor.theme.etpMenu.horizontalLine.cgColor
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            contentView.backgroundColor = UIColor.Photon.DarkGrey30
+            borderView.layer.borderColor = UIColor.Photon.DarkGrey05.cgColor
+        } else {
+            contentView.backgroundColor = UIColor.Photon.LightGrey10
+            borderView.layer.borderColor = UIColor.Photon.LightGrey30.cgColor
+        }
+
         selectedView.layer.borderColor = UIColor.theme.etpMenu.switchAndButtonTint.cgColor
     }
 }

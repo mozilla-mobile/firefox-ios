@@ -23,7 +23,7 @@ class WallpaperManager: WallpaperManagerInterface {
 
     /// Returns the currently selected wallpaper.
     var currentWallpaper: Wallpaper {
-        return Wallpaper(id: "fxDefault", textColour: UIColor.red)
+        return Wallpaper(id: "fxDefault", textColour: UIColor.green)
     }
 
     /// Returns all available collections and their wallpaper data. Availability is
