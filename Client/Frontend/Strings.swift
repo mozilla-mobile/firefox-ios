@@ -264,7 +264,7 @@ extension String {
                 lastUpdated: .v39)
             public static let GroupTitle = MZLocalizedString(
                 "ActivityStream.JumpBackIn.TabGroup.Title",
-                value: "Your search for \"%@\"",
+                value: "Your search for “%@”",
                 comment: "On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did.",
                 lastUpdated: .v39)
             public static let SyncedTabTitle = MZLocalizedString(
@@ -3094,7 +3094,7 @@ extension String {
             lastUpdated: .unknown)
         public static let WhatsNewString = MZLocalizedString(
             "Menu.WhatsNew.Title",
-            value: "What's New",
+            value: "What’s New",
             comment: "The title for the option to view the What's new page.",
             lastUpdated: .unknown)
         public static let CustomizeHomePage = MZLocalizedString(
@@ -4153,7 +4153,7 @@ extension String {
         lastUpdated: .unknown)
     public static let DisplayThemeSectionFooter = MZLocalizedString(
         "Settings.DisplayTheme.SectionFooter",
-        value: "The theme will automatically change based on your display brightness. You can set the threshold where the theme changes. The circle indicates your display's current brightness.",
+        value: "The theme will automatically change based on your display brightness. You can set the threshold where the theme changes. The circle indicates your display’s current brightness.",
         comment: "Display (theme) settings footer describing how the brightness slider works.",
         lastUpdated: .unknown)
     public static let SystemThemeSectionHeader = MZLocalizedString(
