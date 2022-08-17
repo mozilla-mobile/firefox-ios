@@ -424,7 +424,7 @@ features:
         value: {
           "configuration": {
             "status": true,
-            "version": v2,
+            "version": legacy,
           },
           "onboarding-sheet": true
         }
