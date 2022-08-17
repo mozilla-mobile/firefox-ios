@@ -110,7 +110,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             // display wallpaper UI for now (temporary)
             self?.displayWallpaperSelector()
-            self?.dismissKeyboard()
         }
     }
 
@@ -305,6 +304,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
               wallpaperVersion == .v2,
               featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly)
         else { return }
+
+        self.dismissKeyboard()
 
         let viewModel = WallpaperSelectorViewModel(wallpaperManager: WallpaperManager(), openSettingsAction: {
             self.homePanelDidRequestToOpenSettings(at: .wallpaper)
