@@ -77,6 +77,10 @@ features:
         type: Boolean
         default: false
     defaults:
+      - channel: beta
+        value: {
+          "enabled": true
+        }
       - channel: developer
         value: {
           "enabled": true

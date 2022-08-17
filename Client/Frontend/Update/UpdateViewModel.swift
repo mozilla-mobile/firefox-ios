@@ -10,12 +10,16 @@ class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     let profile: Profile
     static let prefsKey: String = PrefsKeys.KeyLastVersionNumber
 
+    lazy var hasSyncableAccount: Bool = {
+        return profile.hasSyncableAccount()
+    }()
+
     var shouldShowSingleCard: Bool {
         return enabledCards.count == 1
     }
 
     var enabledCards: [IntroViewModel.InformationCards] {
-        if profile.hasSyncableAccount() {
+        if hasSyncableAccount {
             return [.updateWelcome]
         }
 

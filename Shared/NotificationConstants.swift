@@ -38,6 +38,8 @@ extension Notification.Name {
     public static let DatabaseWasClosed = Notification.Name("DatabaseWasClosed")
     public static let DatabaseWasReopened = Notification.Name("DatabaseWasReopened")
 
+    public static let RustPlacesOpened = Notification.Name("RustPlacesOpened")
+
     public static let PasscodeDidChange = Notification.Name("PasscodeDidChange")
 
     public static let PasscodeDidCreate = Notification.Name("PasscodeDidCreate")
