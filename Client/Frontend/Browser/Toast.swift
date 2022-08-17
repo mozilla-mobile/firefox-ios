@@ -65,15 +65,17 @@ class Toast: UIView {
         dismissed = true
         superview?.removeGestureRecognizer(gestureRecognizer)
 
-        UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
-            self.animationConstraint?.constant = SimpleToastUX.ToastHeight
-            self.layoutIfNeeded()
-        }) { finished in
-            self.removeFromSuperview()
-            if !buttonPressed {
-                self.completionHandler?(false)
+        UIView.animate(
+            withDuration: SimpleToastUX.ToastAnimationDuration,
+            animations: {
+                self.animationConstraint?.constant = SimpleToastUX.ToastHeight
+                self.layoutIfNeeded()
+            }) { finished in
+                self.removeFromSuperview()
+                if !buttonPressed {
+                    self.completionHandler?(false)
+                }
             }
-        }
     }
 
     @objc func handleTap(_ gestureRecognizer: UIGestureRecognizer) {

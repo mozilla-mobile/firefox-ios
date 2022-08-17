@@ -395,13 +395,15 @@ extension GridTabViewController {
     @objc func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
-        UIView.animate(withDuration: 0.2, animations: {
-            self.collectionView.alpha = 1
-            self.emptyPrivateTabsView.alpha = 1
-        }) { _ in
-            self.webViewContainerBackdrop.alpha = 0
-            self.view.sendSubviewToBack(self.webViewContainerBackdrop)
-        }
+        UIView.animate(
+            withDuration: 0.2,
+            animations: {
+                self.collectionView.alpha = 1
+                self.emptyPrivateTabsView.alpha = 1
+            }) { _ in
+                self.webViewContainerBackdrop.alpha = 0
+                self.view.sendSubviewToBack(self.webViewContainerBackdrop)
+            }
     }
 }
 
@@ -839,12 +841,12 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
         contextualHintViewController.configure(
             anchor: title,
             withArrowDirection: .up,
-            andDelegate: self, presentedUsing: { self.presentCFROnView() },
+            andDelegate: self,
+            presentedUsing: { self.presentCFROnView() },
             andActionForButton: {
                 self.dismissTabTray()
                 self.delegate?.tabTrayDidRequestTabsSettings()
-            },
-            andShouldStartTimerRightAway: false
+            }, andShouldStartTimerRightAway: false
         )
     }
 }
