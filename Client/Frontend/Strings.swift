@@ -193,7 +193,7 @@ extension String {
             public static let SearchBarTopPlacement = MZLocalizedString(
                 "ContextualHints.Toolbar.Top.Description.v106",
                 tableName: "ToolbarLocation",
-                value: "Move the toolbar to the bottom in settings if that's more your style.",
+                value: "Move the toolbar to the bottom in settings if that’s more your style.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. ",
                 lastUpdated: .v106)
         }
@@ -264,7 +264,7 @@ extension String {
                 lastUpdated: .v39)
             public static let GroupTitle = MZLocalizedString(
                 "ActivityStream.JumpBackIn.TabGroup.Title",
-                value: "Your search for \"%@\"",
+                value: "Your search for “%@”",
                 comment: "On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did.",
                 lastUpdated: .v39)
             public static let SyncedTabTitle = MZLocalizedString(
@@ -734,12 +734,12 @@ extension String {
         public static let WelcomeTitle = MZLocalizedString(
             "Upgrade.Welcome.Title.v106",
             value: "Welcome to a more personal internet",
-            comment: "Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades firefox version",
+            comment: "Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version.",
             lastUpdated: .v106)
         public static let WelcomeDescription = MZLocalizedString(
             "Upgrade.Welcome.Description.v106",
             value: "New colors. New convenience. Same commitment to people over profits.",
-            comment: "Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades firefox version",
+            comment: "Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version.",
             lastUpdated: .v106)
         public static let WelcomeAction = MZLocalizedString(
             "Upgrade.Welcome.Action.v106",
@@ -747,14 +747,14 @@ extension String {
             comment: "Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade.",
             lastUpdated: .v106)
         public static let SyncSignTitle = MZLocalizedString(
-            "Upgrade.SyncSign.Description.v106",
+            "Upgrade.SyncSign.Title.v106",
             value: "Switching screens is easier than ever",
-            comment: "Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades firefox version",
+            comment: "Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.",
             lastUpdated: .v106)
         public static let SyncSignDescription = MZLocalizedString(
             "Upgrade.SyncSign.Description.v106",
             value: "Pick up where you left off with tabs from other devices now on your homepage.",
-            comment: "Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades firefox version",
+            comment: "Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.",
             lastUpdated: .v106)
         public static let SyncAction = MZLocalizedString(
             "Upgrade.SyncSign.Action.v106",
@@ -3094,7 +3094,7 @@ extension String {
             lastUpdated: .unknown)
         public static let WhatsNewString = MZLocalizedString(
             "Menu.WhatsNew.Title",
-            value: "What's New",
+            value: "What’s New",
             comment: "The title for the option to view the What's new page.",
             lastUpdated: .unknown)
         public static let CustomizeHomePage = MZLocalizedString(
@@ -4153,7 +4153,7 @@ extension String {
         lastUpdated: .unknown)
     public static let DisplayThemeSectionFooter = MZLocalizedString(
         "Settings.DisplayTheme.SectionFooter",
-        value: "The theme will automatically change based on your display brightness. You can set the threshold where the theme changes. The circle indicates your display's current brightness.",
+        value: "The theme will automatically change based on your display brightness. You can set the threshold where the theme changes. The circle indicates your display’s current brightness.",
         comment: "Display (theme) settings footer describing how the brightness slider works.",
         lastUpdated: .unknown)
     public static let SystemThemeSectionHeader = MZLocalizedString(
