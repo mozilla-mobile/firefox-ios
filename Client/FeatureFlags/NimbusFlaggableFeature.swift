@@ -87,10 +87,10 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .contextualHintForJumpBackIn,
                 .contextualHintForJumpBackInSyncedTab,
                 .contextualHintForToolbar,
-                .reportSiteIssue,
-                .shakeToRestore,
-                .searchHighlights,
                 .jumpBackInSyncedTab,
+                .reportSiteIssue,
+                .searchHighlights,
+                .shakeToRestore,
                 .wallpaperOnboardingSheet,
                 .wallpaperVersion,
                 .upgradeOnboarding:
