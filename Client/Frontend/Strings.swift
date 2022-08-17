@@ -193,7 +193,7 @@ extension String {
             public static let SearchBarTopPlacement = MZLocalizedString(
                 "ContextualHints.Toolbar.Top.Description.v106",
                 tableName: "ToolbarLocation",
-                value: "Move the toolbar to the bottom in settings if that's more your style.",
+                value: "Move the toolbar to the bottom in settings if that’s more your style.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. ",
                 lastUpdated: .v106)
         }
@@ -734,12 +734,12 @@ extension String {
         public static let WelcomeTitle = MZLocalizedString(
             "Upgrade.Welcome.Title.v106",
             value: "Welcome to a more personal internet",
-            comment: "Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades firefox version",
+            comment: "Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version.",
             lastUpdated: .v106)
         public static let WelcomeDescription = MZLocalizedString(
             "Upgrade.Welcome.Description.v106",
             value: "New colors. New convenience. Same commitment to people over profits.",
-            comment: "Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades firefox version",
+            comment: "Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version.",
             lastUpdated: .v106)
         public static let WelcomeAction = MZLocalizedString(
             "Upgrade.Welcome.Action.v106",
@@ -747,14 +747,14 @@ extension String {
             comment: "Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade.",
             lastUpdated: .v106)
         public static let SyncSignTitle = MZLocalizedString(
-            "Upgrade.SyncSign.Description.v106",
+            "Upgrade.SyncSign.Title.v106",
             value: "Switching screens is easier than ever",
-            comment: "Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades firefox version",
+            comment: "Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.",
             lastUpdated: .v106)
         public static let SyncSignDescription = MZLocalizedString(
             "Upgrade.SyncSign.Description.v106",
             value: "Pick up where you left off with tabs from other devices now on your homepage.",
-            comment: "Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades firefox version",
+            comment: "Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.",
             lastUpdated: .v106)
         public static let SyncAction = MZLocalizedString(
             "Upgrade.SyncSign.Action.v106",
