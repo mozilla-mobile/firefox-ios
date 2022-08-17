@@ -335,7 +335,7 @@ private extension HistoryDeletionUtilityTests {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 30, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func emptyDB(

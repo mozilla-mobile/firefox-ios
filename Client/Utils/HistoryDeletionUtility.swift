@@ -44,15 +44,13 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
     ) {
 
         deleteWKWebsiteDataSince(dateOption, for: WKWebsiteDataStore.allWebsiteDataTypes())
-        // Delete data in parallel
-        deleteProfileMetadataSince(dateOption) { _ in
-
-        }
+        // For efficiency, we'll delete data in parallel, which is why closures are
+        // not encloning each subsequent call
         deleteProfileHistorySince(dateOption) { result in
             self.clearRecentlyClosedTabs(using: dateOption)
             completion(dateOption)
         }
-
+        deleteProfileMetadataSince(dateOption)
     }
 
     // MARK: URL based deletion functions
@@ -103,6 +101,7 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
             profile.history
                 .clearHistory()
                 .uponQueue(.global(qos: .userInteractive)) { result in
+                    completion(result.isSuccess)
                 }
 
         default:
@@ -116,20 +115,12 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
         }
     }
 
-    private func deleteProfileMetadataSince(
-        _ dateOption: HistoryDeletionUtilityDateOptions,
-        completion: @escaping (Bool?) -> Void
-    ) {
+    private func deleteProfileMetadataSince(_ dateOption: HistoryDeletionUtilityDateOptions) {
 
         guard let date = dateFor(dateOption) else { return }
         let dateInMilliseconds = date.toMillisecondsSince1970()
 
-        profile.places.deleteHistoryMetadata(since: dateInMilliseconds) { result in
-            completion(result)
-        }
-//            .deleteHistoryMetadata(since: dateInMilliseconds)
-//            .uponQueue(.global(qos: .userInteractive)) { result in
-//            }
+        profile.places.deleteHistoryMetadata(since: dateInMilliseconds) { _ in }
     }
 
     private func clearRecentlyClosedTabs(using dateOption: HistoryDeletionUtilityDateOptions) {
