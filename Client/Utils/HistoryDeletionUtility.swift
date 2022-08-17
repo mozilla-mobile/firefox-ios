@@ -44,11 +44,13 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
     ) {
 
         deleteWKWebsiteDataSince(dateOption, for: WKWebsiteDataStore.allWebsiteDataTypes())
+        // Delete data in parallel
+        deleteProfileMetadataSince(dateOption) { _ in
+
+        }
         deleteProfileHistorySince(dateOption) { result in
-            self.deleteProfileMetadataSince(dateOption) { result in
-                self.clearRecentlyClosedTabs(using: dateOption)
-                completion(dateOption)
-            }
+            self.clearRecentlyClosedTabs(using: dateOption)
+            completion(dateOption)
         }
 
     }
@@ -122,11 +124,12 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
         guard let date = dateFor(dateOption) else { return }
         let dateInMilliseconds = date.toMillisecondsSince1970()
 
-        profile.places
-            .deleteHistoryMetadata(since: dateInMilliseconds)
-            .uponQueue(.global(qos: .userInteractive)) { result in
-                completion(result.isSuccess)
-            }
+        profile.places.deleteHistoryMetadata(since: dateInMilliseconds) { result in
+            completion(result)
+        }
+//            .deleteHistoryMetadata(since: dateInMilliseconds)
+//            .uponQueue(.global(qos: .userInteractive)) { result in
+//            }
     }
 
     private func clearRecentlyClosedTabs(using dateOption: HistoryDeletionUtilityDateOptions) {
