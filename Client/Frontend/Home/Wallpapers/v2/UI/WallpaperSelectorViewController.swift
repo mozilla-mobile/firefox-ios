@@ -7,8 +7,8 @@ import UIKit
 class WallpaperSelectorViewController: UIViewController {
 
     private struct UX {
-        static let cardWidth: CGFloat = 97
-        static let cardHeight: CGFloat = 88
+        static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
+        static let cardHeight: CGFloat = UIDevice().isTinyFormFactor ? 80 : 88
         static let inset: CGFloat = 8
         static let cardShadowHeight: CGFloat = 14
     }
