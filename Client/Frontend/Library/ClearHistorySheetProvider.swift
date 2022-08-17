@@ -25,7 +25,8 @@ class ClearHistorySheetProvider {
     ) {
 
         let alert = createAlertAndConfigureWithArrowIfNeeded(from: viewController)
-        setupActions(for: alert)
+        setupActions(for: alert, didComplete: didComplete)
+
         viewController.present(alert, animated: true)
     }
 
@@ -52,14 +53,13 @@ class ClearHistorySheetProvider {
         for alert: UIAlertController,
         didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
     ) {
-        addDeleteSomeData(for: alert, didComplete: didComplete)
-        addDeleteEverythingOption(for: alert, didComplete: didComplete)
-        let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
-        alert.addAction(cancelAction)
+        addDeleteSomeData(to: alert, didComplete: didComplete)
+        addDeleteEverythingOption(to: alert, didComplete: didComplete)
+        addCancelAction(to: alert)
     }
 
     func addDeleteSomeData(
-        for alert: UIAlertController,
+        to alert: UIAlertController,
         didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
     ) {
 
@@ -85,7 +85,7 @@ class ClearHistorySheetProvider {
     }
 
     func addDeleteEverythingOption(
-        for alert: UIAlertController,
+        to alert: UIAlertController,
         didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
     ) {
         alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive) { _ in
@@ -97,5 +97,10 @@ class ClearHistorySheetProvider {
                 didComplete?(dateOption)
             }
         })
+    }
+
+    func addCancelAction(to alert: UIAlertController) {
+        let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
+        alert.addAction(cancelAction)
     }
 }
