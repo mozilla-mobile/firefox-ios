@@ -37,7 +37,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.backgroundImage
     }
 
-    internal lazy var closeButton: UIButton = .build { button in
+    private lazy var closeButton: UIButton = .build { button in
         let closeImage = UIImage(named: ImageIdentifiers.upgradeCloseButton)
         button.setImage(closeImage, for: .normal)
         button.tintColor = .secondaryLabel
@@ -103,7 +103,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
 
-            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
+            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])

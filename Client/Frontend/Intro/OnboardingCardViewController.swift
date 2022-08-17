@@ -58,7 +58,7 @@ class OnboardingCardViewController: UIViewController {
         stack.axis = .vertical
     }
 
-    private lazy var imageView: UIImageView = .build { imageView in
+    lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)ImageView"
     }
@@ -221,7 +221,7 @@ class OnboardingCardViewController: UIViewController {
             buttonStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.stackViewPadding),
             buttonStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewPadding),
 
-            imageView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.imageViewMaxHeight).priority(.defaultLow)
+            imageView.heightAnchor.constraint(equalToConstant: UX.imageViewMaxHeight)
         ])
 
         contentStackView.spacing = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacing : UX.stackViewSpacing
@@ -234,11 +234,22 @@ class OnboardingCardViewController: UIViewController {
         descriptionBoldLabel.text = .Onboarding.IntroDescriptionPart1
         descriptionLabel.isHidden = viewModel.infoModel.description?.isEmpty ?? true
         descriptionLabel.text = viewModel.infoModel.description
-        secondaryButton.isHidden = viewModel.infoModel.secondaryAction?.isEmpty ?? true
 
         imageView.image = viewModel.infoModel.image
         primaryButton.setTitle(viewModel.infoModel.primaryAction, for: .normal)
-        secondaryButton.setTitle(viewModel.infoModel.secondaryAction, for: .normal)
+        handleSecondaryButton()
+    }
+
+    private func handleSecondaryButton() {
+        // To keep Title, Description aligned between cards we don't hide the button
+        // we clear the background and make disabled
+        guard let buttonTitle = viewModel.infoModel.secondaryAction else {
+            secondaryButton.isUserInteractionEnabled = false
+            secondaryButton.backgroundColor = .clear
+            return
+        }
+
+        secondaryButton.setTitle(buttonTitle, for: .normal)
     }
 
     private func applyTheme() {

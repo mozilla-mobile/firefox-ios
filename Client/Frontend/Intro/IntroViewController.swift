@@ -19,6 +19,11 @@ class IntroViewController: UIViewController {
     }
 
     // MARK: - Var related to onboarding
+    private lazy var backgroundImageView: UIImageView = .build { imageView in
+        imageView.image = UIImage(named: ImageIdentifiers.upgradeBackground)
+        imageView.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.backgroundImage
+    }
+
     private lazy var closeButton: UIButton = .build { button in
         let closeImage = UIImage(named: ImageIdentifiers.closeLargeButton)
         button.setImage(closeImage, for: .normal)
@@ -91,6 +96,7 @@ class IntroViewController: UIViewController {
     }
 
     private func setupLayout() {
+        view.addSubviews(backgroundImageView)
         addChild(pageController)
         view.addSubview(pageController.view)
         pageController.didMove(toParent: self)
@@ -105,7 +111,11 @@ class IntroViewController: UIViewController {
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonPadding),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonPadding),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
+
+            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 

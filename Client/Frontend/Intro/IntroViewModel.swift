@@ -83,7 +83,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
                                        secondaryAction: .WhatsNew.RecentButtonTitle,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
         case (.signSync, true):
-            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSync),
+            return OnboardingInfoModel(image: nil,
                                        title: .Onboarding.IntroSyncTitle,
                                        description: .Onboarding.IntroSyncDescription,
                                        primaryAction: .IntroSignInButtonTitle,
