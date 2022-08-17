@@ -20,7 +20,8 @@ enum JumpBackInSectionLayout: Equatable {
     var widthDimension: NSCollectionLayoutDimension {
         switch self {
         case .compactJumpBackIn, .compactSyncedTab, .compactJumpBackInAndSyncedTab:
-            return .fractionalWidth(1)
+            // When the trailing inset will be handled by the section layout, this can be set to .fractionalWidth(1)
+            return UIDevice.current.userInterfaceIdiom == .pad ? .fractionalWidth(0.95) : .fractionalWidth(0.93)
         case .regular, .regularWithSyncedTab:
             return UIDevice.current.userInterfaceIdiom == .pad ?
                 .fractionalWidth(7.66/24) : .fractionalWidth(7.8/16) // iPad or iPhone in landscape
