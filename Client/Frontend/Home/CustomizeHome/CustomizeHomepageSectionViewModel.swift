@@ -36,13 +36,17 @@ extension CustomizeHomepageSectionViewModel: HomepageViewModelProtocol {
         return section
     }
 
-    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
+    func numberOfItemsInSection() -> Int {
         return 1
     }
 
     var isEnabled: Bool {
         return true
     }
+
+    func refreshData(for traitCollection: UITraitCollection,
+                     isPortrait: Bool = UIWindow.isPortrait,
+                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
 }
 
 // MARK: FxHomeSectionHandler

@@ -2735,6 +2735,26 @@ awesomebar:
     data_sensitivity:
       - interaction
     expires: "2022-12-01"
+  query_time:
+    type: timing_distribution
+    time_unit: millisecond
+    description: >
+      The time a query against awesomebar took.
+      This helps us understand the performance of the awesomebar
+      in querying history and bookmarks.
+      The query time will also help us verify that we are
+      **not** introducing any performance regressions.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3261
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/11602
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - sync-core@mozilla.com
+      - teshaq@mozilla.com
+    expires: never
+
 
 # Device specific metrics
 

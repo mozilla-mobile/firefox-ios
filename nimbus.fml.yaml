@@ -77,6 +77,10 @@ features:
         type: Boolean
         default: false
     defaults:
+      - channel: beta
+        value: {
+          "enabled": true
+        }
       - channel: developer
         value: {
           "enabled": true
@@ -268,6 +272,7 @@ features:
         default: 
         {
           "toolbar-contextual-hint": true,
+          "jump-back-in-contextual-hint": true,
           "jump-back-in-synced-tab-contextual-hint": false
         }
     defaults:
@@ -275,6 +280,7 @@ features:
         value: {
           "features-enabled": {
             "toolbar-contextual-hint": true,
+            "jump-back-in-contextual-hint": true,
             "jump-back-in-synced-tab-contextual-hint": true
           }
         }
@@ -282,6 +288,7 @@ features:
         value: {
           "features-enabled": {
             "toolbar-contextual-hint": true,
+            "jump-back-in-contextual-hint": true,
             "jump-back-in-synced-tab-contextual-hint": true
           }
         }
@@ -621,6 +628,8 @@ types:
       variants:
         toolbar-contextual-hint:
           description: The contextual hint bubble that appears to indicate that the toolbar location is adjustable.
+        jump-back-in-contextual-hint:
+          description: The contextual hint bubble that appears to indicate new additions to the firefox homepage, like the Jump Back In section.
         jump-back-in-synced-tab-contextual-hint:
           description: The contextual hint bubble that appears to indicate a synced tab has appeared within the Jump Back In section.
 
