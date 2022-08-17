@@ -7,10 +7,9 @@ import UIKit
 class BottomSheetViewController: UIViewController {
 
     private struct UX {
-        static let defaultHeight: CGFloat = 200
         static let minVisibleTopSpace: CGFloat = 40
         static let closeButtonWidthHeight: CGFloat = 30
-        static let topSpace: CGFloat = 16
+        static let closeButtonTopTrailingSpace: CGFloat = 16
     }
 
     internal var notificationCenter: NotificationProtocol
@@ -142,9 +141,9 @@ private extension BottomSheetViewController {
             contentView.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
 
             closeButton.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                             constant: BottomSheetViewController.UX.topSpace),
+                                             constant: BottomSheetViewController.UX.closeButtonTopTrailingSpace),
             closeButton.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor,
-                                                  constant: -BottomSheetViewController.UX.topSpace),
+                                                  constant: -BottomSheetViewController.UX.closeButtonTopTrailingSpace),
             closeButton.widthAnchor.constraint(equalToConstant: BottomSheetViewController.UX.closeButtonWidthHeight),
             closeButton.heightAnchor.constraint(equalToConstant: BottomSheetViewController.UX.closeButtonWidthHeight),
 

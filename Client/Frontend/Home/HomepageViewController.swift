@@ -298,7 +298,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
     }
 
-    // WT
     private func displayWallpaperSelector() {
         guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
               wallpaperVersion == .v2,

@@ -747,7 +747,7 @@ extension String {
             lastUpdated: .v105)
         public static let LimitedEditionWallpaper = MZLocalizedString(
             "Onboarding.Wallpaper.Accessibility.LimitedEdition.v105",
-            value: "Limited Edition",
+            value: "Limited Edition Wallpaper",
             comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.",
             lastUpdated: .v105)
     }
