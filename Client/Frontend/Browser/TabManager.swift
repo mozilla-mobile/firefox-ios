@@ -176,7 +176,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
         self.profile = profile
         self.navDelegate = TabManagerNavDelegate()
-        self.tabEventHandlers = TabEventHandlers.create(with: profile.prefs)
+        self.tabEventHandlers = TabEventHandlers.create(with: profile)
 
         self.store = TabManagerStore(imageStore: imageStore, prefs: profile.prefs)
         super.init()
