@@ -184,6 +184,7 @@ class HomepageViewModel: FeatureFlaggable {
     }
 
     func refreshData(for traitCollection: UITraitCollection) {
+        updateEnabledSections()
         childViewModels.forEach {
             $0.refreshData(for: traitCollection)
         }
