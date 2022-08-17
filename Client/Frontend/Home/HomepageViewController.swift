@@ -107,8 +107,11 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        // display wallpaper UI for now (temporary)
-        displayWallpaperSelector()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            // display wallpaper UI for now (temporary)
+            self?.displayWallpaperSelector()
+            self?.dismissKeyboard()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
