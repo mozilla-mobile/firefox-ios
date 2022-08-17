@@ -37,7 +37,7 @@ class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
                                            pocketSponsoredAPI: pocketSponsoredAPI)
         self.dataCompletion = dataCompletion
 
-        setupNotifications(forObserver: self, observing: [UIApplication.willEnterForegroundNotification])
+        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification])
 
         Task {
             await updatePocketSites()
