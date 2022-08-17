@@ -92,7 +92,9 @@ class ClearHistorySheetProvider {
 
             let deletionUlitily = HistoryDeletionUtility(with: self.profile)
             deletionUlitily.deleteHistoryFrom(.allTime) { dateOption in
-                self.tabManager.clearAllTabsHistory()
+                DispatchQueue.main.async {
+                    self.tabManager.clearAllTabsHistory()
+                }
                 NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
                 didComplete?(dateOption)
             }

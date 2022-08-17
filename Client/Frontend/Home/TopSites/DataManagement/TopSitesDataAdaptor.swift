@@ -71,7 +71,6 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         setupNotifications(forObserver: self,
                            observing: [.FirefoxAccountChanged,
                                        .ProfileDidFinishSyncing,
-                                       .PrivateDataClearedHistory,
                                        .TopSitesUpdated])
 
         loadTopSitesData()
@@ -285,7 +284,6 @@ extension TopSitesDataAdaptorImplementation: Notifiable, Loggable {
         switch notification.name {
         case .ProfileDidFinishSyncing,
                 .FirefoxAccountChanged,
-                .PrivateDataClearedHistory,
                 .TopSitesUpdated:
             topSiteHistoryManager.refreshIfNeeded(forceRefresh: true)
         default:
