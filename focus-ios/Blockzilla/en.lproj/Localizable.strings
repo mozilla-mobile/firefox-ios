@@ -284,7 +284,7 @@
 "Save" = "Save";
 
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
-"SearchEngine.addEngineError" = "That didn't work. Try replacing the search term with this: %s.";
+"SearchEngine.addEngineError" = "That didn’t work. Try replacing the search term with this: %s.";
 
 /* Label for disable option on search suggestions prompt */
 "SearchSuggestions.promptDisable" = "No";
