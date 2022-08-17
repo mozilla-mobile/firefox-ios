@@ -3,8 +3,14 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import SnapKit
 
 extension UIView {
+
+    var safeArea: ConstraintBasicAttributesDSL {
+        return self.safeAreaLayoutGuide.snp
+    }
+
     /**
      * Takes a screenshot of the view with the given size.
      */
@@ -67,7 +73,6 @@ extension UIView {
         maskLayer.path = maskPath.cgPath
         layer.mask = maskLayer
     }
-
     /// Makes the edge constraints (`topAnchor`, `bottomAnchor`, `leadingAnchor`, `trailingAnchor`) of a view equaled to the edge constraints of another view.
     /// - Parameters:
     ///   - view: The view that we are constraining the current view's edges to.
@@ -82,7 +87,6 @@ extension UIView {
             trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding)
         ])
     }
-
     /// Makes the center x and y anchors of a view equaled to the center x and y anchors of another view.
     /// - Parameter view: The view that we're constraining the current view's center anchors to.
     /// For example : `currentView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true`

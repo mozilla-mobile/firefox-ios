@@ -787,7 +787,7 @@
 "Menu.TrackingProtectionWhitelistRemove.Title" = "Enable for this site";
 
 /* The title for the option to view the What's new page. */
-"Menu.WhatsNew.Title" = "What's New";
+"Menu.WhatsNew.Title" = "What’s New";
 
 /* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
 "Navigation Toolbar" = "Navigation Toolbar";
@@ -1136,7 +1136,7 @@
 "Settings.DisplayTheme.OptionLight" = "Light";
 
 /* Display (theme) settings footer describing how the brightness slider works. */
-"Settings.DisplayTheme.SectionFooter" = "The theme will automatically change based on your display brightness. You can set the threshold where the theme changes. The circle indicates your display's current brightness.";
+"Settings.DisplayTheme.SectionFooter" = "The theme will automatically change based on your display brightness. You can set the threshold where the theme changes. The circle indicates your display’s current brightness.";
 
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "Switch Mode";

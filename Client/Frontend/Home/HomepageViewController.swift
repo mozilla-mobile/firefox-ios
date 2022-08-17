@@ -221,6 +221,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
 
     func recordHomepageDisappeared() {
+        contextualHintViewController.stopTimer()
         viewModel.recordViewDisappeared()
     }
 
