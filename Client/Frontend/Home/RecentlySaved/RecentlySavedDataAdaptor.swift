@@ -42,7 +42,10 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
         self.readingList = readingList
         self.bookmarksHandler = bookmarksHandler
 
-        setupNotifications(forObserver: self, observing: [.ReadingListUpdated, .BookmarksUpdated])
+        setupNotifications(forObserver: self,
+                           observing: [.ReadingListUpdated,
+                                       .BookmarksUpdated,
+                                       .RustPlacesOpened])
 
         getRecentBookmarks()
         getReadingLists()
@@ -119,7 +122,7 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
         switch notification.name {
         case .ReadingListUpdated:
             getReadingLists()
-        case .BookmarksUpdated:
+        case .BookmarksUpdated, .RustPlacesOpened:
             getRecentBookmarks()
         default: break
         }
