@@ -44,17 +44,19 @@ class Toast: UIView {
             NSLayoutConstraint.activate(updateConstraintsOn(self))
             self.layoutIfNeeded()
 
-            UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
-                self.animationConstraint?.constant = 0
-                self.layoutIfNeeded()
-            }) { finished in
-                if let duration = duration {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                        self.didDismissWithoutTapHandler?()
-                        self.dismiss(false)
+            UIView.animate(
+                withDuration: SimpleToastUX.ToastAnimationDuration,
+                animations: {
+                    self.animationConstraint?.constant = 0
+                    self.layoutIfNeeded()
+                }) { finished in
+                    if let duration = duration {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                            self.didDismissWithoutTapHandler?()
+                            self.dismiss(false)
+                        }
                     }
                 }
-            }
         }
     }
 

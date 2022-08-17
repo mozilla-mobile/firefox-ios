@@ -52,8 +52,11 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: .SettingsSearchDoneButton, style: .done, target: self, action: #selector(self.dismissAnimated))
         }
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: .SettingsSearchEditButton, style: .plain, target: self,
-                                                                 action: #selector(beginEditing))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: .SettingsSearchEditButton,
+            style: .plain,
+            target: self,
+            action: #selector(beginEditing))
     }
 
     override func viewWillAppear(_ animated: Bool) {

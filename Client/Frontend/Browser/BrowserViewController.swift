@@ -363,16 +363,20 @@ class BrowserViewController: UIViewController {
     @objc func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
-        UIView.animate(withDuration: 0.2, delay: 0, options: UIView.AnimationOptions(), animations: {
-            self.webViewContainer.alpha = 1
-            self.urlBar.locationContainer.alpha = 1
-            self.topTabsViewController?.switchForegroundStatus(isInForeground: true)
-            self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
-            self.presentedViewController?.view.alpha = 1
-        }, completion: { _ in
-            self.webViewContainerBackdrop.alpha = 0
-            self.view.sendSubviewToBack(self.webViewContainerBackdrop)
-        })
+        UIView.animate(
+            withDuration: 0.2,
+            delay: 0,
+            options: UIView.AnimationOptions(),
+            animations: {
+                self.webViewContainer.alpha = 1
+                self.urlBar.locationContainer.alpha = 1
+                self.topTabsViewController?.switchForegroundStatus(isInForeground: true)
+                self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
+                self.presentedViewController?.view.alpha = 1
+            }, completion: { _ in
+                self.webViewContainerBackdrop.alpha = 0
+                self.view.sendSubviewToBack(self.webViewContainerBackdrop)
+            })
 
         // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
         scrollController.showToolbars(animated: false)
@@ -449,22 +453,46 @@ class BrowserViewController: UIViewController {
     }
 
     private func setupNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification),
-                                               name: UIApplication.willResignActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification),
-                                               name: UIApplication.didBecomeActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackgroundNotification),
-                                               name: UIApplication.didEnterBackgroundNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appMenuBadgeUpdate),
-                                               name: .FirefoxAccountStateChange, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(displayThemeChanged),
-                                               name: .DisplayThemeChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(searchBarPositionDidChange),
-                                               name: .SearchBarPositionDidChange, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didTapUndoCloseAllTabToast),
-                                               name: .DidTapUndoCloseAllTabToast, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(homePanelDidPresentContextualHintWith),
-                                               name: .DidPresentContextualHint, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appWillResignActiveNotification),
+            name: UIApplication.willResignActiveNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appDidBecomeActiveNotification),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appDidEnterBackgroundNotification),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appMenuBadgeUpdate),
+            name: .FirefoxAccountStateChange,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(displayThemeChanged),
+            name: .DisplayThemeChanged,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(searchBarPositionDidChange),
+            name: .SearchBarPositionDidChange,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didTapUndoCloseAllTabToast),
+            name: .DidTapUndoCloseAllTabToast,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(homePanelDidPresentContextualHintWith),
+            name: .DidPresentContextualHint,
+            object: nil)
     }
 
     func addSubviews() {
@@ -890,13 +918,15 @@ class BrowserViewController: UIViewController {
         homepageViewController?.reloadView()
         NotificationCenter.default.post(name: .ShowHomepage, object: nil)
 
-        UIView.animate(withDuration: 0.2, animations: { () -> Void in
-            self.homepageViewController?.view.alpha = 1
-        }, completion: { finished in
-            guard finished else { return }
-            self.webViewContainer.accessibilityElementsHidden = true
-            UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
-        })
+        UIView.animate(
+            withDuration: 0.2,
+            animations: { () -> Void in
+                self.homepageViewController?.view.alpha = 1
+            }, completion: { finished in
+                guard finished else { return }
+                self.webViewContainer.accessibilityElementsHidden = true
+                UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
+            })
 
         // Make sure reload button is hidden on homepage
         urlBar.locationView.reloadButton.reloadButtonState = .disabled
@@ -928,18 +958,22 @@ class BrowserViewController: UIViewController {
         guard self.homepageViewController?.view.alpha != 0 else { return }
 
         homepageViewController.recordHomepageDisappeared()
-        UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
-            homepageViewController.view.alpha = 0
-        }, completion: { _ in
-            self.webViewContainer.accessibilityElementsHidden = false
-            UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
+        UIView.animate(
+            withDuration: 0.2,
+            delay: 0,
+            options: .beginFromCurrentState,
+            animations: { () -> Void in
+                homepageViewController.view.alpha = 0
+            }, completion: { _ in
+                self.webViewContainer.accessibilityElementsHidden = false
+                UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
 
-            // Refresh the reading view toolbar since the article record may have changed
-            if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode, readerMode.state == .active {
-                self.showReaderModeBar(animated: false)
-            }
-            completion?()
-        })
+                // Refresh the reading view toolbar since the article record may have changed
+                if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode, readerMode.state == .active {
+                    self.showReaderModeBar(animated: false)
+                }
+                completion?()
+            })
 
         // Make sure reload button is working after leaving homepage
         urlBar.locationView.reloadButton.reloadButtonState = .reload
@@ -1194,9 +1228,11 @@ class BrowserViewController: UIViewController {
         guard let kp = keyPath,
               let path = KVOConstants(rawValue: kp)
         else {
-            SentryIntegration.shared.send(message: "BVC observeValue webpage unhandled KVO", tag: .general,
-                                          severity: .error,
-                                          description: "Unhandled KVO key: \(keyPath ?? "nil")")
+            SentryIntegration.shared.send(
+                message: "BVC observeValue webpage unhandled KVO",
+                tag: .general,
+                severity: .error,
+                description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }
 
@@ -1287,8 +1323,10 @@ class BrowserViewController: UIViewController {
         if tab == tabManager.selectedTab, let displayUrl = tab.url?.displayURL, urlBar.currentURL != displayUrl {
             let searchData = tab.metadataManager?.tabGroupData ?? TabGroupData()
             searchData.tabAssociatedNextUrl = displayUrl.absoluteString
-            tab.metadataManager?.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl,
-                                                         searchData: searchData, isPrivate: tab.isPrivate)
+            tab.metadataManager?.updateTimerAndObserving(
+                state: .tabNavigatedToDifferentUrl,
+                searchData: searchData,
+                isPrivate: tab.isPrivate)
         }
         urlBar.currentURL = tab.url?.displayURL
         urlBar.locationView.tabDidChangeContentBlocking(tab)
@@ -2437,20 +2475,26 @@ extension BrowserViewController: KeyboardHelperDelegate {
         keyboardState = state
         updateViewConstraints()
 
-        UIView.animate(withDuration: state.animationDuration, delay: 0,
-                       options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))], animations: {
-            self.bottomContentStackView.layoutIfNeeded()
-        })
+        UIView.animate(
+            withDuration: state.animationDuration,
+            delay: 0,
+            options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
+            animations: {
+                self.bottomContentStackView.layoutIfNeeded()
+            })
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         keyboardState = nil
         updateViewConstraints()
 
-        UIView.animate(withDuration: state.animationDuration, delay: 0,
-                       options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))], animations: {
-            self.bottomContentStackView.layoutIfNeeded()
-        })
+        UIView.animate(
+            withDuration: state.animationDuration,
+            delay: 0,
+            options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
+            animations: {
+                self.bottomContentStackView.layoutIfNeeded()
+            })
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {

@@ -29,8 +29,11 @@ extension UILabel {
 
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
         let attrs = [NSAttributedString.Key.font: label.font as Any]
-        let boundingRect = NSString(string: text).boundingRect(with: size,
-            options: .usesLineFragmentOrigin, attributes: attrs, context: nil)
+        let boundingRect = NSString(string: text).boundingRect(
+            with: size,
+            options: .usesLineFragmentOrigin,
+            attributes: attrs,
+            context: nil)
         return boundingRect.height
     }
 }

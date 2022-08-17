@@ -355,9 +355,11 @@ extension GridTabViewController {
             if !self.emptyPrivateTabsView.isHidden {
                 // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
                 self.emptyPrivateTabsView.alpha = 0
-                UIView.animate(withDuration: 0.5, animations: {
-                    self.emptyPrivateTabsView.alpha = 1
-                }, completion: nil)
+                UIView.animate(
+                    withDuration: 0.5,
+                    animations: {
+                        self.emptyPrivateTabsView.alpha = 1
+                    })
             }
         } else if self.tabManager.normalTabs.count == 1, let tab = self.tabManager.normalTabs.first {
             self.tabManager.selectTab(tab)

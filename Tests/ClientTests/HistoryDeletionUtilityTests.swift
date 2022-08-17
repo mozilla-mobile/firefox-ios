@@ -233,34 +233,46 @@ private extension HistoryDeletionUtilityTests {
     ) {
         let metadataKey1 = HistoryMetadataKey(url: siteURL, searchTerm: title, referrerUrl: nil)
 
-        XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
-            key: metadataKey1,
-            observation: HistoryMetadataObservation(
-                url: metadataKey1.url,
-                viewTime: nil,
-                documentType: nil,
-                title: title
-            )
-        ).value.isSuccess, file: file, line: line)
+        XCTAssertTrue(
+            profile.places.noteHistoryMetadataObservation(
+                key: metadataKey1,
+                observation: HistoryMetadataObservation(
+                    url: metadataKey1.url,
+                    viewTime: nil,
+                    documentType: nil,
+                    title: title
+                )
+            ).value.isSuccess,
+                      file: file,
+                      line: line
+        )
 
-        XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
-            key: metadataKey1,
-            observation: HistoryMetadataObservation(
-                url: metadataKey1.url,
-                viewTime: viewTime,
-                documentType: nil,
-                title: nil
-            )
-        ).value.isSuccess, file: file, line: line)
+        XCTAssertTrue(
+            profile.places.noteHistoryMetadataObservation(
+                key: metadataKey1,
+                observation: HistoryMetadataObservation(
+                    url: metadataKey1.url,
+                    viewTime: viewTime,
+                    documentType: nil,
+                    title: nil
+                )
+            ).value.isSuccess,
+            file: file,
+            line: line
+        )
 
-        XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
-            key: metadataKey1,
-            observation: HistoryMetadataObservation(
-                url: metadataKey1.url,
-                viewTime: nil,
-                documentType: .regular,
-                title: nil
-            )
-        ).value.isSuccess, file: file, line: line)
+        XCTAssertTrue(
+            profile.places.noteHistoryMetadataObservation(
+                key: metadataKey1,
+                observation: HistoryMetadataObservation(
+                    url: metadataKey1.url,
+                    viewTime: nil,
+                    documentType: .regular,
+                    title: nil
+                )
+            ).value.isSuccess,
+            file: file,
+            line: line
+        )
     }
 }
