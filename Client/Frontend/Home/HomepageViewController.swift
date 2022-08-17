@@ -298,7 +298,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     // WT
     private func displayWallpaperSelector() {
         guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-              wallpaperVersion == .v2
+              wallpaperVersion == .v2,
+              featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly)
         else { return }
 
         let viewModel = WallpaperSelectorViewModel(wallpaperManager: WallpaperManager(), openSettingsAction: {

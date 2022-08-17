@@ -32,6 +32,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case topSites
     case upgradeOnboarding
     case wallpapers
+    case wallpaperOnboardingSheet
     case wallpaperVersion
 }
 
@@ -90,6 +91,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .shakeToRestore,
                 .searchHighlights,
                 .jumpBackInSyncedTab,
+                .wallpaperOnboardingSheet,
                 .wallpaperVersion,
                 .upgradeOnboarding:
             return nil
