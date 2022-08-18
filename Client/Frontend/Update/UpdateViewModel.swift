@@ -9,10 +9,7 @@ class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
     let profile: Profile
     static let prefsKey: String = PrefsKeys.KeyLastVersionNumber
-
-    lazy var hasSyncableAccount: Bool = {
-        return profile.hasSyncableAccount()
-    }()
+    var hasSyncableAccount: Bool?
 
     var shouldShowSingleCard: Bool {
         return enabledCards.count == 1
@@ -23,7 +20,7 @@ class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     }
 
     var enabledCards: [IntroViewModel.InformationCards] {
-        if hasSyncableAccount {
+        if hasSyncableAccount ?? false {
             return [.updateWelcome]
         }
 
@@ -61,6 +58,15 @@ class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         }
 
         return false
+    }
+
+    func hasSyncableAccount(completion: @escaping () -> Void) {
+        profile.hasSyncAccount { result in
+            self.hasSyncableAccount = result
+            ensureMainThread {
+                completion()
+            }
+        }
     }
 
     func positionForCard(cardType: IntroViewModel.InformationCards) -> Int? {
