@@ -6,6 +6,15 @@ import UIKit
 
 class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
 
+    private struct UX {
+        static let cornerRadius: CGFloat = 10
+        static let borderWidth: CGFloat = 1
+        static let selectedBorderWidth: CGFloat = 3
+        static let shadowOffset: CGSize = CGSize(width: 0, height: 5.0)
+        static let shadowOpacity: Float = 0.2
+        static let shadowRadius: CGFloat = 4.0
+    }
+
     // MARK: - UI Element
     private lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
@@ -13,14 +22,14 @@ class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
     }
 
     private lazy var borderView: UIView = .build { borderView in
-        borderView.layer.cornerRadius = 10
-        borderView.layer.borderWidth = 1
+        borderView.layer.cornerRadius = WallpaperCollectionViewCell.UX.cornerRadius
+        borderView.layer.borderWidth = WallpaperCollectionViewCell.UX.borderWidth
         borderView.backgroundColor = .clear
     }
 
     private lazy var selectedView: UIView = .build { selectedView in
-        selectedView.layer.cornerRadius = 10
-        selectedView.layer.borderWidth = 3
+        selectedView.layer.cornerRadius = WallpaperCollectionViewCell.UX.cornerRadius
+        selectedView.layer.borderWidth = WallpaperCollectionViewCell.UX.selectedBorderWidth
         selectedView.backgroundColor = .clear
         selectedView.alpha = 0.0
     }
@@ -63,10 +72,12 @@ class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
 
         layer.backgroundColor = UIColor.clear.cgColor
         layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOffset = CGSize(width: 0, height: 5.0)
-        layer.shadowOpacity = 0.2
-        layer.shadowRadius = 4.0
-        layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: 10).cgPath
+        layer.shadowOffset = WallpaperCollectionViewCell.UX.shadowOffset
+        layer.shadowOpacity = WallpaperCollectionViewCell.UX.shadowOpacity
+        layer.shadowRadius = WallpaperCollectionViewCell.UX.shadowRadius
+        layer.shadowPath = UIBezierPath(
+            roundedRect: self.bounds,
+            cornerRadius: WallpaperCollectionViewCell.UX.cornerRadius).cgPath
     }
 }
 
@@ -86,7 +97,7 @@ private extension WallpaperCollectionViewCell {
         contentView.addSubview(borderView)
         contentView.addSubview(imageView)
         contentView.addSubview(selectedView)
-        contentView.layer.cornerRadius = 10
+        contentView.layer.cornerRadius = WallpaperCollectionViewCell.UX.cornerRadius
         contentView.clipsToBounds = true
 
         NSLayoutConstraint.activate([
