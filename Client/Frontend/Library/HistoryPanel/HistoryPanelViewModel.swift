@@ -230,8 +230,8 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
         return groups
     }
 
-    func deleteGroupsForDates(date: Date) {
-        guard let deletableSections = getDeletableSection(date: date) else { return }
+    func deleteGroupsFor(dateOption: HistoryDeletionUtilityDateOptions) {
+        guard let deletableSections = getDeletableSection(for: dateOption) else { return }
 
         deletableSections.forEach { section in
             // Remove grouped items for delete section
@@ -325,15 +325,15 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
         }
     }
 
-    private func getDeletableSection(date: Date) -> [Sections]? {
-        var deletableSections: [Sections]?
+    private func getDeletableSection(for dateOption: HistoryDeletionUtilityDateOptions) -> [Sections]? {
 
-        if date.isToday() {
-            deletableSections = [.today]
-        } else if date.isYesterday() {
-            deletableSections = [.today, .yesterday]
+        switch dateOption {
+        case .today:
+            return [.today]
+        case .yesterday:
+            return [.today, .yesterday]
+        default:
+            return nil
         }
-
-        return deletableSections
     }
 }

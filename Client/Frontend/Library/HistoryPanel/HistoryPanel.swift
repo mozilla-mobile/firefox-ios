@@ -38,7 +38,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
 
     let profile: Profile
     let viewModel: HistoryPanelViewModel
-    private let clearHistoryHelper: ClearHistoryHelper
+    private let clearHistoryHelper: ClearHistorySheetProvider
     var keyboardState: KeyboardState?
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     var chevronImage = UIImage(named: ImageIdentifiers.menuChevron)
@@ -140,7 +140,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     // MARK: - Inits
 
     init(profile: Profile, tabManager: TabManager) {
-        self.clearHistoryHelper = ClearHistoryHelper(profile: profile, tabManager: tabManager)
+        self.clearHistoryHelper = ClearHistorySheetProvider(profile: profile, tabManager: tabManager)
         self.viewModel = HistoryPanelViewModel(profile: profile)
         self.profile = profile
         self.state = .history(state: .mainView)
@@ -258,12 +258,13 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     }
 
     private func showClearRecentHistory() {
-        clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: { [weak self] date in
+        clearHistoryHelper.showClearRecentHistory(onViewController: self) { [weak self] dateOption in
+
             // Delete groupings that belong to THAT section.
-            if let date = date {
-                self?.viewModel.deleteGroupsForDates(date: date)
-            } else {
-                // Otherwise delete ALL groups, since we're deleting all history anyways.
+            switch dateOption {
+            case .today, .yesterday:
+                self?.viewModel.deleteGroupsFor(dateOption: dateOption)
+            default:
                 self?.viewModel.removeAllData()
             }
 
@@ -272,7 +273,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
                 self?.tableView.reloadData()
                 self?.refreshRecentlyClosedCell()
             }
-        })
+        }
     }
 
     private func refreshRecentlyClosedCell() {
