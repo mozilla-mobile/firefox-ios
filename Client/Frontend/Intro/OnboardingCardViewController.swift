@@ -144,16 +144,6 @@ class OnboardingCardViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection), LegacyThemeManager.instance.systemThemeIsOn {
-            let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
-            applyTheme()
-        }
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -170,6 +160,8 @@ class OnboardingCardViewController: UIViewController {
     }
 
     func setupView() {
+        view.backgroundColor = .clear
+
         contentStackView.addArrangedSubview(imageView)
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(descriptionBoldLabel)
@@ -253,12 +245,22 @@ class OnboardingCardViewController: UIViewController {
         secondaryButton.setTitle(buttonTitle, for: .normal)
     }
 
-    private func applyTheme() {
-        view.backgroundColor = .clear
-        titleLabel.textColor = UIColor.theme.homeTabBanner.textColor
-        descriptionLabel.textColor = UIColor.theme.homeTabBanner.textColor
-        descriptionBoldLabel.textColor = UIColor.theme.homeTabBanner.textColor
-        primaryButton.backgroundColor = UIColor.theme.homePanel.activityStreamHeaderButton
+    func applyTheme() {
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+
+        if theme == .dark {
+            titleLabel.textColor = .white
+            descriptionLabel.textColor  = .white
+            descriptionBoldLabel.textColor = .white
+            primaryButton.setTitleColor(.black, for: .normal)
+            primaryButton.backgroundColor = UIColor.theme.homePanel.activityStreamHeaderButton
+        } else {
+            titleLabel.textColor = .black
+            descriptionLabel.textColor = .black
+            descriptionBoldLabel.textColor = .black
+            primaryButton.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
+            primaryButton.backgroundColor = UIColor.Photon.Blue50
+        }
     }
 
     @objc func primaryAction() {

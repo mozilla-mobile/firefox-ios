@@ -30,6 +30,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     var viewModel: UpdateViewModel
     var didFinishClosure: (() -> Void)?
     private var informationCards = [OnboardingCardViewController]()
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Private vars
     private lazy var backgroundImageView: UIImageView = .build { imageView in
@@ -70,10 +71,17 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupView()
+        setupNotifications(forObserver: self,
+                                   observing: [.DisplayThemeChanged])
+        applyTheme()
     }
 
     // MARK: View setup
@@ -281,10 +289,26 @@ extension UpdateViewController {
 }
 
 // MARK: - NotificationThemeable
-extension UpdateViewController: NotificationThemeable {
+extension UpdateViewController: NotificationThemeable, Notifiable {
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default:
+            break
+        }
+    }
+
     func applyTheme() {
-        // TODO: Update background color
-        // TODO: Check if pageControl exist fist
-        pageControl.currentPageIndicatorTintColor = UIColor.theme.homePanel.activityStreamHeaderButton
+        guard !viewModel.shouldShowSingleCard else { return }
+
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        let indicatorColor = theme == .dark ? UIColor.theme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
+        pageControl.currentPageIndicatorTintColor = indicatorColor
+
+        informationCards.forEach { cardViewController in
+            cardViewController.applyTheme()
+        }
     }
 }

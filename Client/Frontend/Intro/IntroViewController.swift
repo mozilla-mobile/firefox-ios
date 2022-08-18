@@ -10,6 +10,7 @@ class IntroViewController: UIViewController {
     private var viewModel: IntroViewModel
     private let profile: Profile
     private var onboardingCards = [OnboardingCardViewController]()
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     struct UX {
         static let closeButtonSize: CGFloat = 44
@@ -62,12 +63,19 @@ class IntroViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = UIColor.theme.browser.background
         setupPageController()
         setupLayout()
+        setupNotifications(forObserver: self,
+                                   observing: [.DisplayThemeChanged])
+        applyTheme()
     }
 
     // MARK: View setup
@@ -96,7 +104,6 @@ class IntroViewController: UIViewController {
     }
 
     private func setupLayout() {
-        view.addSubviews(backgroundImageView)
         addChild(pageController)
         view.addSubview(pageController.view)
         pageController.didMove(toParent: self)
@@ -112,11 +119,18 @@ class IntroViewController: UIViewController {
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonPadding),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-
-            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+
+        if viewModel.isMROnboardingVersion {
+            view.addSubviews(backgroundImageView)
+            view.sendSubviewToBack(backgroundImageView)
+
+            NSLayoutConstraint.activate([
+                backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+                backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+                ])
+        }
     }
 
     @objc private func closeOnboarding() {
@@ -245,9 +259,24 @@ extension IntroViewController {
 }
 
 // MARK: - NotificationThemeable
-extension IntroViewController: NotificationThemeable {
+extension IntroViewController: NotificationThemeable, Notifiable {
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default:
+            break
+        }
+    }
+    
     func applyTheme() {
-        pageControl.currentPageIndicatorTintColor = UIColor.theme.homePanel.activityStreamHeaderButton
-        // TODO: Update background color
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        let indicatorColor = theme == .dark ? UIColor.theme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
+        pageControl.currentPageIndicatorTintColor = indicatorColor
+
+        onboardingCards.forEach { cardViewController in
+            cardViewController.applyTheme()
+        }
     }
 }
