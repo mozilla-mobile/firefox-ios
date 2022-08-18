@@ -224,9 +224,6 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
         // Get cached tabs
         userInteractiveQueue.async { [weak self] in
-            /// Force an accounts Sync so that we download new records to local storage (also uploads records from local storage to the sync server)
-            _ = self?.profile.syncManager.syncNamedCollections(why: .user, names: ["tabs"])
-
             self?.profile.getCachedClientsAndTabs { [weak self] result in
                 self?.createMostRecentSyncedTab(from: result, completion: completion)
             }
