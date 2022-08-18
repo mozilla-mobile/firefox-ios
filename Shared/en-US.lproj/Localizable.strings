@@ -388,12 +388,6 @@
 /* Button label to resend email */
 "FxA.ResendEmail" = "Resend Email";
 
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Sign in to Sync";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "Get your tabs, bookmarks, and passwords from your other devices.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Sync Now";
 
@@ -498,9 +492,6 @@
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Delete from History";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Open in New Private Tab";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Open in New Tab";
@@ -668,9 +659,6 @@
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "Enable Night Mode";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "Block Images";
 
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "Page Actions";
@@ -895,9 +883,6 @@
 /* Reopen alert title shown at home page. */
 "ReopenAlert.Title" = "Reopen Last Closed Tab";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "Reopen Closed Tab";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "Reset text size";
 
@@ -915,9 +900,6 @@
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "The data is invalid";
-
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Please allow Firefox to access your device’s camera in ‘Settings’ -> ‘Privacy’ -> ‘Camera’.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Scan QR Code";
@@ -1355,14 +1337,8 @@
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Standard (default)";
 
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Allows some trackers so websites function properly.";
-
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Strict";
-
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Blocks known trackers. Some websites may not function properly.";
 
 /* Description label shown on tracking protection options screen. */
 "Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Tracking is the collection of your browsing data across multiple websites.";
@@ -1452,12 +1428,6 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Swipe right or left with three fingers to close the tab.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Normal Browsing Mode";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Private Browsing Mode";
-
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
 "Sync your tabs, bookmarks, passwords and more." = "Sync your tabs, bookmarks, passwords and more.";
 
@@ -1521,32 +1491,11 @@
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "Close Selected Tab";
 
-/* The section header for tabs opened last week */
-"TabTray.LastWeek.Header" = "Last Week";
-
-/* The title on the button to copy the tab address. */
-"TabTray.MoreMenu.Copy" = "Copy";
-
-/* The section header for tabs opened before last week */
-"TabTray.Older.Header" = "Older";
-
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Open New Tab";
 
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "Open Selected Tab";
-
-/* The button title to see more options to perform on the tab. */
-"TabTray.SwipeMenu.More" = "More";
-
 /* The title for the tab tray */
 "TabTray.Title" = "Open Tabs";
-
-/* The section header for tabs opened today */
-"TabTray.Today.Header" = "Today";
-
-/* The section header for tabs opened yesterday */
-"TabTray.Yesterday.Header" = "Yesterday";
 
 /* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
 "Tabs %@ to %@ of %@" = "Tabs %1$@ to %2$@ of %3$@";
@@ -1629,9 +1578,6 @@
 /* Text message in the settings table view */
 "Verify your email address" = "Verify your email address";
 
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Version %1$@ (%2$@)";
-
 /* Accessibility label for the main web content view */
 "Web content" = "Web content";
 
@@ -1676,9 +1622,6 @@
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Ready to Scan";
-
-/* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "Turn on Sync";
 
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "Use Email Instead";
