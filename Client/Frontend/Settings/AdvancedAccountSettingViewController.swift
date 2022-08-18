@@ -11,7 +11,9 @@ import Account
 private class CustomFxAContentServerEnableSetting: BoolSetting {
       init(prefs: Prefs, settingDidChange: ((Bool?) -> Void)? = nil) {
           super.init(
-              prefs: prefs, prefKey: PrefsKeys.KeyUseCustomFxAContentServer, defaultValue: false,
+              prefs: prefs,
+              prefKey: PrefsKeys.KeyUseCustomFxAContentServer,
+              defaultValue: false,
               attributedTitleText: NSAttributedString(string: .SettingsAdvancedAccountUseCustomFxAContentServerURITitle),
               settingDidChange: settingDidChange
           )
@@ -21,7 +23,9 @@ private class CustomFxAContentServerEnableSetting: BoolSetting {
   private class CustomSyncTokenServerEnableSetting: BoolSetting {
       init(prefs: Prefs, settingDidChange: ((Bool?) -> Void)? = nil) {
           super.init(
-              prefs: prefs, prefKey: PrefsKeys.KeyUseCustomSyncTokenServerOverride, defaultValue: false,
+              prefs: prefs,
+              prefKey: PrefsKeys.KeyUseCustomSyncTokenServerOverride,
+              defaultValue: false,
               attributedTitleText: NSAttributedString(string: .SettingsAdvancedAccountUseCustomSyncTokenServerTitle),
               settingDidChange: settingDidChange
           )

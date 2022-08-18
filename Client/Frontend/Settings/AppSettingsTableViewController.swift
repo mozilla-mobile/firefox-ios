@@ -45,7 +45,8 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: .AppSettingsDone,
             style: .done,
-            target: navigationController, action: #selector((navigationController as! ThemedNavigationController).done))
+            target: navigationController,
+            action: #selector((navigationController as! ThemedNavigationController).done))
         navigationItem.rightBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
 
         tableView.accessibilityIdentifier = "AppSettingsTableViewController.tableView"
@@ -104,8 +105,11 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             OpenWithSetting(settings: self),
             ThemeSetting(settings: self),
             SiriPageSetting(settings: self),
-            BoolSetting(prefs: prefs, prefKey: PrefsKeys.KeyBlockPopups, defaultValue: true,
-                        titleText: .AppSettingsBlockPopups),
+            BoolSetting(
+                prefs: prefs,
+                prefKey: PrefsKeys.KeyBlockPopups,
+                defaultValue: true,
+                titleText: .AppSettingsBlockPopups),
             NoImageModeSetting(settings: self)
            ]
 
@@ -133,12 +137,18 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         // be changed.
 
         generalSettings += [
-            BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
-                        titleText: .SettingsOfferClipboardBarTitle,
-                        statusText: .SettingsOfferClipboardBarStatus),
-            BoolSetting(prefs: prefs, prefKey: PrefsKeys.ContextMenuShowLinkPreviews, defaultValue: true,
-                        titleText: .SettingsShowLinkPreviewsTitle,
-                        statusText: .SettingsShowLinkPreviewsStatus)
+            BoolSetting(
+                prefs: prefs,
+                prefKey: "showClipboardBar",
+                defaultValue: false,
+                titleText: .SettingsOfferClipboardBarTitle,
+                statusText: .SettingsOfferClipboardBarStatus),
+            BoolSetting(
+                prefs: prefs,
+                prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
+                defaultValue: true,
+                titleText: .SettingsShowLinkPreviewsTitle,
+                statusText: .SettingsShowLinkPreviewsStatus)
         ]
 
         if #available(iOS 14.0, *) {

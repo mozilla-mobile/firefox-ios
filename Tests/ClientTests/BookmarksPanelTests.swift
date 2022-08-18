@@ -151,8 +151,10 @@ class BookmarksPanelTests: XCTestCase {
         panel.updatePanelState(newState: .bookmarks(state: .itemEditMode))
         panel.handleRightTopButton()
 
-        XCTAssertEqual(panel.state, .bookmarks(state: .itemEditMode),
-                       "No state change on right top button click if we're not in a BookmarkDetailPanel")
+        XCTAssertEqual(
+            panel.state,
+            .bookmarks(state: .itemEditMode),
+            "No state change on right top button click if we're not in a BookmarkDetailPanel")
     }
 
     func testBookmarks_ItemEditMode_RightTopButton_WithBookmarkDetailPanel() {

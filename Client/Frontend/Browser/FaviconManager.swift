@@ -87,15 +87,17 @@ class FaviconManager: TabContentScript {
         }
 
         var fetch: SDWebImageOperation?
-        fetch = manager.loadImage(with: iconUrl, options: SDWebImageOptions(options),
-                                  progress: { (receivedSize, expectedSize, _) in
-                                    if receivedSize > FaviconManager.maximumFaviconSize || expectedSize > FaviconManager.maximumFaviconSize {
-                                        fetch?.cancel()
-                                    }
-                                  },
-                                  completed: {  (img, _, _, _, _, url) in
-                                    loadImageCompleted(img, url)
-                                  })
+        fetch = manager.loadImage(
+            with: iconUrl,
+            options: SDWebImageOptions(options),
+            progress: { (receivedSize, expectedSize, _) in
+                if receivedSize > FaviconManager.maximumFaviconSize || expectedSize > FaviconManager.maximumFaviconSize {
+                    fetch?.cancel()
+                }
+            },
+            completed: {  (img, _, _, _, _, url) in
+                loadImageCompleted(img, url)
+            })
         return deferred
     }
 

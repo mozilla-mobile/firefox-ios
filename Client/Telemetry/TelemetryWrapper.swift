@@ -657,8 +657,12 @@ extension TelemetryWrapper {
                 let isPrivateExtra = GleanMetrics.Preferences.PrivateBrowsingButtonTappedExtra(isPrivate: isPrivate)
                 GleanMetrics.Preferences.privateBrowsingButtonTapped.record(isPrivateExtra)
             } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object,
-                                            value: value, extras: extras)
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
             }
 
         // MARK: - QR Codes
@@ -726,8 +730,12 @@ extension TelemetryWrapper {
                 let awesomebarExtraValue = GleanMetrics.Awesomebar.SearchResultTapExtra(type: tapValue)
                 GleanMetrics.Awesomebar.searchResultTap.record(awesomebarExtraValue)
             } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object,
-                                            value: value, extras: extras)
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
             }
         // MARK: Default Browser
         case (.action, .tap, .dismissDefaultBrowserCard, _, _):
@@ -896,40 +904,60 @@ extension TelemetryWrapper {
                 let isRunningExtra = GleanMetrics.Accessibility.VoiceOverExtra(isRunning: isRunning)
                 GleanMetrics.Accessibility.voiceOver.record(isRunningExtra)
             } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object,
-                                            value: value, extras: extras)
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
             }
         case(.action, .switchControl, .app, _, let extras):
             if let isRunning = extras?[EventExtraKey.isSwitchControlRunning.rawValue] as? String {
                 let isRunningExtra = GleanMetrics.Accessibility.SwitchControlExtra(isRunning: isRunning)
                 GleanMetrics.Accessibility.switchControl.record(isRunningExtra)
             } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object,
-                                            value: value, extras: extras)
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
             }
         case(.action, .reduceTransparency, .app, _, let extras):
             if let isEnabled = extras?[EventExtraKey.isReduceTransparencyEnabled.rawValue] as? String {
                 let isEnabledExtra = GleanMetrics.Accessibility.ReduceTransparencyExtra(isEnabled: isEnabled)
                 GleanMetrics.Accessibility.reduceTransparency.record(isEnabledExtra)
             } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object,
-                                            value: value, extras: extras)
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
             }
         case(.action, .reduceMotion, .app, _, let extras):
             if let isEnabled = extras?[EventExtraKey.isReduceMotionEnabled.rawValue] as? String {
                 let isEnabledExtra = GleanMetrics.Accessibility.ReduceMotionExtra(isEnabled: isEnabled)
                 GleanMetrics.Accessibility.reduceMotion.record(isEnabledExtra)
             } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object,
-                                            value: value, extras: extras)
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
             }
         case(.action, .invertColors, .app, _, let extras):
             if let isEnabled = extras?[EventExtraKey.isInvertColorsEnabled.rawValue] as? String {
                 let isEnabledExtra = GleanMetrics.Accessibility.InvertColorsExtra(isEnabled: isEnabled)
                 GleanMetrics.Accessibility.invertColors.record(isEnabledExtra)
             } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object,
-                                            value: value, extras: extras)
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
             }
         // MARK: App menu
         case (.action, .tap, .logins, _, _):
@@ -1153,8 +1181,12 @@ extension TelemetryWrapper {
                 let locationExtra = GleanMetrics.Awesomebar.LocationExtra(location: location)
                 GleanMetrics.Awesomebar.location.record(locationExtra)
             } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object,
-                                            value: value, extras: extras)
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
             }
         case (.action, .drag, .locationBar, _, _):
             GleanMetrics.Awesomebar.dragLocationBar.record()

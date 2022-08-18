@@ -68,18 +68,24 @@ extension HistoryPanel: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
         updateLayoutForKeyboard()
-        UIView.animate(withDuration: state.animationDuration, delay: 0,
-                       options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))], animations: {
-            self.bottomStackView.layoutIfNeeded()
-        })
+        UIView.animate(
+            withDuration: state.animationDuration,
+            delay: 0,
+            options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
+            animations: {
+                self.bottomStackView.layoutIfNeeded()
+            })
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         keyboardState = nil
         updateLayoutForKeyboard()
-        UIView.animate(withDuration: state.animationDuration, delay: 0,
-                       options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))], animations: {
-            self.bottomStackView.layoutIfNeeded()
-        })
+        UIView.animate(
+            withDuration: state.animationDuration,
+            delay: 0,
+            options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
+            animations: {
+                self.bottomStackView.layoutIfNeeded()
+            })
     }
 }

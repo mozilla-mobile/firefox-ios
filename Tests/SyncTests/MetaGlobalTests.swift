@@ -35,8 +35,14 @@ class MockSyncAuthState: SyncAuthState {
     }
 
     func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: Data)>> {
-        let token = TokenServerToken(id: "id", key: "key", api_endpoint: serverRoot, uid: UInt64(0), hashedFxAUID: "",
-            durationInSeconds: UInt64(5 * 60), remoteTimestamp: Timestamp(now - 1))
+        let token = TokenServerToken(
+            id: "id",
+            key: "key",
+            api_endpoint: serverRoot,
+            uid: UInt64(0),
+            hashedFxAUID: "",
+            durationInSeconds: UInt64(5 * 60),
+            remoteTimestamp: Timestamp(now - 1))
         return deferMaybe((token, self.kSync))
     }
 }
@@ -542,8 +548,13 @@ class MetaGlobalTests: XCTestCase {
     }
 
     private func createUnusualMetaGlobal() -> MetaGlobal {
-        let metaGlobal = MetaGlobal(syncID: "id", storageVersion: 5,
-            engines: ["bookmarks": EngineMeta(version: 1, syncID: "bookmarks"), "unknownEngine1": EngineMeta(version: 2, syncID: "engineId1")],
+        let metaGlobal = MetaGlobal(
+            syncID: "id",
+            storageVersion: 5,
+            engines: [
+                "bookmarks": EngineMeta(version: 1, syncID: "bookmarks"),
+                "unknownEngine1": EngineMeta(version: 2, syncID: "engineId1")
+            ],
             declined: ["clients", "forms", "unknownEngine2"])
         return metaGlobal
     }

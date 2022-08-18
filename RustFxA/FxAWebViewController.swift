@@ -178,12 +178,14 @@ extension FxAWebViewController: WKUIDelegate {
     }
 
     @objc func closeHelpBrowser() {
-        UIView.animate(withDuration: 0.2, animations: {
-            self.helpBrowser?.alpha = 0
-        }, completion: {_ in
-            self.helpBrowser?.removeFromSuperview()
-            self.helpBrowser = nil
-        })
+        UIView.animate(
+            withDuration: 0.2,
+            animations: {
+                self.helpBrowser?.alpha = 0
+            }, completion: {_ in
+                self.helpBrowser?.removeFromSuperview()
+                self.helpBrowser = nil
+            })
 
         navigationItem.title = nil
         self.navigationItem.leftBarButtonItem = nil
@@ -234,7 +236,8 @@ extension FxAWebViewController {
     }
 
     private func sendSentryObserveValueError(forKeyPath keyPath: String?) {
-        SentryIntegration.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog,
+        SentryIntegration.shared.send(message: "FxA webpage unhandled KVO",
+                                      tag: .rustLog,
                                       severity: .error,
                                       description: "Unhandled KVO key: \(keyPath ?? "nil")")
     }

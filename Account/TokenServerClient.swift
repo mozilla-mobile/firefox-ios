@@ -8,8 +8,10 @@ import SwiftyJSON
 
 let TokenServerClientErrorDomain = "org.mozilla.token.error"
 let TokenServerClientUnknownError = TokenServerError.local(
-    NSError(domain: TokenServerClientErrorDomain, code: 999,
-    userInfo: [NSLocalizedDescriptionKey: "Invalid server response"]))
+    NSError(
+        domain: TokenServerClientErrorDomain,
+        code: 999,
+        userInfo: [NSLocalizedDescriptionKey: "Invalid server response"]))
 
 public struct TokenServerToken {
     public let id: String
@@ -38,9 +40,14 @@ public struct TokenServerToken {
             let hashedFxAUID = json["hashed_fxa_uid"].string,
             let durationInSeconds = json["duration"].int64,
             let remoteTimestamp = json["remoteTimestamp"].int64 {
-                return TokenServerToken(id: id, key: key, api_endpoint: api_endpoint, uid: UInt64(uid),
-                                        hashedFxAUID: hashedFxAUID, durationInSeconds: UInt64(durationInSeconds),
-                                        remoteTimestamp: Timestamp(remoteTimestamp))
+                return TokenServerToken(
+                    id: id,
+                    key: key,
+                    api_endpoint: api_endpoint,
+                    uid: UInt64(uid),
+                    hashedFxAUID: hashedFxAUID,
+                    durationInSeconds: UInt64(durationInSeconds),
+                    remoteTimestamp: Timestamp(remoteTimestamp))
         }
         return nil
     }
@@ -111,7 +118,9 @@ open class TokenServerClient {
         if 200 <= statusCode && statusCode <= 299 {
             return nil
         }
-        return TokenServerError.remote(code: Int32(statusCode), status: json["status"].string,
+        return TokenServerError.remote(
+            code: Int32(statusCode),
+            status: json["status"].string,
             remoteTimestamp: parseTimestampHeader(remoteTimestampHeader))
     }
 
@@ -127,9 +136,14 @@ open class TokenServerClient {
             let uid = json["uid"].int,
             let hashedFxAUID = json["hashed_fxa_uid"].string,
             let durationInSeconds = json["duration"].int64, durationInSeconds > 0 {
-            return TokenServerToken(id: id, key: key, api_endpoint: api_endpoint, uid: UInt64(uid),
-                                    hashedFxAUID: hashedFxAUID, durationInSeconds: UInt64(durationInSeconds),
-                                    remoteTimestamp: remoteTimestamp)
+            return TokenServerToken(
+                id: id,
+                key: key,
+                api_endpoint: api_endpoint,
+                uid: UInt64(uid),
+                hashedFxAUID: hashedFxAUID,
+                durationInSeconds: UInt64(durationInSeconds),
+                remoteTimestamp: remoteTimestamp)
         }
         return nil
     }

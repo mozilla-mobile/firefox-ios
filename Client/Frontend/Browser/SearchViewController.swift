@@ -372,10 +372,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private func animateSearchEnginesWithKeyboard(_ keyboardState: KeyboardState) {
         layoutSearchEngineScrollView()
 
-        UIView.animate(withDuration: keyboardState.animationDuration, delay: 0,
-                       options: [UIView.AnimationOptions(rawValue: UInt(keyboardState.animationCurve.rawValue << 16))], animations: {
-            self.view.layoutIfNeeded()
-        })
+        UIView.animate(
+            withDuration: keyboardState.animationDuration,
+            delay: 0,
+            options: [UIView.AnimationOptions(rawValue: UInt(keyboardState.animationCurve.rawValue << 16))],
+            animations: {
+                self.view.layoutIfNeeded()
+            })
     }
 
     private func getCachedTabs() {

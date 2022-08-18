@@ -638,13 +638,19 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
             removeLocationTextField()
         }
 
-        UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: [], animations: {
-            self.transitionToOverlay(cancel)
-            self.setNeedsUpdateConstraints()
-            self.layoutIfNeeded()
-        }, completion: { _ in
-            self.updateViewsForOverlayModeAndToolbarChanges()
-        })
+        UIView.animate(
+            withDuration: 0.3,
+            delay: 0.0,
+            usingSpringWithDamping: 0.85,
+            initialSpringVelocity: 0.0,
+            options: [],
+            animations: {
+                self.transitionToOverlay(cancel)
+                self.setNeedsUpdateConstraints()
+                self.layoutIfNeeded()
+            }, completion: { _ in
+                self.updateViewsForOverlayModeAndToolbarChanges()
+            })
     }
 
     func didClickAddTab() {

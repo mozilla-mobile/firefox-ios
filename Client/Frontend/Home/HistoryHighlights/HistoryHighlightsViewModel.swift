@@ -204,8 +204,11 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
         section.boundarySupplementaryItems = [header]
 
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset,
-                                                        bottom: HomepageViewModel.UX.spacingBetweenSections, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: leadingInset,
+            bottom: HomepageViewModel.UX.spacingBetweenSections,
+            trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
 
         return section
@@ -263,12 +266,14 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
             return configureIndividualHighlightCell(cell,
                                                     hideBottomLine: hideBottomLine,
                                                     cornersToRound: cornersToRound,
-                                                    shouldAddShadow: shouldAddShadow, item: item)
+                                                    shouldAddShadow: shouldAddShadow,
+                                                    item: item)
         } else {
             return configureGroupHighlightCell(cell,
                                                hideBottomLine: hideBottomLine,
                                                cornersToRound: cornersToRound,
-                                               shouldAddShadow: shouldAddShadow, item: item)
+                                               shouldAddShadow: shouldAddShadow,
+                                               item: item)
         }
     }
 

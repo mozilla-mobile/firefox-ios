@@ -174,16 +174,18 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
             return
         }
         self.view.isUserInteractionEnabled = false
-        UIView.animate(withDuration: 0.25) {
-            closure()
-            self.overlay.alpha = 0
-        } completion: { value in
-            if value {
-                self.view.isHidden = true
-                self.delegate?.showBottomToolbar()
-                self.containerViewController?.view.removeFromSuperview()
-            }
-        }
+        UIView.animate(
+            withDuration: 0.25,
+            animations: {
+                closure()
+                self.overlay.alpha = 0
+            }, completion: { value in
+                if value {
+                    self.view.isHidden = true
+                    self.delegate?.showBottomToolbar()
+                    self.containerViewController?.view.removeFromSuperview()
+                }
+            })
     }
 
     @objc func showView() {

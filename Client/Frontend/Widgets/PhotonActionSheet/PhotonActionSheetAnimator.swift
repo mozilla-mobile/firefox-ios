@@ -53,24 +53,36 @@ extension PhotonActionSheetAnimator {
             containerView.addSubview(actionSheet.view)
             actionSheet.view.layoutIfNeeded()
 
-            UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: [], animations: { () -> Void in
-                self.shadow.alpha = 1
-                actionSheet.view.frame = containerView.bounds
-                actionSheet.view.layoutIfNeeded()
-            }, completion: { (completed) -> Void in
-                transitionContext.completeTransition(completed)
-            })
+            UIView.animate(
+                withDuration: transitionDuration(using: transitionContext),
+                delay: 0,
+                usingSpringWithDamping: 0.8,
+                initialSpringVelocity: 0.3,
+                options: [],
+                animations: { () -> Void in
+                    self.shadow.alpha = 1
+                    actionSheet.view.frame = containerView.bounds
+                    actionSheet.view.layoutIfNeeded()
+                }, completion: { (completed) -> Void in
+                    transitionContext.completeTransition(completed)
+                })
 
         } else {
-            UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 1.2, initialSpringVelocity: 0.0, options: [], animations: { () -> Void in
-                self.shadow.alpha = 0
-                actionSheet.view.frame = CGRect(origin: CGPoint(x: 0, y: containerView.frame.size.height), size: containerView.frame.size)
-                actionSheet.view.layoutIfNeeded()
-            }, completion: { (completed) -> Void in
-                actionSheet.view.removeFromSuperview()
-                self.shadow.removeFromSuperview()
-                transitionContext.completeTransition(completed)
-            })
+            UIView.animate(
+                withDuration: transitionDuration(using: transitionContext),
+                delay: 0,
+                usingSpringWithDamping: 1.2,
+                initialSpringVelocity: 0.0,
+                options: [],
+                animations: { () -> Void in
+                    self.shadow.alpha = 0
+                    actionSheet.view.frame = CGRect(origin: CGPoint(x: 0, y: containerView.frame.size.height), size: containerView.frame.size)
+                    actionSheet.view.layoutIfNeeded()
+                }, completion: { (completed) -> Void in
+                    actionSheet.view.removeFromSuperview()
+                    self.shadow.removeFromSuperview()
+                    transitionContext.completeTransition(completed)
+                })
         }
     }
 }

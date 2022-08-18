@@ -40,8 +40,14 @@ class ExperimentsSettingsView: UIView {
         self.init(frame: .zero)
         backgroundColor = .systemBackground
 
-        addSubviews(customRemoteSettingsTextField, reloadButton, usePreviewPrompt,
-                    usePreviewToggle, customExperimentDataTextView, updateButton, gapView)
+        addSubviews(
+            customRemoteSettingsTextField,
+            reloadButton,
+            usePreviewPrompt,
+            usePreviewToggle,
+            customExperimentDataTextView,
+            updateButton,
+            gapView)
         setupConstraints()
     }
 

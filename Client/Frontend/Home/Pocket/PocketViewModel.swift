@@ -136,8 +136,11 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         let subItems = Array(repeating: item, count: UX.numberOfItemsInColumn)
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
         group.interItemSpacing = PocketStandardCell.UX.interItemSpacing
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
-                                                      bottom: 0, trailing: PocketStandardCell.UX.interGroupSpacing)
+        group.contentInsets = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: 0,
+            bottom: 0,
+            trailing: PocketStandardCell.UX.interGroupSpacing)
 
         let section = NSCollectionLayoutSection(group: group)
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),

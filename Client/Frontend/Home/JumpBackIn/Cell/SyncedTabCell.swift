@@ -237,11 +237,17 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
         descriptionContainer.addArrangedSubview(syncedDeviceImage)
         descriptionContainer.addArrangedSubview(descriptionLabel)
-        contentView.addSubviews(cardTitle, syncedTabsButton, itemTitle, imageContainer,
-                                descriptionContainer, syncedTabTapTargetView)
+        contentView.addSubviews(
+            cardTitle,
+            syncedTabsButton,
+            itemTitle,
+            imageContainer,
+            descriptionContainer,
+            syncedTabTapTargetView)
 
-        itemTitleTopConstraint = itemTitle.topAnchor.constraint(equalTo: syncedTabsButton.bottomAnchor,
-                                                                constant: SyncedTabCell.UX.itemTitleTopAnchorConstant)
+        itemTitleTopConstraint = itemTitle.topAnchor.constraint(
+            equalTo: syncedTabsButton.bottomAnchor,
+            constant: SyncedTabCell.UX.itemTitleTopAnchorConstant)
 
         NSLayoutConstraint.activate([
             cardTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),

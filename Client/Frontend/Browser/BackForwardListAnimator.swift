@@ -55,23 +55,35 @@ extension BackForwardListAnimator {
             }
             backForward.view.layoutIfNeeded()
 
-            UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: [], animations: { () -> Void in
-                backForward.view.alpha = 1
-                backForward.tableViewHeightAnchor.constant = backForward.tableHeight
-                backForward.view.layoutIfNeeded()
+            UIView.animate(
+                withDuration: transitionDuration(using: transitionContext),
+                delay: 0,
+                usingSpringWithDamping: 0.8,
+                initialSpringVelocity: 0.3,
+                options: [],
+                animations: { () -> Void in
+                    backForward.view.alpha = 1
+                    backForward.tableViewHeightAnchor.constant = backForward.tableHeight
+                    backForward.view.layoutIfNeeded()
                 }, completion: { (completed) -> Void in
                     transitionContext.completeTransition(completed)
-            })
+                })
 
         } else {
-            UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 1.2, initialSpringVelocity: 0.0, options: [], animations: { () -> Void in
-                backForward.view.alpha = 0
-                backForward.tableViewHeightAnchor.constant = 0
-                backForward.view.layoutIfNeeded()
+            UIView.animate(
+                withDuration: transitionDuration(using: transitionContext),
+                delay: 0,
+                usingSpringWithDamping: 1.2,
+                initialSpringVelocity: 0.0,
+                options: [],
+                animations: { () -> Void in
+                    backForward.view.alpha = 0
+                    backForward.tableViewHeightAnchor.constant = 0
+                    backForward.view.layoutIfNeeded()
                 }, completion: { (completed) -> Void in
                     backForward.view.removeFromSuperview()
                     transitionContext.completeTransition(completed)
-            })
+                })
         }
     }
 }

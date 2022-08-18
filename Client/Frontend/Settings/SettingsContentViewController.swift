@@ -22,7 +22,9 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
     var isLoaded: Bool = false {
         didSet {
             if isLoaded {
-                UIView.transition(from: interstitialView, to: settingsWebView,
+                UIView.transition(
+                    from: interstitialView,
+                    to: settingsWebView,
                     duration: 0.5,
                     options: .transitionCrossDissolve,
                     completion: { finished in
@@ -37,7 +39,9 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         didSet {
             if isError {
                 interstitialErrorView.isHidden = false
-                UIView.transition(from: interstitialSpinnerView, to: interstitialErrorView,
+                UIView.transition(
+                    from: interstitialSpinnerView,
+                    to: interstitialErrorView,
                     duration: 0.5,
                     options: .transitionCrossDissolve,
                     completion: { finished in

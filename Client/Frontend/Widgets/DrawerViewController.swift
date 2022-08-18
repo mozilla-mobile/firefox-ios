@@ -227,14 +227,16 @@ public class DrawerViewController: UIViewController, NotificationThemeable {
             duration = 0.25
         }
 
-        UIView.animate(withDuration: duration, animations: {
-            self.yPosition = nextYPosition
-        }) { _ in
-            if nextYPosition > 0 {
-                self.view.removeFromSuperview()
-                self.removeFromParent()
+        UIView.animate(
+            withDuration: duration,
+            animations: {
+                self.yPosition = nextYPosition
+            }) { _ in
+                if nextYPosition > 0 {
+                    self.view.removeFromSuperview()
+                    self.removeFromParent()
+                }
             }
-        }
     }
 
     public func open() {
@@ -251,17 +253,19 @@ public class DrawerViewController: UIViewController, NotificationThemeable {
 
     public func close(immediately: Bool = false) {
         let duration = immediately ? 0.0 : 0.25
-        UIView.animate(withDuration: duration, animations: {
-            if self.showingPadLayout {
-                self.xPosition = DrawerViewControllerUX.DrawerPadWidth
-            } else {
-                self.yPosition = self.view.frame.maxY
+        UIView.animate(
+            withDuration: duration,
+            animations: {
+                if self.showingPadLayout {
+                    self.xPosition = DrawerViewControllerUX.DrawerPadWidth
+                } else {
+                    self.yPosition = self.view.frame.maxY
+                }
+            }) { _ in
+                self.isOpen = false
+                self.view.removeFromSuperview()
+                self.removeFromParent()
             }
-        }) { _ in
-            self.isOpen = false
-            self.view.removeFromSuperview()
-            self.removeFromParent()
-        }
     }
 }
 

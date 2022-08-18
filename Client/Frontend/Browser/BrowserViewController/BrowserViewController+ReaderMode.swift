@@ -210,8 +210,11 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                 popoverPresentationController.backgroundColor = UIColor.Photon.White100
                 popoverPresentationController.delegate = self
                 popoverPresentationController.sourceView = readerModeBar
-                popoverPresentationController.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: ySpacing,
-                                                                  width: 1, height: 1)
+                popoverPresentationController.sourceRect = CGRect(
+                    x: readerModeBar.frame.width/2,
+                    y: ySpacing,
+                    width: 1,
+                    height: 1)
                 popoverPresentationController.permittedArrowDirections = arrowDirection
             }
 

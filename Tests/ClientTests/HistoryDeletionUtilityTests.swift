@@ -64,57 +64,57 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-   func testDeletingMultipleItemsEmptyingDatabase() {
-       let sitesToDelete = [SiteElements(domain: "mozilla"),
-                            SiteElements(domain: "amazon"),
-                            SiteElements(domain: "google")]
-       populateDBHistory(with: sitesToDelete)
+    func testDeletingMultipleItemsEmptyingDatabase() {
+        let sitesToDelete = [SiteElements(domain: "mozilla"),
+                             SiteElements(domain: "amazon"),
+                             SiteElements(domain: "google")]
+        populateDBHistory(with: sitesToDelete)
 
-       let siteEntries = sitesToDelete
-           .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
-           .map { $0.url }
+        let siteEntries = sitesToDelete
+            .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
+            .map { $0.url }
 
-       deletionWithExpectation(siteEntries) { result in
-           XCTAssertTrue(result)
-           self.assertDBIsEmpty()
-       }
-   }
+        deletionWithExpectation(siteEntries) { result in
+            XCTAssertTrue(result)
+            self.assertDBIsEmpty()
+        }
+    }
 
-   func testDeletingMultipleTopLevelItems() {
-       let testSites = [SiteElements(domain: "cnn")]
-       let sitesToDelete = [SiteElements(domain: "mozilla"),
-                            SiteElements(domain: "google"),
-                            SiteElements(domain: "amazon")]
-       populateDBHistory(with: (testSites + sitesToDelete).shuffled())
+    func testDeletingMultipleTopLevelItems() {
+        let testSites = [SiteElements(domain: "cnn")]
+        let sitesToDelete = [SiteElements(domain: "mozilla"),
+                             SiteElements(domain: "google"),
+                             SiteElements(domain: "amazon")]
+        populateDBHistory(with: (testSites + sitesToDelete).shuffled())
 
-       let siteEntries = sitesToDelete
-           .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
-           .map { $0.url }
+        let siteEntries = sitesToDelete
+            .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
+            .map { $0.url }
 
-       deletionWithExpectation(siteEntries) { result in
-           XCTAssertTrue(result)
-           // Assert DB contains only the expected number of things
-           self.assertDBStateFor(testSites)
-       }
-   }
+        deletionWithExpectation(siteEntries) { result in
+            XCTAssertTrue(result)
+            // Assert DB contains only the expected number of things
+            self.assertDBStateFor(testSites)
+        }
+    }
 
-   func testDeletingMultipleSpecificItems() {
-       let testSites = [SiteElements(domain: "cnn", path: "newsOne/test1.html")]
-       let sitesToDelete = [SiteElements(domain: "cnn", path: "newsOne/test2.html"),
-                            SiteElements(domain: "cnn", path: "newsOne/test3.html"),
-                            SiteElements(domain: "cnn", path: "newsTwo/test1.html")]
-       populateDBHistory(with: (testSites + sitesToDelete).shuffled())
+    func testDeletingMultipleSpecificItems() {
+        let testSites = [SiteElements(domain: "cnn", path: "newsOne/test1.html")]
+        let sitesToDelete = [SiteElements(domain: "cnn", path: "newsOne/test2.html"),
+                             SiteElements(domain: "cnn", path: "newsOne/test3.html"),
+                             SiteElements(domain: "cnn", path: "newsTwo/test1.html")]
+        populateDBHistory(with: (testSites + sitesToDelete).shuffled())
 
-       let siteEntries = sitesToDelete
-           .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
-           .map { $0.url }
+        let siteEntries = sitesToDelete
+            .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
+            .map { $0.url }
 
-       deletionWithExpectation(siteEntries) { result in
-           XCTAssertTrue(result)
-           // Assert DB contains only the expected number of things
-           self.assertDBStateFor(testSites)
-       }
-   }
+        deletionWithExpectation(siteEntries) { result in
+            XCTAssertTrue(result)
+            // Assert DB contains only the expected number of things
+            self.assertDBStateFor(testSites)
+        }
+    }
 }
 
 // MARK: - Helper functions
@@ -136,7 +136,7 @@ private extension HistoryDeletionUtilityTests {
             expectation.fulfill()
         }
 
-       waitForExpectations(timeout: 30, handler: nil)
+        waitForExpectations(timeout: 30, handler: nil)
     }
 
     func emptyDB(file: StaticString = #filePath, line: UInt = #line) {
@@ -167,8 +167,8 @@ private extension HistoryDeletionUtilityTests {
     }
 
     func assertDBStateFor(_ sites: [SiteElements],
-                                  file: StaticString = #filePath,
-                                  line: UInt = #line
+                          file: StaticString = #filePath,
+                          line: UInt = #line
     ) {
         let metadataItems = profile.places.getHistoryMetadataSince(since: 0).value
         XCTAssertTrue(metadataItems.isSuccess, file: file, line: line)
@@ -201,8 +201,8 @@ private extension HistoryDeletionUtilityTests {
     }
 
     func populateDBHistory(with entries: [SiteElements],
-                                   file: StaticString = #filePath,
-                                   line: UInt = #line
+                           file: StaticString = #filePath,
+                           line: UInt = #line
     ) {
         entries.forEach { entry in
             let site = createWebsiteFor(domain: entry.domain, with: entry.path)
@@ -226,41 +226,53 @@ private extension HistoryDeletionUtilityTests {
     }
 
     func setupMetadataItem(forTestURL siteURL: String,
-                                   withTitle title: String,
-                                   andViewTime viewTime: Int32,
-                                   file: StaticString = #filePath,
-                                   line: UInt = #line
+                           withTitle title: String,
+                           andViewTime viewTime: Int32,
+                           file: StaticString = #filePath,
+                           line: UInt = #line
     ) {
         let metadataKey1 = HistoryMetadataKey(url: siteURL, searchTerm: title, referrerUrl: nil)
 
-        XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
-            key: metadataKey1,
-            observation: HistoryMetadataObservation(
-                url: metadataKey1.url,
-                viewTime: nil,
-                documentType: nil,
-                title: title
-            )
-        ).value.isSuccess, file: file, line: line)
+        XCTAssertTrue(
+            profile.places.noteHistoryMetadataObservation(
+                key: metadataKey1,
+                observation: HistoryMetadataObservation(
+                    url: metadataKey1.url,
+                    viewTime: nil,
+                    documentType: nil,
+                    title: title
+                )
+            ).value.isSuccess,
+            file: file,
+            line: line
+        )
 
-        XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
-            key: metadataKey1,
-            observation: HistoryMetadataObservation(
-                url: metadataKey1.url,
-                viewTime: viewTime,
-                documentType: nil,
-                title: nil
-            )
-        ).value.isSuccess, file: file, line: line)
+        XCTAssertTrue(
+            profile.places.noteHistoryMetadataObservation(
+                key: metadataKey1,
+                observation: HistoryMetadataObservation(
+                    url: metadataKey1.url,
+                    viewTime: viewTime,
+                    documentType: nil,
+                    title: nil
+                )
+            ).value.isSuccess,
+            file: file,
+            line: line
+        )
 
-        XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
-            key: metadataKey1,
-            observation: HistoryMetadataObservation(
-                url: metadataKey1.url,
-                viewTime: nil,
-                documentType: .regular,
-                title: nil
-            )
-        ).value.isSuccess, file: file, line: line)
+        XCTAssertTrue(
+            profile.places.noteHistoryMetadataObservation(
+                key: metadataKey1,
+                observation: HistoryMetadataObservation(
+                    url: metadataKey1.url,
+                    viewTime: nil,
+                    documentType: .regular,
+                    title: nil
+                )
+            ).value.isSuccess,
+            file: file,
+            line: line
+        )
     }
 }
