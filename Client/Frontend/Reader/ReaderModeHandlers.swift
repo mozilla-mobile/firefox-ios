@@ -74,14 +74,26 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                         if let readerViewLoadingPath = Bundle.main.path(forResource: "ReaderViewLoading", ofType: "html") {
                             do {
                                 let readerViewLoading = try NSMutableString(contentsOfFile: readerViewLoadingPath, encoding: String.Encoding.utf8.rawValue)
-                                readerViewLoading.replaceOccurrences(of: "%ORIGINAL-URL%", with: url.absoluteString,
-                                    options: .literal, range: NSRange(location: 0, length: readerViewLoading.length))
-                                readerViewLoading.replaceOccurrences(of: "%LOADING-TEXT%", with: .ReaderModeHandlerLoadingContent,
-                                    options: .literal, range: NSRange(location: 0, length: readerViewLoading.length))
-                                readerViewLoading.replaceOccurrences(of: "%LOADING-FAILED-TEXT%", with: .ReaderModeHandlerPageCantDisplay,
-                                    options: .literal, range: NSRange(location: 0, length: readerViewLoading.length))
-                                readerViewLoading.replaceOccurrences(of: "%LOAD-ORIGINAL-TEXT%", with: .ReaderModeHandlerLoadOriginalPage,
-                                    options: .literal, range: NSRange(location: 0, length: readerViewLoading.length))
+                                readerViewLoading.replaceOccurrences(
+                                    of: "%ORIGINAL-URL%",
+                                    with: url.absoluteString,
+                                    options: .literal,
+                                    range: NSRange(location: 0, length: readerViewLoading.length))
+                                readerViewLoading.replaceOccurrences(
+                                    of: "%LOADING-TEXT%",
+                                    with: .ReaderModeHandlerLoadingContent,
+                                    options: .literal,
+                                    range: NSRange(location: 0, length: readerViewLoading.length))
+                                readerViewLoading.replaceOccurrences(
+                                    of: "%LOADING-FAILED-TEXT%",
+                                    with: .ReaderModeHandlerPageCantDisplay,
+                                    options: .literal,
+                                    range: NSRange(location: 0, length: readerViewLoading.length))
+                                readerViewLoading.replaceOccurrences(
+                                    of: "%LOAD-ORIGINAL-TEXT%",
+                                    with: .ReaderModeHandlerLoadOriginalPage,
+                                    options: .literal,
+                                    range: NSRange(location: 0, length: readerViewLoading.length))
                                 return GCDWebServerDataResponse(html: readerViewLoading as String)
                             } catch _ {
                             }

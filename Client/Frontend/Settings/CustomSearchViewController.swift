@@ -144,14 +144,17 @@ class CustomSearchViewController: SettingsTableViewController {
         titleField.textField.text = engineTitle
         titleField.textField.accessibilityIdentifier = "customEngineTitle"
 
-        let urlField = CustomSearchEngineTextView(placeholder: .SettingsAddCustomEngineURLPlaceholder, height: 133,
-            keyboardType: .URL, settingIsValid: { text in
-            // Can check url text text validity here.
-            return true
-        }, settingDidChange: {fieldText in
-            self.urlString = fieldText
-            self.updateSaveButton()
-        })
+        let urlField = CustomSearchEngineTextView(
+            placeholder: .SettingsAddCustomEngineURLPlaceholder,
+            height: 133,
+            keyboardType: .URL,
+            settingIsValid: { text in
+                // Can check url text text validity here.
+                return true
+            }, settingDidChange: {fieldText in
+                self.urlString = fieldText
+                self.updateSaveButton()
+            })
 
         urlField.textField.autocapitalizationType = .none
         urlField.textField.text = urlString

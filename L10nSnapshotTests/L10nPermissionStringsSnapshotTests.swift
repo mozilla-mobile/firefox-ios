@@ -7,10 +7,13 @@ import XCTest
 class L10nPermissionStringsSnapshotTests: L10nBaseSnapshotTests {
     func testNSLocationWhenInUseUsageDescription() {
         var didShowDialog = false
-        expectation(for: NSPredicate {(_, _) in
-            self.app.tap() // this is the magic tap that makes it work
-            return didShowDialog
-        }, evaluatedWith: NSNull(), handler: nil)
+        expectation(
+            for: NSPredicate { (_, _) in
+                self.app.tap() // this is the magic tap that makes it work
+                return didShowDialog
+            },
+            evaluatedWith: NSNull(),
+            handler: nil)
 
         addUIInterruptionMonitor(withDescription: "Location Dialog") { (alert) -> Bool in
             let okButton = alert.buttons["OK"]

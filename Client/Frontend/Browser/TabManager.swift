@@ -565,29 +565,28 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         let numberOfTabs = recentlyClosedTabs.count
         if numberOfTabs > 0 {
             var didPressButton = false
-            toast = ButtonToast(labelText:
-                    String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, numberOfTabs),
-                    buttonText: .TabsDeleteAllUndoAction) { buttonPressed in
-                if buttonPressed {
+            toast = ButtonToast(
+                labelText: String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, numberOfTabs),
+                buttonText: .TabsDeleteAllUndoAction,
+                completion: { buttonPressed in
+                    if buttonPressed {
+                        self.reAddTabs(tabsToAdd: recentlyClosedTabs,
+                                       previousTabUUID: previousTabUUID)
+                        NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast, object: nil)
+                    }
+                    didPressButton = true
+                }, autoDismissCompletion: {
+                    guard !didPressButton else { return }
+                    DispatchQueue.global(qos: .background).async { [unowned self] in
+                        let previousTab = tabs.filter {
+                            $0.tabUUID == previousTabUUID
+                        }.first
 
-                    self.reAddTabs(tabsToAdd: recentlyClosedTabs,
-                                   previousTabUUID: previousTabUUID)
-                    NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast,
-                                                    object: nil)
-                }
-                didPressButton = true
-            } autoDismissCompletion: {
-                guard !didPressButton else { return }
-                DispatchQueue.global(qos: .background).async { [unowned self] in
-                    let previousTab = tabs.filter {
-                        $0.tabUUID == previousTabUUID
-                    }.first
-
-                    self.cleanupClosedTabs(recentlyClosedTabs,
-                                           previous: previousTab,
-                                           isPrivate: isPrivate)
-                }
-            }
+                        self.cleanupClosedTabs(recentlyClosedTabs,
+                                               previous: previousTab,
+                                               isPrivate: isPrivate)
+                    }
+                })
         }
 
         if let toast = toast {
