@@ -24,7 +24,7 @@ class OnboardingCardViewController: UIViewController {
         static let titleFontSize: CGFloat = 34
         static let descriptionBoldFontSize: CGFloat = 20
         static let descriptionFontSize: CGFloat = 17
-        static let imageViewMaxHeight: CGFloat = 160
+        static let imageViewSize: CGFloat = 109
 
         // small device
         static let smallStackViewSpacing: CGFloat = 8
@@ -159,6 +159,7 @@ class OnboardingCardViewController: UIViewController {
 
         setupView()
         updateLayout()
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -221,7 +222,7 @@ class OnboardingCardViewController: UIViewController {
             buttonStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.stackViewPadding),
             buttonStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewPadding),
 
-            imageView.heightAnchor.constraint(equalToConstant: UX.imageViewMaxHeight)
+            imageView.heightAnchor.constraint(equalToConstant: UX.imageViewSize)
         ])
 
         contentStackView.spacing = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacing : UX.stackViewSpacing
@@ -253,10 +254,11 @@ class OnboardingCardViewController: UIViewController {
     }
 
     private func applyTheme() {
-        view.backgroundColor = UIColor.theme.homePanel.panelBackground
+        view.backgroundColor = .clear
         titleLabel.textColor = UIColor.theme.homeTabBanner.textColor
         descriptionLabel.textColor = UIColor.theme.homeTabBanner.textColor
         descriptionBoldLabel.textColor = UIColor.theme.homeTabBanner.textColor
+        primaryButton.backgroundColor = UIColor.theme.homePanel.activityStreamHeaderButton
     }
 
     @objc func primaryAction() {

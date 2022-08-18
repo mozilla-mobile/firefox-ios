@@ -279,3 +279,12 @@ extension UpdateViewController {
         return .portrait
     }
 }
+
+// MARK: - NotificationThemeable
+extension UpdateViewController: NotificationThemeable {
+    func applyTheme() {
+        // TODO: Update background color
+        // TODO: Check if pageControl exist fist
+        pageControl.currentPageIndicatorTintColor = UIColor.theme.homePanel.activityStreamHeaderButton
+    }
+}

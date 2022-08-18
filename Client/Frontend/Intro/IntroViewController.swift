@@ -243,3 +243,11 @@ extension IntroViewController {
         return .portrait
     }
 }
+
+// MARK: - NotificationThemeable
+extension IntroViewController: NotificationThemeable {
+    func applyTheme() {
+        pageControl.currentPageIndicatorTintColor = UIColor.theme.homePanel.activityStreamHeaderButton
+        // TODO: Update background color
+    }
+}
