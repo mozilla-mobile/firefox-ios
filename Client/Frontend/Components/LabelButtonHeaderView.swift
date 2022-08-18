@@ -4,7 +4,7 @@
 
 import UIKit
 
-struct LabelButtonHeaderViewModel: Equatable {
+struct LabelButtonHeaderViewModel {
     var leadingInset: CGFloat = 0
     var trailingInset: CGFloat = HomepageViewModel.UX.standardInset
     var title: String?
@@ -16,10 +16,6 @@ struct LabelButtonHeaderViewModel: Equatable {
 
     static var emptyHeader: LabelButtonHeaderViewModel {
         return LabelButtonHeaderViewModel(title: nil, isButtonHidden: true)
-    }
-
-    static func == (lhs: LabelButtonHeaderViewModel, rhs: LabelButtonHeaderViewModel) -> Bool {
-        return lhs.title == rhs.title && lhs.isButtonHidden == rhs.isButtonHidden
     }
 }
 

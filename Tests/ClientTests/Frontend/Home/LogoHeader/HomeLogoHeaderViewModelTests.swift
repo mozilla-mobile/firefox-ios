@@ -48,3 +48,9 @@ extension HomeLogoHeaderViewModelTests {
         return sut
     }
 }
+
+extension LabelButtonHeaderViewModel: Equatable {
+    public static func == (lhs: LabelButtonHeaderViewModel, rhs: LabelButtonHeaderViewModel) -> Bool {
+        return lhs.title == rhs.title && lhs.isButtonHidden == rhs.isButtonHidden
+    }
+}
