@@ -2,6 +2,3 @@ semver
 requests
 ruamel.yaml
 pygithub
-shutil
-os
-filecmp2
