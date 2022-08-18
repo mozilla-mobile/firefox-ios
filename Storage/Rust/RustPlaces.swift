@@ -409,6 +409,23 @@ public class RustPlaces: BookmarksHandler {
         }
     }
 
+    private func deleteHistoryMetadata(since startDate: Int64) -> Deferred<Maybe<Void>> {
+        let now = Date().toMillisecondsSince1970()
+        return withWriter { connection in
+            return try connection.deleteVisitsBetween(start: startDate, end: now)
+        }
+    }
+
+    public func deleteHistoryMetadata(
+        since startDate: Int64,
+        completion: @escaping (Bool) -> Void
+    ) {
+        let deferredResponse = deleteHistoryMetadata(since: startDate)
+        deferredResponse.upon { result in
+            completion(result.isSuccess)
+        }
+    }
+
     public func deleteHistoryMetadata(key: HistoryMetadataKey) -> Deferred<Maybe<Void>> {
         return withWriter { connection in
             let response: Void = try connection.deleteHistoryMetadata(key: key)

@@ -54,16 +54,16 @@ extension Date {
         return UInt64(1000 * Date().timeIntervalSince1970)
     }
 
-    public func toMicrosecondTimestamp() -> MicrosecondTimestamp {
-        return UInt64(1_000_000 * timeIntervalSince1970)
-    }
-
     public static func nowNumber() -> NSNumber {
         return NSNumber(value: now() as UInt64)
     }
 
-    public static func nowMicroseconds() -> MicrosecondTimestamp {
-        return UInt64(1000000 * Date().timeIntervalSince1970)
+    public func toMillisecondsSince1970() -> Int64 {
+        return Int64((self.timeIntervalSince1970 * 1000.0).rounded())
+    }
+
+    public func toMicrosecondsSince1970() -> MicrosecondTimestamp {
+        return UInt64(1_000_000 * self.timeIntervalSince1970)
     }
 
     public static func fromTimestamp(_ timestamp: Timestamp) -> Date {

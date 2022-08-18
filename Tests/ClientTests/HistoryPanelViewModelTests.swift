@@ -167,12 +167,12 @@ class HistoryPanelViewModelTests: XCTestCase {
     }
 
     func testShouldNotAddGroupToSections() {
-        let searchTermGroup = createSearchTermGroup(timestamp: Date.nowMicroseconds())
+        let searchTermGroup = createSearchTermGroup(timestamp: Date().toMicrosecondsSince1970())
         XCTAssertNil(self.sut.shouldAddGroupToSections(group: searchTermGroup))
     }
 
     func testGroupBelongToSection_ForToday() {
-        let searchTermGroup = createSearchTermGroup(timestamp: Date.nowMicroseconds())
+        let searchTermGroup = createSearchTermGroup(timestamp: Date().toMicrosecondsSince1970())
 
         guard let section = self.sut.groupBelongsToSection(asGroup: searchTermGroup) else {
             XCTFail("Expected to return today section")
@@ -184,7 +184,7 @@ class HistoryPanelViewModelTests: XCTestCase {
 
     func testGroupBelongToSection_ForYesterday() {
         let yesterday = Date.yesterday
-        let searchTermGroup = createSearchTermGroup(timestamp: yesterday.toMicrosecondTimestamp())
+        let searchTermGroup = createSearchTermGroup(timestamp: yesterday.toMicrosecondsSince1970())
 
         guard let section = self.sut.groupBelongsToSection(asGroup: searchTermGroup) else {
             XCTFail("Expected to return today section")
@@ -196,7 +196,7 @@ class HistoryPanelViewModelTests: XCTestCase {
 
     func testGroupBelongToSection_ForLastWeek() {
         let yesterday = Date().lastWeek
-        let searchTermGroup = createSearchTermGroup(timestamp: yesterday.toMicrosecondTimestamp())
+        let searchTermGroup = createSearchTermGroup(timestamp: yesterday.toMicrosecondsSince1970())
 
         guard let section = self.sut.groupBelongsToSection(asGroup: searchTermGroup) else {
             XCTFail("Expected to return today section")
@@ -208,7 +208,7 @@ class HistoryPanelViewModelTests: XCTestCase {
 
     func testGroupBelongToSection_ForTwoLastWeek() {
         let yesterday = Date().lastTwoWeek
-        let searchTermGroup = createSearchTermGroup(timestamp: yesterday.toMicrosecondTimestamp())
+        let searchTermGroup = createSearchTermGroup(timestamp: yesterday.toMicrosecondsSince1970())
 
         guard let section = self.sut.groupBelongsToSection(asGroup: searchTermGroup) else {
             XCTFail("Expected to return today section")
@@ -219,7 +219,7 @@ class HistoryPanelViewModelTests: XCTestCase {
     }
 
     func testShouldAddGroupToSections_ForToday() {
-        let searchTermGroup = createSearchTermGroup(timestamp: Date.nowMicroseconds())
+        let searchTermGroup = createSearchTermGroup(timestamp: Date().toMicrosecondsSince1970())
         sut.visibleSections.append(.today)
 
         guard let section = self.sut.shouldAddGroupToSections(group: searchTermGroup) else {
@@ -239,7 +239,7 @@ class HistoryPanelViewModelTests: XCTestCase {
 
     private func addSiteVisit(_ history: BrowserHistory, url: String, title: String, s: Bool = true) {
         let site = Site(url: url, title: title)
-        let visit = SiteVisit(site: site, date: Date.nowMicroseconds())
+        let visit = SiteVisit(site: site, date: Date().toMicrosecondsSince1970())
         XCTAssertEqual(s, history.addLocalVisit(visit).value.isSuccess, "Site added: \(url).")
     }
 

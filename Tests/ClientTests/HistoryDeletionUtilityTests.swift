@@ -14,105 +14,279 @@ import Shared
 // These basic cases are not tested here as they are tested in
 // `HistoryHighlightsManagerTests` and `TestHistory` respectively
 class HistoryDeletionUtilityTests: XCTestCase {
+
     struct SiteElements {
         let domain: String
         let path: String
+        let timeVisited: MicrosecondTimestamp
 
-        init(domain: String, path: String = "") {
+        init(domain: String,
+             path: String = "",
+             timeVisited: MicrosecondTimestamp = Date().toMicrosecondsSince1970()) {
+
             self.domain = domain
             self.path = path
+            self.timeVisited = timeVisited
         }
     }
 
-    private var profile: MockProfile!
-
-    override func setUp() {
-        super.setUp()
-
-        profile = MockProfile(databasePrefix: "historyDeletion_tests")
-        profile._reopen()
-
-        emptyDB()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-
-        profile._shutdown()
-        profile = nil
-    }
-
+    // MARK: - General Tests
     func testEmptyRead() {
-        assertDBIsEmpty()
+        let profile = profileSetup(named: "hsd_emptyTest")
+
+        assertDBIsEmpty(with: profile)
     }
 
     func testSingleDataExists() {
+        let profile = profileSetup(named: "hsd_singleDataExists")
         let testSites = [SiteElements(domain: "mozilla")]
-        populateDBHistory(with: testSites)
+        populateDBHistory(with: testSites, using: profile)
 
-        assertDBStateFor(testSites)
+        assertDBStateFor(testSites, with: profile)
     }
 
+    // MARK: - Test url based deletion
     func testDeletingSingleItem() {
+        let profile = profileSetup(named: "hsd_deleteSingleItem")
         let testSites = [SiteElements(domain: "mozilla")]
-        populateDBHistory(with: testSites)
-
+        populateDBHistory(with: testSites, using: profile)
         let siteEntry = createWebsiteFor(domain: "mozilla", with: "")
-        deletionWithExpectation([siteEntry.url]) { result in
+
+        deletionWithExpectation(for: [siteEntry.url], using: profile) { result in
             XCTAssertTrue(result)
-            self.assertDBIsEmpty()
+            self.assertDBIsEmpty(with: profile)
         }
     }
 
     func testDeletingMultipleItemsEmptyingDatabase() {
+        let profile = profileSetup(named: "hsd_deleteMultipleItemsEmptyingDB")
         let sitesToDelete = [SiteElements(domain: "mozilla"),
                              SiteElements(domain: "amazon"),
                              SiteElements(domain: "google")]
-        populateDBHistory(with: sitesToDelete)
+        populateDBHistory(with: sitesToDelete, using: profile)
 
         let siteEntries = sitesToDelete
             .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
             .map { $0.url }
 
-        deletionWithExpectation(siteEntries) { result in
+        deletionWithExpectation(for: siteEntries, using: profile) { result in
             XCTAssertTrue(result)
-            self.assertDBIsEmpty()
+            self.assertDBIsEmpty(with: profile)
         }
     }
 
     func testDeletingMultipleTopLevelItems() {
-        let testSites = [SiteElements(domain: "cnn")]
+        let profile = profileSetup(named: "hsd_deleteMultipleItemsTopLevelItems")
+        let sitesToRemain = [SiteElements(domain: "cnn")]
         let sitesToDelete = [SiteElements(domain: "mozilla"),
                              SiteElements(domain: "google"),
                              SiteElements(domain: "amazon")]
-        populateDBHistory(with: (testSites + sitesToDelete).shuffled())
+        populateDBHistory(with: (sitesToRemain + sitesToDelete).shuffled(), using: profile)
 
         let siteEntries = sitesToDelete
             .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
             .map { $0.url }
 
-        deletionWithExpectation(siteEntries) { result in
+        deletionWithExpectation(for: siteEntries, using: profile) { result in
             XCTAssertTrue(result)
-            // Assert DB contains only the expected number of things
-            self.assertDBStateFor(testSites)
+            self.assertDBStateFor(sitesToRemain, with: profile)
         }
     }
 
     func testDeletingMultipleSpecificItems() {
-        let testSites = [SiteElements(domain: "cnn", path: "newsOne/test1.html")]
+        let profile = profileSetup(named: "hsd_deleteMultipleSpecificItems")
+        let sitesToRemain = [SiteElements(domain: "cnn", path: "newsOne/test1.html")]
         let sitesToDelete = [SiteElements(domain: "cnn", path: "newsOne/test2.html"),
                              SiteElements(domain: "cnn", path: "newsOne/test3.html"),
                              SiteElements(domain: "cnn", path: "newsTwo/test1.html")]
-        populateDBHistory(with: (testSites + sitesToDelete).shuffled())
+        populateDBHistory(with: (sitesToRemain + sitesToDelete).shuffled(), using: profile)
 
         let siteEntries = sitesToDelete
             .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
             .map { $0.url }
 
-        deletionWithExpectation(siteEntries) { result in
+        deletionWithExpectation(for: siteEntries, using: profile) { result in
             XCTAssertTrue(result)
-            // Assert DB contains only the expected number of things
-            self.assertDBStateFor(testSites)
+            self.assertDBStateFor(sitesToRemain, with: profile)
+        }
+    }
+
+    // MARK: - Test time based deletion
+    // In these tests, we don't test the deletion of metadata. The assumption
+    // is that A-S has its own testing. Furthermore, because we don't have an
+    // API to control when the date at which a metadata item is created,
+    // currently making testing these time frames, with the exception of
+    // `.allTime` impossible to test.
+
+    func testDeletingAllItemsInLastHour() {
+        let profile = profileSetup(named: "hsd_deleteLastHour")
+        guard let thirtyMinutesAgo = Calendar.current.date(byAdding: .minute,
+                                                           value: -30,
+                                                           to: Date())?.toMicrosecondsSince1970()
+        else {
+            XCTFail("Unable to create date")
+            return
+        }
+
+        let timeframe: HistoryDeletionUtilityDateOptions = .lastHour
+        let sitesToDelete = [SiteElements(domain: "cnn", timeVisited: thirtyMinutesAgo),
+                             SiteElements(domain: "mozilla")]
+        populateDBHistory(with: sitesToDelete, using: profile)
+
+        deletionWithExpectation(since: timeframe, using: profile) { returnedTimeFrame in
+            XCTAssertEqual(timeframe, returnedTimeFrame)
+            self.assertDBIsEmpty(with: profile, shouldSkipMetadata: true)
+        }
+    }
+
+    func testDeletingItemsInLastHour_WithFurtherHistory() {
+        let profile = profileSetup(named: "hsd_deleteLastHour_WithFurtherHistory")
+        guard let thirtyMinutesAgo = Calendar.current.date(byAdding: .minute,
+                                                           value: -30,
+                                                           to: Date())?.toMicrosecondsSince1970(),
+              let twoHoursAgo = Calendar.current.date(byAdding: .minute,
+                                                      value: -90,
+                                                      to: Date())?.toMicrosecondsSince1970()
+        else {
+            XCTFail("Unable to create date")
+            return
+        }
+
+        let timeframe: HistoryDeletionUtilityDateOptions = .lastHour
+        let sitesToDelete = [SiteElements(domain: "cnn", timeVisited: thirtyMinutesAgo)]
+        let sitesToRemain = [SiteElements(domain: "mozilla", timeVisited: twoHoursAgo)]
+        populateDBHistory(with: (sitesToRemain + sitesToDelete).shuffled(), using: profile)
+
+        deletionWithExpectation(since: timeframe, using: profile) { returnedTimeFrame in
+            XCTAssertEqual(timeframe, returnedTimeFrame)
+            self.assertDBHistoryStateFor(sitesToRemain, with: profile)
+        }
+    }
+
+    func testDeletingAllItemsInHistoryUsingToday() {
+        let profile = profileSetup(named: "hsd_deleteToday")
+        guard let someTimeToday = Calendar.current.date(
+            byAdding: .minute,
+            value: 1,
+            to: Calendar.current.startOfDay(for: Date()))?.toMicrosecondsSince1970()
+        else {
+            XCTFail("Unable to create date")
+            return
+        }
+
+        let timeframe: HistoryDeletionUtilityDateOptions = .today
+        let sitesToDelete = [SiteElements(domain: "cnn", timeVisited: someTimeToday),
+                             SiteElements(domain: "mozilla")]
+        populateDBHistory(with: sitesToDelete, using: profile)
+
+        deletionWithExpectation(since: timeframe, using: profile) { returnedTimeFrame in
+            XCTAssertEqual(timeframe, returnedTimeFrame)
+            self.assertDBIsEmpty(with: profile, shouldSkipMetadata: true)
+        }
+    }
+
+    func testDeletingItemsInHistoryUsingToday_WithFurtherHistory() {
+        let profile = profileSetup(named: "hsd_deleteToday_WithFurtherHistory")
+        guard let someTimeToday = Calendar.current.date(
+            byAdding: .minute,
+            value: 1,
+            to: Calendar.current.startOfDay(for: Date()))?.toMicrosecondsSince1970(),
+              let thirtyHoursAgo = Calendar.current.date(byAdding: .hour,
+                                                         value: -30,
+                                                         to: Date())?.toMicrosecondsSince1970()
+        else {
+            XCTFail("Unable to create date")
+            return
+        }
+
+        let timeframe: HistoryDeletionUtilityDateOptions = .today
+        let sitesToDelete = [SiteElements(domain: "cnn", timeVisited: someTimeToday)]
+        let sitesToRemain = [SiteElements(domain: "mozilla", timeVisited: thirtyHoursAgo)]
+        populateDBHistory(with: (sitesToRemain + sitesToDelete).shuffled(), using: profile)
+
+        deletionWithExpectation(since: timeframe, using: profile) { returnedTimeFrame in
+            XCTAssertEqual(timeframe, returnedTimeFrame)
+            self.assertDBHistoryStateFor(sitesToRemain, with: profile)
+        }
+    }
+
+    func testDeletingAllItemsInHistoryUsingYesterday() {
+        let profile = MockProfile(databasePrefix: "hsd_deleteYesterday")
+        guard let someTimeYesterday = someTimeYesterday()?.toMicrosecondsSince1970() else {
+            XCTFail("Unable to create date")
+            return
+        }
+
+        let timeframe: HistoryDeletionUtilityDateOptions = .yesterday
+        let sitesToDelete = [SiteElements(domain: "cnn", timeVisited: someTimeYesterday),
+                             SiteElements(domain: "mozilla")]
+        populateDBHistory(with: sitesToDelete,
+                          using: profile,
+                          skippingMetadata: true)
+
+        deletionWithExpectation(since: timeframe, using: profile) { returnedTimeFrame in
+            XCTAssertEqual(timeframe, returnedTimeFrame)
+            self.assertDBIsEmpty(with: profile, shouldSkipMetadata: true)
+        }
+    }
+
+    func testDeletingItemsInHistoryUsingYesterday_WithFurtherHistory() {
+        let profile = MockProfile(databasePrefix: "hsd_deleteYesterday_WithFurtherHistory")
+        guard let someTimeYesterday = someTimeYesterday()?.toMicrosecondsSince1970(),
+              let ninetyHoursAgo = Calendar.current.date(byAdding: .hour,
+                                                         value: -90,
+                                                         to: Date())?.toMicrosecondsSince1970()
+        else {
+            XCTFail("Unable to create date")
+            return
+        }
+
+        let timeframe: HistoryDeletionUtilityDateOptions = .yesterday
+        let sitesToDelete = [SiteElements(domain: "cnn", timeVisited: someTimeYesterday)]
+        let sitesToRemain = [SiteElements(domain: "mozilla", timeVisited: ninetyHoursAgo)]
+        populateDBHistory(with: (sitesToRemain + sitesToDelete).shuffled(),
+                          using: profile,
+                          skippingMetadata: true)
+
+        deletionWithExpectation(since: timeframe, using: profile) { returnedTimeFrame in
+            XCTAssertEqual(timeframe, returnedTimeFrame)
+            self.assertDBHistoryStateFor(sitesToRemain, with: profile)
+        }
+    }
+
+    func testDeletingAllItemsInHistoryUsingAllTime() {
+        let profile = MockProfile(databasePrefix: "hsd_deleteAllTime")
+        guard let earlierToday = Calendar.current.date(byAdding: .hour,
+                                                       value: -5,
+                                                       to: Date())?.toMicrosecondsSince1970(),
+              let yesterday = someTimeYesterday()?.toMicrosecondsSince1970(),
+              let aFewDaysAgo = Calendar.current.date(byAdding: .hour,
+                                                      value: -73,
+                                                      to: Date())?.toMicrosecondsSince1970(),
+              let twoWeeksAgo = Calendar.current.date(byAdding: .day,
+                                                      value: -11,
+                                                      to: Date())?.toMicrosecondsSince1970(),
+              let lastMonth = Calendar.current.date(byAdding: .month,
+                                                    value: -1,
+                                                    to: Date())?.toMicrosecondsSince1970()
+        else {
+            XCTFail("Unable to create date")
+            return
+        }
+
+        let timeframe: HistoryDeletionUtilityDateOptions = .allTime
+        let sitesToDelete = [SiteElements(domain: "cnn", timeVisited: earlierToday),
+                             SiteElements(domain: "polygon", timeVisited: yesterday),
+                             SiteElements(domain: "theverge", timeVisited: aFewDaysAgo),
+                             SiteElements(domain: "macrumors", timeVisited: twoWeeksAgo),
+                             SiteElements(domain: "doihaveinternet", timeVisited: lastMonth)]
+        populateDBHistory(with: sitesToDelete,
+                          using: profile,
+                          skippingMetadata: true)
+
+        deletionWithExpectation(since: timeframe, using: profile) { returnedTimeFrame in
+            XCTAssertEqual(timeframe, returnedTimeFrame)
+            self.assertDBIsEmpty(with: profile, shouldSkipMetadata: true)
         }
     }
 }
@@ -120,15 +294,23 @@ class HistoryDeletionUtilityTests: XCTestCase {
 // MARK: - Helper functions
 private extension HistoryDeletionUtilityTests {
 
-    func createDeletionUtility(file: StaticString = #filePath, line: UInt = #line) -> HistoryDeletionUtility {
-        let deletionUtility = HistoryDeletionUtility(with: profile)
-        trackForMemoryLeaks(deletionUtility, file: file, line: line)
+    func profileSetup(named dbPrefix: String) -> MockProfile {
+        let profile = MockProfile(databasePrefix: dbPrefix)
+        profile._reopen()
+        trackForMemoryLeaks(profile)
 
-        return deletionUtility
+        emptyDB(with: profile)
+
+        return profile
     }
 
-    func deletionWithExpectation(_ siteEntries: [String], completion: @escaping (Bool) -> Void) {
-        let deletionUtility = createDeletionUtility()
+    func deletionWithExpectation(
+        for siteEntries: [String],
+        using profile: MockProfile,
+        completion: @escaping (Bool) -> Void
+    ) {
+        let deletionUtility = HistoryDeletionUtility(with: profile)
+        trackForMemoryLeaks(deletionUtility)
         let expectation = expectation(description: "HistoryDeletionUtilityTest")
 
         deletionUtility.delete(siteEntries) { result in
@@ -136,10 +318,31 @@ private extension HistoryDeletionUtilityTests {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 30, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
-    func emptyDB(file: StaticString = #filePath, line: UInt = #line) {
+    func deletionWithExpectation(
+        since dateOption: HistoryDeletionUtilityDateOptions,
+        using profile: MockProfile,
+        completion: @escaping (HistoryDeletionUtilityDateOptions?) -> Void
+    ) {
+        let deletionUtility = HistoryDeletionUtility(with: profile)
+        trackForMemoryLeaks(deletionUtility)
+        let expectation = expectation(description: "HistoryDeletionUtilityTest")
+
+        deletionUtility.deleteHistoryFrom(dateOption) { time in
+            completion(time)
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+
+    func emptyDB(
+        with profile: MockProfile,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: 0).value.isSuccess, file: file, line: line)
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).value.isSuccess, file: file, line: line)
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: -1).value.isSuccess, file: file, line: line)
@@ -147,44 +350,65 @@ private extension HistoryDeletionUtilityTests {
         XCTAssertTrue(profile.history.removeHistoryFromDate(Date(timeIntervalSince1970: 0)).value.isSuccess, file: file, line: line)
     }
 
-    func assertDBIsEmpty(file: StaticString = #filePath, line: UInt = #line) {
-        assertMetadataIsEmpty(file: file, line: line)
-        assertHistoryIsEmpty(file: file, line: line)
+    // `shouldSkipMetadata` is a  parameter to deal with the case where AS doesn't allow
+    // for entering a custom date for metadata. If this is set to `true`, then the
+    // metadata check will not run, and only the history check will run.
+    func assertDBIsEmpty(
+        with profile: MockProfile,
+        shouldSkipMetadata: Bool = false,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        if !shouldSkipMetadata { assertMetadataIsEmpty(with: profile, file: file, line: line) }
+        assertHistoryIsEmpty(with: profile, file: file, line: line)
     }
 
-    func assertMetadataIsEmpty(file: StaticString = #filePath, line: UInt = #line) {
+    func assertMetadataIsEmpty(
+        with profile: MockProfile,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
         let emptyMetadata = profile.places.getHistoryMetadataSince(since: 0).value
         XCTAssertTrue(emptyMetadata.isSuccess, file: file, line: line)
         XCTAssertNotNil(emptyMetadata.successValue, file: file, line: line)
-        XCTAssertEqual(emptyMetadata.successValue!.count, 0, file: file, line: line)
+        XCTAssertEqual(emptyMetadata.successValue!.count, 0, "Metadata", file: file, line: line)
     }
 
-    func assertHistoryIsEmpty(file: StaticString = #filePath, line: UInt = #line) {
+    func assertHistoryIsEmpty(
+        with profile: MockProfile,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
         let emptyHistory = profile.history.getSitesByLastVisit(limit: 100, offset: 0).value
         XCTAssertTrue(emptyHistory.isSuccess, file: file, line: line)
         XCTAssertNotNil(emptyHistory.successValue, file: file, line: line)
-        XCTAssertEqual(emptyHistory.successValue!.count, 0, file: file, line: line)
+        XCTAssertEqual(emptyHistory.successValue!.count, 0, "History", file: file, line: line)
     }
 
-    func assertDBStateFor(_ sites: [SiteElements],
-                          file: StaticString = #filePath,
-                          line: UInt = #line
+    func assertDBStateFor(
+        _ sites: [SiteElements],
+        with profile: MockProfile,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        assertDBMetadataStateFor(sites, with: profile)
+        assertDBHistoryStateFor(sites, with: profile)
+    }
+
+    func assertDBMetadataStateFor(
+        _ sites: [SiteElements],
+        with profile: MockProfile,
+        file: StaticString = #filePath,
+        line: UInt = #line
     ) {
         let metadataItems = profile.places.getHistoryMetadataSince(since: 0).value
         XCTAssertTrue(metadataItems.isSuccess, file: file, line: line)
         XCTAssertNotNil(metadataItems.successValue, file: file, line: line)
         XCTAssertEqual(metadataItems.successValue!.count, sites.count, file: file, line: line)
 
-        let historyItems = profile.history.getSitesByLastVisit(limit: 100, offset: 0).value
-        XCTAssertTrue(historyItems.isSuccess, file: file, line: line)
-        XCTAssertNotNil(historyItems.successValue, file: file, line: line)
-        XCTAssertEqual(historyItems.successValue!.count, sites.count, file: file, line: line)
-
         for (index, site) in sites.enumerated() {
             guard let metadataURL = metadataItems.successValue?[index].url,
-                  let metadataTitle = metadataItems.successValue?[index].title?.lowercased(),
-                  let historyURL = historyItems.successValue?[index]?.url,
-                  let historyTitle = historyItems.successValue?[index]?.title.lowercased()
+                  let metadataTitle = metadataItems.successValue?[index].title?.lowercased()
             else {
                 XCTFail("Items that should exist in the database, do not.")
                 return
@@ -194,22 +418,52 @@ private extension HistoryDeletionUtilityTests {
             XCTAssertEqual(metadataTitle, "\(site.domain) test", file: file, line: line)
             XCTAssertEqual(metadataItems.successValue![index].documentType, DocumentType.regular, file: file, line: line)
             XCTAssertEqual(metadataItems.successValue![index].totalViewTime, 1, file: file, line: line)
+        }
+    }
+
+    func assertDBHistoryStateFor(
+        _ sites: [SiteElements],
+        with profile: MockProfile,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let historyItems = profile.history.getSitesByLastVisit(limit: 100, offset: 0).value
+        XCTAssertTrue(historyItems.isSuccess, file: file, line: line)
+        XCTAssertNotNil(historyItems.successValue, file: file, line: line)
+        XCTAssertEqual(historyItems.successValue!.count, sites.count, file: file, line: line)
+
+        for (index, site) in sites.enumerated() {
+            guard let historyURL = historyItems.successValue?[index]?.url,
+                  let historyTitle = historyItems.successValue?[index]?.title.lowercased()
+            else {
+                XCTFail("Items that should exist in the database, do not.")
+                return
+            }
 
             XCTAssertEqual(historyURL, "https://www.\(site.domain).com/\(site.path)", file: file, line: line)
             XCTAssertEqual(historyTitle, "\(site.domain) test", file: file, line: line)
         }
     }
 
-    func populateDBHistory(with entries: [SiteElements],
-                           file: StaticString = #filePath,
-                           line: UInt = #line
+    func populateDBHistory(
+        with entries: [SiteElements],
+        using profile: MockProfile,
+        skippingMetadata shouldSkipMetadata: Bool = false,
+        file: StaticString = #filePath,
+        line: UInt = #line
     ) {
         entries.forEach { entry in
             let site = createWebsiteFor(domain: entry.domain, with: entry.path)
-            addToLocalHistory(site: site)
-            setupMetadataItem(forTestURL: site.url,
-                              withTitle: site.title,
-                              andViewTime: 1)
+            addToLocalHistory(site: site, timeVisited: entry.timeVisited, with: profile)
+
+            if !shouldSkipMetadata {
+                setupMetadataItem(forTestURL: site.url,
+                                  withTitle: site.title,
+                                  andViewTime: 1,
+                                  with: profile,
+                                  file: file,
+                                  line: line)
+            }
         }
     }
 
@@ -220,59 +474,72 @@ private extension HistoryDeletionUtilityTests {
         return Site(url: urlString, title: urlTitle)
     }
 
-    func addToLocalHistory(site: Site, file: StaticString = #filePath, line: UInt = #line) {
-        let visit = SiteVisit(site: site, date: Date.nowMicroseconds())
+    func addToLocalHistory(
+        site: Site,
+        timeVisited: MicrosecondTimestamp,
+        with profile: MockProfile,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let visit = SiteVisit(site: site, date: timeVisited)
         XCTAssertTrue(profile.history.addLocalVisit(visit).value.isSuccess, "Site added: \(site.url).", file: file, line: line)
     }
 
-    func setupMetadataItem(forTestURL siteURL: String,
-                           withTitle title: String,
-                           andViewTime viewTime: Int32,
-                           file: StaticString = #filePath,
-                           line: UInt = #line
+    func setupMetadataItem(
+        forTestURL siteURL: String,
+        withTitle title: String,
+        andViewTime viewTime: Int32,
+        with profile: MockProfile,
+        file: StaticString = #filePath,
+        line: UInt = #line
     ) {
         let metadataKey1 = HistoryMetadataKey(url: siteURL, searchTerm: title, referrerUrl: nil)
 
-        XCTAssertTrue(
-            profile.places.noteHistoryMetadataObservation(
-                key: metadataKey1,
-                observation: HistoryMetadataObservation(
-                    url: metadataKey1.url,
-                    viewTime: nil,
-                    documentType: nil,
-                    title: title
-                )
-            ).value.isSuccess,
-            file: file,
-            line: line
-        )
+        XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
+            key: metadataKey1,
+            observation: HistoryMetadataObservation(
+                url: metadataKey1.url,
+                viewTime: nil,
+                documentType: nil,
+                title: title
+            )).value.isSuccess,
+                      "Metadata observation: title",
+                      file: file,
+                      line: line)
 
-        XCTAssertTrue(
-            profile.places.noteHistoryMetadataObservation(
-                key: metadataKey1,
-                observation: HistoryMetadataObservation(
-                    url: metadataKey1.url,
-                    viewTime: viewTime,
-                    documentType: nil,
-                    title: nil
-                )
-            ).value.isSuccess,
-            file: file,
-            line: line
-        )
+        XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
+            key: metadataKey1,
+            observation: HistoryMetadataObservation(
+                url: metadataKey1.url,
+                viewTime: viewTime,
+                documentType: nil,
+                title: nil
+            )).value.isSuccess,
+                      "Metadata observation: view time",
+                      file: file,
+                      line: line)
 
-        XCTAssertTrue(
-            profile.places.noteHistoryMetadataObservation(
-                key: metadataKey1,
-                observation: HistoryMetadataObservation(
-                    url: metadataKey1.url,
-                    viewTime: nil,
-                    documentType: .regular,
-                    title: nil
-                )
-            ).value.isSuccess,
-            file: file,
-            line: line
-        )
+        XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
+            key: metadataKey1,
+            observation: HistoryMetadataObservation(
+                url: metadataKey1.url,
+                viewTime: nil,
+                documentType: .regular,
+                title: nil
+            )).value.isSuccess,
+                      "Metadata observation: document type",
+                      file: file,
+                      line: line)
+    }
+
+    private func someTimeYesterday() -> Date? {
+        guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()),
+              let someTimeYesterday = Calendar.current.date(
+                byAdding: .hour,
+                value: 1,
+                to: Calendar.current.startOfDay(for: yesterday))
+        else { return nil }
+
+        return someTimeYesterday
     }
 }
