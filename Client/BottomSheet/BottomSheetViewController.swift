@@ -102,12 +102,14 @@ class BottomSheetViewController: UIViewController {
 
     public func dismissViewController() {
         contentViewBottomConstraint.constant = childViewController.view.frame.height
-        UIView.animate(withDuration: viewModel.animationTransitionDuration, animations: {
-            self.view.layoutIfNeeded()
-            self.view.backgroundColor = .clear
-        }, completion: { _ in
-            self.dismiss(animated: false, completion: nil)
-        })
+        UIView.animate(
+            withDuration: viewModel.animationTransitionDuration,
+            animations: {
+                self.view.layoutIfNeeded()
+                self.view.backgroundColor = .clear
+            }, completion: { _ in
+                self.dismiss(animated: false, completion: nil)
+            })
     }
 }
 

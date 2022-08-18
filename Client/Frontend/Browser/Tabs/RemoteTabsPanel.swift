@@ -29,10 +29,12 @@ class RemoteTabsPanel: UIViewController, NotificationThemeable, Loggable {
         super.init(nibName: nil, bundle: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(notificationReceived),
-                                               name: .FirefoxAccountChanged, object: nil)
+                                               name: .FirefoxAccountChanged,
+                                               object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(notificationReceived),
-                                               name: .ProfileDidFinishSyncing, object: nil)
+                                               name: .ProfileDidFinishSyncing,
+                                               object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {

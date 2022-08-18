@@ -379,10 +379,13 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             }
 
             if shouldAnimate {
-                UIView.transition(with: self.collectionView, duration: 0.27,
-                                  options: .transitionCrossDissolve, animations: {
-                    self.collectionView.reloadData()
-                })
+                UIView.transition(
+                    with: self.collectionView,
+                    duration: 0.27,
+                    options: .transitionCrossDissolve,
+                    animations: {
+                        self.collectionView.reloadData()
+                    })
             } else {
                 self.collectionView.reloadData()
             }
