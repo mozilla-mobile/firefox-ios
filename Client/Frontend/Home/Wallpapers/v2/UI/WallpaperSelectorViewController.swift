@@ -111,7 +111,6 @@ class WallpaperSelectorViewController: UIViewController {
 }
 
 // MARK: - CollectionView Data Source
-
 extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -121,9 +120,8 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier,
                                                             for: indexPath) as? WallpaperCollectionViewCell,
-                let cellViewModel = viewModel.wallpaperCellModels[safe: indexPath.row] else {
-            return UICollectionViewCell()
-        }
+              let cellViewModel = viewModel.wallpaperCellModels[safe: indexPath.row]
+        else { return UICollectionViewCell() }
 
         cell.viewModel = cellViewModel
         return cell

@@ -5,13 +5,14 @@
 import Foundation
 
 public enum Model: String {
-    case simulator     = "simulator",
-    iPhoneSE           = "iPhone SE (1st gen)",
-    unrecognized       = "?unrecognized?"
+    case simulator = "simulator"
+    case iPhoneSE = "iPhone SE (1st gen)"
+    case unrecognized = "?unrecognized?"
 }
 
 extension UIDevice {
 
+    // returns true when device is an iPhone SE 1st gen
     var isTinyFormFactor: Bool {
         return UIDevice().type == .iPhoneSE
     }

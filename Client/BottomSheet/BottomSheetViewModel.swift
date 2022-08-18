@@ -6,6 +6,11 @@ import UIKit
 
 public struct BottomSheetViewModel {
 
+    private struct UX {
+        static let cornerRadius: CGFloat = 8
+        static let animationTransitionDuration: CGFloat = 0.3
+    }
+
     public var cornerRadius: CGFloat
     public var animationTransitionDuration: TimeInterval
     public var backgroundColor: UIColor
@@ -13,8 +18,8 @@ public struct BottomSheetViewModel {
     public var sheetDarkThemeBackgroundColor: UIColor
 
     public init() {
-        cornerRadius = 8
-        animationTransitionDuration = 0.3
+        cornerRadius = BottomSheetViewModel.UX.cornerRadius
+        animationTransitionDuration = BottomSheetViewModel.UX.animationTransitionDuration
         backgroundColor = .clear
         sheetLightThemeBackgroundColor = UIColor.Photon.LightGrey10
         sheetDarkThemeBackgroundColor = UIColor.Photon.DarkGrey40

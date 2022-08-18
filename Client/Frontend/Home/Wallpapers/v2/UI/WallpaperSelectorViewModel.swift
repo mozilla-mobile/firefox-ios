@@ -13,30 +13,24 @@ class WallpaperSelectorViewModel {
         // The maximum number of items to display in the whole section
         var maxItemsToDisplay: Int {
             switch self {
-            case .compact:
-                return 6
-            case .regular:
-                return 8
+            case .compact: return 6
+            case .regular: return 8
             }
         }
 
         // The maximum number of items to display per row
         var itemsPerRow: Int {
             switch self {
-            case .compact:
-                return 3
-            case .regular:
-                return 4
+            case .compact: return 3
+            case .regular: return 4
             }
         }
 
         // The maximum number of seasonal items to display
         var maxNumberOfSeasonalItems: Int {
             switch self {
-            case .compact:
-                return 3
-            case .regular:
-                return 5
+            case .compact: return 3
+            case .regular: return 5
             }
         }
     }
@@ -44,7 +38,7 @@ class WallpaperSelectorViewModel {
     private var wallpaperManager: WallpaperManagerInterface
     var openSettingsAction: (() -> Void)
     var sectionLayout: WallpaperSelectorLayout = .compact // We use the compact layout as default
-    var wallpaperCellModels: [WallpaperCellViewModel] = []
+    var wallpaperCellModels = [WallpaperCellViewModel]()
 
     init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(), openSettingsAction: @escaping (() -> Void)) {
         self.wallpaperManager = wallpaperManager
@@ -82,7 +76,7 @@ private extension WallpaperSelectorViewModel {
     func createCellModels(for collection: WallpaperCollection?, maxNumber: Int) -> [WallpaperCellViewModel] {
         guard let collection = collection else { return [] }
 
-        var cellModels: [WallpaperCellViewModel] = []
+        var cellModels = [WallpaperCellViewModel]()
         for (index, wallpaper) in collection.wallpapers.enumerated() {
             if cellModels.count < maxNumber {
                 cellModels.append(cellViewModel(for: wallpaper,
