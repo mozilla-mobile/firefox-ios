@@ -81,7 +81,7 @@ extension RecentlySavedCellViewModel: HomepageViewModelProtocol, FeatureFlaggabl
             top: 0,
             leading: leadingInset,
             bottom: HomepageViewModel.UX.spacingBetweenSections,
-            trailing: 1)
+            trailing: 0)
 
         let isIPad = UIDevice.current.userInterfaceIdiom == .pad
         section.interGroupSpacing = isIPad ? UX.iPadGeneralSpacing: UX.generalSpacing
