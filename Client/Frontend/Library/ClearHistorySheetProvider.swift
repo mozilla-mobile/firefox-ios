@@ -74,8 +74,9 @@ class ClearHistorySheetProvider {
 
             let action = UIAlertAction(title: name, style: .destructive) { _ in
 
-                let deletionUlitily = HistoryDeletionUtility(with: self.profile)
-                deletionUlitily.deleteHistoryFrom(timeRange) { dateOption in
+                let deletionUtility = HistoryDeletionUtility(with: self.profile)
+                deletionUtility.deleteHistoryFrom(timeRange) { dateOption in
+                    NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
                     didComplete?(dateOption)
                 }
             }
@@ -90,8 +91,8 @@ class ClearHistorySheetProvider {
     ) {
         alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive) { _ in
 
-            let deletionUlitily = HistoryDeletionUtility(with: self.profile)
-            deletionUlitily.deleteHistoryFrom(.allTime) { dateOption in
+            let deletionUtilitiy = HistoryDeletionUtility(with: self.profile)
+            deletionUtilitiy.deleteHistoryFrom(.allTime) { dateOption in
                 DispatchQueue.main.async {
                     self.tabManager.clearAllTabsHistory()
                 }

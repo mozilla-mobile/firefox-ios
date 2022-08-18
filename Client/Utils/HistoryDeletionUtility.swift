@@ -133,8 +133,6 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
 
             profile.recentlyClosedTabs.removeTabsFromDate(date)
         }
-
-        NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
     }
 
     // MARK: - Helper functions
