@@ -726,30 +726,30 @@ extension String {
             comment: "Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding.",
             lastUpdated: .v102)
         public static let WallpaperSelectorTitle = MZLocalizedString(
-            "Onboarding.Wallpaper.Title.v105",
+            "Onboarding.Wallpaper.Title.v106",
             value: "Try a splash of color",
             comment: "Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.",
-            lastUpdated: .v105)
+            lastUpdated: .v106)
         public static let WallpaperSelectorDescription = MZLocalizedString(
-            "Onboarding.Wallpaper.Description.v105",
+            "Onboarding.Wallpaper.Description.v106",
             value: "Choose a wallpaper that speaks to you.",
             comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.",
-            lastUpdated: .v105)
+            lastUpdated: .v106)
         public static let WallpaperSelectorAction = MZLocalizedString(
-            "Onboarding.Wallpaper.Action.v105",
+            "Onboarding.Wallpaper.Action.v106",
             value: "Explore more wallpapers",
             comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper.",
-            lastUpdated: .v105)
+            lastUpdated: .v106)
         public static let ClassicWallpaper = MZLocalizedString(
-            "Onboarding.Wallpaper.Accessibility.Classic.v105",
+            "Onboarding.Wallpaper.Accessibility.Classic.v106",
             value: "Classic Wallpaper",
             comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.",
-            lastUpdated: .v105)
+            lastUpdated: .v106)
         public static let LimitedEditionWallpaper = MZLocalizedString(
-            "Onboarding.Wallpaper.Accessibility.LimitedEdition.v105",
+            "Onboarding.Wallpaper.Accessibility.LimitedEdition.v106",
             value: "Limited Edition Wallpaper",
             comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.",
-            lastUpdated: .v105)
+            lastUpdated: .v106)
     }
 }
 
