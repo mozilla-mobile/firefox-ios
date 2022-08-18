@@ -38,6 +38,8 @@ extension Notification.Name {
     public static let DatabaseWasClosed = Notification.Name("DatabaseWasClosed")
     public static let DatabaseWasReopened = Notification.Name("DatabaseWasReopened")
 
+    public static let RustPlacesOpened = Notification.Name("RustPlacesOpened")
+
     public static let PasscodeDidChange = Notification.Name("PasscodeDidChange")
 
     public static let PasscodeDidCreate = Notification.Name("PasscodeDidCreate")
@@ -63,6 +65,8 @@ extension Notification.Name {
     public static let WallpaperDidChange = Notification.Name("WallpaperDidChange")
 
     public static let UpdateLabelOnTabClosed = Notification.Name("UpdateLabelOnTabClosed")
+
+    public static let TopTabsTabClosed = Notification.Name("TopTabsTabClosed")
 
     public static let ShowHomepage = Notification.Name("ShowHomepage")
 

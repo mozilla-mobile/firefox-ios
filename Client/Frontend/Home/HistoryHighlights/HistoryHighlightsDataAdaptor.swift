@@ -36,7 +36,8 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
         self.deletionUtility = HistoryDeletionUtility(with: profile)
 
         setupNotifications(forObserver: self,
-                           observing: [.HistoryUpdated])
+                           observing: [.HistoryUpdated,
+                                       .RustPlacesOpened])
         loadHistory()
     }
 
@@ -83,7 +84,8 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
 extension HistoryHighlightsDataAdaptorImplementation: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .HistoryUpdated:
+        case .HistoryUpdated,
+                .RustPlacesOpened:
             loadHistory()
         default:
             return

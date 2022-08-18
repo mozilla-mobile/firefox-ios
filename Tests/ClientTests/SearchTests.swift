@@ -65,7 +65,12 @@ class SearchTests: XCTestCase {
 
     func testSuggestClient() {
         let webServerBase = startMockSuggestServer()
-        let engine = OpenSearchEngine(engineID: "mock", shortName: "Mock engine", image: UIImage(), searchTemplate: "", suggestTemplate: "\(webServerBase)?q={searchTerms}",
+        let engine = OpenSearchEngine(
+            engineID: "mock",
+            shortName: "Mock engine",
+            image: UIImage(),
+            searchTemplate: "",
+            suggestTemplate: "\(webServerBase)?q={searchTerms}",
             isCustomEngine: false)
         let client = SearchSuggestClient(searchEngine: engine, userAgent: "Fx-testSuggestClient")
 

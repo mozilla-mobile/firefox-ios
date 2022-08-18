@@ -158,11 +158,15 @@ class InitialViewController: UIViewController {
 
 extension InitialViewController: ShareControllerDelegate {
     func finish(afterDelay: TimeInterval) {
-        UIView.animate(withDuration: 0.2, delay: afterDelay, options: [], animations: {
-            self.view.alpha = 0
-        }, completion: { _ in
-            self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
-        })
+        UIView.animate(
+            withDuration: 0.2,
+            delay: afterDelay,
+            options: [],
+            animations: {
+                self.view.alpha = 0
+            }, completion: { _ in
+                self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+            })
     }
 
     func getValidExtensionContext() -> NSExtensionContext? {

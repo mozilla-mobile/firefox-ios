@@ -90,6 +90,7 @@ opt_in_rules: # some rules are only opt-in
   - empty_xctest_method
   - duplicate_imports
   - duplicate_enum_cases
+  - multiline_arguments
   - opening_brace
   - return_arrow_whitespace
 

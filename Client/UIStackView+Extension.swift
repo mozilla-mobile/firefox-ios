@@ -57,10 +57,12 @@ extension UIStackView {
                                    completion: (() -> Void)?) {
         view.layoutIfNeeded()
 
-        UIView.animate(withDuration: animated ? 0.25 : 0, animations: {
-            animateClosure()
-        }, completion: { _ in
-            completion?()
-        })
+        UIView.animate(
+            withDuration: animated ? 0.25 : 0,
+            animations: {
+                animateClosure()
+            }, completion: { _ in
+                completion?()
+            })
     }
 }

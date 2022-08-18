@@ -81,14 +81,16 @@ extension SwipeAnimator {
         let translation = velocity.x >= 0 ? animatingView.frame.width : -animatingView.frame.width
         let timeStep = TimeInterval(abs(translation) / speed)
         self.delegate?.swipeAnimator(self, viewWillExitContainerBounds: animatingView)
-        UIView.animate(withDuration: timeStep, animations: {
-            animatingView.transform = self.transformForTranslation(translation)
-            animatingView.alpha = self.alphaForDistanceFromCenter(abs(translation))
-        }, completion: { finished in
-            if finished {
-                animatingView.alpha = 0
-            }
-        })
+        UIView.animate(
+            withDuration: timeStep,
+            animations: {
+                animatingView.transform = self.transformForTranslation(translation)
+                animatingView.alpha = self.alphaForDistanceFromCenter(abs(translation))
+            }, completion: { finished in
+                if finished {
+                    animatingView.alpha = 0
+                }
+            })
     }
 
     fileprivate func transformForTranslation(_ translation: CGFloat) -> CGAffineTransform {

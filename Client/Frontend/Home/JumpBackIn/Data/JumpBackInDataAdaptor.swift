@@ -70,7 +70,8 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
         setupNotifications(forObserver: self, observing: [.ShowHomepage,
                                                           .TabsTrayDidClose,
-                                                          .TabsTrayDidSelectHomeTab])
+                                                          .TabsTrayDidSelectHomeTab,
+                                                          .TopTabsTabClosed])
 
         updateData()
     }
@@ -274,7 +275,8 @@ extension JumpBackInDataAdaptorImplementation: Notifiable {
         switch notification.name {
         case .ShowHomepage,
                 .TabsTrayDidClose,
-                .TabsTrayDidSelectHomeTab:
+                .TabsTrayDidSelectHomeTab,
+                .TopTabsTabClosed:
             updateData()
         default: break
         }

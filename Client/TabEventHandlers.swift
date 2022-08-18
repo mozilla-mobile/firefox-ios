@@ -6,12 +6,18 @@ import Foundation
 import Shared
 
 class TabEventHandlers {
-    static func create(with prefs: Prefs) -> [TabEventHandler] {
+
+    /// Create handlers that observe specified tab events.
+    ///
+    /// For anything that needs to react to tab events notifications (see `TabEventLabel`), the
+    /// pattern is to implement a handler and specify which events to observe.
+    static func create(with profile: Profile) -> [TabEventHandler] {
         let handlers: [TabEventHandler] = [
             FaviconHandler(),
             UserActivityHandler(),
             MetadataParserHelper(),
-            MediaImageLoader(prefs),
+            MediaImageLoader(profile.prefs),
+            AccountSyncHandler(with: profile)
         ]
 
         return handlers

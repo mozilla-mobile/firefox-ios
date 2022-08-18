@@ -222,14 +222,15 @@ class HomepageViewController: UIViewController, HomePanel {
     /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
     /// since it's `.regular` on both. We reloadOnRotation from viewWillTransition in that case.
     private func reloadOnRotation() {
-        if let _ = self.presentedViewController as? PhotonActionSheet {
+        if let _ = presentedViewController as? PhotonActionSheet {
             presentedViewController?.dismiss(animated: false, completion: nil)
         }
 
         // Force the entire collectionview to re-layout
+        viewModel.refreshData(for: traitCollection)
         collectionView.collectionViewLayout.invalidateLayout()
         DispatchQueue.main.async {
-            self.reloadView()
+            self.collectionView.reloadData()
         }
     }
 
@@ -614,11 +615,12 @@ extension HomepageViewController: UIPopoverPresentationControllerDelegate {
 extension HomepageViewController: HomepageViewModelDelegate {
     func reloadView() {
         ensureMainThread { [weak self] in
+            // If the view controller is not visible ignore updates
             guard let self = self,
                   self.view.alpha != 0
             else { return }
+
             self.viewModel.refreshData(for: self.traitCollection)
-            self.viewModel.updateEnabledSections()
             self.collectionView.reloadData()
         }
     }
