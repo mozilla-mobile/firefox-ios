@@ -67,6 +67,7 @@ extension UIView {
         maskLayer.path = maskPath.cgPath
         layer.mask = maskLayer
     }
+
     /// Makes the edge constraints (`topAnchor`, `bottomAnchor`, `leadingAnchor`, `trailingAnchor`) of a view equaled to the edge constraints of another view.
     /// - Parameters:
     ///   - view: The view that we are constraining the current view's edges to.
@@ -81,6 +82,7 @@ extension UIView {
             trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding)
         ])
     }
+
     /// Makes the center x and y anchors of a view equaled to the center x and y anchors of another view.
     /// - Parameter view: The view that we're constraining the current view's center anchors to.
     /// For example : `currentView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true`

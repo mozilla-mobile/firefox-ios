@@ -17,15 +17,18 @@ struct Wallpaper: Equatable {
     // TODO: This following properties will need to be replaced with fetching the
     // resource from the local folder once that functionality is in. For now, we're
     // just returning an existing image to enable development of UI related work.
-    var thumbnail: UIImage {
+    var thumbnail: UIImage? {
+        guard id != "fxDefault" else { return nil } // default/empty wallpaper
         return UIImage(imageLiteralResourceName: "\(id)")
     }
 
-    var portrait: UIImage {
+    var portrait: UIImage? {
+        guard id != "fxDefault" else { return nil } // default/empty wallpaper
         return UIImage(imageLiteralResourceName: "\(id)")
     }
 
-    var landscape: UIImage {
+    var landscape: UIImage? {
+        guard id != "fxDefault" else { return nil } // default/empty wallpaper
         return UIImage(imageLiteralResourceName: "\(id)_ls")
     }
 }

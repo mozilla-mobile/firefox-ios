@@ -56,6 +56,9 @@ final class NimbusFeatureFlagLayer {
                 .wallpaperVersion:
             return checkNimbusForWallpapersFeature(using: nimbus)
 
+        case .wallpaperOnboardingSheet:
+            return checkNimbusForWallpaperOnboarding(using: nimbus)
+
         case .upgradeOnboarding:
             return checkNimbusForUpgradeOnboardingFeature(using: nimbus)
         }
@@ -144,6 +147,10 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.wallpaperFeature.value()
 
         return config.configuration.status
+    }
+
+    private func checkNimbusForWallpaperOnboarding(using nimbus: FxNimbus) -> Bool {
+        return nimbus.features.wallpaperFeature.value().onboardingSheet
     }
 
     public func checkNimbusForWallpapersVersion(using nimbus: FxNimbus = FxNimbus.shared) -> String {

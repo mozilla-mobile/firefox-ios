@@ -23,7 +23,7 @@ class WallpaperManager: WallpaperManagerInterface {
 
     /// Returns the currently selected wallpaper.
     var currentWallpaper: Wallpaper {
-        return Wallpaper(id: "fxAmethyst", textColour: UIColor.red)
+        return Wallpaper(id: "fxDefault", textColour: UIColor.green)
     }
 
     /// Returns all available collections and their wallpaper data. Availability is
@@ -31,7 +31,9 @@ class WallpaperManager: WallpaperManagerInterface {
     var availableCollections: [WallpaperCollection] {
         var wallpapersForClassic: [Wallpaper] {
             var wallpapers = [Wallpaper]()
-            for _ in 0..<5 {
+            wallpapers.append(Wallpaper(id: "fxDefault", textColour: UIColor.green))
+
+            for _ in 0..<4 {
                 wallpapers.append(Wallpaper(id: "fxAmethyst", textColour: UIColor.red))
             }
 

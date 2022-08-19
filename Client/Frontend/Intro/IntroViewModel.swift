@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-struct IntroViewModel: OnboardingViewModelProtocol {
+struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     enum InformationCards: Int, CaseIterable {
         case welcome
         case wallpapers
@@ -45,7 +45,11 @@ struct IntroViewModel: OnboardingViewModelProtocol {
     }
 
     var enabledCards: [InformationCards] {
-        return [.welcome, .wallpapers, .signSync]
+        guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion) else {
+            return [.welcome, .wallpapers, .signSync]
+        }
+
+        return wallpaperVersion == .v2 ? [ .welcome, .signSync] : [.welcome, .wallpapers, .signSync]
     }
 
     func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol? {
