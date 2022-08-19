@@ -321,6 +321,10 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     func refreshData(for traitCollection: UITraitCollection,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+        updateSectionLayout(for: traitCollection,
+                            isPortrait: isPortrait,
+                            device: device)
+
         let maxItemToDisplay = sectionLayout.maxItemsToDisplay(
             displayGroup: .jumpBackIn,
             hasAccount: jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled,
@@ -330,10 +334,6 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
 
         jumpBackInList = jumpBackInDataAdaptor.getJumpBackInData()
         mostRecentSyncedTab = jumpBackInDataAdaptor.getSyncedTabData()
-
-        updateSectionLayout(for: traitCollection,
-                            isPortrait: isPortrait,
-                            device: device)
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
