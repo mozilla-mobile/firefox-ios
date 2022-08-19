@@ -131,10 +131,12 @@ private extension WallpaperSelectorViewModel {
             a11yLabel = "\(String.Onboarding.LimitedEditionWallpaper) \(number)"
         }
 
+        let needsDownload = wallpaper.type == .other && wallpaper.landscape == nil
         let cellViewModel = WallpaperCellViewModel(image: wallpaper.thumbnail,
                                                    a11yId: a11yId,
                                                    a11yLabel: a11yLabel,
-                                                   isSelected: wallpaperManager.currentWallpaper == wallpaper)
+                                                   isSelected: wallpaperManager.currentWallpaper == wallpaper,
+                                                   needsDownload: needsDownload)
         return cellViewModel
     }
 }
