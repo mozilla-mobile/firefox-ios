@@ -311,6 +311,37 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(sut.sectionLayout, .regular)
     }
 
+    func testUpdateLayoutSectionBeforeRefreshData() {
+        let sut = createSut()
+        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        adaptor.jumpBackInList = JumpBackInList(group: nil, tabs: [tab1, tab2, tab3])
+
+        // Start in portrait
+        let portraitTrait = MockTraitCollection()
+        portraitTrait.overridenHorizontalSizeClass = .compact
+        portraitTrait.overridenVerticalSizeClass = .regular
+        sut.refreshData(for: portraitTrait, isPortrait: true, device: .phone)
+
+        XCTAssertEqual(adaptor.maxItemToDisplay, 2)
+        XCTAssertEqual(sut.sectionLayout, .compactJumpBackIn)
+
+        // Mock rotation to landscape
+        let landscapeTrait = MockTraitCollection()
+        landscapeTrait.overridenHorizontalSizeClass = .regular
+        landscapeTrait.overridenVerticalSizeClass = .compact
+        sut.refreshData(for: landscapeTrait, isPortrait: false, device: .phone)
+
+        XCTAssertEqual(adaptor.maxItemToDisplay, 4)
+        XCTAssertEqual(sut.sectionLayout, .regular)
+
+        // Go back to portrait
+        sut.refreshData(for: portraitTrait, isPortrait: true, device: .phone)
+        XCTAssertEqual(adaptor.maxItemToDisplay, 2)
+        XCTAssertEqual(sut.sectionLayout, .compactJumpBackIn)
+    }
+
     // MARK: - Sync tab layout
 
     func testMaxDisplayedItemSyncedTab_withAccount() {
@@ -467,7 +498,10 @@ class JumpBackInDataAdaptorMock: JumpBackInDataAdaptor {
         return nil
     }
 
-    func refreshData(maxItemToDisplay: Int) {}
+    var maxItemToDisplay: Int = 0
+    func refreshData(maxItemToDisplay: Int) {
+        self.maxItemToDisplay = maxItemToDisplay
+    }
 }
 
 // MARK: - MockBrowserBarViewDelegate
