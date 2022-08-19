@@ -321,6 +321,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     func refreshData(for traitCollection: UITraitCollection,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+        getLatestData()
         updateSectionLayout(for: traitCollection,
                             isPortrait: isPortrait,
                             device: device)
@@ -331,7 +332,10 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
             device: device
         )
         jumpBackInDataAdaptor.refreshData(maxItemToDisplay: maxItemToDisplay)
+        getLatestData()
+    }
 
+    private func getLatestData() {
         jumpBackInList = jumpBackInDataAdaptor.getJumpBackInData()
         mostRecentSyncedTab = jumpBackInDataAdaptor.getSyncedTabData()
     }
@@ -402,8 +406,7 @@ extension JumpBackInViewModel: HomepageSectionHandler {
 extension JumpBackInViewModel: JumpBackInDelegate {
     func didLoadNewData() {
         ensureMainThread {
-            self.jumpBackInList = self.jumpBackInDataAdaptor.getJumpBackInData()
-            self.mostRecentSyncedTab = self.jumpBackInDataAdaptor.getSyncedTabData()
+            self.getLatestData()
             guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }
