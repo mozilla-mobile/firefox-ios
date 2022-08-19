@@ -36,10 +36,11 @@ class PocketViewModel {
 
     // The dimension of a cell
     // Fractions for iPhone to only show a slight portion of the next column
-    static var widthDimension: NSCollectionLayoutDimension {
-        if UIDevice.current.userInterfaceIdiom == .pad {
+    func getWidthDimension(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
+                           isLandscape: Bool = UIWindow.isLandscape) -> NSCollectionLayoutDimension {
+        if device == .pad {
             return .absolute(PocketStandardCell.UX.cellWidth) // iPad
-        } else if UIWindow.isLandscape {
+        } else if isLandscape {
             return .fractionalWidth(UX.fractionalWidthiPhoneLanscape)
         } else {
             return .fractionalWidth(UX.fractionalWidthiPhonePortrait)
@@ -64,7 +65,11 @@ class PocketViewModel {
 
     private func recordSectionHasShown() {
         if !hasSentPocketSectionEvent {
-            TelemetryWrapper.recordEvent(category: .action, method: .view, object: .pocketSectionImpression, value: nil, extras: nil)
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .view,
+                                         object: .pocketSectionImpression,
+                                         value: nil,
+                                         extras: nil)
             hasSentPocketSectionEvent = true
         }
     }
@@ -129,7 +134,7 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: PocketViewModel.widthDimension,
+            widthDimension: getWidthDimension(),
             heightDimension: .estimated(PocketStandardCell.UX.cellHeight)
         )
 
