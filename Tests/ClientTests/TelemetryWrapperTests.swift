@@ -333,10 +333,11 @@ extension XCTestCase {
     }
 
     func testCounterMetricRecordingSuccess(metric: CounterMetricType,
+                                           value: Int32 = 1,
                                            file: StaticString = #file,
                                            line: UInt = #line) {
         XCTAssertNotNil(metric.testGetValue(), file: file, line: line)
-        XCTAssertEqual(metric.testGetValue(), 1, file: file, line: line)
+        XCTAssertEqual(metric.testGetValue(), value, file: file, line: line)
 
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
