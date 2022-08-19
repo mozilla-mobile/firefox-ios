@@ -13,4 +13,3 @@ protocol OnboardingViewControllerProtocol {
     func getCardIndex(viewController: OnboardingCardViewController) -> Int?
     func showNextPage(_ cardType: IntroViewModel.InformationCards)
 }
-

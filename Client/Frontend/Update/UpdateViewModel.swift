@@ -60,6 +60,8 @@ class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         return false
     }
 
+    // Function added to wait for AccountManager initialization to get
+    // if the user is Sign in with Sync Account to decide which cards to show
     func hasSyncableAccount(completion: @escaping () -> Void) {
         profile.hasSyncAccount { result in
             self.hasSyncableAccount = result
