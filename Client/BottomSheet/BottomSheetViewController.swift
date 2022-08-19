@@ -22,7 +22,6 @@ class BottomSheetViewController: UIViewController {
     }
     private lazy var topTapView: UIView = .build { view in
         view.backgroundColor = .clear
-        view.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(self.closeTapped)))
     }
     private lazy var sheetView: UIView = .build { _ in }
     private lazy var contentView: UIView = .build { _ in }
@@ -116,6 +115,10 @@ class BottomSheetViewController: UIViewController {
 private extension BottomSheetViewController {
 
     func setupView() {
+        if viewModel.shouldDismissForTapOutside {
+            topTapView.addGestureRecognizer(UITapGestureRecognizer.init(target: self,
+                                                                        action: #selector(self.closeTapped)))
+        }
         scrollView.addSubview(scrollContentView)
         sheetView.addSubview(contentView)
         contentView.addSubviews(closeButton, scrollView)

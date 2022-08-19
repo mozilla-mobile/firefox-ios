@@ -310,7 +310,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
             self.homePanelDidRequestToOpenSettings(at: .wallpaper)
         })
         let viewController = WallpaperSelectorViewController(viewModel: viewModel)
-        let bottomSheetViewModel = BottomSheetViewModel()
+        var bottomSheetViewModel = BottomSheetViewModel()
+        bottomSheetViewModel.shouldDismissForTapOutside = false
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
             childViewController: viewController

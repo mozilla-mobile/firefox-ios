@@ -16,6 +16,7 @@ public struct BottomSheetViewModel {
     public var backgroundColor: UIColor
     public var sheetLightThemeBackgroundColor: UIColor
     public var sheetDarkThemeBackgroundColor: UIColor
+    public var shouldDismissForTapOutside: Bool
 
     public init() {
         cornerRadius = BottomSheetViewModel.UX.cornerRadius
@@ -23,17 +24,20 @@ public struct BottomSheetViewModel {
         backgroundColor = .clear
         sheetLightThemeBackgroundColor = UIColor.Photon.LightGrey10
         sheetDarkThemeBackgroundColor = UIColor.Photon.DarkGrey40
+        shouldDismissForTapOutside = true
     }
 
     public init(cornerRadius: CGFloat,
                 animationTransitionDuration: TimeInterval,
                 backgroundColor: UIColor,
                 sheetLightThemeBackgroundColor: UIColor,
-                sheetDarkThemeBackgroundColor: UIColor) {
+                sheetDarkThemeBackgroundColor: UIColor,
+                shouldDismissForTapOutside: Bool) {
         self.cornerRadius = cornerRadius
         self.animationTransitionDuration = animationTransitionDuration
         self.backgroundColor = backgroundColor
         self.sheetLightThemeBackgroundColor = sheetLightThemeBackgroundColor
         self.sheetDarkThemeBackgroundColor = sheetDarkThemeBackgroundColor
+        self.shouldDismissForTapOutside = shouldDismissForTapOutside
     }
 }
