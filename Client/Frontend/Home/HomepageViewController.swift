@@ -108,7 +108,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         super.viewDidAppear(animated)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            // display wallpaper UI for now (temporary)
             self?.displayWallpaperSelector()
         }
     }
