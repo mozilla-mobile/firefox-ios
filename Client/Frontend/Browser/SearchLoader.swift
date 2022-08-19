@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Storage
 import XCGLogger
-import Glean
+import MozillaAppServices
 
 private let log = Logger.browserLogger
 

@@ -5,7 +5,7 @@
 import Foundation
 import Adjust
 import Shared
-import Glean
+import MozillaAppServices
 
 private let log = Logger.browserLogger
 

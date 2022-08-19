@@ -5,7 +5,7 @@
 import Shared
 import Storage
 import Telemetry
-import Glean
+import MozillaAppServices
 
 protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }

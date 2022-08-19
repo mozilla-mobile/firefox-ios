@@ -12,7 +12,7 @@ import MozillaAppServices
 import Foundation
 import XCTest
 
-import Glean
+import MozillaAppServices
 
 class MockSyncDelegate: SyncDelegate {
     func displaySentTab(for url: URL, title: String, from deviceName: String?) {

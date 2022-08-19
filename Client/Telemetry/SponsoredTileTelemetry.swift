@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Glean
+import MozillaAppServices
 
 // Telemetry for the Sponsored tiles located in the Top sites on the Firefox home page
 // Using Pings to send the telemetry events

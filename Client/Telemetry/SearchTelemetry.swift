@@ -4,7 +4,7 @@
 
 import Foundation
 import WebKit
-import Glean
+import MozillaAppServices
 
 // Search Partner Codes
 // https://docs.google.com/spreadsheets/d/1HMm9UXjfJv-uHhGU1pJlbP4ILkdpSD9w_Fd-3yOd8oY/

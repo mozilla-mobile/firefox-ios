@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Account
 import LocalAuthentication
-import Glean
+import MozillaAppServices
 
 // This file contains all of the settings available in the main settings screen of the app.
 

@@ -4,7 +4,7 @@
 
 import Foundation
 import Adjust
-import Glean
+import MozillaAppServices
 
 protocol AdjustTelemetryData {
     var campaign: String? { get set }
