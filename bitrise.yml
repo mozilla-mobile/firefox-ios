@@ -1087,6 +1087,10 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: WidgetKit/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: CredentialProvider/Info.plist
     - script@1:
         inputs:
         - content: |-
@@ -1213,6 +1217,10 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
         - plist_path: WidgetKit/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: CredentialProvider/Info.plist
     - script@1:
         inputs:
         - content: |-
@@ -1310,6 +1318,10 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
         - plist_path: WidgetKit/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: CredentialProvider/Info.plist
     - script@1:
         inputs:
         - content: |-
