@@ -592,6 +592,7 @@
 		8AD40FD327BB068F00672675 /* MainMenuActionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FD227BB068F00672675 /* MainMenuActionHelper.swift */; };
 		8AD40FD527BB1C1000672675 /* LockButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FD427BB1C1000672675 /* LockButton.swift */; };
 		8AD5702F27AB4DEA005BFDC8 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5702E27AB4DEA005BFDC8 /* UIStackView+Extension.swift */; };
+		8ADAFAC628AEBF6300FFEBE3 /* HomeLogoHeaderViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADAFAC528AEBF6300FFEBE3 /* HomeLogoHeaderViewModelTests.swift */; };
 		8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */; };
 		8ADED7EE276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7ED276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift */; };
 		8ADED7F0276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7EF276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift */; };
@@ -3108,6 +3109,7 @@
 		8AD40FD427BB1C1000672675 /* LockButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockButton.swift; sourceTree = "<group>"; };
 		8AD440CBBF202B15E74E186D /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Search.strings; sourceTree = "<group>"; };
 		8AD5702E27AB4DEA005BFDC8 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
+		8ADAFAC528AEBF6300FFEBE3 /* HomeLogoHeaderViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLogoHeaderViewModelTests.swift; sourceTree = "<group>"; };
 		8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensionsTests.swift; sourceTree = "<group>"; };
 		8ADED7ED276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CumulativeDaysOfUseCounter.swift; sourceTree = "<group>"; };
 		8ADED7EF276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CumulativeDaysOfUseCounterTests.swift; sourceTree = "<group>"; };
@@ -6118,6 +6120,14 @@
 			path = TabContentsScripts;
 			sourceTree = "<group>";
 		};
+		8ADAFAC428AEBF5000FFEBE3 /* LogoHeader */ = {
+			isa = PBXGroup;
+			children = (
+				8ADAFAC528AEBF6300FFEBE3 /* HomeLogoHeaderViewModelTests.swift */,
+			);
+			path = LogoHeader;
+			sourceTree = "<group>";
+		};
 		8AE0BF4B2819B08D00F33EC4 /* TopSitesSettings */ = {
 			isa = PBXGroup;
 			children = (
@@ -7145,6 +7155,7 @@
 		E1AEC16E286E0CF500062E29 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				8ADAFAC428AEBF5000FFEBE3 /* LogoHeader */,
 				8A7653C028A2E54800924ABF /* Pocket */,
 				5AF6254128A5799D00A90253 /* HistoryHighlights */,
 				8AE80BAB2891955400BC12EA /* TopSites */,
@@ -10421,6 +10432,7 @@
 				5A31275828906422001F30FA /* RecentlySavedDelegateMock.swift in Sources */,
 				DFA51484276103A000266AA0 /* HistoryHighlightsManagerTests.swift in Sources */,
 				3BFCBF201E04B1C50070C042 /* UIImageViewExtensionsTests.swift in Sources */,
+				8ADAFAC628AEBF6300FFEBE3 /* HomeLogoHeaderViewModelTests.swift in Sources */,
 				C889D7CE2858C4B500121E1D /* ContextMenuHelperTests.swift in Sources */,
 				C838FD612899A9BB0068F60B /* WallpaperURLProviderTests.swift in Sources */,
 				8DCD3BCD1ED5B7FA00446D38 /* FxADeepLinkingTests.swift in Sources */,
