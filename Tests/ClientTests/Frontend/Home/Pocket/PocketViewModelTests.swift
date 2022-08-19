@@ -30,8 +30,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     func testDefaultPocketViewModelProtocolValues_withEmptyData() {
         let sut = createSut()
         XCTAssertEqual(sut.sectionType, .pocket)
-        // laurie
-//        XCTAssertNotEqual(sut.headerViewModel, LabelButtonHeaderViewModel.emptyHeader)
+        XCTAssertNotEqual(sut.headerViewModel, LabelButtonHeaderViewModel.emptyHeader)
         XCTAssertEqual(sut.numberOfItemsInSection(), 0)
         XCTAssertFalse(sut.hasData)
         XCTAssertTrue(sut.isEnabled)
@@ -119,7 +118,8 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
             XCTAssertEqual(url.absoluteString, "www.test0.com")
         }
         sut.didSelectItem(at: IndexPath(item: 0, section: 0),
-                          homePanelDelegate: nil, libraryPanelDelegate: nil)
+                          homePanelDelegate: nil,
+                          libraryPanelDelegate: nil)
     }
 
     func testLongPressStandardCell_callsHandleLongPress() {
@@ -168,7 +168,8 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
             XCTAssertEqual(url, PocketProvider.MoreStoriesURL)
         }
         sut.didSelectItem(at: IndexPath(item: 1, section: 0),
-                          homePanelDelegate: nil, libraryPanelDelegate: nil)
+                          homePanelDelegate: nil,
+                          libraryPanelDelegate: nil)
     }
 
     func testLongPressDiscoverCell_callsHandleLongPress() {
