@@ -6,11 +6,13 @@ import Foundation
 import UIKit
 import Shared
 
-class IntroViewController: UIViewController {
+class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
+
     private var viewModel: IntroViewModel
     private let profile: Profile
     private var onboardingCards = [OnboardingCardViewController]()
     var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var didFinishClosure: (() -> Void)?
 
     struct UX {
         static let closeButtonSize: CGFloat = 44
@@ -48,9 +50,6 @@ class IntroViewController: UIViewController {
         pageControl.isUserInteractionEnabled = false
         pageControl.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.pageControl
     }
-
-    // Closure delegate
-    var didFinishClosure: ((IntroViewController, FxAPageType?) -> Void)?
 
     // MARK: Initializer
     init(viewModel: IntroViewModel, profile: Profile) {
@@ -134,18 +133,18 @@ class IntroViewController: UIViewController {
     }
 
     @objc private func closeOnboarding() {
-        didFinishClosure?(self, nil)
+        didFinishClosure?()
         viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
 
-    private func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
+    func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
         guard let index = viewModel.getNextIndex(currentIndex: index, goForward: goForward) else { return nil }
 
         return onboardingCards[index]
     }
 
     // Used to programmatically set the pageViewController to show next card
-    private func moveToNextPage(cardType: IntroViewModel.InformationCards) {
+    func moveToNextPage(cardType: IntroViewModel.InformationCards) {
         if let nextViewController = getNextOnboardingCard(index: cardType.rawValue, goForward: true) {
             pageControl.currentPage = cardType.rawValue + 1
             pageController.setViewControllers([nextViewController], direction: .forward, animated: false)
@@ -154,7 +153,7 @@ class IntroViewController: UIViewController {
 
     // Due to restrictions with PageViewController we need to get the index of the current view controller
     // to calculate the next view controller
-    private func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
+    func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
         let cardType = viewController.viewModel.cardType
 
         guard let index = viewModel.enabledCards.firstIndex(of: cardType) else { return nil }
@@ -192,7 +191,7 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 extension IntroViewController: OnboardingCardDelegate {
     func showNextPage(_ cardType: IntroViewModel.InformationCards) {
         guard cardType != viewModel.enabledCards.last else {
-            self.didFinishClosure?(self, nil)
+            self.didFinishClosure?()
             return
         }
 
@@ -258,7 +257,7 @@ extension IntroViewController {
     }
 }
 
-// MARK: - NotificationThemeable
+// MARK: - NotificationThemeable and Notifiable
 extension IntroViewController: NotificationThemeable, Notifiable {
 
     func handleNotifications(_ notification: Notification) {
@@ -269,7 +268,7 @@ extension IntroViewController: NotificationThemeable, Notifiable {
             break
         }
     }
-    
+
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         let indicatorColor = theme == .dark ? UIColor.theme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50

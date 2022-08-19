@@ -6,15 +6,6 @@ import Foundation
 import UIKit
 import Shared
 
-protocol OnboardingViewControllerProtocol {
-    var didFinishClosure: (() -> Void)? { get }
-
-    func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController?
-    func moveToNextPage(cardType: IntroViewModel.InformationCards)
-    func getCardIndex(viewController: OnboardingCardViewController) -> Int?
-    func showNextPage(_ cardType: IntroViewModel.InformationCards)
-}
-
 class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
     // Update view UX constants
@@ -288,7 +279,7 @@ extension UpdateViewController {
     }
 }
 
-// MARK: - NotificationThemeable
+// MARK: - NotificationThemeable and Notifiable
 extension UpdateViewController: NotificationThemeable, Notifiable {
 
     func handleNotifications(_ notification: Notification) {
