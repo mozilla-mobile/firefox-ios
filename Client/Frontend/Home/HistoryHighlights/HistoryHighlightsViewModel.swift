@@ -73,6 +73,8 @@ class HistoryHighlightsViewModel {
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var hasSentSectionEvent = false
     private var historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor
+    private let dispatchQueue: DispatchQueueInterface
+    private let telemetry: TelemetryWrapperProtocol
     var onTapItem: ((HighlightItem) -> Void)?
     var historyHighlightLongPressHandler: ((HighlightItem, UIView?) -> Void)?
     var headerButtonAction: ((UIButton) -> Void)?
@@ -110,11 +112,15 @@ class HistoryHighlightsViewModel {
          isPrivate: Bool,
          tabManager: TabManagerProtocol,
          urlBar: URLBarViewProtocol,
-         historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor) {
+         historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor,
+         dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
+         telemetry: TelemetryWrapperProtocol = TelemetryWrapper.shared) {
         self.profile = profile
         self.isPrivate = isPrivate
         self.tabManager = tabManager
         self.urlBar = urlBar
+        self.dispatchQueue = dispatchQueue
+        self.telemetry = telemetry
         self.historyHighlightsDataAdaptor = historyHighlightsDataAdaptor
         self.historyHighlightsDataAdaptor.delegate = self
     }
@@ -123,11 +129,11 @@ class HistoryHighlightsViewModel {
 
     func recordSectionHasShown() {
         if !hasSentSectionEvent {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .view,
-                                         object: .historyImpressions,
-                                         value: nil,
-                                         extras: nil)
+            telemetry.recordEvent(category: .action,
+                                  method: .view,
+                                  object: .historyImpressions,
+                                  value: nil,
+                                  extras: nil)
             hasSentSectionEvent = true
         }
     }
@@ -136,10 +142,10 @@ class HistoryHighlightsViewModel {
         if urlBar.inOverlayMode { urlBar.leaveOverlayMode() }
 
         onTapItem?(highlight)
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .historyHighlightsItemOpened)
+        telemetry.recordEvent(category: .action,
+                              method: .tap,
+                              object: .firefoxHomepage,
+                              value: .historyHighlightsItemOpened)
     }
 
     // TODO: Good candidate for protocol because is used in JumpBackIn and here
@@ -442,7 +448,7 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
 
 extension HistoryHighlightsViewModel: HistoryHighlightsDelegate {
     func didLoadNewData() {
-        ensureMainThread {
+        dispatchQueue.ensureMainThread {
             self.historyItems = self.historyHighlightsDataAdaptor.getHistoryHightlights()
             guard self.isEnabled else { return }
             self.delegate?.reloadView()
