@@ -253,11 +253,23 @@
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "Dilemel roll-istor ar merdeiñ, ar gerioù-tremen, an toupinoù ha mirout ouzh ar bruderezhioù strobus da heuliañ ac'hanoc'h gant ur c'hlik nemetken!";
 
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Ho roll istor ne heuilh ket ac'hanoc'h";
+
 /* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Incognito.Description" = "%@ eo ur merdeer gouestlet d'ar vuhez prevez gant ur gwarez a-enep an heuliañ hag ur stanker danvezioù.";
 
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "Gwelloc'h eget ur mod incognito";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Keflugnit an arventennoù evit dibab pegen ha pegen nebeud e rannit.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Ar gwarez evel ma faot deoc’h";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Kemerit ho merdeiñ prevez d'al live da-heul.";
 
 /* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Title" = "Degemer mat war Firefox %@!";
@@ -342,6 +354,9 @@
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Strivañ a ra Mozilla evit dastum ar pezh hon eus ezhomm hepken evit gwellaat ha kinnig %@ d'an holl.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ a c’hall staliañ ha lañsañ studiadennoù a vare da vare.";
 
 /* Title for section in settings menu */
 "Settings.general" = "Hollek";
@@ -583,11 +598,59 @@
 /* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
 "Tip.Release.Description" = "Lenn hiroc'h diwar-benn an dra-se hag an hizivadennoù all evit %@.";
 
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Feiz ya, un neuz nevez-flamm a zo ganeomp!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Gweredoù ar bajenn > Lec’hienn urzhiataer";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Fellout a ra deoc’h gwelet stumm urzhiataer klok ul lec’hienn?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ heulier stanket betek-henn";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Merdeiñ a rit. Stankañ a ra %@.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Dibabit Lakaat er varrenn berradennoù adalek lañser %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Krouiñ berradennoù etrezek al lec’hienn a weladennit ar muiañ:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Ouzhpennañ ur verradenn Siri";
+
 /* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
 "Tip.SiriErase.Title" = "“Siri, diverk ma dalc'h war %@ .”";
 
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Ouzhpennañ ur verradenn Siri";
+
 /* Text for a label that indicates the title for siri favorite tip. */
 "Tip.SiriFavorite.Title" = "“Siri, digor al lec'hienn a blij din ar muiañ.”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Klaskit diweredekaat ar gwarez heuliañ";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Mankout a ra elfennoù el lec’hienn pe iskis e seblant bezañ?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Kit en arventennoù evit merañ an dibarzhioù buhez prevez ha diogelroez.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "An arventennoù dre ziouer-se a ginnig ur gwarez kreñv. Aes eo kemmañ an arventennoù evit klotañ gant hoc’h ezhommoù resis.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "Miret en deus %@ da vezañ spiet gant al lec’hienn. Stokit ar skoed evit kaout titouroù war ar pezh a zo bet stanket.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Stokit ar boubelenn pa fell deoc’h tennañ holl roudoù hoc’h estez bremanel.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Gwarezet hoc’h!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Implijit Touch ID evit distreiñ da %@";
