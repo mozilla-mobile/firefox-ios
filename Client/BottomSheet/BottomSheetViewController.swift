@@ -4,6 +4,11 @@
 
 import UIKit
 
+protocol BottomSheetChild {
+    /// Tells the child that the bottom sheet will get dismissed
+    func willDismiss()
+}
+
 class BottomSheetViewController: UIViewController {
 
     private struct UX {
@@ -14,7 +19,9 @@ class BottomSheetViewController: UIViewController {
 
     internal var notificationCenter: NotificationProtocol
     private let viewModel: BottomSheetViewModel
-    private let childViewController: UIViewController
+
+    typealias BottomSheetChildViewController = UIViewController & BottomSheetChild
+    private let childViewController: BottomSheetChildViewController
 
     // Views
     private lazy var scrollView: FadeScrollView = .build { scrollView in
@@ -37,7 +44,7 @@ class BottomSheetViewController: UIViewController {
 
     // MARK: Init
     public init(viewModel: BottomSheetViewModel,
-                childViewController: UIViewController,
+                childViewController: BottomSheetChildViewController,
                 notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
         self.childViewController = childViewController
@@ -100,6 +107,7 @@ class BottomSheetViewController: UIViewController {
     }
 
     public func dismissViewController() {
+        childViewController.willDismiss()
         contentViewBottomConstraint.constant = childViewController.view.frame.height
         UIView.animate(
             withDuration: viewModel.animationTransitionDuration,

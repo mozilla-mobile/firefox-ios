@@ -260,3 +260,7 @@ extension WallpaperSelectorViewController: NotificationThemeable, Notifiable {
         }
     }
 }
+extension WallpaperSelectorViewController: BottomSheetChild {
+    func willDismiss() {
+    }
+}
