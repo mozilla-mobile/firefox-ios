@@ -114,17 +114,30 @@ class WallpaperSelectorViewController: UIViewController {
 extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.wallpaperCellModels.count
+        return viewModel.numberOfWallpapers
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier,
                                                             for: indexPath) as? WallpaperCollectionViewCell,
-              let cellViewModel = viewModel.wallpaperCellModels[safe: indexPath.row]
+              let cellViewModel = viewModel.cellViewModel(for: indexPath)
         else { return UICollectionViewCell() }
 
         cell.viewModel = cellViewModel
         return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        viewModel.updateCurrentWallpaper(at: indexPath) { result in
+            switch result {
+            case .success(let success):
+                if success {
+                    collectionView.reloadData()
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 
 }

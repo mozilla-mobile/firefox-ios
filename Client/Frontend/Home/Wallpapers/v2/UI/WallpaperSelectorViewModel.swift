@@ -4,6 +4,11 @@
 
 import Foundation
 
+private struct WallpaperSelectorItem {
+    let wallpaper: Wallpaper
+    let collectionType: WallpaperCollectionType
+}
+
 class WallpaperSelectorViewModel {
 
     enum WallpaperSelectorLayout: Equatable {
@@ -36,9 +41,13 @@ class WallpaperSelectorViewModel {
     }
 
     private var wallpaperManager: WallpaperManagerInterface
+    private var wallpaperItems = [WallpaperSelectorItem]()
     var openSettingsAction: (() -> Void)
     var sectionLayout: WallpaperSelectorLayout = .compact // We use the compact layout as default
-    var wallpaperCellModels = [WallpaperCellViewModel]()
+
+    var numberOfWallpapers: Int {
+        return wallpaperItems.count
+    }
 
     init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(), openSettingsAction: @escaping (() -> Void)) {
         self.wallpaperManager = wallpaperManager
@@ -54,37 +63,58 @@ class WallpaperSelectorViewModel {
         }
         setupWallpapers()
     }
+
+    func updateCurrentWallpaper(at indexPath: IndexPath, completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard let wallpaperItem = wallpaperItems[safe: indexPath.row] else {
+            completion(.success(false))
+            return
+        }
+        wallpaperManager.setCurrentWallpaper(to: wallpaperItem.wallpaper, completion: completion)
+        setupWallpapers()
+    }
+
+    func cellViewModel(for indexPath: IndexPath) -> WallpaperCellViewModel? {
+        guard let wallpaperItem = wallpaperItems[safe: indexPath.row] else {
+            return nil
+        }
+        return cellViewModel(for: wallpaperItem.wallpaper,
+                             collectionType: wallpaperItem.collectionType,
+                             number: indexPath.row)
+    }
 }
+
 private extension WallpaperSelectorViewModel {
 
     func setupWallpapers() {
-        wallpaperCellModels = []
+        wallpaperItems = []
         let classicCollection = wallpaperManager.availableCollections.first { $0.type == .classic }
         let seasonalCollection = wallpaperManager.availableCollections.first { $0.type == .limitedEdition }
 
-        let seasonalCellModels = createCellModels(for: seasonalCollection,
-                                                  maxNumber: sectionLayout.maxNumberOfSeasonalItems)
+        let seasonalWallpapers = collectWallpapers(for: seasonalCollection,
+                                                   maxNumber: sectionLayout.maxNumberOfSeasonalItems)
 
-        let maxNumberOfClassic = sectionLayout.maxItemsToDisplay - seasonalCellModels.count
-        let classicCellModels = createCellModels(for: classicCollection,
-                                                 maxNumber: maxNumberOfClassic)
+        let maxNumberOfClassic = sectionLayout.maxItemsToDisplay - seasonalWallpapers.count
+        let classicWallpapers = collectWallpapers(for: classicCollection,
+                                                  maxNumber: maxNumberOfClassic)
 
-        wallpaperCellModels.append(contentsOf: classicCellModels)
-        wallpaperCellModels.append(contentsOf: seasonalCellModels)
+        wallpaperItems.append(contentsOf: classicWallpapers.map { WallpaperSelectorItem(wallpaper: $0,
+                                                                                    collectionType: .classic) })
+        wallpaperItems.append(contentsOf: seasonalWallpapers.map { WallpaperSelectorItem(wallpaper: $0,
+                                                                                     collectionType: .limitedEdition) })
     }
 
-    func createCellModels(for collection: WallpaperCollection?, maxNumber: Int) -> [WallpaperCellViewModel] {
+    func collectWallpapers(for collection: WallpaperCollection?, maxNumber: Int) -> [Wallpaper] {
         guard let collection = collection else { return [] }
 
-        var cellModels = [WallpaperCellViewModel]()
-        for (index, wallpaper) in collection.wallpapers.enumerated() {
-            if cellModels.count < maxNumber {
-                cellModels.append(cellViewModel(for: wallpaper,
-                                                collectionType: collection.type,
-                                                number: index + 1))
+        var wallpapers = [Wallpaper]()
+        for wallpaper in collection.wallpapers {
+            if wallpapers.count < maxNumber {
+                wallpapers.append(wallpaper)
+            } else {
+                break
             }
         }
-        return cellModels
+        return wallpapers
     }
 
     func cellViewModel(for wallpaper: Wallpaper,
