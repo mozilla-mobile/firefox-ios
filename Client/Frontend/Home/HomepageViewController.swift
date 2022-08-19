@@ -299,14 +299,15 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
 
     private func displayWallpaperSelector() {
-        guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-              wallpaperVersion == .v2,
-              featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly)
+        let wallpaperManager = WallpaperManager()
+        guard wallpaperManager.canOnboardingBeShown,
+              !contextualHintViewController.isPresenting,
+              !UserDefaults.standard.bool(forKey: PrefsKeys.WallpaperOnboardingSeenKey)
         else { return }
 
         self.dismissKeyboard()
 
-        let viewModel = WallpaperSelectorViewModel(wallpaperManager: WallpaperManager(), openSettingsAction: {
+        let viewModel = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager, openSettingsAction: {
             self.homePanelDidRequestToOpenSettings(at: .wallpaper)
         })
         let viewController = WallpaperSelectorViewController(viewModel: viewModel)
@@ -318,6 +319,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         )
 
         self.present(bottomSheetVC, animated: false, completion: nil)
+        UserDefaults.standard.set(true, forKey: PrefsKeys.WallpaperOnboardingSeenKey)
     }
 
     // MARK: - Contextual hint
