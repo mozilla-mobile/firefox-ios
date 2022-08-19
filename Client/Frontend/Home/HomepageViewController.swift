@@ -8,7 +8,7 @@ import Storage
 import SyncTelemetry
 import MozillaAppServices
 
-class HomepageViewController: UIViewController, HomePanel {
+class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
@@ -102,6 +102,15 @@ class HomepageViewController: UIViewController, HomePanel {
         applyTheme()
         setupSectionsAction()
         reloadView()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            // display wallpaper UI for now (temporary)
+            self?.displayWallpaperSelector()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -287,6 +296,27 @@ class HomepageViewController: UIViewController, HomePanel {
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
         let visitType = VisitType.bookmark
         homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
+    }
+
+    private func displayWallpaperSelector() {
+        guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
+              wallpaperVersion == .v2,
+              featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly)
+        else { return }
+
+        self.dismissKeyboard()
+
+        let viewModel = WallpaperSelectorViewModel(wallpaperManager: WallpaperManager(), openSettingsAction: {
+            self.homePanelDidRequestToOpenSettings(at: .wallpaper)
+        })
+        let viewController = WallpaperSelectorViewController(viewModel: viewModel)
+        let bottomSheetViewModel = BottomSheetViewModel()
+        let bottomSheetVC = BottomSheetViewController(
+            viewModel: bottomSheetViewModel,
+            childViewController: viewController
+        )
+
+        self.present(bottomSheetVC, animated: false, completion: nil)
     }
 
     // MARK: - Contextual hint

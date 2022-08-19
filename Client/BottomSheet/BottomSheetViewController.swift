@@ -2,250 +2,254 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import Foundation
 import UIKit
-import SnapKit
-import Shared
 
-enum BottomSheetState {
-    case none
-    case partial
-    case full
-}
+class BottomSheetViewController: UIViewController {
 
-protocol BottomSheetDelegate: AnyObject {
-    func closeBottomSheet()
-    func showBottomToolbar()
-}
+    private struct UX {
+        static let minVisibleTopSpace: CGFloat = 40
+        static let closeButtonWidthHeight: CGFloat = 30
+        static let closeButtonTopTrailingSpace: CGFloat = 16
+    }
 
-class BottomSheetViewController: UIViewController, NotificationThemeable {
-    // Delegate
-    var delegate: BottomSheetDelegate?
-    private var currentState: BottomSheetState = .none
-    private var isLandscape: Bool {
-        return UIWindow.isLandscape
-    }
-    private var orientationBasedHeight: CGFloat {
-        return isLandscape ? DeviceInfo.screenSizeOrientationIndependent().width : DeviceInfo.screenSizeOrientationIndependent().height
-    }
-    // shows how much bottom sheet should be visible
-    // 1 = full, 0.5 = half, 0 = hidden
-    // and for landscape we show 0.5 specifier just because of very small height
-    private var heightSpecifier: CGFloat {
-        let height = orientationBasedHeight
-        let heightForTallScreen: CGFloat = height > 850 ? 0.65 : 0.74
-        var specifier = height > 668 ? heightForTallScreen : 0.84
-        if isLandscape {
-            specifier = 0.5
-        }
-        return specifier
-    }
-    private var navHeight: CGFloat {
-        return navigationController?.navigationBar.frame.height ?? 0
-    }
-    private var fullHeight: CGFloat {
-        return orientationBasedHeight - navHeight
-    }
-    private var partialHeight: CGFloat {
-        return fullHeight * heightSpecifier
-    }
-    private var maxY: CGFloat {
-        return fullHeight - partialHeight
-    }
-    private var minY: CGFloat {
-        return orientationBasedHeight
-    }
-    private var endedYVal: CGFloat = 0
-    private var endedTranslationYVal: CGFloat = 0
-
-    // Container child view controller
-    var containerViewController: UIViewController?
+    internal var notificationCenter: NotificationProtocol
+    private let viewModel: BottomSheetViewModel
+    private let childViewController: UIViewController
 
     // Views
-    private var overlay: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.50)
-        return view
-    }()
-    private var panView: UIView = {
-        let view = UIView()
-        return view
-    }()
+    private lazy var scrollView: FadeScrollView = .build { scrollView in
+        scrollView.showsHorizontalScrollIndicator = false
+    }
+    private lazy var topTapView: UIView = .build { view in
+        view.backgroundColor = .clear
+        view.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(self.closeTapped)))
+    }
+    private lazy var sheetView: UIView = .build { _ in }
+    private lazy var contentView: UIView = .build { _ in }
+    private lazy var closeButton: UIButton = .build { button in
+        button.setImage(UIImage(named: ImageIdentifiers.bottomSheetClose), for: .normal)
+        button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
+        button.accessibilityLabel = .CloseButtonTitle
+    }
+    private lazy var scrollContentView: UIView = .build { _ in }
+    private var contentViewBottomConstraint: NSLayoutConstraint!
 
-    // MARK: Initializers
-    init() {
+    private var viewTranslation = CGPoint(x: 0, y: 0)
+
+    // MARK: Init
+    public init(viewModel: BottomSheetViewModel,
+                childViewController: UIViewController,
+                notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.viewModel = viewModel
+        self.childViewController = childViewController
+        self.notificationCenter = notificationCenter
+
         super.init(nibName: nil, bundle: nil)
+
+        modalPresentationStyle = .overFullScreen
+        modalTransitionStyle = .crossDissolve
     }
 
-    required init?(coder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLoad() {
+    // MARK: View lifecyle
+    override public func viewDidLoad() {
         super.viewDidLoad()
-        roundViews()
-        initialViewSetup()
+        sheetView.alpha = 1
+        setupChildViewController()
+
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(panGesture))
+        contentView.addGestureRecognizer(gesture)
+        gesture.delegate = self
+
+        setupView()
+        applyTheme()
+
+        contentViewBottomConstraint.constant = childViewController.view.frame.height
+        view.layoutIfNeeded()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         applyTheme()
     }
 
-    // MARK: View setup
-    private func initialViewSetup() {
-        self.view.backgroundColor = .clear
-        self.view.addSubview(overlay)
-        overlay.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
-
-        self.view.addSubview(panView)
-        panView.snp.makeConstraints { make in
-            make.bottom.equalTo(self.view.safeArea.bottom)
-            make.centerX.equalToSuperview()
-            make.left.right.equalToSuperview()
-            make.height.equalTo(fullHeight)
-        }
-
-        let gesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGesture))
-        panView.addGestureRecognizer(gesture)
-        panView.translatesAutoresizingMaskIntoConstraints = true
-
-        let overlayTapGesture = UITapGestureRecognizer(target: self, action: #selector(self.hideViewWithAnimation))
-        overlay.addGestureRecognizer(overlayTapGesture)
-
-        hideView(shouldAnimate: false)
-    }
-
-    private func roundViews() {
-        panView.layer.cornerRadius = 10
-        view.clipsToBounds = true
-        panView.clipsToBounds = true
-    }
-
-    // MARK: Bottomsheet swipe methods
-    private func moveView(state: BottomSheetState) {
-        self.currentState = state
-        let yVal = state == .full ? navHeight : state == .partial ? maxY : minY
-        panView.frame = CGRect(x: 0, y: yVal, width: view.frame.width, height: fullHeight)
-    }
-
-    private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
-        let translation = recognizer.translation(in: view)
-        let yVal: CGFloat = translation.y
-        let startedYVal = endedTranslationYVal + maxY
-        let newYVal = currentState == .full ? navHeight + yVal : startedYVal + yVal
-        let downYShiftSpecifier: CGFloat = isLandscape ? 0.3 : 0.2
-
-        // top
-        guard newYVal >= navHeight else {
-            endedTranslationYVal = 0
-            return
-        }
-
-        // move the frame according to pan gesture
-        panView.frame = CGRect(x: 0, y: newYVal, width: view.frame.width, height: fullHeight)
-
-        if recognizer.state == .ended {
-            self.endedTranslationYVal = 0
-            // moving down
-            if newYVal > self.maxY {
-                // past middle
-                if newYVal > self.maxY + (self.partialHeight * downYShiftSpecifier) {
-                    hideView(shouldAnimate: true)
-                } else {
-                    self.moveView(state: .partial)
-                }
-            // moving up
-            } else if newYVal < self.maxY {
-                self.showFullView(shouldAnimate: true)
-            }
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        contentViewBottomConstraint.constant = 0
+        UIView.animate(withDuration: viewModel.animationTransitionDuration) {
+            self.view.backgroundColor = self.viewModel.backgroundColor
+            self.view.layoutIfNeeded()
         }
     }
 
-    @objc func hideView(shouldAnimate: Bool) {
-        let closure = {
-            self.moveView(state: .none)
-            self.view.isUserInteractionEnabled = true
-        }
-        guard shouldAnimate else {
-            closure()
-            self.overlay.alpha = 0
-            self.view.isHidden = true
-            delegate?.showBottomToolbar()
-            return
-        }
-        self.view.isUserInteractionEnabled = false
+    override public func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        contentView.clipsToBounds = true
+        contentView.layer.cornerRadius = viewModel.cornerRadius
+        contentView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+
+        sheetView.layer.backgroundColor = UIColor.clear.cgColor
+        sheetView.layer.shadowColor = UIColor.black.cgColor
+        sheetView.layer.shadowOffset = CGSize(width: 0, height: -5.0)
+        sheetView.layer.shadowRadius = 20.0
+        sheetView.layer.shadowPath = UIBezierPath(roundedRect: sheetView.bounds,
+                                                  cornerRadius: viewModel.cornerRadius).cgPath
+    }
+
+    public func dismissViewController() {
+        contentViewBottomConstraint.constant = childViewController.view.frame.height
         UIView.animate(
-            withDuration: 0.25,
+            withDuration: viewModel.animationTransitionDuration,
             animations: {
-                closure()
-                self.overlay.alpha = 0
-            }, completion: { value in
-                if value {
-                    self.view.isHidden = true
-                    self.delegate?.showBottomToolbar()
-                    self.containerViewController?.view.removeFromSuperview()
-                }
+                self.view.layoutIfNeeded()
+                self.view.backgroundColor = .clear
+            }, completion: { _ in
+                self.dismiss(animated: false, completion: nil)
             })
     }
+}
 
-    @objc func showView() {
-        if let container = containerViewController {
-            panView.addSubview(container.view)
-        }
-        UIView.animate(withDuration: 0.26, animations: {
-            self.moveView(state: self.isLandscape ? .full : .partial)
-            self.overlay.alpha = 1
-            self.view.isHidden = false
-        })
+private extension BottomSheetViewController {
+
+    func setupView() {
+        scrollView.addSubview(scrollContentView)
+        sheetView.addSubview(contentView)
+        contentView.addSubviews(closeButton, scrollView)
+        view.addSubviews(topTapView, sheetView)
+
+        contentViewBottomConstraint = sheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        let scrollViewHeightConstraint = scrollView.heightAnchor.constraint(
+            greaterThanOrEqualTo: scrollContentView.heightAnchor)
+
+        NSLayoutConstraint.activate([
+            topTapView.topAnchor.constraint(equalTo: view.topAnchor),
+            topTapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topTapView.bottomAnchor.constraint(equalTo: sheetView.topAnchor, constant: viewModel.cornerRadius),
+            topTapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            sheetView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor,
+                                             constant: BottomSheetViewController.UX.minVisibleTopSpace),
+            sheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentViewBottomConstraint,
+            sheetView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            contentView.topAnchor.constraint(equalTo: sheetView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: sheetView.bottomAnchor),
+            contentView.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
+
+            closeButton.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                             constant: BottomSheetViewController.UX.closeButtonTopTrailingSpace),
+            closeButton.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor,
+                                                  constant: -BottomSheetViewController.UX.closeButtonTopTrailingSpace),
+            closeButton.widthAnchor.constraint(equalToConstant: BottomSheetViewController.UX.closeButtonWidthHeight),
+            closeButton.heightAnchor.constraint(equalToConstant: BottomSheetViewController.UX.closeButtonWidthHeight),
+
+            scrollContentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            scrollContentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            scrollContentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            scrollContentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            scrollContentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+
+            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            scrollViewHeightConstraint
+        ])
+
+        scrollViewHeightConstraint.priority = .defaultLow
+        contentView.bringSubviewToFront(closeButton)
     }
 
-    func showFullView(shouldAnimate: Bool) {
-        let closure = {
-            self.moveView(state: .full)
-            self.overlay.alpha = 1
-            self.view.isHidden = false
-        }
-        guard shouldAnimate else {
-            closure()
-            return
-        }
-        UIView.animate(withDuration: 0.26, animations: {
-            closure()
-        })
+    func setupChildViewController() {
+        addChild(childViewController)
+        scrollContentView.addSubview(childViewController.view)
+        childViewController.didMove(toParent: self)
+
+        guard let childSuperView = childViewController.view.superview else { return }
+
+        NSLayoutConstraint.activate([
+            childViewController.view.bottomAnchor.constraint(equalTo: childSuperView.bottomAnchor),
+            childViewController.view.topAnchor.constraint(equalTo: childSuperView.topAnchor),
+            childViewController.view.leftAnchor.constraint(equalTo: childSuperView.leftAnchor),
+            childViewController.view.rightAnchor.constraint(equalTo: childSuperView.rightAnchor)
+            ])
+
+        childViewController.view.translatesAutoresizingMaskIntoConstraints = false
     }
 
-    @objc private func panGesture(_ recognizer: UIPanGestureRecognizer) {
-        moveView(panGestureRecognizer: recognizer)
+    @objc func panGesture(_ recognizer: UIPanGestureRecognizer) {
+        switch recognizer.state {
+        case .changed:
+            viewTranslation = recognizer.translation(in: view)
+
+            // do not allow swiping up
+            guard viewTranslation.y > 0 else { return }
+
+            UIView.animate(withDuration: 0.5,
+                           delay: 0,
+                           usingSpringWithDamping: 0.7,
+                           initialSpringVelocity: 1,
+                           options: .curveEaseOut,
+                           animations: {
+                self.sheetView.transform = CGAffineTransform(translationX: 0, y: self.viewTranslation.y)
+            })
+        case .ended:
+            if viewTranslation.y < 200 {
+                UIView.animate(withDuration: 0.5,
+                               delay: 0,
+                               usingSpringWithDamping: 0.7,
+                               initialSpringVelocity: 1,
+                               options: .curveEaseOut,
+                               animations: {
+                    self.sheetView.transform = .identity
+                })
+            } else {
+                dismissViewController()
+            }
+        default:
+            break
+        }
     }
 
-    @objc private func hideViewWithAnimation() {
-        hideView(shouldAnimate: true)
+    @objc func closeTapped() {
+        dismissViewController()
+    }
+}
+
+extension BottomSheetViewController: UIGestureRecognizerDelegate {
+
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                                  shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+        ) -> Bool {
+        return false
+    }
+}
+
+// MARK: - Themable & Notifiable
+extension BottomSheetViewController: NotificationThemeable, Notifiable {
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
     }
 
     func applyTheme() {
-        if LegacyThemeManager.instance.currentName == .normal {
-            panView.backgroundColor = UIColor.Photon.Grey10
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            contentView.backgroundColor = viewModel.sheetDarkThemeBackgroundColor
+            sheetView.layer.shadowOpacity = 0.5
         } else {
-            panView.backgroundColor = UIColor.Photon.Grey90
+            contentView.backgroundColor = viewModel.sheetLightThemeBackgroundColor
+            sheetView.layer.shadowOpacity = 0.2
         }
-    }
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: { (UIViewControllerTransitionCoordinatorContext) -> Void in
-            let orient = UIWindow.interfaceOrientation
-            switch orient {
-            case .portrait:
-                self.moveView(state: .partial)
-            case .landscapeLeft, .landscapeRight:
-                self.moveView(state: .full)
-            default:
-                print("orientation not supported")
-            }
-        }, completion: { (UIViewControllerTransitionCoordinatorContext) -> Void in
-            self.view.setNeedsLayout()
-            self.view.layoutIfNeeded()
-            self.containerViewController?.view.setNeedsLayout()
-        })
     }
 }

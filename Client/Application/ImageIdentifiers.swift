@@ -20,6 +20,7 @@ public struct ImageIdentifiers {
     public static let addToReadingList = "addToReadingList"
     public static let bookmarks = "menu-panel-Bookmarks"
     public static let bookmarkFolder = "bookmarkFolder"
+    public static let bottomSheetClose = "bottomSheet-close"
     public static let contextualHintClose = "find_close"
     public static let copyLink = "menu-Copy-Link"
     public static let closeLargeButton = "close-large"

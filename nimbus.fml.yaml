@@ -407,20 +407,26 @@ features:
             "status": true,
             "version": legacy,
           }
+      onboarding-sheet:
+        description: This property defines whether the wallpaper onboarding is shown or not
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value: {
           "configuration": {
             "status": true,
             "version": legacy,
-          }
+          },
+          "onboarding-sheet": false
         }
       - channel: developer
         value: {
           "configuration": {
             "status": true,
             "version": legacy,
-          }
+          },
+          "onboarding-sheet": true
         }
 
 types:

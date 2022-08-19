@@ -133,3 +133,6 @@ wallpaper-feature:
     configuration:
       type: json
       description: This property defines the configuration for the wallpaper feature
+    onboarding-sheet:
+      type: boolean
+      description: This property defines whether the wallpaper onboarding is shown or not

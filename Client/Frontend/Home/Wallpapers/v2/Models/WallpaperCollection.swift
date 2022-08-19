@@ -20,6 +20,10 @@ struct WallpaperCollection: Codable, Equatable {
     let availability: WallpaperCollectionAvailability?
     let wallpapers: [Wallpaper]
 
+    var type: WallpaperCollectionType {
+        return id == "classicFirefox" ? .classic : .limitedEdition
+    }
+
     init(
         id: String,
         learnMoreURL: String?,
