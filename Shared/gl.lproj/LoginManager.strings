@@ -34,6 +34,9 @@
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Abrir e cubrir";
 
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Contrasinal";
+
 /* Reveal password text selection menu item */
 "Reveal" = "Amosar";
 
@@ -45,4 +48,7 @@
 
 /* Label for the button used to select all logins. */
 "Select All" = "Seleccionar todo";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Nome de usuario";
 

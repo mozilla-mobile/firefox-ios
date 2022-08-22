@@ -1,0 +1,60 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "ඔබට විශ්වාස ද?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "අවලංගු";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "සෙවුම මකන්න";
+
+/* Copy password text selection menu item */
+"Copy" = "පිටපතක්";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "සෑදුවේ %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "මකන්න";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "සියල්ල නොතෝරන්න";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "සෙවුම් ආකාරයට යන්න";
+
+/* Hide password text selection menu item */
+"Hide" = "සඟවන්න";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "පිවිසුම් සදහටම ඉවත් කරනු ලැබේ.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "සියළුම සම්බන්ධිත උපාංගවලින් පිවිසුම් ඉවත් කෙරේ.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "%@ සංශෝධිතයි";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "පිවිසුම් හමු නොවුණි";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "විවෘත කර පුරවන්න";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "මුරපදය";
+
+/* Reveal password text selection menu item */
+"Reveal" = "පෙන්වන්න";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "සොයන්න";
+
+/* Label for the button used to select all logins. */
+"Select All" = "සියල්ල තෝරන්න";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "පරිශීලක නාමය";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "අඩවිය";
+

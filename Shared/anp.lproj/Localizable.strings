@@ -746,7 +746,7 @@
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
    Open search section of settings */
-"Search" = "खोजोॅ";
+"Search" = "खोजियै";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "खोजोॅ अथवा पता भरोॅ";

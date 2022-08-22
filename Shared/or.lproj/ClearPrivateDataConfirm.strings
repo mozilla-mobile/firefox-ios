@@ -2,7 +2,7 @@
 "Cancel" = "ନାକଚ";
 
 /* The button that clears private data. */
-"OK" = "OK";
+"OK" = "ଠିକ ଅଛି";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "This action will clear all of your private data. It cannot be undone." = "ଏହା ଆପଣଙ୍କର ସବୁ ବ୍ୟକ୍ତିଗତ ତଥ୍ୟ ସଫା କରିଦେବ । ଏହାକୁ ଆଉ ଫେରାଇହେବ ନାହିଁ ।";

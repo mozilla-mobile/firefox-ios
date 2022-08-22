@@ -1,21 +1,24 @@
 /* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
-"Add to Bookmarks" = "පිටු සලකුණු එක් කරන්න";
+"Add to Bookmarks" = "පොත්යොමුවලට යොදන්න";
 
 /* Label for preview action on Tab Tray Tab to close the current tab */
-"Close Tab" = "ටැබය වසන්න";
+"Close Tab" = "පටිත්ත වසන්න";
 
 /* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
-"Copy URL" = "URL පිටපත් කරන්න";
+"Copy URL" = "ඒ.ස.නි. පිටපතක්";
+
+/* Label for preview action on Tab Tray Tab to send the current link to another device */
+"Menu.SendLinkToDevice" = "උපාංගයට සබැඳිය යවන්න";
 
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
-"Open Last Bookmark" = "අවසාන පිටුසළකුණ විවෘත කරන්න";
+"Open Last Bookmark" = "අවසාන පොත්යොමුව අරින්න";
 
 /* String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch */
-"Open Last Tab" = "අවසාන ටැබය විවෘත කරන්න";
+"Open Last Tab" = "අවසාන පටිත්ත අරින්න";
 
 /* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
-"Preview of %@" = "%@ හි පෙර දසුන";
+"Preview of %@" = "%@ හි පෙරදසුන";
 
 /* Label for preview action on Tab Tray Tab to send the current tab to another device */
-"Send to Device" = "මෙවලමට යවන්න";
+"Send to Device" = "උපාංගයට යවන්න";
 
