@@ -55,6 +55,11 @@
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "ཆོག";
 
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "འཚོལ་བཤེར།";
+
 /* The cancel button if you do not want to add a search engine. */
 "Search.ThirdPartyEngines.Cancel" = "འདོར་བ།";
 

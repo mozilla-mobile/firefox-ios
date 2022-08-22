@@ -1,6 +1,6 @@
 /* The cancel button when confirming clear history. */
-"Cancel" = "ರದ್ದು";
+"Cancel" = "ರದ್ದು ಮಾಡು";
 
 /* The confirmation button that clears history even when Sync is connected. */
-"OK" = "OK";
+"OK" = "OK‍";
 

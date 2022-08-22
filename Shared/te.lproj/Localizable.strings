@@ -975,7 +975,7 @@
 "Panel Chooser" = "ప్యానెల్ ఎంపిక";
 
 /* Password textbox in Authentication prompt */
-"Password" = "పాస్వర్డ్";
+"Password" = "సంకేతపదం";
 
 /* Error message shown in the remote tabs panel */
 "PasswordAutoFill.NoPasswordsFoundTitle" = "మీ Firefox ఖాతా నుండి సింక్రనించిన ప్రవేశ వివరాలు ఏమీ లేవు";
@@ -1802,7 +1802,7 @@
 "Upgrade Firefox to connect" = "Firefoxతో కనెక్ట్ చేయడానికి అప్గ్రేడ్ చేయండి";
 
 /* Username textbox in Authentication prompt */
-"Username" = "యూజర్‌పేరు";
+"Username" = "వాడుకరి పేరు";
 
 /* Text message in the settings table view */
 "Verify your email address" = "మీ ఇమెయిల్ చిరునామాను ధృవీకరించండి";

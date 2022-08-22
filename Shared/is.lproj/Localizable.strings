@@ -296,9 +296,6 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "Til að auðvelda innslátt upplýsinga er verkfærasláin nú sjálfgefið neðst.";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.Homepage.PersonalizedHome" = "Sérsniðin Firefox-upphafssíða þín gerir það nú auðveldara að halda áfram þar sem frá var horfið. Finndu nýlega flipa, bókamerki og leitarniðurstöður.";
-
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Stillingar verkfæraslár";
 
@@ -307,6 +304,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Slökkva á í stillingum";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "Loka";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Ekki var hægt að bæta síðu við leslista";
@@ -1427,7 +1427,7 @@
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
    Open search section of settings */
-"Search" = "Leitarvélar";
+"Search" = "Leita";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Leit eða skrifaðu vistfang";
@@ -2365,11 +2365,29 @@
 /* Text message in the settings table view */
 "Upgrade Firefox to connect" = "Uppfæra Firefox til að tengjast";
 
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v106" = "Skrá inn";
+
+/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v106" = "Haltu áfram þar sem þú hættir með flipum af öðrum tækjum, sem núna eru á upphafssíðunni þinni.";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "Það er auðveldara en nokkru sinni að skipta á milli skjáa";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v106" = "Hefjast handa";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "Nýir litir. Ný þægindi. Sama skuldbinding setur fólk fram yfir hagnað.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v106" = "Velkomin á persónulegra internet";
+
 /* Debug option */
 "Use stage servers" = "Nota forskoðunarnetþjóna";
 
 /* Username textbox in Authentication prompt */
-"Username" = "Notandanafn";
+"Username" = "Notendanafn";
 
 /* Text message in the settings table view */
 "Verify your email address" = "Staðfestu tölvupóstfangið þitt";

@@ -34,6 +34,9 @@
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Oscail agus Líon";
 
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Focal Faire";
+
 /* Reveal password text selection menu item */
 "Reveal" = "Nocht";
 
@@ -45,4 +48,7 @@
 
 /* Label for the button used to select all logins. */
 "Select All" = "Roghnaigh Uile";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Ainm úsáideora";
 

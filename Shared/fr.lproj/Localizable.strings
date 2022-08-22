@@ -296,9 +296,6 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "Pour faciliter la saisie d’informations, la barre d’outils est désormais située en bas par défaut.";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.Homepage.PersonalizedHome" = "L’accueil personnalisé de Firefox permet désormais de reprendre plus facilement là où vous en étiez. Retrouvez vos onglets, marque-pages et résultats de recherche récents.";
-
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Paramètres de la barre d’outils";
 
@@ -307,6 +304,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Désactiver dans les paramètres";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "Fermer";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Impossible d’ajouter la page à la liste de lecture";
@@ -1427,7 +1427,7 @@
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
    Open search section of settings */
-"Search" = "Recherche";
+"Search" = "Rechercher";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Recherche ou adresse";
@@ -2364,6 +2364,21 @@
 
 /* Text message in the settings table view */
 "Upgrade Firefox to connect" = "Veuillez mettre à jour Firefox pour vous connecter.";
+
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v106" = "Se connecter";
+
+/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v106" = "Reprenez là où vous en étiez avec des onglets d’autres appareils qui figurent désormais sur votre page d’accueil.";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v106" = "Démarrer";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "De nouvelles couleurs. Un nouveau confort. Mais le même engagement pour les gens plutôt que pour les profits.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v106" = "Bienvenue sur un Internet plus personnel";
 
 /* Debug option */
 "Use stage servers" = "Utiliser les serveurs de simulation";

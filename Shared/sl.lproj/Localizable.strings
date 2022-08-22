@@ -296,9 +296,6 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "Za lažje vnašanje podatkov je orodna vrstica zdaj privzeto na dnu.";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.Homepage.PersonalizedHome" = "Prilagojena domača stran Firefoxa vam zdaj olajšuje nadaljevanje nedokončanih opravil. Poiščite svoje nedavne zavihke, zaznamke in rezultate iskanja.";
-
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Nastavitve orodne vrstice";
 
@@ -307,6 +304,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Izklopi v nastavitvah";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "Zapri";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Strani ni bilo mogoče dodati na bralni seznam";
@@ -1427,7 +1427,7 @@
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
    Open search section of settings */
-"Search" = "Iskanje";
+"Search" = "Išči";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Iskanje ali naslov strani";
@@ -2364,6 +2364,21 @@
 
 /* Text message in the settings table view */
 "Upgrade Firefox to connect" = "Za povezavo nadgradite Firefox";
+
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v106" = "Prijava";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "Preklapljanje med zasloni je preprostejše kot kdajkoli prej";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v106" = "Začnite";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "Nove barve. Novo udobje. Enaka zavezanost ljudem namesto dobičku.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v106" = "Dobrodošli v bolj osebnem internetu";
 
 /* Debug option */
 "Use stage servers" = "Uporabi testne strežnike";

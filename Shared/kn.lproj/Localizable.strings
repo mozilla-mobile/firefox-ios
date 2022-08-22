@@ -129,7 +129,7 @@
 "Brightness" = "ಪ್ರಕಾಶಮಾನ";
 
 /* Label for Cancel button */
-"Cancel" = "ರದ್ದು";
+"Cancel" = "ರದ್ದು ಮಾಡು";
 
 /* Accessibility hint for the color theme setting buttons in reader mode display settings */
 "Changes color theme." = "ಬಣ್ಣದ ಥೀಮ್‍ ಬದಲಾಯಿಸುತ್ತದೆ.";
@@ -581,7 +581,7 @@
 "Panel Chooser" = "ಫಲಕದ ಆಯ್ಕೆ";
 
 /* Password textbox in Authentication prompt */
-"Password" = "ಗುಪ್ತಪದಗಳು";
+"Password" = "ಗುಪ್ತಪದ";
 
 /* Header for the list of credentials table */
 "PasswordAutoFill.PasswordsListTitle" = "ಲಭ್ಯವಿರುವ ರುಜುವಾತುಗಳು:";
@@ -1069,7 +1069,7 @@
 "Upgrade Firefox to connect" = "ಫೈರ್ಫಾಕ್ಸ್ ಅನ್ನು ಸಂಪರ್ಕಿಸಲು ಪರಿಷ್ಕರಣೆ ಮಾಡಿ";
 
 /* Username textbox in Authentication prompt */
-"Username" = "ಬಳಕೆದಾರನ ಹೆಸರು";
+"Username" = "ಬಳಕೆದಾರ ಹೆಸರು";
 
 /* Text message in the settings table view */
 "Verify your email address" = "ನಿಮ್ಮ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ಧೃಡೀಕರಿಸಿ";

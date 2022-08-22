@@ -296,9 +296,6 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "Aby zapódawanje informacijow lažčejše było, jo symbolowa rědka něnto pó standarźe dołojce.";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.Homepage.PersonalizedHome" = "Waša personalizěrowany startowy bok Firefox něnto wólažcujo tam pókšacowaś, źož sćo pśestał. Namakajśo swóje nejnowše rejtariki, cytańske znamjenja a pytańske wuslědki.";
-
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Nastajenja symboloweje rědki";
 
@@ -307,6 +304,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "W nastajenjach znjemóžniś";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "Zacyniś";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Bok njedajo se cytańskej lisćinje pśidaś";
@@ -2364,6 +2364,21 @@
 
 /* Text message in the settings table view */
 "Upgrade Firefox to connect" = "Aktualizěrujśo Firefox, aby zwězał";
+
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v106" = "Pśizjawiś";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "Pśešaltowanje mjazy wobrazowkami jo lažke ako do togo";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v106" = "Prědne kšace";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "Nowe barwy. Nowy komfort. Samsna angažěrowanosć za luźi njeźiwajucy na wudobytki.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v106" = "Witajśo k wěcej wósobinskemu internetoju";
 
 /* Debug option */
 "Use stage servers" = "Testowe serwery wužywaś";
