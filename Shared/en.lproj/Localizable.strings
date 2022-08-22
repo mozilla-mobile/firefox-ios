@@ -16,18 +16,6 @@
 /* About settings section title */
 "About" = "About";
 
-/* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Pin to Top Sites";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Remove Pinned Site";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "Bookmarked";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "Visited";
-
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "Recent Bookmarks";
 
@@ -37,9 +25,6 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "Trending on Pocket";
 
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "Trending";
-
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Recently Visited";
 
@@ -48,9 +33,6 @@
 
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Set Rows";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Top Sites";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Add Tab";
@@ -89,12 +71,6 @@
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "Block Pop-up Windows";
 
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Bookmark";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Folder";
-
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "Title";
 
@@ -116,12 +92,6 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Folder";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Location";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Folder Name";
-
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "New Bookmark";
 
@@ -133,12 +103,6 @@
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Title";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "Bookmarks you save will show up here.";
 
 /* Describes the date on which the breach occurred */
 "BreachAlerts.BreachDate" = "This breach occurred on";
@@ -181,9 +145,6 @@
 
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "Bookmark Link";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Switch";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "New Private Tab opened";
@@ -279,9 +240,6 @@
 
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "Cancel Download";
-
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Downloads aren’t supported in Firefox yet.";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Download Cancelled";
@@ -388,12 +346,6 @@
 /* Button label to resend email */
 "FxA.ResendEmail" = "Resend Email";
 
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Sign in to Sync";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "Get your tabs, bookmarks, and passwords from your other devices.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Sync Now";
 
@@ -420,9 +372,6 @@
 
 /* Title of a notification displayed when named device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_title" = "Sync Disconnected";
-
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "Get your open tabs, bookmarks, and passwords from your other devices.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Help";
@@ -460,9 +409,6 @@
 /* Description for the empty synced tabs 'not yet verified' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Your account needs to be verified.";
 
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Want to see your tabs from other devices here?";
-
 /* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Turn on tab syncing to view a list of tabs from your other devices.";
 
@@ -475,32 +421,11 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Recently Closed";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d device(s) connected";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "Synced Devices";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "Cancel";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "You can change this at any time in Settings";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Set Homepage";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Do you want to use this web page as your home page?";
-
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Bookmark";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Delete from History";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Open in New Private Tab";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Open in New Tab";
@@ -580,12 +505,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "Logins";
 
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "Modified";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "Login";
-
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Don’t Save";
 
@@ -610,15 +529,6 @@
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "Update";
 
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "Login";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "All";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "Website";
-
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filter";
 
@@ -638,9 +548,6 @@
 
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Bookmark Added";
-
-/* Toast displayed to the user after adding the item to the Top Sites. */
-"Menu.AddPin.Confirm" = "Pinned To Top Sites";
 
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Added To Reading List";
@@ -666,15 +573,6 @@
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "Stop";
 
-/* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "Enable Night Mode";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "Block Images";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "Page Actions";
-
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Paste";
 
@@ -689,9 +587,6 @@
 
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Bookmark Removed";
-
-/* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "Removed From Top Sites";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Tab Sent";
@@ -713,12 +608,6 @@
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "Social Trackers";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox is blocking parts of the page that may track your browsing.";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Block online trackers";
 
 /* The title that shows the number of cross-site cookies blocked */
 "Menu.TrackingProtectionCrossSiteCookies.Title" = "Cross-Site Tracking Cookies";
@@ -744,47 +633,8 @@
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Social networks place trackers on other websites to build a more complete and targeted profile of you. Blocking these trackers reduces how much social media companies can see what do you online.";
 
-/* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "Disabled for this site";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "Tracking Protection is now off for this site.";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "Enable Tracking Protection";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "Enabled for this site";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "Tracking Protection is now on for this site.";
-
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Fingerprinters";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Blocked Cross-Site Tracking Cookies";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "Blocked Cryptominers";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "Blocked Fingerprinters";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "Blocked Social Trackers";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "Learn more about how Tracking Protection blocks online trackers that collect your browsing data across multiple websites.";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "No tracking elements detected on this page.";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "The site includes elements that may track your browsing. You have disabled protection.";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "Enable for this site";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "What’s New";
@@ -828,9 +678,6 @@
 
 /* Accessibility label for the Page Options menu button */
 "Page Options Menu" = "Page Options Menu";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "Panel Chooser";
 
 /* Password textbox in Authentication prompt */
 "Password" = "Password";
@@ -895,9 +742,6 @@
 /* Reopen alert title shown at home page. */
 "ReopenAlert.Title" = "Reopen Last Closed Tab";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "Reopen Closed Tab";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "Reset text size";
 
@@ -915,9 +759,6 @@
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "The data is invalid";
-
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Please allow Firefox to access your device’s camera in ‘Settings’ -> ‘Privacy’ -> ‘Camera’.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Scan QR Code";
@@ -1011,12 +852,6 @@
 
 /* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
 "SendTo.SignIn.Button" = "Sign In to Firefox";
-
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "Add to Reading List";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "Bookmark";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Tap to begin";
@@ -1172,29 +1007,14 @@
 /* General settings section title */
 "Settings.General.SectionName" = "General";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "Clear";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Homepage";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Homepage Settings";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Enter a webpage";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Current Homepage";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Use Copied Link";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Use Current Page";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "Use Default";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "Logins & Passwords";
@@ -1202,47 +1022,14 @@
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "Custom URL";
 
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "When you open a New Tab:";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "Customize Top Sites";
-
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Blank Page";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "Bookmarks";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "The sites you visit most";
-
-/* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Customize Firefox Home";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox Home";
 
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "Recent Bookmarks";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "Visited";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "History";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Homepage";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "Trending on Pocket";
-
-/* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "Great content from around the web.";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "Show your Reading List";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "New Tab";
@@ -1313,23 +1100,11 @@
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Heads up!";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "You can choose which list Firefox will use to block Web elements that may track your browsing activity.";
-
-/* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "Balanced for protection and performance.";
-
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "BLOCKS";
 
-/* Explanation of strict mode. */
-"Settings.TrackingProtection.Info.StrictTitle" = "Offers stronger protection, but may cause some sites to break.";
-
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "Learn more";
-
-/* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "More Info…";
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reduces targeted ads and helps stop advertisers from tracking your browsing.";
@@ -1349,23 +1124,11 @@
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Tracking Protection";
 
-/* Additional information about the strict level setting */
-"Settings.TrackingProtection.StrictLevelInfoFooter" = "Blocking trackers could impact the functionality of some websites.";
-
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Standard (default)";
 
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Allows some trackers so websites function properly.";
-
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Strict";
-
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Blocks known trackers. Some websites may not function properly.";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Tracking is the collection of your browsing data across multiple websites.";
 
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Enhanced Tracking Protection";
@@ -1387,15 +1150,6 @@
 
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Troubleshoot";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "Delete";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "Done";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "Edit";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Show More";
@@ -1452,18 +1206,6 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Swipe right or left with three fingers to close the tab.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Normal Browsing Mode";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Private Browsing Mode";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Sync your tabs, bookmarks, passwords and more.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "Sync your tabs, passwords and more.";
-
 /* Message displayed when the user syncs for the first time */
 "Sync.FirstTimeMessage.Label" = "Your first sync may take a while";
 
@@ -1503,9 +1245,6 @@
 /* The Tabs sync component, used in SyncState.Partial.Title */
 "SyncState.Tabs.Title" = "Tabs";
 
-/* Panel accessibility label */
-"Synced Tabs" = "Synced Tabs";
-
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Tab %1$@ of %2$@";
 
@@ -1521,32 +1260,11 @@
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "Close Selected Tab";
 
-/* The section header for tabs opened last week */
-"TabTray.LastWeek.Header" = "Last Week";
-
-/* The title on the button to copy the tab address. */
-"TabTray.MoreMenu.Copy" = "Copy";
-
-/* The section header for tabs opened before last week */
-"TabTray.Older.Header" = "Older";
-
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Open New Tab";
 
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "Open Selected Tab";
-
-/* The button title to see more options to perform on the tab. */
-"TabTray.SwipeMenu.More" = "More";
-
 /* The title for the tab tray */
 "TabTray.Title" = "Open Tabs";
-
-/* The section header for tabs opened today */
-"TabTray.Today.Header" = "Today";
-
-/* The section header for tabs opened yesterday */
-"TabTray.Yesterday.Header" = "Yesterday";
 
 /* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
 "Tabs %@ to %@ of %@" = "Tabs %1$@ to %2$@ of %3$@";
@@ -1559,9 +1277,6 @@
 
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d tab(s) closed";
-
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "Search Tabs";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "The page could not be displayed in Reader View.";
@@ -1589,12 +1304,6 @@
 
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Close All Tabs";
-
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Your most visited sites will show up here.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Welcome to Top Sites";
 
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Remove page — %@";
@@ -1629,9 +1338,6 @@
 /* Text message in the settings table view */
 "Verify your email address" = "Verify your email address";
 
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Version %1$@ (%2$@)";
-
 /* Accessibility label for the main web content view */
 "Web content" = "Web content";
 
@@ -1659,9 +1365,6 @@
 /* Accessibility label for Desktop Computer (PC) image in remote tabs list */
 "computer" = "computer";
 
-/* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "Scan the QR code shown at firefox.com/pair";
-
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "Sign In with Your Camera";
 
@@ -1676,9 +1379,6 @@
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Ready to Scan";
-
-/* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "Turn on Sync";
 
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "Use Email Instead";
