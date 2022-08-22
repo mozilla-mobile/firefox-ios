@@ -290,9 +290,6 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "লিঙ্ক শেয়ার করুন";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.Homepage.PersonalizedHome" = "আপনার পারসোনালাইজ Firefox হোমপেজ আপনি পূর্বের অবস্থান থেকে শুরু করা আরো সহজতর করেছে। আপনার সাম্প্রতিক ট্যাব, বুকমার্ক, এবং অনুসন্ধান ফলাফল খুঁজুন।";
-
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "টুলবার সেটিংস";
 
@@ -1241,7 +1238,7 @@
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
    Open search section of settings */
-"Search" = "অনুসন্ধান";
+"Search" = "অনুসন্ধান করুন";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "অনুসন্ধান করুন অথবা ঠিকানা প্রবেশ করুন";
@@ -2045,7 +2042,7 @@
 "Use stage servers" = "স্টেজ সার্ভার ব্যবহার করুন";
 
 /* Username textbox in Authentication prompt */
-"Username" = "উজারনেম";
+"Username" = "ব্যবহারকারীর নাম";
 
 /* Text message in the settings table view */
 "Verify your email address" = "আপনার ইমেল যাচাই করুন।";

@@ -14,7 +14,7 @@
 "Created %@" = "បាន​បង្កើត %@";
 
 /* Label for the button used to delete the current login. */
-"Delete" = "​លុប​";
+"Delete" = "លុប";
 
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "ដោះ​ជ្រើស​ទាំងអស់";

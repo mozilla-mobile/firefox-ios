@@ -287,9 +287,6 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "شارِك الرابط";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.Homepage.PersonalizedHome" = "تُسهّل الآن صفحة بداية Firefox مواصلة ما كنتَ تركته سابقًا. ستجد فيها أحدث الألسنة والعلامات ونتائج البحث.";
-
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "ستُنقل الألسنة التي لم تعرضها منذ أسبوعين إلى هنا.";
 
@@ -1262,7 +1259,7 @@
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
    Open search section of settings */
-"Search" = "البحث";
+"Search" = "ابحث";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "ابحث أو أدخِل عنوانا";
