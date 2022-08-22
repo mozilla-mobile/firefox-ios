@@ -88,6 +88,22 @@ class WallpaperSelectorViewModel {
                              collectionType: wallpaperItem.collection.type,
                              number: indexPath.row)
     }
+
+    func sendImpressionTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .onboardingWallpaperSelector,
+                                     value: nil,
+                                     extras: nil)
+    }
+
+    func sendDismissImpressionTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .onboardingWallpaperSelector,
+                                     value: nil,
+                                     extras: nil)
+    }
 }
 
 private extension WallpaperSelectorViewModel {

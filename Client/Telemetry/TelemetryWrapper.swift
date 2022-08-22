@@ -842,11 +842,16 @@ extension TelemetryWrapper {
         case (.action, .tap, .onboardingWallpaperSelector, .wallpaperSelected, let extras):
             if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
                let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {
-                let wallpaperExtra = GleanMetrics.Onboarding.SelectorWallpaperSelectedExtra(wallpaperName: name, wallpaperType: type)
-                GleanMetrics.Onboarding.selectorWallpaperSelected.record(wallpaperExtra)
+                let wallpaperExtra = GleanMetrics.Onboarding.WallpaperSelectorSelectedExtra(wallpaperName: name, wallpaperType: type)
+                GleanMetrics.Onboarding.wallpaperSelectorSelected.record(wallpaperExtra)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
+        case (.action, .view, .onboardingWallpaperSelector, _, _):
+            GleanMetrics.Onboarding.wallpaperSelectorView.record()
+        case (.action, .close, .onboardingWallpaperSelector, _, _):
+            GleanMetrics.Onboarding.wallpaperSelectorClose.record()
+
         // MARK: Upgrade onboarding
         case (.action, .view, .upgradeOnboardingCardView, _, let extras):
             if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {

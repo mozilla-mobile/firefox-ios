@@ -24,11 +24,25 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         wallpaperManager = nil
     }
 
+    func testRecordsWallpaperSelectorView() {
+        let sut = createSut()
+        sut.sendImpressionTelemetry()
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorView)
+    }
+
+    func testRecordsWallpaperSelectorClose() {
+        let sut = createSut()
+        sut.sendDismissImpressionTelemetry()
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorClose)
+    }
+
     func testClickingCell_recordsWallpaperChange() {
         let sut = createSut()
         sut.updateCurrentWallpaper(at: IndexPath(item: 0, section: 0)) { _ in }
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.selectorWallpaperSelected)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorSelected)
     }
 
     func createSut() -> WallpaperSelectorViewModel {

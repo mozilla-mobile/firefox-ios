@@ -93,6 +93,8 @@ class WallpaperSelectorViewController: UIViewController {
             WallpaperSelectorViewController.UX.cardShadowHeight
         collectionViewHeightConstraint.constant = height
         view.layoutIfNeeded()
+
+        viewModel.sendImpressionTelemetry()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -260,7 +262,9 @@ extension WallpaperSelectorViewController: NotificationThemeable, Notifiable {
         }
     }
 }
+
 extension WallpaperSelectorViewController: BottomSheetChild {
     func willDismiss() {
+        viewModel.sendDismissImpressionTelemetry()
     }
 }

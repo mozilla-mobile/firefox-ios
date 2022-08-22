@@ -550,7 +550,30 @@ onboarding:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-12-10"
-  selector_wallpaper_selected:
+  wallpaper_selector_view:
+    type: event
+    description: |
+      Recorded when the wallpaper onboarding bottom sheet is shown to the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-02-01"
+  wallpaper_selector_close:
+    type: event
+    description: |
+      Recorded when the wallpaper onboarding bottom sheet
+      is dismissed by the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-02-01"
+  wallpaper_selector_selected:
     type: event
     description: |
       Recorded when the user selects a wallpaper from
