@@ -31,25 +31,43 @@ class UpdateViewModelTests: XCTestCase {
     // MARK: Enable cards
     func testEnabledCards_ForHasSyncAccount() {
         profile.hasSyncableAccountMock = true
-        let enableCards = viewModel.enabledCards
+        let expectation = expectation(description: "The hasAccount var has value")
 
-        XCTAssertEqual(enableCards.count, 1)
-        XCTAssertEqual(enableCards[0], .updateWelcome)
+        viewModel.hasSyncableAccount {
+            let enableCards = self.viewModel.enabledCards
+
+            XCTAssertEqual(enableCards.count, 1)
+            XCTAssertEqual(enableCards[0], .updateWelcome)
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 2.0)
     }
 
     func testEnabledCards_ForSyncAccountDisabled() {
         profile.hasSyncableAccountMock = false
-        let enableCards = viewModel.enabledCards
+        let expectation = expectation(description: "The hasAccount var has value")
 
-        XCTAssertEqual(enableCards.count, 2)
-        XCTAssertEqual(enableCards[0], .updateWelcome)
-        XCTAssertEqual(enableCards[1], .updateSignSync)
+        viewModel.hasSyncableAccount {
+            let enableCards = self.viewModel.enabledCards
+
+            XCTAssertEqual(enableCards.count, 2)
+            XCTAssertEqual(enableCards[0], .updateWelcome)
+            XCTAssertEqual(enableCards[1], .updateSignSync)
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 2.0)
     }
 
     // MARK: Has Single card
     func testHasSingleCard_ForHasSyncAccount() {
         profile.hasSyncableAccountMock = true
-        XCTAssertEqual(viewModel.shouldShowSingleCard, true)
+        let expectation = expectation(description: "The hasAccount var has value")
+
+        viewModel.hasSyncableAccount {
+            XCTAssertEqual(self.viewModel.shouldShowSingleCard, true)
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 2.0)
     }
 
     func testHasSingleCard_ForSyncAccountDisabled() {

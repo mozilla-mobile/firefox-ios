@@ -2216,33 +2216,39 @@ extension BrowserViewController {
     func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) {
         let viewModel = UpdateViewModel(profile: profile)
         if viewModel.shouldShowUpdateSheet(force: force) {
-            let updateViewController = UpdateViewController(viewModel: viewModel)
-            updateViewController.didFinishClosure = {
-                updateViewController.dismiss(animated: true)
+            viewModel.hasSyncableAccount {
+                self.buildUpdateVC(viewModel: viewModel, animated: animated)
             }
+        }
+    }
 
-            if topTabsVisible {
-                updateViewController.preferredContentSize = CGSize(
-                    width: ViewControllerConsts.PreferredSize.UpdateViewController.width,
-                    height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
-                updateViewController.modalPresentationStyle = .formSheet
-            } else {
-                updateViewController.modalPresentationStyle = .fullScreen
-            }
+    private func buildUpdateVC(viewModel: UpdateViewModel, animated: Bool = true) {
+        let updateViewController = UpdateViewController(viewModel: viewModel)
+        updateViewController.didFinishFlow = {
+            updateViewController.dismiss(animated: true)
+        }
 
-            // On iPad we present it modally in a controller
-            present(updateViewController, animated: animated) {
-                self.setupHomepageOnBackground()
-            }
+        if topTabsVisible {
+            updateViewController.preferredContentSize = CGSize(
+                width: ViewControllerConsts.PreferredSize.UpdateViewController.width,
+                height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
+            updateViewController.modalPresentationStyle = .formSheet
+        } else {
+            updateViewController.modalPresentationStyle = .fullScreen
+        }
+
+        // On iPad we present it modally in a controller
+        present(updateViewController, animated: animated) {
+            self.setupHomepageOnBackground()
         }
     }
 
     private func showProperIntroVC() {
         let introViewModel = IntroViewModel()
         let introViewController = IntroViewController(viewModel: introViewModel, profile: profile)
-        introViewController.didFinishClosure = { controller, _ in
+        introViewController.didFinishFlow = {
             self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-            controller.dismiss(animated: true)
+            introViewController.dismiss(animated: true)
         }
         self.introVCPresentHelper(introViewController: introViewController)
     }

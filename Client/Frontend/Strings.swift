@@ -725,6 +725,31 @@ extension String {
             value: "Sign Up and Log In",
             comment: "Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding.",
             lastUpdated: .v102)
+        public static let IntroWelcomeTitle = MZLocalizedString(
+            "Onboarding.Welcome.Title.v106",
+            value: "Welcome to an independent internet",
+            comment: "String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens.",
+            lastUpdated: .v106)
+        public static let IntroWelcomeDescription = MZLocalizedString(
+            "Onboarding.Welcome.Description.v106",
+            value: "Firefox puts people over profits and defends your privacy by default.",
+            comment: "String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens.",
+            lastUpdated: .v106)
+        public static let IntroSyncTitle = MZLocalizedString(
+            "Onboarding.Sync.Title.v106",
+            value: "Hop from phone to laptop and back",
+            comment: "String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens.",
+            lastUpdated: .v106)
+        public static let IntroSyncDescription = MZLocalizedString(
+            "Onboarding.Sync.Description.v106",
+            value: "Grab tabs and passwords from your other devices to pick up where you left off.",
+            comment: "String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens.",
+            lastUpdated: .v106)
+        public static let IntroSyncSkipAction = MZLocalizedString(
+            "Onboarding.Sync.Skip.Action.v106",
+            value: "Skip",
+            comment: "String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens.",
+            lastUpdated: .v106)
         public static let WallpaperSelectorTitle = MZLocalizedString(
             "Onboarding.Wallpaper.Title.v106",
             value: "Try a splash of color",

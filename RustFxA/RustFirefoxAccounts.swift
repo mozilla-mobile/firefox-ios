@@ -292,6 +292,12 @@ open class RustFirefoxAccounts {
         MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
     }
 
+    public func hasAccount(completion: @escaping (Bool) -> Void) {
+        accountManager.uponQueue(.global(qos: .userInitiated)) { manager in
+            completion(manager.hasAccount())
+        }
+    }
+
     public func hasAccount() -> Bool {
         guard let accountManager = accountManager.peek() else { return false }
         return accountManager.hasAccount()

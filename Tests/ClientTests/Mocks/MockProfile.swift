@@ -194,8 +194,12 @@ open class MockProfile: Client.Profile {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
+    public func hasSyncAccount(completion: @escaping (Bool) -> Void) {
+        completion(hasSyncableAccountMock)
+    }
+
     public func hasAccount() -> Bool {
-        return true
+        return hasSyncableAccountMock
     }
 
     var hasSyncableAccountMock: Bool = true

@@ -3,7 +3,6 @@ import XCTest
 class FirstRunTourTests: BaseTestCase {
 
     let onboardingAccessibilityId = [AccessibilityIdentifiers.Onboarding.welcomeCard,
-                                     AccessibilityIdentifiers.Onboarding.wallpapersCard,
                                      AccessibilityIdentifiers.Onboarding.signSyncCard]
     var currentScreen = 0
     var rootA11yId: String {
@@ -20,7 +19,7 @@ class FirstRunTourTests: BaseTestCase {
     func testFirstRunTour() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
-        waitForExistence(app.staticTexts["Welcome to Firefox"], timeout: 15)
+        waitForExistence(app.staticTexts["Welcome to an independent internet"], timeout: 15)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].exists)
         XCTAssertTrue(app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"].exists)
@@ -28,21 +27,13 @@ class FirstRunTourTests: BaseTestCase {
         // Swipe to the second screen
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
-        waitForExistence(app.staticTexts["Choose a Firefox Wallpaper"])
-        XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
-
-        // Swipe to the third screen
-        app.buttons["\(rootA11yId)SecondaryButton"].tap()
-        currentScreen += 1
-        waitForExistence(app.staticTexts["Sync to Stay In Your Flow"])
+        waitForExistence(app.staticTexts["Hop from phone to laptop and back"])
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
     }
 
     func testStartBrowsingFromThirdScreen() {
         navigator.goto(FirstRun)
-        goToNextScreen()
         goToNextScreen()
         tapStartBrowsingButton()
     }
@@ -55,11 +46,10 @@ class FirstRunTourTests: BaseTestCase {
 
     func testShowTourFromSettings() {
         goToNextScreen()
-        goToNextScreen()
         tapStartBrowsingButton()
         app.buttons["urlBar-cancel"].tap()
         navigator.goto(ShowTourInSettings)
-        waitForExistence(app.staticTexts["Welcome to Firefox"])
+        waitForExistence(app.staticTexts["Welcome to an independent internet"])
     }
 
     // MARK: Private

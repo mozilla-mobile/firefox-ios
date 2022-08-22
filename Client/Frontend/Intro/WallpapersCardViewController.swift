@@ -95,6 +95,7 @@ class WallpaperCardViewController: OnboardingCardViewController {
         ])
         view.sendSubviewToBack(wallpaperImageView)
         collectionView.reloadData()
+        imageView.isHidden = true
     }
 
     override func primaryAction() {
