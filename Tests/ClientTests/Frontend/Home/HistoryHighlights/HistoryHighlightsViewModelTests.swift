@@ -137,6 +137,100 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         XCTAssertTrue(telemetry.recordedObjects.contains(.firefoxHomepage))
     }
 
+    func testDelete() {
+        setupSubject()
+        sut.delete(getItemWithTitle(title: "to-delete"))
+
+        XCTAssertEqual(dataAdaptor.deleteCallCount, 1)
+    }
+
+    func testNumberOfItemsInSection1Column() {
+        setupSubject()
+        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one"),
+                                        getItemWithTitle(title: "two")]
+        sut.didLoadNewData()
+
+        XCTAssertEqual(sut.numberOfItemsInSection(), 2)
+    }
+
+    func testNumberOfItemsInSection2Column() {
+        setupSubject()
+        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one"),
+                                        getItemWithTitle(title: "two"),
+                                        getItemWithTitle(title: "three"),
+                                        getItemWithTitle(title: "four")]
+        sut.didLoadNewData()
+
+        XCTAssertEqual(sut.numberOfItemsInSection(), 6)
+    }
+
+    func testNumberOfItemsInSection3Column() {
+        setupSubject()
+        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one"),
+                                        getItemWithTitle(title: "two"),
+                                        getItemWithTitle(title: "three"),
+                                        getItemWithTitle(title: "four"),
+                                        getItemWithTitle(title: "five"),
+                                        getItemWithTitle(title: "six"),
+                                        getItemWithTitle(title: "seven")]
+        sut.didLoadNewData()
+
+        XCTAssertEqual(sut.numberOfItemsInSection(), 9)
+    }
+
+    func testConfigureFillerCell() {
+        setupSubject()
+        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one"),
+                                        getItemWithTitle(title: "two"),
+                                        getItemWithTitle(title: "three"),
+                                        getItemWithTitle(title: "four")]
+        sut.didLoadNewData()
+        let cell = sut.configure(HistoryHighlightsCell(), at: IndexPath(row: 5, section: 0)) as? HistoryHighlightsCell
+
+        XCTAssertNotNil(cell)
+        XCTAssertTrue(cell!.isFillerCell)
+    }
+
+    func testConfigureIndividualCell() {
+        setupSubject()
+        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one")]
+        sut.didLoadNewData()
+        let cell = sut.configure(HistoryHighlightsCell(), at: IndexPath(row: 0, section: 0)) as? HistoryHighlightsCell
+
+        XCTAssertNotNil(cell)
+        XCTAssertFalse(cell!.isFillerCell)
+    }
+
+    func testConfigureGroupCell() {
+        setupSubject()
+        let item = ASGroup(searchTerm: "",
+                           groupedItems: [getItemWithTitle(title: "one"), getItemWithTitle(title: "two")],
+                           timestamp: 0)
+
+        dataAdaptor.mockHistoryItems = [item]
+        sut.didLoadNewData()
+        let cell = sut.configure(HistoryHighlightsCell(), at: IndexPath(row: 0, section: 0)) as? HistoryHighlightsCell
+
+        XCTAssertNotNil(cell)
+        XCTAssertFalse(cell!.isFillerCell)
+        XCTAssertEqual(cell!.itemDescription.text,
+                       String.localizedStringWithFormat(.FirefoxHomepage.Common.SitesCount, 2))
+    }
+
+    func testDidSelectItem() {
+        setupSubject()
+        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one")]
+        sut.didLoadNewData()
+        sut.didSelectItem(at: IndexPath(row: 0, section: 0),
+                          homePanelDelegate: nil,
+                          libraryPanelDelegate: nil)
+
+        XCTAssertEqual(telemetry.recordEventCallCount, 1)
+        XCTAssertTrue(telemetry.recordedCategories.contains(.action))
+        XCTAssertTrue(telemetry.recordedMethods.contains(.tap))
+        XCTAssertTrue(telemetry.recordedObjects.contains(.firefoxHomepage))
+    }
+
     // MARK: - Helper methods
 
     private func setupSubject(isPrivate: Bool = false) {

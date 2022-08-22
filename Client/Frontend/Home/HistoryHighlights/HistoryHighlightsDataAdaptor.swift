@@ -21,19 +21,20 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
     private var historyManager: HistoryHighlightsManagerProtocol
     private var profile: Profile
     private var tabManager: TabManagerProtocol
-    private var deletionUtility: HistoryDeletionUtility
+    private var deletionUtility: HistoryDeletionProtocol
     var notificationCenter: NotificationProtocol
     weak var delegate: HistoryHighlightsDelegate?
 
     init(historyManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager(),
          profile: Profile,
          tabManager: TabManagerProtocol,
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         deletionUtility: HistoryDeletionProtocol) {
         self.historyManager = historyManager
         self.profile = profile
         self.tabManager = tabManager
         self.notificationCenter = notificationCenter
-        self.deletionUtility = HistoryDeletionUtility(with: profile)
+        self.deletionUtility = deletionUtility
 
         setupNotifications(forObserver: self,
                            observing: [.HistoryUpdated,
