@@ -6,7 +6,7 @@ import Foundation
 
 private struct WallpaperSelectorItem {
     let wallpaper: Wallpaper
-    let collectionType: WallpaperCollectionType
+    let collection: WallpaperCollection
 }
 
 class WallpaperSelectorViewModel {
@@ -71,6 +71,13 @@ class WallpaperSelectorViewModel {
         }
         wallpaperManager.setCurrentWallpaper(to: wallpaperItem.wallpaper, completion: completion)
         setupWallpapers()
+
+        let extra = telemetryMetadata(for: wallpaperItem)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .onboardingWallpaperSelector,
+                                     value: .wallpaperSelected,
+                                     extras: extra)
     }
 
     func cellViewModel(for indexPath: IndexPath) -> WallpaperCellViewModel? {
@@ -78,7 +85,7 @@ class WallpaperSelectorViewModel {
             return nil
         }
         return cellViewModel(for: wallpaperItem.wallpaper,
-                             collectionType: wallpaperItem.collectionType,
+                             collectionType: wallpaperItem.collection.type,
                              number: indexPath.row)
     }
 }
@@ -90,26 +97,25 @@ private extension WallpaperSelectorViewModel {
         let classicCollection = wallpaperManager.availableCollections.first { $0.type == .classic }
         let seasonalCollection = wallpaperManager.availableCollections.first { $0.type == .limitedEdition }
 
-        let seasonalWallpapers = collectWallpapers(for: seasonalCollection,
-                                                   maxNumber: sectionLayout.maxNumberOfSeasonalItems)
+        let seasonalItems = collectWallpaperItems(for: seasonalCollection,
+                                                  maxNumber: sectionLayout.maxNumberOfSeasonalItems)
 
-        let maxNumberOfClassic = sectionLayout.maxItemsToDisplay - seasonalWallpapers.count
-        let classicWallpapers = collectWallpapers(for: classicCollection,
-                                                  maxNumber: maxNumberOfClassic)
+        let maxNumberOfClassic = sectionLayout.maxItemsToDisplay - seasonalItems.count
+        let classicItems = collectWallpaperItems(for: classicCollection,
+                                                 maxNumber: maxNumberOfClassic)
 
-        wallpaperItems.append(contentsOf: classicWallpapers.map { WallpaperSelectorItem(wallpaper: $0,
-                                                                                    collectionType: .classic) })
-        wallpaperItems.append(contentsOf: seasonalWallpapers.map { WallpaperSelectorItem(wallpaper: $0,
-                                                                                     collectionType: .limitedEdition) })
+        wallpaperItems.append(contentsOf: classicItems)
+        wallpaperItems.append(contentsOf: seasonalItems)
     }
 
-    func collectWallpapers(for collection: WallpaperCollection?, maxNumber: Int) -> [Wallpaper] {
+    func collectWallpaperItems(for collection: WallpaperCollection?, maxNumber: Int) -> [WallpaperSelectorItem] {
         guard let collection = collection else { return [] }
 
-        var wallpapers = [Wallpaper]()
+        var wallpapers = [WallpaperSelectorItem]()
         for wallpaper in collection.wallpapers {
             if wallpapers.count < maxNumber {
-                wallpapers.append(wallpaper)
+                wallpapers.append(WallpaperSelectorItem(wallpaper: wallpaper,
+                                                        collection: collection))
             } else {
                 break
             }
@@ -138,5 +144,26 @@ private extension WallpaperSelectorViewModel {
                                                    isSelected: wallpaperManager.currentWallpaper == wallpaper,
                                                    needsDownload: needsDownload)
         return cellViewModel
+    }
+
+    func telemetryMetadata(for item: WallpaperSelectorItem) -> [String: String] {
+        var metadata = [String: String]()
+
+        metadata[TelemetryWrapper.EventExtraKey.wallpaperName.rawValue] = item.wallpaper.id
+
+        let wallpaperTypeKey = TelemetryWrapper.EventExtraKey.wallpaperType.rawValue
+        switch item.wallpaper.type {
+        case .defaultWallpaper:
+            metadata[wallpaperTypeKey] = "default"
+        case .other:
+            switch item.collection.type {
+            case .classic:
+                metadata[wallpaperTypeKey] = item.collection.type.rawValue
+            case .limitedEdition:
+                metadata[wallpaperTypeKey] = item.collection.id
+            }
+        }
+
+        return metadata
     }
 }

@@ -384,6 +384,7 @@ extension TelemetryWrapper {
         case onboardingSecondaryButton = "onboarding-card-secondary-button"
         case onboardingSelectWallpaper = "onboarding-select-wallpaper"
         case onboarding = "onboarding"
+        case onboardingWallpaperSelector = "onboarding-wallpaper-selector"
         // MARK: New Upgrade screen
         case upgradeOnboardingClose = "upgrade-onboarding-close"
         case upgradeOnboardingCardView = "upgrade-onboarding-card-view"
@@ -798,6 +799,14 @@ extension TelemetryWrapper {
         case (.action, .tap, .onboardingClose, _, let extras):
             if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
                 GleanMetrics.Onboarding.closeTap.record(GleanMetrics.Onboarding.CloseTapExtra(cardType: type))
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .tap, .onboardingWallpaperSelector, .wallpaperSelected, let extras):
+            if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
+               let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {
+                let wallpaperExtra = GleanMetrics.Onboarding.SelectorWallpaperSelectedExtra(wallpaperName: name, wallpaperType: type)
+                GleanMetrics.Onboarding.selectorWallpaperSelected.record(wallpaperExtra)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
