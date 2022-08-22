@@ -108,9 +108,11 @@ class HomepageViewModel: FeatureFlaggable {
 
         self.recentlySavedViewModel = RecentlySavedCellViewModel(
             profile: profile)
+        let deletionUtility = HistoryDeletionUtility(with: profile)
         let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
             profile: profile,
-            tabManager: tabManager)
+            tabManager: tabManager,
+            deletionUtility: deletionUtility)
         self.historyHighlightsViewModel = HistoryHighlightsViewModel(
             with: profile,
             isPrivate: isPrivate,
