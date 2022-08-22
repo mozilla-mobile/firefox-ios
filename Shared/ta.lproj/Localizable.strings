@@ -845,7 +845,7 @@
 "Panel Chooser" = "பலகம் தேர்வி";
 
 /* Password textbox in Authentication prompt */
-"Password" = "கடவுச்சொல்";
+"Password" = "கடவுச்சொல்";
 
 /* Error message shown in the remote tabs panel */
 "PasswordAutoFill.NoPasswordsFoundTitle" = "உங்கள் ஃபயர்பாக்ஸ் கணக்கிலிருந்து ஒத்திசைவான எந்த சான்றுகளும் உங்களிடம் இல்லை";
@@ -937,7 +937,7 @@
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
    Open search section of settings */
-"Search" = "தேடல்";
+"Search" = "தேடு";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "தேடு (அ) தள முகவரியுடன் உலாவு";

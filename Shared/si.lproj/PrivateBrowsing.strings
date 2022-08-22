@@ -1,3 +1,27 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "පෞද්. පටිති වසන්න";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "නව පෞද්. පටිත්තකින් අරින්න";
+
 /* Text button displayed when there are no tabs open while in private mode */
-"Learn More" = "තවත් දැනගන්න";
+"Learn More" = "තව දැනගන්න";
+
+/* Toggled OFF accessibility value */
+"Off" = "අක්‍රිය";
+
+/* Toggled ON accessibility value */
+"On" = "සක්‍රිය";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "පෞද්. පිරික්සුම";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "පෞද්. ආකාරය";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "පෞද්. ආකාරය සක්‍රිය හෝ අක්‍රිය කරයි";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "පෞද්. පිරික්සීමක් හැර යන විට";
 

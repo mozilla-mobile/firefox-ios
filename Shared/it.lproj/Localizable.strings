@@ -180,7 +180,7 @@
 "Bookmarks.FolderName.Label" = "Nome cartella";
 
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
-"Bookmarks.Menu.DesktopBookmarks" = "Segnalibri pc desktop";
+"Bookmarks.Menu.DesktopBookmarks" = "Segnalibri PC desktop";
 
 /* A label indicating all bookmarks that were recently added. */
 "Bookmarks.Menu.RecentlyBookmarked" = "Aggiunti di recente";
@@ -296,9 +296,6 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "Per facilitare l’inserimento di informazioni, la barra degli strumenti è ora posizionata in basso per impostazione predefinita.";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.Homepage.PersonalizedHome" = "La pagina iniziale personalizzata di Firefox rende più semplice riprendere da dove avevi interrotto. Puoi trovare le schede recenti, i segnalibri e i risultati delle ricerche.";
-
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Impostazioni della barra degli strumenti";
 
@@ -307,6 +304,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Disattiva nelle impostazioni";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "Chiudi";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Impossibile aggiungere la pagina a Elenco lettura.";
@@ -2364,6 +2364,24 @@
 
 /* Text message in the settings table view */
 "Upgrade Firefox to connect" = "Aggiorna Firefox per connetterti";
+
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v106" = "Accedi";
+
+/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v106" = "Riprendi da dove avevi interrotto con le schede di altri dispositivi, ora disponibili direttamente dalla pagina iniziale.";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "Passare da uno schermo all’altro è più facile che mai";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v106" = "Inizia";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "Nuovi colori. Nuovi vantaggi. Stesso impegno nell’anteporre le persone ai profitti.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v106" = "Benvenuto in un Internet più personale";
 
 /* Debug option */
 "Use stage servers" = "Usa i server di test";

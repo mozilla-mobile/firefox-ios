@@ -296,9 +296,6 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "Ақпаратты енгізу оңайырақ қылу үшін, құралдар панелін енді төменде орналасады.";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.Homepage.PersonalizedHome" = "Сіздің жекелендірілген Firefox үй беті енді тоқтаған жерден жалғастыруды жеңілдетеді. Соңғы беттерді, бетбелгілерді және іздеу нәтижелерін табыңыз.";
-
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Құралдар панелінің баптаулары";
 
@@ -2369,7 +2366,7 @@
 "Use stage servers" = "Сынама серверлерін қолдану";
 
 /* Username textbox in Authentication prompt */
-"Username" = "Пайдаланушы";
+"Username" = "Пайдаланушы аты";
 
 /* Text message in the settings table view */
 "Verify your email address" = "Эл. пошта адресін растаңыз";

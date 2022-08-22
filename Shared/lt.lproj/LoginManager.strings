@@ -14,7 +14,7 @@
 "Created %@" = "Sukurta %@";
 
 /* Label for the button used to delete the current login. */
-"Delete" = "Ištrinti";
+"Delete" = "Pašalinti";
 
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Atžymėti viską";

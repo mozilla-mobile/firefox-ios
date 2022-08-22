@@ -14,7 +14,7 @@
 "Created %@" = "أُنشئت في %@";
 
 /* Label for the button used to delete the current login. */
-"Delete" = "احدف";
+"Delete" = "احذف";
 
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "ألغِ تحديد الكل";

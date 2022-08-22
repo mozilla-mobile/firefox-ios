@@ -1,9 +1,9 @@
 /* The cancel button when confirming clear private data. */
-"Cancel" = "අවලංගු කරන්න";
+"Cancel" = "අවලංගු";
 
 /* The button that clears private data. */
 "OK" = "හරි";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
-"This action will clear all of your private data. It cannot be undone." = "මෙම ක්‍රියාවෙන් ඔබේ සියලු පුද්ගලික දත්ත මකා දමනු ඇත. එය යළි යතා තත්ත්වයට පත් කළ නොහැක.";
+"This action will clear all of your private data. It cannot be undone." = "මෙම ක්‍රියාමාර්ගය ඔබගේ සියළුම පෞද්. දත්ත මකා දමනු ඇත. එය අප්‍රතිවර්ත්‍යයි.";
 

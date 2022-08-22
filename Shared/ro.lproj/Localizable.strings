@@ -976,7 +976,7 @@
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
    Open search section of settings */
-"Search" = "Căutare";
+"Search" = "Caută";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Caută sau introdu adresa";

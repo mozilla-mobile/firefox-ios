@@ -1,0 +1,132 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "පෞද්. පටිති වසන්න";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "පෞද්. පටිති\nවසන්න";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV3" = "පෞද්. \nපටිති\nවසන්න";
+
+/* Copied Link from clipboard displayed */
+"TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "සබැඳිය පසුරුපුවරුවෙන් පිටපත් කෙරිණි";
+
+/* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
+"TodayWidget.DropDownMenuItemClearPrivateTabs" = "පෞද්. පටිති මකන්න";
+
+/* Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands */
+"TodayWidget.DropDownMenuItemGoToCopiedLink" = "පිටපත් වූ සබැඳියට යන්න";
+
+/* Quick Actions drop down menu item for new private search when widget enters edit mode and drop down menu expands */
+"TodayWidget.DropDownMenuItemNewPrivateSearch" = "නව පෞද්. සෙවුම";
+
+/* Quick Actions drop down menu item for new search when widget enters edit mode and drop down menu expands */
+"TodayWidget.DropDownMenuItemNewSearch" = "නව සෙවුම";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "මුල් තිරයට ෆයර්ෆොක්ස් කෙටිමං එක් කරන්න.";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "පිටපත් වූ සබැඳියට යන්න";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "පිටපත් වූ\nසබැඳියට යන්න";
+
+/* Go To Copied Link text pasted on the clipboard but this string doesn't have new line character */
+"TodayWidget.GoToCopiedLinkLabelV3" = "පිටපත් වූ සබැඳියට යන්න";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV4" = "පිටපත් වූ\nසබැඳියට\nයන්න";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "තවත් +%d…";
+
+/* Open New Private Tab button label for medium size action */
+"TodayWidget.NewPrivateTabButtonLabelV2" = "පෞද්. පටිත්තක සොයන්න";
+
+/* Open New Tab button label */
+"TodayWidget.NewSearchButtonLabelV1" = "ෆයර්ෆොක්ස් හි සොයන්න";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "නව සෙවුම";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "විවෘත පටිති නැත.";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabelV2" = "විවෘත පටිති නැත";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "ෆයර්ෆොක්ස් අරින්න";
+
+/* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
+"TodayWidget.PocketWidgetSubLabel" = "ෆයර්ෆොක්ස් - පොකට් මගින් නිර්දේශිතයි";
+
+/* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
+"TodayWidget.PocketWidgetTitle" = "පොකට් මගින් නිර්දේශිත";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "පෞද්. සෙවුම";
+
+/* Quick action description when widget enters edit mode */
+"TodayWidget.QuickActionDescription" = "මුල් තිරයට යෙදීමට ෆයර්ෆොක්ස් කෙටිමඟක් තෝරන්න.";
+
+/* Quick Actions left label text for dropdown menu when widget enters edit mode */
+"TodayWidget.QuickActionDropDownMenu" = "ඉක්මන් ක්‍රියාමාර්ගය";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "ඔබගේ මුල් තිරයට ෆයර්ෆෝක්ස් කෙටිමඟක් යොදන්න. එය එකතු කළ පසුව, සංස්කරණය කිරීමට ස්පර්ශ කරගෙන සිට වෙනස් කෙටිමඟක් තෝරන්න.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "ඉක්මන් ක්‍රියාමාර්ග";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "ෆයර්ෆොක්ස් කෙටිමං";
+
+/* Sub label for medium size quick action widget */
+"TodayWidget.QuickActionsSubLabel" = "ෆයර්ෆොක්ස් - ඉක්මන් ක්‍රියාමාර්ග";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescription" = "මුල් තිරයෙන් ඔබගේ විවෘත පටිති වෙත ප්‍රවේශ වන්න.";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "විවෘත පටිති වෙත කෙටිමං යොදන්න.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "ඉක්මන් දැක්ම";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewLargeGalleryDescription" = "විවෘත පටිති වෙත කෙටිමං යොදන්න.";
+
+/* Sub label for Top Sites widget */
+"TodayWidget.QuickViewOpenTabsSubLabel" = "ෆයර්ෆොක්ස් - පටිති අරින්න";
+
+/* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
+"TodayWidget.SearchInFirefoxTitle" = "ෆයර්ෆොක්ස්හි සොයන්න";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "ෆයර්ෆොක්ස්\nහි සොයන්න";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "පෞද්. පටිත්තක්\nතුළ සොයන්න";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "නිතර හා මෑතදී ගොඩවැදුණු අඩවි සඳහා කෙටිමං එක් කරන්න.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "ප්‍රචලිත අඩවි";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "අඩවි කෙටිමං";
+
+/* Sub label for Top Sites widget */
+"TodayWidget.TopSitesSubLabel" = "ෆයර්ෆොක්ස් - ප්‍රචලිත අඩවි";
+
+/* Sub label for Shortcuts widget */
+"TodayWidget.TopSitesSubLabel2" = "ෆයර්ෆොක්ස් - අඩවියේ කෙටිමං";
+
+/* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
+"TodayWidget.ViewMore" = "තව බලන්න";
+
+/* View More… for Firefox Pocket stories widget where we don't know how many articles are available. */
+"TodayWidget.ViewMoreDots" = "තව බලන්න…";
+

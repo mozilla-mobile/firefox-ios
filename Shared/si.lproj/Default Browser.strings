@@ -1,0 +1,30 @@
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Button" = "සැකසුම් වෙත යන්න";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "කෙසේදැයි දැනගන්න";
+
+/* Description for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "ෆයර්ෆොක්ස් හි ස්වයංක්‍රීයව විවෘත වීමට අඩවි, වි-තැපැල් සහ පණිවිඩ වලින් සබැඳි සකසන්න.";
+
+/* Title for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "පෙරනිමි අතිරික්සුව මාරු කරන්න";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "සැකසුම් වෙත යන්න";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. සැකසුම් වෙත යන්න";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. පෙරනිමි අතිරික්සු යෙදුම ඔබන්න";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. ෆයර්ෆොක්ස් තෝරන්න";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "පෙරනිමි අතිරික්සු යෙදුම";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "පෙරනිමි අතිරික්සුව ලෙස සකසන්න";
+

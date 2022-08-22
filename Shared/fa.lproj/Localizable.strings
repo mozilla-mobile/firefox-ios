@@ -1019,7 +1019,7 @@
 "Panel Chooser" = "انتخاب کننده پنل";
 
 /* Password textbox in Authentication prompt */
-"Password" = "گذرواژه";
+"Password" = "کلمه عبور";
 
 /* Error message shown in the remote tabs panel */
 "PasswordAutoFill.NoPasswordsFoundTitle" = "شما هیچ‌گونه مجوزی برای همگام‌ سازی با حساب فایرفاکس خود ندارید";
@@ -1822,7 +1822,7 @@
 "Use stage servers" = "استفاده از سرورهای مرحله";
 
 /* Username textbox in Authentication prompt */
-"Username" = "نام‌کاربری";
+"Username" = "نام کاربری";
 
 /* Text message in the settings table view */
 "Verify your email address" = "تایید آدرس پست الکترونیکی";

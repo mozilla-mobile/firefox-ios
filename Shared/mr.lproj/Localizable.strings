@@ -1525,7 +1525,7 @@
 "Upgrade Firefox to connect" = "कनेक्ट करण्यासाठी Firefox श्रेणीसुधारित करा";
 
 /* Username textbox in Authentication prompt */
-"Username" = "वापरकर्त्याचे नाव";
+"Username" = "वापरकर्ता नाव";
 
 /* Text message in the settings table view */
 "Verify your email address" = "आपला ईमेल पत्ता सत्यापित करा";

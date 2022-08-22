@@ -156,7 +156,7 @@
 "Brightness" = "အလင်းအမှောင်";
 
 /* Label for Cancel button */
-"Cancel" = "နေတော့";
+"Cancel" = "မဆောင်ရွက်တော့ပါ";
 
 /* Accessibility hint for the color theme setting buttons in reader mode display settings */
 "Changes color theme." = "ကာလာစတိုင်လ်များပြောင်း";
@@ -863,7 +863,7 @@
 "Panel Chooser" = "အကွက်ရွေးသူ";
 
 /* Password textbox in Authentication prompt */
-"Password" = "စကားဝှက်များ";
+"Password" = "စကားဝှက်";
 
 /* Error message shown in the remote tabs panel */
 "PasswordAutoFill.NoPasswordsFoundTitle" = "သင့် Firefox Account ထံမှ သက်သေခံများ ရယူထားခြင်းမရှိပါ";
@@ -958,7 +958,7 @@
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
    Open search section of settings */
-"Search" = "ရှာ";
+"Search" = "ရှာဖွေရန်";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "ရှာဖွေ သို့ လိပ်စာတစ်ခုရိုက်ထည့်ပါ";
@@ -1660,7 +1660,7 @@
 "Use stage servers" = "ဆာဗာကိုသုံးပါ";
 
 /* Username textbox in Authentication prompt */
-"Username" = "သုံးဆွဲသူ အမည်";
+"Username" = "အသုံးပြုသူ အမည်";
 
 /* Text message in the settings table view */
 "Verify your email address" = "အီးမေးလ်လိပ်စာကို အတည်ပြုပါ";

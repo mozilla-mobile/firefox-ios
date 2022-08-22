@@ -14,7 +14,7 @@
 "Created %@" = "%@ सिर्जना गरियो";
 
 /* Label for the button used to delete the current login. */
-"Delete" = "मेट्नुहोस्";
+"Delete" = "हटाउनुहोस्";
 
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "सबै चयनबाट हटाउनुहोस्";

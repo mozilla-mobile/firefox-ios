@@ -14,7 +14,7 @@
 "Created %@" = "Criado %@";
 
 /* Label for the button used to delete the current login. */
-"Delete" = "Apagar";
+"Delete" = "Eliminar";
 
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Desmarcar tudo";

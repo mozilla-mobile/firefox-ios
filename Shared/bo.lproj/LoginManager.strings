@@ -7,6 +7,12 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "འདོར་སུབ།";
 
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "གསང་གྲངས།";
+
 /* Title for the search field at the top of the Logins list screen */
 "Search" = "འཚོལ་བཤེར།";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "ཐོ་མིང་།";
 

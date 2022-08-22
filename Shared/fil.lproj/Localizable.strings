@@ -141,7 +141,7 @@
 "Brightness" = "Tinkad";
 
 /* Label for Cancel button */
-"Cancel" = "Ikansela";
+"Cancel" = "Kanselahin";
 
 /* Accessibility hint for the color theme setting buttons in reader mode display settings */
 "Changes color theme." = "Papalit ng color theme.";

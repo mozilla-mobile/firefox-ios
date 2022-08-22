@@ -13,9 +13,15 @@
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Bukak & Isèni";
 
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Tembung Sandi";
+
 /* Title for the search field at the top of the Logins list screen */
 "Search" = "Golèk";
 
 /* Label for the button used to select all logins. */
 "Select All" = "Pilih Kabèh";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Jeneng Panganggo";
 

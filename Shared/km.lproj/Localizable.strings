@@ -204,7 +204,7 @@
 "Brightness" = "ពន្លឺ";
 
 /* Label for Cancel button */
-"Cancel" = "បោះបង់ចោល";
+"Cancel" = "បោះបង់";
 
 /* Accessibility hint for the color theme setting buttons in reader mode display settings */
 "Changes color theme." = "ប្ដូរ​ពណ៌​រូបរាង។";
@@ -268,9 +268,6 @@
 
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "ចែករំលែក​តំណ";
-
-/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.Homepage.PersonalizedHome" = "ឥឡូវនេះ គេហទំព័រ Firefox ដែលស្របតាមបុគ្គល​របស់អ្នក​ ងាយស្រួល​ជាងមុន​ក្នុងការជ្រើសរើស​កន្លែង​ដែលអ្នកបានចាកចេញ។ រក​ផ្ទាំង​ ចំណាំ និង​លទ្ធផល​ស្វែងរក​ថ្មីៗ​របស់អ្នក។";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "ផ្ទាំង​ដែល​អ្នក​មិន​បាន​មើល​រយៈពេល​ពីរសប្ដាហ៍​បានផ្លាស់ទី​នៅទីនេះ។";
@@ -1756,7 +1753,7 @@
 "Upgrade Firefox to connect" = "ដំឡើងកំណែ Firefox ដើម្បីតភ្ជាប់";
 
 /* Username textbox in Authentication prompt */
-"Username" = "ឈ្មោះ​អ្នក​ប្រើ";
+"Username" = "ឈ្មោះ​អ្នក​ប្រើប្រាស់";
 
 /* Text message in the settings table view */
 "Verify your email address" = "ផ្ទៀងផ្ទាត់អាសយដ្ឋាន​អ៊ីមែល​របស់​អ្នក";
