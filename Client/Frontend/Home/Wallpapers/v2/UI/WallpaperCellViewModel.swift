@@ -9,5 +9,4 @@ struct WallpaperCellViewModel {
     let a11yId: String
     let a11yLabel: String
     let isSelected: Bool
-    let needsDownload: Bool
 }
