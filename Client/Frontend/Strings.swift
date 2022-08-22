@@ -1255,46 +1255,6 @@ extension String {
 extension String {
     /// The text for the What's New onboarding card
     public struct WhatsNew {
-        public static let Title = MZLocalizedString(
-            "Onboarding.WhatsNew.Title",
-            value: "What’s New in Firefox",
-            comment: "The title for the new onboarding card letting users know what is new in Firefox iOS",
-            lastUpdated: .v39)
-        public static let GeneralDescription = MZLocalizedString(
-            "Onboarding.WhatsNew.Description",
-            value: "It’s now easier to pick up where you left off.",
-            comment: "On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about.",
-            lastUpdated: .v39)
-        public static let PersonalizedHomeTitle = MZLocalizedString(
-            "Onboarding.WhatsNew.Title",
-            value: "Personalized Firefox Homepage",
-            comment: "On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card",
-            lastUpdated: .v39)
-        public static let PersonalizedHomeDescription = MZLocalizedString(
-            "Onboarding.WhatsNew.PersonalizedHome.Description",
-            value: "Jump to your open tabs, bookmarks, and browsing history.",
-            comment: "On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point",
-            lastUpdated: .v39)
-        public static let TabGroupsTitle = MZLocalizedString(
-            "Onboarding.WhatsNew.TabGroups.Title",
-            value: "Tidier Tab Groups",
-            comment: "On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card",
-            lastUpdated: .v39)
-        public static let TabGroupsDescription = MZLocalizedString(
-            "Onboarding.WhatsNew.TabGroups.Description",
-            value: "Pages from the same search get grouped together.",
-            comment: "On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card",
-            lastUpdated: .v39)
-        public static let RecentSearchesTitle = MZLocalizedString(
-            "Onboarding.WhatsNew.RecentSearches.Title",
-            value: "Recent Searches",
-            comment: "On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card",
-            lastUpdated: .v39)
-        public static let RecentSearchesDescription = MZLocalizedString(
-            "Onboarding.WhatsNew.RecentSearches.Description",
-            value: "Revisit your latest searches from your homepage.",
-            comment: "On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card",
-            lastUpdated: .v39)
         public static let RecentButtonTitle = MZLocalizedString(
             "Onboarding.WhatsNew.Button.Title",
             value: "Start Browsing",
@@ -3590,7 +3550,7 @@ extension String {
         comment: "Message in error prompt explaining why the URL is invalid.",
         lastUpdated: .unknown)
     public static let SendToCloseButton = MZLocalizedString(
-        "SendTo.Cancel.Button",
+        "SendTo.Close.Button",
         value: "Close",
         comment: "Close button in top navigation bar",
         lastUpdated: .unknown)
@@ -3790,7 +3750,7 @@ extension String {
         comment: "Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider.",
         lastUpdated: .unknown)
     public static let DisplayThemeAutomaticStatusLabel = MZLocalizedString(
-        "Settings.DisplayTheme.SwitchTitle",
+        "Settings.DisplayTheme.StatusTitle",
         value: "Automatic",
         comment: "Display (theme) settings label to show if automatically switch theme is enabled.",
         lastUpdated: .unknown)
