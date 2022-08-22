@@ -14,7 +14,8 @@ class WallpaperSelectorViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        wallpaperManager = WallpaperManager() // needs to be a mock once the manager has real data
+        wallpaperManager = WallpaperManagerMock()
+        addWallpaperCollections()
 
         Glean.shared.resetGlean(clearStores: true)
     }
@@ -24,7 +25,42 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         wallpaperManager = nil
     }
 
+    func testInit_hasCorrectNumberOfWallpapers() {
+        let sut = createSut()
+        let expectedLayout: WallpaperSelectorViewModel.WallpaperSelectorLayout = .compact
+        XCTAssert(sut.sectionLayout == expectedLayout)
+        XCTAssert(sut.numberOfWallpapers == expectedLayout.maxItemsToDisplay)
+    }
+
+    func testUpdateSectionLayout_regularLayout_hasCorrectNumberOfWallpapers() {
+        let sut = createSut()
+        let expectedLayout: WallpaperSelectorViewModel.WallpaperSelectorLayout = .regular
+
+        let landscapeTrait = MockTraitCollection()
+        landscapeTrait.overridenHorizontalSizeClass = .regular
+        landscapeTrait.overridenVerticalSizeClass = .compact
+
+        sut.updateSectionLayout(for: landscapeTrait)
+
+        XCTAssert(sut.sectionLayout == expectedLayout)
+        XCTAssert(sut.numberOfWallpapers == expectedLayout.maxItemsToDisplay)
+    }
+
+    func testDownloadAndSetWallpaper_downloaded_wallpaperIsSet() {
+        let sut = createSut()
+        let indexPath = IndexPath(item: 1, section: 0)
+        let expectation = self.expectation(description: "Download and set wallpaper")
+
+        sut.downloadAndSetWallpaper(at: indexPath) { result in
+            let wallpaperCellModel = sut.cellViewModel(for: indexPath)!
+            XCTAssertTrue(wallpaperCellModel.isSelected)
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+
     func testRecordsWallpaperSelectorView() {
+        wallpaperManager = WallpaperManager()
         let sut = createSut()
         sut.sendImpressionTelemetry()
 
@@ -32,6 +68,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
     }
 
     func testRecordsWallpaperSelectorClose() {
+        wallpaperManager = WallpaperManager()
         let sut = createSut()
         sut.sendDismissImpressionTelemetry()
 
@@ -39,6 +76,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
     }
 
     func testClickingCell_recordsWallpaperChange() {
+        wallpaperManager = WallpaperManager()
         let sut = createSut()
         sut.updateCurrentWallpaper(at: IndexPath(item: 0, section: 0)) { _ in }
 
@@ -49,6 +87,46 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         let sut = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager) { }
         trackForMemoryLeaks(sut)
         return sut
+    }
+
+    func addWallpaperCollections() {
+        guard let mockManager = wallpaperManager as? WallpaperManagerMock else { return }
+
+        var wallpapersForClassic: [Wallpaper] {
+            var wallpapers = [Wallpaper]()
+            wallpapers.append(Wallpaper(id: "fxDefault", textColour: UIColor.green))
+
+            for _ in 0..<4 {
+                wallpapers.append(Wallpaper(id: "fxAmethyst", textColour: UIColor.red))
+            }
+
+            return wallpapers
+        }
+
+        var wallpapersForOther: [Wallpaper] {
+            var wallpapers = [Wallpaper]()
+            let rangeEnd = Int.random(in: 3...6)
+            for _ in 0..<rangeEnd {
+                wallpapers.append(Wallpaper(id: "fxCerulean", textColour: UIColor.purple))
+            }
+
+            return wallpapers
+        }
+
+        mockManager.mockAvailableCollections = [
+            WallpaperCollection(
+                id: "classicFirefox",
+                learnMoreURL: nil,
+                availableLocales: nil,
+                availability: nil,
+                wallpapers: wallpapersForClassic),
+            WallpaperCollection(
+                id: "otherCollection",
+                learnMoreURL: "https://www.mozilla.com",
+                availableLocales: nil,
+                availability: nil,
+                wallpapers: wallpapersForOther),
+        ]
     }
 
 }
