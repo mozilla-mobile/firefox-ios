@@ -8,10 +8,32 @@ import Telemetry
 import Account
 import Sync
 
-class TelemetryWrapper {
+protocol TelemetryWrapperProtocol {
+    func recordEvent(category: TelemetryWrapper.EventCategory,
+                     method: TelemetryWrapper.EventMethod,
+                     object: TelemetryWrapper.EventObject,
+                     value: TelemetryWrapper.EventValue?,
+                     extras: [String: Any]?)
+}
+
+extension TelemetryWrapperProtocol {
+    func recordEvent(category: TelemetryWrapper.EventCategory,
+                     method: TelemetryWrapper.EventMethod,
+                     object: TelemetryWrapper.EventObject,
+                     value: TelemetryWrapper.EventValue? = nil,
+                     extras: [String: Any]? = nil) {
+        recordEvent(category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+    }
+}
+
+class TelemetryWrapper: TelemetryWrapperProtocol {
+    static let shared = TelemetryWrapper()
     let legacyTelemetry = Telemetry.default
     let glean = Glean.shared
-
     // Boolean flag to temporarily remember if we crashed during the
     // last run of the app. We cannot simply use `Sentry.crashedLastLaunch`
     // because we want to clear this flag after we've already reported it
@@ -19,6 +41,10 @@ class TelemetryWrapper {
     private var crashedLastLaunch: Bool
 
     private var profile: Profile?
+
+    init() {
+        crashedLastLaunch = SentryIntegration.shared.crashedLastLaunch
+    }
 
     private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
         guard let oldPath = try? FileManager.default.url(
@@ -48,9 +74,7 @@ class TelemetryWrapper {
         }
     }
 
-    init(profile: Profile) {
-        crashedLastLaunch = SentryIntegration.shared.crashedLastLaunch
-
+    func setup(profile: Profile) {
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-core", to: .cachesDirectory)
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-mobile-event", to: .cachesDirectory)
         migratePathComponentInDocumentsDirectory("eventArray-MozTelemetry-Default-mobile-event.json", to: .cachesDirectory)
@@ -585,6 +609,19 @@ extension TelemetryWrapper {
 
         // Onboarding
         case cardType = "card-type"
+    }
+
+    func recordEvent(category: EventCategory,
+                     method: EventMethod,
+                     object: EventObject,
+                     value: EventValue? = nil,
+                     extras: [String: Any]? = nil
+    ) {
+        TelemetryWrapper.recordEvent(category: category,
+                                     method: method,
+                                     object: object,
+                                     value: value,
+                                     extras: extras)
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {

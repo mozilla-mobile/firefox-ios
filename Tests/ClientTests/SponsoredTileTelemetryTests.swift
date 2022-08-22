@@ -38,7 +38,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
     }
 
     func testTelemetryWrapper_setsContextId() {
-        _ = TelemetryWrapper(profile: MockProfile())
+        TelemetryWrapper.shared.setup(profile: MockProfile())
         XCTAssertNotNil(SponsoredTileTelemetry.contextId)
     }
 
