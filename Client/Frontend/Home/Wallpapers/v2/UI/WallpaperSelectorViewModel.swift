@@ -64,22 +64,6 @@ class WallpaperSelectorViewModel {
         setupWallpapers()
     }
 
-    func updateCurrentWallpaper(at indexPath: IndexPath, completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard let wallpaperItem = wallpaperItems[safe: indexPath.row] else {
-            completion(.success(false))
-            return
-        }
-        wallpaperManager.setCurrentWallpaper(to: wallpaperItem.wallpaper, completion: completion)
-        setupWallpapers()
-
-        let extra = telemetryMetadata(for: wallpaperItem)
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .onboardingWallpaperSelector,
-                                     value: .wallpaperSelected,
-                                     extras: extra)
-    }
-
     func cellViewModel(for indexPath: IndexPath) -> WallpaperCellViewModel? {
         guard let wallpaperItem = wallpaperItems[safe: indexPath.row] else {
             return nil
@@ -191,6 +175,22 @@ private extension WallpaperSelectorViewModel {
                                                    a11yLabel: a11yLabel,
                                                    isSelected: wallpaperManager.currentWallpaper == wallpaper)
         return cellViewModel
+    }
+
+    func updateCurrentWallpaper(at indexPath: IndexPath, completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard let wallpaperItem = wallpaperItems[safe: indexPath.row] else {
+            completion(.success(false))
+            return
+        }
+        wallpaperManager.setCurrentWallpaper(to: wallpaperItem.wallpaper, completion: completion)
+        setupWallpapers()
+
+        let extra = telemetryMetadata(for: wallpaperItem)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .onboardingWallpaperSelector,
+                                     value: .wallpaperSelected,
+                                     extras: extra)
     }
 
     func telemetryMetadata(for item: WallpaperSelectorItem) -> [String: String] {

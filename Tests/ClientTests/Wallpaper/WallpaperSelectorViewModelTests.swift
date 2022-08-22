@@ -78,7 +78,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
     func testClickingCell_recordsWallpaperChange() {
         wallpaperManager = WallpaperManager()
         let sut = createSut()
-        sut.updateCurrentWallpaper(at: IndexPath(item: 0, section: 0)) { _ in }
+        sut.downloadAndSetWallpaper(at: IndexPath(item: 0, section: 0)) { _ in }
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorSelected)
     }
