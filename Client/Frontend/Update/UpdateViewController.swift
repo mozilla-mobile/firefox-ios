@@ -6,15 +6,6 @@ import Foundation
 import UIKit
 import Shared
 
-protocol OnboardingViewControllerProtocol {
-    var didFinishClosure: (() -> Void)? { get }
-
-    func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController?
-    func moveToNextPage(cardType: IntroViewModel.InformationCards)
-    func getCardIndex(viewController: OnboardingCardViewController) -> Int?
-    func showNextPage(_ cardType: IntroViewModel.InformationCards)
-}
-
 class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
     // Update view UX constants
@@ -28,8 +19,9 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
     // Public constants 
     var viewModel: UpdateViewModel
-    var didFinishClosure: (() -> Void)?
+    var didFinishFlow: (() -> Void)?
     private var informationCards = [OnboardingCardViewController]()
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Private vars
     private lazy var backgroundImageView: UIImageView = .build { imageView in
@@ -37,11 +29,11 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.backgroundImage
     }
 
-    internal lazy var closeButton: UIButton = .build { button in
+    private lazy var closeButton: UIButton = .build { button in
         let closeImage = UIImage(named: ImageIdentifiers.upgradeCloseButton)
         button.setImage(closeImage, for: .normal)
         button.tintColor = .secondaryLabel
-        button.addTarget(self, action: #selector(self.dismissUpdate), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.closeUpdate), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.closeButton
     }
 
@@ -70,10 +62,17 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupView()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
+        applyTheme()
     }
 
     // MARK: View setup
@@ -96,6 +95,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         addChild(cardViewController)
         view.addSubview(cardViewController.view)
         cardViewController.didMove(toParent: self)
+        view.bringSubviewToFront(closeButton)
 
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
@@ -103,7 +103,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
 
-            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
+            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
@@ -154,8 +154,8 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     // Button Actions
-    @objc private func dismissUpdate() {
-        didFinishClosure?()
+    @objc private func closeUpdate() {
+        didFinishFlow?()
         viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
 
@@ -200,11 +200,15 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
                                          action: #selector(dismissSignInViewController))
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
+        controller.onViewDismissed = {
+            self.closeUpdate()
+        }
         self.present(controller, animated: true)
     }
 
     @objc func dismissSignInViewController() {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
+        closeUpdate()
     }
 }
 
@@ -235,7 +239,7 @@ extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewContro
 extension UpdateViewController: OnboardingCardDelegate {
     func showNextPage(_ cardType: IntroViewModel.InformationCards) {
         guard cardType != viewModel.enabledCards.last else {
-            self.didFinishClosure?()
+            self.didFinishFlow?()
             return
         }
 
@@ -277,5 +281,30 @@ extension UpdateViewController {
         // This actually does the right thing on iPad where the modally
         // presented version happily rotates with the iPad orientation.
         return .portrait
+    }
+}
+
+// MARK: - NotificationThemeable and Notifiable
+extension UpdateViewController: NotificationThemeable, Notifiable {
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default:
+            break
+        }
+    }
+
+    func applyTheme() {
+        guard !viewModel.shouldShowSingleCard else { return }
+
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        let indicatorColor = theme == .dark ? UIColor.theme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
+        pageControl.currentPageIndicatorTintColor = indicatorColor
+
+        informationCards.forEach { cardViewController in
+            cardViewController.applyTheme()
+        }
     }
 }
