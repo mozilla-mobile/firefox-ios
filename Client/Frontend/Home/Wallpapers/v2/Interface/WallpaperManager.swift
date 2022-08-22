@@ -84,5 +84,9 @@ class WallpaperManager: WallpaperManagerInterface {
     /// to existing metadata, and, if there are changes, performs the necessary operations
     /// to ensure parity between server data and what the user sees locally.
     func checkForUpdates() {
+        let dataService = WallpaperDataService()
+        Task {
+            try? await dataService.getMetadata()
+        }
     }
 }

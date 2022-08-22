@@ -39,6 +39,10 @@ public struct PrefsKeys {
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
     public static let KeySecondRun = "SecondRun"
 
+    public struct Wallpapers {
+        public static let MetadataLastCheckDate = "WallpaperMetadataLastCheckedPrefsKey"
+    }
+
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
