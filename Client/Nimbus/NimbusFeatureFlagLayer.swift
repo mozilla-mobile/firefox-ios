@@ -46,6 +46,12 @@ final class NimbusFeatureFlagLayer {
                 .tabTrayGroups:
             return checkGroupingFeature(for: featureID, from: nimbus)
 
+        case .onboardingUpgrade:
+            return checkNimbusForUpgradeOnboardingFeature(using: nimbus)
+
+        case .onboardingFreshInstall:
+            return checkNimbusForFreshInstallOnboardingFeature(using: nimbus)
+
         case .sponsoredTiles:
             return checkSponsoredTilesFeature(from: nimbus)
 
@@ -58,9 +64,6 @@ final class NimbusFeatureFlagLayer {
 
         case .wallpaperOnboardingSheet:
             return checkNimbusForWallpaperOnboarding(using: nimbus)
-
-        case .upgradeOnboarding:
-            return checkNimbusForUpgradeOnboardingFeature(using: nimbus)
         }
     }
 
@@ -169,9 +172,15 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkNimbusForUpgradeOnboardingFeature(using nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.upgradeOnboardingFeature.value()
+        let config = nimbus.features.onboardingFeature.value()
 
-        return config.enabled
+        return config.upgradeFlow
+    }
+
+    private func checkNimbusForFreshInstallOnboardingFeature(using nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.onboardingFeature.value()
+
+        return config.freshInstallFlow
     }
 
     private func checkTabTrayFeature(for featureID: NimbusFeatureFlagID,
