@@ -15,7 +15,7 @@ class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         return enabledCards.count == 1
     }
 
-    var isMROnboardingVersion: Bool {
+    var isv106Version: Bool {
         return true
     }
 

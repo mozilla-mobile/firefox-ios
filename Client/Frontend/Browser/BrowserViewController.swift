@@ -2224,7 +2224,7 @@ extension BrowserViewController {
 
     private func buildUpdateVC(viewModel: UpdateViewModel, animated: Bool = true) {
         let updateViewController = UpdateViewController(viewModel: viewModel)
-        updateViewController.didFinishClosure = {
+        updateViewController.didFinishFlow = {
             updateViewController.dismiss(animated: true)
         }
 
@@ -2246,7 +2246,7 @@ extension BrowserViewController {
     private func showProperIntroVC() {
         let introViewModel = IntroViewModel()
         let introViewController = IntroViewController(viewModel: introViewModel, profile: profile)
-        introViewController.didFinishClosure = {
+        introViewController.didFinishFlow = {
             self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
             introViewController.dismiss(animated: true)
         }

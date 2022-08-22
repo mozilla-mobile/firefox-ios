@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 protocol OnboardingViewControllerProtocol {
-    var didFinishClosure: (() -> Void)? { get }
+    var didFinishFlow: (() -> Void)? { get }
 
     func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController?
     func moveToNextPage(cardType: IntroViewModel.InformationCards)

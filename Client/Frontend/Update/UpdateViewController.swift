@@ -19,7 +19,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
     // Public constants 
     var viewModel: UpdateViewModel
-    var didFinishClosure: (() -> Void)?
+    var didFinishFlow: (() -> Void)?
     private var informationCards = [OnboardingCardViewController]()
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
@@ -154,7 +154,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
     // Button Actions
     @objc private func dismissUpdate() {
-        didFinishClosure?()
+        didFinishFlow?()
         viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
 
@@ -234,7 +234,7 @@ extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewContro
 extension UpdateViewController: OnboardingCardDelegate {
     func showNextPage(_ cardType: IntroViewModel.InformationCards) {
         guard cardType != viewModel.enabledCards.last else {
-            self.didFinishClosure?()
+            self.didFinishFlow?()
             return
         }
 

@@ -12,7 +12,7 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
     private let profile: Profile
     private var onboardingCards = [OnboardingCardViewController]()
     var notificationCenter: NotificationProtocol = NotificationCenter.default
-    var didFinishClosure: (() -> Void)?
+    var didFinishFlow: (() -> Void)?
 
     struct UX {
         static let closeButtonSize: CGFloat = 44
@@ -120,7 +120,7 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
         ])
 
-        if viewModel.isMROnboardingVersion {
+        if viewModel.isv106Version {
             view.addSubviews(backgroundImageView)
             view.sendSubviewToBack(backgroundImageView)
 
@@ -133,7 +133,7 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     @objc private func closeOnboarding() {
-        didFinishClosure?()
+        didFinishFlow?()
         viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
 
@@ -191,7 +191,7 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 extension IntroViewController: OnboardingCardDelegate {
     func showNextPage(_ cardType: IntroViewModel.InformationCards) {
         guard cardType != viewModel.enabledCards.last else {
-            self.didFinishClosure?()
+            self.didFinishFlow?()
             return
         }
 

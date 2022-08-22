@@ -20,11 +20,11 @@ struct OnboardingCardViewModel: OnboardingCardProtocol {
 
     init(cardType: IntroViewModel.InformationCards,
          infoModel: OnboardingModelProtocol,
-         isMROnboardingVersion: Bool) {
+         isv106Version: Bool) {
 
         self.cardType = cardType
         self.infoModel = infoModel
-        self.shouldShowDescriptionBold = cardType == .welcome && !isMROnboardingVersion
+        self.shouldShowDescriptionBold = cardType == .welcome && !isv106Version
     }
 
     func sendCardViewTelemetry() {

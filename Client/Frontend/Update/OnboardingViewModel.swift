@@ -6,7 +6,7 @@ import Foundation
 
 protocol OnboardingViewModelProtocol {
     var enabledCards: [IntroViewModel.InformationCards] { get }
-    var isMROnboardingVersion: Bool { get }
+    var isv106Version: Bool { get }
 
     func getCardViewModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardProtocol?
     func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol?
@@ -30,6 +30,6 @@ extension OnboardingViewModelProtocol {
 
         return OnboardingCardViewModel(cardType: cardType,
                                        infoModel: infoModel,
-                                       isMROnboardingVersion: isMROnboardingVersion)
+                                       isv106Version: isv106Version)
     }
 }

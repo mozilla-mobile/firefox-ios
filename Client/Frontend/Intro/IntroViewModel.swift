@@ -44,16 +44,16 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         }
     }
 
-    var isMROnboardingVersion: Bool {
+    var isv106Version: Bool {
         return featureFlags.isFeatureEnabled(.upgradeOnboarding, checking: .buildOnly)
     }
 
     var enabledCards: [IntroViewModel.InformationCards] {
-        return isMROnboardingVersion ? [ .welcome, .signSync] : [.welcome, .wallpapers, .signSync]
+        return isv106Version ? [ .welcome, .signSync] : [.welcome, .wallpapers, .signSync]
     }
 
     func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol? {
-        switch (cardType, isMROnboardingVersion) {
+        switch (cardType, isv106Version) {
         case (.welcome, false):
             return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcome),
                                        title: .CardTitleWelcome,
@@ -99,7 +99,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
         return OnboardingCardViewModel(cardType: cardType,
                                        infoModel: infoModel,
-                                       isMROnboardingVersion: isMROnboardingVersion)
+                                       isv106Version: isv106Version)
     }
 
     func sendCloseButtonTelemetry(index: Int) {
