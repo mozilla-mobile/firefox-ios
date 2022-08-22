@@ -257,13 +257,13 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_backgroundWallpaperMetric_defaultBackgroundIsNotSent() {
         let profile = MockProfile()
-        let wrapper = TelemetryWrapper(profile: profile)
+        TelemetryWrapper.shared.setup(profile: profile)
 
         LegacyWallpaperManager().updateSelectedWallpaperIndex(to: 0)
         XCTAssertEqual(LegacyWallpaperManager().currentWallpaper.type, .defaultBackground)
 
         let fakeNotif = NSNotification(name: UIApplication.didEnterBackgroundNotification, object: nil)
-        wrapper.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
+        TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
 
         testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
         let wallpaperName = LegacyWallpaperManager().currentWallpaper.name.lowercased()
@@ -272,13 +272,13 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
         let profile = MockProfile()
-        let wrapper = TelemetryWrapper(profile: profile)
+        TelemetryWrapper.shared.setup(profile: profile)
 
         LegacyWallpaperManager().updateSelectedWallpaperIndex(to: 1)
         XCTAssertNotEqual(LegacyWallpaperManager().currentWallpaper.type, .defaultBackground)
 
         let fakeNotif = NSNotification(name: UIApplication.didEnterBackgroundNotification, object: nil)
-        wrapper.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
+        TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
 
         testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
         let wallpaperName = LegacyWallpaperManager().currentWallpaper.name.lowercased()

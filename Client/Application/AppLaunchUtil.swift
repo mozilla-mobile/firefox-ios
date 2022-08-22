@@ -33,7 +33,7 @@ class AppLaunchUtil {
             Logger.browserLogger.deleteOldLogsDownToSizeLimit()
         }
 
-        _ = TelemetryWrapper(profile: profile)
+        TelemetryWrapper.shared.setup(profile: profile)
 
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
         // before getting the Profile.

@@ -12,4 +12,8 @@ class MockDispatchQueue: DispatchQueueInterface {
                execute work: @escaping @convention(block) () -> Void) {
         work()
     }
+
+    func ensureMainThread(execute work: @escaping () -> Void) {
+        work()
+    }
 }
