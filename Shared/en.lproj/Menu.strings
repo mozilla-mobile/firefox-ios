@@ -1,9 +1,6 @@
 /* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
 "Menu.AddBookmarkAction.Title" = "Bookmark This Page";
 
-/* Label for the button, displayed in the menu, used to add a page to the reading list. */
-"Menu.AddToReadingList.Title" = "Add to Reading List";
-
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "Close All Tabs";
 
@@ -15,9 +12,6 @@
 
 /* Label for the button, displayed in the menu, used to Reload the webpage */
 "Menu.Library.Reload" = "Reload";
-
-/* Label for the button, displayed in the menu, used to open the Library */
-"Menu.Library.Title" = "Your Library";
 
 /* Label for the button, displayed in the menu, used to open a new private tab. */
 "Menu.NewPrivateTabAction.Title" = "Open New Private Tab";
@@ -34,9 +28,6 @@
 /* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "History";
 
-/* Label for the button, displayed in the menu, used to navigate to the home page. */
-"Menu.OpenHomePageAction.Title" = "Home";
-
 /* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "Reading List";
 
@@ -51,9 +42,6 @@
 
 /* Label for the button, displayed in the menu, used to show the html page source */
 "Menu.PageSourceAction.Title" = "View Page Source";
-
-/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
-"Menu.RemoveBookmarkAction.Title" = "Remove Bookmark";
 
 /* Label for the button, displayed in the menu, used to open the QR code scanner. */
 "Menu.ScanQRCodeAction.Title" = "Scan QR Code";
