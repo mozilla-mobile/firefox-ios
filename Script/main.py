@@ -47,6 +47,7 @@ def get_store_version() -> Version:
     return Version(int(split[0]), int(split[1]))
 
 
+# TODO: Cannot be calculated like this, needs tobe fetched from app store.
 def calculate_previous_version(version: Version) -> Version:
     if version.minor == 0:
         return Version(version.major - 1, 0)
@@ -128,7 +129,7 @@ def build_release_message(current_version: Version,
 if __name__ == '__main__':
     # Uncomment for tests
     current = Version(major=104, minor=0)
-    previous = Version(major=103, minor=0)
+    previous = Version(major=103, minor=1)
 
     # TODO: If script parameters use them, if not fetch version from App Store
     # current = get_store_version()
