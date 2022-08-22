@@ -89,6 +89,39 @@ class WallpaperSelectorViewModel {
                              number: indexPath.row)
     }
 
+    func downloadAndSetWallpaper(at indexPath: IndexPath, completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard let wallpaperItem = wallpaperItems[safe: indexPath.row] else {
+            completion(.success(false))
+            return
+        }
+
+        let wallpaper = wallpaperItem.wallpaper
+        let needsDownload = wallpaper.type == .other && wallpaper.landscape == nil
+
+        let setWallpaperBlock = { [weak self] in
+            self?.updateCurrentWallpaper(at: indexPath) { result in
+                completion(result)
+            }
+        }
+
+        if needsDownload {
+            wallpaperManager.fetch(wallpaper) { result in
+                switch result {
+                case .success(let success):
+                    if success {
+                        setWallpaperBlock()
+                    } else {
+                        completion(result)
+                    }
+                case .failure:
+                    completion(result)
+                }
+            }
+        } else {
+            setWallpaperBlock()
+        }
+    }
+
     func sendImpressionTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,

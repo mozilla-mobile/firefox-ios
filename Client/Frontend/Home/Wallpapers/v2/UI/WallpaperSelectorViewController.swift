@@ -63,6 +63,11 @@ class WallpaperSelectorViewController: UIViewController {
         button.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.settingsButton
     }
 
+    private lazy var activityIndicatorView: UIActivityIndicatorView = .build { view in
+        view.style = .large
+        view.isHidden = true
+    }
+
     // MARK: - Initializers
     init(viewModel: WallpaperSelectorViewModel,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
@@ -130,16 +135,20 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel.updateCurrentWallpaper(at: indexPath) { result in
-            switch result {
-            case .success(let success):
-                if success {
-                    collectionView.reloadData()
+        activityIndicatorView.startAnimating()
+        viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
+            ensureMainThread {
+                switch result {
+                case .success(let success):
+                    if success {
+                        self?.collectionView.reloadData()
+                    }
+                case .failure(let error):
+                    print(error.localizedDescription)
                 }
-            case .failure(let error):
-                print(error.localizedDescription)
             }
         }
+        activityIndicatorView.stopAnimating()
     }
 
 }
@@ -150,7 +159,7 @@ private extension WallpaperSelectorViewController {
     func setupView() {
         configureCollectionView()
 
-        contentView.addSubviews(headerLabel, instructionLabel, collectionView, settingsButton)
+        contentView.addSubviews(headerLabel, instructionLabel, collectionView, settingsButton, activityIndicatorView)
         view.addSubview(contentView)
 
         collectionViewHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 300)
@@ -179,6 +188,9 @@ private extension WallpaperSelectorViewController {
             settingsButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 34),
             settingsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -43),
             settingsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -34),
+
+            activityIndicatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
     }
 
