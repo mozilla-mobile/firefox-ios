@@ -232,11 +232,15 @@ extension IntroViewController: OnboardingCardDelegate {
                                          action: #selector(dismissSignInViewController))
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
+        controller.onViewDismissed = {
+            self.closeOnboarding()
+        }
         self.present(controller, animated: true)
     }
 
     @objc func dismissSignInViewController() {
         dismiss(animated: true, completion: nil)
+        closeOnboarding()
     }
 }
 

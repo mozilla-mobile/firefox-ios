@@ -33,7 +33,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         let closeImage = UIImage(named: ImageIdentifiers.upgradeCloseButton)
         button.setImage(closeImage, for: .normal)
         button.tintColor = .secondaryLabel
-        button.addTarget(self, action: #selector(self.dismissUpdate), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.closeUpdate), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.closeButton
     }
 
@@ -71,7 +71,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
         setupView()
         setupNotifications(forObserver: self,
-                                   observing: [.DisplayThemeChanged])
+                           observing: [.DisplayThemeChanged])
         applyTheme()
     }
 
@@ -95,6 +95,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         addChild(cardViewController)
         view.addSubview(cardViewController.view)
         cardViewController.didMove(toParent: self)
+        view.bringSubviewToFront(closeButton)
 
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
@@ -153,7 +154,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     // Button Actions
-    @objc private func dismissUpdate() {
+    @objc private func closeUpdate() {
         didFinishFlow?()
         viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
@@ -199,11 +200,15 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
                                          action: #selector(dismissSignInViewController))
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
+        controller.onViewDismissed = {
+            self.closeUpdate()
+        }
         self.present(controller, animated: true)
     }
 
     @objc func dismissSignInViewController() {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
+        closeUpdate()
     }
 }
 
