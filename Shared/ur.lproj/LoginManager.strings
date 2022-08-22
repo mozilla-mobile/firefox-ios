@@ -14,7 +14,7 @@
 "Created %@" = "%@ پر پیدا کیا";
 
 /* Label for the button used to delete the current login. */
-"Delete" = "حذف کریں";
+"Delete" = "مٹائیں";
 
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "سب کو غیر منتخب کریں";

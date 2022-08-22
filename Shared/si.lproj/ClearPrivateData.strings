@@ -1,14 +1,14 @@
 /* Settings item for clearing browsing history */
-"Browsing History" = "සැරිසර අතීතය";
+"Browsing History" = "පිරික්සුම් ඉතිහාසය";
 
 /* Settings item for clearing the cache */
-"Cache" = "කැච්";
+"Cache" = "නිහිතය";
 
-/* Settings item for clearing cookies */
-"Cookies" = "කුකී";
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "බාගත කළ ගොනු";
 
 /* Settings item for clearing website data */
-"Offline Website Data" = "නොබැඳි වෙබ් අඩවි දත්ත";
+"Offline Website Data" = "මාර්ගඅපගත අඩවිවල දත්ත";
 
 /* Settings item for clearing passwords and login data */
 "Saved Logins" = "සුරැකි පිවිසුම්";

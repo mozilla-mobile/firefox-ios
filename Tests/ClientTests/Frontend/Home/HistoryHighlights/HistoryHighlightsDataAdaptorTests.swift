@@ -12,6 +12,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
     var historyManager: MockHistoryHighlightsManager!
     var notificationCenter: MockNotificationCenter!
     var delegate: MockHistoryHighlightsDelegate!
+    var deletionUtility: MockHistoryDeletionProtocol!
 
     override func setUp() {
         super.setUp()
@@ -19,12 +20,14 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         historyManager = MockHistoryHighlightsManager()
         notificationCenter = MockNotificationCenter()
         delegate = MockHistoryHighlightsDelegate()
+        deletionUtility = MockHistoryDeletionProtocol()
 
         let subject = HistoryHighlightsDataAdaptorImplementation(
             historyManager: historyManager,
             profile: MockProfile(),
             tabManager: MockTabManager(),
-            notificationCenter: notificationCenter)
+            notificationCenter: notificationCenter,
+            deletionUtility: deletionUtility)
         subject.delegate = delegate
         notificationCenter.notifiableListener = subject
         self.subject = subject
@@ -36,6 +39,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         historyManager = nil
         notificationCenter = nil
         delegate = nil
+        deletionUtility = nil
     }
 
     // Loads history on first launch with data
@@ -76,5 +80,38 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         XCTAssertEqual(results.count, 2)
         XCTAssertEqual(historyManager.getHighlightsDataCallCount, 2)
         XCTAssertEqual(delegate.didLoadNewDataCallCount, 2)
+    }
+
+    func testDeleteIndividualItem() {
+        let item1: HighlightItem = HistoryHighlight(score: 0,
+                                                    placeId: 0,
+                                                    url: "www.firefox.com",
+                                                    title: "",
+                                                    previewImageUrl: "")
+        historyManager.callGetHighlightsDataCompletion(result: [item1])
+
+        subject.delete(item1)
+        deletionUtility.callDeleteCompletion(result: true)
+
+        XCTAssertEqual(historyManager.getHighlightsDataCallCount, 2)
+    }
+
+    func testDeleteGroupItem() {
+        let item: HighlightItem = HistoryHighlight(score: 0,
+                                                    placeId: 0,
+                                                    url: "www.firefox.com",
+                                                    title: "",
+                                                    previewImageUrl: "")
+
+        let group: HighlightItem = ASGroup(searchTerm: "foxes",
+                                           groupedItems: [item],
+                                           timestamp: 0)
+
+        historyManager.callGetHighlightsDataCompletion(result: [group])
+
+        subject.delete(group)
+        deletionUtility.callDeleteCompletion(result: true)
+
+        XCTAssertEqual(historyManager.getHighlightsDataCallCount, 2)
     }
 }

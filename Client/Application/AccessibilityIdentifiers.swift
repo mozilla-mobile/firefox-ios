@@ -122,6 +122,7 @@ public struct AccessibilityIdentifiers {
     }
 
     struct Onboarding {
+        static let backgroundImage = "Onboarding.BackgroundImage"
         static let welcomeCard = "WelcomeCard"
         static let wallpapersCard = "WallpapersCard"
         static let signSyncCard = "SignSyncCard"

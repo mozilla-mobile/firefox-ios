@@ -31,6 +31,9 @@
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Open en vul in";
 
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Wagwoord";
+
 /* Reveal password text selection menu item */
 "Reveal" = "Onthul";
 
@@ -39,4 +42,7 @@
 
 /* Label for the button used to select all logins. */
 "Select All" = "Kies almal";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Gebruikernaam";
 

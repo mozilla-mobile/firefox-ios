@@ -290,9 +290,6 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Sdílet odkaz";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.Homepage.PersonalizedHome" = "Na své osobní domovské stránce Firefoxu vždy najdete, co jste dělali naposledy, ať už nedávno otevřené panely, záložky nebo výsledky vyhledávání.";
-
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Nastavení lišty";
 
@@ -1397,7 +1394,7 @@
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
    Open search section of settings */
-"Search" = "Vyhledávání";
+"Search" = "Hledat";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Zadejte hledání nebo adresu";

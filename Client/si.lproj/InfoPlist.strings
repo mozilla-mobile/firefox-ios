@@ -1,21 +1,24 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "මෙමගින් ඔබට ඡායාරූප ගැනීමට හා උඩුගත කිරීමට ඉඩ දෙයි.";
+"NSCameraUsageDescription" = "Firefox uses your camera to scan QR codes and take photos and video.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "ඔබගේ සුරැකි පිවිසුම් වෙත ප්‍රවේශයට මුහුණු හැඳු. අවශ්‍යයි.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "ඔබ පිවිසෙන වෙබ් අඩවි ඔබේ පිහිටුම ඉල්ලා සිටිය හැක.";
+"NSLocationWhenInUseUsageDescription" = "ගොඩවදින අඩවි වෙතින් ඔබගේ ස්ථානය ඉල්ලා සිටීමට හැකිය.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "මෙමගින් ඔබට වීඩියෝ ගැනීමට හා උඩුගත කිරීමට ඉඩ දෙයි.";
+"NSMicrophoneUsageDescription" = "ෆයර්ෆොක්ස් හඬ පටිගතයට හා උඩුගත කිරීමට ශබ්දවාහිනිය භාවිත කරයි.";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "මෙමගින් ඔබට ඡායාරූප සුරැකීමට ඉඩ දෙයි.";
+"NSPhotoLibraryAddUsageDescription" = "මෙමගින් ඔබට ඡායාරූප සුරැකීමට ඉඩදෙයි.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "නව පුද්ගලික ටැබය";
+"ShortcutItemTitleNewPrivateTab" = "නව පෞද්. පටිත්ත";
 
 /* (No Comment) */
-"ShortcutItemTitleNewTab" = "නව ටැබය";
+"ShortcutItemTitleNewTab" = "නව පටිත්ත";
 
 /* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR කේතය පරිලෝකනය කරන්න";
+"ShortcutItemTitleQRCode" = "QR කේතය සුපිරික්සන්න";
 

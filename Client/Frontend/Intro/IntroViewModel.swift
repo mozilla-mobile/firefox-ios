@@ -44,36 +44,50 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         }
     }
 
-    var enabledCards: [InformationCards] {
-        guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion) else {
-            return [.welcome, .wallpapers, .signSync]
-        }
+    var isv106Version: Bool {
+        return featureFlags.isFeatureEnabled(.upgradeOnboarding, checking: .buildOnly)
+    }
 
-        return wallpaperVersion == .v2 ? [ .welcome, .signSync] : [.welcome, .wallpapers, .signSync]
+    var enabledCards: [IntroViewModel.InformationCards] {
+        return isv106Version ? [ .welcome, .signSync] : [.welcome, .wallpapers, .signSync]
     }
 
     func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol? {
-        switch cardType {
-        case .welcome:
+        switch (cardType, isv106Version) {
+        case (.welcome, false):
             return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcome),
                                        title: .CardTitleWelcome,
                                        description: .Onboarding.IntroDescriptionPart2,
                                        primaryAction: .Onboarding.IntroAction,
                                        secondaryAction: nil,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
-        case .wallpapers:
+        case (.welcome, true):
+            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcome),
+                                       title: .Onboarding.IntroWelcomeTitle,
+                                       description: .Onboarding.IntroWelcomeDescription,
+                                       primaryAction: .Onboarding.IntroAction,
+                                       secondaryAction: nil,
+                                       a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
+        case (.wallpapers, _):
             return OnboardingInfoModel(image: nil,
                                        title: .Onboarding.WallpaperTitle,
                                        description: nil,
                                        primaryAction: .Onboarding.WallpaperAction,
                                        secondaryAction: .Onboarding.LaterAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.wallpapersCard)
-        case .signSync:
+        case (.signSync, false):
             return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSync),
                                        title: .Onboarding.SyncTitle,
                                        description: .Onboarding.SyncDescription,
                                        primaryAction: .Onboarding.SyncAction,
                                        secondaryAction: .WhatsNew.RecentButtonTitle,
+                                       a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
+        case (.signSync, true):
+            return OnboardingInfoModel(image: nil,
+                                       title: .Onboarding.IntroSyncTitle,
+                                       description: .Onboarding.IntroSyncDescription,
+                                       primaryAction: .IntroSignInButtonTitle,
+                                       secondaryAction: .Onboarding.IntroSyncSkipAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
         default:
             return nil
@@ -83,7 +97,9 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     func getCardViewModel(cardType: InformationCards) -> OnboardingCardProtocol? {
         guard let infoModel = getInfoModel(cardType: cardType) else { return nil }
 
-        return OnboardingCardViewModel(cardType: cardType, infoModel: infoModel)
+        return OnboardingCardViewModel(cardType: cardType,
+                                       infoModel: infoModel,
+                                       isv106Version: isv106Version)
     }
 
     func sendCloseButtonTelemetry(index: Int) {
