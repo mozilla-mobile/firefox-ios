@@ -39,6 +39,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         historyManager = nil
         notificationCenter = nil
         delegate = nil
+        deletionUtility = nil
     }
 
     // Loads history on first launch with data
