@@ -24,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var webServerUtil: WebServerUtil?
     private var appLaunchUtil: AppLaunchUtil?
     private var backgroundSyncUtil: BackgroundSyncUtil?
+    private var widgetManager: TopSitesWidgetManager?
 
     func application(_ application: UIApplication,
                      willFinishLaunchingWithOptions
@@ -68,6 +69,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         pushNotificationSetup()
         appLaunchUtil?.setUpPostLaunchDependencies()
         backgroundSyncUtil = BackgroundSyncUtil(profile: profile, application: application)
+
+        // Widgets are available on iOS 14 and up only.
+        if #available(iOS 14.0, *) {
+            let topSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
+                                                                  prefs: profile.prefs)
+
+            widgetManager = TopSitesWidgetManager(topSitesProvider: topSitesProvider)
+        }
 
         return true
     }
@@ -149,10 +158,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Since we only need the topSites data in the archiver, let's write it
         // only if iOS 14 is available.
         if #available(iOS 14.0, *) {
-            let topSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
-                                                                  prefs: profile.prefs)
-
-            TopSitesWidgetManager(topSitesProvider: topSitesProvider).writeWidgetKitTopSites()
+            widgetManager?.writeWidgetKitTopSites()
         }
     }
 
