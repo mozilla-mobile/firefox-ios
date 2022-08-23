@@ -47,6 +47,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
     }
 
     func testDownloadAndSetWallpaper_downloaded_wallpaperIsSet() {
+        guard let mockManager = wallpaperManager as? WallpaperManagerMock else { return }
         let sut = createSut()
         let indexPath = IndexPath(item: 1, section: 0)
         let expectation = self.expectation(description: "Download and set wallpaper")
@@ -54,6 +55,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         sut.downloadAndSetWallpaper(at: indexPath) { result in
             let wallpaperCellModel = sut.cellViewModel(for: indexPath)!
             XCTAssertTrue(wallpaperCellModel.isSelected)
+            XCTAssert(mockManager.setCurrentWallpaperCallCount == 1)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 5, handler: nil)
