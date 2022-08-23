@@ -26,36 +26,36 @@ class WallpaperSelectorViewModelTests: XCTestCase {
     }
 
     func testInit_hasCorrectNumberOfWallpapers() {
-        let sut = createSut()
+        let subject = createSubject()
         let expectedLayout: WallpaperSelectorViewModel.WallpaperSelectorLayout = .compact
-        XCTAssert(sut.sectionLayout == expectedLayout)
-        XCTAssert(sut.numberOfWallpapers == expectedLayout.maxItemsToDisplay)
+        XCTAssertEqual(subject.sectionLayout, expectedLayout)
+        XCTAssertEqual(subject.numberOfWallpapers, expectedLayout.maxItemsToDisplay)
     }
 
     func testUpdateSectionLayout_regularLayout_hasCorrectNumberOfWallpapers() {
-        let sut = createSut()
+        let subject = createSubject()
         let expectedLayout: WallpaperSelectorViewModel.WallpaperSelectorLayout = .regular
 
         let landscapeTrait = MockTraitCollection()
         landscapeTrait.overridenHorizontalSizeClass = .regular
         landscapeTrait.overridenVerticalSizeClass = .compact
 
-        sut.updateSectionLayout(for: landscapeTrait)
+        subject.updateSectionLayout(for: landscapeTrait)
 
-        XCTAssert(sut.sectionLayout == expectedLayout)
-        XCTAssert(sut.numberOfWallpapers == expectedLayout.maxItemsToDisplay)
+        XCTAssertEqual(subject.sectionLayout, expectedLayout)
+        XCTAssertEqual(subject.numberOfWallpapers, expectedLayout.maxItemsToDisplay)
     }
 
     func testDownloadAndSetWallpaper_downloaded_wallpaperIsSet() {
         guard let mockManager = wallpaperManager as? WallpaperManagerMock else { return }
-        let sut = createSut()
+        let subject = createSubject()
         let indexPath = IndexPath(item: 1, section: 0)
         let expectation = self.expectation(description: "Download and set wallpaper")
 
-        sut.downloadAndSetWallpaper(at: indexPath) { result in
-            let wallpaperCellModel = sut.cellViewModel(for: indexPath)!
+        subject.downloadAndSetWallpaper(at: indexPath) { result in
+            let wallpaperCellModel = subject.cellViewModel(for: indexPath)!
             XCTAssertTrue(wallpaperCellModel.isSelected)
-            XCTAssert(mockManager.setCurrentWallpaperCallCount == 1)
+            XCTAssertEqual(mockManager.setCurrentWallpaperCallCount, 1)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 5, handler: nil)
@@ -63,32 +63,32 @@ class WallpaperSelectorViewModelTests: XCTestCase {
 
     func testRecordsWallpaperSelectorView() {
         wallpaperManager = WallpaperManager()
-        let sut = createSut()
-        sut.sendImpressionTelemetry()
+        let subject = createSubject()
+        subject.sendImpressionTelemetry()
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorView)
     }
 
     func testRecordsWallpaperSelectorClose() {
         wallpaperManager = WallpaperManager()
-        let sut = createSut()
-        sut.sendDismissImpressionTelemetry()
+        let subject = createSubject()
+        subject.sendDismissImpressionTelemetry()
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorClose)
     }
 
     func testClickingCell_recordsWallpaperChange() {
         wallpaperManager = WallpaperManager()
-        let sut = createSut()
-        sut.downloadAndSetWallpaper(at: IndexPath(item: 0, section: 0)) { _ in }
+        let subject = createSubject()
+        subject.downloadAndSetWallpaper(at: IndexPath(item: 0, section: 0)) { _ in }
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorSelected)
     }
 
-    func createSut() -> WallpaperSelectorViewModel {
-        let sut = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager) { }
-        trackForMemoryLeaks(sut)
-        return sut
+    func createSubject() -> WallpaperSelectorViewModel {
+        let subject = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager) { }
+        trackForMemoryLeaks(subject)
+        return subject
     }
 
     func addWallpaperCollections() {
