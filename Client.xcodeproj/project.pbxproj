@@ -512,8 +512,6 @@
 		8A11C8132731E54800AC7318 /* DictionaryExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */; };
 		8A161411282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A161410282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift */; };
 		8A161413282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A161412282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift */; };
-		8A1A231928AFD3FD0081DE20 /* QuickLinkSelection.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 8A1A231C28AFD3FD0081DE20 /* QuickLinkSelection.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
-		8A1A231A28AFD3FD0081DE20 /* QuickLinkSelection.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 8A1A231C28AFD3FD0081DE20 /* QuickLinkSelection.intentdefinition */; };
 		8A2366FA28A302E500846D1B /* MockSponsoredPocketAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2366F928A302E500846D1B /* MockSponsoredPocketAPI.swift */; };
 		8A2783F1275FFDC50080D29D /* KeyboardPressesHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */; };
 		8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */; };
@@ -3132,7 +3130,6 @@
 		8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensionsTests.swift; sourceTree = "<group>"; };
 		8A161410282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeHomepageSectionViewModel.swift; sourceTree = "<group>"; };
 		8A161412282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusSponsoredTileLayer.swift; sourceTree = "<group>"; };
-		8A1A231B28AFD3FD0081DE20 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/QuickLinkSelection.intentdefinition; sourceTree = "<group>"; };
 		8A2366F928A302E500846D1B /* MockSponsoredPocketAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSponsoredPocketAPI.swift; sourceTree = "<group>"; };
 		8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPressesHandler.swift; sourceTree = "<group>"; };
 		8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPressesHandlerTests.swift; sourceTree = "<group>"; };
@@ -7183,7 +7180,6 @@
 		DA9FD88024E213B400168D1E /* SearchQuickLinksSmall */ = {
 			isa = PBXGroup;
 			children = (
-				8A1A231C28AFD3FD0081DE20 /* QuickLinkSelection.intentdefinition */,
 				DA9FD88224E213B400168D1E /* SmallQuickLink.swift */,
 			);
 			path = SearchQuickLinksSmall;
@@ -9529,7 +9525,6 @@
 				1DA3CE6724EEE86C00422BB2 /* AppInfo.swift in Sources */,
 				4392FB34252EC4CE00AD3D23 /* SessionRestoreHandler.swift in Sources */,
 				DA9FD88824E213DD00168D1E /* QuickLink.swift in Sources */,
-				8A1A231A28AFD3FD0081DE20 /* QuickLinkSelection.intentdefinition in Sources */,
 				1DA3CE5D24EEE73100422BB2 /* OpenTabsWidget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10272,7 +10267,6 @@
 				5A271ABD2860B0D700471CE4 /* WebServerUtil.swift in Sources */,
 				964FA97528A1A8F20024BB3B /* ContextualHintEligibilityUtility.swift in Sources */,
 				C84656052888373100861B4A /* WallpaperDataProvider.swift in Sources */,
-				8A1A231928AFD3FD0081DE20 /* QuickLinkSelection.intentdefinition in Sources */,
 				CA7FC7D324A6A9B70012F347 /* LoginListDataSourceHelper.swift in Sources */,
 				43AB6FA425DC53D30016B015 /* LabelButtonHeaderView.swift in Sources */,
 				C8163851268A0899004C7160 /* AddCredentialViewController.swift in Sources */,
@@ -12031,14 +12025,6 @@
 				A85F9E4A289A4C9800DCBF19 /* be */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		8A1A231C28AFD3FD0081DE20 /* QuickLinkSelection.intentdefinition */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8A1A231B28AFD3FD0081DE20 /* Base */,
-			);
-			name = QuickLinkSelection.intentdefinition;
 			sourceTree = "<group>";
 		};
 		8DFA42FBB7C25AC38ACEEA0D /* PrivateBrowsing.strings */ = {
