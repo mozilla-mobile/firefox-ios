@@ -4,7 +4,7 @@
 
 import UIKit
 
-class WallpaperSelectorViewController: UIViewController {
+class WallpaperSelectorViewController: UIViewController, Loggable {
 
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
@@ -63,6 +63,11 @@ class WallpaperSelectorViewController: UIViewController {
         button.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.settingsButton
     }
 
+    private lazy var activityIndicatorView: UIActivityIndicatorView = .build { view in
+        view.style = .large
+        view.isHidden = true
+    }
+
     // MARK: - Initializers
     init(viewModel: WallpaperSelectorViewModel,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
@@ -93,6 +98,8 @@ class WallpaperSelectorViewController: UIViewController {
             WallpaperSelectorViewController.UX.cardShadowHeight
         collectionViewHeightConstraint.constant = height
         view.layoutIfNeeded()
+
+        viewModel.sendImpressionTelemetry()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -114,17 +121,32 @@ class WallpaperSelectorViewController: UIViewController {
 extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.wallpaperCellModels.count
+        return viewModel.numberOfWallpapers
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier,
                                                             for: indexPath) as? WallpaperCollectionViewCell,
-              let cellViewModel = viewModel.wallpaperCellModels[safe: indexPath.row]
+              let cellViewModel = viewModel.cellViewModel(for: indexPath)
         else { return UICollectionViewCell() }
 
         cell.viewModel = cellViewModel
         return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        activityIndicatorView.startAnimating()
+        viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
+            ensureMainThread {
+                switch result {
+                case .success:
+                    self?.collectionView.reloadData()
+                case .failure(let error):
+                    self?.browserLog.info(error.localizedDescription)
+                }
+            }
+        }
+        activityIndicatorView.stopAnimating()
     }
 
 }
@@ -135,7 +157,7 @@ private extension WallpaperSelectorViewController {
     func setupView() {
         configureCollectionView()
 
-        contentView.addSubviews(headerLabel, instructionLabel, collectionView, settingsButton)
+        contentView.addSubviews(headerLabel, instructionLabel, collectionView, settingsButton, activityIndicatorView)
         view.addSubview(contentView)
 
         collectionViewHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 300)
@@ -164,6 +186,9 @@ private extension WallpaperSelectorViewController {
             settingsButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 34),
             settingsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -43),
             settingsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -34),
+
+            activityIndicatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
     }
 
@@ -245,5 +270,11 @@ extension WallpaperSelectorViewController: NotificationThemeable, Notifiable {
             instructionLabel.textColor = UIColor.Photon.DarkGrey05
             settingsButton.setTitleColor(UIColor.Photon.Blue50, for: .normal)
         }
+    }
+}
+
+extension WallpaperSelectorViewController: BottomSheetChild {
+    func willDismiss() {
+        viewModel.sendDismissImpressionTelemetry()
     }
 }

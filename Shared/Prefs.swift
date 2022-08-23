@@ -119,6 +119,7 @@ public struct PrefsKeys {
     public static let WallpaperManagerCurrentWallpaperImage = "WallpaperManagerCurrentWallpaperImage"
     public static let WallpaperManagerCurrentWallpaperImageLandscape = "WallpaperManagerCurrentWallpaperImageLandscape"
     public static let WallpaperManagerLogoSwitchPreference = "WallpaperManagerLogoSwitchPreference"
+    public static let WallpaperOnboardingSeenKey = "WallpaperOnboardingSeenKey"
 }
 
 public struct PrefsDefaults {

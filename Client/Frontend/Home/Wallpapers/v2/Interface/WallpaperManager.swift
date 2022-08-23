@@ -7,13 +7,16 @@ import Foundation
 protocol WallpaperManagerInterface {
     var currentWallpaper: Wallpaper { get }
     var availableCollections: [WallpaperCollection] { get }
+    var canOnboardingBeShown: Bool { get }
 
-    func setCurrentWallpaper(to wallpaper: Wallpaper, completion: @escaping (Result<Bool, Error>) -> Void)
+    func setCurrentWallpaper(to wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
+    func fetch(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
+    func removeDownloadedAssets()
     func checkForUpdates()
 }
 
 /// The primary interface for the wallpaper feature.
-class WallpaperManager: WallpaperManagerInterface {
+class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
 
     // MARK: Public Interface
 
@@ -66,14 +69,40 @@ class WallpaperManager: WallpaperManagerInterface {
         ]
     }
 
+    /// Determines whether the wallpaper onboarding can be shown
+    var canOnboardingBeShown: Bool {
+        let wallpaperThumbnailsDownloaded = true
+        guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
+              wallpaperVersion == .v2,
+              featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly),
+              wallpaperThumbnailsDownloaded // check if wallpaper thumbnails are downloaded here
+        else { return false }
+
+        // Roux: add private var for thumbnails downloaded
+        return true
+    }
+
     /// Sets and saves a selected wallpaper as currently selected wallpaper.
     ///
     /// - Parameter wallpaper: A `Wallpaper` the user has selected.
     func setCurrentWallpaper(
         to wallpaper: Wallpaper,
-        completion: @escaping (Result<Bool, Error>) -> Void
+        completion: @escaping (Result<Void, Error>) -> Void
     ) {
-        completion(.success(true))
+        completion(.success(()))
+    }
+
+    /// Fetches the images for a specific wallpaper.
+    ///
+    /// - Parameter wallpaper: A `Wallpaper` for which images should be downloaded.
+    /// - Parameter completion: The block that is called when the image download completes.
+    ///                      If the images is loaded successfully, the block is called with
+    ///                      a `.success` with the data associated. Otherwise, it is called
+    ///                      with a `.failure` and passed an error.
+    func fetch(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.1) {
+            completion(.success(()))
+        }
     }
 
     func removeDownloadedAssets() {
