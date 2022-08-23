@@ -10,30 +10,30 @@ import XCTest
 class LoginListDataSourceHelperTests: XCTestCase {
 
     func testSetDomainLookup() {
-        let sut = LoginListDataSourceHelper()
+        let subject = LoginListDataSourceHelper()
         let login = LoginRecord(fromJSONDict: [
             "hostname": "https://example.com/",
             "id": "example"
         ])
-        sut.setDomainLookup([login])
-        XCTAssertNotNil(sut.domainLookup[login.id])
-        XCTAssertEqual(sut.domainLookup[login.id]?.baseDomain, login.hostname.asURL?.baseDomain)
-        XCTAssertEqual(sut.domainLookup[login.id]?.host, login.hostname.asURL?.host)
-        XCTAssertEqual(sut.domainLookup[login.id]?.hostname, login.hostname)
+        subject.setDomainLookup([login])
+        XCTAssertNotNil(subject.domainLookup[login.id])
+        XCTAssertEqual(subject.domainLookup[login.id]?.baseDomain, login.hostname.asURL?.baseDomain)
+        XCTAssertEqual(subject.domainLookup[login.id]?.host, login.hostname.asURL?.host)
+        XCTAssertEqual(subject.domainLookup[login.id]?.hostname, login.hostname)
     }
 
     func testTitleForLogin() {
-        let sut = LoginListDataSourceHelper()
+        let subject = LoginListDataSourceHelper()
         let login = LoginRecord(fromJSONDict: [
             "hostname": "https://example.com/",
             "id": "example"
         ])
-        sut.setDomainLookup([login])
-        XCTAssertEqual(sut.titleForLogin(login), Character("E"))
+        subject.setDomainLookup([login])
+        XCTAssertEqual(subject.titleForLogin(login), Character("E"))
     }
 
     func testSortByDomain() {
-        let sut = LoginListDataSourceHelper()
+        let subject = LoginListDataSourceHelper()
         let apple = LoginRecord(fromJSONDict: [
             "hostname": "https://apple.com/",
             "id": "apple"
@@ -42,15 +42,15 @@ class LoginListDataSourceHelperTests: XCTestCase {
             "hostname": "https://zebra.com/",
             "id": "zebra"
         ])
-        XCTAssertFalse(sut.sortByDomain(apple, loginB: zebra))
+        XCTAssertFalse(subject.sortByDomain(apple, loginB: zebra))
 
-        sut.setDomainLookup([apple, zebra])
-        XCTAssertTrue(sut.sortByDomain(apple, loginB: zebra))
-        XCTAssertFalse(sut.sortByDomain(zebra, loginB: apple))
+        subject.setDomainLookup([apple, zebra])
+        XCTAssertTrue(subject.sortByDomain(apple, loginB: zebra))
+        XCTAssertFalse(subject.sortByDomain(zebra, loginB: apple))
     }
 
     func testComputeSectionsFromLogins() {
-        let sut = LoginListDataSourceHelper()
+        let subject = LoginListDataSourceHelper()
         let apple = LoginRecord(fromJSONDict: [
             "hostname": "https://apple.com/",
             "id": "apple"
@@ -70,9 +70,9 @@ class LoginListDataSourceHelperTests: XCTestCase {
         expected[Character("Z")] = [zebra]
 
         let logins = [apple, appleMusic, zebra]
-        sut.setDomainLookup(logins)
+        subject.setDomainLookup(logins)
         let expectation = expectation(description: "Compute sections from login done")
-        sut.computeSectionsFromLogins(logins).upon { (formattedLoginsMaybe) in
+        subject.computeSectionsFromLogins(logins).upon { (formattedLoginsMaybe) in
             XCTAssertTrue(formattedLoginsMaybe.isSuccess)
             XCTAssertNotNil(formattedLoginsMaybe.successValue)
             let formattedLogins = formattedLoginsMaybe.successValue

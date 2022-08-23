@@ -14,9 +14,9 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
         let dataTask = WallpaperURLSessionDataTaskMock()
         let session = WallpaperURLSessionMock(with: nil, response: nil, and: nil)
         session.dataTask = dataTask
-        let sut = WallpaperNetworkingModule(with: session)
+        let subject = WallpaperNetworkingModule(with: session)
 
-        _ = try? await sut.data(from: url)
+        _ = try? await subject.data(from: url)
         XCTAssertTrue(dataTask.resumeWasCalled)
     }
 
@@ -24,10 +24,10 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
         let session = WallpaperURLSessionMock(with: nil,
                                               response: nil,
                                               and: URLError(.cannotConnectToHost))
-        let sut = WallpaperNetworkingModule(with: session)
+        let subject = WallpaperNetworkingModule(with: session)
 
         do {
-            _ = try await sut.data(from: url)
+            _ = try await subject.data(from: url)
             XCTFail("This test should throw an error, but it did not.")
         } catch {
             XCTAssertEqual(error as! URLError,
@@ -40,10 +40,10 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
         let session = WallpaperURLSessionMock(with: nil,
                                               response: response,
                                               and: nil)
-        let sut = WallpaperNetworkingModule(with: session)
+        let subject = WallpaperNetworkingModule(with: session)
 
         do {
-            _ = try await sut.data(from: url)
+            _ = try await subject.data(from: url)
             XCTFail("This test should throw an error, but it did not.")
         } catch {
             XCTAssertEqual(error as! URLError,
@@ -56,10 +56,10 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
         let session = WallpaperURLSessionMock(with: nil,
                                               response: response,
                                               and: nil)
-        let sut = WallpaperNetworkingModule(with: session)
+        let subject = WallpaperNetworkingModule(with: session)
 
         do {
-            _ = try await sut.data(from: url)
+            _ = try await subject.data(from: url)
             XCTFail("This test should throw an error, but it did not.")
         } catch {
             XCTAssertEqual(error as! URLError,
@@ -73,10 +73,10 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
         let session = WallpaperURLSessionMock(with: data,
                                               response: response,
                                               and: nil)
-        let sut = WallpaperNetworkingModule(with: session)
+        let subject = WallpaperNetworkingModule(with: session)
 
         do {
-            let (data, _) = try await sut.data(from: url)
+            let (data, _) = try await subject.data(from: url)
             XCTAssertEqual(data, getDataFromJSONFile(named: .goodData))
         } catch {
             XCTFail("This test should not throw an error, but it did: \(error.localizedDescription)")
@@ -88,10 +88,10 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
         let session = WallpaperURLSessionMock(with: nil,
                                               response: response,
                                               and: nil)
-        let sut = WallpaperNetworkingModule(with: session)
+        let subject = WallpaperNetworkingModule(with: session)
 
         do {
-            _ = try await sut.data(from: url)
+            _ = try await subject.data(from: url)
             XCTFail("This test should throw an error, but it did not.")
         } catch {
             XCTAssertEqual(error as! WallpaperServiceError,

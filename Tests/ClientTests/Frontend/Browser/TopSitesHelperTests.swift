@@ -13,10 +13,10 @@ class TopSitesHelperTests: XCTestCase {
     func testGetTopSites_withError_completesWithZeroSites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
 
-        let sut = TopSitesProviderImplementation(browserHistoryFetcher: BrowserHistoryMock(),
-                                                 prefs: MockProfilePrefs())
+        let subject = TopSitesProviderImplementation(browserHistoryFetcher: BrowserHistoryMock(),
+                                                     prefs: MockProfilePrefs())
 
-        sut.getTopSites { sites in
+        subject.getTopSites { sites in
             guard let sites = sites else {
                 XCTFail("Has no sites")
                 return
@@ -36,10 +36,10 @@ class TopSitesHelperTests: XCTestCase {
         cursor.sites = defaultPinnedSites
         mockHistory.pinnedResponse = Maybe(success: cursor)
 
-        let sut = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
-                                                 prefs: MockProfilePrefs())
+        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
+                                                     prefs: MockProfilePrefs())
 
-        sut.getTopSites { sites in
+        subject.getTopSites { sites in
             guard let sites = sites else {
                 XCTFail("Has no sites")
                 return
@@ -59,10 +59,10 @@ class TopSitesHelperTests: XCTestCase {
         cursor.sites = defaultFrecencySites
         mockHistory.frecencyResponse = Maybe(success: cursor)
 
-        let sut = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
-                                                 prefs: MockProfilePrefs())
+        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
+                                                     prefs: MockProfilePrefs())
 
-        sut.getTopSites { sites in
+        subject.getTopSites { sites in
             guard let sites = sites else {
                 XCTFail("Has no sites")
                 return
@@ -84,10 +84,10 @@ class TopSitesHelperTests: XCTestCase {
         cursor.sites = sites
         mockHistory.frecencyResponse = Maybe(success: cursor)
 
-        let sut = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
-                                                 prefs: MockProfilePrefs())
+        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
+                                                     prefs: MockProfilePrefs())
 
-        sut.getTopSites { sites in
+        subject.getTopSites { sites in
             guard let sites = sites else {
                 XCTFail("Has no sites")
                 return
@@ -108,10 +108,10 @@ class TopSitesHelperTests: XCTestCase {
         cursor.sites = sites
         mockHistory.frecencyResponse = Maybe(success: cursor)
 
-        let sut = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
-                                                 prefs: MockProfilePrefs())
+        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
+                                                     prefs: MockProfilePrefs())
 
-        sut.getTopSites { sites in
+        subject.getTopSites { sites in
             guard let sites = sites else {
                 XCTFail("Has no sites")
                 return
@@ -131,10 +131,10 @@ class TopSitesHelperTests: XCTestCase {
         cursor.sites = [Site(url: "https://facebook.com", title: "Facebook")]
         mockHistory.frecencyResponse = Maybe(success: cursor)
 
-        let sut = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
-                                                 prefs: MockProfilePrefs())
+        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
+                                                     prefs: MockProfilePrefs())
 
-        sut.getTopSites { sites in
+        subject.getTopSites { sites in
             guard let sites = sites else {
                 XCTFail("Has no sites")
                 return
@@ -154,10 +154,10 @@ class TopSitesHelperTests: XCTestCase {
         cursor.sites = [PinnedSite(site: Site(url: "https://facebook.com", title: "Facebook"))]
         mockHistory.pinnedResponse = Maybe(success: cursor)
 
-        let sut = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
-                                                 prefs: MockProfilePrefs())
+        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
+                                                     prefs: MockProfilePrefs())
 
-        sut.getTopSites { sites in
+        subject.getTopSites { sites in
             guard let sites = sites else {
                 XCTFail("Has no sites")
                 return

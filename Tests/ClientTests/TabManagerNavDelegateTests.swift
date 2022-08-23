@@ -11,130 +11,130 @@ class TabManagerNavDelegateTests: XCTestCase {
     let navigation = WKNavigation()
 
     func test_webViewDidCommit_sendsCorrectMessage() {
-        let sutConstructor = makeSUT()
-        let sut = sutConstructor.sut
-        let delegate1 = sutConstructor.delegate1
-        let delegate2 = sutConstructor.delegate2
+        let subjectConstructor = createSubject()
+        let subject = subjectConstructor.subject
+        let delegate1 = subjectConstructor.delegate1
+        let delegate2 = subjectConstructor.delegate2
 
-        sut.insert(delegate1)
-        sut.insert(delegate2)
-        sut.webView(anyWebView(), didCommit: navigation)
+        subject.insert(delegate1)
+        subject.insert(delegate2)
+        subject.webView(anyWebView(), didCommit: navigation)
 
         XCTAssertEqual(delegate1.receivedMessages, [.webViewDidCommit])
         XCTAssertEqual(delegate2.receivedMessages, [.webViewDidCommit])
     }
 
     func test_webViewDidFail_sendsCorrectMessage() {
-        let sutConstructor = makeSUT()
-        let sut = sutConstructor.sut
-        let delegate1 = sutConstructor.delegate1
-        let delegate2 = sutConstructor.delegate2
+        let subjectConstructor = createSubject()
+        let subject = subjectConstructor.subject
+        let delegate1 = subjectConstructor.delegate1
+        let delegate2 = subjectConstructor.delegate2
 
-        sut.insert(delegate1)
-        sut.insert(delegate2)
-        sut.webView(anyWebView(), didFail: navigation, withError: anyError())
+        subject.insert(delegate1)
+        subject.insert(delegate2)
+        subject.webView(anyWebView(), didFail: navigation, withError: anyError())
 
         XCTAssertEqual(delegate1.receivedMessages, [.webViewDidFail])
         XCTAssertEqual(delegate2.receivedMessages, [.webViewDidFail])
     }
 
     func test_webViewDidFailProvisionalNavigation_sendsCorrectMessage() {
-        let sutConstructor = makeSUT()
-        let sut = sutConstructor.sut
-        let delegate1 = sutConstructor.delegate1
-        let delegate2 = sutConstructor.delegate2
+        let subjectConstructor = createSubject()
+        let subject = subjectConstructor.subject
+        let delegate1 = subjectConstructor.delegate1
+        let delegate2 = subjectConstructor.delegate2
 
-        sut.insert(delegate1)
-        sut.insert(delegate2)
-        sut.webView(anyWebView(), didFailProvisionalNavigation: navigation, withError: anyError())
+        subject.insert(delegate1)
+        subject.insert(delegate2)
+        subject.webView(anyWebView(), didFailProvisionalNavigation: navigation, withError: anyError())
 
         XCTAssertEqual(delegate1.receivedMessages, [.webViewDidFailProvisionalNavigation])
         XCTAssertEqual(delegate2.receivedMessages, [.webViewDidFailProvisionalNavigation])
     }
 
     func test_webViewDidFinish_sendsCorrectMessage() {
-        let sutConstructor = makeSUT()
-        let sut = sutConstructor.sut
-        let delegate1 = sutConstructor.delegate1
-        let delegate2 = sutConstructor.delegate2
+        let subjectConstructor = createSubject()
+        let subject = subjectConstructor.subject
+        let delegate1 = subjectConstructor.delegate1
+        let delegate2 = subjectConstructor.delegate2
 
-        sut.insert(delegate1)
-        sut.insert(delegate2)
-        sut.webView(anyWebView(), didFinish: navigation)
+        subject.insert(delegate1)
+        subject.insert(delegate2)
+        subject.webView(anyWebView(), didFinish: navigation)
 
         XCTAssertEqual(delegate1.receivedMessages, [.webViewDidFinish])
         XCTAssertEqual(delegate2.receivedMessages, [.webViewDidFinish])
     }
 
     func test_webViewWebContentProcessDidTerminate_sendsCorrectMessage() {
-        let sutConstructor = makeSUT()
-        let sut = sutConstructor.sut
-        let delegate1 = sutConstructor.delegate1
-        let delegate2 = sutConstructor.delegate2
+        let subjectConstructor = createSubject()
+        let subject = subjectConstructor.subject
+        let delegate1 = subjectConstructor.delegate1
+        let delegate2 = subjectConstructor.delegate2
 
-        sut.insert(delegate1)
-        sut.insert(delegate2)
-        sut.webViewWebContentProcessDidTerminate(anyWebView())
+        subject.insert(delegate1)
+        subject.insert(delegate2)
+        subject.webViewWebContentProcessDidTerminate(anyWebView())
 
         XCTAssertEqual(delegate1.receivedMessages, [.webViewWebContentProcessDidTerminate])
         XCTAssertEqual(delegate2.receivedMessages, [.webViewWebContentProcessDidTerminate])
     }
 
     func test_webViewDidReceiveServerRedirectForProvisionalNavigation_sendsCorrectMessage() {
-        let sutConstructor = makeSUT()
-        let sut = sutConstructor.sut
-        let delegate1 = sutConstructor.delegate1
-        let delegate2 = sutConstructor.delegate2
+        let subjectConstructor = createSubject()
+        let subject = subjectConstructor.subject
+        let delegate1 = subjectConstructor.delegate1
+        let delegate2 = subjectConstructor.delegate2
 
-        sut.insert(delegate1)
-        sut.insert(delegate2)
-        sut.webView(anyWebView(), didReceiveServerRedirectForProvisionalNavigation: navigation)
+        subject.insert(delegate1)
+        subject.insert(delegate2)
+        subject.webView(anyWebView(), didReceiveServerRedirectForProvisionalNavigation: navigation)
 
         XCTAssertEqual(delegate1.receivedMessages, [.webViewDidReceiveServerRedirectForProvisionalNavigation])
         XCTAssertEqual(delegate2.receivedMessages, [.webViewDidReceiveServerRedirectForProvisionalNavigation])
     }
 
     func test_webViewDidStartProvisionalNavigation_sendsCorrectMessage() {
-        let sutConstructor = makeSUT()
-        let sut = sutConstructor.sut
-        let delegate1 = sutConstructor.delegate1
-        let delegate2 = sutConstructor.delegate2
+        let subjectConstructor = createSubject()
+        let subject = subjectConstructor.subject
+        let delegate1 = subjectConstructor.delegate1
+        let delegate2 = subjectConstructor.delegate2
 
-        sut.insert(delegate1)
-        sut.insert(delegate2)
-        sut.webView(anyWebView(), didStartProvisionalNavigation: navigation)
+        subject.insert(delegate1)
+        subject.insert(delegate2)
+        subject.webView(anyWebView(), didStartProvisionalNavigation: navigation)
 
         XCTAssertEqual(delegate1.receivedMessages, [.webViewDidStartProvisionalNavigation])
         XCTAssertEqual(delegate2.receivedMessages, [.webViewDidStartProvisionalNavigation])
     }
 
     func test_webViewDecidePolicyFor_actionPolicy_sendsCorrectMessage() {
-        let sutConstructor = makeSUT()
-        let sut = sutConstructor.sut
-        let delegate1 = sutConstructor.delegate1
-        let delegate2 = sutConstructor.delegate2
+        let subjectConstructor = createSubject()
+        let subject = subjectConstructor.subject
+        let delegate1 = subjectConstructor.delegate1
+        let delegate2 = subjectConstructor.delegate2
 
-        sut.insert(delegate1)
-        sut.insert(delegate2)
-        sut.webView(anyWebView(),
-                    decidePolicyFor: WKNavigationAction(),
-                    decisionHandler: { _ in })
+        subject.insert(delegate1)
+        subject.insert(delegate2)
+        subject.webView(anyWebView(),
+                        decidePolicyFor: WKNavigationAction(),
+                        decisionHandler: { _ in })
 
         XCTAssertEqual(delegate1.receivedMessages, [.webViewDecidePolicyWithActionPolicy])
         XCTAssertEqual(delegate2.receivedMessages, [.webViewDecidePolicyWithActionPolicy])
     }
 
     func test_webViewDecidePolicyFor_responsePolicy_sendsCorrectMessage() {
-        let sutConstructor = makeSUT()
-        let sut = sutConstructor.sut
-        let delegate1 = sutConstructor.delegate1
-        let delegate2 = sutConstructor.delegate2
+        let subjectConstructor = createSubject()
+        let subject = subjectConstructor.subject
+        let delegate1 = subjectConstructor.delegate1
+        let delegate2 = subjectConstructor.delegate2
 
-        sut.insert(delegate1)
-        sut.insert(delegate2)
-        sut.webView(anyWebView(),
-                    decidePolicyFor: WKNavigationResponse(),
-                    decisionHandler: { _ in })
+        subject.insert(delegate1)
+        subject.insert(delegate2)
+        subject.webView(anyWebView(),
+                        decidePolicyFor: WKNavigationResponse(),
+                        decisionHandler: { _ in })
 
         XCTAssertEqual(delegate1.receivedMessages, [.webViewDecidePolicyWithResponsePolicy])
         XCTAssertEqual(delegate2.receivedMessages, [.webViewDecidePolicyWithResponsePolicy])
@@ -144,22 +144,22 @@ class TabManagerNavDelegateTests: XCTestCase {
 // MARK: - Helpers
 
 private extension TabManagerNavDelegateTests {
-    struct SUT {
-        let sut: TabManagerNavDelegate
+    struct Subject {
+        let subject: TabManagerNavDelegate
         let delegate1: WKNavigationDelegateSpy
         let delegate2: WKNavigationDelegateSpy
     }
 
-    func makeSUT(file: StaticString = #file, line: UInt = #line) -> SUT {
-        let sut = TabManagerNavDelegate()
+    func createSubject(file: StaticString = #file, line: UInt = #line) -> Subject {
+        let subject = TabManagerNavDelegate()
         let delegate1 = WKNavigationDelegateSpy()
         let delegate2 = WKNavigationDelegateSpy()
 
-        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeaks(subject, file: file, line: line)
         trackForMemoryLeaks(delegate1, file: file, line: line)
         trackForMemoryLeaks(delegate2, file: file, line: line)
 
-        return SUT(sut: sut, delegate1: delegate1, delegate2: delegate2)
+        return Subject(subject: subject, delegate1: delegate1, delegate2: delegate2)
     }
 
     func anyWebView() -> WKWebView {

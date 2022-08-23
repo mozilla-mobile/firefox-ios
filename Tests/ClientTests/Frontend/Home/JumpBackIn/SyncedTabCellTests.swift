@@ -27,14 +27,14 @@ class SyncedTabCellTests: XCTestCase {
             XCTAssertEqual(url, testUrl)
         }
 
-        let sut = SyncedTabCell(frame: CGRect.zero)
-        trackForMemoryLeaks(sut)
+        let subject = SyncedTabCell(frame: CGRect.zero)
+        trackForMemoryLeaks(subject)
 
-        sut.configure(viewModel: viewModel,
-                      onTapShowAllAction: syncedTabsShowAllAction,
-                      onOpenSyncedTabAction: onOpenSyncedTabAction)
+        subject.configure(viewModel: viewModel,
+                          onTapShowAllAction: syncedTabsShowAllAction,
+                          onOpenSyncedTabAction: onOpenSyncedTabAction)
 
-        sut.showAllSyncedTabs(sender: testButton)
-        sut.didTapSyncedTab(UITapGestureRecognizer())
+        subject.showAllSyncedTabs(sender: testButton)
+        subject.didTapSyncedTab(UITapGestureRecognizer())
     }
 }

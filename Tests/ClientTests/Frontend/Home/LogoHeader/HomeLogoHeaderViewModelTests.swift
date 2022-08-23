@@ -20,32 +20,32 @@ class HomeLogoHeaderViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testDefaultHomepageViewModelProtocolValues() {
-        let sut = createSut()
-        XCTAssertEqual(sut.sectionType, .logoHeader)
-        XCTAssertEqual(sut.headerViewModel, LabelButtonHeaderViewModel.emptyHeader)
-        XCTAssertEqual(sut.numberOfItemsInSection(), 1)
-        XCTAssertTrue(sut.isEnabled)
+        let subject = createSubject()
+        XCTAssertEqual(subject.sectionType, .logoHeader)
+        XCTAssertEqual(subject.headerViewModel, LabelButtonHeaderViewModel.emptyHeader)
+        XCTAssertEqual(subject.numberOfItemsInSection(), 1)
+        XCTAssertTrue(subject.isEnabled)
     }
 
     func testConfigureOnTapAction() throws {
-        let sut = createSut()
+        let subject = createSubject()
 
         let cellBeforeConfig = HomeLogoHeaderCell(frame: CGRect.zero)
         XCTAssertNil(cellBeforeConfig.logoButton.touchUpAction)
 
-        sut.onTapAction = { _ in }
-        let cellAfterConfig = try XCTUnwrap(sut.configure(HomeLogoHeaderCell(frame: CGRect.zero),
-                                                          at: IndexPath()) as? HomeLogoHeaderCell)
+        subject.onTapAction = { _ in }
+        let cellAfterConfig = try XCTUnwrap(subject.configure(HomeLogoHeaderCell(frame: CGRect.zero),
+                                                              at: IndexPath()) as? HomeLogoHeaderCell)
         XCTAssertNotNil(cellAfterConfig.logoButton.touchUpAction)
     }
 }
 
 extension HomeLogoHeaderViewModelTests {
 
-    func createSut(file: StaticString = #file, line: UInt = #line) -> HomeLogoHeaderViewModel {
-        let sut = HomeLogoHeaderViewModel(profile: profile)
-        trackForMemoryLeaks(sut, file: file, line: line)
-        return sut
+    func createSubject(file: StaticString = #file, line: UInt = #line) -> HomeLogoHeaderViewModel {
+        let subject = HomeLogoHeaderViewModel(profile: profile)
+        trackForMemoryLeaks(subject, file: file, line: line)
+        return subject
     }
 }
 

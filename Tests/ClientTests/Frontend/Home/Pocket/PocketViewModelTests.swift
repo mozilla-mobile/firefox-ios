@@ -28,34 +28,34 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testDefaultPocketViewModelProtocolValues_withEmptyData() {
-        let sut = createSut()
-        XCTAssertEqual(sut.sectionType, .pocket)
-        XCTAssertNotEqual(sut.headerViewModel, LabelButtonHeaderViewModel.emptyHeader)
-        XCTAssertEqual(sut.numberOfItemsInSection(), 0)
-        XCTAssertFalse(sut.hasData)
-        XCTAssertTrue(sut.isEnabled)
+        let subject = createSubject()
+        XCTAssertEqual(subject.sectionType, .pocket)
+        XCTAssertNotEqual(subject.headerViewModel, LabelButtonHeaderViewModel.emptyHeader)
+        XCTAssertEqual(subject.numberOfItemsInSection(), 0)
+        XCTAssertFalse(subject.hasData)
+        XCTAssertTrue(subject.isEnabled)
     }
 
     func testFeatureFlagDisablesSection() {
         featureFlags.set(feature: .pocket, to: false)
-        let sut = createSut()
-        XCTAssertFalse(sut.isEnabled)
+        let subject = createSubject()
+        XCTAssertFalse(subject.isEnabled)
     }
 
     func testRecordSectionHasShown() throws {
         adaptor.pocketStories = createStories(numberOfStories: 1)
-        let sut = createSut()
-        sut.didLoadNewData()
+        let subject = createSubject()
+        subject.didLoadNewData()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
         collectionView.register(cellType: PocketStandardCell.self)
         XCTAssertNil(GleanMetrics.Pocket.sectionImpressions.testGetValue())
 
-        _ = sut.configure(collectionView, at: IndexPath(item: 0, section: 0))
+        _ = subject.configure(collectionView, at: IndexPath(item: 0, section: 0))
         testCounterMetricRecordingSuccess(metric: GleanMetrics.Pocket.sectionImpressions,
                                           value: 1)
 
         // Calling configure again doesn't add another count
-        _ = sut.configure(collectionView, at: IndexPath(item: 0, section: 0))
+        _ = subject.configure(collectionView, at: IndexPath(item: 0, section: 0))
         testCounterMetricRecordingSuccess(metric: GleanMetrics.Pocket.sectionImpressions,
                                           value: 1)
     }
@@ -63,26 +63,26 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     // MARK: - Dimension
 
     func testDimensioniPhoneLandscape() {
-        let sut = createSut()
-        let dimension = sut.getWidthDimension(device: .phone, isLandscape: true)
+        let subject = createSubject()
+        let dimension = subject.getWidthDimension(device: .phone, isLandscape: true)
         XCTAssertEqual(dimension, .fractionalWidth(PocketViewModel.UX.fractionalWidthiPhoneLanscape))
     }
 
     func testDimensioniPhonePortrait() {
-        let sut = createSut()
-        let dimension = sut.getWidthDimension(device: .phone, isLandscape: false)
+        let subject = createSubject()
+        let dimension = subject.getWidthDimension(device: .phone, isLandscape: false)
         XCTAssertEqual(dimension, .fractionalWidth(PocketViewModel.UX.fractionalWidthiPhonePortrait))
     }
 
     func testDimensioniPadPortrait() {
-        let sut = createSut()
-        let dimension = sut.getWidthDimension(device: .pad, isLandscape: false)
+        let subject = createSubject()
+        let dimension = subject.getWidthDimension(device: .pad, isLandscape: false)
         XCTAssertEqual(dimension, .absolute(PocketStandardCell.UX.cellWidth))
     }
 
     func testDimensioniPadLandscape() {
-        let sut = createSut()
-        let dimension = sut.getWidthDimension(device: .pad, isLandscape: true)
+        let subject = createSubject()
+        let dimension = subject.getWidthDimension(device: .pad, isLandscape: true)
         XCTAssertEqual(dimension, .absolute(PocketStandardCell.UX.cellWidth))
     }
 
@@ -90,21 +90,21 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testConfigureStandardCell() throws {
         adaptor.pocketStories = createStories(numberOfStories: 1)
-        let sut = createSut()
-        sut.didLoadNewData()
+        let subject = createSubject()
+        subject.didLoadNewData()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
         collectionView.register(cellType: PocketStandardCell.self)
 
-        let cell = try XCTUnwrap(sut.configure(collectionView,
-                                               at: IndexPath(item: 0, section: 0)) as? PocketStandardCell)
+        let cell = try XCTUnwrap(subject.configure(collectionView,
+                                                   at: IndexPath(item: 0, section: 0)) as? PocketStandardCell)
         XCTAssertNotNil(cell)
     }
 
     func testClickingStandardCell_recordsTapOnStory() {
         adaptor.pocketStories = createStories(numberOfStories: 1)
-        let sut = createSut()
-        sut.didLoadNewData()
-        sut.didSelectItem(at: IndexPath(item: 0, section: 0), homePanelDelegate: nil, libraryPanelDelegate: nil)
+        let subject = createSubject()
+        subject.didLoadNewData()
+        subject.didSelectItem(at: IndexPath(item: 0, section: 0), homePanelDelegate: nil, libraryPanelDelegate: nil)
 
         testLabeledMetricSuccess(metric: GleanMetrics.Pocket.openStoryOrigin)
         testLabeledMetricSuccess(metric: GleanMetrics.Pocket.openStoryPosition)
@@ -112,49 +112,49 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testClickingStandardCell_callsTapTileAction() {
         adaptor.pocketStories = createStories(numberOfStories: 1)
-        let sut = createSut()
-        sut.didLoadNewData()
-        sut.onTapTileAction = { url in
+        let subject = createSubject()
+        subject.didLoadNewData()
+        subject.onTapTileAction = { url in
             XCTAssertEqual(url.absoluteString, "www.test0.com")
         }
-        sut.didSelectItem(at: IndexPath(item: 0, section: 0),
-                          homePanelDelegate: nil,
-                          libraryPanelDelegate: nil)
+        subject.didSelectItem(at: IndexPath(item: 0, section: 0),
+                              homePanelDelegate: nil,
+                              libraryPanelDelegate: nil)
     }
 
     func testLongPressStandardCell_callsHandleLongPress() {
         adaptor.pocketStories = createStories(numberOfStories: 1)
-        let sut = createSut()
-        sut.didLoadNewData()
-        sut.onLongPressTileAction = { (site, _) in
+        let subject = createSubject()
+        subject.didLoadNewData()
+        subject.onLongPressTileAction = { (site, _) in
             XCTAssertEqual(site.url, "www.test0.com")
             XCTAssertEqual(site.title, "Story 0")
         }
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-        sut.handleLongPress(with: collectionView,
-                            indexPath: IndexPath(item: 0, section: 0))
+        subject.handleLongPress(with: collectionView,
+                                indexPath: IndexPath(item: 0, section: 0))
     }
 
     // MARK: - Discover cell
 
     func testConfigureDiscoverCell() throws {
         adaptor.pocketStories = createStories(numberOfStories: 2)
-        let sut = createSut()
-        sut.didLoadNewData()
+        let subject = createSubject()
+        subject.didLoadNewData()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
         collectionView.register(cellType: PocketDiscoverCell.self)
 
-        let cell = try XCTUnwrap(sut.configure(collectionView,
-                                               at: IndexPath(item: 2, section: 0)) as? PocketDiscoverCell)
+        let cell = try XCTUnwrap(subject.configure(collectionView,
+                                                   at: IndexPath(item: 2, section: 0)) as? PocketDiscoverCell)
         XCTAssertNotNil(cell)
     }
 
     func testClickingDiscoverCell_recordsTapOnStory() {
         adaptor.pocketStories = createStories(numberOfStories: 1)
-        let sut = createSut()
-        sut.didLoadNewData()
-        sut.didSelectItem(at: IndexPath(item: 1, section: 0), homePanelDelegate: nil, libraryPanelDelegate: nil)
+        let subject = createSubject()
+        subject.didLoadNewData()
+        subject.didSelectItem(at: IndexPath(item: 1, section: 0), homePanelDelegate: nil, libraryPanelDelegate: nil)
 
         testLabeledMetricSuccess(metric: GleanMetrics.Pocket.openStoryOrigin)
         testLabeledMetricSuccess(metric: GleanMetrics.Pocket.openStoryPosition)
@@ -162,28 +162,28 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testClickingDiscoverCell_callsTapTileAction() {
         adaptor.pocketStories = createStories(numberOfStories: 1)
-        let sut = createSut()
-        sut.didLoadNewData()
-        sut.onTapTileAction = { url in
+        let subject = createSubject()
+        subject.didLoadNewData()
+        subject.onTapTileAction = { url in
             XCTAssertEqual(url, PocketProvider.MoreStoriesURL)
         }
-        sut.didSelectItem(at: IndexPath(item: 1, section: 0),
-                          homePanelDelegate: nil,
-                          libraryPanelDelegate: nil)
+        subject.didSelectItem(at: IndexPath(item: 1, section: 0),
+                              homePanelDelegate: nil,
+                              libraryPanelDelegate: nil)
     }
 
     func testLongPressDiscoverCell_callsHandleLongPress() {
         adaptor.pocketStories = createStories(numberOfStories: 1)
-        let sut = createSut()
-        sut.didLoadNewData()
-        sut.onLongPressTileAction = { (site, _) in
+        let subject = createSubject()
+        subject.didLoadNewData()
+        subject.onLongPressTileAction = { (site, _) in
             XCTAssertEqual(site.url, PocketProvider.MoreStoriesURL.absoluteString)
             XCTAssertEqual(site.title, "Discover more")
         }
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-        sut.handleLongPress(with: collectionView,
-                            indexPath: IndexPath(item: 1, section: 0))
+        subject.handleLongPress(with: collectionView,
+                                indexPath: IndexPath(item: 1, section: 0))
     }
 }
 
@@ -212,12 +212,12 @@ extension PocketViewModelTests {
         return stories
     }
 
-    func createSut(isZeroSearch: Bool = true,
-                   file: StaticString = #file,
-                   line: UInt = #line) -> PocketViewModel {
-        let sut = PocketViewModel(pocketDataAdaptor: adaptor, isZeroSearch: isZeroSearch)
-        trackForMemoryLeaks(sut, file: file, line: line)
-        return sut
+    func createSubject(isZeroSearch: Bool = true,
+                       file: StaticString = #file,
+                       line: UInt = #line) -> PocketViewModel {
+        let subject = PocketViewModel(pocketDataAdaptor: adaptor, isZeroSearch: isZeroSearch)
+        trackForMemoryLeaks(subject, file: file, line: line)
+        return subject
     }
 }
 
