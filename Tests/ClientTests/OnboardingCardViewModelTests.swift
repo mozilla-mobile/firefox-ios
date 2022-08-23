@@ -9,7 +9,7 @@ import Glean
 
 class OnboardingCardViewModelTests: XCTestCase {
 
-    var sut: OnboardingCardViewModel!
+    var subject: OnboardingCardViewModel!
 
     override func setUp() {
         super.setUp()
@@ -19,124 +19,124 @@ class OnboardingCardViewModelTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         Glean.shared.resetGlean(clearStores: true)
-        sut = nil
+        subject = nil
     }
 
     func testSendOnboardingCardView_WelcomeCard() {
-        sut = OnboardingCardViewModel(cardType: .welcome,
-                                      infoModel: createInfoModel(),
-                                      isv106Version: false)
-        sut.sendCardViewTelemetry()
+        subject = OnboardingCardViewModel(cardType: .welcome,
+                                          infoModel: createInfoModel(),
+                                          isv106Version: false)
+        subject.sendCardViewTelemetry()
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
 
     func testSendOnboardingCardView_WallpaperCard() {
-        sut = OnboardingCardViewModel(cardType: .wallpapers,
-                                      infoModel: createInfoModel(),
-                                      isv106Version: false)
-        sut.sendCardViewTelemetry()
+        subject = OnboardingCardViewModel(cardType: .wallpapers,
+                                          infoModel: createInfoModel(),
+                                          isv106Version: false)
+        subject.sendCardViewTelemetry()
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
 
     func testSendOnboardingCardView_SyncCard() {
-        sut = OnboardingCardViewModel(cardType: .signSync,
-                                      infoModel: createInfoModel(),
-                                      isv106Version: false)
-        sut.sendCardViewTelemetry()
+        subject = OnboardingCardViewModel(cardType: .signSync,
+                                          infoModel: createInfoModel(),
+                                          isv106Version: false)
+        subject.sendCardViewTelemetry()
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
 
     func testSendUpgradeCardView_WelcomeCard() {
-        sut = OnboardingCardViewModel(cardType: .updateWelcome,
-                                      infoModel: createInfoModel(),
-                                      isv106Version: false)
-        sut.sendCardViewTelemetry()
+        subject = OnboardingCardViewModel(cardType: .updateWelcome,
+                                          infoModel: createInfoModel(),
+                                          isv106Version: false)
+        subject.sendCardViewTelemetry()
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.cardView)
     }
 
     func testSendUpgradeCardView_SyncCard() {
-        sut = OnboardingCardViewModel(cardType: .updateSignSync,
-                                      infoModel: createInfoModel(),
-                                      isv106Version: false)
-        sut.sendCardViewTelemetry()
+        subject = OnboardingCardViewModel(cardType: .updateSignSync,
+                                          infoModel: createInfoModel(),
+                                          isv106Version: false)
+        subject.sendCardViewTelemetry()
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.cardView)
     }
 
     // MARK: - Primary tap
     func testSendOnboardingPrimaryTap_WelcomeCard() {
-        sut = OnboardingCardViewModel(cardType: .welcome,
-                                      infoModel: createInfoModel(),
-                                      isv106Version: false)
-        sut.sendTelemetryButton(isPrimaryAction: true)
+        subject = OnboardingCardViewModel(cardType: .welcome,
+                                          infoModel: createInfoModel(),
+                                          isv106Version: false)
+        subject.sendTelemetryButton(isPrimaryAction: true)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
     }
 
     func testSendOnboardingPrimaryTap_WallpaperCard() {
-        sut = OnboardingCardViewModel(cardType: .wallpapers,
-                                      infoModel: createInfoModel(),
-                                      isv106Version: false)
-        sut.sendTelemetryButton(isPrimaryAction: true)
+        subject = OnboardingCardViewModel(cardType: .wallpapers,
+                                          infoModel: createInfoModel(),
+                                          isv106Version: false)
+        subject.sendTelemetryButton(isPrimaryAction: true)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
     }
 
     func testSendOnboardingPrimaryTap_SyncCard() {
-        sut = OnboardingCardViewModel(cardType: .signSync,
-                                      infoModel: createInfoModel(),
-                                      isv106Version: false)
-        sut.sendTelemetryButton(isPrimaryAction: true)
+        subject = OnboardingCardViewModel(cardType: .signSync,
+                                          infoModel: createInfoModel(),
+                                          isv106Version: false)
+        subject.sendTelemetryButton(isPrimaryAction: true)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
     }
 
     func testSendUpgradePrimaryTap_WallpaperCard() {
-        sut = OnboardingCardViewModel(cardType: .updateWelcome,
-                                      infoModel: createInfoModel(),
-                                      isv106Version: false)
-        sut.sendTelemetryButton(isPrimaryAction: true)
+        subject = OnboardingCardViewModel(cardType: .updateWelcome,
+                                          infoModel: createInfoModel(),
+                                          isv106Version: false)
+        subject.sendTelemetryButton(isPrimaryAction: true)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.primaryButtonTap)
     }
 
     func testSendUpgradePrimaryTap_SyncCard() {
-        sut = OnboardingCardViewModel(cardType: .updateSignSync,
-                                      infoModel: createInfoModel(),
-                                      isv106Version: false)
-        sut.sendTelemetryButton(isPrimaryAction: true)
+        subject = OnboardingCardViewModel(cardType: .updateSignSync,
+                                          infoModel: createInfoModel(),
+                                          isv106Version: false)
+        subject.sendTelemetryButton(isPrimaryAction: true)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.primaryButtonTap)
     }
 
     // MARK: - Secondary tap
     func testSendOnboardingSecondaryTap_WallpaperCard() {
-        sut = OnboardingCardViewModel(cardType: .wallpapers,
-                                      infoModel: createInfoModel(),
-                                      isv106Version: false)
-        sut.sendTelemetryButton(isPrimaryAction: false)
+        subject = OnboardingCardViewModel(cardType: .wallpapers,
+                                          infoModel: createInfoModel(),
+                                          isv106Version: false)
+        subject.sendTelemetryButton(isPrimaryAction: false)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
     }
 
     func testSendOnboardingSecondaryTap_SyncCard() {
-        sut = OnboardingCardViewModel(cardType: .signSync,
-                                      infoModel: createInfoModel(),
-                                      isv106Version: false)
-        sut.sendTelemetryButton(isPrimaryAction: false)
+        subject = OnboardingCardViewModel(cardType: .signSync,
+                                          infoModel: createInfoModel(),
+                                          isv106Version: false)
+        subject.sendTelemetryButton(isPrimaryAction: false)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
     }
 
     func testSendUpgradeSecondaryTap_SyncCard() {
-        sut = OnboardingCardViewModel(cardType: .updateSignSync,
-                                      infoModel: createInfoModel(),
-                                      isv106Version: false)
-        sut.sendTelemetryButton(isPrimaryAction: false)
+        subject = OnboardingCardViewModel(cardType: .updateSignSync,
+                                          infoModel: createInfoModel(),
+                                          isv106Version: false)
+        subject.sendTelemetryButton(isPrimaryAction: false)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.secondaryButtonTap)
     }

@@ -10,28 +10,28 @@ import XCTest
 class WallpaperCollectionAvailabilityTests: XCTestCase {
 
     func testFullAvailability() {
-        let sut = WallpaperCollectionAvailability(start: nil, end: nil)
-        XCTAssertTrue(sut.isAvailable, "Wallpaper collection should be available")
+        let subject = WallpaperCollectionAvailability(start: nil, end: nil)
+        XCTAssertTrue(subject.isAvailable, "Wallpaper collection should be available")
     }
 
     func testNoEndDate() {
-        let sut = WallpaperCollectionAvailability(start: Date.yesterday, end: nil)
-        XCTAssertTrue(sut.isAvailable, "Wallpaper collection should be available")
+        let subject = WallpaperCollectionAvailability(start: Date.yesterday, end: nil)
+        XCTAssertTrue(subject.isAvailable, "Wallpaper collection should be available")
     }
 
     func testNoStartDate() {
-        let sut = WallpaperCollectionAvailability(start: nil, end: Date.tomorrow)
-        XCTAssertTrue(sut.isAvailable, "Wallpaper collection should be available")
+        let subject = WallpaperCollectionAvailability(start: nil, end: Date.tomorrow)
+        XCTAssertTrue(subject.isAvailable, "Wallpaper collection should be available")
     }
 
     func testStartDateInFuture() {
-        let sut = WallpaperCollectionAvailability(start: Date.tomorrow, end: nil)
-        XCTAssertFalse(sut.isAvailable, "Wallpaper collection should not be available")
+        let subject = WallpaperCollectionAvailability(start: Date.tomorrow, end: nil)
+        XCTAssertFalse(subject.isAvailable, "Wallpaper collection should not be available")
     }
 
     func testPastEndDate() {
-        let sut = WallpaperCollectionAvailability(start: nil, end: Date.yesterday)
-        XCTAssertFalse(sut.isAvailable, "Wallpaper collection should not be available")
+        let subject = WallpaperCollectionAvailability(start: nil, end: Date.yesterday)
+        XCTAssertFalse(subject.isAvailable, "Wallpaper collection should not be available")
     }
 
 }

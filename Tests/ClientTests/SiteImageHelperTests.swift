@@ -138,22 +138,22 @@ class SiteImageHelperTests: XCTestCase {
     }
 
     func test_faviconLoads_completesFromCache() {
-        let sut = createSiteImageHelper()
+        let subject = createSiteImageHelper()
 
         let site = Site(url: "www.a-website.com", title: "Website")
         let expectation = self.expectation(description: "Favicon image is fetched from cache")
-        sut.fetchImageFor(site: site,
-                          imageType: .favicon,
-                          shouldFallback: false,
-                          completion: { image in
+        subject.fetchImageFor(site: site,
+                              imageType: .favicon,
+                              shouldFallback: false,
+                              completion: { image in
             XCTAssertNotNil(image)
 
             // Image is now cached, fake an error to see if it's fetched from cache
-            let sut2 = self.createSiteImageHelper(shouldFaviconSucceeds: false)
-            sut2.fetchImageFor(site: site,
-                               imageType: .favicon,
-                               shouldFallback: false,
-                               completion: { image in
+            let subject2 = self.createSiteImageHelper(shouldFaviconSucceeds: false)
+            subject2.fetchImageFor(site: site,
+                                   imageType: .favicon,
+                                   shouldFallback: false,
+                                   completion: { image in
                 XCTAssertNotNil(image)
                 expectation.fulfill()
             })

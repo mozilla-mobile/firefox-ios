@@ -10,7 +10,7 @@ import Shared
 
 class HistoryPanelViewModelTests: XCTestCase {
 
-    var sut: HistoryPanelViewModel!
+    var subject: HistoryPanelViewModel!
     var profile: MockProfile!
 
     override func setUp() {
@@ -20,7 +20,7 @@ class HistoryPanelViewModelTests: XCTestCase {
 
         ThemeManager.shared.updateProfile(with: profile)
         profile._reopen()
-        sut = HistoryPanelViewModel(profile: profile)
+        subject = HistoryPanelViewModel(profile: profile)
     }
 
     override func tearDown() {
@@ -29,7 +29,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         clear(profile.history)
         profile._shutdown()
         profile = nil
-        sut = nil
+        subject = nil
     }
 
     func testHistorySectionTitle() {
@@ -56,14 +56,14 @@ class HistoryPanelViewModelTests: XCTestCase {
 
         fetchHistory { success in
             XCTAssertTrue(success)
-            XCTAssertNotNil(self.sut.searchTermGroups)
-            XCTAssertFalse(self.sut.groupedSites.isEmpty)
-            XCTAssertFalse(self.sut.visibleSections.isEmpty)
+            XCTAssertNotNil(self.subject.searchTermGroups)
+            XCTAssertFalse(self.subject.groupedSites.isEmpty)
+            XCTAssertFalse(self.subject.visibleSections.isEmpty)
         }
     }
 
     func testFetchHistoryFail_WithFetchInProgress() {
-        sut.isFetchInProgress = true
+        subject.isFetchInProgress = true
 
         fetchHistory { success in
             XCTAssertFalse(success)
@@ -73,7 +73,7 @@ class HistoryPanelViewModelTests: XCTestCase {
     func testPerformSearch_ForNoResults() {
         fetchSearchHistory(searchTerm: "moz") { hasResults in
             XCTAssertFalse(hasResults)
-            XCTAssertEqual(self.sut.searchResultSites.count, 0)
+            XCTAssertEqual(self.subject.searchResultSites.count, 0)
         }
     }
 
@@ -82,99 +82,99 @@ class HistoryPanelViewModelTests: XCTestCase {
 
         fetchSearchHistory(searchTerm: "moz") { hasResults in
             XCTAssertTrue(hasResults)
-            XCTAssertEqual(self.sut.searchResultSites.count, 2)
+            XCTAssertEqual(self.subject.searchResultSites.count, 2)
         }
     }
 
     func testEmptyStateText_ForSearch() {
-        sut.isSearchInProgress = true
-        XCTAssertEqual(sut.emptyStateText, .LibraryPanel.History.NoHistoryResult)
+        subject.isSearchInProgress = true
+        XCTAssertEqual(subject.emptyStateText, .LibraryPanel.History.NoHistoryResult)
     }
 
     func testEmptyStateText_ForHistoryResults() {
-        sut.isSearchInProgress = false
-        XCTAssertEqual(sut.emptyStateText, .HistoryPanelEmptyStateTitle)
+        subject.isSearchInProgress = false
+        XCTAssertEqual(subject.emptyStateText, .HistoryPanelEmptyStateTitle)
     }
 
     func testShouldShowEmptyState_ForEmptySearch() {
         setupSiteVisits()
-        sut.isSearchInProgress = true
+        subject.isSearchInProgress = true
 
         fetchSearchHistory(searchTerm: "") { hasResults in
-            XCTAssertFalse(self.sut.shouldShowEmptyState(searchText: ""))
+            XCTAssertFalse(self.subject.shouldShowEmptyState(searchText: ""))
         }
     }
 
     func testShouldShowEmptyState_ForNoResultSearch() {
         setupSiteVisits()
-        sut.isSearchInProgress = true
+        subject.isSearchInProgress = true
 
         fetchSearchHistory(searchTerm: "ui") { hasResults in
-            XCTAssertTrue(self.sut.shouldShowEmptyState(searchText: "ui"))
+            XCTAssertTrue(self.subject.shouldShowEmptyState(searchText: "ui"))
         }
     }
 
     func testShouldShowEmptyState_ForNoHistory() {
-        sut.isSearchInProgress = false
+        subject.isSearchInProgress = false
 
         fetchHistory { _ in
-            XCTAssertTrue(self.sut.shouldShowEmptyState())
+            XCTAssertTrue(self.subject.shouldShowEmptyState())
         }
     }
 
     func testCollapseSection() {
         setupSiteVisits()
-        XCTAssertTrue(sut.hiddenSections.isEmpty)
+        XCTAssertTrue(subject.hiddenSections.isEmpty)
 
         fetchHistory { _ in
-            self.sut.collapseSection(sectionIndex: 1)
-            XCTAssertEqual(self.sut.hiddenSections.count, 1)
+            self.subject.collapseSection(sectionIndex: 1)
+            XCTAssertEqual(self.subject.hiddenSections.count, 1)
             // Starts at 0, removing the Additional section
-            XCTAssertTrue(self.sut.isSectionCollapsed(sectionIndex: 0))
-            XCTAssertTrue(self.sut.hiddenSections.contains(where: { $0 == .today }))
+            XCTAssertTrue(self.subject.isSectionCollapsed(sectionIndex: 0))
+            XCTAssertTrue(self.subject.hiddenSections.contains(where: { $0 == .today }))
         }
     }
 
     func testExpandSection() {
         setupSiteVisits()
-        XCTAssertTrue(sut.hiddenSections.isEmpty)
+        XCTAssertTrue(subject.hiddenSections.isEmpty)
 
         fetchHistory { _ in
-            self.sut.collapseSection(sectionIndex: 1)
-            XCTAssertEqual(self.sut.hiddenSections.count, 1)
+            self.subject.collapseSection(sectionIndex: 1)
+            XCTAssertEqual(self.subject.hiddenSections.count, 1)
             // Starts at 0, removing the Additional section
-            XCTAssertTrue(self.sut.isSectionCollapsed(sectionIndex: 0))
-            XCTAssertTrue(self.sut.hiddenSections.contains(where: { $0 == .today }))
+            XCTAssertTrue(self.subject.isSectionCollapsed(sectionIndex: 0))
+            XCTAssertTrue(self.subject.hiddenSections.contains(where: { $0 == .today }))
 
-            self.sut.collapseSection(sectionIndex: 1)
-            XCTAssertTrue(self.sut.hiddenSections.isEmpty)
-            XCTAssertFalse(self.sut.isSectionCollapsed(sectionIndex: 1))
+            self.subject.collapseSection(sectionIndex: 1)
+            XCTAssertTrue(self.subject.hiddenSections.isEmpty)
+            XCTAssertFalse(self.subject.isSectionCollapsed(sectionIndex: 1))
         }
     }
 
     func testRemoveAllData() {
         setupSiteVisits()
-        XCTAssertTrue(sut.hiddenSections.isEmpty)
+        XCTAssertTrue(subject.hiddenSections.isEmpty)
 
         fetchHistory { _ in
-            self.sut.removeAllData()
+            self.subject.removeAllData()
 
-            XCTAssertEqual(self.sut.currentFetchOffset, 0)
-            XCTAssertTrue(self.sut.searchTermGroups.isEmpty)
-            XCTAssertTrue(self.sut.groupedSites.isEmpty)
-            XCTAssertTrue(self.sut.visibleSections.isEmpty)
+            XCTAssertEqual(self.subject.currentFetchOffset, 0)
+            XCTAssertTrue(self.subject.searchTermGroups.isEmpty)
+            XCTAssertTrue(self.subject.groupedSites.isEmpty)
+            XCTAssertTrue(self.subject.visibleSections.isEmpty)
         }
     }
 
     func testShouldNotAddGroupToSections() {
         let searchTermGroup = createSearchTermGroup(timestamp: Date().toMicrosecondsSince1970())
-        XCTAssertNil(self.sut.shouldAddGroupToSections(group: searchTermGroup))
+        XCTAssertNil(self.subject.shouldAddGroupToSections(group: searchTermGroup))
     }
 
     func testGroupBelongToSection_ForToday() {
         let searchTermGroup = createSearchTermGroup(timestamp: Date().toMicrosecondsSince1970())
 
-        guard let section = self.sut.groupBelongsToSection(asGroup: searchTermGroup) else {
+        guard let section = self.subject.groupBelongsToSection(asGroup: searchTermGroup) else {
             XCTFail("Expected to return today section")
             return
         }
@@ -186,7 +186,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         let yesterday = Date.yesterday
         let searchTermGroup = createSearchTermGroup(timestamp: yesterday.toMicrosecondsSince1970())
 
-        guard let section = self.sut.groupBelongsToSection(asGroup: searchTermGroup) else {
+        guard let section = self.subject.groupBelongsToSection(asGroup: searchTermGroup) else {
             XCTFail("Expected to return today section")
             return
         }
@@ -198,7 +198,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         let yesterday = Date().lastWeek
         let searchTermGroup = createSearchTermGroup(timestamp: yesterday.toMicrosecondsSince1970())
 
-        guard let section = self.sut.groupBelongsToSection(asGroup: searchTermGroup) else {
+        guard let section = self.subject.groupBelongsToSection(asGroup: searchTermGroup) else {
             XCTFail("Expected to return today section")
             return
         }
@@ -210,7 +210,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         let yesterday = Date().lastTwoWeek
         let searchTermGroup = createSearchTermGroup(timestamp: yesterday.toMicrosecondsSince1970())
 
-        guard let section = self.sut.groupBelongsToSection(asGroup: searchTermGroup) else {
+        guard let section = self.subject.groupBelongsToSection(asGroup: searchTermGroup) else {
             XCTFail("Expected to return today section")
             return
         }
@@ -220,9 +220,9 @@ class HistoryPanelViewModelTests: XCTestCase {
 
     func testShouldAddGroupToSections_ForToday() {
         let searchTermGroup = createSearchTermGroup(timestamp: Date().toMicrosecondsSince1970())
-        sut.visibleSections.append(.today)
+        subject.visibleSections.append(.today)
 
-        guard let section = self.sut.shouldAddGroupToSections(group: searchTermGroup) else {
+        guard let section = self.subject.shouldAddGroupToSections(group: searchTermGroup) else {
             XCTFail("Expected to return today section")
             return
         }
@@ -250,7 +250,7 @@ class HistoryPanelViewModelTests: XCTestCase {
     private func fetchHistory(completion: @escaping (Bool) -> Void) {
         let expectation = self.expectation(description: "Wait for history")
 
-        sut.reloadData { success in
+        subject.reloadData { success in
             XCTAssertNotNil(success)
             completion(success)
             expectation.fulfill()
@@ -263,7 +263,7 @@ class HistoryPanelViewModelTests: XCTestCase {
                                     completion: @escaping (Bool) -> Void) {
         let expectation = self.expectation(description: "Wait for history search")
 
-        sut.performSearch(term: searchTerm) { hasResults in
+        subject.performSearch(term: searchTerm) { hasResults in
             XCTAssertNotNil(hasResults)
             completion(hasResults)
             expectation.fulfill()

@@ -10,85 +10,85 @@ import Storage
 class TopSitesDimensionTests: XCTestCase {
 
     func testSectionDimension_portraitIphone_defaultRowNumber() {
-        let sut = createSut()
+        let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false, isIphone: true, trait: trait)
 
-        let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
+        let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_landscapeIphone_defaultRowNumber() {
-        let sut = createSut()
+        let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: true, isIphone: true, trait: trait)
 
-        let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
+        let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 8)
     }
 
     func testSectionDimension_portraitiPadRegular_defaultRowNumber() {
-        let sut = createSut()
+        let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false, isIphone: false, trait: trait)
 
-        let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
+        let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
     }
 
     func testSectionDimension_landscapeiPadRegular_defaultRowNumber() {
-        let sut = createSut()
+        let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: true, isIphone: false, trait: trait)
 
-        let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
+        let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 8)
     }
 
     func testSectionDimension_portraitiPadCompact_defaultRowNumber() {
-        let sut = createSut()
+        let subject = createSubject()
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
         let interface = TopSitesUIInterface(isLandscape: false, isIphone: false, trait: trait)
 
-        let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
+        let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_landscapeiPadCompact_defaultRowNumber() {
-        let sut = createSut()
+        let subject = createSubject()
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
         let interface = TopSitesUIInterface(isLandscape: true, isIphone: false, trait: trait)
 
-        let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
+        let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_portraitiPadUnspecified_defaultRowNumber() {
-        let sut = createSut()
+        let subject = createSubject()
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .unspecified
         let interface = TopSitesUIInterface(isLandscape: false, isIphone: false, trait: trait)
 
-        let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
+        let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 2)
     }
 
     func testSectionDimension_landscapeiPadUnspecified_defaultRowNumber() {
-        let sut = createSut()
+        let subject = createSubject()
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .unspecified
         let interface = TopSitesUIInterface(isLandscape: true, isIphone: false, trait: trait)
 
-        let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
+        let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
@@ -96,52 +96,52 @@ class TopSitesDimensionTests: XCTestCase {
     // MARK: Section dimension with stubbed data
 
     func testSectionDimension_oneEmptyRow_shouldBeRemoved() {
-        let sut = createSut()
+        let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false, isIphone: true, trait: trait)
 
-        let dimension = sut.getSectionDimension(for: createSites(count: 4), numberOfRows: 2, interface: interface)
+        let dimension = subject.getSectionDimension(for: createSites(count: 4), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 1)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_twoEmptyRow_shouldBeRemoved() {
-        let sut = createSut()
+        let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false, isIphone: true, trait: trait)
 
-        let dimension = sut.getSectionDimension(for: createSites(count: 4), numberOfRows: 3, interface: interface)
+        let dimension = subject.getSectionDimension(for: createSites(count: 4), numberOfRows: 3, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 1)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_noEmptyRow_shouldNotBeRemoved() {
-        let sut = createSut()
+        let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false, isIphone: true, trait: trait)
 
-        let dimension = sut.getSectionDimension(for: createSites(count: 8), numberOfRows: 2, interface: interface)
+        let dimension = subject.getSectionDimension(for: createSites(count: 8), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_halfFilledRow_shouldNotBeRemoved() {
-        let sut = createSut()
+        let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false, isIphone: true, trait: trait)
 
-        let dimension = sut.getSectionDimension(for: createSites(count: 6), numberOfRows: 2, interface: interface)
+        let dimension = subject.getSectionDimension(for: createSites(count: 6), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 }
 
 extension TopSitesDimensionTests {
-    func createSut() -> TopSitesDimension {
-        let sut = TopSitesDimensionImplementation()
-        trackForMemoryLeaks(sut)
+    func createSubject() -> TopSitesDimension {
+        let subject = TopSitesDimensionImplementation()
+        trackForMemoryLeaks(subject)
 
-        return sut
+        return subject
     }
 
     func createSites(count: Int = 30) -> [TopSite] {

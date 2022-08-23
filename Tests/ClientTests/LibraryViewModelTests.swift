@@ -7,7 +7,7 @@ import XCTest
 
 class LibraryViewModelTests: XCTestCase {
 
-    private var sut: LibraryViewModel!
+    private var subject: LibraryViewModel!
     private var profile: MockProfile!
     private var tabManager: TabManager!
 
@@ -31,18 +31,18 @@ class LibraryViewModelTests: XCTestCase {
     }
 
     func testInitialState_Init() {
-        sut = LibraryViewModel(withProfile: profile, tabManager: tabManager)
-        sut.selectedPanel = .bookmarks
+        subject = LibraryViewModel(withProfile: profile, tabManager: tabManager)
+        subject.selectedPanel = .bookmarks
 
-        XCTAssertTrue(sut.currentPanelState == .bookmarks(state: .mainView))
-        XCTAssertEqual(sut.panelDescriptors.count, 4)
+        XCTAssertTrue(subject.currentPanelState == .bookmarks(state: .mainView))
+        XCTAssertEqual(subject.panelDescriptors.count, 4)
     }
 
     func testLibraryPanelTitle() {
-        sut = LibraryViewModel(withProfile: profile, tabManager: tabManager)
-        sut.selectedPanel = .bookmarks
+        subject = LibraryViewModel(withProfile: profile, tabManager: tabManager)
+        subject.selectedPanel = .bookmarks
 
-        for panel in sut.panelDescriptors {
+        for panel in subject.panelDescriptors {
             switch panel.panelType {
             case .bookmarks:
                 XCTAssertEqual(panel.panelType.title, .AppMenu.AppMenuBookmarksTitleString)
@@ -60,7 +60,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testBookmarksButtons_MainFolder() {
         setup(panelType: .bookmarks)
-        guard let panel = sut.currentPanel as? BookmarksPanel else {
+        guard let panel = subject.currentPanel as? BookmarksPanel else {
             XCTFail("Expected bookmark panel")
             return
         }
@@ -73,7 +73,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testBookmarksButtons_SubFolder() {
         setup(panelType: .bookmarks)
-        guard let panel = sut.currentPanel as? BookmarksPanel else {
+        guard let panel = subject.currentPanel as? BookmarksPanel else {
             XCTFail("Expected bookmark panel")
             return
         }
@@ -88,7 +88,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testBookmarks_FolderEditMode() {
         setup(panelType: .bookmarks)
-        guard let panel = sut.currentPanel as? BookmarksPanel else {
+        guard let panel = subject.currentPanel as? BookmarksPanel else {
             XCTFail("Expected bookmark panel")
             return
         }
@@ -96,7 +96,7 @@ class LibraryViewModelTests: XCTestCase {
         panel.updatePanelState(newState: .bookmarks(state: .inFolder))
         panel.enableEditMode()
 
-        XCTAssertEqual(sut.currentPanelState, .bookmarks(state: .inFolderEditMode))
+        XCTAssertEqual(subject.currentPanelState, .bookmarks(state: .inFolderEditMode))
         let toolbarItems = panel.bottomToolbarItems
         // We need to account for the flexibleSpace item
         XCTAssertEqual(toolbarItems.count, 3, "Expected Add, Done button and flexibleSpace")
@@ -104,7 +104,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testBookmarks_ItemEditMode() {
         setup(panelType: .bookmarks)
-        guard let panel = sut.currentPanel as? BookmarksPanel else {
+        guard let panel = subject.currentPanel as? BookmarksPanel else {
             XCTFail("Expected bookmark panel")
             return
         }
@@ -120,7 +120,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testBookmarks_MainFolderLeavingEdit() {
         setup(panelType: .bookmarks)
-        guard let panel = sut.currentPanel as? BookmarksPanel else {
+        guard let panel = subject.currentPanel as? BookmarksPanel else {
             XCTFail("Expected bookmark panel")
             return
         }
@@ -128,7 +128,7 @@ class LibraryViewModelTests: XCTestCase {
         panel.updatePanelState(newState: .bookmarks(state: .itemEditMode))
         panel.disableEditMode()
 
-        XCTAssertEqual(sut.currentPanelState, .bookmarks(state: .mainView))
+        XCTAssertEqual(subject.currentPanelState, .bookmarks(state: .mainView))
         let toolbarItems = panel.bottomToolbarItems
         // We need to account for the flexibleSpace item
         XCTAssertEqual(toolbarItems.count, 2, "Expected Edit button and flexibleSpace")
@@ -136,7 +136,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testBookmarksBack_ForInFolder() {
         setup(panelType: .bookmarks)
-        guard let panel = sut.currentPanel as? BookmarksPanel else {
+        guard let panel = subject.currentPanel as? BookmarksPanel else {
             XCTFail("Expected bookmark panel")
             return
         }
@@ -144,7 +144,7 @@ class LibraryViewModelTests: XCTestCase {
         panel.updatePanelState(newState: .bookmarks(state: .inFolder))
         panel.handleLeftTopButton()
 
-        XCTAssertEqual(sut.currentPanelState, .bookmarks(state: .mainView))
+        XCTAssertEqual(subject.currentPanelState, .bookmarks(state: .mainView))
         let toolbarItems = panel.bottomToolbarItems
         // We need to account for the flexibleSpace item
         XCTAssertEqual(toolbarItems.count, 2, "Expected Edit button and flexibleSpace")
@@ -152,7 +152,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testBookmarksBack_ForItemEditMode() {
         setup(panelType: .bookmarks)
-        guard let panel = sut.currentPanel as? BookmarksPanel else {
+        guard let panel = subject.currentPanel as? BookmarksPanel else {
             XCTFail("Expected bookmark panel")
             return
         }
@@ -160,7 +160,7 @@ class LibraryViewModelTests: XCTestCase {
         panel.updatePanelState(newState: .bookmarks(state: .itemEditMode))
         panel.handleLeftTopButton()
 
-        XCTAssertEqual(sut.currentPanelState, .bookmarks(state: .inFolderEditMode))
+        XCTAssertEqual(subject.currentPanelState, .bookmarks(state: .inFolderEditMode))
         let toolbarItems = panel.bottomToolbarItems
         // We need to account for the flexibleSpace item
         XCTAssertEqual(toolbarItems.count, 3, "Expected Edit button and flexibleSpace")
@@ -168,7 +168,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testBookmarksShouldDismissOnDone_ForMain() {
         setup(panelType: .bookmarks)
-        guard let panel = sut.currentPanel as? BookmarksPanel else {
+        guard let panel = subject.currentPanel as? BookmarksPanel else {
             XCTFail("Expected history panel")
             return
         }
@@ -179,7 +179,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testBookmarksShouldDismissOnDone_ForInFolder() {
         setup(panelType: .bookmarks)
-        guard let panel = sut.currentPanel as? BookmarksPanel else {
+        guard let panel = subject.currentPanel as? BookmarksPanel else {
             XCTFail("Expected history panel")
             return
         }
@@ -190,7 +190,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testBookmarksShouldDismissOnDone_ForFolderEditMode() {
         setup(panelType: .bookmarks)
-        guard let panel = sut.currentPanel as? BookmarksPanel else {
+        guard let panel = subject.currentPanel as? BookmarksPanel else {
             XCTFail("Expected history panel")
             return
         }
@@ -201,7 +201,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testBookmarksShouldDismissOnDone_ForItemEditMode() {
         setup(panelType: .bookmarks)
-        guard let panel = sut.currentPanel as? BookmarksPanel else {
+        guard let panel = subject.currentPanel as? BookmarksPanel else {
             XCTFail("Expected history panel")
             return
         }
@@ -214,19 +214,19 @@ class LibraryViewModelTests: XCTestCase {
     func testHistoryButtons() {
         setup(panelType: .history)
 
-        guard let panel = sut.currentPanel as? HistoryPanel else {
+        guard let panel = subject.currentPanel as? HistoryPanel else {
             XCTFail("Expected history panel")
             return
         }
 
-        XCTAssertTrue(sut.currentPanelState == .history(state: .mainView))
+        XCTAssertTrue(subject.currentPanelState == .history(state: .mainView))
         // There is 2 flexible space to keep buttons to the left
         XCTAssertEqual(panel.bottomToolbarItems.count, 4, "Expected Delete, Search buttons and 2 flexible spaces")
     }
 
     func testHistorySearch_ForStartSearch() {
         setup(panelType: .history)
-        guard let panel = sut.currentPanel as? HistoryPanel else {
+        guard let panel = subject.currentPanel as? HistoryPanel else {
             XCTFail("Expected history panel")
             return
         }
@@ -234,7 +234,7 @@ class LibraryViewModelTests: XCTestCase {
         panel.updatePanelState(newState: .history(state: .mainView))
         panel.startSearchState()
 
-        XCTAssertEqual(sut.currentPanelState, .history(state: .search))
+        XCTAssertEqual(subject.currentPanelState, .history(state: .search))
         let toolbarItems = panel.bottomToolbarItems
         // We need to account for the flexibleSpace item
         XCTAssertEqual(toolbarItems.count, 4, "Expected Edit button and flexibleSpace")
@@ -242,7 +242,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testHistorySearch_ForExitSearch() {
         setup(panelType: .history)
-        guard let panel = sut.currentPanel as? HistoryPanel else {
+        guard let panel = subject.currentPanel as? HistoryPanel else {
             XCTFail("Expected history panel")
             return
         }
@@ -250,7 +250,7 @@ class LibraryViewModelTests: XCTestCase {
         panel.updatePanelState(newState: .history(state: .search))
         panel.handleRightTopButton()
 
-        XCTAssertEqual(sut.currentPanelState, .history(state: .mainView))
+        XCTAssertEqual(subject.currentPanelState, .history(state: .mainView))
         let toolbarItems = panel.bottomToolbarItems
         // We need to account for the flexibleSpace item
         XCTAssertEqual(toolbarItems.count, 4, "Expected Edit button and flexibleSpace")
@@ -258,7 +258,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testHistoryInFolder() {
         setup(panelType: .history)
-        guard let panel = sut.currentPanel as? HistoryPanel else {
+        guard let panel = subject.currentPanel as? HistoryPanel else {
             XCTFail("Expected history panel")
             return
         }
@@ -269,7 +269,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testHistoryMain_ForBackButtonPress() {
         setup(panelType: .history)
-        guard let panel = sut.currentPanel as? HistoryPanel else {
+        guard let panel = subject.currentPanel as? HistoryPanel else {
             XCTFail("Expected history panel")
             return
         }
@@ -277,7 +277,7 @@ class LibraryViewModelTests: XCTestCase {
         panel.updatePanelState(newState: .history(state: .inFolder))
         panel.handleLeftTopButton()
 
-        XCTAssertEqual(sut.currentPanelState, .history(state: .mainView))
+        XCTAssertEqual(subject.currentPanelState, .history(state: .mainView))
         let toolbarItems = panel.bottomToolbarItems
         // We need to account for the flexibleSpace item
         XCTAssertEqual(toolbarItems.count, 4, "Expected Edit button and flexibleSpace")
@@ -285,7 +285,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testHistoryShouldDismissOnDone_ForSearch() {
         setup(panelType: .history)
-        guard let panel = sut.currentPanel as? HistoryPanel else {
+        guard let panel = subject.currentPanel as? HistoryPanel else {
             XCTFail("Expected history panel")
             return
         }
@@ -296,7 +296,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testHistoryShouldDismissOnDone_ForMain() {
         setup(panelType: .history)
-        guard let panel = sut.currentPanel as? HistoryPanel else {
+        guard let panel = subject.currentPanel as? HistoryPanel else {
             XCTFail("Expected history panel")
             return
         }
@@ -307,7 +307,7 @@ class LibraryViewModelTests: XCTestCase {
 
     func testHistoryShouldDismissOnDone_ForInFolder() {
         setup(panelType: .history)
-        guard let panel = sut.currentPanel as? HistoryPanel else {
+        guard let panel = subject.currentPanel as? HistoryPanel else {
             XCTFail("Expected history panel")
             return
         }
@@ -320,19 +320,19 @@ class LibraryViewModelTests: XCTestCase {
     func testReaderPanelButtons() {
         setup(panelType: .readingList)
 
-        guard let panel = sut.currentPanel as? ReadingListPanel else {
+        guard let panel = subject.currentPanel as? ReadingListPanel else {
             XCTFail("Expected reading list panel")
             return
         }
 
-        XCTAssertTrue(sut.currentPanelState == .readingList)
+        XCTAssertTrue(subject.currentPanelState == .readingList)
         XCTAssertTrue(panel.bottomToolbarItems.isEmpty)
     }
 
     func testReaderPanel_ShouldDismissOnDone() {
         setup(panelType: .readingList)
 
-        guard let panel = sut.currentPanel as? ReadingListPanel else {
+        guard let panel = subject.currentPanel as? ReadingListPanel else {
             XCTFail("Expected reading list panel")
             return
         }
@@ -344,19 +344,19 @@ class LibraryViewModelTests: XCTestCase {
     func testDownloadsPanelButtons() {
         setup(panelType: .downloads)
 
-        guard let panel = sut.currentPanel as? DownloadsPanel else {
+        guard let panel = subject.currentPanel as? DownloadsPanel else {
             XCTFail("Expected downloads panel")
             return
         }
 
-        XCTAssertTrue(sut.currentPanelState == .downloads)
+        XCTAssertTrue(subject.currentPanelState == .downloads)
         XCTAssertTrue(panel.bottomToolbarItems.isEmpty)
     }
 
     func testDownloadsPanel_ShouldDismissOnDone() {
         setup(panelType: .downloads)
 
-        guard let panel = sut.currentPanel as? DownloadsPanel else {
+        guard let panel = subject.currentPanel as? DownloadsPanel else {
             XCTFail("Expected reading list panel")
             return
         }
@@ -366,8 +366,8 @@ class LibraryViewModelTests: XCTestCase {
 
     // MARK: - Helper functions
     private func setup(panelType: LibraryPanelType) {
-        sut = LibraryViewModel(withProfile: profile, tabManager: tabManager)
-        sut.selectedPanel = panelType
-        sut.setupNavigationController()
+        subject = LibraryViewModel(withProfile: profile, tabManager: tabManager)
+        subject.selectedPanel = panelType
+        subject.setupNavigationController()
     }
 }

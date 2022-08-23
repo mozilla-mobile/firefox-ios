@@ -7,7 +7,7 @@ import Shared
 @testable import Client
 
 class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
-    var sut: StoryProvider!
+    var subject: StoryProvider!
 
     override func setUp() {
         super.setUp()
@@ -16,7 +16,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
 
     override func tearDown() {
         super.tearDown()
-        sut = nil
+        subject = nil
     }
 
     func testIfSponsoredAreDisabled_FetchingStories_ReturnsTheNonSponsoredList() async {
@@ -27,12 +27,12 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             .make(title: "feed3"),
         ]
 
-        sut = StoryProvider(
+        subject = StoryProvider(
             pocketAPI: MockPocketAPI(result: .success(stories)),
             pocketSponsoredAPI: MockSponsoredPocketAPI(result: .success([]))
         )
 
-        let fetched = await sut.fetchPocketStories()
+        let fetched = await subject.fetchPocketStories()
         XCTAssertEqual(fetched, stories.map(PocketStory.init))
     }
 
@@ -44,12 +44,12 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             .make(title: "feed3"),
         ]
 
-        sut = StoryProvider(
+        subject = StoryProvider(
             pocketAPI: MockPocketAPI(result: .success(stories)),
             pocketSponsoredAPI: MockSponsoredPocketAPI(result: .success([]))
         )
 
-        let fetched = await sut.fetchPocketStories()
+        let fetched = await subject.fetchPocketStories()
         XCTAssertEqual(fetched, stories.map(PocketStory.init))
     }
 
@@ -67,14 +67,14 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             .make(title: "sponsored3"),
         ]
 
-        sut = StoryProvider(
+        subject = StoryProvider(
             pocketAPI: MockPocketAPI(result: .success(stories)),
             pocketSponsoredAPI: MockSponsoredPocketAPI(result: .success(sponsoredStories)),
             sponsoredIndices: [3, 4, 5]
         )
 
         let expected = (stories.map(PocketStory.init) + sponsoredStories.map(PocketStory.init))
-        let fetched = await sut.fetchPocketStories()
+        let fetched = await subject.fetchPocketStories()
 
         XCTAssertEqual(fetched, expected)
     }
@@ -93,7 +93,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             .make(title: "sponsored3"),
         ]
 
-        sut = StoryProvider(
+        subject = StoryProvider(
             pocketAPI: MockPocketAPI(result: .success(stories)),
             pocketSponsoredAPI: MockSponsoredPocketAPI(result: .success(sponsoredStories)),
             sponsoredIndices: [1, 3, 5]
@@ -108,7 +108,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             .init(pocketSponsoredStory: .make(title: "sponsored3"))
         ]
 
-        let fetched = await sut.fetchPocketStories()
+        let fetched = await subject.fetchPocketStories()
         XCTAssertEqual(fetched, expected)
     }
 
@@ -127,7 +127,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             .make(title: "sponsored5"),
         ]
 
-        sut = StoryProvider(
+        subject = StoryProvider(
             pocketAPI: MockPocketAPI(result: .success(stories)),
             pocketSponsoredAPI: MockSponsoredPocketAPI(result: .success(sponsoredStories)),
             sponsoredIndices: [0, 1]
@@ -140,7 +140,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             .init(pocketFeedStory: .make(title: "feed2"))
         ]
 
-        let fetched = await sut.fetchPocketStories()
+        let fetched = await subject.fetchPocketStories()
         XCTAssertEqual(fetched, expected)
     }
 
@@ -154,7 +154,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             .make(title: "sponsored5"),
         ]
 
-        sut = StoryProvider(
+        subject = StoryProvider(
             pocketAPI: MockPocketAPI(result: .success([])),
             pocketSponsoredAPI: MockSponsoredPocketAPI(result: .success(sponsoredStories)),
             sponsoredIndices: [0, 1]
@@ -165,7 +165,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             .init(pocketSponsoredStory: .make(title: "sponsored2"))
         ]
 
-        let fetched = await sut.fetchPocketStories()
+        let fetched = await subject.fetchPocketStories()
         XCTAssertEqual(fetched, expected)
     }
 
@@ -177,7 +177,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             .make(title: "feed3"),
         ]
 
-        sut = StoryProvider(
+        subject = StoryProvider(
             pocketAPI: MockPocketAPI(result: .success(stories)),
             pocketSponsoredAPI: MockSponsoredPocketAPI(result: .failure(TestError.default)),
             sponsoredIndices: [0, 1]
@@ -189,7 +189,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             .init(pocketFeedStory: .make(title: "feed3")),
         ]
 
-        let fetched = await sut.fetchPocketStories()
+        let fetched = await subject.fetchPocketStories()
         XCTAssertEqual(fetched.count, 3)
         XCTAssertEqual(fetched, expected)
     }
@@ -202,7 +202,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             .make(title: "sponsored3"),
         ]
 
-        sut = StoryProvider(
+        subject = StoryProvider(
             pocketAPI: MockPocketAPI(result: .failure(TestError.default)),
             pocketSponsoredAPI: MockSponsoredPocketAPI(result: .success(stories)),
             sponsoredIndices: [0, 1, 2]
@@ -210,7 +210,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
 
         let expected: [PocketStory] = stories.map(PocketStory.init)
 
-        let fetched = await sut.fetchPocketStories()
+        let fetched = await subject.fetchPocketStories()
         XCTAssertEqual(fetched, expected)
     }
 
@@ -224,7 +224,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             .make(title: "feed5")
         ]
 
-        sut = StoryProvider(
+        subject = StoryProvider(
             pocketAPI: MockPocketAPI(result: .success(stories)),
             pocketSponsoredAPI: MockSponsoredPocketAPI(result: .failure(TestError.default)),
             numberOfPocketStories: 3,
@@ -237,7 +237,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             .init(pocketFeedStory: .make(title: "feed3")),
         ]
 
-        let fetched = await sut.fetchPocketStories()
+        let fetched = await subject.fetchPocketStories()
         XCTAssertEqual(fetched.count, 3)
         XCTAssertEqual(fetched, expected)
     }
