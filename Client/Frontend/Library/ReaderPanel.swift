@@ -350,15 +350,17 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         guard let record = records?[safe: indexPath.row] else { return nil }
 
-        let deleteAction = UIContextualAction(style: .destructive, title: .ReaderPanelRemove) { [weak self] (_, _, completion) in
+        let deleteAction = UIContextualAction(style: .destructive,
+                                              title: .ReaderPanelRemove) { [weak self] (_, _, completion) in
             guard let strongSelf = self else { completion(false); return }
-
+            
             strongSelf.deleteItem(atIndex: indexPath)
             completion(true)
         }
 
         let toggleText: String = record.unread ? .ReaderPanelMarkAsRead : .ReaderModeBarMarkAsUnread
-        let unreadToggleAction = UIContextualAction(style: .normal, title: toggleText.stringSplitWithNewline()) { [weak self] (_, view, completion) in
+        let unreadToggleAction = UIContextualAction(style: .normal,
+                                                    title: toggleText.stringSplitWithNewline()) { [weak self] (_, view, completion) in
             guard let strongSelf = self else { completion(false); return }
 
             view.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
