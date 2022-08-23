@@ -9,6 +9,10 @@ private struct WallpaperSelectorItem {
     let collection: WallpaperCollection
 }
 
+public enum WallpaperSelectorError: Error {
+    case itemNotFound
+}
+
 class WallpaperSelectorViewModel {
 
     enum WallpaperSelectorLayout: Equatable {
@@ -73,16 +77,16 @@ class WallpaperSelectorViewModel {
                              number: indexPath.row)
     }
 
-    func downloadAndSetWallpaper(at indexPath: IndexPath, completion: @escaping (Result<Bool, Error>) -> Void) {
+    func downloadAndSetWallpaper(at indexPath: IndexPath, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let wallpaperItem = wallpaperItems[safe: indexPath.row] else {
-            completion(.success(false))
+            completion(.failure(WallpaperSelectorError.itemNotFound))
             return
         }
 
         let wallpaper = wallpaperItem.wallpaper
 
         let setWallpaperBlock = { [weak self] in
-            self?.updateCurrentWallpaper(at: indexPath) { result in
+            self?.updateCurrentWallpaper(for: wallpaperItem) { result in
                 completion(result)
             }
         }
@@ -90,12 +94,8 @@ class WallpaperSelectorViewModel {
         if wallpaper.needsToFetchResources {
             wallpaperManager.fetch(wallpaper) { result in
                 switch result {
-                case .success(let success):
-                    if success {
-                        setWallpaperBlock()
-                    } else {
-                        completion(result)
-                    }
+                case .success:
+                    setWallpaperBlock()
                 case .failure:
                     completion(result)
                 }
@@ -176,11 +176,8 @@ private extension WallpaperSelectorViewModel {
         return cellViewModel
     }
 
-    func updateCurrentWallpaper(at indexPath: IndexPath, completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard let wallpaperItem = wallpaperItems[safe: indexPath.row] else {
-            completion(.success(false))
-            return
-        }
+    func updateCurrentWallpaper(for wallpaperItem: WallpaperSelectorItem,
+                                completion: @escaping (Result<Void, Error>) -> Void) {
         wallpaperManager.setCurrentWallpaper(to: wallpaperItem.wallpaper, completion: completion)
         setupWallpapers()
 

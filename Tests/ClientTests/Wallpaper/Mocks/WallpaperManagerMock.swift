@@ -18,11 +18,11 @@ class WallpaperManagerMock: WallpaperManagerInterface {
     var canOnboardingBeShown: Bool = true
 
     var setCurrentWallpaperCallCount = 0
-    var setCurrentWallpaperResult: Result<Bool, Error> = .success(true)
+    var setCurrentWallpaperResult: Result<Void, Error> = .success(())
 
     func setCurrentWallpaper(
         to wallpaper: Wallpaper,
-        completion: @escaping (Result<Bool, Error>) -> Void
+        completion: @escaping (Result<Void, Error>) -> Void
     ) {
         setCurrentWallpaperCallCount += 1
         currentWallpaper = wallpaper
@@ -30,9 +30,9 @@ class WallpaperManagerMock: WallpaperManagerInterface {
     }
 
     var fetchCallCount = 0
-    var fetchResult: Result<Bool, Error> = .success(true)
+    var fetchResult: Result<Void, Error> = .success(())
 
-    func fetch(_ wallpaper: Wallpaper, completion: @escaping (Result<Bool, Error>) -> Void) {
+    func fetch(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void) {
         fetchCallCount += 1
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             completion(self.fetchResult)

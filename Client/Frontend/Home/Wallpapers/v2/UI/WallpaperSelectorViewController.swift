@@ -139,10 +139,8 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
         viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
             ensureMainThread {
                 switch result {
-                case .success(let success):
-                    if success {
-                        self?.collectionView.reloadData()
-                    }
+                case .success:
+                    self?.collectionView.reloadData()
                 case .failure(let error):
                     print(error.localizedDescription)
                 }

@@ -21,8 +21,8 @@ class WallpaperSelectorViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         wallpaperManager = nil
+        super.tearDown()
     }
 
     func testInit_hasCorrectNumberOfWallpapers() {
