@@ -101,12 +101,24 @@ class HomepageMessageCardViewModelTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessagePressedCalled, 0)
     }
 
-    // TODO:
-    // Laurie - func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
-    // Laurie - test configure
+    func testConfigureCallsMethod() throws {
+        let subject = createSubject()
+        let cell = SpyHomepageMessageCardCell(frame: .zero)
+        let configuredCell = try XCTUnwrap(subject.configure(cell, at: IndexPath(item: 0, section: 0))) as? SpyHomepageMessageCardCell
+        XCTAssertEqual(configuredCell?.configureCalled, 1)
+    }
 
-    // other file
-    // Laurie - test adaptor
+    func testGetMessageEmpty() {
+        let subject = createSubject()
+        XCTAssertNil(subject.getMessage(for: .newTabCard))
+    }
+
+    func testGetMessageNotEmpty() {
+        adaptor.message = createMessage(isExpired: false)
+        let subject = createSubject()
+        subject.didLoadNewData()
+        XCTAssertNotNil(subject.getMessage(for: .newTabCard))
+    }
 }
 
 // MARK: - Helpers
@@ -164,10 +176,11 @@ class MockStyleDataProtocol: StyleDataProtocol {
 class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
     func onStartup() {}
 
+    var message: GleanPlumbMessage?
     var recordedSurface: MessageSurfaceId?
     func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
         recordedSurface = surface
-        return nil
+        return message
     }
 
     var onMessageDisplayedCalled = 0
@@ -186,4 +199,12 @@ class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
     }
 
     func onMalformedMessage(messageKey: String) {}
+}
+
+// MARK: SpyHomepageMessageCardCell
+class SpyHomepageMessageCardCell: HomepageMessageCardCell {
+    var configureCalled = 0
+    override func configure(viewModel: HomepageMessageCardViewModel) {
+        configureCalled += 1
+    }
 }
