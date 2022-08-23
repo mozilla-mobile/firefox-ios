@@ -392,10 +392,13 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             profile.readingList.deleteRecord(record, completion: { success in
                 guard success else { return }
                 self.records?.remove(at: indexPath.row)
-                self.tableView.deleteRows(at: [indexPath], with: .automatic)
-                // reshow empty state if no records left
-                if let records = self.records, records.isEmpty {
-                    self.refreshReadingList()
+
+                DispatchQueue.main.async {
+                    self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                    // reshow empty state if no records left
+                    if let records = self.records, records.isEmpty {
+                        self.refreshReadingList()
+                    }
                 }
             })
         }
