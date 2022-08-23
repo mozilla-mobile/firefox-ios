@@ -208,6 +208,7 @@ function configureReader() {
 }
 
 function escapeHTML(string) {
+  if (typeof(string) !== 'string') { return ''; }
   return string
     .replace(/\&/g, "&amp;")
     .replace(/\</g, "&lt;")
