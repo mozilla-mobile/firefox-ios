@@ -50,15 +50,12 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         guard let mockManager = wallpaperManager as? WallpaperManagerMock else { return }
         let subject = createSubject()
         let indexPath = IndexPath(item: 1, section: 0)
-        let expectation = self.expectation(description: "Download and set wallpaper")
 
         subject.downloadAndSetWallpaper(at: indexPath) { result in
             let wallpaperCellModel = subject.cellViewModel(for: indexPath)!
             XCTAssertTrue(wallpaperCellModel.isSelected)
             XCTAssertEqual(mockManager.setCurrentWallpaperCallCount, 1)
-            expectation.fulfill()
         }
-        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testRecordsWallpaperSelectorView() {
@@ -80,9 +77,14 @@ class WallpaperSelectorViewModelTests: XCTestCase {
     func testClickingCell_recordsWallpaperChange() {
         wallpaperManager = WallpaperManager()
         let subject = createSubject()
-        subject.downloadAndSetWallpaper(at: IndexPath(item: 0, section: 0)) { _ in }
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorSelected)
+        let expectation = self.expectation(description: "Download and set wallpaper")
+        subject.downloadAndSetWallpaper(at: IndexPath(item: 0, section: 0)) { _ in
+            self.testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorSelected)
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func createSubject() -> WallpaperSelectorViewModel {

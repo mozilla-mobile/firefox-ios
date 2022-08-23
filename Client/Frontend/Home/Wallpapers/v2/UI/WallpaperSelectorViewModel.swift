@@ -178,15 +178,21 @@ private extension WallpaperSelectorViewModel {
 
     func updateCurrentWallpaper(for wallpaperItem: WallpaperSelectorItem,
                                 completion: @escaping (Result<Void, Error>) -> Void) {
-        wallpaperManager.setCurrentWallpaper(to: wallpaperItem.wallpaper, completion: completion)
-        setupWallpapers()
+        wallpaperManager.setCurrentWallpaper(to: wallpaperItem.wallpaper) { [weak self] result in
+            self?.setupWallpapers()
 
-        let extra = telemetryMetadata(for: wallpaperItem)
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .onboardingWallpaperSelector,
-                                     value: .wallpaperSelected,
-                                     extras: extra)
+            guard let extra = self?.telemetryMetadata(for: wallpaperItem) else {
+                completion(result)
+                return
+            }
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .onboardingWallpaperSelector,
+                                         value: .wallpaperSelected,
+                                         extras: extra)
+
+           completion(result)
+        }
     }
 
     func telemetryMetadata(for item: WallpaperSelectorItem) -> [String: String] {

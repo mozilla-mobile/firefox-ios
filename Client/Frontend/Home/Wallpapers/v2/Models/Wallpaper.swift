@@ -24,7 +24,7 @@ struct Wallpaper: Equatable {
     }
 
     var needsToFetchResources: Bool {
-        guard type == .defaultWallpaper else { return false }
+        guard type != .defaultWallpaper else { return false }
         return portrait == nil || landscape == nil
     }
 
