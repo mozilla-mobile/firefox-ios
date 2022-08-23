@@ -348,9 +348,10 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
     }
 
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard let record = records?[indexPath.row] else { return nil }
+        guard let record = records?[safe: indexPath.row] else { return nil }
 
-        let deleteAction = UIContextualAction(style: .destructive, title: .ReaderPanelRemove) { [weak self] (_, _, completion) in
+        let deleteAction = UIContextualAction(style: .destructive,
+                                              title: .ReaderPanelRemove) { [weak self] (_, _, completion) in
             guard let strongSelf = self else { completion(false); return }
 
             strongSelf.deleteItem(atIndex: indexPath)
@@ -358,7 +359,8 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         }
 
         let toggleText: String = record.unread ? .ReaderPanelMarkAsRead : .ReaderModeBarMarkAsUnread
-        let unreadToggleAction = UIContextualAction(style: .normal, title: toggleText.stringSplitWithNewline()) { [weak self] (_, view, completion) in
+        let unreadToggleAction = UIContextualAction(style: .normal,
+                                                    title: toggleText.stringSplitWithNewline()) { [weak self] (_, view, completion) in
             guard let strongSelf = self else { completion(false); return }
 
             view.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
@@ -392,10 +394,13 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             profile.readingList.deleteRecord(record, completion: { success in
                 guard success else { return }
                 self.records?.remove(at: indexPath.row)
-                self.tableView.deleteRows(at: [indexPath], with: .automatic)
-                // reshow empty state if no records left
-                if let records = self.records, records.isEmpty {
-                    self.refreshReadingList()
+
+                DispatchQueue.main.async {
+                    self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                    // reshow empty state if no records left
+                    if let records = self.records, records.isEmpty {
+                        self.refreshReadingList()
+                    }
                 }
             })
         }
