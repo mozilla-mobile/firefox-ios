@@ -348,7 +348,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
     }
 
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard let record = records?[indexPath.row] else { return nil }
+        guard let record = records?[safe: indexPath.row] else { return nil }
 
         let deleteAction = UIContextualAction(style: .destructive, title: .ReaderPanelRemove) { [weak self] (_, _, completion) in
             guard let strongSelf = self else { completion(false); return }
