@@ -194,7 +194,7 @@ private class WKNavigationDelegateSpy: NSObject, WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         receivedMessages.append(.webViewDidFail)
     }
-    
+
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         receivedMessages.append(.webViewDidFailProvisionalNavigation)
     }

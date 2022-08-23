@@ -67,7 +67,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     }
 
     func testCalculateTopSitesData_hasGoogleTopSiteWithPinnedCount_googlePrefsNi() {
-        let subject =createSubject(addPinnedSiteCount: 3)
+        let subject = createSubject(addPinnedSiteCount: 3)
 
         subject.recalculateTopSiteData(for: 1)
 
@@ -78,7 +78,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     }
 
     func testCalculateTopSitesData_hasNotGoogleTopSite_IfHidden() {
-        let subject =createSubject(addPinnedSiteCount: 3)
+        let subject = createSubject(addPinnedSiteCount: 3)
         profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteAddedKey)
         profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
 
@@ -93,7 +93,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     // MARK: Pinned site
 
     func testCalculateTopSitesData_pinnedSites() {
-        let subject =createSubject(addPinnedSiteCount: 3)
+        let subject = createSubject(addPinnedSiteCount: 3)
 
         subject.recalculateTopSiteData(for: 6)
 
@@ -110,7 +110,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
 
         let expectedContileResult = ContileResult.success(ContileProviderMock.defaultSuccessData)
-        let subject =createSubject(siteCount: 0, expectedContileResult: expectedContileResult)
+        let subject = createSubject(siteCount: 0, expectedContileResult: expectedContileResult)
 
         let data = subject.getTopSitesData()
         XCTAssertNotEqual(data.count, 0)
@@ -119,7 +119,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testLoadTopSitesData_addSponsoredTile() {
         featureFlags.set(feature: .sponsoredTiles, to: true)
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1)
-        let subject =createSubject(expectedContileResult: ContileResult.success(expectedContileResult))
+        let subject = createSubject(expectedContileResult: ContileResult.success(expectedContileResult))
 
         subject.recalculateTopSiteData(for: 6)
 
@@ -130,7 +130,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testCalculateTopSitesData_addSponsoredTileAfterGoogle() {
         featureFlags.set(feature: .sponsoredTiles, to: true)
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1)
-        let subject =createSubject(expectedContileResult: ContileResult.success(expectedContileResult))
+        let subject = createSubject(expectedContileResult: ContileResult.success(expectedContileResult))
 
         subject.recalculateTopSiteData(for: 6)
 
@@ -143,7 +143,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testCalculateTopSitesData_doesNotAddSponsoredTileIfError() {
         featureFlags.set(feature: .sponsoredTiles, to: true)
         let expectedContileResult = ContileResult.failure(ContileProvider.Error.failure)
-        let subject =createSubject(expectedContileResult: expectedContileResult)
+        let subject = createSubject(expectedContileResult: expectedContileResult)
 
         subject.recalculateTopSiteData(for: 6)
 
@@ -156,7 +156,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testCalculateTopSitesData_doesNotAddSponsoredTileIfSuccessEmpty() {
         featureFlags.set(feature: .sponsoredTiles, to: true)
         let expectedContileResult = ContileResult.success([])
-        let subject =createSubject(expectedContileResult: expectedContileResult)
+        let subject = createSubject(expectedContileResult: expectedContileResult)
 
         subject.recalculateTopSiteData(for: 6)
 
@@ -170,7 +170,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         featureFlags.set(feature: .sponsoredTiles, to: true)
         // Max contiles is currently at 2, so it should add 2 contiles only
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 3)
-        let subject =createSubject(expectedContileResult: ContileResult.success(expectedContileResult))
+        let subject = createSubject(expectedContileResult: ContileResult.success(expectedContileResult))
 
         subject.recalculateTopSiteData(for: 6)
         let data = subject.getTopSitesData()
@@ -186,7 +186,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1,
                                                                     duplicateFirstTile: true,
                                                                     pinnedDuplicateTile: true)
-        let subject =createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
+        let subject = createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
         subject.recalculateTopSiteData(for: 6)
 
         let data = subject.getTopSitesData()
@@ -200,7 +200,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
 
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1,
                                                                     duplicateFirstTile: true)
-        let subject =createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
+        let subject = createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
 
         subject.recalculateTopSiteData(for: 6)
 
@@ -216,7 +216,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 2,
                                                                     duplicateFirstTile: true,
                                                                     pinnedDuplicateTile: true)
-        let subject =createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
+        let subject = createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
 
         subject.recalculateTopSiteData(for: 6)
 
@@ -231,7 +231,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         featureFlags.set(feature: .sponsoredTiles, to: true)
 
         let expectedContileResult = ContileResult.success([])
-        let subject =createSubject(addPinnedSiteCount: 12, expectedContileResult: expectedContileResult)
+        let subject = createSubject(addPinnedSiteCount: 12, expectedContileResult: expectedContileResult)
 
         profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteAddedKey)
         profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
@@ -248,7 +248,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         featureFlags.set(feature: .sponsoredTiles, to: true)
 
         let expectedContileResult = ContileResult.success([])
-        let subject =createSubject(addPinnedSiteCount: 11, expectedContileResult: expectedContileResult)
+        let subject = createSubject(addPinnedSiteCount: 11, expectedContileResult: expectedContileResult)
 
         subject.recalculateTopSiteData(for: 6)
 
@@ -261,7 +261,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testSponsoredTileOrder_emptySites_addsAllContiles() {
         featureFlags.set(feature: .sponsoredTiles, to: true)
         let expectedContileResult = ContileResult.success(ContileProviderMock.defaultSuccessData)
-        let subject =createSubject(expectedContileResult: expectedContileResult)
+        let subject = createSubject(expectedContileResult: expectedContileResult)
 
         var sites: [Site] = []
         subject.addSponsoredTiles(sites: &sites, shouldAddGoogle: true, availableSpaceCount: 10)
@@ -274,7 +274,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testSponsoredTileOrder_emptySites_addsOneIfGoogleIsThere() {
         featureFlags.set(feature: .sponsoredTiles, to: true)
         let expectedContileResult = ContileResult.success(ContileProviderMock.defaultSuccessData)
-        let subject =createSubject(expectedContileResult: expectedContileResult)
+        let subject = createSubject(expectedContileResult: expectedContileResult)
 
         var sites: [Site] = []
         subject.addSponsoredTiles(sites: &sites, shouldAddGoogle: true, availableSpaceCount: 2)
@@ -286,7 +286,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testSponsoredTileOrder_withSites_addsAllContiles() {
         featureFlags.set(feature: .sponsoredTiles, to: true)
         let expectedContileResult = ContileResult.success(ContileProviderMock.defaultSuccessData)
-        let subject =createSubject(expectedContileResult: expectedContileResult)
+        let subject = createSubject(expectedContileResult: expectedContileResult)
 
         var sites: [Site] = [Site(url: "www.test.com", title: "A test"),
                              Site(url: "www.test2.com", title: "A test2")]
@@ -301,7 +301,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         featureFlags.set(feature: .sponsoredTiles, to: true)
 
         let expectedContileResult = ContileResult.success(ContileProviderMock.defaultSuccessData)
-        let subject =createSubject(expectedContileResult: expectedContileResult)
+        let subject = createSubject(expectedContileResult: expectedContileResult)
 
         var sites: [Site] = []
         subject.addSponsoredTiles(sites: &sites, shouldAddGoogle: false, availableSpaceCount: 2)
@@ -315,7 +315,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         featureFlags.set(feature: .sponsoredTiles, to: true)
 
         let expectedContileResult = ContileResult.success(ContileProviderMock.defaultSuccessData)
-        let subject =createSubject(expectedContileResult: expectedContileResult)
+        let subject = createSubject(expectedContileResult: expectedContileResult)
 
         var sites: [Site] = []
         subject.addSponsoredTiles(sites: &sites, shouldAddGoogle: true, availableSpaceCount: 2)
@@ -329,7 +329,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     // Sponsored > Frequency
     func testDuplicates_SponsoredTileHasPrecedenceOnFrequencyTiles() {
         featureFlags.set(feature: .sponsoredTiles, to: true)
-        let subject =createSubject(expectedContileResult: ContileResult.success([ContileProviderMock.duplicateTile]))
+        let subject = createSubject(expectedContileResult: ContileResult.success([ContileProviderMock.duplicateTile]))
 
         subject.recalculateTopSiteData(for: 6)
 
@@ -344,7 +344,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testDuplicates_PinnedTilesHasPrecedenceOnSponsoredTiles() {
         featureFlags.set(feature: .sponsoredTiles, to: true)
 
-        let subject =createSubject(addPinnedSiteCount: 1,
+        let subject = createSubject(addPinnedSiteCount: 1,
                                    expectedContileResult: ContileResult.success([ContileProviderMock.pinnedDuplicateTile]))
 
         subject.recalculateTopSiteData(for: 6)
@@ -361,7 +361,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testDuplicates_PinnedTilesHasPrecedenceOnFrequencyTiles() {
         featureFlags.set(feature: .sponsoredTiles, to: true)
         let expectedPinnedURL = String(format: ContileProviderMock.url, "0")
-        let subject =createSubject(addPinnedSiteCount: 1, siteCount: 3, duplicatePinnedSiteURL: true)
+        let subject = createSubject(addPinnedSiteCount: 1, siteCount: 3, duplicatePinnedSiteURL: true)
 
         subject.recalculateTopSiteData(for: 6)
 
@@ -388,7 +388,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     // Pinned vs another Pinned of same domain
     func testDuplicates_PinnedTilesOfSameDomainIsntDeduped() {
         featureFlags.set(feature: .sponsoredTiles, to: true)
-        let subject =createSubject(addPinnedSiteCount: 2, siteCount: 0)
+        let subject = createSubject(addPinnedSiteCount: 2, siteCount: 0)
 
         subject.recalculateTopSiteData(for: 6)
 

@@ -108,7 +108,7 @@ class DownloadHelperTests: XCTestCase {
     private func anyCachePolicy() -> URLRequest.CachePolicy {
         return .useProtocolCachePolicy
     }
-    
+
     private func allMIMETypes() -> [String] {
         return [MIMEType.Bitmap,
                 MIMEType.CSS,
