@@ -12,11 +12,11 @@ class WallpaperURLProviderTests: XCTestCase {
     let testURL = WallpaperURLProvider.testURL
 
     func testMetadataURL() {
-        let sut = WallpaperURLProvider()
-        let expectedURL = URL(string: "\(testURL)/metadata/\(sut.currentMetadataEndpoint)/wallpapers.json")
+        let subject = WallpaperURLProvider()
+        let expectedURL = URL(string: "\(testURL)/metadata/\(subject.currentMetadataEndpoint)/wallpapers.json")
 
         do {
-            let actualURL = try sut.url(for: .metadata)
+            let actualURL = try subject.url(for: .metadata)
             XCTAssertEqual(actualURL,
                            expectedURL,
                            "The metadata url builder is returning the wrong url.")
@@ -27,12 +27,12 @@ class WallpaperURLProviderTests: XCTestCase {
     }
 
     func testPathURL() {
-        let sut = WallpaperURLProvider()
+        let subject = WallpaperURLProvider()
         let path = "path/to/image"
         let expectedURL = URL(string: "\(testURL)/\(path).png")
 
         do {
-            let actualURL = try sut.url(for: .imageURL, withComponent: path)
+            let actualURL = try subject.url(for: .imageURL, withComponent: path)
             XCTAssertEqual(actualURL,
                            expectedURL,
                            "The image url builder is returning the wrong url.")

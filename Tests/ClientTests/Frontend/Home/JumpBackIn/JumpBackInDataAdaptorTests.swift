@@ -32,9 +32,9 @@ class JumpBackInDataAdaptorTests: XCTestCase {
 
     func testEmptyData_tabTrayGroupsDisabled() {
         FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
-        let sut = createSut()
-        let jumpBackIn = sut.getJumpBackInData()
-        let synced = sut.getSyncedTabData()
+        let subject = createSubject()
+        let jumpBackIn = subject.getJumpBackInData()
+        let synced = subject.getSyncedTabData()
 
         XCTAssertEqual(jumpBackIn.itemsToDisplay, 0)
         XCTAssertNil(synced)
@@ -48,10 +48,10 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
 
-        let sut = createSut()
-        sut.refreshData(maxItemToDisplay: 2)
+        let subject = createSubject()
+        subject.refreshData(maxItemToDisplay: 2)
 
-        let jumpBackIn = sut.getJumpBackInData()
+        let jumpBackIn = subject.getJumpBackInData()
         XCTAssertEqual(jumpBackIn.tabs.count, 2, "iPhone portrait has 2 tabs in it's jumpbackin layout")
         XCTAssertEqual(jumpBackIn.tabs[0], tab1)
         XCTAssertEqual(jumpBackIn.tabs[1], tab2)
@@ -64,10 +64,10 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1]
 
-        let sut = createSut()
-        sut.refreshData(maxItemToDisplay: 2)
+        let subject = createSubject()
+        subject.refreshData(maxItemToDisplay: 2)
 
-        let jumpBackIn = sut.getJumpBackInData()
+        let jumpBackIn = subject.getJumpBackInData()
         XCTAssertEqual(jumpBackIn.tabs.count, 1, "With a max of 2 items, only shows 1 item when only 1 is available")
         XCTAssertEqual(jumpBackIn.tabs[0], tab1)
     }
@@ -81,16 +81,16 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
 
-        let sut = createSut()
-        sut.refreshData(maxItemToDisplay: 1)
+        let subject = createSubject()
+        subject.refreshData(maxItemToDisplay: 1)
 
-        let jumpBackIn = sut.getJumpBackInData()
+        let jumpBackIn = subject.getJumpBackInData()
         XCTAssertEqual(jumpBackIn.tabs.count, 1, "iPhone portrait has 1 tab in it's jumpbackin layout")
         XCTAssertEqual(jumpBackIn.tabs[0], tab1)
         XCTAssertFalse(jumpBackIn.tabs.contains(tab2))
         XCTAssertFalse(jumpBackIn.tabs.contains(tab3))
 
-        let syncTab = sut.getSyncedTabData()
+        let syncTab = subject.getSyncedTabData()
         XCTAssertNotNil(syncTab, "iPhone portrait will show 1 sync tab")
     }
 
@@ -101,16 +101,16 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
 
-        let sut = createSut()
-        sut.refreshData(maxItemToDisplay: 4)
+        let subject = createSubject()
+        subject.refreshData(maxItemToDisplay: 4)
 
-        let jumpBackIn = sut.getJumpBackInData()
+        let jumpBackIn = subject.getJumpBackInData()
         XCTAssertEqual(jumpBackIn.tabs.count, 3, "iPhone landscape has 3 tabs in it's jumpbackin layout, up until 4")
         XCTAssertEqual(jumpBackIn.tabs[0], tab1)
         XCTAssertEqual(jumpBackIn.tabs[1], tab2)
         XCTAssertEqual(jumpBackIn.tabs[2], tab3)
 
-        let syncTab = sut.getSyncedTabData()
+        let syncTab = subject.getSyncedTabData()
         XCTAssertNil(syncTab)
     }
 
@@ -123,24 +123,24 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
                                                        tabs: remoteTabs(idRange: 1...3))]
 
-        let sut = createSut()
-        sut.refreshData(maxItemToDisplay: 2)
+        let subject = createSubject()
+        subject.refreshData(maxItemToDisplay: 2)
 
-        let jumpBackIn = sut.getJumpBackInData()
+        let jumpBackIn = subject.getJumpBackInData()
         XCTAssertEqual(jumpBackIn.tabs.count, 2, "iPhone landscape has 2 tabs in it's jumpbackin layout, up until 2")
         XCTAssertEqual(jumpBackIn.tabs[0], tab1)
         XCTAssertEqual(jumpBackIn.tabs[1], tab2)
         XCTAssertFalse(jumpBackIn.tabs.contains(tab3))
 
-        let syncTab = sut.getSyncedTabData()
+        let syncTab = subject.getSyncedTabData()
         XCTAssertNotNil(syncTab, "iPhone landscape will show 1 sync tab")
     }
 
     func testSyncTab_whenNoSyncTabsData_notReturned() {
         FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
-        let sut = createSut()
+        let subject = createSubject()
 
-        let syncTab = sut.getSyncedTabData()
+        let syncTab = subject.getSyncedTabData()
         XCTAssertNil(syncTab, "No sync tab since there's no remote tabs")
     }
 
@@ -150,9 +150,9 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
                                                        tabs: remoteTabs(idRange: 1...3))]
         FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
-        let sut = createSut()
+        let subject = createSubject()
 
-        let syncTab = sut.getSyncedTabData()
+        let syncTab = subject.getSyncedTabData()
         XCTAssertNil(syncTab, "No sync tab since hasSyncableAccount is off")
     }
 
@@ -160,9 +160,9 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         mockProfile.hasSyncableAccountMock = false
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs(idRange: 1...2))]
-        let sut = createSut()
+        let subject = createSubject()
 
-        let syncTab = sut.getSyncedTabData()
+        let syncTab = subject.getSyncedTabData()
         XCTAssertNil(syncTab, "No sync tab since there's no desktop client")
     }
 
@@ -172,9 +172,9 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         let remoteTabs = remoteTabs(idRange: 1...3)
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs)]
 
-        let sut = createSut()
+        let subject = createSubject()
 
-        let syncTab = sut.getSyncedTabData()
+        let syncTab = subject.getSyncedTabData()
         XCTAssertEqual(syncTab?.client.name, remoteClient.name)
         XCTAssertEqual(syncTab?.tab.title, remoteTabs.last?.title)
         XCTAssertEqual(syncTab?.tab.URL, remoteTabs.last?.URL)
@@ -185,11 +185,11 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         let remoteClient = remoteDesktopClient(name: "Fake Client 2")
         let remoteClientTabs = remoteTabs(idRange: 7...9)
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(), tabs: remoteTabs(idRange: 1...5)),
-                                     ClientAndTabs(client: remoteClient, tabs: remoteClientTabs)]
+                                         ClientAndTabs(client: remoteClient, tabs: remoteClientTabs)]
 
-        let sut = createSut()
+        let subject = createSubject()
 
-        let syncTab = sut.getSyncedTabData()
+        let syncTab = subject.getSyncedTabData()
         XCTAssertEqual(syncTab?.client.name, remoteClient.name)
         XCTAssertEqual(syncTab?.tab.title, remoteClientTabs.last?.title)
         XCTAssertEqual(syncTab?.tab.URL, remoteClientTabs.last?.URL)
@@ -199,26 +199,26 @@ class JumpBackInDataAdaptorTests: XCTestCase {
 // MARK: Helpers
 extension JumpBackInDataAdaptorTests {
 
-    func createSut(file: StaticString = #file, line: UInt = #line) -> JumpBackInDataAdaptorImplementation {
+    func createSubject(file: StaticString = #file, line: UInt = #line) -> JumpBackInDataAdaptorImplementation {
         let dispatchGroup = MockDispatchGroup()
         let dispatchQueue = MockDispatchQueue()
         let siteImageHelper = SiteImageHelperMock()
         let notificationCenter = SpyNotificationCenter()
 
-        let sut = JumpBackInDataAdaptorImplementation(profile: mockProfile,
-                                                      tabManager: mockTabManager,
-                                                      siteImageHelper: siteImageHelper,
-                                                      dispatchGroup: dispatchGroup,
-                                                      mainQueue: dispatchQueue,
-                                                      userInteractiveQueue: dispatchQueue,
-                                                      notificationCenter: notificationCenter)
+        let subject = JumpBackInDataAdaptorImplementation(profile: mockProfile,
+                                                          tabManager: mockTabManager,
+                                                          siteImageHelper: siteImageHelper,
+                                                          dispatchGroup: dispatchGroup,
+                                                          mainQueue: dispatchQueue,
+                                                          userInteractiveQueue: dispatchQueue,
+                                                          notificationCenter: notificationCenter)
 
-        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeaks(subject, file: file, line: line)
         trackForMemoryLeaks(siteImageHelper, file: file, line: line)
         trackForMemoryLeaks(dispatchGroup, file: file, line: line)
         trackForMemoryLeaks(dispatchQueue, file: file, line: line)
 
-        return sut
+        return subject
     }
 
     func createTab(profile: MockProfile,

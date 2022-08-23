@@ -8,7 +8,7 @@ import MozillaAppServices
 
 class HistoryHighlightsViewModelTests: XCTestCase {
 
-    private var sut: HistoryHighlightsViewModel!
+    private var subject: HistoryHighlightsViewModel!
     private var profile: MockProfile!
     private var tabManager: MockTabManager!
     private var dataAdaptor: MockHistoryHighlightsDataAdaptor!
@@ -34,7 +34,7 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         profile = nil
         tabManager = nil
         dataAdaptor = nil
-        sut = nil
+        subject = nil
         delegate = nil
         telemetry = nil
         urlBar = nil
@@ -44,9 +44,9 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         setupSubject()
         dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "mozilla")]
 
-        sut.didLoadNewData()
+        subject.didLoadNewData()
 
-        XCTAssertEqual(sut.getItemDetailsAt(index: 0)?.displayTitle, "mozilla")
+        XCTAssertEqual(subject.getItemDetailsAt(index: 0)?.displayTitle, "mozilla")
         XCTAssertEqual(delegate.reloadViewCallCount, 1)
     }
 
@@ -54,9 +54,9 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         setupSubject(isPrivate: true)
         dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "mozilla")]
 
-        sut.didLoadNewData()
+        subject.didLoadNewData()
 
-        XCTAssertEqual(sut.getItemDetailsAt(index: 0)?.displayTitle, "mozilla")
+        XCTAssertEqual(subject.getItemDetailsAt(index: 0)?.displayTitle, "mozilla")
         XCTAssertEqual(delegate.reloadViewCallCount, 0)
     }
 
@@ -66,10 +66,10 @@ class HistoryHighlightsViewModelTests: XCTestCase {
                                         getItemWithTitle(title: "two"),
                                         getItemWithTitle(title: "three")]
 
-        sut.didLoadNewData()
+        subject.didLoadNewData()
 
-        XCTAssertEqual(sut.numberOfColumns, 1)
-        XCTAssertEqual(sut.numberOfRows, 3)
+        XCTAssertEqual(subject.numberOfColumns, 1)
+        XCTAssertEqual(subject.numberOfRows, 3)
     }
 
     func testTwoColumns() {
@@ -79,10 +79,10 @@ class HistoryHighlightsViewModelTests: XCTestCase {
                                         getItemWithTitle(title: "three"),
                                         getItemWithTitle(title: "four")]
 
-        sut.didLoadNewData()
+        subject.didLoadNewData()
 
-        XCTAssertEqual(sut.numberOfColumns, 2)
-        XCTAssertEqual(sut.numberOfRows, 3)
+        XCTAssertEqual(subject.numberOfColumns, 2)
+        XCTAssertEqual(subject.numberOfRows, 3)
     }
 
     func testThreeColumns() {
@@ -95,16 +95,16 @@ class HistoryHighlightsViewModelTests: XCTestCase {
                                         getItemWithTitle(title: "six"),
                                         getItemWithTitle(title: "seven")]
 
-        sut.didLoadNewData()
+        subject.didLoadNewData()
 
-        XCTAssertEqual(sut.numberOfColumns, 3)
-        XCTAssertEqual(sut.numberOfRows, 3)
+        XCTAssertEqual(subject.numberOfColumns, 3)
+        XCTAssertEqual(subject.numberOfRows, 3)
     }
 
     func testRecordSectionHasShown() {
         setupSubject()
 
-        sut.recordSectionHasShown()
+        subject.recordSectionHasShown()
 
         XCTAssertEqual(telemetry.recordEventCallCount, 1)
         XCTAssertTrue(telemetry.recordedCategories.contains(.action))
@@ -115,8 +115,8 @@ class HistoryHighlightsViewModelTests: XCTestCase {
     func testRecordSectionHasShownOnlyOnce() {
         setupSubject()
 
-        sut.recordSectionHasShown()
-        sut.recordSectionHasShown()
+        subject.recordSectionHasShown()
+        subject.recordSectionHasShown()
 
         XCTAssertEqual(telemetry.recordEventCallCount, 1)
         XCTAssertTrue(telemetry.recordedCategories.contains(.action))
@@ -128,7 +128,7 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         setupSubject()
         urlBar.inOverlayMode = true
 
-        sut.switchTo(getItemWithTitle(title: "item"))
+        subject.switchTo(getItemWithTitle(title: "item"))
 
         XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 1)
         XCTAssertEqual(telemetry.recordEventCallCount, 1)
@@ -139,7 +139,7 @@ class HistoryHighlightsViewModelTests: XCTestCase {
 
     func testDelete() {
         setupSubject()
-        sut.delete(getItemWithTitle(title: "to-delete"))
+        subject.delete(getItemWithTitle(title: "to-delete"))
 
         XCTAssertEqual(dataAdaptor.deleteCallCount, 1)
     }
@@ -148,9 +148,9 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         setupSubject()
         dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one"),
                                         getItemWithTitle(title: "two")]
-        sut.didLoadNewData()
+        subject.didLoadNewData()
 
-        XCTAssertEqual(sut.numberOfItemsInSection(), 2)
+        XCTAssertEqual(subject.numberOfItemsInSection(), 2)
     }
 
     func testNumberOfItemsInSection2Column() {
@@ -159,9 +159,9 @@ class HistoryHighlightsViewModelTests: XCTestCase {
                                         getItemWithTitle(title: "two"),
                                         getItemWithTitle(title: "three"),
                                         getItemWithTitle(title: "four")]
-        sut.didLoadNewData()
+        subject.didLoadNewData()
 
-        XCTAssertEqual(sut.numberOfItemsInSection(), 6)
+        XCTAssertEqual(subject.numberOfItemsInSection(), 6)
     }
 
     func testNumberOfItemsInSection3Column() {
@@ -173,9 +173,9 @@ class HistoryHighlightsViewModelTests: XCTestCase {
                                         getItemWithTitle(title: "five"),
                                         getItemWithTitle(title: "six"),
                                         getItemWithTitle(title: "seven")]
-        sut.didLoadNewData()
+        subject.didLoadNewData()
 
-        XCTAssertEqual(sut.numberOfItemsInSection(), 9)
+        XCTAssertEqual(subject.numberOfItemsInSection(), 9)
     }
 
     func testConfigureFillerCell() {
@@ -184,8 +184,8 @@ class HistoryHighlightsViewModelTests: XCTestCase {
                                         getItemWithTitle(title: "two"),
                                         getItemWithTitle(title: "three"),
                                         getItemWithTitle(title: "four")]
-        sut.didLoadNewData()
-        let cell = sut.configure(HistoryHighlightsCell(), at: IndexPath(row: 5, section: 0)) as? HistoryHighlightsCell
+        subject.didLoadNewData()
+        let cell = subject.configure(HistoryHighlightsCell(), at: IndexPath(row: 5, section: 0)) as? HistoryHighlightsCell
 
         XCTAssertNotNil(cell)
         XCTAssertTrue(cell!.isFillerCell)
@@ -194,8 +194,8 @@ class HistoryHighlightsViewModelTests: XCTestCase {
     func testConfigureIndividualCell() {
         setupSubject()
         dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one")]
-        sut.didLoadNewData()
-        let cell = sut.configure(HistoryHighlightsCell(), at: IndexPath(row: 0, section: 0)) as? HistoryHighlightsCell
+        subject.didLoadNewData()
+        let cell = subject.configure(HistoryHighlightsCell(), at: IndexPath(row: 0, section: 0)) as? HistoryHighlightsCell
 
         XCTAssertNotNil(cell)
         XCTAssertFalse(cell!.isFillerCell)
@@ -208,8 +208,8 @@ class HistoryHighlightsViewModelTests: XCTestCase {
                            timestamp: 0)
 
         dataAdaptor.mockHistoryItems = [item]
-        sut.didLoadNewData()
-        let cell = sut.configure(HistoryHighlightsCell(), at: IndexPath(row: 0, section: 0)) as? HistoryHighlightsCell
+        subject.didLoadNewData()
+        let cell = subject.configure(HistoryHighlightsCell(), at: IndexPath(row: 0, section: 0)) as? HistoryHighlightsCell
 
         XCTAssertNotNil(cell)
         XCTAssertFalse(cell!.isFillerCell)
@@ -220,10 +220,10 @@ class HistoryHighlightsViewModelTests: XCTestCase {
     func testDidSelectItem() {
         setupSubject()
         dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one")]
-        sut.didLoadNewData()
-        sut.didSelectItem(at: IndexPath(row: 0, section: 0),
-                          homePanelDelegate: nil,
-                          libraryPanelDelegate: nil)
+        subject.didLoadNewData()
+        subject.didSelectItem(at: IndexPath(row: 0, section: 0),
+                              homePanelDelegate: nil,
+                              libraryPanelDelegate: nil)
 
         XCTAssertEqual(telemetry.recordEventCallCount, 1)
         XCTAssertTrue(telemetry.recordedCategories.contains(.action))
@@ -234,7 +234,7 @@ class HistoryHighlightsViewModelTests: XCTestCase {
     // MARK: - Helper methods
 
     private func setupSubject(isPrivate: Bool = false) {
-        sut = HistoryHighlightsViewModel(
+        subject = HistoryHighlightsViewModel(
             with: profile,
             isPrivate: isPrivate,
             tabManager: tabManager,
@@ -242,7 +242,7 @@ class HistoryHighlightsViewModelTests: XCTestCase {
             historyHighlightsDataAdaptor: dataAdaptor,
             dispatchQueue: MockDispatchQueue(),
             telemetry: telemetry)
-        sut.delegate = delegate
+        subject.delegate = delegate
     }
 
     private func getItemWithTitle(title: String) -> HighlightItem {
