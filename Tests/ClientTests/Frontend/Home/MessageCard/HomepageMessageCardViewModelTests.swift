@@ -10,6 +10,7 @@ class HomepageMessageCardViewModelTests: XCTestCase {
 
     private var adaptor: MockMessageCardDataAdaptor!
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
+    private var dismissClosureCalled = 0
 
     override func setUp() {
         super.setUp()
@@ -78,13 +79,14 @@ class HomepageMessageCardViewModelTests: XCTestCase {
         let subject = createSubject()
         subject.didLoadNewData()
         subject.dismissClosure = {
-            XCTAssert(true, "Dismiss closure is called")
+            self.dismissClosureCalled += 1
         }
 
         subject.handleMessagePressed()
         XCTAssertEqual(messageManager.onMessagePressedCalled, 1)
         XCTAssertEqual(messageManager.onMessageDisplayedCalled, 1, "Displayed through didLoadNewData, needs to be 1")
         XCTAssertEqual(messageManager.onMessageDismissedCalled, 0)
+        XCTAssertEqual(dismissClosureCalled, 1)
     }
 
     func testMessageDismiss() {
@@ -92,13 +94,14 @@ class HomepageMessageCardViewModelTests: XCTestCase {
         let subject = createSubject()
         subject.didLoadNewData()
         subject.dismissClosure = {
-            XCTAssert(true, "Dismiss closure is called")
+            self.dismissClosureCalled += 1
         }
 
         subject.handleMessageDismiss()
         XCTAssertEqual(messageManager.onMessageDismissedCalled, 1)
         XCTAssertEqual(messageManager.onMessageDisplayedCalled, 1, "Displayed through didLoadNewData, needs to be 1")
         XCTAssertEqual(messageManager.onMessagePressedCalled, 0)
+        XCTAssertEqual(dismissClosureCalled, 1)
     }
 
     func testConfigureCallsMethod() throws {
