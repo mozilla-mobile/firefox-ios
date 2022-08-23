@@ -364,9 +364,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Today and Yesterday";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Clearing Recent History will remove history, cookies, and other browser data.";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "Websites you’ve visited recently will show up here.";
 
@@ -539,9 +536,6 @@
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox blocks cross-site trackers, social trackers, cryptominers, fingerprinters, and tracking content.";
-
-/* Label for the button displayed in the menu used to stop the reload of the webpage */
-"Menu.Library.StopReload" = "Stop";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Paste";

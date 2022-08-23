@@ -9,8 +9,6 @@ import Foundation
  Strings with the following IDs may be removed after confirming with Product:
  - `ActivityStream.Pocket.SectionTitle`      --> replaced by `FirefoxHome.Pocket.SectionTitle`
  - `ActivityStream.Pocket.SectionTitle2`    --> replaced by `FirefoxHome.Pocket.SectionTitle`
- - All Strings marked under "unused" in AppMenu struct
- - "HistoryPanel.ClearHistoryMenuTitle" string
  */
 
 // MARK: - Localization bundle setup
@@ -1678,11 +1676,6 @@ extension String {
 
 // MARK: - Clear recent history action menu
 extension String {
-    public static let ClearHistoryMenuTitle = MZLocalizedString(
-        "HistoryPanel.ClearHistoryMenuTitle",
-        value: "Clearing Recent History will remove history, cookies, and other browser data.",
-        comment: "Title for popup action menu to clear recent history.",
-        lastUpdated: .unknown)
     public static let ClearHistoryMenuOptionTheLastHour = MZLocalizedString(
         "HistoryPanel.ClearHistoryMenuOptionTheLastHour",
         value: "The Last Hour",
@@ -2632,12 +2625,6 @@ extension String {
             value: "Copy Link",
             comment: "Label for the button, displayed in the menu, used to copy the current page link to the clipboard.",
             lastUpdated: .unknown)
-        public static let AppMenuAddBookmarkTitleString = MZLocalizedString(
-            "Menu.AddBookmarkAction.Title",
-            tableName: "Menu",
-            value: "Bookmark This Page",
-            comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.",
-            lastUpdated: .unknown)
         public static let AppMenuFindInPageTitleString = MZLocalizedString(
             "Menu.FindInPageAction.Title",
             tableName: "Menu",
@@ -2673,12 +2660,6 @@ extension String {
             tableName: "Menu",
             value: "Homepage",
             comment: "Label for the button, displayed in the menu, used to navigate to the home page.",
-            lastUpdated: .unknown)
-        public static let AppMenuTopSitesTitleString = MZLocalizedString(
-            "Menu.OpenTopSitesAction.AccessibilityLabel",
-            tableName: "Menu",
-            value: "Top Sites",
-            comment: "Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel.",
             lastUpdated: .unknown)
         public static let AppMenuBookmarksTitleString = MZLocalizedString(
             "Menu.OpenBookmarksAction.AccessibilityLabel.v2",
@@ -2912,60 +2893,6 @@ extension String {
                 comment: "Label for preview action on Tab Tray Tab to send the current link to another device",
                 lastUpdated: .unknown)
         }
-
-        // Unused
-        public static let AppMenuLibraryReloadString = MZLocalizedString(
-            "Menu.Library.Reload",
-            tableName: "Menu",
-            value: "Reload",
-            comment: "Label for the button, displayed in the menu, used to Reload the webpage",
-            lastUpdated: .unknown)
-        public static let AppMenuRecentlySavedTitle = MZLocalizedString(
-            "Menu.RecentlySaved.Title",
-            tableName: "Menu",
-            value: "Recently Saved",
-            comment: "A string used to signify the start of the Recently Saved section in Home Screen.",
-            lastUpdated: .unknown)
-        public static let AppMenuShowTabsTitleString = MZLocalizedString(
-            "Menu.ShowTabs.Title",
-            tableName: "Menu",
-            value: "Show Tabs",
-            comment: "Label for the button, displayed in the menu, used to open the tabs tray",
-            lastUpdated: .unknown)
-        public static let AppMenuCopyURLTitleString = MZLocalizedString(
-            "Menu.CopyAddress.Title",
-            tableName: "Menu",
-            value: "Copy Address",
-            comment: "Label for the button, displayed in the menu, used to copy the page url to the clipboard.",
-            lastUpdated: .unknown)
-        public static let AppMenuTranslatePageTitleString = MZLocalizedString(
-            "Menu.TranslatePageAction.Title",
-            tableName: "Menu",
-            value: "Translate Page",
-            comment: "Label for the button, displayed in the menu, used to translate the current page.",
-            lastUpdated: .unknown)
-        public static let AppMenuScanQRCodeTitleString = MZLocalizedString(
-            "Menu.ScanQRCodeAction.Title",
-            tableName: "Menu",
-            value: "Scan QR Code",
-            comment: "Label for the button, displayed in the menu, used to open the QR code scanner.",
-            lastUpdated: .unknown)
-        public static let AppMenuShowPageSourceString = MZLocalizedString(
-            "Menu.PageSourceAction.Title",
-            tableName: "Menu",
-            value: "View Page Source",
-            comment: "Label for the button, displayed in the menu, used to show the html page source",
-            lastUpdated: .unknown)
-        public static let AppMenuShowImageMode = MZLocalizedString(
-            "Menu.NoImageModeShowImages.Label",
-            value: "Show Images",
-            comment: "Label for the button, displayed in the menu, shows images on the webpage when pressed.",
-            lastUpdated: .unknown)
-        public static let StopReloadPageTitle = MZLocalizedString(
-            "Menu.Library.StopReload",
-            value: "Stop",
-            comment: "Label for the button displayed in the menu used to stop the reload of the webpage",
-            lastUpdated: .unknown)
     }
 }
 
