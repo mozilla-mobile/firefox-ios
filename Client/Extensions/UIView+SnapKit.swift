@@ -8,6 +8,6 @@ import SnapKit
 extension UIView {
 
     var safeArea: ConstraintBasicAttributesDSL {
-        return self.safeAreaLayoutGuide.snp
+        return safeAreaLayoutGuide.snp
     }
 }

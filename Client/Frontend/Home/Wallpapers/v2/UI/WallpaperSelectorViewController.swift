@@ -4,7 +4,7 @@
 
 import UIKit
 
-class WallpaperSelectorViewController: UIViewController {
+class WallpaperSelectorViewController: UIViewController, Loggable {
 
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
@@ -142,7 +142,7 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
                 case .success:
                     self?.collectionView.reloadData()
                 case .failure(let error):
-                    print(error.localizedDescription)
+                    self?.browserLog.info(error.localizedDescription)
                 }
             }
         }

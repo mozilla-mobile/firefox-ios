@@ -68,17 +68,13 @@ extension UIView {
         ])
     }
 
-    /*
-     * Performs a deep copy of the view. Does not copy constraints.
-     */
+    /// Performs a deep copy of the view. Does not copy constraints.
     @objc func clone() -> UIView {
         let data = NSKeyedArchiver.archivedData(withRootObject: self)
         return NSKeyedUnarchiver.unarchiveObject(with: data) as! UIView
     }
 
-    /**
-     * Rounds the requested corners of a view with the provided radius.
-     */
+    /// Rounds the requested corners of a view with the provided radius.
     func addRoundedCorners(_ cornersToRound: UIRectCorner, radius: CGFloat) {
         let maskPath = UIBezierPath(roundedRect: bounds,
                                     byRoundingCorners: cornersToRound,

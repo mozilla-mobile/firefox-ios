@@ -34,9 +34,7 @@ class WallpaperManagerMock: WallpaperManagerInterface {
 
     func fetch(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void) {
         fetchCallCount += 1
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            completion(self.fetchResult)
-        }
+        completion(fetchResult)
     }
 
     func removeDownloadedAssets() {
