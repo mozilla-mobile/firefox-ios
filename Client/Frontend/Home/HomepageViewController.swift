@@ -108,7 +108,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         super.viewDidAppear(animated)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            // display wallpaper UI for now (temporary)
             self?.displayWallpaperSelector()
         }
     }
@@ -299,24 +298,27 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
 
     private func displayWallpaperSelector() {
-        guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-              wallpaperVersion == .v2,
-              featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly)
+        let wallpaperManager = WallpaperManager()
+        guard wallpaperManager.canOnboardingBeShown,
+              !contextualHintViewController.isPresenting,
+              !UserDefaults.standard.bool(forKey: PrefsKeys.WallpaperOnboardingSeenKey)
         else { return }
 
         self.dismissKeyboard()
 
-        let viewModel = WallpaperSelectorViewModel(wallpaperManager: WallpaperManager(), openSettingsAction: {
+        let viewModel = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager, openSettingsAction: {
             self.homePanelDidRequestToOpenSettings(at: .wallpaper)
         })
         let viewController = WallpaperSelectorViewController(viewModel: viewModel)
-        let bottomSheetViewModel = BottomSheetViewModel()
+        var bottomSheetViewModel = BottomSheetViewModel()
+        bottomSheetViewModel.shouldDismissForTapOutside = false
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
             childViewController: viewController
         )
 
         self.present(bottomSheetVC, animated: false, completion: nil)
+        UserDefaults.standard.set(true, forKey: PrefsKeys.WallpaperOnboardingSeenKey)
     }
 
     // MARK: - Contextual hint

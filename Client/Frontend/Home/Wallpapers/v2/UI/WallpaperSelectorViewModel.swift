@@ -4,6 +4,15 @@
 
 import Foundation
 
+private struct WallpaperSelectorItem {
+    let wallpaper: Wallpaper
+    let collection: WallpaperCollection
+}
+
+public enum WallpaperSelectorError: Error {
+    case itemNotFound
+}
+
 class WallpaperSelectorViewModel {
 
     enum WallpaperSelectorLayout: Equatable {
@@ -36,9 +45,13 @@ class WallpaperSelectorViewModel {
     }
 
     private var wallpaperManager: WallpaperManagerInterface
+    private var wallpaperItems = [WallpaperSelectorItem]()
     var openSettingsAction: (() -> Void)
     var sectionLayout: WallpaperSelectorLayout = .compact // We use the compact layout as default
-    var wallpaperCellModels = [WallpaperCellViewModel]()
+
+    var numberOfWallpapers: Int {
+        return wallpaperItems.count
+    }
 
     init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(), openSettingsAction: @escaping (() -> Void)) {
         self.wallpaperManager = wallpaperManager
@@ -54,37 +67,92 @@ class WallpaperSelectorViewModel {
         }
         setupWallpapers()
     }
+
+    func cellViewModel(for indexPath: IndexPath) -> WallpaperCellViewModel? {
+        guard let wallpaperItem = wallpaperItems[safe: indexPath.row] else {
+            return nil
+        }
+        return cellViewModel(for: wallpaperItem.wallpaper,
+                             collectionType: wallpaperItem.collection.type,
+                             number: indexPath.row)
+    }
+
+    func downloadAndSetWallpaper(at indexPath: IndexPath, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let wallpaperItem = wallpaperItems[safe: indexPath.row] else {
+            completion(.failure(WallpaperSelectorError.itemNotFound))
+            return
+        }
+
+        let wallpaper = wallpaperItem.wallpaper
+
+        let setWallpaperBlock = { [weak self] in
+            self?.updateCurrentWallpaper(for: wallpaperItem) { result in
+                completion(result)
+            }
+        }
+
+        if wallpaper.needsToFetchResources {
+            wallpaperManager.fetch(wallpaper) { result in
+                switch result {
+                case .success:
+                    setWallpaperBlock()
+                case .failure:
+                    completion(result)
+                }
+            }
+        } else {
+            setWallpaperBlock()
+        }
+    }
+
+    func sendImpressionTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .onboardingWallpaperSelector,
+                                     value: nil,
+                                     extras: nil)
+    }
+
+    func sendDismissImpressionTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .onboardingWallpaperSelector,
+                                     value: nil,
+                                     extras: nil)
+    }
 }
+
 private extension WallpaperSelectorViewModel {
 
     func setupWallpapers() {
-        wallpaperCellModels = []
+        wallpaperItems = []
         let classicCollection = wallpaperManager.availableCollections.first { $0.type == .classic }
         let seasonalCollection = wallpaperManager.availableCollections.first { $0.type == .limitedEdition }
 
-        let seasonalCellModels = createCellModels(for: seasonalCollection,
+        let seasonalItems = collectWallpaperItems(for: seasonalCollection,
                                                   maxNumber: sectionLayout.maxNumberOfSeasonalItems)
 
-        let maxNumberOfClassic = sectionLayout.maxItemsToDisplay - seasonalCellModels.count
-        let classicCellModels = createCellModels(for: classicCollection,
+        let maxNumberOfClassic = sectionLayout.maxItemsToDisplay - seasonalItems.count
+        let classicItems = collectWallpaperItems(for: classicCollection,
                                                  maxNumber: maxNumberOfClassic)
 
-        wallpaperCellModels.append(contentsOf: classicCellModels)
-        wallpaperCellModels.append(contentsOf: seasonalCellModels)
+        wallpaperItems.append(contentsOf: classicItems)
+        wallpaperItems.append(contentsOf: seasonalItems)
     }
 
-    func createCellModels(for collection: WallpaperCollection?, maxNumber: Int) -> [WallpaperCellViewModel] {
+    func collectWallpaperItems(for collection: WallpaperCollection?, maxNumber: Int) -> [WallpaperSelectorItem] {
         guard let collection = collection else { return [] }
 
-        var cellModels = [WallpaperCellViewModel]()
-        for (index, wallpaper) in collection.wallpapers.enumerated() {
-            if cellModels.count < maxNumber {
-                cellModels.append(cellViewModel(for: wallpaper,
-                                                collectionType: collection.type,
-                                                number: index + 1))
+        var wallpapers = [WallpaperSelectorItem]()
+        for wallpaper in collection.wallpapers {
+            if wallpapers.count < maxNumber {
+                wallpapers.append(WallpaperSelectorItem(wallpaper: wallpaper,
+                                                        collection: collection))
+            } else {
+                break
             }
         }
-        return cellModels
+        return wallpapers
     }
 
     func cellViewModel(for wallpaper: Wallpaper,
@@ -106,5 +174,45 @@ private extension WallpaperSelectorViewModel {
                                                    a11yLabel: a11yLabel,
                                                    isSelected: wallpaperManager.currentWallpaper == wallpaper)
         return cellViewModel
+    }
+
+    func updateCurrentWallpaper(for wallpaperItem: WallpaperSelectorItem,
+                                completion: @escaping (Result<Void, Error>) -> Void) {
+        wallpaperManager.setCurrentWallpaper(to: wallpaperItem.wallpaper) { [weak self] result in
+            self?.setupWallpapers()
+
+            guard let extra = self?.telemetryMetadata(for: wallpaperItem) else {
+                completion(result)
+                return
+            }
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .onboardingWallpaperSelector,
+                                         value: .wallpaperSelected,
+                                         extras: extra)
+
+           completion(result)
+        }
+    }
+
+    func telemetryMetadata(for item: WallpaperSelectorItem) -> [String: String] {
+        var metadata = [String: String]()
+
+        metadata[TelemetryWrapper.EventExtraKey.wallpaperName.rawValue] = item.wallpaper.id
+
+        let wallpaperTypeKey = TelemetryWrapper.EventExtraKey.wallpaperType.rawValue
+        switch item.wallpaper.type {
+        case .defaultWallpaper:
+            metadata[wallpaperTypeKey] = "default"
+        case .other:
+            switch item.collection.type {
+            case .classic:
+                metadata[wallpaperTypeKey] = item.collection.type.rawValue
+            case .limitedEdition:
+                metadata[wallpaperTypeKey] = item.collection.id
+            }
+        }
+
+        return metadata
     }
 }

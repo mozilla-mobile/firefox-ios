@@ -4,6 +4,11 @@
 
 import Foundation
 
+enum WallpaperType: String {
+    case defaultWallpaper
+    case other
+}
+
 /// A single wallpaper instance.
 struct Wallpaper: Equatable {
     enum CodingKeys: String, CodingKey {
@@ -14,21 +19,30 @@ struct Wallpaper: Equatable {
     let id: String
     let textColour: UIColor
 
+    var type: WallpaperType {
+        return id == "fxDefault" ? .defaultWallpaper : .other
+    }
+
+    var needsToFetchResources: Bool {
+        guard type != .defaultWallpaper else { return false }
+        return portrait == nil || landscape == nil
+    }
+
     // TODO: This following properties will need to be replaced with fetching the
     // resource from the local folder once that functionality is in. For now, we're
     // just returning an existing image to enable development of UI related work.
     var thumbnail: UIImage? {
-        guard id != "fxDefault" else { return nil } // default/empty wallpaper
+        guard type == .other else { return nil } // default/empty wallpaper
         return UIImage(imageLiteralResourceName: "\(id)")
     }
 
     var portrait: UIImage? {
-        guard id != "fxDefault" else { return nil } // default/empty wallpaper
+        guard type == .other else { return nil } // default/empty wallpaper
         return UIImage(imageLiteralResourceName: "\(id)")
     }
 
     var landscape: UIImage? {
-        guard id != "fxDefault" else { return nil } // default/empty wallpaper
+        guard type == .other else { return nil } // default/empty wallpaper
         return UIImage(imageLiteralResourceName: "\(id)_ls")
     }
 }
