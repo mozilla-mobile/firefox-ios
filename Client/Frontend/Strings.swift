@@ -1429,11 +1429,6 @@ extension String {
         value: "Current Homepage",
         comment: "Title of the setting section containing the URL of the current home page.",
         lastUpdated: .unknown)
-    public static let SettingsHomePageUseCurrentPage = MZLocalizedString(
-        "Settings.HomePage.UseCurrent.Button",
-        value: "Use Current Page",
-        comment: "Button in settings to use the current page as home page.",
-        lastUpdated: .unknown)
     public static let ReopenLastTabAlertTitle = MZLocalizedString(
         "ReopenAlert.Title",
         value: "Reopen Last Closed Tab",
@@ -1487,11 +1482,6 @@ extension String {
         "Settings.DataManagement.SearchLabel",
         value: "Filter Sites",
         comment: "Default text in search bar for Data Management",
-        lastUpdated: .unknown)
-    public static let SettingsClearPrivateDataTitle = MZLocalizedString(
-        "Settings.ClearPrivateData.Title",
-        value: "Clear Private Data",
-        comment: "Title displayed in header of the setting panel.",
         lastUpdated: .unknown)
     public static let SettingsDataManagementTitle = MZLocalizedString(
         "Settings.DataManagement.Title",
@@ -1923,21 +1913,6 @@ extension String {
         value: "Firefox Account",
         comment: "Settings section title for Firefox Account",
         lastUpdated: .unknown)
-    public static let FxATakeYourWebWithYou = MZLocalizedString(
-        "FxA.TakeYourWebWithYou",
-        value: "Take Your Web With You",
-        comment: "Call to action for sign into sync button",
-        lastUpdated: .unknown)
-    public static let FxAAccountVerificationRequired = MZLocalizedString(
-        "FxA.AccountVerificationRequired",
-        value: "Account Verification Required",
-        comment: "Label stating your account is not verified",
-        lastUpdated: .unknown)
-    public static let FxAAccountVerificationDetails = MZLocalizedString(
-        "FxA.AccountVerificationDetails",
-        value: "Wrong email? Disconnect below to start over.",
-        comment: "Label stating how to disconnect account",
-        lastUpdated: .unknown)
     public static let FxAManageAccount = MZLocalizedString(
         "FxA.ManageAccount",
         value: "Manage Account & Devices",
@@ -1968,53 +1943,10 @@ extension String {
         value: "Device Name",
         comment: "Label used for the device name settings section.",
         lastUpdated: .unknown)
-    public static let FxAOpenSyncPreferences = MZLocalizedString(
-        "FxA.OpenSyncPreferences",
-        value: "Open Sync Preferences",
-        comment: "Button label to open Sync preferences",
-        lastUpdated: .unknown)
-    public static let FxAConnectAnotherDevice = MZLocalizedString(
-        "FxA.ConnectAnotherDevice",
-        value: "Connect Another Device",
-        comment: "Button label to connect another device to Sync",
-        lastUpdated: .unknown)
-    public static let FxARemoveAccountButton = MZLocalizedString(
-        "FxA.RemoveAccount",
-        value: "Remove",
-        comment: "Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account.",
-        lastUpdated: .unknown)
-    public static let FxARemoveAccountAlertTitle = MZLocalizedString(
-        "FxA.RemoveAccountAlertTitle",
-        value: "Remove Account",
-        comment: "Remove account alert is the final confirmation before user removes their firefox account",
-        lastUpdated: .unknown)
-    public static let FxARemoveAccountAlertMessage = MZLocalizedString(
-        "FxA.RemoveAccountAlertMessage",
-        value: "Remove the Firefox Account associated with this device to sign in as a different user.",
-        comment: "Description string for alert view that gets presented when user tries to remove an account.",
-        lastUpdated: .unknown)
 
     // Surface error strings
-    public static let FxAAccountVerificationRequiredSurface = MZLocalizedString(
-        "FxA.AccountVerificationRequiredSurface",
-        value: "You need to verify %@. Check your email for the verification link from Firefox.",
-        comment: "Message explaining that user needs to check email for Firefox Account verfication link.",
-        lastUpdated: .unknown)
-    public static let FxAResendEmail = MZLocalizedString(
-        "FxA.ResendEmail",
-        value: "Resend Email",
-        comment: "Button label to resend email",
-        lastUpdated: .unknown)
-    public static let FxAAccountVerifyEmail = MZLocalizedString(
-        "Verify your email address",
-        comment: "Text message in the settings table view",
-        lastUpdated: .unknown)
     public static let FxAAccountVerifyPassword = MZLocalizedString(
         "Enter your password to connect",
-        comment: "Text message in the settings table view",
-        lastUpdated: .unknown)
-    public static let FxAAccountUpgradeFirefox = MZLocalizedString(
-        "Upgrade Firefox to connect",
         comment: "Text message in the settings table view",
         lastUpdated: .unknown)
 }
@@ -3308,32 +3240,6 @@ extension String {
 
 // MARK: - Nimbus settings
 extension String {
-    public static let SettingsStudiesTitle = MZLocalizedString(
-        "Settings.Studies.Title",
-        value: "Studies",
-        comment: "Label used as an item in Settings. Tapping on this item takes you to the Studies panel",
-        lastUpdated: .unknown)
-    public static let SettingsStudiesSectionName = MZLocalizedString(
-        "Settings.Studies.SectionName",
-        value: "Studies",
-        comment: "Title displayed in header of the Studies panel",
-        lastUpdated: .unknown)
-    public static let SettingsStudiesActiveSectionTitle = MZLocalizedString(
-        "Settings.Studies.Active.SectionName",
-        value: "Active",
-        comment: "Section title for all studies that are currently active",
-        lastUpdated: .unknown)
-    public static let SettingsStudiesCompletedSectionTitle = MZLocalizedString(
-        "Settings.Studies.Completed.SectionName",
-        value: "Completed",
-        comment: "Section title for all studies that are completed",
-        lastUpdated: .unknown)
-    public static let SettingsStudiesRemoveButton = MZLocalizedString(
-        "Settings.Studies.Remove.Button",
-        value: "Remove",
-        comment: "Button title displayed next to each study allowing the user to opt-out of the study",
-        lastUpdated: .unknown)
-
     public static let SettingsStudiesToggleTitle = MZLocalizedString(
         "Settings.Studies.Toggle.Title",
         value: "Studies",
@@ -3348,36 +3254,6 @@ extension String {
         "Settings.Studies.Toggle.Message",
         value: "Firefox may install and run studies from time to time.",
         comment: "A short description that explains that Mozilla is running studies",
-        lastUpdated: .unknown)
-
-    public static let SettingsStudiesToggleValueOn = MZLocalizedString(
-        "Settings.Studies.Toggle.On",
-        value: "On",
-        comment: "Toggled ON to participate in studies",
-        lastUpdated: .unknown)
-    public static let SettingsStudiesToggleValueOff = MZLocalizedString(
-        "Settings.Studies.Toggle.Off",
-        value: "Off",
-        comment: "Toggled OFF to opt-out of studies",
-        lastUpdated: .unknown)
-}
-
-// MARK: - Do not track
-extension String {
-    public static let SettingsDoNotTrackTitle = MZLocalizedString(
-        "Settings.DNT.Title",
-        value: "Send websites a Do Not Track signal that you don’t want to be tracked",
-        comment: "DNT Settings title",
-        lastUpdated: .unknown)
-    public static let SettingsDoNotTrackOptionOnWithTP = MZLocalizedString(
-        "Settings.DNT.OptionOnWithTP",
-        value: "Only when using Tracking Protection",
-        comment: "DNT Settings option for only turning on when Tracking Protection is also on",
-        lastUpdated: .unknown)
-    public static let SettingsDoNotTrackOptionAlwaysOn = MZLocalizedString(
-        "Settings.DNT.OptionAlwaysOn",
-        value: "Always",
-        comment: "DNT Settings option for always on",
         lastUpdated: .unknown)
 }
 
@@ -3679,32 +3555,6 @@ extension String {
         value: "No",
         comment: "Button to disallow the page to be translated to the user locale language",
         lastUpdated: .unknown)
-
-    public static let SettingTranslateSnackBarSectionHeader = MZLocalizedString(
-        "Settings.TranslateSnackBar.SectionHeader",
-        value: "Services",
-        comment: "Translation settings section title",
-        lastUpdated: .unknown)
-    public static let SettingTranslateSnackBarSectionFooter = MZLocalizedString(
-        "Settings.TranslateSnackBar.SectionFooter",
-        value: "The web page language is detected on the device, and a translation from a remote service is offered.",
-        comment: "Translation settings footer describing how language detection and translation happens.",
-        lastUpdated: .unknown)
-    public static let SettingTranslateSnackBarTitle = MZLocalizedString(
-        "Settings.TranslateSnackBar.Title",
-        value: "Translation",
-        comment: "Title in main app settings for Translation toast settings",
-        lastUpdated: .unknown)
-    public static let SettingTranslateSnackBarSwitchTitle = MZLocalizedString(
-        "Settings.TranslateSnackBar.SwitchTitle",
-        value: "Offer Translation",
-        comment: "Switch to choose if the language of a page is detected and offer to translate.",
-        lastUpdated: .unknown)
-    public static let SettingTranslateSnackBarSwitchSubtitle = MZLocalizedString(
-        "Settings.TranslateSnackBar.SwitchSubtitle",
-        value: "Offer to translate any site written in a language that is different from your default language.",
-        comment: "Switch to choose if the language of a page is detected and offer to translate.",
-        lastUpdated: .unknown)
 }
 
 // MARK: - Display Theme
@@ -3847,16 +3697,6 @@ extension String {
         "fxa.signin.use-email-instead",
         value: "Use Email Instead",
         comment: "FxA sign in view email login button",
-        lastUpdated: .unknown)
-    public static let FxASignin_CreateAccountPt1 = MZLocalizedString(
-        "fxa.signin.create-account-pt-1",
-        value: "Sync Firefox between devices with an account.",
-        comment: "FxA sign in create account label.",
-        lastUpdated: .unknown)
-    public static let FxASignin_CreateAccountPt2 = MZLocalizedString(
-        "fxa.signin.create-account-pt-2",
-        value: "Create Firefox account.",
-        comment: "FxA sign in create account label. This will be linked to the site to create an account.",
         lastUpdated: .unknown)
 }
 

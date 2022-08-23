@@ -310,18 +310,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Forward";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Wrong email? Disconnect below to start over.";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "Account Verification Required";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "You need to verify %@. Check your email for the verification link from Firefox.";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Connect Another Device";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Firefox Account";
 
@@ -331,26 +319,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "No Internet Connection";
 
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Open Sync Preferences";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "Remove";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Remove the Firefox Account associated with this device to sign in as a different user.";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "Remove Account";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "Resend Email";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Sync Now";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "Take Your Web With You";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Firefox Sync has connected to %@";
@@ -913,20 +883,8 @@
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Clear Private Data";
 
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Clear Private Data";
-
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Copied to clipboard";
-
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "Always";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Only when using Tracking Protection";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "Send websites a Do Not Track signal that you don’t want to be tracked";
 
 /* Default text in search bar for Data Management */
 "Settings.DataManagement.SearchLabel" = "Filter Sites";
@@ -1133,21 +1091,6 @@
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Enhanced Tracking Protection";
 
-/* Translation settings footer describing how language detection and translation happens. */
-"Settings.TranslateSnackBar.SectionFooter" = "The web page language is detected on the device, and a translation from a remote service is offered.";
-
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "Services";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchSubtitle" = "Offer to translate any site written in a language that is different from your default language.";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchTitle" = "Offer Translation";
-
-/* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "Translation";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Troubleshoot";
 
@@ -1326,17 +1269,11 @@
 /* Search in New Tab Text selection menu item */
 "UIMenuItem.SearchWithFirefox" = "Search with Firefox";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Upgrade Firefox to connect";
-
 /* Debug option */
 "Use stage servers" = "Use stage servers";
 
 /* Username textbox in Authentication prompt */
 "Username" = "Username";
-
-/* Text message in the settings table view */
-"Verify your email address" = "Verify your email address";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Web content";
@@ -1367,12 +1304,6 @@
 
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "Sign In with Your Camera";
-
-/* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "Sync Firefox between devices with an account.";
-
-/* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Create Firefox account.";
 
 /* FxA sign in view qr code instructions */
 "fxa.signin.qr-link-instruction" = "On your computer open Firefox and go to firefox.com/pair";
