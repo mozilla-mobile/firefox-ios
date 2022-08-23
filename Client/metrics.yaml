@@ -555,9 +555,9 @@ onboarding:
     description: |
       Recorded when the wallpaper onboarding bottom sheet is shown to the user.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11675
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11675
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-02-01"
@@ -567,9 +567,9 @@ onboarding:
       Recorded when the wallpaper onboarding bottom sheet
       is dismissed by the user.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11675
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11675
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-02-01"
@@ -589,9 +589,9 @@ onboarding:
         description: |
           The name of the wallpaper set.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11675
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11675
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-02-01"
