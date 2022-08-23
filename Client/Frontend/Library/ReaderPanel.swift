@@ -353,7 +353,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         let deleteAction = UIContextualAction(style: .destructive,
                                               title: .ReaderPanelRemove) { [weak self] (_, _, completion) in
             guard let strongSelf = self else { completion(false); return }
-            
+
             strongSelf.deleteItem(atIndex: indexPath)
             completion(true)
         }
