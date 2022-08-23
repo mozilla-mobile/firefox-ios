@@ -80,7 +80,6 @@ class WallpaperSelectorViewModel {
         }
 
         let wallpaper = wallpaperItem.wallpaper
-        let needsDownload = wallpaper.type == .other && wallpaper.landscape == nil
 
         let setWallpaperBlock = { [weak self] in
             self?.updateCurrentWallpaper(at: indexPath) { result in
@@ -88,7 +87,7 @@ class WallpaperSelectorViewModel {
             }
         }
 
-        if needsDownload {
+        if wallpaper.needsToFetchResources {
             wallpaperManager.fetch(wallpaper) { result in
                 switch result {
                 case .success(let success):

@@ -23,6 +23,11 @@ struct Wallpaper: Equatable {
         return id == "fxDefault" ? .defaultWallpaper : .other
     }
 
+    var needsToFetchResources: Bool {
+        guard type == .defaultWallpaper else { return false }
+        return portrait == nil || landscape == nil
+    }
+
     // TODO: This following properties will need to be replaced with fetching the
     // resource from the local folder once that functionality is in. For now, we're
     // just returning an existing image to enable development of UI related work.
