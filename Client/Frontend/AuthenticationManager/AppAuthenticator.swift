@@ -24,7 +24,7 @@ class AppAuthenticator {
         // First check if we have the needed hardware support.
         var error: NSError?
         if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
-            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: .Settings.Passwords.AuthenticationLoginsTouchReason) { success, error in
+            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: .Settings.Passwords.FingerPrintReason) { success, error in
                 if success {
                     DispatchQueue.main.async {
                         completion(.success(()))
