@@ -41,7 +41,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     private var syncedDeviceIconFirstBaselineConstraint: NSLayoutConstraint?
     private var contextualHintViewController: ContextualHintViewController!
     private var syncedDeviceIconCenterConstraint: NSLayoutConstraint?
-    private var showAllSyncedTabsAction: ((UIButton) -> Void)?
+    private var showAllSyncedTabsAction: (() -> Void)?
     private var itemTitleTopConstraint: NSLayoutConstraint!
     private var openSyncedTabAction: (() -> Void)?
 
@@ -164,7 +164,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     // MARK: - Helpers
 
     func configure(viewModel: SyncedTabCellViewModel,
-                   onTapShowAllAction: ((UIButton) -> Void)?,
+                   onTapShowAllAction: (() -> Void)?,
                    onOpenSyncedTabAction: ((URL) -> Void)?) {
         itemTitle.text = viewModel.titleText
         descriptionLabel.text = viewModel.descriptionText
@@ -196,11 +196,11 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         adjustLayout()
     }
 
-    @objc func showAllSyncedTabs(sender: UIButton) {
-        showAllSyncedTabsAction?(sender)
+    @objc func showAllSyncedTabs(_ sender: Any) {
+        showAllSyncedTabsAction?()
     }
 
-    @objc func didTapSyncedTab(_ sender: UITapGestureRecognizer) {
+    @objc func didTapSyncedTab(_ sender: Any) {
         openSyncedTabAction?()
     }
 
