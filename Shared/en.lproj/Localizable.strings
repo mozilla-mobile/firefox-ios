@@ -16,20 +16,8 @@
 /* About settings section title */
 "About" = "About";
 
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "Recent Bookmarks";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "More";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "Trending on Pocket";
-
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Recently Visited";
-
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "Rows: %d";
 
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Set Rows";
@@ -185,12 +173,6 @@
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Could not load page.";
 
-/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "For iOS 13 users, Firefox now automatically switches to a dark theme when your phone is set to Dark Mode. To change this behavior, go to Settings > Theme.";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "Dark theme now includes a dark keyboard and dark splash screen.";
-
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "Built-in Enhanced Tracking Protection helps stop ads from following you around. Turn on Strict to block even more trackers, ads, and popups. ";
 
@@ -246,9 +228,6 @@
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "Download Failed";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "Retry";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Downloads";
@@ -373,12 +352,6 @@
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Sign in to view a list of tabs from your other devices.";
 
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Your account needs to be verified.";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Turn on tab syncing to view a list of tabs from your other devices.";
-
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
 
@@ -447,9 +420,6 @@
 
 /* History tableview section header */
 "Last month" = "Last month";
-
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Last synced: %@";
 
 /* History tableview section header */
 "Last week" = "Last week";
@@ -531,12 +501,6 @@
 /* A switch to enable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOn.Title" = "Enhanced Tracking Protection is ON for this site.";
 
-/* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox blocks cross-site trackers, social trackers, cryptominers, and fingerprinters.";
-
-/* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox blocks cross-site trackers, social trackers, cryptominers, fingerprinters, and tracking content.";
-
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Paste";
 
@@ -555,26 +519,14 @@
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Tab Sent";
 
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "Blocked";
-
-/* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "No trackers known to Firefox were detected on this page.";
-
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Protection Settings";
-
-/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "Protections for %@";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "Tracking content";
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "Social Trackers";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "Cross-Site Tracking Cookies";
 
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Cross-Site Trackers";
@@ -606,10 +558,6 @@
 /* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
 "Navigation Toolbar" = "Navigation Toolbar";
 
-/* Accessibility label for the New Tab button in the tab toolbar.
-   Accessibility Label for the tab toolbar New tab button */
-"New Tab" = "New Tab";
-
 /* Restore Tabs Negative Action */
 "No" = "No";
 
@@ -640,20 +588,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Cannot Open Page";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "Page Options Menu";
-
 /* Password textbox in Authentication prompt */
 "Password" = "Password";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "You don’t have any credentials synced from your Firefox Account";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "Available Credentials:";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox Credentials";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "This allows you to save the image to your Camera Roll.";
@@ -768,12 +704,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
 
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "Searches for the suggestion";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Secure connection";
-
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Send Feedback";
 
@@ -813,9 +743,6 @@
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Send";
-
-/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Sign In to Firefox";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Tap to begin";
@@ -1118,9 +1045,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Open in Firefox";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "Open in Private Mode";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Search in Firefox";
 
@@ -1143,44 +1067,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Swipe right or left with three fingers to close the tab.";
 
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "Your first sync may take a while";
-
-/* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "No account? Create one to sync Firefox between devices.";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Syncing";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Syncing…";
 
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Bookmarks";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Remote Clients";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Syncing has failed";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "History";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "Logins";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Sync is unavailable";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Sync is offline";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "Sync is experiencing issues syncing %@";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "Tabs";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Tab %1$@ of %2$@";
@@ -1292,9 +1183,6 @@
 
 /* Your Rights settings section title */
 "Your Rights" = "Your Rights";
-
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "computer";
 
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "Sign In with Your Camera";
