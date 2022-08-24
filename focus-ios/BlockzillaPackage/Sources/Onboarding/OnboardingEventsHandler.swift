@@ -16,6 +16,7 @@ public class OnboardingEventsHandler {
         case enterHome
         case startBrowsing
         case showTrackingProtection
+        case trackerBlocked
     }
 
     public enum OnboardingType: Equatable, Hashable, Codable {
@@ -75,10 +76,6 @@ public class OnboardingEventsHandler {
             visitedURLcounter += 1
             guard shouldShowNewOnboarding() else { return }
 
-            if visitedURLcounter == 1 {
-                show(route: .trackingProtectionShield)
-            }
-
             if visitedURLcounter == 3 {
                 show(route: .trash)
             }
@@ -86,6 +83,9 @@ public class OnboardingEventsHandler {
         case .showTrackingProtection:
             guard shouldShowNewOnboarding() else { return }
             show(route: .trackingProtection)
+        case .trackerBlocked:
+            guard shouldShowNewOnboarding() else { return }
+            show(route: .trackingProtectionShield)
         }
     }
 

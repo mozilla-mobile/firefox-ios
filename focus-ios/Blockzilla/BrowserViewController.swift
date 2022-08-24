@@ -1680,7 +1680,9 @@ extension BrowserViewController: WebControllerDelegate {
            case .on(let oldInfo) = oldTrackingProtectionStatus {
             let differenceSinceLastUpdate = max(0, info.total - oldInfo.total)
             let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
-            setNumberOfLifetimeTrackersBlocked(numberOfTrackers: numberOfTrackersBlocked + differenceSinceLastUpdate)
+            let totalNumberOfTrackersBlocked = numberOfTrackersBlocked + differenceSinceLastUpdate
+            if totalNumberOfTrackersBlocked > 0 { onboardingEventsHandler.send(.trackerBlocked) }
+            setNumberOfLifetimeTrackersBlocked(numberOfTrackers: totalNumberOfTrackersBlocked)
         }
         updateLockIcon(trackingProtectionStatus: trackingStatus)
     }
