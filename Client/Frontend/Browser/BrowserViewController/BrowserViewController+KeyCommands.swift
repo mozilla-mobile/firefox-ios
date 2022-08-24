@@ -9,19 +9,19 @@ import UIKit
 extension BrowserViewController {
     fileprivate typealias shortcuts = String.KeyboardShortcuts
 
-    @objc private func openSettingsKeyCommand() {
+    @objc public func openSettingsKeyCommand() {
         openSettings()
     }
 
-    @objc private func showHistoryKeyCommand() {
+    @objc public func showHistoryKeyCommand() {
         showPanel(.history)
     }
 
-    @objc private func showDownloadsKeyCommand() {
+    @objc public func showDownloadsKeyCommand() {
         showPanel(.downloads)
     }
 
-    @objc private func showBookmarksKeyCommand() {
+    @objc public func showBookmarksKeyCommand() {
         showPanel(.bookmarks)
     }
 
@@ -29,7 +29,7 @@ extension BrowserViewController {
         showLibrary(panel: panel)
     }
 
-    @objc private func openClearHistoryPanelKeyCommand() {
+    @objc public func openClearHistoryPanelKeyCommand() {
         guard let libraryViewController = self.libraryViewController else {
             let clearHistoryHelper = ClearHistorySheetProvider(profile: profile, tabManager: tabManager)
             clearHistoryHelper.showClearRecentHistory(onViewController: self)
@@ -40,14 +40,14 @@ extension BrowserViewController {
         NotificationCenter.default.post(name: .OpenClearRecentHistory, object: nil)
     }
 
-    @objc private func addBookmarkKeyCommand() {
+    @objc public func addBookmarkKeyCommand() {
         if let tab = tabManager.selectedTab, homepageViewController == nil {
             guard let url = tab.canonicalURL?.displayURL else { return }
             addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
         }
     }
 
-    @objc private func reloadTabKeyCommand() {
+    @objc public func reloadTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -58,7 +58,7 @@ extension BrowserViewController {
         }
     }
 
-    @objc private func goBackKeyCommand() {
+    @objc public func goBackKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -69,7 +69,7 @@ extension BrowserViewController {
         }
     }
 
-    @objc private func goForwardKeyCommand() {
+    @objc public func goForwardKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -80,7 +80,7 @@ extension BrowserViewController {
         }
     }
 
-    @objc private func findInPageKeyCommand() {
+    @objc public func findInPageKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -88,7 +88,7 @@ extension BrowserViewController {
         findInPage(withText: "")
     }
 
-    @objc private func findInPageAgainKeyCommand() {
+    @objc public func findInPageAgainKeyCommand() {
         findInPage(withText: FindInPageBar.retrieveSavedText ?? "")
     }
 
@@ -98,7 +98,7 @@ extension BrowserViewController {
         }
     }
 
-    @objc private func selectLocationBarKeyCommand() {
+    @objc public func selectLocationBarKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -107,7 +107,7 @@ extension BrowserViewController {
         urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
     }
 
-    @objc private func newTabKeyCommand() {
+    @objc public func newTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -117,7 +117,7 @@ extension BrowserViewController {
         if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
-    @objc private func newPrivateTabKeyCommand() {
+    @objc public func newPrivateTabKeyCommand() {
         // NOTE: We cannot and should not distinguish between "new-tab" and "new-private-tab"
         // when recording telemetry for key commands.
         TelemetryWrapper.recordEvent(category: .action,
@@ -125,9 +125,10 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
         openBlankNewTab(focusLocationField: true, isPrivate: true)
-        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }    }
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
+    }
 
-    @objc private func newNormalTabKeyCommand() {
+    @objc public func newNormalTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -136,7 +137,7 @@ extension BrowserViewController {
         if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
-    @objc private func closeTabKeyCommand() {
+    @objc public func closeTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -146,7 +147,7 @@ extension BrowserViewController {
         if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
-    @objc private func undoLastTabClosedKeyCommand() {
+    @objc public func undoLastTabClosedKeyCommand() {
         guard let lastClosedURL = profile.recentlyClosedTabs.popFirstTab()?.url,
               let selectedTab = tabManager.selectedTab
         else { return }
@@ -156,7 +157,7 @@ extension BrowserViewController {
         tabManager.selectTab(closedTab)
     }
 
-    @objc private func showTabTrayKeyCommand() {
+    @objc public func showTabTrayKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -172,7 +173,7 @@ extension BrowserViewController {
 
     // MARK: - Tab selection
 
-    @objc private func nextTabKeyCommand() {
+    @objc public func nextTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -189,7 +190,7 @@ extension BrowserViewController {
         if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
-    @objc private func previousTabKeyCommand() {
+    @objc public func previousTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -206,7 +207,7 @@ extension BrowserViewController {
         if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
-    @objc private func selectFirstTab() {
+    @objc public func selectFirstTab() {
         selectTab(number: 0)
     }
 
@@ -238,7 +239,7 @@ extension BrowserViewController {
         selectTab(number: 7)
     }
 
-    @objc private func selectLastTab() {
+    @objc public func selectLastTab() {
         guard let currentTab = tabManager.selectedTab else { return }
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
@@ -264,8 +265,7 @@ extension BrowserViewController {
     }
 
     // MARK: Zoom
-
-    @objc private func zoomIn() {
+    @objc public func zoomIn() {
         guard let currentTab = tabManager.selectedTab,
               homepageViewController == nil
         else { return }
@@ -273,7 +273,7 @@ extension BrowserViewController {
         currentTab.zoomIn()
     }
 
-    @objc private func zoomOut() {
+    @objc public func zoomOut() {
         guard let currentTab = tabManager.selectedTab,
               homepageViewController == nil
         else { return }
@@ -281,7 +281,7 @@ extension BrowserViewController {
         currentTab.zoomOut()
     }
 
-    @objc private func resetZoom() {
+    @objc public func resetZoom() {
         guard let currentTab = tabManager.selectedTab,
               homepageViewController == nil
         else { return }
@@ -306,11 +306,8 @@ extension BrowserViewController {
         ]
 
         let windowShortcuts = [
-            UIKeyCommand(action: #selector(nextTabKeyCommand), input: "\t", modifierFlags: .control, discoverabilityTitle: shortcuts.ShowNextTab),
-            UIKeyCommand(action: #selector(previousTabKeyCommand), input: "\t", modifierFlags: [.control, .shift], discoverabilityTitle: shortcuts.ShowPreviousTab),
             UIKeyCommand(action: #selector(nextTabKeyCommand), input: "]", modifierFlags: [.command, .shift]),
             UIKeyCommand(action: #selector(previousTabKeyCommand), input: "[", modifierFlags: [.command, .shift]),
-            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\t", modifierFlags: [.command, .alternate], discoverabilityTitle: shortcuts.ShowTabTray),
             UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\\", modifierFlags: [.command, .shift]),
         ]
 
@@ -322,41 +319,11 @@ extension BrowserViewController {
         }
 
         let commands = [
-            // Settings
-            UIKeyCommand(action: #selector(openSettingsKeyCommand), input: ",", modifierFlags: .command, discoverabilityTitle: shortcuts.Settings),
-
-            // File
-            UIKeyCommand(action: #selector(newTabKeyCommand), input: "t", modifierFlags: .command, discoverabilityTitle: shortcuts.NewTab),
-            UIKeyCommand(action: #selector(selectLocationBarKeyCommand), input: "l", modifierFlags: .command, discoverabilityTitle: shortcuts.SelectLocationBar),
-            UIKeyCommand(action: #selector(newPrivateTabKeyCommand), input: "p", modifierFlags: [.command, .shift], discoverabilityTitle: shortcuts.NewPrivateTab),
-            UIKeyCommand(action: #selector(closeTabKeyCommand), input: "w", modifierFlags: .command, discoverabilityTitle: shortcuts.CloseCurrentTab),
             UIKeyCommand(action: #selector(undoLastTabClosedKeyCommand), input: "t", modifierFlags: [.command, .shift]),
             UIKeyCommand(action: #selector(newNormalTabKeyCommand), input: "n", modifierFlags: [.command, .shift]),
-
-            // Edit
-            UIKeyCommand(action: #selector(findInPageKeyCommand), input: "f", modifierFlags: .command, discoverabilityTitle: shortcuts.Find),
-            UIKeyCommand(action: #selector(findInPageAgainKeyCommand), input: "g", modifierFlags: .command, discoverabilityTitle: shortcuts.FindAgain),
-
-            // View
             UIKeyCommand(action: #selector(zoomIn), input: "=", modifierFlags: .command),
             UIKeyCommand(action: #selector(zoomIn), input: "+", modifierFlags: .command, discoverabilityTitle: shortcuts.ZoomIn),
             UIKeyCommand(action: #selector(zoomOut), input: "-", modifierFlags: .command, discoverabilityTitle: shortcuts.ZoomOut),
-            UIKeyCommand(action: #selector(resetZoom), input: "0", modifierFlags: .command, discoverabilityTitle: shortcuts.ActualSize),
-            UIKeyCommand(action: #selector(reloadTabKeyCommand), input: "r", modifierFlags: .command, discoverabilityTitle: shortcuts.ReloadPage),
-
-            // History
-            UIKeyCommand(action: #selector(goBackKeyCommand), input: "[", modifierFlags: .command, discoverabilityTitle: shortcuts.Back),
-            UIKeyCommand(action: #selector(openClearHistoryPanelKeyCommand), input: "\u{8}", modifierFlags: [.shift, .command], discoverabilityTitle: shortcuts.ClearRecentHistory),
-            UIKeyCommand(action: #selector(goForwardKeyCommand), input: "]", modifierFlags: .command, discoverabilityTitle: shortcuts.Forward),
-            UIKeyCommand(action: #selector(showHistoryKeyCommand), input: "y", modifierFlags: .command, discoverabilityTitle: shortcuts.ShowHistory),
-
-            // Bookmarks
-            UIKeyCommand(action: #selector(showBookmarksKeyCommand), input: "o", modifierFlags: [.shift, .command], discoverabilityTitle: shortcuts.ShowBookmarks),
-            UIKeyCommand(action: #selector(addBookmarkKeyCommand), input: "d", modifierFlags: .command, discoverabilityTitle: shortcuts.AddBookmark),
-
-            // Tools
-            UIKeyCommand(action: #selector(showDownloadsKeyCommand), input: "j", modifierFlags: .command, discoverabilityTitle: shortcuts.ShowDownloads),
-            UIKeyCommand(action: #selector(selectFirstTab), input: "1", modifierFlags: .command, discoverabilityTitle: shortcuts.ShowFirstTab),
             UIKeyCommand(action: #selector(selectTabTwo), input: "2", modifierFlags: .command),
             UIKeyCommand(action: #selector(selectTabThree), input: "3", modifierFlags: .command),
             UIKeyCommand(action: #selector(selectTabFour), input: "4", modifierFlags: .command),
@@ -364,7 +331,6 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(selectTabSix), input: "6", modifierFlags: .command),
             UIKeyCommand(action: #selector(selectTabSeven), input: "7", modifierFlags: .command),
             UIKeyCommand(action: #selector(selectTabEight), input: "8", modifierFlags: .command),
-            UIKeyCommand(action: #selector(selectLastTab), input: "9", modifierFlags: .command, discoverabilityTitle: shortcuts.ShowLastTab),
 
         ] + windowShortcuts
 
