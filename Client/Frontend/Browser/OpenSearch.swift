@@ -167,9 +167,11 @@ class OpenSearchEngine: NSObject, NSCoding {
  */
 class OpenSearchParser {
     fileprivate let pluginMode: Bool
+    fileprivate let userInterfaceIdiom: UIUserInterfaceIdiom
 
-    init(pluginMode: Bool) {
+    init(pluginMode: Bool, userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         self.pluginMode = pluginMode
+        self.userInterfaceIdiom = userInterfaceIdiom
     }
 
     func parse(_ file: String, engineID: String) -> OpenSearchEngine? {
@@ -243,7 +245,7 @@ class OpenSearchParser {
                         }
 
                         // Ref: FXIOS-4547 required us to change partner code (pc) for Bing search on iPad 
-                        if name == "pc", shortName == "Bing", UIDevice.current.userInterfaceIdiom == .pad {
+                        if name == "pc", shortName == "Bing", userInterfaceIdiom == .pad {
                             value = "MOZL"
                         }
 
