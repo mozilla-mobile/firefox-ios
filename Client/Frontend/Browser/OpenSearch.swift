@@ -242,7 +242,7 @@ class OpenSearchParser {
                             return nil
                         }
 
-                        // Change partner code (pc) for Bing search on iPad (quick fix)
+                        // Ref: FXIOS-4547 required us to change partner code (pc) for Bing search on iPad 
                         if name == "pc", shortName == "Bing", UIDevice.current.userInterfaceIdiom == .pad {
                             value = "MOZL"
                         }
