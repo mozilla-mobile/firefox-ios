@@ -143,6 +143,26 @@ class SearchTests: XCTestCase {
         XCTAssertEqual(searchTerm, yaaniEngine.queryForSearchURL(yaaniSearchURL))
     }
 
+    func testBingParsing_iPhone_hasIphonePartnerCode() {
+        let parser = OpenSearchParser(pluginMode: true, userInterfaceIdiom: .phone)
+        let file = Bundle.main.path(forResource: "bing", ofType: "xml", inDirectory: "SearchPlugins/")
+        let engine: OpenSearchEngine! = parser.parse(file!, engineID: "bing")
+        XCTAssertEqual(engine.shortName, "Bing")
+
+        let containsPartnerCode = engine.searchTemplate.contains("pc=MOZW")
+        XCTAssertTrue(containsPartnerCode)
+    }
+
+    func testBingParsing_iPad_hasIpadPartnerCode() {
+        let parser = OpenSearchParser(pluginMode: true, userInterfaceIdiom: .pad)
+        let file = Bundle.main.path(forResource: "bing", ofType: "xml", inDirectory: "SearchPlugins/")
+        let engine: OpenSearchEngine! = parser.parse(file!, engineID: "bing")
+        XCTAssertEqual(engine.shortName, "Bing")
+
+        let containsPartnerCode = engine.searchTemplate.contains("pc=MOZL")
+        XCTAssertTrue(containsPartnerCode)
+    }
+
     fileprivate func startMockSuggestServer() -> String {
         let webServer: GCDWebServer = GCDWebServer()
 

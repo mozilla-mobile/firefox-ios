@@ -167,9 +167,11 @@ class OpenSearchEngine: NSObject, NSCoding {
  */
 class OpenSearchParser {
     fileprivate let pluginMode: Bool
+    fileprivate let userInterfaceIdiom: UIUserInterfaceIdiom
 
-    init(pluginMode: Bool) {
+    init(pluginMode: Bool, userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         self.pluginMode = pluginMode
+        self.userInterfaceIdiom = userInterfaceIdiom
     }
 
     func parse(_ file: String, engineID: String) -> OpenSearchEngine? {
@@ -236,11 +238,17 @@ class OpenSearchParser {
                         }
 
                         let name = paramIndexer.attributes["name"]
-                        let value = paramIndexer.attributes["value"]
+                        var value = paramIndexer.attributes["value"]
                         if name == nil || value == nil {
                             print("Param element must have name and value attributes", terminator: "\n")
                             return nil
                         }
+
+                        // Ref: FXIOS-4547 required us to change partner code (pc) for Bing search on iPad 
+                        if name == "pc", shortName == "Bing", userInterfaceIdiom == .pad {
+                            value = "MOZL"
+                        }
+
                         template! += name! + "=" + value!
                     }
                 }
