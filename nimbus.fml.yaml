@@ -77,7 +77,7 @@ features:
           If true, we show the Upgrade onboarding screen when the user upgrades the version.
         type: Boolean
         default: false
-      fresh-install-flow:
+      first-run-flow:
         description: >
           If true, we show the new Onboarding screen when the user for v106 version.
         type: Boolean
@@ -86,12 +86,12 @@ features:
       - channel: beta
         value: {
           "upgrade-flow": true,
-          "fresh-install-flow": true
+          "first-run-flow": true
         }
       - channel: developer
         value: {
           "upgrade-flow": true,
-          "fresh-install-flow": true
+          "first-run-flow": true
         }
   spotlight-search:
     description: Add pages as items findable with Spotlight.
