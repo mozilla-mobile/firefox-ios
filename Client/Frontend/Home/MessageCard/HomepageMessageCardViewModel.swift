@@ -11,15 +11,19 @@ protocol MessageSurfaceProtocol {
     func handleMessageDismiss()
 }
 
-class HomepageMessageCardViewModel: MessageSurfaceProtocol, GleanPlumbMessageManagable {
+class HomepageMessageCardViewModel: MessageSurfaceProtocol {
 
     private let dataAdaptor: MessageCardDataAdaptor
+    private let messagingManager: GleanPlumbMessageManagerProtocol
+
     weak var delegate: HomepageDataModelDelegate?
     var message: GleanPlumbMessage?
     var dismissClosure: (() -> Void)?
 
-    init(dataAdaptor: MessageCardDataAdaptor) {
+    init(dataAdaptor: MessageCardDataAdaptor,
+         messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared) {
         self.dataAdaptor = dataAdaptor
+        self.messagingManager = messagingManager
     }
 
     func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {

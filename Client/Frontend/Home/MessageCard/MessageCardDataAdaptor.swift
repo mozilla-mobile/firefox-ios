@@ -12,14 +12,20 @@ protocol MessageCardDelegate: AnyObject {
     func didLoadNewData()
 }
 
-class MessageCardDataAdaptorImplementation: MessageCardDataAdaptor, GleanPlumbMessageManagable {
+class MessageCardDataAdaptorImplementation: MessageCardDataAdaptor {
+
+    private var message: GleanPlumbMessage?
+    private let messagingManager: GleanPlumbMessageManagerProtocol
 
     weak var delegate: MessageCardDelegate? {
         didSet {
             updateMessage()
         }
     }
-    private var message: GleanPlumbMessage?
+
+    init(messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared) {
+        self.messagingManager = messagingManager
+    }
 
     func getMessageCardData() -> GleanPlumbMessage? {
         return message

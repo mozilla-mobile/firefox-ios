@@ -7,14 +7,6 @@ import Foundation
 import MozillaAppServices
 import Shared
 
-protocol GleanPlumbMessageManagable { }
-
-extension GleanPlumbMessageManagable {
-    var messagingManager: GleanPlumbMessageManager {
-        return GleanPlumbMessageManager.shared
-    }
-}
-
 protocol GleanPlumbMessageManagerProtocol {
 
     /// Performs the bookkeeping and preparation of messages for their respective surfaces.
