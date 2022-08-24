@@ -69,7 +69,7 @@ onboarding-feature:
   hasExposure: true
   exposureDescription: ""
   variables:
-    fresh-install-flow:
+    first-run-flow:
       type: boolean
       description: "If true, we show the new Onboarding screen when the user for v106 version.\n"
     upgrade-flow:
