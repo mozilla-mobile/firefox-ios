@@ -11,7 +11,7 @@ protocol WallpaperMetadataTrackerProtocol {
 
 /// Responsible for tracking whether or not the wallpaper system should perform
 /// a variety of checks, such as whether it should fetch data from the server.
-class WallpaperMetadataTracker: WallpaperMetadataTrackerProtocol {
+class WallpaperMetadataTracker: WallpaperMetadataTrackerProtocol, Loggable {
 
     // MARK: - Properties
 
@@ -27,12 +27,18 @@ class WallpaperMetadataTracker: WallpaperMetadataTrackerProtocol {
         return true
     }
 
-    private let userDefaults: UserDefaultsInterface
     private let prefsKey = PrefsKeys.Wallpapers.MetadataLastCheckedDate
 
+    private let userDefaults: UserDefaultsInterface
+    private let networkingModule: WallpaperNetworking
+
     // MARK: - Initializers
-    init(with userDefaults: UserDefaultsInterface = UserDefaults.standard) {
+    init(
+        with userDefaults: UserDefaultsInterface = UserDefaults.standard,
+        and networkingModule: WallpaperNetworking
+    ) {
         self.userDefaults = userDefaults
+        self.networkingModule = networkingModule
     }
 
     deinit {
@@ -42,9 +48,22 @@ class WallpaperMetadataTracker: WallpaperMetadataTrackerProtocol {
     // MARK: - Public interface
     public func metadataUpdateFetchedNewData() async -> Bool {
         if !shouldCheckForNewMetadata { return false }
-
-        return true
+        return await attemptToFetchMetadata()
     }
 
     // MARK: - Private methods
+    private func attemptToFetchMetadata() async -> Bool {
+        do {
+            let metadata = try await fetchMetadata()
+            return true
+
+        } catch {
+            browserLog.error("Failed to fetch new metadata: \(error.localizedDescription)")
+            return false
+        }
+    }
+    private func fetchMetadata() async throws -> WallpaperMetadata {
+        let dataService = WallpaperDataService(with: networkingModule)
+        return try await dataService.getMetadata()
+    }
 }

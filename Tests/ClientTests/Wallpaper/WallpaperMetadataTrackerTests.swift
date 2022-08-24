@@ -21,7 +21,8 @@ class WallpaperMetadataTrackerTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         mockUserDefaults = MockUserDefaults()
-        sut = WallpaperMetadataTracker(with: mockUserDefaults)
+        sut = WallpaperMetadataTracker(with: mockUserDefaults,
+                                       and: WallpaperNetworkingModule())
     }
 
     override func tearDownWithError() throws {

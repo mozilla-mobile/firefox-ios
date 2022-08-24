@@ -17,7 +17,7 @@ class WallpaperDataService {
     private let wallpaperURLScheme = "MozWallpaperURLScheme"
 
     // MARK: - Initializers
-    init(with networkingModule: WallpaperNetworking = WallpaperNetworkingModule()) {
+    init(with networkingModule: WallpaperNetworking) {
         self.networking = networkingModule
     }
 

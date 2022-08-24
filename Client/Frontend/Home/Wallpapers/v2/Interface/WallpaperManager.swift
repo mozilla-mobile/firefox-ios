@@ -15,6 +15,14 @@ protocol WallpaperManagerInterface {
 /// The primary interface for the wallpaper feature.
 class WallpaperManager: WallpaperManagerInterface {
 
+    // MARK: - Properties
+    private var networkingModule: WallpaperNetworking
+
+    // MARK: - Initializers
+    init(with networkingModule: WallpaperNetworking = WallpaperNetworkingModule()) {
+        self.networkingModule = networkingModule
+    }
+
     // MARK: Public Interface
 
     // TODO: The return values here will have to be properly updated once the plumbing
@@ -22,13 +30,13 @@ class WallpaperManager: WallpaperManagerInterface {
     // convenience to aid in UI development.
 
     /// Returns the currently selected wallpaper.
-    var currentWallpaper: Wallpaper {
+    public var currentWallpaper: Wallpaper {
         return Wallpaper(id: "fxDefault", textColour: UIColor.green)
     }
 
     /// Returns all available collections and their wallpaper data. Availability is
     /// determined on locale and date ranges from the collection's metadata.
-    var availableCollections: [WallpaperCollection] {
+    public var availableCollections: [WallpaperCollection] {
         var wallpapersForClassic: [Wallpaper] {
             var wallpapers = [Wallpaper]()
             wallpapers.append(Wallpaper(id: "fxDefault", textColour: UIColor.green))
@@ -69,24 +77,28 @@ class WallpaperManager: WallpaperManagerInterface {
     /// Sets and saves a selected wallpaper as currently selected wallpaper.
     ///
     /// - Parameter wallpaper: A `Wallpaper` the user has selected.
-    func setCurrentWallpaper(
+    public func setCurrentWallpaper(
         to wallpaper: Wallpaper,
         completion: @escaping (Result<Bool, Error>) -> Void
     ) {
         completion(.success(true))
     }
 
-    func removeDownloadedAssets() {
+    public func removeDownloadedAssets() {
 
     }
 
     /// Reaches out to the server and fetches the latest metadata. This is then compared
     /// to existing metadata, and, if there are changes, performs the necessary operations
     /// to ensure parity between server data and what the user sees locally.
-    func checkForUpdates() {
-        let dataService = WallpaperDataService()
+    public func checkForUpdates() {
+        let metadataTracker = WallpaperMetadataTracker(and: networkingModule)
+
         Task {
-            try? await dataService.getMetadata()
+            let didFetchNewData = await metadataTracker.metadataUpdateFetchedNewData()
+            if didFetchNewData {
+                // download new assets
+            }
         }
     }
 }
