@@ -1073,48 +1073,21 @@ extension String {
         }
 
         public struct Passwords {
-            // TODO: Delete LoginsAndPasswordsTitle string with FXIOS-4254 since we'll be using Title
-            public static let LoginsAndPasswordsTitle = MZLocalizedString(
-                "Settings.LoginsAndPasswordsTitle",
-                value: "Logins & Passwords",
-                comment: "Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long",
-                lastUpdated: .unknown)
             public static let Title = MZLocalizedString(
                 "Settings.Passwords.Title.v103",
                 value: "Passwords",
                 comment: "Title for the passwords screen.",
                 lastUpdated: .v103)
-
-            // TODO: Delete SettingToSaveLogins string with FXIOS-4254 since we'll be using SettingToSavePasswords
-            public static let SettingToSaveLogins = MZLocalizedString(
-                "Settings.SaveLogins.Title",
-                value: "Save Logins",
-                comment: "Setting to enable the built-in password manager",
-                lastUpdated: .unknown)
             public static let SavePasswords = MZLocalizedString(
                 "Settings.Passwords.SavePasswords.v103",
                 value: "Save Passwords",
                 comment: "Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords.",
                 lastUpdated: .v103)
-
-            // TODO: Delete LoginsOnboardingMessage string with FXIOS-4254 since we'll be using OnboardingMessage
-            public static let LoginsOnboardingMessage = MZLocalizedString(
-                "Logins.Onboarding.Message",
-                value: "Your logins and passwords are now protected by Face ID, Touch ID or a device passcode.",
-                comment: "Message shown when you enter Logins & Passwords for the first time.",
-                lastUpdated: .unknown)
             public static let OnboardingMessage = MZLocalizedString(
                 "Settings.Passwords.OnboardingMessage.v103",
                 value: "Your passwords are now protected by Face ID, Touch ID or a device passcode.",
                 comment: "Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application.",
                 lastUpdated: .v103)
-
-            // TODO: Delete AuthenticationLoginsTouchReason string with FXIOS-4254 since we'll be using AuthenticationLoginsFingerPrintReason
-            public static let AuthenticationLoginsTouchReason = MZLocalizedString(
-                "Use your fingerprint to access Logins now.",
-                tableName: "AuthenticationManager",
-                comment: "Touch ID prompt subtitle when accessing logins",
-                lastUpdated: .unknown)
             public static let FingerPrintReason = MZLocalizedString(
                 "Settings.Passwords.FingerPrintReason.v103",
                 value: "Use your fingerprint to access passwords now.",

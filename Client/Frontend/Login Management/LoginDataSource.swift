@@ -19,7 +19,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             BoolSetting(prefs: viewModel.profile.prefs,
                         prefKey: PrefsKeys.LoginsSaveEnabled,
                         defaultValue: true,
-                        attributedTitleText: NSAttributedString(string: .Settings.Passwords.SettingToSaveLogins)),
+                        attributedTitleText: NSAttributedString(string: .Settings.Passwords.SavePasswords)),
             BoolSetting(prefs: viewModel.profile.prefs,
                         prefKey: PrefsKeys.LoginsShowShortcutMenuItem,
                         defaultValue: true,
