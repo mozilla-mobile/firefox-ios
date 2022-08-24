@@ -236,11 +236,17 @@ class OpenSearchParser {
                         }
 
                         let name = paramIndexer.attributes["name"]
-                        let value = paramIndexer.attributes["value"]
+                        var value = paramIndexer.attributes["value"]
                         if name == nil || value == nil {
                             print("Param element must have name and value attributes", terminator: "\n")
                             return nil
                         }
+
+                        // Change partner code (pc) for Bing search on iPad (quick fix)
+                        if name == "pc", shortName == "Bing", UIDevice.current.userInterfaceIdiom == .pad {
+                            value = "MOZL"
+                        }
+
                         template! += name! + "=" + value!
                     }
                 }
