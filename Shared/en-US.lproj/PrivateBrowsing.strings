@@ -4,9 +4,6 @@
 /* Context menu option for opening a link in a new private tab */
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Open in New Private Tab";
 
-/* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox won’t remember any of your history or cookies, but new bookmarks will be saved.";
-
 /* Toggled OFF accessibility value */
 "Off" = "Off";
 
