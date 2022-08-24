@@ -69,21 +69,29 @@ features:
         value: {
           "setting": after-four-hours
         }
-  upgrade-onboarding-feature:
+  onboarding-feature:
     description: The feature that controls whether to show or not Upgrade onboarding
     variables:
-      enabled:
-        description: If this is true, we show the Upgrade onboarding screen when the user upgrade the version.
+      upgrade-flow:
+        description: >
+          If true, we show the Upgrade onboarding screen when the user upgrades the version.
+        type: Boolean
+        default: false
+      first-run-flow:
+        description: >
+          If true, we show the new Onboarding screen when the user for v106 version.
         type: Boolean
         default: false
     defaults:
       - channel: beta
         value: {
-          "enabled": true
+          "upgrade-flow": true,
+          "first-run-flow": true
         }
       - channel: developer
         value: {
-          "enabled": true
+          "upgrade-flow": true,
+          "first-run-flow": true
         }
   spotlight-search:
     description: Add pages as items findable with Spotlight.
