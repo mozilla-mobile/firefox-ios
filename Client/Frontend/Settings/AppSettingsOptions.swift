@@ -922,8 +922,13 @@ class LoginsSetting: Setting {
         self.navigationController = settings.navigationController
         self.settings = settings as? AppSettingsTableViewController
 
-        super.init(title: NSAttributedString(string: .Settings.Passwords.LoginsAndPasswordsTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
-                   delegate: delegate)
+        super.init(
+            title: NSAttributedString(
+                string: .Settings.Passwords.Title,
+                attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]
+            ),
+            delegate: delegate
+        )
     }
 
     func deselectRow () {
