@@ -29,7 +29,6 @@ class BrowserViewControllerTests: XCTestCase {
         }
     )
     
-    private lazy var whatsNewEventsHandler = WhatsNewEventsHandler()
     private lazy var themeManager = ThemeManager()
 
     func testRequestReviewThreshold() {
@@ -37,7 +36,6 @@ class BrowserViewControllerTests: XCTestCase {
             shortcutManager: ShortcutsManager(),
             authenticationManager: AuthenticationManager(),
             onboardingEventsHandler: onboardingEventsHandler,
-            whatsNewEventsHandler: whatsNewEventsHandler,
             themeManager: themeManager
         )
         mockUserDefaults.clear()

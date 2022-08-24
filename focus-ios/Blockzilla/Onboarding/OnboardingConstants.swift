@@ -6,7 +6,6 @@ import Foundation
 
 struct OnboardingConstants {
     static let onboardingDidAppear = "OnboardingDidAppear"
-    static let whatsNewVersion = "whatsNewVersion"
     static let alwaysShowOnboarding = "AlwaysShowOnboarding"
     static let ignoreOnboardingExperiment = "IgnoreOnboardingExperiment"
     static let showOldOnboarding = "ShowOldOnboarding"

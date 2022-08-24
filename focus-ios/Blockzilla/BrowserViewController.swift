@@ -49,7 +49,6 @@ class BrowserViewController: UIViewController {
     private var background = UIImageView()
     private var cancellables = Set<AnyCancellable>()
     private var onboardingEventsHandler: OnboardingEventsHandler
-    private var whatsNewEventsHandler: WhatsNewEventsHandler
     private var themeManager: ThemeManager
     private let shortcutsPresenter = ShortcutsPresenter()
 
@@ -92,14 +91,12 @@ class BrowserViewController: UIViewController {
         shortcutManager: ShortcutsManager,
         authenticationManager: AuthenticationManager,
         onboardingEventsHandler: OnboardingEventsHandler,
-        whatsNewEventsHandler: WhatsNewEventsHandler,
         themeManager: ThemeManager
     ) {
         self.tipManager = tipManager
         self.shortcutManager = shortcutManager
         self.authenticationManager = authenticationManager
         self.onboardingEventsHandler = onboardingEventsHandler
-        self.whatsNewEventsHandler = whatsNewEventsHandler
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
@@ -980,12 +977,12 @@ class BrowserViewController: UIViewController {
 
             let shareMenu = UIMenu(options: .displayInline, children: shareItems.compactMap { $0 })
             actions.append(shareMenu)
+            actions.append(UIMenu(options: .displayInline, children: [UIAction(whatsNewItem), UIAction(settingsItem)]))
 
         } else {
-            actions.append(UIMenu(options: .displayInline, children: [UIAction(helpItem)]))
+            let actionMenu = UIMenu(options: .displayInline, children: [UIAction(whatsNewItem), UIAction(helpItem), UIAction(settingsItem)])
+            actions.append(actionMenu)
         }
-        actions.append(UIMenu(options: .displayInline, children: [UIAction(settingsItem)]))
-
         return actions
     }
 
@@ -1879,7 +1876,6 @@ extension BrowserViewController: MenuActionable {
             searchEngineManager: searchEngineManager,
             authenticationManager: authenticationManager,
             onboardingEventsHandler: onboardingEventsHandler,
-            whatsNewEventsHandler: whatsNewEventsHandler,
             themeManager: themeManager,
             dismissScreenCompletion: activateUrlBarOnHomeView,
             shouldScrollToSiri: shouldScrollToSiri
@@ -1895,6 +1891,10 @@ extension BrowserViewController: MenuActionable {
 
     func showHelp() {
         submit(text: "https://support.mozilla.org/en-US/products/focus-firefox/Focus-ios")
+    }
+
+    func showWhatsNew() {
+        submit(url: URL(forSupportTopic: .whatsNew))
     }
 
     func showCopy() {

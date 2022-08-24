@@ -48,14 +48,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         shortcutManager: shortcutManager,
         authenticationManager: authenticationManager,
         onboardingEventsHandler: onboardingEventsHandler,
-        whatsNewEventsHandler: whatsNewEventsHandler,
         themeManager: themeManager
     )
 
     private let nimbus = NimbusWrapper.shared
     private var queuedUrl: URL?
     private var queuedString: String?
-    private let whatsNewEventsHandler = WhatsNewEventsHandler()
     private let themeManager = ThemeManager()
     private var cancellables = Set<AnyCancellable>()
     private lazy var shortcutManager: ShortcutsManager = .init()
@@ -189,8 +187,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         }
 
         onboardingEventsHandler.send(.applicationDidLaunch)
-        whatsNewEventsHandler.highlightWhatsNewButton()
-
         return true
     }
 

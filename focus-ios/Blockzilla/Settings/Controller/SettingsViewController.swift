@@ -53,14 +53,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return tableView
     }()
 
-    private lazy var highlightsButton: UIBarButtonItem = {
-        let barButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
-        barButton.image = UIImage(named: "highlight")
-        barButton.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
-        barButton.tintColor = whatsNewButtonColor
-        return barButton
-    }()
-
     private lazy var doneButton: UIBarButtonItem = {
         let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(dismissSettings))
         doneButton.tintColor = .accent
@@ -69,9 +61,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }()
 
     private var onboardingEventsHandler: OnboardingEventsHandler
-    private var whatsNewEventsHandler: WhatsNewEventsHandler
     private var themeManager: ThemeManager
-    private var cancellable: AnyCancellable?
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
     private let detector = BlockerEnabledDetector()
@@ -97,11 +87,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             break
         }
         return themeName
-    }
-
-    var whatsNewButtonColor: UIColor {
-        let barButtonDisabledColor: UIColor = themeManager.selectedTheme == .unspecified ? (traitCollection.userInterfaceStyle == .light ? .systemGray2 : .white) : (themeManager.selectedTheme == .light ? .systemGray2 : .white)
-        return whatsNewEventsHandler.shouldShowWhatsNew ? .accent : barButtonDisabledColor
     }
 
     private func getSectionIndex(_ section: Section) -> Int? {
@@ -149,7 +134,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         searchEngineManager: SearchEngineManager,
         authenticationManager: AuthenticationManager,
         onboardingEventsHandler: OnboardingEventsHandler,
-        whatsNewEventsHandler: WhatsNewEventsHandler,
         themeManager: ThemeManager,
         dismissScreenCompletion:  @escaping (() -> Void),
         shouldScrollToSiri: Bool = false
@@ -158,7 +142,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.shouldScrollToSiri = shouldScrollToSiri
         self.authenticationManager = authenticationManager
         self.onboardingEventsHandler = onboardingEventsHandler
-        self.whatsNewEventsHandler = whatsNewEventsHandler
         self.themeManager = themeManager
         self.dismissScreenCompletion =  dismissScreenCompletion
         super.init(nibName: nil, bundle: nil)
@@ -180,7 +163,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationBar.shadowImage = UIImage()
         navigationBar.layoutIfNeeded()
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
-        navigationItem.rightBarButtonItems = [doneButton, highlightsButton]
+        navigationItem.rightBarButtonItem = doneButton
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -215,12 +198,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             tableView.scrollToRow(at: siriIndexPath, at: .none, animated: false)
             shouldScrollToSiri = false
         }
-
-        cancellable = themeManager
-            .$selectedTheme
-            .sink { [unowned self] selectedTheme in
-                highlightsButton.tintColor = whatsNewButtonColor
-            }
 
     }
 
@@ -532,12 +509,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     @objc private func aboutClicked() {
         navigationController!.pushViewController(AboutViewController(), animated: true)
-    }
-
-    @objc private func whatsNewClicked() {
-        navigationController?.pushViewController(SettingsContentViewController(url: URL(forSupportTopic: .whatsNew)), animated: true)
-        whatsNewEventsHandler.didShowWhatsNew()
-        highlightsButton.tintColor = whatsNewButtonColor
     }
 
     @objc private func toggleSwitched(_ sender: UISwitch) {

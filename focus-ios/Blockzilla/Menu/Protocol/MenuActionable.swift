@@ -22,4 +22,5 @@ protocol MenuActionable: AnyObject {
 
     func showSettings(shouldScrollToSiri: Bool)
     func showHelp()
+    func showWhatsNew()
 }
