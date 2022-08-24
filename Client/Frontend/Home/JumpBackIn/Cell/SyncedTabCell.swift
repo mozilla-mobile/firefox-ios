@@ -22,6 +22,9 @@ struct SyncedTabCellViewModel {
     var syncedTabsButtonText: String {
         return .FirefoxHomepage.JumpBackIn.SyncedTabShowAllButtonTitle
     }
+    var syncedTabOpenActionTitle: String {
+        return .FirefoxHomepage.JumpBackIn.SyncedTabOpenTabA11y
+    }
 }
 
 /// A cell used in FxHomeScreen's Jump Back In section
@@ -194,6 +197,14 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         syncedTabTapTargetView.addGestureRecognizer(tapRecognizer)
         applyTheme()
         adjustLayout()
+
+        let showAllSyncedTabsA11yAction = UIAccessibilityCustomAction(name: viewModel.syncedTabsButtonText,
+                                                                      target: self,
+                                                                      selector: #selector(showAllSyncedTabs(_:)))
+        let openSyncedTabA11yAction = UIAccessibilityCustomAction(name: viewModel.syncedTabOpenActionTitle,
+                                                                  target: self,
+                                                                  selector: #selector(didTapSyncedTab(_:)))
+        accessibilityCustomActions = [showAllSyncedTabsA11yAction, openSyncedTabA11yAction]
     }
 
     @objc func showAllSyncedTabs(_ sender: Any) {
