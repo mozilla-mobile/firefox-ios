@@ -29,7 +29,7 @@ class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
     // If the feature is enabled and is not clean install
     var shouldShowFeature: Bool {
-        return featureFlags.isFeatureEnabled(.upgradeOnboarding, checking: .buildOnly) && profile.prefs.stringForKey(LatestAppVersionProfileKey) != nil
+        return featureFlags.isFeatureEnabled(.onboardingUpgrade, checking: .buildOnly) && profile.prefs.stringForKey(LatestAppVersionProfileKey) != nil
     }
 
     init(profile: Profile) {

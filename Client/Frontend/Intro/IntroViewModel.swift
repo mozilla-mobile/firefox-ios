@@ -45,7 +45,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     }
 
     var isv106Version: Bool {
-        return featureFlags.isFeatureEnabled(.upgradeOnboarding, checking: .buildOnly)
+        return featureFlags.isFeatureEnabled(.onboardingFreshInstall, checking: .buildOnly)
     }
 
     var enabledCards: [IntroViewModel.InformationCards] {

@@ -19,6 +19,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case inactiveTabs
     case jumpBackIn
     case jumpBackInSyncedTab
+    case onboardingUpgrade
+    case onboardingFreshInstall
     case pocket
     case pullToRefresh
     case recentlySaved
@@ -30,7 +32,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case startAtHome
     case tabTrayGroups
     case topSites
-    case upgradeOnboarding
     case wallpapers
     case wallpaperOnboardingSheet
     case wallpaperVersion
@@ -88,12 +89,13 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .contextualHintForJumpBackInSyncedTab,
                 .contextualHintForToolbar,
                 .jumpBackInSyncedTab,
+                .onboardingUpgrade,
+                .onboardingFreshInstall,
                 .reportSiteIssue,
                 .searchHighlights,
                 .shakeToRestore,
                 .wallpaperOnboardingSheet,
-                .wallpaperVersion,
-                .upgradeOnboarding:
+                .wallpaperVersion:
             return nil
         }
     }
