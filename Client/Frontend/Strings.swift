@@ -3577,12 +3577,12 @@ extension String {
 // MARK: - Reader Mode Bar
 extension String {
     public static let ReaderModeBarMarkAsRead = MZLocalizedString(
-        "ReaderModeBar.MarkAsRead",
+        "ReaderModeBar.MarkAsRead.v106",
         value: "Mark as Read",
         comment: "Name for Mark as read button in reader mode",
         lastUpdated: .v106)
     public static let ReaderModeBarMarkAsUnread = MZLocalizedString(
-        "ReaderModeBar.MarkAsUnread",
+        "ReaderModeBar.MarkAsUnread.v106",
         value: "Mark as Unread",
         comment: "Name for Mark as unread button in reader mode",
         lastUpdated: .v106)
@@ -3635,7 +3635,7 @@ extension String {
         comment: "Accessibility label for the Address Bar, where a user can enter the search they wish to make",
         lastUpdated: .v99)
     public static let TabLocationReaderModeAddToReadingListAccessibilityLabel = MZLocalizedString(
-        "Address.Bar.ReadingList",
+        "Address.Bar.ReadingList.v106",
         value: "Add to Reading List",
         comment: "Accessibility label for action adding current page to reading list.",
         lastUpdated: .v106)
@@ -3680,7 +3680,7 @@ extension String {
         comment: "Accessibility Label for the tab toolbar Stop button",
         lastUpdated: .unknown)
     public static let TabToolbarSearchAccessibilityLabel = MZLocalizedString(
-        "TabToolbar.Accessibility.Search",
+        "TabToolbar.Accessibility.Search.v106",
         value: "Search",
         comment: "Accessibility Label for the tab toolbar Search button",
         lastUpdated: .v106)
@@ -3807,12 +3807,12 @@ extension String {
 // MARK: - LibraryPanel
 extension String {
     public static let LibraryPanelBookmarksAccessibilityLabel = MZLocalizedString(
-        "LibraryPanel.Accessibility.Bookmarks",
+        "LibraryPanel.Accessibility.Bookmarks.v106",
         value: "Bookmarks",
         comment: "Panel accessibility label",
         lastUpdated: .v106)
     public static let LibraryPanelHistoryAccessibilityLabel = MZLocalizedString(
-        "LibraryPanel.Accessibility.History",
+        "LibraryPanel.Accessibility.History.v106",
         value: "History",
         comment: "Panel accessibility label",
         lastUpdated: .v106)
@@ -4165,12 +4165,12 @@ extension String {
 // MARK: - SearchSettings
 extension String {
     public static let SearchSettingsTitle = MZLocalizedString(
-        "SearchSettings.Title.Search",
+        "SearchSettings.Title.Search.v106",
         value: "Search",
         comment: "Navigation title for search settings.",
         lastUpdated: .v106)
     public static let SearchSettingsDefaultSearchEngineAccessibilityLabel = MZLocalizedString(
-        "SearchSettings.Accessibility.DefaultSearchEngine",
+        "SearchSettings.Accessibility.DefaultSearchEngine.v106",
         value: "Default Search Engine",
         comment: "Accessibility label for default search engine setting.",
         lastUpdated: .v106)
@@ -4179,7 +4179,7 @@ extension String {
         comment: "Label for show search suggestions setting.",
         lastUpdated: .unknown)
     public static let SearchSettingsDefaultSearchEngineTitle = MZLocalizedString(
-        "SearchSettings.Title.DefaultSearchEngine",
+        "SearchSettings.Title.DefaultSearchEngine.v106",
         value: "Default Search Engine",
         comment: "Title for default search engine settings section.",
         lastUpdated: .v106)
@@ -4205,11 +4205,11 @@ extension String {
         comment: "Accessibility label for the search input field in the Logins list",
         lastUpdated: .unknown)
     public static let SearchInputTitle = MZLocalizedString(
-        "SearchInput.Title.Search",
+        "SearchInput.Title.Search.v106",
         tableName: "LoginManager",
         value: "Search",
         comment: "Title for the search field at the top of the Logins list screen",
-        lastUpdated: .unknown)
+        lastUpdated: .v106)
     public static let SearchInputClearAccessibilityLabel = MZLocalizedString(
         "Clear Search",
         tableName: "LoginManager",
@@ -4237,7 +4237,7 @@ extension String {
         comment: "Accessibility label for the New Tab button in the tab toolbar.",
         lastUpdated: .unknown)
     public static let TabTrayButtonShowTabsAccessibilityLabel = MZLocalizedString(
-        "TabTrayButtons.Accessibility.ShowTabs",
+        "TabTrayButtons.Accessibility.ShowTabs.v106",
         value: "Show Tabs",
         comment: "Accessibility Label for the tabs button in the tab toolbar",
         lastUpdated: .v106)
@@ -4302,7 +4302,7 @@ extension String {
         comment: "Description for a date more than a week ago, but less than a month ago.",
         lastUpdated: .unknown)
     public static let TimeConstantYesterday = MZLocalizedString(
-        "TimeConstants.Yesterday",
+        "TimeConstants.Yesterday.v106",
         value: "yesterday",
         comment: "Relative date for yesterday.",
         lastUpdated: .v106)
