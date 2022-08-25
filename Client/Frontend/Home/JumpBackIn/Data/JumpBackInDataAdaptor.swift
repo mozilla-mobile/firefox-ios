@@ -44,6 +44,7 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     private var recentGroups: [ASGroup<Tab>]?
     private var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
     private var mostRecentSyncedTab: JumpBackInSyncedTab?
+    private var hasSyncAccount: Bool?
 
     private let mainQueue: DispatchQueueInterface
     private let dispatchGroup: DispatchGroupInterface
@@ -72,7 +73,7 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
                                                           .TabsTrayDidClose,
                                                           .TabsTrayDidSelectHomeTab,
                                                           .TopTabsTabClosed])
-
+        getHasSyncAccount()
         updateData()
     }
 
@@ -83,8 +84,8 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     // MARK: Public interface
 
     var hasSyncedTabFeatureEnabled: Bool {
-        return profile.hasSyncableAccount() &&
-                featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly)
+        return featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly) &&
+            hasSyncAccount ?? false
     }
 
     func getJumpBackInData() -> JumpBackInList {
@@ -214,6 +215,17 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     }
 
     // MARK: Synced tab data
+
+    private func getHasSyncAccount() {
+        guard featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly) else { return }
+
+        profile.hasSyncAccount { hasSync in
+            self.hasSyncAccount = hasSync
+            self.updateRemoteTabs {
+                self.delegate?.didLoadNewData()
+            }
+        }
+    }
 
     private func updateRemoteTabs(completion: @escaping () -> Void) {
         // Short circuit if the user is not logged in or feature not enabled
