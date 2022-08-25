@@ -25,8 +25,7 @@
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Add Tab";
 
-/* Accessibility label for action adding current page to reading list.
-   Name for button adding current article to reading list in reader mode */
+/* Name for button adding current article to reading list in reader mode */
 "Add to Reading List" = "Add to Reading List";
 
 /* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
@@ -191,9 +190,7 @@
 /* Accessibility label for button decreasing font size in display settings of reader mode */
 "Decrease text size" = "Decrease text size";
 
-/* Accessibility label for default search engine setting.
-   Title for default search engine picker.
-   Title for default search engine settings section. */
+/* Title for default search engine picker. */
 "Default Search Engine" = "Default Search Engine";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
@@ -379,49 +376,49 @@
 /* The title for the Share context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Share" = "Share";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Back.DiscoveryTitle" = "Back";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.CloseTab.DiscoveryTitle" = "Close Tab";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of finding text a user desires within a page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Find.DiscoveryTitle" = "Find";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Forward.DiscoveryTitle" = "Forward";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NewPrivateTab.DiscoveryTitle" = "New Private Tab";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NewTab.DiscoveryTitle" = "New Tab";
 
-/* Label to switch to normal browsing mode */
+/* A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NormalMode.DiscoveryTitle" = "Normal Browsing Mode";
 
-/* Label to switch to private browsing mode */
+/* A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.PrivateMode.DiscoveryTitle" = "Private Browsing Mode";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Reload.DiscoveryTitle" = "Reload Page";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of directly accessing the URL, location, bar. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.SelectLocationBar.DiscoveryTitle" = "Select Location Bar";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.ShowNextTab.DiscoveryTitle" = "Show Next Tab";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Show Previous Tab";
 
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "Increase text size";
 
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the past thirty days. */
 "Last month" = "Last month";
 
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Last week";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
@@ -475,12 +472,10 @@
 /* Restore Tabs Prompt Description */
 "Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Looks like Firefox crashed previously. Would you like to restore your tabs?";
 
-/* Name for Mark as read button in reader mode
-   Title for the button that marks a reading list item as read */
+/* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Mark as Read";
 
-/* Name for Mark as unread button in reader mode
-   Title for the button that marks a reading list item as unread */
+/* Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "Mark as Unread";
 
 /* Toast displayed to the user after a bookmark has been added. */
@@ -496,10 +491,10 @@
 "Menu.CopyURL.Confirm" = "URL Copied To Clipboard";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "Enhanced Tracking Protection is OFF for this site.";
+"Menu.EnhancedTrackingProtectionOff.Title" = "Protections are OFF for this site";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "Enhanced Tracking Protection is ON for this site.";
+"Menu.EnhancedTrackingProtectionOn.Title" = "Protections are ON for this site";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Paste";
@@ -663,9 +658,7 @@
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Scan QR Code";
 
-/* Accessibility Label for the tab toolbar Search button
-   Navigation title for search settings.
-   Open search section of settings */
+/* Open search section of settings */
 "Search" = "Search";
 
 /* The text shown in the URL bar on about:home */
@@ -713,8 +706,7 @@
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Send a crash report so Mozilla can fix the problem?";
 
-/* Button title for cancelling share screen
-   Close button in top navigation bar */
+/* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "Cancel";
 
 /* Header for the list of devices table */
@@ -795,7 +787,7 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Replace Query with %s)";
 
-/* Button in Data Management that clears private data for the selected items. */
+/* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Clear All Website Data";
 
 /* Button in settings that clears private data for the selected items. */
@@ -858,8 +850,7 @@
 /* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
 "Settings.DisplayTheme.SwitchSubtitle" = "Switch automatically based on screen brightness";
 
-/* Display (theme) settings label to show if automatically switch theme is enabled.
-   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+/* Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
 "Settings.DisplayTheme.SwitchTitle" = "Automatically";
 
 /* System theme settings section title */
@@ -1051,8 +1042,7 @@
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Show Search Suggestions";
 
-/* Accessibility label for the tabs button in the (top) tab toolbar
-   Accessibility Label for the tabs button in the tab toolbar */
+/* Accessibility label for the tabs button in the (top) tab toolbar */
 "Show Tabs" = "Show Tabs";
 
 /* Show the on-boarding screen again from the settings */
@@ -1076,16 +1066,16 @@
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Tab %1$@ of %2$@";
 
-/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+/* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "Show All Tabs";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Add Tab";
 
-/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+/* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Close All Tabs";
 
-/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+/* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Open New Tab";
 
 /* The title for the tab tray */
@@ -1121,7 +1111,7 @@
 /* Label for button to undo the action just performed */
 "Toasts.Undo" = "Undo";
 
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "Today";
 
 /* Accessibility label for the Menu button. */
@@ -1169,7 +1159,7 @@
 /* Tile title for Wikipedia */
 "Wikipedia" = "Wikipedia";
 
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the past 24 hours. */
 "Yesterday" = "Yesterday";
 
 /* Error message in the remote tabs panel */
