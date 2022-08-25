@@ -648,8 +648,7 @@ extension HomepageViewController: HomepageViewModelDelegate {
     func reloadView() {
         ensureMainThread { [weak self] in
             // If the view controller is not visible ignore updates
-            guard let self = self,
-                  self.view.alpha != 0
+            guard let self = self
             else { return }
 
             self.viewModel.refreshData(for: self.traitCollection)
