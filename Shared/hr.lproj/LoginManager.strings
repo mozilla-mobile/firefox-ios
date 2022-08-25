@@ -14,7 +14,7 @@
 "Created %@" = "Izrađeno %@";
 
 /* Label for the button used to delete the current login. */
-"Delete" = "Obriši";
+"Delete" = "Izbriši";
 
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Poništi odabir";

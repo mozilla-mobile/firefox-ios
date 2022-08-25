@@ -167,10 +167,6 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         return eligibleTabs
     }
 
-    var lastSessionWasPrivate: Bool {
-        return UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
-    }
-
     // MARK: - Initializer
     init(profile: Profile, imageStore: DiskImageStore?) {
 
@@ -880,8 +876,8 @@ extension TabManager {
 
         var tabToSelect = store.restoreStartupTabs(clearPrivateTabs: shouldClearPrivateTabs(),
                                                    tabManager: self)
-        if lastSessionWasPrivate, !(tabToSelect?.isPrivate ?? false) {
-            tabToSelect = addTab(isPrivate: true)
+        if tabToSelect == nil {
+            tabToSelect = addTab()
         }
 
         selectTab(tabToSelect)
@@ -917,7 +913,7 @@ extension TabManager {
         guard !startAtHomeManager.shouldSkipStartHome else { return }
 
         if startAtHomeManager.shouldStartAtHome() {
-            let wasLastSessionPrivate = selectedTab?.isPrivate ?? lastSessionWasPrivate
+            let wasLastSessionPrivate = selectedTab?.isPrivate ?? false
             let scannableTabs = wasLastSessionPrivate ? privateTabs : normalTabs
             let existingHomeTab = startAtHomeManager.scanForExistingHomeTab(in: scannableTabs,
                                                                             with: profile.prefs)

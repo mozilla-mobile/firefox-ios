@@ -126,6 +126,9 @@ protocol Profile: AnyObject {
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
     func localName() -> String
 
+    // Async call to wait for result
+    func hasSyncAccount(completion: @escaping (Bool) -> Void)
+
     // Do we have an account at all?
     func hasAccount() -> Bool
 
@@ -627,6 +630,12 @@ open class BrowserProfile: Profile {
 
         return RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
     }()
+
+    func hasSyncAccount(completion: @escaping (Bool) -> Void) {
+        rustFxA.hasAccount { hasAccount in
+            completion(hasAccount)
+        }
+    }
 
     func hasAccount() -> Bool {
         return rustFxA.hasAccount()
@@ -1421,8 +1430,22 @@ open class BrowserProfile: Profile {
         }
 
         public func syncClientsThenTabs() -> SyncResult {
-            return self.sync("clients", function: self.syncClientsWithDelegate)
-            >>> { self.sync("tabs", function: self.syncTabsWithDelegate) }
+            // Previously we were making two separate `self.sync` calls, each of which
+            // made a `self.syncSeveral` call. Because `self.syncSeveral` is meant to batch
+            // engine syncs, this caused the second `self.sync` call (for the tabs engine)
+            // to be cancelled as the first call for the clients engine was still running.
+            // Here we are calling `self.syncSeveral` once for both engines to prevent
+            // that from happening so the tabs engine syncing actually occurs.
+
+            return self.syncSeveral(
+                why: .user,
+                synchronizers:
+                ("clients", self.syncClientsWithDelegate),
+                ("tabs", self.syncTabsWithDelegate)
+            ) >>== { statuses in
+                let status = statuses.find { "tabs" == $0.0 }
+                return deferMaybe(status!.1)
+            }
         }
 
         @discardableResult public func syncBookmarks() -> SyncResult {

@@ -1,17 +1,8 @@
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction.Title" = "Bookmark This Page";
-
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "Close All Tabs";
 
-/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
-"Menu.CopyAddress.Title" = "Copy Address";
-
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "Find in Page";
-
-/* Label for the button, displayed in the menu, used to Reload the webpage */
-"Menu.Library.Reload" = "Reload";
 
 /* Label for the button, displayed in the menu, used to open a new private tab. */
 "Menu.NewPrivateTabAction.Title" = "Open New Private Tab";
@@ -37,26 +28,11 @@
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Synced Tabs";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
-"Menu.OpenTopSitesAction.AccessibilityLabel" = "Top Sites";
-
-/* Label for the button, displayed in the menu, used to show the html page source */
-"Menu.PageSourceAction.Title" = "View Page Source";
-
-/* Label for the button, displayed in the menu, used to open the QR code scanner. */
-"Menu.ScanQRCodeAction.Title" = "Scan QR Code";
-
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "See All";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
 "Menu.SharePageAction.Title" = "Share Page With…";
-
-/* Label for the button, displayed in the menu, used to open the tabs tray */
-"Menu.ShowTabs.Title" = "Show Tabs";
-
-/* Label for the button, displayed in the menu, used to translate the current page. */
-"Menu.TranslatePageAction.Title" = "Translate Page";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "Request Desktop Site";

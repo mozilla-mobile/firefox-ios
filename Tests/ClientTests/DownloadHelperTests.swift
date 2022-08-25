@@ -12,17 +12,17 @@ class DownloadHelperTests: XCTestCase {
     func test_init_whenMIMETypeIsNil_initializeCorrectly() {
         let response = anyResponse(mimeType: nil)
 
-        var sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
-        XCTAssertNotNil(sut)
+        var subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
+        XCTAssertNotNil(subject)
 
-        sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: true)
-        XCTAssertNotNil(sut)
+        subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: true)
+        XCTAssertNotNil(subject)
 
-        sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: false)
-        XCTAssertNotNil(sut)
+        subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: false)
+        XCTAssertNotNil(subject)
 
-        sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: true)
-        XCTAssertNotNil(sut)
+        subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: true)
+        XCTAssertNotNil(subject)
     }
 
     func test_init_whenMIMETypeIsNotOctetStream_initializeCorrectly() {
@@ -31,58 +31,58 @@ class DownloadHelperTests: XCTestCase {
 
             let response = anyResponse(mimeType: mimeType)
 
-            var sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
-            XCTAssertNil(sut)
+            var subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
+            XCTAssertNil(subject)
 
-            sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: true)
-            XCTAssertNotNil(sut)
+            subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: true)
+            XCTAssertNotNil(subject)
 
-            sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: false)
-            XCTAssertNotNil(sut)
+            subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: false)
+            XCTAssertNotNil(subject)
 
-            sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: true)
-            XCTAssertNotNil(sut)
+            subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: true)
+            XCTAssertNotNil(subject)
         }
     }
 
     func test_init_whenMIMETypeIsOctetStream_initializeCorrectly() {
         let response = anyResponse(mimeType: MIMEType.OctetStream)
 
-        var sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
-        XCTAssertNotNil(sut)
+        var subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
+        XCTAssertNotNil(subject)
 
-        sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: true)
-        XCTAssertNotNil(sut)
+        subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: true)
+        XCTAssertNotNil(subject)
 
-        sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: true)
-        XCTAssertNotNil(sut)
+        subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: true)
+        XCTAssertNotNil(subject)
 
-        sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: false)
-        XCTAssertNotNil(sut)
+        subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: false)
+        XCTAssertNotNil(subject)
     }
 
     func test_downloadViewModel_whenRequestURLIsWrong_deliversEmptyResult() {
         let request = anyRequest(urlString: "wrong-url.com")
-        let sut = DownloadHelper(request: request, response: anyResponse(mimeType: nil), cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
+        let subject = DownloadHelper(request: request, response: anyResponse(mimeType: nil), cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
 
-        let downloadViewModel = sut?.downloadViewModel(okAction: { _ in })
+        let downloadViewModel = subject?.downloadViewModel(okAction: { _ in })
 
         XCTAssertNil(downloadViewModel)
     }
 
     func test_downloadViewModel_deliversCorrectTitle() {
         let response = anyResponse(urlString: "http://some-domain.com/some-image.jpg")
-        let sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
+        let subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
 
-        let downloadViewModel = sut?.downloadViewModel(okAction: { _ in })
+        let downloadViewModel = subject?.downloadViewModel(okAction: { _ in })
 
         XCTAssertEqual(downloadViewModel!.title!, "some-image.jpg")
     }
 
     func test_downloadViewModel_deliversCorrectCancelButtonTitle() {
-        let sut = DownloadHelper(request: anyRequest(), response: anyResponse(mimeType: nil), cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
+        let subject = DownloadHelper(request: anyRequest(), response: anyResponse(mimeType: nil), cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
 
-        let downloadViewModel = sut?.downloadViewModel(okAction: { _ in })
+        let downloadViewModel = subject?.downloadViewModel(okAction: { _ in })
 
         XCTAssertEqual(downloadViewModel!.closeButtonTitle, .CancelString)
     }

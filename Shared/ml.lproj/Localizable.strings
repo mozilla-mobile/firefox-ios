@@ -883,7 +883,7 @@
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
    Open search section of settings */
-"Search" = "തിരയുക";
+"Search" = "തെരയുക";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "തെരയൂ അല്ലെങ്കില്‍ വിലാസം നല്‍കൂ";

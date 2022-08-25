@@ -9,6 +9,7 @@ protocol DispatchQueueInterface {
                qos: DispatchQoS,
                flags: DispatchWorkItemFlags,
                execute work: @escaping @convention(block) () -> Void)
+    func ensureMainThread(execute work: @escaping @convention(block) () -> Swift.Void)
 }
 
 extension DispatchQueueInterface {
@@ -22,6 +23,15 @@ extension DispatchQueueInterface {
               execute: work)
     }
 
+    func ensureMainThread(execute work: @escaping @convention(block) () -> Swift.Void) {
+        if Thread.isMainThread {
+            work()
+        } else {
+            DispatchQueue.main.async {
+                work()
+            }
+        }
+    }
 }
 
 extension DispatchQueue: DispatchQueueInterface {}

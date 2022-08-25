@@ -87,7 +87,7 @@
 "Brightness" = "Parlaklık";
 
 /* Label for Cancel button */
-"Cancel" = "İptal";
+"Cancel" = "Bekor qilish";
 
 /* Accessibility hint for the color theme setting buttons in reader mode display settings */
 "Changes color theme." = "Renk temasını değiştirir.";
@@ -448,7 +448,7 @@
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
    Open search section of settings */
-"Search" = "Izlash";
+"Search" = "Qidirish";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Izlang yoki manzilni kiriting";

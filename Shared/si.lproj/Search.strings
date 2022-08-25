@@ -1,0 +1,9 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "%@ සෙවුම";
+
+/* Label for search settings button. */
+"Search Settings" = "සෙවුම් සැකසුම්";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "%@ වෙතින් සෙවුම් යෝජනා";
+

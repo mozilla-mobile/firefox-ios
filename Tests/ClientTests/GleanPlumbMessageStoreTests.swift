@@ -8,24 +8,24 @@ import XCTest
 
 class GleanPlumbMessageStoreTests: XCTestCase {
 
-    var sut: GleanPlumbMessageStore!
+    var subject: GleanPlumbMessageStore!
     let messageId = "testId"
 
     override func setUp() {
         super.setUp()
-        sut = GleanPlumbMessageStore()
+        subject = GleanPlumbMessageStore()
         resetUserDefaults()
     }
 
     override func tearDown() {
         super.tearDown()
         resetUserDefaults()
-        sut = nil
+        subject = nil
     }
 
     func testImpression_OnMessageDisplayed() {
         let message = createMessage(messageId: messageId)
-        sut.onMessageDisplayed(message)
+        subject.onMessageDisplayed(message)
 
         XCTAssertEqual(message.metadata.impressions, 1)
         XCTAssertFalse(message.metadata.isExpired)
@@ -33,8 +33,8 @@ class GleanPlumbMessageStoreTests: XCTestCase {
 
     func testOnMessageExpired_WhenPressed() {
         let message = createMessage(messageId: messageId)
-        sut.onMessageDisplayed(message)
-        sut.onMessagePressed(message)
+        subject.onMessageDisplayed(message)
+        subject.onMessagePressed(message)
 
         XCTAssertEqual(message.metadata.impressions, 1)
         XCTAssertTrue(message.metadata.isExpired)
@@ -42,8 +42,8 @@ class GleanPlumbMessageStoreTests: XCTestCase {
 
     func testOnMessageExpired_WhenDismiss() {
         let message = createMessage(messageId: messageId)
-        sut.onMessageDisplayed(message)
-        sut.onMessageDismissed(message)
+        subject.onMessageDisplayed(message)
+        subject.onMessageDismissed(message)
 
         XCTAssertEqual(message.metadata.impressions, 1)
         XCTAssertTrue(message.metadata.isExpired)
@@ -58,7 +58,7 @@ class GleanPlumbMessageStoreTests: XCTestCase {
                                  action: "MAKE_DEFAULT",
                                  triggers: ["ALWAYS"],
                                  style: styleData,
-                                 metadata: sut.getMessageMetadata(messageId: messageId))
+                                 metadata: subject.getMessageMetadata(messageId: messageId))
     }
 
     private func resetUserDefaults() {

@@ -1,0 +1,6 @@
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Скасаваць";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Выдаліць";
+

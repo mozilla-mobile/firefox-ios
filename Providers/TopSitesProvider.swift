@@ -71,7 +71,8 @@ class TopSitesProviderImplementation: TopSitesProvider {
         getPinnedSites(group: group)
 
         group.notify(queue: .global(qos: .userInitiated)) { [weak self] in
-            self?.calculateTopSites(completion: completion)
+            guard let self = self else { return }
+            self.calculateTopSites(completion: completion)
         }
     }
 

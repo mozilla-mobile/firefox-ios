@@ -1,0 +1,96 @@
+/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
+"Menu.AddBookmarkAction.Title" = "මෙම පිටුවට පොත්යොමුවක්";
+
+/* Long label for the button displayed in the menu, used to add a page to the reading list. */
+"Menu.AddToReadingList.AlternateLabel.v99" = "කියවීමේ ලේඛනයට එක් කරන්න";
+
+/* Label for the button, displayed in the menu, used to add a page to the reading list. */
+"Menu.AddToReadingList.Title" = "කියවීමේ ලේඛනයට එක් කරන්න";
+
+/* Label for the button, displayed in the menu, used to close all tabs currently open. */
+"Menu.CloseAllTabsAction.Title" = "සියළු පටිති වසන්න";
+
+/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
+"Menu.CopyAddress.Title" = "ලිපිනයේ පිටපතක්";
+
+/* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
+"Menu.CopyLink.Title" = "සබැඳියේ පිටපතක්";
+
+/* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
+"Menu.FindInPageAction.Title" = "පිටුවේ සොයන්න";
+
+/* Label for the button, displayed in the menu, used to Reload the webpage */
+"Menu.Library.Reload" = "යළි පූරණය";
+
+/* Label for the button, displayed in the menu, used to open the Library */
+"Menu.Library.Title" = "ඔබගේ එකතුව";
+
+/* Label for the button, displayed in the menu, used to open a new private tab. */
+"Menu.NewPrivateTabAction.Title" = "නව පෞද්. පටිත්තක් අරින්න";
+
+/* Label for the button, displayed in the menu, used to open a new tab */
+"Menu.NewTabAction.Title" = "නව පටිත්තක් අරින්න";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "පොත්යොමු";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "බාගැනීම්";
+
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenHistoryAction.AccessibilityLabel.v2" = "ඉතිහාසය";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"Menu.OpenHomePageAction.Title" = "මුල";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenReadingListAction.AccessibilityLabel.v2" = "කියවීමේ ලේඛනය";
+
+/* Label for the button, displayed in the menu, used to open the Settings menu. */
+"Menu.OpenSettingsAction.Title" = "සැකසුම්";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "සමමුහූර්ත පටිති";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "ප්‍රචලිත අඩවි";
+
+/* Label for the button, displayed in the menu, used to show the html page source */
+"Menu.PageSourceAction.Title" = "පිටුවේ මූලාශ්‍රය බලන්න";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"Menu.RecentlySaved.Title" = "මෑතදී සුරැකි";
+
+/* Long label for the remove bookmark button displayed in the menu. Pressing this button remove the current page from the bookmarks. */
+"Menu.RemoveBookmark.AlternateLabel.v99" = "පොත්යොමුව ඉවත් කරන්න";
+
+/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
+"Menu.RemoveBookmarkAction.Title" = "පොත්යොමුව ඉවත් කරන්න";
+
+/* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
+"Menu.ReportSiteIssueAction.Title" = "අඩවියේ දෝෂ වාර්තාව";
+
+/* Label for the button, displayed in the menu, used to open the QR code scanner. */
+"Menu.ScanQRCodeAction.Title" = "QR කේතය සුපිරික්සන්න";
+
+/* Label for the button, displayed in Firefox Home, used to see all Library panels. */
+"Menu.SeeAllAction.Title" = "සියල්ල බලන්න";
+
+/* Label for the button, displayed in the menu, used to open the share dialog. */
+"Menu.SharePageAction.Title" = "සමඟ පිටුව බෙදාගන්න…";
+
+/* Label for the button, displayed in the menu, used to open the tabs tray */
+"Menu.ShowTabs.Title" = "පටිති පෙන්වන්න";
+
+/* Label for the button, displayed in the menu, used to translate the current page. */
+"Menu.TranslatePageAction.Title" = "පිටුව පරිවර්තනය";
+
+/* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
+"Menu.ViewDekstopSiteAction.Title" = "වැඩතල අඩවිය ඉල්ලන්න";
+
+/* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
+"Menu.ViewMobileSiteAction.Title" = "ජංගම අඩවිය ඉල්ලන්න";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"SettingsMenu.OpenHomePageAction.Title" = "මුල් පිටුව";
+

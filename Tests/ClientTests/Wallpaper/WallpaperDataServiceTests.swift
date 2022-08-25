@@ -29,10 +29,10 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
         let expectedMetadata = getExpectedMetadata(for: .goodData)
 
         networking.result = .success(data)
-        let sut = WallpaperDataService(with: networking)
+        let subject = WallpaperDataService(with: networking)
 
         do {
-            let actualMetadata = try await sut.getMetadata()
+            let actualMetadata = try await subject.getMetadata()
             XCTAssertEqual(
                 actualMetadata,
                 expectedMetadata,
@@ -47,10 +47,10 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
         let expectedMetadata = getExpectedMetadata(for: .noLearnMoreURL)
 
         networking.result = .success(data)
-        let sut = WallpaperDataService(with: networking)
+        let subject = WallpaperDataService(with: networking)
 
         do {
-            let actualMetadata = try await sut.getMetadata()
+            let actualMetadata = try await subject.getMetadata()
             XCTAssertEqual(
                 actualMetadata,
                 expectedMetadata,
@@ -65,10 +65,10 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
         let expectedMetadata = getExpectedMetadata(for: .noAvailabilityRange)
 
         networking.result = .success(data)
-        let sut = WallpaperDataService(with: networking)
+        let subject = WallpaperDataService(with: networking)
 
         do {
-            let actualMetadata = try await sut.getMetadata()
+            let actualMetadata = try await subject.getMetadata()
             XCTAssertEqual(
                 actualMetadata,
                 expectedMetadata,
@@ -83,10 +83,10 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
         let expectedMetadata = getExpectedMetadata(for: .noLocales)
 
         networking.result = .success(data)
-        let sut = WallpaperDataService(with: networking)
+        let subject = WallpaperDataService(with: networking)
 
         do {
-            let actualMetadata = try await sut.getMetadata()
+            let actualMetadata = try await subject.getMetadata()
             XCTAssertEqual(
                 actualMetadata,
                 expectedMetadata,
@@ -101,10 +101,10 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
         let expectedMetadata = getExpectedMetadata(for: .availabilityStart)
 
         networking.result = .success(data)
-        let sut = WallpaperDataService(with: networking)
+        let subject = WallpaperDataService(with: networking)
 
         do {
-            let actualMetadata = try await sut.getMetadata()
+            let actualMetadata = try await subject.getMetadata()
             XCTAssertEqual(
                 actualMetadata,
                 expectedMetadata,
@@ -119,10 +119,10 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
         let expectedMetadata = getExpectedMetadata(for: .availabilityEnd)
 
         networking.result = .success(data)
-        let sut = WallpaperDataService(with: networking)
+        let subject = WallpaperDataService(with: networking)
 
         do {
-            let actualMetadata = try await sut.getMetadata()
+            let actualMetadata = try await subject.getMetadata()
             XCTAssertEqual(
                 actualMetadata,
                 expectedMetadata,
@@ -136,10 +136,10 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
         let data = getDataFromJSONFile(named: .badLastUpdatedDate)
 
         networking.result = .success(data)
-        let sut = WallpaperDataService(with: networking)
+        let subject = WallpaperDataService(with: networking)
 
         do {
-            _ = try await sut.getMetadata()
+            _ = try await subject.getMetadata()
             XCTFail("We should fail the extraction process")
 
         } catch let error {
@@ -153,10 +153,10 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
         let data = getDataFromJSONFile(named: .badTextColour)
 
         networking.result = .success(data)
-        let sut = WallpaperDataService(with: networking)
+        let subject = WallpaperDataService(with: networking)
 
         do {
-            _ = try await sut.getMetadata()
+            _ = try await subject.getMetadata()
             XCTFail("We should fail the extraction process")
         } catch let error {
             XCTAssertEqual(error.localizedDescription,

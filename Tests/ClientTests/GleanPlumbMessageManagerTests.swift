@@ -9,7 +9,7 @@ import Glean
 
 class GleanPlumbMessageManagerTests: XCTestCase {
 
-    var sut: GleanPlumbMessageManager!
+    var subject: GleanPlumbMessageManager!
     var messagingStore: MockGleanPlumbMessageStore!
     let messageId = "testId"
 
@@ -19,34 +19,34 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
         messagingStore = MockGleanPlumbMessageStore(messageId: messageId)
-        sut = GleanPlumbMessageManager(messagingStore: messagingStore)
+        subject = GleanPlumbMessageManager(messagingStore: messagingStore)
     }
 
     override func tearDown() {
         super.tearDown()
 
         messagingStore = nil
-        sut = nil
+        subject = nil
     }
 
     func testManagerHasMessage() {
-        let messageForSurface = sut.hasMessage(for: .newTabCard)
+        let messageForSurface = subject.hasMessage(for: .newTabCard)
         XCTAssertTrue(messageForSurface)
     }
 
     func testManagerGetMessage() {
-        guard let message = sut.getNextMessage(for: .newTabCard) else {
+        guard let message = subject.getNextMessage(for: .newTabCard) else {
             XCTFail("Expected to retrieve message")
             return
         }
 
-        sut.onMessageDisplayed(message)
+        subject.onMessageDisplayed(message)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.shown)
     }
 
     func testManagerOnMessageDisplayed() {
         let message = createMessage(messageId: messageId)
-        sut.onMessageDisplayed(message)
+        subject.onMessageDisplayed(message)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertFalse(messageMetadata.isExpired)
         XCTAssertEqual(messageMetadata.impressions, 1)
@@ -55,7 +55,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 
     func testManagerOnMessagePressed() {
         let message = createMessage(messageId: messageId)
-        sut.onMessagePressed(message)
+        subject.onMessagePressed(message)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
@@ -63,7 +63,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 
     func testManagerOnMessageDismissed() {
         let message = createMessage(messageId: messageId)
-        sut.onMessageDismissed(message)
+        subject.onMessageDismissed(message)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertEqual(messageMetadata.dismissals, 1)
         XCTAssertTrue(messageMetadata.isExpired)
