@@ -483,6 +483,9 @@ extension TelemetryWrapper {
         case awesomebarLocation = "awesomebar-position"
         case searchHighlights = "search-highlights"
         case clearSDWebImageCache = "clear-sd-webimage-cache"
+        case viewDownloadsPanel = "view-downloads-panel"
+        case viewHistoryPanel = "view-history-panel"
+        case createNewTab = "create-new-tab"
     }
 
     public enum EventValue: String {
@@ -1051,6 +1054,12 @@ extension TelemetryWrapper {
             GleanMetrics.PageActionMenu.requestDesktopSite.add()
         case (.action, .tap, .requestMobileSite, _, _):
             GleanMetrics.PageActionMenu.requestMobileSite.add()
+        case (.action, .tap, .viewDownloadsPanel, _, _):
+            GleanMetrics.PageActionMenu.viewDownloadsPanel.add()
+        case (.action, .tap, .viewHistoryPanel, _, _):
+            GleanMetrics.PageActionMenu.viewHistoryPanel.add()
+        case (.action, .tap, .createNewTab, _, _):
+            GleanMetrics.PageActionMenu.createNewTab.add()
 
         // MARK: Inactive Tab Tray
         case (.action, .tap, .inactiveTabTray, .openInactiveTab, _):
