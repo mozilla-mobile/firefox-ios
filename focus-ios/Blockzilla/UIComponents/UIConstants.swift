@@ -135,6 +135,7 @@ struct UIConstants {
         static let contextMenuButtonMargin: CGFloat = 14
         static let contextMenuIconSize: CGFloat = 28
         static let deleteButtonMarginContextMenu: CGFloat = -16
+        static let toastLabelOffset: CGFloat = 20
     }
 
     struct strings {

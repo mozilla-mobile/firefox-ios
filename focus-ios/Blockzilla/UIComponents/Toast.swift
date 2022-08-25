@@ -17,12 +17,14 @@ class Toast {
         }
 
         let toast = UIView()
+        toast.translatesAutoresizingMaskIntoConstraints = false
         toast.backgroundColor = .locationBar
         toast.alpha = 0
         toast.layer.cornerRadius = UIConstants.layout.toastMessageHeight / 2
         window.addSubview(toast)
 
         let label = SmartLabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = text
         label.textColor = .primaryText
         label.font = .footnote12Semibold
@@ -31,19 +33,19 @@ class Toast {
         label.accessibilityIdentifier = "Toast.label"
         toast.addSubview(label)
 
-        toast.snp.makeConstraints { make in
-            let topOffset = UIConstants.layout.urlBarHeightInset + (UIConstants.layout.urlBarBorderInset * 2) + UIConstants.layout.urlBarHeight
-            make.top.equalTo(window.safeAreaLayoutGuide).offset(topOffset)
-            make.centerX.equalTo(window)
-            make.leading.greaterThanOrEqualTo(window)
-            make.trailing.lessThanOrEqualTo(window)
-            make.height.equalTo(UIConstants.layout.toastMessageHeight)
-        }
+        let topOffset = UIConstants.layout.urlBarHeightInset + (UIConstants.layout.urlBarBorderInset * 2) + UIConstants.layout.urlBarHeight
 
-        label.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(toast).inset(20)
-            make.centerY.equalTo(toast)
-        }
+        NSLayoutConstraint.activate([
+            toast.topAnchor.constraint(equalTo: window.safeAreaLayoutGuide.topAnchor, constant: topOffset),
+            toast.centerXAnchor.constraint(equalTo: window.centerXAnchor),
+            toast.leadingAnchor.constraint(greaterThanOrEqualTo: window.leadingAnchor),
+            toast.trailingAnchor.constraint(lessThanOrEqualTo: window.trailingAnchor),
+            toast.heightAnchor.constraint(equalToConstant: UIConstants.layout.toastMessageHeight),
+
+            label.leadingAnchor.constraint(equalTo: toast.leadingAnchor, constant: UIConstants.layout.toastLabelOffset),
+            label.trailingAnchor.constraint(equalTo: toast.trailingAnchor, constant: -UIConstants.layout.toastLabelOffset),
+            label.centerYAnchor.constraint(equalTo: toast.centerYAnchor)
+        ])
 
         toast.animateHidden(false, duration: UIConstants.layout.toastAnimationDuration) {
             DispatchQueue.main.asyncAfter(deadline: .now() + UIConstants.layout.toastDuration) {
