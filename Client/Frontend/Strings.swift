@@ -3807,9 +3807,10 @@ extension String {
         comment: "Panel accessibility label",
         lastUpdated: .unknown)
     public static let LibraryPanelHistoryAccessibilityLabel = MZLocalizedString(
-        "History",
+        "library.accessibility.history",
+        value: "History",
         comment: "Panel accessibility label",
-        lastUpdated: .unknown)
+        lastUpdated: .v106)
     public static let LibraryPanelReadingListAccessibilityLabel = MZLocalizedString(
         "Reading list",
         comment: "Panel accessibility label",
