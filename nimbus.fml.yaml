@@ -15,7 +15,8 @@ features:
           "onboarding-first-run-flow": false,
           "onboarding-upgrade-flow": false,
           "sync-cfr": false,
-          "jump-back-in-cfr": false,
+          "jump-back-in-cfr-update": false,
+          "toolbar-cfr-update": false,
           "wallpaper-onboarding-sheet": false,
         }
     defaults:
@@ -25,7 +26,8 @@ features:
               "onboarding-first-run-flow": true,
               "onboarding-upgrade-flow": true,
               "sync-cfr": true,
-              "jump-back-in-cfr": true,
+              "jump-back-in-cfr-update": true,
+              "toolbar-cfr-update": true,
               "wallpaper-onboarding-sheet": true,
           }
         }
@@ -302,7 +304,7 @@ features:
       features-enabled:
         description: This property provides a lookup table of whether specific contextual hints are enabled.
         type: Map<ContextualHint, Boolean>
-        default: 
+        default:
         {
           "toolbar-contextual-hint": true,
           "jump-back-in-contextual-hint": true,
@@ -479,7 +481,11 @@ types:
           type: Boolean
           description: Whether or not the feature is enabled
           default: false
-        jump-back-in-cfr:
+        jump-back-in-cfr-update:
+          type: Boolean
+          description: Whether or not the feature is enabled
+          default: false
+        toolbar-cfr-update:
           type: Boolean
           description: Whether or not the feature is enabled
           default: false
@@ -685,7 +691,7 @@ types:
       variants:
         inactive-tabs:
           description: Tabs that have been automatically closed for the user.
-    
+
     ContextualHint:
       description: The identifiers for a individual contextual hints.
       variants:
