@@ -2,6 +2,7 @@ name: Create a PR with changes after importing strings
 on:
   schedule:
     - cron: '0 11 * * 1'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -12,14 +13,14 @@ jobs:
         python-version: [3.9]
         xcode: ["13.4.1"]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
-        persist-credentials: false 
+        persist-credentials: false
         token: ${{ secrets.GITHUB_TOKEN }}
     - name: Select Xcode ${{ matrix.xcode }}
       run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
     - name: Get the current date for PR title
@@ -31,7 +32,7 @@ jobs:
         git diff || (git add Shared/*/*.lproj/* Shared/*.lproj/* WidgetKit/*.lproj/* Client/*/*.lproj/* Client/*.lproj/*)
         git restore Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v4
       with:
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
