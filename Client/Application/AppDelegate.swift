@@ -296,7 +296,12 @@ extension AppDelegate {
             UIKeyCommand(title: .KeyboardShortcuts.SelectLocationBar, action: #selector(BrowserViewController.selectLocationBarKeyCommand), input: "l", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.SelectLocationBar),
             UIKeyCommand(title: .KeyboardShortcuts.CloseCurrentTab, action: #selector(BrowserViewController.closeTabKeyCommand), input: "w", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.CloseCurrentTab),
         ])
-        fileMenu.children.forEach { ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true }
+
+        if #available(iOS 15, *) {
+            fileMenu.children.forEach {
+                ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
+            }
+        }
 
         let editMenu = UIMenu(options: .displayInline, children: [
             UIKeyCommand(title: .KeyboardShortcuts.Find, action: #selector(BrowserViewController.findInPageKeyCommand), input: "f", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.Find),
@@ -309,7 +314,12 @@ extension AppDelegate {
             UIKeyCommand(title: .KeyboardShortcuts.ActualSize, action: #selector(BrowserViewController.resetZoom), input: "0", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ActualSize),
             UIKeyCommand(title: .KeyboardShortcuts.ReloadPage, action: #selector(BrowserViewController.reloadTabKeyCommand), input: "r", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ReloadPage)
         ])
-        viewMenu.children.forEach { ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true }
+
+        if #available(iOS 15, *) {
+            viewMenu.children.forEach {
+                ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
+            }
+        }
 
         let historyMenu = UIMenu(title: .KeyboardShortcuts.Sections.History, identifier: UIMenu.Identifier("com.mozilla.firefox.menus.history"), options: .displayInline, children: [
             UIKeyCommand(title: .KeyboardShortcuts.ShowHistory, action: #selector(BrowserViewController.showHistoryKeyCommand), input: "y", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ShowHistory),
@@ -334,7 +344,12 @@ extension AppDelegate {
             UIKeyCommand(title: .KeyboardShortcuts.ShowPreviousTab, action: #selector(BrowserViewController.previousTabKeyCommand), input: "\t", modifierFlags: [.control, .shift], discoverabilityTitle: .KeyboardShortcuts.ShowPreviousTab),
             UIKeyCommand(title: .KeyboardShortcuts.ShowTabTray, action: #selector(BrowserViewController.showTabTrayKeyCommand), input: "\t", modifierFlags: [.command, .alternate], discoverabilityTitle: .KeyboardShortcuts.ShowTabTray),
         ])
-        windowMenu.children.forEach { ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true }
+
+        if #available(iOS 15, *) {
+            windowMenu.children.forEach {
+                ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
+            }
+        }
 
         builder.insertChild(applicationMenu, atStartOfMenu: .application)
         builder.insertChild(fileMenu, atStartOfMenu: .file)
