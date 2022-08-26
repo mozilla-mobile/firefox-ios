@@ -1,45 +1,9 @@
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "पुढे";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "साइन इन";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "साइन अप करा";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "फक्त मेल नाही — Firefox सोबत — कोणतेही इमेल अॅप वापरा.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "आपल्याला मेल आलाय… पर्याय";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "खाजगी ब्राऊझिंग चालू करण्यासाठी मुखवट्यावर क्लिक करा.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "कोणीच पाहत नाही आहे असे ब्राउजिंग करा";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "काही वेगळे शोधत आहात का? सेटिंग मधून अन्य पूर्वनिर्धारित शोध इंजिन ठरवा (किंवा स्वतःचा पर्याय जोडा).";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "आपला शोध, आपल्या प्रमाणे";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "संकलन करण्यासाठी आपल्या खात्यामध्ये साइन इन करा आणि अधिक वैशिष्ट्यांचा अॅक्सेस मिळवा.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "आपले बुकमार्क, इतिहास आणि संकेतशब्द आपल्या फोनवर सिंक करा.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "जलद, खाजगी आणि आपल्या बाजूने.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Firefox मध्ये स्वागत आहे";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "ब्राउजिंग सुरु करा";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "सिंक चालू करा…";
 

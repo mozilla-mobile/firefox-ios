@@ -4,24 +4,6 @@
 /* Close Private Tabs */
 "TodayWidget.ClosePrivateTabsLabelV2" = "Privát lapok bezárása";
 
-/* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV3" = "Privát lapok bezárása";
-
-/* Copied Link from clipboard displayed */
-"TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "Hivatkozás másolva a vágólapról";
-
-/* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemClearPrivateTabs" = "Privát lapok törlése";
-
-/* Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemGoToCopiedLink" = "Ugrás a másolt hivatkozáshoz";
-
-/* Quick Actions drop down menu item for new private search when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemNewPrivateSearch" = "Új privát keresés";
-
-/* Quick Actions drop down menu item for new search when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemNewSearch" = "Új keresés";
-
 /* Description for medium size widget to add Firefox Shortcut to home screen */
 "TodayWidget.FirefoxShortcutGalleryDescription" = "Firefoxos parancsikonok hozzáadása a kezdőképernyőhöz.";
 
@@ -31,20 +13,8 @@
 /* Go to copied link */
 "TodayWidget.GoToCopiedLinkLabelV2" = "Ugrás a másolt hivatkozáshoz";
 
-/* Go To Copied Link text pasted on the clipboard but this string doesn't have new line character */
-"TodayWidget.GoToCopiedLinkLabelV3" = "Ugrás a másolt hivatkozáshoz";
-
-/* Go to copied link */
-"TodayWidget.GoToCopiedLinkLabelV4" = "Ugrás a másolt hivatkozáshoz";
-
 /* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
 "TodayWidget.MoreTabsLabel" = "+%d további…";
-
-/* Open New Private Tab button label for medium size action */
-"TodayWidget.NewPrivateTabButtonLabelV2" = "Keresés privát lapon";
-
-/* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Keresés a Firefoxban";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Új keresés";
@@ -52,29 +22,11 @@
 /* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.NoOpenTabsLabel" = "Nincsenek nyitott lapok.";
 
-/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.NoOpenTabsLabelV2" = "Nincs nyitott lap";
-
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.OpenFirefoxLabel" = "Firefox megnyitása";
 
-/* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetGalleryDescription" = "Fedezzen fel az izgalmas és elgondolkodtató történeteket az internetről, a Pocket válogatásából.";
-
-/* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox – a Pocket ajánlásával";
-
-/* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetTitle" = "A Pocket ajánlásával";
-
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Privát keresés";
-
-/* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Válasszon egy kezdőképernyőhöz adandó firefoxos parancsikont.";
-
-/* Quick Actions left label text for dropdown menu when widget enters edit mode */
-"TodayWidget.QuickActionDropDownMenu" = "Gyors művelet";
 
 /* Description for small size widget to add it to home screen */
 "TodayWidget.QuickActionGalleryDescription" = "Adjon egy Firefox ikont a kezdőképernyőhöz. A kisalkalmazás hozzáadása után érintse meg és tartsa lenyomva a szerkesztéshez, majd válasszon egy másik ikont.";
@@ -85,26 +37,11 @@
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
 "TodayWidget.QuickActionsGalleryTitleV2" = "Firefox-hivatkozások";
 
-/* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox – Gyors műveletek";
-
-/* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewGalleryDescription" = "Érje el nyitott lapjait közvetlenül a kezdőképernyőn.";
-
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Parancsikonok hozzáadása a nyitott lapokhoz.";
 
 /* Title for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryTitle" = "Gyors nézet";
-
-/* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewLargeGalleryDescription" = "Parancsikonok hozzáadása a nyitott lapokhoz.";
-
-/* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox – Nyitott lapok";
-
-/* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Keresés a Firefoxban";
 
 /* Search in Firefox. Do not translate the word Firefox */
 "TodayWidget.SearchInFirefoxV2" = "Keresés a Firefoxban";
@@ -120,16 +57,4 @@
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitleV2" = "Webhelyparancsok";
-
-/* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox – Népszerű oldalak";
-
-/* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox – Webhelyparancsok";
-
-/* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
-"TodayWidget.ViewMore" = "Több";
-
-/* View More… for Firefox Pocket stories widget where we don't know how many articles are available. */
-"TodayWidget.ViewMoreDots" = "Több…";
 

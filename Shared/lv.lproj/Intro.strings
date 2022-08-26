@@ -1,21 +1,3 @@
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Izmantot jebkuru e-pasta lietotni - ne tikai Mail - ar Firefox.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Jums pienācis pasts… iestatījumi";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Pieskarieties maskas ikonai, lai nokļūtu privātās pārlūkošanas režīmā.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Pārlūko un neuztraucies, ka kāds skatītos";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Meklējat ko citu? Izvēlieties citu noklusēto meklētāju (vai pievienojiet savu) Iestatījumos.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Meklējiet pa savam";
-
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Sākt pārlūkošanu";
 

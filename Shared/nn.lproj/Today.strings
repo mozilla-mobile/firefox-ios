@@ -4,24 +4,6 @@
 /* Close Private Tabs */
 "TodayWidget.ClosePrivateTabsLabelV2" = "Lat att private faner";
 
-/* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV3" = "Lat att private faner";
-
-/* Copied Link from clipboard displayed */
-"TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "Kopierte lenke frå utklippstavla";
-
-/* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemClearPrivateTabs" = "Tøm private faner";
-
-/* Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemGoToCopiedLink" = "Gå til kopiert lenke";
-
-/* Quick Actions drop down menu item for new private search when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemNewPrivateSearch" = "Nytt privat søk";
-
-/* Quick Actions drop down menu item for new search when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemNewSearch" = "Nytt søk";
-
 /* Description for medium size widget to add Firefox Shortcut to home screen */
 "TodayWidget.FirefoxShortcutGalleryDescription" = "Legg til Firefox-snarvegar på heim-skjermen.";
 
@@ -31,20 +13,8 @@
 /* Go to copied link */
 "TodayWidget.GoToCopiedLinkLabelV2" = "Gå til kopiert lenke";
 
-/* Go To Copied Link text pasted on the clipboard but this string doesn't have new line character */
-"TodayWidget.GoToCopiedLinkLabelV3" = "Gå til kopiert lenke";
-
-/* Go to copied link */
-"TodayWidget.GoToCopiedLinkLabelV4" = "Gå til kopiert lenke";
-
 /* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
 "TodayWidget.MoreTabsLabel" = "+%d fleire…";
-
-/* Open New Private Tab button label for medium size action */
-"TodayWidget.NewPrivateTabButtonLabelV2" = "Søk i privat fane";
-
-/* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Søk i Firefox";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Nytt søk";
@@ -52,29 +22,11 @@
 /* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.NoOpenTabsLabel" = "Ingen opne faner.";
 
-/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.NoOpenTabsLabelV2" = "Ingen opne faner";
-
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.OpenFirefoxLabel" = "Opne Firefox";
 
-/* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetGalleryDescription" = "Oppdag fascinerande og tankevekkjande historier frå heile nettet, sett saman av Pocket.";
-
-/* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - tilrådd av Pocket";
-
-/* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetTitle" = "Tilrådd av Pocket";
-
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Privat søk";
-
-/* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Vel en Firefox-snarveg for å leggje til på heim-skjermen.";
-
-/* Quick Actions left label text for dropdown menu when widget enters edit mode */
-"TodayWidget.QuickActionDropDownMenu" = "Hurtighandling";
 
 /* Description for small size widget to add it to home screen */
 "TodayWidget.QuickActionGalleryDescription" = "Legg til ein Firefox-snarveg til heim-skjermen. Når du har lagt til widgeten, trykkjer du på og held nede for å redigere han og vel ein annan snarveg.";
@@ -85,26 +37,11 @@
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
 "TodayWidget.QuickActionsGalleryTitleV2" = "Firefox-snarvegar";
 
-/* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - hurtighandlingar";
-
-/* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewGalleryDescription" = "Få tilgang til dei opne fanene dine direkte på heim-skjermen din.";
-
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Legg til snarvegar til dei opne fanene dine.";
 
 /* Title for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryTitle" = "Snøggtitt";
-
-/* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewLargeGalleryDescription" = "Legg til snarvegar til dei opne fanene dine.";
-
-/* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - Opne faner";
-
-/* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Søk i Firefox";
 
 /* Search in Firefox. Do not translate the word Firefox */
 "TodayWidget.SearchInFirefoxV2" = "Søk i Firefox";
@@ -120,16 +57,4 @@
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitleV2" = "Snarvegar til nettstadar";
-
-/* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - Mest besøkte";
-
-/* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - snarvegar til nettstadar";
-
-/* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
-"TodayWidget.ViewMore" = "Vis meir";
-
-/* View More… for Firefox Pocket stories widget where we don't know how many articles are available. */
-"TodayWidget.ViewMoreDots" = "Vis meir…";
 

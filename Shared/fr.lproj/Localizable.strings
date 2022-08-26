@@ -20,25 +20,10 @@
 "ActivityStream.ContextMenu.AddToShortcuts" = "Ajouter aux raccourcis";
 
 /* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Épingler comme site populaire";
-
-/* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "Épingler";
-
-/* The title for removing a shortcut action */
-"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Supprimer des raccourcis";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Retirer des sites populaires";
 
 /* The title for the unpinning a topsite action */
 "ActivityStream.ContextMenu.UnpinTopsite" = "Désépingler";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "Ajouté aux marque-pages";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "Visité";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "Revenir à cet onglet";
@@ -46,56 +31,22 @@
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Onglets : %d";
 
-/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
-"ActivityStream.JumpBackIn.TabGroup.Title" = "Votre recherche de « %@ »";
-
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "Récemment enregistrés";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "Marque-pages récents";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "Plus";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "Tendances sur Pocket";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle2" = "Recommandé par Pocket";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "Tendance";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Visités récemment";
 
-/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
-"ActivityStream.RecentlySaved.SectionTitle" = "Récemment enregistrés";
-
-/* This button will open the library showing all the users bookmarks */
-"ActivityStream.RecentlySaved.ShowAll" = "Tout afficher";
-
-/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
-"ActivityStream.RecentlyVisited.RemoveButton.Title" = "Supprimer";
-
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Raccourcis";
-
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "Lignes : %d";
 
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Choisir le nombre de lignes";
 
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Les plus visités";
-
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Ajouter un onglet";
 
-/* Accessibility label for action adding current page to reading list.
-   Name for button adding current article to reading list in reader mode */
+/* Name for button adding current article to reading list in reader mode */
 "Add to Reading List" = "Ajouter à la liste de lecture";
 
 /* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
@@ -113,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Recherche ou adresse";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Ajouter à la liste de lecture";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "Barre d’adresse";
 
@@ -125,23 +79,11 @@
 /* Authentication prompt title */
 "Authentication required" = "Authentification requise";
 
-/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Description" = "Recherche %@ directement depuis la barre d’adresse";
-
-/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Title" = "Rechercher avec %@";
-
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Retour";
 
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "Bloquer les fenêtres popup";
-
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Marque-page";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Dossier";
 
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "Titre";
@@ -151,15 +93,6 @@
 
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Marque-pages";
-
-/* A label indicating the action of adding a web page as a bookmark. */
-"Bookmarks.Actions.Add" = "Ajouter";
-
-/* A label indicating the action of bookmarking all currently open non private tabs. */
-"Bookmarks.Actions.BookmarkAllTabs" = "Marquer tous les onglets";
-
-/* A label indicating the action of bookmarking the current tab. */
-"Bookmarks.Actions.BookmarkCurrentTab" = "Marquer l’onglet courant";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "Modifier";
@@ -173,17 +106,8 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Dossier";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Emplacement";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Nom du dossier";
-
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
 "Bookmarks.Menu.DesktopBookmarks" = "Marque-pages ordinateur";
-
-/* A label indicating all bookmarks that were recently added. */
-"Bookmarks.Menu.RecentlyBookmarked" = "Marqués récemment";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Nouveau marque-page";
@@ -194,17 +118,8 @@
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "Nouveau séparateur";
 
-/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
-"Bookmarks.Search.SearchBookmarks" = "Rechercher dans les marque-pages";
-
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Titre";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "Adresse web";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "Les marque-pages enregistrés apparaîtront ici.";
 
 /* Describes the date on which the breach occurred */
 "BreachAlerts.BreachDate" = "Cette fuite de données s’est produite le";
@@ -245,14 +160,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "Fermeture de l’onglet";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "ordinateur";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "Marquer le lien";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Afficher";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Nouvel onglet privé ouvert";
@@ -277,12 +186,6 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Ouvrir dans un nouvel onglet";
-
-/* Context menu item for opening a link in a new private tab */
-"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Ouvrir le lien dans un nouvel onglet privé";
-
-/* Context menu item for opening a link in a new tab */
-"ContextMenu.OpenLinkInNewTabButtonTitle" = "Ouvrir le lien dans un nouvel onglet";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Enregistrer l’image";
@@ -317,12 +220,6 @@
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Impossible de charger la page.";
 
-/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "Si vous utilisez iOS 13, Firefox bascule désormais automatiquement sur le thème sombre lorsque votre téléphone est configuré en mode sombre. Pour modifier ce comportement, rendez-vous dans Paramètres > Thème.";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "Le thème sombre comprend désormais un clavier sombre et un écran de démarrage sombre.";
-
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "La protection renforcée contre le pistage empêche le pistage publicitaire. Activez le mode Strict pour bloquer encore plus de traqueurs, de publicités et de popups.";
 
@@ -341,9 +238,7 @@
 /* Accessibility label for button decreasing font size in display settings of reader mode */
 "Decrease text size" = "Réduire la taille du texte";
 
-/* Accessibility label for default search engine setting.
-   Title for default search engine picker.
-   Title for default search engine settings section. */
+/* Title for default search engine picker. */
 "Default Search Engine" = "Moteur de recherche par défaut";
 
 /* Accessibility label for action denoting closing default browser home tab banner. */
@@ -376,17 +271,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "Annuler le téléchargement";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Les téléchargements ne sont pas encore pris en charge par Firefox.";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Téléchargement annulé";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "Échec du téléchargement";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "Réessayer";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Téléchargements";
@@ -484,18 +373,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Page suivante";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Mauvaise adresse électronique ? Déconnectez-vous ci-dessous pour recommencer.";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "Vérification du compte nécessaire";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Vous devez vérifier %@. Consultez votre boîte de réception pour accéder au lien de vérification envoyé par Firefox.";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Connecter un autre appareil";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Compte Firefox";
 
@@ -505,32 +382,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Aucune connexion internet";
 
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Ouvrir les préférences de synchronisation";
-
-/* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "Scannez le code QR affiché à l’adresse firefox.com/pair";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "Supprimer";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Retirez le compte Firefox associé à cet appareil pour vous connecter en tant qu’utilisateur différent.";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "Supprimer le compte";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "Renvoyer le courriel";
-
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "Connectez-vous avec votre appareil photo";
-
-/* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "Synchronisez Firefox entre vos appareils en créant un compte.";
-
-/* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Créer un compte Firefox";
 
 /* FxA sign in view qr code instructions */
 "fxa.signin.qr-link-instruction" = "Sur votre ordinateur, ouvrez Firefox et accédez à firefox.com/pair";
@@ -538,23 +391,11 @@
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Prêt·e à scanner";
 
-/* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "Activer Sync";
-
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "Utiliser plutôt une adresse électronique";
 
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Se connecter à Sync";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "Retrouvez vos onglets, marque-pages et mots de passe depuis vos autres appareils.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Synchroniser maintenant";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "Emportez votre Web partout avec vous";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Firefox Sync s’est connecté à %@";
@@ -580,9 +421,6 @@
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo Firefox, changer le fond d’écran.";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "Retrouvez vos onglets ouverts, marque-pages et mots de passe depuis vos autres appareils.";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Aide";
 
@@ -604,9 +442,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Aujourd’hui et hier";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Effacer l’historique récent supprimera l’historique, les cookies et autres données du navigateur.";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "Les sites récemment visités s’affichent ici.";
 
@@ -615,15 +450,6 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Connectez-vous pour afficher la liste des onglets de vos autres appareils.";
-
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Votre compte doit être vérifié.";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Vous souhaitez afficher ici les onglets de vos autres appareils ?";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Activez la synchronisation des onglets pour afficher la liste des onglets de vos autres appareils.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
@@ -634,35 +460,14 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Récemment fermés";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d appareil(s) connecté(s)";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "Appareils synchronisés";
-
 /* Accessibility label for the tab toolbar indicating the Home button. */
 "Home" = "Accueil";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "Annuler";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "Vous pouvez modifier ce choix à tout moment depuis les paramètres.";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Définir comme page d’accueil";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Voulez-vous utiliser ce site web comme page d’accueil ?";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Marquer cette page";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Supprimer de l’historique";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Ouvrir dans un onglet privé";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Ouvrir dans un onglet privé";
@@ -679,50 +484,41 @@
 /* The title for the Share context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Share" = "Partager";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Back.DiscoveryTitle" = "Retour";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.CloseTab.DiscoveryTitle" = "Fermer l’onglet";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of finding text a user desires within a page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Find.DiscoveryTitle" = "Rechercher";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Forward.DiscoveryTitle" = "Suivant";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NewPrivateTab.DiscoveryTitle" = "Nouvel onglet privé";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NewTab.DiscoveryTitle" = "Nouvel onglet";
 
-/* Label to switch to normal browsing mode */
+/* A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NormalMode.DiscoveryTitle" = "Mode de navigation classique";
 
-/* Label to switch to private browsing mode */
+/* A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.PrivateMode.DiscoveryTitle" = "Mode de navigation privée";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Reload.DiscoveryTitle" = "Actualiser la page";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of directly accessing the URL, location, bar. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.SelectLocationBar.DiscoveryTitle" = "Sélectionner la barre d’adresse";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.ShowNextTab.DiscoveryTitle" = "Afficher l’onglet suivant";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Afficher l’onglet précédent";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
-"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Activer la fermeture automatique";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox peut fermer les onglets que vous n’avez pas consultés au cours du mois dernier.";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
-"InactiveTabs.TabTray.AutoClosePrompt.Title" = "Fermeture automatique après un mois ?";
 
 /* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
 "InactiveTabs.TabTray.CloseButtonTitle" = "Fermer tous les onglets inactifs";
@@ -742,41 +538,17 @@
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ClearRecentHistory" = "Effacer l’historique récent";
 
-/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.DownloadLink" = "Télécharger la cible du lien";
-
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Rechercher le suivant";
 
-/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.NewNormalTab" = "Nouvel onglet normal";
-
-/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.OpenLinkInBackground" = "Ouvrir le lien en arrière-plan";
-
-/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.OpenLinkInNewTab" = "Ouvrir le lien dans un nouvel onglet";
-
-/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.SavePageAs" = "Enregistrer le document sous…";
-
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "Marque-pages";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.Edit" = "Édition";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.File" = "Fichier";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.History" = "Historique";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Tools" = "Outils";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.View" = "Affichage";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Window" = "Fenêtre";
@@ -799,26 +571,23 @@
 /* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowLastTab" = "Aller au dernier onglet";
 
-/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowTabNumber" = "Aller à l’onglet 1-9";
-
-/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.UndoCloseTab" = "Annuler la fermeture de l’onglet";
-
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "Zoom avant";
 
 /* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomOut" = "Zoom arrière";
 
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the past thirty days. */
 "Last month" = "Le mois dernier";
 
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Dernière synchronisation : %@";
-
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "La semaine dernière";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Marque-pages";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Historique";
 
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Annuler";
@@ -843,9 +612,6 @@
 
 /* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
 "LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Saisissez les termes à rechercher";
-
-/* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
-"LibraryPanel.History.SyncedFromOtherDevices.v99" = "Synchronisé depuis un autre appareil";
 
 /* Within the History Panel, users can see the option of viewing their history from synced tabs. */
 "LibraryPanel.History.SyncedHistory.v100" = "Historique synchronisé";
@@ -883,9 +649,6 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.Onboarding.LearnMoreButtonTitle" = "En savoir plus";
 
-/* Message shown when you enter Logins & Passwords for the first time. */
-"Logins.Onboarding.Message" = "Vos identifiants et mots de passe sont désormais protégés par Face ID, Touch ID ou le code de l’appareil.";
-
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
 "Logins.PasscodeRequirement.Warning" = "Pour utiliser la fonctionnalité de remplissage automatique, vous devez avoir un code d’appareil actif.";
 
@@ -897,12 +660,6 @@
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Activer le remplissage automatique";
-
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "Modifié";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "Identifiant";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Ne pas enregistrer";
@@ -927,15 +684,6 @@
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "Mettre à jour";
-
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "Identifiant";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "Tout";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "Site web";
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrer";
@@ -967,12 +715,10 @@
 /* Restore Tabs Prompt Description */
 "Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Il semblerait que Firefox ait planté. Voulez-vous restaurer vos onglets ?";
 
-/* Name for Mark as read button in reader mode
-   Title for the button that marks a reading list item as read */
+/* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Marquer comme lu";
 
-/* Name for Mark as unread button in reader mode
-   Title for the button that marks a reading list item as unread */
+/* Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "Marquer comme non lu";
 
 /* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
@@ -983,9 +729,6 @@
 
 /* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
 "Menu.AddBookmark.Label.v99" = "Ajouter";
-
-/* Toast displayed to the user after adding the item to the Top Sites. */
-"Menu.AddPin.Confirm" = "Ajouté aux sites principaux";
 
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "Ajouté aux raccourcis";
@@ -1015,28 +758,16 @@
 "Menu.Downloads.Label" = "Téléchargements";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "La protection renforcée contre le pistage est DÉSACTIVÉE pour ce site.";
+"Menu.EnhancedTrackingProtectionOff.Title" = "Les protections sont désactivées pour ce site";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "La protection renforcée contre le pistage est ACTIVÉE pour ce site.";
-
-/* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox bloque les traqueurs intersites, les traqueurs de réseaux sociaux, les mineurs de cryptomonnaies et les détecteurs d’empreintes numériques.";
-
-/* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox bloque les traqueurs intersites, les traqueurs de réseaux sociaux, les mineurs de cryptomonnaies, les détecteurs d’empreintes numériques et le contenu utilisé pour le pistage.";
+"Menu.EnhancedTrackingProtectionOn.Title" = "Les protections sont activées pour ce site";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Aide";
 
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "Historique";
-
-/* Label for the button displayed in the menu used to stop the reload of the webpage */
-"Menu.Library.StopReload" = "Arrêter";
-
-/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
-"Menu.ManageAccount.Label" = "Gérer le compte %@";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Nouvel onglet";
@@ -1045,19 +776,7 @@
 "Menu.NightModeTurnOff.Label2" = "Désactiver le mode nocturne";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "Activer le mode nocturne";
-
-/* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "Activer le mode nocturne";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "Bloquer les images";
-
-/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
-"Menu.NoImageModeShowImages.Label" = "Afficher les images";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "Actions pour la page";
 
 /* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
 "Menu.Passwords.Label" = "Mots de passe";
@@ -1086,9 +805,6 @@
 /* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
 "Menu.RemovedFromShortcuts.v99" = "Supprimer des raccourcis";
 
-/* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "Retiré des sites principaux";
-
 /* Toast displayed to the user after removing the item to the Shortcuts. */
 "Menu.RemovePin.Confirm2.v99" = "Supprimé des raccourcis";
 
@@ -1116,35 +832,17 @@
 /* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
 "Menu.Toolbar.Home.AccessibilityLabel.v99" = "Accueil";
 
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "Bloqués";
-
 /* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
 "Menu.TrackingProtection.Details.Verifier" = "Vérifié par %@";
 
-/* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Aucun traqueur connu par Firefox n’a été détecté sur cette page.";
-
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Paramètres de protection";
-
-/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "Protections pour %@";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "Contenu utilisé pour le pistage";
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "Traqueurs de réseaux sociaux";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox a bloqué des éléments de la page qui peuvent pister votre navigation.";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Bloquer les traqueurs en ligne";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "Cookies de pistage intersites";
 
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Traqueurs intersites";
@@ -1167,47 +865,8 @@
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Les réseaux sociaux placent des traqueurs sur d’autres sites web pour créer un profil plus complet et ciblé de vous. Le blocage de ces traqueurs réduit ce que les entreprises de réseaux sociaux peuvent voir de vous en ligne.";
 
-/* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "Désactivées pour ce site";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "La protection contre le pistage est désormais désactivée pour ce site.";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "Activer la protection contre le pistage";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "Activées pour ce site";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "La protection contre le pistage est désormais activée pour ce site.";
-
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Détecteurs d’empreinte numérique";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Cookies de pistage intersites bloqués";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "Mineurs de cryptomonnaies bloqués";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "Détecteurs d’empreinte numérique bloqués";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "Traqueurs de réseaux sociaux bloqués";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "Découvrir comment la protection contre le pistage bloque les traqueurs en ligne qui collectent vos données de navigation depuis plusieurs sites web";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "Aucun élément de pistage détecté sur cette page.";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Ce site possède des éléments qui peuvent pister votre navigation. Vous avez désactivé la protection.";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "Activer pour ce site";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Nouveautés";
@@ -1224,8 +883,7 @@
 /* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
 "Navigation Toolbar" = "Barre de navigation";
 
-/* Accessibility label for the New Tab button in the tab toolbar.
-   Accessibility Label for the tab toolbar New tab button */
+/* Accessibility label for the New Tab button in the tab toolbar. */
 "New Tab" = "Nouvel onglet";
 
 /* Restore Tabs Negative Action */
@@ -1252,6 +910,15 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "Plus tard";
 
+/* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Description.v106" = "Récupérez les onglets et mots de passe depuis vos autres appareils pour reprendre là où vous en étiez.";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
+"Onboarding.Sync.Skip.Action.v106" = "Ignorer";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Title.v106" = "Passez du téléphone à l’ordinateur portable et vice-versa";
+
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "S’inscrire et se connecter";
 
@@ -1261,6 +928,21 @@
 /* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
 "Onboarding.SyncTitle.v102" = "Synchronisez pour ne pas perdre le fil";
 
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.Classic.v106" = "Fond d’écran classique";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Fond d’écran en édition limité";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v106" = "Explorez plus de fonds d’écran";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v106" = "Choisissez un fond d’écran qui vous parle.";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Title.v106" = "Essayez une touche de couleur";
+
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "Définir un fond d’écran";
 
@@ -1269,28 +951,6 @@
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Commencer la navigation";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about. */
-"Onboarding.WhatsNew.Description" = "Il est désormais plus facile de reprendre là où vous en étiez.";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
-"Onboarding.WhatsNew.PersonalizedHome.Description" = "Accédez à vos onglets ouverts, vos marque-pages et votre historique de navigation.";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
-"Onboarding.WhatsNew.RecentSearches.Description" = "Consultez vos dernières recherches depuis votre page d’accueil.";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
-"Onboarding.WhatsNew.RecentSearches.Title" = "Recherches récentes";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card */
-"Onboarding.WhatsNew.TabGroups.Description" = "Les pages d’une même recherche sont regroupées.";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card */
-"Onboarding.WhatsNew.TabGroups.Title" = "Des onglets regroupés plus clairement";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
-   The title for the new onboarding card letting users know what is new in Firefox iOS */
-"Onboarding.WhatsNew.Title" = "Les nouveautés de Firefox";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Oups, Firefox a planté";
@@ -1310,23 +970,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Impossible d’ouvrir la page";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "Menu des options de la page";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "Sélecteur de panneau";
-
 /* Password textbox in Authentication prompt */
 "Password" = "Mot de passe";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Vous n’avez aucun identifiant synchronisé avec votre compte Firefox";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "Identifiants disponibles :";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Identifiants Firefox";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Ceci vous permet d’enregistrer l’image dans Pellicule.";
@@ -1364,6 +1009,12 @@
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Mode lecture disponible";
 
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Marquer comme lu";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Marquer comme non lu";
+
 /* Panel accessibility label */
 "Reading list" = "Liste de lecture";
 
@@ -1394,9 +1045,6 @@
 /* Reopen alert title shown at home page. */
 "ReopenAlert.Title" = "Rouvrir le dernier onglet fermé";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "Rouvrir l’onglet fermé";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "Réinitialiser la taille du texte";
 
@@ -1415,18 +1063,13 @@
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Données non valides";
 
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Veuillez autoriser Firefox à accéder à l’appareil photo de votre appareil dans « Réglages » -> « Confidentialité » -> « Appareil photo ».";
-
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
 "ScanQRCode.PermissionError.Message.v100" = "Accédez à « Réglages » > « Firefox » et autorisez Firefox à accéder à l’appareil photo.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Scanner un code QR";
 
-/* Accessibility Label for the tab toolbar Search button
-   Navigation title for search settings.
-   Open search section of settings */
+/* Open search section of settings */
 "Search" = "Rechercher";
 
 /* The text shown in the URL bar on about:home */
@@ -1471,11 +1114,14 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
 
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "Lancer une recherche à partir de cette suggestion";
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Moteur de recherche par défaut";
 
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Connexion sécurisée";
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "Moteur de recherche par défaut";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "Rechercher";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Envoyer un rapport de plantage afin que Mozilla puisse corriger le problème ?";
@@ -1486,9 +1132,11 @@
 /* Used as a button label for crash dialog prompt */
 "Send Report" = "Envoyer le rapport";
 
-/* Button title for cancelling share screen
-   Close button in top navigation bar */
+/* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "Annuler";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "Fermer";
 
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "Appareils disponibles :";
@@ -1517,9 +1165,6 @@
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Envoyer";
 
-/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Se connecter via Firefox";
-
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Nouvel onglet reçu depuis un autre appareil.";
 
@@ -1531,12 +1176,6 @@
 
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "Onglet reçu depuis %@";
-
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "Ajouter à la liste de lecture";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "Ajouter aux marque-pages";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Appuyer pour commencer";
@@ -1577,7 +1216,7 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "Adresse web (Remplacez la recherche par %s)";
 
-/* Button in Data Management that clears private data for the selected items. */
+/* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Effacer toutes les données de sites";
 
 /* Button in settings that clears private data for the selected items. */
@@ -1585,9 +1224,6 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Effacer mes traces";
-
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Effacer mes traces";
 
 /* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
 "Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Supprimer les éléments : %1$@";
@@ -1640,14 +1276,16 @@
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "Le thème basculera automatiquement en fonction de la luminosité de votre écran. Vous pouvez définir le seuil à partir duquel le thème doit basculer. Le cercle indique la luminosité actuelle.";
 
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "Automatique";
+
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "Changer de mode";
 
 /* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
 "Settings.DisplayTheme.SwitchSubtitle" = "Basculer automatiquement en fonction de la luminosité de l’écran";
 
-/* Display (theme) settings label to show if automatically switch theme is enabled.
-   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+/* Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
 "Settings.DisplayTheme.SwitchTitle" = "Automatiquement";
 
 /* System theme settings section title */
@@ -1661,15 +1299,6 @@
 
 /* Title in main app settings for Theme settings */
 "Settings.DisplayTheme.Title.v2" = "Thème";
-
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "Toujours";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Seulement lorsque la protection contre le pistage est utilisée";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "Envoyer aux sites web un signal « Ne pas me pister » indiquant que vous ne souhaitez pas être pisté·e";
 
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Nom de l’appareil";
@@ -1764,9 +1393,6 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
 "Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Afficher";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "Effacer";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Page d’accueil";
 
@@ -1791,23 +1417,11 @@
 /* Toggled ON to show the shortcuts section */
 "Settings.Homepage.Shortcuts.ToggleOn.v100" = "Activé";
 
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Paramètres de la page d’accueil";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Saisir une page web";
-
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Page d’accueil actuelle";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Utiliser le lien copié";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Utiliser la page actuelle";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "Utiliser la page par défaut";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "Identifiants et mots de passe";
@@ -1815,56 +1429,14 @@
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "Adresse personnalisée";
 
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "À l’ouverture d’un nouvel onglet :";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "Personnaliser les sites populaires";
-
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Une page vide";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "Les marque-pages";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "Les sites que vous visitez le plus souvent";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter2" = "Sites que vous enregistrez ou visitez";
-
-/* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Personnaliser l’accueil de Firefox";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "La page d’accueil de Firefox";
 
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "Marque-pages récents";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "Visité";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "L’historique";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "La page d’accueil";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "Tendances sur Pocket";
-
-/* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "Du contenu de qualité provenant des quatre coins du Web.";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "Afficher la liste de lecture";
-
-/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
-"Settings.NewTab.Option.RecommendedByPocket" = "Recommandations par %@";
-
-/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
-"Settings.NewTab.Option.RecommendedByPocketDescription" = "Contenu exceptionnel sélectionné par %1$@, qui fait partie de la famille %2$@";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Nouvel onglet";
@@ -1941,32 +1513,11 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Raccourcis Siri";
 
-/* Section title for all studies that are currently active */
-"Settings.Studies.Active.SectionName" = "Études actives";
-
-/* Section title for all studies that are completed */
-"Settings.Studies.Completed.SectionName" = "Terminée";
-
-/* Button title displayed next to each study allowing the user to opt-out of the study */
-"Settings.Studies.Remove.Button" = "Supprimer";
-
-/* Title displayed in header of the Studies panel */
-"Settings.Studies.SectionName" = "Études";
-
-/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
-"Settings.Studies.Title" = "Études";
-
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Toggle.Link" = "En savoir plus.";
 
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Toggle.Message" = "Firefox peut installer et lancer des études de temps en temps.";
-
-/* Toggled OFF to opt-out of studies */
-"Settings.Studies.Toggle.Off" = "Désactivées";
-
-/* Toggled ON to participate in studies */
-"Settings.Studies.Toggle.On" = "Activées";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Études";
@@ -2013,23 +1564,11 @@
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Attention !";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Vous pouvez désormais choisir quelle liste Firefox doit utiliser pour bloquer les éléments web susceptibles de pister votre navigation.";
-
-/* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "Équilibré entre la protection et la performance.";
-
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "BLOQUE";
 
-/* Explanation of strict mode. */
-"Settings.TrackingProtection.Info.StrictTitle" = "Propose une protection renforcée, mais certains sites ou contenus peuvent ne pas fonctionner correctement.";
-
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "En savoir plus";
-
-/* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "En savoir plus…";
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Réduit les publicités ciblées et empêche les annonceurs de suivre votre navigation.";
@@ -2049,53 +1588,17 @@
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Protection contre le pistage";
 
-/* Additional information about the strict level setting */
-"Settings.TrackingProtection.StrictLevelInfoFooter" = "Le blocage des traqueurs peut avoir une incidence sur les fonctionnalités de certains sites.";
-
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Standard (par défaut)";
-
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Autorise certains éléments de pistage afin que des sites fonctionnent correctement.";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Strict";
 
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Bloque les éléments de pistage connus. Certains sites peuvent ne pas fonctionner correctement.";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Le pistage correspond à la collecte de vos données de navigation sur plusieurs sites web.";
-
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Protection renforcée contre le pistage";
 
-/* Translation settings footer describing how language detection and translation happens. */
-"Settings.TranslateSnackBar.SectionFooter" = "La langue de la page web est détectée sur l’appareil et une traduction d’un service distant est proposée.";
-
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "Services";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchSubtitle" = "Proposer de traduire n’importe quel site affiché dans une langue différente de votre langue par défaut.";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchTitle" = "Proposer des traductions";
-
-/* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "Traduction";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Informations pour corriger certains problèmes";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "Retirer";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "Terminé";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "Modifier";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Afficher plus";
@@ -2130,17 +1633,13 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Ouvrir dans Firefox";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "Ouvrir en navigation privée";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Rechercher dans Firefox";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Afficher les suggestions";
 
-/* Accessibility label for the tabs button in the (top) tab toolbar
-   Accessibility Label for the tabs button in the tab toolbar */
+/* Accessibility label for the tabs button in the (top) tab toolbar */
 "Show Tabs" = "Afficher les onglets";
 
 /* Show the on-boarding screen again from the settings */
@@ -2155,64 +1654,16 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Faites glisser trois doigts vers la droite ou la gauche pour fermer l’onglet.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Mode de navigation classique";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Mode de navigation privée";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Synchronisez vos onglets, marque-pages, mots de passe et bien plus.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "Synchronisez vos onglets, mots de passe et bien plus.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "La première synchronisation peut prendre un moment";
-
-/* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "Vous n’avez pas de compte ? Créez-en un pour synchroniser Firefox entre vos appareils.";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Synchronisation en cours";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Synchronisation en cours…";
-
-/* Panel accessibility label */
-"Synced Tabs" = "Onglets synchronisés";
-
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Marque-pages";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Clients distants";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Échec de la synchronisation";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "Historique";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "Identifiants";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Sync n’est pas disponible";
 
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Sync est hors connexion";
 
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "Sync a rencontré des problèmes lors de la synchronisation des données « %@ »";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "Onglets";
-
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Onglet %1$@ sur %2$@";
 
-/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+/* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "Afficher tous les onglets";
 
 /* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
@@ -2227,23 +1678,20 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d onglet(s) fermé(s)";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "Rechercher des onglets";
-
 /* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Afficher les onglets inactifs";
 
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Masquer les onglets inactifs";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Rechercher";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Ajouter un onglet";
 
-/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+/* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Fermer tous les onglets";
-
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "Fermer les onglets sélectionnés";
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Onglet actuellement sélectionné.";
@@ -2254,29 +1702,8 @@
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Onglets inactifs";
 
-/* The section header for tabs opened last week */
-"TabTray.LastWeek.Header" = "La semaine dernière";
-
-/* The title on the button to copy the tab address. */
-"TabTray.MoreMenu.Copy" = "Copier";
-
-/* The section header for tabs opened before last week */
-"TabTray.Older.Header" = "Plus anciens";
-
-/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+/* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Ouvrir un nouvel onglet";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "Ouvrir l’onglet sélectionné";
-
-/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
-"TabTray.OtherTabs.Title" = "Autres onglets";
-
-/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
-"TabTray.RecentlyClosed.Description" = "Les onglets sont disponibles ici pendant 30 jours. Après ce délai, les onglets seront automatiquement fermés.";
-
-/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
-"TabTray.RecentlyClosed.SectionTitle" = "Récemment fermés";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Privés";
@@ -2287,17 +1714,11 @@
 /* The title on the button to look at regular tabs. */
 "TabTray.SegmentedControlTitles.Tabs" = "Onglets";
 
-/* The button title to see more options to perform on the tab. */
-"TabTray.SwipeMenu.More" = "Plus";
-
 /* The title for the tab tray */
 "TabTray.Title" = "Onglets ouverts";
 
-/* The section header for tabs opened today */
-"TabTray.Today.Header" = "Aujourd’hui";
-
-/* The section header for tabs opened yesterday */
-"TabTray.Yesterday.Header" = "Hier";
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Afficher les onglets";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "La page n’a pas pu être affichée en mode lecture.";
@@ -2311,6 +1732,9 @@
 /* Relative date for date in past week. */
 "this week" = "cette semaine";
 
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "hier";
+
 /* label for Not Now button */
 "Toasts.NotNow" = "Plus tard";
 
@@ -2320,7 +1744,7 @@
 /* Label for button to undo the action just performed */
 "Toasts.Undo" = "Annuler";
 
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "Aujourd’hui";
 
 /* Relative date for date older than a minute. */
@@ -2331,12 +1755,6 @@
 
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Fermer tous les onglets";
-
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Les sites les plus visités s’afficheront ici.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Sites les plus visités";
 
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Supprimer la page - %@";
@@ -2362,14 +1780,14 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "Non lu";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Veuillez mettre à jour Firefox pour vous connecter.";
-
 /* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
 "Upgrade.SyncSign.Action.v106" = "Se connecter";
 
 /* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.SyncSign.Description.v106" = "Reprenez là où vous en étiez avec des onglets d’autres appareils qui figurent désormais sur votre page d’accueil.";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "Passer d’un écran à l’autre est plus facile que jamais";
 
 /* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
 "Upgrade.Welcome.Action.v106" = "Démarrer";
@@ -2386,12 +1804,6 @@
 /* Username textbox in Authentication prompt */
 "Username" = "Nom d’utilisateur";
 
-/* Text message in the settings table view */
-"Verify your email address" = "Veuillez confirmer votre adresse électronique.";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Version %1$@ (%2$@)";
-
 /* Accessibility label for the main web content view */
 "Web content" = "Contenu web";
 
@@ -2407,7 +1819,7 @@
 /* Relative date for yesterday. */
 "yesterday" = "hier";
 
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the past 24 hours. */
 "Yesterday" = "Hier";
 
 /* Error message in the remote tabs panel */

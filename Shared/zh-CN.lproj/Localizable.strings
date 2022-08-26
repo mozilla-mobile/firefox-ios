@@ -20,25 +20,10 @@
 "ActivityStream.ContextMenu.AddToShortcuts" = "添加快捷指令";
 
 /* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "固定在常用网站";
-
-/* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "固定";
-
-/* The title for removing a shortcut action */
-"ActivityStream.ContextMenu.RemoveFromShortcuts" = "从快捷指令删除";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "从常用网站中去除";
 
 /* The title for the unpinning a topsite action */
 "ActivityStream.ContextMenu.UnpinTopsite" = "取消固定";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "已加书签";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "曾经访问";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "回到先前页面";
@@ -46,56 +31,22 @@
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "标签页：%d";
 
-/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
-"ActivityStream.JumpBackIn.TabGroup.Title" = "“%@”的搜索结果";
-
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "最近保存";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "最近的书签";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "更多";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "Pocket 流行";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle2" = "Pocket 推荐";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "趋势";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "最近访问";
 
-/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
-"ActivityStream.RecentlySaved.SectionTitle" = "最近保存";
-
-/* This button will open the library showing all the users bookmarks */
-"ActivityStream.RecentlySaved.ShowAll" = "显示全部";
-
-/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
-"ActivityStream.RecentlyVisited.RemoveButton.Title" = "移除";
-
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "快捷指令";
-
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "行数：%d";
 
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "设置行数";
 
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "常用网站";
-
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "添加标签页";
 
-/* Accessibility label for action adding current page to reading list.
-   Name for button adding current article to reading list in reader mode */
+/* Name for button adding current article to reading list in reader mode */
 "Add to Reading List" = "添加到阅读列表";
 
 /* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
@@ -125,23 +76,11 @@
 /* Authentication prompt title */
 "Authentication required" = "需要验证身份";
 
-/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Description" = "直接从地址栏使用 %@ 搜索";
-
-/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Title" = "使用 %@ 搜索";
-
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "后退";
 
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "阻止弹出窗口";
-
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "书签";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "文件夹";
 
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "标题";
@@ -151,15 +90,6 @@
 
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "书签";
-
-/* A label indicating the action of adding a web page as a bookmark. */
-"Bookmarks.Actions.Add" = "添加";
-
-/* A label indicating the action of bookmarking all currently open non private tabs. */
-"Bookmarks.Actions.BookmarkAllTabs" = "将所有标签页加入书签";
-
-/* A label indicating the action of bookmarking the current tab. */
-"Bookmarks.Actions.BookmarkCurrentTab" = "将当前标签页加入书签";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "编辑";
@@ -173,17 +103,8 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "文件夹";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "位置";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "文件夹名称";
-
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
 "Bookmarks.Menu.DesktopBookmarks" = "桌面设备上的书签";
-
-/* A label indicating all bookmarks that were recently added. */
-"Bookmarks.Menu.RecentlyBookmarked" = "最近的书签";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "新建书签";
@@ -194,17 +115,8 @@
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "新建分割条";
 
-/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
-"Bookmarks.Search.SearchBookmarks" = "搜索书签";
-
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "标题";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "您保存的书签将显示在此处。";
 
 /* Describes the date on which the breach occurred */
 "BreachAlerts.BreachDate" = "此外泄发生于";
@@ -245,14 +157,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "关闭标签页";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "计算机";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "为此链接添加书签";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "切换";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "已新建隐私浏览标签页";
@@ -277,12 +183,6 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "新建标签页打开";
-
-/* Context menu item for opening a link in a new private tab */
-"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "新建隐私标签页打开链接";
-
-/* Context menu item for opening a link in a new tab */
-"ContextMenu.OpenLinkInNewTabButtonTitle" = "新建标签页打开链接";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "保存图像";
@@ -317,12 +217,6 @@
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "未能载入页面。";
 
-/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "对于 iOS 13 用户，当您的手机设置为深色模式时，Firefox 现在会自动切换为深邃主题。要更改此行为，请前往“设置”>“主题”。";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "深色主题现在包含一套深色键盘和深色启动页。";
-
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "内置的增强型跟踪保护，能够阻止广告在网上跟踪您。开启“严格”模式则可拦截更多跟踪器和弹窗。";
 
@@ -341,9 +235,7 @@
 /* Accessibility label for button decreasing font size in display settings of reader mode */
 "Decrease text size" = "缩小文字";
 
-/* Accessibility label for default search engine setting.
-   Title for default search engine picker.
-   Title for default search engine settings section. */
+/* Title for default search engine picker. */
 "Default Search Engine" = "默认搜索引擎";
 
 /* Accessibility label for action denoting closing default browser home tab banner. */
@@ -376,17 +268,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "取消下载";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Firefox 尚不支持下载。";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "下载已取消";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "下载失败";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "重试";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "下载";
@@ -484,18 +370,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "前进";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "邮箱错误？断开连接以重新开始。";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "需要验证账户";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "您需要验证 %@。请检查您的邮箱找到验证链接以确认链接 Firefox。";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "连接其他设备";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Firefox 账户";
 
@@ -505,32 +379,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "无互联网连接";
 
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "打开同步首选项";
-
-/* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "到 firefox.com/pair 扫描二维码";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "移除";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "移除与此设备关联的 Firefox 账户，登录其他账户。";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "移除账户";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "重发邮件";
-
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "使用相机登录";
-
-/* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "使用账户在设备间同步 Firefox。";
-
-/* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "创建 Firefox 账户。";
 
 /* FxA sign in view qr code instructions */
 "fxa.signin.qr-link-instruction" = "在计算机上使用 Firefox 打开 firefox.com/pair";
@@ -538,23 +388,11 @@
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "扫描就绪";
 
-/* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "开启同步";
-
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "改用电子邮件";
 
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "登录以同步";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "随时在您的各个设备上取得您的标签页、书签及密码。";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "立即同步";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "精彩网络与你相伴";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Firefox 同步已连接至 %@";
@@ -580,9 +418,6 @@
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox 徽标，更换壁纸。";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "查看您其他设备上打开的标签页、书签和密码。";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "帮助";
 
@@ -604,9 +439,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "昨今两天";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "清除“最近的历史记录”将移除浏览记录、Cookie 和其他浏览器数据。";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "您最近访问的网站将在此处显示。";
 
@@ -615,15 +447,6 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "登录以查看来自您的其他设备的标签页列表。";
-
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "您的账户需要验证。";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "想查看您在其他设备上的标签页吗？";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "打开标签页同步功能，就能看到其他设备上打开的标签页。";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox 同步";
@@ -634,35 +457,14 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "最近关闭";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "已连接 %d 台设备";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "已同步设备";
-
 /* Accessibility label for the tab toolbar indicating the Home button. */
 "Home" = "主页";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "取消";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "您随时可以在设置中更改此项";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "设为首页";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "使用此网页作为您的首页？";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "书签";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "从历史记录中删除";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "新建隐私标签页打开";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "新建隐私标签页打开";
@@ -679,50 +481,41 @@
 /* The title for the Share context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Share" = "分享";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Back.DiscoveryTitle" = "后退";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.CloseTab.DiscoveryTitle" = "关闭标签页";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of finding text a user desires within a page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Find.DiscoveryTitle" = "查找";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Forward.DiscoveryTitle" = "前进";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NewPrivateTab.DiscoveryTitle" = "新建隐私标签页";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NewTab.DiscoveryTitle" = "新建标签页";
 
-/* Label to switch to normal browsing mode */
+/* A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NormalMode.DiscoveryTitle" = "一般浏览模式";
 
-/* Label to switch to private browsing mode */
+/* A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.PrivateMode.DiscoveryTitle" = "隐私浏览模式";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Reload.DiscoveryTitle" = "重新载入页面";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of directly accessing the URL, location, bar. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.SelectLocationBar.DiscoveryTitle" = "选择地址栏";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.ShowNextTab.DiscoveryTitle" = "显示下一个标签页";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "显示上一个标签页";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
-"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "开启“自动关闭”";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox 将自动关闭您一个月内未查看的标签页。";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
-"InactiveTabs.TabTray.AutoClosePrompt.Title" = "要一个月后自动关闭吗？";
 
 /* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
 "InactiveTabs.TabTray.CloseButtonTitle" = "关闭所有休眠标签页";
@@ -742,41 +535,17 @@
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ClearRecentHistory" = "清除最近的历史记录";
 
-/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.DownloadLink" = "下载链接";
-
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "查找下一个";
 
-/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.NewNormalTab" = "新建普通标签页";
-
-/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.OpenLinkInBackground" = "在后台打开链接";
-
-/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.OpenLinkInNewTab" = "在新标签页中打开链接";
-
-/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.SavePageAs" = "另存页面为…";
-
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "书签";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.Edit" = "编辑";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.File" = "文件";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.History" = "历史";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Tools" = "工具";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.View" = "查看";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Window" = "窗口";
@@ -799,25 +568,16 @@
 /* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowLastTab" = "显示最后一个标签页";
 
-/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowTabNumber" = "显示序号 1-9 的标签页";
-
-/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.UndoCloseTab" = "恢复关闭的标签页";
-
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "放大";
 
 /* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomOut" = "缩小";
 
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the past thirty days. */
 "Last month" = "上个月";
 
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "最近同步：%@";
-
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "上周";
 
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
@@ -843,9 +603,6 @@
 
 /* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
 "LibraryPanel.History.SearchHistoryPlaceholder.v99" = "输入搜索词";
-
-/* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
-"LibraryPanel.History.SyncedFromOtherDevices.v99" = "从其他设备同步而来";
 
 /* Within the History Panel, users can see the option of viewing their history from synced tabs. */
 "LibraryPanel.History.SyncedHistory.v100" = "同步的历史记录";
@@ -883,9 +640,6 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.Onboarding.LearnMoreButtonTitle" = "详细了解";
 
-/* Message shown when you enter Logins & Passwords for the first time. */
-"Logins.Onboarding.Message" = "您的登录名和密码现由面容 ID、触控 ID 或设备密码保护。";
-
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
 "Logins.PasscodeRequirement.Warning" = "要使用 Firefox 的“自动填充”功能，须先启用设备密码。";
 
@@ -897,12 +651,6 @@
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "启用“自动填充”";
-
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "修改时间";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "登录信息";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "不保存";
@@ -927,15 +675,6 @@
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "更新";
-
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "登录名";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "全部";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "站点";
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "筛选";
@@ -967,12 +706,10 @@
 /* Restore Tabs Prompt Description */
 "Looks like Firefox crashed previously. Would you like to restore your tabs?" = "看起来 Firefox 此前崩溃了。您想恢复您的标签页吗？";
 
-/* Name for Mark as read button in reader mode
-   Title for the button that marks a reading list item as read */
+/* Title for the button that marks a reading list item as read */
 "Mark as Read" = "标记为已读";
 
-/* Name for Mark as unread button in reader mode
-   Title for the button that marks a reading list item as unread */
+/* Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "标记为未读";
 
 /* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
@@ -983,9 +720,6 @@
 
 /* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
 "Menu.AddBookmark.Label.v99" = "添加";
-
-/* Toast displayed to the user after adding the item to the Top Sites. */
-"Menu.AddPin.Confirm" = "已固定至常用网站";
 
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "快捷指令已添加";
@@ -1014,29 +748,11 @@
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "下载";
 
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "已关闭此网站的增强型跟踪保护。";
-
-/* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "已开启此网站的增强型跟踪保护。";
-
-/* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox 可拦截跨网站跟踪器、社交跟踪器、加密货币挖矿程序和数字指纹跟踪程序。";
-
-/* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox 可拦截跨网站跟踪器、社交跟踪器、加密货币挖矿程序和数字指纹跟踪程序，以及跟踪性内容。";
-
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "帮助";
 
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "历史记录";
-
-/* Label for the button displayed in the menu used to stop the reload of the webpage */
-"Menu.Library.StopReload" = "停止";
-
-/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
-"Menu.ManageAccount.Label" = "管理账户 %@";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "新建标签页";
@@ -1045,19 +761,7 @@
 "Menu.NightModeTurnOff.Label2" = "关闭夜间模式";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "启用夜间模式";
-
-/* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "开启夜间模式";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "屏蔽图像";
-
-/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
-"Menu.NoImageModeShowImages.Label" = "显示图像";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "页面操作";
 
 /* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
 "Menu.Passwords.Label" = "密码";
@@ -1086,9 +790,6 @@
 /* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
 "Menu.RemovedFromShortcuts.v99" = "移除快捷方式";
 
-/* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "已从常用网站移除";
-
 /* Toast displayed to the user after removing the item to the Shortcuts. */
 "Menu.RemovePin.Confirm2.v99" = "已从快捷方式移除";
 
@@ -1116,35 +817,17 @@
 /* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
 "Menu.Toolbar.Home.AccessibilityLabel.v99" = "主页";
 
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "已拦截";
-
 /* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
 "Menu.TrackingProtection.Details.Verifier" = "验证者：%@";
 
-/* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "此页面上未检测到 Firefox 已知的跟踪器。";
-
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "保护设置";
-
-/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "保护状态 - %@";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "跟踪性内容";
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "社交跟踪器";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox 已拦截此页面中可能跟踪您的浏览行为的内容。";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "拦截在线跟踪器";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "跨网站跟踪性 Cookie";
 
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "跨网站跟踪器";
@@ -1167,47 +850,8 @@
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "社交网站会在其他网站放置跟踪器，以勾勒您的精准画像。拦截这些跟踪器，可降低您被社交媒体公司看到浏览内容的机会。";
 
-/* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "在此网站禁用";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "已关闭此网站的跟踪保护。";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "启用跟踪保护";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "在此网站启用";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "已开启此网站的跟踪保护。";
-
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "数字指纹跟踪程序";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "已拦截的跨网站跟踪性 Cookie";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "已拦截的加密货币挖矿程序";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "已拦截的数字指纹跟踪程序";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "已拦截的社交跟踪器";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "详细了解跟踪保护功能如何阻止跟踪者跨越不同网站收集您的浏览数据。";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "在此页面上没有检测到跟踪元素。";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "此网站包含的某些元素可能跟踪您的浏览行为，但您已经禁用保护。";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "为此网站启用";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "新版变化";
@@ -1224,8 +868,7 @@
 /* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
 "Navigation Toolbar" = "导航工具栏";
 
-/* Accessibility label for the New Tab button in the tab toolbar.
-   Accessibility Label for the tab toolbar New tab button */
+/* Accessibility label for the New Tab button in the tab toolbar. */
 "New Tab" = "新建标签页";
 
 /* Restore Tabs Negative Action */
@@ -1252,6 +895,9 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "暂时不要";
 
+/* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
+"Onboarding.Sync.Skip.Action.v106" = "跳过";
+
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "注册并登录";
 
@@ -1261,6 +907,12 @@
 /* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
 "Onboarding.SyncTitle.v102" = "同步让您随心流转";
 
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.Classic.v106" = "经典壁纸";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "限量版壁纸";
+
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "设置壁纸";
 
@@ -1269,28 +921,6 @@
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "开始浏览";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about. */
-"Onboarding.WhatsNew.Description" = "现在可以更轻松地从上次中断的地方继续浏览。";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
-"Onboarding.WhatsNew.PersonalizedHome.Description" = "跳转到您打开的标签页、书签和浏览历史。";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
-"Onboarding.WhatsNew.RecentSearches.Description" = "从主页快速访问您的上次搜索。";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
-"Onboarding.WhatsNew.RecentSearches.Title" = "最近的搜索";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card */
-"Onboarding.WhatsNew.TabGroups.Description" = "将同一次搜索打开的页面归入一组。";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card */
-"Onboarding.WhatsNew.TabGroups.Title" = "更简洁的标签页组";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
-   The title for the new onboarding card letting users know what is new in Firefox iOS */
-"Onboarding.WhatsNew.Title" = "Firefox 的新变化";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "啊哦！Firefox 崩溃了";
@@ -1310,23 +940,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "无法打开页面";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "页面选项菜单";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "面板选择器";
-
 /* Password textbox in Authentication prompt */
 "Password" = "密码";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "您没有任何同步自 Firefox 账户的登录信息";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "可用登录信息：";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox 登录信息";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "这将允许您保存图像到您的“相机胶卷”。";
@@ -1394,9 +1009,6 @@
 /* Reopen alert title shown at home page. */
 "ReopenAlert.Title" = "重新打开上次关闭的标签页";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "重新打开关闭的标签页";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "重置字号";
 
@@ -1415,18 +1027,13 @@
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "数据无效";
 
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "请在 设置 -> 隐私 -> 相机 中允许 Firefox 访问设备的相机。";
-
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
 "ScanQRCode.PermissionError.Message.v100" = "请到设备的“设置”>“Firefox”，允许 Firefox 访问相机。";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "扫描 QR 码";
 
-/* Accessibility Label for the tab toolbar Search button
-   Navigation title for search settings.
-   Open search section of settings */
+/* Open search section of settings */
 "Search" = "搜索";
 
 /* The text shown in the URL bar on about:home */
@@ -1471,12 +1078,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "确定";
 
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "搜索建议";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "安全连接";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "发送一则崩溃报告给 Mozilla，以便我们修复此问题？";
 
@@ -1486,9 +1087,11 @@
 /* Used as a button label for crash dialog prompt */
 "Send Report" = "发送报告";
 
-/* Button title for cancelling share screen
-   Close button in top navigation bar */
+/* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "取消";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "关闭";
 
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "可用设备：";
@@ -1517,9 +1120,6 @@
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "发送";
 
-/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "登录 Firefox";
-
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "从其他设备收到了新的标签页。";
 
@@ -1531,12 +1131,6 @@
 
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "%@ 收到新的标签页";
-
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "添加到阅读列表";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "书签";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "点按以开始";
@@ -1577,7 +1171,7 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "网址（请用 %s 替换查询内容）";
 
-/* Button in Data Management that clears private data for the selected items. */
+/* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "清除所有网站数据";
 
 /* Button in settings that clears private data for the selected items. */
@@ -1585,9 +1179,6 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "清除隐私数据";
-
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "清除隐私数据";
 
 /* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
 "Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "清除项目：%1$@";
@@ -1640,14 +1231,16 @@
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "主题将根据您的显示亮度自动更改。您可以设置主题更改的阈值，而圆圈代表屏幕的当前亮度。";
 
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "自动";
+
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "切换模式";
 
 /* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
 "Settings.DisplayTheme.SwitchSubtitle" = "基于屏幕亮度自动切换";
 
-/* Display (theme) settings label to show if automatically switch theme is enabled.
-   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+/* Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
 "Settings.DisplayTheme.SwitchTitle" = "自动";
 
 /* System theme settings section title */
@@ -1661,15 +1254,6 @@
 
 /* Title in main app settings for Theme settings */
 "Settings.DisplayTheme.Title.v2" = "主题";
-
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "一律启用";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "仅限使用跟踪保护时";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "向网站发送请勿跟踪（DNT）标识以表明您的态度";
 
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "设备名称";
@@ -1764,9 +1348,6 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
 "Settings.Home.Option.Wallpaper.UpdatedToastButton" = "查看";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "清除";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "首页";
 
@@ -1791,23 +1372,11 @@
 /* Toggled ON to show the shortcuts section */
 "Settings.Homepage.Shortcuts.ToggleOn.v100" = "开启";
 
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "首页设置";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "指定网页";
-
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "当前首页";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "使用已复制链接";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "使用当前页面";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "使用默认设置";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "登录名和密码";
@@ -1815,56 +1384,14 @@
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "自定义网址";
 
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "在打开新标签页时：";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "自定义常用网站";
-
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "空白页";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "书签";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "您经常访问的网站";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter2" = "您保存或访问过的网站";
-
-/* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "定制 Firefox 主页";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox 主页";
 
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "最近添加的书签";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "曾经访问";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "历史记录";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "主页";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "Pocket 流行";
-
-/* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "取自网络的精彩内容。";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "显示您的阅读列表";
-
-/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
-"Settings.NewTab.Option.RecommendedByPocket" = "%@ 推荐";
-
-/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
-"Settings.NewTab.Option.RecommendedByPocketDescription" = "由 %2$@ 旗下产品 %1$@ 提供的精选内容";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "新标签页";
@@ -1941,32 +1468,11 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri 快捷指令";
 
-/* Section title for all studies that are currently active */
-"Settings.Studies.Active.SectionName" = "进行中";
-
-/* Section title for all studies that are completed */
-"Settings.Studies.Completed.SectionName" = "已完成";
-
-/* Button title displayed next to each study allowing the user to opt-out of the study */
-"Settings.Studies.Remove.Button" = "移除";
-
-/* Title displayed in header of the Studies panel */
-"Settings.Studies.SectionName" = "研究";
-
-/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
-"Settings.Studies.Title" = "研究";
-
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Toggle.Link" = "详细了解。";
 
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Toggle.Message" = "Firefox 可能会不时地安装并运行一些研究项目。";
-
-/* Toggled OFF to opt-out of studies */
-"Settings.Studies.Toggle.Off" = "关闭";
-
-/* Toggled ON to participate in studies */
-"Settings.Studies.Toggle.On" = "开启";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "研究";
@@ -2013,23 +1519,11 @@
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "注意！";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "您可以选择一个列表，Firefox 将依此过滤可能会跟踪您网上活动的网页元素。";
-
-/* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "平衡保护和性能。";
-
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "拦截";
 
-/* Explanation of strict mode. */
-"Settings.TrackingProtection.Info.StrictTitle" = "提供更强大的保护，但可能导致某些网站异常。";
-
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "详细了解";
-
-/* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "更多信息…";
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "减少定向广告，并阻止广告商跟踪您的浏览。";
@@ -2049,53 +1543,17 @@
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "跟踪保护";
 
-/* Additional information about the strict level setting */
-"Settings.TrackingProtection.StrictLevelInfoFooter" = "拦截跟踪器可能会影响某些网站的功能。";
-
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "标准（默认）";
-
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "允许部分网站运行必不可少的网络跟踪器。";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "严格";
 
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "屏蔽已知的所有跟踪器。部分网站可能运行异常。";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "跟踪是指跨越多个网站收集您的浏览行为数据。";
-
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "增强型跟踪保护";
 
-/* Translation settings footer describing how language detection and translation happens. */
-"Settings.TranslateSnackBar.SectionFooter" = "网页语言在本机上检测，翻译内容由远程服务提供。";
-
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "服务";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchSubtitle" = "提供将其他语言的任何网站翻译为您的默认语言的服务。";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchTitle" = "提供翻译";
-
-/* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "翻译";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "故障排除";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "删除";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "完成";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "编辑";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "显示更多";
@@ -2130,17 +1588,13 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "在 Firefox 中打开";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "在隐私模式中打开";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "在 Firefox 中搜索";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "显示搜索建议";
 
-/* Accessibility label for the tabs button in the (top) tab toolbar
-   Accessibility Label for the tabs button in the tab toolbar */
+/* Accessibility label for the tabs button in the (top) tab toolbar */
 "Show Tabs" = "显示标签页";
 
 /* Show the on-boarding screen again from the settings */
@@ -2155,64 +1609,16 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "三指向左或向右滑动关闭标签页。";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "常规浏览模式";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "隐私浏览模式";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "同步您的标签页、书签、密码等等。";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "同步您的标签页、密码等信息。";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "您的首次同步可能会花些时间";
-
-/* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "尚无账户？立即创建以在设备间同步 Firefox。";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "正在同步";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "正在同步…";
-
-/* Panel accessibility label */
-"Synced Tabs" = "受同步的标签页";
-
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "书签";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "远程客户端";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "同步失败";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "历史记录";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "登录信息";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "同步不可用";
 
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "同步已离线";
 
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "同步在处理 %@ 时遇到问题";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "标签页";
-
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "第 %1$@ 个标签页，共 %2$@ 个";
 
-/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+/* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "显示所有标签页";
 
 /* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
@@ -2227,9 +1633,6 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d 个标签页已关闭";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "搜索标签页";
-
 /* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "查看休眠标签页";
 
@@ -2239,11 +1642,8 @@
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "新建标签页";
 
-/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+/* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "关闭所有标签页";
-
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "关闭所选标签页";
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "当前选择的标签页。";
@@ -2254,29 +1654,8 @@
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "休眠标签页";
 
-/* The section header for tabs opened last week */
-"TabTray.LastWeek.Header" = "上周";
-
-/* The title on the button to copy the tab address. */
-"TabTray.MoreMenu.Copy" = "复制";
-
-/* The section header for tabs opened before last week */
-"TabTray.Older.Header" = "更早";
-
-/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+/* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "打开新标签页";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "打开所选标签页";
-
-/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
-"TabTray.OtherTabs.Title" = "其他标签页";
-
-/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
-"TabTray.RecentlyClosed.Description" = "标签页将在此处保留 30 天，之后将自动关闭。";
-
-/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
-"TabTray.RecentlyClosed.SectionTitle" = "最近关闭";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "隐私";
@@ -2287,17 +1666,8 @@
 /* The title on the button to look at regular tabs. */
 "TabTray.SegmentedControlTitles.Tabs" = "标签页";
 
-/* The button title to see more options to perform on the tab. */
-"TabTray.SwipeMenu.More" = "更多";
-
 /* The title for the tab tray */
 "TabTray.Title" = "打开的标签页";
-
-/* The section header for tabs opened today */
-"TabTray.Today.Header" = "今天";
-
-/* The section header for tabs opened yesterday */
-"TabTray.Yesterday.Header" = "昨天";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "此页面无法在阅读模式下显示。";
@@ -2320,7 +1690,7 @@
 /* Label for button to undo the action just performed */
 "Toasts.Undo" = "撤销";
 
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "今天";
 
 /* Relative date for date older than a minute. */
@@ -2331,12 +1701,6 @@
 
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "关闭所有标签页";
-
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "您最常访问的网站将在这里显示。";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "欢迎访问常用网站";
 
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "移除页面 - %@";
@@ -2362,9 +1726,6 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "未读";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "升级 Firefox 以连接";
-
 /* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
 "Upgrade.SyncSign.Action.v106" = "登录";
 
@@ -2379,12 +1740,6 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "用户名";
-
-/* Text message in the settings table view */
-"Verify your email address" = "验证您的电子邮件地址";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "版本 %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "网页内容";
@@ -2401,7 +1756,7 @@
 /* Relative date for yesterday. */
 "yesterday" = "昨天";
 
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the past 24 hours. */
 "Yesterday" = "昨天";
 
 /* Error message in the remote tabs panel */

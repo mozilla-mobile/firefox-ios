@@ -1,29 +1,14 @@
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction.Title" = "Pridať medzi záložky";
-
 /* Long label for the button displayed in the menu, used to add a page to the reading list. */
 "Menu.AddToReadingList.AlternateLabel.v99" = "Pridať do Zoznamu na prečítanie";
 
-/* Label for the button, displayed in the menu, used to add a page to the reading list. */
-"Menu.AddToReadingList.Title" = "Pridať do Zoznamu na prečítanie";
-
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "Zavrieť všetky karty";
-
-/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
-"Menu.CopyAddress.Title" = "Kopírovať adresu";
 
 /* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
 "Menu.CopyLink.Title" = "Kopírovať odkaz";
 
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "Hľadať na stránke";
-
-/* Label for the button, displayed in the menu, used to Reload the webpage */
-"Menu.Library.Reload" = "Obnoviť";
-
-/* Label for the button, displayed in the menu, used to open the Library */
-"Menu.Library.Title" = "Vaša knižnica";
 
 /* Label for the button, displayed in the menu, used to open a new private tab. */
 "Menu.NewPrivateTabAction.Title" = "Otvoriť na súkromnej karte";
@@ -40,9 +25,6 @@
 /* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "História";
 
-/* Label for the button, displayed in the menu, used to navigate to the home page. */
-"Menu.OpenHomePageAction.Title" = "Domovská stránka";
-
 /* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "Zoznam na prečítanie";
 
@@ -52,38 +34,17 @@
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Synchronizované karty";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
-"Menu.OpenTopSitesAction.AccessibilityLabel" = "Top stránky";
-
-/* Label for the button, displayed in the menu, used to show the html page source */
-"Menu.PageSourceAction.Title" = "Zobraziť zdrojový kód stránky";
-
-/* A string used to signify the start of the Recently Saved section in Home Screen. */
-"Menu.RecentlySaved.Title" = "Nedávno uložené";
-
 /* Long label for the remove bookmark button displayed in the menu. Pressing this button remove the current page from the bookmarks. */
 "Menu.RemoveBookmark.AlternateLabel.v99" = "Odstrániť záložku";
 
-/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
-"Menu.RemoveBookmarkAction.Title" = "Odstrániť záložku";
-
 /* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
 "Menu.ReportSiteIssueAction.Title" = "Nahlásiť problém so stránkou";
-
-/* Label for the button, displayed in the menu, used to open the QR code scanner. */
-"Menu.ScanQRCodeAction.Title" = "Skenovať QR kód";
 
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "Zobraziť všetko";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
 "Menu.SharePageAction.Title" = "Zdieľať stránku s…";
-
-/* Label for the button, displayed in the menu, used to open the tabs tray */
-"Menu.ShowTabs.Title" = "Zobraziť karty";
-
-/* Label for the button, displayed in the menu, used to translate the current page. */
-"Menu.TranslatePageAction.Title" = "Preložiť stránku";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "Verzia stránky pre počítače";

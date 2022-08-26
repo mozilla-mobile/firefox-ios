@@ -4,24 +4,6 @@
 /* Close Private Tabs */
 "TodayWidget.ClosePrivateTabsLabelV2" = "ਪ੍ਰਾਈਵੇਟ ਟੈਬਾਂ ਨੂੰ ਬੰਦ ਕਰੋ";
 
-/* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV3" = "ਪ੍ਰਾਈਵੇਟ ਟੈਬਾਂ ਨੂੰ ਬੰਦ ਕਰੋ";
-
-/* Copied Link from clipboard displayed */
-"TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "ਕਲਿੱਪਬੋਰਡ ਤੋਂ ਲਿੰਕ ਕਾਪੀ ਕੀਤਾ";
-
-/* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemClearPrivateTabs" = "ਪ੍ਰਾਈਵੇਟ ਟੈਬਾਂ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
-
-/* Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemGoToCopiedLink" = "ਕਾਪੀ ਕੀਤੇ ਲਿੰਕ ਉੱਤੇ ਜਾਓ";
-
-/* Quick Actions drop down menu item for new private search when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemNewPrivateSearch" = "ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਖੋਜ";
-
-/* Quick Actions drop down menu item for new search when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemNewSearch" = "ਨਵੀਂ ਖੋਜ";
-
 /* Description for medium size widget to add Firefox Shortcut to home screen */
 "TodayWidget.FirefoxShortcutGalleryDescription" = "ਫਾਇਰਫਾਕਸ ਸ਼ਾਰਟਕੱਟ ਨੂੰ ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਉੱਤੇ ਜੋੜੋ";
 
@@ -31,20 +13,8 @@
 /* Go to copied link */
 "TodayWidget.GoToCopiedLinkLabelV2" = "ਕਾਪੀ ਕੀਤੇ ਲਿੰਕ ਉੱਤੇ ਜਾਓ";
 
-/* Go To Copied Link text pasted on the clipboard but this string doesn't have new line character */
-"TodayWidget.GoToCopiedLinkLabelV3" = "ਕਾਪੀ ਕੀਤੇ ਲਿੰਕ ਉੱਤੇ ਜਾਓ";
-
-/* Go to copied link */
-"TodayWidget.GoToCopiedLinkLabelV4" = "ਕਾਪੀ ਕੀਤੇ ਲਿੰਕ ਉੱਤੇ ਜਾਓ";
-
 /* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
 "TodayWidget.MoreTabsLabel" = "+%d ਹੋਰ…";
-
-/* Open New Private Tab button label for medium size action */
-"TodayWidget.NewPrivateTabButtonLabelV2" = "ਪ੍ਰਾਈਵੇਟ ਟੈਬ ਵਿੱਚ ਖੋਜੋ";
-
-/* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਖੋਜੋ";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "ਨਵੀਂ ਖੋਜ";
@@ -52,29 +22,11 @@
 /* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.NoOpenTabsLabel" = "ਕੋਈ ਖੁੱਲ੍ਹੀ ਟੈਬ ਨਹੀਂ ਹੈ।";
 
-/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.NoOpenTabsLabelV2" = "ਕੋਈ ਖੁੱਲ੍ਹੀ ਟੈਬ ਨਹੀਂ ਹੈ";
-
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.OpenFirefoxLabel" = "ਫਾਇਰਫਾਕਸ ਖੋਲ੍ਹੋ";
 
-/* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetGalleryDescription" = "ਪੂਰੇ ਵੈਬ ਤੋਂ ਰੌਚਕ ਅਤੇ ਸੋਚਣ ਲਈ ਮਜ਼ਬੂਰ ਕਰਨ ਵਾਲੀਆਂ, Pocket ਵਲੋਂ ਇਕੱਤਰ ਕੀਤੀਆਂ ਕਹਾਣੀਆਂ ਲਵੋ।";
-
-/* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Pocket ਵਲੋਂ ਸਿਫਾਰਸ਼ੀ";
-
-/* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetTitle" = "Pocket ਵਲੋਂ ਸਿਫਾਰਸ਼ੀ";
-
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "ਪ੍ਰਾਈਵੇਟ ਖੋਜ";
-
-/* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਉੱਤੇ ਜੋੜਨ ਲਈ ਫਾਇਰਫਾਕਸ ਸ਼ਾਰਟਕੱਟ ਚੁਣੋ।";
-
-/* Quick Actions left label text for dropdown menu when widget enters edit mode */
-"TodayWidget.QuickActionDropDownMenu" = "ਫ਼ੌਰੀ ਕਾਰਵਾਈ";
 
 /* Description for small size widget to add it to home screen */
 "TodayWidget.QuickActionGalleryDescription" = "ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਉੱਤੇ Firefox ਜੋੜੋ। ਵਿਜੈਟ ਜੋੜਨ ਦੇ ਬਾਅਦ ਇਸ ਨੂੰ ਸੋਧਣ ਲਈ ਛੂਹ ਕੇ ਰੱਖੋ ਅਤੇ ਵੱਖਰਾ ਸ਼ਾਰਟਕੱਟ ਚੁਣੋ।";
@@ -85,26 +37,11 @@
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
 "TodayWidget.QuickActionsGalleryTitleV2" = "ਫਾਇਰਫਾਕਸ ਸ਼ਾਰਟਕੱਟ";
 
-/* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "ਫਾਇਰਫਾਕਸ - ਫ਼ੌਰੀ ਕਾਰਵਾਈਆਂ";
-
-/* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewGalleryDescription" = "ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਤੋਂ ਆਪਣੀਆਂ ਖੋਲ੍ਹੀਆਂ ਟੈਬਾਂ ਨੂੰ ਸਿੱਧਾ ਵਰਤੋਂ।";
-
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "ਆਪਣੀਆਂ ਖੁੱਲ੍ਹੀਆਂ ਟੈਬਾਂ ਲਈ ਸ਼ਾਰਟਕਟ ਜੋੜੋ।";
 
 /* Title for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryTitle" = "ਫ਼ੌਰੀ ਝਲਕ";
-
-/* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewLargeGalleryDescription" = "ਆਪਣੀਆਂ ਖੁੱਲ੍ਹੀਆਂ ਟੈਬਾਂ ਲਈ ਸ਼ਾਰਟਕਟ ਜੋੜੋ।";
-
-/* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "ਫਾਇਰਫਾਕਸ - ਟੈਬਾਂ ਖੋਲ੍ਹੋ";
-
-/* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਖੋਜੋ";
 
 /* Search in Firefox. Do not translate the word Firefox */
 "TodayWidget.SearchInFirefoxV2" = "ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਖੋਜੋ";
@@ -120,16 +57,4 @@
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitleV2" = "ਵੈੱਬਸਾਈਟ ਸ਼ਾਰਟਕੱਟ";
-
-/* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "ਫਾਇਰਫਾਕਸ - ਮੁੱਖ ਸਾਈਟਾਂ";
-
-/* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - ਵੈੱਬਸਾਈਟ ਸ਼ਾਰਟਕੱਟ";
-
-/* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
-"TodayWidget.ViewMore" = "ਹੋਰ ਵੇਖੋ";
-
-/* View More… for Firefox Pocket stories widget where we don't know how many articles are available. */
-"TodayWidget.ViewMoreDots" = "ਹੋਰ ਵੇਖੋ…";
 

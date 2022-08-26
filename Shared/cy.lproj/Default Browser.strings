@@ -1,13 +1,10 @@
-/* Button string to open settings that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Button" = "Mynd i Gosodiadau";
-
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Dysgu Sut";
 
-/* Description for small card shown that allows user to switch their default browser to Firefox. */
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Gosod dolenni o wefannau, e-byst, a Messages i agor yn awtomatig yn Firefox.";
 
-/* Title for small card shown that allows user to switch their default browser to Firefox. */
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Newid Eich Porwr Rhagosodedig";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */

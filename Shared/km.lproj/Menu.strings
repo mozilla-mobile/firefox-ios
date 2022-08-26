@@ -1,20 +1,8 @@
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction.Title" = "ចំណាំ​ទំព័រ​នេះ";
-
-/* Label for the button, displayed in the menu, used to add a page to the reading list. */
-"Menu.AddToReadingList.Title" = "បញ្ចូល​​ទៅ​បញ្ជី​អាន";
-
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "បិទ​ផ្ទាំង​ទាំងអស់​";
 
-/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
-"Menu.CopyAddress.Title" = "ចម្លងអាសយដ្ឋាន";
-
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "ស្វែងរក​ក្នុង​ទំព័រ";
-
-/* Label for the button, displayed in the menu, used to open the Library */
-"Menu.Library.Title" = "បណ្ណាល័យរបស់អ្នក";
 
 /* Label for the button, displayed in the menu, used to open a new private tab. */
 "Menu.NewPrivateTabAction.Title" = "បើក​ផ្ទាំង​ឯកជនថ្មី";
@@ -28,9 +16,6 @@
 /* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "ប្រវត្តិ";
 
-/* Label for the button, displayed in the menu, used to navigate to the home page. */
-"Menu.OpenHomePageAction.Title" = "ទំព័រដើម";
-
 /* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "បញ្ជី​​អំណាន";
 
@@ -40,29 +25,11 @@
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "ផ្ទាំង​​ដែល​​បាន​​ធ្វើ​​សមកាល​កម្ម";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
-"Menu.OpenTopSitesAction.AccessibilityLabel" = "វេបសាយ​ដ៏​ពេញនិយម";
-
-/* Label for the button, displayed in the menu, used to show the html page source */
-"Menu.PageSourceAction.Title" = "មើល​ប្រភពកូដ​នៃទំព័រ";
-
-/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
-"Menu.RemoveBookmarkAction.Title" = "យក​ចំណាំ​ចេញ​";
-
-/* Label for the button, displayed in the menu, used to open the QR code scanner. */
-"Menu.ScanQRCodeAction.Title" = "ស្កេនកូដ QR";
-
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "មើល​ទាំងអស់";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
 "Menu.SharePageAction.Title" = "ចែករំលែកទំព័រជាមួយ…";
-
-/* Label for the button, displayed in the menu, used to open the tabs tray */
-"Menu.ShowTabs.Title" = "បង្ហាញ​ផ្ទាំង";
-
-/* Label for the button, displayed in the menu, used to translate the current page. */
-"Menu.TranslatePageAction.Title" = "បកប្រែទំព័រ";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "ស្នើ​វេបសាយ​លើ​ផ្ទៃ​តុ";
