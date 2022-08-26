@@ -233,6 +233,11 @@ extension String {
                 value: "See all synced tabs",
                 comment: "Button title shown for tab pickup on the Firefox homepage in the Jump Back In section.",
                 lastUpdated: .v104)
+            public static let SyncedTabOpenTabA11y = MZLocalizedString(
+                "FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106",
+                value: "Open synced tab",
+                comment: "Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section.",
+                lastUpdated: .v106)
         }
 
         public struct Pocket {
