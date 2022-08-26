@@ -5,7 +5,7 @@
 import Foundation
 
 enum WallpaperType: String {
-    case defaultWallpaper
+    case defaltWallpaper
     case other
 }
 

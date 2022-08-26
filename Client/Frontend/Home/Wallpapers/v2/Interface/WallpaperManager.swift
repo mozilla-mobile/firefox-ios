@@ -63,7 +63,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
 
         return [
             WallpaperCollection(
-                id: "classicFirefox",
+                id: "classic-firefox",
                 learnMoreURL: nil,
                 availableLocales: nil,
                 availability: nil,
