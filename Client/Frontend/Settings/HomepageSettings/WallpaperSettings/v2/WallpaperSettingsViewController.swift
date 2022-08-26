@@ -1,0 +1,233 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import UIKit
+
+class WallpaperSettingsViewController: UIViewController, Loggable {
+
+    private struct UX {
+        static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
+        static let cardHeight: CGFloat = UIDevice().isTinyFormFactor ? 80 : 88
+        static let inset: CGFloat = 8
+        static let cardShadowHeight: CGFloat = 14
+    }
+
+    private var viewModel: WallpaperSettingsViewModel
+    internal var notificationCenter: NotificationProtocol
+
+    // Views
+    private lazy var contentView: UIView = .build { _ in }
+
+    private lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero,
+                                              collectionViewLayout: getCompositionalLayout())
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .clear
+        collectionView.dataSource = self
+        collectionView.delegate = self
+
+        collectionView.register(
+            WallpaperCollectionViewCell.self,
+            forCellWithReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier)
+        collectionView.register(WallpaperSettingsHeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: WallpaperSettingsHeaderView.cellIdentifier)
+        return collectionView
+    }()
+
+    private lazy var activityIndicatorView: UIActivityIndicatorView = .build { view in
+        view.style = .large
+        view.isHidden = true
+    }
+
+    // MARK: - Initializers
+    init(viewModel: WallpaperSettingsViewModel,
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.viewModel = viewModel
+        self.notificationCenter = notificationCenter
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View setup & lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+        applyTheme()
+        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        applyTheme()
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
+            || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
+            updateOnRotation()
+        }
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        updateOnRotation()
+    }
+}
+
+// MARK: - CollectionView Data Source
+extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return viewModel.numberOfSections
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return viewModel.numberOfWallpapers(in: section)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionHeader,
+              let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: WallpaperSettingsHeaderView.cellIdentifier,
+                for: indexPath) as? WallpaperSettingsHeaderView,
+              let headerViewModel = viewModel.sectionHeaderViewModel(for: indexPath.section)
+        else { return UICollectionReusableView() }
+
+        headerView.configure(viewModel: headerViewModel)
+        return headerView
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier,
+                                                            for: indexPath) as? WallpaperCollectionViewCell,
+              let cellViewModel = viewModel.cellViewModel(for: indexPath)
+        else { return UICollectionViewCell() }
+
+        cell.viewModel = cellViewModel
+        return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        activityIndicatorView.startAnimating()
+        viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
+            ensureMainThread {
+                switch result {
+                case .success:
+                    self?.collectionView.reloadData()
+                case .failure(let error):
+                    self?.browserLog.info(error.localizedDescription)
+                }
+            }
+        }
+        activityIndicatorView.stopAnimating()
+    }
+
+}
+
+// MARK: - Private
+private extension WallpaperSettingsViewController {
+
+    func setupView() {
+        configureCollectionView()
+
+        contentView.addSubview(collectionView)
+        contentView.addSubview(activityIndicatorView)
+        view.addSubview(contentView)
+
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: view.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+
+            activityIndicatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+        ])
+    }
+
+    func configureCollectionView() {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.collectionViewLayout = getCompositionalLayout()
+    }
+
+    func getCompositionalLayout() -> UICollectionViewCompositionalLayout {
+        viewModel.updateSectionLayout(for: traitCollection)
+
+        let config = UICollectionViewCompositionalLayoutConfiguration()
+        config.scrollDirection = .vertical
+
+        let layout = UICollectionViewCompositionalLayout(sectionProvider: { ix, environment in
+            let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(WallpaperSettingsViewController.UX.cardWidth),
+                                                  heightDimension: .fractionalHeight(1.0))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                   heightDimension: .absolute(WallpaperSettingsViewController.UX.cardHeight))
+            let subitemsCount = self.viewModel.sectionLayout.itemsPerRow
+            let subItems: [NSCollectionLayoutItem] = Array(repeating: item, count: Int(subitemsCount))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                           subitems: subItems)
+            group.interItemSpacing = .fixed(WallpaperSettingsViewController.UX.inset)
+
+            let section = NSCollectionLayoutSection(group: group)
+            let width = environment.container.effectiveContentSize.width
+            let inset = (width -
+                         CGFloat(subitemsCount) * WallpaperSettingsViewController.UX.cardWidth -
+                         CGFloat(subitemsCount - 1) * WallpaperSettingsViewController.UX.inset) / 2.0
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                            leading: inset,
+                                                            bottom: 16.0,
+                                                            trailing: inset)
+            section.interGroupSpacing = WallpaperSettingsViewController.UX.inset
+
+            return section
+        }, configuration: config)
+
+        return layout
+    }
+
+    /// On iPhone, we call updateOnRotation when the trait collection has changed, to ensure calculation
+    /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
+    /// since it's `.regular` on both. We updateOnRotation from viewWillTransition in that case.
+    func updateOnRotation() {
+        configureCollectionView()
+    }
+}
+
+// MARK: - Themable & Notifiable
+extension WallpaperSettingsViewController: NotificationThemeable, Notifiable {
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
+    }
+
+    func applyTheme() {
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            contentView.backgroundColor = UIColor.Photon.DarkGrey40
+        } else {
+            contentView.backgroundColor = UIColor.Photon.LightGrey10
+        }
+    }
+}
