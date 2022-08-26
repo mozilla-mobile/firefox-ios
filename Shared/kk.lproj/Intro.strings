@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "Бақылаудан кеңейтілген қорғаныс зиянкес бағдарламаларды бұғаттайды және трекерлерді тоқтатады.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "Автоматты жекелік";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Келесі";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Кіру";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Тіркелгіні жасау";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "Іздеу ұсыныстары веб-сайттарға жылдамырақ апарады.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Жылдам іздеу";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Осы құрылғыдағы Firefox-қа бетбелгілер, шолу тарихын және парольдерді көшіру.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Firefox-ты құрылғылар арасында синхрондау";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Firefox көмегімен кез келген пошта қолданбасын - тек Mail емес - қолданыңыз.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Сізде поштаның… таңдауы бар";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Жекелік шолу режиміне өту үшін бетперде таңбашасын шертіңіз.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Бақылаудан қорықпай-ақ интернетті шолыңыз";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Firefox-ті қолданатын барлық жерде логиндер және деректеріңізді қорғаңыз.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Қауіпсіз синхрондау";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Басқа бірнәрсе іздедіңіз бе? Баптаулардан басқа негізгі іздеу жүйесін таңдаңыз (немесе өзіңіздікін қосыңыз).";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Сіздің іздеулеріңіз, сіздің жолыңызбен";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Синхрондау және көбірек мүмкіндіктерге қол жеткізу үшін, тіркелгіңізге кіріңіз.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Бетбелгілер, шолу тарихы және парольдерді телефоныңызға синхрондаңыз.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Жылдам, жеке және сіздің жағыңызда.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Firefox қолданбасына қош келдіңіз";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Шолуды бастау";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Синхрондауды іске қосу…";
 

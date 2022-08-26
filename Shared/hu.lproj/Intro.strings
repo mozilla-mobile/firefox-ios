@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "A fokozott követés elleni védelem blokkolja a rosszindulatú programokat és megállítja a nyomkövetőket.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "Automatikus adatvédelem";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Tovább";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Bejelentkezés";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Regisztráció";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "A keresési javaslatok gyorsabban juttatják el Önt a webhelyekre.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Gyors keresés";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Adjon hozzá könyvjelzőket, előzményeket és jelszavakat a Firefoxhoz ezen az eszközön.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Szinkronizálja a Firefoxot az eszközök közt";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Használja bármelyik levelezőalkalmazást – nem csak a Mailt – a Firefoxszal.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Üzenetet kapott… beállítások";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Érintse meg a maszk ikont, hogy privát böngészésbe váltson.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Böngésszen úgy, mintha senki sem figyelné";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Védje bejelentkezéseit és adatait mindenhol, ahol a Firefoxot használja.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Biztonságos szinkronizálás";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Valami mást keres? Válasszon másik alapértelmezett keresőmotort (vagy adja hozzá a sajátját) a Beállításokban.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Az Ön keresése, az Ön útja";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "A szinkronizáláshoz és a további funkciók eléréséhez jelentkezzen be fiókjába.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Szinkronizálja a könyvjelzőit, előzményeit és jelszavait a telefonjára.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Gyors, privát és az Ön oldalán áll.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Üdvözli a Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Böngészés megkezdése";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Sync bekapcsolása…";
 

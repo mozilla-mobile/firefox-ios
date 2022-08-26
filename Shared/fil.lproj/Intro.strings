@@ -1,51 +1,9 @@
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Sa susunod";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Mag sign-in";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Mag-sign Up";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Mabilis na Paghahanap";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Gamitin ang anumang email app - hindi lamang Mail - may Firefox.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Nakakuha ka ng mga mail… opsyon";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Tapikin ang icon ng mask upang mawala sa pribadong pagba-browse mode.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Mag-browse tulad ng walang nanonood";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Ligtas na Pag-sync";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Naghahanap ng ibang bagay? Pumili ng isa pang default na search engine (o idagdag ang iyong sariling) sa Mga Setting.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Ang iyong paghahanap, ang iyong paraan";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Mag-sign in sa iyong account upang i-sync at ma-access ang higit pang mga tampok.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "I-sync ang iyong mga bookmark, kasaysayan, at password sa iyong telepono.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Mabilis, pribado, at nasa tabi mo.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Maligayang pagdating sa Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Simulang mag-Browse";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "i-On ang Sync…";
 

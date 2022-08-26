@@ -1,13 +1,10 @@
-/* Button string to open settings that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Button" = "ໄປທີ່ການຕັ້ງຄ່າ";
-
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "ຮຽນຮູ້ວິທີການ";
 
-/* Description for small card shown that allows user to switch their default browser to Firefox. */
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "ຕັ້ງໃຫ້ເປີດລີ້ງຈາກເວັບໄຊທ, ອີເມລ ແລະ ຂໍ້ຄວາມແບບອັດຕະໂນມັດໃນ Firefox.";
 
-/* Title for small card shown that allows user to switch their default browser to Firefox. */
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "ປ່ຽນບຣາວເຊີຫລັກຂອງທ່ານ";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */

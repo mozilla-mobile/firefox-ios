@@ -1,21 +1,3 @@
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Use calquera aplicativo de correo (non só Mail) co Firefox.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Máis opcións para o correo";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Prema na icona da máscara para pasar ao modo de navegación privada.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Navegue sen sentirse observado";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Busca algo diferente? Escolla outro buscador predeterminado (ou engada un propio) nos Axustes.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "As súas buscas, a seu modo";
-
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Iniciar a navegación";
 
