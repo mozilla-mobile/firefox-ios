@@ -46,7 +46,6 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
 
     fileprivate lazy var learnMoreButton: ResizableButton = .build { button in
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 12.0)
-        button.setTitleColor(.black, for: .normal)
         button.contentHorizontalAlignment = .leading
         button.buttonEdgeSpacing = 0
     }
@@ -140,8 +139,14 @@ extension WallpaperSettingsHeaderView: NotificationThemeable, Notifiable {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
             contentStackView.backgroundColor = UIColor.Photon.DarkGrey40
+            titleLabel.textColor = UIColor.Photon.Grey10
+            descriptionLabel.textColor = UIColor.Photon.Grey10
+            learnMoreButton.setTitleColor(UIColor.Photon.Grey10, for: .normal)
         } else {
             contentStackView.backgroundColor = UIColor.Photon.LightGrey10
+            titleLabel.textColor = UIColor.Photon.Grey75A60
+            descriptionLabel.textColor = UIColor.Photon.Grey75A60
+            learnMoreButton.setTitleColor(UIColor.Photon.Grey75A60, for: .normal)
         }
     }
 }
