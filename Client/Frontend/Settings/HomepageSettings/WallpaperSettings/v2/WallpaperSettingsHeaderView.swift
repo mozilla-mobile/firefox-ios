@@ -13,6 +13,7 @@ struct WallpaperSettingsHeaderViewModel {
 
     var buttonTitle: String?
     var buttonA11yIdentifier: String?
+    var buttonAction: (() -> Void)?
 }
 
 class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
@@ -92,12 +93,19 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
             contentStackView.addArrangedSubview(descriptionLabel)
         }
 
-        if let buttonTitle = viewModel.buttonTitle, let buttonA11y = viewModel.buttonA11yIdentifier {
+        if let buttonTitle = viewModel.buttonTitle,
+           let buttonA11y = viewModel.buttonA11yIdentifier,
+           let _ = viewModel.buttonAction {
             learnMoreButton.setTitle(buttonTitle, for: .normal)
+            learnMoreButton.addTarget(self, action: #selector((buttonTapped(_:))), for: .touchUpInside)
             learnMoreButton.accessibilityIdentifier = buttonA11y
 
             contentStackView.addArrangedSubview(learnMoreButton)
         }
+    }
+
+    @objc func buttonTapped(_ sender: Any) {
+        viewModel?.buttonAction?()
     }
 }
 

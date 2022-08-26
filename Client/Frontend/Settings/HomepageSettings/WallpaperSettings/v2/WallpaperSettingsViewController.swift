@@ -101,7 +101,9 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
                 ofKind: UICollectionView.elementKindSectionHeader,
                 withReuseIdentifier: WallpaperSettingsHeaderView.cellIdentifier,
                 for: indexPath) as? WallpaperSettingsHeaderView,
-              let headerViewModel = viewModel.sectionHeaderViewModel(for: indexPath.section)
+              let headerViewModel = viewModel.sectionHeaderViewModel(for: indexPath.section, dismissView: {
+                  self.dismissView()
+              })
         else { return UICollectionReusableView() }
 
         headerView.configure(viewModel: headerViewModel)
@@ -217,6 +219,16 @@ private extension WallpaperSettingsViewController {
     /// since it's `.regular` on both. We updateOnRotation from viewWillTransition in that case.
     func updateOnRotation() {
         configureCollectionView()
+    }
+
+    private func dismissView() {
+        guard let navigationController = self.navigationController as? ThemedNavigationController else { return }
+
+        if let isFxHomeTab = viewModel.tabManager.selectedTab?.isFxHomeTab, !isFxHomeTab {
+            viewModel.tabManager.selectTab(viewModel.tabManager.addTab())
+        }
+
+        navigationController.done()
     }
 }
 

@@ -25,14 +25,16 @@ class WallpaperSettingsViewModel {
 
     private var wallpaperManager: WallpaperManagerInterface
     private var wallpaperCollections = [WallpaperCollection]()
+    var tabManager: TabManager
     var sectionLayout: WallpaperSettingsLayout = .compact // We use the compact layout as default
 
     var numberOfSections: Int {
         return wallpaperCollections.count
     }
 
-    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
+    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(), tabManager: TabManager) {
         self.wallpaperManager = wallpaperManager
+        self.tabManager = tabManager
         setupWallpapers()
     }
 
@@ -40,7 +42,7 @@ class WallpaperSettingsViewModel {
         return wallpaperCollections[safe: section]?.wallpapers.count ?? 0
     }
 
-    func sectionHeaderViewModel(for sectionIndex: Int) -> WallpaperSettingsHeaderViewModel? {
+    func sectionHeaderViewModel(for sectionIndex: Int, dismissView: @escaping (() -> Void)) -> WallpaperSettingsHeaderViewModel? {
         guard let collection = wallpaperCollections[safe: sectionIndex] else { return nil }
 
         let isClassic = collection.type == .classic
@@ -48,12 +50,23 @@ class WallpaperSettingsViewModel {
             .Settings.Homepage.Wallpaper.ClassicWallpaper : .Settings.Homepage.Wallpaper.LimitedEditionWallpaper
         let desc: String? = isClassic ? nil : .Settings.Homepage.Wallpaper.IndependentVoicesDescription
         let buttonTitle: String? = isClassic ? nil : .Settings.Homepage.Wallpaper.LearnMoreButton
+        let buttonAction = { [weak self] in
+            guard let strongSelf = self, let learnMoreUrl = collection.learnMoreUrl else { return }
+
+            dismissView()
+            let tab = strongSelf.tabManager.addTab(URLRequest(url: learnMoreUrl),
+                                                   afterTab: strongSelf.tabManager.selectedTab,
+                                                   isPrivate: false)
+            strongSelf.tabManager.selectTab(tab)
+        }
 
         return WallpaperSettingsHeaderViewModel(title: title,
                                                 titleA11yIdentifier: "title", // todo
                                                 description: desc,
                                                 descriptionA11yIdentifier: "description", // todo
-                                                buttonTitle: buttonTitle)
+                                                buttonTitle: buttonTitle,
+                                                buttonA11yIdentifier: "button", // todo
+                                                buttonAction: buttonAction)
     }
 
     func updateSectionLayout(for traitCollection: UITraitCollection) {
