@@ -315,6 +315,39 @@ class TelemetryWrapperTests: XCTestCase {
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.searchResultTap)
     }
+
+    // MARK: - Page Action Menu
+
+    func test_createNewTab_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .createNewTab
+        )
+
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.createNewTab)
+
+    }
+
+    func test_viewHistoryPanel_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .viewHistoryPanel
+        )
+
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.viewHistoryPanel)
+    }
+
+    func test_viewDownloadsPanel_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .viewDownloadsPanel
+        )
+
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.viewDownloadsPanel)
+    }
 }
 
 // MARK: - Helper functions to test telemetry
