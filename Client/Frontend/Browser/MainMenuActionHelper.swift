@@ -278,6 +278,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
 
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.delegate?.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false, searchFor: nil)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .createNewTab)
         }.items
     }
 
@@ -285,6 +286,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         return SingleActionViewModel(title: .AppMenu.AppMenuHistory,
                                      iconString: ImageIdentifiers.history) { _ in
             self.delegate?.showLibrary(panel: .history)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .viewHistoryPanel)
         }.items
     }
 
@@ -292,6 +294,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         return SingleActionViewModel(title: .AppMenu.AppMenuDownloads,
                                      iconString: ImageIdentifiers.downloads) { _ in
             self.delegate?.showLibrary(panel: .downloads)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .viewDownloadsPanel)
         }.items
     }
 
