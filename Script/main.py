@@ -1,9 +1,11 @@
+import config
+import git
 import requests
 import re
-import git
 import os
-from github import Github
+import time
 
+from github import Github
 from dataclasses import dataclass
 
 
@@ -47,7 +49,7 @@ def get_store_version() -> Version:
     return Version(int(split[0]), int(split[1]))
 
 
-# TODO: Cannot be calculated like this, needs tobe fetched from app store.
+# TODO: Cannot be calculated like this, needs to be fetched from app store.
 def calculate_previous_version(version: Version) -> Version:
     if version.minor == 0:
         return Version(version.major - 1, 0)
@@ -66,70 +68,99 @@ def get_diff_commits(current_version: Version, previous_version: Version) -> str
     max_date = commit_intersect_object.committed_date + 1
 
     # Pretty format doc: https://git-scm.com/docs/pretty-formats
-    result = repo.git.log(f'--since={max_date}',
-                          '--pretty=format:- email:%ae username:%an with commit: %s',
-                          commit_intersect,
-                          commit_origin_current)
-    return result
+    return repo.git.log(f'--since={max_date}',
+                        '--pretty=format:- email: %ae username: %an with commit: %s',
+                        commit_intersect,
+                        commit_origin_current)
 
 
 def filter_commits(commits: list) -> list[str]:
     contributor_commits = []
     for commit in commits:
-        author = re.search('- email:(.*) username:', commit).group(1)
+        author = re.search('- email: (.*) username:', commit).group(1)
         if author not in author_exception_list:
             contributor_commits.append(commit)
     return contributor_commits
 
 
-# TODO: Group usernames commits
-def get_usernames_commits(commits: list) -> list[str]:
-    mention_commits = []
+def get_usernames_commits(commits: list) -> dict[str:[str]]:
+    mention_commits = {}
+    saved_users = {}
+
+    g = Github(f"{config.username}", f"{config.token}")
+
     for commit in commits:
-        username = re.search('username:(.*) with commit:', commit).group(1)
-        subject = re.search('with commit: (.*)', commit).group(1)
+        username = re.search('username: (.*) with commit:', commit).group(1)
+        subject = re.search('\(#.*\)', commit).group(0).strip("()")
 
-        # TODO: Secret file for username and token
-        api_token = '1234'
-
-        # https://stackoverflow.com/questions/44888187/get-github-username-through-primary-email
-        g = Github("the_username", f"{api_token}")
-        found_users = g.search_users(f"{username}")
-
-        if found_users.totalCount == 0:
-            # TODO: no username could be retrieved for this email, let's just use the author name without @mention
-            continue
+        if username in saved_users:
+            # Do not search again
+            print(f"Already have username: {username}")
+            found_user = saved_users[username][0]
         else:
-            # Should be the first found user
-            user = found_users[0]
-            mention_commits.append(f"@{user.login} with commit: '{subject}'")
+            # Search
+            print(f"Calling API for username: {username}")
+            found = g.search_users(f"{username}")
+            if found.totalCount == 0:
+                found_user = username
+            else:
+                # Should be the first found user
+                found_user = f"{found[0].login}"
+
+        append_to_dict(mention_commits, found_user, subject)
+        append_to_dict(saved_users, username, found_user)
+
+        time.sleep(5)
+
     return mention_commits
+
+
+def append_to_dict(to: {}, key: str, value: str):
+    if key in to:
+        to[key].append(value)
+    else:
+        to[key] = [value]
 
 
 def build_release_message(current_version: Version,
                           previous_version: Version,
-                          commits: list) -> str:
+                          commits: dict[str:[str]]) -> str:
     current_tag = f"v{current_version.string_name}"
     previous_tag = f"v{previous_version.string_name}"
-    formatted_commits = '\n'.join(commits)
+    contributions = build_contribution_message(commits)
 
-    # TODO: If there's no contributors (ex: dot release), then remove that section
     return f"# Overview \n" \
            f"This is our official {current_tag} release of Firefox-iOS. It's based on the " \
            f"[{current_tag} branch](https://github.com/mozilla-mobile/firefox-ios/tree/{current_tag}) \n\n" \
            f"## Differences between {previous_tag} & {current_tag} \n" \
            f"You can view the changes between our previous and newly released version " \
            f"[here](https://github.com/mozilla-mobile/firefox-ios/compare/{previous_tag}...{current_tag}).\n\n" \
-           f"## Contributions \n" \
+           f"{contributions}"
+
+
+def build_contribution_message(commits: dict[str:[str]]) -> str:
+    # If there's no contributors, then don't build this section
+    if len(commits) == 0:
+        return ""
+
+    formatted_commits = ""
+    for key, value in commits.items():
+        if len(value) > 1:
+            assembled_user_commits = ' & '.join(value)
+            formatted_commits += f"@{key} with commits: {assembled_user_commits} \n"
+        else:
+            formatted_commits += f"@{key} with commit: {value[0]} \n"
+
+    return f"## Contributions \n" \
            f"We've had lots of contributions from the community this release, including:\n" \
-           f"{formatted_commits}\n\n" \
+           f"{formatted_commits}\n" \
            f"Thanks everyone!"
 
 
 if __name__ == '__main__':
     # Uncomment for tests
-    current = Version(major=104, minor=0)
-    previous = Version(major=103, minor=1)
+    current = Version(major=104, minor=1)
+    previous = Version(major=104, minor=0)
 
     # TODO: If script parameters use them, if not fetch version from App Store
     # current = get_store_version()
