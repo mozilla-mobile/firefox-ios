@@ -18,9 +18,9 @@ class SyncedTabCellTests: XCTestCase {
             url: testUrl
         )
 
-        let testButton = UIButton(frame: CGRect.zero)
-        let syncedTabsShowAllAction = { button in
-            XCTAssertEqual(button, testButton)
+        var wasShowAllActionCalled = false
+        let syncedTabsShowAllAction = {
+            wasShowAllActionCalled = true
         }
 
         let onOpenSyncedTabAction = { url in
@@ -34,7 +34,8 @@ class SyncedTabCellTests: XCTestCase {
                           onTapShowAllAction: syncedTabsShowAllAction,
                           onOpenSyncedTabAction: onOpenSyncedTabAction)
 
-        subject.showAllSyncedTabs(sender: testButton)
+        subject.showAllSyncedTabs(UIButton(frame: CGRect.zero))
+        XCTAssertTrue(wasShowAllActionCalled)
         subject.didTapSyncedTab(UITapGestureRecognizer())
     }
 }

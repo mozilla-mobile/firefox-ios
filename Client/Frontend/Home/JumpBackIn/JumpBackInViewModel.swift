@@ -19,7 +19,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     // MARK: - Properties
     var headerButtonAction: ((UIButton) -> Void)?
     var onTapGroup: ((Tab) -> Void)?
-    var syncedTabsShowAllAction: ((UIButton) -> Void)?
+    var syncedTabsShowAllAction: (() -> Void)?
     var openSyncedTabAction: ((URL) -> Void)?
 
     weak var browserBarViewDelegate: BrowserBarViewDelegate?

@@ -22,6 +22,9 @@ struct SyncedTabCellViewModel {
     var syncedTabsButtonText: String {
         return .FirefoxHomepage.JumpBackIn.SyncedTabShowAllButtonTitle
     }
+    var syncedTabOpenActionTitle: String {
+        return .FirefoxHomepage.JumpBackIn.SyncedTabOpenTabA11y
+    }
 }
 
 /// A cell used in FxHomeScreen's Jump Back In section
@@ -41,7 +44,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     private var syncedDeviceIconFirstBaselineConstraint: NSLayoutConstraint?
     private var contextualHintViewController: ContextualHintViewController!
     private var syncedDeviceIconCenterConstraint: NSLayoutConstraint?
-    private var showAllSyncedTabsAction: ((UIButton) -> Void)?
+    private var showAllSyncedTabsAction: (() -> Void)?
     private var itemTitleTopConstraint: NSLayoutConstraint!
     private var openSyncedTabAction: (() -> Void)?
 
@@ -164,7 +167,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     // MARK: - Helpers
 
     func configure(viewModel: SyncedTabCellViewModel,
-                   onTapShowAllAction: ((UIButton) -> Void)?,
+                   onTapShowAllAction: (() -> Void)?,
                    onOpenSyncedTabAction: ((URL) -> Void)?) {
         itemTitle.text = viewModel.titleText
         descriptionLabel.text = viewModel.descriptionText
@@ -194,13 +197,21 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         syncedTabTapTargetView.addGestureRecognizer(tapRecognizer)
         applyTheme()
         adjustLayout()
+
+        let showAllSyncedTabsA11yAction = UIAccessibilityCustomAction(name: viewModel.syncedTabsButtonText,
+                                                                      target: self,
+                                                                      selector: #selector(showAllSyncedTabs(_:)))
+        let openSyncedTabA11yAction = UIAccessibilityCustomAction(name: viewModel.syncedTabOpenActionTitle,
+                                                                  target: self,
+                                                                  selector: #selector(didTapSyncedTab(_:)))
+        accessibilityCustomActions = [showAllSyncedTabsA11yAction, openSyncedTabA11yAction]
     }
 
-    @objc func showAllSyncedTabs(sender: UIButton) {
-        showAllSyncedTabsAction?(sender)
+    @objc func showAllSyncedTabs(_ sender: Any) {
+        showAllSyncedTabsAction?()
     }
 
-    @objc func didTapSyncedTab(_ sender: UITapGestureRecognizer) {
+    @objc func didTapSyncedTab(_ sender: Any) {
         openSyncedTabAction?()
     }
 

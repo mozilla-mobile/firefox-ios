@@ -439,7 +439,7 @@ private extension HomepageViewController {
             self?.openTabTray(button)
         }
 
-        viewModel.jumpBackInViewModel.syncedTabsShowAllAction = { [weak self] button in
+        viewModel.jumpBackInViewModel.syncedTabsShowAllAction = { [weak self] in
             self?.homePanelDelegate?.homePanelDidRequestToOpenTabTray(focusedSegment: .syncedTabs)
 
             var extras: [String: String]?
