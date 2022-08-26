@@ -127,6 +127,7 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
                 switch result {
                 case .success:
                     self?.collectionView.reloadData()
+                    self?.showToast()
                 case .failure(let error):
                     self?.browserLog.info(error.localizedDescription)
                 }
@@ -219,6 +220,26 @@ private extension WallpaperSettingsViewController {
     /// since it's `.regular` on both. We updateOnRotation from viewWillTransition in that case.
     func updateOnRotation() {
         configureCollectionView()
+    }
+
+    private func showToast() {
+        let toast = ButtonToast(
+            labelText: WallpaperSettingsViewModel.Constants.Strings.Toast.label,
+            buttonText: WallpaperSettingsViewModel.Constants.Strings.Toast.button,
+            completion: { buttonPressed in
+
+            if buttonPressed { self.dismissView() }
+        })
+
+        toast.showToast(viewController: self,
+                        delay: SimpleToastUX.ToastDelayBefore,
+                        duration: SimpleToastUX.ToastDismissAfter) { toast in
+            [
+                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            ]
+        }
     }
 
     private func dismissView() {

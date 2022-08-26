@@ -23,6 +23,15 @@ class WallpaperSettingsViewModel {
         }
     }
 
+    struct Constants {
+        struct Strings {
+            struct Toast {
+                static let label: String = .Settings.Homepage.Wallpaper.WallpaperUpdatedToastLabel
+                static let button: String = .Settings.Homepage.Wallpaper.WallpaperUpdatedToastButton
+            }
+        }
+    }
+
     private var wallpaperManager: WallpaperManagerInterface
     private var wallpaperCollections = [WallpaperCollection]()
     var tabManager: TabManager
