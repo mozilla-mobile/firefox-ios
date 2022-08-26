@@ -107,6 +107,9 @@ def get_diff_commits(current_version: Version,
 
 
 def filter_commits(commits: list) -> list[str]:
+    """
+    Removing commits that were made by members of the `author_exception_list`
+    """
     contributor_commits = []
     for commit in commits:
         author = re.search('email: (.*) username:', commit).group(1)
