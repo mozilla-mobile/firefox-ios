@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "Pólěpšony slědowański šćit škódnu softwaru a pśeslědowaki blokěrujo.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "Awtomatiska priwatnosć";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Dalej";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Pśizjawiś";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Registrěrowaś";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "Z pytańskimi naraźenjami se malsnjej k websedłam dostawaśo.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Malsne pytanje";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Pśinjasćo cytańske znamjenja, historiju a gronidła k Firefox na toś tom rěźe.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Firefox mjazy rědami synchronizěrowaś";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Wužywajśo někake e-mailowe nałoženje - nic jano Mail - z Firefox.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Nastajenja dostanych mejlkow";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Pótusniśo maskowy symbol, aby k priwatnemu modusoju pśejšeł.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Pśeglědujśo mimo aby něchten wobglědował";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Šćitajśo swóje pśizjawjenja a daty wšuźi, źož Firefox wužywaśo.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Wěsta synchronizacija";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Pytaśo za něcym drugim? Wubjeŕśo drugu standardnu pytnicu (abo swójsku) w nastajenjach.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Wašo pytanje ako wy jo cośo";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Pśizjawśo se pla swójogo konta, aby synchronizěrował a k dalšnym funkcijam pśistup měł.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Synchronizěrujśo swóje cytańske znamjenja, historiju a gronidła na swójom telefonje.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Malsny, priwatny a na wašom boku.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Witajśo k Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Pśeglědowaś zachopiś";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Sync zmóžniś…";
 

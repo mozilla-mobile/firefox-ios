@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "மேம்படுத்தப்பட்ட கண்காணிப்பு பாதுகாப்பு தீம்பொருளைத் தடுக்கிறது தொடரிகளை நிறுத்துகிறது.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "தானியங்கு தனியுரிமை";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "அடுத்து";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "உள்நுழை";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "பதிவுபெறுக";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "தேடல் பரிந்துரைகள் விரைவாக வலைத்தளங்களை அடையச் செய்கின்றன.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "விரைவான தேடல்";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "இச்சாதனத்திற்கு பயர்பாக்சு புத்தகக்குறிகள், வரலாறு மற்றும் கடவுச்சொற்களைக் கொண்டு வாருங்கள்.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "கருவிகளிடையே பயர்பாக்சை ஒத்திசைக்கவும்";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "ஏதேனும் மின்னஞ்சல் செயலியைப் பயன்படுத்தவும் - பயர்பாக்சுடன் - வெறும் மின்னஞ்சல் மட்டுமல்ல.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "நீங்கள் அஞ்சல்… தெரிவுகள் பெற்றீர்கள்";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "தனிப்பட்ட உலாவல் முறைக்குச் செல்ல முகமூடி சின்னத்தைத் தட்டவும்.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "யாருக்கும் தெரியாம உலாவுங்கள்";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "பயர்பாக்சைப் பயன்படுத்தும் எல்லா இடங்களிலும் உங்களின் உள்நுழைவுகளையும் தரவையும் பாதுகாக்கவும்.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "பாதுகாப்பான ஒத்திசைவு";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "வித்தியாசமானதைத் தேடுகிறீர்களா? அமைப்புகளில் வேறொரு இயல்புநிலை தேடியியந்திரத்தைத் தேர்ந்தெடுக்கவும் (அல்லது சேர்க்கவும்).";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "உங்களின் தேடல் உங்கள் வழி";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "ஒத்திசைக்க மற்றும் கூடுதல் அம்சங்களை அணுக உங்கள் கணக்கில் உள்நுழைக.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "உங்கள் புத்தகக்குறிகள், வரலாறு மற்றும் கடவுச்சொற்களை உங்கள் தொலைபேசியில் ஒத்திசைக்கவும்.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "வேகமான, தனியுரிமையுள்ள மற்றும் உங்களுடன்.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "பயர்பாக்சுக்கு வருக";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "உலாவத் தொடங்குங்கள்";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "ஒத்திசைவை இயக்கு…";
 

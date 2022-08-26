@@ -1,13 +1,10 @@
-/* Button string to open settings that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Button" = "Buka Pengaturan";
-
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Pelajari Caranya";
 
-/* Description for small card shown that allows user to switch their default browser to Firefox. */
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Setel agar tautan dari situs web, surel, dan Pesan dibuka di Firefox secara otomatis.";
 
-/* Title for small card shown that allows user to switch their default browser to Firefox. */
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Alihkan Peramban Baku Anda";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */

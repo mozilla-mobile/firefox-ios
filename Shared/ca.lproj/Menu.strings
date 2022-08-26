@@ -1,29 +1,14 @@
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction.Title" = "Afegeix a les adreces d'interès";
-
 /* Long label for the button displayed in the menu, used to add a page to the reading list. */
 "Menu.AddToReadingList.AlternateLabel.v99" = "Afegeix a la llista de lectura";
 
-/* Label for the button, displayed in the menu, used to add a page to the reading list. */
-"Menu.AddToReadingList.Title" = "Afegeix a la llista de lectura";
-
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "Tanca totes les pestanyes";
-
-/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
-"Menu.CopyAddress.Title" = "Copia l'adreça";
 
 /* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
 "Menu.CopyLink.Title" = "Copia l'enllaç";
 
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "Cerca a la pàgina";
-
-/* Label for the button, displayed in the menu, used to Reload the webpage */
-"Menu.Library.Reload" = "Actualitza";
-
-/* Label for the button, displayed in the menu, used to open the Library */
-"Menu.Library.Title" = "La vostra biblioteca";
 
 /* Label for the button, displayed in the menu, used to open a new private tab. */
 "Menu.NewPrivateTabAction.Title" = "Obre una pestanya privada nova";
@@ -40,9 +25,6 @@
 /* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "Historial";
 
-/* Label for the button, displayed in the menu, used to navigate to the home page. */
-"Menu.OpenHomePageAction.Title" = "Inici";
-
 /* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "Llista de lectura";
 
@@ -52,38 +34,17 @@
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Pestanyes sincronitzades";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
-"Menu.OpenTopSitesAction.AccessibilityLabel" = "Llocs principals";
-
-/* Label for the button, displayed in the menu, used to show the html page source */
-"Menu.PageSourceAction.Title" = "Codi font de la pàgina";
-
-/* A string used to signify the start of the Recently Saved section in Home Screen. */
-"Menu.RecentlySaved.Title" = "Desades recentment";
-
 /* Long label for the remove bookmark button displayed in the menu. Pressing this button remove the current page from the bookmarks. */
 "Menu.RemoveBookmark.AlternateLabel.v99" = "Elimina l'adreça d'interès";
 
-/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
-"Menu.RemoveBookmarkAction.Title" = "Elimina l'adreça d'interès";
-
 /* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
 "Menu.ReportSiteIssueAction.Title" = "Informa d'un problema amb el lloc";
-
-/* Label for the button, displayed in the menu, used to open the QR code scanner. */
-"Menu.ScanQRCodeAction.Title" = "Escaneja un codi QR";
 
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "Mostra-ho tot";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
 "Menu.SharePageAction.Title" = "Comparteix la pàgina amb…";
-
-/* Label for the button, displayed in the menu, used to open the tabs tray */
-"Menu.ShowTabs.Title" = "Mostra les pestanyes";
-
-/* Label for the button, displayed in the menu, used to translate the current page. */
-"Menu.TranslatePageAction.Title" = "Tradueix la pàgina";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "Mostra el lloc d'escriptori";

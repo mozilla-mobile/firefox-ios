@@ -4,24 +4,6 @@
 /* Close Private Tabs */
 "TodayWidget.ClosePrivateTabsLabelV2" = "निजी ट्याबहरू\nबन्द गर्नुहोस्";
 
-/* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV3" = "निजी\nट्याबहरु\nबन्द गर्नुहोस्";
-
-/* Copied Link from clipboard displayed */
-"TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "क्लिपबोर्डबाट कपि गरिएको लिङ्क";
-
-/* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemClearPrivateTabs" = "निजी ट्याबहरु खाली गर्नुहोस्";
-
-/* Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemGoToCopiedLink" = "कपि गरिएको लिङ्कमा जानुहोस्";
-
-/* Quick Actions drop down menu item for new private search when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemNewPrivateSearch" = "नयाँ निजी खोज";
-
-/* Quick Actions drop down menu item for new search when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemNewSearch" = "नयाँ खोजी";
-
 /* Description for medium size widget to add Firefox Shortcut to home screen */
 "TodayWidget.FirefoxShortcutGalleryDescription" = "Firefox लाई तपाईंको गृह स्क्रिनमा सर्टकटको रुपमा थप्नुहोस्।";
 
@@ -31,20 +13,8 @@
 /* Go to copied link */
 "TodayWidget.GoToCopiedLinkLabelV2" = "कपि गरिएको\nलिङ्कमा जानुहोस्";
 
-/* Go To Copied Link text pasted on the clipboard but this string doesn't have new line character */
-"TodayWidget.GoToCopiedLinkLabelV3" = "कपि गरिएको लिङ्कमा जानुुहोस्";
-
-/* Go to copied link */
-"TodayWidget.GoToCopiedLinkLabelV4" = "कपि गरिएको\nलिङ्कमा\nजानुहोस्";
-
 /* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
 "TodayWidget.MoreTabsLabel" = "+%d थप…";
-
-/* Open New Private Tab button label for medium size action */
-"TodayWidget.NewPrivateTabButtonLabelV2" = "निजी ट्याबमा खोज्नुहोस्";
-
-/* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Firefox मा खोज्नुहोस्";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "नयाँ खोजी";
@@ -52,29 +22,11 @@
 /* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.NoOpenTabsLabel" = "कुनैपनि खोलिएका ट्याबहरु छैनन्।";
 
-/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.NoOpenTabsLabelV2" = "कुनैपनि खोलिएका ट्याबहरु छैनन्";
-
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.OpenFirefoxLabel" = "Firefox खोल्नुहोस्";
 
-/* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetGalleryDescription" = "Pocket द्वारा ब्यवस्थापन गरिएका, वेबभरिबाट मनमोहक र विचार-उत्तेजक कथाहरू पत्ता लगाउनुहोस्।";
-
-/* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Pocket द्वारा सिफारिस गरिएको";
-
-/* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetTitle" = "Pocket द्वारा सिफारिस गरिएको";
-
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "निजी खोजी";
-
-/* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "आफ्नो गृह स्क्रिनमा थप्न Firefox सर्टकट चयन गर्नुहोस्।";
-
-/* Quick Actions left label text for dropdown menu when widget enters edit mode */
-"TodayWidget.QuickActionDropDownMenu" = "द्रुत कार्य";
 
 /* Description for small size widget to add it to home screen */
 "TodayWidget.QuickActionGalleryDescription" = "तपाईंको गृह स्क्रिनमा Firefox सर्टकट थप्नुहोस्। विजेट थपेपछि, यसलाई सम्पादन गर्न छुनुहोस् र होल्ड गर्नुहोस् र फरक सर्टकट चयन गर्नुहोस्।";
@@ -85,26 +37,11 @@
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
 "TodayWidget.QuickActionsGalleryTitleV2" = "Firefox सर्टकटहरु";
 
-/* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - द्रुत कार्यहरू";
-
-/* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewGalleryDescription" = "आफ्नो खुला ट्याबहरू सिधै आफ्नो गृह स्क्रिनमा पहुँच गर्नुहोस्।";
-
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "तपाईंको खुला ट्याबहरूमा सर्टकटहरू थप्नुहोस्।";
 
 /* Title for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryTitle" = "द्रुत दृश्य";
-
-/* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewLargeGalleryDescription" = "तपाईंको खुला ट्याबहरूमा सर्टकटहरू थप्नुहोस्।";
-
-/* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - ट्याबहरु खोल्नुहोस्";
-
-/* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Firefox मा खोज्नुहोस्";
 
 /* Search in Firefox. Do not translate the word Firefox */
 "TodayWidget.SearchInFirefoxV2" = "Firefox मा\nखोज्नुहोस्";
@@ -120,16 +57,4 @@
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitleV2" = "वेबसाइट सर्टकटहरु";
-
-/* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - शीर्ष साइटहरू";
-
-/* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - वेबसाइट सर्टकटहरू";
-
-/* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
-"TodayWidget.ViewMore" = "थप हेर्नुहोस्";
-
-/* View More… for Firefox Pocket stories widget where we don't know how many articles are available. */
-"TodayWidget.ViewMoreDots" = "थप हेर्नुहोस्…";
 

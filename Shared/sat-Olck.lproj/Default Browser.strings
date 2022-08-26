@@ -1,13 +1,10 @@
-/* Button string to open settings that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Button" = "ᱥᱟᱡᱟᱣ ᱠᱚ ᱨᱮ ᱪᱟᱞᱟᱜ ᱢᱮ";
-
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "ᱪᱮᱫᱢᱮ ᱚᱠᱟᱞᱠᱟ";
 
-/* Description for small card shown that allows user to switch their default browser to Firefox. */
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "ᱞᱤᱱᱠ ᱠᱚ ᱥᱟᱡᱟᱣ ᱢᱮ ᱣᱮᱵᱥᱟᱭᱤᱴ, ᱤᱢᱮᱞ, ᱟᱨ ᱢᱮᱥᱮᱡ ᱠᱷᱚᱱ Firefox ᱨᱮ ᱟᱪᱛᱮ ᱡᱷᱤᱜ ᱞᱚᱜᱤᱛ.";
 
-/* Title for small card shown that allows user to switch their default browser to Firefox. */
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "ᱟᱢᱟᱜ ᱢᱩᱞ ᱯᱟᱱᱛᱮᱭᱟᱜ ᱵᱚᱫᱚᱞ ᱢᱮ";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */

@@ -4,24 +4,6 @@
 /* Close Private Tabs */
 "TodayWidget.ClosePrivateTabsLabelV2" = "Mdel iccaren usligen";
 
-/* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV3" = "Mdel iccaren usligen";
-
-/* Copied Link from clipboard displayed */
-"TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "Ittwanɣel useɣwen si ɣef afus.";
-
-/* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemClearPrivateTabs" = "Sfeḍ iccaren usligen";
-
-/* Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemGoToCopiedLink" = "Ddu ɣer useɣwen yettwaneɣlen";
-
-/* Quick Actions drop down menu item for new private search when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemNewPrivateSearch" = "Anadi uslig amaynut";
-
-/* Quick Actions drop down menu item for new search when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemNewSearch" = "Anadi amaynut";
-
 /* Description for medium size widget to add Firefox Shortcut to home screen */
 "TodayWidget.FirefoxShortcutGalleryDescription" = "Rnu inegzumen n Firefo ɣer ugdil-ik·im agejdan.";
 
@@ -31,20 +13,8 @@
 /* Go to copied link */
 "TodayWidget.GoToCopiedLinkLabelV2" = "Ddu ɣer useɣwen yettwaneɣlen";
 
-/* Go To Copied Link text pasted on the clipboard but this string doesn't have new line character */
-"TodayWidget.GoToCopiedLinkLabelV3" = "Ddu ɣer useɣwen yettwaneɣlen";
-
-/* Go to copied link */
-"TodayWidget.GoToCopiedLinkLabelV4" = "Ddu ɣer useɣwen yettwaneɣlen";
-
 /* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
 "TodayWidget.MoreTabsLabel" = "+%d Ugar…";
-
-/* Open New Private Tab button label for medium size action */
-"TodayWidget.NewPrivateTabButtonLabelV2" = "Nadi deg yiccer uslig";
-
-/* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Nadi deg firefox";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Anadi amaynut";
@@ -52,29 +22,11 @@
 /* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.NoOpenTabsLabel" = "Ulac iccaren yeldin,";
 
-/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.NoOpenTabsLabelV2" = "Ulac accaren i yeldin";
-
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.OpenFirefoxLabel" = "Ldi Firefox";
 
-/* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetGalleryDescription" = "Af-d tiqsiḍin yessewhamen, yesduqusen ɣef web. Ttusuddsent d ikemmusen.";
-
-/* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Yettusemter d ikemmusen";
-
-/* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetTitle" = "Awelleh si Pocket";
-
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Anadi uslig";
-
-/* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Fren anegzum n Firefox ara ternuḍ ɣer ugdil-ik·im agejdan.";
-
-/* Quick Actions left label text for dropdown menu when widget enters edit mode */
-"TodayWidget.QuickActionDropDownMenu" = "Tigawt taruradt";
 
 /* Description for small size widget to add it to home screen */
 "TodayWidget.QuickActionGalleryDescription" = "Rnu anegzum n Firefox ɣer ugdil-ik·im agejdan. Seld timerna n uwiǧit, sit s useɣzef i wakken ad t-tẓergeḍ syen ad tferneḍ anegzum-nniḍen.";
@@ -85,26 +37,11 @@
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
 "TodayWidget.QuickActionsGalleryTitleV2" = "Inegzumen n Firefox";
 
-/* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - Tigawin tirurad";
-
-/* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewGalleryDescription" = "Kcem ɣer waccaren-ik·im i yeldin srid ɣef ugdil agejdan.";
-
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Rnu inegzumen ɣer waccaren-ik·im i yeldin.";
 
 /* Title for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryTitle" = "Taskant taruradt";
-
-/* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewLargeGalleryDescription" = "Rnu anegzum ɣer yiccaren-ik.im yeldin.";
-
-/* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - Iccaren yeldin";
-
-/* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Nadi deg firefox";
 
 /* Search in Firefox. Do not translate the word Firefox */
 "TodayWidget.SearchInFirefoxV2" = "Nadi deg firefox";
@@ -120,16 +57,4 @@
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitleV2" = "Inegzumen n usmel web";
-
-/* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - Ismal ifazen";
-
-/* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - Inegzumen n usmel web";
-
-/* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
-"TodayWidget.ViewMore" = "Sken ugar";
-
-/* View More… for Firefox Pocket stories widget where we don't know how many articles are available. */
-"TodayWidget.ViewMoreDots" = "Sken ugar…";
 

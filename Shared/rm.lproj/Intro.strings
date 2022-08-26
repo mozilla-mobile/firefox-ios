@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "La protecziun avanzada cunter il fastizar blochescha software donnegiusa e fastizaders.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "Protecziun da datas automatica";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Enavant";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "S'annunziar";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Sa registrar";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "Propostas da tschertga ta mainan pli svelt tar tias websites.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Tschertga svelta";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Importescha segnapaginas, la cronologia e pleds-clav en Firefox sin quest apparat.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Sincronisescha Firefox sin differents apparats";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Utilisescha mintga app per e-mails (betg mo Mail) cun Firefox.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Ussa pos ti inditgar tias preferenzas per e-mails";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Tippa sin l'icona da mascra per midar en il modus privat.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Navighescha sco sche nagin t'observass";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Protegia tias infurmaziuns d'annunzia e datas dapertut nua che ti dovras Firefox.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Sincronisaziun segira";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Ti tschertgas insatge auter? Tscherna in'autra maschina da tschertgar sco standard (u agiuntescha in'atgna) en ils parameters.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Tschertga en tia moda e maniera";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "T'annunzia cun tes conto per sincronisar ed avair access ad ulteriuras funcziuns.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Sincronisescha ils segnapaginas, la cronologia ed ils pleds-clav era sin tes telefon.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Spert, privat e da tia vart.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Bainvegni tar Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Cumenzar a navigar";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Activar Sync…";
 

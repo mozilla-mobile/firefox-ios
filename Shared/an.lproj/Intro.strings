@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "La protección contra lo seguimiento millorada bloca lo software malicioso y atura los elementos de seguimiento.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "Privacidat automatica";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Siguient";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Iniciar la sesión";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Rechistrar-se";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "Las sucherencias de busqueda te leva mas aprisa ta las webs.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Busqueda rapida";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Imparta los marcapachinas, historial y claus a lo Firefox d'este dispositivo.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Sincroniza Firefox entre dispositivos";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Utiliza qualsiquier aplicación de correu - no nomás Mail - con Firefox.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Tiens nuevas… opcions de correu";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Preta l'icono d'a mascareta pa cambiar a lo modo de navegación privada.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Navega como si dengún no t'observase";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Proteche los tuyos identificadors d'usuario y datos en totz os puestos que emplegues Firefox.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Sincronización segura";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Buscas bella cosa diferent? Triga unatro motor de busqueda predeterminau (u anyade uno propio) en Achustes.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Las tuyas busquedas, a la tuya traza";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Inicia sesión pa sincronizar y acceder a mas funcions.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Sincroniza los tuyos marcapachinas, historial y claus con o tuyo telefono.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Rapido, privau y a lo tuyo cosau.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Bienveniu ta Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Empecipia a navegar";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Activat la sincronización…";
 

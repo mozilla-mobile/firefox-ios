@@ -1,13 +1,10 @@
-/* Button string to open settings that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Button" = "Перайсці ў налады";
-
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Даведацца, як";
 
-/* Description for small card shown that allows user to switch their default browser to Firefox. */
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Наладзьце аўтаматычна адкрываць спасылкі з сайтаў, пошты і паведамленняў у Firefox.";
 
-/* Title for small card shown that allows user to switch their default browser to Firefox. */
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Пераключыць прадвызначаны браўзер";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */

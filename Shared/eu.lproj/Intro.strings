@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "Jarraipenaren babes hobetuak malwarea blokeatzen du eta jarraipen-elementuak gelditzen ditu.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "Pribatutasun automatikoa";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Hurrengoa";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Hasi saioa";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Eman izena";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "Bilaketa-iradokizunek webguneetarako sarbidea azkartzen dute.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Bilaketa azkarra";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Ekarri laster-markak, historia eta pasahitzak gailu honetako Firefoxera.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Sinkronizatu Firefox gailuen artean";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Erabili edozein posta-aplikazio Firefoxekin.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Postaren aukera berriak";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Sakatu maskararen ikonoan nabigatze pribatuko modura aldatzeko.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Nabigatu inor begira ez balego bezala";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Babestu zure saio-hasierak eta datuak Firefox erabiltzen duzun toki orotan.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Sinkronizazio segurua";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Zerbait desberdinaren bila? Aukeratu beste bilaketa-motor lehenetsi bat ezarpenetan (edo gehitu zurea).";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Bilaketa, zure erara";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Sinkronizatzeko eta eginbide gehiago izateko, hasi saioa zure kontuan.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Sinkronizatu laster-markak, historia eta pasahitzak zure telefonoan.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Azkarra, pribatua eta zure alboan dagoena.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Ongi etorri Firefoxera";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Hasi nabigatzen";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Gaitu sinkronizazioa…";
 

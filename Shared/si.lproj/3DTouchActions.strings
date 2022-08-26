@@ -13,9 +13,6 @@
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
 "Open Last Bookmark" = "අවසාන පොත්යොමුව අරින්න";
 
-/* String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch */
-"Open Last Tab" = "අවසාන පටිත්ත අරින්න";
-
 /* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
 "Preview of %@" = "%@ හි පෙරදසුන";
 

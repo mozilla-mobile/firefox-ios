@@ -4,15 +4,6 @@
 /* Close Private Tabs */
 "TodayWidget.ClosePrivateTabsLabelV2" = "అంతరంగిక ట్యాబులను మూసివేయి";
 
-/* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV3" = "అంతరంగిక ట్యాబులను మూసివేయి";
-
-/* Copied Link from clipboard displayed */
-"TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "క్లిప్‌బోర్డ్ నుండి లంకె కాపీ అయ్యింది";
-
-/* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemClearPrivateTabs" = "అంతరంగిక ట్యాబులను తుడిచివేయి";
-
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "కాపీచేసిన లంకెకు వెళ్ళు";
 
@@ -28,21 +19,6 @@
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "త్వరిత చర్యలు";
 
-/* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - తెరిచివున్న ట్యాబులు";
-
-/* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Firefox‌తో వెతుకు";
-
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "మేటి సైట్లు";
-
-/* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - మేటి సైట్లు";
-
-/* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
-"TodayWidget.ViewMore" = "ఇంకా చూడండి";
-
-/* View More… for Firefox Pocket stories widget where we don't know how many articles are available. */
-"TodayWidget.ViewMoreDots" = "ఇంకా చూడండి…";
 

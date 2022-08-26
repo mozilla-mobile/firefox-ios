@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "ການປ້ອງກັນການຕິດຕາມຈະບັອກມັລແວລ ແລະ ຢຸດຕົວຕິດຕາມ.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "ຄວາມເປັນສ່ວນໂຕແບບອັດຕະໂນມັດ";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "ຕໍ່ໄປ";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "ເຂົ້າ​ສູ່​ລະ​ບົບ";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "ລົງ​ທະ​ບຽນ";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "ຄຳແນະນຳການຄົ້ນຫາຈະເຮັດໃຫ້ທ່ານເຂົ້າເວັບໄຊທໄດ້ໄວຂື້ນ.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "ການຄົ້ນຫາແບບວ່ອງໄວ";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "ນຳເອົາບຸກມາກ, ປະຫວັດ ແລະ ລະຫັດຜ່ານໄປໄວ້ໃນ Firefox ຈາກອຸປະກອນນີ້.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Sync Firefox ລະຫວ່າງອຸປະກອນ";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "ນຳໃຊ້ແອັບເມລ — ບໍ່ແມ່ນພຽງແຕ່ອີເມລ — ດ້ວຍ Firefox.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "ທ່ານໄດ້ຮັບເມລ… ຕົວເລືອກ";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "ແຕະໄອຄອນຫນ້າກາກເພື່ອເຂົ້າໄປໃນໂຫມດການທ່ອງເວັບແບບສ່ວນຕົວ.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "ທ່ອງເວັບແບບບໍ່ມີໃຜມາຫລັກເຝົ້າຕິດຕາມ.";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "ຮັກສາການເຂົ້າສູ່ລະບົບ ແລະ ຂໍ້ມູນຂອງທ່ານໃນທຸກໆບ່ອນທີ່ນຳໃຊ້ Firefox.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Sync ທີ່ປອດໄພ";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "ກຳລັງຊອກຫາບາງສິ່ງບາງຢ່າງທີ່ແຕກຕ່າງບໍ່? ເລືອກເອົາຕົວຄົ້ນຫາພື້ນຖານອື່ນໆ (ຫລື ເພີ່ມຂອງທ່ານເອງ) ໃນການຕັ້ງຄ່າ.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "ການຄົ້ນຫາໃນແບບຂອງທ່ານເອງ";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "ເຂົ້າສູ່ລະບົບບັນຊີຂອງທ່ານເພື່ອ sync ແລະ ເຂົ້າໄປໃຊ້ຄຸນລັກສະນະອື່ນໆທີ່ມີຢູ່.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Sync ບຸກມາກ, ປະຫວັດການໃຊ້ງານ ແລະ ລະຫັດຜ່ານຂອງທ່ານເຂົ້າໄວ້ໃນໂທລະສັບຂອງທ່ານ.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "ວ່ອງໄວ, ເປັນສ່ວນຕົວ ແລະ ຢູ່ຄຽງຂ້າງທ່ານ.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "ຍິນດີຕ້ອນຮັບສູ່ Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "ເລີ່ມການທ່ອງເວັບ";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "ເປີດ Sync…";
 

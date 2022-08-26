@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "Wzmocniona ochrona przed śledzeniem blokuje złośliwe oprogramowanie i zatrzymuje elementy śledzące";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "Automatyczna prywatność";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Dalej";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Zaloguj się";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Utwórz konto";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "Podpowiedzi wyszukiwania pozwalają szybciej otwierać strony";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Szybkie wyszukiwanie";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Przenieś zakładki, historię i hasła do Firefoksa na tym urządzeniu";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Synchronizuj Firefoksa między urządzeniami";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Używaj dowolnej aplikacji e-mail, a nie tylko domyślnego Maila";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Ustawienia poczty";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Stuknij ikonę maski, by przejść do trybu prywatnego";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Przeglądaj, jak gdyby nikt nie patrzył";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Chroń swoje hasła i dane wszędzie, gdzie używasz Firefoksa";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Bezpieczna synchronizacja";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Szukasz czegoś innego? Wybierz inną domyślną wyszukiwarkę (lub dodaj własną) w ustawieniach";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Wyszukuj po swojemu";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Zaloguj się na swoje konto, by synchronizować i mieć dostęp do dodatkowych funkcji";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Synchronizuj swoje zakładki, historię i hasła na telefonie";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Szybki, prywatny i po Twojej stronie";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Witamy w Firefoksie";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Zacznij przeglądać Internet";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Włącz synchronizację…";
 

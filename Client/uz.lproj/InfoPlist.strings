@@ -1,6 +1,9 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "U rasmga tushirish va internetga yuklashda yordam beradi.";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Saqlangan loginlarga kirish uchun Firefox Face ID talab qiladi.";
+
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Ziyaret ettiğiniz web siteleri konumunuzu isteyebilir.";
 

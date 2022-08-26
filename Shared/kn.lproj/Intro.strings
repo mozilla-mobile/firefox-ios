@@ -1,12 +1,3 @@
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "ನಿಮಗೆ ಹೊಸ ಇಮೇಲ್ ಇದೆ… ಆಯ್ಕೆಗಳು";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "ಯಾರೂ ನೋಡದಿರುವಂತೆ ಜಾಲಾಡಿ";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "ನಿಮ್ಮ ಹುಡುಕಾಟ, ನಿಮ್ಮ ಮಾರ್ಗ";
-
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "ವೀಕ್ಷಣೆಯನ್ನು ಪ್ರಾರಂಭಿಸಿ";
 

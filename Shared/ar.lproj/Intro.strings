@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "تحجب الحماية الموسّعة من التعقب البرمجيات الضارة وتُوقف عمل المتعقّبات.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "خصوصية تلقائية";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "التالي";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "لِج";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "سجّل حسابا";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "تنقلك اقتراحات البحث إلى المواقع بسرعة.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "بحث سريع";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "اسحب العلامات والتأريخ وكلمات السر إلى Firefox على هذا الجهاز.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "زامِن Firefox بين الأجهزة";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "استخدم أيّا من تطبيقات البريد على Firefox، ليس فقط تطبيق «البريد».";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "باتت لديك خيارات للبريد";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "انقر أيقونة القناع للانتقال إلى وضع التصفح الخاص.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "تصفح و لا أحد يراقبك";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "احمِ جلسات الولوج وبياناتك أينما استعملت Firefox.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "المزامنة الآمنة";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "أتبحث عن شيء مختلف؟ اختر محرّك بحث آخر ليكون المبدئي (أو أضف واحدا من عندك) من الإعدادات.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "تبحثُ بأسلوبك أنت";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "لِج إلى حسابك لتُزامن بياناتك وتتمتّع بغيرها من مزايا.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "زامِن العلامات والتأريخ وكلمات السر إلى هاتفك.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "سريع وخاص ويقف صفًا صفًا معك.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "أهلا بك على Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "ابدأ التصفح";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "فعّل «تزامُن»…";
 

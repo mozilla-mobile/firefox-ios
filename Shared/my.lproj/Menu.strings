@@ -1,23 +1,8 @@
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction.Title" = "စာမှတ် ထည့်ရန်";
-
-/* Label for the button, displayed in the menu, used to add a page to the reading list. */
-"Menu.AddToReadingList.Title" = "စာဖတ်စာရင်းသို့ ထည့်ပေးပါ";
-
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "တဗ်အားလုံးကို ပိတ်ရန်";
 
-/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
-"Menu.CopyAddress.Title" = "လိပ်စာကို ကူးယူပါ";
-
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "စာမျက်နှာထဲတွင် ရှာပါ";
-
-/* Label for the button, displayed in the menu, used to Reload the webpage */
-"Menu.Library.Reload" = "ပြန်တင်ပါ";
-
-/* Label for the button, displayed in the menu, used to open the Library */
-"Menu.Library.Title" = "သင့် စာကြည့်တိုက်";
 
 /* Label for the button, displayed in the menu, used to open a new private tab. */
 "Menu.NewPrivateTabAction.Title" = "တစ်ကိုယ်ရေသုံး တပ်ဗ်အသစ်";
@@ -34,9 +19,6 @@
 /* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "မှတ်တမ်း";
 
-/* Label for the button, displayed in the menu, used to navigate to the home page. */
-"Menu.OpenHomePageAction.Title" = "အဖွင့်စာမျက်နှာ";
-
 /* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "ဖတ်နေဆဲစာရင်း";
 
@@ -46,29 +28,11 @@
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "ချိတ်ဆက်ထားသော တပ်ဗ်များ";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
-"Menu.OpenTopSitesAction.AccessibilityLabel" = "ထိပ်တန်းဝဘ်ဆိုက်များ";
-
-/* Label for the button, displayed in the menu, used to show the html page source */
-"Menu.PageSourceAction.Title" = "စာမျက်နှာအရင်းအမြစ်ကိုကြည့်ရန်";
-
-/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
-"Menu.RemoveBookmarkAction.Title" = "စာမှတ် ဖယ်ရှားရန်";
-
-/* Label for the button, displayed in the menu, used to open the QR code scanner. */
-"Menu.ScanQRCodeAction.Title" = "QR ကုဒ်ဖတ်ရန်";
-
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "အားလုံးဆက်";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
 "Menu.SharePageAction.Title" = "စာမျက်နှာကို မျှဝေရန်…";
-
-/* Label for the button, displayed in the menu, used to open the tabs tray */
-"Menu.ShowTabs.Title" = "တပ်ဗ်များကို ပြပါ";
-
-/* Label for the button, displayed in the menu, used to translate the current page. */
-"Menu.TranslatePageAction.Title" = "စာမျက်နှာကို ဘာသာပြန်ပါ";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "ဒတ်စ်တောခ့်ဆိုက်ကို တောင်းပါ";

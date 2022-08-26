@@ -1,26 +1,11 @@
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction.Title" = "বুকমার্ক যোগ করুন";
-
-/* Label for the button, displayed in the menu, used to add a page to the reading list. */
-"Menu.AddToReadingList.Title" = "পাঠ্য তালিকায় যোগ করুন";
-
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "সকল ট্যাব বন্ধ করুন";
-
-/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
-"Menu.CopyAddress.Title" = "ঠিকানা কপি করুন";
 
 /* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
 "Menu.CopyLink.Title" = "লিংক কপি করুন";
 
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "পাতাটিতে খুঁজুন";
-
-/* Label for the button, displayed in the menu, used to Reload the webpage */
-"Menu.Library.Reload" = "পুনরায় লোড করুন";
-
-/* Label for the button, displayed in the menu, used to open the Library */
-"Menu.Library.Title" = "আপনার লাইব্রেরি";
 
 /* Label for the button, displayed in the menu, used to open a new private tab. */
 "Menu.NewPrivateTabAction.Title" = "নতুন ব্যাক্তিগত ট্যাব খুলুন";
@@ -37,9 +22,6 @@
 /* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "ইতিহাস";
 
-/* Label for the button, displayed in the menu, used to navigate to the home page. */
-"Menu.OpenHomePageAction.Title" = "নীড়";
-
 /* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "পড়ার তালিকা";
 
@@ -49,35 +31,14 @@
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "সিঙ্ককৃত ট্যাব";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
-"Menu.OpenTopSitesAction.AccessibilityLabel" = "শীর্ষ সাইটগুলি";
-
-/* Label for the button, displayed in the menu, used to show the html page source */
-"Menu.PageSourceAction.Title" = "পাতা সোর্স দেখাও";
-
-/* A string used to signify the start of the Recently Saved section in Home Screen. */
-"Menu.RecentlySaved.Title" = "সম্প্রতি সংরক্ষিত";
-
-/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
-"Menu.RemoveBookmarkAction.Title" = "বুকমার্ক সরান";
-
 /* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
 "Menu.ReportSiteIssueAction.Title" = "সাইটের সমস্যা রিপোর্ট করুন";
-
-/* Label for the button, displayed in the menu, used to open the QR code scanner. */
-"Menu.ScanQRCodeAction.Title" = "QR কোড স্ক্যান করুন";
 
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "সব দেখুন";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
 "Menu.SharePageAction.Title" = "… এর মাধ্যমে পেজ শেয়ার করুন";
-
-/* Label for the button, displayed in the menu, used to open the tabs tray */
-"Menu.ShowTabs.Title" = "ট্যাব প্রদর্শন";
-
-/* Label for the button, displayed in the menu, used to translate the current page. */
-"Menu.TranslatePageAction.Title" = "পাতাটি অনুবাদ করুন";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "ডেস্কটপ সাইটের জন্য অনুরোধ করুন";

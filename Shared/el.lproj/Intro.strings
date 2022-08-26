@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "Η ενισχυμένη προστασία από καταγραφή αποκλείει κακόβουλο λογισμικό και ιχνηλάτες.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "Αυτόματο απόρρητο";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Επόμενο";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Σύνδεση";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Εγγραφή";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "Οι προτάσεις αναζήτησης σας μεταφέρουν πιο γρήγορα σε ιστοσελίδες.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Γρήγορη αναζήτηση";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Φέρτε σελιδοδείκτες, ιστορικό και κωδικούς πρόσβασης στο Firefox σε αυτή τη συσκευή.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Συγχρονισμός του Firefox μεταξύ συσκευών";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Χρησιμοποιήστε οποιαδήποτε εφαρμογή email - όχι μόνο το Mail - με το Firefox.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Έχετε επιλογές… αλληλογραφίας";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Πατήστε το εικονίδιο-μάσκα για μετάβαση στη λειτουργία ιδιωτικής περιήγησης.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Περιηγηθείτε σαν να μην σας βλέπει κανείς";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Προστατέψτε τις συνδέσεις και τα δεδομένα σας όπου κι αν χρησιμοποιήσετε το Firefox.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Ασφαλής συγχρονισμός";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Ψάχνετε κάτι διαφορετικό; Επιλέξτε μια άλλη προεπιλεγμένη μηχανή αναζήτησης (ή προσθέστε τη δική σας) στις ρυθμίσεις.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Η αναζήτησή σας, με τον τρόπο σας";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Συνδεθείτε στο λογαριασμό σας για συγχρονισμό και πρόσβαση σε περισσότερες λειτουργίες.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Συγχρονίστε τους σελιδοδείκτες, το ιστορικό και τους κωδικούς πρόσβασής σας με το τηλέφωνό σας.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Γρήγορο, ιδιωτικό, στο πλευρό σας.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Καλώς ορίσατε στο Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Έναρξη περιήγησης";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Ενεργοποίηση Sync…";
 

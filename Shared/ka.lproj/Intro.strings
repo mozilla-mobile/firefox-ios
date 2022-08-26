@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "თვალთვალისგან გაძლიერებული დაცვა ზღუდავს მავნე პროგრამებს და ხელს უშლის მეთვალყურეებს.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "თავისთავადი პირადულობა";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "შემდეგი";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "შესვლა";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "ანგარიშის შექმნა";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "ძიების შემოთავაზებები უფრო სწრაფად მოგინახავთ საიტებს.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "სწრაფი ძიება";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "გადმოიტანს სანიშნებს, ისტორიასა და პაროლებს, ამ მოწყობილობის Firefox-ზე.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "დაასინქრონეთ Firefox მოწყობილობებს შორის";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "გამოიყენეთ ელფოსტის ნებისმიერი პროგრამა — არა მხოლოდ Mail — Firefox-თან ერთად.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "თქვენ გაქვთ შესაძლებლობა აირჩიოთ ელფოსტა… პარამეტრებში";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "შეეხეთ ნიღბის ნიშანს პირადი დათვალიერების რეჟიმში გადასასვლელად.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "იმოგზაურეთ ინტერნეტში მეთვალყურეების გარეშე";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "დაიცავით თქვენი ანგარიშები და მონაცემები ყველგან, სადაც გიყენიათ Firefox.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "უსაფრთხო დასინქრონება";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "განსხვავებულად გსურთ მოიძიოთ? აირჩიეთ სხვა საძიებო სისტემა ნაგულისხმევად (ან დაამატეთ თავად) პარამეტრებიდან.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "მოიძიეთ გვერდები, თქვენებურად";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "შედით თქვენს ანგარიშზე სინქრონიზაციისა და მეტი შესაძლებლობებისთვის.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "დაასინქრონეთ თქვენი სანიშნები, ისტორია და პაროლები, თქვენს ტელეფონზე.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "სწრაფი, პირადი და თქვენიანი.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "მოგესალმებათ Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "დაიწყეთ მონახულება";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "ჩართეთ დასინქრონება…";
 

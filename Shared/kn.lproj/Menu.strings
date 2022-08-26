@@ -1,20 +1,8 @@
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction.Title" = "ಬುಕ್‌ಮಾರ್ಕುಗಳನ್ನು ಸೇರಿಸು";
-
-/* Label for the button, displayed in the menu, used to add a page to the reading list. */
-"Menu.AddToReadingList.Title" = "ಓದುಗ ಪಟ್ಟಿಗೆ ಸೇರಿಸು";
-
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "ಎಲ್ಲ ಟ್ಯಾಬ್‍ಗಳನ್ನು ಮುಚ್ಚು";
 
-/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
-"Menu.CopyAddress.Title" = "ವಿಳಾಸವನ್ನು ನಕಲಿಸು";
-
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "ಪುಟದಲ್ಲಿ ಹುಡುಕು";
-
-/* Label for the button, displayed in the menu, used to open the Library */
-"Menu.Library.Title" = "ನಿಮ್ಮ ಲೈಬ್ರರಿ";
 
 /* Label for the button, displayed in the menu, used to open a new private tab. */
 "Menu.NewPrivateTabAction.Title" = "ಹೊಸ ಖಾಸಗಿ ಟ್ಯಾಬ್";
@@ -22,29 +10,11 @@
 /* Label for the button, displayed in the menu, used to open a new tab */
 "Menu.NewTabAction.Title" = "ಹೊಸ ಟ್ಯಾಬ್";
 
-/* Label for the button, displayed in the menu, used to navigate to the home page. */
-"Menu.OpenHomePageAction.Title" = "ಮುಖಪುಟ";
-
 /* Label for the button, displayed in the menu, used to open the Settings menu. */
 "Menu.OpenSettingsAction.Title" = "ಸಿದ್ಧತೆಗಳು";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
-"Menu.OpenTopSitesAction.AccessibilityLabel" = "ಪ್ರಮುಖ ತಾಣಗಳು";
-
-/* Label for the button, displayed in the menu, used to show the html page source */
-"Menu.PageSourceAction.Title" = "ಪುಟದ ಮೂಲವನ್ನು ನೋಡು";
-
-/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
-"Menu.RemoveBookmarkAction.Title" = "ಪುಟ ಗುರುತು ತೆಗೆ";
-
-/* Label for the button, displayed in the menu, used to open the QR code scanner. */
-"Menu.ScanQRCodeAction.Title" = "QR ಸಂಕೇತ ಸ್ಕ್ಯಾನ್ ಮಾಡು‍";
-
 /* Label for the button, displayed in the menu, used to open the share dialog. */
 "Menu.SharePageAction.Title" = "ಇದರೊಂದಿಗೆ ಪುಟ ಹಂಚಿಕೊಳ್ಳಿ…";
-
-/* Label for the button, displayed in the menu, used to open the tabs tray */
-"Menu.ShowTabs.Title" = "ಟ್ಯಾಬ್‌ಗಳನ್ನು ತೋರಿಸು";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "ಡೆಸ್ಕ್‌ಟಾಪ್ ತಾಣವನ್ನು ಕೇಳಿ";

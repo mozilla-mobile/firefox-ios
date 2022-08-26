@@ -2,6 +2,9 @@
 "2GqvPe" = "कॉपी की गई लिंक पर जाएं";
 
 /* (No Comment) */
+"ctDNmu" = "Quick access to various Firefox actions";
+
+/* (No Comment) */
 "eHmH1H" = "निजी टैब बंद करें";
 
 /* (No Comment) */
@@ -11,13 +14,16 @@
 "eV8mOT" = "तुरंत कारवाई प्रकार";
 
 /* (No Comment) */
-"scEmjs" = "नई निजी खोज";
+"fi3W24-2GqvPe" = "There are ${count} options matching ‘Go to Copied Link’.";
 
 /* (No Comment) */
-"w9jdPK" = "तुरंत कारवाई";
+"fi3W24-eHmH1H" = "There are ${count} options matching ‘Clear Private Tabs’.";
 
 /* (No Comment) */
-"xRJbBP" = "नयी खोज";
+"fi3W24-scEmjs" = "There are ${count} options matching ‘New Private Search’.";
+
+/* (No Comment) */
+"fi3W24-xRJbBP" = "There are ${count} options matching ‘New Search’.";
 
 /* (No Comment) */
 "PzSrmZ-2GqvPe" = "Just to confirm, you wanted ‘Go to Copied Link’?";
@@ -32,17 +38,11 @@
 "PzSrmZ-xRJbBP" = "Just to confirm, you wanted ‘New Search’?";
 
 /* (No Comment) */
-"ctDNmu" = "Quick access to various Firefox actions";
+"scEmjs" = "नई निजी खोज";
 
 /* (No Comment) */
-"fi3W24-2GqvPe" = "There are ${count} options matching ‘Go to Copied Link’.";
+"w9jdPK" = "तुरंत कारवाई";
 
 /* (No Comment) */
-"fi3W24-eHmH1H" = "There are ${count} options matching ‘Clear Private Tabs’.";
-
-/* (No Comment) */
-"fi3W24-scEmjs" = "There are ${count} options matching ‘New Private Search’.";
-
-/* (No Comment) */
-"fi3W24-xRJbBP" = "There are ${count} options matching ‘New Search’.";
+"xRJbBP" = "नयी खोज";
 

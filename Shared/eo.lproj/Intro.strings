@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "Plibonigita protekto kontraŭ spurado blokas malicajn programojn kaj haltigas spurilojn.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "Aŭtomata privateco";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Antaŭen";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Komenci seancon";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Enskribiĝi";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "Serĉaj sugestoj portas vin pli rapide al retejoj.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Rapida serĉo";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Porti legosignojn, historion kaj pasvortojn al Firefox en tiu ĉi aparato.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Speguli Firefox inter aparatoj";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Uzi iun retpoŝta programo, ne nur Mail - per Firefox.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Vi havas mesaĝojn… kaj elekteblojn";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Tuŝetu la maskan emblemon por eniri en la reĝimo de privata retumo.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Retumi kvazaŭ neniu vin rigardus";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Protekti viajn legitimilojn kaj datumojn ĉie, kie vi uzas Firefox.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Sekura spegulado";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Ĉu vi serĉas ion alian, malsaman? Elektu alian norman serĉilon (aŭ aldonu propran) en la agordoj.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Via serĉo laŭ via maniero";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Komenci seancon per via konto por speguli kaj aliri aliajn trajtojn.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Spegulu viajn legosignojn, historion kaj pasvortojn en via telefono.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Rapida, privata, ĉe via flanko.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Bonvenon al Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Komenci retumi";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Ŝalti Speguladon…";
 

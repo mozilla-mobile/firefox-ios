@@ -1,45 +1,9 @@
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "അടുത്തത്";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "പ്രവേശിക്കുക";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "അംഗത്വമെടുക്കുക";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "ഏത് ഇമെയിൽ ആപ്പും ഉപയോഗിക്കുക — മെയിൽ മാത്രമല്ല — ഫയർഫോക്സിനോടൊപ്പം.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "നിങ്ങൾക്ക് ഇമെയിൽ ലഭിച്ചു… ഓപ്ഷനുകൾ";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "സ്വകാര്യ ബ്രൌസിംഗ് മോഡിലേക്ക് മാറുന്നതിനു് മാസ്ക് ഐക്കൺ ടാപ്പുചെയ്യുക.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "ആരും കാണാത്തതു പോലെ ബ്രൌസ് ചെയ്യുക";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "വ്യത്യസ്ഥമായ എന്തിനെങ്കിലും തേടുന്നാണോ? ക്രമീകരണങ്ങളിൽ മറ്റൊരു സ്ഥിരസ്ഥിതി തിരയൽ എഞ്ചിൻ തിരഞ്ഞെടുക്കുക (അല്ലെങ്കിൽ നിങ്ങളുടേത് ചേർക്കുക).";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "നിങ്ങളുടെ തിരയൽ നിങ്ങളെ വഴി";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "കൂടുതൽ സവിശേഷതകൾ ഉപയോഗിക്കാനും സമന്വയിപ്പിക്കാനും നിങ്ങളുടെ അക്കൗണ്ടിലേക്ക് പ്രവേശിക്കുക.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "നിങ്ങളുടെ ഫോണിലേക്ക് ഓർമ്മക്കുറിപ്പുകളും ചരിത്രവും രഹസ്യവാക്കുകളും സമന്വയിപ്പിക്കുക.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "വേഗമേറിയത്, സ്വകാര്യമായത്, കൂടാതെ നിങ്ങളുടെ ഒപ്പം നിൽക്കുന്നതും.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "ഫയർ‌ഫോക്സിലേക്ക് സ്വാഗതം";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "ബ്രൗസിങ് തുടങ്ങൂക";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "സമന്വയം ഓണാക്കുക…";
 

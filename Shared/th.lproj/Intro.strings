@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "การป้องกันการติดตามที่มากขึ้นจะปิดกั้นมัลแวร์และหยุดตัวติดตาม";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "ความเป็นส่วนตัวอัตโนมัติ";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "ถัดไป";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "ลงชื่อเข้า";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "ลงทะเบียน";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "คำแนะนำการค้นหาช่วยให้คุณไปยังเว็บไซต์ได้เร็วขึ้น";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "ค้นหาอย่างรวดเร็ว";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "นำที่คั่นหน้า ประวัติ และรหัสผ่านไปยัง Firefox บนอุปกรณ์นี้";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "ซิงค์ Firefox ระหว่างอุปกรณ์";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "ใช้แอปอีเมลใด ๆ - ไม่ใช่แค่ เมล - ด้วย Firefox";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "คุณได้รับ… ตัวเลือกจดหมาย";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "แตะไอคอนหน้ากากเพื่อเข้าไปในโหมดการเรียกดูแบบส่วนตัว";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "เรียกดูเหมือนไม่มีใครเฝ้ามองอยู่";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "ป้องการข้อมูลและการเข้าสู่ระบบของคุณทุกที่ที่คุณใช้ Firefox";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Safe Sync";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "กำลังค้นหาอย่างอื่น? เลือกเครื่องมือค้นหาเริ่มต้นอื่น (หรือเพิ่มของคุณเอง) ในการตั้งค่า";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "การค้นหาของคุณในแบบของคุณ";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "ลงชื่อเข้าบัญชีของคุณเพื่อซิงค์และเข้าถึงคุณลักษณะเพิ่มเติม";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "ซิงค์ที่คั่นหน้า ประวัติ และรหัสผ่านไปยังโทรศัพท์ของคุณ";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "รวดเร็ว เป็นส่วนตัว และอยู่เคียงข้างคุณ";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "ยินดีต้อนรับสู่ Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "เริ่มการเรียกดู";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "เปิด Sync…";
 

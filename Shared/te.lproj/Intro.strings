@@ -1,35 +1,5 @@
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "తర్వాత";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "ప్రవేశించండి";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "నమోదవ్వండి";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "ఏదైనా ఇమెయిల్ అనువర్తనం ఉపయోగించండి — కేవలం మెయిల్ కాదు — Firefoxతో.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "మీకు మెయిల్… ఎంపికలు ఉన్నాయి";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "ప్రైవేట్ బ్రౌజింగ్ మోడ్ లోకి వెళ్ళటానికి ముసుగు చిహ్నాన్ని నొక్కండి.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "ఎవరూ చూడనట్టుగా విహరణ చెయ్యండి";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "విభిన్నమైన వాటి కోసం శోధిస్తున్నారా? అమరికాలలో మరొక అప్రమేయ శోధన యంత్రం (లేదా మీ స్వంతంగా) ను ఎంచుకోండి.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "మీ శోధన, మీ మార్గం";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "సింక్రనించడానికి, మరెన్నో సౌలభ్యాలను వాడుకోడానికి మీ ఖాతా లోనికి ప్రవేశించండి.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "వేగవంతం, అంతరంగికం, మీ వక్షం.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Firefoxకి స్వాగతం";

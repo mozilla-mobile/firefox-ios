@@ -1,48 +1,9 @@
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Sonrakı";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Daxil ol";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Qeyd ol";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Sürətli Axtarış";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "İstənilən e-poçt tətbiqini işlədin - sadəcə Mail-i deyil - Firefox ilə.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "E-poçt seçimləri";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Məxfi Səyahət rejiminə keçmək üçün maska ikonuna toxunun.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Başqalarının izləməsindən narahat olmadan internetdə gəzin";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Fərqli şeylər axtarırsız? Tənzimləmələrdən fərqli axtarış mühərriyi seçin və ya özünüzkünü əlavə edin.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Sizin axtarış, sizin qaydalar";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Sinxronlaşdırma və daha çox özəlliklər üçün hesabınıza daxil olun.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Əlfəcin, tarixçə və parollarınızı telefonunuza sinxronlaşdırın.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Sürətli, məxfi və sizin tərəfinizdə.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Firefox-a Xoş Gəldiniz";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Səyahətə Başla";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Sinxronlaşdırmanı aktivləşdir…";
 

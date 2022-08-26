@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "ခြေရာခံကာကွယ်မှုသည် အနှောင့်အယှက်များကိုပိတ်ဆို့ပြီး ခြေရာခံသူများကိုရပ်စေသည်။";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "အလိုအလျောက် ကိုယ်ရေးကာကွယ်မှု";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "ရှေ့သို့";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "၀င်ပါ";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "စတင်သုံးရန် စာရင်းသွင်းပါ";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "ရှာဖွေခြင်းအကြံပြုချက်များသည်သင့်အားဝက်ဘ်ဆိုက်များသို့သွားရန် ပို၍မြန်စေသည်။";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "အမြန်ရှာဖွေရေး";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Bookmarks, history နှင့် password များကိုဤစက်ရှိ Firefox သို့ယူဆောင်ပါ။";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "ကိရိယာများအကြား Firefox ကိုထပ်တူပြုပါ";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "နှစ်သက်ရာ အီးမေးလ်အက်ပ်ကို အသုံးပြုပါ — Mail နှင့်သာမဟုတ်ပါ — Firefox နှင့်ပါ။";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "သင့်ထံ စာဝင်လာသည်… ရွေးစရာများ";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "သီးသန့်ကြည့်ရှုခြင်းသို့ ပြောင်းလဲအသုံးပြုရန် မျက်နှာဖုံးပုံငယ်ကို တို့ထိပါ။";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "မည်သူမျှစောင့်ကြည့်မနေသကဲ့သို့ အသုံးပြုပါ";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "သင် Firefox ကို နေရာတိုင်း၌ သုံးခြင်းဖြင့် သင်၏ လော့အင် နှင့် အချက်အလက်များ ကို ကာကွယ်ပါ။";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Safe ထပ်တူပြုခြင်း";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "အခြား မူသေရှာဖွေရေးယန္တရားကို အသုံးပြုလိုပါသလား။ အပြင်အဆင်များတွင် နှစ်သက်ရာ (သို့မဟုတ် အသုံးပြုနေကျ တစ်ခုခု) ကို ရွေးပါ။";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "ကိုယ့်နည်းကိုယ့်ဟန် အသုံးပြုမည်";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "တစ်ပြေးညီ ထပ်တူပြုရန်နှင့် လုပ်ဆောင်ချက်များကို ရယူအသုံးပြုရန် သင့်အကောင့်ကို ဝင်ရောက်ပါ။";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "သင့်ကိရိယာများပေါ်မှ စာမှတ်များ၊မှတ်တမ်းများနှင့် စာဝှက်များကို ရယူပါ။";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "သင့်အတွက် မြန်ဆန်လုံခြုံသောစနစ်";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Firefox က ကြိုဆိုပါသည်";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "စတင် သုံးစွဲမည်";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Sync ကိုဖွင့်…";
 

@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "Mae Rhwystro Tracio Uwch yn rhwystro meddalwedd maleisus ac yn atal tracwyr.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "Preifatrwydd Awtomatig";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Nesaf";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Mewngofnodi";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Ymuno";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "Mae awgrymiadau chwilio yn mynd a chi at wefannau'n gynt.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Chwilio Cyflym";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Dewch â nodau tudalen, hanes, a chyfrineiriau i Firefox ar y ddyfais hon.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Cydweddu Firefox Rhwng Dyfeisiau";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Defnyddiwch unrhyw ap e-bost - nid dim ond Mail - gyda Firefox.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Mae gennych chi ddewisiadau… e-bost";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Tapiwch yr eicon masg i lithro i'r modd Pori Preifat.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Pori fel petai neb yn eich gwylio";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Diogelwch eich mewngofnodi a'ch data ym mhobman rydych chi'n defnyddio Firefox.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Sync Diogel";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Chwilio am rywbeth gwahanol? Dewiswch beiriant chwilio ragosodedig arall (neu ychwanegu un eich hun) yn y Gosodiadau.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Chwilio, cynhwysfawr";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Mewngofnodwch i'ch cyfrif i gydweddu a chael mynediad i ragor o nodweddion.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Cydweddu eich nodau tudalen, hanes a'ch cyfrineiriau i'ch ffôn.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Cyflym, preifat, ac o'ch plaid.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Croeso i Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Cychwyn Pori";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Cychwyn Sync…";
 

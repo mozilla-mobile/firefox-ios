@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "Узмоцненая ахова ад сачэння блакуе зламысныя праграмы і спыняе трэкеры.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "Аўтаматычная прыватнасць";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Далей";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Увайсці";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Зарэгістравацца";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "Прапановы пошуку дазваляюць хутчэй пераходіць да вэб-сайтаў.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Хуткі пошук";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Перанясіце закладкі, гісторыю і паролі ў Firefox на гэтай прыладзе.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Сінхранізуйце Firefox паміж прыладамі";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Карыстайцеся любой паштовай праграмай з Firefox, а не толькі прадвызначанай праграмай \"Пошта\".";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Налады пошты";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Націсніце значок маскі, каб перайсці ў рэжым прыватнага аглядання.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Аглядайце не баючыся сачэння";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Абараніце свае лагіны і даныя ўсюды, дзе вы карыстаецеся Firefox.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Бяспечная сінхранізацыя";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Шукаеце нешта іншае? Выберыце іншы прадвызначаны пашукавік (альбо дадайце свой) у наладах.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Шукайце па-свойму";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Увайдзіце ў свой акаўнт, каб атрымаць доступ да сінхранізацыі і дадатковых функцый.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Сінхранізуйце свае закладкі, гісторыю і паролі з сваім тэлефонам.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Хуткі, прыватны, і на вашым баку.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Вітаем у Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Пачаць агляданне";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Уключыць сінхранізацыю…";
 

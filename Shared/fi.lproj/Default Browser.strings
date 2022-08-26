@@ -1,7 +1,7 @@
-/* Description for small card shown that allows user to switch their default browser to Firefox. */
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Aseta verkkosivustojen, sähköpostien ja viestien linkit avautumaan automaattisesti Firefoxissa.";
 
-/* Title for small card shown that allows user to switch their default browser to Firefox. */
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Vaihda oletusselain";
 
 /* Description for default browser onboarding card. */

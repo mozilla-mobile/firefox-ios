@@ -1,5 +1,11 @@
+/* Long label for the button displayed in the menu, used to add a page to the reading list. */
+"Menu.AddToReadingList.AlternateLabel.v99" = "Add to Reading List";
+
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "Close All Tabs";
+
+/* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
+"Menu.CopyLink.Title" = "Copy Link";
 
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "Find in Page";
@@ -28,6 +34,12 @@
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Synced Tabs";
 
+/* Long label for the remove bookmark button displayed in the menu. Pressing this button remove the current page from the bookmarks. */
+"Menu.RemoveBookmark.AlternateLabel.v99" = "Remove Bookmark";
+
+/* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
+"Menu.ReportSiteIssueAction.Title" = "Report Site Issue";
+
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "See All";
 
@@ -39,4 +51,7 @@
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "Request Mobile Site";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"SettingsMenu.OpenHomePageAction.Title" = "Homepage";
 

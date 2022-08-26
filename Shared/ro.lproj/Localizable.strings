@@ -16,47 +16,16 @@
 /* About settings section title */
 "About" = "Despre";
 
-/* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Fixează în site-uri de top";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Elimină site-ul fixat";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "Marcat";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "Vizitat";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "Marcaje recente";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "Mai multe";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "În tendințe pe Pocket";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "În tendințe";
-
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Vizitate recent";
-
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "Rânduri: %d";
 
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Setează rândurile";
 
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Site-uri de top";
-
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Adaugă filă";
 
-/* Accessibility label for action adding current page to reading list.
-   Name for button adding current article to reading list in reader mode */
+/* Name for button adding current article to reading list in reader mode */
 "Add to Reading List" = "Adaugă în lista de lectură";
 
 /* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
@@ -89,12 +58,6 @@
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "Blochează ferestrele pop-up";
 
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Marcaj";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Dosar";
-
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "Titlu";
 
@@ -116,12 +79,6 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Dosar";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Locație";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Numele dosarului";
-
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Marcaj nou";
 
@@ -133,12 +90,6 @@
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Titlu";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "Marcajele pe care le salvezi vor apărea aici.";
 
 /* Describes the date on which the breach occurred */
 "BreachAlerts.BreachDate" = "Această încălcare a securității datelor a avut loc la data de";
@@ -179,14 +130,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "Închiderea filei";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "calculator";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "Marchează linkul";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Comută";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Filă privată nouă deschisă";
@@ -212,12 +157,6 @@
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Deschide într-o filă nouă";
 
-/* Context menu item for opening a link in a new private tab */
-"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Deschide linkul într-o filă privată nouă";
-
-/* Context menu item for opening a link in a new tab */
-"ContextMenu.OpenLinkInNewTabButtonTitle" = "Deschide linkul într-o filă nouă";
-
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Salvează imaginea";
 
@@ -232,12 +171,6 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Nu s-a putut încărca pagina.";
-
-/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "Pentru utilizatorii iOS 13, Firefox trece acum automat la o temă întunecată când telefonul este setat pe modul întunecat. Pentru a schimba acest comportament, intră în Setări > Temă.";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "Tema întunecată include acum o tastatură întunecată și un ecran de start întunecat.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "Protecția împotriva urmăririi, îmbunătățită și încorporată, ajută la oprirea anunțurilor ca să nu te mai urmărească peste tot. Activează modul Strict pentru a bloca și mai multe elemente de urmărire, reclame și ferestre pop-up.";
@@ -257,9 +190,7 @@
 /* Accessibility label for button decreasing font size in display settings of reader mode */
 "Decrease text size" = "Micșorează mărimea textului";
 
-/* Accessibility label for default search engine setting.
-   Title for default search engine picker.
-   Title for default search engine settings section. */
+/* Title for default search engine picker. */
 "Default Search Engine" = "Motor de căutare implicit";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
@@ -289,17 +220,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "Anulează descărcarea";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Descărcările nu sunt suportate în Firefox momentan.";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Descărcare anulată";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "Descărcare eșuată";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "Reîncearcă";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Descărcări";
@@ -361,18 +286,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Înainte";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "E-mailul greșit? Deconectează-te mai jos pentru a o lua de la început.";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "Este necesară verificarea contului";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "%@ trebuie verificat. Verifică e-mailul pentru linkul de verificare de la Firefox.";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Conectează alt dispozitiv";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Cont Firefox";
 
@@ -381,24 +294,6 @@
 
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Fără conexiune la internet";
-
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Deschide preferințele de sincronizare";
-
-/* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "Scanează codul QR afișat pe firefox.com/pair";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "Elimină";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Elimină contul Firefox asociat acestui dispozitiv pentru a te conecta cu alt utilizator.";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "Elimină contul";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "Retrimite e-mailul";
 
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "Autentifică-te cu camera";
@@ -409,23 +304,11 @@
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Gata de scanare";
 
-/* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "Activează Sync";
-
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "Folosește e-mailul în schimb";
 
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Autentifică-te în Sync";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "Obține filele, marcajele și parolele de pe celelalte dispozitive.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Sincronizează acum";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "Ia webul cu tine";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Firefox Sync s-a conectat la %@";
@@ -448,9 +331,6 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un dispozitiv a fost deconectat de la Firefox Sync";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "Obține filele deschise, marcajele și parolele de pe celelalte dispozitive.";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Ajutor";
 
@@ -472,9 +352,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Azi și ieri";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Ștergerea istoricului recent va elimina istoricul, cookie-urile și alte date ale browserului.";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "Site-urile web pe care le-ai vizitat recent vor apărea aici.";
 
@@ -483,15 +360,6 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Autentifică-te pentru a vedea o listă de file de pe celelalte dispozitive.";
-
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Contul tău trebuie verificat.";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Vrei să vezi filele de pe celelalte dispozitive aici?";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Activează sincronizarea filelor pentru a vedea o listă cu file de pe celelalte dispozitive.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
@@ -502,32 +370,11 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Închise recent";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d dispozitiv(e) conectat(e)";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "Dispozitive sincronizate";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "Renunță";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "O poți modifica oricând în Setări";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Setează pagina de start";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Vrei să folosești această pagină web ca pagină de start?";
-
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Marchează";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Șterge din istoric";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Deschide într-o filă privată nouă";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Deschide într-o filă nouă";
@@ -541,40 +388,40 @@
 /* The title for the Share context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Share" = "Partajează";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Back.DiscoveryTitle" = "Înapoi";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.CloseTab.DiscoveryTitle" = "Închide fila";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of finding text a user desires within a page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Find.DiscoveryTitle" = "Caută";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Forward.DiscoveryTitle" = "Înainte";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NewPrivateTab.DiscoveryTitle" = "Filă privată nouă";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NewTab.DiscoveryTitle" = "Filă nouă";
 
-/* Label to switch to normal browsing mode */
+/* A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NormalMode.DiscoveryTitle" = "Mod de navigare normal";
 
-/* Label to switch to private browsing mode */
+/* A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.PrivateMode.DiscoveryTitle" = "Mod de navigare privat";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Reload.DiscoveryTitle" = "Reîncarcă pagina";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of directly accessing the URL, location, bar. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.SelectLocationBar.DiscoveryTitle" = "Selectează bara adresei";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.ShowNextTab.DiscoveryTitle" = "Afișează fila următoare";
 
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
+/* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Afișează fila anterioară";
 
 /* Accessibility label for button increasing font size in display settings of reader mode */
@@ -583,19 +430,13 @@
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "chiar acum";
 
-/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.SavePageAs" = "Salvează pagina ca…";
-
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Tools" = "Instrumente";
 
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the past thirty days. */
 "Last month" = "Luna trecută";
 
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Ultima sincronizare: %@";
-
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Săptămâna trecută";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
@@ -615,12 +456,6 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "Autentificări";
-
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "Modificat";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "Date de autentificare";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Nu salva";
@@ -646,15 +481,6 @@
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "Actualizează";
 
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "Date de autentificare";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "Toate";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "Site web";
-
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrează";
 
@@ -664,19 +490,14 @@
 /* Restore Tabs Prompt Description */
 "Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Se pare că Firefox s-a închis neașteptat anterior. Dorești să restaurezi filele?";
 
-/* Name for Mark as read button in reader mode
-   Title for the button that marks a reading list item as read */
+/* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Marchează ca citit";
 
-/* Name for Mark as unread button in reader mode
-   Title for the button that marks a reading list item as unread */
+/* Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "Marchează ca necitit";
 
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Marcaj adăugat";
-
-/* Toast displayed to the user after adding the item to the Top Sites. */
-"Menu.AddPin.Confirm" = "Fixat în site-uri de top";
 
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Adăugat în lista de lectură";
@@ -686,33 +507,6 @@
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL copiat în clipboard";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "Protecția îmbunătățită împotriva urmăririi este dezactivată pentru acest site.";
-
-/* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "Protecția îmbunătățită împotriva urmăririi este activată pentru acest site.";
-
-/* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox blochează elementele de urmărire inter-site-uri, elementele de urmărire ale rețelelor sociale, criptominerii și detectoarele de amprente digitale.";
-
-/* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox blochează elementele de urmărire inter-site-uri, elementele de urmărire ale rețelelor sociale, criptominerii, detectoarele de amprente digitale și conținuturile de urmărire.";
-
-/* Label for the button displayed in the menu used to stop the reload of the webpage */
-"Menu.Library.StopReload" = "Oprește";
-
-/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
-"Menu.ManageAccount.Label" = "Gestionează contul %@";
-
-/* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "Activează modul nocturn";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "Blochează imaginile";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "Acțiuni pe pagină";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Lipește";
@@ -729,38 +523,17 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Marcaj eliminat";
 
-/* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "Eliminat din site-uri de top";
-
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Fila trimisă";
 
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "Blocat";
-
-/* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Nu a fost depistat niciun element de urmărire cunoscut de Firefox.";
-
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Setări pentru protecție";
-
-/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "Protecții pentru %@";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "Conținut de urmărire";
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "Elemente de urmărire ale rețelelor sociale";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox blochează părți ale paginii care ți-ar putea urmări navigarea.";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Blochează elementele de urmărire online";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "Cookie-uri de urmărire inter-site-uri";
 
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Elemente de urmărire inter-site-uri";
@@ -783,47 +556,8 @@
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Rețelele sociale plasează elemente de urmărire pe alte site-uri web pentru a-ți construi un profil mai complet și mai direcționat. Blocarea acestor elemente de urmărire reduce cât de multe companii de social media pot vedea ce faci online.";
 
-/* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "Dezactivat pentru acest site";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "Protecția împotriva urmăririi este acum oprită pentru acest site.";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "Activează protecția împotriva urmăririi";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "Activat pentru acest site";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "Protecția împotriva urmăririi este acum pornită pentru acest site.";
-
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Generatoare de amprente digitale";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Cookie-uri de urmărire inter-site-uri, blocate";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "Criptominerii blocați";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "Detectoare de amprente digitale, blocate";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "Elemente de urmărire ale rețelelor sociale, blocate";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "Află mai multe despre modul în care protecția împotriva urmăririi blochează elementele de urmărire online care îți colectează datele de navigare pe mai multe site-uri web.";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "Nu au fost detectate elemente de urmărire pe această pagină.";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Site-ul include elemente care ți-ar putea urmări navigarea. Ai dezactivat protecția.";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "Activează pentru acest site";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Ce este nou";
@@ -840,8 +574,7 @@
 /* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
 "Navigation Toolbar" = "Bară de navigare";
 
-/* Accessibility label for the New Tab button in the tab toolbar.
-   Accessibility Label for the tab toolbar New tab button */
+/* Accessibility label for the New Tab button in the tab toolbar. */
 "New Tab" = "Filă nouă";
 
 /* Restore Tabs Negative Action */
@@ -874,23 +607,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Nu se poate deschide pagina";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "Meniu opțiuni de pagină";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "Selector de panouri";
-
 /* Password textbox in Authentication prompt */
 "Password" = "Parolă";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Nu ai date de autentificare sincronizate din contul tău Firefox";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "Date de autentificare disponibile:";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Date de autentificare Firefox";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Aceasta permite salvarea imaginii în rolul camerei.";
@@ -946,9 +664,6 @@
 /* Reopen alert title shown at home page. */
 "ReopenAlert.Title" = "Redeschide ultima filă închisă";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "Redeschide fila închisă";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "Resetează mărimea textului";
 
@@ -967,15 +682,10 @@
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Datele sunt nevalide";
 
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Te rugăm să îi permiți lui Firefox accesul la camera dispozitivului din „Configurări” -> „Intimitate” > „Cameră”.";
-
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Scanează codul QR";
 
-/* Accessibility Label for the tab toolbar Search button
-   Navigation title for search settings.
-   Open search section of settings */
+/* Open search section of settings */
 "Search" = "Caută";
 
 /* The text shown in the URL bar on about:home */
@@ -1017,12 +727,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Ok";
 
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "Caută sugestii";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Conexiune securizată";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Trimiți un raport de defecțiune astfel încât Mozilla să poată remedia problema?";
 
@@ -1032,8 +736,7 @@
 /* Used as a button label for crash dialog prompt */
 "Send Report" = "Trimite raport";
 
-/* Button title for cancelling share screen
-   Close button in top navigation bar */
+/* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "Renunță";
 
 /* Header for the list of devices table */
@@ -1075,12 +778,6 @@
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "Filă primită de la %@";
 
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "Adaugă în lista de lectură";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "Marchează";
-
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Atinge pentru a începe";
 
@@ -1120,7 +817,7 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Înlocuiește interogarea cu %s)";
 
-/* Button in Data Management that clears private data for the selected items. */
+/* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Curăță toate datele site-urilor web";
 
 /* Button in settings that clears private data for the selected items. */
@@ -1128,9 +825,6 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Șterge datele private";
-
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Șterge datele private";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Copiat în clipboard";
@@ -1186,8 +880,7 @@
 /* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
 "Settings.DisplayTheme.SwitchSubtitle" = "Schimbă automat pe baza luminozității ecranului";
 
-/* Display (theme) settings label to show if automatically switch theme is enabled.
-   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+/* Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
 "Settings.DisplayTheme.SwitchTitle" = "Automat";
 
 /* System theme settings section title */
@@ -1202,15 +895,6 @@
 /* Title in main app settings for Theme settings */
 "Settings.DisplayTheme.Title.v2" = "Temă";
 
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "Întotdeauna";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Doar când se folosește protecția împotriva urmăririi";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "Trimite site-urilor web un semnal „Nu urmări” pentru a indica faptul că nu vrei să fii urmărit";
-
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Numele dispozitivului";
 
@@ -1223,29 +907,14 @@
 /* General settings section title */
 "Settings.General.SectionName" = "General";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "Șterge";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Pagină de start";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Setări pentru pagina de start";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Introdu o pagină web";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Pagina de start actuală";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Folosește linkul copiat";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Folosește pagina actuală";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "Folosește pagina implicită";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "Date de autentificare și parole";
@@ -1253,50 +922,14 @@
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "URL personalizat";
 
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "Când deschizi o filă nouă:";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "Personalizează site-urile de top";
-
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Pagină goală";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "Marcaje";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "Site-urile pe care le vizitezi cel mai des";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter2" = "Site-uri pe care le salvezi sau le vizitezi";
-
-/* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Personalizează pagina de start Firefox";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Pagină de start Firefox";
 
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "Marcaje recente";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "Vizitate";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "Istoric";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Pagina de start";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "În tendințe pe Pocket";
-
-/* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "Conținut nemaipomenit de pe web.";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "Afișează lista de lectură";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Filă nouă";
@@ -1370,23 +1003,11 @@
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Atenție!";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Poți alege care listă o va folosi Firefox pentru a bloca elementele web care îți pot urmări activitatea de navigare.";
-
-/* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "Echilibrat pentru protecție și performanță.";
-
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "BLOCĂRI";
 
-/* Explanation of strict mode. */
-"Settings.TrackingProtection.Info.StrictTitle" = "Oferă protecție mai puternică, dar poate cauza funcționarea incorectă a unor site-uri.";
-
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "Află mai multe";
-
-/* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "Mai multe informații…";
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reduce reclamele țintite și te ajută să oprești firmele care își fac publicitate din a te mai urmări pe unde navighezi.";
@@ -1406,53 +1027,17 @@
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Protecție împotriva urmăririi";
 
-/* Additional information about the strict level setting */
-"Settings.TrackingProtection.StrictLevelInfoFooter" = "Blocarea elementelor de urmărire ar putea afecta funcționalitatea unor site-uri web.";
-
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Standard (implicit)";
-
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Permite anumite elemente de urmărire astfel ca site-urile web să funcționeze corespunzător.";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Strict";
 
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Blochează elementele de urmărire cunoscute. Este posibil ca unele site-uri web să nu funcționeze corespunzător.";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Urmărirea este colecția datelor tale de navigare pe multiple site-uri web.";
-
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Protecție îmbunătățită împotriva urmăririi";
 
-/* Translation settings footer describing how language detection and translation happens. */
-"Settings.TranslateSnackBar.SectionFooter" = "Limba paginii web este detectată pe dispozitiv și se oferă o traducere de la un serviciu la distanță.";
-
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "Servicii";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchSubtitle" = "Oferă traducerea oricărui site scris într-o limbă diferită de limba ta implicită.";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchTitle" = "Oferă traducere";
-
-/* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "Traducere";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Depanare";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "Șterge";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "Gata";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "Editează";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Afișează mai multe";
@@ -1484,17 +1069,13 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Deschide în Firefox";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "Deschide în mod privat";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Caută în Firefox";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Afișează sugestii de căutare";
 
-/* Accessibility label for the tabs button in the (top) tab toolbar
-   Accessibility Label for the tabs button in the tab toolbar */
+/* Accessibility label for the tabs button in the (top) tab toolbar */
 "Show Tabs" = "Afișează filele";
 
 /* Show the on-boarding screen again from the settings */
@@ -1509,61 +1090,16 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Glisează spre dreapta sau stânga cu trei degete pentru a închide fila.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Mod de navigare normală";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Mod de navigare privată";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Sincronizează filele, marcajele, parolele și multe altele.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "Sincronizează filele, parolele și multe altele.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "Prima ta sincronizare poate dura ceva timp";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Se sincronizează";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Se sincronizează…";
-
-/* Panel accessibility label */
-"Synced Tabs" = "File sincronizate";
-
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "marcajelor";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "clienților de la distanță";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Sincronizarea a eșuat";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "istoricului";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "autentificărilor";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Sync este indisponibil";
 
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Sync este offline";
 
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "Sync întâmpină probleme la sincronizarea %@";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "filelor";
-
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Fila %1$@ din %2$@";
 
-/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+/* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "Afișează toate filele";
 
 /* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
@@ -1578,23 +1114,14 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d filă(e) închisă(e)";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "Caută file";
-
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Adaugă filă";
 
-/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+/* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Închide toate filele";
 
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "Închide fila selectată";
-
-/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+/* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Deschide o filă nouă";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "Deschide fila selectată";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Pagina nu a putut fi afișată în modul de lectură.";
@@ -1617,7 +1144,7 @@
 /* Label for button to undo the action just performed */
 "Toasts.Undo" = "Anulează";
 
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "Azi";
 
 /* Relative date for date older than a minute. */
@@ -1628,12 +1155,6 @@
 
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Închide toate filele";
-
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Cele mai vizitate site-uri vor apărea aici.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Bine ai venit la site-uri de top";
 
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Elimină pagina - %@";
@@ -1659,20 +1180,11 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "necitit";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Actualizează Firefox pentru a te conecta";
-
 /* Debug option */
 "Use stage servers" = "Folosește servere de simulare";
 
 /* Username textbox in Authentication prompt */
 "Username" = "Nume de utilizator";
-
-/* Text message in the settings table view */
-"Verify your email address" = "Te rugăm să-ți confirmi adresa de e-mail";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Versiune %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Conținut web";
@@ -1689,7 +1201,7 @@
 /* Relative date for yesterday. */
 "yesterday" = "ieri";
 
-/* History tableview section header */
+/* This label is meant to signify the section containing a group of items from the past 24 hours. */
 "Yesterday" = "Ieri";
 
 /* Error message in the remote tabs panel */
