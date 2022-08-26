@@ -37,26 +37,33 @@ author_exception_list = ['4530+thatswinnie@users.noreply.github.com',
                          '51127880+PARAIPAN9@users.noreply.github.com']
 
 
+# Fetch raw data from a specific url
 def fetch_raw_data(url: str) -> str:
     return requests.get(url).content.decode("utf-8")
 
 
-# Find released version from App Store
-def get_store_version() -> Version:
+# Find current and previous release versions from App Store
+def get_store_versions() -> (Version, Version):
     data = fetch_raw_data(firefox_url)
-    version_string = re.search('whats-new__latest__version\">Version (.*)</p>', data).group(1)
-    split = version_string.split(".")
-    return Version(int(split[0]), int(split[1]))
+    versions = re.findall(r'"versionDisplay\\":\\"(.*?)\\",\\"releaseNotes\\', data)
+
+    current_version = build_version(versions[0])
+    previous_version = build_version(versions[1])
+
+    return current_version, previous_version
 
 
-# TODO: Cannot be calculated like this, needs to be fetched from app store.
-def calculate_previous_version(version: Version) -> Version:
-    if version.minor == 0:
-        return Version(version.major - 1, 0)
+# Build Version from a string, handling if it has minor version or not
+def build_version(version_string: str) -> Version:
+    if "." in version_string:
+        split = version_string.split(".")
+        return Version(int(split[0]), int(split[1]))
     else:
-        return Version(version.major, version.minor - 1)
+        return Version(int(version_string), 0)
 
 
+# Get the commits difference between two versions.
+# We find the intersection with main to be able to make the diff then prettify logs
 def get_diff_commits(current_version: Version, previous_version: Version) -> str:
     repo = git.Repo(search_parent_directories=True)
     commit_origin_current = repo.commit(f"mozilla/v{current_version.string_name}")
@@ -163,15 +170,12 @@ def build_contribution_message(commits: dict[str:[str]]) -> str:
 
 if __name__ == '__main__':
     # Uncomment for tests
-    current = Version(major=104, minor=1)
-    previous = Version(major=104, minor=0)
+    # current = Version(major=104, minor=1)
+    # previous = Version(major=104, minor=0)
 
     # TODO: If script parameters use them, if not fetch version from App Store
-    # current = get_store_version()
-    # print(f"Found App store version: {current}")
-    #
-    # previous = calculate_previous_version(current)
-    # print(f"Previous is then: {previous}")
+    current, previous = get_store_versions()
+    print(f"Found App store version: {current}")
 
     raw_commits_list = get_diff_commits(current, previous).split("\n")
     filtered_list = filter_commits(raw_commits_list)
