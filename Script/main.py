@@ -69,7 +69,7 @@ def get_diff_commits(current_version: Version, previous_version: Version) -> str
 
     # Pretty format doc: https://git-scm.com/docs/pretty-formats
     return repo.git.log(f'--since={max_date}',
-                        '--pretty=format:- email: %ae username: %an with commit: %s',
+                        '--pretty=format:email: %ae username: %an with commit: %s',
                         commit_intersect,
                         commit_origin_current)
 
@@ -77,7 +77,7 @@ def get_diff_commits(current_version: Version, previous_version: Version) -> str
 def filter_commits(commits: list) -> list[str]:
     contributor_commits = []
     for commit in commits:
-        author = re.search('- email: (.*) username:', commit).group(1)
+        author = re.search('email: (.*) username:', commit).group(1)
         if author not in author_exception_list:
             contributor_commits.append(commit)
     return contributor_commits
@@ -91,26 +91,30 @@ def get_usernames_commits(commits: list) -> dict[str:[str]]:
 
     for commit in commits:
         username = re.search('username: (.*) with commit:', commit).group(1)
-        subject = re.search('\(#.*\)', commit).group(0).strip("()")
+        print(f"Analyzing commit: {commit}")
+        try:
+            subject = re.findall(r"#\b\d{5}\b", commit)[0]
+        except IndexError:
+            # If we can't grasp PR number, use the whole commit as subject
+            subject = re.search('with commit: (.*)', commit).group(1)
 
         if username in saved_users:
-            # Do not search again
-            print(f"Already have username: {username}")
+            # Do not search again since we have the username already
             found_user = saved_users[username][0]
         else:
-            # Search
-            print(f"Calling API for username: {username}")
+            # Find username to @mention from API
             found = g.search_users(f"{username}")
             if found.totalCount == 0:
+                # Username for @mention not found
                 found_user = username
             else:
                 # Should be the first found user
-                found_user = f"{found[0].login}"
+                found_user = f"@{found[0].login}"
+            time.sleep(5)
 
         append_to_dict(mention_commits, found_user, subject)
-        append_to_dict(saved_users, username, found_user)
-
-        time.sleep(5)
+        if username not in saved_users:
+            saved_users[username] = [found_user]
 
     return mention_commits
 
@@ -146,13 +150,13 @@ def build_contribution_message(commits: dict[str:[str]]) -> str:
     formatted_commits = ""
     for key, value in commits.items():
         if len(value) > 1:
-            assembled_user_commits = ' & '.join(value)
-            formatted_commits += f"@{key} with commits: {assembled_user_commits} \n"
+            assembled_user_commits = ', '.join(value)
+            formatted_commits += f"{key} with commits: {assembled_user_commits} \n"
         else:
-            formatted_commits += f"@{key} with commit: {value[0]} \n"
+            formatted_commits += f"{key} with commit: {value[0]} \n"
 
     return f"## Contributions \n" \
-           f"We've had lots of contributions from the community this release, including:\n" \
+           f"We've had lots of contributions from the community this release, including:\n\n" \
            f"{formatted_commits}\n" \
            f"Thanks everyone!"
 
