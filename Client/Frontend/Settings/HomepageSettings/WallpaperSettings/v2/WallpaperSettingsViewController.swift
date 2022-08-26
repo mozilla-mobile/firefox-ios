@@ -197,6 +197,15 @@ private extension WallpaperSettingsViewController {
                                                             trailing: inset)
             section.interGroupSpacing = WallpaperSettingsViewController.UX.inset
 
+            // Supplementary Item
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                    heightDimension: .estimated(38))
+            let header = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: headerSize,
+                elementKind: UICollectionView.elementKindSectionHeader,
+                alignment: .top)
+            section.boundarySupplementaryItems = [header]
+
             return section
         }, configuration: config)
 

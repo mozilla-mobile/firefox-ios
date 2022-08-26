@@ -1,0 +1,139 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Foundation
+
+struct WallpaperSettingsHeaderViewModel {
+    var title: String
+    var titleA11yIdentifier: String
+
+    var description: String?
+    var descriptionA11yIdentifier: String?
+
+    var buttonTitle: String?
+    var buttonA11yIdentifier: String?
+}
+
+class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
+
+    private struct UX {
+        static let stackViewSpacing: CGFloat = 4.0
+        static let topBottomSpacing: CGFloat = 16.0
+    }
+
+    private var viewModel: WallpaperSettingsHeaderViewModel?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
+    // Views
+    fileprivate lazy var contentStackView: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.spacing = UX.stackViewSpacing
+    }
+
+    fileprivate lazy var titleLabel: UILabel = .build { label in
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline, size: 12.0, weight: .medium)
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
+    }
+
+    fileprivate lazy var descriptionLabel: UILabel = .build { label in
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 12.0)
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
+    }
+
+    fileprivate lazy var learnMoreButton: ResizableButton = .build { button in
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 12.0)
+        button.setTitleColor(.black, for: .normal)
+        button.contentHorizontalAlignment = .leading
+        button.buttonEdgeSpacing = 0
+    }
+
+    // MARK: - Initializers
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+        applyTheme()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
+    // MARK: - Helper functions
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        titleLabel.text = nil
+        descriptionLabel.text = nil
+        learnMoreButton.setAttributedTitle(nil, for: .normal)
+
+        contentStackView.removeArrangedView(descriptionLabel)
+        descriptionLabel.removeFromSuperview()
+        contentStackView.removeArrangedView(learnMoreButton)
+        learnMoreButton.removeFromSuperview()
+    }
+
+    func configure(viewModel: WallpaperSettingsHeaderViewModel) {
+        self.viewModel = viewModel
+
+        titleLabel.text = viewModel.title
+        titleLabel.accessibilityIdentifier = viewModel.titleA11yIdentifier
+
+        if let description = viewModel.description, let descriptionA11y = viewModel.descriptionA11yIdentifier {
+            descriptionLabel.text = description
+            descriptionLabel.accessibilityIdentifier = descriptionA11y
+            contentStackView.addArrangedSubview(descriptionLabel)
+        }
+
+        if let buttonTitle = viewModel.buttonTitle, let buttonA11y = viewModel.buttonA11yIdentifier {
+            learnMoreButton.setTitle(buttonTitle, for: .normal)
+            learnMoreButton.accessibilityIdentifier = buttonA11y
+
+            contentStackView.addArrangedSubview(learnMoreButton)
+        }
+    }
+}
+
+// MARK: - Private
+private extension WallpaperSettingsHeaderView {
+
+    func setupView() {
+        contentStackView.addArrangedSubview(titleLabel)
+        addSubview(contentStackView)
+
+        NSLayoutConstraint.activate([
+            contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.topBottomSpacing),
+            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.topBottomSpacing),
+            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
+    }
+}
+
+// MARK: - Themable & Notifiable
+extension WallpaperSettingsHeaderView: NotificationThemeable, Notifiable {
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
+    }
+
+    func applyTheme() {
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            contentStackView.backgroundColor = UIColor.Photon.DarkGrey40
+        } else {
+            contentStackView.backgroundColor = UIColor.Photon.LightGrey10
+        }
+    }
+}
