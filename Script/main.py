@@ -1,3 +1,25 @@
+"""
+This script can be used to build the message for the release in GitHub. It will fetch commits between
+two versions, make the diff and properly tag users with @mention. Contributors will be listed in the message,
+ignoring users emails that are listed in the 'author_exception_list'.
+
+The script can either be used with manual versions input, or the script can fetch latest released versions
+from the App Store.
+
+To use you first need to install python requirements through pip in your virtual environment.
+Then create a `config.py` file that will contain the username and token to access GitHub API with format:
+username = "username"
+token = "123456"
+
+Two versions can be passed in as arguments:
+- python script.py -o 'oldVersion' -n 'newVersion'
+- python script.py -o 103.1 -n 104.0
+
+Or no versions can be passed in, and the script will retrieve the versions from the App Store:
+- python script.py
+"""
+
+import argparse
 import config
 import git
 import requests
@@ -5,8 +27,9 @@ import re
 import os
 import time
 
-from github import Github
 from dataclasses import dataclass
+from github import Github
+from typing import Optional
 
 
 @dataclass
@@ -18,11 +41,19 @@ class Version:
     def string_name(self):
         return f"{self.major}.{self.minor}"
 
+    @classmethod
+    def build_version(cls, version_string: str):
+        if "." in version_string:
+            split = version_string.split(".")
+            return cls(int(split[0]), int(split[1]))
+        else:
+            return cls(int(version_string), 0)
+
 
 # The Firefox for iOS App Store URL
 firefox_url = 'https://apps.apple.com/ca/app/firefox-private-safe-browser/id989804926'
 
-# Any author added into this list won't appear in the contributors thank you note
+# Any author email added into this list won't appear in the contributors thank you note
 author_exception_list = ['4530+thatswinnie@users.noreply.github.com',
                          'lmarceau@mozilla.com',
                          'mitchell.orla@gmail.com',
@@ -37,34 +68,28 @@ author_exception_list = ['4530+thatswinnie@users.noreply.github.com',
                          '51127880+PARAIPAN9@users.noreply.github.com']
 
 
-# Fetch raw data from a specific url
 def fetch_raw_data(url: str) -> str:
     return requests.get(url).content.decode("utf-8")
 
 
-# Find current and previous release versions from App Store
 def get_store_versions() -> (Version, Version):
+    """
+    Find current and previous release versions from App Store
+    Returns:
+        current_version, previous_version
+    """
     data = fetch_raw_data(firefox_url)
     versions = re.findall(r'"versionDisplay\\":\\"(.*?)\\",\\"releaseNotes\\', data)
 
-    current_version = build_version(versions[0])
-    previous_version = build_version(versions[1])
-
-    return current_version, previous_version
+    return Version.build_version(versions[0]), Version.build_version(versions[1])
 
 
-# Build Version from a string, handling if it has minor version or not
-def build_version(version_string: str) -> Version:
-    if "." in version_string:
-        split = version_string.split(".")
-        return Version(int(split[0]), int(split[1]))
-    else:
-        return Version(int(version_string), 0)
-
-
-# Get the commits difference between two versions.
-# We find the intersection with main to be able to make the diff then prettify logs
-def get_diff_commits(current_version: Version, previous_version: Version) -> str:
+def get_diff_commits(current_version: Version,
+                     previous_version: Version) -> str:
+    """
+    Get the commits difference between two versions.
+    We find the intersection with main to be able to make the diff then prettify logs
+    """
     repo = git.Repo(search_parent_directories=True)
     commit_origin_current = repo.commit(f"mozilla/v{current_version.string_name}")
 
@@ -91,6 +116,14 @@ def filter_commits(commits: list) -> list[str]:
 
 
 def get_usernames_commits(commits: list) -> dict[str:[str]]:
+    """
+    Retrieves the @mention username as this information isn't available with local git.
+    Whenever we fetch from the GitHub API for a username, we throttle as we can hit the rate limit rapidly.
+    This is also why we temporarily save the found usernames to avoid making too much API calls.
+    Returns:
+        A dictionary containing an array of commits for specific users.
+        Key being the username, value being the array of commits (of format #12345)
+    """
     mention_commits = {}
     saved_users = {}
 
@@ -117,7 +150,7 @@ def get_usernames_commits(commits: list) -> dict[str:[str]]:
             else:
                 # Should be the first found user
                 found_user = f"@{found[0].login}"
-            time.sleep(5)
+            time.sleep(4)
 
         append_to_dict(mention_commits, found_user, subject)
         if username not in saved_users:
@@ -150,7 +183,7 @@ def build_release_message(current_version: Version,
 
 
 def build_contribution_message(commits: dict[str:[str]]) -> str:
-    # If there's no contributors, then don't build this section
+    # If there's no contributors, then it doesn't build this section.
     if len(commits) == 0:
         return ""
 
@@ -168,18 +201,28 @@ def build_contribution_message(commits: dict[str:[str]]) -> str:
            f"Thanks everyone!"
 
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-o", "--previous_version", help="The previously released version", type=str)
+parser.add_argument("-n", "--current_version", help="The currently released version", type=str)
+
+
 if __name__ == '__main__':
-    # Uncomment for tests
-    # current = Version(major=104, minor=1)
-    # previous = Version(major=104, minor=0)
+    args = parser.parse_args()
+    current_version: Optional[str] = args.current_version
+    previous_version: Optional[str] = args.previous_version
 
-    # TODO: If script parameters use them, if not fetch version from App Store
-    current, previous = get_store_versions()
-    print(f"Found App store version: {current}")
+    if current_version and previous_version:
+        current = Version.build_version(current_version)
+        previous = Version.build_version(previous_version)
+    else:
+        current, previous = get_store_versions()
 
+    print(f"Running with version current: {current.string_name}, previous: {previous.string_name}")
     raw_commits_list = get_diff_commits(current, previous).split("\n")
     filtered_list = filter_commits(raw_commits_list)
     username_list = get_usernames_commits(filtered_list)
     release_message = build_release_message(current, previous, username_list)
 
+    print(f"***** Start of release message *****\n\n")
     print(f"{release_message}")
+    print(f"\n\n***** End of release message *****")
