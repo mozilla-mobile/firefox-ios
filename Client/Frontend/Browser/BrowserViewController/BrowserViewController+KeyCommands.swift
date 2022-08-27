@@ -9,19 +9,19 @@ import UIKit
 extension BrowserViewController {
     fileprivate typealias shortcuts = String.KeyboardShortcuts
 
-    @objc public func openSettingsKeyCommand() {
+    @objc internal func openSettingsKeyCommand() {
         openSettings()
     }
 
-    @objc public func showHistoryKeyCommand() {
+    @objc internal func showHistoryKeyCommand() {
         showPanel(.history)
     }
 
-    @objc public func showDownloadsKeyCommand() {
+    @objc internal func showDownloadsKeyCommand() {
         showPanel(.downloads)
     }
 
-    @objc public func showBookmarksKeyCommand() {
+    @objc internal func showBookmarksKeyCommand() {
         showPanel(.bookmarks)
     }
 
@@ -29,7 +29,7 @@ extension BrowserViewController {
         showLibrary(panel: panel)
     }
 
-    @objc public func openClearHistoryPanelKeyCommand() {
+    @objc internal func openClearHistoryPanelKeyCommand() {
         guard let libraryViewController = self.libraryViewController else {
             let clearHistoryHelper = ClearHistorySheetProvider(profile: profile, tabManager: tabManager)
             clearHistoryHelper.showClearRecentHistory(onViewController: self)
@@ -40,36 +40,36 @@ extension BrowserViewController {
         NotificationCenter.default.post(name: .OpenClearRecentHistory, object: nil)
     }
 
-    @objc public func addBookmarkKeyCommand() {
-        if let tab = tabManager.selectedTab, homepageViewController == nil {
+    @objc internal func addBookmarkKeyCommand() {
+        if let tab = tabManager.selectedTab, homepageViewController?.view.alpha == 0 {
             guard let url = tab.canonicalURL?.displayURL else { return }
             addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
         }
     }
 
-    @objc public func reloadTabKeyCommand() {
+    @objc internal func reloadTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload"])
 
-        if let tab = tabManager.selectedTab, homepageViewController == nil {
+        if let tab = tabManager.selectedTab, homepageViewController?.view.alpha == 0 {
             tab.reload()
         }
     }
 
-    @objc public func goBackKeyCommand() {
+    @objc internal func goBackKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "go-back"])
 
-        if let tab = tabManager.selectedTab, tab.canGoBack, homepageViewController == nil {
+        if let tab = tabManager.selectedTab, tab.canGoBack, homepageViewController?.view.alpha == 0 {
             tab.goBack()
         }
     }
 
-    @objc public func goForwardKeyCommand() {
+    @objc internal func goForwardKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -80,7 +80,7 @@ extension BrowserViewController {
         }
     }
 
-    @objc public func findInPageKeyCommand() {
+    @objc internal func findInPageKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -88,17 +88,17 @@ extension BrowserViewController {
         findInPage(withText: "")
     }
 
-    @objc public func findInPageAgainKeyCommand() {
+    @objc internal func findInPageAgainKeyCommand() {
         findInPage(withText: FindInPageBar.retrieveSavedText ?? "")
     }
 
     private func findInPage(withText text: String) {
-        if let tab = tabManager.selectedTab, homepageViewController == nil {
+        if let tab = tabManager.selectedTab, homepageViewController?.view.alpha == 0 {
             self.tab(tab, didSelectFindInPageForSelection: text)
         }
     }
 
-    @objc public func selectLocationBarKeyCommand() {
+    @objc internal func selectLocationBarKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -107,7 +107,7 @@ extension BrowserViewController {
         urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
     }
 
-    @objc public func newTabKeyCommand() {
+    @objc internal func newTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -117,7 +117,7 @@ extension BrowserViewController {
         if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
-    @objc public func newPrivateTabKeyCommand() {
+    @objc internal func newPrivateTabKeyCommand() {
         // NOTE: We cannot and should not distinguish between "new-tab" and "new-private-tab"
         // when recording telemetry for key commands.
         TelemetryWrapper.recordEvent(category: .action,
@@ -128,7 +128,7 @@ extension BrowserViewController {
         if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
-    @objc public func newNormalTabKeyCommand() {
+    @objc internal func newNormalTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -137,7 +137,7 @@ extension BrowserViewController {
         if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
-    @objc public func closeTabKeyCommand() {
+    @objc internal func closeTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -147,7 +147,7 @@ extension BrowserViewController {
         if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
-    @objc public func undoLastTabClosedKeyCommand() {
+    @objc internal func undoLastTabClosedKeyCommand() {
         guard let lastClosedURL = profile.recentlyClosedTabs.popFirstTab()?.url,
               let selectedTab = tabManager.selectedTab
         else { return }
@@ -157,7 +157,7 @@ extension BrowserViewController {
         tabManager.selectTab(closedTab)
     }
 
-    @objc public func showTabTrayKeyCommand() {
+    @objc internal func showTabTrayKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -173,7 +173,7 @@ extension BrowserViewController {
 
     // MARK: - Tab selection
 
-    @objc public func nextTabKeyCommand() {
+    @objc internal func nextTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -190,7 +190,7 @@ extension BrowserViewController {
         if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
-    @objc public func previousTabKeyCommand() {
+    @objc internal func previousTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .keyCommand,
@@ -207,7 +207,7 @@ extension BrowserViewController {
         if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
-    @objc public func selectFirstTab() {
+    @objc internal func selectFirstTab() {
         selectTab(number: 0)
     }
 
@@ -239,7 +239,7 @@ extension BrowserViewController {
         selectTab(number: 7)
     }
 
-    @objc public func selectLastTab() {
+    @objc internal func selectLastTab() {
         guard let currentTab = tabManager.selectedTab else { return }
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
@@ -265,25 +265,26 @@ extension BrowserViewController {
     }
 
     // MARK: Zoom
-    @objc public func zoomIn() {
+
+    @objc internal func zoomIn() {
         guard let currentTab = tabManager.selectedTab,
-              homepageViewController == nil
+              homepageViewController?.view.alpha == 0
         else { return }
 
         currentTab.zoomIn()
     }
 
-    @objc public func zoomOut() {
+    @objc internal func zoomOut() {
         guard let currentTab = tabManager.selectedTab,
-              homepageViewController == nil
+              homepageViewController?.view.alpha == 0
         else { return }
 
         currentTab.zoomOut()
     }
 
-    @objc public func resetZoom() {
+    @objc internal func resetZoom() {
         guard let currentTab = tabManager.selectedTab,
-              homepageViewController == nil
+              homepageViewController?.view.alpha == 0
         else { return }
 
         currentTab.resetZoom()
