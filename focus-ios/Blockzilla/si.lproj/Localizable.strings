@@ -1,0 +1,708 @@
+/* Button on About screen */
+"About.learnMoreButton" = "තව දැනගන්න";
+
+/* Label on About screen */
+"About.privateBullet2" = "ලුහුබැඳීම් අවහිර කරන්න (හෝ ඒවාට ඉඩ දීමට සැකසුම් සකසන්න)";
+
+/* Label on About screen */
+"About.privateBullet3" = "දත්තකඩ මෙන්ම සෙවුම් හා පිරික්සුම් ඉතිහාසය ඉවතලීමට මකන්න";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "පෞද්. අතිරික්සුවක් ලෙස යොදා ගන්න:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "උදව්";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "පෞද්ගලිකත්‍ව දැන්වීම";
+
+/* Label for row in About screen */
+"About.rowRights" = "ඔබගේ අයිතීන්";
+
+/* Label on About screen */
+"About.safariBullet1" = "ඉහළ රහස්‍යතාවක් සඳහා ලුහුබැඳීම් අවහිරය";
+
+/* Label on About screen */
+"About.safariBullet2" = "පිටුවේ ප්‍රමාණය අඩු කිරීමට වියමන අකුරු අවහිරය";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "එය සෆාරි දිගුවක් ලෙස යොදාගන්න:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "%@ ගැන";
+
+/* Label on About screen */
+"About.topLabel" = "%@ ඔබව පාලනයක තබයි.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ හි අරින්න";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "හරි";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "පසුම්බියට අවසර පත එක් කිරීමේදී දෝෂයක් ඇති විය. පසුව උත්සාහ කරන්න.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "අවසර පත එක් කිරීමට අසමත්!";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "%@ වෙත යාමට සත්‍යාපනය කරන්න";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "අභිරුචි ඒ.ස.නි. යොදන්න";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "ඇතුල් කළ ඒ.ස.නි. දෙවරක් පරීක්‍ෂා කරන්න.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "නිදසුන: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "එක් කිරීමට ඒ.ස.නි.";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "අලවන්න හෝ ඒ.ස.නි. යොදන්න";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ අභිරුචි ඒ.ස.නි. යොදන්න";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "අභිරුචි ස්වයං පිරවුම් ඒ.ස.නි. එක් කර කළමනාකරණය.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "අභිරුචි ඒ.ස.නි.";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "අභිරුචි ඒ.ස.නි. ලේඛනය";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "නව අභිරුචි ඒ.ස.නි. එක් කෙරිණි.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "ස්වයං පිරවීම";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "පෙරනිමි ඒ.ස.නි. ලේඛනය";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "අබලයි";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "ඒ.ස.නි. දැනටමත් පවතී";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "පෙන්වීමට අභිරුචි ඒ.ස.නි. නැත";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "සබලයි";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "අඩවි කළමනාකරණය";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "මාගේ අඩවි";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "%@ ඔබගේ ප්‍රියතම ඒ.ස.නි. ස්වයං පිරවීම සබල කරන්න.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "ප්‍රචලිත අඩවි";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "නව වාරය";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "අනවසර ප්‍රවේශය වැලැක්වීමට නැවත විවෘත කරන විට %@ අගුළු හරින්න.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "ආපසු";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "ලිපිනයේ පිටපතක්";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "ඒ.ස.නි. පසුරුපුවරුවට පිටපත් විය";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "පිටපතක්";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "අභිරුචි ඒ.ස.නි. යොදන්න";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "යළි පූරණය";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "සැකසුම්";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "බෙදාගන්න";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "නවතන්න";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "ස්ථාන තීරුව තෝරන්න";
+
+/* Label on button to cancel edits */
+"Cancel" = "අවලංගු";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "රූපයේ පිටපතක්";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "සබැඳියේ පිටපතක්";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "පිටපත් කළ සබැඳිය:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "රූපය සුරකින්න";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "සබැඳිය බෙදාගන්න";
+
+/* Label on button to complete edits */
+"Done" = "අහවරයි";
+
+/* Label on button to allow edits */
+"Edit" = "සංස්කරණය";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "යළි උත්සාහය";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "අවලංගු";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ සඳහා අන් යෙදුමක් විවෘත කිරීමට අවශ්‍යයි";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "අරින්න";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ සඳහා %2$@ විවෘත කිරීමට අවශ්‍යයි";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "අමතන්න";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "අවලංගු";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "වි-තැපෑල";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "ඔබ දැන් %@ හැර යයි.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "යෙදුම් ගබඩාව අරින්න";
+
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@ සඳහා යෙදුම් ගබඩාව ඇරීමට අවශ්‍යයි.";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "සිතියම් අරින්න";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "පිටුවේ ඊළඟ සොයන්න";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "පිටුවේ පෙර දෑ සොයන්න";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "හරි, තේරුණා!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "කිසිවෙක් නොදකින ලෙස පිරික්සන්න.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "ස්වයංක්‍රීය පෞද්. පිරික්සුම.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "පිරික්සන්න. මකන්න. නැවතත්.";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "වසන්න";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "පිරික්සුම අරඹන්න";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "ඔබගේ පිරික්සුම් ඉතිහාසය, මුරපද, දත්තකඩ මකන්න සහ තනි එබීමකින් අනවශ්‍ය දැන්වීම් ඔබව ලුහුබැඳීමෙන් වළක්වන්න!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "ඔබගේ ඉතිහාසය ඔබව හඹා නොයයි";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ යනු ලුහුබැඳීමේ රැකවරණය හා අන්තර්ගත අවහිරය සහිත පෞද්ගලික අතිරික්සුවකි.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "අප්‍රසිද්ධත්‍වයට වඩා";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "සැකසුම් වින්‍යාස කරන්න එවිට ඔබ කොපමණ ප්‍රමාණයක් බෙදා ගන්නේ දැයි තීරණය කළ හැකිය.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "ඔබගේ අභිමතය පරිදි රැකවරණය";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "පෞද්ගලික පිරික්සීම ඊළඟ මට්ටමට ගෙන යන්න.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "අවලංගු";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "තවත්";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "සෆාරි";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "මෙය ඔබගේ ඡායා එකතුවට රූපය සුරැකීමට ඉඩ සලසයි";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "සැකසුම් අරින්න";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” ඔබගේ ඡායාරූප වෙත ප්‍රවේශ වීමට කැමතිය";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "සම්බන්ධතාවය අනාරක්‍ෂිතයි";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "සම්බන්ධතාවය ආරක්‍ෂිතයි";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "වැඩතල අඩවිය ඉල්ලන්න";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "සෆාරි ඔබන්න, ඉන්පසු අන්තර්ගත අවහිර තෝරන්න";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ සබල කරන්න";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ සබල කර නැත.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "සැකසුම් යෙදුම අරින්න";
+
+/* Save button label */
+"Save" = "සුරකින්න";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "එය වැඩ කළේ නැහැ. සෙවුම් පදය මෙය සමඟ ප්‍රතිස්ථාපනය කර බලන්න: %s.";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "නැහැ";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "ඔව්";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "යෝජනා ලබා ගැනීමට, ඔබ ලිපින තීරුවේ ලියන දෑ සෙවුම් යන්ත්‍රය වෙත යැවීම %@ මගින් සිදු කළ යුතුය.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "සෙවුම් යෝජනා පෙන්වන්නද?";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "ඒ.ස.නි. ස්වයං පිරවීම";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "වෙනත් අන්තර්ගත ලුහුබැඳීම් අවහිර කිරීමෙන් ඇතැම් දෘශ්‍යක සහ පිටු කැඩී යාමට හැකිය.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "අවලංගු";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "අන්තර්ගත ලුහුබැඳීම් අවහිරය";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "අඳුරු";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "ඔබ ලිපින තීරුවේ ලියන දෑ ඔබගේ සෙවුම් යන්ත්‍රයට %@ හරහා යවයි.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "සැමට %@ වැඩිදියුණු කර දීමට හා සැපයීමට අවශ්‍ය දෑ පමණක් රැස් කර ගැනීමට මොසිල්ලා උත්සාහ කරයි.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ කලින් කලට අධ්‍යන ස්ථාපනය කර ධාවනය කරයි.";
+
+/* Title for section in settings menu */
+"Settings.general" = "සාමාන්‍ය";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "තව දැනගන්න.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "දීප්ත";
+
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "අතින්";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "%@ අගයන්න";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "සෆාරි අනුකලනය";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "සැකසුම්";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "අන් සෙවුම් යන්ත්‍රයක් එක් කරන්න";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ අන් සෙවුම් යන්ත්‍රයක් එක් කරන්න";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "සෙවුම් යන්ත්‍රයක් යොදන්න";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "ස්ථාපිත සෙවුම් යන්ත්‍ර";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "සංදර්ශනයට නම";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "නව සෙවුම් යන්ත්‍රයක් එක් විය.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "පෙරනිමි සෙවුම් එළවුම් ප්‍රත්‍යර්පණය";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "සෙවුම් යන්ත්‍රයේ නම";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "භාවිතයට සෙවුම් තන්තුව";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "නිදසුන: එළවුම.නිදසුන.ලංකා/සොයන්න/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "සෙවුම් තන්තුව අලවන්න හෝ ලියන්න. අවශ්‍ය නම්, සෙවුම් පදය මෙයට ප්‍රතිස්ථාපනය කරන්න: %s.";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "සෙවුම් යන්ත්‍රය";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "සෙවුම් යෝජනා ගන්න";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "සොයන්න";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "කාර්ය සාධනය";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "රහස්‍යතාව";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "ආරක්‍ෂාව";
+
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "පෙරනිමි අතිරික්සුව කරන්න";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "%@ හි ස්වයංක්‍රීයව විවෘත වීමට අඩවි, වි-තැපැල් සහ පණිවිඩ වලින් සබැඳි සකසන්න.";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "පද්ධතියේ තේමාව";
+
+/* Theme section in settings menu */
+"Settings.theme" = "තේමාව";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "තේමා ඇහුළුම";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "දැන්වීම්කරණය";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "විශ්ලේෂ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "වියමන අකුරු අවහිරය";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "අන්තර්ගතය";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "සමාජ";
+
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "යෙදුම අගුළු ඇරීමට මුහුණු හැඳු.";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "ඒ.ස.නි. දැනටමත් යෙදුම තුළ විවෘත නම් මුහුණු හැඳු. මගින් %@ අගුළු හැරීමට හැකිය";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "මුල් තිර ඉඟි පෙන්වන්න";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "ඇතැම් දාශ්‍යක හා පිටු කැඩී යාමට හැකිය";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "සෆාරි";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "භාවිත දත්ත යවන්න";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "අධ්‍යන";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "යෙදුම අගුළු හැරීමට ස්පර්ශ හැඳු. භාවිතය";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "ඒ.ස.නි. දැනටමත් යෙදුම තුළ විවෘත නම් ස්පර්ශ හැඳු. මගින් %@ අගුළු හැරීමට හැකිය";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "අක්‍රිය";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "සක්‍රිය";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "පද්ධතියේ දීප්ත/අඳුරු ප්‍රකාරය භාවිතය";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "අළුත් දෑ";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "සිරි කෙටිමං";
+
+/* Text for a share button */
+"share" = "බෙදාගන්න";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "කෙටිමං වෙත යොදන්න";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "කෙටිමං වෙත යෙදිණි";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "ලිපිනයේ පිටපතක්";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "පිටුවේ සොයන්න";
+
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "පිටුවේ ක්‍රියාමාර්ග";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "කෙටිමං වලින් ඉවතලන්න";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "වැඩතල අඩවිය ඉල්ලන්න";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "ජංගම අඩවිය ඉල්ලන්න";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "ක්‍රෝම් හි අරින්න";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "පෙරනිමි අතිරික්සුවෙන් අරින්න";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "සමඟ පිටුව බෙදාගන්න…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "කෙටිමං වලින් ඉවතලන්න";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "කෙටිමඟ නම් කරන්න";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "කෙටිමඟ නාමය";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "සුරකින්න";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "අවලංගු";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "එකතු";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "සිරි වෙත යොදන්න";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "කෙටිමඟ සංශෝධනය හෝ මකන්න";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "මකන්න";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "මකා දමා අරින්න";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "ප්‍රියතම අඩවිය අරින්න";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "ප්‍රියතම අඩවිය අරින්න";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "විවෘත කිරීමට ඒ.ස.නි.";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "අඩවියක් විවෘත විට %@ අගුළුලන්න:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "මුහුණු හැඳු. සක්‍රිය කරන්න";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "ස්පර්ශ හැඳු. සක්‍රිය කරන්න";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "මෙය ගැන හා %@ ආශ්‍රිත වෙනත් යාවත්කාල ගැන කියවන්න.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "ඇයි ඔව්, අපට නැවුම් නව පෙනුමක් තිබේ!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "පිටු ක්‍රියාමාර්ග > වැඩතල අඩවිය ඉල්ලන්න";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "අඩවියෙහි පූර්ණ වැඩතල අනුවාදය බැලීමට අවශ්‍යද?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "ලුහුබැඳීම් %@ ක් පමණ අවහිර කර ඇත";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "ඔබ පිරික්සයි. %@ වළක්වයි.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "%@ වට්ටෝරුවෙන් කෙටිමං වෙත එක් කරන්න තෝරන්න";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "නිතර ගොඩවදින අඩවි සඳහා කෙටිමං සාදන්න:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "සිරි කෙටිමඟ යොදන්න";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“සිරි, මාගේ %@ වාරය මකන්න.”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "සිරි කෙටිමඟ යොදන්න";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“සිරි, මාගේ ප්‍රියතම අඩවිය අරින්න.”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "ලුහුබැඳීමේ රැකවරණය අක්‍රිය කර බලන්න";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "අඩවියේ අන්තර්ගත මඟහැරී හෝ අමුතු ලෙස ක්‍රියා කරනවාද?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "පෞද්ගලික හා ආරක්‍ෂණ විකල්ප කළමනාකරණයට සැකසුම් වෙත යන්න.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "මෙම පෙරනිමි සැකසුම් ඉහළ ආරක්‍ෂාවක් සපයයි. නමුත් ඔබගේ අවශ්‍යතා වලට යෝග්‍ය ලෙස සැකසුම් හැඩගැසීමට පහසුය.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ මෙම අඩවිය ඔබ ගැන ඔත්තු බැලීම නැවැත්විය. අවහිර වූ දෑ පිළිබඳව තොරතුරු සඳහා පලිහ මත තට්ටු කරන්න.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "ඔබගේ වත්මන් වාරයේ සියළුම ලැකීම් ඉවත් කිරීමට ඕනෑම විටෙක කුණු බඳුන මත තට්ටු කරන්න.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "ඔබ සුරක්‍ෂිතයි!";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "%@ වෙත යාමට ස්පර්ශ හැඳු. යොදාගන්න";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "දැන්වීම් ලුහුබැඳීම්";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "විශ්ලේෂ ලුහුබැඳීම්";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "සම්බන්ධතාවය අනාරක්‍ෂිතයි";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "සම්බන්ධතාවය ආරක්‍ෂිතයි";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "තහවුරු කළේ: %@";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "අන්තර්ගත ලුහුබැඳීම්";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "ලුහුබැඳීමේ රැකවරණය අක්‍රියයි";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "ලුහුබැඳීමේ රැකවරණය";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "මෙය අක්‍රිය කිරීමෙන් ඇතැම් අඩවිවල ගැටළු විසඳේ";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "තව දැනගන්න";
+
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "තවත් සැකසුම්";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "සමාජ ලුහුබැඳීම්";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "මෙම වාරය සඳහා රැකවරණය අක්‍රියයි";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "මෙම වාරය සඳහා රැකවරණය සක්‍රියයි";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "%@ වසන හෝ මකන්න ඔබන තෙක් නවතන්න.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "දියුණු කළ ලුහුබැඳීමේ රැකවරණය";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "ඔබගේ දත්ත ඔබම තබා ගන්න. ඔබ මාර්ගගතව කරන දෑ සොයන බොහෝ පොදු ලුහුබැඳීම් වලින් %@ ඔබව ආරක්‍ෂා කරයි.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "%@ සිට අවහිර කළ ලුහුබැඳීම්";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "අවහිර කිරීමට ලුහුබැඳීම් හා අත්පත්";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "ස්වයං පිරවීමට සබැඳිය යොදන්න";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "අවලංගු";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "අලවන්න හා යන්න";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "මකන්න";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "පිරික්සුම් ඉතිහාසය මැකිණි";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "පිටුවේ සොයන්න: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "අලවන්න";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "සොයන්න හෝ ලිපිනය යොදන්න";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ සඳහා සොයන්න";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "ලුහුබැඳීම් අවහිරයි";
+

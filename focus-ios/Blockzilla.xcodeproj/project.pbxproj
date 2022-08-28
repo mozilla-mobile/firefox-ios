@@ -600,6 +600,10 @@
 		A847EEFB289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Intents.strings"; sourceTree = "<group>"; };
 		A847EEFC289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Intro.strings"; sourceTree = "<group>"; };
 		A847EEFD289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		A892C8D428BBA27600A64567 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A892C8D528BBA27600A64567 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/Intents.strings; sourceTree = "<group>"; };
+		A892C8D628BBA27600A64567 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/Intro.strings; sourceTree = "<group>"; };
+		A892C8D728BBA27600A64567 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A89766D31F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D41F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D51F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -2035,6 +2039,7 @@
 				tt,
 				et,
 				"pa-IN",
+				si,
 			);
 			mainGroup = E4BF2DCA1BACE8CA00DA9D68;
 			packageReferences = (
@@ -2547,6 +2552,7 @@
 				F8E4E8C127444A6900A97CCD /* tt */,
 				A8EA0CE5289A4F4100B99C37 /* et */,
 				A847EEFB289A4F5A002AC855 /* pa-IN */,
+				A892C8D528BBA27600A64567 /* si */,
 			);
 			name = Intents.strings;
 			sourceTree = "<group>";
@@ -2634,6 +2640,7 @@
 				F8E4E8C227444A6900A97CCD /* tt */,
 				A8EA0CE6289A4F4100B99C37 /* et */,
 				A847EEFC289A4F5A002AC855 /* pa-IN */,
+				A892C8D628BBA27600A64567 /* si */,
 			);
 			name = Intro.strings;
 			sourceTree = "<group>";
@@ -2721,6 +2728,7 @@
 				F8E4E8C327444A6900A97CCD /* tt */,
 				A8EA0CE7289A4F4100B99C37 /* et */,
 				A847EEFD289A4F5A002AC855 /* pa-IN */,
+				A892C8D728BBA27600A64567 /* si */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2808,6 +2816,7 @@
 				F8E4E8C027444A6900A97CCD /* tt */,
 				A8EA0CE4289A4F4100B99C37 /* et */,
 				A847EEFA289A4F5A002AC855 /* pa-IN */,
+				A892C8D428BBA27600A64567 /* si */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
