@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "주소와 검색";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "읽기 목록에 추가";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "주소창";
 
@@ -204,6 +207,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "설정에서 끄기";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "닫기";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "읽기 목록에 페이지를 추가하지 못했습니다.";
@@ -577,6 +583,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "지난주";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "북마크";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "방문 기록";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "취소";
 
@@ -745,6 +757,12 @@
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "다운로드";
 
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "이 사이트에서 보호 꺼짐";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "이 사이트에서 보호 켜짐";
+
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "도움말";
 
@@ -892,6 +910,15 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "나중에";
 
+/* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Description.v106" = "다른 기기에서 탭과 비밀번호를 가져와 중단한 부분부터 다시 시작하세요.";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
+"Onboarding.Sync.Skip.Action.v106" = "건너뛰기";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Title.v106" = "휴대전화에서 노트북으로 왔다가 다시 돌아가기";
+
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "가입 및 로그인";
 
@@ -901,11 +928,32 @@
 /* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
 "Onboarding.SyncTitle.v102" = "흐름을 유지하기 위한 동기화";
 
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.Classic.v106" = "클래식 배경화면";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "한정판 바탕화면";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v106" = "더 많은 바탕화면 살펴보기";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v106" = "나를 표현하는 배경화면을 선택하세요.";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Title.v106" = "다른 배경화면 사용해보기";
+
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "배경화면 설정";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
 "Onboarding.WallpaperTitle.v102" = "Firefox 배경화면 선택";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Description.v106" = "Firefox는 이익보다 사람을 우선시하고 기본적으로 개인 정보를 보호합니다.";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v106" = "나만의 인터넷에 오신 것을 환영합니다";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "사용하기";
@@ -966,6 +1014,12 @@
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "읽기 모드 사용 가능";
+
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "읽음으로 표시";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "안읽음으로 표시";
 
 /* Panel accessibility label */
 "Reading list" = "읽기 목록";
@@ -1066,6 +1120,15 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "확인";
 
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "기본 검색 엔진";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "기본 검색 엔진";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "검색";
+
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Mozilla가 문제를 고칠 수 있도록 보고서를 전송하시겠습니까?";
 
@@ -1077,6 +1140,9 @@
 
 /* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "취소";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "닫기";
 
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "사용 가능 기기:";
@@ -1215,6 +1281,9 @@
 
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "테마는 화면의 밝기에 따라 자동으로 변경됩니다. 언제 테마가 변경될지 값을 설정할 수 있습니다. 원은 현재 화면의 밝기를 나타냅니다.";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "자동";
 
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "모드 변경";
@@ -1621,6 +1690,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "비활성 탭 숨기기";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "검색";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "탭 추가";
 
@@ -1651,6 +1723,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "열린 탭";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "탭 보기";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "읽기 모드에서 볼 수 없는 페이지 입니다.";
 
@@ -1662,6 +1737,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "이번주";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "어제";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "나중에";
@@ -1707,6 +1785,24 @@
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "않읽음";
+
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v106" = "로그인";
+
+/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v106" = "이제 홈페이지에서 다른 기기의 탭을 가져와서 중단한 부분부터 다시 시작하세요.";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "더 쉬워진 화면 전환";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v106" = "시작하기";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "새로운 색상. 새로운 편리함. 이익보다 사람에 대한 헌신.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v106" = "나만의 인터넷에 오신 것을 환영합니다";
 
 /* Debug option */
 "Use stage servers" = "스테이지 서버 사용";

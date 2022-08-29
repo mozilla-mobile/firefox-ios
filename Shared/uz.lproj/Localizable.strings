@@ -16,6 +16,15 @@
 /* About settings section title */
 "About" = "Hakkında";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Yorliqlarga qoʻshish";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Yopishtirish";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Ajratish";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Sekme ekle";
 

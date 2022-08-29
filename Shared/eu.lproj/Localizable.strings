@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Helbidea eta bilaketa";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Gehitu irakurketa-zerrendan";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "Helbide-barra";
 
@@ -204,6 +207,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Desaktibatu ezarpenetan";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "Itxi";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Ezin da orria irakurketa-zerrendan gehitu";
@@ -577,6 +583,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Aurreko astea";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Laster-markak";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Historia";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Utzi";
 
@@ -745,6 +757,12 @@
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Deskargak";
 
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Babesak inaktibo daude gune honetarako";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Babesak aktibo daude gune honetarako";
+
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Laguntza";
 
@@ -892,6 +910,15 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "Une honetan ez";
 
+/* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Description.v106" = "Erabili zure beste gailuetako fitxak eta pasahitzak, utzitako lekutik jarraitu ahal izateko.";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
+"Onboarding.Sync.Skip.Action.v106" = "Saltatu";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Title.v106" = "Egin salto telefonotik ordenagailu eramangarrira eta atzera";
+
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "Eman izena eta hasi saioa";
 
@@ -901,11 +928,32 @@
 /* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
 "Onboarding.SyncTitle.v102" = "Sinkronizatu zure etorria ez eteteko";
 
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.Classic.v106" = "Horma-paper klasikoa";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Edizio mugatuko horma-papera";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v106" = "Arakatu horma-paper gehiago";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v106" = "Aukeratu zuri egokitzen zaizun horma-papera.";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Title.v106" = "Probatu kolore ukitu bat";
+
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "Ezarri horma-papera";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
 "Onboarding.WallpaperTitle.v102" = "Aukeratu Firefoxen horma-papera";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Description.v106" = "Firefoxek jendea jartzen du irabazi-asmoen aurretik eta zure pribatutasuna defendatzen du lehenespenez.";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v106" = "Ongi etorri Internet independente batera";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Hasi nabigatzen";
@@ -966,6 +1014,12 @@
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Irakurketa modua erabilgarri";
+
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Markatu irakurritako gisa";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Markatu irakurri gabeko gisa";
 
 /* Panel accessibility label */
 "Reading list" = "Irakurketa-zerrenda";
@@ -1066,6 +1120,15 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Ados";
 
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Bilaketa-motor lehenetsia";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "Bilaketa-motor lehenetsia";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "Bilatu";
+
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Bidali hutsegite-txostena Mozillari arazoa konpondu ahal izateko?";
 
@@ -1077,6 +1140,9 @@
 
 /* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "Utzi";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "Itxi";
 
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "Gailu erabilgarriak:";
@@ -1215,6 +1281,9 @@
 
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "Itxura automatikoki aldatuko da zure pantailaren argitasunaren arabera. Itxura aldatzeko kontuan hartuko den atalasea ezar dezakezu. Zirkuluak zure pantailaren uneko argitasuna adierazten du.";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "Automatikoa";
 
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "Aldatu modua";
@@ -1621,6 +1690,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Ezkutatu fitxa inaktiboak";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Bilatu";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Gehitu fitxa";
 
@@ -1651,6 +1723,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "Irekitako fitxak";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Erakutsi fitxak";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Orria ezin da irakurtzeko ikuspegian bistaratu.";
 
@@ -1662,6 +1737,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "aste honetan";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "atzo";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "Une honetan ez";
@@ -1707,6 +1785,24 @@
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "irakurri gabe";
+
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v106" = "Hasi saioa";
+
+/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v106" = "Berrekin utzitako lekutik zure hasierako orriko beste gailuetako fitxekin.";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "Pantailak aldatzea inoiz baino errazagoa da";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v106" = "Hasi erabiltzen";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "Kolore gehiago. Egokitasun berria. Irabazi-asmoen gainetik, jendearekiko betidaniko konpromisoa.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v106" = "Ongi etorri Internet pertsonalago batera";
 
 /* Debug option */
 "Use stage servers" = "Erabili probetarako zerbitzariak";
