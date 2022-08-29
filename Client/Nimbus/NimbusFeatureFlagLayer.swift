@@ -28,15 +28,15 @@ final class NimbusFeatureFlagLayer {
                 .topSites:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
+        case .contextualHintForJumpBackInSyncedTab:
+            return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
+
         case .copyForJumpBackIn,
                 .copyForToolbar:
             return checkHintCopyFeature(for: featureID, from: nimbus)
 
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
-
-        case .contextualHintForJumpBackInSyncedTab:
-            return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
         case .sponsoredPocket:
             return checkNimbusForPocketSponsoredStoriesFeature(using: nimbus)
@@ -128,7 +128,7 @@ final class NimbusFeatureFlagLayer {
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
     ) -> Bool {
-        let config = nimbus.features.contextualHintCopy.value()
+        let config = nimbus.features.contextualHintFeature.value().hintCopy
 
         switch featureID {
         case .copyForJumpBackIn: return config.jumpBackIn

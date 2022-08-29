@@ -4,18 +4,17 @@
 
 import Foundation
 
-/// This specifies the public facing interface any consumers will interact with.
-protocol ContextualHintCopyProviderProtocol {
-    func getCopyFor(_ copyType: ContextualHintCopyType, of hint: ContextualHintType) -> String
+enum ContextualHintCopyType {
+    case action, description
 }
 
 /// `ContextualHintCopyProvider` exists to provide the requested description or action strings back
 /// for the specified `ContextualHintType`.
-struct ContextualHintCopyProvider: ContextualHintCopyProviderProtocol, FeatureFlaggable {
+struct ContextualHintCopyProvider: FeatureFlaggable {
     typealias CFRStrings = String.ContextualHints
 
     /// Arrow direction infuences toolbar copy, so it exists here.
-    var arrowDirection: UIPopoverArrowDirection?
+    private var arrowDirection: UIPopoverArrowDirection?
 
     init(arrowDirecton: UIPopoverArrowDirection? = nil) {
         self.arrowDirection = arrowDirecton

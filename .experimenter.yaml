@@ -1,15 +1,4 @@
 ---
-contextual-hint-copy:
-  description: This set holds all copy related items of contextual hints.
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    jump-back-in:
-      type: boolean
-      description: "If true, we show the new copy for the hint description."
-    toolbar:
-      type: boolean
-      description: "If true, we show the new copy for the hint description."
 contextual-hint-feature:
   description: This set holds contextual hints that can be toggled to hide or show based on these settings.
   hasExposure: true
@@ -18,6 +7,9 @@ contextual-hint-feature:
     features-enabled:
       type: json
       description: This property provides a lookup table of whether specific contextual hints are enabled.
+    hint-copy:
+      type: json
+      description: This set allows us to experiment with changing hint descriptions.
 general-app-features:
   description: The feature that contains feature flags for the entire application
   hasExposure: true

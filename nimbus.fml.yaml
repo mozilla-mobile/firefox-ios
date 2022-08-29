@@ -308,42 +308,35 @@ features:
         {
           "jump-back-in-synced-tab-contextual-hint": false
         }
-    defaults:
-      - channel: beta
-        value: {
-          "features-enabled": {
-            "jump-back-in-synced-tab-contextual-hint": true
-          }
+      hint-copy: 
+        description: This set allows us to experiment with changing hint descriptions.
+        type: HintCopy
+        default: {
+          "jump-back-in": false,
+          "toolbar": false
         }
+    defaults:
       - channel: developer
         value: {
           "features-enabled": {
             "jump-back-in-synced-tab-contextual-hint": true
+          },
+          "hint-copy": {
+            "jump-back-in": true,
+            "toolbar": true
           }
         }
-  contextual-hint-copy:
-    description: This set holds all copy related items of contextual hints. 
-    variables:
-      jump-back-in:
-        description: If true, we show the new copy for the hint description.
-        type: Boolean
-        default: false
-      toolbar:
-        description: If true, we show the new copy for the hint description.
-        type: Boolean
-        default: false
-    defaults:
       - channel: beta
         value: {
-          "jump-back-in": true,
-          "toolbar": true
+          "features-enabled": {
+            "jump-back-in-synced-tab-contextual-hint": true
+          },
+          "hint-copy": {
+            "jump-back-in": true,
+            "toolbar": true
+          }
         }
-      - channel: developer
-        value: {
-          "jump-back-in": true,
-          "toolbar": true
-        }
-
+        
   messaging:
     description: >
       Configuration for the messaging system.
@@ -516,6 +509,18 @@ types:
         status:
           type: Boolean
           description: Whether or not the feature is enabled
+          default: false
+
+    HintCopy:
+      description: The hint and its associated description text.
+      fields:
+        jump-back-in:
+          description: If true, we show the new copy for the hint description.
+          type: Boolean
+          default: false
+        toolbar:
+          description: If true, we show the new copy for the hint description.
+          type: Boolean
           default: false
 
     AwesomeBar:

@@ -19,10 +19,6 @@ enum ContextualHintType: String {
     case toolbarLocation = "ToolbarLocation"
 }
 
-enum ContextualHintCopyType {
-    case action, description
-}
-
 class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
     typealias CFRPrefsKeys = PrefsKeys.ContextualHints
     typealias CFRStrings = String.ContextualHints
