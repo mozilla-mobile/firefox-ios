@@ -75,13 +75,16 @@ class WallpaperSettingsViewModel {
             strongSelf.tabManager.selectTab(tab)
         }
 
-        return WallpaperSettingsHeaderViewModel(title: title,
-                                                titleA11yIdentifier: "title", // todo
-                                                description: description,
-                                                descriptionA11yIdentifier: "description", // todo
-                                                buttonTitle: buttonTitle,
-                                                buttonA11yIdentifier: "button", // todo
-                                                buttonAction: buttonAction)
+        let a11yIds = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Wallpaper.self
+
+        return WallpaperSettingsHeaderViewModel(
+            title: title,
+            titleA11yIdentifier: "\(a11yIds.collectionTitle)_\(sectionIndex)",
+            description: description,
+            descriptionA11yIdentifier: "\(a11yIds.collectionDescription)_\(sectionIndex)",
+            buttonTitle: buttonTitle,
+            buttonA11yIdentifier: "\(a11yIds.collectionButton)_\(sectionIndex)",
+            buttonAction: buttonAction)
     }
 
     func updateSectionLayout(for traitCollection: UITraitCollection) {
@@ -100,7 +103,7 @@ class WallpaperSettingsViewModel {
         }
         return cellViewModel(for: wallpaper,
                              collectionType: collection.type,
-                             number: indexPath.row)
+                             indexPath: indexPath)
     }
 
     func downloadAndSetWallpaper(at indexPath: IndexPath, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -139,16 +142,17 @@ private extension WallpaperSettingsViewModel {
 
     func cellViewModel(for wallpaper: Wallpaper,
                        collectionType: WallpaperCollectionType,
-                       number: Int
+                       indexPath: IndexPath
     ) -> WallpaperCellViewModel {
-        let a11yId = "\(AccessibilityIdentifiers.Onboarding.Wallpaper.card)_\(number)"
+        let wallpaperA11yIds = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Wallpaper.self
+        let a11yId = "\(wallpaperA11yIds.card)_\(indexPath.section)_\(indexPath.row)"
         var a11yLabel: String
 
         switch collectionType {
         case .classic:
-            a11yLabel = "\(String.Onboarding.ClassicWallpaper) \(number)"
+            a11yLabel = "\(String.Settings.Homepage.Wallpaper.ClassicWallpaper) \(indexPath.row + 1)"
         case .limitedEdition:
-            a11yLabel = "\(String.Onboarding.LimitedEditionWallpaper) \(number)"
+            a11yLabel = "\(String.Settings.Homepage.Wallpaper.LimitedEditionWallpaper) \(indexPath.row + 1)"
         }
 
         let cellViewModel = WallpaperCellViewModel(image: wallpaper.thumbnail,
