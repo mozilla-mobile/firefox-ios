@@ -17,7 +17,7 @@ jobs:
           ref: main
       - name: "Update Experiments JSON"
         id: update-experiments-json
-        uses: mozilla-mobile/update-initial-experiments@v1
+        uses: mozilla-mobile/update-experiments@v1
         with:
           repo-path: firefox-ios
           output-path: Client/Experiments/initial_experiments.json

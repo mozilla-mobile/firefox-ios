@@ -1,3 +1,12 @@
 /* Done button in Find in Page Toolbar. */
 "Done" = "අහවරයි";
 
+/* Text selection menu item */
+"Find in Page" = "පිටුවේ සොයන්න";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "ඊළඟ පිටුව-තුළ ප්‍රතිඵලය";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "කලින් පිටුව-තුළ ප්‍රතිඵලය";
+

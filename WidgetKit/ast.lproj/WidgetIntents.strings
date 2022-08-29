@@ -1,35 +1,14 @@
 /* (No Comment) */
-"eqyNJg" = "Aición rápida";
-
-/* (No Comment) */
-"scEmjs" = "Busca privada nueva";
-
-/* (No Comment) */
-"w9jdPK" = "Aición rápida";
-
-/* (No Comment) */
-"xRJbBP" = "Busca nueva";
-
-/* (No Comment) */
-"2GqvPe" = "Siirry kopioituun linkkiin";
-
-/* (No Comment) */
-"PzSrmZ-2GqvPe" = "Just to confirm, you wanted ‘Go to Copied Link’?";
-
-/* (No Comment) */
-"PzSrmZ-eHmH1H" = "Just to confirm, you wanted ‘Clear Private Tabs’?";
-
-/* (No Comment) */
-"PzSrmZ-scEmjs" = "Just to confirm, you wanted ‘New Private Search’?";
-
-/* (No Comment) */
-"PzSrmZ-xRJbBP" = "Just to confirm, you wanted ‘New Search’?";
+"2GqvPe" = "Go to Copied Link";
 
 /* (No Comment) */
 "ctDNmu" = "Quick access to various Firefox actions";
 
 /* (No Comment) */
 "eHmH1H" = "Clear Private Tabs";
+
+/* (No Comment) */
+"eqyNJg" = "Aición rápida";
 
 /* (No Comment) */
 "eV8mOT" = "Quick Action Type";
@@ -45,3 +24,25 @@
 
 /* (No Comment) */
 "fi3W24-xRJbBP" = "There are ${count} options matching ‘New Search’.";
+
+/* (No Comment) */
+"PzSrmZ-2GqvPe" = "Just to confirm, you wanted ‘Go to Copied Link’?";
+
+/* (No Comment) */
+"PzSrmZ-eHmH1H" = "Just to confirm, you wanted ‘Clear Private Tabs’?";
+
+/* (No Comment) */
+"PzSrmZ-scEmjs" = "Just to confirm, you wanted ‘New Private Search’?";
+
+/* (No Comment) */
+"PzSrmZ-xRJbBP" = "Just to confirm, you wanted ‘New Search’?";
+
+/* (No Comment) */
+"scEmjs" = "Busca privada nueva";
+
+/* (No Comment) */
+"w9jdPK" = "Aición rápida";
+
+/* (No Comment) */
+"xRJbBP" = "Busca nueva";
+

@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "加強型追蹤保護會封鎖惡意軟體並防止追蹤器追蹤。";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "自動保護隱私";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "下一頁";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "登入";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "註冊";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "搜尋建議功能讓您可以更快抵達想要的網站。";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "更快找到想要的東西";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "將 Firefox 上的書籤、瀏覽紀錄、網站密碼帶到此裝置。";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "在不同裝置間同步 Firefox";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "可在 Firefox 使用任何郵件程式，而不只是內建的「郵件」App。";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "設定要使用的郵件程式";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "點擊眼罩圖示，打開隱私分頁，不僅可阻擋追蹤廣告，也不會留下瀏覽紀錄。";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "隱私瀏覽不留痕跡";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "在任何使用 Firefox 的地方都保護登入資訊。";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "安全同步";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "想找點不一樣的東西嗎？可在設定畫面中選擇不同的預設搜尋引擎，或自行新增。";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "用你的方式搜尋";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "登入帳號即可同步，並使用更多功能。";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "將您的書籤、瀏覽紀錄、密碼同步到手機。";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "快速上網，確保隱私，永遠挺你。";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "歡迎使用 Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "開始瀏覽";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "開啟同步…";
 
