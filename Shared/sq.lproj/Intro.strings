@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "Mbrojtja e Thelluar Nga Gjurmimi bllokon malware-in dhe ndal gjurmues.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "Privatësi e Vetvetishme";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Pasuesi";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Hyni";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Regjistrohuni";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "Sugjerimet për kërkimin ju shpien më shpejt te sajtet.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Kërkim i Shpejtë";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Sillni te Firefox-i në këtë pajisje faqerojtës, historik dhe fjalëkalime.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Njëkohësoni Firefox-in Mes Pajisjesh";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Përdorni në Firefox çfarëdo aplikacioni email, jo thjesht Mail-in.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Mundësi për “Erdhi posta!”";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Prekni ikonën maskë që të kaloni nën mënyrën Shfletim Privat.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Shfletoni si të mos ju shihte njeri";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Mbroni kredencialet tuaj të hyrjeve dhe të dhënat tuaja kudo ku përdorni Firefox-in.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Njëkohësim i Sigurt";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Po kërkoni për diçka tjetër? Zgjidhni te Rregullimet një tjetër motor parazgjedhje kërkimesh (ose shtoni tuajin).";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Kërkimi juaj, me mënyrën tuaj";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Bëni hyrjen te llogaria juaj që të bëhet njëkohësimi dhe të përdorni më tepër veçori.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Njëkohësoni faqerojtësit, historikun dhe fjalëkalimet te telefoni juaj.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "I shpejtë, privat, dhe krah jush.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Mirë se vini në Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Filloni të Shfletoni";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Aktivizoni Sync-un…";
 

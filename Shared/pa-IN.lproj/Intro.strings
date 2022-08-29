@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "ਵਾਧਾ ਕੀਤੀ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਖਤਰਨਾਕ ਚੀਜ਼ਾਂ ਨੂੰ ਬਲੌਕ ਕਰਦੀ ਹੈ ਅਤੇ ਟਰੈਕਰਾਂ ਨੂੰ ਰੋਕਦੀ ਹੈ।";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "ਆਟੋਮੈਟਿਕ ਪਰਦੇਦਾਰੀ";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "ਅੱਗੇ";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "ਸਾਈਨ ਇਨ";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "ਸਾਈਨ ਅੱਪ";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "ਖੋਜ ਸੁਝਾਵਾਂ ਨਾਲ ਤੁਹਾਨੂੰ ਵਧੇਰੇ ਤੇਜ਼ੀ ਨਾਲ ਵੈੱਬਸਾਈਟਾਂ ਮਿਲ ਜਾਂਦੀਆਂ ਹਨ।";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "ਤੇਜ਼ ਖੋਜ";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "ਇਸ ਡਿਵਾਈਸ 'ਤੇ ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਬੁੱਕਮਾਰਕ, ਇਤਿਹਾਸ ਅਤੇ ਪਾਸਵਰਡ ਲਿਆਓ।";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "ਡਿਵਾਈਸਾਂ ਵਿਚਕਾਰ ਫਾਇਰਫਾਕਸ ਨੂੰ ਸਿੰਕ ਕਰੋ";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "ਫਾਇਰਫਾਕਸ ਨਾਲ — ਸਿਰਫ਼ ਮੇਲ ਨਹੀਂ — ਕੋਈ ਵੀ ਈਮੇਲ ਐਪ ਨੂੰ ਵਰਤੋ।";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "ਤੁਹਾਨੂੰ ਮੇਲ ਆਈ ਹੈ… ਚੋਣਾਂ";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ ਕਰਨ ਦੇ ਢੰਗ ਵਿੱਚ ਜਾਣ ਲਈ ਮਖੌਟਾ ਆਈਕਾਨ ਨੂੰ ਛੂਹੋ।";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "ਇੰਝ ਬਰਾਊਜ਼ ਕਰੋ ਜਿਵੇਂ ਕੋਈ ਵੇਂਹਦਾ ਨਾ ਹੋਵੇ";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "ਤੁਸੀਂ ਫਾਇਰਫਾਕਸ ਦੀ ਵਰਤੋਂ ਕਰਦੇ ਹੋਏ ਹਰ ਥਾਂ 'ਤੇ ਆਪਣੇ ਲਾਗਇਨ ਅਤੇ ਡਾਟੇ ਨੂੰ ਸੁਰੱਖਿਅਤ ਕਰੋ।";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "ਸੁਰੱਖਿਅਤ ਸਿੰਕ";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "ਕੁਝ ਵੱਖਰਾ ਲੱਭ ਰਹੇ ਹੋ? ਸੈਟਿੰਗਾਂ ਵਿੱਚੋਂ ਮੂਲ ਖੋਜ ਇੰਜਣ ਨੂੰ ਚੁਣੋ (ਜਾਂ ਆਪਣਾ ਖੁਦ ਦਾ ਜੋੜੋ)।";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "ਤੁਹਾਡੀ ਖੋਜ, ਤੁਹਾਡਾ ਢੰਗ";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "ਸਿੰਕ ਕਰਨ ਅਤੇ ਹੋਰ ਫੀਚਰਾਂ ਲਈ ਪਹੁੰਚ ਵਾਸਤੇ ਆਪਣੇ ਖਾਤੇ ਵਿੱਚ ਸਾਈਨ ਇਨ ਕਰੋ।";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "ਆਪਣੇ ਬੁੱਕਮਾਰਕਾਂ, ਅਤੀਤ ਅਤੇ ਪਾਸਵਰਡਾਂ ਨੂੰ ਆਪਣੇ ਫ਼ੋਨ ਨਾਲ ਸਿੰਕ ਕਰੋ।";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "ਤੇਜ਼, ਨਿੱਜੀ ਅਤੇ ਤੁਹਾਡੇ ਪੱਖ ਵਿੱਚ।";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "ਫਾਇਰਫਾਕਸ ਵਲੋਂ ਜੀ ਆਇਆਂ ਨੂੰ";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "ਬਰਾਊਜ਼ ਕਰਨਾ ਸ਼ੁਰੂ ਕਰੋ";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "…ਸਿੰਕ ਨੂੰ ਚਾਲੂ ਕਰੋ";
 

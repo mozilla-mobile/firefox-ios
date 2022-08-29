@@ -1,6 +1,3 @@
-/* Button string to open settings that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Button" = "सेटिंग्स में जाहोॅ";
-
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "जान्हो केना ";
 

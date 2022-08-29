@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "ᱵᱟᱲᱦᱟᱣᱟᱠᱟᱱ ᱯᱟᱧᱡᱟ ᱫᱟᱱᱟᱲ ᱪᱤᱱᱦᱟᱹ ᱟᱰ ᱢᱟᱞᱣᱮᱨ ᱟᱨ ᱯᱟᱧᱡᱟ ᱫᱟᱱᱟᱲ ᱠᱚᱭ ᱟᱴᱠᱟᱣ ᱠᱚᱟᱭ ᱾";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "ᱟᱪ ᱛᱮᱭᱟᱠ ᱱᱤᱡᱮᱨᱟᱠ";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "ᱤᱱᱟᱹ ᱛᱟᱭᱚᱢ";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "ᱥᱩᱦᱤ";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "ᱥᱚᱞᱟᱦ ᱥᱮᱸᱫᱽᱨᱟ ᱟᱢ ᱣᱮᱵᱥᱟᱭᱤᱴ ᱛᱮ ᱞᱚᱜᱚᱱ ᱤᱫᱤ ᱢᱮᱟᱭ ᱾";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "ᱞᱚᱜᱚᱱ ᱥᱮᱸᱫᱽᱨᱟ";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "ᱱᱚᱶᱟ ᱥᱟᱫᱷᱚᱱ ᱨᱮ Firefox ᱛᱮ ᱵᱩᱠᱢᱟᱨᱠ , ᱦᱤᱛᱟᱹᱞ, ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱟᱹᱜᱩᱭ ᱢᱮ ᱾";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "ᱥᱟᱫᱷᱚᱱ ᱛᱟᱞᱟ ᱛᱮ Firefox ᱛᱚᱞ ᱡᱚᱠᱷᱟᱭᱮᱢ";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Firefox ᱥᱟᱞᱟᱜ — ᱠᱷᱟᱹᱞᱤ ᱢᱮᱞ ᱜᱮ ᱵᱟᱝᱟ — ᱚᱞᱜᱟ ᱤᱼᱢᱮᱞ ᱮᱯᱯ ᱵᱮᱵᱷᱟᱨ ᱢᱮ ᱾";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "ᱟᱢ ᱢᱮᱞ ᱮᱢ ᱧᱟᱢ ᱠᱮᱜᱼᱟ… ᱚᱯᱥᱚᱱᱥ";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "ᱱᱤᱡᱮᱨᱟᱠ ᱯᱟᱱᱛᱮᱭᱟᱠ ᱨᱮ ᱜᱷᱟᱥᱠᱟᱣ ᱪᱟᱞᱟ ᱞᱟᱹᱜᱤᱛ ᱛᱮ ᱢᱟᱥᱠ ᱟᱸᱭᱠᱚᱱ ᱨᱮ ᱚᱛᱟᱭ ᱢᱮ ᱾";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "ᱵᱨᱟᱩᱡ ᱢᱮ ᱡᱮᱞᱠᱟ ᱚᱠᱚᱭ ᱦᱚᱸ ᱵᱟᱠᱚ ᱧᱮᱞᱮᱫ ᱢᱮᱭᱟ";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "ᱟᱢᱟᱠ ᱵᱚᱞᱚᱱ ᱠᱚ ᱟᱨ ᱥᱟᱠᱷᱤᱭᱟᱛ ᱠᱚ ᱨᱚᱯᱷᱟᱭ ᱢᱮ ᱡᱟᱦᱟᱱ ᱨᱤᱜᱤ ᱟᱢ Firefox ᱵᱮᱵᱷᱟᱨ ᱟᱢ ᱾";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "ᱡᱚᱯᱛᱤ ᱛᱚᱞ ᱡᱚᱠᱷᱟ";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "ᱡᱟᱦᱟᱱᱟᱜ ᱯᱟᱱᱛᱮᱜᱼᱟᱢ? ᱚᱞᱜᱟ ᱦᱩᱲᱟᱹᱜ ᱯᱟᱱᱛᱮ ᱮᱱᱡᱤᱱ (ᱟᱨ ᱵᱟᱝ ᱟᱢᱟᱜ ᱥᱮᱞᱮᱫ ᱢᱮ) ᱫᱚ ᱥᱟᱞᱟᱣ ᱨᱮ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "ᱟᱢᱟᱠ ᱥᱮᱸᱫᱽᱨᱟ, ᱟᱢᱟᱠ ᱦᱚᱨ ᱛᱮ";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "ᱟᱭᱩᱨ ᱢᱤᱫ ᱟᱨ ᱟᱨᱦᱚᱸ ᱯᱷᱤᱪᱚᱨ ᱞᱟᱹᱜᱤᱫ ᱟᱢᱟᱜ ᱠᱷᱟᱛᱟ ᱨᱮ ᱥᱩᱦᱤ ᱵᱚᱞᱚ ᱪᱷᱚ ᱢᱮ ᱾";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "ᱵᱩᱠᱢᱟᱨᱠ , ᱦᱤᱛᱟᱹᱞ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱯᱷᱚᱱ ᱛᱮ ᱟᱹᱭᱩᱨ ᱢᱤᱫ ᱢᱮ";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "ᱞᱚᱜᱚᱱ, ᱱᱤᱡᱚᱨᱟᱜ ᱟᱨ ᱟᱢᱟᱜ ᱥᱟᱢᱟᱝ ᱨᱮ ᱾";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Firefox ᱨᱮ ᱥᱟᱹᱜᱩᱱ ᱫᱟᱨᱟᱢ";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "ᱯᱟᱱᱛᱮᱭᱟᱠ ᱮᱦᱚᱵ ᱢᱮ";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱚᱱ ᱢᱮ…";
 

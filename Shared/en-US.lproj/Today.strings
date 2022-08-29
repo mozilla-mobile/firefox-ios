@@ -2,8 +2,7 @@
 "TodayWidget.ClosePrivateTabsButton" = "Close Private Tabs";
 
 /* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV2" = "Close
-Private Tabs";
+"TodayWidget.ClosePrivateTabsLabelV2" = "Close\nPrivate Tabs";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
 "TodayWidget.FirefoxShortcutGalleryDescription" = "Add Firefox shortcuts to your Home screen.";
@@ -12,8 +11,7 @@ Private Tabs";
 "TodayWidget.GoToCopiedLinkLabelV1" = "Go to copied link";
 
 /* Go to copied link */
-"TodayWidget.GoToCopiedLinkLabelV2" = "Go to
-Copied Link";
+"TodayWidget.GoToCopiedLinkLabelV2" = "Go to\nCopied Link";
 
 /* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
 "TodayWidget.MoreTabsLabel" = "+%d More…";
@@ -36,6 +34,9 @@ Copied Link";
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Quick Actions";
 
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox Shortcuts";
+
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Add shortcuts to your open tabs.";
 
@@ -43,16 +44,17 @@ Copied Link";
 "TodayWidget.QuickViewGalleryTitle" = "Quick View";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Search in
-Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Search in\nFirefox";
 
 /* Search in private tab */
-"TodayWidget.SearchInPrivateTabLabelV2" = "Search in
-Private Tab";
+"TodayWidget.SearchInPrivateTabLabelV2" = "Search in\nPrivate Tab";
 
 /* Description for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryDescription" = "Add shortcuts to frequently and recently visited sites.";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Top Sites";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Website Shortcuts";
 

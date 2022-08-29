@@ -1,45 +1,9 @@
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "આગળ";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "સાઇન ઇન";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "સાઇન અપ કરો";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "કોઈપણ ઇમેઇલ એપ્લિકેશનનો ઉપયોગ કરો — ફક્ત મેઇલ નહીં — Firefox સાથે.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "તમારી પાસે મેઇલ… વિકલ્પો";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "ખાનગી બ્રાઉઝિંગ મોડમાં આવવા માટે માસ્ક આયકનને ટેપ કરો.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "એવી રીતે બ્રાઉઝ કરો કે તમને કોઈ જોતું નથી";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "કંઈક અલગ શોધી રહ્યાં છો? સેટિંગ્સમાં બીજું મૂળભૂત શોધ એંજિન (અથવા તમારું પોતાનું ઉમેરો) પસંદ કરો.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "તમારી શોધ, તમારી રીત";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "વધુ સુવિધાઓ સમન્વયિત કરવા અને ઍક્સેસ કરવા માટે તમારા એકાઉન્ટમાં સાઇન ઇન કરો.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "તમારા બુકમાર્ક્સ, ઇતિહાસ અને પાસવર્ડોને તમારા ફોન પર સમન્વયિત કરો.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "ઝડપી, ખાનગી અને તમારી બાજુએ.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Firefox માં તમારું સ્વાગત છે";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "બ્રાઉઝિંગ પ્રારંભ કરો";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "સમન્વયન ચાલુ કરો…";
 
