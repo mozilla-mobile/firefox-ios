@@ -44,27 +44,30 @@ extension UIView {
     /// using the desired blur style.
     ///
     /// - Parameter style: The strength of the blur desired
-    func addBlurEffectWithClearBackgroundAndClipping(using style: UIBlurEffect.Style) {
-        self.clipsToBounds = true
-        self.backgroundColor = .clear
-        self.addBlurEffect(using: style)
+    func addBlurEffectWithClearBackgroundAndClipping(using style: UIBlurEffect.Style,
+                                                     for view: UIView) {
+        view.clipsToBounds = true
+        view.backgroundColor = .clear
+        addBlurEffect(using: style, for: view)
     }
 
     /// Shortcut to set a blur effect on a view, given a specified style of blur desired.
     ///
     /// - Parameter style: The strength of the blur desired
-    func addBlurEffect(using style: UIBlurEffect.Style) {
+    func addBlurEffect(using style: UIBlurEffect.Style,
+                       for view: UIView) {
         let blurEffect = UIBlurEffect(style: style)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.layer.cornerRadius = 5
+        blurEffectView.clipsToBounds = true
         blurEffectView.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(blurEffectView)
-        self.sendSubviewToBack(blurEffectView)
+        insertSubview(blurEffectView, at: 0)
 
         NSLayoutConstraint.activate([
-            blurEffectView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            blurEffectView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            blurEffectView.topAnchor.constraint(equalTo: self.topAnchor),
-            blurEffectView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            blurEffectView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            blurEffectView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            blurEffectView.topAnchor.constraint(equalTo: view.topAnchor),
+            blurEffectView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
