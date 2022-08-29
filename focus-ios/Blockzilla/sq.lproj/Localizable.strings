@@ -73,26 +73,11 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Shtoni URL Vetjake";
 
-/* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Shtoni dhe administroni URLra vetjake vetëplotësimesh.";
-
-/* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "URL Vetjake";
-
-/* Title for the default URL list section */
-"Autocomplete.customTitle" = "LISTË URLsh VETJAKE";
-
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "U shtua URL Vetjake e re.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "Aktivizojeni që %@ të vetëplotësojë te shtylla e adresave mbi 450 URL popullore.";
-
-/* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "Vetëplotësim";
-
-/* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "LISTË URLsh PARAZGJEDHJE";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "E çaktivizuar";
@@ -121,23 +106,14 @@
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Sesion i Ri";
 
-/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "Shkyçeni %@ kur rihapet, që të parandalohen hyrje të pa-autorizuara.";
-
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Mbrapsht";
-
-/* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "Kopjoje Adresën";
 
 /* Toast displayed after a URL has been copied to the clipboard */
 "browser.copyAddressToast" = "URL-ja u Kopjua Te e Papastra";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopjoje";
-
-/* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "Shtoni URL Vetjake";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Përpara";
@@ -148,32 +124,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Rregullime";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "Ndajeni me të tjerë";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Ndale";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Përzgjidhni Shtyllë Vendesh";
-
-/* Label on button to cancel edits */
-"Cancel" = "Anuloje";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Kopjo Figurën";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Kopjoji Lidhjen";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Lidhja që kopjuat:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Ruajeni Figurën";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Ndajeni Lidhjen Me të Tjerët";
 
 /* Label on button to complete edits */
 "Done" = "U bë";
@@ -196,26 +151,11 @@
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ dëshiron të hapë %2$@";
 
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Thirrje";
-
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "Anuloje";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Email";
-
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "Tani po dilni nga %@.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Hapni Shitoren e Aplikacioneve";
-
-/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ dëshiron të hapë App Store-in.";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Hapni Harta";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
 "FindInPage.Done" = "Gjetja në faqe u krye";
@@ -230,52 +170,10 @@
 "FirstRun.lastSlide.buttonLabel" = "OK, e mora vesh!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Bllokojini vetvetiu gjurmuesit në internet, teksa shfletoni. Mandej prekeni, që të fshihen nga pajisja juaj faqe të vizituara, kërkime, cookies dhe fjalëkalime.";
-
-/* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Shfletoni sikur të mos ju vëzhgonte njeri.";
-
-/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "Apple Handoff po bën njëkohësimin";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Shfletim privat i vetvetishëm.";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Shfletoni. Fshini. Nga e para.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Mbylle";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "Anuloje";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (Shfletim Privat)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "Më tepër";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Kjo ju lejon të ruani figura te Camera Roll-i juaj";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Hap Rregullimet";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” Do të Donte të Hynte te Fotot Tuaja";
-
-/* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "Lidhja s’është e sigurt";
-
-/* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "Lidhja është e sigurt";
-
-/* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Kërko Sajtin për Desktop";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Prekni Safari-n, mandej përzgjidhni Bllokues Lënde";
@@ -340,9 +238,6 @@
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "E çelët";
 
-/* Manual value for theme section in settings menu */
-"Settings.manualTheme" = "Dorazi";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Vlerësojeni %@";
 
@@ -354,9 +249,6 @@
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Shtoni Motor Tjetër Kërkimesh";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Shtoni Motor Tjetër Kërkimesh";
 
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "Shtoni Motor Kërkimesh";
@@ -397,14 +289,8 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "PUNIM";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVATËSI";
-
-/* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "SIGURI";
 
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Temë Sistemi";
@@ -438,9 +324,6 @@
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Shfaq ndihmëza skene kreu";
-
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Mund të pengojë funksionimin e disa videove dhe faqeve Web";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -483,12 +366,6 @@
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Gjej në Faqe";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Merrni Aplikacionin Firefox";
-
-/* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "Veprime Faqeje";
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Hiqe nga Shkurtoret";
@@ -601,44 +478,14 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Mungon lëndë te sajti, apo po sillet në mënyrë të çuditshme?";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "Përdorni Touch ID që të ktheheni te %@";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "Gjurmues reklamash";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "Gjurmues analitikë";
-
 /* Text for tracking protection screen showing the connection is not secure */
 "trackingProtection.connectionNotSecureLabel" = "Lidhja s’është e sigurt";
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Lidhja është e sigurt";
 
-/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
-"trackingProtection.connectionVerifiedByLabel" = "Verifikuar nga: %@";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "Gjurmues lënde";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "Pa Mbrojtje Nga Gjurmimet";
-
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Mbrojtje Nga Gjurmimet";
-
-/* Description/subtitle for the tracking protection label. */
-"trackingProtection.labelDescription" = "Çaktivizimi i kësaj mund të ndreqë ca probleme sajti";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "Mësoni Më Tepër";
-
-/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
-"trackingProtection.moreSettings" = "Më Tepër Rregullime";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "Gjurmues socialë";
 
 /* Text for the status off from Tracking Protection. */
 "trackingProtection.statusOff" = "Për këtë sesion, mbrojtjet janë OFF";
@@ -646,14 +493,8 @@
 /* Text for the status on from Tracking Protection. */
 "trackingProtection.statusOn" = "Për këtë sesion, mbrojtjet janë ON";
 
-/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Çaktivizoje derisa të mbyll %@ ose prekë FSHIJE.";
-
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "Mbrojtje e Thelluar Nga Gjurmimi";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel2" = "Mbajini për vete të dhënat tuaja. %@ ju mbron nga shumë prej gjurmuesve më të rëndomtë që ndjekin ç’bëni në internet.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Gjurmues të bllokuar që prej %@";
@@ -663,9 +504,6 @@
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Shtoni lidhje për vetëplotësim";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Anuloje";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Ngjite & Shko";

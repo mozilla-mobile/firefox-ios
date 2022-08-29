@@ -73,26 +73,11 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ 사용자 정의 URL 추가";
 
-/* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "사용자 정의 자동 완성 URL을 추가하고 관리합니다.";
-
-/* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "사용자 정의 URL";
-
-/* Title for the default URL list section */
-"Autocomplete.customTitle" = "사용자 정의 URL 목록";
-
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "새 사용자 정의 URL이 추가되었습니다.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "%@ 자동 완성 기능을 활성화해서 450개가 넘는 자주 찾는 URL을 주소창에서 사용해 보세요.";
-
-/* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "자동완성";
-
-/* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "기본 URL 목록";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "사용 안 함";
@@ -121,23 +106,14 @@
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "새 세션";
 
-/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "허용되지 않은 접근을 막기 위해 %@를 다시 열 때 잠급니다.";
-
 /* Accessibility label for the back button */
 "Browser.backLabel" = "뒤로";
-
-/* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "주소 복사";
 
 /* Toast displayed after a URL has been copied to the clipboard */
 "browser.copyAddressToast" = "클립보드에 URL 복사됨";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "복사";
-
-/* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "사용자 정의 URL 추가";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "앞으로";
@@ -148,32 +124,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "설정";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "공유";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "중지";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "주소창 선택";
-
-/* Label on button to cancel edits */
-"Cancel" = "취소";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "이미지 복사";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "링크 복사";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "복사 한 링크:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "이미지 저장";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "링크 공유";
 
 /* Label on button to complete edits */
 "Done" = "완료";
@@ -196,26 +151,11 @@
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@가 %2$@를 열려고 합니다";
 
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "통화";
-
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "취소";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "메일";
-
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "%@를 종료합니다.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "App Store 열기";
-
-/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@가 App Store를 열려고 합니다.";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "지도 열기";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
 "FindInPage.Done" = "페이지내 검색 완료";
@@ -230,19 +170,7 @@
 "FirstRun.lastSlide.buttonLabel" = "네, 알겠습니다!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "검색 중 온라인 추적을 자동으로 차단합니다. 클릭만으로 방문한 페이지, 검색 기록, 쿠키, 암호를 단말기에서 삭제할 수 있습니다.";
-
-/* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "누구도 감시하지 않는 자유로운 웹 여행";
-
-/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "Apple Handoff가 동기화중";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "자동화된 사생활 보호 브라우저";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "쓰고, 지우고. 쓰고, 지우고.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "닫기";
@@ -273,36 +201,6 @@
 
 /* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Title" = "Firefox %@에 오신 것을 환영합니다!";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "취소";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (사생활 보호모드)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "기타";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "이미지를 카메라롤에 저장할 수 있게 되었습니다";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "설정 열기";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@”가 사진에 접근하려고 합니다";
-
-/* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "연결이 안전하지 않음";
-
-/* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "연결이 안전함";
-
-/* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "데스크톱 사이트 요청";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari에서 콘텐츠 차단";
@@ -367,9 +265,6 @@
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "밝은";
 
-/* Manual value for theme section in settings menu */
-"Settings.manualTheme" = "수동";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "%@ 평가하기";
 
@@ -381,9 +276,6 @@
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "다른 검색 엔진 추가";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ 다른 검색 엔진 추가";
 
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "검색 엔진 추가";
@@ -424,14 +316,8 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "성능";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "개인 정보";
-
-/* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "보안";
 
 /* Label title for set as default browser row */
 "Settings.setAsDefaultBrowser" = "기본 브라우저로 설정";
@@ -471,9 +357,6 @@
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "홈 스크린 팁 표시";
-
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "동영상이나 웹 페이지가 제대로 표시되지 않을 수 있음";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -519,12 +402,6 @@
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "페이지내 검색";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Firefox 앱 설치";
-
-/* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "페이지 작업";
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "바로가기에서 제거";
@@ -652,44 +529,14 @@
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "보호되고 있습니다!";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "Touch ID를 사용하여 %@로 돌아옴";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "광고 추적기";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "분석용 추적기";
-
 /* Text for tracking protection screen showing the connection is not secure */
 "trackingProtection.connectionNotSecureLabel" = "연결이 안전하지 않음";
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "연결이 안전함";
 
-/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
-"trackingProtection.connectionVerifiedByLabel" = "%@가 인증함";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "콘텐츠 추적기";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "추적 방지해제";
-
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "추적 방지";
-
-/* Description/subtitle for the tracking protection label. */
-"trackingProtection.labelDescription" = "이 기능을 끄면 일부 사이트 문제가 해결 될 수 있습니다.";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "자세히 보기";
-
-/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
-"trackingProtection.moreSettings" = "추가 설정";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "소셜 추적기";
 
 /* Text for the status off from Tracking Protection. */
 "trackingProtection.statusOff" = "이 세션에서 보호 꺼짐";
@@ -697,14 +544,8 @@
 /* Text for the status on from Tracking Protection. */
 "trackingProtection.statusOn" = "이 세션에서 보호 켜짐";
 
-/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "%@를 닫을 때까지 비활성화하거나 ERASE를 누르세요.";
-
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "향상된 추적 방지 기능";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel2" = "자신의 데이터를 보호하세요. %@는 온라인에서 하는 일을 추적하는 가장 일반적인 많은 추적기로부터 사용자를 보호합니다.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "%@ 이후에 차단된 추적기";
@@ -714,9 +555,6 @@
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "자동 완성에 링크 추가";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "취소";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "붙여넣어서 가기";

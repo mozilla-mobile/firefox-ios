@@ -67,26 +67,11 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Adaugă URL personalizat";
 
-/* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Adaugă și gestionează completarea automată personalizată de URL-uri.";
-
-/* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "URL-uri personalizate";
-
-/* Title for the default URL list section */
-"Autocomplete.customTitle" = "LISTĂ DE URL-URI PERSONALIZATE";
-
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Nou URL personalizat adăugat.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "Activează pentru ca %@ să completeze automat peste 450 de URL-uri populare în bara de adresă.";
-
-/* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "Completare automată";
-
-/* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "LISTĂ DE URL-URI IMPLICITE";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Dezactivată";
@@ -115,23 +100,14 @@
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Sesiune nouă";
 
-/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "Deblochează %@ la redeschidere pentru a preveni accesul neautorizat.";
-
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Înapoi";
-
-/* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "Copiază adresa";
 
 /* Toast displayed after a URL has been copied to the clipboard */
 "browser.copyAddressToast" = "URL copiat în clipboard";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Copiază";
-
-/* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "Adaugă adresă personalizată";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Înainte";
@@ -142,32 +118,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Setări";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "Împărtășește";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Oprește";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Selectează bara adresei";
-
-/* Label on button to cancel edits */
-"Cancel" = "Renunță";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Copiază imaginea";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Copiază linkul";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Linkul copiat:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Salvează imaginea";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Partajează linkul";
 
 /* Label on button to complete edits */
 "Done" = "Terminat";
@@ -190,26 +145,11 @@
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ vrea să deschidă %2$@";
 
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Apelează";
-
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "Renunță";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Trimite e-mail";
-
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "Părăsești acum %@.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Deschide App Store";
-
-/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ vrea să deschidă App Store.";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Deschide Hărți";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
 "FindInPage.Done" = "Căutarea în pagină s-a terminat";
@@ -224,46 +164,10 @@
 "FirstRun.lastSlide.buttonLabel" = "Ok, am înțeles!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Blochează automat elementele de urmărire online în timp ce navighezi. Apoi apasă pentru a șterge paginile vizitate, căutările, cookie-urile și parolele din dispozitiv.";
-
-/* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Navighează fără grija de a fi urmărit.";
-
-/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "Apple Handoff se sincronizează";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Navigare privată automată.";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Navighează. Șterge. Repetă.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Închide";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "Renunță";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (Navigare privată)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "Mai multe";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Acest lucru îți permite să salvezi imaginea în Rolă film";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Deschide Configurări";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "„%@” dorește să îți acceseze fotografiile";
-
-/* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Cere versiune de desktop";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Apasă pe Safari, apoi selectează Sisteme de blocare a conținutului";
@@ -322,9 +226,6 @@
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Adaugă alt motor de căutare";
 
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ adaugă alt motor de căutare";
-
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "Adaugă un motor de căutare";
 
@@ -361,14 +262,8 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "PERFORMANȚĂ";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "CONFIDENȚIALITATE";
-
-/* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "SECURITATE";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blochează fonturile web";
@@ -381,9 +276,6 @@
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Afișează ponturi în ecranul principal";
-
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Ar putea afecta funcționalitatea unor videouri sau pagini web";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -411,12 +303,6 @@
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Caută în pagină";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Obține aplicația Firefox";
-
-/* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "Acțiuni pe pagină";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Cere versiune de desktop";
@@ -457,41 +343,11 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Adresa de deschis";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "Folosește Touch ID pentru a reveni la %@";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "Elemente de urmărire publicitare";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "Elemente de urmărire analitice";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "Elemente de urmărire de conținut";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "Protecție împotriva urmăririi dezactivată";
-
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Protecție împotriva urmăririi";
 
-/* Description/subtitle for the tracking protection label. */
-"trackingProtection.labelDescription" = "Dezactivarea opțiunii poate remedia unele probleme legate de site";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "Află mai multe";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "Elemente de urmărire ale rețelelor sociale";
-
-/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Dezactivează până când închizi %@ sau apeși ȘTERGE.";
-
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Adaugă un link pentru completare automată";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Renunță";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Lipește și accesează";

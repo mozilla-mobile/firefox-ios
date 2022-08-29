@@ -46,23 +46,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Sozlamalar";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "Ulashish";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "To‘xtatish";
 
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Rasmdan nusxa olish";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Havoladan nusxa olish";
-
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Yana urinib ko‘rish";
-
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Qo‘ng‘iroq qilish";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "Bekor qilish";
@@ -70,38 +58,8 @@
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "E-pochta";
 
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "%@ brauzeridan chiqyapsiz.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "App Store do‘konini ochish";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Xaritalarni ochish";
-
-/* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Internetga kirganingizda kuzatuvchilar avtomatik tarzda bloklaydi. So‘ngra kirilgan sahifalar, qidiruv, kuki va parollarni qurilmadan o‘chirish uchun tugmachani bosing.";
-
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Kuzatishlaridan xavotir olmasdan internetda ishlay olasiz.";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Avtomatik maxfiy tazda internetda ishlash.";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Ko‘ring, O‘chiring, Qaytaring.";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "Bekor qilish";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (Maxfiy tarzda ishlash)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "Yana";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari ustiga bosing, so‘ngra \"Kontentni bloklash qoidasi\"ni tanlang.";
@@ -124,23 +82,14 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "SAMARADORLIK";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "MAXFIYLIK";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Veb-shriftlarni bloklash";
 
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Ba’zi video va veb sahifalarning ishlashiga halaqit berishi mumkin";
-
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Bekor qilish";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "TOZALASH";

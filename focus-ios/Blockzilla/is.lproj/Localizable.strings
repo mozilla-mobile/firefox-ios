@@ -73,26 +73,11 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Bæta við sérsniðinni vefslóð";
 
-/* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Bættu við og stjórnaðu sérsniðnum sjálfvirkum útfyllingarslóðum.";
-
-/* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "Sérsniðnar vefslóðir";
-
-/* Title for the default URL list section */
-"Autocomplete.customTitle" = "SÉRSNIÐINN SLÓÐALISTI";
-
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Nýrri sérsniðinni vefslóð bætt við.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "Virkja sjálfvirka útfyllingu í staðsetningarslá %@ á rúmlega 450 vinsælum slóðum.";
-
-/* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "Sjálfvirk útfylling";
-
-/* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "SJÁLFGEFINN SLÓÐALISTI";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Óvirkt";
@@ -121,23 +106,14 @@
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Ný seta";
 
-/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "Aflæsa %@ til að koma í veg fyrir óleyfilegan aðgang þegar smáforrit er enduropnað.";
-
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Til baka";
-
-/* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "Afrita vistfang";
 
 /* Toast displayed after a URL has been copied to the clipboard */
 "browser.copyAddressToast" = "URL Afritað á klemmuspjald";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Afrita";
-
-/* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "Bæta við sérsniðinni vefslóð";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Áfram";
@@ -148,32 +124,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Stillingar";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "Deila";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Stöðva";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Velja staðsetningarslá";
-
-/* Label on button to cancel edits */
-"Cancel" = "Hætta við";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Afrita mynd";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Afrita hlekk";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Hlekkur sem þú afritaðir:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Vista mynd";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Deila hlekk";
 
 /* Label on button to complete edits */
 "Done" = "Búið";
@@ -196,26 +151,11 @@
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ vill opna %2$@";
 
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Hringja";
-
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "Hætta við";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Tölvupóstur";
-
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "Þú ert að yfirgefa %@.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Opna App Store";
-
-/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ vill opna App Store.";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Opna landakort";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
 "FindInPage.Done" = "Finna á síðu búið";
@@ -230,19 +170,7 @@
 "FirstRun.lastSlide.buttonLabel" = "Í lagi, ég skil";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Loka sjálfvirkt á tengda rekjara á meðan þú vafrar. Ýttu síðan til að eyða heimsóttum síðum, uppflettingum, vefkökum og lykilorðum úr tækinu þínu.";
-
-/* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Vafra þannig að enginn taki eftir því.";
-
-/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "Apple Handoff samstilling í gangi";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Sjálfvirkt einkavafur.";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Vafra. Hreinsa. Endurtaka.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Loka";
@@ -273,36 +201,6 @@
 
 /* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Title" = "Velkomin í Firefox %@!";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "Hætta við";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (einkavafur)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "Meira";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Hér getur þú vista myndir á myndasvæðið þitt";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Opna stillingar";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "\"%@\" vill aðgang að myndunum þínum";
-
-/* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "Tenging er ekki örugg";
-
-/* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "Tenging er örugg";
-
-/* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Fá borðtölvu vefsvæði";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Ýttu á Safari, veldu síðan lokun á efni";
@@ -367,9 +265,6 @@
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "Ljóst";
 
-/* Manual value for theme section in settings menu */
-"Settings.manualTheme" = "Handvirkt";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Gefa %@ einkunn";
 
@@ -381,9 +276,6 @@
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Bæta við annari leitarvél";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+Bæta við annari leitarvél";
 
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "Bæta við leitarvél";
@@ -424,14 +316,8 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "AFKÖST";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "FRIÐHELGI";
-
-/* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "ÖRYGGI";
 
 /* Label title for set as default browser row */
 "Settings.setAsDefaultBrowser" = "Setja sem sjálfgefinn vafra";
@@ -471,9 +357,6 @@
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Sýna ábendingar á heimasvæði";
-
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Gæti haft áhrif á sum myndbönd og vefsíður";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -519,12 +402,6 @@
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Finna á síðu";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Sækja Firefox-smáforritið";
-
-/* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "Síðu aðgerðir";
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Fjarlægja úr flýtileiðum";
@@ -652,44 +529,14 @@
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Þú ert varin/n!";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "Nota fingrafara auðkenningu til að fara aftur í %@";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "Auglýsingarekjarar";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "Greiningarekjarar";
-
 /* Text for tracking protection screen showing the connection is not secure */
 "trackingProtection.connectionNotSecureLabel" = "Tenging er ekki örugg";
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Tenging er örugg";
 
-/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
-"trackingProtection.connectionVerifiedByLabel" = "Sannvottað af: %@";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "Efnislegir rekjarar";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "Vörn gegn rekjurum ekki virk";
-
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Vörn gegn gagnasöfnun rekjara";
-
-/* Description/subtitle for the tracking protection label. */
-"trackingProtection.labelDescription" = "Að slökkva á þessu gæti lagað sum vandamál á vefsvæðinu";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "Fræðast meira";
-
-/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
-"trackingProtection.moreSettings" = "Fleiri stillingar";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "Samfélagslegir rekjarar";
 
 /* Text for the status off from Tracking Protection. */
 "trackingProtection.statusOff" = "Slökkt er á vörnum fyrir þessa setu";
@@ -697,14 +544,8 @@
 /* Text for the status on from Tracking Protection. */
 "trackingProtection.statusOn" = "Kveikt er á vörnum fyrir þessa setu";
 
-/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Slökkva á þar til þú lokar %@ eða ýttu á HREINSA.";
-
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "Aukin rakningarvörn";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel2" = "Haltu þínum gögnum fyrir sjálfan þig. %@ verndar þig fyrir mörgum algengustu rekjurum sem fylgjast með því sem þú gerir á netinu.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Rekjarar sem lokað er fyrir síðan %@";
@@ -714,9 +555,6 @@
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Bæta vefslóð við í autocomplete";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Hætta við";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Líma & áfram";

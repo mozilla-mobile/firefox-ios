@@ -64,26 +64,11 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ सानुकूल URL जोडा";
 
-/* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "सानुकूल स्वयंपूर्ण URLs जोडा आणि व्यवस्थापित करा.";
-
-/* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "सानुकूल URLs";
-
-/* Title for the default URL list section */
-"Autocomplete.customTitle" = "CUSTOM URL LIST";
-
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "नवीन सानुकूल URL जोडली.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "450 हुन अधिक विख्यात URL %@ ने स्वयंपूर्ण करणे सक्षम करा.";
-
-/* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "स्वयंपूर्ण";
-
-/* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "DEFAULT URL LIST";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "अक्षम केलेले";
@@ -112,23 +97,14 @@
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "नवीन सत्र";
 
-/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "अनाधिकृत प्रवेश प्रतिबंधित करण्यासाठी पुन्हा उघडताना %@ अनलॉक करा.";
-
 /* Accessibility label for the back button */
 "Browser.backLabel" = "मागे";
-
-/* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "पत्त्याची प्रत बनवा";
 
 /* Toast displayed after a URL has been copied to the clipboard */
 "browser.copyAddressToast" = "क्लिपबोर्डवर URL ची प्रत बनवली";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "कॉपी करा";
-
-/* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "सानुकूल URL जोडा";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "पुढे";
@@ -139,32 +115,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "सेटिंग";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "शेअर करा";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "थांबा";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "स्थान बार निवडा";
-
-/* Label on button to cancel edits */
-"Cancel" = "रद्द करा";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "प्रतिमा कॉपी करा";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "दुव्याची प्रत बनवा";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "आपण प्रत बनवलेली दुवा:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "प्रतिमा साठवा";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "दुवा शेअर करा";
 
 /* Label on button to complete edits */
 "Done" = "पूर्ण झाले";
@@ -187,26 +142,11 @@
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ उघडू इच्छित आहे";
 
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "कॉल करा";
-
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "रद्द करा";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "ईमेल";
-
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "आपण आता %@ वर जात आहात.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "App Store उघडा";
-
-/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ ला App Store उघडायचे आहे.";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "नकाशे उघडा";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
 "FindInPage.Done" = "पृष्ठामध्ये शोधणे पूर्ण";
@@ -221,46 +161,10 @@
 "FirstRun.lastSlide.buttonLabel" = "ठीक आहे, समजले!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "ब्राउझ करताना मागोवा घेणाऱ्यांना आपोआप बंद करा. मग उपकरणावर पाहिलेले पृष्ठ, शोध, कुकीज आणि पासवर्ड पुसण्यासाठी टॅप करा.";
-
-/* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "कोणीच पाहत नाही आहे असे ब्राउजिंग करा.";
-
-/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "Apple Handoff सिंक करीत आहे";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "स्वयंचलित खाजगी ब्राउझिंग.";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "ब्राउझ करा. मिटवा. परत करा.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "बंद करा";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "रद्द करा";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (खाजगी ब्राउझिंग)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "अधिक";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "हे आपल्याला प्रतिमा कॅमेरा रोल मध्ये जतन करण्यास अनुमती देते";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "सेटिंग उघडा";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "\"%@\" आपल्या फोटोमध्ये प्रवेश करू इच्छित आहे";
-
-/* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "डेस्कटॉप साइटची विनंती करा";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari टॅप करा, नंतर मजकूर अवरोधक निवडा";
@@ -319,9 +223,6 @@
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "अन्य शोध इंजिन जोडा";
 
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ आणखी एक शोध इंजिन जोडा";
-
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "शोध इंजिन जोडा";
 
@@ -358,14 +259,8 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "PERFORMANCE";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "गोपनीयता";
-
-/* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "सुरक्षा";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "वेब फॉन्ट अवरोधित करा";
@@ -378,9 +273,6 @@
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "मुख्य पृष्ठ सूचना दाखवा";
-
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "काही व्हिडिओ आणि वेब पृष्ठे खंडित होऊ शकतात";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -408,12 +300,6 @@
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "पृष्ठामध्ये शोधा";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Firefox अनुप्रयोग मिळवा";
-
-/* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "पृष्ठाच्या कृती";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "डेस्कटॉप साइटची विनंती करा";
@@ -454,41 +340,11 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "उघडायची URL";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "%@ वर परत जाण्यास Touch ID वापरा";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "जाहिरात ट्रॅकर्स";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "अॅनालिटिक ट्रॅकर्स";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "मजकूर ट्रॅकर्स";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "ट्रॅकिंग संरक्षण बंद";
-
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "मागोवा सुरक्षा";
 
-/* Description/subtitle for the tracking protection label. */
-"trackingProtection.labelDescription" = "हे बंद केल्याने कदाचित काही साईट समस्या सुटू शकतील";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "अधिक जाणा";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "सामाजिक ट्रॅकर्स";
-
-/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "आपण %@ बंद करेपर्यंत निष्क्रिय करा किंवा खोडा वर टॅप करा.";
-
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "स्वयंपूर्ण करण्यासाठी दुवा जोडा";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "रद्द करा";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "चिकटवा व जा";

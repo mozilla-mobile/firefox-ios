@@ -73,26 +73,11 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Lisa kohandatud URL";
 
-/* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Lisa ja halda kohandatud automaatse täitmise URLe.";
-
-/* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "Kohandatud URLid";
-
-/* Title for the default URL list section */
-"Autocomplete.customTitle" = "KOHANDATUD URLIDE NIMEKIRI";
-
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Uus kohandatud URL lisatud.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "Võimaldab %@el aadressiribal automaatselt lõpetada üle 450 populaarse URLi.";
-
-/* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "Automaatne lõpetamine";
-
-/* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "VAIKEURLIDE NIMEKIRI";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Keelatud";
@@ -121,23 +106,14 @@
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Uus seanss";
 
-/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "Lukusta %@ uuesti avamisel lahti, et ära hoida volitamata ligipääsu.";
-
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Tagasi";
-
-/* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "Kopeeri aadress";
 
 /* Toast displayed after a URL has been copied to the clipboard */
 "browser.copyAddressToast" = "URL kopeeriti vahemällu";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopeeri";
-
-/* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "Lisa kohandatud URL";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Edasi";
@@ -148,32 +124,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Sätted";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "Jaga";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Peata";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Vali asukohariba";
-
-/* Label on button to cancel edits */
-"Cancel" = "Loobu";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Kopeeri pilt";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Kopeeri link";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Kopeeritud link:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Salvesta pilt";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Jaga linki";
 
 /* Label on button to complete edits */
 "Done" = "Valmis";
@@ -196,26 +151,11 @@
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ soovib avada äpi %2$@";
 
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Helista";
-
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "Loobu";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Saada e-kiri";
-
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "Lahkud nüüd %@est.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Ava App Store";
-
-/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ soovib avada App Store'i.";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Ava Maps";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
 "FindInPage.Done" = "Lehelt otsimine lõpetatud";
@@ -230,19 +170,7 @@
 "FirstRun.lastSlide.buttonLabel" = "Olgu, sain aru!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Automaatselt bloki jälitajad lehitsemise ajal. Seejärel puuduta oma seadmes külastatud lehtede, otsingute, küpsiste ja paroolide kustutamiseks.";
-
-/* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Lehitse veebi nii nagu keegi ei vaataks.";
-
-/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "Apple Handoff sünkroniseerib";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Automaatne privaatne lehitsemine.";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Lehitse. Kustuta. Korda.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Sulge";
@@ -273,36 +201,6 @@
 
 /* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Title" = "Tere tulemast Firefox %@esse!";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "Loobu";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (privaatne lehitsemine)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "Rohkem";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "See võimaldab salvestada pildi Camera Rolli.";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Ava sätted";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” soovib ligipääsu sinu piltidele";
-
-/* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "Ühendus pole turvaline";
-
-/* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "Turvaline ühendus";
-
-/* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Töölaua versioon";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Puuduta valikut Safari, see järel vali Content Blockers";
@@ -367,9 +265,6 @@
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "Hele";
 
-/* Manual value for theme section in settings menu */
-"Settings.manualTheme" = "Käsitsi";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Hinda %@t";
 
@@ -381,9 +276,6 @@
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Lisa veel üks otsingumootor";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Lisa veel üks otsingumootor";
 
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "Otsingumootori lisamine";
@@ -424,14 +316,8 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "JÕUDLUS";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVAATSUS";
-
-/* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "TURVALISUS";
 
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Süsteemi teema";
@@ -465,9 +351,6 @@
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Kuvatakse avakuva näpunäiteid";
-
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Võib mõned videod ja veebilehed katki teha";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -510,12 +393,6 @@
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Otsi lehelt";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Hangi Firefoxi äpp";
-
-/* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "Lehe toimingud";
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Eemalda otseteede hulgast";
@@ -643,44 +520,14 @@
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Sa oled kaitstud!";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "%@esse naasmiseks kasuta Touch ID'd";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "Reklaami kaudu jälitajad";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "Analüütilised jälitajad";
-
 /* Text for tracking protection screen showing the connection is not secure */
 "trackingProtection.connectionNotSecureLabel" = "Ühendus pole turvaline";
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Turvaline ühendus";
 
-/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
-"trackingProtection.connectionVerifiedByLabel" = "Verifitseerija: %@";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "Sisu kaudu jälitajad";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "Jälitamisvastane kaitse on väljas";
-
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Jälitamisvastane kaitse";
-
-/* Description/subtitle for the tracking protection label. */
-"trackingProtection.labelDescription" = "Selle väljalülitamine võib lahendada mõned saidiprobleemid";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "Rohkem teavet";
-
-/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
-"trackingProtection.moreSettings" = "Rohkem sätteid";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "Sotsiaalmeedia jälitajad";
 
 /* Text for the status off from Tracking Protection. */
 "trackingProtection.statusOff" = "Kaitsed on selle seansi ajal VÄLJAS";
@@ -688,14 +535,8 @@
 /* Text for the status on from Tracking Protection. */
 "trackingProtection.statusOn" = "Kaitsed on selle seansi ajal SEES";
 
-/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Keela kuni %@e sulgemise või KUSTUTA nupu vajutamiseni.";
-
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "Täiustatud jälitamisvastane kaitse";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel2" = "Hoia oma andmed endale. %@ kaitseb sind paljude tuntud jälitajate eest, kes jälgivad, mida sa võrgus olles teed.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Alates %@ blokitud jälitajaid";
@@ -705,9 +546,6 @@
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Lisa link automaatse täitmise nimekirja";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Loobu";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Aseta ja mine";

@@ -58,26 +58,11 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Հավելել հարմարեցված URL";
 
-/* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Ավելացնել և կառավարել հարմարեցված ինքնալրացվող URL-ները:";
-
-/* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "Հարմարեցված URLներ";
-
-/* Title for the default URL list section */
-"Autocomplete.customTitle" = "ՀԱՐՄԱՐԵՑՎԱԾ URL ՑԱՆԿ";
-
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Նոր հարմարեցված URL է ավելացվել:";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "Միացրեք՝ ունենալու համար %@ ինքնալրացում աեվլի քան 450 հանրահայտ URL-ների համար:";
-
-/* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "Ինքնալրացում";
-
-/* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "ԼՌԵԼՅԱՅՆ URL ՑԱՆԿ";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Անջատել";
@@ -100,29 +85,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Կարգավորումներ";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "Համօգտագործել";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Կանգնեցնել";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Ընտրել տեղադրության գոտին";
-
-/* Label on button to cancel edits */
-"Cancel" = "Չեղարկել";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Կրկնօրինակել Նկարը";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Պատճենել հղումը";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Պահպանել պատկերը";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Համօգտագործել հղումը";
 
 /* Label on button to complete edits */
 "Done" = "Պատրաստ է";
@@ -145,65 +112,17 @@
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@-ը ցանկանում է բացել %2$@-ը";
 
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Զանգ";
-
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "Չեղարկել";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Էլ. փոստ";
 
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "Դուք հետևում եք %@-ին։";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Բացել App Store-ը";
-
-/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@-ը ցանկանում է բացել App Store-ը:";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Բացել Քարտեզները";
-
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "Լավ, հասկացա";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Ինքնաշխատ արգելափակել առցանց հետագծումները դիտարկելիս: Ապա հպեք՝ ջնջելու այցելած էջերը, որոնումները, cookie-ները և գաղտնաբառերը ձեր սարքից:";
-
-/* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Դիտարկեք այնպես, որ ոչ ոք Ձեզ չի հետևում:";
-
-/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "Apple Handoff-ը համաժամեցնում է";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Ինքնաշխատ գաղտնի դիտարկիչ:";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Դիտարկեք: Ջնջեք: Կրկնեք:";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "Չեղարկել";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Փորձեք Գաղտնի դիտարկումը";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "Ավելին";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari­";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Հնարավորություն է տալիս պահպանել Camera Roll-ը";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Բացել կարգավորումները";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@”-ը ցանկանում է մատչել ձեր լուսանկարները";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Հպեք Safari, ընտրեք բովանդակության արգելափակիչներ";
@@ -238,9 +157,6 @@
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Ավելացնել որոնողական հանգույց";
 
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "Ավելացնել որոնողական հանգույց";
-
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "Ավելացնել որոնիչ";
 
@@ -274,17 +190,11 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "ԱՐՏԱԴՐՈՂԱԿԱՆՈՒԹՅՈՒՆ";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "ԳԱՂՏՆԻՈՒԹՅՈՒՆ";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Արգելափակել վեբ տառատեսակները";
-
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Կարող է ընդհատել որոշ տեսանյութեր և վեբ էջեր";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari­-ից";
@@ -294,33 +204,6 @@
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Ինչն է նոր";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Ստանալ Firefox-ը";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "Գովազդի արգելափակում";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "Վերլուծական հետագծումներ";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "Բովանդակության հետագծումներ";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "Հետագծման պաշտպանություն";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "Իմանալ ավելին";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "Սոցիալական հետագծումներ";
-
-/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Անջատել, մինչև կփակեք %@-ը կամ հպեք ՋՆՋԵԼ:";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Չեղարկել";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Տեղադրել և Առաջ";

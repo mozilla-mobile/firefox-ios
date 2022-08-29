@@ -67,26 +67,11 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Magdagdag ng Custom na URL";
 
-/* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Magdagdag at pamahalaan ang mga custom na autocomplete na URLs.";
-
-/* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "Custom URLs";
-
-/* Title for the default URL list section */
-"Autocomplete.customTitle" = "CUSTOM URL LIST";
-
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Idinagdag ang Bagong Custom na URL.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "Paganahin na magkaroon ng %@ autocomplete sa 450 mga popular na URL sa address bar.";
-
-/* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "Autocomplete";
-
-/* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "DEFAULT URL LIST";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Hindi pinagana";
@@ -103,23 +88,14 @@
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Bagong Session";
 
-/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "I-unlock ang %@ kapag nagbukas muli upang maiwasan ang hindi awtorisadong pag-access.";
-
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Balikan";
-
-/* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "Kopyahin ang Address";
 
 /* Toast displayed after a URL has been copied to the clipboard */
 "browser.copyAddressToast" = "URL Kinopya Sa Clipboard";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopyahin";
-
-/* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "Dagdagan ang Custom URL";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Pasulong";
@@ -130,32 +106,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Mga Setting";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "Ibahagi";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Huminto";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Piliin ang Lokasyon Bar";
-
-/* Label on button to cancel edits */
-"Cancel" = "Kanselahin";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Kopyahin ang Larawan";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Kopyahin ang Link";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "I-link mo ang kinopya:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "I-save ang Larawan";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Ibahagi ang Link";
 
 /* Label on button to complete edits */
 "Done" = "Tapos na";
@@ -178,26 +133,11 @@
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ gustong buksan ang %2$@";
 
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Tumawag";
-
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "I-cancel";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Email";
-
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "Ikaw ngayon ay umaalis %@.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Buksan ang App Store";
-
-/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ gustong buksan ang isa pang App Store";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Buksan ang Mapa";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
 "FindInPage.Done" = "Hanapin sa pahina na tapos na";
@@ -212,46 +152,10 @@
 "FirstRun.lastSlide.buttonLabel" = "OK, nakuha ko na!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Awtomatikong i-block ang mga online trackers habang nagba-browse ka. Pagkatapos ay tapikin upang burahin ang binisita na mga pahina, mga paghahanap, cookies at mga password mula sa iyong aparato.";
-
-/* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Mag-browse tulad ng walang nanonood.";
-
-/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "Apple Handoff ay nag sync";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Automatic na pribadong pagba-browse.";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Magtingin. Burahin. Ulitin.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Isarado";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "I-cancel";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (pribadong pagba-browse)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "Higit pa";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Hinahayaan ka nitong i-save ang mga larawan sa iyong Camera Roll";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Buksan ang Mga Setting";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” Gusto I-access ang Iyong Mga Larawan";
-
-/* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Humiling ng Desktop Site";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Tap Safari, pagkatapos ay piliin ang Nilalaman ng Blockers";
@@ -310,9 +214,6 @@
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Magdagdag ng Panibagong Search Engine";
 
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Magdagdag ng Panibagong Search Engine";
-
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "Magdagdag ng Search Engine";
 
@@ -346,14 +247,8 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "PERFORMANCE";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
-
-/* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "SECURITY";
 
 /* Theme section in settings menu */
 "Settings.theme" = "Tema";
@@ -378,9 +273,6 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Maaaring i-unlock ng Face ID ang %@ kung may bukas na URL sa app";
-
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Maaaring masira ang ilang mga video at mga pahina ng Web pages";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -417,12 +309,6 @@
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Hanapin sa Pahina";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Kumuha ng Firefox App";
-
-/* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "Mga Pagkilos ng Pahina";
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Alisin sa Shortcuts";
@@ -463,35 +349,8 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL na buksan";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "Gamitin ang Touch ID upang bumalik sa %@";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "Mga tagasubaybay ng ad";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "Analytic trackers";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "Mga tagasubaybay ng nilalaman";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "Ang pagsubaybay na proteksyon ay sarado";
-
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Proteksyon sa Pagsubaybay";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "Matuto ng Higit pa";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "Mga social tracker";
-
-/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Huwag paganahin hanggang sa isara mo ang %@ o i-tap ang ERASE.";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "I-cancel";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Idikit at Pumunta";

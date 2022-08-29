@@ -61,26 +61,11 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ເພີ່ມ URL ທີ່ກຳນົດເອງ";
 
-/* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "ເພີ່ມ ແລະ ຈັດການ URLs ທີ່ກຳໜົດເອງເຕິມອັດຕະໂນມັດ.";
-
-/* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "URLs ທີ່ກຳນົດເອງ";
-
-/* Title for the default URL list section */
-"Autocomplete.customTitle" = "ລາຍການ URL ທີ່ກຳນົດເອງ";
-
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "ເພີ່ມ URL ທີ່ກຳນົດເອງໃຫມ່ແລ້ວ.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "ເປີດໃຊ້ງານເພື່ອໃຫ້ມີການເຕິມອັດຕະໂນມັດຂອງ %@ ຜ່ານ 450 URLs ຍອດນິຍົມໃນແຖບທີ່ຢູ່";
-
-/* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "ສຳເລັດແບບອັດຕະໂນມັດ";
-
-/* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "ລາຍການ URL ພື້ນຖານ";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "ຖືກປິດການນຳໃຊ້";
@@ -103,29 +88,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "ການຕັ້ງຄ່າ";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "ແບ່ງປັນ";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "ຢຸດ";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "ເລືອກຕຳແຫນ່ງທີ່ຕັ້ງບາ";
-
-/* Label on button to cancel edits */
-"Cancel" = "ຍົກເລີກ";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "ສຳເນົາຮູບພາບ";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "ສຳເນົາທີ່ຢູ່ລີ້ງ";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "ບັນທຶກຮູບພາບ";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "ແບ່ງປັນລີ້ງ";
 
 /* Label on button to complete edits */
 "Done" = "ສຳເລັດ";
@@ -148,68 +115,20 @@
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ ຕ້ອງການເປີດໃນ %2$@";
 
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "ໂທ";
-
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "ຍົກເລີກ";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "ອີເມວ";
 
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "ຕອນນີ້ທ່ານກຳລັງຈະອອກໄປຈາກ %@.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "ເປີດໃນ App Store";
-
-/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ ຕ້ອງການເປີດ App Store.";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "ເປີດແຜນທີ່";
-
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "ໂອເຄ, ເຂົ້າໃຈແລ້ວ!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "ມັນຈະບັອກຕົວຕິດຕາມອອນໄລນ໌ແບບອັດຕະໂນມັດໃນຂະນະທີ່ທ່ານກຳລັງທ່ອງເວັບຢູ່. ຫລັງຈາກນັ້ນໃຫ້ແຕະເພື່ອລົບລ້າງຫນ້າເວັບທີ່ທ່ານໄດ້ເຂົ້າໄປເບິງ, ການຄົ້ນຫາ, ຄຸກກີ້ ແລະ ລະຫັດຜ່ານອອກຈາກອຸປະກອນຂອງທ່ານ.";
-
-/* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "ທ່ອງເວັບແບບບໍ່ມີໃຜມາຫລັກເຝົ້າຕິດຕາມ.";
-
-/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "Apple Handoff ກຳລັງ sync ຢູ່";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "ການທ່ອງເວັບແບບສ່ວນໂຕໂດຍອັດຕະໂນມັດ.";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "ທ່ອງເວັບ ແລະ ລຶບຂໍ້ມູນການທ່ອງເວັບຕ່າງໆອອກ.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "ປິດ";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "ຍົກເລີກ";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (ການທ່ອງເວັບແບບສ່ວນຕົວ)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "ເພີ່ມເຕີມ";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "ນີ້ຊ່ວຍໃຫ້ທ່ານບັນທຶກຮູບພາບໄປໄວ້ໃນທີ່ເກັບຮູບພາບຂອງທ່ານ";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "ເປີດການຕັ້ງຄ່າ";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” ຕ້ອງການເຂົ້າເຖິງຮູບພາບຂອງທ່ານ";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "ແຕະ Safari, ຫລັງຈາກນັ້ນເລືອກຕົວບັອກເນື້ອຫາ";
@@ -244,9 +163,6 @@
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "ເພີ່ມເຄື່ອງມືການຄົ້ນຫາຕົວອື່ນ";
 
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ ເພີ່ມເຄື່ອງມືການຄົ້ນຫາຕົວອື່ນ";
-
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "ເພີ່ມເຄື່ອງມືການຄົ້ນຫາ";
 
@@ -280,17 +196,11 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "PERFORMANCE";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "ບັອກຕົວອັກສອນເວັບ";
-
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "ອາດຈະເຮັດໃຫ້ບາງວິດີໂອ ແລະ ຫນ້າເວັບບໍ່ສົມບູນ";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -304,12 +214,6 @@
 /* Text for a share button */
 "share" = "ແບ່ງປັນ";
 
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "ຕິດຕັ້ງແອັບ Firefox";
-
-/* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "ການກະທຳຂອງຫນ້າ";
-
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "ເປີດໃນ Chrome";
 
@@ -319,32 +223,8 @@
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "ເພີ່ມ";
 
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "ຕົວຕິດຕາມໂຄສະນາ";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "ຕົວຕິດຕາມການວິເຄາະ";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "ຕົວຕິດຕາມເນື້ອຫາ";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "ປິດການປ້ອງກັນການຕິດຕາມ";
-
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "ການປ້ອງກັນການຕິດຕາມ";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "ຕົວຕິດຕາມທາງສືສັງຄົມ";
-
-/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "ປິດໃຊ້ງານຈົນກະທັ້ງທ່ານປິດ %@ ຫລື ແຕະ ERASE.";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "ຍົກເລີກ";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "ວາງແລ້ວໄປ";

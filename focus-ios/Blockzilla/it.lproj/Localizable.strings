@@ -73,26 +73,11 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Aggiungi indirizzo personalizzato";
 
-/* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Aggiungi e gestisci il completamento automatico degli indirizzi personalizzati.";
-
-/* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "Indirizzi personalizzati";
-
-/* Title for the default URL list section */
-"Autocomplete.customTitle" = "ELENCO INDIRIZZI PERSONALIZZATI";
-
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Aggiunto nuovo indirizzo personalizzato.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "Attiva per completare automaticamente oltre 450 domini nella barra degli indirizzi di %@.";
-
-/* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "Completamento automatico";
-
-/* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "ELENCO INDIRIZZI PREDEFINITI";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Disattivato";
@@ -121,23 +106,14 @@
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Nuova sessione";
 
-/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "Sblocca %@ quando viene riaperta per prevenire gli accessi non autorizzati.";
-
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Indietro";
-
-/* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "Copia indirizzo";
 
 /* Toast displayed after a URL has been copied to the clipboard */
 "browser.copyAddressToast" = "Indirizzo copiato negli appunti";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Copia";
-
-/* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "Aggiungi URL personalizzato";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Avanti";
@@ -148,32 +124,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Impostazioni";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "Condividi";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Interrompi";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Seleziona la barra degli indirizzi";
-
-/* Label on button to cancel edits */
-"Cancel" = "Annulla";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Copia immagine";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Copia link";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Indirizzo copiato:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Salva immagine";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Condividi link";
 
 /* Label on button to complete edits */
 "Done" = "Fatto";
@@ -196,26 +151,11 @@
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ vuole aprire %2$@";
 
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Chiama";
-
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "Annulla";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Email";
-
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "Stai uscendo da %@.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Apri App Store";
-
-/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ vuole aprire App Store.";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Apri Mappe";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
 "FindInPage.Done" = "Trova nella pagina completato";
@@ -230,19 +170,7 @@
 "FirstRun.lastSlide.buttonLabel" = "OK, tutto chiaro.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Blocca automaticamente gli elementi in grado di tracciarti durante la navigazione. Poi, con un semplice tocco, elimina le pagine visitate, i cookie e le password dal dispositivo.";
-
-/* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Naviga come se nessuno ti stesse guardando.";
-
-/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "Sincronizzazione in corso di Apple Handoff";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Navigazione anonima in automatico.";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Naviga. Elimina. Ripeti.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Chiudi";
@@ -273,36 +201,6 @@
 
 /* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Title" = "Benvenuto in Firefox %@";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "Annulla";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (navigazione anonima)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "Altro";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "In questo modo sarà possibile salvare le immagini nel Rullino.";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Apri impostazioni";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” vorrebbe accedere alle Foto sul dispositivo";
-
-/* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "La connessione non è sicura";
-
-/* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "La connessione è sicura";
-
-/* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Versione desktop";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Tocca Safari, poi seleziona Blocchi dei contenuti";
@@ -367,9 +265,6 @@
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "Chiaro";
 
-/* Manual value for theme section in settings menu */
-"Settings.manualTheme" = "Manuale";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Dai un voto a %@";
 
@@ -381,9 +276,6 @@
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Aggiungi un altro motore di ricerca";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Aggiungi un altro motore di ricerca";
 
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "Nuovo motore di ricerca";
@@ -424,14 +316,8 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "PRESTAZIONI";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
-
-/* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "SICUREZZA";
 
 /* Label title for set as default browser row */
 "Settings.setAsDefaultBrowser" = "Imposta come browser predefinito";
@@ -471,9 +357,6 @@
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Visualizza i suggerimenti nella schermata iniziale";
-
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Alcuni video e pagine web potrebbero non funzionare";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -519,12 +402,6 @@
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Trova nella pagina";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Scarica Firefox";
-
-/* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "Azioni per la pagina corrente";
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Rimuovi dalle scorciatoie";
@@ -652,44 +529,14 @@
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Sei protetto!";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "Usa Touch ID per tornare a %@";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "Pubblicità traccianti";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "Traccianti analitici";
-
 /* Text for tracking protection screen showing the connection is not secure */
 "trackingProtection.connectionNotSecureLabel" = "La connessione non è sicura";
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "La connessione è sicura";
 
-/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
-"trackingProtection.connectionVerifiedByLabel" = "Verificato da %@";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "Contenuti traccianti";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "Protezione antitracciamento disattivata";
-
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Protezione antitracciamento";
-
-/* Description/subtitle for the tracking protection label. */
-"trackingProtection.labelDescription" = "Disattivare questa opzione potrebbe risolvere alcuni problemi con i siti";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "Ulteriori informazioni";
-
-/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
-"trackingProtection.moreSettings" = "Altre impostazioni";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "Traccianti social";
 
 /* Text for the status off from Tracking Protection. */
 "trackingProtection.statusOff" = "Le protezioni sono DISATTIVATE per questa sessione";
@@ -697,14 +544,8 @@
 /* Text for the status on from Tracking Protection. */
 "trackingProtection.statusOn" = "Le protezioni sono ATTIVE per questa sessione";
 
-/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Disattiva fino a quando si chiude %@ o tocca ELIMINA.";
-
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "Protezione antitracciamento avanzata";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel2" = "Mantieni i tuoi dati al riparo da occhi indiscreti. %@ ti protegge dagli elementi traccianti più comuni che cercano di seguire le tue attività online.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Elementi traccianti bloccati dal %@";
@@ -714,9 +555,6 @@
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Aggiungi link a completamento automatico";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Annulla";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Incolla e vai";

@@ -46,17 +46,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Socruithe";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "Comhroinn";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Stad";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Déan iarracht arís";
-
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Glao";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "Cealaigh";
@@ -64,38 +58,8 @@
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "R-phost";
 
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "Tá tú ar tí %@ a fhágáil.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Oscail an App Store";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Oscail Mapaí";
-
-/* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Cuir cosc ar lorgairí ar líne go huathoibríoch le linn brabhsála. Ansin, tapáil chun na leathanaigh ar thug tú cuairt orthu a bhánú ó do ghléas, chomh maith le haon fhianáin, focail fhaire, nó cuardaigh a rinne tú.";
-
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Brabhsáil i leith is nach bhfuil éinne ag cúlchoimhéad ort.";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Brabhsáil phríobháideach, go huathoibríoch.";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Brabhsáil. Bánaigh. Arís is arís eile.";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "Cealaigh";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (Brabhsáil Phríobháideach)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "Tuilleadh";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Tapáil Safari, ansin roghnaigh Content Blockers";
@@ -118,26 +82,14 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "FEIDHMÍOCHT";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRÍOBHÁIDEACHAS";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Cuir cosc ar chlónna Gréasáin";
 
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Seans go mbrisfidh seo físeáin agus leathanaigh Ghréasáin áirithe";
-
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Faigh an Aip Firefox";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Cealaigh";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Greamaigh agus Téigh";

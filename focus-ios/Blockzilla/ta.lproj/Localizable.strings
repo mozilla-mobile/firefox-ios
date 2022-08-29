@@ -61,26 +61,11 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ தனிபயன் URL சேர்";
 
-/* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "தனிபயன் தானியங்குநிரப்பு URLs சேர்த்து நிர்வகி.";
-
-/* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "தனிபயன் URLs";
-
-/* Title for the default URL list section */
-"Autocomplete.customTitle" = "தனிப்பயன் URL பட்டியல்";
-
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "புது தனிபயன் URL சேர்க்கப்பட்டது.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "முகவரிப்பட்டையில் 450 பிரபல URLs உடைய %@ தானியங்குநிரப்பலைச் செயற்படுத்தவும்.";
-
-/* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "தானியங்கு நிரப்பி";
-
-/* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "இயல்புநிலை URL பட்டியல்";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "முடக்கப்பட்டது";
@@ -97,20 +82,11 @@
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "புதிய அமர்வு";
 
-/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "அனுமதியற்ற அணுகலைத் தடுக்க மீண்டும் திற்க்கையில் %@ செயலியை தடைநீக்கு.";
-
 /* Accessibility label for the back button */
 "Browser.backLabel" = "பின்செல்";
 
 /* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "முகவரியை நகலெடு";
-
-/* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "நகலெடு";
-
-/* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "தனிபயன் URL சேர்";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "முன்செல்";
@@ -121,29 +97,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "அமைவுகள்";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "பகிர்க";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "நிறுத்து";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "இருப்பிடப் பட்டையைத் தேர்ந்தெடு";
-
-/* Label on button to cancel edits */
-"Cancel" = "ரத்து";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "படத்தை நகலெடு";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "இணைப்பைப் படியெடு";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "படத்தைச் சேமி";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "தொடுப்பைப் பகிர்";
 
 /* Label on button to complete edits */
 "Done" = "முடிந்தது";
@@ -166,26 +124,11 @@
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ செயலியில் திறக்க விரும்புகிறது";
 
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "அழை";
-
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "ரத்து";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "மின்னஞ்சல்";
-
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "%@ விட்டு வெளியேறுகிறீர்கள்.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "செயலி கடையைத் திற";
-
-/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ செயலி கடையைத் திறக்க விரும்புகிறது.";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "வரைபடத்தைத் திற";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
 "FindInPage.Done" = "பக்கத்தில் கண்டுபிடித்தல் முடிந்தது";
@@ -200,46 +143,10 @@
 "FirstRun.lastSlide.buttonLabel" = "சரி, கிடைத்துவிட்டது!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "நீங்கள் உலாவும் போது தடமறிபவைகளை தானாக தடு. உங்கள் சாதனத்தில் நீங்கள் பார்த்த வலைப்பக்கங்கள், தேடல்கள், நினைவிகள், மற்றும் கடவுச்சொல்லை அகற்ற தட்டவும்.";
-
-/* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "மற்றவர்களுக்கு தெரியா வண்ணம் உலாவு.";
-
-/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "ஆப்பிள் ஹேண்ட்ஆப் ஒத்திசைக்கிறது";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "தானியக்க தனிப்பட்ட உலாவல்.";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "உலாவு. அகற்று. திரும்பச்செய்.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "மூடு";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "ரத்து";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "பயர்பாக்ஸ் (தனிப்பட்ட உலாவல்)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "மேலும்";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "சப்பாரி";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "இது கருவியினுள் படத்தைச் சேமிக்க அனுமதிக்கிறது";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "அமைவுகளைத் திற";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” உங்கள் படங்களை அணுக விரும்புகிறது";
-
-/* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "கணினி பக்கத்தைக் கேள்";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "சப்பாரி உலாவியைத் தட்டி, உள்ளடக்க தடுப்புகளைத் தேர்";
@@ -283,9 +190,6 @@
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "+ மற்றொரு தேடு பொறியைச் சேர்";
 
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ மற்றொரு தேடு பொறியைச் சேர்";
-
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "தேடும் பொறியைச் சேர்";
 
@@ -319,14 +223,8 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "மொசில்லா";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "செயல்திறன்";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "தனியுரிமை";
-
-/* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "பாதுகாப்பு";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "இணைய எழுத்துருக்களைத் தடு";
@@ -336,9 +234,6 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "ஒரு URL செயலியில் திறந்திருந்தால் முக அடையாளம் கொண்டு %@ உலாவியின் தடையை நீக்க முடியும்";
-
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "சில காணொளிகளும் இணையப் பக்கங்களும் உடையலாம்";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "சப்பாரி";
@@ -361,38 +256,8 @@
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "பக்கத்தில் கண்டுபிடி";
 
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "பயர்பாக்ஸ் செயலியைப் பெறுக";
-
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "கணினி பக்கத்தைக் கேள்";
-
-/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "%@ செயலிக்கு திரும்ப தொடு அடையாளத்தைப் பயன்படுத்துக";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "விளம்பர பின்தொடரிகள்";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "பகுப்பாய்வு பின்தொடரிகள்";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "உள்ளடக்க பின்தொடரிகள்";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "தடமறியல் பாதுகாப்பு அணைந்துள்ளது";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "மேலும் அறிய";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "சமூக பின்தொடரிகள்";
-
-/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "%@ உலாவியை மூடும் வரையில் அல்லது அழி என்பதைத் தட்டும் வரையில் முடக்கவும்.";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "ரத்து";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "ஒட்டிச் செல்";

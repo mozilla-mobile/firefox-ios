@@ -73,26 +73,11 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Gehitu URL perstonalizatua";
 
-/* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Gehitu eta kudeatu automatikoki osatzeko URL pertsonalizatuak.";
-
-/* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "URL pertsonalizatuak";
-
-/* Title for the default URL list section */
-"Autocomplete.customTitle" = "URL ZERRENDA PERTSONALIZATUA";
-
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "URL pertsonalizatu berria gehitu da.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "Gaituz gero, helbide-barran automatikoki osatuko ditu 450 URL ezagun baino gehiago %@(e)k.";
-
-/* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "Osatze automatikoa";
-
-/* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "URL ZERRENDA PERTSONALIZATUA";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Desgaituta";
@@ -121,23 +106,14 @@
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Saio berria";
 
-/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "Desblokeatu %@ berriro irekitzean baimenik gabeko sarbidea galarazteko.";
-
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Atzera";
-
-/* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "Kopiatu helbidea";
 
 /* Toast displayed after a URL has been copied to the clipboard */
 "browser.copyAddressToast" = "URLa arbelera kopiatu da";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopiatu";
-
-/* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "Gehitu URL perstonalizatua";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Aurrera";
@@ -148,32 +124,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Ezarpenak";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "Partekatu";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Gelditu";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Hautatu helbide-barra";
-
-/* Label on button to cancel edits */
-"Cancel" = "Utzi";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Kopiatu irudia";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Kopiatu lotura";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Kopiatu duzun lotura:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Gorde irudia";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Partekatu lotura";
 
 /* Label on button to complete edits */
 "Done" = "Eginda";
@@ -196,26 +151,11 @@
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ aplikazioak %2$@ ireki nahi du";
 
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Deitu";
-
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "Utzi";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Bidali mezu elektronikoa";
-
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "%@(e)tik irtetear zaude.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Ireki App Store-a";
-
-/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ aplikazioak App Store-a ireki nahi du.";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Ireki mapak";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
 "FindInPage.Done" = "Orriko bilaketa eginda";
@@ -230,19 +170,7 @@
 "FirstRun.lastSlide.buttonLabel" = "Ulertuta!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Automatikoki blokeatu jarraipena nabigatu ahala. Ondoren sakatu zure gailutik ezabatzeko bisitatutako orriak, bilaketak, cookieak eta pasahitzak.";
-
-/* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Nabigatu inor begira ez balego bezala.";
-
-/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "Apple Handoff sinkronizatzen ari da";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Nabigatze pribatu automatikoa.";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Nabigatu. Ezabatu. Errepikatu.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Itxi";
@@ -273,36 +201,6 @@
 
 /* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Title" = "Ongi etorri Firefox %@(e)ra!";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "Utzi";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (nabigatze pribatua)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "Gehiago";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Honekin kameraren karretean gorde ditzakezu irudiak";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Ireki ezarpenak";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "\"%@\" aplikazioak zure argazkietarako sarbidea nahi du";
-
-/* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "Konexioa ez da segurua";
-
-/* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "Konexioa segurua da";
-
-/* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Mahaigaineko gunea";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Sakatu Safari-n eta ondoren hautatu edukien blokeatzaileak";
@@ -367,9 +265,6 @@
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "Argia";
 
-/* Manual value for theme section in settings menu */
-"Settings.manualTheme" = "Eskuzkoa";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Baloratu %@";
 
@@ -381,9 +276,6 @@
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Gehitu beste bilaketa-motor bat";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Gehitu beste bilaketa-motor bat";
 
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "Gehitu bilaketa-motorra";
@@ -424,14 +316,8 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "ERRENDIMENDUA";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIBATUTASUNA";
-
-/* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "SEGURTASUNA";
 
 /* Label title for set as default browser row */
 "Settings.setAsDefaultBrowser" = "Ezarri nabigatzaile lehenetsi gisa";
@@ -471,9 +357,6 @@
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Erakutsi gomendioak hasierako pantailan";
-
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Zenbait bideo eta web orri apur litzake";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -519,12 +402,6 @@
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Bilatu orrian";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Eskuratu Firefox";
-
-/* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "Orri-ekintzak";
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Kendu lasterbideetatik";
@@ -652,44 +529,14 @@
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Babestuta zaude!";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "Erabili Touch ID %@ aplikaziora itzultzeko";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "Iragarkien jarraipen-elementuak";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "Estatistiken jarraipen-elementuak";
-
 /* Text for tracking protection screen showing the connection is not secure */
 "trackingProtection.connectionNotSecureLabel" = "Konexioa ez da segurua";
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Konexioa segurua da";
 
-/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
-"trackingProtection.connectionVerifiedByLabel" = "Egiaztatzailea: %@";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "Edukien jarraipen-elementuak";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "Jarraipenaren babesa desgaituta";
-
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Jarraipenaren babesa";
-
-/* Description/subtitle for the tracking protection label. */
-"trackingProtection.labelDescription" = "Hau itzaltzeak zenbait guneren arazoak konpon litzake";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "Argibide gehiago";
-
-/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
-"trackingProtection.moreSettings" = "Ezarpen gehiago";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "Sare sozialetako jarraipen-elementuak";
 
 /* Text for the status off from Tracking Protection. */
 "trackingProtection.statusOff" = "Babesak inaktibo daude saio honetarako";
@@ -697,14 +544,8 @@
 /* Text for the status on from Tracking Protection. */
 "trackingProtection.statusOn" = "Babesak aktibo daude saio honetarako";
 
-/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Desgaitu %@ itxi edo EZABATU sakatu arte.";
-
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "Jarraipenaren babes hobetua";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel2" = "Mantendu zure datuak zuretzat. Lineako zure jardueraren jarraipena egiten duten elementu ohikoenetatik babesten zaitu %@(e)k.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Blokeatutako jarraipen-elementuak %@ datatik";
@@ -714,9 +555,6 @@
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Gehitu automatikoki osatzeko lotura";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Utzi";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Itsatsi eta joan";

@@ -64,26 +64,11 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Tambah URL Penyesuaian";
 
-/* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Tambah dan urus penyesuaian URLs auto-lengkap.";
-
-/* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "URLs Penyesuaian";
-
-/* Title for the default URL list section */
-"Autocomplete.customTitle" = "SENARAI URL PENYESUAIAN";
-
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Penyesuaian URL baru ditambah.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "Aktifkan %@ supaya auto-lengkap lebih 450 URLs popular dalam bar alamat.";
-
-/* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "Auto-lengkap";
-
-/* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "SENARAI URL PIAWAI";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Dinyahdayakan";
@@ -112,23 +97,14 @@
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Sesi Baru";
 
-/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "Buka %@ apabila membuka semula supaya menghalang akses yang tidak dibenarkan.";
-
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Undur";
-
-/* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "Salin Alamat";
 
 /* Toast displayed after a URL has been copied to the clipboard */
 "browser.copyAddressToast" = "URL Disalin Ke Klipbod";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Salin";
-
-/* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "Tambah URL penyesuaian";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Hadapan";
@@ -139,32 +115,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Tetapan";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "Kongsi";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Berhenti";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Pilih Bar Lokasi";
-
-/* Label on button to cancel edits */
-"Cancel" = "Batal";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Salin Imej";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Salin Pautan";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Pautan yang disalin:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Simpan Imej";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Kongsi Pautan";
 
 /* Label on button to complete edits */
 "Done" = "Selesai";
@@ -187,26 +142,11 @@
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ mahu membuka %2$@";
 
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Hubungi";
-
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "Batal";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Emel";
-
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "Anda kini meninggalkan %@.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Buka App Store";
-
-/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ mahu membuka App Store.";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Buka Maps";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
 "FindInPage.Done" = "Cari dalam halaman siap";
@@ -221,46 +161,10 @@
 "FirstRun.lastSlide.buttonLabel" = "OK, Faham!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Sekat penjejak atas talian secara automatik semasa anda berlayar. Kemudian tap untuk memadam halaman dilawati, carian, kuki dan kata laluan dari peranti anda.";
-
-/* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Layari seperti tiada sesiapa yang melihat.";
-
-/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "Apple Handoff sedang menyelaras";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Pelayaran peribadi automatik.";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Layar. Buang. Ulang.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Tutup";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "Batal";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (Pelayaran Peribadi)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "Selanjutnya";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Ini membolehkan anda menyimpan imej ke dalam Jalur Kamera";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Buka Tetapan";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” Mahu Mengakses Foto Anda";
-
-/* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Pinta Laman Desktop";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Tap Safari, kemudian pilih Penyekat Kandungan";
@@ -319,9 +223,6 @@
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Tambah Enjin Carian Lain";
 
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Tambah Enjin Carian Lain";
-
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "Tambah Enjin Carian";
 
@@ -358,14 +259,8 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "PERFORMANCE";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
-
-/* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "SEKURITI";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Sekat fon Web";
@@ -378,9 +273,6 @@
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Papar panduan skrin utama";
-
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Boleh mengganggu sesetengah kandungan video dan laman Web";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -408,12 +300,6 @@
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Cari dalam Halaman";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Dapatkan app Firefox";
-
-/* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "Tindakan Halaman";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Pinta Laman Desktop";
@@ -451,38 +337,11 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL untuk dibuka";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "Guna Touch ID untuk kembali ke %@";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "Penjejak iklan";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "Penjejak analitik";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "Penjejak kandungan";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "Perlindungan Penjejakan dinyahaktifkan";
-
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Perlindungan Penjejakan";
 
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "Ketahui Selanjutnya";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "Penjejak sosial";
-
-/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Nyahdayakan sehingga anda tutup %@ atau tekan BUANG.";
-
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Tambah pautan ke autolengkap";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Batal";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Tampal & Lancarkan";

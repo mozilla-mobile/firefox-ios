@@ -73,26 +73,11 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ ouzhpennañ un URL personelaet";
 
-/* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Ouzhpennañ ha merañ URLoù klokaet ent emgefreek personelaet.";
-
-/* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "URLoù personelaet";
-
-/* Title for the default URL list section */
-"Autocomplete.customTitle" = "ROLL URL PERSONELAET";
-
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "URL personelaet ouzhpennet.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "Gweredekait evit ma vefe klokaet gant %@ ent emgefreek ouzhpenn 450 URL brudet er varrenn chomlec'h.";
-
-/* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "Klokaat ent emgefreek";
-
-/* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "ROLL URL DRE ZIOUER";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Diweredekaet";
@@ -121,23 +106,14 @@
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Estez nevez";
 
-/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "DIbrennit %@ pa addigor evit mirout ouzh kement haeziñ diaotreet.";
-
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Distreiñ";
-
-/* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "Eilañ ar chomlec'h";
 
 /* Toast displayed after a URL has been copied to the clipboard */
 "browser.copyAddressToast" = "URL eilet er golver";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Eilañ";
-
-/* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "Ouzhpennañ un URL personelaet";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "War-lerc'h";
@@ -148,32 +124,11 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Arventennoù";
 
-/* Accessibility label for the share button */
-"Browser.shareLabel" = "Rannañ";
-
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Herzel";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Diuzañ ar varrenn lec'hiadur";
-
-/* Label on button to cancel edits */
-"Cancel" = "Nullañ";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Eilañ ar skeudenn";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Eilañ an ere";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Ere eilet ganeoc'h:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Enrollañ ar skeudenn";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Rannañ an ere";
 
 /* Label on button to complete edits */
 "Done" = "Graet";
@@ -196,26 +151,11 @@
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "Fellout a ra da %1$@ digeriñ %2$@";
 
-/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Gervel";
-
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "Nullañ";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Postel";
-
-/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "Kuitaat a reoc'h %@.";
-
-/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Digeriñ an App Store";
-
-/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "Fellout a ra da %@ digeriñ an App Store.";
-
-/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Digeriñ an arload kartennoù";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
 "FindInPage.Done" = "Kavet er bajenn";
@@ -230,19 +170,7 @@
 "FirstRun.lastSlide.buttonLabel" = "Mat eo, komprenet 'm eus!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Stankit an heulierien enlinenn ent emgefreek pa verdeit. Stokit evit dilemel ar pajennoù gweladennet, an toupinoù, an enklaskoù hag ar gerioù-tremen eus ho trevnad.";
-
-/* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Merdeit 'vel ma vefe den o sellet.";
-
-/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "O c'houbredañ emañ Apple Handoff";
-
-/* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Merdeiñ prevez emgefreek.";
-
-/* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Merdeit. Diverkit. Adkrogit.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Serriñ";
@@ -273,36 +201,6 @@
 
 /* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Title" = "Degemer mat war Firefox %@!";
-
-/* Label in share alert to cancel the alert */
-"Open.Cancel" = "Nullañ";
-
-/* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (Merdeiñ prevez)";
-
-/* Label in share alert to open the full system share menu */
-"Open.More" = "Muioc'h";
-
-/* Label in share alert to open the URL in Safari */
-"Open.Safari" = "Safari";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Aotren a ra ac'hanoc'h da enrollañ skeudennoù d'ho koc'henn";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Digeriñ an arventennoù";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "Fellout a ra da “%@” haeziñ ho skeudennoù";
-
-/* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "N'eo ket diarvar ar c'hennask";
-
-/* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "Kennask suraet";
-
-/* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Goulenn al lec'hienn evit an urzhiataerioù";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Stokit war Safari ha diuzit ar stankaerioù endalc'had";
@@ -367,9 +265,6 @@
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "Sklaer";
 
-/* Manual value for theme section in settings menu */
-"Settings.manualTheme" = "Gant an dorn";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Feur %@";
 
@@ -381,9 +276,6 @@
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Ouzhpennañ ur c'heflusker enklask all";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Ouzhpennañ ur c'heflusket enklask all";
 
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "Ouzhpennañ ur c'heflusker enklask";
@@ -424,14 +316,8 @@
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
-/* Section label for performance toggles */
-"Settings.sectionPerformance" = "DIGONUSTED";
-
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "BUHEZ PREVEZ";
-
-/* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "DIOGELROEZ";
 
 /* Label title for set as default browser row */
 "Settings.setAsDefaultBrowser" = "Lakaat evel merdeer dre ziouer";
@@ -471,9 +357,6 @@
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Diskouez tunioù pennbajenn";
-
-/* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Gallout a ra mirout videoioù ha pajennadoù web da vont en-dro en un doare dereat";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -519,12 +402,6 @@
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Kavout er bajennad";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Kaout an arload Firefox";
-
-/* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "Obererezhioù ar bajenn";
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Lemel diouzh ar berradennoù";
@@ -652,44 +529,14 @@
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Gwarezet hoc’h!";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "Implijit Touch ID evit distreiñ da %@";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "Heulieroù bruderezh";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "Heulieroù digejañ";
-
 /* Text for tracking protection screen showing the connection is not secure */
 "trackingProtection.connectionNotSecureLabel" = "N'eo ket diarvar ar c'hennask";
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Kennask suraet";
 
-/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
-"trackingProtection.connectionVerifiedByLabel" = "Gwiriet gant %@";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "Heulieroù endalc'had";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "Diweredekaet eo ar gware heuliañ";
-
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Gwarez heuliañ";
-
-/* Description/subtitle for the tracking protection label. */
-"trackingProtection.labelDescription" = "Diweredekaat an dra-se a c'hallfe diskoulmañ kudennoù 'zo el lec'hienn";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "Gouzout hiroc'h";
-
-/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
-"trackingProtection.moreSettings" = "Muioc'h a arventennoù";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "Heulieroù kevredadel";
 
 /* Text for the status off from Tracking Protection. */
 "trackingProtection.statusOff" = "DIWEREDEKAET eo ar gwarezioù evit an dalc'h-mañ";
@@ -697,14 +544,8 @@
 /* Text for the status on from Tracking Protection. */
 "trackingProtection.statusOn" = "GWEREDEKAET eo ar gwarezioù evit an dalc'h-mañ";
 
-/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Diweredekaat betek ma vo serret %@ pe stoket DILEMEL.";
-
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "Gwarez heuliañ araoket";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel2" = "Mirit ho roadennoù ganeoc'h. %@ ho kwarez a-enep lodenn vrasañ an heulierien a sell ar pezh a rit enlinenn.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Heulierien stanket abaoe %@";
@@ -714,9 +555,6 @@
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Ouzhpennañ un ere d'al leuniadur emgefreek";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Nullañ";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Pegañ & Mont";
