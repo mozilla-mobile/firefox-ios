@@ -874,8 +874,11 @@ class BrowserViewController: UIViewController {
         let verificationQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue",
                                               qos: .utility)
         verificationQueue.async {
-            let wallpaperManager = LegacyWallpaperManager()
-            wallpaperManager.runResourceVerification()
+            let legacyWallpaperManager = LegacyWallpaperManager()
+            legacyWallpaperManager.runResourceVerification()
+
+            let wallpaperManager = WallpaperManager()
+            wallpaperManager.checkForUpdates()
         }
     }
 

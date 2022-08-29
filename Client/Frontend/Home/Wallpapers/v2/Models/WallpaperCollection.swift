@@ -12,6 +12,8 @@ struct WallpaperCollection: Codable, Equatable {
         case availableLocales = "available-locales"
         case availability = "availability-range"
         case wallpapers
+        case description
+        case heading
     }
 
     let id: String
@@ -19,9 +21,16 @@ struct WallpaperCollection: Codable, Equatable {
     let availableLocales: [String]?
     let availability: WallpaperCollectionAvailability?
     let wallpapers: [Wallpaper]
+    let description: String?
+    let heading: String?
 
     var type: WallpaperCollectionType {
         return id == "classic-firefox" ? .classic : .limitedEdition
+    }
+
+    var learnMoreUrl: URL? {
+        guard let urlString = learnMoreURLString else { return nil }
+        return URL(string: urlString)
     }
 
     init(
@@ -29,17 +38,16 @@ struct WallpaperCollection: Codable, Equatable {
         learnMoreURL: String?,
         availableLocales: [String]?,
         availability: WallpaperCollectionAvailability?,
-        wallpapers: [Wallpaper]
+        wallpapers: [Wallpaper],
+        description: String?,
+        heading: String?
     ) {
         self.id = id
         self.learnMoreURLString = learnMoreURL
         self.availableLocales = availableLocales
         self.availability = availability
         self.wallpapers = wallpapers
-    }
-
-    var learnMoreUrl: URL? {
-        guard let urlString = learnMoreURLString else { return nil }
-        return URL(string: urlString)
+        self.description = description
+        self.heading = heading
     }
 }

@@ -11,7 +11,7 @@ protocol WallpaperMetadataTrackerProtocol {
 
 /// Responsible for tracking whether or not the wallpaper system should perform
 /// a variety of checks, such as whether it should fetch data from the server.
-class WallpaperMetadataTracker: WallpaperMetadataTrackerProtocol, Loggable {
+class WallpaperMetadataUtility: WallpaperMetadataTrackerProtocol, Loggable {
 
     // MARK: - Properties
 
@@ -48,13 +48,12 @@ class WallpaperMetadataTracker: WallpaperMetadataTrackerProtocol, Loggable {
     // MARK: - Public interface
     public func metadataUpdateFetchedNewData() async -> Bool {
         if !shouldCheckForNewMetadata { return false }
-        return await attemptToFetchMetadata()
-    }
 
-    // MARK: - Private methods
-    private func attemptToFetchMetadata() async -> Bool {
         do {
-            let metadata = try await fetchMetadata()
+            let newMetadata = try await attemptToFetchMetadata()
+            try attemptToStore(newMetadata)
+            markLastUpdatedDate(with: Date())
+
             return true
 
         } catch {
@@ -62,8 +61,29 @@ class WallpaperMetadataTracker: WallpaperMetadataTrackerProtocol, Loggable {
             return false
         }
     }
-    private func fetchMetadata() async throws -> WallpaperMetadata {
+
+    public func getMetadata() -> WallpaperMetadata? {
+        let storageUtility = WallpaperStorageUtility()
+        guard let metadata = storageUtility.fetchMetadata() else { return nil }
+
+        return metadata
+    }
+
+    // MARK: - Private methods
+    private func attemptToFetchMetadata() async throws -> WallpaperMetadata {
         let dataService = WallpaperDataService(with: networkingModule)
-        return try await dataService.getMetadata()
+        let metadata = try await dataService.getMetadata()
+
+        return metadata
+    }
+
+    private func attemptToStore(_ metadata: WallpaperMetadata) throws {
+        let storageUtility = WallpaperStorageUtility()
+        try storageUtility.store(metadata)
+    }
+
+    private func markLastUpdatedDate(with date: Date) {
+        let todaysDate = Calendar.current.startOfDay(for: date)
+        userDefaults.set(todaysDate, forKey: prefsKey)
     }
 }

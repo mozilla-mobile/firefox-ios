@@ -34,7 +34,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
 
     /// Returns the currently selected wallpaper.
     public var currentWallpaper: Wallpaper {
-        return Wallpaper(id: "fxDefault", textColour: UIColor.green)
+        return Wallpaper(id: "fxDefault", textColour: UIColor.green, cardColour: .purple)
     }
 
     /// Returns all available collections and their wallpaper data. Availability is
@@ -42,10 +42,10 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
     public var availableCollections: [WallpaperCollection] {
         var wallpapersForClassic: [Wallpaper] {
             var wallpapers = [Wallpaper]()
-            wallpapers.append(Wallpaper(id: "fxDefault", textColour: UIColor.green))
+            wallpapers.append(Wallpaper(id: "fxDefault", textColour: UIColor.green, cardColour: .purple))
 
             for _ in 0..<4 {
-                wallpapers.append(Wallpaper(id: "fxAmethyst", textColour: UIColor.red))
+                wallpapers.append(Wallpaper(id: "fxAmethyst", textColour: UIColor.red, cardColour: .purple))
             }
 
             return wallpapers
@@ -55,7 +55,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
             var wallpapers = [Wallpaper]()
             let rangeEnd = Int.random(in: 3...6)
             for _ in 0..<rangeEnd {
-                wallpapers.append(Wallpaper(id: "fxCerulean", textColour: UIColor.purple))
+                wallpapers.append(Wallpaper(id: "fxCerulean", textColour: UIColor.purple, cardColour: .purple))
             }
 
             return wallpapers
@@ -67,13 +67,19 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
                 learnMoreURL: nil,
                 availableLocales: nil,
                 availability: nil,
-                wallpapers: wallpapersForClassic),
+                wallpapers: wallpapersForClassic,
+                description: nil,
+                heading: nil
+            ),
             WallpaperCollection(
                 id: "otherCollection",
                 learnMoreURL: "https://www.mozilla.com",
                 availableLocales: nil,
                 availability: nil,
-                wallpapers: wallpapersForOther),
+                wallpapers: wallpapersForOther,
+                description: nil,
+                heading: nil
+            ),
         ]
     }
 
@@ -121,7 +127,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
     /// to existing metadata, and, if there are changes, performs the necessary operations
     /// to ensure parity between server data and what the user sees locally.
     public func checkForUpdates() {
-        let metadataTracker = WallpaperMetadataTracker(and: networkingModule)
+        let metadataTracker = WallpaperMetadataUtility(and: networkingModule)
 
         Task {
             let didFetchNewData = await metadataTracker.metadataUpdateFetchedNewData()

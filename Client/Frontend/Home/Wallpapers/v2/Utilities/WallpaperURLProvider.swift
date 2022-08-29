@@ -61,6 +61,9 @@ struct WallpaperURLProvider {
     private func urlScheme() throws -> String {
         if AppConstants.isRunningTest { return WallpaperURLProvider.testURL }
 
+        // roux!
+        return "https://assets.mozilla.net/mobile-wallpapers"
+
         let bundle = AppInfo.applicationBundle
         guard let appToken = bundle.object(forInfoDictionaryKey: wallpaperURLScheme) as? String,
               !appToken.isEmpty

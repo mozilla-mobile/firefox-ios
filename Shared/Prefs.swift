@@ -40,7 +40,8 @@ public struct PrefsKeys {
     public static let KeySecondRun = "SecondRun"
 
     public struct Wallpapers {
-        public static let MetadataLastCheckedDate = "WallpaperMetadataLastCheckedPrefsKey"
+        public static let MetadataLastCheckedDate = "WallpaperMetadataLastCheckedUserPrefsKey"
+        public static let CurrentWallpaper = "CurrentWallpaperUserPrefsKey"
     }
 
     // For ease of use, please list keys alphabetically.

@@ -12,7 +12,7 @@ import XCTest
 class WallpaperMetadataTrackerTests: XCTestCase {
 
     // MARK: - Properties
-    var sut: WallpaperMetadataTracker!
+    var sut: WallpaperMetadataUtility!
     var mockUserDefaults: MockUserDefaults!
 
     private let prefsKey = PrefsKeys.Wallpapers.MetadataLastCheckedDate
@@ -21,7 +21,7 @@ class WallpaperMetadataTrackerTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         mockUserDefaults = MockUserDefaults()
-        sut = WallpaperMetadataTracker(with: mockUserDefaults,
+        sut = WallpaperMetadataUtility(with: mockUserDefaults,
                                        and: WallpaperNetworkingModule())
     }
 

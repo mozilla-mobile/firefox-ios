@@ -5,7 +5,7 @@
 import Foundation
 
 enum WallpaperType: String {
-    case defaltWallpaper
+    case defaultWallpaper
     case other
 }
 
@@ -13,11 +13,13 @@ enum WallpaperType: String {
 struct Wallpaper: Equatable {
     enum CodingKeys: String, CodingKey {
         case textColour = "text-color"
+        case cardColour = "card-color"
         case id
     }
 
     let id: String
     let textColour: UIColor
+    let cardColour: UIColor
 
     var type: WallpaperType {
         return id == "fxDefault" ? .defaultWallpaper : .other
@@ -53,12 +55,22 @@ extension Wallpaper: Decodable {
 
         id = try values.decode(String.self, forKey: .id)
 
-        let hexString = try values.decode(String.self, forKey: .textColour)
+        let textHexString = try values.decode(String.self, forKey: .textColour)
+        let cardHexString = try values.decode(String.self, forKey: .cardColour)
 
-        // Validate that `hexString` is actually a valid hex vaule
         var colorInt: UInt64 = 0
-        if Scanner(string: hexString).scanHexInt64(&colorInt) {
-            textColour = UIColor(colorString: hexString)
+        if Scanner(string: textHexString).scanHexInt64(&colorInt) {
+            textColour = UIColor(colorString: textHexString)
+        } else {
+            throw DecodingError.dataCorrupted(
+                DecodingError.Context(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "Received text-colour is not a proper hex code"))
+        }
+
+        colorInt = 0
+        if Scanner(string: cardHexString).scanHexInt64(&colorInt) {
+            cardColour = UIColor(colorString: cardHexString)
         } else {
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
@@ -71,9 +83,11 @@ extension Wallpaper: Decodable {
 extension Wallpaper: Encodable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        let hexString = textColour.hexString
+        let textHex = textColour.hexString
+        let cardHex = cardColour.hexString
 
         try container.encode(id, forKey: .id)
-        try container.encode(hexString, forKey: .textColour)
+        try container.encode(textHex, forKey: .textColour)
+        try container.encode(cardHex, forKey: .cardColour)
     }
 }

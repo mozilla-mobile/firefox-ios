@@ -21,7 +21,8 @@ class WallpaperMetadataLoader {
     func fetchMetadata(from url: URL) async throws -> WallpaperMetadata {
         let (data, _) = try await networkModule.data(from: url)
 
-        return try decodeMetadata(from: data)
+        let metadata = try decodeMetadata(from: data)
+        return metadata //try decodeMetadata(from: data)
     }
 
     // MARK: - Private methods
@@ -29,6 +30,18 @@ class WallpaperMetadataLoader {
     /// Given some data, if that data is a valid JSON file, it attempts to decode it
     /// into a `WallpaperMetadata` object
     private func decodeMetadata(from data: Data) throws -> WallpaperMetadata {
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print(jsonString)
+
+            let jsonData = jsonString.data(using: .utf8)!
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .formatted(dateFormatter)
+
+            return try decoder.decode(WallpaperMetadata.self, from: jsonData)
+        } else {
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -37,5 +50,6 @@ class WallpaperMetadataLoader {
         decoder.dateDecodingStrategy = .formatted(dateFormatter)
 
         return try decoder.decode(WallpaperMetadata.self, from: data)
+        }
     }
 }
