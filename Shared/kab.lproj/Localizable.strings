@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Tansa akked unadi";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Rnu ɣer tebdart n tɣuri";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "Afeggag n tansa";
 
@@ -580,6 +583,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Dduṛt yezrin";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Ticraḍ n isebtar";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Azray";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Sefsex";
 
@@ -747,6 +756,12 @@
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Isadaren";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Ammesten yensa i usmel-a";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Ammesten yermed i usmel-a";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Tallelt";
@@ -991,6 +1006,12 @@
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Askar n tɣuri yella";
 
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Creḍ amzun yettwaɣṛa";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Creḍ-it amzun ur yettwaɣri ara";
+
 /* Panel accessibility label */
 "Reading list" = "Tabdart n tɣuri";
 
@@ -1089,6 +1110,15 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Ih";
+
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Amsedday n unadi amezwer";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "Amsedday n unadi amezwer";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "Nadi";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Azen aneqqis n uɣelluy akken Mozilla ad tefru ugur?";
@@ -1651,6 +1681,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Ffer accaren irurmiden";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Nadi";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Rnu iccer";
 
@@ -1681,6 +1714,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "Ldi iccaren";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Sken iccaren";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Asebter ur d-yettwaskan ara deg tmeẓri n umeɣri.";
 
@@ -1692,6 +1728,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "dduṛt-a";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "iḍelli";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "Maci tura";
@@ -1740,6 +1779,9 @@
 
 /* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
 "Upgrade.SyncSign.Action.v106" = "Kcem";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "Abeddel seg ugdil ɣer wayeḍ fessus ugar ɣef wayen iɛeddan";
 
 /* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
 "Upgrade.Welcome.Action.v106" = "Bdu";

@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "網址與搜尋";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "新增至閱讀清單";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "網址列";
 
@@ -580,6 +583,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "上週";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "書籤";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "瀏覽紀錄";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "取消";
 
@@ -747,6 +756,12 @@
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "下載";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "已關閉此網站的追蹤保護";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "已開啟此網站的追蹤保護";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "說明";
@@ -1000,6 +1015,12 @@
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "可使用閱讀模式";
 
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "標示為已讀";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "標示為未讀";
+
 /* Panel accessibility label */
 "Reading list" = "閱讀清單";
 
@@ -1098,6 +1119,15 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "確定";
+
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "預設搜尋引擎";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "預設搜尋引擎";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "搜尋";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "要傳送錯誤報告，讓 Mozilla 改善這些問題嗎？";
@@ -1660,6 +1690,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "隱藏閒置分頁";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "搜尋";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "新增分頁";
 
@@ -1690,6 +1723,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "開啟分頁";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "顯示分頁";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "無法在閱讀畫面中顯示此頁面。";
 
@@ -1701,6 +1737,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "本週";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "昨天";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "現在不要";

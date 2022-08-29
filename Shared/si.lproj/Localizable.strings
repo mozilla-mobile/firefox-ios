@@ -353,7 +353,7 @@
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "සැකසුම්";
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
-"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "අපගේ අනුග්‍රහකයින් හා ඔබගේ පෞද්ගලිකත්වය";
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "අපගේ අනුග්‍රහකයින් හා ඔබගේ පෞද්ගලිකත්‍වය";
 
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "සියළු සමමුහූර්ත පටිති බලන්න";
@@ -377,16 +377,16 @@
 "FxA.NoInternetConnection" = "අන්තර්ජාල සම්බන්ධතාවයක් නැත";
 
 /* FxA sign in view subtitle */
-"fxa.signin.camera-signin" = "ඔබගේ කැමරාව සමඟ පිවිසෙන්න";
+"fxa.signin.camera-signin" = "කැමරාව සමඟ පිවිසෙන්න";
 
 /* FxA sign in view qr code instructions */
 "fxa.signin.qr-link-instruction" = "පරිගණකයෙහි ෆයර්ෆොක්ස් විවෘත කර firefox.com/pair වෙත යන්න";
 
 /* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "සුපිරික්සීමට සූදානම්";
+"fxa.signin.ready-to-scan" = "පරිලෝකනයට සූදානම්";
 
 /* FxA sign in view email login button */
-"fxa.signin.use-email-instead" = "වි-තැපෑල භාවිතා කරන්න";
+"fxa.signin.use-email-instead" = "වි-තැපෑල යොදාගන්න";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "සමමුහූර්ත කරන්න";
@@ -931,6 +931,9 @@
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
 "Onboarding.WallpaperTitle.v102" = "ෆයර්ෆොක්ස් බිතුපතක් තෝරන්න";
 
+/* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Description.v106" = "ෆයර්ෆොක්ස් ලාභයට වඩා මිනිසුන් ඉහළින් තබා මූලිකව ඔබගේ පෞද්ගලිකත්‍වය ආරක්‍ෂා කරයි.";
+
 /* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v106" = "ස්වාධීන අන්තර්ජාලයකට පිළිගනිමු";
 
@@ -968,10 +971,10 @@
 "PhotonMenu.close" = "වසන්න";
 
 /* Privacy section title */
-"Privacy" = "පෞද්ගලිකත්වය";
+"Privacy" = "පෞද්ගලිකත්‍වය";
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
-"Privacy Policy" = "පෞද්ගලිකත්ව ප්‍රතිපත්තිය";
+"Privacy Policy" = "පෞද්ගලිකත්‍ව ප්‍රතිපත්තිය";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
 "ProtectionStatus.NotSecure" = "සම්බන්ධතාවය අනාරක්‍ෂිතයි";

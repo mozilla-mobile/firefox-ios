@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Adresse und Suche";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Zur Leseliste hinzufügen";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "Adressleiste";
 
@@ -580,6 +583,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Letzte Woche";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Lesezeichen";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Chronik";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Abbrechen";
 
@@ -747,6 +756,12 @@
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Downloads";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Der Schutz für diese Website ist deaktiviert";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Der Schutz für diese Website ist aktiviert";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Hilfe";
@@ -1000,6 +1015,12 @@
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Lesemodus verfügbar";
 
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Als gelesen markieren";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Als ungelesen markieren";
+
 /* Panel accessibility label */
 "Reading list" = "Leseliste";
 
@@ -1098,6 +1119,15 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
+
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Standardsuchmaschine";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "Standardsuchmaschine";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "Suche";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Einen Absturzbericht senden, damit Mozilla das Problem beheben kann?";
@@ -1660,6 +1690,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Inaktive Tabs ausblenden";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Suche";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Tab hinzufügen";
 
@@ -1690,6 +1723,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "Offene Tabs";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Tabs anzeigen";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Die Seite konnte nicht in der Leseansicht dargestellt werden.";
 
@@ -1701,6 +1737,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "diese Woche";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "Gestern";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "Nicht jetzt";
