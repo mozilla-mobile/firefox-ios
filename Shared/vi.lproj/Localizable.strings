@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Địa chỉ và tìm kiếm";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Thêm vào danh sách đọc";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "Thanh địa chỉ";
 
@@ -580,6 +583,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Tuần trước";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Dấu trang";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Lịch sử";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Hủy bỏ";
 
@@ -747,6 +756,12 @@
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Tải xuống";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Bảo vệ đã TẮT cho trang web này";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Bảo vệ đã BẬT cho trang web này";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Trợ giúp";
@@ -1000,6 +1015,12 @@
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Chế độ đọc sách có sẵn";
 
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Đánh dấu là đã đọc";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Đánh dấu là chưa đọc";
+
 /* Panel accessibility label */
 "Reading list" = "Danh sách đọc";
 
@@ -1098,6 +1119,15 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
+
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Công cụ tìm kiếm mặc định";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "Công cụ tìm kiếm mặc định";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "Tìm kiếm";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Gửi báo cáo lỗi để Mozilla có thể khắc phục sự cố?";
@@ -1660,6 +1690,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Ẩn các thẻ không hoạt động";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Tìm kiếm";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Thêm thẻ";
 
@@ -1690,6 +1723,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "Các thẻ đang mở";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Hiển thị thẻ";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Trang này không thể hiển thị trong chế độ đọc sách.";
 
@@ -1701,6 +1737,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "tuần này";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "hôm qua";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "Không phải bây giờ";

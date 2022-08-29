@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Adres en Zoeken";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Toevoegen aan leeslijst";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "Adresbalk";
 
@@ -580,6 +583,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Vorige week";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Bladwijzers";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Geschiedenis";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Annuleren";
 
@@ -747,6 +756,12 @@
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Downloads";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Beschermingen voor deze website staan UIT";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Beschermingen voor deze website staan AAN";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Help";
@@ -1000,6 +1015,12 @@
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Lezermodus beschikbaar";
 
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Markeren als gelezen";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Markeren als ongelezen";
+
 /* Panel accessibility label */
 "Reading list" = "Leeslijst";
 
@@ -1098,6 +1119,15 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
+
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Standaardzoekmachine";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "Standaardzoekmachine";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "Zoeken";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Een crashrapport verzenden, zodat Mozilla het probleem kan verhelpen?";
@@ -1660,6 +1690,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Inactieve tabbladen verbergen";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Zoeken";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Tabblad toevoegen";
 
@@ -1690,6 +1723,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "Open tabbladen";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Tabbladen tonen";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "De pagina kon niet in de lezerweergave worden weergegeven.";
 
@@ -1701,6 +1737,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "deze week";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "gisteren";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "Niet nu";
