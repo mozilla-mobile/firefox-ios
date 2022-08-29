@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var appLaunchUtil: AppLaunchUtil?
     private var backgroundSyncUtil: BackgroundSyncUtil?
     private var widgetManager: TopSitesWidgetManager?
+    private var menuBuilderHelper: MenuBuilderHelper?
 
     func application(_ application: UIApplication,
                      willFinishLaunchingWithOptions
@@ -42,6 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
+
+        menuBuilderHelper = MenuBuilderHelper()
 
         setupRootViewController()
         startListeningForThemeUpdates()
@@ -285,6 +288,6 @@ extension AppDelegate {
 
         guard builder.system == .main else { return }
 
-        MenuBuilderHelper.defaultHelper.mainMenu(for: builder)
+        menuBuilderHelper?.mainMenu(for: builder)
     }
 }

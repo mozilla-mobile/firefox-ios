@@ -13,13 +13,6 @@ class MenuBuilderHelper {
         static let tools = UIMenu.Identifier("com.mozilla.firefox.menus.tools")
     }
 
-    open class var defaultHelper: MenuBuilderHelper {
-        struct Singleton {
-            static let instance = MenuBuilderHelper()
-        }
-        return Singleton.instance
-    }
-
     func mainMenu(for builder: UIMenuBuilder) {
         let newPrivateTab = UICommandAlternate(title: .KeyboardShortcuts.NewPrivateTab, action: #selector(BrowserViewController.newPrivateTabKeyCommand), modifierFlags: [.shift])
 
@@ -40,18 +33,20 @@ class MenuBuilderHelper {
             }
         }
 
-        let editMenu = UIMenu(options: .displayInline, children: [
+        let findMenu = UIMenu(options: .displayInline, children: [
             UIKeyCommand(title: .KeyboardShortcuts.Find, action: #selector(BrowserViewController.findInPageKeyCommand), input: "f", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.Find),
             UIKeyCommand(title: .KeyboardShortcuts.FindAgain, action: #selector(BrowserViewController.findInPageAgainKeyCommand), input: "g", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.FindAgain),
         ])
 
         if #available(iOS 15, *) {
-            editMenu.children.forEach {
+            findMenu.children.forEach {
                 ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
             }
         }
 
         let viewMenu = UIMenu(options: .displayInline, children: [
+            UIKeyCommand(title: .KeyboardShortcuts.ZoomIn, action: #selector(BrowserViewController.zoomIn), input: "+", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ZoomIn),
+            UIKeyCommand(title: .KeyboardShortcuts.ZoomOut, action: #selector(BrowserViewController.zoomOut), input: "-", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ZoomOut),
             UIKeyCommand(title: .KeyboardShortcuts.ActualSize, action: #selector(BrowserViewController.resetZoom), input: "0", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ActualSize),
             UIKeyCommand(title: .KeyboardShortcuts.ReloadPage, action: #selector(BrowserViewController.reloadTabKeyCommand), input: "r", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ReloadPage)
         ])
@@ -94,7 +89,8 @@ class MenuBuilderHelper {
 
         builder.insertChild(applicationMenu, atStartOfMenu: .application)
         builder.insertChild(fileMenu, atStartOfMenu: .file)
-        builder.insertChild(editMenu, atStartOfMenu: .edit)
+        builder.replace(menu: .find, with: findMenu)
+        builder.remove(menu: .font)
         builder.insertChild(viewMenu, atStartOfMenu: .view)
         builder.insertSibling(historyMenu, afterMenu: .view)
         builder.insertSibling(bookmarksMenu, afterMenu: MenuIdentifiers.history)
