@@ -1,0 +1,22 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+# Metrics specific to the history storage
+history:
+  num_visits:
+    type: quantity
+    unit: visit
+    description: >
+      The number of visits in a User's history database
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3260
+    data_reviews:
+      - TODO
+    notification_emails:
+      - sync-core@mozilla.com
+      - teshaq@mozilla.com
+    expires: never

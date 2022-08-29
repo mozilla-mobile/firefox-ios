@@ -76,4 +76,8 @@ extension SQLiteHistory {
         site.metadata = pageMetadataColumnFactory(row)
         return site
     }
+
+    class func countAllVisitsFactory(_ row: SDRow) -> Int? {
+        return row[0] as? Int
+    }
 }
