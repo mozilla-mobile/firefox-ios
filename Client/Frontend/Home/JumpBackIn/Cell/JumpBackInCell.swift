@@ -239,15 +239,6 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         fallbackFaviconBackground.addBlurEffectWithClearBackgroundAndClipping(using: .systemMaterial)
     }
-
-    private func addShadow() {
-        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = UX.stackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
-        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = 0.12
-    }
 }
 
 // MARK: - Theme
