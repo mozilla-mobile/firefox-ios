@@ -59,7 +59,8 @@ class WallpaperSettingsViewController: UIViewController, Loggable {
         super.viewDidLoad()
         setupView()
         applyTheme()
-        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged, UIContentSizeCategory.didChangeNotification])
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -222,7 +223,7 @@ private extension WallpaperSettingsViewController {
         configureCollectionView()
     }
 
-    private func showToast() {
+    func showToast() {
         let toast = ButtonToast(
             labelText: WallpaperSettingsViewModel.Constants.Strings.Toast.label,
             buttonText: WallpaperSettingsViewModel.Constants.Strings.Toast.button,
@@ -242,7 +243,7 @@ private extension WallpaperSettingsViewController {
         }
     }
 
-    private func dismissView() {
+    func dismissView() {
         guard let navigationController = self.navigationController as? ThemedNavigationController else { return }
 
         if let isFxHomeTab = viewModel.tabManager.selectedTab?.isFxHomeTab, !isFxHomeTab {
@@ -250,6 +251,11 @@ private extension WallpaperSettingsViewController {
         }
 
         navigationController.done()
+    }
+
+    func preferredContentSizeChanged(_ notification: Notification) {
+        // Reload the complete collection view as the section headers are not adjusting their size correctly otherwise
+        collectionView.reloadData()
     }
 }
 
@@ -260,6 +266,8 @@ extension WallpaperSettingsViewController: NotificationThemeable, Notifiable {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
+        case UIContentSizeCategory.didChangeNotification:
+            preferredContentSizeChanged(notification)
         default: break
         }
     }

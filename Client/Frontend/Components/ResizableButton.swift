@@ -43,7 +43,7 @@ class ResizableButton: UIButton {
         guard let title = titleLabel else {
             return super.intrinsicContentSize
         }
-        let size = title.intrinsicContentSize
+        let size = title.sizeThatFits(CGSize(width: frame.width, height: .greatestFiniteMagnitude))
         return CGSize(width: size.width + contentEdgeInsets.left + contentEdgeInsets.right, height: size.height + contentEdgeInsets.top + contentEdgeInsets.bottom)
     }
 

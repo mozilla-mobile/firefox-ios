@@ -95,7 +95,15 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
         if let buttonTitle = viewModel.buttonTitle,
            let buttonA11y = viewModel.buttonA11yIdentifier,
            let _ = viewModel.buttonAction {
-            learnMoreButton.setTitle(buttonTitle, for: .normal)
+            // make button underlined
+            let labelAttributes: [NSAttributedString.Key: Any] = [
+                .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 12.0),
+                .underlineStyle: NSUnderlineStyle.single.rawValue
+            ]
+
+            let attributeString = NSMutableAttributedString(string: buttonTitle,
+                                                            attributes: labelAttributes)
+            learnMoreButton.setAttributedTitle(attributeString, for: .normal)
             learnMoreButton.addTarget(self, action: #selector((buttonTapped(_:))), for: .touchUpInside)
             learnMoreButton.accessibilityIdentifier = buttonA11y
 
@@ -137,6 +145,7 @@ extension WallpaperSettingsHeaderView: NotificationThemeable, Notifiable {
 
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+
         if theme == .dark {
             contentStackView.backgroundColor = UIColor.Photon.DarkGrey40
             titleLabel.textColor = UIColor.Photon.Grey10
