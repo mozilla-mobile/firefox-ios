@@ -239,6 +239,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
     private func setupLayout() {
         contentView.layer.cornerRadius = UX.generalCornerRadius
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                    cornerRadius: UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = UX.stackViewShadowRadius
         contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
@@ -335,7 +337,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         itemTitleTopConstraint.constant = itemTitleTopAnchorConstant
 
         // Add blur
-        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThinMaterial)
+        fallbackFaviconBackground.addBlurEffectWithClearBackgroundAndClipping(using: .systemThinMaterial)
     }
 }
 

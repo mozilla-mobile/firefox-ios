@@ -236,8 +236,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         faviconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
 
         // Add blur
-        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-        fallbackFaviconBackground.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThinMaterial)
+        fallbackFaviconBackground.addBlurEffectWithClearBackgroundAndClipping(using: .systemThinMaterial)
     }
 }
 
