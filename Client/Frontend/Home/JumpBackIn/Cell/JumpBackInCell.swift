@@ -169,6 +169,12 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     private func setupLayout() {
         contentView.layer.cornerRadius = UX.generalCornerRadius
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                    cornerRadius: UX.generalCornerRadius).cgPath
+        contentView.layer.shadowRadius = UX.stackViewShadowRadius
+        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
+        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        contentView.layer.shadowOpacity = 0.12
 
         fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
         imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
@@ -229,18 +235,9 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         faviconCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
         faviconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
 
-        addShadow()
-        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThinMaterialLight,
-                                                                for: contentView)
-    }
-
-    private func addShadow() {
-        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = UX.stackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
-        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = 0.12
+        // Add blur
+        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        fallbackFaviconBackground.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
     }
 }
 

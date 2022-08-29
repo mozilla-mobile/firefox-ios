@@ -333,6 +333,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             itemTitleTopAnchorConstant = SyncedTabCell.UX.itemTitleTopAnchorCompactPhoneConstant
         }
         itemTitleTopConstraint.constant = itemTitleTopAnchorConstant
+
+        // Add blur
+        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
     }
 }
 

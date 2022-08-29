@@ -6,6 +6,13 @@ import UIKit
 
 extension UIView {
 
+    // Wait for contentView bounds to be correct and check if is has been added before
+    var shouldAddBlur: Bool {
+        guard !bounds.isEmpty else { return false }
+
+        return !subviews.contains(where: { $0 is UIVisualEffectView })
+    }
+
     /// Convenience function to ease creating new views.
     ///
     /// Calling this function creates a new view with `translatesAutoresizingMaskIntoConstraints`
@@ -44,18 +51,18 @@ extension UIView {
     /// using the desired blur style.
     ///
     /// - Parameter style: The strength of the blur desired
-    func addBlurEffectWithClearBackgroundAndClipping(using style: UIBlurEffect.Style,
-                                                     for view: UIView) {
-        view.clipsToBounds = true
-        view.backgroundColor = .clear
-        addBlurEffect(using: style, for: view)
+    func addBlurEffectWithClearBackgroundAndClipping(using style: UIBlurEffect.Style) {
+        guard !UIAccessibility.isReduceTransparencyEnabled, shouldAddBlur else { return }
+
+        clipsToBounds = true
+        backgroundColor = .clear
+        addBlurEffect(using: style)
     }
 
     /// Shortcut to set a blur effect on a view, given a specified style of blur desired.
     ///
     /// - Parameter style: The strength of the blur desired
-    func addBlurEffect(using style: UIBlurEffect.Style,
-                       for view: UIView) {
+    func addBlurEffect(using style: UIBlurEffect.Style) {
         let blurEffect = UIBlurEffect(style: style)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.layer.cornerRadius = 5
@@ -64,10 +71,10 @@ extension UIView {
         insertSubview(blurEffectView, at: 0)
 
         NSLayoutConstraint.activate([
-            blurEffectView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            blurEffectView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            blurEffectView.topAnchor.constraint(equalTo: view.topAnchor),
-            blurEffectView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            blurEffectView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            blurEffectView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            blurEffectView.topAnchor.constraint(equalTo: topAnchor),
+            blurEffectView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 
