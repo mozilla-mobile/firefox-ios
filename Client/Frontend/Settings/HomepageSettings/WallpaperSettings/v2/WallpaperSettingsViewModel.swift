@@ -57,8 +57,14 @@ class WallpaperSettingsViewModel {
         let isClassic = collection.type == .classic
         let title: String = isClassic ?
             .Settings.Homepage.Wallpaper.ClassicWallpaper : .Settings.Homepage.Wallpaper.LimitedEditionWallpaper
-        let desc: String? = isClassic ? nil : .Settings.Homepage.Wallpaper.IndependentVoicesDescription
+        var description: String? = isClassic ? nil : .Settings.Homepage.Wallpaper.IndependentVoicesDescription
         let buttonTitle: String? = isClassic ? nil : .Settings.Homepage.Wallpaper.LearnMoreButton
+
+        // the first limited edition collection has a different description, any other collection uses the default
+        if sectionIndex > 1 {
+            description = .Settings.Homepage.Wallpaper.LimitedEditionDefaultDescription
+        }
+
         let buttonAction = { [weak self] in
             guard let strongSelf = self, let learnMoreUrl = collection.learnMoreUrl else { return }
 
@@ -71,7 +77,7 @@ class WallpaperSettingsViewModel {
 
         return WallpaperSettingsHeaderViewModel(title: title,
                                                 titleA11yIdentifier: "title", // todo
-                                                description: desc,
+                                                description: description,
                                                 descriptionA11yIdentifier: "description", // todo
                                                 buttonTitle: buttonTitle,
                                                 buttonA11yIdentifier: "button", // todo
