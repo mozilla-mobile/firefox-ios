@@ -68,6 +68,7 @@ python-env/
 # Required for Glean
 /Client/Generated
 /Sync/Generated
+/Storage/Generated
 .venv/
 
 ThirdParty/google-breakpad
