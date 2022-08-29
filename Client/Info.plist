@@ -129,7 +129,7 @@
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>quick_action_new_tab</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>ShortcutItemTitleNewTab</string>
+			<string>New Tab</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).NewTab</string>
 		</dict>
@@ -137,7 +137,7 @@
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>quick_action_new_private_tab</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>ShortcutItemTitleNewPrivateTab</string>
+			<string>New Private Tab</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).NewPrivateTab</string>
 		</dict>
@@ -145,7 +145,7 @@
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>menu-ScanQRCode</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>ShortcutItemTitleQRCode</string>
+			<string>Scan QR Code</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).QRCode</string>
 		</dict>
