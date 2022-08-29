@@ -1,6 +1,17 @@
 ---
+contextual-hint-copy:
+  description: This set holds all copy related items of contextual hints.
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    jump-back-in:
+      type: boolean
+      description: "If true, we show the new copy for the hint description."
+    toolbar:
+      type: boolean
+      description: "If true, we show the new copy for the hint description."
 contextual-hint-feature:
-  description: "This set holds all features pertaining to the usage of contextual hints, whether it's to introduce new features or remind users of existing ones."
+  description: This set holds contextual hints that can be toggled to hide or show based on these settings.
   hasExposure: true
   exposureDescription: ""
   variables:

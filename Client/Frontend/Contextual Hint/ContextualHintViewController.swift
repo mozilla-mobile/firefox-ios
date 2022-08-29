@@ -88,18 +88,23 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
     private var popupContentHeight: CGFloat {
         let spacingWidth = UX.labelLeading + UX.closeButtonSize.width + UX.closeButtonTrailing + UX.labelTrailing
+
         let labelHeight = descriptionLabel.heightForLabel(
             descriptionLabel,
             width: containerView.frame.width - spacingWidth,
-            text: viewModel.descriptionText(arrowDirection: viewModel.arrowDirection))
+            text: viewModel.getCopyFor(.description)
+        )
 
         switch viewModel.isActionType() {
         case true:
             guard let titleLabel = actionButton.titleLabel else { fallthrough }
+
             let buttonHeight = titleLabel.heightForLabel(
                 titleLabel,
                 width: containerView.frame.width - spacingWidth,
-                text: viewModel.buttonActionText())
+                text: viewModel.getCopyFor(.action)
+            )
+
             return buttonHeight + labelHeight + UX.labelTop + UX.labelBottom
 
         case false:
@@ -218,7 +223,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }
 
     private func setupContent() {
-        descriptionLabel.text = viewModel.descriptionText(arrowDirection: viewModel.arrowDirection)
+        descriptionLabel.text = viewModel.getCopyFor(.description)
 
         if viewModel.isActionType() {
 
@@ -230,7 +235,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
             ]
 
             let attributeString = NSMutableAttributedString(
-                string: viewModel.buttonActionText(),
+                string: viewModel.getCopyFor(.action),
                 attributes: textAttributes
             )
 

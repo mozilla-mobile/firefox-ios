@@ -299,33 +299,49 @@ features:
             "inactive-tabs": true,
           }
   contextual-hint-feature:
-    description: This set holds all features pertaining to the usage of contextual hints, whether it's to introduce new features or remind users of existing ones.
+    description: This set holds contextual hints that can be toggled to hide or show based on these settings.
     variables:
       features-enabled:
         description: This property provides a lookup table of whether specific contextual hints are enabled.
         type: Map<ContextualHint, Boolean>
         default:
         {
-          "toolbar-contextual-hint": true,
-          "jump-back-in-contextual-hint": true,
           "jump-back-in-synced-tab-contextual-hint": false
         }
     defaults:
       - channel: beta
         value: {
           "features-enabled": {
-            "toolbar-contextual-hint": true,
-            "jump-back-in-contextual-hint": true,
             "jump-back-in-synced-tab-contextual-hint": true
           }
         }
       - channel: developer
         value: {
           "features-enabled": {
-            "toolbar-contextual-hint": true,
-            "jump-back-in-contextual-hint": true,
             "jump-back-in-synced-tab-contextual-hint": true
           }
+        }
+  contextual-hint-copy:
+    description: This set holds all copy related items of contextual hints. 
+    variables:
+      jump-back-in:
+        description: If true, we show the new copy for the hint description.
+        type: Boolean
+        default: false
+      toolbar:
+        description: If true, we show the new copy for the hint description.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value: {
+          "jump-back-in": true,
+          "toolbar": true
+        }
+      - channel: developer
+        value: {
+          "jump-back-in": true,
+          "toolbar": true
         }
 
   messaging:
@@ -695,10 +711,6 @@ types:
     ContextualHint:
       description: The identifiers for a individual contextual hints.
       variants:
-        toolbar-contextual-hint:
-          description: The contextual hint bubble that appears to indicate that the toolbar location is adjustable.
-        jump-back-in-contextual-hint:
-          description: The contextual hint bubble that appears to indicate new additions to the firefox homepage, like the Jump Back In section.
         jump-back-in-synced-tab-contextual-hint:
           description: The contextual hint bubble that appears to indicate a synced tab has appeared within the Jump Back In section.
 
