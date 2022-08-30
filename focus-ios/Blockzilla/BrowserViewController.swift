@@ -1922,6 +1922,7 @@ extension BrowserViewController: MenuActionable {
         self.shortcutManager.remove(url)
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_browser_menu"].add()
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "remove_from_shortcuts"))
+        Toast(text: UIConstants.strings.shareMenuRemoveShortcutConfirmMessage).show()
     }
 }
 

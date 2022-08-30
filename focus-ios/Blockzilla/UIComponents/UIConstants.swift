@@ -236,6 +236,7 @@ struct UIConstants {
         static let shareMenuFindInPage = NSLocalizedString("ShareMenu.FindInPage", value: "Find in Page", comment: "Text for the share menu option when a user wants to open the find in page menu")
         static let shareMenuAddToShortcuts = NSLocalizedString("ShareMenu.AddToShortcuts", value: "Add to Shortcuts", comment: "Text for the share menu option when a user wants to add the site to Shortcuts")
         static let shareMenuAddToShortcutsConfirmMessage = NSLocalizedString("ShareMenu.AddToShortcuts.Confirm", value: "Added to Shortcuts", comment: "Toast displayed to the user after adding the item to the Shortcuts.")
+        static let shareMenuRemoveShortcutConfirmMessage = NSLocalizedString("ShareMenu.RemoveShortcut.Confirm", value: "Shortcut removed", comment: "Toast displayed to the user after removing the item from the Shortcuts.")
         static let shareMenuRemoveFromShortcuts = NSLocalizedString("ShareMenu.RemoveFromShortcuts", value: "Remove from Shortcuts", comment: "Text for the share menu option when a user wants to remove the site from Shortcuts")
         static let removeFromShortcuts = NSLocalizedString("ShortcutView.RemoveFromShortcuts", value: "Remove from Shortcuts", comment: "Text for the long press on a shortcut option in context menu.")
         static let renameShortcut = NSLocalizedString("ShortcutView.Rename", value: "Rename Shortcut", comment: "Text for the long press on a shortcut rename option in context menu.")
