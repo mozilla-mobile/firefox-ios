@@ -32,7 +32,7 @@ public class OnboardingEventsHandler {
         case trackingProtection
         case trackingProtectionShield
         case trash
-        case menu
+        case searchBar
     }
 
     @Published public var route: ToolTipRoute?
@@ -63,14 +63,14 @@ public class OnboardingEventsHandler {
         case .applicationDidLaunch:
             let onboardingRoute = ToolTipRoute.onboarding(OnboardingType(shouldShowNewOnboarding()))
             if shownTips.contains(onboardingRoute) {
-                show(route: .menu)
+                show(route: .searchBar)
             } else {
                 show(route: onboardingRoute)
             }
 
         case .enterHome:
             guard shouldShowNewOnboarding() else { return }
-            show(route: .menu)
+            show(route: .searchBar)
 
         case .startBrowsing:
             visitedURLcounter += 1

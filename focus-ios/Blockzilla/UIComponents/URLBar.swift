@@ -63,6 +63,7 @@ class URLBar: UIView {
 
     public var contextMenuButton: InsetButton { toolset.contextMenuButton }
     public var deleteButton: InsetButton { toolset.deleteButton }
+    public var textFieldAnchor: UIView { urlTextField }
 
     private let leftBarViewLayoutGuide = UILayoutGuide()
     private let rightBarViewLayoutGuide = UILayoutGuide()

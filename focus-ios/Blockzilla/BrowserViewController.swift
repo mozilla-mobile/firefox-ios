@@ -322,11 +322,14 @@ class BrowserViewController: UIViewController {
                     self.present(controller, animated: true)
                     presentedController = controller
 
-                case .menu:
+                case .searchBar:
                     let controller = self.tooltipController(
-                        anchoredBy: self.urlBar.contextMenuButton,
-                        sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 12, width: 0, height: 0),
-                        body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
+                        anchoredBy: self.urlBar.textFieldAnchor,
+                        sourceRect: CGRect(
+                            x: self.urlBar.textFieldAnchor.bounds.minX,
+                            y: self.urlBar.textFieldAnchor.bounds.maxY, width: 0, height: 0
+                        ),
+                        body: UIConstants.strings.tooltipBodyTextStartPrivateBrowsing,
                         dismiss: { self.onboardingEventsHandler.route = nil }
                     )
                     self.present(controller, animated: true)

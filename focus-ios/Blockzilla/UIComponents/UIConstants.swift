@@ -325,7 +325,7 @@ struct UIConstants {
         static let tooltipBodyTextForShieldIcon = NSLocalizedString("TooltipBodyText.ShieldIconTrackerBlocked", value: "Got ‘em! We stopped this site from spying on you. Tap the shield any time to see what we’re blocking.", comment: "This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website")
         static let tooltipTitleTextForPrivacy = NSLocalizedString("TooltipTitleText.Privacy", value: "You’re protected! ", comment: "This is the title text that is displayed for the Privacy tooltip")
         static let tooltipBodyTextForPrivacy = NSLocalizedString("TooltipBodyText.Privacy", value: "These default settings offer strong protection. But it’s easy to tweak the settings to meet your specific needs.", comment: "This is the body text that is displayed for the Privacy tooltip")
-        static let tootipBodyTextForContextMenuIcon = NSLocalizedString("TooltipBodyText.ContextMenu", value: "Go to Settings to manage specific privacy & security options.", comment: "This is the body text that is displayed for the Context Menu icon tooltip")
+        static let tooltipBodyTextStartPrivateBrowsing = NSLocalizedString("TooltipBodyText.SearchBar", value: "Start your private browsing session, and we’ll block trackers and other bad stuff as you go.", comment: "This is the body text that is displayed for the Search Bar tooltip")
         static let tooltipBodyTextForTrashIcon = NSLocalizedString("TooltipBodyText.TrashIcon", value: "Tap the trash anytime to remove all traces of your current session.", comment: "This is the body text that is displayed for the Trash icon tooltip")
 
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
