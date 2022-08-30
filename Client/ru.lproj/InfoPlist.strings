@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Новая приватная вкладка";
+
+/* (No Comment) */
+"New Tab" = "Новая вкладка";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox использует вашу камеру для сканирования QR-кодов и съемки фотографий и видео.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Это позволит вам сохранять фотографии.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Новая приватная вкладка";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Новая вкладка";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Сканировать QR-код";
+"Scan QR Code" = "Сканировать QR-код";
 

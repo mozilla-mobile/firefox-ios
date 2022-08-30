@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "ᱴᱷᱤᱠᱟᱹᱱᱟ ᱟᱨ ᱥᱮᱸᱫᱽᱨᱟ";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "ᱯᱟᱰᱦᱟᱣ ᱞᱤᱥᱴᱤ ᱨᱮ ᱥᱮᱞᱮᱫ ᱢᱮ";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "ᱴᱷᱤᱠᱟᱹᱱᱟ ᱦᱩᱨᱠᱟᱹᱬ";
 
@@ -149,7 +152,7 @@
 "ClipboardToast.GoToCopiedLink.Button" = "ᱪᱟᱞᱟᱜ ᱢᱮ";
 
 /* Message displayed when the user has a copied link on the clipboard */
-"ClipboardToast.GoToCopiedLink.Title" = "ᱱᱚᱠᱚᱞ ᱞᱤᱸᱠ ᱨᱮ ᱪᱟᱞᱟᱜ ᱢᱮ?";
+"ClipboardToast.GoToCopiedLink.Title" = "ᱱᱚᱠᱚᱞ ᱞᱤᱝᱠ ᱨᱮ ᱪᱟᱞᱟᱜ ᱢᱮ?";
 
 /* Accessibility label for action denoting closing a tab in tab list (tray) */
 "Close" = "ᱵᱚᱸᱫᱚᱭ";
@@ -158,7 +161,7 @@
 "Closing tab" = "ᱴᱮᱵᱽ ᱵᱚᱸᱫᱚ ᱦᱩᱭᱩ ᱠᱟᱱᱟ";
 
 /* Context menu item for bookmarking a link URL */
-"ContextMenu.BookmarkLinkButtonTitle" = "ᱵᱩᱠᱢᱟᱨᱠ ᱞᱤᱸᱠ";
+"ContextMenu.BookmarkLinkButtonTitle" = "ᱵᱩᱠᱢᱟᱨᱠ ᱞᱤᱝᱠ";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "ᱱᱟᱶᱟ ᱱᱤᱡᱮᱨᱟᱠ ᱴᱮᱵᱽ ᱠᱷᱩᱞᱟᱹᱭᱱᱟ";
@@ -173,10 +176,10 @@
 "ContextMenu.CopyImageButtonTitle" = "ᱪᱤᱛᱟᱹᱨ ᱱᱚᱠᱚᱞ ᱢᱮ";
 
 /* Context menu item for copying an image URL to the clipboard */
-"ContextMenu.CopyImageLinkButtonTitle" = "ᱪᱤᱛᱟᱹᱨ ᱨᱮᱭᱟᱜ ᱞᱤᱸᱠ ᱱᱚᱠᱚᱞ ᱢᱮ";
+"ContextMenu.CopyImageLinkButtonTitle" = "ᱪᱤᱛᱟᱹᱨ ᱨᱮᱭᱟᱜ ᱞᱤᱝᱠ ᱱᱚᱠᱚᱞ ᱢᱮ";
 
 /* Context menu item for copying a link URL to the clipboard */
-"ContextMenu.CopyLinkButtonTitle" = "ᱞᱤᱸᱠ ᱱᱚᱠᱚᱞ ᱢᱮ";
+"ContextMenu.CopyLinkButtonTitle" = "ᱞᱤᱝᱠ ᱱᱚᱠᱚᱞ ᱢᱮ";
 
 /* Context menu item for downloading a link URL */
 "ContextMenu.DownloadLinkButtonTitle" = "ᱰᱟᱩᱱᱞᱚᱰ ᱞᱤᱝᱠ";
@@ -188,7 +191,7 @@
 "ContextMenu.SaveImageButtonTitle" = "ᱪᱤᱛᱟᱹᱨ ᱥᱟᱧᱪᱟᱣ ᱢᱮ";
 
 /* Context menu item for sharing a link URL */
-"ContextMenu.ShareLinkButtonTitle" = "ᱞᱤᱸᱠ ᱦᱟᱹᱴᱤᱧᱟᱜ ᱢᱮ";
+"ContextMenu.ShareLinkButtonTitle" = "ᱞᱤᱝᱠ ᱦᱟᱹᱴᱤᱧᱟᱜ ᱢᱮ";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
 "ContextualHint.SearchBarPlacement.ExistingUsers" = "ᱱᱤᱛᱚᱜ ᱫᱚ ᱟᱢ ᱦᱟᱹᱛᱤᱭᱟᱨ ᱵᱟᱨ ᱞᱟᱛᱟᱨ ᱥᱮᱫ ᱩᱪᱟᱹᱲ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ, ᱢᱮᱱᱠᱷᱟᱱ ᱡᱤᱱᱤᱥ ᱟᱫᱮᱨ ᱟᱞᱜᱟᱜᱼᱟ ᱾";
@@ -204,6 +207,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "ᱥᱟᱡᱟᱣ ᱠᱚ ᱨᱮ ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "ᱯᱟᱰᱦᱟᱣ ᱞᱤᱥᱴᱤ ᱨᱮ ᱥᱟᱦᱴᱟ ᱵᱟᱞᱮ ᱥᱮᱞᱮᱫ ᱫᱟᱲᱤᱭᱟᱫᱟ";
@@ -233,7 +239,7 @@
 "Decrease text size" = "ᱚᱱᱚᱞ ᱢᱟᱨᱟᱲᱛᱮᱛ ᱠᱚᱢ ᱢᱮ";
 
 /* Title for default search engine picker. */
-"Default Search Engine" = "ᱢᱩᱞ ᱥᱮᱸᱫᱽᱨᱟ ᱤᱸᱡᱤᱱ";
+"Default Search Engine" = "ᱢᱩᱞ ᱥᱮᱸᱫᱽᱨᱟ ᱤᱧᱡᱤᱱ";
 
 /* Accessibility label for action denoting closing default browser home tab banner. */
 "DefaultBrowserCloseButtonAccessibility.v102" = "ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
@@ -317,10 +323,10 @@
 "ErrorPages.VisitOnce.Button" = "ᱡᱟᱦᱟ ᱞᱮᱠᱟᱛᱮ ᱥᱟᱤᱴ ᱧᱮᱞ ᱢᱮ";
 
 /* Question shown to user when tapping a link that opens the App Store app */
-"ExternalLink.AppStore.ConfirmationTitle" = "ᱱᱚᱶᱟ ᱞᱤᱸᱠ App ᱜᱚᱫᱟᱢ ᱨᱮ ᱠᱷᱩᱞᱟᱹᱭ ᱢᱮ?";
+"ExternalLink.AppStore.ConfirmationTitle" = "ᱱᱚᱶᱟ ᱞᱤᱝᱠ App ᱜᱚᱫᱟᱢ ᱨᱮ ᱠᱷᱩᱞᱟᱹᱭ ᱢᱮ?";
 
 /* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
-"ExternalLink.AppStore.GenericConfirmationTitle" = "ᱱᱚᱶᱟ ᱞᱤᱸᱠ ᱵᱟᱦᱨᱮ ᱮᱯᱯ ᱨᱮ ᱠᱷᱩᱞᱟᱹᱭ ᱢᱮ?";
+"ExternalLink.AppStore.GenericConfirmationTitle" = "ᱱᱚᱶᱟ ᱞᱤᱝᱠ ᱵᱟᱦᱨᱮ ᱮᱯ ᱨᱮ ᱠᱷᱩᱞᱟᱹᱭ ᱢᱮ?";
 
 /* Tile title for Facebook */
 "Facebook" = "Facebook";
@@ -351,6 +357,9 @@
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "ᱟᱞᱮ ᱠᱟᱹᱢᱤᱠᱚ ᱟᱨ ᱟᱢᱟᱜ ᱱᱤᱥᱚᱱ ᱠᱚ";
+
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "ᱟᱹᱭᱩᱨ ᱢᱤᱫ ᱴᱮᱵᱽ ᱡᱷᱤᱡᱽ ᱢᱮ";
 
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "ᱤᱧᱟᱜ ᱡᱷᱚᱛᱚ ᱟᱹᱭᱩᱨ ᱢᱤᱫ ᱠᱟᱱ ᱴᱮᱵᱽ ᱠᱚ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
@@ -443,7 +452,7 @@
 "HistoryPanel.EmptySyncedTabsNullState.Description" = "ᱟᱢᱟᱠ ᱴᱮᱵᱽ ᱮᱴᱟᱠ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱱᱚᱸᱲᱮ ᱩᱫᱩᱜᱟᱭ᱾";
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "ᱟᱢᱟᱠ ᱮᱴᱟᱠ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱴᱮᱵᱽ ᱞᱤᱥᱴᱤ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱛ ᱛᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ᱾";
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "ᱟᱢᱟᱠ ᱮᱴᱟᱠ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱴᱮᱵᱽ ᱞᱤᱥᱴᱤ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱛᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ᱾";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox ᱛᱷᱟᱨ ᱦᱚᱪᱚ";
@@ -577,6 +586,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "ᱛᱟᱭᱚᱢ ᱦᱟᱴ";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "ᱱᱟᱜᱟᱢ";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "ᱵᱟᱹᱰᱨᱟᱹ";
 
@@ -659,10 +674,10 @@
 "LoginsHelper.PromptSaveLogin.Title" = "%2$@ ᱞᱟᱹᱜᱤᱫ %1$@ ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱧᱪᱟᱣ ᱢᱮ?";
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "%@ ᱞᱟᱹᱜᱤᱛ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫᱽ ᱥᱟᱧᱪᱟᱣ ᱢᱮ?";
+"LoginsHelper.PromptSavePassword.Title" = "%@ ᱞᱟᱹᱜᱤᱫ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫᱽ ᱥᱟᱧᱪᱟᱣ ᱢᱮ?";
 
 /* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "%@ ᱞᱟᱹᱜᱤᱛ ᱵᱚᱞᱚ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱢᱮ?";
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "%@ ᱞᱟᱹᱜᱤᱫ ᱵᱚᱞᱚ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱢᱮ?";
 
 /* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
 "LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "%2$@ ᱞᱟᱹᱜᱤᱫ %1$@ ᱵᱚᱞᱚ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ?";
@@ -744,6 +759,12 @@
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "ᱰᱟᱩᱱᱞᱚᱰᱥ";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "ᱱᱚᱶᱟ ᱥᱟᱭᱤᱴ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱲᱦᱟᱣᱟᱠᱟᱱ ᱯᱟᱸᱡᱟ ᱨᱚᱯᱷᱟ ᱵᱚᱸᱫᱚ ᱢᱮᱱᱟᱜᱼᱟ";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "ᱱᱚᱶᱟ ᱥᱟᱭᱤᱴ ᱞᱟᱹᱜᱤᱫ ᱯᱨᱚᱴᱮᱠᱥᱚᱱ ᱠᱚ ᱪᱚᱞᱩ ᱢᱮᱱᱟᱜ-ᱟ";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "ᱜᱚᱲᱚ";
@@ -892,6 +913,9 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "ᱱᱤᱛᱚᱜ ᱫᱚ ᱵᱟᱝᱟ";
 
+/* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
+"Onboarding.Sync.Skip.Action.v106" = "ᱟᱲᱟᱜ";
+
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "ᱥᱩᱦᱤ ᱮᱢ ᱢᱮ ᱟᱨ ᱵᱚᱞᱚᱱ ᱢᱮ";
 
@@ -953,7 +977,7 @@
 "ProtectionStatus.Secure" = "ᱡᱩᱲᱟᱹᱣ ᱫᱚ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱜᱮᱭᱟ";
 
 /* Title for quick-search engines settings section. */
-"Quick-Search Engines" = "ᱞᱚᱜᱚᱱ-ᱯᱟᱱᱛᱮ ᱤᱸᱡᱤᱱ ᱠᱚ";
+"Quick-Search Engines" = "ᱞᱚᱜᱚᱱ-ᱯᱟᱱᱛᱮ ᱤᱧᱡᱤᱱ ᱠᱚ";
 
 /* A label indicating the action that a user can rate the Firefox app in the App store. */
 "Ratings.Settings.RateOnAppStore" = "ᱮᱯ ᱜᱚᱫᱟᱢ ᱨᱮ ᱫᱚᱨ ᱮᱢᱚᱜ ᱢᱮ";
@@ -1010,7 +1034,7 @@
 "ScanQRCode.Error.OK.Button" = "ᱴᱷᱤᱠ";
 
 /* Text for the instructions label, displayed in the QR scanner view */
-"ScanQRCode.Instructions.Label" = "Scan ᱞᱟᱹᱜᱤᱛ ᱛᱮ QR ᱠᱳᱰ ᱥᱟᱡ ᱵᱷᱤᱛᱨᱤ ᱨᱮ ᱛᱷᱟᱨ ᱦᱚᱪᱚᱜ ᱢᱮ";
+"ScanQRCode.Instructions.Label" = "Scan ᱞᱟᱹᱜᱤᱫ ᱛᱮ QR ᱠᱳᱰ ᱥᱟᱡ ᱵᱷᱤᱛᱨᱤ ᱨᱮ ᱛᱷᱟᱨ ᱦᱚᱪᱚᱜ ᱢᱮ";
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "ᱥᱟᱠᱷᱤᱭᱟᱛ ᱫᱚ ᱵᱟᱲ ᱵᱟᱛᱟᱣ ᱢᱮᱱᱟ-ᱟ";
@@ -1037,7 +1061,7 @@
 "Search.ThirdPartyEngines.AddMessage" = "ᱱᱟᱶᱟ ᱯᱟᱱᱛᱮ ᱮᱱᱡᱤᱱ ᱫᱚ ᱞᱚᱜᱚᱱ ᱥᱮᱸᱽᱨᱟ ᱵᱟᱨ ᱨᱮ ᱫᱮᱠᱷᱟᱣᱜᱼᱟ ᱾";
 
 /* The success message that appears after a user sucessfully adds a new search engine */
-"Search.ThirdPartyEngines.AddSuccess" = "ᱥᱮᱸᱫᱽᱨᱟ ᱤᱸᱡᱤᱱ ᱡᱩᱲᱣ ᱠᱤᱫᱟ!";
+"Search.ThirdPartyEngines.AddSuccess" = "ᱥᱮᱸᱫᱽᱨᱟ ᱤᱧᱡᱤᱱ ᱡᱩᱲᱣ ᱠᱤᱫᱟ!";
 
 /* The title that asks the user to Add the search provider */
 "Search.ThirdPartyEngines.AddTitle" = "ᱥᱮᱸᱫᱽᱨᱟ ᱮᱢᱚᱜᱤᱡ ᱥᱮᱞᱮᱫᱮᱭᱟᱢ?";
@@ -1066,6 +1090,15 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ᱴᱷᱤᱠ";
 
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "ᱢᱩᱞ ᱥᱮᱸᱫᱽᱨᱟ ᱤᱧᱡᱤᱱ";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "ᱢᱩᱞ ᱥᱮᱸᱫᱽᱨᱟ ᱤᱧᱡᱤᱱ";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "ᱥᱮᱸᱫᱽᱨᱟ";
+
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "ᱨᱚᱯᱩᱫ ᱨᱤᱯᱳᱨᱴ ᱠᱩᱞ ᱢᱮ ᱛᱚᱵᱚᱠᱷᱟᱱ ᱢᱚᱡᱤᱞᱟ ᱫᱤᱜᱫᱷᱷᱟ ᱴᱟ ᱴᱷᱤᱠ ᱫᱟᱲᱤᱟᱭ?";
 
@@ -1078,17 +1111,20 @@
 /* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "ᱵᱟᱹᱰᱨᱟᱹ";
 
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
+
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "ᱧᱟᱢᱚᱜᱟ ᱥᱟᱫᱷᱚᱱ:";
 
 /* Message in error prompt explaining why the URL is invalid. */
-"SendTo.Error.Message" = "ᱮᱠᱷᱮᱱ HTTP ᱟᱨ HTTPS ᱞᱤᱸᱠ ᱠᱚ ᱜᱤ ᱦᱟᱹᱴᱤᱧᱟᱜ ᱫᱚᱲᱤ ᱟᱢ᱾";
+"SendTo.Error.Message" = "ᱮᱠᱷᱮᱱ HTTP ᱟᱨ HTTPS ᱞᱤᱝᱠ ᱠᱚ ᱜᱤ ᱦᱟᱹᱴᱤᱧᱟᱜ ᱫᱚᱲᱤ ᱟᱢ᱾";
 
 /* OK button to dismiss the error prompt. */
 "SendTo.Error.OK.Button" = "ᱴᱷᱤᱠ";
 
 /* Title of error prompt displayed when an invalid URL is shared. */
-"SendTo.Error.Title" = "ᱡᱟ ᱞᱤᱸᱠ ᱟᱢ ᱦᱟᱹᱴᱤᱧᱟᱜ ᱞᱟᱹᱜᱤᱛ ᱛᱮ ᱠᱩᱨᱩᱢᱩᱴᱩᱤ ᱫᱟᱢ ᱚᱱᱟ ᱵᱟᱝ ᱦᱟᱹᱴᱤᱧᱟᱜ ᱚᱣᱟ᱾";
+"SendTo.Error.Title" = "ᱡᱟ ᱞᱤᱝᱠ ᱟᱢ ᱦᱟᱹᱴᱤᱧᱟᱜ ᱞᱟᱹᱜᱤᱫ ᱛᱮ ᱠᱩᱨᱩᱢᱩᱴᱩᱤ ᱫᱟᱢ ᱚᱱᱟ ᱵᱟᱝ ᱦᱟᱹᱴᱤᱧᱟᱜ ᱚᱣᱟ᱾";
 
 /* Title of the dialog that allows you to send a tab to a different device */
 "SendTo.NavBar.Title" = "ᱴᱮᱵᱽ ᱠᱩᱞ ᱢᱮ";
@@ -1097,7 +1133,7 @@
 "SendTo.NoDevicesFound.Message" = "ᱲᱟᱢ ᱴᱷᱮᱱ ᱚᱞᱜᱟ Firefox ᱠᱷᱟᱛᱟ ᱟᱹᱭᱨ ᱢᱤᱫ ᱞᱟᱹᱜᱤᱫ ᱟᱞᱜᱟ ᱥᱟᱫᱷᱚᱱ ᱡᱩᱰᱟᱹᱣ ᱵᱟᱹᱱᱩᱜᱟ ᱾";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "ᱫᱭᱟ ᱠᱟᱛᱮ Firefox ᱡᱷᱤᱜ ᱢᱮ, ᱥᱟᱡᱟᱣ ᱠᱚ ᱨᱮ ᱪᱟᱞᱟ ᱢᱮ ᱟᱨ ᱞᱮᱛᱟᱰ ᱞᱟᱹᱜᱤᱛ ᱛᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ᱾";
+"SendTo.NotSignedIn.Message" = "ᱫᱭᱟ ᱠᱟᱛᱮ Firefox ᱡᱷᱤᱜ ᱢᱮ, ᱥᱟᱡᱟᱣ ᱠᱚ ᱨᱮ ᱪᱟᱞᱟ ᱢᱮ ᱟᱨ ᱞᱮᱛᱟᱰ ᱞᱟᱹᱜᱤᱫ ᱛᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ᱾";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Title" = "ᱟᱢ ᱟᱢᱟᱠ Firefox ᱠᱷᱟᱛᱟ ᱨᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱵᱚᱱᱩᱢ-ᱟ ᱾";
@@ -1118,7 +1154,7 @@
 "SentTab_TabArrivingNotification_WithDevice_title" = "%@ ᱠᱷᱚᱱ ᱴᱮᱵᱽ ᱭᱟᱢᱮᱱᱟ";
 
 /* Body of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.body" = "ᱮᱦᱚᱵ ᱞᱟᱹᱜᱤᱛ ᱛᱮ ᱚᱛᱟᱭ ᱢᱮ";
+"SentTab.NoTabArrivingNotification.body" = "ᱮᱦᱚᱵ ᱞᱟᱹᱜᱤᱫ ᱛᱮ ᱚᱛᱟᱭ ᱢᱮ";
 
 /* Title of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.title" = "Firefox ᱛᱚᱞ ᱡᱚᱠᱷᱟ";
@@ -1136,19 +1172,19 @@
 "Settings" = "ᱥᱟᱡᱟᱣ ᱠᱚ";
 
 /* The button text in Search Settings that opens the Custom Search Engine view. */
-"Settings.AddCustomEngine" = "ᱥᱮᱸᱫᱽᱨᱟ ᱤᱸᱡᱤᱱ ᱥᱮᱞᱮᱫ ᱢᱮ";
+"Settings.AddCustomEngine" = "ᱥᱮᱸᱫᱽᱨᱟ ᱤᱧᱡᱤᱱ ᱥᱮᱞᱮᱫ ᱢᱮ";
 
 /* The text on the Save button when saving a custom search engine */
 "Settings.AddCustomEngine.SaveButtonText" = "ᱥᱟᱧᱪᱟᱣ ᱢᱮ";
 
 /* The title of the  Custom Search Engine view. */
-"Settings.AddCustomEngine.Title" = "ᱥᱮᱸᱫᱽᱨᱟ ᱤᱸᱡᱤᱱ ᱥᱮᱞᱮᱫ ᱢᱮ";
+"Settings.AddCustomEngine.Title" = "ᱥᱮᱸᱫᱽᱨᱟ ᱤᱧᱡᱤᱱ ᱥᱮᱞᱮᱫ ᱢᱮ";
 
 /* The title for the field which sets the title for a custom search engine. */
 "Settings.AddCustomEngine.TitleLabel" = "ᱧᱩᱛᱩᱢ";
 
 /* The placeholder for Title Field when saving a custom search engine. */
-"Settings.AddCustomEngine.TitlePlaceholder" = "ᱥᱮᱸᱫᱽᱨᱟ ᱤᱸᱡᱤᱱ";
+"Settings.AddCustomEngine.TitlePlaceholder" = "ᱥᱮᱸᱫᱽᱨᱟ ᱤᱧᱡᱤᱱ";
 
 /* The title for URL Field */
 "Settings.AddCustomEngine.URLLabel" = "URL";
@@ -1215,6 +1251,9 @@
 
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "ᱰᱤᱥᱯᱞᱟᱭ ᱡᱷᱟᱞᱠᱟᱣ ᱨᱮ ᱟᱢᱟᱜ ᱛᱷᱮᱢ ᱟᱡ ᱛᱮᱜᱮ ᱵᱚᱫᱚᱞᱚᱜᱼᱟ ᱾ ᱟᱢ ᱛᱷᱨᱤᱥᱚᱞᱰ ᱥᱮᱴ ᱫᱟᱲᱮᱟᱜᱟᱢ ᱡᱟᱦᱟᱸ ᱨᱮ ᱟᱢ ᱛᱷᱮᱢ ᱵᱚᱫᱚᱞ ᱫᱟᱲᱮᱟᱜᱼᱟᱢ ᱾ ᱜᱩᱞ ᱨᱮ ᱫᱚ ᱟᱢᱟᱜ ᱱᱤᱛᱚᱜ ᱨᱮᱭᱟᱜ ᱡᱷᱟᱞᱠᱟᱣ ᱫᱮᱠᱷᱟᱣᱟᱭ ᱾";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "ᱟᱡ ᱛᱮ";
 
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "ᱚᱵᱥᱛᱟ ᱵᱚᱫᱚᱞ";
@@ -1397,7 +1436,7 @@
 "Settings.OfferClipboardBar.Title" = "ᱱᱚᱠᱚᱞ ᱟᱠᱟᱱ ᱥᱟᱭᱤᱴ ᱠᱷᱩᱞᱟᱹ ᱯᱨᱚᱥᱛᱟᱣ";
 
 /* Title for Open With Settings */
-"Settings.OpenWith.PageTitle" = "ᱢᱮᱞ ᱞᱤᱸᱠ ᱱᱚᱶᱟ ᱛᱮ ᱡᱷᱤᱜ ᱢᱮ";
+"Settings.OpenWith.PageTitle" = "ᱢᱮᱞ ᱞᱤᱝᱠ ᱱᱚᱶᱟ ᱛᱮ ᱡᱷᱤᱜ ᱢᱮ";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "ᱢᱮᱞ ᱮᱯ";
@@ -1433,10 +1472,10 @@
 "Settings.SendUsage.Title" = "ᱵᱮᱵᱷᱟᱨ ᱥᱟᱠᱷᱤᱭᱟᱛ ᱠᱩᱞ ᱢᱮ";
 
 /* Description displayed under the ”Show Link Previews” option */
-"Settings.ShowLinkPreviews.Status" = "ᱚᱠᱟ ᱡᱷᱚᱜ ᱡᱟᱹᱥᱛᱤ ᱚᱛᱟ ᱠᱟᱱ ᱞᱤᱸᱠ ᱠᱚ";
+"Settings.ShowLinkPreviews.Status" = "ᱚᱠᱟ ᱡᱷᱚᱜ ᱡᱟᱹᱥᱛᱤ ᱚᱛᱟ ᱠᱟᱱ ᱞᱤᱝᱠ ᱠᱚ";
 
 /* Title of setting to enable link previews when long-pressing links. */
-"Settings.ShowLinkPreviews.Title" = "ᱞᱤᱸᱠ ᱧᱮᱧᱮᱞᱚᱜ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
+"Settings.ShowLinkPreviews.Title" = "ᱞᱤᱝᱠ ᱧᱮᱧᱮᱞᱚᱜ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
 
 /* Setting to show Logins & Passwords quick access in the application menu */
 "Settings.ShowLoginsInAppMenu.Title" = "ᱟᱹᱨᱡᱤ ᱥᱟᱠᱟᱢ ᱢᱮᱱᱩ ᱨᱮ ᱩᱫᱩᱜ";
@@ -1621,6 +1660,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "ᱵᱟᱝ ᱩᱥᱨᱟᱹᱣ ᱴᱮᱵᱽ ᱠᱚ ᱩᱠᱩᱭ ᱢᱮ";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "ᱥᱮᱸᱫᱽᱨᱟ";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "ᱴᱮᱵᱽ ᱥᱮᱞᱮᱫ ᱢᱮ";
 
@@ -1651,6 +1693,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "ᱴᱮᱵᱽ ᱠᱚ ᱡᱷᱤᱡᱽ ᱢᱮ";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "ᱴᱮᱵᱽ ᱠᱚ ᱩᱫᱩᱜ ᱢᱮ";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "ᱨᱤᱰᱟᱹᱨ ᱵᱷᱤᱣ ᱨᱮ ᱥᱟᱠᱟᱢ ᱵᱟᱭ ᱫᱮᱠᱷᱟᱣᱼᱜ ᱠᱟᱱᱟ ᱾";
 
@@ -1662,6 +1707,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "ᱱᱚᱶᱟ ᱦᱟᱴ";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "ᱦᱚᱞᱟ";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "ᱱᱤᱛᱚᱜ ᱫᱚ ᱵᱟᱸ";
@@ -1707,6 +1755,9 @@
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "ᱵᱟᱝ ᱯᱟᱲᱦᱟᱣ";
+
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v106" = "ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ";
 
 /* Debug option */
 "Use stage servers" = "Stage ᱥᱚᱨᱵᱷᱚᱨ ᱠᱚ ᱵᱮᱵᱷᱟᱨ ᱢᱮ";

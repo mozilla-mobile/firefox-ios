@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "新隱私分頁";
+
+/* (No Comment) */
+"New Tab" = "新分頁";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox 可使用您的攝影機掃描 QR Code 或為網站拍照、錄影上傳。";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "讓您可儲存相片。";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "新隱私分頁";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "新分頁";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "掃描 QR Code";
+"Scan QR Code" = "掃描 QR Code";
 

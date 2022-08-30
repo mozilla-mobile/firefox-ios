@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Yeni Məxfi Vərəq";
+
+/* (No Comment) */
+"New Tab" = "Yeni Vərəq";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Bu sizə şəkil çəkmə və yükləmə imkanı verir.";
 
@@ -11,11 +17,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Bu şəkilləri saxlamağınıza imkan verir.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Yeni Məxfi Vərəq";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Yeni Vərəq";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR Kod oxut";
+"Scan QR Code" = "QR Kod oxut";
 

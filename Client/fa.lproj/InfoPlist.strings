@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "زبانه‌ی خصوصی جدید";
+
+/* (No Comment) */
+"New Tab" = "زبانه جدید";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "فایرفاکس از دوربین شما برای پردازش کد QR یا گرفتن عکس یا ویدیو شما استفاده می‌کند.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "با این می‌توانید تصاویر را ذخیره کنید.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "زبانه‌ی خصوصی جدید";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "زبانه جدید";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "اسکن کد QR";
+"Scan QR Code" = "اسکن کد QR";
 

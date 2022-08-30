@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "新建隐私标签页";
+
+/* (No Comment) */
+"New Tab" = "新建标签页";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox 需要使用您的相机扫码、拍摄照片或视频。";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "让您可以保存照片。";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "新建隐私标签页";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "新建标签页";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "扫描二维码";
+"Scan QR Code" = "扫描二维码";
 

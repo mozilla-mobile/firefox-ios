@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Жаңа жекелік беті";
+
+/* (No Comment) */
+"New Tab" = "Жаңа бет";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Бұл арқылы фотоларды түсіріп, жүктеуге болады.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Бұл көмегімен фотоларды сақтауға болады.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Жаңа жекелік беті";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Жаңа бет";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR кодын сканерлеу";
+"Scan QR Code" = "QR кодын сканерлеу";
 
