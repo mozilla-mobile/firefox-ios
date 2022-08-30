@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Jauna privātā cilne";
+
+/* (No Comment) */
+"New Tab" = "Jauna cilne";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Šis ļauj uzņemt un augšupielādēt foto.";
 
@@ -11,11 +17,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Tas ļauj saglabāt foto.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Jauna privātā cilne";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Jauna cilne";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skanēt QR kodu";
+"Scan QR Code" = "Skanēt QR kodu";
 

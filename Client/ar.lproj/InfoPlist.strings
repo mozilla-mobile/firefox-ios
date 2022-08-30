@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "لسان خاص جديد";
+
+/* (No Comment) */
+"New Tab" = "لسان جديد";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "يستعمل Firefox كمرتك لمسح رموز QR رقميًا والتقاط الصور والڤِديوهات.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "يتيح لك هذا حفظ الصور.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "لسان خاص جديد";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "لسان جديد";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "امسح رمز QR ضوئيا";
+"Scan QR Code" = "امسح رمز QR ضوئيا";
 

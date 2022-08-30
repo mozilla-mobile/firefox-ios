@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Skedë e Re Private";
+
+/* (No Comment) */
+"New Tab" = "Skedë e Re";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Kjo ju lejon të bëni dhe ngarkoni foto.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Kjo ju lejon të ruani foto.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Skedë e Re Private";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Skedë e Re";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skanonin Kodin QR";
+"Scan QR Code" = "Skanonin Kodin QR";
 

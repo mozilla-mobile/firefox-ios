@@ -580,6 +580,9 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "上周";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "书签";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "取消";
 
@@ -747,6 +750,12 @@
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "下载";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "已关闭此网站的增强型跟踪保护。";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "已开启此网站的增强型跟踪保护。";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "帮助";
@@ -979,6 +988,12 @@
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "阅读模式可用";
 
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "标为已读";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "标为未读";
+
 /* Panel accessibility label */
 "Reading list" = "阅读列表";
 
@@ -1077,6 +1092,15 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "确定";
+
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "默认搜索引擎";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "默认搜索引擎";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "搜索";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "发送一则崩溃报告给 Mozilla，以便我们修复此问题？";
@@ -1639,6 +1663,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "隐藏休眠标签页";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "搜索";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "新建标签页";
 
@@ -1669,6 +1696,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "打开的标签页";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "显示标签页";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "此页面无法在阅读模式下显示。";
 
@@ -1680,6 +1710,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "本周";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "昨天";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "暂时不要";
