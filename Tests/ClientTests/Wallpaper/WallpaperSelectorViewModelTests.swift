@@ -98,10 +98,14 @@ class WallpaperSelectorViewModelTests: XCTestCase {
 
         var wallpapersForClassic: [Wallpaper] {
             var wallpapers = [Wallpaper]()
-            wallpapers.append(Wallpaper(id: "fxDefault", textColour: UIColor.green))
+            wallpapers.append(Wallpaper(id: "fxDefault",
+                                        textColour: UIColor.green,
+                                        cardColour: .purple))
 
             for _ in 0..<4 {
-                wallpapers.append(Wallpaper(id: "fxAmethyst", textColour: UIColor.red))
+                wallpapers.append(Wallpaper(id: "fxAmethyst",
+                                            textColour: UIColor.red,
+                                            cardColour: .purple))
             }
 
             return wallpapers
@@ -111,7 +115,9 @@ class WallpaperSelectorViewModelTests: XCTestCase {
             var wallpapers = [Wallpaper]()
             let rangeEnd = Int.random(in: 3...6)
             for _ in 0..<rangeEnd {
-                wallpapers.append(Wallpaper(id: "fxCerulean", textColour: UIColor.purple))
+                wallpapers.append(Wallpaper(id: "fxCerulean",
+                                            textColour: UIColor.purple,
+                                            cardColour: .purple))
             }
 
             return wallpapers
@@ -123,13 +129,17 @@ class WallpaperSelectorViewModelTests: XCTestCase {
                 learnMoreURL: nil,
                 availableLocales: nil,
                 availability: nil,
-                wallpapers: wallpapersForClassic),
+                wallpapers: wallpapersForClassic,
+                description: nil,
+                heading: nil),
             WallpaperCollection(
                 id: "otherCollection",
                 learnMoreURL: "https://www.mozilla.com",
                 availableLocales: nil,
                 availability: nil,
-                wallpapers: wallpapersForOther),
+                wallpapers: wallpapersForOther,
+                description: nil,
+                heading: nil),
         ]
     }
 
