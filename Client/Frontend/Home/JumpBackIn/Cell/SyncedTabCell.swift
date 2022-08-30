@@ -337,8 +337,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         itemTitleTopConstraint.constant = itemTitleTopAnchorConstant
 
         // Add blur
-        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThinMaterial)
-        fallbackFaviconBackground.addBlurEffectWithClearBackgroundAndClipping(using: .systemThinMaterial)
+        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        fallbackFaviconBackground.addBlurEffectWithClearBackgroundAndClipping(using: .systemMaterial)
     }
 }
 
@@ -361,9 +361,7 @@ extension SyncedTabCell: NotificationThemeable {
             syncedDeviceImage.image = syncedDeviceImage.image?.tinted(withColor: .black)
         }
 
-        fallbackFaviconBackground.backgroundColor = UIColor.theme.homePanel.topSitesBackground
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
-        contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
     }
 }
 

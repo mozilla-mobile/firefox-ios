@@ -236,8 +236,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         faviconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
 
         // Add blur
-        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThinMaterial)
-        fallbackFaviconBackground.addBlurEffectWithClearBackgroundAndClipping(using: .systemThinMaterial)
+        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        fallbackFaviconBackground.addBlurEffectWithClearBackgroundAndClipping(using: .systemMaterial)
     }
 }
 
@@ -254,9 +254,7 @@ extension JumpBackInCell: NotificationThemeable {
             fallbackFaviconImage.tintColor = UIColor.Photon.DarkGrey90
         }
 
-        fallbackFaviconBackground.backgroundColor = UIColor.theme.homePanel.topSitesBackground
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
-        contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
     }
 }
 
