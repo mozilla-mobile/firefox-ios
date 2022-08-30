@@ -5,14 +5,9 @@
 import Foundation
 import Shared
 
-protocol WallpaperMetadataTrackerProtocol {
-    func metadataUpdateFetchedNewData() async -> Bool
-}
-
 /// Responsible for tracking whether or not the wallpaper system should perform
 /// a variety of checks, such as whether it should fetch data from the server.
-class WallpaperMetadataUtility: WallpaperMetadataTrackerProtocol, Loggable {
-
+class WallpaperMetadataUtility: Loggable {
     // MARK: - Properties
 
     /// Will return `true` under two conditions:
@@ -34,11 +29,11 @@ class WallpaperMetadataUtility: WallpaperMetadataTrackerProtocol, Loggable {
 
     // MARK: - Initializers
     init(
-        with userDefaults: UserDefaultsInterface = UserDefaults.standard,
-        and networkingModule: WallpaperNetworking
+        with networkingModule: WallpaperNetworking,
+        and userDefaults: UserDefaultsInterface = UserDefaults.standard
     ) {
-        self.userDefaults = userDefaults
         self.networkingModule = networkingModule
+        self.userDefaults = userDefaults
     }
 
     deinit {
@@ -47,7 +42,7 @@ class WallpaperMetadataUtility: WallpaperMetadataTrackerProtocol, Loggable {
 
     // MARK: - Public interface
     public func metadataUpdateFetchedNewData() async -> Bool {
-        if !shouldCheckForNewMetadata { return false }
+//        if !shouldCheckForNewMetadata { return false }
 
         do {
             let newMetadata = try await attemptToFetchMetadata()
@@ -62,9 +57,9 @@ class WallpaperMetadataUtility: WallpaperMetadataTrackerProtocol, Loggable {
         }
     }
 
-    public func getMetadata() -> WallpaperMetadata? {
+    public func getMetadata() throws -> WallpaperMetadata? {
         let storageUtility = WallpaperStorageUtility()
-        guard let metadata = storageUtility.fetchMetadata() else { return nil }
+        guard let metadata = try storageUtility.fetchMetadata() else { return nil }
 
         return metadata
     }

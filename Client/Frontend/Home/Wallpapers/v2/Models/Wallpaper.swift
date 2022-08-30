@@ -83,11 +83,19 @@ extension Wallpaper: Decodable {
 extension Wallpaper: Encodable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        let textHex = textColour.hexString
-        let cardHex = cardColour.hexString
+        let textHex = dropOctothorpeIfAvailable(from: textColour.hexString)
+        let cardHex = dropOctothorpeIfAvailable(from: cardColour.hexString)
 
         try container.encode(id, forKey: .id)
         try container.encode(textHex, forKey: .textColour)
         try container.encode(cardHex, forKey: .cardColour)
+    }
+
+    private func dropOctothorpeIfAvailable(from string: String) -> String {
+        if string.hasPrefix("#") {
+            return string.remove("#")
+        }
+
+        return string
     }
 }

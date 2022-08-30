@@ -5,45 +5,63 @@
 import Foundation
 import Shared
 
-enum WallpaperStorageError: Error {
-    case ErrorConvertingData
+enum WallpaperStorageErrors: Error {
+    case fileDoesNotExistError
+    case noDataAtFilePath
 }
 
 /// Responsible for writing or deleting wallpaper data to/from memory.
-struct WallpaperStorageUtility {
+struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
 
     private var userDefaults: UserDefaultsInterface
+    private var fileManager: FileManager
     private let metadataKey = "metadata"
 
     // MARK: - Initializer
-    init(with userDefaults: UserDefaultsInterface = UserDefaults.standard) {
+    init(
+        with userDefaults: UserDefaultsInterface = UserDefaults.standard,
+        and fileManager: FileManager = FileManager.default
+    ) {
         self.userDefaults = userDefaults
+        self.fileManager = fileManager
     }
 
     func store(_ metadata: WallpaperMetadata) throws {
         let filePathProvider = WallpaperFilePathProvider()
 
-        if let encoded = try? JSONEncoder().encode(metadata),
-           let jsonString = String(data: encoded, encoding: .utf8),
-           let data = jsonString.data(using: .utf8),
-           let filePath = filePathProvider.filePath(forKey: metadataKey) {
+        if let filePath = filePathProvider.filePath(forKey: metadataKey) {
+            let data = try encodeToData(from: metadata)
 
-            try data.write(to: filePath)
+            if fileManager.fileExists(atPath: filePath.path) {
+                try fileManager.removeItem(at: filePath)
+            }
+
+            fileManager.createFile(
+                atPath: filePath.path,
+                contents: data,
+                attributes: nil)
+        }
+    }
+
+    func store(_ wallpaper: Wallpaper) throws {
+        let encoded = try JSONEncoder().encode(wallpaper)
+        userDefaults.set(encoded, forKey: PrefsKeys.Wallpapers.CurrentWallpaper)
+    }
+
+    func fetchMetadata() throws -> WallpaperMetadata? {
+        let filePathProvider = WallpaperFilePathProvider()
+        guard let filePath = filePathProvider.filePath(forKey: metadataKey) else { return nil }
+
+        if !fileManager.fileExists(atPath: filePath.path) {
+            throw WallpaperStorageErrors.fileDoesNotExistError
+        }
+
+        if let data = fileManager.contents(atPath: filePath.path) {
+            return try decodeMetadata(from: data)
+
         } else {
-            throw WallpaperStorageError.ErrorConvertingData
+            throw WallpaperStorageErrors.noDataAtFilePath
         }
-    }
-
-    func store(_ wallpaper: Wallpaper) {
-        let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(wallpaper) {
-            userDefaults.set(encoded, forKey: PrefsKeys.Wallpapers.CurrentWallpaper)
-        }
-    }
-
-    func fetchMetadata() -> WallpaperMetadata? {
-
-        return nil
     }
 
     public func fetchCurrentWallpaper() -> Wallpaper? {

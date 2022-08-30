@@ -119,6 +119,20 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
         }
     }
 
+    func fetchMetadata() -> WallpaperMetadata {
+        let metadataUtility = WallpaperMetadataUtility(with: networkingModule)
+        do {
+            guard let metadata = try metadataUtility.getMetadata() else {
+                fatalError()
+            }
+
+            return metadata
+        } catch {
+            print(error.localizedDescription)
+            fatalError()
+        }
+    }
+
     public func removeDownloadedAssets() {
 
     }
@@ -127,10 +141,9 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
     /// to existing metadata, and, if there are changes, performs the necessary operations
     /// to ensure parity between server data and what the user sees locally.
     public func checkForUpdates() {
-        let metadataTracker = WallpaperMetadataUtility(and: networkingModule)
-
+        let metadataUtility = WallpaperMetadataUtility(with: networkingModule)
         Task {
-            let didFetchNewData = await metadataTracker.metadataUpdateFetchedNewData()
+            let didFetchNewData = await metadataUtility.metadataUpdateFetchedNewData()
             if didFetchNewData {
                 // download new assets
             }
