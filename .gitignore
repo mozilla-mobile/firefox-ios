@@ -106,3 +106,5 @@ export-strings.log
 
 # Nimbus
 nimbus-fml/
+
+*config.py

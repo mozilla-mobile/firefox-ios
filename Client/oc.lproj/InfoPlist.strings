@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Onglet de nav. privada";
+
+/* (No Comment) */
+"New Tab" = "Onglet novèl";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Aquò vos permet de prendre e d’enviar de fotos.";
 
@@ -11,11 +17,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Aquò vos permet d’enregistrar de fotografias.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Onglet de nav. privada";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Onglet novèl";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Escanerizar un còdi QR";
+"Scan QR Code" = "Escanerizar un còdi QR";
 

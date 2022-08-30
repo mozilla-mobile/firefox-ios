@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nova privatna kartica";
+
+/* (No Comment) */
+"New Tab" = "Nova kartica";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Ovo vam omogućava slikanje i prijenos fotografija.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Ovo vam omogućava spremanje fotografija.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nova privatna kartica";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nova kartica";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skeniraj QR kod";
+"Scan QR Code" = "Skeniraj QR kod";
 

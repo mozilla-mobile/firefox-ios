@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nov tab privat";
+
+/* (No Comment) */
+"New Tab" = "Nov tab";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox utilisescha tia camera per scannar codes QR e far fotos e videos.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Uschia pos ti memorisar fotografias.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nov tab privat";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nov tab";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Scannar in code QR";
+"Scan QR Code" = "Scannar in code QR";
 
