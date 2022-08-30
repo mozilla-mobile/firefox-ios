@@ -66,6 +66,8 @@ class WallpaperSettingsViewController: UIViewController, Loggable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
+
+        collectionView.selectItem(at: viewModel.selectedIndexPath, animated: false, scrollPosition: [])
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -112,9 +114,10 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier,
-                                                            for: indexPath) as? WallpaperCollectionViewCell,
-              let cellViewModel = viewModel.cellViewModel(for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier,
+            for: indexPath) as? WallpaperCollectionViewCell,
+                let cellViewModel = viewModel.cellViewModel(for: indexPath)
         else { return UICollectionViewCell() }
 
         cell.viewModel = cellViewModel
@@ -127,7 +130,6 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
             ensureMainThread {
                 switch result {
                 case .success:
-                    self?.collectionView.reloadData()
                     self?.showToast()
                 case .failure(let error):
                     self?.browserLog.info(error.localizedDescription)
@@ -136,7 +138,6 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
         }
         activityIndicatorView.stopAnimating()
     }
-
 }
 
 // MARK: - Private

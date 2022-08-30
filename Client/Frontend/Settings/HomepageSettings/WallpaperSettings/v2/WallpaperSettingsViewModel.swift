@@ -36,6 +36,7 @@ class WallpaperSettingsViewModel {
     private var wallpaperCollections = [WallpaperCollection]()
     var tabManager: TabManager
     var sectionLayout: WallpaperSettingsLayout = .compact // We use the compact layout as default
+    var selectedIndexPath: IndexPath = IndexPath(row: 0, section: 0)
 
     var numberOfSections: Int {
         return wallpaperCollections.count
@@ -123,6 +124,7 @@ class WallpaperSettingsViewModel {
             wallpaperManager.fetch(wallpaper) { result in
                 switch result {
                 case .success:
+                    self.selectedIndexPath = indexPath
                     setWallpaperBlock()
                 case .failure:
                     completion(result)
@@ -155,10 +157,13 @@ private extension WallpaperSettingsViewModel {
             a11yLabel = "\(String.Settings.Homepage.Wallpaper.LimitedEditionWallpaper) \(indexPath.row + 1)"
         }
 
+        if wallpaperManager.currentWallpaper == wallpaper {
+            selectedIndexPath = indexPath
+        }
+
         let cellViewModel = WallpaperCellViewModel(image: wallpaper.thumbnail,
                                                    a11yId: a11yId,
-                                                   a11yLabel: a11yLabel,
-                                                   isSelected: wallpaperManager.currentWallpaper == wallpaper)
+                                                   a11yLabel: a11yLabel)
         return cellViewModel
     }
 

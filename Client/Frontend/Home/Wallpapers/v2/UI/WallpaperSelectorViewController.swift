@@ -99,6 +99,8 @@ class WallpaperSelectorViewController: UIViewController, Loggable {
         collectionViewHeightConstraint.constant = height
         view.layoutIfNeeded()
 
+        collectionView.selectItem(at: viewModel.selectedIndexPath, animated: false, scrollPosition: [])
+
         viewModel.sendImpressionTelemetry()
     }
 
@@ -138,17 +140,13 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
         activityIndicatorView.startAnimating()
         viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
             ensureMainThread {
-                switch result {
-                case .success:
-                    self?.collectionView.reloadData()
-                case .failure(let error):
+                if case .failure(let error) = result {
                     self?.browserLog.info(error.localizedDescription)
                 }
             }
         }
         activityIndicatorView.stopAnimating()
     }
-
 }
 
 // MARK: - Private
