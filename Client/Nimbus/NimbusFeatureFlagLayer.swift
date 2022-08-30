@@ -28,13 +28,15 @@ final class NimbusFeatureFlagLayer {
                 .topSites:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
+        case .contextualHintForJumpBackInSyncedTab:
+            return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
+
+        case .copyForJumpBackIn,
+                .copyForToolbar:
+            return checkHintCopyFeature(for: featureID, from: nimbus)
+
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
-
-        case .contextualHintForJumpBackIn,
-                .contextualHintForJumpBackInSyncedTab,
-                .contextualHintForToolbar:
-            return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
         case .sponsoredPocket:
             return checkNimbusForPocketSponsoredStoriesFeature(using: nimbus)
@@ -122,6 +124,19 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
+    private func checkHintCopyFeature(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus
+    ) -> Bool {
+        let config = nimbus.features.contextualHintFeature.value().hintCopy
+
+        switch featureID {
+        case .copyForJumpBackIn: return config.jumpBackIn
+        case .copyForToolbar: return config.toolbar
+        default: return false
+        }
+    }
+
     private func checkNimbusForJumpBackInSyncedTabFeature(using nimbus: FxNimbus) -> Bool {
         return nimbus.features.homescreenFeature.value().jumpBackInSyncedTab
     }
@@ -134,8 +149,6 @@ final class NimbusFeatureFlagLayer {
         var nimbusID: ContextualHint
 
         switch featureID {
-        case .contextualHintForToolbar: nimbusID = ContextualHint.toolbarContextualHint
-        case .contextualHintForJumpBackIn: nimbusID = ContextualHint.jumpBackInContextualHint
         case .contextualHintForJumpBackInSyncedTab: nimbusID = ContextualHint.jumpBackInSyncedTabContextualHint
         default: return false
         }

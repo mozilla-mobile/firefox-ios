@@ -128,10 +128,6 @@ class JumpBackInViewModel: FeatureFlaggable {
         }
     }
 
-    func isFlagForHintEnabled() -> Bool {
-        return featureFlags.isFeatureEnabled(.contextualHintForJumpBackIn, checking: .buildOnly)
-    }
-
     private var hasSyncedTab: Bool {
         return jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled && mostRecentSyncedTab != nil
     }

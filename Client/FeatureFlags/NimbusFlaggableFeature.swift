@@ -11,8 +11,8 @@ import UIKit
 /// Please add new features alphabetically.
 enum NimbusFeatureFlagID: String, CaseIterable {
     case bottomSearchBar
-    case contextualHintForToolbar
-    case contextualHintForJumpBackIn
+    case copyForJumpBackIn
+    case copyForToolbar
     case contextualHintForJumpBackInSyncedTab
     case historyHighlights
     case historyGroups
@@ -85,9 +85,9 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.CustomWallpaper
 
         // Cases where users do not have the option to manipulate a setting.
-        case .contextualHintForJumpBackIn,
-                .contextualHintForJumpBackInSyncedTab,
-                .contextualHintForToolbar,
+        case .contextualHintForJumpBackInSyncedTab,
+                .copyForJumpBackIn,
+                .copyForToolbar,
                 .jumpBackInSyncedTab,
                 .onboardingUpgrade,
                 .onboardingFreshInstall,
