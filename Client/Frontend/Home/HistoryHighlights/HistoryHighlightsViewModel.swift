@@ -68,7 +68,6 @@ class HistoryHighlightsViewModel {
     var historyItems = [HighlightItem]()
     private var profile: Profile
     private var isPrivate: Bool
-    private var tabManager: TabManagerProtocol
     private var urlBar: URLBarViewProtocol
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var hasSentSectionEvent = false
@@ -110,14 +109,12 @@ class HistoryHighlightsViewModel {
     // MARK: - Inits
     init(with profile: Profile,
          isPrivate: Bool,
-         tabManager: TabManagerProtocol,
          urlBar: URLBarViewProtocol,
          historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor,
          dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
          telemetry: TelemetryWrapperProtocol = TelemetryWrapper.shared) {
         self.profile = profile
         self.isPrivate = isPrivate
-        self.tabManager = tabManager
         self.urlBar = urlBar
         self.dispatchQueue = dispatchQueue
         self.telemetry = telemetry

@@ -81,11 +81,6 @@ struct ClearableErrorType: MaybeErrorType {
 // Clear the web cache. Note, this has to close all open tabs in order to ensure the data
 // cached in them isn't flushed to disk.
 class CacheClearable: Clearable {
-    let tabManager: TabManager
-    init(tabManager: TabManager) {
-        self.tabManager = tabManager
-    }
-
     var label: String { .ClearableCache }
 
     func clear() -> Success {
@@ -136,10 +131,6 @@ private func deleteLibraryFolder(_ folder: String) throws {
 
 // Removes all app cache storage.
 class SiteDataClearable: Clearable {
-    let tabManager: TabManager
-    init(tabManager: TabManager) {
-        self.tabManager = tabManager
-    }
 
     var label: String { .ClearableOfflineData }
 
@@ -154,10 +145,6 @@ class SiteDataClearable: Clearable {
 
 // Remove all cookies stored by the site. This includes localStorage, sessionStorage, and WebSQL/IndexedDB.
 class CookiesClearable: Clearable {
-    let tabManager: TabManager
-    init(tabManager: TabManager) {
-        self.tabManager = tabManager
-    }
 
     var label: String { .ClearableCookies }
 

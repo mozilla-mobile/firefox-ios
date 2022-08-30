@@ -88,7 +88,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidTapShield(_ urlBar: URLBarView) {
         if let tab = self.tabManager.selectedTab {
-            let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile, tabManager: tabManager)
+            let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile)
             etpViewModel.onOpenSettingsTapped = {
                 let settingsTableViewController = AppSettingsTableViewController(
                     with: self.profile,
