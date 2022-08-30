@@ -11,6 +11,7 @@ class WallpaperSettingsViewController: UIViewController, Loggable {
         static let cardHeight: CGFloat = UIDevice().isTinyFormFactor ? 80 : 88
         static let inset: CGFloat = 8
         static let cardShadowHeight: CGFloat = 14
+        static let sectionBottomInset: CGFloat = 16
     }
 
     private var viewModel: WallpaperSettingsViewModel
@@ -179,28 +180,28 @@ private extension WallpaperSettingsViewController {
         config.scrollDirection = .vertical
 
         let layout = UICollectionViewCompositionalLayout(sectionProvider: { ix, environment in
-            let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(WallpaperSettingsViewController.UX.cardWidth),
+            let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(UX.cardWidth),
                                                   heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: .absolute(WallpaperSettingsViewController.UX.cardHeight))
+                                                   heightDimension: .absolute(UX.cardHeight))
             let subitemsCount = self.viewModel.sectionLayout.itemsPerRow
             let subItems: [NSCollectionLayoutItem] = Array(repeating: item, count: Int(subitemsCount))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                            subitems: subItems)
-            group.interItemSpacing = .fixed(WallpaperSettingsViewController.UX.inset)
+            group.interItemSpacing = .fixed(UX.inset)
 
             let section = NSCollectionLayoutSection(group: group)
             let width = environment.container.effectiveContentSize.width
             let inset = (width -
-                         CGFloat(subitemsCount) * WallpaperSettingsViewController.UX.cardWidth -
-                         CGFloat(subitemsCount - 1) * WallpaperSettingsViewController.UX.inset) / 2.0
+                         CGFloat(subitemsCount) * UX.cardWidth -
+                         CGFloat(subitemsCount - 1) * UX.inset) / 2.0
             section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                             leading: inset,
-                                                            bottom: 16.0,
+                                                            bottom: UX.sectionBottomInset,
                                                             trailing: inset)
-            section.interGroupSpacing = WallpaperSettingsViewController.UX.inset
+            section.interGroupSpacing = UX.inset
 
             // Supplementary Item
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
