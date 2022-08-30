@@ -105,6 +105,11 @@ extension String {
 
         public struct FirefoxHomepage {
             public struct JumpBackIn {
+                public static let PersonalizedHomeOldCopy = MZLocalizedString(
+                    "ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106",
+                    value: "Your personalized Firefox homepage now makes it easier to pick up where you left off. Find your recent tabs, bookmarks, and search results.",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature.",
+                    lastUpdated: .v106)
                 public static let PersonalizedHome = MZLocalizedString(
                     "ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHome",
                     tableName: "JumpBackIn",
