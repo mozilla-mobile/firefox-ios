@@ -119,7 +119,8 @@ extension RecentlySavedCellViewModel: HomepageSectionHandler {
             let site = Site(url: item.url, title: item.title, bookmarked: true)
 
             recentlySavedCell.configure(site: site,
-                                        image: recentlySavedDataAdaptor.getHeroImage(forSite: site))
+                                        heroImage: recentlySavedDataAdaptor.getHeroImage(forSite: site),
+                                        favIconImage: recentlySavedDataAdaptor.getFaviconImage(forSite: site))
         }
 
         return recentlySavedCell
