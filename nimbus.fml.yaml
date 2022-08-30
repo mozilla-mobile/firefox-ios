@@ -299,7 +299,7 @@ features:
             "inactive-tabs": true,
           }
   contextual-hint-feature:
-    description: This set holds contextual hints that can be toggled to hide or show based on these settings.
+    description: This set holds all features pertaining to contextual hints.
     variables:
       features-enabled:
         description: This property provides a lookup table of whether specific contextual hints are enabled.
