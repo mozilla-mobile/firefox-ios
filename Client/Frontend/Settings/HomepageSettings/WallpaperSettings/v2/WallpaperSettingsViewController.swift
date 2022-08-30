@@ -134,9 +134,9 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
                 case .failure(let error):
                     self?.browserLog.info(error.localizedDescription)
                 }
+                self?.activityIndicatorView.stopAnimating()
             }
         }
-        activityIndicatorView.stopAnimating()
     }
 }
 
