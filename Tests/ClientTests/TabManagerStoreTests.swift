@@ -135,7 +135,6 @@ private extension TabManagerStoreTests {
         manager.storeChanges(writeCompletion: { [weak self] in
             guard let self = self else { XCTFail("self should be strong"); return }
 
-            // TODO: Improve upon store tests so we don't depend on testTabCountOnDisk()
 //            let managerMessage = "TestTabCountOnDisk is \(manager.testTabCountOnDisk()) when it should be \(managerTabCount)"
 //            XCTAssertEqual(manager.testTabCountOnDisk(), managerTabCount, managerMessage, file: file, line: line)
 
