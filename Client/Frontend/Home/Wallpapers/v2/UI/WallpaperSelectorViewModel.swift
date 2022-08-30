@@ -166,9 +166,9 @@ private extension WallpaperSelectorViewModel {
 
         switch collectionType {
         case .classic:
-            a11yLabel = "\(String.Onboarding.ClassicWallpaper) \(number)"
+            a11yLabel = "\(String.Onboarding.ClassicWallpaper) \(number + 1)"
         case .limitedEdition:
-            a11yLabel = "\(String.Onboarding.LimitedEditionWallpaper) \(number)"
+            a11yLabel = "\(String.Onboarding.LimitedEditionWallpaper) \(number + 1)"
         }
 
         if wallpaperManager.currentWallpaper == wallpaper {
