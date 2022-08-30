@@ -69,6 +69,13 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         applyTheme()
     }
 
+    func configure(site: Site, image: UIImage?) {
+        itemTitle.text = site.tileURL.shortDisplayString.capitalized // site.title
+        heroImage.image = image
+
+        adjustLayout()
+    }
+
     // MARK: - Helpers
 
     private func setupLayout() {
@@ -100,6 +107,11 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
             itemTitle.trailingAnchor.constraint(equalTo: heroImage.trailingAnchor),
             itemTitle.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor, constant: -UX.generalSpacing)
         ])
+        adjustLayout()
+    }
+
+    func adjustLayout() {
+        rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
     }
 
     func applyTheme() {
@@ -111,7 +123,6 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
             rootContainer.backgroundColor = .white
         }
     }
-
 }
 
 // MARK: - Notifiable

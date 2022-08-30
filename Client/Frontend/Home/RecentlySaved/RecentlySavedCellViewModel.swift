@@ -117,9 +117,9 @@ extension RecentlySavedCellViewModel: HomepageSectionHandler {
 
         if let item = recentItems[safe: indexPath.row] {
             let site = Site(url: item.url, title: item.title, bookmarked: true)
-            recentlySavedCell.itemTitle.text = site.title
-            let image = recentlySavedDataAdaptor.getHeroImage(forSite: site)
-            recentlySavedCell.heroImage.image = image
+
+            recentlySavedCell.configure(site: site,
+                                        image: recentlySavedDataAdaptor.getHeroImage(forSite: site))
         }
 
         return recentlySavedCell
