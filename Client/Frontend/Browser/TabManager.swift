@@ -174,7 +174,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         self.navDelegate = TabManagerNavDelegate()
         self.tabEventHandlers = TabEventHandlers.create(with: profile)
 
-        self.store = TabManagerStore(imageStore: imageStore, prefs: profile.prefs)
+        self.store = TabManagerStoreImplementation(prefs: profile.prefs, imageStore: imageStore)
         super.init()
 
         register(self, forTabEvents: .didLoadFavicon, .didSetScreenshot)
@@ -1004,10 +1004,10 @@ extension TabManager: WKNavigationDelegate {
 
 // Helper functions for test cases
 extension TabManager {
-    func testTabCountOnDisk() -> Int {
-        assert(AppConstants.isRunningTest)
-        return store.testTabCountOnDisk()
-    }
+//    func testTabCountOnDisk() -> Int {
+//        assert(AppConstants.isRunningTest)
+//        return store.testTabCountOnDisk()
+//    }
 
     func testCountRestoredTabs() -> Int {
         assert(AppConstants.isRunningTest)
