@@ -24,8 +24,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
         static let generalCornerRadius: CGFloat = 12
-        static let titleFontSize: CGFloat = 49 // Style subheadline - AX5
-        static let siteFontSize: CGFloat = 43 // Style caption1 - AX5
+        static let titleFontSize: CGFloat = 16 // Style subheadline - AX5
+        static let siteFontSize: CGFloat = 12 // Style caption1 - AX5
         static let stackViewShadowRadius: CGFloat = 4
         static let stackViewShadowOffset: CGFloat = 2
         static let heroImageSize =  CGSize(width: 108, height: 80)
@@ -47,8 +47,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     private let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                   maxSize: UX.titleFontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
+                                                                   size: UX.titleFontSize)
         label.numberOfLines = 2
     }
 
@@ -71,7 +71,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     private let descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   maxSize: UX.siteFontSize)
+                                                                   size: UX.siteFontSize)
         label.textColor = .label
     }
 

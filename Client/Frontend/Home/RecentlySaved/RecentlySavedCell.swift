@@ -9,14 +9,20 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
 
     private struct UX {
         static let generalCornerRadius: CGFloat = 12
-        static let bookmarkTitleMaxFontSize: CGFloat = 43
+        static let bookmarkTitleFontSize: CGFloat = 12
         static let generalSpacing: CGFloat = 8
+        static let containerSpacing: CGFloat = 16
         static let heroImageSize: CGSize = CGSize(width: 150, height: 92)
         static let shadowRadius: CGFloat = 4
         static let shadowOffset: CGFloat = 2
     }
 
     // MARK: - UI Elements
+    // Contains the hero image
+    private var rootContainer: UIView = .build { view in
+        view.backgroundColor = .white
+    }
+
     let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -26,9 +32,10 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
     }
 
     let itemTitle: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   maxSize: UX.bookmarkTitleMaxFontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+                                                                   size: UX.bookmarkTitleFontSize)
         label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
         label.textColor = .label
     }
 
@@ -65,35 +72,43 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
     // MARK: - Helpers
 
     private func setupLayout() {
-        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
-        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
-        contentView.layer.cornerRadius = UX.generalCornerRadius
-        let shadowRect = CGRect(width: UX.heroImageSize.width, height: UX.heroImageSize.height)
-        contentView.layer.shadowPath = UIBezierPath(rect: shadowRect).cgPath
-        contentView.layer.shadowRadius = UX.shadowRadius
+        rootContainer.layer.cornerRadius = UX.generalCornerRadius
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                      cornerRadius: UX.generalCornerRadius).cgPath
+        rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        rootContainer.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+        rootContainer.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
+        rootContainer.layer.shadowRadius = UX.shadowRadius
 
-        contentView.addSubviews(heroImage, itemTitle)
+        contentView.addSubview(rootContainer)
+        rootContainer.addSubviews(heroImage, itemTitle)
 
         NSLayoutConstraint.activate([
-            heroImage.topAnchor.constraint(equalTo: contentView.topAnchor),
-            heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            heroImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            rootContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
+            rootContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            rootContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            rootContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            heroImage.topAnchor.constraint(equalTo: rootContainer.topAnchor, constant: UX.containerSpacing),
+            heroImage.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor, constant: UX.containerSpacing),
+            heroImage.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor, constant: -UX.containerSpacing),
             heroImage.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
             heroImage.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
 
             itemTitle.topAnchor.constraint(equalTo: heroImage.bottomAnchor, constant: UX.generalSpacing),
             itemTitle.leadingAnchor.constraint(equalTo: heroImage.leadingAnchor),
             itemTitle.trailingAnchor.constraint(equalTo: heroImage.trailingAnchor),
-            itemTitle.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            itemTitle.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor, constant: -UX.generalSpacing)
         ])
     }
 
     func applyTheme() {
         if LegacyThemeManager.instance.currentName == .dark {
             itemTitle.textColor = UIColor.Photon.LightGrey10
+            rootContainer.backgroundColor = UIColor.Photon.DarkGrey40
         } else {
             itemTitle.textColor = UIColor.Photon.DarkGrey90
+            rootContainer.backgroundColor = .white
         }
     }
 
