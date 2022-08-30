@@ -116,7 +116,6 @@ class HomepageViewModel: FeatureFlaggable {
         self.historyHighlightsViewModel = HistoryHighlightsViewModel(
             with: profile,
             isPrivate: isPrivate,
-            tabManager: tabManager,
             urlBar: urlBar,
             historyHighlightsDataAdaptor: historyDataAdaptor)
 

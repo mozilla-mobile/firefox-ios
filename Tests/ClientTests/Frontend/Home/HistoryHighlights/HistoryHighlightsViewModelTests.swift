@@ -10,7 +10,6 @@ class HistoryHighlightsViewModelTests: XCTestCase {
 
     private var subject: HistoryHighlightsViewModel!
     private var profile: MockProfile!
-    private var tabManager: MockTabManager!
     private var dataAdaptor: MockHistoryHighlightsDataAdaptor!
     private var delegate: MockHomepageDataModelDelegate!
     private var telemetry: MockTelemetryWrapper!
@@ -21,7 +20,6 @@ class HistoryHighlightsViewModelTests: XCTestCase {
 
         profile = MockProfile()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        tabManager = MockTabManager()
         dataAdaptor = MockHistoryHighlightsDataAdaptor()
         delegate = MockHomepageDataModelDelegate()
         telemetry = MockTelemetryWrapper()
@@ -32,7 +30,6 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         super.tearDown()
 
         profile = nil
-        tabManager = nil
         dataAdaptor = nil
         subject = nil
         delegate = nil
@@ -237,7 +234,6 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         subject = HistoryHighlightsViewModel(
             with: profile,
             isPrivate: isPrivate,
-            tabManager: tabManager,
             urlBar: urlBar,
             historyHighlightsDataAdaptor: dataAdaptor,
             dispatchQueue: MockDispatchQueue(),
