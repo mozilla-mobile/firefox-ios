@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Konten menghilang atau situs bertingkah aneh?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Buka Pengaturan untuk mengelola pilihan privasi & keamanan tertentu.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Pengaturan bawaan ini menawarkan perlindungan yang kuat. Tetapi mudah untuk mengubah pengaturan untuk memenuhi kebutuhan spesifik Anda.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ menghentikan situs ini memata-matai Anda. Ketuk perisai untuk info tentang apa yang kami blokir.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Ketuk tempat sampah kapan saja untuk menghapus semua jejak sesi Anda saat ini.";

@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Asmel ixuṣṣ agbur neɣ ur iteddu ara akken yella uqbel?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Ddu ɣer yiɣewwaren i wakken ad tesferkeḍ tixtiṛiyin tufrinin n tbaḍnit & tɣellist.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Iɣewwaren-a s wudem amezwer ttmuddun ammesten iǧehden. Maca yeshel ad ttubeddlen, ad ten-terreḍ akken i tebɣiḍ.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ issewḥel asmel-a seg tεessast-ik·im. Sit ɣef ẓẓerb-nni i wugar n telɣut ɣef wayen i nessewḥel.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Sit ɣef tqecwalt yal tikkelt i tukksa n lǧeṛṛa n tɣimit-ik•im tamirant.";

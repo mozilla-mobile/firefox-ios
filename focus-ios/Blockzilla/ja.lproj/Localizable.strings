@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "サイトのコンテンツが表示されなかったり動作がおかしいときは？";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "設定を開いて特定のプライバシーとセキュリティの設定を管理します。";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "これらのデフォルト設定は強力な保護を提供します。必要に応じて、簡単に設定を調整できます。";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ がこのサイトによるスパイ行動を阻止しました。ブロックしたものに関する情報を見るには盾アイコンをタップしてください。";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "ゴミ箱をタップするだけで、いつでも現在のセッションの痕跡をすべて削除します。";

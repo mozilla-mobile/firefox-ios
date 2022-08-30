@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Ci seria u cuntenutu chì manca o u situ si cumpurteria d’una manera strana ?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Andà à e preferenze per urganizà l’ozzioni specifiche di cunfidenzialità è di sicurità.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Ste preferenze predefinite furniscenu una prutezzione forte. Ma hè faciule di mudificalle per suddisfà i vostri bisogni specifichi.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ hà fermatu stu situ di spiunavvi. Picchichjate u scudu per cunnosce ciò ch’avemu bluccatu.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Picchichjate a curbella à ogni mumenti per caccià tutta traccia di a vostra sessione currente.";

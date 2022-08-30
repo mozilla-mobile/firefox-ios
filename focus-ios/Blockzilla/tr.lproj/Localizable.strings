@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Sitenin içeriği eksik veya site çalışmıyor mu?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Gizlilik ve güvenlik seçeneklerini yönetmek için Ayarlar’a gidin.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Bu varsayılan ayarlar güçlü koruma sağlar ama isterseniz ayarları ihtiyaçlarınızı göre değiştirebilirsiniz.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ bu sitenin sizi gözetlemesini engelledi. Engellediklerimiz hakkında bilgi almak için kalkana dokunun.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Oturumunuzun tüm izlerini kaldırmak istediğiniz zaman çöp kutusuna dokunun.";

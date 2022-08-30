@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Guneak edukia falta du edo portaera bitxia du?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Zoaz ezarpenetara pribatutasun- eta segurtasun-aukera zehatzak kudeatzeko.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Ezarpen lehenetsi hauek babes sendoa eskaintzen dute. Erraza da halere ezarpenak zure beharretara moldatzea.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@(e)k gune honek zu espiatzea eragotzi du. Sakatu babesaren ikonoan blokeatu dugunaren inguruko informazioa jasotzeko.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Sakatu edozein unetan zakarrontzia zure uneko saioaren aztarna guztiak ezabatzeko.";

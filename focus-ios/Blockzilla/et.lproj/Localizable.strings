@@ -505,14 +505,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Saidilt tundub sisu puudu olevat või see käitub imelikult?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Konkreetsete privaatsus- ja turvavalikute haldamiseks ava sätted.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Need vaikesätted pakuvad tugevat kaitset. Kuid nende muutmine konkreetselt sinu vajadustele on lihtne.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ peatas sellel saidil sinu järgi luuramise. Puuduta kilpi, et näha, mida me blokkisime.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Kõigi oma seansi jälgede kustutamiseks puuduta soovitud ajal prügikasti ikooni.";

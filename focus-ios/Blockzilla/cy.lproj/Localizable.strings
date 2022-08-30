@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Oes yna gynnwys ar goll neu a yw'r wefan yn ymddwyn yn rhyfedd?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Ewch i'r Gosodiadau i reoli deisiadau preifatrwydd a diogelwch penodol.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Mae’r gosodiadau rhagosodedig hyn yn cynnig diogelwch cryf. Ond mae’n hawdd newid y gosodiadau i ddiwallu’ch anghenion penodol.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "Stopiodd %@ y wefan hon rhag ysbïo arnoch chi. Tapiwch y darian i gael gwybodaeth am yr hyn rydyn ni wedi'i rwystro.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Tapiwch y sbwriel unrhyw bryd i ddileu holl olion eich sesiwn gyfredol.";

@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "網站的內容不見了，或功能變得怪怪的嗎？";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "前往「設定」管理各種隱私與安全性選項。";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "下列預設設定就已經提供了強大保護，但如果您有特殊需求，也很簡單就能調整。";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ 已防止此網站追蹤您。點擊盾牌即可了解已封鎖哪些內容。";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "隨時點擊垃圾桶，即可清除目前的瀏覽階段，不留下一絲一毫痕跡。";

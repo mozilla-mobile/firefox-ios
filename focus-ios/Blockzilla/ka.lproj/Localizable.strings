@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "საიტზე აკლია რამე ან უცნაურად მუშაობს?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "გადადით პარამეტრებში, პირადულობისა და უსაფრთხოების სურვილისამებრ სამართავად.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "ეს ნაგულისხმევი პარამეტრები ძლიერ დაცვას გთავაზობთ. თუმცა მარტივად შეგიძლიათ პარამეტრების შესწორება და საკუთარ საჭიროებებზე მორგება.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ უკრძალავს ამ საიტს თქვენს თვალთვალს. შეეხეთ ფარის ნიშანს და იხილეთ ვრცლად, რა შეიზღუდა.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "შეეხეთ სანაგვე ყუთის ნიშანს ყველა კვალის მოსაცილებლად.";

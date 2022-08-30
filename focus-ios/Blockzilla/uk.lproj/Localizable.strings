@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "На сайті відсутній вміст або він дивно поводиться?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Перейдіть до Налаштувань, щоб керувати певними опціями приватності та безпеки.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Ці типові налаштування забезпечують надійний захист. Але їх можна легко змінити відповідно до ваших особистих потреб.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ запобіг стеженню за вами цим сайтом. Торкніться щита, щоб отримати інформацію про те, що ми заблокували.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Торкніться кошика будь-коли, щоб вилучити всі сліди поточного сеансу.";

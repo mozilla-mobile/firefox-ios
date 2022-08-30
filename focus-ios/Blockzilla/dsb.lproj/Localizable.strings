@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Sedło se źiwnje zaźaržujo abo wopśimjeśe felujo?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Wócyńśo nastajenja, aby wěste nastajenja priwatnosći a wěstoty zastojał.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Toś te standardne nastajenja mócny šćit póbituju. Ale jo lažko, nastajenja wašym specifiskim pótrjebam pśiměriś.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ jo sedłoju zajźował was wusnuchliś. Pótusniśo šćit, aby informacije wó tom dostał, což smy zablokěrowali.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Pótusniśo kuždy cas papjernik, aby wšykne slědy swójogo pósejźenja wótwónoźeł.";

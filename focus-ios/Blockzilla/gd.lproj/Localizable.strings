@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "A bheil susbaint na làraich a dhìth no a’ dèanamh rudan neònach?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Tadhail air na roghainnean airson roghainnean sònraichte a thaobh prìobhaideachd ⁊ tèarainteachd a stiùireadh.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Tha na bun-roghainnean seo a’ toirt dhut dìon làidir. Ach chan eil e doirbh an cur air gleus ach am freagair iad ort-sa.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "Cha do leig %@ leis an làrach seo brath fhaighinn ort. Thoir gnogag air an sgiath airson fiosrachadh dè na rudan a bhac sinn.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Thoir gnogag air an sgudal uair sam bith airson gach fuigheall dhen t-seisean làithreach a chur gu neoini.";

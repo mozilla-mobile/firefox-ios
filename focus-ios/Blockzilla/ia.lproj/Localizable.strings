@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Le sito ha contento mancante o se comporta estraniemente?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Va a Parametros, pro gerer optiones specific de confidentialitate e de securitate.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Iste parametros predefinite offere forte protection. Ma il es facile adjustar le parametros pro satisfacer tu specific besonios.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ impediva a iste sito de spiar te. Tocca le schermo pro info re lo que nos ha blocate.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Quandocunque tu vole, tocca le immunditia pro remover tote le tracias de tu actual session.";

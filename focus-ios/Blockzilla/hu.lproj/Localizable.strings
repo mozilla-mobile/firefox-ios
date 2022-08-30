@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Hiányzik a webhely tartalma, vagy furcsán viselkedik?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Ugorjon a Beállításokhoz az adatvédelmi és biztonsági beállítások kezeléséhez.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Ezek az alapértelmezett beállítások erős védelmet nyújtanak. De könnyű a beállításokat az Ön egyedi igényei szerint módosítani.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "A %@ megakadályozta, hogy ez a webhely kémkedjen Ön után. Koppintson a pajzsra, hogy tájékozódjon arról, hogy mit blokkoltunk.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Koppintson bármikor a kukára, hogy eltávolítsa az aktuális munkamenet összes nyomát.";

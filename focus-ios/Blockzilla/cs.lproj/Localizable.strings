@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Chybí na stránce obsah nebo se chová podivně?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Všechny možnosti zabezpečení a ochrany soukromí najdete v nastavení.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Tato výchozí nastavení poskytují silnou ochranu. Můžete je ale jednoduše nastavit podle vlastních potřeb.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "Aplikace %@ zabránila tomuto serveru ve vašem sledování. Klepnutím na ikonu štítu se dozvíte, co bylo zablokováno.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Klepnutím na ikonu koše kdykoliv zahladíte všechny stopy po vašem prohlížení.";

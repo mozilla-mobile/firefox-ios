@@ -505,14 +505,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "חסר תוכן כלשהו באתר או שהאתר לא פועל כצפוי?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "ניתן לעבור להגדרות כדי לנהל אפשרויות פרטיות ואבטחה.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "הגדרות ברירת המחדל האלו מציעות הגנה חזקה, אבל קל לשנות את ההגדרות כדי לענות על הצרכים הספציפיים שלך.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "‏%@ מנע מאתר זה לרגל אחריך. יש ללחוץ על סמל המגן לקבלת מידע על מה שחסמנו.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "ניתן להקיש על סמל האשפה בכל עת כדי להסיר את כל העקבות של ההפעלה הנוכחית שלך.";

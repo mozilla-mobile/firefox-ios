@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Trang web thiếu nội dung hoặc hoạt động không đúng?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Đi đến Cài đặt để quản lý các tùy chọn quyền riêng tư và bảo mật cụ thể.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Các cài đặt mặc định này cung cấp khả năng bảo vệ mạnh mẽ. Tuy nhiên, thật dễ dàng để điều chỉnh cài đặt để đáp ứng các nhu cầu cụ thể của bạn.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ đã ngăn trang web này theo dõi bạn. Nhấn vào lá chắn để biết thông tin về những gì chúng tôi đã chặn.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Nhấn vào thùng rác bất cứ lúc nào để xóa tất cả dấu vết của phiên hiện tại của bạn.";

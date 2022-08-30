@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Mist een website inhoud of gedraagt deze zich vreemd?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Ga naar Instellingen om specifieke privacy- en beveiligingsopties te beheren.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Deze standaardinstellingen bieden een sterke bescherming. Maar het is eenvoudig om de instellingen aan uw specifieke behoeften aan te passen.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ heeft ervoor gezorgd dat deze website u niet meer bespioneert. Tik op het schild voor informatie over wat we hebben geblokkeerd.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Tik op elk gewenst moment op de prullenbak om alle sporen van uw huidige sessie te verwijderen.";

@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Mangler nettstedet innhold eller oppfører den seg rart?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Gå til Innstillinger for å behandle spesifikke personvern- og sikkerhetsalternativer.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Disse standardinnstillingene gir sterk beskyttelse. Men det er enkelt å tilpasse innstillingene for å møte dine spesifikke behov.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ stoppet denne siden fra å spionere på deg. Trykk på skjoldet for informasjon om hva vi blokkerte.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Trykk på papirkurven når som helst for å fjerne alle spor etter gjeldende økt.";

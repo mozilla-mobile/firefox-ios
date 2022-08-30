@@ -514,14 +514,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Mankout a ra elfennoù el lec’hienn pe iskis e seblant bezañ?";
 
-/* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Kit en arventennoù evit merañ an dibarzhioù buhez prevez ha diogelroez.";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "An arventennoù dre ziouer-se a ginnig ur gwarez kreñv. Aes eo kemmañ an arventennoù evit klotañ gant hoc’h ezhommoù resis.";
-
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "Miret en deus %@ da vezañ spiet gant al lec’hienn. Stokit ar skoed evit kaout titouroù war ar pezh a zo bet stanket.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Stokit ar boubelenn pa fell deoc’h tennañ holl roudoù hoc’h estez bremanel.";
