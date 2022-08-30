@@ -565,9 +565,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func prepareURLOnboardingContextualHint() {
-        guard contextHintVC.shouldPresentHint(),
-              featureFlags.isFeatureEnabled(.contextualHintForToolbar, checking: .buildOnly)
-        else { return }
+        guard contextHintVC.shouldPresentHint() else { return }
 
         contextHintVC.configure(
             anchor: urlBar,

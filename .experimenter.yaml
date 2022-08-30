@@ -1,12 +1,15 @@
 ---
 contextual-hint-feature:
-  description: "This set holds all features pertaining to the usage of contextual hints, whether it's to introduce new features or remind users of existing ones."
+  description: This set holds contextual hints that can be toggled to hide or show based on these settings.
   hasExposure: true
   exposureDescription: ""
   variables:
     features-enabled:
       type: json
       description: This property provides a lookup table of whether specific contextual hints are enabled.
+    hint-copy:
+      type: json
+      description: This set allows us to experiment with changing hint descriptions.
 general-app-features:
   description: The feature that contains feature flags for the entire application
   hasExposure: true

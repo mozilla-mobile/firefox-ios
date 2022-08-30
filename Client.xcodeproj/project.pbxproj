@@ -636,6 +636,7 @@
 		9609F4CA26B57CE800F81493 /* Calendar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9609F4C926B57CE800F81493 /* Calendar+Extension.swift */; };
 		9614BF4228A53FDF00D3F7EA /* ContextualHintEligibilityUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9614BF4028A53F7C00D3F7EA /* ContextualHintEligibilityUtilityTests.swift */; };
 		9614BF4428AD1C6700D3F7EA /* AccountSyncHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9614BF4328AD1C6700D3F7EA /* AccountSyncHandler.swift */; };
+		962021E128B8078400BDF3D9 /* ContextualHintCopyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962021E028B8078400BDF3D9 /* ContextualHintCopyProvider.swift */; };
 		962F394A2672D57A006BDA2A /* RecentItemsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962F39492672D57A006BDA2A /* RecentItemsHelper.swift */; };
 		9636D92827F5D72D00771F5E /* GleanPlumbMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92727F5D72D00771F5E /* GleanPlumbMessageManager.swift */; };
 		9636D92A27F767EC00771F5E /* GleanPlumbMessageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92927F767EC00771F5E /* GleanPlumbMessageUtility.swift */; };
@@ -3393,6 +3394,7 @@
 		9609F4C926B57CE800F81493 /* Calendar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Extension.swift"; sourceTree = "<group>"; };
 		9614BF4028A53F7C00D3F7EA /* ContextualHintEligibilityUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualHintEligibilityUtilityTests.swift; sourceTree = "<group>"; };
 		9614BF4328AD1C6700D3F7EA /* AccountSyncHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSyncHandler.swift; sourceTree = "<group>"; };
+		962021E028B8078400BDF3D9 /* ContextualHintCopyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualHintCopyProvider.swift; sourceTree = "<group>"; };
 		962A450E9186BF349E535413 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		962F39492672D57A006BDA2A /* RecentItemsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentItemsHelper.swift; sourceTree = "<group>"; };
 		9636D92727F5D72D00771F5E /* GleanPlumbMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageManager.swift; sourceTree = "<group>"; };
@@ -5992,6 +5994,7 @@
 				4331A9BC271D267E005E8080 /* ContextualHintViewModel.swift */,
 				964FA97428A1A8F20024BB3B /* ContextualHintEligibilityUtility.swift */,
 				964FA97628A2A55C0024BB3B /* ContextualHintPrefsKeysProvider.swift */,
+				962021E028B8078400BDF3D9 /* ContextualHintCopyProvider.swift */,
 			);
 			path = "Contextual Hint";
 			sourceTree = "<group>";
@@ -10411,6 +10414,7 @@
 				C849E46326B9C3AF00260F0B /* EnhancedTrackingProtectionVM.swift in Sources */,
 				D0E55C4F1FB4FD23006DC274 /* FormPostHelper.swift in Sources */,
 				E118B9292862674E00C84831 /* InactiveTabItemCellModel.swift in Sources */,
+				962021E128B8078400BDF3D9 /* ContextualHintCopyProvider.swift in Sources */,
 				E650754E1E37F6AE006961AC /* CGRect+Extension.swift in Sources */,
 				8AE1E1D227B1ADC40024C45E /* TopBottomInterchangeable.swift in Sources */,
 				8A7653BD28A2C61D00924ABF /* PocketDataAdaptor.swift in Sources */,
