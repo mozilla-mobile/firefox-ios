@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Filă privată nouă";
+
+/* (No Comment) */
+"New Tab" = "Filă nouă";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Acest lucru îți permite să realizezi și să încarci fotografii.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Acest lucru îți permite să salvezi fotografii.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Filă privată nouă";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Filă nouă";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Scanează codul QR";
+"Scan QR Code" = "Scanează codul QR";
 

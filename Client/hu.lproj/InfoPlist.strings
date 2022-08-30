@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Új privát lap";
+
+/* (No Comment) */
+"New Tab" = "Új lap";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Ez lehetővé teszi, hogy fényképeket készítsen és töltsön fel.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Ezzel lementheti a képeket.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Új privát lap";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Új lap";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR-kód leolvasása";
+"Scan QR Code" = "QR-kód leolvasása";
 

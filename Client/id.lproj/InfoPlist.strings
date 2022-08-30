@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Tab Pribadi Baru";
+
+/* (No Comment) */
+"New Tab" = "Tab Baru";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox menggunakan kamera Anda untuk memindai kode QR dan mengambil foto dan video.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Ini memungkinkan Anda menyimpan foto.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Tab Pribadi Baru";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Tab Baru";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Pindai Kode QR";
+"Scan QR Code" = "Pindai Kode QR";
 

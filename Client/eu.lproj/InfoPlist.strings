@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Fitxa pribatu berria";
+
+/* (No Comment) */
+"New Tab" = "Fitxa berria";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefoxek zure kamera erabiltzen du QR kodeak eskaneatu, argazkiak atera eta bideoak grabatzeko.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Honekin argazkiak gorde ditzakezu.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Fitxa pribatu berria";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Fitxa berria";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Eskaneatu QR kodea";
+"Scan QR Code" = "Eskaneatu QR kodea";
 

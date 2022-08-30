@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Bagong Private Tab";
+
+/* (No Comment) */
+"New Tab" = "Bagong Tab";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox uses your camera to scan QR codes and take photos and video.";
 
@@ -11,11 +17,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Pinapayagan ka nito na i-save ang mga larawan.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Bagong Private Tab";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Bagong Tab";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "I-scan ang QR Code";
+"Scan QR Code" = "I-scan ang QR Code";
 

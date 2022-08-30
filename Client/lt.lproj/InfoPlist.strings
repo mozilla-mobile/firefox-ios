@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nauja privačioji kortelė";
+
+/* (No Comment) */
+"New Tab" = "Nauja kortelė";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "„Firefox“ naudoja jūsų kamerą QR kodų nuskaitymui, nuotraukų darymui, ir vaizdo įrašams.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Tai jums leis įrašyti nuotraukas.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nauja privačioji kortelė";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nauja kortelė";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skenuoti QR kodą";
+"Scan QR Code" = "Skenuoti QR kodą";
 

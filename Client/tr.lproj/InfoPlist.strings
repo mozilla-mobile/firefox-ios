@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Yeni gizli sekme";
+
+/* (No Comment) */
+"New Tab" = "Yeni sekme";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox, QR kodlarını taramak, fotoğraf ve video çekmek için kameranızı kullanır.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Fotoğraf kaydetmenize olanak sağlar.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Yeni gizli sekme";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Yeni sekme";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR kodu tara";
+"Scan QR Code" = "QR kodu tara";
 

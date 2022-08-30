@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Taba prìobhaideach ùr";
+
+/* (No Comment) */
+"New Tab" = "Taba ùr";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Bheir seo comas dhut dealbhan a thogail is a luchdadh suas.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Bheir seo comas dhut dealbhan a shàbhaladh.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Taba prìobhaideach ùr";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Taba ùr";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Sganaich còd QR";
+"Scan QR Code" = "Sganaich còd QR";
 

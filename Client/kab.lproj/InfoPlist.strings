@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Iccer uslig amaynut";
+
+/* (No Comment) */
+"New Tab" = "Iccer amaynut";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Ayagi ad k-isireg tuṭṭfa d usali n tvidyutin.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Aya ad k-yeǧǧ ad teskelseḍ tiwlafin-inek.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Iccer uslig amaynut";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Iccer amaynut";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Semḍen Tangalt QR";
+"Scan QR Code" = "Semḍen Tangalt QR";
 

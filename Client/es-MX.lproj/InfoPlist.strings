@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nueva pestaña privada";
+
+/* (No Comment) */
+"New Tab" = "Nueva pestaña";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox usa tu cámara para escanear códigos QR y tomar fotos y vídeo.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Esto te permite guardar tus fotos.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nueva pestaña privada";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nueva pestaña";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Escanear código QR";
+"Scan QR Code" = "Escanear código QR";
 

@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "नया निजी टैब";
+
+/* (No Comment) */
+"New Tab" = "नया टैब";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "यह आपको तस्वीरें लेने और अपलोड करने देता है।";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "यह आपको फोटो सहेजने देता है।";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "नया निजी टैब";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "नया टैब";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR कोड स्कैन करें";
+"Scan QR Code" = "QR कोड स्कैन करें";
 

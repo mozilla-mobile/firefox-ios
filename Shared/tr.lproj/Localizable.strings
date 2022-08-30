@@ -358,6 +358,9 @@
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Sponsorlarımız ve gizliliğiniz";
 
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Eşitlenen sekmeyi aç";
+
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Tüm eşitlenmiş sekmeleri gör";
 
@@ -934,6 +937,9 @@
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Kısıtlı sürüm duvar kâğıdı";
 
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v106" = "Daha fazla duvar kâğıdı keşfedin";
+
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Description.v106" = "Size hitap eden bir duvar kâğıdı seçin.";
 
@@ -945,6 +951,9 @@
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
 "Onboarding.WallpaperTitle.v102" = "Firefox duvar kâğıdınızı seçin";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Description.v106" = "Firefox için paradan önce insanlık gelir. Firefox, gizliliğinizi varsayılan olarak korur.";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v106" = "Bağımsız bir internete hoş geldiniz";
@@ -1791,6 +1800,9 @@
 
 /* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
 "Upgrade.Welcome.Action.v106" = "Başlayın";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "Yeni renkler. Yeni kolaylıklar. Para için değil, insanlık için.";
 
 /* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.Welcome.Title.v106" = "Daha kişisel bir internete hoş geldiniz";

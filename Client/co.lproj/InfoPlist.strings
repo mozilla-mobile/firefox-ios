@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nova unghjetta privata";
+
+/* (No Comment) */
+"New Tab" = "Nova unghjetta";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox impiega u vostru apparechju-fotò per analizà i codici QR è per piglià fotò è video.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Quessu vi permette d’arregistrà fotò.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nova unghjetta privata";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nova unghjetta";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Analizà un codice QR";
+"Scan QR Code" = "Analizà un codice QR";
 

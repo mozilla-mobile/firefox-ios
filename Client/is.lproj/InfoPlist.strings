@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nýr huliðsflipi";
+
+/* (No Comment) */
+"New Tab" = "Nýr flipi";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox notar myndavélina þína til að skanna QR-kóða og taka myndir og myndskeið.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Hér getur þú vistað myndir.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nýr huliðsflipi";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nýr flipi";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skanna QR-kóða";
+"Scan QR Code" = "Skanna QR-kóða";
 

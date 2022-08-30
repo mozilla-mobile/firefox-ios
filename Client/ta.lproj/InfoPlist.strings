@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "புதிய தனிப்பயன் கீற்று";
+
+/* (No Comment) */
+"New Tab" = "புதிய கீற்று";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "படங்களை எடுத்து பதிவேற்றச் செய்கிறது.";
 
@@ -11,11 +17,5 @@
 "NSPhotoLibraryAddUsageDescription" = "இது உங்களை படம் சேமிக்க விடுகிறது.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "புதிய தனிப்பயன் கீற்று";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "புதிய கீற்று";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "சதுர குறியீட்டை வருடு";
+"Scan QR Code" = "சதுர குறியீட்டை வருடு";
 

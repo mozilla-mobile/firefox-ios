@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Thẻ riêng tư mới";
+
+/* (No Comment) */
+"New Tab" = "Thẻ mới";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox sử dụng máy ảnh của bạn để quét mã QR,chụp ảnh và quay video.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Điều này cho phép bạn lưu ảnh.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Thẻ riêng tư mới";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Thẻ mới";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Quét mã QR";
+"Scan QR Code" = "Quét mã QR";
 

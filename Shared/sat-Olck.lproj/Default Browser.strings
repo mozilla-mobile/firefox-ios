@@ -14,13 +14,13 @@
 "DefaultBrowserOnboarding.Description1" = "1. ᱥᱟᱡᱟᱣ ᱛᱮ ᱪᱟᱞᱟᱜ ᱢᱮ";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "2. ᱢᱩᱞ ᱵᱨᱟᱩᱡᱽᱟᱹᱨ ᱮᱯ ᱨᱮ ᱚᱛᱟᱭ ᱢᱮ";
+"DefaultBrowserOnboarding.Description2" = "2. ᱢᱩᱞ ᱵᱽᱨᱟᱣᱩᱡᱽᱟᱹᱨ ᱮᱯ ᱨᱮ ᱚᱛᱟᱭ ᱢᱮ";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. Firefox ᱵᱟᱪᱷᱟᱣᱢᱮ";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
-"DefaultBrowserOnboarding.Screenshot" = "ᱢᱩᱞ ᱵᱨᱟᱩᱡᱽᱟᱹᱨ ᱮᱯ";
+"DefaultBrowserOnboarding.Screenshot" = "ᱢᱩᱞ ᱵᱽᱨᱟᱣᱩᱡᱽᱟᱹᱨ ᱮᱯ";
 
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "ᱢᱩᱞ ᱯᱟᱱᱛᱮᱭᱟᱜ ᱞᱮᱠᱟ ᱥᱟᱡᱟᱣ ᱢᱮ";

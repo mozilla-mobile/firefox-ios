@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Novo separador privado";
+
+/* (No Comment) */
+"New Tab" = "Novo separador";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "O Firefox utiliza a sua câmara para digitalizar códigos QR e tirar fotos e vídeos.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Isto deixa-lhe guardar fotos.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Novo separador privado";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Novo separador";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Digitalizar código QR";
+"Scan QR Code" = "Digitalizar código QR";
 

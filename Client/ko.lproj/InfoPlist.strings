@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "새 사생활 탭";
+
+/* (No Comment) */
+"New Tab" = "새 탭";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "사진을 찍고 업로드 할 수 있게 합니다.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "사진을 저장할 수 있게 합니다.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "새 사생활 탭";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "새 탭";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR 코드 스캔";
+"Scan QR Code" = "QR 코드 스캔";
 

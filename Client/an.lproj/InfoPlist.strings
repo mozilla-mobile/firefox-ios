@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nueva pestanya privada";
+
+/* (No Comment) */
+"New Tab" = "Nueva pestanya";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Esto te permite de fer fotos y de puyar-las.";
 
@@ -11,11 +17,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Esto te permite d'alzar fotos.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nueva pestanya privada";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nueva pestanya";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Escaniar codigo QR";
+"Scan QR Code" = "Escaniar codigo QR";
 

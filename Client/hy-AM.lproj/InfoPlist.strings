@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Նոր Գաղտնի Ներդիր";
+
+/* (No Comment) */
+"New Tab" = "Նոր Ներդիր";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox-ն օգտագործում է ձեր խցիկը՝ սկանավորելու QR կոդերը և լուսանկարելու ու տեսանյութերի համար:";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Սա ձեզ թույլ է տալիս պահպանել լուսանկարներ։";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Նոր Գաղտնի Ներդիր";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Նոր Ներդիր";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Սկանավորել QR կոդը";
+"Scan QR Code" = "Սկանավորել QR կոդը";
 

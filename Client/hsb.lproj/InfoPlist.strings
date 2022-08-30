@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nowy priwatny rajtark";
+
+/* (No Comment) */
+"New Tab" = "Nowy rajtark";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox wašu kameru wužiwa, zo by QR-kody skenował a fota činił a wideja natočił.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Z tym móžeće fota składować.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nowy priwatny rajtark";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nowy rajtark";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR-kod skenować";
+"Scan QR Code" = "QR-kod skenować";
 

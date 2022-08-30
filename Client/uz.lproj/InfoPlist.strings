@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Yangi maxfiy ichki oyna";
+
+/* (No Comment) */
+"New Tab" = "Yangi ichki oyna";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "U rasmga tushirish va internetga yuklashda yordam beradi.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "This lets you save photos.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Yangi maxfiy ichki oyna";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Yangi ichki oyna";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Scan QR Code";
+"Scan QR Code" = "Scan QR Code";
 

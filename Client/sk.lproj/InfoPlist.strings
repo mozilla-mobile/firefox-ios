@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nová súkromná karta";
+
+/* (No Comment) */
+"New Tab" = "Nová karta";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox používa váš fotoaparát na skenovanie QR kódov a snímanie fotografií a videí.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Toto vám umožňuje ukladať fotky.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nová súkromná karta";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nová karta";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skenovanie QR kódu";
+"Scan QR Code" = "Skenovanie QR kódu";
 

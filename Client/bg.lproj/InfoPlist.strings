@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Нов поверителен раздел";
+
+/* (No Comment) */
+"New Tab" = "Нов раздел";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "От тук може да правите и качвате снимки.";
 
@@ -11,11 +17,5 @@
 "NSPhotoLibraryAddUsageDescription" = "От тук може да запазвате снимки.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Нов поверителен раздел";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Нов раздел";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Сканиране на QR код";
+"Scan QR Code" = "Сканиране на QR код";
 

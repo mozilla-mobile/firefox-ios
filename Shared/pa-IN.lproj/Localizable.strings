@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "ਸਿਰਨਾਵਾਂ ਅਤੇ ਖੋਜ";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "ਪੜ੍ਹਨ ਸੂਚੀ ਵਿੱਚ ਜੋੜੋ";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "ਸਿਰਨਾਵਾਂ ਪੱਟੀ";
 
@@ -355,6 +358,9 @@
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "ਸਾਡੇ ਸਪਾਂਸਰ ਅਤੇ ਤੁਹਾਡੀ ਪਰਦੇਦਾਰੀ";
 
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "ਸਿੰਕ ਕੀਤੀ ਟੈਬ ਖੋਲ੍ਹੋ";
+
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "ਸਾਰੀਆਂ ਸਿੰਕ ਕੀਤੀਆਂ ਟੈਬਾਂ ਵੇਖੋ";
 
@@ -580,6 +586,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "ਪਿਛਲਾ ਹਫ਼ਤਾ";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "ਬੁੱਕਮਾਰਕ";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "ਅਤੀਤ";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "ਰੱਦ ਕਰੋ";
 
@@ -747,6 +759,12 @@
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "ਡਾਊਨਲੋਡ";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "ਇਸ ਸਾਈਟ ਲਈ ਸੁਰੱਖਿਆਵਾਂ ਬੰਦ ਹਨ";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "ਇਸ ਸਾਈਟ ਲਈ ਸੁਰੱਖਿਆਵਾਂ ਚਾਲੂ ਹਨ";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "ਮਦਦ";
@@ -1000,6 +1018,12 @@
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "ਰੀਡਰ ਢੰਗ ਮੌਜੂਦ ਹੈ";
 
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "ਪੜ੍ਹੇ ਵਜੋਂ ਨਿਸ਼ਾਨੀ ਲਾਓ";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "ਨਾ-ਪੜ੍ਹੇ ਵਜੋਂ ਨਿਸ਼ਾਨੀ ਲਾਓ";
+
 /* Panel accessibility label */
 "Reading list" = "ਪੜ੍ਹਨ ਸੂਚੀ";
 
@@ -1098,6 +1122,15 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ਠੀਕ ਹੈ";
+
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "ਮੂਲ ਖੋਜ ਇੰਜਣ";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "ਮੂਲ ਖੋਜ ਇੰਜਣ";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "ਖੋਜ";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "ਕੀ ਸਮੱਸਿਆ ਨੂੰ ਠੀਕ ਕਰਨ ਵਾਸਤੇ ਮੋਜ਼ੀਲਾ ਨੂੰ ਕਰੈਸ਼ ਰਿਪੋਰਟ ਭੇਜਣੀ ਹੈ?";
@@ -1660,6 +1693,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "ਨਾ-ਸਰਗਰਮ ਟੈਬਾਂ ਲੁਕਾਓ";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "ਖੋਜ";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "ਟੈਬ ਜੋੜੋ";
 
@@ -1690,6 +1726,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "ਟੈਬਾਂ ਖੋਲ੍ਹੋ";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "ਟੈਬਾਂ ਨੂੰ ਵੇਖੋ";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "ਸਫ਼ੇ ਨੂੰ ਰੀਡਰ ਝਲਕ ਵਿੱਚ ਦਿਖਾਇਆ ਨਹੀਂ ਜਾ ਸਕਿਆ।";
 
@@ -1701,6 +1740,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "ਇਸ ਹਫ਼ਤੇ";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "ਕੱਲ੍ਹ";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "ਹੁਣੇ ਨਹੀਂ";

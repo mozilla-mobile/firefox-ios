@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "တစ်ကိုယ်ရေသုံး တပ်ဗ်အသစ်";
+
+/* (No Comment) */
+"New Tab" = "စာမျက်နှာ အသစ်";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "ဓါတ်ပုံရိုက်ခြင်းနှင့် တင်ပို့ခြင်းတို့ကို ဆောင်ရွက်နိုင်စေသည်။";
 
@@ -11,11 +17,5 @@
 "NSPhotoLibraryAddUsageDescription" = "ဓါတ်ပုံများကို သိမ်းဆည်းနိုင်စေသည်။";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "တစ်ကိုယ်ရေသုံး တပ်ဗ်အသစ်";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "စာမျက်နှာ အသစ်";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR ကုဒ်ဖတ်ရန်";
+"Scan QR Code" = "QR ကုဒ်ဖတ်ရန်";
 

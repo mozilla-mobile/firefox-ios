@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Uusi yksityinen välilehti";
+
+/* (No Comment) */
+"New Tab" = "Uusi välilehti";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox käyttää kameraasi skannatakseen QR-koodeja ja ottaakseen valokuvia ja videoita.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Näin voit tallentaa kuvia.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Uusi yksityinen välilehti";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Uusi välilehti";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skannaa QR-koodi";
+"Scan QR Code" = "Skannaa QR-koodi";
 

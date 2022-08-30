@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nowy priwatny rejtarik";
+
+/* (No Comment) */
+"New Tab" = "Nowy rejtarik";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox wašu kameru wužywa, aby QR-kody skannował a fota cynił a wideo nagrał.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Z tym móžośo fota składowaś.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nowy priwatny rejtarik";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nowy rejtarik";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR-kod skannowaś";
+"Scan QR Code" = "QR-kod skannowaś";
 

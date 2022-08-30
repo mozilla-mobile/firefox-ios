@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "नयाँ निजी ट्याब";
+
+/* (No Comment) */
+"New Tab" = "नयाँ ट्याब";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox ले QR कोडहरू स्क्यान गर्न र फोटो र भिडियो खिच्न तपाईंको क्यामरा प्रयोग गर्दछ।";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "यसले तपाईंलाई फोटोहरू सेभ गर्न दिन्छ ।";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "नयाँ निजी ट्याब";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "नयाँ ट्याब";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR कोड स्क्यान गर्नुहोस्";
+"Scan QR Code" = "QR कोड स्क्यान गर्नुहोस्";
 

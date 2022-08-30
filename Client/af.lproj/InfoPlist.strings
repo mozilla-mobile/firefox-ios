@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nuwe private oortjie";
+
+/* (No Comment) */
+"New Tab" = "Nuwe oortjie";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Hierdie laat mens foto’s neem en oplaai.";
 
@@ -11,11 +17,5 @@
 "NSPhotoLibraryAddUsageDescription" = "This lets you save photos.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nuwe private oortjie";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nuwe oortjie";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Scan QR Code";
+"Scan QR Code" = "Scan QR Code";
 

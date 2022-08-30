@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nowa karta prywatna";
+
+/* (No Comment) */
+"New Tab" = "Nowa karta";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox używa aparatu do skanowania kodów QR, robienia zdjęć i nagrywania filmów.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Pozwoli to zachowywać zdjęcia.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nowa karta prywatna";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nowa karta";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skanuj kod QR";
+"Scan QR Code" = "Skanuj kod QR";
 

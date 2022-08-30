@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Uus privaatne kaart";
+
+/* (No Comment) */
+"New Tab" = "Uus kaart";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox kasutab sinu kaamerat QR-koodide skannimiseks ning fotode ja videote tegemiseks.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "See võimaldab sul salvestada fotosid.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Uus privaatne kaart";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Uus kaart";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skanni QR-kood";
+"Scan QR Code" = "Skanni QR-kood";
 

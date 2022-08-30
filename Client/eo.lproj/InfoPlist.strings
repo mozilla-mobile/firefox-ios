@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nova privata langeto";
+
+/* (No Comment) */
+"New Tab" = "Nova langeto";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Tio ĉi permesas al vi preni kaj alŝuti fotojn.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Tio ĉi permesas al vi konservi fotojn.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nova privata langeto";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nova langeto";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skani kodon QR";
+"Scan QR Code" = "Skani kodon QR";
 

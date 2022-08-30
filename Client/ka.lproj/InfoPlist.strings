@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "ახალი პირადი ჩანართი";
+
+/* (No Comment) */
+"New Tab" = "ახალი ჩანართი";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "საშუალებას გაძლევთ, სურათის გადაღებისა და ატვირთვის.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "სურათების შენახვის საშუალებას იძლევა.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "ახალი პირადი ჩანართი";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "ახალი ჩანართი";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR კოდის წაკითხვა";
+"Scan QR Code" = "QR კოდის წაკითხვა";
 

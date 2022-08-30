@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Ivinell prevez nevez";
+
+/* (No Comment) */
+"New Tab" = "Ivinell nevez";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Gant se e c’hallit kemer ha pellgas luc’hskeudennoù.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Reiñ a ra tro deoc’h da enrollañ skeudennoù.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Ivinell prevez nevez";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Ivinell nevez";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "C’hwilerviñ ur boneg QR";
+"Scan QR Code" = "C’hwilerviñ ur boneg QR";
 

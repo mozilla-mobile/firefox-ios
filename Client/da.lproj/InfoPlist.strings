@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nyt privat faneblad";
+
+/* (No Comment) */
+"New Tab" = "Nyt faneblad";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox bruger dit kamera til at skanne QR-koder, tage billeder og optage video.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Lader dig gemme fotos.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nyt privat faneblad";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nyt faneblad";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skan QR-kode";
+"Scan QR Code" = "Skan QR-kode";
 
