@@ -74,6 +74,9 @@ class WallpaperSettingsViewController: UIViewController, Loggable {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
+        // Fixes bug where selection state gets lost when switching themes
+        collectionView.selectItem(at: viewModel.selectedIndexPath, animated: false, scrollPosition: [])
+
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
             updateOnRotation()
