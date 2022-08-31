@@ -9,6 +9,8 @@ public enum WallpaperSettingsError: Error {
 }
 
 class WallpaperSettingsViewModel {
+    typealias a11yIds = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Wallpaper
+    typealias stringIds = String.Settings.Homepage.Wallpaper
 
     enum WallpaperSettingsLayout: Equatable {
         case compact
@@ -26,8 +28,8 @@ class WallpaperSettingsViewModel {
     struct Constants {
         struct Strings {
             struct Toast {
-                static let label: String = .Settings.Homepage.Wallpaper.WallpaperUpdatedToastLabel
-                static let button: String = .Settings.Homepage.Wallpaper.WallpaperUpdatedToastButton
+                static let label: String = stringIds.WallpaperUpdatedToastLabel
+                static let button: String = stringIds.WallpaperUpdatedToastButton
             }
         }
     }
@@ -56,14 +58,13 @@ class WallpaperSettingsViewModel {
         guard let collection = wallpaperCollections[safe: sectionIndex] else { return nil }
 
         let isClassic = collection.type == .classic
-        let title: String = isClassic ?
-            .Settings.Homepage.Wallpaper.ClassicWallpaper : .Settings.Homepage.Wallpaper.LimitedEditionWallpaper
-        var description: String? = isClassic ? nil : .Settings.Homepage.Wallpaper.IndependentVoicesDescription
-        let buttonTitle: String? = isClassic ? nil : .Settings.Homepage.Wallpaper.LearnMoreButton
+        let title: String = isClassic ? stringIds.ClassicWallpaper : stringIds.LimitedEditionWallpaper
+        var description: String? = isClassic ? nil : stringIds.IndependentVoicesDescription
+        let buttonTitle: String? = isClassic ? nil : stringIds.LearnMoreButton
 
         // the first limited edition collection has a different description, any other collection uses the default
         if sectionIndex > 1 {
-            description = .Settings.Homepage.Wallpaper.LimitedEditionDefaultDescription
+            description = stringIds.LimitedEditionDefaultDescription
         }
 
         let buttonAction = { [weak self] in
@@ -75,8 +76,6 @@ class WallpaperSettingsViewModel {
                                                    isPrivate: false)
             strongSelf.tabManager.selectTab(tab)
         }
-
-        let a11yIds = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Wallpaper.self
 
         return WallpaperSettingsHeaderViewModel(
             title: title,
@@ -146,15 +145,14 @@ private extension WallpaperSettingsViewModel {
                        collectionType: WallpaperCollectionType,
                        indexPath: IndexPath
     ) -> WallpaperCellViewModel {
-        let wallpaperA11yIds = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Wallpaper.self
-        let a11yId = "\(wallpaperA11yIds.card)_\(indexPath.section)_\(indexPath.row)"
+        let a11yId = "\(a11yIds.card)_\(indexPath.section)_\(indexPath.row)"
         var a11yLabel: String
 
         switch collectionType {
         case .classic:
-            a11yLabel = "\(String.Settings.Homepage.Wallpaper.ClassicWallpaper) \(indexPath.row + 1)"
+            a11yLabel = "\(stringIds.ClassicWallpaper) \(indexPath.row + 1)"
         case .limitedEdition:
-            a11yLabel = "\(String.Settings.Homepage.Wallpaper.LimitedEditionWallpaper) \(indexPath.row + 1)"
+            a11yLabel = "\(stringIds.LimitedEditionWallpaper) \(indexPath.row + 1)"
         }
 
         if wallpaperManager.currentWallpaper == wallpaper {
