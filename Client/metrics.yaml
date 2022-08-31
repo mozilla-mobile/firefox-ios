@@ -2209,6 +2209,11 @@ tabs:
     type: counter
     description: |
       Record the number of URI's visited by the user.
+    send_in_pings:
+      - baseline
+      - metrics
+    no_lint:
+      - BASELINE_PING
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/9158
     data_reviews:
