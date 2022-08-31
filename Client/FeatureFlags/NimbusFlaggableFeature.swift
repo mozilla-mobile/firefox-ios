@@ -112,7 +112,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
 
         switch featureID {
         case .pocket, .sponsoredPocket:
-            return nimbusValue && PocketProvider.IslocaleSupported(Locale.current.identifier)
+            return nimbusValue && PocketProvider.islocaleSupported(Locale.current.identifier)
         default:
             return nimbusValue
         }

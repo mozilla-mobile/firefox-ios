@@ -77,9 +77,7 @@ class ShareViewController: UIViewController {
     weak var delegate: ShareControllerDelegate?
 
     override var extensionContext: NSExtensionContext? {
-        get {
-            return delegate?.getValidExtensionContext()
-        }
+        return delegate?.getValidExtensionContext()
     }
 
     override func viewDidLoad() {
