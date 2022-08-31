@@ -8,8 +8,8 @@ import Shared
 /// Responsible for tracking whether or not the wallpaper system should perform
 /// a variety of checks, such as whether it should fetch data from the server.
 class WallpaperMetadataUtility: Loggable {
-    // MARK: - Properties
 
+    // MARK: - Properties
     /// Will return `true` under two conditions:
     /// 1. Has never performed a check
     /// 2. Has not performed a check on the current day
@@ -36,20 +36,22 @@ class WallpaperMetadataUtility: Loggable {
         self.userDefaults = userDefaults
     }
 
-    deinit {
-
-    }
-
     // MARK: - Public interface
     public func metadataUpdateFetchedNewData() async -> Bool {
-//        if !shouldCheckForNewMetadata { return false }
+        if !shouldCheckForNewMetadata { return false }
 
         do {
-            let newMetadata = try await attemptToFetchMetadata()
-            try attemptToStore(newMetadata)
-            markLastUpdatedDate(with: Date())
+            let freshMetadata = try await attemptToFetchMetadata()
+            // If new metadata is different from the old, it should take precedence
+            if oldMetadataIsDifferentThanNew(freshMetadata) {
+                try attemptToStore(freshMetadata)
+                markLastUpdatedDate(with: Date())
+                return true
 
-            return true
+            } else {
+                markLastUpdatedDate(with: Date())
+                return false
+            }
 
         } catch {
             browserLog.error("Failed to fetch new metadata: \(error.localizedDescription)")
@@ -80,5 +82,20 @@ class WallpaperMetadataUtility: Loggable {
     private func markLastUpdatedDate(with date: Date) {
         let todaysDate = Calendar.current.startOfDay(for: date)
         userDefaults.set(todaysDate, forKey: prefsKey)
+    }
+
+    private func oldMetadataIsDifferentThanNew(_ metadata: WallpaperMetadata) -> Bool {
+
+        do {
+            let storageUtility = WallpaperStorageUtility()
+            guard let oldMetadata = try storageUtility.fetchMetadata() else { return true }
+
+            if oldMetadata.collections == metadata.collections { return false }
+
+            return true
+        } catch {
+            browserLog.error("Failed to get old metadata: \(error.localizedDescription)")
+            return true
+        }
     }
 }

@@ -64,12 +64,15 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
         }
     }
 
-    public func fetchCurrentWallpaper() -> Wallpaper? {
-        if let wallpaper = userDefaults.object(forKey: PrefsKeys.Wallpapers.CurrentWallpaper) as? Data {
-            return try? JSONDecoder().decode(Wallpaper.self, from: wallpaper)
+    public func fetchCurrentWallpaper() throws -> Wallpaper? {
+        if let data = userDefaults.object(forKey: PrefsKeys.Wallpapers.CurrentWallpaper) as? Data {
+            return try JSONDecoder().decode(Wallpaper.self, from: data)
         }
 
         return nil
     }
 
+    public func remove() {
+
+    }
 }

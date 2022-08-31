@@ -29,13 +29,9 @@ struct WallpaperURLProvider {
         for urlType: WallpaperURLType,
         withComponent component: String = ""
     ) throws -> URL {
-        do {
-            switch urlType {
-            case .metadata: return try metadataURL()
-            case .imageURL: return try imageURL(with: component)
-            }
-        } catch {
-            throw error
+        switch urlType {
+        case .metadata: return try metadataURL()
+        case .imageURL: return try imageURL(with: component)
         }
     }
 

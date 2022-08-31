@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 protocol WallpaperManagerInterface {
     var currentWallpaper: Wallpaper { get }
@@ -119,7 +120,43 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
         }
     }
 
-    func fetchMetadata() -> WallpaperMetadata {
+    public func removeDownloadedAssets() {
+
+    }
+
+    /// Reaches out to the server and fetches the latest metadata. This is then compared
+    /// to existing metadata, and, if there are changes, performs the necessary operations
+    /// to ensure parity between server data and what the user sees locally.
+    public func checkForUpdates() {
+        let metadataUtility = WallpaperMetadataUtility(with: networkingModule)
+
+        Task {
+            let didFetchNewData = await metadataUtility.metadataUpdateFetchedNewData()
+            if didFetchNewData {
+                // download new assets
+            }
+        }
+    }
+
+    // MARK: - Helper functions
+
+    private func getAvailableCollections() -> [WallpaperCollection] {
+        let metadata = getMetadata()
+        return metadata.collections.filter {
+            let isDateAvailable = $0.availability?.isAvailable ?? true
+            var isLocaleAvailable: Bool = false
+
+            if let availableLocales = $0.availableLocales {
+                isLocaleAvailable = availableLocales.isEmpty || availableLocales.contains(Locale.current.identifier)
+            } else {
+                isLocaleAvailable = true
+            }
+
+            return isDateAvailable && isLocaleAvailable
+        }
+    }
+
+    private func getMetadata() -> WallpaperMetadata {
         let metadataUtility = WallpaperMetadataUtility(with: networkingModule)
         do {
             guard let metadata = try metadataUtility.getMetadata() else {
@@ -133,20 +170,4 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
         }
     }
 
-    public func removeDownloadedAssets() {
-
-    }
-
-    /// Reaches out to the server and fetches the latest metadata. This is then compared
-    /// to existing metadata, and, if there are changes, performs the necessary operations
-    /// to ensure parity between server data and what the user sees locally.
-    public func checkForUpdates() {
-        let metadataUtility = WallpaperMetadataUtility(with: networkingModule)
-        Task {
-            let didFetchNewData = await metadataUtility.metadataUpdateFetchedNewData()
-            if didFetchNewData {
-                // download new assets
-            }
-        }
-    }
 }
