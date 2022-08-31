@@ -104,9 +104,9 @@ open class Keys: Equatable {
         self.valid = false
     }
 
-    public convenience init(downloaded: EnvelopeJSON, master: KeyBundle) {
+    public convenience init(downloaded: EnvelopeJSON, main: KeyBundle) {
         let f: (JSON) -> KeysPayload = { KeysPayload($0) }
-        let keysRecord = Record<KeysPayload>.fromEnvelope(downloaded, payloadFactory: keysPayloadFactory(keyBundle: master, f))
+        let keysRecord = Record<KeysPayload>.fromEnvelope(downloaded, payloadFactory: keysPayloadFactory(keyBundle: main, f))
         self.init(payload: keysRecord?.payload)
     }
 
