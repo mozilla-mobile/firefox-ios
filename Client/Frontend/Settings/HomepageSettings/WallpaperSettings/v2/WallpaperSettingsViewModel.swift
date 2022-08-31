@@ -98,9 +98,8 @@ class WallpaperSettingsViewModel {
 
     func cellViewModel(for indexPath: IndexPath) -> WallpaperCellViewModel? {
         guard let collection = wallpaperCollections[safe: indexPath.section],
-                let wallpaper = collection.wallpapers[safe: indexPath.row] else {
-            return nil
-        }
+              let wallpaper = collection.wallpapers[safe: indexPath.row]
+        else { return nil }
         return cellViewModel(for: wallpaper,
                              collectionType: collection.type,
                              indexPath: indexPath)
@@ -108,7 +107,8 @@ class WallpaperSettingsViewModel {
 
     func downloadAndSetWallpaper(at indexPath: IndexPath, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let collection = wallpaperCollections[safe: indexPath.section],
-                let wallpaper = collection.wallpapers[safe: indexPath.row] else {
+              let wallpaper = collection.wallpapers[safe: indexPath.row]
+        else {
             completion(.failure(WallpaperSelectorError.itemNotFound))
             return
         }

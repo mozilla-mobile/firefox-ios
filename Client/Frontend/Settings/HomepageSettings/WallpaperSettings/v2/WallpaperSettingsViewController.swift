@@ -15,7 +15,7 @@ class WallpaperSettingsViewController: UIViewController, Loggable {
     }
 
     private var viewModel: WallpaperSettingsViewModel
-    internal var notificationCenter: NotificationProtocol
+    var notificationCenter: NotificationProtocol
 
     // Views
     private lazy var contentView: UIView = .build { _ in }
@@ -102,7 +102,8 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
 
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath) -> UICollectionReusableView {
+                        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader,
               let headerView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: UICollectionView.elementKindSectionHeader,
@@ -117,11 +118,13 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
         return headerView
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier,
             for: indexPath) as? WallpaperCollectionViewCell,
-                let cellViewModel = viewModel.cellViewModel(for: indexPath)
+              let cellViewModel = viewModel.cellViewModel(for: indexPath)
         else { return UICollectionViewCell() }
 
         cell.viewModel = cellViewModel

@@ -27,24 +27,24 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // Views
-    fileprivate lazy var contentStackView: UIStackView = .build { stackView in
+    private lazy var contentStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.spacing = UX.stackViewSpacing
     }
 
-    fileprivate lazy var titleLabel: UILabel = .build { label in
+    private lazy var titleLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline, size: 12.0, weight: .medium)
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
 
-    fileprivate lazy var descriptionLabel: UILabel = .build { label in
+    private lazy var descriptionLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 12.0)
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
 
-    fileprivate lazy var learnMoreButton: ResizableButton = .build { button in
+    private lazy var learnMoreButton: ResizableButton = .build { button in
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 12.0)
         button.contentHorizontalAlignment = .leading
         button.buttonEdgeSpacing = 0
