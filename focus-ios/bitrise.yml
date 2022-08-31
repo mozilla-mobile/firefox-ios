@@ -19,7 +19,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
+    - git-clone@6.2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
         inputs:
@@ -206,7 +206,7 @@ workflows:
 
   runFocus:
     steps:
-    - git-clone@6: {}
+    - git-clone@6.2: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
@@ -248,18 +248,18 @@ workflows:
             set -x
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
-    - xcode-build-for-simulator@0:
+    - xcode-build-for-simulator@0.12:
         inputs:
         - configuration: FocusDebug
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Focus
-    - xcode-test@4:
+    - xcode-test@4.5:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -testPlan UnitTests
         - scheme: Focus
         - test_plan: UnitTests
-    - xcode-test@4:
+    - xcode-test@4.5:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan $TEST_PLAN_NAME
@@ -283,7 +283,7 @@ workflows:
 
   runKlar:
     steps:
-    - git-clone@6: {}
+    - git-clone@6.2: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
@@ -324,18 +324,18 @@ workflows:
             set -x
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
-    - xcode-build-for-simulator@0:
+    - xcode-build-for-simulator@0.12:
         inputs:
         - configuration: FocusDebug
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Klar
-    - xcode-test@4:
+    - xcode-test@4.5:
         inputs:
         - scheme: Klar
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -testPlan UnitTests
         - test_plan: UnitTests
-    - xcode-test@4:
+    - xcode-test@4.5:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan "$TEST_PLAN_NAME"
@@ -361,7 +361,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4: {}
+    - git-clone@6.2: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
@@ -378,12 +378,12 @@ workflows:
             set -x
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
-    - xcode-build-for-simulator@0:
+    - xcode-build-for-simulator@0.12:
         inputs:
         - configuration: FocusDebug
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Focus
-    - xcode-test@2:
+    - xcode-test@4.5:
         is_always_run: true
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
@@ -391,7 +391,7 @@ workflows:
         - scheme: Focus
         - simulator_device: iPad Pro (12.9-inch) (5th generation)
         - simulator_os_version: '15.4'
-    - xcode-test@2:
+    - xcode-test@4.5:
         is_always_run: true
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
@@ -408,7 +408,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4: {}
+    - git-clone@6.2: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
@@ -472,7 +472,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
+    - git-clone@6.2: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
