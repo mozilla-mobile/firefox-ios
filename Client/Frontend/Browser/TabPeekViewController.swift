@@ -29,11 +29,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     fileprivate var webView: WKWebView?
 
     // Preview action items.
-    override var previewActionItems: [UIPreviewActionItem] {
-        get {
-            return previewActions
-        }
-    }
+    override var previewActionItems: [UIPreviewActionItem] { return previewActions }
 
     lazy var previewActions: [UIPreviewActionItem] = {
         var actions = [UIPreviewActionItem]()
