@@ -32,7 +32,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         view.backgroundColor = .clear
     }
 
-    let heroImage: UIImageView = .build { imageView in
+    let heroImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
@@ -86,7 +86,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        heroImage.image = nil
+        heroImageView.image = nil
         fallbackFaviconImage.image = nil
         itemTitle.text = nil
         setFallBackFaviconVisibility(isHidden: false)
@@ -109,7 +109,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
             fallbackFaviconImage.image = heroImage
         } else {
             setFallBackFaviconVisibility(isHidden: true)
-            self.heroImage.image = heroImage
+            heroImageView.image = heroImage
         }
     }
 
@@ -117,7 +117,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         fallbackFaviconBackground.isHidden = isHidden
         fallbackFaviconImage.isHidden = isHidden
 
-        self.heroImage.isHidden = !isHidden
+        heroImageView.isHidden = !isHidden
     }
 
     // MARK: - Helpers
@@ -132,7 +132,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         rootContainer.layer.shadowRadius = UX.shadowRadius
 
         fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
-        imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
+        imageContainer.addSubviews(heroImageView, fallbackFaviconBackground)
         rootContainer.addSubviews(imageContainer, itemTitle)
         contentView.addSubview(rootContainer)
 
@@ -144,21 +144,26 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
 
             // Image container, hero image and fallback
 
-            imageContainer.topAnchor.constraint(equalTo: rootContainer.topAnchor, constant: UX.containerSpacing),
-            imageContainer.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor, constant: UX.containerSpacing),
-            imageContainer.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor, constant: -UX.containerSpacing),
+            imageContainer.topAnchor.constraint(equalTo: rootContainer.topAnchor,
+                                                constant: UX.containerSpacing),
+            imageContainer.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor,
+                                                    constant: UX.containerSpacing),
+            imageContainer.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor,
+                                                     constant: -UX.containerSpacing),
             imageContainer.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
             imageContainer.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
 
-            heroImage.topAnchor.constraint(equalTo: imageContainer.topAnchor),
-            heroImage.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
-            heroImage.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
-            heroImage.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor),
+            heroImageView.topAnchor.constraint(equalTo: imageContainer.topAnchor),
+            heroImageView.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
+            heroImageView.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
+            heroImageView.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor),
 
-            itemTitle.topAnchor.constraint(equalTo: heroImage.bottomAnchor, constant: UX.generalSpacing),
-            itemTitle.leadingAnchor.constraint(equalTo: heroImage.leadingAnchor),
-            itemTitle.trailingAnchor.constraint(equalTo: heroImage.trailingAnchor),
-            itemTitle.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor, constant: -UX.generalSpacing),
+            itemTitle.topAnchor.constraint(equalTo: heroImageView.bottomAnchor,
+                                           constant: UX.generalSpacing),
+            itemTitle.leadingAnchor.constraint(equalTo: heroImageView.leadingAnchor),
+            itemTitle.trailingAnchor.constraint(equalTo: heroImageView.trailingAnchor),
+            itemTitle.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
+                                              constant: -UX.generalSpacing),
 
             fallbackFaviconBackground.centerXAnchor.constraint(equalTo: imageContainer.centerXAnchor),
             fallbackFaviconBackground.centerYAnchor.constraint(equalTo: imageContainer.centerYAnchor),
@@ -170,10 +175,12 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
             fallbackFaviconImage.centerXAnchor.constraint(equalTo: fallbackFaviconBackground.centerXAnchor),
             fallbackFaviconImage.centerYAnchor.constraint(equalTo: fallbackFaviconBackground.centerYAnchor),
 
-            itemTitle.topAnchor.constraint(equalTo: heroImage.bottomAnchor, constant: UX.generalSpacing),
-            itemTitle.leadingAnchor.constraint(equalTo: heroImage.leadingAnchor),
-            itemTitle.trailingAnchor.constraint(equalTo: heroImage.trailingAnchor),
-            itemTitle.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor, constant: -UX.generalSpacing)
+            itemTitle.topAnchor.constraint(equalTo: heroImageView.bottomAnchor,
+                                           constant: UX.generalSpacing),
+            itemTitle.leadingAnchor.constraint(equalTo: heroImageView.leadingAnchor),
+            itemTitle.trailingAnchor.constraint(equalTo: heroImageView.trailingAnchor),
+            itemTitle.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
+                                              constant: -UX.generalSpacing)
         ])
 
         adjustLayout()
