@@ -23,7 +23,6 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
     }
 
     // MARK: - UI Elements
-    // Contains the hero image
     private var rootContainer: UIView = .build { view in
         view.backgroundColor = .white
     }
@@ -59,7 +58,6 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    size: UX.bookmarkTitleFontSize)
         label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 0
         label.textColor = .label
     }
 
@@ -98,7 +96,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
     func configure(site: Site, heroImage: UIImage?, favIconImage: UIImage?) {
         configureImages(heroImage: heroImage, favIconImage: favIconImage)
 
-        itemTitle.text = site.tileURL.shortDisplayString.capitalized // site.title
+        itemTitle.text = site.title
         adjustLayout()
     }
 
