@@ -22,8 +22,6 @@ import MozillaAppServices
 
 private let log = Logger.syncLogger
 
-public let ProfileRemoteTabsSyncDelay: TimeInterval = 0.1
-
 public protocol SyncManager {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }
@@ -245,7 +243,7 @@ open class BrowserProfile: Profile {
 
     internal let files: FileAccessor
 
-    let db: BrowserDB
+    let database: BrowserDB
     let readingListDB: BrowserDB
     var syncManager: SyncManager!
 
@@ -286,7 +284,7 @@ open class BrowserProfile: Profile {
         let isNewProfile = !files.exists("")
 
         // Set up our database handles.
-        self.db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        self.database = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         self.readingListDB = BrowserDB(filename: "ReadingList.db", schema: ReadingListSchema(), files: files)
 
         if isNewProfile {
@@ -373,10 +371,10 @@ open class BrowserProfile: Profile {
         isShutdown = false
 
         if !places.isOpen && !RustFirefoxAccounts.shared.hasAccount() {
-            places.migrateBookmarksIfNeeded(fromBrowserDB: db)
+            places.migrateBookmarksIfNeeded(fromBrowserDB: database)
         }
 
-        db.reopenIfClosed()
+        database.reopenIfClosed()
         _ = logins.reopenIfClosed()
         _ = places.reopenIfClosed()
         _ = tabs.reopenIfClosed()
@@ -386,7 +384,7 @@ open class BrowserProfile: Profile {
         log.debug("Shutting down profile.")
         isShutdown = true
 
-        db.forceClose()
+        database.forceClose()
         _ = logins.forceClose()
         _ = places.forceClose()
         _ = tabs.forceClose()
@@ -441,7 +439,7 @@ open class BrowserProfile: Profile {
 
     lazy var queue: TabQueue = {
         withExtendedLifetime(self.history) {
-            return SQLiteQueue(db: self.db)
+            return SQLiteQueue(db: self.database)
         }
     }()
 
@@ -453,7 +451,7 @@ open class BrowserProfile: Profile {
      * that this is initialized first.
      */
     private lazy var legacyPlaces: Favicons & Profile.HistoryFetcher & HistoryRecommendations  = {
-        return SQLiteHistory(db: self.db, prefs: self.prefs)
+        return SQLiteHistory(db: self.database, prefs: self.prefs)
     }()
 
     var favicons: Favicons {
@@ -465,7 +463,7 @@ open class BrowserProfile: Profile {
     }
 
     lazy var metadata: Metadata = {
-        return SQLiteMetadata(db: self.db)
+        return SQLiteMetadata(db: self.database)
     }()
 
     var recommendations: HistoryRecommendations {
@@ -497,7 +495,7 @@ open class BrowserProfile: Profile {
     }()
 
     lazy var remoteClientsAndTabs: RemoteClientsAndTabs & ResettableSyncStorage & AccountRemovalDelegate & RemoteDevices = {
-        return SQLiteRemoteClientsAndTabs(db: self.db)
+        return SQLiteRemoteClientsAndTabs(db: self.database)
     }()
 
     lazy var certStore: CertStore = {

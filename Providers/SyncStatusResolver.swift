@@ -30,15 +30,15 @@ public enum SyncDisplayState {
     }
 }
 
-public func == (a: SyncDisplayState, b: SyncDisplayState) -> Bool {
-    switch (a, b) {
+public func == (lhs: SyncDisplayState, rhs: SyncDisplayState) -> Bool {
+    switch (lhs, rhs) {
     case (.inProgress, .inProgress):
         return true
     case (.good, .good):
         return true
-    case (.bad(let a), .bad(let b)) where a == b:
+    case (.bad(let first), .bad(let second)) where first == second:
         return true
-    case (.warning(let a), .warning(let b)) where a == b:
+    case (.warning(let first), .warning(let second)) where first == second:
         return true
     default:
         return false

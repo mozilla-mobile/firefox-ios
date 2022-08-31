@@ -50,8 +50,8 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFl
 
         let body: [String: Any] = [
             .version: 2,
-            .consumer_key: pocketKey,
-            .pocket_id: pocketId
+            .consumerKey: pocketKey,
+            .pocketId: pocketId
         ]
 
         let bodyData = try? JSONSerialization.data(withJSONObject: body)
@@ -127,7 +127,7 @@ enum PocketSponsoredConstants {
 fileprivate extension String {
     static let country = "country"
     static let version = "version"
-    static let consumer_key = "consumer_key"
-    static let pocket_id = "pocket_id"
+    static let consumerKey = "consumer_key"
+    static let pocketId = "pocket_id"
     static let post = "POST"
 }

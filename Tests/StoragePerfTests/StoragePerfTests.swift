@@ -17,9 +17,9 @@ class MockFiles: FileAccessor {
 class TestSQLiteHistoryFrecencyPerf: XCTestCase {
     func testFrecencyPerf() {
         let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let database = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)
+        let history = SQLiteHistory(db: database, prefs: prefs)
 
         let count = 100
 
@@ -35,9 +35,9 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
 class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
     func testCheckIfCleanupIsNeeded() {
         let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let database = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)
+        let history = SQLiteHistory(db: database, prefs: prefs)
 
         history.clearHistory().succeeded()
 
@@ -52,7 +52,7 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
         XCTAssertTrue(doCleanup2, "We should not need to perform clean-up")
 
         // Trigger the actual clean-up operation to happen and re-check.
-        _ = db.run(history.cleanupOldHistory(numberOfRowsToPrune: 50)).value.successValue
+        _ = database.run(history.cleanupOldHistory(numberOfRowsToPrune: 50)).value.successValue
         let doCleanup3 = history.checkIfCleanupIsNeeded(maxHistoryRows: maxRows).value.successValue!
         XCTAssertFalse(doCleanup3, "We should not need to perform clean-up")
     }
@@ -61,9 +61,9 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
 class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
     func testCachePerf() {
         let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let database = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)
+        let history = SQLiteHistory(db: database, prefs: prefs)
 
         let count = 100
 
