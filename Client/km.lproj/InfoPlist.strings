@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "ផ្ទាំង​ឯកជន​ថ្មី";
+
+/* (No Comment) */
+"New Tab" = "ផ្ទាំង​ថ្មី";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "វា​អនុញ្ញាតឱ្យអ្នកថត និងបង្ហោះ​រូបថត។";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "វា​អនុញ្ញាតឱ្យអ្នករក្សាទុកថត។";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "ផ្ទាំង​ឯកជន​ថ្មី";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "ផ្ទាំង​ថ្មី";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "ស្កេនកូដ QR";
+"Scan QR Code" = "ស្កេនកូដ QR";
 

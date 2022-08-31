@@ -6,7 +6,7 @@ import Foundation
 import Sentry
 import Shared
 
-// Struct that retrives saved tabs and simple tabs dictionary for WidgetKit
+// Struct that retrieves saved tabs and simple tabs dictionary for WidgetKit
 struct SiteArchiver {
     static func tabsToRestore(tabsStateArchivePath: String?) -> ([SavedTab], [String: SimpleTab]) {
         // Get simple tabs for widgetkit

@@ -83,28 +83,15 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
 
     // MARK: Text
 
-    func descriptionText(arrowDirection: UIPopoverArrowDirection) -> String {
-        switch hintType {
-        case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Body
-        case .jumpBackIn: return CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHome
-        case .jumpBackInSyncedTab: return CFRStrings.FirefoxHomepage.JumpBackIn.SyncedTab
+    func getCopyFor(_ copyType: ContextualHintCopyType) -> String {
+        let copyProvider: ContextualHintCopyProvider
 
-        case .toolbarLocation:
-            switch arrowDirection {
-            case .up:
-                return CFRStrings.Toolbar.SearchBarTopPlacement
-            default:
-                return CFRStrings.Toolbar.SearchBarPlacementForNewUsers
-            }
-        }
-    }
-
-    func buttonActionText() -> String {
         switch hintType {
-        case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Action
-        case .toolbarLocation: return CFRStrings.Toolbar.SearchBarPlacementButtonText
-        default: return ""
+        case .toolbarLocation: copyProvider = ContextualHintCopyProvider(arrowDirecton: arrowDirection)
+        default: copyProvider = ContextualHintCopyProvider()
         }
+
+        return copyProvider.getCopyFor(copyType, of: hintType)
     }
 
     func isActionType() -> Bool {

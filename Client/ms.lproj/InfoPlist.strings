@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Tab Peribadi Baru";
+
+/* (No Comment) */
+"New Tab" = "Tab Baru";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Ciri ini membolehkan anda mengambil dan memuat naik foto.";
 
@@ -11,11 +17,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Membolehkan anda menyimpan foto.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Tab Peribadi Baru";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Tab Baru";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Imbas Kod QR";
+"Scan QR Code" = "Imbas Kod QR";
 

@@ -31,7 +31,7 @@ class TabDisplayManagerTests: XCTestCase {
         super.tearDown()
 
         profile._shutdown()
-        manager.removeAll()
+        manager.testRemoveAll()
         manager.testClearArchive()
         profile = nil
         manager = nil

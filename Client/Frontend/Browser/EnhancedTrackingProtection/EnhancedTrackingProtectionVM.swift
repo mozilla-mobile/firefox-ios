@@ -9,7 +9,6 @@ class EnhancedTrackingProtectionMenuVM {
 
     // MARK: - Variables
     var tab: Tab
-    var tabManager: TabManager
     var profile: Profile
     var onOpenSettingsTapped: (() -> Void)?
 
@@ -51,11 +50,9 @@ class EnhancedTrackingProtectionMenuVM {
 
     // MARK: - Initializers
 
-    init(tab: Tab, profile: Profile, tabManager: TabManager) {
+    init(tab: Tab, profile: Profile) {
         self.tab = tab
         self.profile = profile
-        self.tabManager = tabManager
-
     }
 
     // MARK: - Functions

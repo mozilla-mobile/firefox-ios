@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Νέα ιδιωτική καρτέλα";
+
+/* (No Comment) */
+"New Tab" = "Νέα καρτέλα";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Το Firefox χρησιμοποιεί την κάμερα για τη σάρωση κωδικών QR και τη λήψη φωτογραφιών και βίντεο.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Αυτό σας επιτρέπει να αποθηκεύετε φωτογραφίες.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Νέα ιδιωτική καρτέλα";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Νέα καρτέλα";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Σάρωση κωδικού QR";
+"Scan QR Code" = "Σάρωση κωδικού QR";
 

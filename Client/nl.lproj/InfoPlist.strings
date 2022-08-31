@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nieuw privétabblad";
+
+/* (No Comment) */
+"New Tab" = "Nieuw tabblad";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox gebruikt uw camera om QR-codes te scannen en foto’s en video te maken.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Hiermee kunt u foto’s opslaan.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nieuw privétabblad";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nieuw tabblad";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR-code scannen";
+"Scan QR Code" = "QR-code scannen";
 

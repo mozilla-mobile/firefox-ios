@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Llingüeta privada nueva";
+
+/* (No Comment) */
+"New Tab" = "Llingüeta nueva";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox usa la cámara pa escaniar códigos QR y facer semeyes y vídeos.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Esto déxate guardar les semeyes.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Llingüeta privada nueva";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Llingüeta nueva";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Escaniar un códigu QR";
+"Scan QR Code" = "Escaniar un códigu QR";
 

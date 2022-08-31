@@ -52,6 +52,9 @@
 /* Accessibility label for the search input field in the Logins list */
 "Search Input Field" = "ਇਨਪੁਟ ਖੇਤਰ ਨੂੰ ਖੋਜੋ";
 
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "ਖੋਜ";
+
 /* Label for the button used to select all logins. */
 "Select All" = "ਸਭ ਚੁਣੋ";
 

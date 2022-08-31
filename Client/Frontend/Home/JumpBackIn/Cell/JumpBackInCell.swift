@@ -142,6 +142,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         itemTitle.text = viewModel.titleText
         descriptionLabel.text = viewModel.descriptionText
         accessibilityLabel = viewModel.accessibilityLabel
+        adjustLayout()
     }
 
     private func configureImages(viewModel: JumpBackInCellViewModel) {
@@ -168,6 +169,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     private func setupLayout() {
         contentView.layer.cornerRadius = UX.generalCornerRadius
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                    cornerRadius: UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = UX.stackViewShadowRadius
         contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
@@ -231,6 +234,10 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
         faviconCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
         faviconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
+
+        // Add blur
+        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        fallbackFaviconBackground.addBlurEffectWithClearBackgroundAndClipping(using: .systemMaterial)
     }
 }
 
@@ -247,9 +254,7 @@ extension JumpBackInCell: NotificationThemeable {
             fallbackFaviconImage.tintColor = UIColor.Photon.DarkGrey90
         }
 
-        fallbackFaviconBackground.backgroundColor = UIColor.theme.homePanel.topSitesBackground
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
-        contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
     }
 }
 
