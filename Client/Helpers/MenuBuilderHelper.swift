@@ -70,15 +70,15 @@ class MenuBuilderHelper {
         ])
 
         let toolsMenu = UIMenu(title: .KeyboardShortcuts.Sections.Tools, identifier: MenuIdentifiers.tools, options: .displayInline, children: [
-            UIKeyCommand(title: .KeyboardShortcuts.ShowDownloads, action: #selector(BrowserViewController.showDownloadsKeyCommand), input: "j", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ShowDownloads),
-            UIKeyCommand(action: #selector(BrowserViewController.selectFirstTab), input: "1", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ShowFirstTab),
-            UIKeyCommand(action: #selector(BrowserViewController.selectLastTab), input: "9", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ShowLastTab),
+            UIKeyCommand(title: .KeyboardShortcuts.ShowDownloads, action: #selector(BrowserViewController.showDownloadsKeyCommand), input: "j", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ShowDownloads)
         ])
 
         let windowMenu = UIMenu(title: .KeyboardShortcuts.Sections.Window, options: .displayInline, children: [
             UIKeyCommand(title: .KeyboardShortcuts.ShowNextTab, action: #selector(BrowserViewController.nextTabKeyCommand), input: "\t", modifierFlags: [.control], discoverabilityTitle: .KeyboardShortcuts.ShowNextTab),
             UIKeyCommand(title: .KeyboardShortcuts.ShowPreviousTab, action: #selector(BrowserViewController.previousTabKeyCommand), input: "\t", modifierFlags: [.control, .shift], discoverabilityTitle: .KeyboardShortcuts.ShowPreviousTab),
             UIKeyCommand(title: .KeyboardShortcuts.ShowTabTray, action: #selector(BrowserViewController.showTabTrayKeyCommand), input: "\t", modifierFlags: [.command, .alternate], discoverabilityTitle: .KeyboardShortcuts.ShowTabTray),
+            UIKeyCommand(action: #selector(BrowserViewController.selectFirstTab), input: "1", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ShowFirstTab),
+            UIKeyCommand(action: #selector(BrowserViewController.selectLastTab), input: "9", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ShowLastTab),
         ])
 
         if #available(iOS 15, *) {
