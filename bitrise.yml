@@ -47,10 +47,6 @@ workflows:
             mkdir DerivedData
                 
             xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec_Enterprise_XCUITests" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 11,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
-            echo "show files"
-            ls
-            ls DerivedData/
-            ls DerivedData/Build/Products
     - script@1.1:
         title: Detect number of warnings
         is_always_run: true
@@ -94,6 +90,13 @@ workflows:
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+    - slack@3.1:
+        is_always_run: true
+        run_if: '{{getenv "NEW_RC_VERSION" | eq "New_RC_Version"}}'
+        inputs:
+        - channel: "#firefox-ios"
+        - text: Build status using latest Rust-Component
+        - webhook_url: $WEBHOOK_SLACK_TOKEN_2
     - script@1.1:
         title: Compress Derived Data
         is_always_run: true
