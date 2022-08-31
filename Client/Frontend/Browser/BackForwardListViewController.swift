@@ -47,10 +47,8 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     var listData = [WKBackForwardListItem]()
 
     var tableHeight: CGFloat {
-        get {
-            assert(Thread.isMainThread, "tableHeight interacts with UIKit components - cannot call from background thread.")
-            return min(BackForwardViewUX.RowHeight * CGFloat(listData.count), self.view.frame.height/2)
-        }
+        assert(Thread.isMainThread, "tableHeight interacts with UIKit components - cannot call from background thread.")
+        return min(BackForwardViewUX.RowHeight * CGFloat(listData.count), self.view.frame.height/2)
     }
 
     var backForwardTransitionDelegate: UIViewControllerTransitioningDelegate? {

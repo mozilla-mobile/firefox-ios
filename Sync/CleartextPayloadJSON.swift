@@ -22,11 +22,7 @@ open class BasePayloadJSON {
                self.json.error == nil
     }
 
-    subscript(key: String) -> JSON {
-        get {
-            return json[key]
-        }
-    }
+    subscript(key: String) -> JSON { return json[key] }
 }
 
 /**

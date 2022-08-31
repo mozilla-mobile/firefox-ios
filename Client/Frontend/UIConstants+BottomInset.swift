@@ -5,19 +5,13 @@
 import Foundation
 
 extension UIConstants {
-    static var BottomToolbarHeight: CGFloat {
-        get {
-            return ToolbarHeight + BottomInset
-        }
-    }
+    static var BottomToolbarHeight: CGFloat { return ToolbarHeight + BottomInset }
 
     static var BottomInset: CGFloat {
-        get {
-            var bottomInset: CGFloat = 0.0
-            if let window = UIWindow.attachedKeyWindow {
-                bottomInset = window.safeAreaInsets.bottom
-            }
-            return bottomInset
+        var bottomInset: CGFloat = 0.0
+        if let window = UIWindow.attachedKeyWindow {
+            bottomInset = window.safeAreaInsets.bottom
         }
+        return bottomInset
     }
 }

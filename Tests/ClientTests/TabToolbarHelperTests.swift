@@ -72,36 +72,32 @@ class MockTabToolbar: TabToolbarProtocol {
     }
 
     var _tabsButton = MockTabsButton()
-    var tabsButton: TabsButton {
-        get { _tabsButton }
-    }
+    var tabsButton: TabsButton { return _tabsButton }
 
     var _bookmarksButton = MockToolbarButton()
-    var bookmarksButton: ToolbarButton { get { _bookmarksButton } }
+    var bookmarksButton: ToolbarButton { return _bookmarksButton }
 
     var _addNewTabButton = MockToolbarButton()
-    var addNewTabButton: ToolbarButton { get { _addNewTabButton } }
+    var addNewTabButton: ToolbarButton { return _addNewTabButton }
 
     var _homeButton = MockToolbarButton()
-    var homeButton: ToolbarButton { get { _homeButton } }
+    var homeButton: ToolbarButton { return _homeButton }
 
     var _appMenuButton = MockToolbarButton()
-    var appMenuButton: ToolbarButton { get { _appMenuButton } }
+    var appMenuButton: ToolbarButton { return _appMenuButton }
 
     var _libraryButton = MockToolbarButton()
-    var libraryButton: ToolbarButton { get { _libraryButton } }
+    var libraryButton: ToolbarButton { return _libraryButton }
 
     var _forwardButton = MockToolbarButton()
-    var forwardButton: ToolbarButton { get { _forwardButton } }
+    var forwardButton: ToolbarButton { return _forwardButton }
 
     var _backButton = MockToolbarButton()
-    var backButton: ToolbarButton { get { _backButton } }
+    var backButton: ToolbarButton { return _backButton }
 
     var _multiStateButton = MockToolbarButton()
-    var multiStateButton: ToolbarButton { get { _multiStateButton } }
-    var actionButtons: [NotificationThemeable & UIButton] {
-        get { return [] }
-    }
+    var multiStateButton: ToolbarButton { return _multiStateButton }
+    var actionButtons: [NotificationThemeable & UIButton] { return [] }
 
     func updateBackStatus(_ canGoBack: Bool) {
 

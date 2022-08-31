@@ -132,17 +132,13 @@ public extension EncryptedLogin {
     }
 
     var decryptedUsername: String {
-        get {
-            let rustKeys = RustLoginEncryptionKeys()
-            return rustKeys.decryptSecureFields(login: self)?.secFields.username ?? ""
-        }
+        let rustKeys = RustLoginEncryptionKeys()
+        return rustKeys.decryptSecureFields(login: self)?.secFields.username ?? ""
     }
 
     var decryptedPassword: String {
-        get {
-            let rustKeys = RustLoginEncryptionKeys()
-            return rustKeys.decryptSecureFields(login: self)?.secFields.password ?? ""
-        }
+        let rustKeys = RustLoginEncryptionKeys()
+        return rustKeys.decryptSecureFields(login: self)?.secFields.password ?? ""
     }
 
     var credentials: URLCredential {
