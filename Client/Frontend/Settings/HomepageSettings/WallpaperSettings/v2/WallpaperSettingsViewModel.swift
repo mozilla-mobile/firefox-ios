@@ -36,7 +36,7 @@ class WallpaperSettingsViewModel {
 
     private var wallpaperManager: WallpaperManagerInterface
     private var wallpaperCollections = [WallpaperCollection]()
-    var tabManager: TabManager
+    var tabManager: TabManagerProtocol
     var sectionLayout: WallpaperSettingsLayout = .compact // We use the compact layout as default
     var selectedIndexPath: IndexPath = IndexPath(row: 0, section: 0)
 
@@ -44,7 +44,7 @@ class WallpaperSettingsViewModel {
         return wallpaperCollections.count
     }
 
-    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(), tabManager: TabManager) {
+    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(), tabManager: TabManagerProtocol) {
         self.wallpaperManager = wallpaperManager
         self.tabManager = tabManager
         setupWallpapers()
@@ -54,7 +54,9 @@ class WallpaperSettingsViewModel {
         return wallpaperCollections[safe: section]?.wallpapers.count ?? 0
     }
 
-    func sectionHeaderViewModel(for sectionIndex: Int, dismissView: @escaping (() -> Void)) -> WallpaperSettingsHeaderViewModel? {
+    func sectionHeaderViewModel(for sectionIndex: Int,
+                                dismissView: @escaping (() -> Void)
+    ) -> WallpaperSettingsHeaderViewModel? {
         guard let collection = wallpaperCollections[safe: sectionIndex] else { return nil }
 
         let isClassic = collection.type == .classic
@@ -74,7 +76,7 @@ class WallpaperSettingsViewModel {
             let tab = strongSelf.tabManager.addTab(URLRequest(url: learnMoreUrl),
                                                    afterTab: strongSelf.tabManager.selectedTab,
                                                    isPrivate: false)
-            strongSelf.tabManager.selectTab(tab)
+            strongSelf.tabManager.selectTab(tab, previous: nil)
         }
 
         return WallpaperSettingsHeaderViewModel(

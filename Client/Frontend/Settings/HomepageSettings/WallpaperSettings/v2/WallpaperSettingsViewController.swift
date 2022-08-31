@@ -255,7 +255,8 @@ private extension WallpaperSettingsViewController {
         guard let navigationController = self.navigationController as? ThemedNavigationController else { return }
 
         if let isFxHomeTab = viewModel.tabManager.selectedTab?.isFxHomeTab, !isFxHomeTab {
-            viewModel.tabManager.selectTab(viewModel.tabManager.addTab())
+            viewModel.tabManager.selectTab(viewModel.tabManager.addTab(nil, afterTab: nil, isPrivate: false),
+                                           previous: nil)
         }
 
         navigationController.done()
