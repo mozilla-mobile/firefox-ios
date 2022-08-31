@@ -9,8 +9,6 @@ import XCTest
 @testable import Account
 @testable import Client
 
-private let ProductionTokenServerEndpointURL = URL(string: "https://token.services.mozilla.com/1.0/sync/1.5")!
-
 // Testing client state is so delicate that I'm not going to test this.  The test below does two
 // requests; we would need a third, and a guarantee of the server state, to test this completely.
 // The rule is: if you turn up with a never-before-seen client state; you win.  If you turn up with

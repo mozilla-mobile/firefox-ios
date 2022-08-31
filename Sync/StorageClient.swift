@@ -660,11 +660,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
         self.collectionURI = serverURI.appendingPathComponent(collection, isDirectory: false)
     }
 
-    var maxBatchPostRecords: Int {
-        get {
-            return infoConfig.maxPostRecords
-        }
-    }
+    var maxBatchPostRecords: Int { return infoConfig.maxPostRecords }
 
     fileprivate func uriForRecord(_ guid: String) -> URL {
         return self.collectionURI.appendingPathComponent(guid)
