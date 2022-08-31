@@ -5,27 +5,42 @@
 import Foundation
 import Storage
 import Shared
-import XCGLogger
 
-private let log = Logger.browserLogger
-class TabManagerStore: FeatureFlaggable {
-    fileprivate var lockedForReading = false
-    fileprivate let imageStore: DiskImageStore?
-    fileprivate var fileManager = FileManager.default
-    fileprivate let prefs: Prefs
-    fileprivate let serialQueue = DispatchQueue(label: "tab-manager-write-queue")
-    fileprivate var writeOperation = DispatchWorkItem {}
+protocol TabManagerStore {
+    var isRestoringTabs: Bool { get }
+    var hasTabsToRestoreAtStartup: Bool { get }
+
+    func preserveScreenshot(forTab tab: Tab?)
+    func removeScreenshot(forTab tab: Tab?)
+
+    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, writeCompletion: (() -> Void)?)
+    func restoreStartupTabs(clearPrivateTabs: Bool, tabManager: TabManager) -> Tab?
+    func restoreTabs(savedTabs: [SavedTab],
+                     clearPrivateTabs: Bool,
+                     tabManager: TabManager) -> Tab?
+    func clearArchive()
+}
+
+extension TabManagerStore {
+    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, writeCompletion: (() -> Void)? =  nil) {
+        preserveTabs(tabs, selectedTab: selectedTab, writeCompletion: writeCompletion)
+    }
+}
+
+class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable {
+
+    // MARK: - Variables
+    private let prefs: Prefs
+    private let imageStore: DiskImageStore?
+    private var fileManager: FileManager
+    private var writeOperation: DispatchWorkItem
+    private let serialQueue: DispatchQueue
+    private var lockedForReading = false
 
     // Init this at startup with the tabs on disk, and then on each save, update the in-memory tab state.
-    fileprivate lazy var archivedStartupTabs = {
+    private lazy var archivedStartupTabs = {
         return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
     }()
-
-    init(imageStore: DiskImageStore?, _ fileManager: FileManager = FileManager.default, prefs: Prefs) {
-        self.fileManager = fileManager
-        self.imageStore = imageStore
-        self.prefs = prefs
-    }
 
     var isRestoringTabs: Bool {
         return lockedForReading
@@ -35,36 +50,21 @@ class TabManagerStore: FeatureFlaggable {
         return !archivedStartupTabs.0.isEmpty
     }
 
-    fileprivate func tabsStateArchivePath() -> String? {
-        let profilePath: String?
-        if  AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
-            profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
-        } else {
-            profilePath = fileManager.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
-        }
-        guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
+    // MARK: - Initializer
+
+    init(prefs: Prefs,
+         imageStore: DiskImageStore?,
+         fileManager: FileManager = FileManager.default,
+         writeOperation: DispatchWorkItem = DispatchWorkItem {},
+         serialQueue: DispatchQueue = DispatchQueue(label: "tab-manager-write-queue")) {
+        self.fileManager = fileManager
+        self.imageStore = imageStore
+        self.prefs = prefs
+        self.writeOperation = writeOperation
+        self.serialQueue = serialQueue
     }
 
-    fileprivate func prepareSavedTabs(fromTabs tabs: [Tab], selectedTab: Tab?) -> [SavedTab]? {
-        var savedTabs = [SavedTab]()
-        var savedUUIDs = Set<String>()
-        for tab in tabs {
-            tab.tabUUID = tab.tabUUID.isEmpty ? UUID().uuidString : tab.tabUUID
-            tab.screenshotUUID = tab.screenshotUUID ?? UUID()
-            tab.firstCreatedTime = tab.firstCreatedTime ?? tab.sessionData?.lastUsedTime ?? Date.now()
-            if let savedTab = SavedTab(tab: tab, isSelected: tab == selectedTab) {
-                savedTabs.append(savedTab)
-                if let uuidString = tab.screenshotUUID?.uuidString {
-                    savedUUIDs.insert(uuidString)
-                }
-            }
-        }
-
-        // Clean up any screenshots that are no longer associated with a tab.
-        _ = imageStore?.clearExcluding(savedUUIDs)
-        return savedTabs.isEmpty ? nil : savedTabs
-    }
+    // MARK: - Screenshots
 
     func preserveScreenshot(forTab tab: Tab?) {
         if let tab = tab, let screenshot = tab.screenshot, let uuidString = tab.screenshotUUID?.uuidString {
@@ -78,6 +78,8 @@ class TabManagerStore: FeatureFlaggable {
         }
     }
 
+    // MARK: - Saving
+
     /// Async write of the tab state. In most cases, code doesn't care about performing an operation
     /// after this completes. Write failures (i.e. due to read locks) are considered inconsequential, as preserveTabs will be called frequently.
     /// - Parameters:
@@ -89,8 +91,8 @@ class TabManagerStore: FeatureFlaggable {
         guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab),
               let path = tabsStateArchivePath()
         else {
-                clearArchive()
-                return
+            clearArchive()
+            return
         }
 
         writeOperation.cancel()
@@ -106,7 +108,7 @@ class TabManagerStore: FeatureFlaggable {
             let written = tabStateData.write(toFile: path, atomically: true)
             SimpleTab.saveSimpleTab(tabs: simpleTabs)
             // Ignore write failure (could be restoring).
-            log.debug("PreserveTabs write ok: \(written), bytes: \(tabStateData.length)")
+            self.browserLog.debug("PreserveTabs write ok: \(written), bytes: \(tabStateData.length)")
             writeCompletion?()
         }
 
@@ -115,12 +117,18 @@ class TabManagerStore: FeatureFlaggable {
         serialQueue.asyncAfter(deadline: .now() + .milliseconds(100), execute: writeOperation)
     }
 
+    // MARK: - Restoration
+
     func restoreStartupTabs(clearPrivateTabs: Bool, tabManager: TabManager) -> Tab? {
-        let selectedTab = restoreTabs(savedTabs: archivedStartupTabs.0, clearPrivateTabs: clearPrivateTabs, tabManager: tabManager)
+        let selectedTab = restoreTabs(savedTabs: archivedStartupTabs.0,
+                                      clearPrivateTabs: clearPrivateTabs,
+                                      tabManager: tabManager)
         return selectedTab
     }
 
-    func restoreTabs(savedTabs: [SavedTab], clearPrivateTabs: Bool, tabManager: TabManager) -> Tab? {
+    func restoreTabs(savedTabs: [SavedTab],
+                     clearPrivateTabs: Bool,
+                     tabManager: TabManager) -> Tab? {
         assertIsMainThread("Restoration is a main-only operation")
         guard !lockedForReading, !savedTabs.isEmpty else { return nil }
         lockedForReading = true
@@ -151,14 +159,49 @@ class TabManagerStore: FeatureFlaggable {
     }
 
     func clearArchive() {
-        if let path = tabsStateArchivePath() {
-            try? FileManager.default.removeItem(atPath: path)
+        guard let path = tabsStateArchivePath() else { return }
+        try? FileManager.default.removeItem(atPath: path)
+    }
+
+    // MARK: - Private
+
+    private func tabsStateArchivePath() -> String? {
+        let profilePath: String?
+        if  AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
+            profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
+        } else {
+            profilePath = fileManager
+                .containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?
+                .appendingPathComponent("profile.profile")
+                .path
         }
+        guard let path = profilePath else { return nil }
+        return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
+    }
+
+    private func prepareSavedTabs(fromTabs tabs: [Tab], selectedTab: Tab?) -> [SavedTab]? {
+        var savedTabs = [SavedTab]()
+        var savedUUIDs = Set<String>()
+        for tab in tabs {
+            tab.tabUUID = tab.tabUUID.isEmpty ? UUID().uuidString : tab.tabUUID
+            tab.screenshotUUID = tab.screenshotUUID ?? UUID()
+            tab.firstCreatedTime = tab.firstCreatedTime ?? tab.sessionData?.lastUsedTime ?? Date.now()
+            if let savedTab = SavedTab(tab: tab, isSelected: tab == selectedTab) {
+                savedTabs.append(savedTab)
+                if let uuidString = tab.screenshotUUID?.uuidString {
+                    savedUUIDs.insert(uuidString)
+                }
+            }
+        }
+
+        // Clean up any screenshots that are no longer associated with a tab.
+        _ = imageStore?.clearExcluding(savedUUIDs)
+        return savedTabs.isEmpty ? nil : savedTabs
     }
 }
 
-// Functions for testing
-extension TabManagerStore {
+// MARK: Tests
+extension TabManagerStoreImplementation {
     func testTabCountOnDisk() -> Int {
         assert(AppConstants.isRunningTest)
         return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).0.count

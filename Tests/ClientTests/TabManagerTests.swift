@@ -120,7 +120,7 @@ class TabManagerTests: XCTestCase {
 
         profile._shutdown()
         manager.removeDelegate(delegate) {
-            self.manager.removeAll()
+            self.manager.testRemoveAll()
         }
 
         super.tearDown()
@@ -244,7 +244,7 @@ class TabManagerTests: XCTestCase {
         removeTabAndAssert(tab: privateTab) {}
     }
 
-    func testDidCreateNormalTabWhenDeletingAll() {
+    func testRemoveTabsRemovesAllTabs() {
         // This test makes sure that a normal tab is always added even when a normal tab is not selected when calling removeAll
         manager.addDelegate(delegate)
 
@@ -257,12 +257,10 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(manager.normalTabs.count, 2, "There should be two normal tabs")
         XCTAssertEqual(manager.privateTabs.count, 1, "There should be one private tab")
 
-        // Function removeTabsWithToast calls didRemove for each tab removed, adds a normal tab and select it then calls didRemoveAllTabs
-        delegate.expect([didRemove, didRemove, didAdd, didSelect, didRemoveAllTabs])
-        manager.removeTabsWithToast(manager.normalTabs)
-        XCTAssertEqual(manager.normalTabs.count, 1, "There should be one normal tab")
+        delegate.expect([didRemove, didRemove])
+        manager.removeTabs(manager.normalTabs)
+        XCTAssertEqual(manager.normalTabs.count, 0, "There should be no normal tab")
         XCTAssertEqual(manager.privateTabs.count, 1, "There should be one private tab")
-        XCTAssertFalse(manager.selectedTab!.isPrivate, "Selected tab should be normal tab")
     }
 
     func testPrivatePreference_deletePrivateTabsOnExit() {
@@ -536,7 +534,7 @@ class TabManagerTests: XCTestCase {
         let tab0 = manager.addTab()
         let tab1 = manager.addTab()
 
-        manager.removeAll()
+        manager.testRemoveAll()
         XCTAssert(nil == manager.tabs.firstIndex(of: tab0))
         XCTAssert(nil == manager.tabs.firstIndex(of: tab1))
     }
@@ -604,24 +602,6 @@ class TabManagerTests: XCTestCase {
         removeTabAndAssert(tab: manager.tabs.first!) {
             self.delegate.verify("Not all delegate methods were called")
         }
-    }
-
-    func testUndoCloseTabsRemovesAutomaticallyCreatedNonPrivateTab() {
-        let tab = manager.addTab()
-        let tabToSave = Tab(profile: profile, configuration: WKWebViewConfiguration())
-        tabToSave.sessionData = SessionData(currentPage: 0, urls: [URL(string: "url")!], lastUsedTime: Date.now())
-        guard let savedTab = SavedTab(tab: tabToSave, isSelected: true) else {
-            XCTFail("Failed to serialize tab")
-            return
-        }
-        manager.recentlyClosedForUndo = [savedTab]
-
-        let expectation = self.expectation(description: "Created non private tab is removed")
-        manager.undoCloseTabs {
-            XCTAssertNotEqual(self.manager.tabs.first, tab, "Tab shouldn't be equal")
-            expectation.fulfill()
-        }
-        waitForExpectations(timeout: 5, handler: nil)
     }
 }
 

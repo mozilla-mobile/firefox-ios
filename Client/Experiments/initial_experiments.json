@@ -1,7 +1,7 @@
 {
   "data": [
     {
-      "schemaVersion": "1.8.0",
+      "schemaVersion": "1.9.0",
       "slug": "firefox-ios-first-run-validation-aa-2-weeks",
       "id": "firefox-ios-first-run-validation-aa-2-weeks",
       "arguments": {},
@@ -54,7 +54,7 @@
       "referenceBranch": "control-1"
     },
     {
-      "schemaVersion": "1.8.0",
+      "schemaVersion": "1.9.0",
       "slug": "firefox-ios-first-run-validation-aa-4-weeks",
       "id": "firefox-ios-first-run-validation-aa-4-weeks",
       "arguments": {},

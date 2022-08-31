@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Tab Nyamuni Anyar";
+
+/* (No Comment) */
+"New Tab" = "Tab Anyar";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Ieu bisa anjeun paké jang nyomot sarta ngunjalkeun poto.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Ieu bisa anjeun paké jang neundeun poto.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Tab Nyamuni Anyar";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Tab Anyar";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Pindéy kodeu QR";
+"Scan QR Code" = "Pindéy kodeu QR";
 

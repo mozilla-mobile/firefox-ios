@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nov zasebni zavihek";
+
+/* (No Comment) */
+"New Tab" = "Nov zavihek";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox uporablja vašo kamero za skeniranje QR-kod, fotografiranje in snemanje.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "To vam omogoča shranjevati fotografije.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nov zasebni zavihek";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nov zavihek";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skeniraj QR-kodo";
+"Scan QR Code" = "Skeniraj QR-kodo";
 

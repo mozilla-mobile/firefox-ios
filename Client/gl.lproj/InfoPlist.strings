@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Nova lapela privada";
+
+/* (No Comment) */
+"New Tab" = "Nova lapela";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Isto permítelle facer fotos e subilas.";
 
@@ -11,11 +17,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Isto permítelle gardar fotos.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nova lapela privada";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nova lapela";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Examinar código QR";
+"Scan QR Code" = "Examinar código QR";
 

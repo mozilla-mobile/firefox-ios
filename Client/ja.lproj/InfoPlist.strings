@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "新規プライベートタブ";
+
+/* (No Comment) */
+"New Tab" = "新規タブ";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox が QR コードのスキャンや写真、動画を撮影するためにカメラを使用します。";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "これにより写真を保存できます。";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "新規プライベートタブ";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "新規タブ";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR コードをスキャン";
+"Scan QR Code" = "QR コードをスキャン";
 

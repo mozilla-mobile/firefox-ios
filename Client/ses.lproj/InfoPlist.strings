@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Sutura kanji taaga";
+
+/* (No Comment) */
+"New Tab" = "Kanji taaga";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Woo ga naŋ war ma biyey zaa k'i zijandi.";
 
@@ -11,11 +17,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Woo ga naŋ ma biyey gaabu.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Sutura kanji taaga";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Kanji taaga";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR tammaasa bii za";
+"Scan QR Code" = "QR tammaasa bii za";
 

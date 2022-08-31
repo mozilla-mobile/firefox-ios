@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "Яңа хосусый таб";
+
+/* (No Comment) */
+"New Tab" = "Яңа таб";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox uses your camera to scan QR codes and take photos and video.";
 
@@ -14,11 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Фотоларны саклау өчен сез моны куллана аласыз.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Яңа хосусый таб";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Яңа таб";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR кодны сканерлау";
+"Scan QR Code" = "QR кодны сканерлау";
 

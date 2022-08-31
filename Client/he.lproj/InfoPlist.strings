@@ -1,3 +1,9 @@
+/* (No Comment) */
+"New Private Tab" = "לשונית פרטית חדשה";
+
+/* (No Comment) */
+"New Tab" = "לשונית חדשה";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "‏Firefox משתמש במצלמה שלך כדי לסרוק קודי QR, לצלם תמונות ולהקליט סרטונים.";
 
@@ -11,11 +17,5 @@
 "NSPhotoLibraryAddUsageDescription" = "זה מאפשר לך לשמור תמונות.";
 
 /* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "לשונית פרטית חדשה";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "לשונית חדשה";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "סריקת קוד QR";
+"Scan QR Code" = "סריקת קוד QR";
 
