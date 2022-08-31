@@ -1451,10 +1451,10 @@ open class BrowserSchema: Schema {
 
         // Query for the existence of the `tableList` table to determine if we are
         // migrating from an older DB version or if this is just a brand new DB.
-        let sqliteMasterCursor = db.executeQueryUnsafe("SELECT count(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
+        let sqliteMainCursor = db.executeQueryUnsafe("SELECT count(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
 
-        let tableListTableExists = sqliteMasterCursor[0] == 1
-        sqliteMasterCursor.close()
+        let tableListTableExists = sqliteMainCursor[0] == 1
+        sqliteMainCursor.close()
 
         // If `tableList` still exists in this DB, then we need to continue to check if
         // any table-specific migrations are required before removing it. Otherwise, if
@@ -1512,10 +1512,10 @@ open class BrowserSchema: Schema {
     fileprivate func migrateClientsTableFromSchemaTableIfNeeded(_ db: SQLiteDBConnection) -> SchemaUpgradeResult {
         // Query for the existence of the `clients` table to determine if we are
         // migrating from an older DB version or if this is just a brand new DB.
-        let sqliteMasterCursor = db.executeQueryUnsafe("SELECT count(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'clients'", factory: IntFactory, withArgs: [] as Args)
+        let sqliteMainCursor = db.executeQueryUnsafe("SELECT count(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'clients'", factory: IntFactory, withArgs: [] as Args)
 
-        let clientsTableExists = sqliteMasterCursor[0] == 1
-        sqliteMasterCursor.close()
+        let clientsTableExists = sqliteMainCursor[0] == 1
+        sqliteMainCursor.close()
 
         guard clientsTableExists else {
             return .skipped
