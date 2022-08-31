@@ -7,7 +7,7 @@ import XCTest
 
 @testable import Client
 
-class WallpaperSelectorViewModelTests: XCTestCase {
+class WallpaperSettingsViewModelTests: XCTestCase {
 
     private var wallpaperManager: WallpaperManagerInterface!
 
@@ -25,16 +25,15 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         super.tearDown()
     }
 
-    func testInit_hasCorrectNumberOfWallpapers() {
+    func testInit_hasDefaultLayout() {
         let subject = createSubject()
-        let expectedLayout: WallpaperSelectorViewModel.WallpaperSelectorLayout = .compact
+        let expectedLayout: WallpaperSettingsViewModel.WallpaperSettingsLayout = .compact
         XCTAssertEqual(subject.sectionLayout, expectedLayout)
-        XCTAssertEqual(subject.numberOfWallpapers, expectedLayout.maxItemsToDisplay)
     }
 
-    func testUpdateSectionLayout_regularLayout_hasCorrectNumberOfWallpapers() {
+    func testUpdateSectionLayout_hasRegularLayout() {
         let subject = createSubject()
-        let expectedLayout: WallpaperSelectorViewModel.WallpaperSelectorLayout = .regular
+        let expectedLayout: WallpaperSettingsViewModel.WallpaperSettingsLayout = .regular
 
         let landscapeTrait = MockTraitCollection()
         landscapeTrait.overridenHorizontalSizeClass = .regular
@@ -43,7 +42,42 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         subject.updateSectionLayout(for: landscapeTrait)
 
         XCTAssertEqual(subject.sectionLayout, expectedLayout)
-        XCTAssertEqual(subject.numberOfWallpapers, expectedLayout.maxItemsToDisplay)
+    }
+
+    func testNumberOfSections() {
+        let subject = createSubject()
+
+        XCTAssertEqual(subject.numberOfSections, 2)
+    }
+
+    func testNumberOfItemsInSection() {
+        let subject = createSubject()
+
+        XCTAssertEqual(subject.numberOfWallpapers(in: 0),
+                       wallpaperManager.availableCollections[safe: 0]?.wallpapers.count)
+
+        XCTAssertEqual(subject.numberOfWallpapers(in: 1),
+                       wallpaperManager.availableCollections[safe: 1]?.wallpapers.count)
+    }
+
+    func testSectionHeaderViewModel_defaultCollectionWithoutLinkAndDescription() {
+        let subject = createSubject()
+        let headerViewModel = subject.sectionHeaderViewModel(for: 0) {
+        }
+
+        XCTAssertNotNil(headerViewModel?.title)
+        XCTAssertNil(headerViewModel?.description)
+        XCTAssertNil(headerViewModel?.buttonTitle)
+    }
+
+    func testSectionHeaderViewModel_limitedCollectionWithLinkAndDescription() {
+        let subject = createSubject()
+        let headerViewModel = subject.sectionHeaderViewModel(for: 1) {
+        }
+
+        XCTAssertNotNil(headerViewModel?.title)
+        XCTAssertNotNil(headerViewModel?.description)
+        XCTAssertNotNil(headerViewModel?.buttonTitle)
     }
 
     func testDownloadAndSetWallpaper_downloaded_wallpaperIsSet() {
@@ -57,37 +91,21 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         }
     }
 
-    func testRecordsWallpaperSelectorView() {
-        wallpaperManager = WallpaperManager()
-        let subject = createSubject()
-        subject.sendImpressionTelemetry()
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorView)
-    }
-
-    func testRecordsWallpaperSelectorClose() {
-        wallpaperManager = WallpaperManager()
-        let subject = createSubject()
-        subject.sendDismissImpressionTelemetry()
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorClose)
-    }
-
     func testClickingCell_recordsWallpaperChange() {
         wallpaperManager = WallpaperManager()
         let subject = createSubject()
 
         let expectation = self.expectation(description: "Download and set wallpaper")
         subject.downloadAndSetWallpaper(at: IndexPath(item: 0, section: 0)) { _ in
-            self.testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorSelected)
+            self.testEventMetricRecordingSuccess(metric: GleanMetrics.WallpaperAnalytics.wallpaperSelected)
             expectation.fulfill()
         }
 
         waitForExpectations(timeout: 5, handler: nil)
     }
 
-    func createSubject() -> WallpaperSelectorViewModel {
-        let subject = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager) { }
+    func createSubject() -> WallpaperSettingsViewModel {
+        let subject = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager, tabManager: MockTabManager())
         trackForMemoryLeaks(subject)
         return subject
     }
@@ -108,8 +126,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
 
         var wallpapersForOther: [Wallpaper] {
             var wallpapers = [Wallpaper]()
-            let rangeEnd = Int.random(in: 3...6)
-            for _ in 0..<rangeEnd {
+            for _ in 0..<6 {
                 wallpapers.append(Wallpaper(id: "fxCerulean", textColour: UIColor.purple))
             }
 
