@@ -406,6 +406,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Remove from Shortcuts";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Shortcut removed";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Request Desktop Site";
 
@@ -516,6 +519,12 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "These default settings offer strong protection. But it’s easy to tweak the settings to meet your specific needs.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Start your private browsing session, and we’ll block trackers and other bad stuff as you go.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked" = "Got ‘em! We stopped this site from spying on you. Tap the shield any time to see what we’re blocking.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Tap the trash any time to remove all traces of your current session.";

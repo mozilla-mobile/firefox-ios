@@ -406,6 +406,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Eltávolítás a Parancsokból";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Parancs eltávolítva";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Asztali oldal kérése";
 
@@ -516,6 +519,12 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Ezek az alapértelmezett beállítások erős védelmet nyújtanak. De könnyű a beállításokat az Ön egyedi igényei szerint módosítani.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Indítsa el a privát böngészési munkamenetet, és menet közben blokkoljuk a nyomkövetőket és az egyéb rossz dolgokat.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked" = "Megvannak! Megakadályoztuk, hogy ez a webhely kémkedjen Ön után. Koppintson a pajzsra, hogy megtudja mit blokkoltunk.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Koppintson bármikor a kukára, hogy eltávolítsa az aktuális munkamenet összes nyomát.";

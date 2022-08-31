@@ -406,6 +406,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Fjarlægja úr flýtileiðum";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Flýtivísun fjarlægð";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Fá borðtölvu vefsvæði";
 
@@ -516,6 +519,12 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Þessar sjálfgefnu stillingar bjóða upp á öfluga vernd. En það er auðvelt að laga til stillingarnar til að mæta sérþörfum þínum.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Byrjaðu einkavafralotuna þína og við lokum á rakningar og annað vont dót á meðan þú vafrar.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked" = "Náðonum! Við komum í veg fyrir að þetta vefsvæði njósnaði um þig. Ýttu á skjöldinn til að fá upplýsingar um það sem við lokuðum á.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Pikkaðu á ruslið hvenær sem er til að fjarlægja öll ummerki um núverandi lotu.";
