@@ -98,6 +98,7 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
             // make button underlined
             let labelAttributes: [NSAttributedString.Key: Any] = [
                 .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 12.0),
+                .foregroundColor: UIColor.Photon.Grey75A60,
                 .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
 
@@ -145,17 +146,32 @@ extension WallpaperSettingsHeaderView: NotificationThemeable, Notifiable {
 
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        let buttonTitleColor: UIColor
 
         if theme == .dark {
             contentStackView.backgroundColor = UIColor.Photon.DarkGrey40
             titleLabel.textColor = UIColor.Photon.Grey10
             descriptionLabel.textColor = UIColor.Photon.Grey10
-            learnMoreButton.setTitleColor(UIColor.Photon.Grey10, for: .normal)
+            buttonTitleColor = UIColor.Photon.Grey10
         } else {
             contentStackView.backgroundColor = UIColor.Photon.LightGrey10
             titleLabel.textColor = UIColor.Photon.Grey75A60
             descriptionLabel.textColor = UIColor.Photon.Grey75A60
-            learnMoreButton.setTitleColor(UIColor.Photon.Grey75A60, for: .normal)
+            buttonTitleColor = UIColor.Photon.Grey75A60
         }
+
+        learnMoreButton.setTitleColor(buttonTitleColor, for: .normal)
+
+        // in iOS 13 the title color set is not used for the attributed text color so we have to set it via attributes
+        guard let buttonTitle = viewModel?.buttonTitle else { return }
+        let labelAttributes: [NSAttributedString.Key: Any] = [
+            .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 12.0),
+            .foregroundColor: buttonTitleColor,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+
+        let attributeString = NSMutableAttributedString(string: buttonTitle,
+                                                        attributes: labelAttributes)
+        learnMoreButton.setAttributedTitle(attributeString, for: .normal)
     }
 }
