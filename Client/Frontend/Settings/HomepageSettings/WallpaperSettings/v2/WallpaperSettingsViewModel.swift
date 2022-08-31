@@ -117,6 +117,7 @@ class WallpaperSettingsViewModel {
 
         let setWallpaperBlock = { [weak self] in
             self?.updateCurrentWallpaper(for: wallpaper, in: collection) { result in
+                self?.selectedIndexPath = indexPath
                 completion(result)
             }
         }
@@ -125,7 +126,6 @@ class WallpaperSettingsViewModel {
             wallpaperManager.fetch(wallpaper) { result in
                 switch result {
                 case .success:
-                    self.selectedIndexPath = indexPath
                     setWallpaperBlock()
                 case .failure:
                     completion(result)
