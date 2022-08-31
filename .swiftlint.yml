@@ -25,7 +25,6 @@ disabled_rules: # rule identifiers to exclude from running
 - function_parameter_count
 - generic_type_name
 - identifier_name
-- inclusive_language
 - is_disjoint
 - legacy_hashing
 - legacy_random
