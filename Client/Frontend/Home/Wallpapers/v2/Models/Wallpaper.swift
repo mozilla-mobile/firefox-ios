@@ -18,8 +18,15 @@ struct Wallpaper: Equatable {
     }
 
     let id: String
-    let textColour: UIColor
-    let cardColour: UIColor
+    let textColour: UIColor?
+    let cardColour: UIColor?
+
+    var thumbnailID: String { return "\(id)_thumbnail" }
+    var portraitID: String { return "\(id)\(deviceVersionID)_portrait" }
+    var landscapeID: String { return "\(id)\(deviceVersionID)_landscape" }
+    var deviceVersionID: String {
+        return UIDevice.current.userInterfaceIdiom == .pad ? "_iPad" : "_iPhone"
+    }
 
     var type: WallpaperType {
         return id == "fxDefault" ? .defaultWallpaper : .other
@@ -30,23 +37,31 @@ struct Wallpaper: Equatable {
         return portrait == nil || landscape == nil
     }
 
-    // TODO: This following properties will need to be replaced with fetching the
-    // resource from the local folder once that functionality is in. For now, we're
-    // just returning an existing image to enable development of UI related work.
     var thumbnail: UIImage? {
-        guard type == .other else { return nil } // default/empty wallpaper
-        return UIImage(imageLiteralResourceName: "\(id)")
+        return getImageFromStorageWith(id: thumbnailID)
     }
 
     var portrait: UIImage? {
-        guard type == .other else { return nil } // default/empty wallpaper
-        return UIImage(imageLiteralResourceName: "\(id)")
+        return getImageFromStorageWith(id: portraitID)
     }
 
     var landscape: UIImage? {
-        guard type == .other else { return nil } // default/empty wallpaper
-        return UIImage(imageLiteralResourceName: "\(id)_ls")
+        return getImageFromStorageWith(id: landscapeID)
     }
+
+    // MARK: - Helper fuctions
+    private func getImageFromStorageWith(id: String) -> UIImage? {
+        // If it's a default (empty) wallpaper
+        guard type == .other else { return nil }
+
+        do {
+            let storageUtility = WallpaperStorageUtility()
+            return try storageUtility.fetchImageWith(id: id)
+        } catch {
+            return nil
+        }
+    }
+
 }
 
 extension Wallpaper: Decodable {
@@ -83,8 +98,19 @@ extension Wallpaper: Decodable {
 extension Wallpaper: Encodable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        let textHex = dropOctothorpeIfAvailable(from: textColour.hexString)
-        let cardHex = dropOctothorpeIfAvailable(from: cardColour.hexString)
+
+        guard let textColorHexString = textColour?.hexString,
+              let cardColorHexString = cardColour?.hexString
+        else {
+            let nilString: String? = nil
+            try container.encode(id, forKey: .id)
+            try container.encode(nilString, forKey: .textColour)
+            try container.encode(nilString, forKey: .cardColour)
+            return
+        }
+
+        let textHex = dropOctothorpeIfAvailable(from: textColorHexString)
+        let cardHex = dropOctothorpeIfAvailable(from: cardColorHexString)
 
         try container.encode(id, forKey: .id)
         try container.encode(textHex, forKey: .textColour)

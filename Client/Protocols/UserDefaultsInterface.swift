@@ -7,6 +7,9 @@ import Foundation
 protocol UserDefaultsInterface {
     func set(_ value: Any?, forKey defaultName: String)
     func object(forKey defaultName: String) -> Any?
+
+    func set(_ value: Bool, forKey defaultName: String)
+    func bool(forKey defaultName: String) -> Bool
 }
 
 extension UserDefaults: UserDefaultsInterface {}

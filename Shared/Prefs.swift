@@ -42,6 +42,7 @@ public struct PrefsKeys {
     public struct Wallpapers {
         public static let MetadataLastCheckedDate = "WallpaperMetadataLastCheckedUserPrefsKey"
         public static let CurrentWallpaper = "CurrentWallpaperUserPrefsKey"
+        public static let ThumbnailsAvailable = "ThumbnailsAvailableUserPrefsKey"
     }
 
     // For ease of use, please list keys alphabetically.

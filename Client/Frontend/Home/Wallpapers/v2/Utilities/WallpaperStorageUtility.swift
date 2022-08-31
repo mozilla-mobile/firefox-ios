@@ -26,6 +26,7 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
         self.fileManager = fileManager
     }
 
+    // MARK: - Storage
     func store(_ metadata: WallpaperMetadata) throws {
         let filePathProvider = WallpaperFilePathProvider()
 
@@ -47,6 +48,12 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
         let encoded = try JSONEncoder().encode(wallpaper)
         userDefaults.set(encoded, forKey: PrefsKeys.Wallpapers.CurrentWallpaper)
     }
+
+    func store(_ image: UIImage) throws {
+
+    }
+
+    // MARK: - Retrieval
 
     func fetchMetadata() throws -> WallpaperMetadata? {
         let filePathProvider = WallpaperFilePathProvider()
@@ -72,6 +79,12 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
         return nil
     }
 
+    public func fetchImageWith(id: String) throws -> UIImage? {
+
+        return UIImage()
+    }
+
+    // MARK: - Deletion
     public func remove() {
 
     }

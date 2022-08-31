@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 protocol WallpaperManagerInterface {
-    var currentWallpaper: Wallpaper { get }
+    var currentWallpaper: Wallpaper? { get }
     var availableCollections: [WallpaperCollection] { get }
     var canOnboardingBeShown: Bool { get }
 
@@ -17,7 +17,7 @@ protocol WallpaperManagerInterface {
 }
 
 /// The primary interface for the wallpaper feature.
-class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
+class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
 
     // MARK: - Properties
     private var networkingModule: WallpaperNetworking
@@ -29,71 +29,33 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
 
     // MARK: Public Interface
 
-    // TODO: The return values here will have to be properly updated once the plumbing
-    // for wallpapers is put in place. For now, these have been added simply for
-    // convenience to aid in UI development.
-
     /// Returns the currently selected wallpaper.
-    public var currentWallpaper: Wallpaper {
-        return Wallpaper(id: "fxDefault", textColour: UIColor.green, cardColour: .purple)
+    public var currentWallpaper: Wallpaper? {
+        do {
+            let storageUtility = WallpaperStorageUtility()
+            return try storageUtility.fetchCurrentWallpaper()
+        } catch {
+            browserLog.error("WallpaperManager error: \(error.localizedDescription)")
+            return nil
+        }
     }
 
     /// Returns all available collections and their wallpaper data. Availability is
     /// determined on locale and date ranges from the collection's metadata.
     public var availableCollections: [WallpaperCollection] {
-        var wallpapersForClassic: [Wallpaper] {
-            var wallpapers = [Wallpaper]()
-            wallpapers.append(Wallpaper(id: "fxDefault", textColour: UIColor.green, cardColour: .purple))
-
-            for _ in 0..<4 {
-                wallpapers.append(Wallpaper(id: "fxAmethyst", textColour: UIColor.red, cardColour: .purple))
-            }
-
-            return wallpapers
-        }
-
-        var wallpapersForOther: [Wallpaper] {
-            var wallpapers = [Wallpaper]()
-            let rangeEnd = Int.random(in: 3...6)
-            for _ in 0..<rangeEnd {
-                wallpapers.append(Wallpaper(id: "fxCerulean", textColour: UIColor.purple, cardColour: .purple))
-            }
-
-            return wallpapers
-        }
-
-        return [
-            WallpaperCollection(
-                id: "classic-firefox",
-                learnMoreURL: nil,
-                availableLocales: nil,
-                availability: nil,
-                wallpapers: wallpapersForClassic,
-                description: nil,
-                heading: nil
-            ),
-            WallpaperCollection(
-                id: "otherCollection",
-                learnMoreURL: "https://www.mozilla.com",
-                availableLocales: nil,
-                availability: nil,
-                wallpapers: wallpapersForOther,
-                description: nil,
-                heading: nil
-            ),
-        ]
+        return getAvailableCollections()
     }
 
     /// Determines whether the wallpaper onboarding can be shown
     var canOnboardingBeShown: Bool {
-        let wallpaperThumbnailsDownloaded = true
+        let thumbnailVerifier = WallpaperThumbnailVerifier()
+
         guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
               wallpaperVersion == .v2,
               featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly),
-              wallpaperThumbnailsDownloaded // check if wallpaper thumbnails are downloaded here
+              thumbnailVerifier.thumbnailsAvailable
         else { return false }
 
-        // Roux: add private var for thumbnails downloaded
         return true
     }
 
@@ -133,16 +95,18 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
         Task {
             let didFetchNewData = await metadataUtility.metadataUpdateFetchedNewData()
             if didFetchNewData {
-                // download new assets
+                let collections = availableCollections
+                // download new thumbnails
+                let thumbnailVerifier = WallpaperThumbnailVerifier()
+                thumbnailVerifier.verifyThumbnailsFor(collections)
             }
         }
     }
 
     // MARK: - Helper functions
-
     private func getAvailableCollections() -> [WallpaperCollection] {
         let metadata = getMetadata()
-        return metadata.collections.filter {
+        let collections = metadata.collections.filter {
             let isDateAvailable = $0.availability?.isAvailable ?? true
             var isLocaleAvailable: Bool = false
 
@@ -154,6 +118,27 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
 
             return isDateAvailable && isLocaleAvailable
         }
+
+        return collections
+    }
+
+    private func addDefaultWallpaper(to availableCollections: [WallpaperCollection]) -> [WallpaperCollection] {
+        guard let classicCollection = availableCollections.first(where: { $0.type == .classic }) else { return availableCollections }
+
+        let defaultWallpaper = [Wallpaper(id: "fxDefault",
+                                          textColour: .white,
+                                          cardColour: .white)]
+        let newWallpapers = defaultWallpaper + classicCollection.wallpapers
+        let newClassic = WallpaperCollection(id: classicCollection.id,
+                                             learnMoreURL: classicCollection.learnMoreUrl?.absoluteString,
+                                             availableLocales: classicCollection.availableLocales,
+                                             availability: classicCollection.availability,
+                                             wallpapers: newWallpapers,
+                                             description: classicCollection.description,
+                                             heading: classicCollection.heading)
+
+
+        return [newClassic] + availableCollections.filter { $0.type != .classic }
     }
 
     private func getMetadata() -> WallpaperMetadata {
@@ -169,5 +154,4 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
             fatalError()
         }
     }
-
 }
