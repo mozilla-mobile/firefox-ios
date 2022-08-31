@@ -29,7 +29,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         static let stackViewShadowRadius: CGFloat = 4
         static let stackViewShadowOffset: CGFloat = 2
         static let heroImageSize =  CGSize(width: 108, height: 80)
-        static let fallbackFaviconSize = CGSize(width: 56, height: 56)
+        static let fallbackFaviconSize = CGSize(width: 36, height: 36)
         static let faviconSize = CGSize(width: 24, height: 24)
     }
 
@@ -252,6 +252,12 @@ extension JumpBackInCell: NotificationThemeable {
             [itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.DarkGrey90 }
             faviconImage.tintColor = UIColor.Photon.DarkGrey90
             fallbackFaviconImage.tintColor = UIColor.Photon.DarkGrey90
+        }
+
+        // If blur is disabled set background color
+        if UIAccessibility.isReduceTransparencyEnabled {
+            fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey20
+            contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
         }
 
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor

@@ -19,7 +19,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         static let iconCornerRadius: CGFloat = 4
         static let borderWidth: CGFloat = 0.5
         static let cellCornerRadius: CGFloat = 8
-        static let fallbackFaviconSize = CGSize(width: 56, height: 56)
+        static let fallbackFaviconSize = CGSize(width: 36, height: 36)
     }
 
     // MARK: - UI Elements
@@ -199,6 +199,13 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
             itemTitle.textColor = UIColor.Photon.DarkGrey90
             rootContainer.backgroundColor = .white
         }
+
+        // If blur is disabled set background color
+        if UIAccessibility.isReduceTransparencyEnabled {
+            fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey20
+            rootContainer.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
+        }
+
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
     }
 }
