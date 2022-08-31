@@ -27,7 +27,6 @@ disabled_rules: # rule identifiers to exclude from running
 - identifier_name
 - implicit_getter
 - inclusive_language
-- inert_defer
 - is_disjoint
 - legacy_hashing
 - legacy_random

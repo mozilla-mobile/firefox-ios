@@ -1,6 +1,6 @@
 ---
 contextual-hint-feature:
-  description: This set holds contextual hints that can be toggled to hide or show based on these settings.
+  description: This set holds all features pertaining to contextual hints.
   hasExposure: true
   exposureDescription: ""
   variables:
