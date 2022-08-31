@@ -108,7 +108,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
             fallbackFaviconImage.image = favIconImage
         } else if heroImage?.size.width == heroImage?.size.height {
             // If hero image is a square use it as a favicon
-            fallbackFaviconImage.image = favIconImage
+            fallbackFaviconImage.image = heroImage
         } else {
             setFallBackFaviconVisibility(isHidden: true)
             self.heroImage.image = heroImage
