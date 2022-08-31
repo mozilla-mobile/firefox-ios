@@ -95,7 +95,7 @@ open class MockProfile: Client.Profile {
 
     fileprivate var legacyPlaces: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
 
-    var db: BrowserDB
+    var database: BrowserDB
     var readingListDB: BrowserDB
 
     fileprivate let name: String = "mockaccount"
@@ -112,7 +112,7 @@ open class MockProfile: Client.Profile {
 
         logins = RustLogins(sqlCipherDatabasePath: oldLoginsDatabasePath, databasePath: newLoginsDatabasePath)
         _ = logins.reopenIfClosed()
-        db = BrowserDB(filename: "\(databasePrefix).db", schema: BrowserSchema(), files: files)
+        database = BrowserDB(filename: "\(databasePrefix).db", schema: BrowserSchema(), files: files)
         readingListDB = BrowserDB(filename: "\(databasePrefix)_ReadingList.db", schema: ReadingListSchema(), files: files)
         let placesDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_places.db").path
         places = RustPlaces(databasePath: placesDatabasePath)
@@ -121,7 +121,7 @@ open class MockProfile: Client.Profile {
 
         tabs = RustRemoteTabs(databasePath: tabsDbPath)
 
-        legacyPlaces = SQLiteHistory(db: self.db, prefs: MockProfilePrefs())
+        legacyPlaces = SQLiteHistory(db: self.database, prefs: MockProfilePrefs())
         recommendations = legacyPlaces
         history = legacyPlaces
     }
@@ -133,7 +133,7 @@ open class MockProfile: Client.Profile {
     public func _reopen() {
         isShutdown = false
 
-        db.reopenIfClosed()
+        database.reopenIfClosed()
         _ = logins.reopenIfClosed()
         _ = places.reopenIfClosed()
         _ = tabs.reopenIfClosed()
@@ -142,7 +142,7 @@ open class MockProfile: Client.Profile {
     public func _shutdown() {
         isShutdown = true
 
-        db.forceClose()
+        database.forceClose()
         _ = logins.forceClose()
         _ = places.forceClose()
         _ = tabs.forceClose()
@@ -159,7 +159,7 @@ open class MockProfile: Client.Profile {
     }()
 
     lazy public var metadata: Metadata = {
-        return SQLiteMetadata(db: self.db)
+        return SQLiteMetadata(db: self.database)
     }()
 
     lazy public var isChinaEdition: Bool = {
@@ -187,11 +187,11 @@ open class MockProfile: Client.Profile {
     }()
 
     internal lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {
-        return SQLiteRemoteClientsAndTabs(db: self.db)
+        return SQLiteRemoteClientsAndTabs(db: self.database)
     }()
 
     fileprivate lazy var syncCommands: SyncCommands = {
-        return SQLiteRemoteClientsAndTabs(db: self.db)
+        return SQLiteRemoteClientsAndTabs(db: self.database)
     }()
 
     public func hasSyncAccount(completion: @escaping (Bool) -> Void) {
