@@ -303,8 +303,11 @@ class BrowserViewController: UIViewController {
                     let controller = self.tooltipController(
                         anchoredBy: self.urlBar.shieldIcon,
                         sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
-                        body: UIConstants.strings.tooltipBodyTextForShieldIcon,
-                        dismiss: { self.onboardingEventsHandler.route = nil }
+                        body: UIConstants.strings.tooltipBodyTextForShieldIconV2,
+                        dismiss: {
+                            self.onboardingEventsHandler.route = nil
+                            self.onboardingEventsHandler.send(.showTrash)
+                        }
                     )
                     self.present(controller, animated: true)
                     presentedController = controller
@@ -316,7 +319,7 @@ class BrowserViewController: UIViewController {
                     let controller = self.tooltipController(
                         anchoredBy: sourceButton,
                         sourceRect: sourceRect,
-                        body: UIConstants.strings.tooltipBodyTextForTrashIcon,
+                        body: UIConstants.strings.tooltipBodyTextForTrashIconV2,
                         dismiss: { self.onboardingEventsHandler.route = nil }
                     )
                     self.present(controller, animated: true)
@@ -785,7 +788,6 @@ class BrowserViewController: UIViewController {
         }
 
         onboardingEventsHandler.route = nil
-        onboardingEventsHandler.send(.startBrowsing)
 
         urlBar.canDelete = true
         browserToolbar.canDelete = true
