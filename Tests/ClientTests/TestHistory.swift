@@ -9,10 +9,10 @@ import Storage
 import XCTest
 
 class TestHistory: ProfileTest {
-    fileprivate func addSite(_ history: BrowserHistory, url: String, title: String, s: Bool = true) {
+    fileprivate func addSite(_ history: BrowserHistory, url: String, title: String, bool: Bool = true) {
         let site = Site(url: url, title: title)
         let visit = SiteVisit(site: site, date: Date().toMicrosecondsSince1970())
-        XCTAssertEqual(s, history.addLocalVisit(visit).value.isSuccess, "Site added: \(url).")
+        XCTAssertEqual(bool, history.addLocalVisit(visit).value.isSuccess, "Site added: \(url).")
     }
 
     fileprivate func innerCheckSites(_ history: BrowserHistory, callback: @escaping (_ cursor: Cursor<Site>) -> Void) {
@@ -23,18 +23,18 @@ class TestHistory: ProfileTest {
         }
     }
 
-    fileprivate func checkSites(_ history: BrowserHistory, urls: [String: String], s: Bool = true) {
+    fileprivate func checkSites(_ history: BrowserHistory, urls: [String: String]) {
         // Retrieve the entry.
         if let cursor = history.getSitesByLastVisit(limit: 100, offset: 0).value.successValue {
             XCTAssertEqual(cursor.status, CursorStatus.success, "Returned success \(cursor.statusMessage).")
             XCTAssertEqual(cursor.count, urls.count, "Cursor has \(urls.count) entries.")
 
             for index in 0..<cursor.count {
-                let s = cursor[index]!
-                XCTAssertNotNil(s, "Cursor has a site for entry.")
-                let title = urls[s.url]
+                let site = cursor[index]!
+                XCTAssertNotNil(site, "Cursor has a site for entry.")
+                let title = urls[site.url]
                 XCTAssertNotNil(title, "Found right URL.")
-                XCTAssertEqual(s.title, title!, "Found right title.")
+                XCTAssertEqual(site.title, title!, "Found right title.")
             }
         } else {
             XCTFail("Couldn't get cursor.")
@@ -63,16 +63,16 @@ class TestHistory: ProfileTest {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testHistory() {
         withTestProfile { profile -> Void in
-            let h = profile.history
-            self.addSite(h, url: "http://url1/", title: "title")
-            self.addSite(h, url: "http://url1/", title: "title")
-            self.addSite(h, url: "http://url1/", title: "title 2")
-            self.addSite(h, url: "https://url2/", title: "title")
-            self.addSite(h, url: "https://url2/", title: "title")
-            self.checkSites(h, urls: ["http://url1/": "title 2", "https://url2/": "title"])
-            self.checkVisits(h, url: "http://url1/")
-            self.checkVisits(h, url: "https://url2/")
-            self.clear(h)
+            let history = profile.history
+            self.addSite(history, url: "http://url1/", title: "title")
+            self.addSite(history, url: "http://url1/", title: "title")
+            self.addSite(history, url: "http://url1/", title: "title 2")
+            self.addSite(history, url: "https://url2/", title: "title")
+            self.addSite(history, url: "https://url2/", title: "title")
+            self.checkSites(history, urls: ["http://url1/": "title 2", "https://url2/": "title"])
+            self.checkVisits(history, url: "http://url1/")
+            self.checkVisits(history, url: "https://url2/")
+            self.clear(history)
         }
     }
 
@@ -176,49 +176,49 @@ class TestHistory: ProfileTest {
 
     func testAboutUrls() {
         withTestProfile { (profile) -> Void in
-            let h = profile.history
-            self.addSite(h, url: "about:home", title: "About Home", s: false)
-            self.clear(h)
+            let history = profile.history
+            self.addSite(history, url: "about:home", title: "About Home", bool: false)
+            self.clear(history)
         }
     }
 
-    let NumThreads = 5
-    let NumCmds = 10
+    let numThreads = 5
+    let numCmds = 10
 
     func testInsertPerformance() {
         withTestProfile { profile -> Void in
-            let h = profile.history
-            var j = 0
+            let history = profile.history
+            var index = 0
 
             self.measure({ () -> Void in
-                for _ in 0...self.NumCmds {
-                    self.addSite(h, url: "https://someurl\(j).com/", title: "title \(j)")
-                    j += 1
+                for _ in 0...self.numCmds {
+                    self.addSite(history, url: "https://someurl\(index).com/", title: "title \(index)")
+                    index += 1
                 }
-                self.clear(h)
+                self.clear(history)
             })
         }
     }
 
     func testGetPerformance() {
         withTestProfile { profile -> Void in
-            let h = profile.history
-            var j = 0
+            let history = profile.history
+            var index = 0
             var urls = [String: String]()
 
-            self.clear(h)
-            for _ in 0...self.NumCmds {
-                self.addSite(h, url: "https://someurl\(j).com/", title: "title \(j)")
-                urls["https://someurl\(j).com/"] = "title \(j)"
-                j += 1
+            self.clear(history)
+            for _ in 0...self.numCmds {
+                self.addSite(history, url: "https://someurl\(index).com/", title: "title \(index)")
+                urls["https://someurl\(index).com/"] = "title \(index)"
+                index += 1
             }
 
             self.measure({ () -> Void in
-                self.checkSites(h, urls: urls)
+                self.checkSites(history, urls: urls)
                 return
             })
 
-            self.clear(h)
+            self.clear(history)
         }
     }
 
@@ -234,11 +234,11 @@ class TestHistory: ProfileTest {
             var counter = 0
 
             let expectation = self.expectation(description: "Wait for history")
-            for _ in 0..<self.NumThreads {
+            for _ in 0..<self.numThreads {
                 var history = profile.history as BrowserHistory
                 self.runRandom(&history, queue: queue, cb: { () -> Void in
                     counter += 1
-                    if counter == self.NumThreads {
+                    if counter == self.numThreads {
                         self.clear(history)
                         expectation.fulfill()
                     }
@@ -260,10 +260,10 @@ class TestHistory: ProfileTest {
             var counter = 0
 
             let expectation = self.expectation(description: "Wait for history")
-            for _ in 0..<self.NumThreads {
+            for _ in 0..<self.numThreads {
                 self.runRandom(&history, queue: queue, cb: { () -> Void in
                     counter += 1
-                    if counter == self.NumThreads {
+                    if counter == self.numThreads {
                         self.clear(history)
                         expectation.fulfill()
                     }
@@ -274,7 +274,11 @@ class TestHistory: ProfileTest {
     }
 
     // Runs a random command on a database. Calls cb when finished.
-    fileprivate func runRandom(_ history: inout BrowserHistory, cmdIn: Int, cb: @escaping () -> Void) {
+    fileprivate func runRandom(
+        _ history: inout BrowserHistory,
+        cmdIn: Int,
+        completion: @escaping () -> Void
+    ) {
         var cmd = cmdIn
         if cmd < 0 {
             cmd = Int(arc4random() % 5)
@@ -285,29 +289,33 @@ class TestHistory: ProfileTest {
             let url = "https://randomurl.com/\(arc4random() % 100)"
             let title = "title \(arc4random() % 100)"
             addSite(history, url: url, title: title)
-            cb()
+            completion()
         case 2...3:
             innerCheckSites(history) { cursor in
                 for site in cursor {
                     _ = site!
                 }
             }
-            cb()
+            completion()
         default:
-            history.clearHistory().upon { success in cb() }
+            history.clearHistory().upon { success in completion() }
         }
     }
 
     // Calls numCmds random methods on this database. val is a counter used by this interally (i.e. always pass zero for it).
     // Calls cb when finished.
-    fileprivate func runMultiRandom(_ history: inout BrowserHistory, val: Int, numCmds: Int, cb: @escaping () -> Void) {
+    fileprivate func runMultiRandom(
+        _ history: inout BrowserHistory,
+        val: Int, numCmds: Int,
+        completion: @escaping () -> Void
+    ) {
         if val == numCmds {
-            cb()
+            completion()
             return
         } else {
             runRandom(&history, cmdIn: -1) { [history] in
                 var history = history
-                self.runMultiRandom(&history, val: val+1, numCmds: numCmds, cb: cb)
+                self.runMultiRandom(&history, val: val+1, numCmds: numCmds, completion: completion)
             }
         }
     }
@@ -317,7 +325,7 @@ class TestHistory: ProfileTest {
         queue.async { [history] in
             var history = history
             // Each thread creates its own history provider
-            self.runMultiRandom(&history, val: 0, numCmds: self.NumCmds) {
+            self.runMultiRandom(&history, val: 0, numCmds: self.numCmds) {
                 DispatchQueue.main.async(execute: cb)
             }
         }

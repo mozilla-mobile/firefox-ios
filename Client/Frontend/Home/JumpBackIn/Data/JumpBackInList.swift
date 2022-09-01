@@ -10,13 +10,11 @@ struct JumpBackInList {
     let group: ASGroup<Tab>?
     let tabs: [Tab]
     var itemsToDisplay: Int {
-        get {
-            var count = 0
+        var count = 0
 
-            count += group != nil ? 1 : 0
-            count += tabs.count
+        count += group != nil ? 1 : 0
+        count += tabs.count
 
-            return count
-        }
+        return count
     }
 }

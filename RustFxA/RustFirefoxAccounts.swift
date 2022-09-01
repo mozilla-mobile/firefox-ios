@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Shared
@@ -159,7 +159,7 @@ open class RustFirefoxAccounts {
         syncAuthState = FirefoxAccountSyncAuthState(
             cache: KeychainCache.fromBranch("rustAccounts.syncAuthState",
                                             withLabel: RustFirefoxAccounts.syncAuthStateUniqueId(prefs: prefs),
-                factory: syncAuthStateCachefromJSON))
+                                            factory: syncAuthStateCachefromJSON))
 
         // Called when account is logged in for the first time, on every app start when the account is found (even if offline), and when migration of an account is completed.
         NotificationCenter.default.addObserver(forName: .accountAuthenticated, object: nil, queue: .main) { [weak self] notification in
@@ -258,26 +258,24 @@ open class RustFirefoxAccounts {
     private let prefKeyCachedUserProfile = "prefKeyCachedUserProfile"
     private var cachedUserProfile: FxAUserProfile?
     public var userProfile: FxAUserProfile? {
-        get {
-            let prefs = RustFirefoxAccounts.prefs
+        let prefs = RustFirefoxAccounts.prefs
 
-            if let accountManager = accountManager.peek(), let profile = accountManager.accountProfile() {
-                if let p = cachedUserProfile, FxAUserProfile(profile: profile) == p {
-                    return cachedUserProfile
-                }
-
-                cachedUserProfile = FxAUserProfile(profile: profile)
-                if let data = try? JSONEncoder().encode(cachedUserProfile!) {
-                    prefs?.setObject(data, forKey: prefKeyCachedUserProfile)
-                }
-            } else if cachedUserProfile == nil {
-                if let data: Data = prefs?.objectForKey(prefKeyCachedUserProfile) {
-                    cachedUserProfile = try? JSONDecoder().decode(FxAUserProfile.self, from: data)
-                }
+        if let accountManager = accountManager.peek(), let profile = accountManager.accountProfile() {
+            if let p = cachedUserProfile, FxAUserProfile(profile: profile) == p {
+                return cachedUserProfile
             }
 
-            return cachedUserProfile
+            cachedUserProfile = FxAUserProfile(profile: profile)
+            if let data = try? JSONEncoder().encode(cachedUserProfile!) {
+                prefs?.setObject(data, forKey: prefKeyCachedUserProfile)
+            }
+        } else if cachedUserProfile == nil {
+            if let data: Data = prefs?.objectForKey(prefKeyCachedUserProfile) {
+                cachedUserProfile = try? JSONDecoder().decode(FxAUserProfile.self, from: data)
+            }
         }
+
+        return cachedUserProfile
     }
 
     public func disconnect() {

@@ -29,7 +29,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
         var description = "Failed to load from API"
     }
 
-    private let PocketEnvAPIKey = "PocketEnvironmentAPIKey"
+    private let pocketEnvAPIKey = "PocketEnvironmentAPIKey"
 
     private static let SupportedLocales = ["en_CA", "en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
     private let pocketGlobalFeed: String
@@ -49,7 +49,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
     lazy private var urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
 
     private lazy var pocketKey: String? = {
-        return Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String
+        return Bundle.main.object(forInfoDictionaryKey: pocketEnvAPIKey) as? String
     }()
 
     enum Error: Swift.Error {
@@ -92,7 +92,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
     }
 
     // Returns nil if the locale is not supported
-    static func IslocaleSupported(_ locale: String) -> Bool {
+    static func islocaleSupported(_ locale: String) -> Bool {
         return PocketProvider.SupportedLocales.contains(locale)
     }
 

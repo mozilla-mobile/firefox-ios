@@ -28,8 +28,8 @@ private var defaultFaviconImageCache = [String: UIImage]()
 // region-specific TLDs. This helps us resolve them.
 private let multiRegionTopSitesDomains = ["craigslist", "google", "amazon"]
 
-private let topSitesIcons: [String : (color: UIColor, fileURL: URL)] = {
-    var icons: [String : (color: UIColor, fileURL: URL)] = [:]
+private let topSitesIcons: [String: (color: UIColor, fileURL: URL)] = {
+    var icons: [String: (color: UIColor, fileURL: URL)] = [:]
 
     let filePath = Bundle.main.path(forResource: "top_sites", ofType: "json")
     let file = try! Data(contentsOf: URL(fileURLWithPath: filePath!))
