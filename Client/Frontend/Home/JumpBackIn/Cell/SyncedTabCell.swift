@@ -361,6 +361,12 @@ extension SyncedTabCell: NotificationThemeable {
             syncedDeviceImage.image = syncedDeviceImage.image?.tinted(withColor: .black)
         }
 
+        // If blur is disabled set background color
+        if !UIAccessibility.isReduceTransparencyEnabled {
+            fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey20
+            contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
+        }
+
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
     }
 }

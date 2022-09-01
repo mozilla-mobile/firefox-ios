@@ -109,8 +109,8 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     }
 
     func getFaviconImage(forSite site: Site) -> UIImage? {
-        if let heroImage = faviconImages[site.url] {
-            return heroImage
+        if let faviconImage = faviconImages[site.url] {
+            return faviconImage
         }
 
         siteImageHelper.fetchImageFor(site: site,
