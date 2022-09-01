@@ -19,7 +19,7 @@ class HistoryHighlightsTests: XCTestCase {
 
         manager = HistoryHighlightsManager()
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
-        profile._reopen()
+        profile.reopen()
         let tabManager = TabManager(profile: profile, imageStore: nil)
         entryProvider = HistoryHighlightsTestEntryProvider(with: profile, and: tabManager)
     }

@@ -17,7 +17,7 @@ class TabManagerStoreTests: XCTestCase {
     override func setUp() {
         super.setUp()
         profile = TabManagerMockProfile()
-        profile._reopen()
+        profile.reopen()
     }
 
     override func tearDown() {

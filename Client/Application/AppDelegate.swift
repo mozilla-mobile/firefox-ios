@@ -90,7 +90,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         shutdownWebServer?.cancel()
         shutdownWebServer = nil
 
-        profile._reopen()
+        profile.reopen()
 
         if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
             profile.removeAccount()

@@ -17,7 +17,7 @@ class TabMetadataManagerTests: XCTestCase {
         super.setUp()
 
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
-        profile._reopen()
+        profile.reopen()
         manager = TabMetadataManager(profile: profile)
     }
 

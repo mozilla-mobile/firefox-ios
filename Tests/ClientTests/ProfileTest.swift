@@ -33,7 +33,7 @@ class ProfileTest: XCTestCase {
 
     func withTestProfile(_ callback: (_ profile: Client.Profile) -> Void) {
         guard let mockProfile = profile else { return }
-        mockProfile._reopen()
+        mockProfile.reopen()
         callback(mockProfile)
         mockProfile._shutdown()
     }

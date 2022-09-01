@@ -130,7 +130,7 @@ open class MockProfile: Client.Profile {
         return name
     }
 
-    public func _reopen() {
+    public func reopen() {
         isShutdown = false
 
         database.reopenIfClosed()

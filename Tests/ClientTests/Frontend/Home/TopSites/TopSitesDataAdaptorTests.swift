@@ -19,7 +19,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
 
         notificationCenter = SpyNotificationCenter()
         profile = MockProfile(databasePrefix: "FxHomeTopSitesManagerTests")
-        profile._reopen()
+        profile.reopen()
 
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 

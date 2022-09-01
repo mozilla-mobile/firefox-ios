@@ -19,7 +19,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         profile = MockProfile(databasePrefix: "HistoryPanelViewModelTest")
 
         ThemeManager.shared.updateProfile(with: profile)
-        profile._reopen()
+        profile.reopen()
         subject = HistoryPanelViewModel(profile: profile)
     }
 

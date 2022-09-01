@@ -208,7 +208,7 @@ class DevicePickerViewController: UITableViewController {
             // Re-open the profile if it was shutdown. This happens when we run from an app extension, where we must
             // make sure that the profile is only open for brief moments of time.
             if profile.isShutdown && Bundle.main.bundleURL.pathExtension == "appex" {
-                profile._reopen()
+                profile.reopen()
             }
             return profile
         }

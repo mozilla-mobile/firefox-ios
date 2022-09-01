@@ -14,7 +14,7 @@ class UpdateViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         profile = MockProfile(databasePrefix: "UpdateViewModel_tests")
-        profile._reopen()
+        profile.reopen()
         viewModel = UpdateViewModel(profile: profile)
         UserDefaults.standard.removeObject(forKey: UpdateViewModel.prefsKey)
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)

@@ -79,7 +79,7 @@ class TestHistory: ProfileTest {
     func testSearchHistory_WithResults() {
         let expectation = self.expectation(description: "Wait for search history")
         let mockProfile = MockProfile()
-        mockProfile._reopen()
+        mockProfile.reopen()
         let history = mockProfile.history
 
         let clearTest = {
@@ -104,7 +104,7 @@ class TestHistory: ProfileTest {
     func testSearchHistory_WithResultsByTitle() {
         let expectation = self.expectation(description: "Wait for search history")
         let mockProfile = MockProfile()
-        mockProfile._reopen()
+        mockProfile.reopen()
         let history = mockProfile.history
 
         let clearTest = {
@@ -129,7 +129,7 @@ class TestHistory: ProfileTest {
     func testSearchHistory_WithResultsByUrl() {
         let expectation = self.expectation(description: "Wait for search history")
         let mockProfile = MockProfile()
-        mockProfile._reopen()
+        mockProfile.reopen()
         let history = mockProfile.history
 
         let clearTest = {
@@ -153,7 +153,7 @@ class TestHistory: ProfileTest {
     func testSearchHistory_NoResults() {
         let expectation = self.expectation(description: "Wait for search history")
         let mockProfile = MockProfile()
-        mockProfile._reopen()
+        mockProfile.reopen()
         let history = mockProfile.history
 
         let clearTest = {
