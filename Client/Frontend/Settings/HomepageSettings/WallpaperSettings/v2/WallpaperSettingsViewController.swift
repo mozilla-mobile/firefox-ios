@@ -4,41 +4,21 @@
 
 import UIKit
 
-class WallpaperSelectorViewController: UIViewController, Loggable {
+class WallpaperSettingsViewController: UIViewController, Loggable {
 
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
         static let cardHeight: CGFloat = UIDevice().isTinyFormFactor ? 80 : 88
         static let inset: CGFloat = 8
         static let cardShadowHeight: CGFloat = 14
+        static let sectionBottomInset: CGFloat = 16
     }
 
-    private var viewModel: WallpaperSelectorViewModel
-    internal var notificationCenter: NotificationProtocol
+    private var viewModel: WallpaperSettingsViewModel
+    var notificationCenter: NotificationProtocol
 
     // Views
     private lazy var contentView: UIView = .build { _ in }
-    private var collectionViewHeightConstraint: NSLayoutConstraint!
-
-    private lazy var headerLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
-                                                                   size: 17)
-        label.adjustsFontForContentSizeCategory = true
-        label.text = .Onboarding.WallpaperSelectorTitle
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.title
-    }
-
-    private lazy var instructionLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   size: 12)
-        label.adjustsFontForContentSizeCategory = true
-        label.text = .Onboarding.WallpaperSelectorDescription
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.description
-    }
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero,
@@ -48,20 +28,15 @@ class WallpaperSelectorViewController: UIViewController, Loggable {
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.isScrollEnabled = false
+
         collectionView.register(
             WallpaperCollectionViewCell.self,
             forCellWithReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier)
+        collectionView.register(WallpaperSettingsHeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: WallpaperSettingsHeaderView.cellIdentifier)
         return collectionView
     }()
-
-    private lazy var settingsButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                                size: 16)
-        button.titleLabel?.textAlignment = .center
-        button.setTitle(.Onboarding.WallpaperSelectorAction, for: .normal)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.settingsButton
-    }
 
     private lazy var activityIndicatorView: UIActivityIndicatorView = .build { view in
         view.style = .large
@@ -69,7 +44,7 @@ class WallpaperSelectorViewController: UIViewController, Loggable {
     }
 
     // MARK: - Initializers
-    init(viewModel: WallpaperSelectorViewModel,
+    init(viewModel: WallpaperSettingsViewModel,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
@@ -85,27 +60,22 @@ class WallpaperSelectorViewController: UIViewController, Loggable {
         super.viewDidLoad()
         setupView()
         applyTheme()
-        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
-        settingsButton.addTarget(self, action: #selector(self.settingsButtonTapped), for: .touchUpInside)
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged, UIContentSizeCategory.didChangeNotification])
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
 
-        // make collection view fixed height so the bottom sheet can size correctly
-        let height = collectionView.collectionViewLayout.collectionViewContentSize.height +
-            WallpaperSelectorViewController.UX.cardShadowHeight
-        collectionViewHeightConstraint.constant = height
-        view.layoutIfNeeded()
-
         collectionView.selectItem(at: viewModel.selectedIndexPath, animated: false, scrollPosition: [])
-
-        viewModel.sendImpressionTelemetry()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+
+        // Fixes bug where selection state gets lost when switching themes
+        collectionView.selectItem(at: viewModel.selectedIndexPath, animated: false, scrollPosition: [])
 
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
@@ -120,15 +90,40 @@ class WallpaperSelectorViewController: UIViewController, Loggable {
 }
 
 // MARK: - CollectionView Data Source
-extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.numberOfWallpapers
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return viewModel.numberOfSections
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier,
-                                                            for: indexPath) as? WallpaperCollectionViewCell,
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return viewModel.numberOfWallpapers(in: section)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionHeader,
+              let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: WallpaperSettingsHeaderView.cellIdentifier,
+                for: indexPath) as? WallpaperSettingsHeaderView,
+              let headerViewModel = viewModel.sectionHeaderViewModel(for: indexPath.section, dismissView: {
+                  self.dismissView()
+              })
+        else { return UICollectionReusableView() }
+
+        headerView.configure(viewModel: headerViewModel)
+        return headerView
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier,
+            for: indexPath) as? WallpaperCollectionViewCell,
               let cellViewModel = viewModel.cellViewModel(for: indexPath)
         else { return UICollectionViewCell() }
 
@@ -140,7 +135,10 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
         activityIndicatorView.startAnimating()
         viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
             ensureMainThread {
-                if case .failure(let error) = result {
+                switch result {
+                case .success:
+                    self?.showToast()
+                case .failure(let error):
                     self?.browserLog.info(error.localizedDescription)
                 }
                 self?.activityIndicatorView.stopAnimating()
@@ -150,16 +148,14 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
 }
 
 // MARK: - Private
-private extension WallpaperSelectorViewController {
+private extension WallpaperSettingsViewController {
 
     func setupView() {
         configureCollectionView()
 
-        contentView.addSubviews(headerLabel, instructionLabel, collectionView, settingsButton, activityIndicatorView)
+        contentView.addSubview(collectionView)
+        contentView.addSubview(activityIndicatorView)
         view.addSubview(contentView)
-
-        collectionViewHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 300)
-        collectionViewHeightConstraint.priority = UILayoutPriority(999)
 
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -167,23 +163,10 @@ private extension WallpaperSelectorViewController {
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 48),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 34),
-            headerLabel.bottomAnchor.constraint(equalTo: instructionLabel.topAnchor, constant: -4),
-            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -34),
-
-            instructionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 34),
-            instructionLabel.bottomAnchor.constraint(equalTo: collectionView.topAnchor, constant: -32),
-            instructionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -34),
-
+            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: settingsButton.topAnchor, constant: -14),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            collectionViewHeightConstraint,
-
-            settingsButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 34),
-            settingsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -43),
-            settingsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -34),
 
             activityIndicatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             activityIndicatorView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
@@ -203,28 +186,38 @@ private extension WallpaperSelectorViewController {
         config.scrollDirection = .vertical
 
         let layout = UICollectionViewCompositionalLayout(sectionProvider: { ix, environment in
-            let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(WallpaperSelectorViewController.UX.cardWidth),
+            let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(UX.cardWidth),
                                                   heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: .absolute(WallpaperSelectorViewController.UX.cardHeight))
+                                                   heightDimension: .absolute(UX.cardHeight))
             let subitemsCount = self.viewModel.sectionLayout.itemsPerRow
             let subItems: [NSCollectionLayoutItem] = Array(repeating: item, count: Int(subitemsCount))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                            subitems: subItems)
-            group.interItemSpacing = .fixed(WallpaperSelectorViewController.UX.inset)
+            group.interItemSpacing = .fixed(UX.inset)
 
             let section = NSCollectionLayoutSection(group: group)
             let width = environment.container.effectiveContentSize.width
             let inset = (width -
-                         CGFloat(subitemsCount) * WallpaperSelectorViewController.UX.cardWidth -
-                         CGFloat(subitemsCount - 1) * WallpaperSelectorViewController.UX.inset) / 2.0
+                         CGFloat(subitemsCount) * UX.cardWidth -
+                         CGFloat(subitemsCount - 1) * UX.inset) / 2.0
             section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                             leading: inset,
-                                                            bottom: 0,
+                                                            bottom: UX.sectionBottomInset,
                                                             trailing: inset)
-            section.interGroupSpacing = WallpaperSelectorViewController.UX.inset
+            section.interGroupSpacing = UX.inset
+
+            // Supplementary Item
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                    heightDimension: .estimated(38))
+            let header = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: headerSize,
+                elementKind: UICollectionView.elementKindSectionHeader,
+                alignment: .top)
+            section.boundarySupplementaryItems = [header]
+
             return section
         }, configuration: config)
 
@@ -238,19 +231,52 @@ private extension WallpaperSelectorViewController {
         configureCollectionView()
     }
 
-    /// Settings button tapped
-    @objc func settingsButtonTapped(_ sender: UIButton) {
-        viewModel.openSettingsAction()
+    func showToast() {
+        let toast = ButtonToast(
+            labelText: WallpaperSettingsViewModel.Constants.Strings.Toast.label,
+            buttonText: WallpaperSettingsViewModel.Constants.Strings.Toast.button,
+            completion: { buttonPressed in
+
+            if buttonPressed { self.dismissView() }
+        })
+
+        toast.showToast(viewController: self,
+                        delay: SimpleToastUX.ToastDelayBefore,
+                        duration: SimpleToastUX.ToastDismissAfter) { toast in
+            [
+                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            ]
+        }
+    }
+
+    func dismissView() {
+        guard let navigationController = self.navigationController as? ThemedNavigationController else { return }
+
+        if let isFxHomeTab = viewModel.tabManager.selectedTab?.isFxHomeTab, !isFxHomeTab {
+            viewModel.tabManager.selectTab(viewModel.tabManager.addTab(nil, afterTab: nil, isPrivate: false),
+                                           previous: nil)
+        }
+
+        navigationController.done()
+    }
+
+    func preferredContentSizeChanged(_ notification: Notification) {
+        // Reload the complete collection view as the section headers are not adjusting their size correctly otherwise
+        collectionView.reloadData()
     }
 }
 
 // MARK: - Themable & Notifiable
-extension WallpaperSelectorViewController: NotificationThemeable, Notifiable {
+extension WallpaperSettingsViewController: NotificationThemeable, Notifiable {
 
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
+        case UIContentSizeCategory.didChangeNotification:
+            preferredContentSizeChanged(notification)
         default: break
         }
     }
@@ -259,20 +285,8 @@ extension WallpaperSelectorViewController: NotificationThemeable, Notifiable {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
             contentView.backgroundColor = UIColor.Photon.DarkGrey40
-            headerLabel.textColor = UIColor.Photon.LightGrey05
-            instructionLabel.textColor = UIColor.Photon.LightGrey05
-            settingsButton.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
         } else {
             contentView.backgroundColor = UIColor.Photon.LightGrey10
-            headerLabel.textColor = UIColor.Photon.Ink80
-            instructionLabel.textColor = UIColor.Photon.DarkGrey05
-            settingsButton.setTitleColor(UIColor.Photon.Blue50, for: .normal)
         }
-    }
-}
-
-extension WallpaperSelectorViewController: BottomSheetChild {
-    func willDismiss() {
-        viewModel.sendDismissImpressionTelemetry()
     }
 }
