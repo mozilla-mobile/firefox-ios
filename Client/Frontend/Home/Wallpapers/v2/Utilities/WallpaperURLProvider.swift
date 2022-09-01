@@ -27,11 +27,12 @@ struct WallpaperURLProvider {
 
     func url(
         for urlType: WallpaperURLType,
-        withComponent component: String = ""
+        withKey key: String = "",
+        and fileName: String = ""
     ) throws -> URL {
         switch urlType {
         case .metadata: return try metadataURL()
-        case .imageURL: return try imageURL(with: component)
+        case .imageURL: return try imageURLWith(key, and: fileName)
         }
     }
 
@@ -44,9 +45,9 @@ struct WallpaperURLProvider {
         return url
     }
 
-    private func imageURL(with path: String) throws -> URL {
+    private func imageURLWith(_ key: String, and fileName: String) throws -> URL {
         let scheme = try urlScheme()
-        guard let url = URL(string: "\(scheme)/\(path).png") else {
+        guard let url = URL(string: "\(scheme)/ios/\(key)/\(fileName).png") else {
             throw URLProviderError.invalidURL
         }
 
@@ -56,6 +57,8 @@ struct WallpaperURLProvider {
     /// Builds a URL for the server based on the specified environment.
     private func urlScheme() throws -> String {
         if AppConstants.isRunningTest { return WallpaperURLProvider.testURL }
+        // roux - add this to the url
+        return "https://assets.mozilla.net/mobile-wallpapers"
 
         let bundle = AppInfo.applicationBundle
         guard let appToken = bundle.object(forInfoDictionaryKey: wallpaperURLScheme) as? String,

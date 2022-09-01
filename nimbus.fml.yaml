@@ -308,7 +308,7 @@ features:
         {
           "jump-back-in-synced-tab-contextual-hint": false
         }
-      hint-copy: 
+      hint-copy:
         description: This set allows us to experiment with changing hint descriptions.
         type: HintCopy
         default: {
@@ -336,7 +336,7 @@ features:
             "toolbar": true
           }
         }
-        
+
   messaging:
     description: >
       Configuration for the messaging system.
@@ -468,7 +468,7 @@ features:
         value: {
           "configuration": {
             "status": true,
-            "version": legacy,
+            "version": v2,
           },
           "onboarding-sheet": true
         }

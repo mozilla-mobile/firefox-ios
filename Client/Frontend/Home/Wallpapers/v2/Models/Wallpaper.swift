@@ -11,6 +11,12 @@ enum WallpaperType: String {
 
 /// A single wallpaper instance.
 struct Wallpaper: Equatable {
+    enum ImageTypeID {
+        case thumbnail
+        case portrait
+        case landscape
+    }
+
     enum CodingKeys: String, CodingKey {
         case textColour = "text-color"
         case cardColour = "card-color"
@@ -24,7 +30,7 @@ struct Wallpaper: Equatable {
     var thumbnailID: String { return "\(id)_thumbnail" }
     var portraitID: String { return "\(id)\(deviceVersionID)_portrait" }
     var landscapeID: String { return "\(id)\(deviceVersionID)_landscape" }
-    var deviceVersionID: String {
+    private var deviceVersionID: String {
         return UIDevice.current.userInterfaceIdiom == .pad ? "_iPad" : "_iPhone"
     }
 
@@ -38,30 +44,38 @@ struct Wallpaper: Equatable {
     }
 
     var thumbnail: UIImage? {
-        return getImageFromStorageWith(id: thumbnailID)
+        return fetchResourceFor(imageType: .thumbnail)
     }
 
     var portrait: UIImage? {
-        return getImageFromStorageWith(id: portraitID)
+        return fetchResourceFor(imageType: .portrait)
     }
 
     var landscape: UIImage? {
-        return getImageFromStorageWith(id: landscapeID)
+        return fetchResourceFor(imageType: .landscape)
     }
 
     // MARK: - Helper fuctions
-    private func getImageFromStorageWith(id: String) -> UIImage? {
+    private func fetchResourceFor(imageType: ImageTypeID) -> UIImage? {
         // If it's a default (empty) wallpaper
         guard type == .other else { return nil }
 
         do {
             let storageUtility = WallpaperStorageUtility()
-            return try storageUtility.fetchImageWith(id: id)
+
+            switch imageType {
+            case .thumbnail:
+                return try storageUtility.fetchImageWith(name: thumbnailID, andID: id)
+            case .portrait:
+                return try storageUtility.fetchImageWith(name: portraitID, andID: id)
+            case .landscape:
+                return try storageUtility.fetchImageWith(name: landscapeID, andID: id)
+            }
+
         } catch {
             return nil
         }
     }
-
 }
 
 extension Wallpaper: Decodable {

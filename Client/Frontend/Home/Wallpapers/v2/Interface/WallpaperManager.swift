@@ -90,15 +90,20 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     /// to existing metadata, and, if there are changes, performs the necessary operations
     /// to ensure parity between server data and what the user sees locally.
     public func checkForUpdates() {
+        let thumbnailVerifier = WallpaperThumbnailVerifier()
         let metadataUtility = WallpaperMetadataUtility(with: networkingModule)
 
         Task {
             let didFetchNewData = await metadataUtility.metadataUpdateFetchedNewData()
             if didFetchNewData {
-                let collections = availableCollections
-                // download new thumbnails
-                let thumbnailVerifier = WallpaperThumbnailVerifier()
-                thumbnailVerifier.verifyThumbnailsFor(collections)
+                do {
+                    try await fetchMissingThumbnails()
+                    thumbnailVerifier.verifyThumbnailsFor(availableCollections)
+                } catch {
+                    browserLog.error("Wallpaper update check error: \(error.localizedDescription)")
+                }
+            } else {
+                thumbnailVerifier.verifyThumbnailsFor(availableCollections)
             }
         }
     }
@@ -137,7 +142,6 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
                                              description: classicCollection.description,
                                              heading: classicCollection.heading)
 
-
         return [newClassic] + availableCollections.filter { $0.type != .classic }
     }
 
@@ -152,6 +156,20 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         } catch {
             print(error.localizedDescription)
             fatalError()
+        }
+    }
+
+    private func fetchMissingThumbnails() async throws {
+        let thumbnailVerifier = WallpaperThumbnailVerifier()
+        let dataService = WallpaperDataService(with: networkingModule)
+        let storageUtility = WallpaperStorageUtility()
+
+        let missingThumbnails = thumbnailVerifier.getListOfMissingTumbnails(from: availableCollections)
+        if !missingThumbnails.isEmpty {
+            for (key, fileName) in missingThumbnails {
+                let thumbnail = try await dataService.getImageWith(key: key, imageName: fileName)
+                try storageUtility.store(thumbnail, withName: fileName, andKey: key)
+            }
         }
     }
 }

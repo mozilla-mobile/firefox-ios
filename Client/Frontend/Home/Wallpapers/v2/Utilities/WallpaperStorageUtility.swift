@@ -8,6 +8,7 @@ import Shared
 enum WallpaperStorageErrors: Error {
     case fileDoesNotExistError
     case noDataAtFilePath
+    case failedToConvertImage
 }
 
 /// Responsible for writing or deleting wallpaper data to/from memory.
@@ -30,12 +31,9 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
     func store(_ metadata: WallpaperMetadata) throws {
         let filePathProvider = WallpaperFilePathProvider()
 
-        if let filePath = filePathProvider.filePath(forKey: metadataKey) {
+        if let filePath = filePathProvider.metadataPath(forKey: metadataKey) {
             let data = try encodeToData(from: metadata)
-
-            if fileManager.fileExists(atPath: filePath.path) {
-                try fileManager.removeItem(at: filePath)
-            }
+            try removeFileIfItExists(at: filePath)
 
             fileManager.createFile(
                 atPath: filePath.path,
@@ -49,15 +47,22 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
         userDefaults.set(encoded, forKey: PrefsKeys.Wallpapers.CurrentWallpaper)
     }
 
-    func store(_ image: UIImage) throws {
+    func store(_ image: UIImage, withName name: String, andKey key: String) throws {
+        let filePathProvider = WallpaperFilePathProvider()
 
+        guard let filePath = filePathProvider.imagePathWith(name: name, andKey: key),
+              let pngRepresentation = image.pngData()
+        else { throw WallpaperStorageErrors.failedToConvertImage }
+
+        try removeFileIfItExists(at: filePath)
+        try pngRepresentation.write(to: filePath, options: .atomic)
     }
 
     // MARK: - Retrieval
 
     func fetchMetadata() throws -> WallpaperMetadata? {
         let filePathProvider = WallpaperFilePathProvider()
-        guard let filePath = filePathProvider.filePath(forKey: metadataKey) else { return nil }
+        guard let filePath = filePathProvider.metadataPath(forKey: metadataKey) else { return nil }
 
         if !fileManager.fileExists(atPath: filePath.path) {
             throw WallpaperStorageErrors.fileDoesNotExistError
@@ -79,13 +84,25 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
         return nil
     }
 
-    public func fetchImageWith(id: String) throws -> UIImage? {
+    public func fetchImageWith(name: String, andID id: String) throws -> UIImage? {
+        let filePathProvider = WallpaperFilePathProvider()
+        guard let filePath = filePathProvider.imagePathWith(name: name, andKey: id),
+              let fileData = FileManager.default.contents(atPath: filePath.path),
+              let image = UIImage(data: fileData)
+        else { return nil }
 
-        return UIImage()
+        return image
     }
 
     // MARK: - Deletion
     public func remove() {
 
+    }
+
+    // MARK: - Helper functions
+    private func removeFileIfItExists(at url: URL) throws {
+        if fileManager.fileExists(atPath: url.path) {
+            try fileManager.removeItem(at: url)
+        }
     }
 }

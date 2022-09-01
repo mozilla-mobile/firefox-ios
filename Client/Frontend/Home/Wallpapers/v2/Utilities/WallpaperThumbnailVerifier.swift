@@ -21,12 +21,26 @@ class WallpaperThumbnailVerifier {
     }
 
     // MARK: - Public interface
+    public func getListOfMissingTumbnails(from collections: [WallpaperCollection]) -> [String: String] {
+        var missingThumbnails: [String: String] = [:]
+
+        collections.forEach { collection in
+            collection.wallpapers.forEach { wallpaper in
+                if wallpaper.type != .defaultWallpaper && wallpaper.thumbnail == nil {
+                    missingThumbnails[wallpaper.id] = wallpaper.thumbnailID
+                }
+            }
+        }
+
+        return missingThumbnails
+    }
+
     public func verifyThumbnailsFor(_ collections: [WallpaperCollection]) {
         userDefaults.set(false, forKey: prefsKey)
         var thumbnailStatus = true
         collections.forEach { collection in
             collection.wallpapers.forEach { wallpaper in
-                if wallpaper.thumbnail == nil {
+                if wallpaper.type != .defaultWallpaper && wallpaper.thumbnail == nil {
                     thumbnailStatus = thumbnailStatus && false
                 }
             }
@@ -35,4 +49,3 @@ class WallpaperThumbnailVerifier {
         userDefaults.set(thumbnailStatus, forKey: prefsKey)
     }
 }
-

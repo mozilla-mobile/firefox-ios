@@ -12,13 +12,29 @@ struct WallpaperFilePathProvider: Loggable {
     ///
     /// - Parameter key: The key to be used as the final path for the file.
     /// - Returns: A URL containing the correct path for the key.
-    func filePath(forKey key: String) -> URL? {
+    func metadataPath(forKey key: String) -> URL? {
+        guard let keyDirectoryPath = folderPath(forKey: key) else {
+            browserLog.debug("WallpaperFilePathProtocol - error fetching keyed directory path for application")
+            return nil
+        }
+
+        return keyDirectoryPath.appendingPathComponent(key)
+    }
+
+    /// Given a key, creates a URL pointing to the
+    /// `.../wallpaper/key-as-folder/name-as-filePath` of the application's document directory.
+    ///
+    /// - Parameters:
+    ///   - key: The key to be used as the folder path for the file.
+    ///   - name: The name to be used as the final path for the file.
+    /// - Returns: A URL containing the correct path for the key.
+    func imagePathWith(name: String, andKey key: String) -> URL? {
         guard let keyDirectoryPath = folderPath(forKey: key) else {
             browserLog.debug("WallpaperFilePathProvider - error fetching keyed directory path for application")
             return nil
         }
 
-        return keyDirectoryPath.appendingPathComponent(key)
+        return keyDirectoryPath.appendingPathComponent(name)
     }
 
     /// Given a key, creates a URL pointing to the `wallpaper/key-as-folder` folder
