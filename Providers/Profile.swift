@@ -451,7 +451,7 @@ open class BrowserProfile: Profile {
      * that this is initialized first.
      */
     private lazy var legacyPlaces: Favicons & Profile.HistoryFetcher & HistoryRecommendations  = {
-        return SQLiteHistory(db: self.database, prefs: self.prefs)
+        return SQLiteHistory(database: self.database, prefs: self.prefs)
     }()
 
     var favicons: Favicons {

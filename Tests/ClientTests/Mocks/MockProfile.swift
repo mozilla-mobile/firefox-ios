@@ -121,7 +121,7 @@ open class MockProfile: Client.Profile {
 
         tabs = RustRemoteTabs(databasePath: tabsDbPath)
 
-        legacyPlaces = SQLiteHistory(db: self.database, prefs: MockProfilePrefs())
+        legacyPlaces = SQLiteHistory(database: self.database, prefs: MockProfilePrefs())
         recommendations = legacyPlaces
         history = legacyPlaces
     }

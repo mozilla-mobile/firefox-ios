@@ -16,7 +16,7 @@ extension SQLiteHistory: HistoryRecommendations {
         DispatchQueue.global(qos: .background).async {
             self.checkIfCleanupIsNeeded(maxHistoryRows: SQLiteHistory.MaxHistoryRowCount) >>== { doCleanup in
                 if doCleanup {
-                    _ = self.db.run(self.cleanupOldHistory(numberOfRowsToPrune: SQLiteHistory.PruneHistoryRowCount))
+                    _ = self.database.run(self.cleanupOldHistory(numberOfRowsToPrune: SQLiteHistory.PruneHistoryRowCount))
                 }
             }
         }
@@ -27,7 +27,7 @@ extension SQLiteHistory: HistoryRecommendations {
     // needs to run.
     func checkIfCleanupIsNeeded(maxHistoryRows: UInt) -> Deferred<Maybe<Bool>> {
         let sql = "SELECT COUNT(rowid) > \(maxHistoryRows) AS cleanup FROM \(TableHistory)"
-        return self.db.runQueryConcurrently(sql, args: nil, factory: IntFactory) >>== { cursor in
+        return self.database.runQueryConcurrently(sql, args: nil, factory: IntFactory) >>== { cursor in
             guard let cleanup = cursor[0], cleanup > 0 else {
                 return deferMaybe(false)
             }
@@ -59,7 +59,7 @@ extension SQLiteHistory: HistoryRecommendations {
 
     public func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool) -> Success {
         if shouldInvalidateTopSites {
-            return db.run(refreshTopSitesQuery())
+            return database.run(refreshTopSitesQuery())
         } else {
             return succeed()
         }
