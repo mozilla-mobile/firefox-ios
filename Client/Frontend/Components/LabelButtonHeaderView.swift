@@ -13,6 +13,7 @@ struct LabelButtonHeaderViewModel {
     var buttonTitle: String?
     var buttonAction: ((UIButton) -> Void)?
     var buttonA11yIdentifier: String?
+    var textColor: UIColor?
 
     static var emptyHeader: LabelButtonHeaderViewModel {
         return LabelButtonHeaderViewModel(title: nil, isButtonHidden: true)
@@ -123,8 +124,10 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 // MARK: - Theme
 extension LabelButtonHeaderView: NotificationThemeable {
     func applyTheme() {
-        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-        moreButton.setTitleColor(UIColor.theme.homePanel.activityStreamHeaderButton, for: .normal)
+        let textColor = viewModel?.textColor ?? UIColor.theme.homePanel.topSiteHeaderTitle
+
+        titleLabel.textColor = textColor
+        moreButton.setTitleColor(textColor, for: .normal)
     }
 }
 

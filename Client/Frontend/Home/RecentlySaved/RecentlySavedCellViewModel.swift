@@ -20,13 +20,14 @@ class RecentlySavedCellViewModel {
     private let profile: Profile
     private var recentlySavedDataAdaptor: RecentlySavedDataAdaptor
     private var recentItems = [RecentlySavedItem]()
+    private var wallpaperManager: WallpaperManager
     var headerButtonAction: ((UIButton) -> Void)?
 
     weak var delegate: HomepageDataModelDelegate?
 
     init(profile: Profile,
-         isZeroSearch: Bool = false) {
-
+         isZeroSearch: Bool = false,
+         wallpaperManager: WallpaperManager) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         let siteImageHelper = SiteImageHelper(profile: profile)
@@ -34,6 +35,7 @@ class RecentlySavedCellViewModel {
                                                              readingList: profile.readingList,
                                                              bookmarksHandler: profile.places)
         self.recentlySavedDataAdaptor = adaptor
+        self.wallpaperManager = wallpaperManager
 
         adaptor.delegate = self
     }
@@ -47,12 +49,14 @@ extension RecentlySavedCellViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        return LabelButtonHeaderViewModel(title: HomepageSectionType.recentlySaved.title,
-                                          titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.recentlySaved,
-                                          isButtonHidden: false,
-                                          buttonTitle: .RecentlySavedShowAllText,
-                                          buttonAction: headerButtonAction,
-                                          buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved)
+        return LabelButtonHeaderViewModel(
+            title: HomepageSectionType.recentlySaved.title,
+            titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.recentlySaved,
+            isButtonHidden: false,
+            buttonTitle: .RecentlySavedShowAllText,
+            buttonAction: headerButtonAction,
+            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved,
+            textColor: wallpaperManager.currentWallpaper.textColour)
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {

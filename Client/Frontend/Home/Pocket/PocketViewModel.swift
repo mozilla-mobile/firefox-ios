@@ -27,11 +27,14 @@ class PocketViewModel {
 
     private var dataAdaptor: PocketDataAdaptor
     private var pocketStoriesViewModels = [PocketStandardCellViewModel]()
+    private var wallpaperManager: WallpaperManager
 
     init(pocketDataAdaptor: PocketDataAdaptor,
-         isZeroSearch: Bool = false) {
+         isZeroSearch: Bool = false,
+         wallpaperManager: WallpaperManager) {
         self.dataAdaptor = pocketDataAdaptor
         self.isZeroSearch = isZeroSearch
+        self.wallpaperManager = wallpaperManager
     }
 
     // The dimension of a cell
@@ -123,7 +126,8 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return LabelButtonHeaderViewModel(
             title: HomepageSectionType.pocket.title,
             titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
-            isButtonHidden: true)
+            isButtonHidden: true,
+            textColor: wallpaperManager.currentWallpaper.textColour)
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
