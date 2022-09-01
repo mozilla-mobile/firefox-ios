@@ -523,9 +523,6 @@
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Start your private browsing session, and we’ll block trackers and other bad stuff as you go.";
 
-/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
-"TooltipBodyText.ShieldIconTrackerBlocked" = "Got ‘em! We stopped this site from spying on you. Tap the shield any time to see what we’re blocking.";
-
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Tap the trash any time to remove all traces of your current session.";
 

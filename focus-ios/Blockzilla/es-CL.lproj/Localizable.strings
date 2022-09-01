@@ -523,9 +523,6 @@
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Inicia tu sesión de navegación privada y bloquearemos rastreadores y otras amenazas mientras navegas.";
 
-/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
-"TooltipBodyText.ShieldIconTrackerBlocked" = "¡Lo agarramos! Evitamos que este sitio te espiara. Toca el escudo para ver lo que estamos bloqueando.";
-
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Toca la papelera en cualquier momento para eliminar todos los rastros de tu sesión actual.";
 

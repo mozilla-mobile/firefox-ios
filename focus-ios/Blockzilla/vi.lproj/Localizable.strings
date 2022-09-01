@@ -406,6 +406,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Xóa khỏi lối tắt";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Đã xóa lối tắt";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Yêu cầu trang web trên máy tính";
 
@@ -516,6 +519,9 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Các cài đặt mặc định này cung cấp khả năng bảo vệ mạnh mẽ. Tuy nhiên, thật dễ dàng để điều chỉnh cài đặt để đáp ứng các nhu cầu cụ thể của bạn.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Bắt đầu phiên duyệt web riêng tư của bạn và chúng tôi sẽ chặn trình theo dõi và các nội dung xấu khác khi bạn di chuyển.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Nhấn vào thùng rác bất cứ lúc nào để xóa tất cả dấu vết của phiên hiện tại của bạn.";

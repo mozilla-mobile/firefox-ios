@@ -406,6 +406,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Verwijderen uit Snelkoppelingen";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Snelkoppeling verwijderd";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Desktop­website opvragen";
 
@@ -516,6 +519,9 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Deze standaardinstellingen bieden een sterke bescherming. Maar het is eenvoudig om de instellingen aan uw specifieke behoeften aan te passen.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Start uw privénavigatiesessie en we blokkeren trackers en andere slechte dingen terwijl u bezig bent.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Tik op elk gewenst moment op de prullenbak om alle sporen van uw huidige sessie te verwijderen.";

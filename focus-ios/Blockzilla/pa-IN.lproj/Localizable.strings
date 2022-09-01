@@ -406,6 +406,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "ਸ਼ਾਰਟਕੱਟ ਵਿੱਚੋਂ ਹਟਾਓ";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "ਸ਼ਾਰਟਕੱਟ ਹਟਾਇਆ";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "ਡੈਸਕਟਾਪ ਸਾਈਟ ਮੰਗੋ";
 
@@ -516,6 +519,9 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "ਇਹ ਮੂਲ ਸੈਟਿੰਗਾਂ ਮਜ਼ਬੂਤ ਸੁਰੱਖਿਆ ਦਿੰਦੀਆਂ ਹਨ। ਪਰ ਤੁਹਾਡੀਆਂ ਖਾਸ ਲੋੜਾਂ ਨੂੰ ਪੂਰਾ ਕਰਨ ਲਈ ਸੈਟਿੰਗਾਂ ਨੂੰ ਬਦਲਣਾ ਸੌਖਾ ਹੈ।";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "ਆਪਣਾ ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ਿੰਗ ਸ਼ੈਸ਼ਨ ਸ਼ੁਰੂ ਕਰੋ ਅਤੇ ਅਸੀਂ ਤੁਹਾਡੇ ਵਾਸਤੇ ਟਰੈਕਰਾਂ ਤੇ ਹੋਰ ਬੁਰੀਆਂ ਉੱਤੇ ਰੋਕ ਲਾਵਾਂਗੇ।";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "ਆਪਣੇ ਮੌਜੂਦਾ ਸ਼ੈਸ਼ਨ ਦੀਆਂ ਸਾਰੀਆਂ ਪੈੜਾਂ ਮਿਟਾਉਣ ਲਈ ਕਿਸੇ ਵੀ ਵੇਲੇੇ ਰੱਦੀ ਨੂੰ ਛੂਹੋ।";

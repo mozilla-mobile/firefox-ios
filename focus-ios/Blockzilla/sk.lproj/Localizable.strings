@@ -406,6 +406,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Odstrániť zo Skratiek";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Skratka bola odstránená";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Verzia stránky pre počítače";
 
@@ -516,6 +519,9 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Tieto predvolené nastavenia ponúkajú silnú ochranu. Je však ľahké vyladiť nastavenia tak, aby vyhovovali vašim špecifickým potrebám.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Začnite svoju reláciu súkromného prehliadania a my zablokujeme sledovacie prvky a iné zlé veci.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Ťuknutím na kôš kedykoľvek odstránite všetky stopy vašej aktuálnej relácie.";

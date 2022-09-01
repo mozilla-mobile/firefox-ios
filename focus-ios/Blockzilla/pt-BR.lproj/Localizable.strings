@@ -520,6 +520,9 @@
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Estas configurações padrão oferecem proteção forte. Mas é fácil ajustar as configurações para atender às suas necessidades específicas.";
 
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Inicie uma sessão de navegação privativa e bloquearemos rastreadores e outras coisas ruins à medida que você avança.";
+
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Toque no ícone de lixeira quando quiser para remover todos os vestígios da sua sessão atual.";
 

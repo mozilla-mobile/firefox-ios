@@ -523,9 +523,6 @@
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Ξεκινήστε τη συνεδρία ιδιωτικής περιήγησής σας και θα αποκλείσουμε τους ιχνηλάτες και άλλα επιβλαβή στοιχεία.";
 
-/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
-"TooltipBodyText.ShieldIconTrackerBlocked" = "Εμποδίσαμε την παρακολούθησή σας από αυτόν τον ιστότοπο. Πατήστε την ασπίδα ανά πάσα στιγμή για να δείτε τι αποκλείουμε.";
-
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Πατήστε τον κάδο απορριμμάτων ανά πάσα στιγμή για να αφαιρέσετε όλα τα ίχνη της τρέχουσας συνεδρίας σας.";
 

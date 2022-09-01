@@ -523,9 +523,6 @@
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Indítsa el a privát böngészési munkamenetet, és menet közben blokkoljuk a nyomkövetőket és az egyéb rossz dolgokat.";
 
-/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
-"TooltipBodyText.ShieldIconTrackerBlocked" = "Megvannak! Megakadályoztuk, hogy ez a webhely kémkedjen Ön után. Koppintson a pajzsra, hogy megtudja mit blokkoltunk.";
-
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Koppintson bármikor a kukára, hogy eltávolítsa az aktuális munkamenet összes nyomát.";
 

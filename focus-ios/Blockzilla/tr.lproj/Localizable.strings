@@ -406,6 +406,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Kısayollardan kaldır";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Kısayol kaldırıldı";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Masaüstü sitesini iste";
 
@@ -516,6 +519,9 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Bu varsayılan ayarlar güçlü koruma sağlar ama isterseniz ayarları ihtiyaçlarınızı göre değiştirebilirsiniz.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Gizli gezinti oturumunuzu başlatın. Siz gezinirken takip kodlarını ve diğer istenmeyen içerikleri engelleyeceğiz.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Oturumunuzun tüm izlerini kaldırmak istediğiniz zaman çöp kutusuna dokunun.";

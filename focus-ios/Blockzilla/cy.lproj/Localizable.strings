@@ -406,6 +406,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Tynnu o'r Llwybrau Byr";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Llwybr byr wedi'i dynnu";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Gofyn am Wefan Lawn";
 
@@ -516,6 +519,9 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Mae’r gosodiadau rhagosodedig hyn yn cynnig diogelwch cryf. Ond mae’n hawdd newid y gosodiadau i ddiwallu’ch anghenion penodol.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Dechreuwch eich sesiwn pori breifat, a byddwn yn rhwystro tracwyr a phethau drwg eraill wrth i chi fynd yn eich blaen.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Tapiwch y sbwriel unrhyw bryd i ddileu holl olion eich sesiwn gyfredol.";
