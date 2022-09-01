@@ -42,7 +42,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
     private var writeOperation: DispatchWorkItem
     private let serialQueue: DispatchQueue
     private var lockedForReading = false
-    private let tabDataRetriever: TabDataRetriever
+    private var tabDataRetriever: TabDataRetriever
 
     var isRestoringTabs: Bool {
         return lockedForReading
@@ -159,7 +159,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
     func clearArchive() {
         guard let path = tabsStateArchivePath() else { return }
         do {
-            try FileManager.default.removeItem(atPath: path)
+            try fileManager.removeItem(atPath: path)
         } catch let error {
             browserLog.warning("Clear archive couldn't be completed with: \(error.localizedDescription)")
         }

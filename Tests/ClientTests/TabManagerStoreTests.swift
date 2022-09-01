@@ -12,26 +12,29 @@ import XCTest
 
 class TabManagerStoreTests: XCTestCase {
 
-    private var profile: TabManagerMockProfile!
+    private var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
-        profile = TabManagerMockProfile()
-        profile.reopen()
+        profile = MockProfile()
     }
 
     override func tearDown() {
         super.tearDown()
-        profile.shutdown()
         profile = nil
     }
 
-    func testNoData() throws {
-        throw XCTSkip("Test is failing intermittently on Bitrise")
-//        let manager = createManager()
-//        XCTAssertEqual(manager.testTabCountOnDisk(), 0, "Expected 0 tabs on disk")
-//        XCTAssertEqual(manager.testCountRestoredTabs(), 0)
-//        XCTAssertEqual(profile.numberOfTabsStored, 0)
+    func testNoData() {
+        let manager = createManager()
+        XCTAssertEqual(manager.testTabCountOnDisk(), 0, "Expected 0 tabs on disk")
+        XCTAssertFalse(manager.hasTabsToRestoreAtStartup)
+    }
+
+    func testPreserve_withNoTabs() {
+        let manager = createManager()
+        manager.preserveTabs([], selectedTab: nil)
+        XCTAssertEqual(manager.testTabCountOnDisk(), 0, "Expected 0 tabs on disk")
+        XCTAssertFalse(manager.hasTabsToRestoreAtStartup)
     }
 
     func testAddTabWithoutStoring_hasNoData() throws {
@@ -91,6 +94,7 @@ private extension TabManagerStoreTests {
 
     func createManager(file: StaticString = #file, line: UInt = #line) -> TabManagerStoreImplementation {
         let manager = TabManagerStoreImplementation(prefs: profile.prefs, imageStore: nil)
+        manager.clearArchive()
         trackForMemoryLeaks(manager, file: file, line: line)
         return manager
     }
@@ -98,51 +102,28 @@ private extension TabManagerStoreTests {
     func createConfiguration(file: StaticString = #file, line: UInt = #line) -> WKWebViewConfiguration {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
-        configureiPad()
 
         trackForMemoryLeaks(configuration, file: file, line: line)
         return configuration
     }
 
-    func configureiPad() {
-        guard UIDevice.current.userInterfaceIdiom == .pad else { return }
-        // BVC.viewWillAppear() calls restoreTabs() which interferes with these tests.
-        // (On iPhone, ClientTests never dismiss the intro screen, on iPad the intro is a popover on the BVC).
-        // Wait for this to happen (UIView.window only gets assigned after viewWillAppear()), then begin testing.
-        let bvc = (UIApplication.shared.delegate as! AppDelegate).browserViewController
-        let predicate = XCTNSPredicateExpectation(predicate: NSPredicate(format: "view.window != nil"), object: bvc)
-        wait(for: [predicate], timeout: 20)
-    }
-
-    func addNumberOfTabs(manager: TabManager, configuration: WKWebViewConfiguration, tabNumber: Int, isPrivate: Bool = false) {
+    func createTabs(configuration: WKWebViewConfiguration,
+                    tabNumber: Int,
+                    isPrivate: Bool = false) -> [Tab] {
+        var tabs = [Tab]()
         for _ in 0..<tabNumber {
-            addTabWithSessionData(manager: manager, configuration: configuration, isPrivate: isPrivate)
+            let tab = createTab(configuration: configuration, isPrivate: isPrivate)
+            tabs.append(tab)
         }
+        return tabs
     }
 
     // Without session data, a Tab can't become a SavedTab and get archived
-    func addTabWithSessionData(manager: TabManager, configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
+    func createTab(configuration: WKWebViewConfiguration,
+                   isPrivate: Bool = false) -> Tab {
         let tab = Tab(profile: profile, configuration: configuration, isPrivate: isPrivate)
         tab.url = URL(string: "http://yahoo.com")!
-        manager.configureTab(tab, request: URLRequest(url: tab.url!), flushToDisk: false, zombie: false)
         tab.sessionData = SessionData(currentPage: 0, urls: [tab.url!], lastUsedTime: Date.now())
-    }
-
-    func waitStoreChanges(manager: TabManager, managerTabCount: Int, profileTabCount: Int, file: StaticString = #file, line: UInt = #line) {
-        let expectation = expectation(description: "Manager stored changes")
-        manager.storeChanges(writeCompletion: { [weak self] in
-            guard let self = self else { XCTFail("self should be strong"); return }
-
-//            let managerMessage = "TestTabCountOnDisk is \(manager.testTabCountOnDisk()) when it should be \(managerTabCount)"
-//            XCTAssertEqual(manager.testTabCountOnDisk(), managerTabCount, managerMessage, file: file, line: line)
-
-            let profileMessage = "NumberOfTabsStored is \(self.profile.numberOfTabsStored) when it should be \(profileTabCount)"
-            XCTAssertEqual(self.profile.numberOfTabsStored, profileTabCount, profileMessage, file: file, line: line)
-            expectation.fulfill()
-        })
-
-        waitForExpectations(timeout: 20) { error in
-            if let error = error { XCTFail("WaitForExpectations failed with: \(error.localizedDescription)", file: file, line: line) }
-        }
+        return tab
     }
 }
