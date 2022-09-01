@@ -193,16 +193,13 @@ private extension WallpaperSettingsViewModel {
         metadata[TelemetryWrapper.EventExtraKey.wallpaperName.rawValue] = wallpaper.id
 
         let wallpaperTypeKey = TelemetryWrapper.EventExtraKey.wallpaperType.rawValue
-        switch wallpaper.type {
-        case .defaultWallpaper:
+        switch (wallpaper.type, collection.type) {
+        case (.defaultWallpaper, _):
             metadata[wallpaperTypeKey] = "default"
-        case .other:
-            switch collection.type {
-            case .classic:
-                metadata[wallpaperTypeKey] = collection.type.rawValue
-            case .limitedEdition:
-                metadata[wallpaperTypeKey] = collection.id
-            }
+        case (.other, .classic):
+            metadata[wallpaperTypeKey] = collection.type.rawValue
+        case (.other, .limitedEdition):
+            metadata[wallpaperTypeKey] = collection.id
         }
 
         return metadata

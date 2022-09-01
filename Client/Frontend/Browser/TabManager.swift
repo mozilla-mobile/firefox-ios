@@ -387,12 +387,12 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
     // MARK: - Add tabs
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
-        return self.addTab(request,
-                           configuration: nil,
-                           afterTab: afterTab,
-                           flushToDisk: true,
-                           zombie: false,
-                           isPrivate: isPrivate)
+        return addTab(request,
+                      configuration: nil,
+                      afterTab: afterTab,
+                      flushToDisk: true,
+                      zombie: false,
+                      isPrivate: isPrivate)
     }
 
     @discardableResult func addTab(_ request: URLRequest! = nil,
@@ -401,12 +401,12 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
                                    zombie: Bool = false,
                                    isPrivate: Bool = false
     ) -> Tab {
-        return self.addTab(request,
-                           configuration: configuration,
-                           afterTab: afterTab,
-                           flushToDisk: true,
-                           zombie: zombie,
-                           isPrivate: isPrivate)
+        return addTab(request,
+                      configuration: configuration,
+                      afterTab: afterTab,
+                      flushToDisk: true,
+                      zombie: zombie,
+                      isPrivate: isPrivate)
     }
 
     func addTabsForURLs(_ urls: [URL], zombie: Bool) {
@@ -416,7 +416,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
         var tab: Tab!
         for url in urls {
-            tab = self.addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie)
+            tab = addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie)
         }
 
         // Select the most recent.
