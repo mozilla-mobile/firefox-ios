@@ -52,8 +52,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         let indexPath = IndexPath(item: 1, section: 0)
 
         subject.downloadAndSetWallpaper(at: indexPath) { result in
-            let wallpaperCellModel = subject.cellViewModel(for: indexPath)!
-            XCTAssertTrue(wallpaperCellModel.isSelected)
+            XCTAssertEqual(subject.selectedIndexPath, indexPath)
             XCTAssertEqual(mockManager.setCurrentWallpaperCallCount, 1)
         }
     }

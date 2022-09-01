@@ -10,6 +10,15 @@ class ResizableButton: UIButton {
         static let buttonEdgeSpacing: CGFloat = 8
     }
 
+    var buttonEdgeSpacing: CGFloat = UX.buttonEdgeSpacing {
+        didSet {
+            contentEdgeInsets = UIEdgeInsets(top: 0,
+                                             left: buttonEdgeSpacing,
+                                             bottom: 0,
+                                             right: buttonEdgeSpacing)
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -25,16 +34,16 @@ class ResizableButton: UIButton {
         titleLabel?.adjustsFontForContentSizeCategory = true
         titleLabel?.lineBreakMode = .byWordWrapping
         contentEdgeInsets = UIEdgeInsets(top: 0,
-                                         left: UX.buttonEdgeSpacing,
+                                         left: buttonEdgeSpacing,
                                          bottom: 0,
-                                         right: UX.buttonEdgeSpacing)
+                                         right: buttonEdgeSpacing)
     }
 
     override var intrinsicContentSize: CGSize {
         guard let title = titleLabel else {
             return super.intrinsicContentSize
         }
-        let size = title.intrinsicContentSize
+        let size = title.sizeThatFits(CGSize(width: frame.width, height: .greatestFiniteMagnitude))
         return CGSize(width: size.width + contentEdgeInsets.left + contentEdgeInsets.right, height: size.height + contentEdgeInsets.top + contentEdgeInsets.bottom)
     }
 
