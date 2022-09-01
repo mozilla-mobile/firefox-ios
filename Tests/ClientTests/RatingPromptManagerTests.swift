@@ -32,7 +32,7 @@ class RatingPromptManagerTests: XCTestCase {
         createdGuids = []
         promptManager?.reset()
         promptManager = nil
-        mockProfile?._shutdown()
+        mockProfile?.shutdown()
         mockProfile = nil
         sentry = nil
         urlOpenerSpy = nil

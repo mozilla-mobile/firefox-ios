@@ -32,7 +32,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         notificationCenter = nil
         contileProviderMock = nil
         profile.prefs.clearAll()
-        profile._shutdown()
+        profile.shutdown()
         profile = nil
     }
 

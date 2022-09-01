@@ -42,7 +42,7 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
 
-        profile._shutdown()
+        profile.shutdown()
         profile = nil
     }
 

@@ -21,7 +21,7 @@ class TopSitesViewModelTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        self.profile._shutdown()
+        self.profile.shutdown()
         self.profile = nil
     }
 

@@ -139,7 +139,7 @@ open class MockProfile: Client.Profile {
         _ = tabs.reopenIfClosed()
     }
 
-    public func _shutdown() {
+    public func shutdown() {
         isShutdown = true
 
         database.forceClose()

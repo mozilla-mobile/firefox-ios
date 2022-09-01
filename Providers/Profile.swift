@@ -114,7 +114,7 @@ protocol Profile: AnyObject {
 
     /// WARNING: Only to be called as part of the app lifecycle from the AppDelegate
     /// or from App Extension code.
-    func _shutdown()
+    func shutdown()
 
     /// WARNING: Only to be called as part of the app lifecycle from the AppDelegate
     /// or from App Extension code.
@@ -380,7 +380,7 @@ open class BrowserProfile: Profile {
         _ = tabs.reopenIfClosed()
     }
 
-    func _shutdown() {
+    func shutdown() {
         log.debug("Shutting down profile.")
         isShutdown = true
 

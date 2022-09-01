@@ -56,7 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // We have only five seconds here, so let's hope this doesn't take too long.
-        profile._shutdown()
+        profile.shutdown()
 
         // Allow deinitializers to close our database connections.
         tabManager = nil

@@ -23,7 +23,7 @@ class StartAtHomeHelperTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
 
-        profile._shutdown()
+        profile.shutdown()
         profile = nil
         tabManager = nil
         helper = nil

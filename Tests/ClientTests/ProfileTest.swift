@@ -35,6 +35,6 @@ class ProfileTest: XCTestCase {
         guard let mockProfile = profile else { return }
         mockProfile.reopen()
         callback(mockProfile)
-        mockProfile._shutdown()
+        mockProfile.shutdown()
     }
 }

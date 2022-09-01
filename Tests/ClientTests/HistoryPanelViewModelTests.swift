@@ -27,7 +27,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         super.tearDown()
 
         clear(profile.history)
-        profile._shutdown()
+        profile.shutdown()
         profile = nil
         subject = nil
     }

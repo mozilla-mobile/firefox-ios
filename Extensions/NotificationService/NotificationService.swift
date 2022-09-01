@@ -57,7 +57,7 @@ class NotificationService: UNNotificationServiceExtension {
             // Rather than changing tabQueue, we manually nil it out here.
             self.display?.tabQueue = nil
 
-            profile?._shutdown()
+            profile?.shutdown()
             consoleLog("push didFinish end")
         }
 

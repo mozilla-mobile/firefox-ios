@@ -28,7 +28,7 @@ class HistoryHighlightsTests: XCTestCase {
         super.tearDown()
 
         manager = nil
-        profile._shutdown()
+        profile.shutdown()
         profile = nil
         entryProvider = nil
     }

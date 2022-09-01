@@ -84,7 +84,7 @@ class TestHistory: ProfileTest {
 
         let clearTest = {
             self.clear(history)
-            mockProfile._shutdown()
+            mockProfile.shutdown()
         }
 
         addSite(history, url: "http://amazon.com/", title: "Amazon")
@@ -109,7 +109,7 @@ class TestHistory: ProfileTest {
 
         let clearTest = {
             self.clear(history)
-            mockProfile._shutdown()
+            mockProfile.shutdown()
         }
 
         addSite(history, url: "http://amazon.com/", title: "Amazon")
@@ -134,7 +134,7 @@ class TestHistory: ProfileTest {
 
         let clearTest = {
             self.clear(history)
-            mockProfile._shutdown()
+            mockProfile.shutdown()
         }
 
         addSite(history, url: "http://amazon.com/", title: "Amazon")
@@ -158,7 +158,7 @@ class TestHistory: ProfileTest {
 
         let clearTest = {
             self.clear(history)
-            mockProfile._shutdown()
+            mockProfile.shutdown()
         }
 
         addSite(history, url: "http://amazon.com/", title: "Amazon")
