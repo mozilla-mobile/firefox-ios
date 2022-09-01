@@ -89,10 +89,8 @@ class TabManagerStoreTests: XCTestCase {
 // MARK: - Helper methods
 private extension TabManagerStoreTests {
 
-    func createManager(file: StaticString = #file, line: UInt = #line) -> TabManager {
-        let manager = TabManager(profile: profile, imageStore: nil)
-        manager.testClearArchive()
-
+    func createManager(file: StaticString = #file, line: UInt = #line) -> TabManagerStoreImplementation {
+        let manager = TabManagerStoreImplementation(prefs: profile.prefs, imageStore: nil)
         trackForMemoryLeaks(manager, file: file, line: line)
         return manager
     }

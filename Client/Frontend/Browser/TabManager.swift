@@ -954,7 +954,8 @@ extension TabManager {
 
     func testCountRestoredTabs() -> Int {
         assert(AppConstants.isRunningTest)
-        _ = store.restoreStartupTabs(clearPrivateTabs: true, tabManager: self)
+        _ = store.restoreStartupTabs(clearPrivateTabs: true,
+                                     tabManager: self)
         return count
     }
 

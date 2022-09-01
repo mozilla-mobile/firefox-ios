@@ -13,11 +13,17 @@ protocol TabManagerStore {
     func preserveScreenshot(forTab tab: Tab?)
     func removeScreenshot(forTab tab: Tab?)
 
-    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, writeCompletion: (() -> Void)?)
-    func restoreStartupTabs(clearPrivateTabs: Bool, tabManager: TabManager) -> Tab?
+    func preserveTabs(_ tabs: [Tab],
+                      selectedTab: Tab?,
+                      writeCompletion: (() -> Void)?)
+
+    func restoreStartupTabs(clearPrivateTabs: Bool,
+                            tabManager: TabManager) -> Tab?
+
     func restoreTabs(savedTabs: [SavedTab],
                      clearPrivateTabs: Bool,
                      tabManager: TabManager) -> Tab?
+
     func clearArchive()
 }
 
@@ -36,18 +42,14 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
     private var writeOperation: DispatchWorkItem
     private let serialQueue: DispatchQueue
     private var lockedForReading = false
-
-    // Init this at startup with the tabs on disk, and then on each save, update the in-memory tab state.
-    private lazy var archivedStartupTabs = {
-        return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
-    }()
+    private let tabDataRetriever: TabDataRetriever
 
     var isRestoringTabs: Bool {
         return lockedForReading
     }
 
     var hasTabsToRestoreAtStartup: Bool {
-        return !archivedStartupTabs.0.isEmpty
+        return !tabs.isEmpty
     }
 
     // MARK: - Initializer
@@ -62,6 +64,8 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         self.prefs = prefs
         self.writeOperation = writeOperation
         self.serialQueue = serialQueue
+        self.tabDataRetriever = TabDataRetrieverImplementation(fileManager: fileManager)
+        tabDataRetriever.tabsStateArchivePath = tabsStateArchivePath()
     }
 
     // MARK: - Screenshots
@@ -85,9 +89,8 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
     /// - Parameters:
     ///   - tabs: The tabs to preserve
     ///   - selectedTab: One of the saved tabs will be saved as the selected tab.
-    ///   - writeCompletion: Used to know the write operation has completed - Used in unit tests
-    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, writeCompletion: (() -> Void)? = nil) {
-        assert(Thread.isMainThread)
+    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) {
+        assertIsMainThread("Preserving tabs is a main-only operation")
         guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab),
               let path = tabsStateArchivePath()
         else {
@@ -97,19 +100,14 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 
         writeOperation.cancel()
 
-        let tabStateData = NSMutableData()
-        let archiver = NSKeyedArchiver(forWritingWith: tabStateData)
-        archiver.encode(savedTabs, forKey: "tabs")
-        archiver.finishEncoding()
-
+        let tabStateData = archive(savedTabs: savedTabs)
         let simpleTabs = SimpleTab.convertToSimpleTabs(savedTabs)
 
-        writeOperation = DispatchWorkItem {
-            let written = tabStateData.write(toFile: path, atomically: true)
+        writeOperation = DispatchWorkItem { [weak self] in
             SimpleTab.saveSimpleTab(tabs: simpleTabs)
+            let written = tabStateData.write(toFile: path, atomically: true)
             // Ignore write failure (could be restoring).
-            self.browserLog.debug("PreserveTabs write ok: \(written), bytes: \(tabStateData.length)")
-            writeCompletion?()
+            self?.browserLog.debug("PreserveTabs write ok: \(written), bytes: \(tabStateData.length)")
         }
 
         // Delay by 100ms to debounce repeated calls to preserveTabs in quick succession.
@@ -120,10 +118,9 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
     // MARK: - Restoration
 
     func restoreStartupTabs(clearPrivateTabs: Bool, tabManager: TabManager) -> Tab? {
-        let selectedTab = restoreTabs(savedTabs: archivedStartupTabs.0,
-                                      clearPrivateTabs: clearPrivateTabs,
-                                      tabManager: tabManager)
-        return selectedTab
+        return restoreTabs(savedTabs: tabs,
+                           clearPrivateTabs: clearPrivateTabs,
+                           tabManager: tabManager)
     }
 
     func restoreTabs(savedTabs: [SavedTab],
@@ -142,6 +139,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 
         var tabToSelect: Tab?
 
+        // TODO: Laurie - This is called from tabManager, shouldn't act on tabManager here
         for savedTab in savedTabs {
             // Provide an empty request to prevent a new tab from loading the home screen
             var tab = tabManager.addTab(flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
@@ -160,10 +158,41 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 
     func clearArchive() {
         guard let path = tabsStateArchivePath() else { return }
-        try? FileManager.default.removeItem(atPath: path)
+        do {
+            try FileManager.default.removeItem(atPath: path)
+        } catch let error {
+            browserLog.warning("Clear archive couldn't be completed with: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Private
+
+    private func archive(savedTabs: [SavedTab]) -> NSMutableData {
+        let tabStateData = NSMutableData()
+        let archiver = NSKeyedArchiver(forWritingWith: tabStateData)
+        archiver.encode(savedTabs, forKey: "tabs")
+        archiver.finishEncoding()
+        return tabStateData
+    }
+
+    private var tabs: [SavedTab] {
+        guard let tabData = tabDataRetriever.getTabData() else { return [SavedTab]() }
+
+        let unarchiver = try NSKeyedUnarchiver(forReadingWith: tabData)
+        unarchiver.setClass(SavedTab.self, forClassName: "Client.SavedTab")
+        unarchiver.setClass(SessionData.self, forClassName: "Client.SessionData")
+        unarchiver.decodingFailurePolicy = .setErrorAndReturn
+        guard let tabs = unarchiver.decodeObject(forKey: "tabs") as? [SavedTab] else {
+            SentryIntegration.shared.send(message: "Failed to restore tabs",
+                                          tag: .tabManager,
+                                          severity: .error,
+                                          description: "\(unarchiver.error ??? "nil")")
+            SimpleTab.saveSimpleTab(tabs: nil)
+            return [SavedTab]()
+        }
+
+        return tabs
+    }
 
     private func tabsStateArchivePath() -> String? {
         let profilePath: String?
@@ -204,6 +233,6 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 extension TabManagerStoreImplementation {
     func testTabCountOnDisk() -> Int {
         assert(AppConstants.isRunningTest)
-        return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).0.count
+        return tabs.count
     }
 }
