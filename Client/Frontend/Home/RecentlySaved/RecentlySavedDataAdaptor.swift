@@ -7,6 +7,7 @@ import Storage
 
 protocol RecentlySavedDataAdaptor {
     func getHeroImage(forSite site: Site) -> UIImage?
+    func getFaviconImage(forSite site: Site) -> UIImage?
     func getRecentlySavedData() -> [RecentlySavedItem]
 }
 
@@ -25,7 +26,14 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
     private var bookmarksHandler: BookmarksHandler
     private var recentBookmarks = [RecentlySavedBookmark]()
     private var readingListItems = [ReadingListItem]()
+
     private var heroImages = [String: UIImage]() {
+        didSet {
+            delegate?.didLoadNewData()
+        }
+    }
+
+    private var faviconImages = [String: UIImage]() {
         didSet {
             delegate?.didLoadNewData()
         }
@@ -59,6 +67,19 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
                                       imageType: .heroImage,
                                       shouldFallback: true) { image in
             self.heroImages[site.url] = image
+        }
+        return nil
+    }
+
+    func getFaviconImage(forSite site: Site) -> UIImage? {
+        if let faviconImage = faviconImages[site.url] {
+            return faviconImage
+        }
+
+        siteImageHelper.fetchImageFor(site: site,
+                                      imageType: .favicon,
+                                      shouldFallback: false) { image in
+            self.faviconImages[site.url] = image
         }
         return nil
     }

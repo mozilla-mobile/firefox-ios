@@ -164,6 +164,13 @@ public struct AccessibilityIdentifiers {
                     static let topSitesRows = "TopSitesRows"
                 }
 
+                struct Wallpaper {
+                    static let collectionTitle = "wallpaperCollectionTitle"
+                    static let collectionDescription = "wallpaperCollectionDescription"
+                    static let collectionButton = "wallpaperCollectionButton"
+                    static let card = "wallpaperCard"
+                }
+
                 static let jumpBackIn = "Jump Back In"
                 static let recentlySaved = "Recently Saved"
                 static let recentVisited = "Recently Visited"
