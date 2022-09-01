@@ -40,6 +40,7 @@ protocol TabManagerProtocol {
     var selectedTab: Tab? { get }
 
     func selectTab(_ tab: Tab?, previous: Tab?)
+    func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
@@ -385,18 +386,27 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     }
 
     // MARK: - Add tabs
+    func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
+        return addTab(request,
+                      configuration: nil,
+                      afterTab: afterTab,
+                      flushToDisk: true,
+                      zombie: false,
+                      isPrivate: isPrivate)
+    }
+
     @discardableResult func addTab(_ request: URLRequest! = nil,
                                    configuration: WKWebViewConfiguration! = nil,
                                    afterTab: Tab? = nil,
                                    zombie: Bool = false,
-                                   isPrivate: Bool = false)
-    -> Tab {
-        return self.addTab(request,
-                           configuration: configuration,
-                           afterTab: afterTab,
-                           flushToDisk: true,
-                           zombie: zombie,
-                           isPrivate: isPrivate)
+                                   isPrivate: Bool = false
+    ) -> Tab {
+        return addTab(request,
+                      configuration: configuration,
+                      afterTab: afterTab,
+                      flushToDisk: true,
+                      zombie: zombie,
+                      isPrivate: isPrivate)
     }
 
     func addTabsForURLs(_ urls: [URL], zombie: Bool) {
@@ -406,7 +416,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
         var tab: Tab!
         for url in urls {
-            tab = self.addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie)
+            tab = addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie)
         }
 
         // Select the most recent.
@@ -418,7 +428,13 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         storeChanges()
     }
 
-    func addTab(_ request: URLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool = false) -> Tab {
+    func addTab(_ request: URLRequest? = nil,
+                configuration: WKWebViewConfiguration? = nil,
+                afterTab: Tab? = nil,
+                flushToDisk: Bool,
+                zombie: Bool,
+                isPrivate: Bool = false
+    ) -> Tab {
         // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
         let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
 
@@ -441,7 +457,13 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         return popup
     }
 
-    func configureTab(_ tab: Tab, request: URLRequest?, afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPopup: Bool = false) {
+    func configureTab(_ tab: Tab,
+                      request: URLRequest?,
+                      afterTab parent: Tab? = nil,
+                      flushToDisk: Bool,
+                      zombie: Bool,
+                      isPopup: Bool = false
+    ) {
         // If network is not available webView(_:didCommit:) is not going to be called
         // We should set request url in order to show url in url bar even no network
         tab.url = request?.url
@@ -463,7 +485,10 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             tabs.insert(tab, at: insertIndex)
         }
 
-        delegates.forEach { $0.get()?.tabManager(self, didAddTab: tab, placeNextToParentTab: placeNextToParentTab, isRestoring: store.isRestoringTabs) }
+        delegates.forEach { $0.get()?.tabManager(self,
+                                                 didAddTab: tab,
+                                                 placeNextToParentTab: placeNextToParentTab,
+                                                 isRestoring: store.isRestoringTabs) }
 
         if !zombie {
             tab.createWebview()
@@ -508,7 +533,6 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
     // MARK: - Move tabs
     func moveTab(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
-
         let currentTabs = privateMode ? privateTabs : normalTabs
 
         guard visibleFromIndex < currentTabs.count, visibleToIndex < currentTabs.count else { return }
@@ -582,7 +606,6 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     ///   - tab: the tab to remove
     ///   - flushToDisk: Will store changes if true, and update selected index
     private func removeTab(_ tab: Tab, flushToDisk: Bool) {
-
         guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
             SentryIntegration.shared.sendWithStacktrace(message: "Could not find index of tab to remove",
                                                         tag: .tabManager,
@@ -667,7 +690,8 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     }
 
     // MARK: - Toasts
-    func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab], isPrivate: Bool,
+    func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab],
+                                         isPrivate: Bool,
                                          previousTabUUID: String) {
         var toast: ButtonToast?
         let numberOfTabs = recentlyClosedTabs.count
@@ -821,8 +845,8 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     /// - Returns: A selectable tab
     private func createStartAtHomeTab(withExistingTab existingTab: Tab?,
                                       inPrivateMode privateMode: Bool,
-                                      and profilePreferences: Prefs) -> Tab? {
-
+                                      and profilePreferences: Prefs
+    ) -> Tab? {
         let page = NewTabAccessors.getHomePage(profilePreferences)
         let customUrl = HomeButtonHomePageAccessors.getHomePage(profilePreferences)
         let homeUrl = URL(string: "internal://local/about/home")
@@ -845,7 +869,6 @@ extension TabManager: WKNavigationDelegate {
 
     // Note the main frame JSContext (i.e. document, window) is not available yet.
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-
         if let tab = self[webView], let blocker = tab.contentBlocker {
             blocker.clearPageStats()
         }

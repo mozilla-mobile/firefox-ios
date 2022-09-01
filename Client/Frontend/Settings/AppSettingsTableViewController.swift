@@ -78,10 +78,17 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             viewController = SearchBarSettingsViewController(viewModel: viewModel)
 
         case .wallpaper:
-            let viewModel = LegacyWallpaperSettingsViewModel(with: tabManager, and: LegacyWallpaperManager())
-            let wallpaperVC = LegacyWallpaperSettingsViewController(with: viewModel)
-            // Push wallpaper settings view controller directly as its not of type settings viewcontroller
-            navigationController?.pushViewController(wallpaperVC, animated: true)
+            if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
+               wallpaperVersion == .v2 {
+                let viewModel = WallpaperSettingsViewModel(wallpaperManager: WallpaperManager(), tabManager: tabManager)
+                let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
+                navigationController?.pushViewController(wallpaperVC, animated: true)
+            } else {
+                let viewModel = LegacyWallpaperSettingsViewModel(with: tabManager, and: LegacyWallpaperManager())
+                let wallpaperVC = LegacyWallpaperSettingsViewController(with: viewModel)
+                // Push wallpaper settings view controller directly as its not of type settings viewcontroller
+                navigationController?.pushViewController(wallpaperVC, animated: true)
+            }
             return
 
         case .customizeTopSites:

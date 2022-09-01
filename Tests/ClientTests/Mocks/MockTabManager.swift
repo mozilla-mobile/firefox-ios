@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import WebKit
 
 @testable import Client
 
@@ -28,5 +29,13 @@ class MockTabManager: TabManagerProtocol {
         if let previous = previous {
             lastSelectedPreviousTabs.append(previous)
         }
+    }
+
+    func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
+        let configuration = WKWebViewConfiguration()
+        let profile = MockProfile()
+        let tab = Tab(profile: profile, configuration: configuration, isPrivate: isPrivate)
+        tabs.append(tab)
+        return tab
     }
 }

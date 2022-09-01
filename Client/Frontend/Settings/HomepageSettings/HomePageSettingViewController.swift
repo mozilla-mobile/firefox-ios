@@ -262,7 +262,7 @@ extension HomePageSettingViewController {
 
 // MARK: - WallpaperSettings
 extension HomePageSettingViewController {
-    class WallpaperSettings: Setting {
+    class WallpaperSettings: Setting, FeatureFlaggable {
 
         var profile: Profile
         var tabManager: TabManager
@@ -280,10 +280,17 @@ extension HomePageSettingViewController {
         }
 
         override func onClick(_ navigationController: UINavigationController?) {
-            let viewModel = LegacyWallpaperSettingsViewModel(with: tabManager,
-                                                       and: LegacyWallpaperManager())
-            let wallpaperVC = LegacyWallpaperSettingsViewController(with: viewModel)
-            navigationController?.pushViewController(wallpaperVC, animated: true)
+            if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
+               wallpaperVersion == .v2 {
+                let viewModel = WallpaperSettingsViewModel(wallpaperManager: WallpaperManager(), tabManager: tabManager)
+                let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
+                navigationController?.pushViewController(wallpaperVC, animated: true)
+            } else {
+                let viewModel = LegacyWallpaperSettingsViewModel(with: tabManager,
+                                                           and: LegacyWallpaperManager())
+                let wallpaperVC = LegacyWallpaperSettingsViewController(with: viewModel)
+                navigationController?.pushViewController(wallpaperVC, animated: true)
+            }
         }
     }
 }

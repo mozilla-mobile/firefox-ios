@@ -914,6 +914,32 @@ extension String {
                     comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper.",
                     lastUpdated: .v98)
 
+                public static let ClassicWallpaper = MZLocalizedString(
+                    "Settings.Home.Option.Wallpaper.Classic.Title.v106",
+                    value: "Classic Firefox",
+                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user.",
+                    lastUpdated: .v106)
+                public static let LimitedEditionWallpaper = MZLocalizedString(
+                    "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106",
+                    value: "Limited Edition",
+                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user.",
+                    lastUpdated: .v106)
+                public static let IndependentVoicesDescription = MZLocalizedString(
+                    "Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106",
+                    value: "The new Independent Voices collection.",
+                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user.",
+                    lastUpdated: .v106)
+                public static let LimitedEditionDefaultDescription = MZLocalizedString(
+                    "Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106",
+                    value: "Try the new collection.",
+                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user.",
+                    lastUpdated: .v106)
+                public static let LearnMoreButton = MZLocalizedString(
+                    "Settings.Home.Option.Wallpaper.LearnMore.v106",
+                    value: "Learn more",
+                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user.",
+                    lastUpdated: .v106)
+
                 // Accessibility
                 public struct AccessibilityLabels {
                     public static let FxHomepageWallpaperButton = MZLocalizedString(
