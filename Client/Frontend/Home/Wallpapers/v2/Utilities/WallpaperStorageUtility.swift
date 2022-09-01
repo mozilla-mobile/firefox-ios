@@ -76,12 +76,12 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
         }
     }
 
-    public func fetchCurrentWallpaper() throws -> Wallpaper? {
+    public func fetchCurrentWallpaper() throws -> Wallpaper {
         if let data = userDefaults.object(forKey: PrefsKeys.Wallpapers.CurrentWallpaper) as? Data {
             return try JSONDecoder().decode(Wallpaper.self, from: data)
         }
 
-        return nil
+        return Wallpaper(id: "fxDefault", textColour: nil, cardColour: nil)
     }
 
     public func fetchImageWith(name: String, andID id: String) throws -> UIImage? {

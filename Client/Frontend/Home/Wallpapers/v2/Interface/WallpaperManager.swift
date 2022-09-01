@@ -131,8 +131,8 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         guard let classicCollection = availableCollections.first(where: { $0.type == .classic }) else { return availableCollections }
 
         let defaultWallpaper = [Wallpaper(id: "fxDefault",
-                                          textColour: .white,
-                                          cardColour: .white)]
+                                          textColour: nil,
+                                          cardColour: nil)]
         let newWallpapers = defaultWallpaper + classicCollection.wallpapers
         let newClassic = WallpaperCollection(id: classicCollection.id,
                                              learnMoreURL: classicCollection.learnMoreUrl?.absoluteString,
