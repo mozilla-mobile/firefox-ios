@@ -29,7 +29,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     private var tabManager: TabManagerProtocol
     private var urlBar: URLBarViewProtocol
     private var wallpaperManager: LegacyWallpaperManager
-    private lazy var wallpaperView: LegacyWallpaperBackgroundView = .build { _ in }
+    private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var contextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
 
@@ -405,8 +405,8 @@ private extension HomepageViewController {
     private func setupSectionsAction() {
 
         // Header view
-        viewModel.headerViewModel.onTapAction = { [weak self] _ in
-            self?.changeHomepageWallpaper()
+        viewModel.headerViewModel.onTapAction = { _ in
+            // No action currently set if the logo button is tapped.
         }
 
         // Message card
@@ -590,10 +590,6 @@ private extension HomepageViewController {
 
     func openTabsSettings() {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeTabs)
-    }
-
-    func changeHomepageWallpaper() {
-        wallpaperView.cycleWallpaper()
     }
 
     func getPopoverSourceRect(sourceView: UIView?) -> CGRect {
