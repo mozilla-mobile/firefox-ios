@@ -876,6 +876,7 @@ class BrowserViewController: UIViewController {
             let legacyWallpaperManager = LegacyWallpaperManager()
             legacyWallpaperManager.runResourceVerification()
 
+            // TODO: [roux] - update this call
             let wallpaperManager = WallpaperManager()
             wallpaperManager.checkForUpdates()
         }

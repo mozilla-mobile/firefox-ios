@@ -97,6 +97,9 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
             let didFetchNewData = await metadataUtility.metadataUpdateFetchedNewData()
             if didFetchNewData {
                 do {
+                    let migrationUtility = WallpaperMigrationUtility()
+                    migrationUtility.attemptMigration()
+
                     try await fetchMissingThumbnails()
                     thumbnailVerifier.verifyThumbnailsFor(availableCollections)
                 } catch {
@@ -124,7 +127,8 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
             return isDateAvailable && isLocaleAvailable
         }
 
-        return collections
+        let collectionsWithDefault = addDefaultWallpaper(to: collections)
+        return collectionsWithDefault
     }
 
     private func addDefaultWallpaper(to availableCollections: [WallpaperCollection]) -> [WallpaperCollection] {

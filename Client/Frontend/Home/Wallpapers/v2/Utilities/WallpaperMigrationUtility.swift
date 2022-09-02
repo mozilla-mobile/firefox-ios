@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-struct NewWallpaperMigrationUtility: Loggable {
+struct WallpaperMigrationUtility: Loggable {
 
     private let migrationKey = PrefsKeys.Wallpapers.v1MigrationCheck
     private let userDefaults: UserDefaultsInterface
@@ -28,17 +28,20 @@ struct NewWallpaperMigrationUtility: Loggable {
         let storageUtility = WallpaperStorageUtility()
 
         do {
-            guard let legacyWallpaperObject = legacyStorageUtility.getCurrentWallpaperObject(),
-                  let metadata = try storageUtility.fetchMetadata()
-            else { return }
+            guard let legacyWallpaperObject = legacyStorageUtility.getCurrentWallpaperObject() else {
+                userDefaults.set(true, forKey: migrationKey)
+                return
+            }
 
-            guard let matchingID = getMatchingIdBasedOn(legacyId: legacyWallpaperObject.name),
+            guard let metadata = try storageUtility.fetchMetadata(),
+                  let matchingID = getMatchingIdBasedOn(legacyId: legacyWallpaperObject.name),
                   let matchingWallpaper = metadata.collections
                 .first(where: { $0.type == .classic })?
                 .wallpapers.first(where: { $0.id ==  matchingID })
             else { return }
 
             try storageUtility.store(matchingWallpaper)
+            // TODO: [roux] - Should download the appropriate wallpaper
 
             userDefaults.set(true, forKey: migrationKey)
 
