@@ -616,16 +616,17 @@ extension BrowserViewController: WKNavigationDelegate {
         let forceDownload = webView == pendingDownloadWebView
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
 
-        // Check if this response should be handed off to Passbook.
-        if let passbookHelper = OpenPassBookHelper(
-            request: request,
-            response: response,
-            cookieStore: cookieStore,
-            canShowInWebView: canShowInWebView,
-            forceDownload: forceDownload,
-            browserViewController: self) {
-            // Open our helper and cancel this response from the webview.
-            passbookHelper.open()
+        if OpenPassBookHelper.shouldOpenWithPassBook(response: response,
+                                                     forceDownload: forceDownload) {
+            self.passBookHelper = OpenPassBookHelper(response: response,
+                                                     cookieStore: cookieStore,
+                                                     presenter: self)
+            // Open our helper and nullifies the helper when done with it
+            self.passBookHelper?.open {
+                self.passBookHelper = nil
+            }
+
+            // Cancel this response from the webview.
             decisionHandler(.cancel)
             return
         }
