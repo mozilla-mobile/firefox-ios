@@ -37,6 +37,8 @@ class TabManagerStoreTests: XCTestCase {
         XCTAssertFalse(manager.hasTabsToRestoreAtStartup)
     }
 
+    // MARK: Preserve
+
     func testPreserve_withNoTabs() {
         let manager = createManager()
         manager.preserveTabs([], selectedTab: nil)
@@ -53,9 +55,18 @@ class TabManagerStoreTests: XCTestCase {
         XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
     }
 
-    func testPreserveTabs_withSelectedTab() {
+    func testPreserveTabs_withSelectedNormalTab() {
         let manager = createManager()
         let tabs = createTabs(tabNumber: 3)
+        manager.preserveTabs(tabs, selectedTab: tabs[0])
+
+        XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
+        XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
+    }
+
+    func testPreserveTabs_withSelectedPrivateTab() {
+        let manager = createManager()
+        let tabs = createTabs(tabNumber: 3, isPrivate: true)
         manager.preserveTabs(tabs, selectedTab: tabs[0])
 
         XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
@@ -76,6 +87,117 @@ class TabManagerStoreTests: XCTestCase {
         XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
         XCTAssertEqual(fileManager.remoteItemCalledCount, 2)
         XCTAssertEqual(fileManager.fileExistsCalledCount, 2)
+    }
+
+    // MARK: Restore
+
+    func testRestoreEmptyTabs() {
+        let manager = createManager()
+        let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: false,
+                                                     addTabClosure: { isPrivate in
+            XCTFail("Should not be called since there's no tabs to restore")
+            return createTab(isPrivate: isPrivate)
+        })
+
+        XCTAssertNil(tabToSelect, "There's no tabs to restore, so nothing is selected")
+        XCTAssertEqual(manager.testTabCountOnDisk(), 0, "Expected 0 tabs on disk")
+        XCTAssertFalse(manager.hasTabsToRestoreAtStartup)
+    }
+
+    func testRestoreNormalTabs_noSelectedTab() {
+        let manager = createManager()
+        let tabs = createTabs(tabNumber: 3)
+        manager.preserveTabs(tabs, selectedTab: nil)
+
+        let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: false,
+                                                     addTabClosure: { isPrivate in
+            XCTAssertFalse(isPrivate)
+            return createTab(isPrivate: isPrivate)
+        })
+
+        XCTAssertNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
+        XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
+        XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
+    }
+
+    func testRestoreNormalTabs_selectedTabIsReselected() {
+        let manager = createManager()
+        let tabs = createTabs(tabNumber: 3)
+        manager.preserveTabs(tabs, selectedTab: tabs[0])
+
+        let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: false,
+                                                     addTabClosure: { isPrivate in
+            XCTAssertFalse(isPrivate)
+            return createTab(isPrivate: isPrivate)
+        })
+
+        XCTAssertNotNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
+        XCTAssertEqual(tabToSelect?.lastTitle, tabs[0].lastTitle, "Selected tab is same that was previously selected")
+        XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
+        XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
+    }
+
+    func testRestorePrivateTabs_noSelectedTab() {
+        let manager = createManager()
+        let tabs = createTabs(tabNumber: 3, isPrivate: true)
+        manager.preserveTabs(tabs, selectedTab: nil)
+
+        let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: false,
+                                                     addTabClosure: { isPrivate in
+            XCTAssertTrue(isPrivate)
+            return createTab(isPrivate: isPrivate)
+        })
+
+        XCTAssertNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
+        XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
+        XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
+    }
+
+    func testRestorePrivateTabs_selectedTabIsReselected() {
+        let manager = createManager()
+        let tabs = createTabs(tabNumber: 3, isPrivate: true)
+        manager.preserveTabs(tabs, selectedTab: tabs[0])
+
+        let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: false,
+                                                     addTabClosure: { isPrivate in
+            XCTAssertTrue(isPrivate)
+            return createTab(isPrivate: isPrivate)
+        })
+
+        XCTAssertNotNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
+        XCTAssertEqual(tabToSelect?.lastTitle, tabs[0].lastTitle, "Selected tab is same that was previously selected")
+        XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
+        XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
+    }
+
+    func testRestorePrivateTabs_clearPrivateTabs() {
+        let manager = createManager()
+        let tabs = createTabs(tabNumber: 3, isPrivate: true)
+        manager.preserveTabs(tabs, selectedTab: tabs[0])
+
+        let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: true,
+                                                     addTabClosure: { isPrivate in
+            XCTFail("Shouldn't be called as there's no more tabs after clear private tabs is done")
+            return createTab(isPrivate: isPrivate)
+        })
+
+        XCTAssertNil(tabToSelect, "No tab is selected since all tabs were removed (since they were private)")
+    }
+
+    func testRestoreNormalAndPrivateTabs_clearPrivateTabs() {
+        let manager = createManager()
+        let normalTabs = createTabs(tabNumber: 2)
+        let privateTabs = createTabs(tabNumber: 3, isPrivate: true)
+        let allTabs = normalTabs + privateTabs
+        manager.preserveTabs(allTabs, selectedTab: privateTabs[0])
+
+        let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: true,
+                                                     addTabClosure: { isPrivate in
+            XCTAssertFalse(isPrivate)
+            return createTab(isPrivate: isPrivate)
+        })
+
+        XCTAssertNil(tabToSelect, "No tab selected since the selected one was deleted, tab manager will deal with it")
     }
 }
 
@@ -106,21 +228,24 @@ private extension TabManagerStoreTests {
                     isPrivate: Bool = false,
                     file: StaticString = #file,
                     line: UInt = #line) -> [Tab] {
-        let configuration = createConfiguration(file: file, line: line)
-
         var tabs = [Tab]()
         for _ in 0..<tabNumber {
-            let tab = createTab(configuration: configuration, isPrivate: isPrivate)
+            let tab = createTab(title: "Title\(tabNumber)/\(isPrivate)", isPrivate: isPrivate, file: file, line: line)
             tabs.append(tab)
         }
         return tabs
     }
 
     // Without session data, a Tab can't become a SavedTab and get archived
-    func createTab(configuration: WKWebViewConfiguration,
-                   isPrivate: Bool = false) -> Tab {
+    func createTab(title: String? = nil,
+                   isPrivate: Bool = false,
+                   file: StaticString = #file,
+                   line: UInt = #line) -> Tab {
+        let configuration = createConfiguration(file: file, line: line)
+
         let tab = Tab(profile: profile, configuration: configuration, isPrivate: isPrivate)
-        tab.url = URL(string: "http://yahoo.com")!
+        tab.url = URL(string: "http://yahoo.com/")!
+        tab.lastTitle = title
         tab.sessionData = SessionData(currentPage: 0, urls: [tab.url!], lastUsedTime: Date.now())
         return tab
     }

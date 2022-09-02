@@ -326,9 +326,16 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         isRestoringTabs = true
 
         var tabToSelect = store.restoreStartupTabs(clearPrivateTabs: shouldClearPrivateTabs(),
-                                                   tabManager: self)
+                                                   addTabClosure: addTabForRestoration(isPrivate:))
+
+        // If tabToSelect is nil after restoration, force selection of first tab normal tab
         if tabToSelect == nil {
-            tabToSelect = addTab()
+            tabToSelect = tabs.first(where: { $0.isPrivate == false })
+
+            // If tabToSelect is still nil, create a new tab
+            if tabToSelect == nil {
+                tabToSelect = addTab()
+            }
         }
 
         selectTab(tabToSelect)
@@ -338,6 +345,10 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         }
 
         isRestoringTabs = false
+    }
+
+    private func addTabForRestoration(isPrivate: Bool) -> Tab {
+        return addTab(flushToDisk: false, zombie: true, isPrivate: isPrivate)
     }
 
     private func checkForSingleTab() {
@@ -932,18 +943,6 @@ extension TabManager {
     func testRemoveAll() {
         assert(AppConstants.isRunningTest)
         removeTabs(self.tabs)
-    }
-
-//    func testTabCountOnDisk() -> Int {
-//        assert(AppConstants.isRunningTest)
-//        return store.testTabCountOnDisk()
-//    }
-
-    func testCountRestoredTabs() -> Int {
-        assert(AppConstants.isRunningTest)
-        _ = store.restoreStartupTabs(clearPrivateTabs: true,
-                                     tabManager: self)
-        return count
     }
 
     func testClearArchive() {

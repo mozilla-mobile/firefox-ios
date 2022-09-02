@@ -17,11 +17,7 @@ protocol TabManagerStore {
                       selectedTab: Tab?)
 
     func restoreStartupTabs(clearPrivateTabs: Bool,
-                            tabManager: TabManager) -> Tab?
-
-    func restoreTabs(savedTabs: [SavedTab],
-                     clearPrivateTabs: Bool,
-                     tabManager: TabManager) -> Tab?
+                            addTabClosure: (Bool) -> Tab) -> Tab?
 
     func clearArchive()
 }
@@ -114,15 +110,16 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 
     // MARK: - Restoration
 
-    func restoreStartupTabs(clearPrivateTabs: Bool, tabManager: TabManager) -> Tab? {
+    func restoreStartupTabs(clearPrivateTabs: Bool,
+                            addTabClosure: (Bool) -> Tab) -> Tab? {
         return restoreTabs(savedTabs: tabs,
                            clearPrivateTabs: clearPrivateTabs,
-                           tabManager: tabManager)
+                           addTabClosure: addTabClosure)
     }
 
-    func restoreTabs(savedTabs: [SavedTab],
-                     clearPrivateTabs: Bool,
-                     tabManager: TabManager) -> Tab? {
+    private func restoreTabs(savedTabs: [SavedTab],
+                             clearPrivateTabs: Bool,
+                             addTabClosure: (Bool) -> Tab) -> Tab? {
         assertIsMainThread("Restoration is a main-only operation")
         guard !lockedForReading, !savedTabs.isEmpty else { return nil }
         lockedForReading = true
@@ -137,15 +134,11 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         var tabToSelect: Tab?
         for savedTab in savedTabs {
             // Provide an empty request to prevent a new tab from loading the home screen
-            var tab = tabManager.addTab(flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
+            var tab = addTabClosure(savedTab.isPrivate)
             tab = savedTab.configureSavedTabUsing(tab, imageStore: imageStore)
             if savedTab.isSelected {
                 tabToSelect = tab
             }
-        }
-
-        if tabToSelect == nil {
-            tabToSelect = tabManager.tabs.first(where: { $0.isPrivate == false })
         }
 
         return tabToSelect
@@ -163,11 +156,11 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
     // MARK: - Private
 
     private func archive(savedTabs: [SavedTab]) -> NSMutableData {
-        let tabStateData = NSMutableData()
-        let archiver = NSKeyedArchiver(forWritingWith: tabStateData)
+        let tabData = NSMutableData()
+        let archiver = NSKeyedArchiver(forWritingWith: tabData)
         archiver.encode(savedTabs, forKey: "tabs")
         archiver.finishEncoding()
-        return tabStateData
+        return tabData
     }
 
     private var tabs: [SavedTab] {
