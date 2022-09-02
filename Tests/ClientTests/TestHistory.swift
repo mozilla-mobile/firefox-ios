@@ -321,12 +321,16 @@ class TestHistory: ProfileTest {
     }
 
     // Helper for starting a new thread running NumCmds random methods on it. Calls cb when done.
-    fileprivate func runRandom(_ history: inout BrowserHistory, queue: DispatchQueue, cb: @escaping () -> Void) {
+    fileprivate func runRandom(
+        _ history: inout BrowserHistory,
+        queue: DispatchQueue,
+        completion: @escaping () -> Void
+    ) {
         queue.async { [history] in
             var history = history
             // Each thread creates its own history provider
             self.runMultiRandom(&history, val: 0, numCmds: self.numCmds) {
-                DispatchQueue.main.async(execute: cb)
+                DispatchQueue.main.async(execute: completion)
             }
         }
     }
