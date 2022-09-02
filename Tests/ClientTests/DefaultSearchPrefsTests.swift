@@ -15,7 +15,7 @@ class DefaultSearchPrefsTests: XCTestCase {
         let searchPrefs = DefaultSearchPrefs(with: Bundle.main.resourceURL!.appendingPathComponent("SearchPlugins").appendingPathComponent("list.json"))!
 
         // setup the most popular locales
-        let us = (lang: ["en-US", "en"], region: "US", resultList: ["google-b-1-m", "amazondotcom", "bing", "ddg", "ebay", "wikipedia"], resultDefault: "Google")
+        let usa = (lang: ["en-US", "en"], region: "US", resultList: ["google-b-1-m", "amazondotcom", "bing", "ddg", "ebay", "wikipedia"], resultDefault: "Google")
         let england = (lang: ["en-GB", "en"], region: "GB", resultList: ["google-b-m", "amazon-co-uk", "bing", "ddg", "ebay-co-uk", "qwant", "wikipedia"], resultDefault: "Google")
         let france = (lang: ["fr-FR", "fr"], region: "FR", resultList: ["google-b-m", "bing", "ddg", "ebay-fr", "qwant", "wikipedia-fr"], resultDefault: "Google")
         let japan = (lang: ["ja-JP", "ja"], region: "JP", resultList: ["google-b-m", "amazon-jp", "bing", "ebay", "wikipedia-ja", "yahoo-jp"], resultDefault: "Google")
@@ -25,7 +25,7 @@ class DefaultSearchPrefsTests: XCTestCase {
         let china = (lang: ["zh-hans-CN", "zh-CN", "zh"], region: "CN", resultList: ["google-b-m", "baidu", "bing", "wikipedia-zh-CN"], resultDefault: "百度")
         let germany = (lang: ["de-DE", "de"], region: "DE", resultList: ["google-b-m", "amazon-de", "bing", "ddg", "ebay-de", "ecosia", "qwant", "wikipedia-de"], resultDefault: "Google")
         let southAfrica = (lang: ["en-SA", "en"], region: "SA", resultList: ["google-b-m", "amazondotcom", "bing", "ddg", "ebay", "wikipedia"], resultDefault: "Google")
-        let testLocales = [us, england, france, japan, canada, russia, taiwan, china, germany, southAfrica]
+        let testLocales = [usa, england, france, japan, canada, russia, taiwan, china, germany, southAfrica]
 
         // run tests
         testLocales.forEach { locale in

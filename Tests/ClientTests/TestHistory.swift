@@ -79,12 +79,12 @@ class TestHistory: ProfileTest {
     func testSearchHistory_WithResults() {
         let expectation = self.expectation(description: "Wait for search history")
         let mockProfile = MockProfile()
-        mockProfile._reopen()
+        mockProfile.reopen()
         let history = mockProfile.history
 
         let clearTest = {
             self.clear(history)
-            mockProfile._shutdown()
+            mockProfile.shutdown()
         }
 
         addSite(history, url: "http://amazon.com/", title: "Amazon")
@@ -104,12 +104,12 @@ class TestHistory: ProfileTest {
     func testSearchHistory_WithResultsByTitle() {
         let expectation = self.expectation(description: "Wait for search history")
         let mockProfile = MockProfile()
-        mockProfile._reopen()
+        mockProfile.reopen()
         let history = mockProfile.history
 
         let clearTest = {
             self.clear(history)
-            mockProfile._shutdown()
+            mockProfile.shutdown()
         }
 
         addSite(history, url: "http://amazon.com/", title: "Amazon")
@@ -129,12 +129,12 @@ class TestHistory: ProfileTest {
     func testSearchHistory_WithResultsByUrl() {
         let expectation = self.expectation(description: "Wait for search history")
         let mockProfile = MockProfile()
-        mockProfile._reopen()
+        mockProfile.reopen()
         let history = mockProfile.history
 
         let clearTest = {
             self.clear(history)
-            mockProfile._shutdown()
+            mockProfile.shutdown()
         }
 
         addSite(history, url: "http://amazon.com/", title: "Amazon")
@@ -153,12 +153,12 @@ class TestHistory: ProfileTest {
     func testSearchHistory_NoResults() {
         let expectation = self.expectation(description: "Wait for search history")
         let mockProfile = MockProfile()
-        mockProfile._reopen()
+        mockProfile.reopen()
         let history = mockProfile.history
 
         let clearTest = {
             self.clear(history)
-            mockProfile._shutdown()
+            mockProfile.shutdown()
         }
 
         addSite(history, url: "http://amazon.com/", title: "Amazon")
@@ -236,7 +236,7 @@ class TestHistory: ProfileTest {
             let expectation = self.expectation(description: "Wait for history")
             for _ in 0..<self.numThreads {
                 var history = profile.history as BrowserHistory
-                self.runRandom(&history, queue: queue, cb: { () -> Void in
+                self.runRandom(&history, queue: queue, completion: { () -> Void in
                     counter += 1
                     if counter == self.numThreads {
                         self.clear(history)
@@ -261,7 +261,7 @@ class TestHistory: ProfileTest {
 
             let expectation = self.expectation(description: "Wait for history")
             for _ in 0..<self.numThreads {
-                self.runRandom(&history, queue: queue, cb: { () -> Void in
+                self.runRandom(&history, queue: queue, completion: { () -> Void in
                     counter += 1
                     if counter == self.numThreads {
                         self.clear(history)
@@ -321,12 +321,16 @@ class TestHistory: ProfileTest {
     }
 
     // Helper for starting a new thread running NumCmds random methods on it. Calls cb when done.
-    fileprivate func runRandom(_ history: inout BrowserHistory, queue: DispatchQueue, cb: @escaping () -> Void) {
+    fileprivate func runRandom(
+        _ history: inout BrowserHistory,
+        queue: DispatchQueue,
+        completion: @escaping () -> Void
+    ) {
         queue.async { [history] in
             var history = history
             // Each thread creates its own history provider
             self.runMultiRandom(&history, val: 0, numCmds: self.numCmds) {
-                DispatchQueue.main.async(execute: cb)
+                DispatchQueue.main.async(execute: completion)
             }
         }
     }

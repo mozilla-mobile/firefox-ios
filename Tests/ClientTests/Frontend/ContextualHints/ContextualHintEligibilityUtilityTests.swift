@@ -23,7 +23,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
 
-        profile._shutdown()
+        profile.shutdown()
         profile = nil
         subject = nil
     }
@@ -36,14 +36,14 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     func test_shouldPresentJumpBackHint() {
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.ToolbarOnboardingKey.rawValue)
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.toolbarOnboardingKey.rawValue)
 
         let result = subject.canPresent(.jumpBackIn)
         XCTAssertTrue(result)
     }
 
     func test_shouldPresentSyncedTabHint() {
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.ToolbarOnboardingKey.rawValue)
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.toolbarOnboardingKey.rawValue)
 
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertTrue(result)
@@ -52,14 +52,14 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     // MARK: - Test should NOT Present cases
 
     func test_shouldNotPresentInactiveTabsHint() {
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.InactiveTabsKey.rawValue)
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.inactiveTabsKey.rawValue)
 
         let result = subject.canPresent(.inactiveTabs)
         XCTAssertFalse(result)
     }
 
     func test_shouldNotPresentJumpBackInHint() {
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.JumpBackinKey.rawValue)
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.jumpBackinKey.rawValue)
 
         let result = subject.canPresent(.jumpBackIn)
         XCTAssertFalse(result)
@@ -73,7 +73,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     func test_shouldNotPresentSyncedTabHint() {
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.JumpBackInSyncedTabKey.rawValue)
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.jumpBackInSyncedTabKey.rawValue)
 
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertFalse(result)

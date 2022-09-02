@@ -114,11 +114,11 @@ protocol Profile: AnyObject {
 
     /// WARNING: Only to be called as part of the app lifecycle from the AppDelegate
     /// or from App Extension code.
-    func _shutdown()
+    func shutdown()
 
     /// WARNING: Only to be called as part of the app lifecycle from the AppDelegate
     /// or from App Extension code.
-    func _reopen()
+    func reopen()
 
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
@@ -366,7 +366,7 @@ open class BrowserProfile: Profile {
         }
     }
 
-    func _reopen() {
+    func reopen() {
         log.debug("Reopening profile.")
         isShutdown = false
 
@@ -380,7 +380,7 @@ open class BrowserProfile: Profile {
         _ = tabs.reopenIfClosed()
     }
 
-    func _shutdown() {
+    func shutdown() {
         log.debug("Shutting down profile.")
         isShutdown = true
 
@@ -451,7 +451,7 @@ open class BrowserProfile: Profile {
      * that this is initialized first.
      */
     private lazy var legacyPlaces: Favicons & Profile.HistoryFetcher & HistoryRecommendations  = {
-        return SQLiteHistory(db: self.database, prefs: self.prefs)
+        return SQLiteHistory(database: self.database, prefs: self.prefs)
     }()
 
     var favicons: Favicons {

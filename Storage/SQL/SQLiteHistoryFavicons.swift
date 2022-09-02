@@ -88,7 +88,7 @@ extension SQLiteHistory: Favicons {
             """
 
         let args: Args = [url, url]
-        return db.runQueryConcurrently(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
+        return database.runQueryConcurrently(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
     }
 
     public func addFavicon(_ icon: Favicon) -> Deferred<Maybe<Int>> {
@@ -101,7 +101,7 @@ extension SQLiteHistory: Favicons {
      */
     public func addFavicon(_ icon: Favicon, forSite site: Site) -> Deferred<Maybe<Int>> {
         func doChange(_ query: String, args: Args?) -> Deferred<Maybe<Int>> {
-            return db.withConnection { conn -> Int in
+            return database.withConnection { conn -> Int in
                 // Blind! We don't see failure here.
                 let id = self.favicons.insertOrUpdateFaviconInTransaction(icon, conn: conn)
 
@@ -291,7 +291,7 @@ extension SQLiteHistory: Favicons {
                     // Also, insert a row in `favicon_site_urls` so we can
                     // look up this favicon later without requiring history.
                     // This is primarily needed for bookmarks.
-                    _ = self.db.run("INSERT OR IGNORE INTO favicon_site_urls(site_url, faviconID) VALUES (?, ?)", withArgs: [site.url, faviconID])
+                    _ = self.database.run("INSERT OR IGNORE INTO favicon_site_urls(site_url, faviconID) VALUES (?, ?)", withArgs: [site.url, faviconID])
                 }
             }
 

@@ -30,7 +30,7 @@ class TabDisplayManagerTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
 
-        profile._shutdown()
+        profile.shutdown()
         manager.testRemoveAll()
         manager.testClearArchive()
         profile = nil

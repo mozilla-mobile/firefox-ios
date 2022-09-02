@@ -282,8 +282,8 @@ extension BrowserViewController: WKUIDelegate {
                     else { return }
 
                     // This is only used on ipad for positioning the popover. On iPhone it is an action sheet.
-                    let p = webView.convert(helper.touchPoint, to: self.view)
-                    self.presentActivityViewController(url as URL, sourceView: self.view, sourceRect: CGRect(origin: p, size: CGSize(width: 10, height: 10)), arrowDirection: .unknown)
+                    let point = webView.convert(helper.touchPoint, to: self.view)
+                    self.presentActivityViewController(url as URL, sourceView: self.view, sourceRect: CGRect(origin: point, size: CGSize(width: 10, height: 10)), arrowDirection: .unknown)
                 })
 
                 if let url = elements.image {
@@ -616,16 +616,17 @@ extension BrowserViewController: WKNavigationDelegate {
         let forceDownload = webView == pendingDownloadWebView
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
 
-        // Check if this response should be handed off to Passbook.
-        if let passbookHelper = OpenPassBookHelper(
-            request: request,
-            response: response,
-            cookieStore: cookieStore,
-            canShowInWebView: canShowInWebView,
-            forceDownload: forceDownload,
-            browserViewController: self) {
-            // Open our helper and cancel this response from the webview.
-            passbookHelper.open()
+        if OpenPassBookHelper.shouldOpenWithPassBook(response: response,
+                                                     forceDownload: forceDownload) {
+            self.passBookHelper = OpenPassBookHelper(response: response,
+                                                     cookieStore: cookieStore,
+                                                     presenter: self)
+            // Open our helper and nullifies the helper when done with it
+            self.passBookHelper?.open {
+                self.passBookHelper = nil
+            }
+
+            // Cancel this response from the webview.
             decisionHandler(.cancel)
             return
         }
