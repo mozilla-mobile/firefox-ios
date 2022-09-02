@@ -35,6 +35,8 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.backgroundColor = .clear
         stackView.spacing = UX.inBetweenSpace
+        stackView.alignment = .fill
+        stackView.distribution = .fill
     }
 
     lazy var titleLabel: UILabel = .build { label in
@@ -141,13 +143,9 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
         if contentSizeCategory.isAccessibilityCategory {
             stackView.axis = .vertical
-            stackView.alignment = .fill
-            stackView.distribution = .fill
             moreButton.contentHorizontalAlignment = .leading
         } else {
             stackView.axis = .horizontal
-            stackView.alignment = .fill
-            stackView.distribution = .fill
             moreButton.contentHorizontalAlignment = .trailing
         }
     }
