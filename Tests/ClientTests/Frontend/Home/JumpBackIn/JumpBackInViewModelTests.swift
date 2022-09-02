@@ -430,7 +430,8 @@ extension JumpBackInViewModelTests {
             profile: mockProfile,
             isPrivate: false,
             tabManager: mockTabManager,
-            adaptor: adaptor
+            adaptor: adaptor,
+            wallpaperManager: WallpaperManager()
         )
         if addDelegate {
             subject.browserBarViewDelegate = mockBrowserBarViewDelegate
