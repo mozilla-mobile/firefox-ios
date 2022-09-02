@@ -379,11 +379,13 @@ class Tab: NSObject {
             return nil
         }
 
+        guard let title = tab.title, !title.isEmpty else { return nil }
+
         if let displayURL = tab.url?.displayURL, RemoteTab.shouldIncludeURL(displayURL) {
             let history = Array(tab.historyList.filter(RemoteTab.shouldIncludeURL).reversed())
             return RemoteTab(clientGUID: nil,
                 URL: displayURL,
-                title: tab.displayTitle,
+                title: title,
                 history: history,
                 lastUsed: tab.lastExecutedTime ?? 0,
                 icon: nil)
@@ -392,7 +394,7 @@ class Tab: NSObject {
             if let displayURL = history.first {
                 return RemoteTab(clientGUID: nil,
                     URL: displayURL,
-                    title: tab.displayTitle,
+                    title: title,
                     history: history,
                     lastUsed: sessionData.lastUsedTime,
                     icon: nil)
@@ -729,6 +731,7 @@ class Tab: NSObject {
         if let title = self.webView?.title, !title.isEmpty,
            path == KVOConstants.title.rawValue {
             metadataManager?.updateObservationTitle(title)
+            _ = Tab.toRemoteTab(self)
         }
     }
 
