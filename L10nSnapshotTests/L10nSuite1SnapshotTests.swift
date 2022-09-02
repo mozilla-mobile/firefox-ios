@@ -38,11 +38,11 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         // Swipe to the second screen
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
-        waitForExistence(app.buttons["\(rootA11yId)PrimaryButton"])
+        waitForExistence(app.buttons["SignSyncCardSecondaryButton"])
         snapshot("Onboarding-2")
 
         // Swipe to the third screen
-        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        app.buttons["SignSyncCardSecondaryButton"].tap()
         currentScreen += 1
         snapshot("Onboarding-3")
     }
