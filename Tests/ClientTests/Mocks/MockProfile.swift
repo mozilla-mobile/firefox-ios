@@ -121,7 +121,7 @@ open class MockProfile: Client.Profile {
 
         tabs = RustRemoteTabs(databasePath: tabsDbPath)
 
-        legacyPlaces = SQLiteHistory(db: self.database, prefs: MockProfilePrefs())
+        legacyPlaces = SQLiteHistory(database: self.database, prefs: MockProfilePrefs())
         recommendations = legacyPlaces
         history = legacyPlaces
     }
@@ -130,7 +130,7 @@ open class MockProfile: Client.Profile {
         return name
     }
 
-    public func _reopen() {
+    public func reopen() {
         isShutdown = false
 
         database.reopenIfClosed()
@@ -139,7 +139,7 @@ open class MockProfile: Client.Profile {
         _ = tabs.reopenIfClosed()
     }
 
-    public func _shutdown() {
+    public func shutdown() {
         isShutdown = true
 
         database.forceClose()
