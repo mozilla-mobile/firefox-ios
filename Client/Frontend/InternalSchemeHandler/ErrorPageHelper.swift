@@ -151,12 +151,12 @@ class ErrorPageHandler: InternalSchemeResponse {
         guard let requestUrl = request.url, let originalUrl = InternalURL(requestUrl)?.originalURLFromErrorPage else { return nil }
 
         guard let url = request.url,
-            let c = URLComponents(url: url, resolvingAgainstBaseURL: false),
-            let code = c.valueForQuery("code"),
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+            let code = components.valueForQuery("code"),
             let errCode = Int(code),
-            let errDescription = c.valueForQuery("description"),
+            let errDescription = components.valueForQuery("description"),
             let errURLDomain = originalUrl.host,
-            var errDomain = c.valueForQuery("domain") else {
+            var errDomain = components.valueForQuery("domain") else {
                 return nil
         }
 

@@ -50,10 +50,13 @@ class ToolbarTextField: AutocompleteTextField {
 
     // The default button size is 19x19, make this larger
     override func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
-        let r = super.clearButtonRect(forBounds: bounds)
+        let rect = super.clearButtonRect(forBounds: bounds)
         let grow: CGFloat = 16
-        let r2 = CGRect(x: r.minX - grow/2, y: r.minY - grow/2, width: r.width + grow, height: r.height + grow)
-        return r2
+        let rect2 = CGRect(x: rect.minX - grow/2,
+                           y: rect.minY - grow/2,
+                           width: rect.width + grow,
+                           height: rect.height + grow)
+        return rect2
     }
 }
 

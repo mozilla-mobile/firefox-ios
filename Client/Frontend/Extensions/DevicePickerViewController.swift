@@ -97,10 +97,15 @@ class DevicePickerViewController: UITableViewController {
                 return
             }
 
-            self.devices = state.remoteDevices.map { d in
-                let t = "\(d.deviceType)"
-                let lastAccessTime = d.lastAccessTime == nil ? nil : UInt64(clamping: d.lastAccessTime!)
-                return RemoteDevice(id: d.id, name: d.displayName, type: t, isCurrentDevice: d.isCurrentDevice, lastAccessTime: lastAccessTime, availableCommands: nil)
+            self.devices = state.remoteDevices.map { device in
+                let typeString = "\(device.deviceType)"
+                let lastAccessTime = device.lastAccessTime == nil ? nil : UInt64(clamping: device.lastAccessTime!)
+                return RemoteDevice(id: device.id,
+                                    name: device.displayName,
+                                    type: typeString,
+                                    isCurrentDevice: device.isCurrentDevice,
+                                    lastAccessTime: lastAccessTime,
+                                    availableCommands: nil)
             }
 
             if self.devices.isEmpty {

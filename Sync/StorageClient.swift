@@ -343,10 +343,10 @@ open class Sync15StorageClient {
             ? String(token.api_endpoint[..<token.api_endpoint.index(before: token.api_endpoint.endIndex)])
             : token.api_endpoint)!
         self.authorizer = {
-            (r: URLRequest) -> URLRequest in
-            var req = r
+            (request: URLRequest) -> URLRequest in
+            var req = request
             let helper = HawkHelper(id: token.id, key: token.key.data(using: .utf8, allowLossyConversion: false)!)
-            req.setValue(helper.getAuthorizationValueFor(r), forHTTPHeaderField: "Authorization")
+            req.setValue(helper.getAuthorizationValueFor(request), forHTTPHeaderField: "Authorization")
             return req
         }
     }
