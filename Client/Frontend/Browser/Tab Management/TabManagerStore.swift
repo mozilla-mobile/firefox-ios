@@ -14,8 +14,7 @@ protocol TabManagerStore {
     func removeScreenshot(forTab tab: Tab?)
 
     func preserveTabs(_ tabs: [Tab],
-                      selectedTab: Tab?,
-                      writeCompletion: (() -> Void)?)
+                      selectedTab: Tab?)
 
     func restoreStartupTabs(clearPrivateTabs: Bool,
                             tabManager: TabManager) -> Tab?
@@ -28,8 +27,8 @@ protocol TabManagerStore {
 }
 
 extension TabManagerStore {
-    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, writeCompletion: (() -> Void)? =  nil) {
-        preserveTabs(tabs, selectedTab: selectedTab, writeCompletion: writeCompletion)
+    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) {
+        preserveTabs(tabs, selectedTab: selectedTab)
     }
 }
 
@@ -38,9 +37,9 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
     // MARK: - Variables
     private let prefs: Prefs
     private let imageStore: DiskImageStore?
-    private var fileManager: FileManager
-    private var writeOperation: DispatchWorkItem
-    private let serialQueue: DispatchQueue
+    private var fileManager: TabFileManager
+    private var writeOperation = DispatchWorkItem {}
+    private let serialQueue: DispatchQueueInterface
     private var lockedForReading = false
     private var tabDataRetriever: TabDataRetriever
 
@@ -56,13 +55,11 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 
     init(prefs: Prefs,
          imageStore: DiskImageStore?,
-         fileManager: FileManager = FileManager.default,
-         writeOperation: DispatchWorkItem = DispatchWorkItem {},
-         serialQueue: DispatchQueue = DispatchQueue(label: "tab-manager-write-queue")) {
-        self.fileManager = fileManager
-        self.imageStore = imageStore
+         fileManager: TabFileManager = FileManager.default,
+         serialQueue: DispatchQueueInterface = DispatchQueue(label: "tab-manager-write-queue")) {
         self.prefs = prefs
-        self.writeOperation = writeOperation
+        self.imageStore = imageStore
+        self.fileManager = fileManager
         self.serialQueue = serialQueue
         self.tabDataRetriever = TabDataRetrieverImplementation(fileManager: fileManager)
         tabDataRetriever.tabsStateArchivePath = tabsStateArchivePath()
@@ -138,8 +135,6 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         }
 
         var tabToSelect: Tab?
-
-        // TODO: Laurie - This is called from tabManager, shouldn't act on tabManager here
         for savedTab in savedTabs {
             // Provide an empty request to prevent a new tab from loading the home screen
             var tab = tabManager.addTab(flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
@@ -161,7 +156,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         do {
             try fileManager.removeItem(atPath: path)
         } catch let error {
-            browserLog.warning("Clear archive couldn't be completed with: \(error.localizedDescription)")
+            browserLog.warning("Clear archive couldn't be completed with error: \(error.localizedDescription)")
         }
     }
 
@@ -199,10 +194,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         if  AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
             profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
         } else {
-            profilePath = fileManager
-                .containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?
-                .appendingPathComponent("profile.profile")
-                .path
+            profilePath = fileManager.tabPath
         }
         guard let path = profilePath else { return nil }
         return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path

@@ -13,15 +13,22 @@ import XCTest
 class TabManagerStoreTests: XCTestCase {
 
     private var profile: MockProfile!
+    private var fileManager: MockFileManager!
+    private var serialQueue: MockDispatchQueue!
 
     override func setUp() {
         super.setUp()
         profile = MockProfile()
+        fileManager = MockFileManager()
+        serialQueue = MockDispatchQueue()
     }
 
     override func tearDown() {
         super.tearDown()
+
         profile = nil
+        fileManager = nil
+        serialQueue = nil
     }
 
     func testNoData() {
@@ -37,69 +44,57 @@ class TabManagerStoreTests: XCTestCase {
         XCTAssertFalse(manager.hasTabsToRestoreAtStartup)
     }
 
-    func testAddTabWithoutStoring_hasNoData() throws {
-        throw XCTSkip("Test is failing intermittently on Bitrise")
-//        let manager = createManager()
-//        let configuration = createConfiguration()
-//        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
-//        XCTAssertEqual(manager.tabs.count, 2)
-//        XCTAssertEqual(manager.testTabCountOnDisk(), 0)
-//        XCTAssertEqual(profile.numberOfTabsStored, 0)
+    func testPreserveTabs_noSelectedTab() {
+        let manager = createManager()
+        let tabs = createTabs(tabNumber: 3)
+        manager.preserveTabs(tabs, selectedTab: nil)
+
+        XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
+        XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
     }
 
-    func testPrivateTabsAreArchived() throws {
-        throw XCTSkip("Test is failing intermittently on Bitrise")
-//        let manager = createManager()
-//        let configuration = createConfiguration()
-//        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2, isPrivate: true)
-//        XCTAssertEqual(manager.tabs.count, 2)
-//
-//        // Private tabs aren't stored in remote tabs
-//        waitStoreChanges(manager: manager, managerTabCount: 2, profileTabCount: 0)
+    func testPreserveTabs_withSelectedTab() {
+        let manager = createManager()
+        let tabs = createTabs(tabNumber: 3)
+        manager.preserveTabs(tabs, selectedTab: tabs[0])
+
+        XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
+        XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
     }
 
-    func testNormalTabsAreArchived_storeMultipleTimesProperly() throws {
-        throw XCTSkip("Test is failing intermittently on Bitrise")
-//        let manager = createManager()
-//        let configuration = createConfiguration()
-//        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
-//        XCTAssertEqual(manager.tabs.count, 2)
-//
-//        waitStoreChanges(manager: manager, managerTabCount: 2, profileTabCount: 2)
-//
-//        // Add 2 more tabs
-//        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
-//        XCTAssertEqual(manager.tabs.count, 4)
-//
-//        waitStoreChanges(manager: manager, managerTabCount: 4, profileTabCount: 4)
-    }
+    func testPreserveTabs_clearAddAgain() {
+        let manager = createManager()
+        let threeTabs = createTabs(tabNumber: 3)
+        manager.preserveTabs(threeTabs, selectedTab: threeTabs[0])
 
-    func testRemoveAndAddTab_doesntStoreRemovedTabs() throws {
-        throw XCTSkip("Test is failing intermittently on Bitrise")
-//        let manager = createManager()
-//        let configuration = createConfiguration()
-//        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
-//        XCTAssertEqual(manager.tabs.count, 2)
-//
-//        // Remove all tabs, and add just 1 tab
-//        manager.removeAll()
-//        addTabWithSessionData(manager: manager, configuration: configuration)
-//
-//        waitStoreChanges(manager: manager, managerTabCount: 1, profileTabCount: 1)
+        manager.clearArchive()
+
+        let twoTabs = createTabs(tabNumber: 2)
+        manager.preserveTabs(twoTabs, selectedTab: nil)
+
+        XCTAssertEqual(manager.testTabCountOnDisk(), 2, "Expected 2 tabs on disk")
+        XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
+        XCTAssertEqual(fileManager.remoteItemCalledCount, 2)
+        XCTAssertEqual(fileManager.fileExistsCalledCount, 2)
     }
 }
 
 // MARK: - Helper methods
 private extension TabManagerStoreTests {
 
-    func createManager(file: StaticString = #file, line: UInt = #line) -> TabManagerStoreImplementation {
-        let manager = TabManagerStoreImplementation(prefs: profile.prefs, imageStore: nil)
+    func createManager(file: StaticString = #file,
+                       line: UInt = #line) -> TabManagerStoreImplementation {
+        let manager = TabManagerStoreImplementation(prefs: profile.prefs,
+                                                    imageStore: nil,
+                                                    fileManager: fileManager,
+                                                    serialQueue: serialQueue)
         manager.clearArchive()
         trackForMemoryLeaks(manager, file: file, line: line)
         return manager
     }
 
-    func createConfiguration(file: StaticString = #file, line: UInt = #line) -> WKWebViewConfiguration {
+    func createConfiguration(file: StaticString = #file,
+                             line: UInt = #line) -> WKWebViewConfiguration {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
 
@@ -107,9 +102,12 @@ private extension TabManagerStoreTests {
         return configuration
     }
 
-    func createTabs(configuration: WKWebViewConfiguration,
-                    tabNumber: Int,
-                    isPrivate: Bool = false) -> [Tab] {
+    func createTabs(tabNumber: Int,
+                    isPrivate: Bool = false,
+                    file: StaticString = #file,
+                    line: UInt = #line) -> [Tab] {
+        let configuration = createConfiguration(file: file, line: line)
+
         var tabs = [Tab]()
         for _ in 0..<tabNumber {
             let tab = createTab(configuration: configuration, isPrivate: isPrivate)
@@ -125,5 +123,24 @@ private extension TabManagerStoreTests {
         tab.url = URL(string: "http://yahoo.com")!
         tab.sessionData = SessionData(currentPage: 0, urls: [tab.url!], lastUsedTime: Date.now())
         return tab
+    }
+}
+
+class MockFileManager: TabFileManager {
+
+    var remoteItemCalledCount = 0
+    func removeItem(atPath path: String) throws {
+        remoteItemCalledCount += 1
+        try FileManager.default.removeItem(atPath: path)
+    }
+
+    var fileExistsCalledCount = 0
+    func fileExists(atPath path: String) -> Bool {
+        fileExistsCalledCount += 1
+        return FileManager.default.fileExists(atPath: tabPath!)
+    }
+
+    var tabPath: String? {
+        return FileManager.default.temporaryDirectory.path
     }
 }

@@ -14,15 +14,16 @@ protocol TabDataRetriever {
 struct TabDataRetrieverImplementation: TabDataRetriever {
 
     var tabsStateArchivePath: String?
-    let fileManager: FileManager
+    let fileManager: TabFileManager
 
-    init(fileManager: FileManager = FileManager.default) {
+    init(fileManager: TabFileManager = FileManager.default) {
         self.fileManager = fileManager
     }
 
     func getTabData() -> Data? {
-        guard let tabStateArchivePath = tabsStateArchivePath else { return nil }
-        fileManager.fileExists(atPath: tabStateArchivePath)
+        guard let tabStateArchivePath = tabsStateArchivePath,
+              fileManager.fileExists(atPath: tabStateArchivePath) else { return nil }
+
         return try? Data(contentsOf: URL(fileURLWithPath: tabStateArchivePath))
     }
 }

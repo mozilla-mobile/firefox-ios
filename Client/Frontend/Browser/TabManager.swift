@@ -295,7 +295,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         }
     }
 
-    private func saveTabs(toProfile profile: Profile, _ tabs: [Tab], writeCompletion: (() -> Void)? = nil) {
+    private func saveTabs(toProfile profile: Profile, _ tabs: [Tab]) {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
         let storedTabs: [RemoteTab] = tabs.compactMap( Tab.toRemoteTab )
 
@@ -303,25 +303,12 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         // work like querying for top sites.
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
             profile.storeTabs(storedTabs)
-            writeCompletion?()
         }
     }
 
-    func storeChanges(writeCompletion: (() -> Void)? = nil) {
-        let group = DispatchGroup()
-        group.enter()
-        saveTabs(toProfile: profile, normalTabs) {
-            group.leave()
-        }
-
-        group.enter()
-        store.preserveTabs(tabs, selectedTab: selectedTab) {
-            group.leave()
-        }
-
-        group.notify(queue: .main) {
-            writeCompletion?()
-        }
+    func storeChanges() {
+        saveTabs(toProfile: profile, normalTabs)
+        store.preserveTabs(tabs, selectedTab: selectedTab)
     }
 
     func hasTabsToRestoreAtStartup() -> Bool {
