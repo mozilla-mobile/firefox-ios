@@ -378,9 +378,9 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .download, value: .downloadsPanel)
 
             if downloadedFile.mimeType == MIMEType.Calendar {
-                let dc = UIDocumentInteractionController(url: downloadedFile.path)
-                dc.delegate = self
-                dc.presentPreview(animated: true)
+                let docController = UIDocumentInteractionController(url: downloadedFile.path)
+                docController.delegate = self
+                docController.presentPreview(animated: true)
                 return
             }
 

@@ -236,7 +236,7 @@ class TestHistory: ProfileTest {
             let expectation = self.expectation(description: "Wait for history")
             for _ in 0..<self.numThreads {
                 var history = profile.history as BrowserHistory
-                self.runRandom(&history, queue: queue, cb: { () -> Void in
+                self.runRandom(&history, queue: queue, completion: { () -> Void in
                     counter += 1
                     if counter == self.numThreads {
                         self.clear(history)
@@ -261,7 +261,7 @@ class TestHistory: ProfileTest {
 
             let expectation = self.expectation(description: "Wait for history")
             for _ in 0..<self.numThreads {
-                self.runRandom(&history, queue: queue, cb: { () -> Void in
+                self.runRandom(&history, queue: queue, completion: { () -> Void in
                     counter += 1
                     if counter == self.numThreads {
                         self.clear(history)
