@@ -6,7 +6,7 @@ import Foundation
 
 /// Describes a wallpaper collection.
 struct WallpaperCollection: Codable, Equatable {
-    static func ==(lhs: WallpaperCollection, rhs: WallpaperCollection) -> Bool {
+    static func == (lhs: WallpaperCollection, rhs: WallpaperCollection) -> Bool {
         return lhs.id == rhs.id
                 && lhs.learnMoreURLString == rhs.learnMoreURLString
                 && lhs.availableLocales == rhs.availableLocales

@@ -11,7 +11,7 @@ enum WallpaperType: String {
 
 /// A single wallpaper instance.
 struct Wallpaper: Equatable {
-    static func ==(lhs: Wallpaper, rhs: Wallpaper) -> Bool {
+    static func == (lhs: Wallpaper, rhs: Wallpaper) -> Bool {
         return lhs.id == rhs.id
                 && lhs.textColour == rhs.textColour
                 && lhs.cardColour == rhs.cardColour

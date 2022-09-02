@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class WallpaperMigrationUtility {
+class LegacyWallpaperMigrationUtility {
 
     private let migrationKey = PrefsKeys.LegacyFeatureFlags.WallpaperDirectoryMigrationCheck
     private let profile: Profile
