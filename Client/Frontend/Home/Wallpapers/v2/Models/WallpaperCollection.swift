@@ -6,6 +6,16 @@ import Foundation
 
 /// Describes a wallpaper collection.
 struct WallpaperCollection: Codable, Equatable {
+    static func ==(lhs: WallpaperCollection, rhs: WallpaperCollection) -> Bool {
+        return lhs.id == rhs.id
+                && lhs.learnMoreURLString == rhs.learnMoreURLString
+                && lhs.availableLocales == rhs.availableLocales
+                && lhs.availability == rhs.availability
+                && lhs.wallpapers == rhs.wallpapers
+                && lhs.description == rhs.description
+                && lhs.heading == rhs.heading
+    }
+
     enum CodingKeys: String, CodingKey {
         case id
         case learnMoreURLString = "learn-more-url"
