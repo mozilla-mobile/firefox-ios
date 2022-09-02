@@ -174,6 +174,13 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
+        var textColor: UIColor?
+        if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
+           wallpaperVersion == .v2,
+           featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly) {
+            textColor = wallpaperManager.currentWallpaper.textColour
+        }
+
         return LabelButtonHeaderViewModel(
             title: HomepageSectionType.historyHighlights.title,
             titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.historyHighlights,
@@ -181,7 +188,7 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
             buttonTitle: .RecentlySavedShowAllText,
             buttonAction: headerButtonAction,
             buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.historyHighlights,
-            textColor: wallpaperManager.currentWallpaper.textColour)
+            textColor: textColor)
     }
 
     var isEnabled: Bool {

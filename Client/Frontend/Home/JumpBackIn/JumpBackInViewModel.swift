@@ -268,6 +268,13 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
+        var textColor: UIColor?
+        if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
+           wallpaperVersion == .v2,
+           featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly) {
+            textColor = wallpaperManager.currentWallpaper.textColour
+        }
+
         return LabelButtonHeaderViewModel(
             title: HomepageSectionType.jumpBackIn.title,
             titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
@@ -275,7 +282,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
             buttonTitle: .RecentlySavedShowAllText,
             buttonAction: headerButtonAction,
             buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn,
-            textColor: wallpaperManager.currentWallpaper.textColour)
+            textColor: textColor)
     }
 
     var isEnabled: Bool {

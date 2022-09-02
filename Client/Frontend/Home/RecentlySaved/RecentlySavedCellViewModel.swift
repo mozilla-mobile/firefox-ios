@@ -49,6 +49,13 @@ extension RecentlySavedCellViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
+        var textColor: UIColor?
+        if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
+           wallpaperVersion == .v2,
+           featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly) {
+            textColor = wallpaperManager.currentWallpaper.textColour
+        }
+
         return LabelButtonHeaderViewModel(
             title: HomepageSectionType.recentlySaved.title,
             titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.recentlySaved,
@@ -56,7 +63,7 @@ extension RecentlySavedCellViewModel: HomepageViewModelProtocol, FeatureFlaggabl
             buttonTitle: .RecentlySavedShowAllText,
             buttonAction: headerButtonAction,
             buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved,
-            textColor: wallpaperManager.currentWallpaper.textColour)
+            textColor: textColor)
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {

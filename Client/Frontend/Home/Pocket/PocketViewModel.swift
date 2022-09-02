@@ -123,11 +123,18 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
+        var textColor: UIColor?
+        if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
+           wallpaperVersion == .v2,
+           featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly) {
+            textColor = wallpaperManager.currentWallpaper.textColour
+        }
+
         return LabelButtonHeaderViewModel(
             title: HomepageSectionType.pocket.title,
             titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
             isButtonHidden: true,
-            textColor: wallpaperManager.currentWallpaper.textColour)
+            textColor: textColor)
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {

@@ -127,11 +127,18 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     var headerViewModel: LabelButtonHeaderViewModel {
         // Only show a header if the firefox browser logo isn't showing
         let shouldShow = !featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
+        var textColor: UIColor?
+        if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
+           wallpaperVersion == .v2,
+           featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly) {
+            textColor = wallpaperManager.currentWallpaper.textColour
+        }
+
         return LabelButtonHeaderViewModel(
             title: shouldShow ? HomepageSectionType.topSites.title: nil,
             titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
             isButtonHidden: true,
-            textColor: wallpaperManager.currentWallpaper.textColour)
+            textColor: textColor)
     }
 
     var isEnabled: Bool {
