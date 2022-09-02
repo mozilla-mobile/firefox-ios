@@ -97,6 +97,13 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
     // MARK: - Deletion
     public func remove() {
 
+        // TODO: [roux] - How to remove cleanly
+        // get wallpapers directory
+        // get folder contents and filter out:
+        //   - the current wallpaper directory
+        //   - the thumbnail directory?
+        //   - metadata folder
+        // remove all folders that are not those three things
     }
 
     // MARK: - Helper functions

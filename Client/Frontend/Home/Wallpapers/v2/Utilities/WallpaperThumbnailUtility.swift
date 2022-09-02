@@ -8,7 +8,7 @@ import Shared
 class WallpaperThumbnailUtility {
 
     // MARK: - Properties
-    public var thumbnailsAvailable: Bool {
+    public var areThumbnailsAvailable: Bool {
         return userDefaults.bool(forKey: prefsKey)
     }
 

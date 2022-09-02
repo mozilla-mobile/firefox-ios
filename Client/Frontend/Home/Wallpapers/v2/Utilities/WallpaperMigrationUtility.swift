@@ -29,19 +29,27 @@ struct WallpaperMigrationUtility: Loggable {
 
         do {
             guard let legacyWallpaperObject = legacyStorageUtility.getCurrentWallpaperObject() else {
+                try? storageUtility.store(Wallpaper(id: "fxDefault", textColour: nil, cardColour: nil))
                 userDefaults.set(true, forKey: migrationKey)
                 return
             }
 
-            guard let metadata = try storageUtility.fetchMetadata(),
+            guard let legacyImagePortrait = legacyStorageUtility.getPortraitImage(),
+                  let legacyImageLandscape = legacyStorageUtility.getLandscapeImage(),
+                  let metadata = try storageUtility.fetchMetadata(),
                   let matchingID = getMatchingIdBasedOn(legacyId: legacyWallpaperObject.name),
                   let matchingWallpaper = metadata.collections
                 .first(where: { $0.type == .classic })?
                 .wallpapers.first(where: { $0.id ==  matchingID })
             else { return }
 
+            try storageUtility.store(legacyImagePortrait,
+                                     withName: matchingWallpaper.portraitID,
+                                     andKey: matchingWallpaper.id)
+            try storageUtility.store(legacyImageLandscape,
+                                     withName: matchingWallpaper.landscapeID,
+                                     andKey: matchingWallpaper.id)
             try storageUtility.store(matchingWallpaper)
-            // TODO: [roux] - Should download the appropriate wallpaper
 
             userDefaults.set(true, forKey: migrationKey)
 
@@ -50,6 +58,7 @@ struct WallpaperMigrationUtility: Loggable {
         }
     }
 
+    // MARK: - Private helpers
     private func getMatchingIdBasedOn(legacyId: String) -> String? {
         let idMap = [
             "fxAmethyst": "amethyst",

@@ -725,7 +725,6 @@
 		C84655E42887394B00861B4A /* WallpaperMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655E32887394B00861B4A /* WallpaperMetadata.swift */; };
 		C84655E62887398700861B4A /* WallpaperCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655E52887398700861B4A /* WallpaperCollection.swift */; };
 		C84655E8288739CB00861B4A /* WallpaperCollectionAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655E7288739CB00861B4A /* WallpaperCollectionAvailability.swift */; };
-		C84655F528879ED800861B4A /* WallpaperDataVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655F428879ED800861B4A /* WallpaperDataVerifier.swift */; };
 		C84655F728879EF100861B4A /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655F628879EF100861B4A /* WallpaperManager.swift */; };
 		C84655FB28879FC600861B4A /* WallpaperStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655FA28879FC600861B4A /* WallpaperStorageUtility.swift */; };
 		C84655FF2887A06B00861B4A /* WallpaperFilePathProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655FE2887A06B00861B4A /* WallpaperFilePathProvider.swift */; };
@@ -3933,7 +3932,6 @@
 		C84655E32887394B00861B4A /* WallpaperMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMetadata.swift; sourceTree = "<group>"; };
 		C84655E52887398700861B4A /* WallpaperCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCollection.swift; sourceTree = "<group>"; };
 		C84655E7288739CB00861B4A /* WallpaperCollectionAvailability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCollectionAvailability.swift; sourceTree = "<group>"; };
-		C84655F428879ED800861B4A /* WallpaperDataVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperDataVerifier.swift; sourceTree = "<group>"; };
 		C84655F628879EF100861B4A /* WallpaperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManager.swift; sourceTree = "<group>"; };
 		C84655FA28879FC600861B4A /* WallpaperStorageUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperStorageUtility.swift; sourceTree = "<group>"; };
 		C84655FE2887A06B00861B4A /* WallpaperFilePathProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperFilePathProvider.swift; sourceTree = "<group>"; };
@@ -6664,7 +6662,6 @@
 		C84655DE2887386A00861B4A /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				C84655F428879ED800861B4A /* WallpaperDataVerifier.swift */,
 				C84655FE2887A06B00861B4A /* WallpaperFilePathProvider.swift */,
 				C84656002887A0F700861B4A /* WallpaperMetadataUtility.swift */,
 				C84655FA28879FC600861B4A /* WallpaperStorageUtility.swift */,
@@ -10461,7 +10458,6 @@
 				2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */,
 				39DD030D1CD53E1900BC09B3 /* HomePageHelper.swift in Sources */,
 				E1390FAB28B032AD00C9EF3E /* UIView+Screenshot.swift in Sources */,
-				C84655F528879ED800861B4A /* WallpaperDataVerifier.swift in Sources */,
 				435222C125882E3800FCA5B6 /* WidgetKitTopSiteModel.swift in Sources */,
 				43DDB97624099F200058A068 /* ETPViewModel.swift in Sources */,
 				96EB6C3E27D9266500A9D159 /* HistoryActionables.swift in Sources */,

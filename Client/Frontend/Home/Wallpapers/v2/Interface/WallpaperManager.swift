@@ -48,12 +48,12 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
 
     /// Determines whether the wallpaper onboarding can be shown
     var canOnboardingBeShown: Bool {
-        let thumbnailVerifier = WallpaperThumbnailUtility()
+        let thumbnailUtility = WallpaperThumbnailUtility(with: networkingModule)
 
         guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
               wallpaperVersion == .v2,
               featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly),
-              thumbnailVerifier.thumbnailsAvailable
+              thumbnailUtility.areThumbnailsAvailable
         else { return false }
 
         return true
@@ -69,8 +69,9 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         do {
             let storageUtility = WallpaperStorageUtility()
             try storageUtility.store(wallpaper)
-            
+
             completion(.success(()))
+
         } catch {
             browserLog.error("Failed to set wallpaper: \(error.localizedDescription)")
             completion(.failure(error))
@@ -85,12 +86,24 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     ///                      a `.success` with the data associated. Otherwise, it is called
     ///                      with a `.failure` and passed an error.
     func fetch(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void) {
-//        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.1) {
-//            completion(.success(()))
-//        }
+        let dataService = WallpaperDataService(with: networkingModule)
+        let storageUtility = WallpaperStorageUtility()
+
         Task(priority: .userInitiated) {
-            await MainActor.run {
+
+            do {
+                let portrait = try await dataService.getImageWith(key: wallpaper.id,
+                                                                  imageName: wallpaper.portraitID)
+                let landscape = try await dataService.getImageWith(key: wallpaper.id,
+                                                                   imageName: wallpaper.landscapeID)
+
+                try storageUtility.store(portrait, withName: wallpaper.portraitID, andKey: wallpaper.id)
+                try storageUtility.store(landscape, withName: wallpaper.landscapeID, andKey: wallpaper.id)
+
                 completion(.success(()))
+            } catch {
+                browserLog.error("Error fetching wallpaper resources: \(error.localizedDescription)")
+                completion(.failure(error))
             }
         }
     }
@@ -103,7 +116,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     /// to existing metadata, and, if there are changes, performs the necessary operations
     /// to ensure parity between server data and what the user sees locally.
     public func checkForUpdates() {
-        let thumbnailVerifier = WallpaperThumbnailUtility(with: networkingModule)
+        let thumbnailUtility = WallpaperThumbnailUtility(with: networkingModule)
         let metadataUtility = WallpaperMetadataUtility(with: networkingModule)
 
         Task {
@@ -113,19 +126,20 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
                     let migrationUtility = WallpaperMigrationUtility()
                     migrationUtility.attemptMigration()
                     
-                    try await thumbnailVerifier.fetchAndVerifyThumbnails(for: availableCollections)
+                    try await thumbnailUtility.fetchAndVerifyThumbnails(for: availableCollections)
                 } catch {
                     browserLog.error("Wallpaper update check error: \(error.localizedDescription)")
                 }
             } else {
-                thumbnailVerifier.verifyThumbnailsFor(availableCollections)
+                thumbnailUtility.verifyThumbnailsFor(availableCollections)
             }
         }
     }
 
     // MARK: - Helper functions
     private func getAvailableCollections() -> [WallpaperCollection] {
-        let metadata = getMetadata()
+        guard let metadata = getMetadata() else { return [] }
+
         let collections = metadata.collections.filter {
             let isDateAvailable = $0.availability?.isAvailable ?? true
             var isLocaleAvailable: Bool = false
@@ -161,17 +175,15 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         return [newClassic] + availableCollections.filter { $0.type != .classic }
     }
 
-    private func getMetadata() -> WallpaperMetadata {
+    private func getMetadata() -> WallpaperMetadata? {
         let metadataUtility = WallpaperMetadataUtility(with: networkingModule)
         do {
-            guard let metadata = try metadataUtility.getMetadata() else {
-                fatalError()
-            }
+            guard let metadata = try metadataUtility.getMetadata() else { return nil }
 
             return metadata
         } catch {
-            print(error.localizedDescription)
-            fatalError()
+            browserLog.error("Error getting stored metadata: \(error.localizedDescription)")
+            return nil
         }
     }
 }
