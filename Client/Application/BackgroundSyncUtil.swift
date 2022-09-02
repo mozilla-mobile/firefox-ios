@@ -64,7 +64,7 @@ class BackgroundSyncUtil {
             }
         } else {
             // Blocking call, however without sync running it should be instantaneous
-            profile._shutdown()
+            profile.shutdown()
 
             let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part1")
             request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
@@ -81,7 +81,7 @@ class BackgroundSyncUtil {
         // Only shutdown the profile if we are not in the foreground
         guard application.applicationState != .active else { return }
 
-        profile._shutdown()
+        profile.shutdown()
     }
 
 }

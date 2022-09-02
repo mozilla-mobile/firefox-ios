@@ -50,8 +50,8 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
         switch hintType {
         // If JumpBackInSyncedTab CFR was shown, don't present JumpBackIn CFR (both convey similar info)
         case .jumpBackInSyncedTab:
-            profile.prefs.setBool(true, forKey: CFRPrefsKeys.JumpBackInSyncedTabKey.rawValue)
-            profile.prefs.setBool(true, forKey: CFRPrefsKeys.JumpBackinKey.rawValue)
+            profile.prefs.setBool(true, forKey: CFRPrefsKeys.jumpBackInSyncedTabKey.rawValue)
+            profile.prefs.setBool(true, forKey: CFRPrefsKeys.jumpBackinKey.rawValue)
         default:
             profile.prefs.setBool(true, forKey: prefsKey(for: hintType))
         }

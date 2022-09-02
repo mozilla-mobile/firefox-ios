@@ -118,8 +118,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
         // Get list of tabs corresponding to the uuids from tab display order
         decodedTabUUID.forEach { tabUUID in
-            if let tabIndex = filteredTabCopy.firstIndex(where: { t in
-                t.tabUUID == tabUUID
+            if let tabIndex = filteredTabCopy.firstIndex(where: { tab in
+                tab.tabUUID == tabUUID
             }) {
                 regularOrderedTabs.append(filteredTabCopy[tabIndex])
             }

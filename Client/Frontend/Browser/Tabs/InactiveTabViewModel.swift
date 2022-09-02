@@ -88,8 +88,8 @@ class InactiveTabViewModel {
     private func updateModelState(state: TabUpdateState) {
         let currentDate = Date()
         let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
-        let day14_Old = Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
-        let defaultOldDay = day14_Old
+        let day14Old = Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
+        let defaultOldDay = day14Old
 
         // Debug for inactive tabs to easily test in code
         // TODO: Add a switch in the debug menu to switch between debug or regular
@@ -181,8 +181,8 @@ extension InactiveTabViewModel {
 
         let currentDate = Date()
         let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
-        let day14_Old = Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
-        let defaultOldDay = day14_Old
+        let day14Old = Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
+        let defaultOldDay = day14Old
 
         for tab in tabs {
             let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0

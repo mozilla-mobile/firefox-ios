@@ -16,8 +16,8 @@ class BadgeWithBackdrop {
         let circle = UIView()
         circle.alpha = BadgeWithBackdrop.backdropAlpha
         circle.layer.cornerRadius = size / 2
-        if let c = color {
-            circle.backgroundColor = c
+        if let color = color {
+            circle.backgroundColor = color
         } else {
             circle.backgroundColor = .black
         }

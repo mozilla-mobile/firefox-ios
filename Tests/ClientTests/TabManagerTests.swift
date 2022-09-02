@@ -118,7 +118,7 @@ class TabManagerTests: XCTestCase {
     override func tearDown() {
         delegate.verify("Not all delegate methods were called")
 
-        profile._shutdown()
+        profile.shutdown()
         manager.removeDelegate(delegate) {
             self.manager.testRemoveAll()
         }

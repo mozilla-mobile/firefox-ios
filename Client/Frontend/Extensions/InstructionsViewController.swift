@@ -17,19 +17,19 @@ protocol InstructionsViewControllerDelegate: AnyObject {
     func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController)
 }
 
-private func highlightLink(_ s: NSString, withColor color: UIColor) -> NSAttributedString {
-    let start = s.range(of: "<")
+private func highlightLink(_ string: NSString, withColor color: UIColor) -> NSAttributedString {
+    let start = string.range(of: "<")
     if start.location == NSNotFound {
-        return NSAttributedString(string: s as String)
+        return NSAttributedString(string: string as String)
     }
 
-    var s: NSString = s.replacingCharacters(in: start, with: "") as NSString
-    let end = s.range(of: ">")
-    s = s.replacingCharacters(in: end, with: "") as NSString
-    let a = NSMutableAttributedString(string: s as String)
-    let r = NSRange(location: start.location, length: end.location-start.location)
-    a.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: r)
-    return a
+    var string: NSString = string.replacingCharacters(in: start, with: "") as NSString
+    let end = string.range(of: ">")
+    string = string.replacingCharacters(in: end, with: "") as NSString
+    let attributedString = NSMutableAttributedString(string: string as String)
+    let range = NSRange(location: start.location, length: end.location-start.location)
+    attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: range)
+    return attributedString
 }
 
 func setupHelpView(_ view: UIView, introText: String, showMeText: String) {

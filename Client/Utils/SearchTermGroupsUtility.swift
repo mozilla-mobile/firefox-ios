@@ -173,11 +173,12 @@ class SearchTermGroupsUtility {
 
         // 3. Tab groups should have at least 2 tabs per search term so we remove smaller groups
         let filteredGroupData = itemGroups.filter { itemGroup in
-            let t = itemGroup.value
-            if t.count > 1 {
+            let temp = itemGroup.value
+            if temp.count > 1 {
                 return true
             } else {
-                if let onlyItem = t.first, let index = itemsInGroups.firstIndex(of: onlyItem) {
+                if let onlyItem = temp.first,
+                    let index = itemsInGroups.firstIndex(of: onlyItem) {
                     itemsInGroups.remove(at: index)
                 }
                 return false

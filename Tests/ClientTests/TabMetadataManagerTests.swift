@@ -17,14 +17,14 @@ class TabMetadataManagerTests: XCTestCase {
         super.setUp()
 
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
-        profile._reopen()
+        profile.reopen()
         manager = TabMetadataManager(profile: profile)
     }
 
     override func tearDown() {
         super.tearDown()
 
-        profile._shutdown()
+        profile.shutdown()
         profile = nil
         manager = nil
     }

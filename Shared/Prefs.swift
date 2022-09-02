@@ -78,12 +78,12 @@ public struct PrefsKeys {
 
     // Firefox contextual hint
     public enum ContextualHints: String, CaseIterable {
-        case JumpBackinKey = "ContextualHintJumpBackin"
-        case JumpBackInConfiguredKey = "JumpBackInConfigured"
-        case JumpBackInSyncedTabKey = "ContextualHintJumpBackInSyncedTab"
+        case jumpBackinKey = "ContextualHintJumpBackin"
+        case jumpBackInConfiguredKey = "JumpBackInConfigured"
+        case jumpBackInSyncedTabKey = "ContextualHintJumpBackInSyncedTab"
         case jumpBackInSyncedTabConfiguredKey = "JumpBackInSyncedTabConfigured"
-        case InactiveTabsKey = "ContextualHintInactiveTabs"
-        case ToolbarOnboardingKey = "ContextualHintToolbarOnboardingKey"
+        case inactiveTabsKey = "ContextualHintInactiveTabs"
+        case toolbarOnboardingKey = "ContextualHintToolbarOnboardingKey"
     }
 
     // Activity Stream

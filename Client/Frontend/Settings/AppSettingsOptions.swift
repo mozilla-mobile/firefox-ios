@@ -348,9 +348,9 @@ class AccountStatusSetting: WithAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
-            let vc = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
+            let controller = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
             TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
-            navigationController?.pushViewController(vc, animated: true)
+            navigationController?.pushViewController(controller, animated: true)
             return
         }
 
@@ -1094,7 +1094,7 @@ class ChinaSyncServiceSetting: Setting {
 
         let msg = "更改此设置后，再次登录您的帐户" // "Sign-in again to your account after changing this setting"
         let alert = UIAlertController(title: "", message: msg, preferredStyle: .alert)
-        let ok = UIAlertAction(title: .OKString, style: .default) { _ in
+        let okString = UIAlertAction(title: .OKString, style: .default) { _ in
             self.prefs.setObject(toggle.isOn, forKey: self.prefKey)
             self.profile.removeAccount()
             RustFirefoxAccounts.reconfig(prefs: self.profile.prefs)
@@ -1102,7 +1102,7 @@ class ChinaSyncServiceSetting: Setting {
         let cancel = UIAlertAction(title: .CancelString, style: .default) { _ in
             toggle.setOn(!toggle.isOn, animated: true)
         }
-        alert.addAction(ok)
+        alert.addAction(okString)
         alert.addAction(cancel)
         settings.present(alert, animated: true)
     }

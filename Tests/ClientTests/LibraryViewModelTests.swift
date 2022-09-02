@@ -15,7 +15,7 @@ class LibraryViewModelTests: XCTestCase {
         super.setUp()
 
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
-        profile._reopen()
+        profile.reopen()
         tabManager = TabManager(profile: profile, imageStore: nil)
 
         ThemeManager.shared.updateProfile(with: profile)
@@ -25,7 +25,7 @@ class LibraryViewModelTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
 
-        profile._shutdown()
+        profile.shutdown()
         profile = nil
         tabManager = nil
     }

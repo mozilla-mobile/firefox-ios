@@ -90,14 +90,14 @@ class DownloadQueueTests: XCTestCase {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.delegate = mockQueueDelegate
         queue.downloads = [download]
-        queue.download(download, didCompleteWithError: DownloadTestError.NoError("OK"))
+        queue.download(download, didCompleteWithError: DownloadTestError.noError("OK"))
         XCTAssertEqual(mockQueueDelegate.methodCalled, didCompleteWithError)
     }
 
 }
 
 private enum DownloadTestError: Error {
-    case NoError(String)
+    case noError(String)
 }
 
 private let url = URL(string: "http://mozilla.org")!

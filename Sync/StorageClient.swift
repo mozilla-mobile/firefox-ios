@@ -126,8 +126,8 @@ open class ServerInBackoffError: MaybeErrorType, SyncPingFailureFormattable {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
         formatter.timeStyle = .medium
-        let s = formatter.string(from: Date.fromTimestamp(self.until))
-        return "Server in backoff until \(s)."
+        let formattedString = formatter.string(from: Date.fromTimestamp(self.until))
+        return "Server in backoff until \(formattedString)."
     }
 
     public init(until: Timestamp) {
@@ -343,10 +343,10 @@ open class Sync15StorageClient {
             ? String(token.api_endpoint[..<token.api_endpoint.index(before: token.api_endpoint.endIndex)])
             : token.api_endpoint)!
         self.authorizer = {
-            (r: URLRequest) -> URLRequest in
-            var req = r
+            (request: URLRequest) -> URLRequest in
+            var req = request
             let helper = HawkHelper(id: token.id, key: token.key.data(using: .utf8, allowLossyConversion: false)!)
-            req.setValue(helper.getAuthorizationValueFor(r), forHTTPHeaderField: "Authorization")
+            req.setValue(helper.getAuthorizationValueFor(request), forHTTPHeaderField: "Authorization")
             return req
         }
     }
@@ -492,7 +492,7 @@ open class Sync15StorageClient {
         return false
     }
 
-    fileprivate func doOp<T>(_ op: (URL, @escaping URLSessionCompletion) -> Void, path: String, f: @escaping (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
+    fileprivate func doOp<T>(_ op: (URL, @escaping URLSessionCompletion) -> Void, path: String, function: @escaping (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
 
         let deferred = Deferred<Maybe<StorageResponse<T>>>(defaultQueue: self.resultQueue)
 
@@ -517,8 +517,8 @@ open class Sync15StorageClient {
 
             if let data = data {
                 let json = JSON(data)
-                if let v = f(json), let response = response as? HTTPURLResponse {
-                    let storageResponse = StorageResponse<T>(value: v, response: response)
+                if let value = function(json), let response = response as? HTTPURLResponse {
+                    let storageResponse = StorageResponse<T>(value: value, response: response)
                     deferred.fill(Maybe(success: storageResponse))
                 } else {
                     deferred.fill(Maybe(failure: RecordParseError()))
@@ -553,8 +553,8 @@ open class Sync15StorageClient {
             }
 
             if let data = data, let response = response as? HTTPURLResponse, let str = String(data: data, encoding: .utf8) {
-                if let v = parser(str) {
-                    let storageResponse = StorageResponse<T>(value: v, response: response)
+                if let value = parser(str) {
+                    let storageResponse = StorageResponse<T>(value: value, response: response)
                     deferred.fill(Maybe(success: storageResponse))
                 } else {
                     deferred.fill(Maybe(failure: RecordParseError()))
@@ -567,25 +567,25 @@ open class Sync15StorageClient {
         return deferred
     }
 
-    fileprivate func getResource<T>(_ path: String, f: @escaping (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
-        return doOp(self.requestGET, path: path, f: f)
+    fileprivate func getResource<T>(_ path: String, function: @escaping (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
+        return doOp(self.requestGET, path: path, function: function)
     }
 
-    fileprivate func deleteResource<T>(_ path: String, f: @escaping (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
-        return doOp(self.requestDELETE, path: path, f: f)
+    fileprivate func deleteResource<T>(_ path: String, function: @escaping (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
+        return doOp(self.requestDELETE, path: path, function: function)
     }
 
     func wipeStorage() -> Deferred<Maybe<StorageResponse<JSON>>> {
         // In Sync 1.5 it's preferred that we delete the root, not /storage.
-        return deleteResource("", f: { $0 })
+        return deleteResource("", function: { $0 })
     }
 
     func deleteObject(collection: String, guid: String) -> Deferred<Maybe<StorageResponse<JSON>>> {
-        return deleteResource("storage/\(collection)/\(guid)", f: { $0 })
+        return deleteResource("storage/\(collection)/\(guid)", function: { $0 })
     }
 
     func getInfoCollections() -> Deferred<Maybe<StorageResponse<InfoCollections>>> {
-        return getResource("info/collections", f: InfoCollections.fromJSON)
+        return getResource("info/collections", function: InfoCollections.fromJSON)
     }
 
     func getMetaGlobal() -> Deferred<Maybe<StorageResponse<MetaGlobal>>> {

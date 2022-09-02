@@ -42,10 +42,10 @@ class PocketStoriesTests: XCTestCase {
 
     func testPocketStoriesCaching() {
         let expect = expectation(description: "Pocket")
-        let PocketFeed = PocketProvider(endPoint: pocketAPI)
+        let pocketFeed = PocketProvider(endPoint: pocketAPI)
         let feedNumber = 11
 
-        PocketFeed.fetchStories(items: feedNumber) { result in
+        pocketFeed.fetchStories(items: feedNumber) { result in
             switch result {
             case .success(let items):
                 XCTAssertEqual(items.count, feedNumber, "We are fetching a static feed. There are \(feedNumber) items in it")
@@ -55,7 +55,7 @@ class PocketStoriesTests: XCTestCase {
             self.webServer.stop() // Stop the webserver so we can check caching
 
             // Try again now that the webserver is down
-            PocketFeed.fetchStories(items: feedNumber) { result in
+            pocketFeed.fetchStories(items: feedNumber) { result in
                 switch result {
                 case .success(let items):
                     XCTAssertEqual(items.count, feedNumber, "We are fetching a static feed. There are \(feedNumber) items in it")

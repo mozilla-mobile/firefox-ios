@@ -171,8 +171,8 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             return []
         }
 
-        return downloadedFiles.sorted(by: { a, b -> Bool in
-            return a.lastModified > b.lastModified
+        return downloadedFiles.sorted(by: { first, second -> Bool in
+            return first.lastModified > second.lastModified
         })
     }
 
@@ -354,8 +354,8 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func isFirstSection(_ section: Int) -> Bool {
-        for i in 0..<section {
-            if groupedDownloadedFiles.numberOfItemsForSection(i) > 0 {
+        for index in 0..<section {
+            if groupedDownloadedFiles.numberOfItemsForSection(index) > 0 {
                 return false
             }
         }
@@ -378,9 +378,9 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .download, value: .downloadsPanel)
 
             if downloadedFile.mimeType == MIMEType.Calendar {
-                let dc = UIDocumentInteractionController(url: downloadedFile.path)
-                dc.delegate = self
-                dc.presentPreview(animated: true)
+                let docController = UIDocumentInteractionController(url: downloadedFile.path)
+                docController.delegate = self
+                docController.presentPreview(animated: true)
                 return
             }
 

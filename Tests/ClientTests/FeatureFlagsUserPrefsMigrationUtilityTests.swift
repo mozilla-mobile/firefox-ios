@@ -35,14 +35,14 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
         super.setUp()
 
         profile = MockProfile(databasePrefix: "migrationUtility_tests")
-        profile._reopen()
+        profile.reopen()
         verifyNilStateForKeys()
     }
 
     override func tearDown() {
         super.tearDown()
 
-        profile._shutdown()
+        profile.shutdown()
         profile = nil
     }
 

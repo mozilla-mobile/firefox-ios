@@ -155,18 +155,18 @@ extension String {
         return String(output)
     }
 
-    fileprivate func isValidUnicodeScala(_ s: String) -> Bool {
-        for c in s.unicodeScalars {
-            let ci = Int(c.value)
-            if ci >= initialN {
+    fileprivate func isValidUnicodeScala(_ string: String) -> Bool {
+        for scalar in string.unicodeScalars {
+            let intScalar = Int(scalar.value)
+            if intScalar >= initialN {
                 return false
             }
         }
         return true
     }
 
-    fileprivate func isValidPunycodeScala(_ s: String) -> Bool {
-        return s.hasPrefix(prefixPunycode)
+    fileprivate func isValidPunycodeScala(_ string: String) -> Bool {
+        return string.hasPrefix(prefixPunycode)
     }
 
     public func utf8HostToAscii() -> String {

@@ -19,7 +19,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         profile = MockProfile(databasePrefix: "HistoryPanelViewModelTest")
 
         ThemeManager.shared.updateProfile(with: profile)
-        profile._reopen()
+        profile.reopen()
         subject = HistoryPanelViewModel(profile: profile)
     }
 
@@ -27,7 +27,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         super.tearDown()
 
         clear(profile.history)
-        profile._shutdown()
+        profile.shutdown()
         profile = nil
         subject = nil
     }
@@ -237,10 +237,10 @@ class HistoryPanelViewModelTests: XCTestCase {
         addSiteVisit(profile.history, url: "https://apple.com/", title: "Apple")
     }
 
-    private func addSiteVisit(_ history: BrowserHistory, url: String, title: String, s: Bool = true) {
+    private func addSiteVisit(_ history: BrowserHistory, url: String, title: String, siteAdded: Bool = true) {
         let site = Site(url: url, title: title)
         let visit = SiteVisit(site: site, date: Date().toMicrosecondsSince1970())
-        XCTAssertEqual(s, history.addLocalVisit(visit).value.isSuccess, "Site added: \(url).")
+        XCTAssertEqual(siteAdded, history.addLocalVisit(visit).value.isSuccess, "Site added: \(url).")
     }
 
     private func clear(_ history: BrowserHistory) {
@@ -274,8 +274,8 @@ class HistoryPanelViewModelTests: XCTestCase {
 
     private func createSearchTermGroup(timestamp: MicrosecondTimestamp) -> ASGroup<Site> {
         var groupSites = [Site]()
-        for i in 0...3 {
-            let site = Site(url: "http://site\(i).com", title: "Site \(i)")
+        for index in 0...3 {
+            let site = Site(url: "http://site\(index).com", title: "Site \(index)")
             let visit = SiteVisit(site: site, date: timestamp)
             site.latestVisit = Visit(date: timestamp)
             XCTAssertTrue(profile.history.addLocalVisit(visit).value.isSuccess, "Site added: \(site.url).")

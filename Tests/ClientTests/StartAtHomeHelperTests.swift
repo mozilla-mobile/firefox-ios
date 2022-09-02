@@ -16,14 +16,14 @@ class StartAtHomeHelperTests: XCTestCase {
         super.setUp()
 
         profile = MockProfile(databasePrefix: "startAtHomeHelper_tests")
-        profile._reopen()
+        profile.reopen()
         tabManager = TabManager(profile: profile, imageStore: nil)
     }
 
     override func tearDown() {
         super.tearDown()
 
-        profile._shutdown()
+        profile.shutdown()
         profile = nil
         tabManager = nil
         helper = nil

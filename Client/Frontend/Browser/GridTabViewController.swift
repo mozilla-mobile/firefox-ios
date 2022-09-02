@@ -431,8 +431,8 @@ extension GridTabViewController: UIScrollViewAccessibilityDelegate {
         visibleCells = visibleCells.filter { !$0.frame.intersection(bounds).isEmpty }
 
         let cells = visibleCells.map { self.collectionView.indexPath(for: $0)! }
-        let indexPaths = cells.sorted { (a: IndexPath, b: IndexPath) -> Bool in
-            return a.section < b.section || (a.section == b.section && a.row < b.row)
+        let indexPaths = cells.sorted { (first: IndexPath, second: IndexPath) -> Bool in
+            return first.section < second.section || (first.section == second.section && first.row < second.row)
         }
 
         guard !indexPaths.isEmpty else {

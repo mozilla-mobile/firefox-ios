@@ -296,7 +296,7 @@ private extension HistoryDeletionUtilityTests {
 
     func profileSetup(named dbPrefix: String) -> MockProfile {
         let profile = MockProfile(databasePrefix: dbPrefix)
-        profile._reopen()
+        profile.reopen()
         trackForMemoryLeaks(profile)
 
         emptyDB(with: profile)

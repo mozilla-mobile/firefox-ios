@@ -223,8 +223,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
         autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case
         autocompleteTextLabel = createAutocompleteLabelWith(autocompleteText)
-        if let l = autocompleteTextLabel {
-            addSubview(l)
+        if let label = autocompleteTextLabel {
+            addSubview(label)
             // Only call forceResetCursor() if `hideCursor` changes.
             // Because forceResetCursor() auto accept iOS user's text replacement
             // (e.g. mu->μ) which makes user unable to type "mu".

@@ -368,12 +368,12 @@ extension FirefoxHomeJumpBackInViewModelTests {
     func remoteTabs(idRange: ClosedRange<Int> = 1...1) -> [RemoteTab] {
         var remoteTabs: [RemoteTab] = []
 
-        for i in idRange {
-            let tab = RemoteTab(clientGUID: String(i),
+        for index in idRange {
+            let tab = RemoteTab(clientGUID: String(index),
                                 URL: URL(string: "www.mozilla.org")!,
-                                title: "Mozilla \(i)",
+                                title: "Mozilla \(index)",
                                 history: [],
-                                lastUsed: UInt64(i),
+                                lastUsed: UInt64(index),
                                 icon: nil)
             remoteTabs.append(tab)
         }

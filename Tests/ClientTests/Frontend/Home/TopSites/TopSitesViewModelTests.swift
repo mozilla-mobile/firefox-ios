@@ -21,7 +21,7 @@ class TopSitesViewModelTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        self.profile._shutdown()
+        self.profile.shutdown()
         self.profile = nil
     }
 
@@ -36,8 +36,8 @@ class TopSitesViewModelTests: XCTestCase {
         viewModel.hideURLFromTopSites(siteToDelete)
         let newSites = topSitesProvider.defaultTopSites(profile.prefs)
 
-        XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
-            return a.url == b.url
+        XCTAssertFalse(newSites.contains(siteToDelete, f: { (first, second) -> Bool in
+            return first.url == second.url
         }))
     }
 
