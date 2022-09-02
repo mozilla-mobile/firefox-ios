@@ -151,7 +151,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return UX.HeaderHeight
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -159,13 +159,13 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
             withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader else { return nil }
         let clientTabs = self.clientAndTabs[section]
         let client = clientTabs.client
-        headerView.frame = CGRect(width: tableView.frame.width, height: UX.HeaderHeight)
 
         let isCollapsed = hiddenSections.contains(section)
         let viewModel = SiteTableViewHeaderModel(title: client.name,
                                                  isCollapsible: true,
                                                  collapsibleState:
-                                                    isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
+                                                    isCollapsed ? ExpandButtonState.right : ExpandButtonState.down,
+                                                 usesDynamicText: true)
         headerView.configure(viewModel)
         headerView.showBorder(for: .bottom, true)
         headerView.showBorder(for: .top, section != 0)

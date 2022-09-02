@@ -9,14 +9,16 @@ struct SiteTableViewHeaderModel {
     let title: String
     let isCollapsible: Bool
     let collapsibleState: ExpandButtonState?
+    let usesDynamicText: Bool
 }
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
 
     struct UX {
         static let HeaderFont = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium)
-        static let HeaderTextMargin: CGFloat = 16
-        static let TrailingSpace: CGFloat = 12
+        static let TitleTrailingLeadingMargin: CGFloat = 16
+        static let TitleTopBottomMargin: CGFloat = 12
+        static let ImageTrailingSpace: CGFloat = 12
         static let ImageWidthHeight: CGFloat = 24
     }
 
@@ -56,21 +58,24 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
         backgroundView = UIView()
         imageViewLeadingConstraint = titleLabel.trailingAnchor.constraint(
             equalTo: collapsibleImageView.leadingAnchor,
-            constant: -UX.HeaderTextMargin)
+            constant: -UX.TitleTrailingLeadingMargin)
         titleTrailingConstraint = titleLabel.trailingAnchor.constraint(
             equalTo: contentView.trailingAnchor,
-            constant: -UX.HeaderTextMargin)
+            constant: -UX.TitleTrailingLeadingMargin)
 
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                constant: UX.HeaderTextMargin),
+                                                constant: UX.TitleTrailingLeadingMargin),
             titleTrailingConstraint,
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                                constant: UX.TitleTopBottomMargin),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                constant: -UX.TitleTopBottomMargin),
 
             collapsibleImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             imageViewLeadingConstraint,
             collapsibleImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                           constant: -UX.TrailingSpace),
+                                                           constant: -UX.ImageTrailingSpace),
             collapsibleImageView.widthAnchor.constraint(equalToConstant: UX.ImageWidthHeight),
             collapsibleImageView.heightAnchor.constraint(equalToConstant: UX.ImageWidthHeight)
         ])
@@ -94,6 +99,11 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
         showImage(model.isCollapsible)
         collapsibleState = model.collapsibleState
+
+        if model.usesDynamicText {
+            titleLabel.numberOfLines = 0
+            titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline, size: 16)
+        }
     }
 
     func applyTheme() {
