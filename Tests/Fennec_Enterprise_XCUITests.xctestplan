@@ -65,6 +65,7 @@
         "HomePageSettingsUITests\/testCustomizeHomepage()",
         "HomePageSettingsUITests\/testJumpBackIn()",
         "HomePageUITest",
+        "IntegrationTests",
         "IntegrationTests\/testFxASyncBookmark()",
         "NavigationTest\/testLongPressLinkOptions()",
         "NavigationTest\/testNavigationPreservesDesktopSiteOnSameHost()",
