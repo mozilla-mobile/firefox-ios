@@ -163,7 +163,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         view.showBorder(for: .bottom, true)
         view.showBorder(for: .top, section != 0)
 
-        view.collapsibleImageView.isHidden = false
+        view.showImage(true)
         let isCollapsed = hiddenSections.contains(section)
         view.collapsibleState = isCollapsed ? ExpandButtonState.right : ExpandButtonState.down
 
@@ -551,7 +551,6 @@ class RemoteTabsTableViewController: UITableViewController {
         tableView.dataSource = nil
 
         tableView.separatorColor = UIColor.theme.tableView.separator
-
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncedTabs
     }
 
