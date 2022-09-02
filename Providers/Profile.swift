@@ -1370,10 +1370,6 @@ open class BrowserProfile: Profile {
             }
         }
 
-        @discardableResult private func syncLogins() -> SyncResult {
-            return self.sync("logins", function: syncLoginsWithDelegate)
-        }
-
         public func syncHistory() -> SyncResult {
             // TODO: recognize .NotStarted.
             return self.sync("history", function: syncHistoryWithDelegate)
