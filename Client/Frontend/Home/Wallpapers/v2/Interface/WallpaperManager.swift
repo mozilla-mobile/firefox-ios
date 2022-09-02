@@ -48,7 +48,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
 
     /// Determines whether the wallpaper onboarding can be shown
     var canOnboardingBeShown: Bool {
-        let thumbnailVerifier = WallpaperThumbnailVerifier()
+        let thumbnailVerifier = WallpaperThumbnailUtility()
 
         guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
               wallpaperVersion == .v2,
@@ -66,7 +66,15 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         to wallpaper: Wallpaper,
         completion: @escaping (Result<Void, Error>) -> Void
     ) {
-        completion(.success(()))
+        do {
+            let storageUtility = WallpaperStorageUtility()
+            try storageUtility.store(wallpaper)
+            
+            completion(.success(()))
+        } catch {
+            browserLog.error("Failed to set wallpaper: \(error.localizedDescription)")
+            completion(.failure(error))
+        }
     }
 
     /// Fetches the images for a specific wallpaper.
@@ -77,8 +85,13 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     ///                      a `.success` with the data associated. Otherwise, it is called
     ///                      with a `.failure` and passed an error.
     func fetch(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.1) {
-            completion(.success(()))
+//        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.1) {
+//            completion(.success(()))
+//        }
+        Task(priority: .userInitiated) {
+            await MainActor.run {
+                completion(.success(()))
+            }
         }
     }
 
@@ -90,7 +103,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     /// to existing metadata, and, if there are changes, performs the necessary operations
     /// to ensure parity between server data and what the user sees locally.
     public func checkForUpdates() {
-        let thumbnailVerifier = WallpaperThumbnailVerifier()
+        let thumbnailVerifier = WallpaperThumbnailUtility(with: networkingModule)
         let metadataUtility = WallpaperMetadataUtility(with: networkingModule)
 
         Task {
@@ -99,9 +112,8 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
                 do {
                     let migrationUtility = WallpaperMigrationUtility()
                     migrationUtility.attemptMigration()
-
-                    try await fetchMissingThumbnails()
-                    thumbnailVerifier.verifyThumbnailsFor(availableCollections)
+                    
+                    try await thumbnailVerifier.fetchAndVerifyThumbnails(for: availableCollections)
                 } catch {
                     browserLog.error("Wallpaper update check error: \(error.localizedDescription)")
                 }
@@ -160,20 +172,6 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         } catch {
             print(error.localizedDescription)
             fatalError()
-        }
-    }
-
-    private func fetchMissingThumbnails() async throws {
-        let thumbnailVerifier = WallpaperThumbnailVerifier()
-        let dataService = WallpaperDataService(with: networkingModule)
-        let storageUtility = WallpaperStorageUtility()
-
-        let missingThumbnails = thumbnailVerifier.getListOfMissingTumbnails(from: availableCollections)
-        if !missingThumbnails.isEmpty {
-            for (key, fileName) in missingThumbnails {
-                let thumbnail = try await dataService.getImageWith(key: key, imageName: fileName)
-                try storageUtility.store(thumbnail, withName: fileName, andKey: key)
-            }
         }
     }
 }

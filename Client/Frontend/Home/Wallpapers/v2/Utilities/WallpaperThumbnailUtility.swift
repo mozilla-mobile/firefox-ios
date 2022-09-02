@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class WallpaperThumbnailVerifier {
+class WallpaperThumbnailUtility {
 
     // MARK: - Properties
     public var thumbnailsAvailable: Bool {
@@ -13,10 +13,15 @@ class WallpaperThumbnailVerifier {
     }
 
     private var userDefaults: UserDefaultsInterface
+    private var networkingModule: WallpaperNetworking
     private let prefsKey = PrefsKeys.Wallpapers.ThumbnailsAvailable
 
     // MARK: - Initializers
-    init(with userDefaults: UserDefaultsInterface = UserDefaults.standard) {
+    init(
+        with networkingModule: WallpaperNetworking,
+        and userDefaults: UserDefaultsInterface = UserDefaults.standard
+    ) {
+        self.networkingModule = networkingModule
         self.userDefaults = userDefaults
     }
 
@@ -35,6 +40,11 @@ class WallpaperThumbnailVerifier {
         return missingThumbnails
     }
 
+    public func fetchAndVerifyThumbnails(for collections: [WallpaperCollection]) async throws {
+        try await fetchMissingThumbnails(from: collections)
+        verifyThumbnailsFor(collections)
+    }
+
     public func verifyThumbnailsFor(_ collections: [WallpaperCollection]) {
         userDefaults.set(false, forKey: prefsKey)
         var thumbnailStatus = true
@@ -47,5 +57,18 @@ class WallpaperThumbnailVerifier {
         }
 
         userDefaults.set(thumbnailStatus, forKey: prefsKey)
+    }
+
+    private func fetchMissingThumbnails(from collections: [WallpaperCollection]) async throws {
+        let dataService = WallpaperDataService(with: networkingModule)
+        let storageUtility = WallpaperStorageUtility()
+
+        let missingThumbnails = getListOfMissingTumbnails(from: collections)
+        if !missingThumbnails.isEmpty {
+            for (key, fileName) in missingThumbnails {
+                let thumbnail = try await dataService.getImageWith(key: key, imageName: fileName)
+                try storageUtility.store(thumbnail, withName: fileName, andKey: key)
+            }
+        }
     }
 }
