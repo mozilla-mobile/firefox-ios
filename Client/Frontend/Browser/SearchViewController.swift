@@ -574,7 +574,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 SiteTableViewHeader
         else { return nil }
 
-        headerView.titleLabel.text = .Search.SuggestSectionTitle
+        let viewModel = SiteTableViewHeaderModel(title: .Search.SuggestSectionTitle,
+                                                 isCollapsible: false,
+                                                 collapsibleState: nil)
+        headerView.configure(viewModel)
 
         return headerView
     }
