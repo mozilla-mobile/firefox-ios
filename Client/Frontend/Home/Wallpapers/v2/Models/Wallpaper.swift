@@ -29,7 +29,6 @@ struct Wallpaper: Equatable {
         case id
     }
 
-    // TODO: [roux] - should these have nil values/"fxDefault" so you can easily create Wallpaper() as a default wallpaper?
     let id: String
     let textColour: UIColor?
     let cardColour: UIColor?

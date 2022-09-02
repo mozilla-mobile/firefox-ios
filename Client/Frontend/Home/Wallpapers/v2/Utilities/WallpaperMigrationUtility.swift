@@ -29,7 +29,6 @@ struct WallpaperMigrationUtility: Loggable {
 
         do {
             guard let legacyWallpaperObject = legacyStorageUtility.getCurrentWallpaperObject() else {
-                try? storageUtility.store(Wallpaper(id: "fxDefault", textColour: nil, cardColour: nil))
                 userDefaults.set(true, forKey: migrationKey)
                 return
             }
@@ -38,6 +37,7 @@ struct WallpaperMigrationUtility: Loggable {
                   let legacyImageLandscape = legacyStorageUtility.getLandscapeImage(),
                   let metadata = try storageUtility.fetchMetadata(),
                   let matchingID = getMatchingIdBasedOn(legacyId: legacyWallpaperObject.name),
+                  // TODO: [roux] - this will need to be in an EITH matich or disney
                   let matchingWallpaper = metadata.collections
                 .first(where: { $0.type == .classic })?
                 .wallpapers.first(where: { $0.id ==  matchingID })
@@ -66,6 +66,7 @@ struct WallpaperMigrationUtility: Loggable {
             "fxSunrise": "sunrise",
             "beachVibes": "beach-vibes",
             "twilingHills": "twilight-hills"
+            // TODO: [roux] - WHAT ABOUT DISNEY???????
         ]
 
         return idMap[legacyId]

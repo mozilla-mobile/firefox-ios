@@ -92,10 +92,16 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         Task(priority: .userInitiated) {
 
             do {
-                let portrait = try await dataService.getImageWith(key: wallpaper.id,
-                                                                  imageName: wallpaper.portraitID)
-                let landscape = try await dataService.getImageWith(key: wallpaper.id,
-                                                                   imageName: wallpaper.landscapeID)
+                // Download both images at the same time for efficiency
+                async let portraitFetchRequest = dataService.getImageWith(
+                    key: wallpaper.id,
+                    imageName: wallpaper.portraitID)
+                async let landscapeFetchRequest = dataService.getImageWith(
+                    key: wallpaper.id,
+                    imageName: wallpaper.landscapeID)
+
+                let (portrait, landscape) = await (try portraitFetchRequest,
+                                                   try landscapeFetchRequest)
 
                 try storageUtility.store(portrait, withName: wallpaper.portraitID, andKey: wallpaper.id)
                 try storageUtility.store(landscape, withName: wallpaper.landscapeID, andKey: wallpaper.id)
