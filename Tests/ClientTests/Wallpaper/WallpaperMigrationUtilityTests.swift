@@ -57,7 +57,7 @@ class WallpaperMigrationUtilityTests: XCTestCase {
 
         let profile = MockProfile(databasePrefix: "wallpaperMigrationTests")
         createFolderAt(path: path(for: .documents))
-        LegacyWallpaperMigrationUtility(with: profile).attemptMigration()
+        WallpaperMigrationUtility(with: profile).attemptMigration()
         guard let key = profile.prefs.boolForKey(migrationKey) else {
             XCTFail("No key exists when a key should exist for WallpaperMigrationCheck")
             return
@@ -75,7 +75,7 @@ class WallpaperMigrationUtilityTests: XCTestCase {
         verifyFoldersHaveBeenDeleted(with: fileManager)
 
         let profile = MockProfile(databasePrefix: "wallpaperMigrationTests")
-        LegacyWallpaperMigrationUtility(with: profile).attemptMigration()
+        WallpaperMigrationUtility(with: profile).attemptMigration()
         guard let key = profile.prefs.boolForKey(migrationKey) else {
             XCTFail("No key exists when a key should exist for WallpaperMigrationCheck")
             return
@@ -90,7 +90,7 @@ class WallpaperMigrationUtilityTests: XCTestCase {
 
         let profile = MockProfile(databasePrefix: "wallpaperMigrationTests")
         createFolderAt(path: path(for: .applicationSupport))
-        LegacyWallpaperMigrationUtility(with: profile).attemptMigration()
+        WallpaperMigrationUtility(with: profile).attemptMigration()
         guard let key = profile.prefs.boolForKey(migrationKey) else {
             XCTFail("No key exists when a key should exist for WallpaperMigrationCheck")
             return
@@ -108,7 +108,7 @@ class WallpaperMigrationUtilityTests: XCTestCase {
         let profile = MockProfile(databasePrefix: "wallpaperMigrationTests")
         createFolderAt(path: path(for: .applicationSupport))
         createFolderAt(path: path(for: .documents))
-        LegacyWallpaperMigrationUtility(with: profile).attemptMigration()
+        WallpaperMigrationUtility(with: profile).attemptMigration()
         guard let key = profile.prefs.boolForKey(migrationKey) else {
             XCTFail("No key exists when a key should exist for WallpaperMigrationCheck")
             return

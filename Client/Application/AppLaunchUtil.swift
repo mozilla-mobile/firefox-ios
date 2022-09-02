@@ -58,7 +58,7 @@ class AppLaunchUtil {
         FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
 
         // Migrate wallpaper folder
-        LegacyWallpaperMigrationUtility(with: profile).attemptMigration()
+        WallpaperMigrationUtility(with: profile).attemptMigration()
 
         // Start initializing the Nimbus SDK. This should be done after Glean
         // has been started.
