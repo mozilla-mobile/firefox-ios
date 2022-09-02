@@ -160,10 +160,10 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)? = nil) {
         DispatchQueue.main.async { [unowned self] in
-            for i in 0 ..< self.delegates.count {
-                let del = self.delegates[i]
+            for index in 0 ..< self.delegates.count {
+                let del = self.delegates[index]
                 if delegate === del.get() || del.get() == nil {
-                    self.delegates.remove(at: i)
+                    self.delegates.remove(at: index)
                     return
                 }
             }

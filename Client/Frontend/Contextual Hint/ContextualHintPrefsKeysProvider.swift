@@ -14,10 +14,10 @@ extension ContextualHintPrefsKeysProvider {
 
     func prefsKey(for hintType: ContextualHintType) -> String {
         switch hintType {
-        case .inactiveTabs: return CFRPrefsKeys.InactiveTabsKey.rawValue
-        case .jumpBackIn: return CFRPrefsKeys.JumpBackinKey.rawValue
-        case .jumpBackInSyncedTab: return CFRPrefsKeys.JumpBackInSyncedTabKey.rawValue
-        case .toolbarLocation: return CFRPrefsKeys.ToolbarOnboardingKey.rawValue
+        case .inactiveTabs: return CFRPrefsKeys.inactiveTabsKey.rawValue
+        case .jumpBackIn: return CFRPrefsKeys.jumpBackinKey.rawValue
+        case .jumpBackInSyncedTab: return CFRPrefsKeys.jumpBackInSyncedTabKey.rawValue
+        case .toolbarLocation: return CFRPrefsKeys.toolbarOnboardingKey.rawValue
         }
     }
 

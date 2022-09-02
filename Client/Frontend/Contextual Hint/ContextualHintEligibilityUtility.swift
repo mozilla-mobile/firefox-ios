@@ -52,7 +52,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     /// - the JumpBackInSyncedTab CFR has NOT been presented already
     /// - the JumpBackIn CFR has NOT been presented yet
     private var canJumpBackInBePresented: Bool {
-        guard let hasPresentedToolbarCFR = profile.prefs.boolForKey(CFRPrefsKeys.ToolbarOnboardingKey.rawValue),
+        guard let hasPresentedToolbarCFR = profile.prefs.boolForKey(CFRPrefsKeys.toolbarOnboardingKey.rawValue),
               hasPresentedToolbarCFR,
               !hasHintBeenConfigured(.jumpBackInSyncedTab),
               !hasAlreadyBeenPresented(.jumpBackInSyncedTab)
@@ -69,7 +69,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     /// - This CFR hasn't already been presented
     /// - The Home Tab Banner isn't being displayed (not specified by Product, but the CFR might show when the anchor point isn't on screen)
     private var canPresentJumpBackInSyncedTab: Bool {
-        guard let hasPresentedToolbarCFR = profile.prefs.boolForKey(CFRPrefsKeys.ToolbarOnboardingKey.rawValue),
+        guard let hasPresentedToolbarCFR = profile.prefs.boolForKey(CFRPrefsKeys.toolbarOnboardingKey.rawValue),
               hasPresentedToolbarCFR else { return false }
 
         return true
@@ -97,7 +97,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
 
         switch hintType {
         case .jumpBackIn:
-            guard let jumpBackInConfigured = profile.prefs.boolForKey(CFRPrefsKeys.JumpBackInConfiguredKey.rawValue) else { return false }
+            guard let jumpBackInConfigured = profile.prefs.boolForKey(CFRPrefsKeys.jumpBackInConfiguredKey.rawValue) else { return false }
             hintConfigured = jumpBackInConfigured
         case .jumpBackInSyncedTab:
             guard let syncedTabConfigured = profile.prefs.boolForKey(CFRPrefsKeys.jumpBackInSyncedTabConfiguredKey.rawValue) else { return false }

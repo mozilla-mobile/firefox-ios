@@ -14,8 +14,8 @@ class TabToolbarHelperTests: XCTestCase {
     let forwardButtonImage = UIImage.templateImageNamed("nav-forward")?.imageFlippedForRightToLeftLayoutDirection()
     let menuButtonImage = UIImage.templateImageNamed("nav-menu")
     let searchButtonImage = UIImage.templateImageNamed("search")
-    let ImageNewTab = UIImage.templateImageNamed("nav-add")
-    let ImageHome = UIImage.templateImageNamed("menu-Home")
+    let imageNewTab = UIImage.templateImageNamed("nav-add")
+    let imageHome = UIImage.templateImageNamed("menu-Home")
 
     override func setUp() {
         super.setUp()
@@ -41,7 +41,7 @@ class TabToolbarHelperTests: XCTestCase {
 
     func testTapHome() {
         subject.setMiddleButtonState(.home)
-        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), ImageHome)
+        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), imageHome)
     }
 }
 

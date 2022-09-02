@@ -42,8 +42,8 @@ open class EncryptedJSON {
 
     // For validating HMAC: the raw ciphertext as bytes without decoding.
     fileprivate var ciphertextB64: Data? {
-        if let ct = self["ciphertext"].string {
-            return Bytes.dataFromBase64(ct)
+        if let cipherText = self["ciphertext"].string {
+            return Bytes.dataFromBase64(cipherText)
         }
         return nil
     }
