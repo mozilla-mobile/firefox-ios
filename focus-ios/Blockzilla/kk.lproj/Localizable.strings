@@ -406,6 +406,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Жарлықтардан өшіру";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Жарлық өшірілді";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Сайттың толық нұсқасы";
 
@@ -516,6 +519,9 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Бұл бастапқы баптаулар қатаң қорғаныс ұсынады. Бірақ нақты қажеттіліктеріңізді қанағаттандыру үшін баптауларды өзгерту оңай.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Жекелік шолу сеансын бастаңыз, сонда біз трекерлерді және басқа да жаман нәрселерді бұғаттаймыз.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Ағымдағы сессияның барлық іздерін кетіру үшін кез келген уақытта себетті шертіңіз.";
