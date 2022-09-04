@@ -406,6 +406,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Hapus dari Pintasan";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Pintasan dihapus";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Minta Situs Desktop";
 
@@ -516,6 +519,9 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Pengaturan bawaan ini menawarkan perlindungan yang kuat. Tetapi mudah untuk mengubah pengaturan untuk memenuhi kebutuhan spesifik Anda.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Mulai sesi penjelajahan pribadi Anda, dan kami akan memblokir pelacak dan hal buruk lainnya saat Anda menjelajah.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Ketuk tempat sampah kapan saja untuk menghapus semua jejak sesi Anda saat ini.";

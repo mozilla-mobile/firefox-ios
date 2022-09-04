@@ -2,6 +2,9 @@
 "About.learnMoreButton" = "තව දැනගන්න";
 
 /* Label on About screen */
+"About.privateBullet1" = "යෙදුමෙහි සොයන්න හා පිරික්සන්න";
+
+/* Label on About screen */
 "About.privateBullet2" = "ලුහුබැඳීම් අවහිර කරන්න (හෝ ඒවාට ඉඩ දීමට සැකසුම් සකසන්න)";
 
 /* Label on About screen */
@@ -70,6 +73,9 @@
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "නව අභිරුචි ඒ.ස.නි. එක් කෙරිණි.";
 
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "%@ ලිපින තීරුවේ ජනප්‍රිය ඒ.ස.නි. 450 කට වඩා ස්වයං පිරවීමට සබල කරන්න.";
+
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "අබලයි";
 
@@ -105,6 +111,9 @@
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "පිටපතක්";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "ඉදිරියට";
 
 /* Accessibility label for the reload button */
 "Browser.reloadLabel" = "යළි පූරණය";
@@ -144,6 +153,9 @@
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "වි-තැපෑල";
+
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "අහවර පිටුවේ සොයන්න";
 
 /* Accessibility label for next result button in Find in Page Toolbar. */
 "FindInPage.NextResult" = "පිටුවේ ඊළඟ සොයන්න";
@@ -385,6 +397,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "කෙටිමං වලින් ඉවතලන්න";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "කෙටිමඟ ඉවත් කෙරිණි";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "වැඩතල අඩවිය ඉල්ලන්න";
 
@@ -492,6 +507,9 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "මෙම පෙරනිමි සැකසුම් ඉහළ ආරක්‍ෂාවක් සපයයි. නමුත් ඔබගේ අවශ්‍යතා වලට යෝග්‍ය ලෙස සැකසුම් හැඩගැසීමට පහසුය.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "ඔබගේ පෞද්ගලික පිරික්සුම් වාරය අරඹන්න, ඔබ යන හැටියට ලුහුබැඳීම් සහ වෙනත් නරක දෑ අවහිර කෙරේ.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "ඔබගේ වත්මන් වාරයේ සියළුම ලැකීම් ඉවත් කිරීමට ඕනෑම විටෙක කුණු බඳුන මත තට්ටු කරන්න.";

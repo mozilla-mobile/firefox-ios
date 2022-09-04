@@ -406,6 +406,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Fjern fra snarveier";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Snarvei fjernet";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Vis skrivebords­versjon";
 
@@ -516,6 +519,9 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Disse standardinnstillingene gir sterk beskyttelse. Men det er enkelt å tilpasse innstillingene for å møte dine spesifikke behov.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Start din private nettlesingsøkt, så blokkerer vi sporere og andre dårlige ting mens du surfer.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Trykk på papirkurven når som helst for å fjerne alle spor etter gjeldende økt.";
