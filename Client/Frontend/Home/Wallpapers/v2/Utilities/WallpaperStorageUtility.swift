@@ -102,22 +102,17 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
     // MARK: - Deletion
     public func removeUnusedLargeWallpaperFiles() throws {
         let filePathProvider = WallpaperFilePathProvider(with: fileManager)
-        let currentWallpaper = try fetchCurrentWallpaper()
         guard let wallpaperDirectory = filePathProvider.wallpaperDirectoryPath() else {
             throw WallpaperStorageErrors.cannotFindWallpaperDirectory
         }
 
-        // Get the directory contents urls (including subfolders urls)
         let directoryContents = try fileManager.contentsOfDirectory(
             at: wallpaperDirectory,
             includingPropertiesForKeys: nil,
             options: [])
 
-        for url in directoryContents.filter({
-            !($0.lastPathComponent == currentWallpaper.id
-              || $0.lastPathComponent == filePathProvider.thumbnailsKey
-              || $0.lastPathComponent == filePathProvider.metadataKey)
-        }) {
+        let directoriesToKeep = try directoriesToKeep()
+        for url in directoryContents.filter({ !directoriesToKeep.contains($0.lastPathComponent) }) {
             try removeFileIfItExists(at: url)
         }
     }
@@ -127,5 +122,15 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
         if fileManager.fileExists(atPath: url.path) {
             try fileManager.removeItem(at: url)
         }
+    }
+
+    private func directoriesToKeep() throws -> [String] {
+        let filePathProvider = WallpaperFilePathProvider(with: fileManager)
+        let currentWallpaper = try fetchCurrentWallpaper()
+        return [
+            currentWallpaper.id,
+            filePathProvider.thumbnailsKey,
+            filePathProvider.metadataKey
+        ]
     }
 }

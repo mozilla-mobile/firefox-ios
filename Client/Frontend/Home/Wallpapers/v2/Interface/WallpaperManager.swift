@@ -11,7 +11,7 @@ protocol WallpaperManagerInterface {
     var canOnboardingBeShown: Bool { get }
 
     func setCurrentWallpaper(to wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
-    func fetch(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
+    func fetchAssetsFor(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
     func removeDownloadedAssets()
     func checkForUpdates()
 }
@@ -51,7 +51,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         let thumbnailUtility = WallpaperThumbnailUtility(with: networkingModule)
 
         guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-              wallpaperVersion == .v2,
+              wallpaperVersion == .v1,
               featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly),
               thumbnailUtility.areThumbnailsAvailable
         else { return false }
@@ -85,7 +85,10 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     ///                      If the images is loaded successfully, the block is called with
     ///                      a `.success` with the data associated. Otherwise, it is called
     ///                      with a `.failure` and passed an error.
-    func fetch(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void) {
+    func fetchAssetsFor(
+        _ wallpaper: Wallpaper,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
         let dataService = WallpaperDataService(with: networkingModule)
         let storageUtility = WallpaperStorageUtility()
 

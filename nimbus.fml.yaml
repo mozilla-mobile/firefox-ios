@@ -468,7 +468,7 @@ features:
         value: {
           "configuration": {
             "status": true,
-            "version": v2,
+            "version": v1,
           },
           "onboarding-sheet": true
         }
@@ -740,5 +740,5 @@ types:
       variants:
         legacy:
           description: The legacy wallpaper version
-        v2:
+        v1:
           description: The 2022 MR version
