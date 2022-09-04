@@ -107,24 +107,17 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
             throw WallpaperStorageErrors.cannotFindWallpaperDirectory
         }
 
-        print("RGB - wallpaperDirectory: ", wallpaperDirectory.path)
         // Get the directory contents urls (including subfolders urls)
         let directoryContents = try fileManager.contentsOfDirectory(
             at: wallpaperDirectory,
             includingPropertiesForKeys: nil,
             options: [])
 
-        print("RGB - directoryContents: ", directoryContents.map { $0.lastPathComponent })
-        let removableURLs = directoryContents.filter { url in
-            return url.lastPathComponent != currentWallpaper.id
-            || url.lastPathComponent != filePathProvider.thumbnailsKey
-            || url.lastPathComponent != filePathProvider.metadataKey
-        }
-
-        print("RGB - directoryContents: \(directoryContents)")
-        print("RGB - removableURL: \(removableURLs)")
-
-        for url in removableURLs {
+        for url in directoryContents.filter({
+            !($0.lastPathComponent == currentWallpaper.id
+              || $0.lastPathComponent == filePathProvider.thumbnailsKey
+              || $0.lastPathComponent == filePathProvider.metadataKey)
+        }) {
             try removeFileIfItExists(at: url)
         }
     }

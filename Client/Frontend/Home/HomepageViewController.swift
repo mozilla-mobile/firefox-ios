@@ -407,6 +407,7 @@ private extension HomepageViewController {
         // Header view
         viewModel.headerViewModel.onTapAction = { _ in
             // No action currently set if the logo button is tapped.
+            // TODO: [roux]
             let manager = WallpaperManager()
             manager.removeDownloadedAssets()
         }
