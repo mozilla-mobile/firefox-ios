@@ -407,6 +407,8 @@ private extension HomepageViewController {
         // Header view
         viewModel.headerViewModel.onTapAction = { _ in
             // No action currently set if the logo button is tapped.
+            let manager = WallpaperManager()
+            manager.removeDownloadedAssets()
         }
 
         // Message card

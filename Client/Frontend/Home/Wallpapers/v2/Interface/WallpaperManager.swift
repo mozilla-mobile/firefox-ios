@@ -115,7 +115,8 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     }
 
     public func removeDownloadedAssets() {
-
+        let storageUtility = WallpaperStorageUtility()
+        try? storageUtility.removeUnusedLargeWallpaperFiles()
     }
 
     /// Reaches out to the server and fetches the latest metadata. This is then compared
@@ -131,7 +132,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
                 do {
                     let migrationUtility = WallpaperMigrationUtility()
                     migrationUtility.attemptMigration()
-                    
+
                     try await thumbnailUtility.fetchAndVerifyThumbnails(for: availableCollections)
                 } catch {
                     browserLog.error("Wallpaper update check error: \(error.localizedDescription)")

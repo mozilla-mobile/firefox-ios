@@ -9,8 +9,18 @@ enum WallpaperType: String {
     case other
 }
 
+struct WallpaperFilenameIdentifiers {
+    static let thumbnail = "_thumbnail"
+    static let portrait = "_portrait"
+    static let landscape = "_landscape"
+    static let iPad = "_iPad"
+    static let iPhone = "_iPhone"
+}
+
 /// A single wallpaper instance.
 struct Wallpaper: Equatable {
+    typealias fileId = WallpaperFilenameIdentifiers
+
     static func == (lhs: Wallpaper, rhs: Wallpaper) -> Bool {
         return lhs.id == rhs.id
                 && lhs.textColour == rhs.textColour
@@ -33,11 +43,11 @@ struct Wallpaper: Equatable {
     let textColour: UIColor?
     let cardColour: UIColor?
 
-    var thumbnailID: String { return "\(id)_thumbnail" }
-    var portraitID: String { return "\(id)\(deviceVersionID)_portrait" }
-    var landscapeID: String { return "\(id)\(deviceVersionID)_landscape" }
+    var thumbnailID: String { return "\(id)\(fileId.thumbnail)" }
+    var portraitID: String { return "\(id)\(deviceVersionID)\(fileId.portrait)" }
+    var landscapeID: String { return "\(id)\(deviceVersionID)\(fileId.landscape)" }
     private var deviceVersionID: String {
-        return UIDevice.current.userInterfaceIdiom == .pad ? "_iPad" : "_iPhone"
+        return UIDevice.current.userInterfaceIdiom == .pad ? fileId.iPad : fileId.iPhone
     }
 
     var type: WallpaperType {
@@ -71,11 +81,11 @@ struct Wallpaper: Equatable {
 
             switch imageType {
             case .thumbnail:
-                return try storageUtility.fetchImageWith(name: thumbnailID, andID: id)
+                return try storageUtility.fetchImageNamed(thumbnailID)
             case .portrait:
-                return try storageUtility.fetchImageWith(name: portraitID, andID: id)
+                return try storageUtility.fetchImageNamed(portraitID)
             case .landscape:
-                return try storageUtility.fetchImageWith(name: landscapeID, andID: id)
+                return try storageUtility.fetchImageNamed(landscapeID)
             }
 
         } catch {

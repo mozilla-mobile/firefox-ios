@@ -9,19 +9,20 @@ enum WallpaperStorageErrors: Error {
     case fileDoesNotExistError
     case noDataAtFilePath
     case failedToConvertImage
+    case failedSavingFile
+    case cannotFindWallpaperDirectory
 }
 
 /// Responsible for writing or deleting wallpaper data to/from memory.
 struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
 
     private var userDefaults: UserDefaultsInterface
-    private var fileManager: FileManager
-    private let metadataKey = "metadata"
+    private var fileManager: FileManagerInterface
 
     // MARK: - Initializer
     init(
         with userDefaults: UserDefaultsInterface = UserDefaults.standard,
-        and fileManager: FileManager = FileManager.default
+        and fileManager: FileManagerInterface = FileManager.default
     ) {
         self.userDefaults = userDefaults
         self.fileManager = fileManager
@@ -29,16 +30,20 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
 
     // MARK: - Storage
     func store(_ metadata: WallpaperMetadata) throws {
-        let filePathProvider = WallpaperFilePathProvider()
+        let filePathProvider = WallpaperFilePathProvider(with: fileManager)
 
-        if let filePath = filePathProvider.metadataPath(forKey: metadataKey) {
+        if let filePath = filePathProvider.metadataPath() {
             let data = try encodeToData(from: metadata)
             try removeFileIfItExists(at: filePath)
 
-            fileManager.createFile(
+            let successfullyCreated = fileManager.createFile(
                 atPath: filePath.path,
                 contents: data,
                 attributes: nil)
+
+            if !successfullyCreated {
+                throw WallpaperStorageErrors.failedSavingFile
+            }
         }
     }
 
@@ -48,9 +53,9 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
     }
 
     func store(_ image: UIImage, withName name: String, andKey key: String) throws {
-        let filePathProvider = WallpaperFilePathProvider()
+        let filePathProvider = WallpaperFilePathProvider(with: fileManager)
 
-        guard let filePath = filePathProvider.imagePathWith(name: name, andKey: key),
+        guard let filePath = filePathProvider.imagePathWith(name: name),
               let pngRepresentation = image.pngData()
         else { throw WallpaperStorageErrors.failedToConvertImage }
 
@@ -61,8 +66,8 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
     // MARK: - Retrieval
 
     func fetchMetadata() throws -> WallpaperMetadata? {
-        let filePathProvider = WallpaperFilePathProvider()
-        guard let filePath = filePathProvider.metadataPath(forKey: metadataKey) else { return nil }
+        let filePathProvider = WallpaperFilePathProvider(with: fileManager)
+        guard let filePath = filePathProvider.metadataPath() else { return nil }
 
         if !fileManager.fileExists(atPath: filePath.path) {
             throw WallpaperStorageErrors.fileDoesNotExistError
@@ -84,9 +89,9 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
         return Wallpaper(id: "fxDefault", textColour: nil, cardColour: nil)
     }
 
-    public func fetchImageWith(name: String, andID id: String) throws -> UIImage? {
-        let filePathProvider = WallpaperFilePathProvider()
-        guard let filePath = filePathProvider.imagePathWith(name: name, andKey: id),
+    public func fetchImageNamed(_ name: String) throws -> UIImage? {
+        let filePathProvider = WallpaperFilePathProvider(with: fileManager)
+        guard let filePath = filePathProvider.imagePathWith(name: name),
               let fileData = FileManager.default.contents(atPath: filePath.path),
               let image = UIImage(data: fileData)
         else { return nil }
@@ -95,15 +100,33 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
     }
 
     // MARK: - Deletion
-    public func remove() {
+    public func removeUnusedLargeWallpaperFiles() throws {
+        let filePathProvider = WallpaperFilePathProvider(with: fileManager)
+        let currentWallpaper = try fetchCurrentWallpaper()
+        guard let wallpaperDirectory = filePathProvider.wallpaperDirectoryPath() else {
+            throw WallpaperStorageErrors.cannotFindWallpaperDirectory
+        }
 
-        // TODO: [roux] - How to remove cleanly
-        // get wallpapers directory
-        // get folder contents and filter out:
-        //   - the current wallpaper directory
-        //   - the thumbnail directory?
-        //   - metadata folder
-        // remove all folders that are not those three things
+        print("RGB - wallpaperDirectory: ", wallpaperDirectory.path)
+        // Get the directory contents urls (including subfolders urls)
+        let directoryContents = try fileManager.contentsOfDirectory(
+            at: wallpaperDirectory,
+            includingPropertiesForKeys: nil,
+            options: [])
+
+        print("RGB - directoryContents: ", directoryContents.map { $0.lastPathComponent })
+        let removableURLs = directoryContents.filter { url in
+            return url.lastPathComponent != currentWallpaper.id
+            || url.lastPathComponent != filePathProvider.thumbnailsKey
+            || url.lastPathComponent != filePathProvider.metadataKey
+        }
+
+        print("RGB - directoryContents: \(directoryContents)")
+        print("RGB - removableURL: \(removableURLs)")
+
+        for url in removableURLs {
+            try removeFileIfItExists(at: url)
+        }
     }
 
     // MARK: - Helper functions

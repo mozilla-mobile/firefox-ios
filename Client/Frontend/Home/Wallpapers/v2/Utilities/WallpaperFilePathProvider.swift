@@ -7,28 +7,38 @@ import Foundation
 /// Responsible for providing the required file paths on the disk.
 struct WallpaperFilePathProvider: Loggable {
 
+    private var fileManager: FileManagerInterface
+    public let metadataKey = "metadata"
+    public let thumbnailsKey = "thumbnails"
+
+    init(with fileManager: FileManagerInterface) {
+        self.fileManager = fileManager
+    }
+
+    // MARK: - Public interface
     /// Given a key, creates a URL pointing to the
     /// `.../wallpaper/key-as-folder/key-as-filePath` of the application's document directory.
     ///
     /// - Parameter key: The key to be used as the final path for the file.
     /// - Returns: A URL containing the correct path for the key.
-    func metadataPath(forKey key: String) -> URL? {
-        guard let keyDirectoryPath = folderPath(forKey: key) else {
+    public func metadataPath() -> URL? {
+        guard let keyDirectoryPath = folderPath(forKey: metadataKey) else {
             browserLog.debug("WallpaperFilePathProtocol - error fetching keyed directory path for application")
             return nil
         }
 
-        return keyDirectoryPath.appendingPathComponent(key)
+        return keyDirectoryPath.appendingPathComponent(metadataKey)
     }
 
     /// Given a key, creates a URL pointing to the
-    /// `.../wallpaper/key-as-folder/name-as-filePath` of the application's document directory.
+    /// `.../wallpaper/base-file-name-as-folderPath/name-as-filePath`
+    /// of the application's document directory.
     ///
     /// - Parameters:
-    ///   - key: The key to be used as the folder path for the file.
     ///   - name: The name to be used as the final path for the file.
     /// - Returns: A URL containing the correct path for the key.
-    func imagePathWith(name: String, andKey key: String) -> URL? {
+    public func imagePathWith(name: String) -> URL? {
+        let key = getFolderName(from: name)
         guard let keyDirectoryPath = folderPath(forKey: key) else {
             browserLog.debug("WallpaperFilePathProvider - error fetching keyed directory path for application")
             return nil
@@ -43,9 +53,16 @@ struct WallpaperFilePathProvider: Loggable {
     /// - Parameter key: The key to be used as the file's containing folder
     /// - Parameter fileManager: The file manager to use to persist and retrieve the wallpaper.
     /// - Returns: A URL containing the correct path for the key.
-    func folderPath(forKey key: String,
-                    with fileManager: FileManager = FileManager.default
-    ) -> URL? {
+    public func folderPath(forKey key: String) -> URL? {
+        guard let wallpaperDirectoryPath = wallpaperDirectoryPath() else { return nil }
+
+        let keyDirectoryPath = wallpaperDirectoryPath.appendingPathComponent(key)
+        createFolderAt(path: keyDirectoryPath)
+
+        return keyDirectoryPath
+    }
+
+    public func wallpaperDirectoryPath() -> URL? {
         guard let basePath = fileManager.urls(
             for: .applicationSupportDirectory,
             in: FileManager.SearchPathDomainMask.userDomainMask).first
@@ -57,16 +74,11 @@ struct WallpaperFilePathProvider: Loggable {
         let wallpaperDirectoryPath = basePath.appendingPathComponent("wallpapers")
         createFolderAt(path: wallpaperDirectoryPath)
 
-        let keyDirectoryPath = wallpaperDirectoryPath.appendingPathComponent(key)
-        createFolderAt(path: keyDirectoryPath)
-
-        return keyDirectoryPath
+        return wallpaperDirectoryPath
     }
 
-    private func createFolderAt(path directoryPath: URL,
-                                with fileManager: FileManager = FileManager.default
-    ) {
-        let fileManager = FileManager.default
+    // MARK: - Helper functions
+    private func createFolderAt(path directoryPath: URL) {
         if !fileManager.fileExists(atPath: directoryPath.path) {
             do {
                 try fileManager.createDirectory(atPath: directoryPath.path,
@@ -76,5 +88,30 @@ struct WallpaperFilePathProvider: Loggable {
                 browserLog.debug("Could not create directory at \(directoryPath.absoluteString)")
             }
         }
+    }
+
+    private func getFolderName(from input: String) -> String {
+        // If the file is a thumbnail file, then return thumbnails as the
+        // folder name. Otherwise, use the file name as the folder name.
+        if input.hasSuffix(WallpaperFilenameIdentifiers.thumbnail) {
+            return thumbnailsKey
+
+        } else {
+            return strip(
+                [
+                    WallpaperFilenameIdentifiers.portrait,
+                    WallpaperFilenameIdentifiers.landscape,
+                    WallpaperFilenameIdentifiers.iPad,
+                    WallpaperFilenameIdentifiers.iPhone
+                ],
+                from: input)
+        }
+    }
+
+    private func strip(_ identifiers: [String], from input: String) -> String {
+        if identifiers.isEmpty { return input }
+
+        return strip(identifiers.tail,
+                     from: input.replacingOccurrences(of: identifiers[0], with: ""))
     }
 }

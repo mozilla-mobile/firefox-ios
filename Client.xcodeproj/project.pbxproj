@@ -763,6 +763,7 @@
 		C869916328918C36007ACC5C /* WallpaperNetworkingModuleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C869916228918C36007ACC5C /* WallpaperNetworkingModuleTests.swift */; };
 		C869916528918C8E007ACC5C /* WallpaperURLSessionMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C869916428918C8E007ACC5C /* WallpaperURLSessionMock.swift */; };
 		C869916828919347007ACC5C /* URLSessionDataTaskProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C869916728919347007ACC5C /* URLSessionDataTaskProtocol.swift */; };
+		C8741FE928C4D30F00030029 /* FileManagerInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8741FE828C4D30F00030029 /* FileManagerInterface.swift */; };
 		C874FB3A2660E8B900EBE86E /* CredentialProviderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C874FB392660E8B900EBE86E /* CredentialProviderPresenter.swift */; };
 		C874FC2826612BFF00EBE86E /* AlertControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C874FC2726612BFF00EBE86E /* AlertControllerView.swift */; };
 		C874FC652661367900EBE86E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C874FC642661367900EBE86E /* MainInterface.storyboard */; };
@@ -3970,6 +3971,7 @@
 		C869916428918C8E007ACC5C /* WallpaperURLSessionMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperURLSessionMock.swift; sourceTree = "<group>"; };
 		C869916728919347007ACC5C /* URLSessionDataTaskProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionDataTaskProtocol.swift; sourceTree = "<group>"; };
 		C86E4F702493BA8E0087BFD9 /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
+		C8741FE828C4D30F00030029 /* FileManagerInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerInterface.swift; sourceTree = "<group>"; };
 		C874FB392660E8B900EBE86E /* CredentialProviderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderPresenter.swift; sourceTree = "<group>"; };
 		C874FC2726612BFF00EBE86E /* AlertControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertControllerView.swift; sourceTree = "<group>"; };
 		C874FC642661367900EBE86E /* MainInterface.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
@@ -7350,6 +7352,7 @@
 				DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */,
 				8AE1E1D127B1ADC40024C45E /* TopBottomInterchangeable.swift */,
 				8A6B77CD2811CD11001110D2 /* URLCaching.swift */,
+				C8741FE828C4D30F00030029 /* FileManagerInterface.swift */,
 				C80C11EB28B3C7100062922A /* UserDefaultsInterface.swift */,
 			);
 			path = Protocols;
@@ -10698,6 +10701,7 @@
 				D04CD74C216CF86B004FF5B0 /* InstructionsViewController.swift in Sources */,
 				8AC5D55F28BFE6C8001F6F7F /* Presenter.swift in Sources */,
 				C8501F4F2850FB72003B09AB /* LegacyWallpaperMigrationUtility.swift in Sources */,
+				C8741FE928C4D30F00030029 /* FileManagerInterface.swift in Sources */,
 				8A3233FE28627446003E1C33 /* LocalDesktopFolder.swift in Sources */,
 				C8954A532729AD9D001C7283 /* ThemeManager.swift in Sources */,
 				8AD40FCA27BADC4B00672675 /* ReaderModeButton.swift in Sources */,
