@@ -43,6 +43,19 @@ struct WallpaperCollection: Codable, Equatable {
         return URL(string: urlString)
     }
 
+    var isAvailable: Bool {
+        let isDateAvailable = availability?.isAvailable ?? true
+        var isLocaleAvailable: Bool = false
+
+        if let availableLocales = availableLocales {
+            isLocaleAvailable = availableLocales.isEmpty || availableLocales.contains(Locale.current.identifier)
+        } else {
+            isLocaleAvailable = true
+        }
+
+        return isDateAvailable && isLocaleAvailable
+    }
+
     init(
         id: String,
         learnMoreURL: String?,

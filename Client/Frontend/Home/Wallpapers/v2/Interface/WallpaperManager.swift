@@ -119,7 +119,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
 
     public func removeDownloadedAssets() {
         let storageUtility = WallpaperStorageUtility()
-        try? storageUtility.removeUnusedLargeWallpaperFiles()
+        try? storageUtility.cleanUpUnusedAssets()
     }
 
     /// Reaches out to the server and fetches the latest metadata. This is then compared
@@ -150,18 +150,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     private func getAvailableCollections() -> [WallpaperCollection] {
         guard let metadata = getMetadata() else { return [] }
 
-        let collections = metadata.collections.filter {
-            let isDateAvailable = $0.availability?.isAvailable ?? true
-            var isLocaleAvailable: Bool = false
-
-            if let availableLocales = $0.availableLocales {
-                isLocaleAvailable = availableLocales.isEmpty || availableLocales.contains(Locale.current.identifier)
-            } else {
-                isLocaleAvailable = true
-            }
-
-            return isDateAvailable && isLocaleAvailable
-        }
+        let collections = metadata.collections.filter { $0.isAvailable }
 
         let collectionsWithDefault = addDefaultWallpaper(to: collections)
         return collectionsWithDefault

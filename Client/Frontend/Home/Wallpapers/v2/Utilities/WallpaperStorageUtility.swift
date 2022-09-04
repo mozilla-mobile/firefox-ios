@@ -11,6 +11,7 @@ enum WallpaperStorageErrors: Error {
     case failedToConvertImage
     case failedSavingFile
     case cannotFindWallpaperDirectory
+    case cannotFindThumbnailDirectory
 }
 
 /// Responsible for writing or deleting wallpaper data to/from memory.
@@ -100,28 +101,20 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
     }
 
     // MARK: - Deletion
-    public func removeUnusedLargeWallpaperFiles() throws {
+    public func cleanUpUnusedAssets() throws {
+        try removeUnusedLargeWallpaperFiles()
+        try removeUnusedThumbnails()
+    }
+
+    // MARK: - Helper functions
+    private func removeUnusedLargeWallpaperFiles() throws {
         let filePathProvider = WallpaperFilePathProvider(with: fileManager)
+
         guard let wallpaperDirectory = filePathProvider.wallpaperDirectoryPath() else {
             throw WallpaperStorageErrors.cannotFindWallpaperDirectory
         }
 
-        let directoryContents = try fileManager.contentsOfDirectory(
-            at: wallpaperDirectory,
-            includingPropertiesForKeys: nil,
-            options: [])
-
-        let directoriesToKeep = try directoriesToKeep()
-        for url in directoryContents.filter({ !directoriesToKeep.contains($0.lastPathComponent) }) {
-            try removeFileIfItExists(at: url)
-        }
-    }
-
-    // MARK: - Helper functions
-    private func removeFileIfItExists(at url: URL) throws {
-        if fileManager.fileExists(atPath: url.path) {
-            try fileManager.removeItem(at: url)
-        }
+        try removefiles(from: wallpaperDirectory, excluding: try directoriesToKeep())
     }
 
     private func directoriesToKeep() throws -> [String] {
@@ -132,5 +125,37 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
             filePathProvider.thumbnailsKey,
             filePathProvider.metadataKey
         ]
+    }
+
+    private func removeUnusedThumbnails() throws {
+        let filePathProvider = WallpaperFilePathProvider(with: fileManager)
+
+        guard let thumbnailsDirectory = filePathProvider.folderPath(forKey: filePathProvider.thumbnailsKey),
+              let metadata = try fetchMetadata()
+        else { throw WallpaperStorageErrors.cannotFindThumbnailDirectory }
+
+        let availableThumbnailIDs = metadata.collections
+            .filter { $0.isAvailable }
+            .flatMap { $0.wallpapers }
+            .map { $0.thumbnailID }
+
+        try removefiles(from: thumbnailsDirectory, excluding: availableThumbnailIDs)
+    }
+
+    private func removefiles(from directory: URL, excluding filesToKeep: [String]) throws {
+        let directoryContents = try fileManager.contentsOfDirectory(
+            at: directory,
+            includingPropertiesForKeys: nil,
+            options: [])
+
+        for url in directoryContents.filter({ !filesToKeep.contains($0.lastPathComponent) }) {
+            try removeFileIfItExists(at: url)
+        }
+    }
+
+    private func removeFileIfItExists(at url: URL) throws {
+        if fileManager.fileExists(atPath: url.path) {
+            try fileManager.removeItem(at: url)
+        }
     }
 }
