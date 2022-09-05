@@ -331,6 +331,21 @@ struct UIConstants {
         static let tooltipBodyTextForTrashIcon = NSLocalizedString("TooltipBodyText.TrashIcon", value: "Tap the trash anytime to remove all traces of your current session.", comment: "This is the body text that is displayed for the Trash icon tooltip")
         static let tooltipBodyTextForTrashIconV2 = NSLocalizedString("TooltipBodyText.TrashIcon.V2", value: "Tap here to trash it all—history, cookies, everything—and start fresh on a new tab.", comment: "This is the body text that is displayed for the Trash icon tooltip")
 
+        // Quick Action - Small Size - Gallery View
+        static let quickActionGalleryDescription = NSLocalizedString(
+                "TodayWidget.QuickActionGalleryDescription",
+                value: "Add a Firefox shortcut to your Home screen. After adding the widget, touch and hold to edit it and select a different shortcut.",
+                comment: "Description for small size widget to add it to home screen")
+        public static let quickActionsGalleryTitle = NSLocalizedString(
+                "TodayWidget.QuickActionsGalleryTitle",
+                value: "Quick Actions",
+                comment: "Quick Actions title when widget enters edit mode")
+
+        public static let searchInApp = NSLocalizedString(
+                "TodayWidget.SearchInApp",
+                value: "Search in",
+                comment: "Translate only 'Search in'. App name will is rendered in a different label.")
+
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
         static let userDefaultsLastReviewRequestDate = "lastReviewRequestDate"
