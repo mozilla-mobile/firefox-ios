@@ -499,8 +499,8 @@
 		8A0017C128A3FF6100FEFC8B /* MessageCardDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0017C028A3FF6100FEFC8B /* MessageCardDataAdaptor.swift */; };
 		8A01891C275E9C2A00923EFE /* ClearHistorySheetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A01891B275E9C2A00923EFE /* ClearHistorySheetProvider.swift */; };
 		8A03294E288F1F0800AD9B89 /* TopSitesDimension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A03294D288F1F0800AD9B89 /* TopSitesDimension.swift */; };
-		8A03309528C2653600286539 /* FileManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A03309428C2653600286539 /* FileManagerProtocol.swift */; };
-		8A03309828C2691800286539 /* FileManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A03309428C2653600286539 /* FileManagerProtocol.swift */; };
+		8A03309528C2653600286539 /* TabFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A03309428C2653600286539 /* TabFileManager.swift */; };
+		8A03309828C2691800286539 /* TabFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A03309428C2653600286539 /* TabFileManager.swift */; };
 		8A04136928258DF600D20B10 /* SponsoredTileTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A04136828258DF600D20B10 /* SponsoredTileTelemetry.swift */; };
 		8A04136B2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */; };
 		8A05123927D17EC3009930CC /* LegacyWallpaperStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A05123827D17EC3009930CC /* LegacyWallpaperStorageUtility.swift */; };
@@ -3153,7 +3153,7 @@
 		8A0017C028A3FF6100FEFC8B /* MessageCardDataAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCardDataAdaptor.swift; sourceTree = "<group>"; };
 		8A01891B275E9C2A00923EFE /* ClearHistorySheetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearHistorySheetProvider.swift; sourceTree = "<group>"; };
 		8A03294D288F1F0800AD9B89 /* TopSitesDimension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesDimension.swift; sourceTree = "<group>"; };
-		8A03309428C2653600286539 /* FileManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerProtocol.swift; sourceTree = "<group>"; };
+		8A03309428C2653600286539 /* TabFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabFileManager.swift; sourceTree = "<group>"; };
 		8A04136828258DF600D20B10 /* SponsoredTileTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsoredTileTelemetry.swift; sourceTree = "<group>"; };
 		8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsoredTileTelemetryTests.swift; sourceTree = "<group>"; };
 		8A05123827D17EC3009930CC /* LegacyWallpaperStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyWallpaperStorageUtility.swift; sourceTree = "<group>"; };
@@ -6269,7 +6269,7 @@
 			children = (
 				63306D422110B3CD00F25400 /* TabManagerStore.swift */,
 				1DA3CE5E24EEE7C600422BB2 /* TabDataRetriever.swift */,
-				8A03309428C2653600286539 /* FileManagerProtocol.swift */,
+				8A03309428C2653600286539 /* TabFileManager.swift */,
 			);
 			path = "Tab Management";
 			sourceTree = "<group>";
@@ -9670,7 +9670,7 @@
 				1DF426CF251BDF6A0086386A /* photon-colors.swift in Sources */,
 				4392FB5C252EC51E00AD3D23 /* PrivilegedRequest.swift in Sources */,
 				1D06AE6A24FEE8D6000B092B /* TabProvider.swift in Sources */,
-				8A03309828C2691800286539 /* FileManagerProtocol.swift in Sources */,
+				8A03309828C2691800286539 /* TabFileManager.swift in Sources */,
 				DA9FD88424E213B500168D1E /* SmallQuickLink.swift in Sources */,
 				435222C225882E3800FCA5B6 /* WidgetKitTopSiteModel.swift in Sources */,
 				1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */,
@@ -10536,7 +10536,7 @@
 				C84655E8288739CB00861B4A /* WallpaperCollectionAvailability.swift in Sources */,
 				8ABC5AEE284532C900FEA552 /* PocketDiscoverCell.swift in Sources */,
 				C834330026BAD32800ABAAA6 /* EnhancedTrackingProtectionDetailsVM.swift in Sources */,
-				8A03309528C2653600286539 /* FileManagerProtocol.swift in Sources */,
+				8A03309528C2653600286539 /* TabFileManager.swift in Sources */,
 				8AB5958A284145B30090F4AE /* HomepageSectionHandler.swift in Sources */,
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
 				4331A9BB27193DF0005E8080 /* ContextualHintViewController.swift in Sources */,
