@@ -30,7 +30,7 @@ class WallpaperURLProviderTests: XCTestCase {
         let subject = WallpaperURLProvider()
         let path = "path/to"
         let image = "imageName"
-        let expectedURL = URL(string: "\(testURL)/\(path)/\(image).png")
+        let expectedURL = URL(string: "\(testURL)/ios/\(path)/\(image).png")
 
         do {
             let actualURL = try subject.url(for: .imageURL, withKey: path, andFileName: image)

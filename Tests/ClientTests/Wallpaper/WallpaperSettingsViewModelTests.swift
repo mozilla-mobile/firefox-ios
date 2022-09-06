@@ -116,13 +116,13 @@ class WallpaperSettingsViewModelTests: XCTestCase {
         var wallpapersForClassic: [Wallpaper] {
             var wallpapers = [Wallpaper]()
             wallpapers.append(Wallpaper(id: "fxDefault",
-                                        textColour: UIColor.green,
-                                        cardColour: .green))
+                                        textColor: UIColor.green,
+                                        cardColor: .green))
 
             for _ in 0..<4 {
                 wallpapers.append(Wallpaper(id: "fxAmethyst",
-                                            textColour: .red,
-                                            cardColour: .red))
+                                            textColor: .red,
+                                            cardColor: .red))
             }
 
             return wallpapers
@@ -132,8 +132,8 @@ class WallpaperSettingsViewModelTests: XCTestCase {
             var wallpapers = [Wallpaper]()
             for _ in 0..<6 {
                 wallpapers.append(Wallpaper(id: "fxCerulean",
-                                            textColour: .purple,
-                                            cardColour: .purple))
+                                            textColor: .purple,
+                                            cardColor: .purple))
             }
 
             return wallpapers
