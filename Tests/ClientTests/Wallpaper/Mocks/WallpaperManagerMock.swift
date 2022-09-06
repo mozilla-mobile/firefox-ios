@@ -39,7 +39,7 @@ class WallpaperManagerMock: WallpaperManagerInterface {
         completion(fetchResult)
     }
 
-    func removeDownloadedAssets() {
+    func removeUnusedAssets() {
     }
 
     func checkForUpdates() {

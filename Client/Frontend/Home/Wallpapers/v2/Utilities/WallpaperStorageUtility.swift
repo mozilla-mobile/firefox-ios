@@ -107,7 +107,7 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, Loggable {
     }
 
     // MARK: - Deletion
-    public func cleanUpUnusedAssets() throws {
+    public func cleanupUnusedAssets() throws {
         try removeUnusedLargeWallpaperFiles()
         try removeUnusedThumbnails()
     }

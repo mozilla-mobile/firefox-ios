@@ -12,7 +12,7 @@ protocol WallpaperManagerInterface {
 
     func setCurrentWallpaper(to wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
     func fetchAssetsFor(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
-    func removeDownloadedAssets()
+    func removeUnusedAssets()
     func checkForUpdates()
 }
 
@@ -113,9 +113,9 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         }
     }
 
-    public func removeDownloadedAssets() {
+    public func removeUnusedAssets() {
         let storageUtility = WallpaperStorageUtility()
-        try? storageUtility.cleanUpUnusedAssets()
+        try? storageUtility.cleanupUnusedAssets()
     }
 
     /// Reaches out to the server and fetches the latest metadata. This is then compared
