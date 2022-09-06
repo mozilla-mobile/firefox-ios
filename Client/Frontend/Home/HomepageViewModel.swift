@@ -63,6 +63,7 @@ class HomepageViewModel: FeatureFlaggable {
 
     var shownSections = [HomepageSectionType]()
     weak var delegate: HomepageViewModelDelegate?
+    private var wallpaperManager: WallpaperManager
 
     // Child View models
     private var childViewModels: [HomepageViewModelProtocol]
@@ -85,7 +86,8 @@ class HomepageViewModel: FeatureFlaggable {
          tabManager: TabManagerProtocol,
          urlBar: URLBarViewProtocol,
          nimbus: FxNimbus = FxNimbus.shared,
-         isZeroSearch: Bool = false) {
+         isZeroSearch: Bool = false,
+         wallpaperManager: WallpaperManager = WallpaperManager()) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
 
@@ -93,7 +95,8 @@ class HomepageViewModel: FeatureFlaggable {
         let messageCardAdaptor = MessageCardDataAdaptorImplementation()
         self.messageCardViewModel = HomepageMessageCardViewModel(dataAdaptor: messageCardAdaptor)
         messageCardAdaptor.delegate = messageCardViewModel
-        self.topSiteViewModel = TopSitesViewModel(profile: profile)
+        self.topSiteViewModel = TopSitesViewModel(profile: profile, wallpaperManager: wallpaperManager)
+        self.wallpaperManager = wallpaperManager
 
         let siteImageHelper = SiteImageHelper(profile: profile)
         let adaptor = JumpBackInDataAdaptorImplementation(profile: profile,
@@ -103,11 +106,11 @@ class HomepageViewModel: FeatureFlaggable {
             profile: profile,
             isPrivate: isPrivate,
             tabManager: tabManager,
-            adaptor: adaptor)
+            adaptor: adaptor,
+            wallpaperManager: wallpaperManager)
         adaptor.delegate = jumpBackInViewModel
 
-        self.recentlySavedViewModel = RecentlySavedCellViewModel(
-            profile: profile)
+        self.recentlySavedViewModel = RecentlySavedCellViewModel(profile: profile, wallpaperManager: wallpaperManager)
         let deletionUtility = HistoryDeletionUtility(with: profile)
         let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
             profile: profile,
@@ -117,12 +120,14 @@ class HomepageViewModel: FeatureFlaggable {
             with: profile,
             isPrivate: isPrivate,
             urlBar: urlBar,
-            historyHighlightsDataAdaptor: historyDataAdaptor)
+            historyHighlightsDataAdaptor: historyDataAdaptor,
+            wallpaperManager: wallpaperManager)
 
         let pocketDataAdaptor = PocketDataAdaptorImplementation(
             pocketAPI: PocketProvider(),
             pocketSponsoredAPI: MockPocketSponsoredStoriesProvider())
-        self.pocketViewModel = PocketViewModel(pocketDataAdaptor: pocketDataAdaptor)
+        self.pocketViewModel = PocketViewModel(pocketDataAdaptor: pocketDataAdaptor,
+                                               wallpaperManager: wallpaperManager)
         pocketDataAdaptor.delegate = pocketViewModel
 
         self.customizeButtonViewModel = CustomizeHomepageSectionViewModel()

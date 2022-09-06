@@ -237,7 +237,8 @@ class HistoryHighlightsViewModelTests: XCTestCase {
             urlBar: urlBar,
             historyHighlightsDataAdaptor: dataAdaptor,
             dispatchQueue: MockDispatchQueue(),
-            telemetry: telemetry)
+            telemetry: telemetry,
+            wallpaperManager: WallpaperManager())
         subject.delegate = delegate
     }
 

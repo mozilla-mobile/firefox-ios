@@ -27,8 +27,11 @@ class TopSitesViewModel {
     private let topSitesDataAdaptor: TopSitesDataAdaptor
     private let topSiteHistoryManager: TopSiteHistoryManager
     private let googleTopSiteManager: GoogleTopSiteManager
+    private var wallpaperManager: WallpaperManager
 
-    init(profile: Profile, isZeroSearch: Bool = false) {
+    init(profile: Profile,
+         isZeroSearch: Bool = false,
+         wallpaperManager: WallpaperManager) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.dimensionManager = TopSitesDimensionImplementation()
@@ -39,6 +42,7 @@ class TopSitesViewModel {
                                                         topSiteHistoryManager: topSiteHistoryManager,
                                                         googleTopSiteManager: googleTopSiteManager)
         topSitesDataAdaptor = adaptor
+        self.wallpaperManager = wallpaperManager
         adaptor.delegate = self
     }
 
@@ -123,9 +127,18 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     var headerViewModel: LabelButtonHeaderViewModel {
         // Only show a header if the firefox browser logo isn't showing
         let shouldShow = !featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
-        return LabelButtonHeaderViewModel(title: shouldShow ? HomepageSectionType.topSites.title: nil,
-                                          titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
-                                          isButtonHidden: true)
+        var textColor: UIColor?
+        if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
+           wallpaperVersion == .v2,
+           featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly) {
+            textColor = wallpaperManager.currentWallpaper.textColour
+        }
+
+        return LabelButtonHeaderViewModel(
+            title: shouldShow ? HomepageSectionType.topSites.title: nil,
+            titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
+            isButtonHidden: true,
+            textColor: textColor)
     }
 
     var isEnabled: Bool {
