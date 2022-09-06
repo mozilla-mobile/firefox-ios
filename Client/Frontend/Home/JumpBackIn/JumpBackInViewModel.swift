@@ -37,6 +37,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     private var hasSentJumpBackInTileEvent = false
     private var hasSentSyncedTabTileEvent = false
     private let tabManager: TabManagerProtocol
+    private var wallpaperManager: WallpaperManager
     var sectionLayout: JumpBackInSectionLayout = .compactJumpBackIn // We use the compact layout as default
 
     init(
@@ -44,13 +45,15 @@ class JumpBackInViewModel: FeatureFlaggable {
         profile: Profile,
         isPrivate: Bool,
         tabManager: TabManagerProtocol,
-        adaptor: JumpBackInDataAdaptor
+        adaptor: JumpBackInDataAdaptor,
+        wallpaperManager: WallpaperManager
     ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.isPrivate = isPrivate
         self.tabManager = tabManager
         self.jumpBackInDataAdaptor = adaptor
+        self.wallpaperManager = wallpaperManager
     }
 
     func switchTo(group: ASGroup<Tab>) {
@@ -265,12 +268,21 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        return LabelButtonHeaderViewModel(title: HomepageSectionType.jumpBackIn.title,
-                                          titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
-                                          isButtonHidden: false,
-                                          buttonTitle: .RecentlySavedShowAllText,
-                                          buttonAction: headerButtonAction,
-                                          buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn)
+        var textColor: UIColor?
+        if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
+           wallpaperVersion == .v2,
+           featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly) {
+            textColor = wallpaperManager.currentWallpaper.textColour
+        }
+
+        return LabelButtonHeaderViewModel(
+            title: HomepageSectionType.jumpBackIn.title,
+            titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
+            isButtonHidden: false,
+            buttonTitle: .RecentlySavedShowAllText,
+            buttonAction: headerButtonAction,
+            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn,
+            textColor: textColor)
     }
 
     var isEnabled: Bool {

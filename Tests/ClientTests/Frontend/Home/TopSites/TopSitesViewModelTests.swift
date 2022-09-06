@@ -27,7 +27,8 @@ class TopSitesViewModelTests: XCTestCase {
 
     func testDeletionOfSingleSuggestedSite() {
         let viewModel = TopSitesViewModel(profile: profile,
-                                          isZeroSearch: false)
+                                          isZeroSearch: false,
+                                          wallpaperManager: WallpaperManager())
         let topSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
                                                               prefs: profile.prefs)
 
@@ -43,7 +44,8 @@ class TopSitesViewModelTests: XCTestCase {
 
     func testDeletionOfAllDefaultSites() {
         let viewModel = TopSitesViewModel(profile: self.profile,
-                                          isZeroSearch: false)
+                                          isZeroSearch: false,
+                                          wallpaperManager: WallpaperManager())
         let topSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
                                                               prefs: profile.prefs)
 
@@ -62,7 +64,8 @@ extension TopSitesViewModelTests {
 
     func createViewModel(overridenSiteCount: Int = 40, overridenNumberOfRows: Int = 2) -> TopSitesViewModel {
         let viewModel = TopSitesViewModel(profile: self.profile,
-                                          isZeroSearch: false)
+                                          isZeroSearch: false,
+                                          wallpaperManager: WallpaperManager())
         trackForMemoryLeaks(viewModel)
 
         return viewModel

@@ -215,7 +215,9 @@ extension PocketViewModelTests {
     func createSubject(isZeroSearch: Bool = true,
                        file: StaticString = #file,
                        line: UInt = #line) -> PocketViewModel {
-        let subject = PocketViewModel(pocketDataAdaptor: adaptor, isZeroSearch: isZeroSearch)
+        let subject = PocketViewModel(pocketDataAdaptor: adaptor,
+                                      isZeroSearch: isZeroSearch,
+                                      wallpaperManager: WallpaperManager())
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
