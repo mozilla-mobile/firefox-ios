@@ -490,3 +490,33 @@ siri:
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: "2023-02-16"
+
+browser_search:
+  with_ads:
+    type: labeled_counter
+    description: |
+      Records counts of SERP pages with adverts displayed.
+      The key format is ‘<provider-name>’.
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3330
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3367
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-08-20"
+  ad_clicks:
+    type: labeled_counter
+    description: |
+      Records clicks of adverts on SERP pages.
+      The key format is ‘<provider-name>’.
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3330
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3367
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-08-20"

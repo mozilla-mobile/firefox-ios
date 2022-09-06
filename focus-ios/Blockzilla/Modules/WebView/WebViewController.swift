@@ -51,6 +51,7 @@ class WebViewController: UIViewController, WebController {
         case findInPageHandler
         case fullScreen
         case metadata
+        case adsMessageHandler
     }
 
     private enum KVOConstants: String, CaseIterable {
@@ -82,6 +83,8 @@ class WebViewController: UIViewController, WebController {
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
 
+    var adsTelemetryHelper = AdsTelemetryHelper()
+
     init(trackingProtectionManager: TrackingProtectionManager) {
         self.trackingProtectionManager = trackingProtectionManager
         super.init(nibName: nil, bundle: nil)
@@ -91,6 +94,10 @@ class WebViewController: UIViewController, WebController {
         }
         setupWebview()
         ContentBlockerHelper.shared.handler = reloadBlockers(_:)
+        adsTelemetryHelper.getURL = { [weak self] in
+            guard let self = self else { return nil }
+            return self.url
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -161,6 +168,7 @@ class WebViewController: UIViewController, WebController {
         setupFindInPageScripts()
         setupMetadataScripts()
         setupFullScreen()
+        setupAdsScripts()
 
         view.addSubview(browserView)
         browserView.snp.makeConstraints { make in
@@ -211,6 +219,11 @@ class WebViewController: UIViewController, WebController {
         addScript(forResource: "FullScreen", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
 
+    private func setupAdsScripts() {
+        browserView.configuration.userContentController.add(self, name: ScriptHandlers.adsMessageHandler.rawValue)
+        addScript(forResource: "Ads", injectionTime: .atDocumentEnd, forMainFrameOnly: false)
+    }
+
     func disableTrackingProtection() {
         guard case .on = trackingProtectionManager.trackingProtectionStatus else { return }
         ScriptHandlers.allCases.forEach {
@@ -221,6 +234,7 @@ class WebViewController: UIViewController, WebController {
         setupFindInPageScripts()
         setupMetadataScripts()
         setupFullScreen()
+        setupAdsScripts()
         trackingProtectionManager.trackingProtectionStatus = .off
     }
 
@@ -347,6 +361,11 @@ extension WebViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
+
+        if let redirectedURL = navigationAction.request.url {
+            adsTelemetryHelper.trackClickedAds(with: redirectedURL)
+        }
+
         // If the user has asked for a specific content mode for this host, use that.
         if let hostName = navigationAction.request.url?.host, let preferredContentMode = contentModeForHost[hostName] {
             preferences.preferredContentMode = preferredContentMode
@@ -468,6 +487,10 @@ extension WebViewController: WKUIDelegate {
 
 extension WebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if message.name == "adsMessageHandler" {
+            adsTelemetryHelper.trackAds(message: message)
+        }
+
         if message.name == "findInPageHandler" {
             let data = message.body as! [String: Int]
 
