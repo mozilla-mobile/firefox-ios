@@ -168,13 +168,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupLayout() {
-        contentView.layer.cornerRadius = UX.generalCornerRadius
-        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = UX.stackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
-        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = 0.12
+        setupShadow()
 
         fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
         imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
@@ -237,30 +231,42 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
         // Add blur
         contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-        fallbackFaviconBackground.addBlurEffectWithClearBackgroundAndClipping(using: .systemMaterial)
+    }
+
+    private func setupShadow() {
+        contentView.layer.cornerRadius = UX.generalCornerRadius
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                    cornerRadius: UX.generalCornerRadius).cgPath
+        contentView.layer.shadowRadius = UX.stackViewShadowRadius
+        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
+        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        contentView.layer.shadowOpacity = 0.12
     }
 }
 
 // MARK: - Theme
 extension JumpBackInCell: NotificationThemeable {
     func applyTheme() {
-        if LegacyThemeManager.instance.currentName == .dark {
+        let isDarkMode = LegacyThemeManager.instance.currentName == .dark
+        if isDarkMode {
             [itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
             faviconImage.tintColor = UIColor.Photon.LightGrey10
             fallbackFaviconImage.tintColor = UIColor.Photon.LightGrey10
+            fallbackFaviconBackground.backgroundColor = UIColor.Photon.DarkGrey60
         } else {
             [itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.DarkGrey90 }
             faviconImage.tintColor = UIColor.Photon.DarkGrey90
             fallbackFaviconImage.tintColor = UIColor.Photon.DarkGrey90
+            fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey10
         }
 
         // If blur is disabled set background color
         if UIAccessibility.isReduceTransparencyEnabled {
-            fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey20
-            contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
+            contentView.backgroundColor = isDarkMode ? UIColor.Photon.DarkGrey40 : .white
         }
 
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
+        setupShadow()
     }
 }
 
