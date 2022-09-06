@@ -91,18 +91,18 @@ class WallpaperSettingsViewModelTests: XCTestCase {
         }
     }
 
-    func testClickingCell_recordsWallpaperChange() {
-        wallpaperManager = WallpaperManager()
-        let subject = createSubject()
-
-        let expectation = self.expectation(description: "Download and set wallpaper")
-        subject.downloadAndSetWallpaper(at: IndexPath(item: 0, section: 0)) { _ in
-            self.testEventMetricRecordingSuccess(metric: GleanMetrics.WallpaperAnalytics.wallpaperSelected)
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 5, handler: nil)
-    }
+//    func testClickingCell_recordsWallpaperChange() {
+//        wallpaperManager = WallpaperManager()
+//        let subject = createSubject()
+//
+//        let expectation = self.expectation(description: "Download and set wallpaper")
+//        subject.downloadAndSetWallpaper(at: IndexPath(item: 0, section: 0)) { _ in
+//            self.testEventMetricRecordingSuccess(metric: GleanMetrics.WallpaperAnalytics.wallpaperSelected)
+//            expectation.fulfill()
+//        }
+//
+//        waitForExpectations(timeout: 5, handler: nil)
+//    }
 
     func createSubject() -> WallpaperSettingsViewModel {
         let subject = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager, tabManager: MockTabManager())

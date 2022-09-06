@@ -6645,7 +6645,7 @@
 			path = ThirdParty/ecec/src;
 			sourceTree = SOURCE_ROOT;
 		};
-		C84655DC2887384200861B4A /* v2 */ = {
+		C84655DC2887384200861B4A /* v1 */ = {
 			isa = PBXGroup;
 			children = (
 				C84655E02887387D00861B4A /* Interface */,
@@ -6655,7 +6655,7 @@
 				E1FF93E028A2E13600E6360E /* UI */,
 				C84655DE2887386A00861B4A /* Utilities */,
 			);
-			path = v2;
+			path = v1;
 			sourceTree = "<group>";
 		};
 		C84655DD2887386200861B4A /* Protocols */ = {
@@ -7328,7 +7328,7 @@
 		DFACBF82277B9278003D5F41 /* Wallpapers */ = {
 			isa = PBXGroup;
 			children = (
-				C84655DC2887384200861B4A /* v2 */,
+				C84655DC2887384200861B4A /* v1 */,
 				C85F9711287CC3D200F5EE86 /* Legacy */,
 			);
 			path = Wallpapers;
@@ -7367,7 +7367,7 @@
 		DFB2610E277CC5CD00DDDD38 /* WallpaperSettings */ = {
 			isa = PBXGroup;
 			children = (
-				E127313528B6ACD4006F39D2 /* v2 */,
+				E127313528B6ACD4006F39D2 /* v1 */,
 				E127313428B6ACCD006F39D2 /* Legacy */,
 			);
 			path = WallpaperSettings;
@@ -7383,14 +7383,14 @@
 			path = Legacy;
 			sourceTree = "<group>";
 		};
-		E127313528B6ACD4006F39D2 /* v2 */ = {
+		E127313528B6ACD4006F39D2 /* v1 */ = {
 			isa = PBXGroup;
 			children = (
 				E127313A28B6AD99006F39D2 /* WallpaperSettingsViewController.swift */,
 				E127313B28B6AD99006F39D2 /* WallpaperSettingsViewModel.swift */,
 				E127313E28B6C194006F39D2 /* WallpaperSettingsHeaderView.swift */,
 			);
-			path = v2;
+			path = v1;
 			sourceTree = "<group>";
 		};
 		E15A8B2B286CFD48004BB2B8 /* Tests */ = {

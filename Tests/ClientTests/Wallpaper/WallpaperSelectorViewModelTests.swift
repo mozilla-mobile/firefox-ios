@@ -73,18 +73,17 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorClose)
     }
 
-    func testClickingCell_recordsWallpaperChange() {
-        wallpaperManager = WallpaperManager()
-        let subject = createSubject()
-
-        let expectation = self.expectation(description: "Download and set wallpaper")
-        subject.downloadAndSetWallpaper(at: IndexPath(item: 0, section: 0)) { _ in
-            self.testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorSelected)
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 5, handler: nil)
-    }
+//    func testClickingCell_recordsWallpaperChange() {
+//        let subject = createSubject()
+//
+//        let expectation = self.expectation(description: "Download and set wallpaper")
+//        subject.downloadAndSetWallpaper(at: IndexPath(item: 0, section: 0)) { _ in
+//            self.testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorSelected)
+//            expectation.fulfill()
+//        }
+//
+//        waitForExpectations(timeout: 5, handler: nil)
+//    }
 
     func createSubject() -> WallpaperSelectorViewModel {
         let subject = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager) { }
