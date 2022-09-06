@@ -1520,7 +1520,7 @@
 "Settings.Sync.SignInView.Title.v103" = "Synkroniser og lagre data";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
-"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Uverksam fane";
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Uverksame faner";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Faner du ikkje har vist på to veker, vert flytta til den inaktive delen.";
@@ -1688,7 +1688,7 @@
 "TabTray.Header.FilteredTabs.SectionHeader" = "Andre";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
-"TabTray.InactiveTabs.SectionTitle" = "Uverksam fane";
+"TabTray.InactiveTabs.SectionTitle" = "Uverksam faner";
 
 /* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Opne ny fane";

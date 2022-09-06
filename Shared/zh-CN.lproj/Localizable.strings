@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "网址与搜索";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "添加到阅读列表";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "地址栏";
 
@@ -355,6 +358,9 @@
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "我们的赞助商﹠您的隐私";
 
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "打开同步的标签页";
+
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "查看所有同步的标签页";
 
@@ -582,6 +588,9 @@
 
 /* Panel accessibility label */
 "LibraryPanel.Accessibility.Bookmarks.v106" = "书签";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "历史";
 
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "取消";
@@ -839,7 +848,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "社交跟踪器";
 
 /* The title that shows the number of cross-site URLs blocked */
-"Menu.TrackingProtectionCrossSiteTrackers.Title" = "跨网站跟踪器";
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "跨站跟踪器";
 
 /* The title that shows the number of cryptomining scripts blocked */
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "加密货币挖矿程序";
@@ -904,8 +913,14 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "暂时不要";
 
+/* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Description.v106" = "同步您其他设备上的标签页和密码，从中断的地方继续浏览。";
+
 /* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v106" = "跳过";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Title.v106" = "手机与 PC 快速切换";
 
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "注册并登录";
@@ -922,11 +937,26 @@
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "限量版壁纸";
 
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v106" = "探索更多壁纸";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v106" = "选择适合您的壁纸。";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Title.v106" = "试用新色彩";
+
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "设置壁纸";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
 "Onboarding.WallpaperTitle.v102" = "选择 Firefox 壁纸";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Description.v106" = "Firefox 始终以人为本，并自动保护您的隐私。";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v106" = "欢迎开启不受巨头左右的互联网世界";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "开始浏览";
@@ -1762,11 +1792,20 @@
 /* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
 "Upgrade.SyncSign.Action.v106" = "登录";
 
+/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v106" = "您现在从主页就可以继续浏览其他设备上的标签页。";
+
 /* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.SyncSign.Title.v106" = "多屏切换更顺手";
 
 /* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
 "Upgrade.Welcome.Action.v106" = "开始使用";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "新色彩、新便利，但始终不变的是以人为本的承诺。";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v106" = "欢迎进入更个性化的互联网";
 
 /* Debug option */
 "Use stage servers" = "使用预发布(Stage)服务器";

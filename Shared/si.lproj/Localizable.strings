@@ -4,6 +4,9 @@
 /* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "+" = "+";
 
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ වෙතින් පරිශීලක නාමයක් හා මුරපදයක් ඉල්ලා සිටියි.";
+
 /* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
 "A username and password are being requested by %@. The site says: %@" = "%1$@ විසින් පරිශීලක නාමයක් සහ මුරපදයක් ඉල්ලා සිටියි. අඩවිය පවසන්නේ: %2$@";
 
@@ -355,8 +358,14 @@
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "අපගේ අනුග්‍රහකයින් හා ඔබගේ පෞද්ගලිකත්‍වය";
 
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "සමමුහූර්ත පටිත්තක් අරින්න";
+
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "සියළු සමමුහූර්ත පටිති බලන්න";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "පටිති ඇහිඳීම";
 
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
 "FirefoxHomepage.Pocket.Sponsored.v103" = "අනුග්‍රහය ලද";
@@ -889,6 +898,9 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
 "Onboarding.IntroAction.v102" = "පටන් ගන්න";
 
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
+"Onboarding.IntroDescriptionPart1.v102" = "ස්වාධීනයි. ලාභ නොලබයි. ප්‍රයෝජනය සඳහාය.";
+
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
 "Onboarding.IntroDescriptionPart2.v102" = "සෑමට වඩා හොඳ අන්තර්ජාලයක පොරොන්දුවක් සඳහා කැපවී සිටියි.";
 
@@ -924,6 +936,9 @@
 
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Description.v106" = "ඔබට කතා කරන බිතුපතක් තෝරන්න.";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Title.v106" = "වර්ණ කැලතීමක් බලන්න";
 
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "බිතුපත සකසන්න";
@@ -1333,11 +1348,17 @@
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
 "Settings.Home.Option.StartAtHome.Title" = "විවෘත වන තිරය";
 
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title.v101" = "මුල් පිටුවට යොදන්න";
+
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "බිතුපත";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "පෙරනිමි පැහැදිලි බිතුපත.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "මුල් පිටුවට බිතුපත් චක්‍රීයව යෙදීම";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "විවෘත වන තිරය";
