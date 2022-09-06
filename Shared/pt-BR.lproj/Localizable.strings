@@ -107,7 +107,7 @@
 "Bookmarks.Folder.Label" = "Pasta";
 
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
-"Bookmarks.Menu.DesktopBookmarks" = "Favoritos do desktop";
+"Bookmarks.Menu.DesktopBookmarks" = "Favoritos do computador";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Novo favorito";
