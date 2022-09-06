@@ -354,8 +354,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 // MARK: - Theme
 extension SyncedTabCell: NotificationThemeable {
     func applyTheme() {
-        let isDarkMode = LegacyThemeManager.instance.currentName == .dark
-        if  isDarkMode {
+        if  LegacyThemeManager.instance.currentName == .dark {
             cardTitle.textColor  = UIColor.Photon.LightGrey10
             itemTitle.textColor = UIColor.Photon.LightGrey05
             descriptionLabel.textColor = UIColor.Photon.LightGrey40
@@ -373,13 +372,7 @@ extension SyncedTabCell: NotificationThemeable {
             syncedDeviceImage.image = syncedDeviceImage.image?.tinted(withColor: .black)
         }
 
-        // If blur is disabled set background color
-        if UIAccessibility.isReduceTransparencyEnabled {
-            contentView.backgroundColor = isDarkMode ? UIColor.Photon.DarkGrey40 : .white
-        }
-
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
-        setupShadow()
     }
 }
 
