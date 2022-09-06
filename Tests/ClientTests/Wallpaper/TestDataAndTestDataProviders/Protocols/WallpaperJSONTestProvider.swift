@@ -12,7 +12,7 @@ enum WallpaperJSONId: String {
     case noLocales = "wallpaperNoLocales"
     case availabilityStart = "wallpaperAvailabilityStart"
     case availabilityEnd = "wallpaperAvailabilityEnd"
-    case badTextColour = "wallpaperBadTextColour"
+    case badTextColor = "wallpaperBadTextColor"
     case newUpdates = "wallpaperNewUpdates"
 }
 

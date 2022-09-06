@@ -110,7 +110,7 @@ extension Wallpaper: Decodable {
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: decoder.codingPath,
-                    debugDescription: "Received text-colour is not a proper hex code"))
+                    debugDescription: "Received text-color is not a proper hex code"))
         }
 
         colorInt = 0
@@ -120,7 +120,7 @@ extension Wallpaper: Decodable {
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: decoder.codingPath,
-                    debugDescription: "Received text-colour is not a proper hex code"))
+                    debugDescription: "Received text-color is not a proper hex code"))
         }
     }
 }

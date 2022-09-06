@@ -753,7 +753,7 @@
 		C869915728917809007ACC5C /* NetworkingMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C869914C28917789007ACC5C /* NetworkingMock.swift */; };
 		C869915828917811007ACC5C /* wallpaperNoAvailabilityRange.json in Resources */ = {isa = PBXBuildFile; fileRef = C86991372891776F007ACC5C /* wallpaperNoAvailabilityRange.json */; };
 		C869915928917811007ACC5C /* wallpaperAvailabilityEnd.json in Resources */ = {isa = PBXBuildFile; fileRef = C86991362891776E007ACC5C /* wallpaperAvailabilityEnd.json */; };
-		C869915A28917811007ACC5C /* wallpaperBadTextColour.json in Resources */ = {isa = PBXBuildFile; fileRef = C869913D28917771007ACC5C /* wallpaperBadTextColour.json */; };
+		C869915A28917811007ACC5C /* wallpaperBadTextColor.json in Resources */ = {isa = PBXBuildFile; fileRef = C869913D28917771007ACC5C /* wallpaperBadTextColor.json */; };
 		C869915B28917811007ACC5C /* wallpaperNewUpdates.json in Resources */ = {isa = PBXBuildFile; fileRef = C869913B28917771007ACC5C /* wallpaperNewUpdates.json */; };
 		C869915C28917811007ACC5C /* wallpaperNoLocales.json in Resources */ = {isa = PBXBuildFile; fileRef = C869913C28917771007ACC5C /* wallpaperNoLocales.json */; };
 		C869915D28917811007ACC5C /* wallpaperAvailabilityStart.json in Resources */ = {isa = PBXBuildFile; fileRef = C86991382891776F007ACC5C /* wallpaperAvailabilityStart.json */; };
@@ -3965,7 +3965,7 @@
 		C869913A28917770007ACC5C /* wallpaperBadLastUpdatedDate.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperBadLastUpdatedDate.json; sourceTree = "<group>"; };
 		C869913B28917771007ACC5C /* wallpaperNewUpdates.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperNewUpdates.json; sourceTree = "<group>"; };
 		C869913C28917771007ACC5C /* wallpaperNoLocales.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperNoLocales.json; sourceTree = "<group>"; };
-		C869913D28917771007ACC5C /* wallpaperBadTextColour.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperBadTextColour.json; sourceTree = "<group>"; };
+		C869913D28917771007ACC5C /* wallpaperBadTextColor.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wallpaperBadTextColor.json; sourceTree = "<group>"; };
 		C86991462891777E007ACC5C /* WallpaperMetadataTestProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperMetadataTestProvider.swift; sourceTree = "<group>"; };
 		C86991472891777F007ACC5C /* WallpaperJSONTestProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperJSONTestProvider.swift; sourceTree = "<group>"; };
 		C86991482891777F007ACC5C /* WallpaperTestDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperTestDataProvider.swift; sourceTree = "<group>"; };
@@ -6769,7 +6769,7 @@
 				C86991362891776E007ACC5C /* wallpaperAvailabilityEnd.json */,
 				C86991382891776F007ACC5C /* wallpaperAvailabilityStart.json */,
 				C869913A28917770007ACC5C /* wallpaperBadLastUpdatedDate.json */,
-				C869913D28917771007ACC5C /* wallpaperBadTextColour.json */,
+				C869913D28917771007ACC5C /* wallpaperBadTextColor.json */,
 				C86991392891776F007ACC5C /* wallpaperGoodData.json */,
 				C87BE0A328A2ED3F00BAADF5 /* wallpaperNoLearnMoreURL.json */,
 				C869913B28917771007ACC5C /* wallpaperNewUpdates.json */,
@@ -9422,7 +9422,7 @@
 				C869915B28917811007ACC5C /* wallpaperNewUpdates.json in Resources */,
 				C869915D28917811007ACC5C /* wallpaperAvailabilityStart.json in Resources */,
 				C87BE0A428A2ED3F00BAADF5 /* wallpaperNoLearnMoreURL.json in Resources */,
-				C869915A28917811007ACC5C /* wallpaperBadTextColour.json in Resources */,
+				C869915A28917811007ACC5C /* wallpaperBadTextColor.json in Resources */,
 				C8B0F5EB283B7BF9007AE65D /* pocketsponsoredfeed.json in Resources */,
 				C869915F28917811007ACC5C /* wallpaperGoodData.json in Resources */,
 				C869915928917811007ACC5C /* wallpaperAvailabilityEnd.json in Resources */,
