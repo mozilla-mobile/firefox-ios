@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Vistfang og leit";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Bæta við leslista";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "Veffangastika";
 
@@ -355,6 +358,9 @@
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Styrktaraðilar okkar og friðhelgi þín";
 
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Opna samstilltan flipa";
+
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Sjá alla samstillta flipa";
 
@@ -580,6 +586,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Í síðustu viku";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Bókamerki";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Ferill";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Hætta við";
 
@@ -747,6 +759,12 @@
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Sóttar skrár";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "SLÖKKT er á vörn fyrir þetta vefssvæði";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "KVEIKT er á vörn fyrir þetta vefsvæði";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Hjálp";
@@ -1000,6 +1018,12 @@
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Leshamur í boði";
 
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Merkja sem lesið";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Merkja sem ólesið";
+
 /* Panel accessibility label */
 "Reading list" = "Leslisti";
 
@@ -1098,6 +1122,15 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Í lagi";
+
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Sjálfgefin leitarvél";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "Sjálfgefin leitarvél";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "Leita";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Senda hrunaskýrslu svo Mozilla geti lagað vandamálið?";
@@ -1660,6 +1693,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Fela óvirka flipa";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Leita";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Bæta við flipa";
 
@@ -1690,6 +1726,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "Opnir flipar";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Birta flipa";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Ekki er hægt að sýna þessa síðu í lesham.";
 
@@ -1701,6 +1740,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "þessa viku";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "í gær";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "Ekki núna";
