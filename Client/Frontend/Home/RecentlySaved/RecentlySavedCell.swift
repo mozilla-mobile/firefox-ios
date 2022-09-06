@@ -93,11 +93,11 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         applyTheme()
     }
 
-    func configure(site: Site, heroImage: UIImage?, favIconImage: UIImage?) {
-        configureImages(heroImage: heroImage, favIconImage: favIconImage)
+    func configure(viewModel: RecentlySavedCellViewModel) {
+        configureImages(heroImage: viewModel.heroImage, favIconImage: viewModel.favIconImage)
 
-        itemTitle.text = site.title
-        adjustLayout()
+        itemTitle.text = viewModel.site.title
+        adjustLayout(shouldAddBlur: viewModel.shouldAddBlur)
     }
 
     private func configureImages(heroImage: UIImage?, favIconImage: UIImage?) {
@@ -123,6 +123,8 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
     // MARK: - Helpers
 
     private func setupLayout() {
+        contentView.backgroundColor = .clear
+
         fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
         imageContainer.addSubviews(heroImageView, fallbackFaviconBackground)
         rootContainer.addSubviews(imageContainer, itemTitle)
@@ -174,19 +176,23 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
             itemTitle.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
                                               constant: -UX.generalSpacing)
         ])
-
-        setupShadow()
-        adjustLayout()
     }
 
-    func adjustLayout() {
-        contentView.backgroundColor = .clear
+    func adjustLayout(shouldAddBlur: Bool) {
+        // If blur is disabled set background color
+        guard shouldAddBlur else {
+            let isDarkMode = LegacyThemeManager.instance.currentName == .dark
+                rootContainer.backgroundColor = isDarkMode ? UIColor.Photon.DarkGrey40 : .white
+            setupShadow()
+
+            return
+        }
+
         rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
     }
 
     func applyTheme() {
-        let isDarkMode = LegacyThemeManager.instance.currentName == .dark
-        if isDarkMode {
+        if LegacyThemeManager.instance.currentName == .dark {
             itemTitle.textColor = UIColor.Photon.LightGrey10
             fallbackFaviconBackground.backgroundColor = UIColor.Photon.DarkGrey60
         } else {
@@ -194,13 +200,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
             fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey10
         }
 
-        // If blur is disabled set background color and addShadow
-        if UIAccessibility.isReduceTransparencyEnabled {
-            rootContainer.backgroundColor = isDarkMode ? UIColor.Photon.DarkGrey40 : .white
-        }
-
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
-        setupShadow()
     }
 
     private func setupShadow() {

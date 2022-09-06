@@ -40,6 +40,12 @@ class JumpBackInViewModel: FeatureFlaggable {
     private var wallpaperManager: WallpaperManager
     var sectionLayout: JumpBackInSectionLayout = .compactJumpBackIn // We use the compact layout as default
 
+    var shouldAddDefaultBackground: Bool {
+        guard !UIAccessibility.isReduceTransparencyEnabled else { return true }
+
+        return wallpaperManager.currentWallpaper.type == .defaultWallpaper
+    }
+
     init(
         isZeroSearch: Bool = false,
         profile: Profile,
