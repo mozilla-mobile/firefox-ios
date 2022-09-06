@@ -66,7 +66,7 @@ class WallpaperThumbnailUtility {
         let missingThumbnails = getListOfMissingTumbnails(from: collections)
         if !missingThumbnails.isEmpty {
             for (key, fileName) in missingThumbnails {
-                let thumbnail = try await dataService.getImageWith(key: key, imageName: fileName)
+                let thumbnail = try await dataService.getImage(named: fileName, withFolderName: key)
                 try storageUtility.store(thumbnail, withName: fileName, andKey: key)
             }
         }

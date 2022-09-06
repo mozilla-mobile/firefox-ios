@@ -32,10 +32,11 @@ class WallpaperDataService {
     }
 
     /// Main interface for fetching images from the server
-    func getImageWith(key: String, imageName: String) async throws -> UIImage {
-        let url = try WallpaperURLProvider().url(for: .imageURL,
-                                                 withKey: key,
-                                                 andFileName: imageName)
+    func getImage(
+        named imageName: String,
+        withFolderName folderName: String
+    ) async throws -> UIImage {
+        let url = try WallpaperURLProvider().url(for: .image(named: imageName, withFolderName: folderName))
         let loader = WallpaperImageLoader(networkModule: networking)
 
         return try await loader.fetchImage(from: url)

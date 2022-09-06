@@ -7,7 +7,7 @@ import Shared
 
 enum WallpaperURLType {
     case metadata
-    case imageURL
+    case image(named: String, withFolderName: String)
 }
 
 struct WallpaperURLProvider {
@@ -25,14 +25,12 @@ struct WallpaperURLProvider {
     static let testURL = "https://my.test.url"
     let currentMetadataEndpoint: WallpaperMetadataEndpoint = .v1
 
-    func url(
-        for urlType: WallpaperURLType,
-        withKey key: String = "",
-        andFileName fileName: String = ""
-    ) throws -> URL {
+    func url(for urlType: WallpaperURLType) throws -> URL {
         switch urlType {
-        case .metadata: return try metadataURL()
-        case .imageURL: return try imageURLWith(key, and: fileName)
+        case .metadata:
+            return try metadataURL()
+        case .image(let fileName, let folderName):
+            return try imageURLWith(folderName, and: fileName)
         }
     }
 

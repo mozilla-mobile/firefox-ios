@@ -92,12 +92,12 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
 
             do {
                 // Download both images at the same time for efficiency
-                async let portraitFetchRequest = dataService.getImageWith(
-                    key: wallpaper.id,
-                    imageName: wallpaper.portraitID)
-                async let landscapeFetchRequest = dataService.getImageWith(
-                    key: wallpaper.id,
-                    imageName: wallpaper.landscapeID)
+                async let portraitFetchRequest = dataService.getImage(
+                    named: wallpaper.portraitID,
+                    withFolderName: wallpaper.id)
+                async let landscapeFetchRequest = dataService.getImage(
+                    named: wallpaper.landscapeID,
+                    withFolderName: wallpaper.id)
 
                 let (portrait, landscape) = await (try portraitFetchRequest,
                                                    try landscapeFetchRequest)
