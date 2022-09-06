@@ -6,7 +6,6 @@ import UIKit
 import Storage
 
 struct SiteTableViewControllerUX {
-    static let HeaderHeight: CGFloat = 32
     static let RowHeight: CGFloat = 44
 }
 
@@ -130,7 +129,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return SiteTableViewControllerUX.HeaderHeight
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

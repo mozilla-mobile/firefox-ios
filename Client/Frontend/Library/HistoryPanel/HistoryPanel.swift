@@ -20,7 +20,6 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
 
     struct UX {
         static let WelcomeScreenItemWidth = 170
-        static let HeaderHeight = CGFloat(40)
         static let IconSize = 23
         static let IconBorderColor = UIColor.Photon.Grey30
         static let IconBorderWidth: CGFloat = 0.5
@@ -670,7 +669,7 @@ extension HistoryPanel: UITableViewDelegate {
             return 0
         }
 
-        return UX.HeaderHeight
+        return UITableView.automaticDimension
     }
 }
 

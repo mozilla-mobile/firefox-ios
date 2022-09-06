@@ -10,7 +10,6 @@ private struct DownloadsPanelUX {
     static let WelcomeScreenTopPadding: CGFloat = 120
     static let WelcomeScreenPadding: CGFloat = 15
     static let WelcomeScreenItemWidth: CGFloat = 170
-    static let HeaderHeight: CGFloat = 28
 }
 
 struct DownloadedFile: Equatable {
@@ -328,7 +327,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard groupedDownloadedFiles.numberOfItemsForSection(section) > 0 else { return 0 }
 
-        return DownloadsPanelUX.HeaderHeight
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
