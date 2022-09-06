@@ -520,6 +520,9 @@
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Desse standardinnstillingane gir sterkt vern. Men det er enkelt å tilpasse innstillingane for å møte dine spesielle behov.";
 
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Start den private nettlesingsøkta di, så blokkerer vi sporarar og andre dårlege ting medan du surfar.";
+
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Trykk på papirkorga når som helst for å fjerne alle spor etter gjeldande økt.";
 

@@ -43,6 +43,18 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "ເປີດໃນ %@";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "ຕົກລົງ";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "ເກີດມີຂໍ້ຜິດພາດໃນການເພີ່ມລະຫັດຜ່ານເຂົ້າໄປໃນກະເປົາເງິນ. ກະລຸນາລອງໃຫມ່ອີກຄັ້ງພາຍຫລັງ.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "ຫລົ້ມເລວໃນການເພີ່ມລະຫັດຜ່ານ";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "ພິສູດຢືນຢັນເພື່ອກັບຄືນຫາ %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "ເພີ່ມ URL ທີ່ກຳນົດເອງ";
 
@@ -70,14 +82,35 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "ຖືກປິດການນຳໃຊ້";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL ນີ້ມີຢູ່ແລ້ວ";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "ບໍ່ມີ URLs ກຳນົດເອງທີ່ຈະສະແດງຜົນ";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "ເປີດໃຊ້ງານແລ້ວ";
 
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "ຈັດການເວັບໄຊ";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "ເວັບໄຊຂອງຂ້ອຍ";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "ເປີດໃຊ້ %@ ຕື່ມຂໍ້ມູນ URL ທີ່ທ່ານມັກໂດຍອັດຕະໂນມັດ.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "ເວັບໄຊທ໌ຍອດນິຍົມ";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "ເຊດຊັນໃໝ່";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "ກັບຄືນ";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "ສຳເນົາ";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "ໄປໜ້າ";
@@ -121,6 +154,15 @@
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "ອີເມວ";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "ຄົ້ນຫາໃນຫນ້ານີ້";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "ຄົ້ນຫາຕໍ່ໄປໃນໜ້າ";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "ຄົ້ນຫາກ່ອນໜ້າໃນໜ້າ";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "ໂອເຄ, ເຂົ້າໃຈແລ້ວ!";
 
@@ -129,6 +171,12 @@
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "ປິດ";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "ເລີ່ມການທ່ອງເວັບ";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "ລຶບປະຫວັດການທ່ອງເວັບ, ລະຫັດຜ່ານ, ຄຸກກີ້, ແລະປ້ອງກັນບໍ່ໃຫ້ໂຄສະນາທີ່ບໍ່ຕ້ອງການຕິດຕາມເຈົ້າດ້ວຍການຄລິກງ່າຍໆ!";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "ແຕະ Safari, ຫລັງຈາກນັ້ນເລືອກຕົວບັອກເນື້ອຫາ";
@@ -144,6 +192,12 @@
 
 /* Save button label */
 "Save" = "ບັນທຶກ";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "ບໍ່ຕ້ອງການ";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "ແມ່ນ";
 
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "ການເຕີມ URL ແບບອັດຕະໂນມັດ";
