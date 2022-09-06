@@ -78,6 +78,7 @@ class HistoryHighlightsViewModel {
     var historyHighlightLongPressHandler: ((HighlightItem, UIView?) -> Void)?
     var headerButtonAction: ((UIButton) -> Void)?
     weak var delegate: HomepageDataModelDelegate?
+    private var wallpaperManager: WallpaperManager
 
     // MARK: - Variables
     /// We calculate the number of columns dynamically based on the numbers of items
@@ -112,12 +113,14 @@ class HistoryHighlightsViewModel {
          urlBar: URLBarViewProtocol,
          historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor,
          dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
-         telemetry: TelemetryWrapperProtocol = TelemetryWrapper.shared) {
+         telemetry: TelemetryWrapperProtocol = TelemetryWrapper.shared,
+         wallpaperManager: WallpaperManager) {
         self.profile = profile
         self.isPrivate = isPrivate
         self.urlBar = urlBar
         self.dispatchQueue = dispatchQueue
         self.telemetry = telemetry
+        self.wallpaperManager = wallpaperManager
         self.historyHighlightsDataAdaptor = historyHighlightsDataAdaptor
         self.historyHighlightsDataAdaptor.delegate = self
     }
@@ -171,12 +174,21 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        return LabelButtonHeaderViewModel(title: HomepageSectionType.historyHighlights.title,
-                                          titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.historyHighlights,
-                                          isButtonHidden: false,
-                                          buttonTitle: .RecentlySavedShowAllText,
-                                          buttonAction: headerButtonAction,
-                                          buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.historyHighlights)
+        var textColor: UIColor?
+        if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
+           wallpaperVersion == .v2,
+           featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly) {
+            textColor = wallpaperManager.currentWallpaper.textColour
+        }
+
+        return LabelButtonHeaderViewModel(
+            title: HomepageSectionType.historyHighlights.title,
+            titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.historyHighlights,
+            isButtonHidden: false,
+            buttonTitle: .RecentlySavedShowAllText,
+            buttonAction: headerButtonAction,
+            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.historyHighlights,
+            textColor: textColor)
     }
 
     var isEnabled: Bool {
