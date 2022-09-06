@@ -332,26 +332,33 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard groupedDownloadedFiles.numberOfItemsForSection(section) > 0 else { return nil }
+        guard groupedDownloadedFiles.numberOfItemsForSection(section) > 0,
+              let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier) as?
+                SiteTableViewHeader
+        else { return nil }
 
-        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeaderIdentifier) as? SiteTableViewHeader
+        var title = ""
 
         switch section {
         case 0:
-            header?.textLabel?.text = .LibraryPanel.Sections.Today
+            title = .LibraryPanel.Sections.Today
         case 1:
-            header?.textLabel?.text = .LibraryPanel.Sections.Yesterday
+            title = .LibraryPanel.Sections.Yesterday
         case 2:
-            header?.textLabel?.text = .LibraryPanel.Sections.LastWeek
+            title = .LibraryPanel.Sections.LastWeek
         case 3:
-            header?.textLabel?.text = .LibraryPanel.Sections.LastMonth
+            title = .LibraryPanel.Sections.LastMonth
         default:
             assertionFailure("Invalid Downloads section \(section)")
         }
 
-        header?.showBorder(for: .top, !isFirstSection(section))
+        let headerViewModel = SiteTableViewHeaderModel(title: title,
+                                                       isCollapsible: false,
+                                                       collapsibleState: nil)
+        headerView.configure(headerViewModel)
+        headerView.showBorder(for: .top, !isFirstSection(section))
 
-        return header
+        return headerView
     }
 
     func isFirstSection(_ section: Int) -> Bool {

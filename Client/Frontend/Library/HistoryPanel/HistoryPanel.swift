@@ -635,34 +635,32 @@ extension HistoryPanel: UITableViewDelegate {
     }
 
     // MARK: - TableView's Header & Footer view
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if let header = view as? SiteTableViewHeader, let actualSection = viewModel.visibleSections[safe: section - 1] {
-
-            header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
-            header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
-            header.textLabel?.text = actualSection.title // At worst, we have a header with no text.
-            header.showImage(true)
-            let isCollapsed = viewModel.isSectionCollapsed(sectionIndex: section - 1)
-            header.collapsibleState = isCollapsed ? ExpandButtonState.right : ExpandButtonState.down
-
-            // Configure tap to collapse/expand section
-            header.tag = section
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(sectionHeaderTapped(sender:)))
-            header.addGestureRecognizer(tapGesture)
-
-            // let historySectionsWithGroups
-            _ = viewModel.searchTermGroups.map { group in
-                viewModel.groupBelongsToSection(asGroup: group)
-            }
-        }
-
-    }
-
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // First section is for recently closed and its header has no view.
-        guard HistoryPanelSections(rawValue: section) != .additionalHistoryActions else { return nil }
+        guard HistoryPanelSections(rawValue: section) != .additionalHistoryActions,
+                let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader,
+                let actualSection = viewModel.visibleSections[safe: section - 1]
+        else { return nil }
 
-        return tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier)
+        let isCollapsed = viewModel.isSectionCollapsed(sectionIndex: section - 1)
+        let headerViewModel = SiteTableViewHeaderModel(title: actualSection.title ?? "",
+                                                       isCollapsible: true,
+                                                       collapsibleState:
+                                                        isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
+        header.configure(headerViewModel)
+        header.showImage(true)
+
+        // Configure tap to collapse/expand section
+        header.tag = section
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(sectionHeaderTapped(sender:)))
+        header.addGestureRecognizer(tapGesture)
+
+        // let historySectionsWithGroups
+        _ = viewModel.searchTermGroups.map { group in
+            viewModel.groupBelongsToSection(asGroup: group)
+        }
+
+        return header
     }
 
     // viewForHeaderInSection REQUIRES implementing heightForHeaderInSection

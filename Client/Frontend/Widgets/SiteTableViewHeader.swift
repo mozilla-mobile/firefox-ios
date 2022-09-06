@@ -9,13 +9,11 @@ struct SiteTableViewHeaderModel {
     let title: String
     let isCollapsible: Bool
     let collapsibleState: ExpandButtonState?
-    let usesDynamicText: Bool
 }
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
 
     struct UX {
-        static let HeaderFont = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium)
         static let TitleTrailingLeadingMargin: CGFloat = 16
         static let TitleTopBottomMargin: CGFloat = 12
         static let ImageTrailingSpace: CGFloat = 12
@@ -29,8 +27,10 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
     }
 
     private let titleLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         label.textColor = UIColor.theme.tableView.headerTextDark
+        label.numberOfLines = 0
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline, size: 16)
+        label.adjustsFontForContentSizeCategory = true
     }
 
     private let collapsibleImageView: UIImageView = .build { imageView in
@@ -99,11 +99,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
         showImage(model.isCollapsible)
         collapsibleState = model.collapsibleState
-
-        if model.usesDynamicText {
-            titleLabel.numberOfLines = 0
-            titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline, size: 16)
-        }
     }
 
     func applyTheme() {

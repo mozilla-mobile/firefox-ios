@@ -164,8 +164,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         let viewModel = SiteTableViewHeaderModel(title: client.name,
                                                  isCollapsible: true,
                                                  collapsibleState:
-                                                    isCollapsed ? ExpandButtonState.right : ExpandButtonState.down,
-                                                 usesDynamicText: true)
+                                                    isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
         headerView.configure(viewModel)
         headerView.showBorder(for: .bottom, true)
         headerView.showBorder(for: .top, section != 0)
