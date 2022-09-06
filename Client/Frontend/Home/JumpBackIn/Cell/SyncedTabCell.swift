@@ -13,6 +13,7 @@ struct SyncedTabCellViewModel {
     var syncedDeviceImage: UIImage?
     var heroImage: UIImage?
     var fallbackFaviconImage: UIImage?
+    var shouldAddBlur: Bool
     var accessibilityLabel: String {
         return "\(cardTitleText): \(titleText), \(descriptionText)"
     }
@@ -135,8 +136,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.itemCell
 
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .DynamicFontChanged])
+                           observing: [.DisplayThemeChanged])
         setupLayout()
         applyTheme()
     }
@@ -196,7 +196,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapSyncedTab(_:)))
         syncedTabTapTargetView.addGestureRecognizer(tapRecognizer)
         applyTheme()
-        adjustLayout()
+        adjustLayout(shouldAddBlur: viewModel.shouldAddBlur)
 
         let showAllSyncedTabsA11yAction = UIAccessibilityCustomAction(name: viewModel.syncedTabsButtonText,
                                                                       target: self,
@@ -316,7 +316,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         adjustLayout()
     }
 
-    private func adjustLayout() {
+    private func adjustLayout(shouldAddBlur: Bool = false) {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
@@ -331,7 +331,13 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         itemTitleTopConstraint.constant = itemTitleTopAnchorConstant
 
         // Add blur
-        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        if shouldAddBlur {
+            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
+            UIColor.Photon.DarkGrey40 : .white
+            setupShadow()
+        }
     }
 
     private func setupShadow() {
@@ -383,8 +389,6 @@ extension SyncedTabCell: Notifiable {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
-        case .DynamicFontChanged:
-            adjustLayout()
         default: break
         }
     }

@@ -14,6 +14,7 @@ struct JumpBackInCellViewModel {
     var accessibilityLabel: String {
         return "\(titleText), \(descriptionText)"
     }
+    var shouldAddBlur: Bool
 }
 
 // MARK: - JumpBackInCell
@@ -107,8 +108,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
         applyTheme()
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .DynamicFontChanged])
+                           observing: [.DisplayThemeChanged])
         setupLayout()
     }
 
@@ -142,7 +142,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         itemTitle.text = viewModel.titleText
         descriptionLabel.text = viewModel.descriptionText
         accessibilityLabel = viewModel.accessibilityLabel
-        adjustLayout()
+        adjustLayout(shouldAddBlur: viewModel.shouldAddBlur)
     }
 
     private func configureImages(viewModel: JumpBackInCellViewModel) {
@@ -218,11 +218,9 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
                                                                                          constant: -UX.faviconSize.height / 2)
 
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
-
-        adjustLayout()
     }
 
-    private func adjustLayout() {
+    private func adjustLayout(shouldAddBlur: Bool) {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
@@ -230,7 +228,13 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         faviconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
 
         // Add blur
-        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        if shouldAddBlur {
+            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
+            UIColor.Photon.DarkGrey40 : .white
+            setupShadow()
+        }
     }
 
     private func setupShadow() {
@@ -247,8 +251,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 // MARK: - Theme
 extension JumpBackInCell: NotificationThemeable {
     func applyTheme() {
-        let isDarkMode = LegacyThemeManager.instance.currentName == .dark
-        if isDarkMode {
+        if LegacyThemeManager.instance.currentName == .dark {
             [itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
             faviconImage.tintColor = UIColor.Photon.LightGrey10
             fallbackFaviconImage.tintColor = UIColor.Photon.LightGrey10
@@ -260,13 +263,7 @@ extension JumpBackInCell: NotificationThemeable {
             fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey10
         }
 
-        // If blur is disabled set background color
-        if UIAccessibility.isReduceTransparencyEnabled {
-            contentView.backgroundColor = isDarkMode ? UIColor.Photon.DarkGrey40 : .white
-        }
-
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
-        setupShadow()
     }
 }
 
@@ -276,8 +273,6 @@ extension JumpBackInCell: Notifiable {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
-        case .DynamicFontChanged:
-            adjustLayout()
         default: break
         }
     }

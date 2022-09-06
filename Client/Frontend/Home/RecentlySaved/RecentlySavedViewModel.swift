@@ -35,7 +35,7 @@ class RecentlySavedViewModel {
     var shouldAddBlur: Bool {
         guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
 
-        return wallpaperManager.currentWallpaper.type == .defaultWallpaper
+        return wallpaperManager.currentWallpaper.type != .defaultWallpaper
     }
 
     init(profile: Profile,
