@@ -111,10 +111,14 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         tableView.accessibilityIdentifier = a11yIds.tableView
         tableView.prefetchDataSource = self
         tableView.delegate = self
-        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
-        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier)
-        tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
-        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self,
+                           forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self,
+                           forCellReuseIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier)
+        tableView.register(OneLineTableViewCell.self,
+                           forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
+        tableView.register(SiteTableViewHeader.self,
+                           forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
 
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0

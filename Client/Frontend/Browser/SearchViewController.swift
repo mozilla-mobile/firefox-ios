@@ -570,8 +570,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard section == SearchListSection.remoteTabs.rawValue,
               hasFirefoxSuggestions,
-              let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderIdentifier) as?
-                SiteTableViewHeader
+              let headerView = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader
         else { return nil }
 
         let viewModel = SiteTableViewHeaderModel(title: .Search.SuggestSectionTitle,
@@ -584,9 +584,14 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let twoLineImageOverlayCell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath) as! TwoLineImageOverlayCell
-        let oneLineTableViewCell = tableView.dequeueReusableCell(withIdentifier: OneLineCellIdentifier, for: indexPath) as! OneLineTableViewCell
-        return getCellForSection(twoLineImageOverlayCell, oneLineCell: oneLineTableViewCell, for: SearchListSection(rawValue: indexPath.section)!, indexPath)
+        let twoLineImageOverlayCell = tableView.dequeueReusableCell(
+            withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath) as! TwoLineImageOverlayCell
+        let oneLineTableViewCell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
+                                                                 for: indexPath) as! OneLineTableViewCell
+        return getCellForSection(twoLineImageOverlayCell,
+                                 oneLineCell: oneLineTableViewCell,
+                                 for: SearchListSection(rawValue: indexPath.section)!,
+                                 indexPath)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -15,9 +15,6 @@ struct SiteTableViewControllerUX {
  */
 @objcMembers
 class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NotificationThemeable {
-    let CellIdentifier = "CellIdentifier"
-    let OneLineCellIdentifier = "OneLineCellIdentifier"
-    let HeaderIdentifier = "HeaderIdentifier"
     let profile: Profile
 
     var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
@@ -25,9 +22,9 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         guard let self = self else { return }
         table.delegate = self
         table.dataSource = self
-        table.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: self.CellIdentifier)
-        table.register(OneLineTableViewCell.self, forCellReuseIdentifier: self.OneLineCellIdentifier)
-        table.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: self.HeaderIdentifier)
+        table.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
+        table.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
+        table.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
         table.layoutMargins = .zero
         table.keyboardDismissMode = .onDrag
         table.accessibilityIdentifier = "SiteTable"
@@ -113,7 +110,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath)
         if self.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath) {
             cell.separatorInset = .zero
         }
@@ -122,7 +119,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderIdentifier)
+        return tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier)
     }
 
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {

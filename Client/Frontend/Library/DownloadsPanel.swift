@@ -46,8 +46,6 @@ struct DownloadedFile: Equatable {
 class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, LibraryPanel {
 
     weak var libraryPanelDelegate: LibraryPanelDelegate?
-    let TwoLineImageOverlayCellIdentifier = "TwoLineImageOverlayCellIdentifier"
-    let SiteTableViewHeaderIdentifier = "SiteTableViewHeaderIdentifier"
     let profile: Profile
     var state: LibraryPanelMainState
     var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
@@ -56,8 +54,10 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         guard let self = self else { return }
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: self.TwoLineImageOverlayCellIdentifier)
-        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: self.SiteTableViewHeaderIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self,
+                           forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
+        tableView.register(SiteTableViewHeader.self,
+                           forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
         tableView.layoutMargins = .zero
         tableView.keyboardDismissMode = .onDrag
         tableView.accessibilityIdentifier = "DownloadsTable"
@@ -312,7 +312,8 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     // MARK: - TableView Delegate / DataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCellIdentifier, for: indexPath) as! TwoLineImageOverlayCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
+                                                 for: indexPath) as! TwoLineImageOverlayCell
 
         return configureDownloadedFile(cell, for: indexPath)
     }
