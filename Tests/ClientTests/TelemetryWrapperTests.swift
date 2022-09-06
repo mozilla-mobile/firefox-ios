@@ -359,12 +359,8 @@ extension XCTestCase {
         line: UInt = #line
     ) {
 
-        guard let value = metric.testGetValue() else {
-            XCTFail("Value is nil;", file: file, line: line)
-            return
-        }
-
-        XCTAssertEqual(value.count, 1, file: file, line: line)
+        XCTAssertNotNil(metric.testGetValue(), file: file, line: line)
+        XCTAssertEqual(metric.testGetValue()!.count, 1, file: file, line: line)
 
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)

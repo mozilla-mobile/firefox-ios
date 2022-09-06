@@ -71,11 +71,9 @@ struct WallpaperMigrationUtility: Loggable {
         from storageUtility: WallpaperStorageUtility
     ) throws -> Wallpaper? {
 
-        // TODO: [roux] - Ask daniela - is the old promotion name allowed in the codebase?
         if matchingID == oldPromotionID {
             // The new metadata doesn't include the old promotional wallpapers.
             // Thus, we must create a new wallpaper to continue storing
-            // TODO: [roux] - what colour should we be using? talk to kate
             return Wallpaper(id: matchingID, textColor: nil, cardColor: nil)
 
         } else {

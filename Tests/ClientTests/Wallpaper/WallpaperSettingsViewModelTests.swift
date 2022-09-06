@@ -141,7 +141,7 @@ class WallpaperSettingsViewModelTests: XCTestCase {
 
         mockManager.mockAvailableCollections = [
             WallpaperCollection(
-                id: "classicFirefox",
+                id: "classic-firefox",
                 learnMoreURL: nil,
                 availableLocales: nil,
                 availability: nil,

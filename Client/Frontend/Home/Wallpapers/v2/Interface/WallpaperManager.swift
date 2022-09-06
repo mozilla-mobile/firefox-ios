@@ -65,6 +65,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
             let storageUtility = WallpaperStorageUtility()
             try storageUtility.store(wallpaper)
 
+            NotificationCenter.default.post(name: .WallpaperDidChange, object: nil)
             completion(.success(()))
 
         } catch {

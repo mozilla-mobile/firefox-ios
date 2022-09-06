@@ -35,7 +35,8 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, Loggable {
 
         if let filePath = filePathProvider.metadataPath() {
             let data = try encodeToData(from: metadata)
-            // TODO: [roux] - rename old file to preserve metadata
+            // TODO: [roux] - rename old file to preserve metadata in case of write
+            // error. This is more than it first seems.
             try removeFileIfItExists(at: filePath)
 
             let successfullyCreated = fileManager.createFile(
