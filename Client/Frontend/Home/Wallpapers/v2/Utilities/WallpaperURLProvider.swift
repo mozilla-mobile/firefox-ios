@@ -28,7 +28,7 @@ struct WallpaperURLProvider {
     func url(
         for urlType: WallpaperURLType,
         withKey key: String = "",
-        and fileName: String = ""
+        andFileName fileName: String = ""
     ) throws -> URL {
         switch urlType {
         case .metadata: return try metadataURL()

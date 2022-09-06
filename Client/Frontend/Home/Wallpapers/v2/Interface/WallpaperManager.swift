@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 protocol WallpaperManagerInterface {
-    var currentWallpaper: Wallpaper? { get }
+    var currentWallpaper: Wallpaper { get }
     var availableCollections: [WallpaperCollection] { get }
     var canOnboardingBeShown: Bool { get }
 
@@ -30,14 +30,9 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     // MARK: Public Interface
 
     /// Returns the currently selected wallpaper.
-    public var currentWallpaper: Wallpaper? {
-        do {
-            let storageUtility = WallpaperStorageUtility()
-            return try storageUtility.fetchCurrentWallpaper()
-        } catch {
-            browserLog.error("WallpaperManager error: \(error.localizedDescription)")
-            return nil
-        }
+    public var currentWallpaper: Wallpaper {
+        let storageUtility = WallpaperStorageUtility()
+        return storageUtility.fetchCurrentWallpaper()
     }
 
     /// Returns all available collections and their wallpaper data. Availability is
@@ -160,8 +155,8 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         guard let classicCollection = availableCollections.first(where: { $0.type == .classic }) else { return availableCollections }
 
         let defaultWallpaper = [Wallpaper(id: "fxDefault",
-                                          textColour: nil,
-                                          cardColour: nil)]
+                                          textColor: nil,
+                                          cardColor: nil)]
         let newWallpapers = defaultWallpaper + classicCollection.wallpapers
         let newClassic = WallpaperCollection(id: classicCollection.id,
                                              learnMoreURL: classicCollection.learnMoreUrl?.absoluteString,

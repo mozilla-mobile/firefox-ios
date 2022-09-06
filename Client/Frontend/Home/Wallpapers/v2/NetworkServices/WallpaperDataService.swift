@@ -35,7 +35,7 @@ class WallpaperDataService {
     func getImageWith(key: String, imageName: String) async throws -> UIImage {
         let url = try WallpaperURLProvider().url(for: .imageURL,
                                                  withKey: key,
-                                                 and: imageName)
+                                                 andFileName: imageName)
         let loader = WallpaperImageLoader(networkModule: networking)
 
         return try await loader.fetchImage(from: url)

@@ -115,10 +115,14 @@ class WallpaperSettingsViewModelTests: XCTestCase {
 
         var wallpapersForClassic: [Wallpaper] {
             var wallpapers = [Wallpaper]()
-            wallpapers.append(Wallpaper(id: "fxDefault", textColour: UIColor.green))
+            wallpapers.append(Wallpaper(id: "fxDefault",
+                                        textColour: UIColor.green,
+                                        cardColour: .green))
 
             for _ in 0..<4 {
-                wallpapers.append(Wallpaper(id: "fxAmethyst", textColour: UIColor.red))
+                wallpapers.append(Wallpaper(id: "fxAmethyst",
+                                            textColour: .red,
+                                            cardColour: .red))
             }
 
             return wallpapers
@@ -127,7 +131,9 @@ class WallpaperSettingsViewModelTests: XCTestCase {
         var wallpapersForOther: [Wallpaper] {
             var wallpapers = [Wallpaper]()
             for _ in 0..<6 {
-                wallpapers.append(Wallpaper(id: "fxCerulean", textColour: UIColor.purple))
+                wallpapers.append(Wallpaper(id: "fxCerulean",
+                                            textColour: .purple,
+                                            cardColour: .purple))
             }
 
             return wallpapers
@@ -139,13 +145,17 @@ class WallpaperSettingsViewModelTests: XCTestCase {
                 learnMoreURL: nil,
                 availableLocales: nil,
                 availability: nil,
-                wallpapers: wallpapersForClassic),
+                wallpapers: wallpapersForOther,
+                description: nil,
+                heading: nil),
             WallpaperCollection(
                 id: "otherCollection",
                 learnMoreURL: "https://www.mozilla.com",
                 availableLocales: nil,
                 availability: nil,
-                wallpapers: wallpapersForOther),
+                wallpapers: wallpapersForOther,
+                description: nil,
+                heading: nil)
         ]
     }
 

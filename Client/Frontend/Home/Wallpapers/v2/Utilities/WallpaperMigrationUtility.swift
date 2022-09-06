@@ -75,7 +75,8 @@ struct WallpaperMigrationUtility: Loggable {
         if matchingID == oldPromotionID {
             // The new metadata doesn't include the old promotional wallpapers.
             // Thus, we must create a new wallpaper to continue storing
-            return Wallpaper(id: matchingID, textColour: .white, cardColour: nil)
+            // TODO: [roux] - what colour should we be using? talk to kate
+            return Wallpaper(id: matchingID, textColor: nil, cardColor: nil)
 
         } else {
             guard let metadata = try storageUtility.fetchMetadata(),

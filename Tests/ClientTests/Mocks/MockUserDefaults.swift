@@ -24,4 +24,12 @@ class MockUserDefaults: UserDefaultsInterface {
     func object(forKey defaultName: String) -> Any? {
         return savedData[defaultName] ?? nil
     }
+
+    func set(_ value: Bool, forKey defaultName: String) {
+        savedData[defaultName] = value
+    }
+
+    func bool(forKey defaultName: String) -> Bool {
+        return savedData[defaultName] as? Bool ?? false
+    }
 }

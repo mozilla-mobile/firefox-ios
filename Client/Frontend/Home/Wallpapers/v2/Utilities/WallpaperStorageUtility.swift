@@ -15,7 +15,7 @@ enum WallpaperStorageErrors: Error {
 }
 
 /// Responsible for writing or deleting wallpaper data to/from memory.
-struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
+struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, Loggable {
 
     private var userDefaults: UserDefaultsInterface
     private var fileManager: FileManagerInterface
@@ -35,6 +35,7 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
 
         if let filePath = filePathProvider.metadataPath() {
             let data = try encodeToData(from: metadata)
+            // TODO: [roux] - rename old file to preserve metadata
             try removeFileIfItExists(at: filePath)
 
             let successfullyCreated = fileManager.createFile(
@@ -82,12 +83,16 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
         }
     }
 
-    public func fetchCurrentWallpaper() throws -> Wallpaper {
+    public func fetchCurrentWallpaper() -> Wallpaper {
         if let data = userDefaults.object(forKey: PrefsKeys.Wallpapers.CurrentWallpaper) as? Data {
-            return try JSONDecoder().decode(Wallpaper.self, from: data)
+            do {
+                return try JSONDecoder().decode(Wallpaper.self, from: data)
+            } catch {
+                browserLog.error("WallpaperStorageUtility decoding error: \(error.localizedDescription)")
+            }
         }
 
-        return Wallpaper(id: "fxDefault", textColour: nil, cardColour: nil)
+        return Wallpaper(id: "fxDefault", textColor: nil, cardColor: nil)
     }
 
     public func fetchImageNamed(_ name: String) throws -> UIImage? {
@@ -119,7 +124,7 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
 
     private func directoriesToKeep() throws -> [String] {
         let filePathProvider = WallpaperFilePathProvider(with: fileManager)
-        let currentWallpaper = try fetchCurrentWallpaper()
+        let currentWallpaper = fetchCurrentWallpaper()
         return [
             currentWallpaper.id,
             filePathProvider.thumbnailsKey,

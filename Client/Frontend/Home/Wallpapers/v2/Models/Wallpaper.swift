@@ -23,8 +23,8 @@ struct Wallpaper: Equatable {
 
     static func == (lhs: Wallpaper, rhs: Wallpaper) -> Bool {
         return lhs.id == rhs.id
-                && lhs.textColour == rhs.textColour
-                && lhs.cardColour == rhs.cardColour
+                && lhs.textColor == rhs.textColor
+                && lhs.cardColor == rhs.cardColor
     }
 
     enum ImageTypeID {
@@ -34,14 +34,14 @@ struct Wallpaper: Equatable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case textColour = "text-color"
-        case cardColour = "card-color"
+        case textColor = "text-color"
+        case cardColor = "card-color"
         case id
     }
 
     let id: String
-    let textColour: UIColor?
-    let cardColour: UIColor?
+    let textColor: UIColor?
+    let cardColor: UIColor?
 
     var thumbnailID: String { return "\(id)\(fileId.thumbnail)" }
     var portraitID: String { return "\(id)\(deviceVersionID)\(fileId.portrait)" }
@@ -100,12 +100,12 @@ extension Wallpaper: Decodable {
 
         id = try values.decode(String.self, forKey: .id)
 
-        let textHexString = try values.decode(String.self, forKey: .textColour)
-        let cardHexString = try values.decode(String.self, forKey: .cardColour)
+        let textHexString = try values.decode(String.self, forKey: .textColor)
+        let cardHexString = try values.decode(String.self, forKey: .cardColor)
 
         var colorInt: UInt64 = 0
         if Scanner(string: textHexString).scanHexInt64(&colorInt) {
-            textColour = UIColor(colorString: textHexString)
+            textColor = UIColor(colorString: textHexString)
         } else {
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
@@ -115,7 +115,7 @@ extension Wallpaper: Decodable {
 
         colorInt = 0
         if Scanner(string: cardHexString).scanHexInt64(&colorInt) {
-            cardColour = UIColor(colorString: cardHexString)
+            cardColor = UIColor(colorString: cardHexString)
         } else {
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
@@ -129,13 +129,13 @@ extension Wallpaper: Encodable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
-        guard let textColorHexString = textColour?.hexString,
-              let cardColorHexString = cardColour?.hexString
+        guard let textColorHexString = textColor?.hexString,
+              let cardColorHexString = cardColor?.hexString
         else {
             let nilString: String? = nil
             try container.encode(id, forKey: .id)
-            try container.encode(nilString, forKey: .textColour)
-            try container.encode(nilString, forKey: .cardColour)
+            try container.encode(nilString, forKey: .textColor)
+            try container.encode(nilString, forKey: .cardColor)
             return
         }
 
@@ -143,8 +143,8 @@ extension Wallpaper: Encodable {
         let cardHex = dropOctothorpeIfAvailable(from: cardColorHexString)
 
         try container.encode(id, forKey: .id)
-        try container.encode(textHex, forKey: .textColour)
-        try container.encode(cardHex, forKey: .cardColour)
+        try container.encode(textHex, forKey: .textColor)
+        try container.encode(cardHex, forKey: .cardColor)
     }
 
     private func dropOctothorpeIfAvailable(from string: String) -> String {
