@@ -79,7 +79,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
 
         case .wallpaper:
             if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-               wallpaperVersion == .v2 {
+               wallpaperVersion == .v1 {
                 let viewModel = WallpaperSettingsViewModel(wallpaperManager: WallpaperManager(), tabManager: tabManager)
                 let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
                 navigationController?.pushViewController(wallpaperVC, animated: true)

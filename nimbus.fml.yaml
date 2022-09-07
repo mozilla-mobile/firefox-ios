@@ -308,7 +308,7 @@ features:
         {
           "jump-back-in-synced-tab-contextual-hint": false
         }
-      hint-copy: 
+      hint-copy:
         description: This set allows us to experiment with changing hint descriptions.
         type: HintCopy
         default: {
@@ -336,7 +336,7 @@ features:
             "toolbar": true
           }
         }
-        
+
   messaging:
     description: >
       Configuration for the messaging system.
@@ -740,5 +740,5 @@ types:
       variants:
         legacy:
           description: The legacy wallpaper version
-        v2:
+        v1:
           description: The 2022 MR version

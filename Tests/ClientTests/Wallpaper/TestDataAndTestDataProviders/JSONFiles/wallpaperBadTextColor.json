@@ -3,6 +3,8 @@
     "collections": [
         {
             "id": "firefox",
+            "description": null,
+            "heading": null,
             "learn-more-url": "https://www.mozilla.com",
             "available-locales": ["en-US", "es-US", "en-CA", "fr-CA"],
             "availability-range": {
@@ -13,6 +15,7 @@
                 {
                     "id": "beachVibes",
                     "text-color": "I am a not a hex code",
+                    "card-color": "I am a not a hex code",
                 }
             ]
         }
