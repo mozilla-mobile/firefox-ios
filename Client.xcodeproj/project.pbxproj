@@ -6822,6 +6822,8 @@
 		C8742DB92729A69E00E724F6 /* LegacyThemeManager */ = {
 			isa = PBXGroup;
 			children = (
+				2C49854D206173C800893DAE /* photon-colors.swift */,
+				4390F7FE246DAFBE00570811 /* FirefoxColors.swift */,
 				EB9A179820E69A7E00B12184 /* LegacyThemeManager.swift */,
 				EB9A179920E69A7E00B12184 /* LegacyDarkTheme.swift */,
 				EB9A179A20E69A7E00B12184 /* LegacyTheme.swift */,
@@ -8154,8 +8156,6 @@
 				8AB8572D27D94A1A0075C173 /* UXSizeClass.swift */,
 				23ED80FD25C899D700D0E9D5 /* DefaultBrowserOnboarding */,
 				43C5A0972555DF7300BA37AD /* BottomSheet */,
-				2C49854D206173C800893DAE /* photon-colors.swift */,
-				4390F7FE246DAFBE00570811 /* FirefoxColors.swift */,
 				392ED7D51D0AEEEE009D9B62 /* Accessors */,
 				E692E3271C46E62D009D1240 /* AuthenticationManager */,
 				D3A994941A368691008AD1AC /* Browser */,
