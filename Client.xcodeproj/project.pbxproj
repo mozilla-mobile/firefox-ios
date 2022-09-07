@@ -6073,8 +6073,6 @@
 				43A5643623CD1E1B00B6857D /* Update.xcassets */,
 				43A5643523CD1E1B00B6857D /* UpdateViewController.swift */,
 				435D660423D794B90046EFA2 /* UpdateViewModel.swift */,
-				435D660223D793DF0046EFA2 /* OnboardingInfoModel.swift */,
-				21371FA328AA7A8D00BC3F37 /* OnboardingViewModel.swift */,
 			);
 			path = Update;
 			sourceTree = "<group>";
@@ -7513,8 +7511,10 @@
 				21A7C44D283539170071D996 /* IntroViewModel.swift */,
 				21B2844928464FF0003EA521 /* OnboardingCardViewModel.swift */,
 				21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */,
-				215A5F9E283D38B800FF4053 /* WallpapersCardViewController.swift */,
+				435D660223D793DF0046EFA2 /* OnboardingInfoModel.swift */,
+				21371FA328AA7A8D00BC3F37 /* OnboardingViewModel.swift */,
 				2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */,
+				215A5F9E283D38B800FF4053 /* WallpapersCardViewController.swift */,
 			);
 			path = Intro;
 			sourceTree = "<group>";

@@ -24,7 +24,7 @@ class OnboardingCardViewController: UIViewController {
         static let titleFontSize: CGFloat = 34
         static let descriptionBoldFontSize: CGFloat = 20
         static let descriptionFontSize: CGFloat = 17
-        static let imageViewSize: CGFloat = 109
+        static let imageViewSize: CGFloat = 250
 
         // small device
         static let smallStackViewSpacing: CGFloat = 8
@@ -53,6 +53,7 @@ class OnboardingCardViewController: UIViewController {
 
     lazy var contentStackView: UIStackView = .build { stack in
         stack.backgroundColor = .clear
+        stack.alignment = .center
         stack.distribution = .fill
         stack.spacing = UX.stackViewSpacing
         stack.axis = .vertical
@@ -214,7 +215,7 @@ class OnboardingCardViewController: UIViewController {
             buttonStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.stackViewPadding),
             buttonStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewPadding),
 
-            imageView.heightAnchor.constraint(equalToConstant: UX.imageViewSize)
+            imageView.widthAnchor.constraint(equalToConstant: UX.imageViewSize)
         ])
 
         contentStackView.spacing = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacing : UX.stackViewSpacing

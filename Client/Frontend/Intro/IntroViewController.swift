@@ -22,11 +22,6 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     // MARK: - Var related to onboarding
-    private lazy var backgroundImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: ImageIdentifiers.upgradeBackground)
-        imageView.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.backgroundImage
-    }
-
     private lazy var closeButton: UIButton = .build { button in
         let closeImage = UIImage(named: ImageIdentifiers.closeLargeButton)
         button.setImage(closeImage, for: .normal)
@@ -69,7 +64,6 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.theme.browser.background
         setupPageController()
         setupLayout()
         setupNotifications(forObserver: self,
@@ -119,17 +113,6 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
         ])
-
-        if viewModel.isv106Version {
-            view.addSubviews(backgroundImageView)
-            view.sendSubviewToBack(backgroundImageView)
-
-            NSLayoutConstraint.activate([
-                backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
-                backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-                ])
-        }
     }
 
     @objc private func closeOnboarding() {
@@ -275,8 +258,10 @@ extension IntroViewController: NotificationThemeable, Notifiable {
 
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+
         let indicatorColor = theme == .dark ? UIColor.theme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
         pageControl.currentPageIndicatorTintColor = indicatorColor
+        view.backgroundColor = theme == .dark ? UIColor.Photon.DarkGrey40 : .white
 
         onboardingCards.forEach { cardViewController in
             cardViewController.applyTheme()

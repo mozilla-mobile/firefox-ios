@@ -24,11 +24,6 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Private vars
-    private lazy var backgroundImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: ImageIdentifiers.upgradeBackground)
-        imageView.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.backgroundImage
-    }
-
     private lazy var closeButton: UIButton = .build { button in
         let closeImage = UIImage(named: ImageIdentifiers.upgradeCloseButton)
         button.setImage(closeImage, for: .normal)
@@ -91,7 +86,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
         let cardViewController = OnboardingCardViewController(viewModel: viewModel,
                                                               delegate: self)
-        view.addSubviews(backgroundImageView, closeButton)
+        view.addSubviews(/*backgroundImageView,*/ closeButton)
         addChild(cardViewController)
         view.addSubview(cardViewController.view)
         cardViewController.didMove(toParent: self)
@@ -101,11 +96,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-
-            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
         ])
     }
 
@@ -130,7 +121,6 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     private func setupMultipleCardsConstraints() {
-        view.addSubview(backgroundImageView)
         addChild(pageController)
         view.addSubview(pageController.view)
         pageController.didMove(toParent: self)
@@ -146,10 +136,6 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-
-            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 
