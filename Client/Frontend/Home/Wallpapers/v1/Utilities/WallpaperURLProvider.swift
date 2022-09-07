@@ -55,7 +55,7 @@ struct WallpaperURLProvider {
     /// Builds a URL for the server based on the specified environment.
     private func urlScheme() throws -> String {
         if AppConstants.isRunningTest { return WallpaperURLProvider.testURL }
-        
+
         let bundle = AppInfo.applicationBundle
         guard let appToken = bundle.object(forInfoDictionaryKey: wallpaperURLScheme) as? String,
               !appToken.isEmpty

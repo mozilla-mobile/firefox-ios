@@ -11,10 +11,10 @@ protocol FileManagerInterface {
                              options mask: FileManager.DirectoryEnumerationOptions) throws -> [URL]
     func createFile(atPath path: String,
                     contents data: Data?,
-                    attributes attr: [FileAttributeKey : Any]?) -> Bool
+                    attributes attr: [FileAttributeKey: Any]?) -> Bool
     func createDirectory(atPath path: String,
                          withIntermediateDirectories createIntermediates: Bool,
-                         attributes: [FileAttributeKey : Any]?) throws
+                         attributes: [FileAttributeKey: Any]?) throws
     func fileExists(atPath path: String) -> Bool
     func removeItem(at URL: URL) throws
     func urls(for directory: FileManager.SearchPathDirectory,
