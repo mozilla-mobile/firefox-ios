@@ -129,9 +129,9 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         let shouldShow = !featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
         var textColor: UIColor?
         if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-           wallpaperVersion == .v2,
+           wallpaperVersion == .v1,
            featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly) {
-            textColor = wallpaperManager.currentWallpaper.textColour
+            textColor = wallpaperManager.currentWallpaper.textColor
         }
 
         return LabelButtonHeaderViewModel(

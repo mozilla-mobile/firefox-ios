@@ -46,7 +46,7 @@ extension UIView {
         views.forEach(addSubview)
     }
 
-    /// Shortcut to set the view's background colour to `.clear`, set the view's
+    /// Shortcut to set the view's background color to `.clear`, set the view's
     /// `clipsToBounds` property set to true, and then add a blur effect on the view,
     /// using the desired blur style.
     ///

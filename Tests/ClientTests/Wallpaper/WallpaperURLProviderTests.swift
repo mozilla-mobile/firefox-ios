@@ -28,11 +28,12 @@ class WallpaperURLProviderTests: XCTestCase {
 
     func testPathURL() {
         let subject = WallpaperURLProvider()
-        let path = "path/to/image"
-        let expectedURL = URL(string: "\(testURL)/\(path).png")
+        let path = "path/to"
+        let image = "imageName"
+        let expectedURL = URL(string: "\(testURL)/ios/\(path)/\(image).png")
 
         do {
-            let actualURL = try subject.url(for: .imageURL, withComponent: path)
+            let actualURL = try subject.url(for: .image(named: image, withFolderName: path))
             XCTAssertEqual(actualURL,
                            expectedURL,
                            "The image url builder is returning the wrong url.")

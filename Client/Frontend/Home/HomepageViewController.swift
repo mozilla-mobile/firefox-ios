@@ -301,7 +301,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         let wallpaperManager = WallpaperManager()
         guard wallpaperManager.canOnboardingBeShown,
               !contextualHintViewController.isPresenting,
-              !UserDefaults.standard.bool(forKey: PrefsKeys.WallpaperOnboardingSeenKey)
+              !UserDefaults.standard.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
         else { return }
 
         self.dismissKeyboard()
@@ -318,7 +318,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         )
 
         self.present(bottomSheetVC, animated: false, completion: nil)
-        UserDefaults.standard.set(true, forKey: PrefsKeys.WallpaperOnboardingSeenKey)
+        UserDefaults.standard.set(true, forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
     }
 
     // MARK: - Contextual hint

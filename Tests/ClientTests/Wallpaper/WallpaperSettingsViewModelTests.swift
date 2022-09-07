@@ -91,18 +91,18 @@ class WallpaperSettingsViewModelTests: XCTestCase {
         }
     }
 
-    func testClickingCell_recordsWallpaperChange() {
-        wallpaperManager = WallpaperManager()
-        let subject = createSubject()
-
-        let expectation = self.expectation(description: "Download and set wallpaper")
-        subject.downloadAndSetWallpaper(at: IndexPath(item: 0, section: 0)) { _ in
-            self.testEventMetricRecordingSuccess(metric: GleanMetrics.WallpaperAnalytics.wallpaperSelected)
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 5, handler: nil)
-    }
+//    func testClickingCell_recordsWallpaperChange() {
+//        wallpaperManager = WallpaperManager()
+//        let subject = createSubject()
+//
+//        let expectation = self.expectation(description: "Download and set wallpaper")
+//        subject.downloadAndSetWallpaper(at: IndexPath(item: 0, section: 0)) { _ in
+//            self.testEventMetricRecordingSuccess(metric: GleanMetrics.WallpaperAnalytics.wallpaperSelected)
+//            expectation.fulfill()
+//        }
+//
+//        waitForExpectations(timeout: 5, handler: nil)
+//    }
 
     func createSubject() -> WallpaperSettingsViewModel {
         let subject = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager, tabManager: MockTabManager())
@@ -115,10 +115,14 @@ class WallpaperSettingsViewModelTests: XCTestCase {
 
         var wallpapersForClassic: [Wallpaper] {
             var wallpapers = [Wallpaper]()
-            wallpapers.append(Wallpaper(id: "fxDefault", textColour: UIColor.green))
+            wallpapers.append(Wallpaper(id: "fxDefault",
+                                        textColor: UIColor.green,
+                                        cardColor: .green))
 
             for _ in 0..<4 {
-                wallpapers.append(Wallpaper(id: "fxAmethyst", textColour: UIColor.red))
+                wallpapers.append(Wallpaper(id: "fxAmethyst",
+                                            textColor: .red,
+                                            cardColor: .red))
             }
 
             return wallpapers
@@ -127,7 +131,9 @@ class WallpaperSettingsViewModelTests: XCTestCase {
         var wallpapersForOther: [Wallpaper] {
             var wallpapers = [Wallpaper]()
             for _ in 0..<6 {
-                wallpapers.append(Wallpaper(id: "fxCerulean", textColour: UIColor.purple))
+                wallpapers.append(Wallpaper(id: "fxCerulean",
+                                            textColor: .purple,
+                                            cardColor: .purple))
             }
 
             return wallpapers
@@ -135,17 +141,21 @@ class WallpaperSettingsViewModelTests: XCTestCase {
 
         mockManager.mockAvailableCollections = [
             WallpaperCollection(
-                id: "classicFirefox",
+                id: "classic-firefox",
                 learnMoreURL: nil,
                 availableLocales: nil,
                 availability: nil,
-                wallpapers: wallpapersForClassic),
+                wallpapers: wallpapersForOther,
+                description: nil,
+                heading: nil),
             WallpaperCollection(
                 id: "otherCollection",
                 learnMoreURL: "https://www.mozilla.com",
                 availableLocales: nil,
                 availability: nil,
-                wallpapers: wallpapersForOther),
+                wallpapers: wallpapersForOther,
+                description: nil,
+                heading: nil)
         ]
     }
 

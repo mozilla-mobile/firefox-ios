@@ -534,8 +534,6 @@ extension TelemetryWrapper {
         case historyHighlightsItemOpened = "history-highlights-item-opened"
         case historyHighlightsGroupOpen = "history-highlights-group-open"
         case customizeHomepageButton = "customize-homepage-button"
-        case cycleWallpaperButton = "cycle-wallpaper-button"
-        case toggleLogoWallpaperButton = "toggle-logo-wallpaper-button"
         case wallpaperSelected = "wallpaper-selected"
         case dismissCFRFromButton = "dismiss-cfr-from-button"
         case dismissCFRFromOutsideTap = "dismiss-cfr-from-outside-tap"
@@ -1176,28 +1174,6 @@ extension TelemetryWrapper {
             }
 
         // MARK: - Wallpaper related
-        case (.action, .tap, .firefoxHomepage, .cycleWallpaperButton, let extras):
-            if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
-               let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {
-                GleanMetrics.WallpaperAnalytics.cycleWallpaperButton.record(
-                    GleanMetrics.WallpaperAnalytics.CycleWallpaperButtonExtra(
-                        wallpaperName: name,
-                        wallpaperType: type
-                    )
-                )
-
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-
-        case (.action, .change, .wallpaperSettings, .toggleLogoWallpaperButton, _):
-            if let state = extras?[EventExtraKey.preferenceChanged.rawValue] as? String {
-                GleanMetrics.WallpaperAnalytics.toggleLogoWallpaperButton.record(
-                    GleanMetrics.WallpaperAnalytics.ToggleLogoWallpaperButtonExtra(changedTo: state)
-                )
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
         case (.action, .tap, .wallpaperSettings, .wallpaperSelected, let extras):
             if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
                let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {

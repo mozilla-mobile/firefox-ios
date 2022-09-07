@@ -3,6 +3,8 @@
     "collections": [
         {
             "id": "firefox",
+            "description": null,
+            "heading": null,
             "learn-more-url": null,
             "available-locales": ["en-US", "es-US", "en-CA", "fr-CA"],
             "availability-range": {
@@ -12,7 +14,8 @@
             "wallpapers": [
                 {
                     "id": "beachVibes",
-                    "text-color": "0xADD8E6",
+                    "text-color": "ADD8E6",
+                    "card-color": "ADD8E6",
                 }
             ]
         }

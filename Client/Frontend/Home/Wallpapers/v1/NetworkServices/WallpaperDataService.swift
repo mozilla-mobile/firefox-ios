@@ -17,7 +17,7 @@ class WallpaperDataService {
     private let wallpaperURLScheme = "MozWallpaperURLScheme"
 
     // MARK: - Initializers
-    init(with networkingModule: WallpaperNetworking = WallpaperNetworkingModule()) {
+    init(with networkingModule: WallpaperNetworking) {
         self.networking = networkingModule
     }
 
@@ -32,8 +32,11 @@ class WallpaperDataService {
     }
 
     /// Main interface for fetching images from the server
-    func getImageWith(path: String) async throws -> UIImage {
-        let url = try WallpaperURLProvider().url(for: .imageURL, withComponent: path)
+    func getImage(
+        named imageName: String,
+        withFolderName folderName: String
+    ) async throws -> UIImage {
+        let url = try WallpaperURLProvider().url(for: .image(named: imageName, withFolderName: folderName))
         let loader = WallpaperImageLoader(networkModule: networking)
 
         return try await loader.fetchImage(from: url)

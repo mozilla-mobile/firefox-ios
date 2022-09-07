@@ -112,6 +112,16 @@ class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
         return getImageResource(for: key)
     }
 
+    func getPortraitImage() -> UIImage? {
+        let key = PrefsKeys.WallpaperManagerCurrentWallpaperImage
+        return getImageResource(for: key)
+    }
+
+    func getLandscapeImage() -> UIImage? {
+        let key = PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape
+        return getImageResource(for: key)
+    }
+
     func getImageResource(for key: String) -> UIImage? {
         guard let filePath = filePath(forKey: key),
            let fileData = FileManager.default.contents(atPath: filePath.path),

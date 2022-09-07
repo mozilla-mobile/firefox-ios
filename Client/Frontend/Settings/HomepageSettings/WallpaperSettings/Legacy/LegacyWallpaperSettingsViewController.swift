@@ -231,12 +231,6 @@ class LegacyWallpaperSettingsViewController: UIViewController {
     // MARK: - Actions
     @objc func didChangeSwitchState(_ sender: UISwitch!) {
         viewModel.wallpaperManager.switchWallpaperFromLogoEnabled = sender.isOn
-        let extras = [TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: sender.isOn ? "on" : "off"]
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .change,
-                                     object: .wallpaperSettings,
-                                     value: .toggleLogoWallpaperButton,
-                                     extras: extras)
     }
 
     private func showToast() {

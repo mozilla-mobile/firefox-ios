@@ -8,7 +8,9 @@ import Foundation
 
 class WallpaperManagerMock: WallpaperManagerInterface {
 
-    var currentWallpaper: Wallpaper = Wallpaper(id: "fxDefault", textColour: UIColor.green)
+    var currentWallpaper: Wallpaper = Wallpaper(id: "fxDefault",
+                                                textColor: UIColor.green,
+                                                cardColor: .purple)
 
     var mockAvailableCollections = [WallpaperCollection]()
     var availableCollections: [WallpaperCollection] {
@@ -32,12 +34,12 @@ class WallpaperManagerMock: WallpaperManagerInterface {
     var fetchCallCount = 0
     var fetchResult: Result<Void, Error> = .success(())
 
-    func fetch(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void) {
+    func fetchAssetsFor(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void) {
         fetchCallCount += 1
         completion(fetchResult)
     }
 
-    func removeDownloadedAssets() {
+    func removeUnusedAssets() {
     }
 
     func checkForUpdates() {
