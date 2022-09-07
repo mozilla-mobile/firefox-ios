@@ -43,6 +43,14 @@ struct WallpaperCollection: Codable, Equatable {
         return URL(string: urlString)
     }
 
+    /// Wallpaper collections availability:
+    /// - Date
+    /// 1. If the date is `nil`, the assumption is that it's available at all times
+    /// 2. Start date determines the day on which the collection shows up
+    /// 3. End date determines the last day on which the collection shows up
+    /// - Locales
+    /// 1. If the locale variable is `nil` OR the locale array is empty, it's available everywhere
+    /// 2. Locale is restricted to locales specified in the array, if not empty
     var isAvailable: Bool {
         let isDateAvailable = availability?.isAvailable ?? true
         var isLocaleAvailable: Bool = false

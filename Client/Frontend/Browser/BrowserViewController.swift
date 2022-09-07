@@ -388,7 +388,7 @@ class BrowserViewController: UIViewController {
         }
 
         tabManager.startAtHomeCheck()
-        wallpaperMetadataUpdate()
+        updateWallpaperMetadata()
     }
 
     // MARK: - Lifecycle
@@ -869,7 +869,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func wallpaperMetadataUpdate() {
+    private func updateWallpaperMetadata() {
         let metadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue",
                                               qos: .utility)
         metadataQueue.async {

@@ -43,11 +43,22 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
 
     /// Determines whether the wallpaper onboarding can be shown
     var canOnboardingBeShown: Bool {
+        guard featureAvailable,
+              featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet,
+                                            checking: .buildOnly)
+        else { return false }
+
+        return true
+    }
+
+    /// Returns true if:
+    /// 1. The feature is enabled for the build AND metadata & thumbnails
+    /// 2. The metadata & thumbnails are available
+    var featureAvailable: Bool {
         let thumbnailUtility = WallpaperThumbnailUtility(with: networkingModule)
 
         guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
               wallpaperVersion == .v1,
-              featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly),
               thumbnailUtility.areThumbnailsAvailable
         else { return false }
 
@@ -144,7 +155,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
 
     // MARK: - Helper functions
     private func getAvailableCollections() -> [WallpaperCollection] {
-        guard let metadata = getMetadata() else { return [] }
+        guard let metadata = getMetadata() else { return addDefaultWallpaper(to: []) }
 
         let collections = metadata.collections.filter { $0.isAvailable }
 
@@ -153,21 +164,35 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     }
 
     private func addDefaultWallpaper(to availableCollections: [WallpaperCollection]) -> [WallpaperCollection] {
-        guard let classicCollection = availableCollections.first(where: { $0.type == .classic }) else { return availableCollections }
 
         let defaultWallpaper = [Wallpaper(id: "fxDefault",
                                           textColor: nil,
                                           cardColor: nil)]
-        let newWallpapers = defaultWallpaper + classicCollection.wallpapers
-        let newClassic = WallpaperCollection(id: classicCollection.id,
-                                             learnMoreURL: classicCollection.learnMoreUrl?.absoluteString,
-                                             availableLocales: classicCollection.availableLocales,
-                                             availability: classicCollection.availability,
-                                             wallpapers: newWallpapers,
-                                             description: classicCollection.description,
-                                             heading: classicCollection.heading)
 
-        return [newClassic] + availableCollections.filter { $0.type != .classic }
+        if availableCollections.isEmpty {
+            return [WallpaperCollection(id: "classic-firefox",
+                                        learnMoreURL: nil,
+                                        availableLocales: nil,
+                                        availability: nil,
+                                        wallpapers: defaultWallpaper,
+                                        description: nil,
+                                        heading: nil)]
+
+        } else if let classicCollection = availableCollections.first(where: { $0.type == .classic }) {
+            let newWallpapers = defaultWallpaper + classicCollection.wallpapers
+            let newClassic = WallpaperCollection(id: classicCollection.id,
+                                                 learnMoreURL: classicCollection.learnMoreUrl?.absoluteString,
+                                                 availableLocales: classicCollection.availableLocales,
+                                                 availability: classicCollection.availability,
+                                                 wallpapers: newWallpapers,
+                                                 description: classicCollection.description,
+                                                 heading: classicCollection.heading)
+
+            return [newClassic] + availableCollections.filter { $0.type != .classic }
+
+        } else {
+            return availableCollections
+        }
     }
 
     private func getMetadata() -> WallpaperMetadata? {
