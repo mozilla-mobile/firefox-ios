@@ -178,6 +178,9 @@
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "ລຶບປະຫວັດການທ່ອງເວັບ, ລະຫັດຜ່ານ, ຄຸກກີ້, ແລະປ້ອງກັນບໍ່ໃຫ້ໂຄສະນາທີ່ບໍ່ຕ້ອງການຕິດຕາມເຈົ້າດ້ວຍການຄລິກງ່າຍໆ!";
 
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "ຫຼາຍກ່ວາການປິດບັງໂຕຕົນ";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "ແຕະ Safari, ຫລັງຈາກນັ້ນເລືອກຕົວບັອກເນື້ອຫາ";
 
@@ -210,6 +213,9 @@
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "ແຈ້ງ";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "ການຕັ້ງຄ່າ";
@@ -255,6 +261,9 @@
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "ບັອກຕົວອັກສອນເວັບ";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "ສັງຄົມ";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
