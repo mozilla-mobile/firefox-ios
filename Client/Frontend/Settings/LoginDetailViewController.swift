@@ -306,7 +306,7 @@ extension LoginDetailViewController {
     }
 
     func deleteLogin() {
-        profile.logins.hasSyncedLogins().uponQueue(.main) { yes in
+        profile.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 self.profile.logins.deleteLogin(id: self.login.id).uponQueue(.main) { _ in
                     _ = self.navigationController?.popViewController(animated: true)

@@ -16,10 +16,6 @@ import SyncTelemetry
 import AuthenticationServices
 import MozillaAppServices
 
-// Import these dependencies ONLY for the main `Client` application target.
-#if MOZ_TARGET_CLIENT
-#endif
-
 private let log = Logger.syncLogger
 
 public protocol SyncManager {
@@ -28,23 +24,16 @@ public protocol SyncManager {
     var syncDisplayState: SyncDisplayState? { get }
 
     func hasSyncedHistory() -> Deferred<Maybe<Bool>>
-    func hasSyncedLogins() -> Deferred<Maybe<Bool>>
 
     func syncClients() -> SyncResult
     func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
-    func syncLogins() -> SyncResult
-    func syncBookmarks() -> SyncResult
     @discardableResult func syncEverything(why: SyncReason) -> Success
     func syncNamedCollections(why: SyncReason, names: [String]) -> Success
 
-    // The simplest possible approach.
-    func beginTimedSyncs()
     func endTimedSyncs()
-    func applicationDidEnterBackground()
     func applicationDidBecomeActive()
 
-    func onNewProfile()
     @discardableResult func onRemovedAccount() -> Success
     @discardableResult func onAddedAccount() -> Success
 }
@@ -99,7 +88,6 @@ protocol Profile: AnyObject {
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
     var history: HistoryFetcher { get }
-    var metadata: Metadata { get }
     var recommendations: HistoryRecommendations { get }
     var favicons: Favicons { get }
     var logins: RustLogins { get }
@@ -137,22 +125,18 @@ protocol Profile: AnyObject {
 
     func removeAccount()
 
-    func getClients() -> Deferred<Maybe<[RemoteClient]>>
-    func getCachedClients()-> Deferred<Maybe<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
-
     func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void)
     func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
 
     func cleanupHistoryIfNeeded()
-
-    func sendQueuedSyncEvents()
 
     @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
 
     var syncManager: SyncManager! { get }
+    func hasSyncedLogins() -> Deferred<Maybe<Bool>>
 
     func syncCredentialIdentities() -> Deferred<Result<Void, Error>>
     func updateCredentialIdentities() -> Deferred<Result<Void, Error>>
@@ -222,20 +206,6 @@ extension Profile {
     }
 }
 
-private let PrefKeyClientID = "PrefKeyClientID"
-extension Profile {
-    var clientID: String {
-        let clientID: String
-        if let id = prefs.stringForKey(PrefKeyClientID) {
-            clientID = id
-        } else {
-            clientID = UUID().uuidString
-            prefs.setString(clientID, forKey: PrefKeyClientID)
-        }
-        return clientID
-    }
-}
-
 open class BrowserProfile: Profile {
     fileprivate let name: String
     fileprivate let keychain: MZKeychainWrapper
@@ -292,11 +262,6 @@ open class BrowserProfile: Profile {
             MZKeychainWrapper.wipeKeychain()
             prefs.clearAll()
         }
-
-        // Log SQLite compile_options.
-        // db.sqliteCompileOptions() >>== { compileOptions in
-        //     log.debug("SQLite compile_options:\n\(compileOptions.joined(separator: "\n"))")
-        // }
 
         // Set up logging from Rust.
         if !RustLog.shared.tryEnable({ (level, tag, message) -> Bool in
@@ -510,15 +475,6 @@ open class BrowserProfile: Profile {
         return syncDelegate ?? CommandStoringSyncDelegate(profile: self)
     }
 
-    public func getClients() -> Deferred<Maybe<[RemoteClient]>> {
-        return self.syncManager.syncClients()
-           >>> { self.remoteClientsAndTabs.getClients() }
-    }
-
-    public func getCachedClients()-> Deferred<Maybe<[RemoteClient]>> {
-        return self.remoteClientsAndTabs.getClients()
-    }
-
     func getTabsWithNativeClients() -> Deferred<Maybe<[ClientAndTabs]>> {
         // Because we are now using the application services tabs component with
         // the iOS clients component (which has additional client data), we need
@@ -688,6 +644,10 @@ open class BrowserProfile: Profile {
         self.syncManager.onRemovedAccount()
     }
 
+    public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+        return logins.hasSyncedLogins()
+    }
+
     // Profile exists in extensions, UIApp is unavailable there, make this code run for the main app only
     @available(iOSApplicationExtension, unavailable, message: "UIApplication.shared is unavailable in application extensions")
     private func unregisterRemoteNotifiation() {
@@ -701,7 +661,7 @@ open class BrowserProfile: Profile {
     }
 
     // Extends NSObject so we can use timers.
-    public class BrowserSyncManager: NSObject, SyncManager, CollectionChangedNotifier {
+    public class BrowserSyncManager: NSObject, SyncManager {
         // We shouldn't live beyond our containing BrowserProfile, either in the main app or in
         // an extension.
         // But it's possible that we'll finish a side-effect sync after we've ditched the profile
@@ -717,10 +677,6 @@ open class BrowserProfile: Profile {
         fileprivate var syncTimer: Timer?
 
         fileprivate var backgrounded: Bool = true
-        public func applicationDidEnterBackground() {
-            self.backgrounded = true
-            self.endTimedSyncs()
-        }
 
         deinit {
             if let c = constellationStateUpdate {
@@ -810,7 +766,6 @@ open class BrowserProfile: Profile {
             let center = NotificationCenter.default
 
             center.addObserver(self, selector: #selector(onDatabaseWasRecreated), name: .DatabaseWasRecreated, object: nil)
-            center.addObserver(self, selector: #selector(onLoginDidChange), name: .DataLoginDidChange, object: nil)
             center.addObserver(self, selector: #selector(onStartSyncing), name: .ProfileDidStartSyncing, object: nil)
             center.addObserver(self, selector: #selector(onFinishSyncing), name: .ProfileDidFinishSyncing, object: nil)
         }
@@ -861,24 +816,6 @@ open class BrowserProfile: Profile {
                     // Otherwise, reset the database on the sync queue now
                     // Sync can't start while this is still going on.
                     self.syncQueue.async(execute: resetDatabase)
-                }
-            }
-        }
-
-        // Simple in-memory rate limiting.
-        var lastTriggeredLoginSync: Timestamp = 0
-        @objc func onLoginDidChange(_ notification: NSNotification) {
-            log.debug("Login did change.")
-            if (Date.now() - lastTriggeredLoginSync) > OneMinuteInMilliseconds {
-                lastTriggeredLoginSync = Date.now()
-
-                // Give it a few seconds.
-                // Trigger on the main queue. The bulk of the sync work runs in the background.
-                let greenLight = self.greenLight()
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(SyncConstants.SyncDelayTriggered)) {
-                    if greenLight() {
-                        self.syncLogins()
-                    }
                 }
             }
         }
@@ -954,10 +891,6 @@ open class BrowserProfile: Profile {
             }
         }
 
-        public func onNewProfile() {
-            SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
-        }
-
         public func onRemovedAccount() -> Success {
             let profile = self.profile
 
@@ -989,7 +922,7 @@ open class BrowserProfile: Profile {
             return Timer.scheduledTimer(timeInterval: interval, target: self, selector: selector, userInfo: nil, repeats: true)
         }
 
-        public func beginTimedSyncs() {
+        private func beginTimedSyncs() {
             if self.syncTimer != nil {
                 log.debug("Already running sync timer.")
                 return
@@ -1030,7 +963,7 @@ open class BrowserProfile: Profile {
             }
 
             let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
-            return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info, notifier: self) >>== { result in
+            return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info) >>== { result in
                 guard case .completed = result, let accountManager = self.profile.rustFxA.accountManager.peek() else {
                     return deferMaybe(result)
                 }
@@ -1418,10 +1351,6 @@ open class BrowserProfile: Profile {
             return self.profile.history.hasSyncedHistory()
         }
 
-        public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
-            return self.profile.logins.hasSyncedLogins()
-        }
-
         public func syncClients() -> SyncResult {
             // TODO: recognize .NotStarted.
             return self.sync("clients", function: syncClientsWithDelegate)
@@ -1446,14 +1375,6 @@ open class BrowserProfile: Profile {
             }
         }
 
-        @discardableResult public func syncBookmarks() -> SyncResult {
-            return self.sync("bookmarks", function: syncBookmarksWithDelegate)
-        }
-
-        @discardableResult public func syncLogins() -> SyncResult {
-            return self.sync("logins", function: syncLoginsWithDelegate)
-        }
-
         public func syncHistory() -> SyncResult {
             // TODO: recognize .NotStarted.
             return self.sync("history", function: syncHistoryWithDelegate)
@@ -1473,14 +1394,6 @@ open class BrowserProfile: Profile {
                 Date.now() < stopBy &&
                 self.profile.hasSyncableAccount()
             }
-        }
-
-        public func notify(deviceIDs: [GUID], collectionsChanged collections: [String], reason: String) -> Success {
-           return succeed()
-        }
-
-        public func notifyAll(collectionsChanged collections: [String], reason: String) -> Success {
-            return succeed()
         }
     }
 }

@@ -26,8 +26,6 @@ open class MockSyncManager: SyncManager {
     open func syncClients() -> SyncResult { return completedWithStats(collection: "mock_clients") }
     open func syncClientsThenTabs() -> SyncResult { return completedWithStats(collection: "mock_clientsandtabs") }
     open func syncHistory() -> SyncResult { return completedWithStats(collection: "mock_history") }
-    open func syncLogins() -> SyncResult { return completedWithStats(collection: "mock_logins") }
-    open func syncBookmarks() -> SyncResult { return completedWithStats(collection: "mock_bookmarks") }
     open func syncEverything(why: SyncReason) -> Success {
         return succeed()
     }
@@ -43,18 +41,11 @@ open class MockSyncManager: SyncManager {
         self.endTimedSyncs()
     }
 
-    open func onNewProfile() {
-    }
-
     open func onAddedAccount() -> Success {
         return succeed()
     }
     open func onRemovedAccount() -> Success {
         return succeed()
-    }
-
-    open func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
-        return deferMaybe(true)
     }
 }
 
@@ -213,14 +204,6 @@ open class MockProfile: Client.Profile {
         self.syncManager.onRemovedAccount()
     }
 
-    public func getClients() -> Deferred<Maybe<[RemoteClient]>> {
-        return deferMaybe([])
-    }
-
-    public func getCachedClients() -> Deferred<Maybe<[RemoteClient]>> {
-        return deferMaybe([])
-    }
-
     public func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
         return deferMaybe([])
     }
@@ -245,5 +228,7 @@ open class MockProfile: Client.Profile {
         return succeed()
     }
 
-    public func sendQueuedSyncEvents() {}
+    public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+        return deferMaybe(true)
+    }
 }
