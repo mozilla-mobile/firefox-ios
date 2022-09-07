@@ -45,6 +45,7 @@ class WallpaperSelectorViewModel {
     }
 
     private var wallpaperManager: WallpaperManagerInterface
+    private var availableCollections: [WallpaperCollection]
     private var wallpaperItems = [WallpaperSelectorItem]()
     var openSettingsAction: (() -> Void)
     var sectionLayout: WallpaperSelectorLayout = .compact // We use the compact layout as default
@@ -56,6 +57,7 @@ class WallpaperSelectorViewModel {
 
     init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(), openSettingsAction: @escaping (() -> Void)) {
         self.wallpaperManager = wallpaperManager
+        self.availableCollections = wallpaperManager.availableCollections
         self.openSettingsAction = openSettingsAction
         setupWallpapers()
         selectedIndexPath = initialSelectedIndexPath
@@ -136,8 +138,8 @@ private extension WallpaperSelectorViewModel {
 
     func setupWallpapers() {
         wallpaperItems = []
-        let classicCollection = wallpaperManager.availableCollections.first { $0.type == .classic }
-        let seasonalCollection = wallpaperManager.availableCollections.first { $0.type == .limitedEdition }
+        let classicCollection = availableCollections.first { $0.type == .classic }
+        let seasonalCollection = availableCollections.first { $0.type == .limitedEdition }
 
         let seasonalItems = collectWallpaperItems(for: seasonalCollection,
                                                   maxNumber: sectionLayout.maxNumberOfSeasonalItems)
