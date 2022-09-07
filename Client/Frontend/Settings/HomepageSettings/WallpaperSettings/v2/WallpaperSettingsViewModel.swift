@@ -38,7 +38,7 @@ class WallpaperSettingsViewModel {
     private var wallpaperCollections = [WallpaperCollection]()
     var tabManager: TabManagerProtocol
     var sectionLayout: WallpaperSettingsLayout = .compact // We use the compact layout as default
-    var selectedIndexPath: IndexPath = IndexPath(row: 0, section: 0)
+    var selectedIndexPath: IndexPath?
 
     var numberOfSections: Int {
         return wallpaperCollections.count

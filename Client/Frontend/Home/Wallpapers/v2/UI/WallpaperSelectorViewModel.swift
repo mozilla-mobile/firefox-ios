@@ -48,7 +48,7 @@ class WallpaperSelectorViewModel {
     private var wallpaperItems = [WallpaperSelectorItem]()
     var openSettingsAction: (() -> Void)
     var sectionLayout: WallpaperSelectorLayout = .compact // We use the compact layout as default
-    var selectedIndexPath: IndexPath = IndexPath(row: 0, section: 0)
+    var selectedIndexPath: IndexPath?
 
     var numberOfWallpapers: Int {
         return wallpaperItems.count
