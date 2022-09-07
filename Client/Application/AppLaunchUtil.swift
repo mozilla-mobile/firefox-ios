@@ -64,8 +64,6 @@ class AppLaunchUtil {
         // has been started.
         initializeExperiments()
 
-        ThemeManager.shared.updateProfile(with: profile)
-
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
                 let title = (userInfo["Title"] as? String) ?? ""

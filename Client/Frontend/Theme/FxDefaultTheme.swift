@@ -9,8 +9,7 @@ import UIKit
 // themeing system, and as such, have been roughly included.
 
 struct FxDefaultTheme: Theme {
-    var colours: ThemeColourPalette = FxDefaultColourPalette()
-    var fonts: ThemeFontPalette = FxDefaultFontPalette()
+    var colors: ThemeColourPalette = FxDefaultColourPalette()
 }
 
 private struct FxDefaultColourPalette: ThemeColourPalette {
@@ -46,8 +45,4 @@ private struct FxDefaultColourPalette: ThemeColourPalette {
     var textPrimary: UIColor { return UIColor(named: "TextPrimary")! }
     var textSecondary: UIColor { return UIColor(named: "TextSecondary")! }
     var textWarning: UIColor { return UIColor(named: "TextWarning")! }
-}
-
-private struct FxDefaultFontPalette: ThemeFontPalette {
-
 }
