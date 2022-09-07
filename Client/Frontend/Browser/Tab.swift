@@ -171,31 +171,43 @@ class Tab: NSObject {
     }
 
     var title: String? {
-        return webView?.title
+        if let title = webView?.title, !title.isEmpty {
+            return webView?.title
+        }
+
+        return nil
     }
 
+    /// This property returns, ideally, the web page's title. Otherwise, based on the page being internal or not, it will
+    /// resort to other displayable titles.
     var displayTitle: String {
+        /// First, check if the webView can give us a title.
         if let title = webView?.title, !title.isEmpty {
             return title
         }
 
+        /// If the webView doesn't give a title. check the URL to see if it's our Home URL, with no sessionData on this tab.
         // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
         // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
         if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil, !isRestoring {
             return .AppMenu.AppMenuOpenHomePageTitleString
         }
 
+        /// Here's another check to see if we're at the Home URL, using sessionData.
         // lets double check the sessionData in case this is a non-restored new tab
         if let firstURL = sessionData?.urls.first, sessionData?.urls.count == 1, InternalURL(firstURL)?.isAboutHomeURL ?? false {
             return .AppMenu.AppMenuOpenHomePageTitleString
         }
 
+        /// Then, if it's not Home, and it's also not a complete and valid URL, display what was "entered" as the title.
         if let url = self.url, !InternalURL.isValid(url: url), let shownUrl = url.displayURL?.absoluteString {
             return shownUrl
         }
 
+        /// Finally, somehow lastTitle is persisted (and webView's title isn't).
         guard let lastTitle = lastTitle, !lastTitle.isEmpty else {
-            return self.url?.displayURL?.absoluteString ??  ""
+            /// And if `lastTitle` fails, we'll take the URL itself (somewhat treated) as the last resort.
+            return self.url?.displayURL?.baseDomain ??  ""
         }
 
         return lastTitle
@@ -381,21 +393,25 @@ class Tab: NSObject {
 
         if let displayURL = tab.url?.displayURL, RemoteTab.shouldIncludeURL(displayURL) {
             let history = Array(tab.historyList.filter(RemoteTab.shouldIncludeURL).reversed())
-            return RemoteTab(clientGUID: nil,
+            return RemoteTab(
+                clientGUID: nil,
                 URL: displayURL,
-                title: tab.displayTitle,
+                title: tab.title ?? tab.displayTitle,
                 history: history,
                 lastUsed: tab.lastExecutedTime ?? 0,
-                icon: nil)
+                icon: nil
+            )
         } else if let sessionData = tab.sessionData, !sessionData.urls.isEmpty {
             let history = Array(sessionData.urls.filter(RemoteTab.shouldIncludeURL).reversed())
             if let displayURL = history.first {
-                return RemoteTab(clientGUID: nil,
+                return RemoteTab(
+                    clientGUID: nil,
                     URL: displayURL,
-                    title: tab.displayTitle,
+                    title: tab.title ?? tab.displayTitle,
                     history: history,
                     lastUsed: sessionData.lastUsedTime,
-                    icon: nil)
+                    icon: nil
+                )
             }
         }
 
@@ -729,6 +745,7 @@ class Tab: NSObject {
         if let title = self.webView?.title, !title.isEmpty,
            path == KVOConstants.title.rawValue {
             metadataManager?.updateObservationTitle(title)
+            _ = Tab.toRemoteTab(self)
         }
     }
 
