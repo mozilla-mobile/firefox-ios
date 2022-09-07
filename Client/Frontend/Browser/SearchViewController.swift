@@ -575,7 +575,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         else { return nil }
 
         headerView.titleLabel.text = .Search.SuggestSectionTitle
-
         return headerView
     }
 
