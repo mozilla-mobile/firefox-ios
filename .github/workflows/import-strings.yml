@@ -3,7 +3,11 @@ on:
   schedule:
     - cron: '0 11 * * 1'
   workflow_dispatch:
-
+    inputs:
+      branchName:
+        description: 'Branch used as target for automation'
+        required: true
+        default: 'main'
 jobs:
   build:
     runs-on: macos-12
@@ -17,14 +21,30 @@ jobs:
       with:
         persist-credentials: false
         token: ${{ secrets.GITHUB_TOKEN }}
+        ref: ${{ github.event.inputs.branchName }}
     - name: Select Xcode ${{ matrix.xcode }}
       run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Get the current date for PR title
-      run: echo "current_date=$(date +"%m-%d-%Y")" >> $GITHUB_ENV
+    - name: Get PR info
+      run: |
+        current_date=$(date +"%Y-%m-%d")
+        # Use 'main' when triggered via cron
+        current_branch=${{ github.event.inputs.branchName || 'main' }}
+        echo "current_date=$current_date" >> $GITHUB_ENV
+        if [[ $current_branch == 'main' ]]; then
+          echo "branch_name=string-import-$current_date" >> $GITHUB_ENV
+          echo "pr_title=Localize [ver] String import $current_date" >> $GITHUB_ENV
+          echo "pr_body=This automated PR imports string changes" >> $GITHUB_ENV
+        else
+          # version: v105.0 -> v105
+          version=${current_branch%??}
+          echo "branch_name=string-import-$current_branch-$current_date" >> $GITHUB_ENV
+          echo "pr_title=Localize [$version] String import $current_date" >> $GITHUB_ENV
+          echo "pr_body=This automated PR imports string changes into branch '$current_branch'" >> $GITHUB_ENV
+        fi
     - name: Run script to import strings
       run: sh ./bootstrap.sh --importLocales
     - name: Update new strings
@@ -37,7 +57,7 @@ jobs:
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
         token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: string-import-${{ env.current_date }}
-        title: "Localize [version] String import ${{ env.current_date }}"
-        branch: string-import-${{ env.current_date }}
-        body: "This (automated) PR import string changes"
+        commit-message: ${{ env.pr_title }}
+        title: ${{ env.pr_title }}
+        branch: ${{ env.branch_name }}
+        body: ${{ env.pr_body }}
