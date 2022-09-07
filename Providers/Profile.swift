@@ -136,6 +136,7 @@ protocol Profile: AnyObject {
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
 
     var syncManager: SyncManager! { get }
+    func hasSyncedLogins() -> Deferred<Maybe<Bool>>
 
     func syncCredentialIdentities() -> Deferred<Result<Void, Error>>
     func updateCredentialIdentities() -> Deferred<Result<Void, Error>>
@@ -641,6 +642,10 @@ open class BrowserProfile: Profile {
         // Trigger cleanup. Pass in the account in case we want to try to remove
         // client-specific data from the server.
         self.syncManager.onRemovedAccount()
+    }
+
+    public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+        return logins.hasSyncedLogins()
     }
 
     // Profile exists in extensions, UIApp is unavailable there, make this code run for the main app only
