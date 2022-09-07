@@ -316,7 +316,7 @@ private extension LoginListViewController {
     }
 
     @objc func tappedDelete() {
-        viewModel.profile.logins.hasSyncedLogins().uponQueue(.main) { yes in
+        viewModel.profile.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
                 let guidsToDelete = self.loginSelectionController.selectedIndexPaths.compactMap { indexPath in
