@@ -52,7 +52,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     }
 
     /// Returns true if:
-    /// 1. The feature is enabled for the build AND metadata & thumbnails
+    /// 1. The feature is enabled for the build
     /// 2. The metadata & thumbnails are available
     var featureAvailable: Bool {
         let thumbnailUtility = WallpaperThumbnailUtility(with: networkingModule)
