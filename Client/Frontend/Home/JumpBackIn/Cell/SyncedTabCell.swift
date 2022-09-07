@@ -354,7 +354,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 // MARK: - Theme
 extension SyncedTabCell: NotificationThemeable {
     func applyTheme() {
-        if  LegacyThemeManager.instance.currentName == .dark {
+        if LegacyThemeManager.instance.currentName == .dark {
             cardTitle.textColor  = UIColor.Photon.LightGrey10
             itemTitle.textColor = UIColor.Photon.LightGrey05
             descriptionLabel.textColor = UIColor.Photon.LightGrey40
