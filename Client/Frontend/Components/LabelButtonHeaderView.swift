@@ -88,7 +88,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace),
         ])
 
-        moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        moreButton.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         moreButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         titleLabel.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
         titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
