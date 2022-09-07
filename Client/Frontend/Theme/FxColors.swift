@@ -2,11 +2,15 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
+import UIKit
 
 // This class contains all official Firefox colors
 // referenced in https://www.figma.com/file/DyIIHvRgqt2EXfAVn1gV9c/Firefox-Colors?node-id=90%3A0
 class FXColors {
+
+    // MARK: - Black & White
+    static let Black = UIColor(rgb: 0x000000)
+    static let White = UIColor(rgb: 0xffffff)
 
     // MARK: - Light Grey
     static let LightGrey05 = UIColor(rgb: 0xfbfbfe)
