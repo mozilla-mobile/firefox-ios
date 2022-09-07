@@ -58,6 +58,7 @@ class WallpaperSelectorViewModel {
         self.wallpaperManager = wallpaperManager
         self.openSettingsAction = openSettingsAction
         setupWallpapers()
+        selectedIndexPath = initialSelectedIndexPath
     }
 
     func updateSectionLayout(for traitCollection: UITraitCollection) {
@@ -126,6 +127,13 @@ class WallpaperSelectorViewModel {
 
 private extension WallpaperSelectorViewModel {
 
+    var initialSelectedIndexPath: IndexPath? {
+        if let index = wallpaperItems.firstIndex(where: {$0.wallpaper == wallpaperManager.currentWallpaper}) {
+            return IndexPath(row: index, section: 0)
+        }
+        return nil
+    }
+
     func setupWallpapers() {
         wallpaperItems = []
         let classicCollection = wallpaperManager.availableCollections.first { $0.type == .classic }
@@ -171,10 +179,6 @@ private extension WallpaperSelectorViewModel {
             a11yLabel = "\(String.Onboarding.LimitedEditionWallpaper) \(number + 1)"
         }
 
-        if wallpaperManager.currentWallpaper == wallpaper {
-            selectedIndexPath = IndexPath(row: number, section: 0)
-        }
-
         let cellViewModel = WallpaperCellViewModel(image: wallpaper.thumbnail,
                                                    a11yId: a11yId,
                                                    a11yLabel: a11yLabel)
@@ -184,8 +188,6 @@ private extension WallpaperSelectorViewModel {
     func updateCurrentWallpaper(for wallpaperItem: WallpaperSelectorItem,
                                 completion: @escaping (Result<Void, Error>) -> Void) {
         wallpaperManager.setCurrentWallpaper(to: wallpaperItem.wallpaper) { [weak self] result in
-            self?.setupWallpapers()
-
             guard let extra = self?.telemetryMetadata(for: wallpaperItem) else {
                 completion(result)
                 return
