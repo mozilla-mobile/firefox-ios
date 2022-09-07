@@ -119,7 +119,7 @@ class SnapshotTests: BaseTestCaseL10n {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
         snapshot("20HomeViewSettings")
-        app.collectionViews.buttons.element(boundBy: 1).tap()
+        app.collectionViews.buttons.element(boundBy: 2).tap()
         waitForExistence(app.cells["SettingsViewController.searchCell"])
         app.cells["SettingsViewController.searchCell"].tap()
         snapshot("SettingsSearchEngine")
@@ -148,28 +148,29 @@ class SnapshotTests: BaseTestCaseL10n {
 
         // Tap on shortcuts settings menu option
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 6))
-        app.collectionViews.cells.buttons.element(boundBy: 6).tap()
+        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 8))
+        app.collectionViews.cells.buttons.element(boundBy: 8).tap()
 
         // Tap on erase button to go to homepage and check the shortcut created
         app.buttons["URLBar.deleteButton"].firstMatch.tap()
         // Verify the shortcut is created
-        waitForExistence(app.otherElements.staticTexts["M"], timeout: 5)
+        waitForExistence(app.otherElements.staticTexts["Mozilla"], timeout: 5)
 
         // Open shortcut to check the tab menu label for shortcut option
-        app.otherElements.staticTexts["M"].tap()
+        app.otherElements.staticTexts["Mozilla"].tap()
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 6), timeout: 5)
+        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 8), timeout: 5)
         snapshot("1-RemoveShortcutTabMenu")
 
         // Go back to homescreen
         app.collectionViews.cells.buttons.element(boundBy: 0).tap()
         app.navigationBars.buttons["SettingsViewController.doneButton"].tap()
         app.buttons["URLBar.deleteButton"].firstMatch.tap()
-        waitForExistence(app.otherElements.staticTexts["M"], timeout: 5)
+        waitForExistence(app.otherElements.staticTexts["Mozilla"], timeout: 5)
 
         // Remove created shortcut
-        app.otherElements.staticTexts["M"].press(forDuration: 2)
+        let icon = app.otherElements.containing(.staticText, identifier: "Mozilla")
+        icon.otherElements["outerView"].press(forDuration: 2)
         waitForExistence(app.collectionViews.cells.buttons.firstMatch)
         snapshot("2-RemoveShortcutLongPressOnIt")
     }
