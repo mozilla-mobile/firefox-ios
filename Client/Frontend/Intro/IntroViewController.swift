@@ -15,7 +15,7 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
     var didFinishFlow: (() -> Void)?
 
     struct UX {
-        static let closeButtonSize: CGFloat = 44
+        static let closeButtonSize: CGFloat = 30
         static let closeButtonPadding: CGFloat = 24
         static let pageControlHeight: CGFloat = 40
         static let pageControlBottomPadding: CGFloat = 8
@@ -23,9 +23,7 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
 
     // MARK: - Var related to onboarding
     private lazy var closeButton: UIButton = .build { button in
-        let closeImage = UIImage(named: ImageIdentifiers.closeLargeButton)
-        button.setImage(closeImage, for: .normal)
-        button.tintColor = .secondaryLabel
+        button.setImage(UIImage(named: ImageIdentifiers.bottomSheetClose), for: .normal)
         button.addTarget(self, action: #selector(self.closeOnboarding), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.closeButton
     }

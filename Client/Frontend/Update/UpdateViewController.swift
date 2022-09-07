@@ -12,7 +12,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     struct UX {
         static let closeButtonTopPadding: CGFloat = 32
         static let closeButtonRightPadding: CGFloat = 16
-        static let closeButtonSize: CGFloat = 32
+        static let closeButtonSize: CGFloat = 30
         static let pageControlHeight: CGFloat = 40
         static let pageControlBottomPadding: CGFloat = 8
     }
@@ -25,9 +25,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
     // MARK: - Private vars
     private lazy var closeButton: UIButton = .build { button in
-        let closeImage = UIImage(named: ImageIdentifiers.upgradeCloseButton)
-        button.setImage(closeImage, for: .normal)
-        button.tintColor = .secondaryLabel
+        button.setImage(UIImage(named: ImageIdentifiers.bottomSheetClose), for: .normal)
         button.addTarget(self, action: #selector(self.closeUpdate), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.closeButton
     }
@@ -288,6 +286,7 @@ extension UpdateViewController: NotificationThemeable, Notifiable {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         let indicatorColor = theme == .dark ? UIColor.theme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
         pageControl.currentPageIndicatorTintColor = indicatorColor
+        view.backgroundColor = theme == .dark ? UIColor.Photon.DarkGrey40 : .white
 
         informationCards.forEach { cardViewController in
             cardViewController.applyTheme()

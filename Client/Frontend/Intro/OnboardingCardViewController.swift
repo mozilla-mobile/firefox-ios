@@ -24,19 +24,20 @@ class OnboardingCardViewController: UIViewController {
         static let titleFontSize: CGFloat = 34
         static let descriptionBoldFontSize: CGFloat = 20
         static let descriptionFontSize: CGFloat = 17
-        static let imageViewSize: CGFloat = 250
+        static let imageViewSize = CGSize(width: 240, height: 300)
 
         // small device
         static let smallStackViewSpacing: CGFloat = 8
         static let smallStackViewSpacingButtons: CGFloat = 16
         static let smallScrollViewVerticalPadding: CGFloat = 20
+        static let smallImageViewSize = CGSize(width: 240, height: 300)
     }
 
     var viewModel: OnboardingCardProtocol
     weak var delegate: OnboardingCardDelegate?
 
     var shouldUseSmallDeviceLayout: Bool {
-        return view.frame.height < 600
+        return view.frame.height <= 667 || UIDevice.current.userInterfaceIdiom == .pad
     }
 
     private lazy var scrollView: UIScrollView = .build { view in
@@ -180,6 +181,8 @@ class OnboardingCardViewController: UIViewController {
         // Adapt layout for smaller screens
         let scrollViewVerticalPadding = shouldUseSmallDeviceLayout ? UX.smallScrollViewVerticalPadding :  UX.scrollViewVerticalPadding
         let stackViewSpacingButtons = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacingButtons :  UX.stackViewSpacingButtons
+        let imageViewHeight = shouldUseSmallDeviceLayout ?
+            UX.imageViewSize.height : UX.smallImageViewSize.height
 
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -215,7 +218,7 @@ class OnboardingCardViewController: UIViewController {
             buttonStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.stackViewPadding),
             buttonStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewPadding),
 
-            imageView.widthAnchor.constraint(equalToConstant: UX.imageViewSize)
+            imageView.heightAnchor.constraint(equalToConstant: imageViewHeight)
         ])
 
         contentStackView.spacing = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacing : UX.stackViewSpacing
