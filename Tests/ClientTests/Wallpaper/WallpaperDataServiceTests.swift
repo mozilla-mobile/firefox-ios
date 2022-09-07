@@ -149,8 +149,8 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
         }
     }
 
-    func testFailToExtractWallpaperMetadata_WithBadTextColour() async {
-        let data = getDataFromJSONFile(named: .badTextColour)
+    func testFailToExtractWallpaperMetadata_WithBadTextColor() async {
+        let data = getDataFromJSONFile(named: .badTextColor)
 
         networking.result = .success(data)
         let subject = WallpaperDataService(with: networking)
@@ -161,7 +161,7 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
         } catch let error {
             XCTAssertEqual(error.localizedDescription,
                            "The data couldn’t be read because it isn’t in the correct format.",
-                           "Expected decoding failure when decoding bad text colour json")
+                           "Expected decoding failure when decoding bad text color json")
         }
     }
 

@@ -14,8 +14,7 @@ class WallpaperBackgroundView: UIView {
     }
 
     // MARK: - Variables
-    // TODO: Roux - this will need to hook into the new wallpaper manager
-    private var wallpaperManager = LegacyWallpaperManager()
+    private var wallpaperManager = WallpaperManager()
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Initializers & Setup
@@ -25,7 +24,7 @@ class WallpaperBackgroundView: UIView {
         setupNotifications(forObserver: self,
                            observing: [.WallpaperDidChange])
 
-        updateImageTo(wallpaperManager.currentWallpaperImage)
+        updateImageToCurrentWallpaper()
     }
 
     @available(*, unavailable)
@@ -51,13 +50,18 @@ class WallpaperBackgroundView: UIView {
 
     // MARK: - Methods
     public func updateImageForOrientationChange() {
-        updateImageTo(wallpaperManager.currentWallpaperImage)
+        updateImageToCurrentWallpaper()
     }
 
-    private func updateImageTo(_ image: UIImage?) {
+    private func updateImageToCurrentWallpaper() {
+        let currentWallpaper = currentWallpaperImage()
         UIView.animate(withDuration: 0.3) {
-            self.pictureView.image = image
+            self.pictureView.image = currentWallpaper
         }
+    }
+
+    private func currentWallpaperImage() -> UIImage? {
+        return UIDevice.current.orientation.isLandscape ? wallpaperManager.currentWallpaper.landscape : wallpaperManager.currentWallpaper.portrait
     }
 }
 
@@ -65,7 +69,7 @@ class WallpaperBackgroundView: UIView {
 extension WallpaperBackgroundView: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .WallpaperDidChange: updateImageTo(wallpaperManager.currentWallpaperImage)
+        case .WallpaperDidChange: updateImageToCurrentWallpaper()
         default: break
         }
     }

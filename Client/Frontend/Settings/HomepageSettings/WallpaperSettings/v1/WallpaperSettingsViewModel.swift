@@ -123,7 +123,7 @@ class WallpaperSettingsViewModel {
         }
 
         if wallpaper.needsToFetchResources {
-            wallpaperManager.fetch(wallpaper) { result in
+            wallpaperManager.fetchAssetsFor(wallpaper) { result in
                 switch result {
                 case .success:
                     setWallpaperBlock()

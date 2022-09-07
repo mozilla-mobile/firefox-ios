@@ -2504,48 +2504,6 @@ widget:
 
 # Wallpaper metrics
 wallpaper_analytics:
-  toggle_logo_wallpaper_button:
-    type: event
-    description: |
-      Recorded when user toggles the button which enables
-      or disables the ability to toggle wallpapers on the
-      homepage from the logo.
-    extra_keys:
-      changed_to:
-        type: string
-        description: |
-          The value the switch was set to.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
-  cycle_wallpaper_button:
-    type: event
-    description: |
-      Recorded when user taps the Fx logo on the homepage,
-      thus changing the wallpaper. Wallpaper information
-      is sent in the extra keys.
-    extra_keys:
-      wallpaper_name:
-        type: string
-        description: |
-          The name of the wallpaper set.
-      wallpaper_type:
-        type: string
-        description: |
-          The type of wallpaper set.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
   wallpaper_selected:
     type: event
     description: |

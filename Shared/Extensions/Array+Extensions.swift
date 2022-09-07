@@ -56,6 +56,11 @@ public extension Array {
         }
     }
 
+    /// Removes the first element of the Array and returns the rest of the array.
+    /// If the array is empty, it returns an empty array.
+    var tail: Array {
+        return Array(self.dropFirst())
+    }
 }
 
 public extension Sequence where Iterator.Element: Hashable {

@@ -4,7 +4,7 @@
 
 import Foundation
 
-class WallpaperMetadataLoader {
+class WallpaperMetadataLoader: WallpaperMetadataCodableProtocol {
 
     // MARK: - Properties
     private let networkModule: WallpaperNetworking
@@ -22,20 +22,5 @@ class WallpaperMetadataLoader {
         let (data, _) = try await networkModule.data(from: url)
 
         return try decodeMetadata(from: data)
-    }
-
-    // MARK: - Private methods
-
-    /// Given some data, if that data is a valid JSON file, it attempts to decode it
-    /// into a `WallpaperMetadata` object
-    private func decodeMetadata(from data: Data) throws -> WallpaperMetadata {
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .formatted(dateFormatter)
-
-        return try decoder.decode(WallpaperMetadata.self, from: data)
     }
 }

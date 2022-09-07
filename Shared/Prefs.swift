@@ -39,6 +39,15 @@ public struct PrefsKeys {
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
     public static let KeySecondRun = "SecondRun"
 
+    public struct Wallpapers {
+        public static let MetadataLastCheckedDate = "WallpaperMetadataLastCheckedUserPrefsKey"
+        public static let CurrentWallpaper = "CurrentWallpaperUserPrefsKey"
+        public static let ThumbnailsAvailable = "ThumbnailsAvailableUserPrefsKey"
+        public static let OnboardingSeenKey = "WallpaperOnboardingSeenKeyUserPrefsKey"
+
+        public static let v1MigrationCheck = "v1MigrationCheckUserPrefsKey"
+    }
+
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
@@ -114,12 +123,11 @@ public struct PrefsKeys {
     // ThemeManager key
     public static let ThemeManagerCustomizationKey = "ThemeManagerCustomizationKey"
 
-    // WallpaperManager Key
+    // WallpaperManager Keys - Legacy
     public static let WallpaperManagerCurrentWallpaperObject = "WallpaperManagerCurrentWallpaperObject"
     public static let WallpaperManagerCurrentWallpaperImage = "WallpaperManagerCurrentWallpaperImage"
     public static let WallpaperManagerCurrentWallpaperImageLandscape = "WallpaperManagerCurrentWallpaperImageLandscape"
     public static let WallpaperManagerLogoSwitchPreference = "WallpaperManagerLogoSwitchPreference"
-    public static let WallpaperOnboardingSeenKey = "WallpaperOnboardingSeenKey"
 }
 
 public struct PrefsDefaults {
