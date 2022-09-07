@@ -178,6 +178,8 @@ class Tab: NSObject {
         return nil
     }
 
+    /// This property returns, ideally, the web page's title. Otherwise, based on the page being internal or not, it will
+    /// resort to other displayable titles.
     var displayTitle: String {
         /// First, check if the webView can give us a title.
         if let title = webView?.title, !title.isEmpty {
@@ -205,7 +207,7 @@ class Tab: NSObject {
         /// Finally, somehow lastTitle is persisted (and webView's title isn't).
         guard let lastTitle = lastTitle, !lastTitle.isEmpty else {
             /// And if `lastTitle` fails, we'll take the URL itself (somewhat treated) as the last resort.
-            return self.url?.displayURL?.absoluteString ??  ""
+            return self.url?.displayURL?.baseDomain ??  ""
         }
 
         return lastTitle
