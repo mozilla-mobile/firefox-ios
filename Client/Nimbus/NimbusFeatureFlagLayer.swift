@@ -64,6 +64,15 @@ final class NimbusFeatureFlagLayer {
 
         case .wallpaperOnboardingSheet:
             return checkNimbusForWallpaperOnboarding(using: nimbus)
+
+            // MARK: - Temp Nimbus Redirect for MR22
+//        case .wallpaperOnboardingSheet,
+//                .onboardingFreshInstall,
+//                .onboardingUpgrade,
+//                .contextualHintForJumpBackInSyncedTab,
+//                .copyForJumpBackIn,
+//                .copyForToolbar:
+//            return checkNimbusForMR22Feature(for: featureID, using: nimbus)
         }
     }
 
@@ -75,6 +84,31 @@ final class NimbusFeatureFlagLayer {
         case .disabled: return .disabled
         case .afterFourHours: return .afterFourHours
         case .always: return .always
+        }
+    }
+
+    // MARK: - Temp Nimbus Redirect for MR22
+
+    private func checkNimbusForMR22Feature(for featureID: NimbusFeatureFlagID,
+                                           using nimbus: FxNimbus
+    ) -> Bool {
+        let config = nimbus.features.mr2022.value().sectionsEnabled
+        // We've already filtered on the appropriate featureID's previously,
+        // so we can saftely have a default here
+        switch featureID {
+        case .wallpaperOnboardingSheet:
+            return config.wallpaperOnboardingSheet
+        case .onboardingFreshInstall:
+            return config.onboardingFirstRunFlow
+        case .onboardingUpgrade:
+            return config.onboardingUpgradeFlow
+        case .contextualHintForJumpBackInSyncedTab:
+            return config.syncCfr
+        case .copyForJumpBackIn:
+            return config.jumpBackInCfrUpdate
+        case .copyForToolbar:
+            return config.toolbarCfrUpdate
+        default: return false
         }
     }
 
