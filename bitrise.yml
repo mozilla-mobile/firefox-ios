@@ -729,22 +729,22 @@ workflows:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Fennec_Enterprise_XCUITests
     - xcode-test@4.5:
-        inputs:
         is_always_run: true
+        inputs:
         - scheme: Fennec_Enterprise_XCUITests
         - test_plan: "SmokeXCUITests"
         - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=latest
         description: This Workflow is to run SmokeTest on iPad simulator device
     - xcode-test@4.5:
-        inputs:
         is_always_run: true
+        inputs:
         - scheme: Fennec_Enterprise_XCUITests
         - test_plan: "Smoketest2"
         - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=latest
         description: This Workflow is to run SmokeTest on iPad simulator device Smoketest2
     - xcode-test@4.5:
-        inputs:
         is_always_run: true
+        inputs:
         - scheme: Fennec_Enterprise_XCUITests
         - test_plan: "Smoketest3"
         - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=latest
