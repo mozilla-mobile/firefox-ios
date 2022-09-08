@@ -18,6 +18,10 @@ protocol WallpaperManagerInterface {
 
 /// The primary interface for the wallpaper feature.
 class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
+    enum ThumbnailFilter {
+        case none
+        case thumbnailsAvailable
+    }
 
     // MARK: - Properties
     private var networkingModule: WallpaperNetworking
@@ -38,7 +42,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     /// Returns all available collections and their wallpaper data. Availability is
     /// determined on locale and date ranges from the collection's metadata.
     public var availableCollections: [WallpaperCollection] {
-        return getAvailableCollections()
+        return getAvailableCollections(filtering: .thumbnailsAvailable)
     }
 
     /// Determines whether the wallpaper onboarding can be shown
@@ -143,25 +147,30 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
                     let migrationUtility = WallpaperMigrationUtility()
                     migrationUtility.attemptMigration()
 
-                    try await thumbnailUtility.fetchAndVerifyThumbnails(for: availableCollections)
+                    try await thumbnailUtility.fetchAndVerifyThumbnails(for: getAvailableCollections(filtering: .none))
                 } catch {
                     browserLog.error("Wallpaper update check error: \(error.localizedDescription)")
                 }
             } else {
-                thumbnailUtility.verifyThumbnailsFor(availableCollections)
+                thumbnailUtility.verifyThumbnailsFor(getAvailableCollections(filtering: .none))
             }
         }
     }
 
     // MARK: - Helper functions
-    private func getAvailableCollections() -> [WallpaperCollection] {
+    private func getAvailableCollections(filtering filter: ThumbnailFilter) -> [WallpaperCollection] {
         guard let metadata = getMetadata() else { return addDefaultWallpaper(to: []) }
 
         let collections = metadata.collections.filter { $0.isAvailable }
-        let collectionWithThumbnails = filterUnavailableThumbnailsFrom(collections)
-        let collectionsWithDefault = addDefaultWallpaper(to: collectionWithThumbnails)
+        switch filter {
+        case .none:
+            return addDefaultWallpaper(to: collections)
 
-        return collectionsWithDefault
+        case .thumbnailsAvailable:
+            let collectionWithThumbnails = filterUnavailableThumbnailsFrom(collections)
+            return addDefaultWallpaper(to: collectionWithThumbnails)
+        }
+
     }
 
     private func addDefaultWallpaper(to availableCollections: [WallpaperCollection]) -> [WallpaperCollection] {

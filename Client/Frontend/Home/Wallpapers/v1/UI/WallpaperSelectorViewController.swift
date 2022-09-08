@@ -273,6 +273,7 @@ extension WallpaperSelectorViewController: NotificationThemeable, Notifiable {
 
 extension WallpaperSelectorViewController: BottomSheetChild {
     func willDismiss() {
+        viewModel.removeAssetsOnDismiss()
         viewModel.sendDismissImpressionTelemetry()
     }
 }
