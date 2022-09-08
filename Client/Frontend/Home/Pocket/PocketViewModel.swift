@@ -10,7 +10,6 @@ class PocketViewModel {
 
     struct UX {
         static let numberOfItemsInColumn = 3
-        static let discoverMoreMaxFontSize: CGFloat = 55 // Title 3 xxxLarge
         static let fractionalWidthiPhonePortrait: CGFloat = 0.90
         static let fractionalWidthiPhoneLanscape: CGFloat = 0.46
     }
@@ -222,7 +221,8 @@ extension PocketViewModel: HomepageSectionHandler {
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketDiscoverCell.cellIdentifier,
                                                           for: indexPath) as! PocketDiscoverCell
-            cell.itemTitle.text = .FirefoxHomepage.Pocket.DiscoverMore
+            cell.configure(text: .FirefoxHomepage.Pocket.DiscoverMore,
+                           shouldAddBlur: shouldAddBlur)
             return cell
         }
     }
