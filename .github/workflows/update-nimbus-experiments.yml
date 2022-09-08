@@ -15,17 +15,20 @@ jobs:
         with:
           path: firefox-ios
           ref: main
+          fetch-depth: 0
       - name: "Update Experiments JSON"
         id: update-experiments-json
-        uses: mozilla-mobile/update-experiments@v1
+        uses: mozilla-mobile/update-experiments@v2
         with:
           repo-path: firefox-ios
           output-path: Client/Experiments/initial_experiments.json
-          experimenter-url: https://experimenter.services.mozilla.com/api/v6/experiments/?is_first_run=true
+          experimenter-url: https://experimenter.services.mozilla.com/api/v6/experiments-first-run/
           app-name: firefox_ios
+          branch: automation/update-nimbus-experiments
       - name: Create Pull Request
+        id: create-pull-request
         uses: peter-evans/create-pull-request@v3
-        if: steps.update-experiments-json.outputs.changed == 1
+        if: steps.update-experiments-json.outputs.changed == 1 && steps.update-experiments-json.outputs.changed-branch == 1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: firefox-ios
@@ -35,3 +38,10 @@ jobs:
           body: "This (automated) PR updates the initial_experiments.json on the `main` branch"
           delete-branch: true
           labels: Needs Code Review
+      - name: Enable Pull Request Automerge
+        if: steps.create-pull-request.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.create-pull-request.outputs.pull-request-number }}
+          merge-method: squash
