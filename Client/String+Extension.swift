@@ -12,7 +12,7 @@ extension String {
     ///     - font: font for entire string, part of string will be converted to bold version of this font
     func attributedText(boldString: String, font: UIFont) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(string: self,
-                                                     attributes: [NSAttributedString.Key.font: font])
+                                                         attributes: [NSAttributedString.Key.font: font])
 
         var boldFont = UIFont.boldSystemFont(ofSize: font.pointSize)
 
