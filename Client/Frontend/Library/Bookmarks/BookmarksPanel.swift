@@ -425,7 +425,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     /// Root folders and local desktop folder cannot be moved or edited
     private func isCurrentFolderEditable(at indexPath: IndexPath) -> Bool {
-        guard let currentRowData = self.viewModel.bookmarkNodes[safe: indexPath.row] else {
+        guard let currentRowData = viewModel.bookmarkNodes[safe: indexPath.row] else {
             return false
         }
 
@@ -434,15 +434,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         return !uneditableGuids.contains(currentRowData.guid)
     }
 
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        guard let bookmarkNode = viewModel.bookmarkNodes[safe: sourceIndexPath.row] else {
-            return
-        }
-
-        _ = profile.places.updateBookmarkNode(guid: bookmarkNode.guid, position: UInt32(destinationIndexPath.row))
-
-        viewModel.bookmarkNodes.remove(at: sourceIndexPath.row)
-        viewModel.bookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
+    func tableView(_ tableView: UITableView,
+                   moveRowAt sourceIndexPath: IndexPath,
+                   to destinationIndexPath: IndexPath) {
+        viewModel.moveRow(at: sourceIndexPath, to: destinationIndexPath)
     }
 
     func tableView(_ tableView: UITableView,
