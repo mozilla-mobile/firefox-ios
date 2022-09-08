@@ -11,7 +11,7 @@ struct Gradient {
 
 /// The colour palette for a theme.
 protocol FxTheme {
-    
+
     // MARK: - Layers
     var layer1: UIColor { get }
     var layer2: UIColor { get }

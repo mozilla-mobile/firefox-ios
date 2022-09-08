@@ -5,7 +5,7 @@
 import Foundation
 
 struct FxLightTheme: FxTheme {
-    
+
     // MARK: - Layers
     var layer1: UIColor = FXColors.LightGrey10
     var layer2: UIColor = FXColors.White
