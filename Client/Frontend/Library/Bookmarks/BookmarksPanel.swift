@@ -437,7 +437,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     func tableView(_ tableView: UITableView,
                    moveRowAt sourceIndexPath: IndexPath,
                    to destinationIndexPath: IndexPath) {
-        viewModel.moveRowAt(moveRowAt: sourceIndexPath, to: destinationIndexPath)
+        viewModel.moveRow(at: sourceIndexPath, to: destinationIndexPath)
     }
 
     func tableView(_ tableView: UITableView,
