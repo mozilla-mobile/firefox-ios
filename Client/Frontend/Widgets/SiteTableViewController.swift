@@ -6,93 +6,7 @@ import UIKit
 import Storage
 
 struct SiteTableViewControllerUX {
-    static let HeaderHeight = CGFloat(32)
-    static let RowHeight = CGFloat(44)
-    static let HeaderFont = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium)
-    static let HeaderTextMargin = CGFloat(16)
-}
-
-class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
-
-    var collapsibleState: ExpandButtonState? {
-        willSet(state) {
-            collapsibleImageView.image = state?.image?.tinted(withColor: UIColor.Photon.Blue50)
-        }
-    }
-
-    let titleLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
-        label.textColor = UIColor.theme.tableView.headerTextDark
-    }
-
-    let headerActionButton: UIButton = .build { button in
-        button.setTitle("Show all", for: .normal)
-        button.backgroundColor = .clear
-        button.titleLabel?.font = .systemFont(ofSize: 12)
-        button.isHidden = true
-    }
-
-    let collapsibleImageView: UIImageView = .build { imageView in
-        imageView.image = ExpandButtonState.down.image?.tinted(withColor: UIColor.Photon.Blue50)
-        imageView.isHidden = true
-    }
-
-    fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
-
-    override var textLabel: UILabel? {
-        return titleLabel
-    }
-
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-
-        translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubviews(titleLabel, headerActionButton)
-        contentView.addSubviews(titleLabel, collapsibleImageView)
-
-        bordersHelper.initBorders(view: self.contentView)
-        setDefaultBordersValues()
-
-        backgroundView = UIView()
-
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(SiteTableViewControllerUX.HeaderTextMargin)),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-
-            collapsibleImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            collapsibleImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
-
-            headerActionButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            headerActionButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
-        ])
-
-        applyTheme()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        setDefaultBordersValues()
-        applyTheme()
-    }
-
-    func applyTheme() {
-        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        backgroundView?.backgroundColor = UIColor.theme.tableView.selectedBackground
-        bordersHelper.applyTheme()
-    }
-
-    func showBorder(for location: ThemedHeaderFooterViewBordersHelper.BorderLocation, _ show: Bool) {
-        bordersHelper.showBorder(for: location, show)
-    }
-
-    func setDefaultBordersValues() {
-        bordersHelper.showBorder(for: .top, true)
-        bordersHelper.showBorder(for: .bottom, true)
-    }
+    static let RowHeight: CGFloat = 44
 }
 
 /**
@@ -100,9 +14,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
  */
 @objcMembers
 class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NotificationThemeable {
-    let CellIdentifier = "CellIdentifier"
-    let OneLineCellIdentifier = "OneLineCellIdentifier"
-    let HeaderIdentifier = "HeaderIdentifier"
     let profile: Profile
 
     var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
@@ -110,9 +21,9 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         guard let self = self else { return }
         table.delegate = self
         table.dataSource = self
-        table.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: self.CellIdentifier)
-        table.register(OneLineTableViewCell.self, forCellReuseIdentifier: self.OneLineCellIdentifier)
-        table.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: self.HeaderIdentifier)
+        table.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
+        table.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
+        table.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
         table.layoutMargins = .zero
         table.keyboardDismissMode = .onDrag
         table.accessibilityIdentifier = "SiteTable"
@@ -198,7 +109,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath)
         if self.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath) {
             cell.separatorInset = .zero
         }
@@ -207,7 +118,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderIdentifier)
+        return tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier)
     }
 
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -218,7 +129,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return SiteTableViewControllerUX.HeaderHeight
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
