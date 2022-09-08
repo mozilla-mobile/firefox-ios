@@ -12,7 +12,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     struct UX {
         static let closeButtonTopPadding: CGFloat = 32
         static let closeButtonRightPadding: CGFloat = 16
-        static let closeButtonSize: CGFloat = 32
+        static let closeButtonSize: CGFloat = 30
         static let pageControlHeight: CGFloat = 40
         static let pageControlBottomPadding: CGFloat = 8
     }
@@ -24,15 +24,8 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Private vars
-    private lazy var backgroundImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: ImageIdentifiers.upgradeBackground)
-        imageView.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.backgroundImage
-    }
-
     private lazy var closeButton: UIButton = .build { button in
-        let closeImage = UIImage(named: ImageIdentifiers.upgradeCloseButton)
-        button.setImage(closeImage, for: .normal)
-        button.tintColor = .secondaryLabel
+        button.setImage(UIImage(named: ImageIdentifiers.bottomSheetClose), for: .normal)
         button.addTarget(self, action: #selector(self.closeUpdate), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.closeButton
     }
@@ -91,7 +84,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
         let cardViewController = OnboardingCardViewController(viewModel: viewModel,
                                                               delegate: self)
-        view.addSubviews(backgroundImageView, closeButton)
+        view.addSubview(closeButton)
         addChild(cardViewController)
         view.addSubview(cardViewController.view)
         cardViewController.didMove(toParent: self)
@@ -101,11 +94,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-
-            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
         ])
     }
 
@@ -130,7 +119,6 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     private func setupMultipleCardsConstraints() {
-        view.addSubview(backgroundImageView)
         addChild(pageController)
         view.addSubview(pageController.view)
         pageController.didMove(toParent: self)
@@ -146,10 +134,6 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-
-            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 
@@ -302,6 +286,7 @@ extension UpdateViewController: NotificationThemeable, Notifiable {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         let indicatorColor = theme == .dark ? UIColor.theme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
         pageControl.currentPageIndicatorTintColor = indicatorColor
+        view.backgroundColor = theme == .dark ? UIColor.Photon.DarkGrey40 : .white
 
         informationCards.forEach { cardViewController in
             cardViewController.applyTheme()
