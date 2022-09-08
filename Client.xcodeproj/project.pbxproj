@@ -1042,6 +1042,7 @@
 		E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */; };
 		E15A8B2D286D0066004BB2B8 /* TabsPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15A8B2C286D0066004BB2B8 /* TabsPayloadTests.swift */; };
 		E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E1C9528BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift */; };
+		E16E1C9828C25F1D00EE2EF5 /* SiteTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E1C9728C25F1D00EE2EF5 /* SiteTableViewHeader.swift */; };
 		E1877A81286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */; };
 		E1877A832875DEDE00F5BDF2 /* SyncedTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1877A822875DEDE00F5BDF2 /* SyncedTabCell.swift */; };
 		E18EA56F28AD3279003F97FC /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18EA56E28AD3279003F97FC /* UIDevice+Extension.swift */; };
@@ -4685,6 +4686,7 @@
 		E15C49D1BE35740E81701F21 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Menu.strings; sourceTree = "<group>"; };
 		E1634E1AB9F05311CD6C8C6C /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		E16E1C9528BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewModelTests.swift; sourceTree = "<group>"; };
+		E16E1C9728C25F1D00EE2EF5 /* SiteTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteTableViewHeader.swift; sourceTree = "<group>"; };
 		E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewNavigationHandler.swift; sourceTree = "<group>"; };
 		E1877A822875DEDE00F5BDF2 /* SyncedTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabCell.swift; sourceTree = "<group>"; };
 		E18EA56E28AD3279003F97FC /* UIDevice+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
@@ -7145,6 +7147,7 @@
 				D0152244229855A8009DE753 /* OneLineCellAndFooter.swift */,
 				E65607601C08B4E200534B02 /* SearchInputView.swift */,
 				D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */,
+				E16E1C9728C25F1D00EE2EF5 /* SiteTableViewHeader.swift */,
 				0BB5B2861AC0A2B90052877D /* SnackBar.swift */,
 				E660BDD81BB06521009AC090 /* TabsButton.swift */,
 				C4E3984B1D21F2FD004E89BA /* TabTrayButtonExtensions.swift */,
@@ -10709,6 +10712,7 @@
 				D04CD718215EBD85004FF5B0 /* SettingsLoadingView.swift in Sources */,
 				4390F7FF246DAFBE00570811 /* FirefoxColors.swift in Sources */,
 				D04CD74C216CF86B004FF5B0 /* InstructionsViewController.swift in Sources */,
+				E16E1C9828C25F1D00EE2EF5 /* SiteTableViewHeader.swift in Sources */,
 				8AC5D55F28BFE6C8001F6F7F /* Presenter.swift in Sources */,
 				C8501F4F2850FB72003B09AB /* LegacyWallpaperMigrationUtility.swift in Sources */,
 				C8741FE928C4D30F00030029 /* FileManagerInterface.swift in Sources */,

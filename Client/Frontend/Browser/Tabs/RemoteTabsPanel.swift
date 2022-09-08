@@ -151,26 +151,28 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return UX.HeaderHeight
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader else { return nil }
         let clientTabs = self.clientAndTabs[section]
         let client = clientTabs.client
-        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier) as! SiteTableViewHeader
-        view.frame = CGRect(width: tableView.frame.width, height: UX.HeaderHeight)
-        view.titleLabel.text = client.name
-        view.showBorder(for: .bottom, true)
-        view.showBorder(for: .top, section != 0)
 
-        view.collapsibleImageView.isHidden = false
         let isCollapsed = hiddenSections.contains(section)
-        view.collapsibleState = isCollapsed ? ExpandButtonState.right : ExpandButtonState.down
+        let viewModel = SiteTableViewHeaderModel(title: client.name,
+                                                 isCollapsible: true,
+                                                 collapsibleState:
+                                                    isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
+        headerView.configure(viewModel)
+        headerView.showBorder(for: .bottom, true)
+        headerView.showBorder(for: .top, section != 0)
 
         // Configure tap to collapse/expand section
-        view.tag = section
+        headerView.tag = section
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(sectionHeaderTapped(sender:)))
-        view.addGestureRecognizer(tapGesture)
+        headerView.addGestureRecognizer(tapGesture)
 
         /*
         * A note on timestamps.
@@ -184,7 +186,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         * Ideally, we should save and use the modified time of the tabs record itself.
         * This will be the real time that the other client uploaded tabs.
         */
-        return view
+        return headerView
     }
 
     func tabAtIndexPath(_ indexPath: IndexPath) -> RemoteTab {
@@ -551,7 +553,6 @@ class RemoteTabsTableViewController: UITableViewController {
         tableView.dataSource = nil
 
         tableView.separatorColor = UIColor.theme.tableView.separator
-
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncedTabs
     }
 
