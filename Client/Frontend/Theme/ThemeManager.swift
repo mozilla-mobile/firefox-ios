@@ -34,6 +34,7 @@ protocol ThemeManager {
 /// The `ThemeManager` will be responsible for providing the theme throughout the app
 final class DefaultThemeManager: ThemeManager {
 
+    // These have been carried over from the legacy system to maintain backwards compatibility
     private enum ThemeKeys {
         static let themeName = "prefKeyThemeName"
         static let automaticBrightness = "prefKeyAutomaticSliderValue"
