@@ -5,7 +5,7 @@
 import Foundation
 import MozillaAppServices
 
-public enum TabGroupTimerState: String, Codable {
+enum TabGroupTimerState: String, Codable {
     case navSearchLoaded
     case tabNavigatedToDifferentUrl
     case tabSwitched
@@ -16,7 +16,8 @@ public enum TabGroupTimerState: String, Codable {
     case none
 }
 
-public class TabGroupData: NSObject, NSCoding {
+class TabGroupData: NSObject, Codable {
+
     var tabAssociatedSearchTerm: String = ""
     var tabAssociatedSearchUrl: String = ""
     var tabAssociatedNextUrl: String = ""
@@ -26,12 +27,19 @@ public class TabGroupData: NSObject, NSCoding {
         return HistoryMetadataKey(url: tabAssociatedSearchUrl, searchTerm: tabAssociatedSearchTerm, referrerUrl: tabAssociatedNextUrl)
     }
 
+    enum CodingKeys: String, CodingKey {
+        case tabAssociatedSearchTerm
+        case tabAssociatedSearchUrl
+        case tabAssociatedNextUrl
+        case tabHistoryCurrentState
+    }
+
     var jsonDictionary: [String: Any] {
         return [
-            "tabAssociatedSearchTerm": String(self.tabAssociatedSearchTerm),
-            "tabAssociatedSearchUrl": String(self.tabAssociatedSearchUrl),
-            "tabAssociatedNextUrl": String(self.tabAssociatedNextUrl),
-            "tabHistoryCurrentState": String(self.tabHistoryCurrentState),
+            CodingKeys.tabAssociatedSearchTerm.rawValue: String(self.tabAssociatedSearchTerm),
+            CodingKeys.tabAssociatedSearchUrl.rawValue: String(self.tabAssociatedSearchUrl),
+            CodingKeys.tabAssociatedNextUrl.rawValue: String(self.tabAssociatedNextUrl),
+            CodingKeys.tabHistoryCurrentState.rawValue: String(self.tabHistoryCurrentState),
         ]
     }
 
@@ -47,19 +55,5 @@ public class TabGroupData: NSObject, NSCoding {
         self.tabAssociatedSearchUrl = searchUrl
         self.tabAssociatedNextUrl = nextReferralUrl
         self.tabHistoryCurrentState = tabHistoryCurrentState
-    }
-
-    required public init?(coder: NSCoder) {
-        self.tabAssociatedSearchTerm = coder.decodeObject(forKey: "tabAssociatedSearchTerm") as? String ?? ""
-        self.tabAssociatedSearchUrl = coder.decodeObject(forKey: "tabAssociatedSearchUrl") as? String ?? ""
-        self.tabAssociatedNextUrl = coder.decodeObject(forKey: "tabAssociatedNextUrl") as? String ?? ""
-        self.tabHistoryCurrentState = coder.decodeObject(forKey: "tabHistoryCurrentState") as? String ?? ""
-    }
-
-    public func encode(with coder: NSCoder) {
-        coder.encode(tabAssociatedSearchTerm, forKey: "tabAssociatedSearchTerm")
-        coder.encode(tabAssociatedSearchUrl, forKey: "tabAssociatedSearchUrl")
-        coder.encode(tabAssociatedNextUrl, forKey: "tabAssociatedNextUrl")
-        coder.encode(tabHistoryCurrentState, forKey: "tabHistoryCurrentState")
     }
 }

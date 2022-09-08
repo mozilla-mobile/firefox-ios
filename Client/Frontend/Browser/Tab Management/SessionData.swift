@@ -40,16 +40,23 @@ private func migrate(urls: [URL]) -> [URL] {
     }
 }
 
-class SessionData: NSObject, NSCoding {
+class SessionData: NSObject, Codable {
+
     let currentPage: Int
     let lastUsedTime: Timestamp
     let urls: [URL]
 
+    enum CodingKeys: String, CodingKey {
+        case currentPage = "user_first_name"
+        case lastUsedTime = "user_last_name"
+        case urls
+    }
+
     var jsonDictionary: [String: Any] {
         return [
-            "currentPage": String(self.currentPage),
-            "lastUsedTime": String(self.lastUsedTime),
-            "urls": urls.map { $0.absoluteString }
+            CodingKeys.currentPage.rawValue: String(self.currentPage),
+            CodingKeys.lastUsedTime.rawValue: String(self.lastUsedTime),
+            CodingKeys.urls.rawValue: urls.map { $0.absoluteString }
         ]
     }
 
@@ -68,17 +75,5 @@ class SessionData: NSObject, NSCoding {
 
         assert(!urls.isEmpty, "Session has at least one entry")
         assert(currentPage > -urls.count && currentPage <= 0, "Session index is valid")
-    }
-
-    required init?(coder: NSCoder) {
-        self.currentPage = coder.decodeAsInt(forKey: "currentPage")
-        self.urls = migrate(urls: coder.decodeObject(forKey: "urls") as? [URL] ?? [URL]())
-        self.lastUsedTime = coder.decodeAsUInt64(forKey: "lastUsedTime")
-    }
-
-    func encode(with coder: NSCoder) {
-        coder.encode(currentPage, forKey: "currentPage")
-        coder.encode(migrate(urls: urls), forKey: "urls")
-        coder.encode(Int64(lastUsedTime), forKey: "lastUsedTime")
     }
 }

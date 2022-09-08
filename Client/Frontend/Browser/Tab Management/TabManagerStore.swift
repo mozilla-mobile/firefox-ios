@@ -31,6 +31,7 @@ extension TabManagerStore {
 class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable {
 
     // MARK: - Variables
+    private let tabsKey = "tabs"
     private let prefs: Prefs
     private let imageStore: DiskImageStore?
     private var fileManager: TabFileManager
@@ -98,9 +99,13 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 
         writeOperation = DispatchWorkItem { [weak self] in
             SimpleTab.saveSimpleTab(tabs: simpleTabs)
-            let written = tabStateData.write(toFile: path, atomically: true)
-            // Ignore write failure (could be restoring).
-            self?.browserLog.debug("PreserveTabs write ok: \(written), bytes: \(tabStateData.length)")
+            guard let data = tabStateData else { return }
+            do {
+                try data.write(to: path, options: [])
+            } catch {
+                // Failure could happen when restoring
+                self?.browserLog.debug("PreserveTabs write failed with bytes count: \(data.count)")
+            }
         }
 
         // Delay by 100ms to debounce repeated calls to preserveTabs in quick succession.
@@ -147,42 +152,50 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
     func clearArchive() {
         guard let path = tabsStateArchivePath() else { return }
         do {
-            try fileManager.removeItem(atPath: path)
+            try fileManager.removeItem(at: path)
         } catch let error {
+            // TODO: Laurie
             browserLog.warning("Clear archive couldn't be completed with error: \(error.localizedDescription)")
         }
     }
 
     // MARK: - Private
 
-    private func archive(savedTabs: [SavedTab]) -> NSMutableData {
-        let tabData = NSMutableData()
-        let archiver = NSKeyedArchiver(forWritingWith: tabData)
-        archiver.encode(savedTabs, forKey: "tabs")
-        archiver.finishEncoding()
-        return tabData
+    private func archive(savedTabs: [SavedTab]) -> Data? {
+        let archiver = NSKeyedArchiver(requiringSecureCoding: false)
+        do {
+            try archiver.encodeEncodable(savedTabs, forKey: tabsKey)
+        } catch {
+            // TODO: Laurie
+            return nil
+        }
+
+        return archiver.encodedData
     }
 
     private var tabs: [SavedTab] {
         guard let tabData = tabDataRetriever.getTabData() else { return [SavedTab]() }
 
-        let unarchiver = try NSKeyedUnarchiver(forReadingWith: tabData)
-        unarchiver.setClass(SavedTab.self, forClassName: "Client.SavedTab")
-        unarchiver.setClass(SessionData.self, forClassName: "Client.SessionData")
-        unarchiver.decodingFailurePolicy = .setErrorAndReturn
-        guard let tabs = unarchiver.decodeObject(forKey: "tabs") as? [SavedTab] else {
-            SentryIntegration.shared.send(message: "Failed to restore tabs",
-                                          tag: .tabManager,
-                                          severity: .error,
-                                          description: "\(unarchiver.error ??? "nil")")
-            SimpleTab.saveSimpleTab(tabs: nil)
+        do {
+            let unarchiver = try NSKeyedUnarchiver(forReadingFrom: tabData)
+            let tabs = unarchiver.decodeDecodable([SavedTab].self, forKey: tabsKey)!
+            return tabs
+        } catch {
+            // TODO: Laurie
             return [SavedTab]()
         }
-
-        return tabs
     }
 
-    private func tabsStateArchivePath() -> String? {
+    private func savedTabError(description: String) -> [SavedTab] {
+        SentryIntegration.shared.send(message: "Failed to restore tabs",
+                                      tag: .tabManager,
+                                      severity: .error,
+                                      description: description)
+        SimpleTab.saveSimpleTab(tabs: nil)
+        return [SavedTab]()
+    }
+
+    private func tabsStateArchivePath() -> URL? {
         let profilePath: String?
         if  AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
             profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
@@ -190,7 +203,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
             profilePath = fileManager.tabPath
         }
         guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
+        return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive")
     }
 
     private func prepareSavedTabs(fromTabs tabs: [Tab], selectedTab: Tab?) -> [SavedTab]? {
@@ -216,8 +229,8 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 
 // MARK: Tests
 extension TabManagerStoreImplementation {
-    func testTabCountOnDisk() -> Int {
+    func testTabOnDisk() -> [SavedTab] {
         assert(AppConstants.isRunningTest)
-        return tabs.count
+        return tabs
     }
 }
