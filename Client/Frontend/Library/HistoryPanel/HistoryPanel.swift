@@ -20,7 +20,6 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
 
     struct UX {
         static let WelcomeScreenItemWidth = 170
-        static let HeaderHeight = CGFloat(40)
         static let IconSize = 23
         static let IconBorderColor = UIColor.Photon.Grey30
         static let IconBorderWidth: CGFloat = 0.5
@@ -42,6 +41,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     var keyboardState: KeyboardState?
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     var chevronImage = UIImage(named: ImageIdentifiers.menuChevron)
+    private var themeManager: ThemeManager
 
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
@@ -111,10 +111,14 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         tableView.accessibilityIdentifier = a11yIds.tableView
         tableView.prefetchDataSource = self
         tableView.delegate = self
-        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
-        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier)
-        tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
-        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self,
+                           forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self,
+                           forCellReuseIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier)
+        tableView.register(OneLineTableViewCell.self,
+                           forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
+        tableView.register(SiteTableViewHeader.self,
+                           forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
 
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
@@ -139,11 +143,14 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
 
     // MARK: - Inits
 
-    init(profile: Profile, tabManager: TabManager) {
+    init(profile: Profile,
+         tabManager: TabManager,
+         themeManager: ThemeManager = DefaultThemeManager.shared) {
         self.clearHistoryHelper = ClearHistorySheetProvider(profile: profile, tabManager: tabManager)
         self.viewModel = HistoryPanelViewModel(profile: profile)
         self.profile = profile
         self.state = .history(state: .mainView)
+        self.themeManager = themeManager
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -404,7 +411,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         cell.titleLabel.text = asGroup.displayTitle
         let imageView = UIImageView(image: chevronImage)
         cell.accessoryView = imageView
-        cell.leftImageView.image = UIImage(named: ImageIdentifiers.stackedTabsIcon)?.withTintColor(ThemeManager.shared.currentTheme.colours.iconSecondary)
+        cell.leftImageView.image = UIImage(named: ImageIdentifiers.stackedTabsIcon)?.withTintColor(themeManager.currentTheme.colors.iconSecondary)
         cell.leftImageView.backgroundColor = .theme.homePanel.historyHeaderIconsBackground
 
         return cell
@@ -631,34 +638,32 @@ extension HistoryPanel: UITableViewDelegate {
     }
 
     // MARK: - TableView's Header & Footer view
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if let header = view as? SiteTableViewHeader, let actualSection = viewModel.visibleSections[safe: section - 1] {
-
-            header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
-            header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
-            header.textLabel?.text = actualSection.title // At worst, we have a header with no text.
-            header.collapsibleImageView.isHidden = false
-            let isCollapsed = viewModel.isSectionCollapsed(sectionIndex: section - 1)
-            header.collapsibleState = isCollapsed ? ExpandButtonState.right : ExpandButtonState.down
-
-            // Configure tap to collapse/expand section
-            header.tag = section
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(sectionHeaderTapped(sender:)))
-            header.addGestureRecognizer(tapGesture)
-
-            // let historySectionsWithGroups
-            _ = viewModel.searchTermGroups.map { group in
-                viewModel.groupBelongsToSection(asGroup: group)
-            }
-        }
-
-    }
-
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // First section is for recently closed and its header has no view.
-        guard HistoryPanelSections(rawValue: section) != .additionalHistoryActions else { return nil }
+        guard HistoryPanelSections(rawValue: section) != .additionalHistoryActions,
+                let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader,
+                let actualSection = viewModel.visibleSections[safe: section - 1]
+        else { return nil }
 
-        return tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier)
+        let isCollapsed = viewModel.isSectionCollapsed(sectionIndex: section - 1)
+        let headerViewModel = SiteTableViewHeaderModel(title: actualSection.title ?? "",
+                                                       isCollapsible: true,
+                                                       collapsibleState:
+                                                        isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
+        header.configure(headerViewModel)
+        header.showImage(true)
+
+        // Configure tap to collapse/expand section
+        header.tag = section
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(sectionHeaderTapped(sender:)))
+        header.addGestureRecognizer(tapGesture)
+
+        // let historySectionsWithGroups
+        _ = viewModel.searchTermGroups.map { group in
+            viewModel.groupBelongsToSection(asGroup: group)
+        }
+
+        return header
     }
 
     // viewForHeaderInSection REQUIRES implementing heightForHeaderInSection
@@ -668,7 +673,7 @@ extension HistoryPanel: UITableViewDelegate {
             return 0
         }
 
-        return UX.HeaderHeight
+        return UITableView.automaticDimension
     }
 }
 

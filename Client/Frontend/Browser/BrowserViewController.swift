@@ -388,7 +388,7 @@ class BrowserViewController: UIViewController {
         }
 
         tabManager.startAtHomeCheck()
-        verifyWallpaperAssets()
+        updateWallpaperMetadata()
     }
 
     // MARK: - Lifecycle
@@ -444,7 +444,7 @@ class BrowserViewController: UIViewController {
 
         if !NightModeHelper.isActivated(profile.prefs) && LegacyThemeManager.instance.systemThemeIsOn {
             let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
         }
 
         searchTelemetry = SearchTelemetry()
@@ -639,7 +639,7 @@ class BrowserViewController: UIViewController {
 
         if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection), LegacyThemeManager.instance.systemThemeIsOn {
             let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
         }
 
         setupMiddleButtonStatus(isLoading: false)
@@ -869,12 +869,12 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func verifyWallpaperAssets() {
-        let verificationQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue",
+    private func updateWallpaperMetadata() {
+        let metadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue",
                                               qos: .utility)
-        verificationQueue.async {
-            let wallpaperManager = LegacyWallpaperManager()
-            wallpaperManager.runResourceVerification()
+        metadataQueue.async {
+            let wallpaperManager = WallpaperManager()
+            wallpaperManager.checkForUpdates()
         }
     }
 

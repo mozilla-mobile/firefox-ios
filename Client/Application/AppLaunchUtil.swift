@@ -58,13 +58,11 @@ class AppLaunchUtil {
         FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
 
         // Migrate wallpaper folder
-        WallpaperMigrationUtility(with: profile).attemptMigration()
+        LegacyWallpaperMigrationUtility(with: profile).attemptMigration()
 
         // Start initializing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
-
-        ThemeManager.shared.updateProfile(with: profile)
 
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {

@@ -31,7 +31,7 @@ struct HistoryActionablesModel: Hashable {
         self.itemIdentity = itemIdentity
 
         if let imageName = imageName {
-            self.itemImage = UIImage(named: imageName)?.withTintColor(ThemeManager.shared.currentTheme.colours.iconSecondary)
+            self.itemImage = UIImage(named: imageName)?.withTintColor(DefaultThemeManager.shared.currentTheme.colors.iconSecondary)
         } else {
             self.itemImage = nil
         }

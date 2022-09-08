@@ -330,7 +330,7 @@ enum NavigationPath {
 
         case .wallpaper:
             let wallpaperVersion: WallpaperVersion? = FeatureFlagsManager.shared.getCustomState(for: .wallpaperVersion)
-            if let wallpaperVersion = wallpaperVersion, wallpaperVersion == .v2 {
+            if let wallpaperVersion = wallpaperVersion, wallpaperVersion == .v1 {
                 let viewModel = WallpaperSettingsViewModel(wallpaperManager: WallpaperManager(), tabManager: tabManager)
                 let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
                 controller.pushViewController(wallpaperVC, animated: true)

@@ -303,8 +303,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     fileprivate func applyStorageResponse(
         _ response: StorageResponse<[Record<ClientPayload>]>,
         toLocalClients localClients: RemoteClientsAndTabs,
-        withServer storageClient: Sync15CollectionClient<ClientPayload>,
-        notifier: CollectionChangedNotifier?
+        withServer storageClient: Sync15CollectionClient<ClientPayload>
     ) -> Success {
         log.debug("Applying clients response.")
 
@@ -358,7 +357,6 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             }
             >>== { self.processCommandsFromRecord(ours, withServer: storageClient) }
             >>== { (shouldUpload, commands) in
-                let isFirstSync = self.lastFetched == 0
                 let ourRecordDidChange = self.why == .didLogin || self.why == .clientNameChanged
                 return self.maybeUploadOurRecord(shouldUpload || ourRecordDidChange || self.clientGuidIsMigrated, ifUnmodifiedSince: ours?.modified, toServer: storageClient)
                     >>> { self.uploadClientCommands(toLocalClients: localClients, withServer: storageClient) }
@@ -368,16 +366,12 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
                             _ = command.run(self)
                         }
                         self.lastFetched = responseTimestamp!
-                        if isFirstSync,
-                           let notifier = notifier {
-                            DispatchQueue.global(qos: DispatchQoS.background.qosClass).async { _ = notifier.notifyAll(collectionsChanged: ["clients"], reason: "firstsync") }
-                        }
                         return succeed()
                 }
         }
     }
 
-    open func synchronizeLocalClients(_ localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections, notifier: CollectionChangedNotifier?) -> SyncResult {
+    open func synchronizeLocalClients(_ localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
         log.debug("Synchronizing clients.")
         self.localClients = localClients // Store for later when we process a repairResponse command
 
@@ -413,7 +407,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             >>== { response in
                 return self.maybeDeleteClients(response: response, withServer: storageClient)
                     >>> { self.wipeIfNecessary(localClients)
-                                >>> { self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient, notifier: notifier) }
+                                >>> { self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient) }
                     }
 
             }

@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 extension Notification.Name {
-    public static let DataLoginDidChange = Notification.Name("DataLoginDidChange")
 
     // add a property to allow the observation of firefox accounts
     public static let FirefoxAccountChanged = Notification.Name("FirefoxAccountChanged")

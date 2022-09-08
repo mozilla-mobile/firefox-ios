@@ -15,7 +15,8 @@ class SyncedTabCellTests: XCTestCase {
             profile: MockProfile(),
             titleText: "Title",
             descriptionText: "Description",
-            url: testUrl
+            url: testUrl,
+            shouldAddBlur: false
         )
 
         var wasShowAllActionCalled = false
