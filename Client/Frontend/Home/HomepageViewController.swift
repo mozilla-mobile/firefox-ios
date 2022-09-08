@@ -300,6 +300,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     private func displayWallpaperSelector() {
         let wallpaperManager = WallpaperManager()
         guard wallpaperManager.canOnboardingBeShown,
+              !contextualHintViewController.shouldPresentHint(),
               !contextualHintViewController.isPresenting,
               !UserDefaults.standard.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
         else { return }
