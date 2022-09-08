@@ -154,8 +154,10 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         do {
             try fileManager.removeItem(at: path)
         } catch let error {
-            // TODO: Laurie
-            browserLog.warning("Clear archive couldn't be completed with error: \(error.localizedDescription)")
+            SentryIntegration.shared.send(message: "Clear archive couldn't be completed",
+                                          tag: .tabManager,
+                                          severity: .warning,
+                                          description: error.localizedDescription)
         }
     }
 
@@ -165,8 +167,11 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         let archiver = NSKeyedArchiver(requiringSecureCoding: false)
         do {
             try archiver.encodeEncodable(savedTabs, forKey: tabsKey)
-        } catch {
-            // TODO: Laurie
+        } catch let error {
+            SentryIntegration.shared.send(message: "Archiving savedTabs failed",
+                                          tag: .tabManager,
+                                          severity: .warning,
+                                          description: error.localizedDescription)
             return nil
         }
 
@@ -179,13 +184,12 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         do {
             let unarchiver = try NSKeyedUnarchiver(forReadingFrom: tabData)
             guard let tabs = unarchiver.decodeDecodable([SavedTab].self, forKey: tabsKey) else {
-                // TODO: Laurie
-                return [SavedTab]()
+                return savedTabError(description: "Unarchiver could not decode Saved tab")
             }
             return tabs
-        } catch {
-            // TODO: Laurie
-            return [SavedTab]()
+
+        } catch let error {
+            return savedTabError(description: error.localizedDescription)
         }
     }
 
