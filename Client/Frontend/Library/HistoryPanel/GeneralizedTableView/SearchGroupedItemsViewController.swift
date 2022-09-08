@@ -25,6 +25,7 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
     let viewModel: SearchGroupedItemsViewModel
     var libraryPanelDelegate: LibraryPanelDelegate? // Set this at the creation site!
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
+    private var themeManager: ThemeManager
 
     lazy private var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
@@ -49,9 +50,12 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
 
     // MARK: - Inits
 
-    init(viewModel: SearchGroupedItemsViewModel, profile: Profile) {
+    init(viewModel: SearchGroupedItemsViewModel,
+         profile: Profile,
+         themeManager: ThemeManager = DefaultThemeManager.shared) {
         self.viewModel = viewModel
         self.profile = profile
+        self.themeManager = themeManager
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -119,7 +123,7 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
                 cell.titleLabel.isHidden = site.title.isEmpty
                 cell.descriptionLabel.text = site.url
                 cell.descriptionLabel.isHidden = false
-                cell.leftImageView.layer.borderColor = ThemeManager.shared.currentTheme.colours.layer4.cgColor
+                cell.leftImageView.layer.borderColor = self.themeManager.currentTheme.colors.layer4.cgColor
                 cell.leftImageView.layer.borderWidth = 0.5
                 self.getFavIcon(for: site) { [weak cell] image in
                     cell?.leftImageView.image = image
@@ -212,7 +216,7 @@ extension SearchGroupedItemsViewController: NotificationThemeable {
         }
 
         view.backgroundColor = .systemBackground
-        tableView.separatorColor = ThemeManager.shared.currentTheme.colours.borderDivider
+        tableView.separatorColor = themeManager.currentTheme.colors.borderDivider
 
         tableView.reloadData()
     }

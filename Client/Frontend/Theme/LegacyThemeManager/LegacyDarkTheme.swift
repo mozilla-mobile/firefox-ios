@@ -171,7 +171,7 @@ class DarkRemoteTabTrayColor: RemoteTabTrayColor {
     override var background: UIColor { return UIColor.Photon.Grey70 }
 }
 
-class DarkTheme: NormalTheme {
+class LegacyDarkTheme: LegacyNormalTheme {
     override var name: String { return BuiltinThemeName.dark.rawValue }
     override var tableView: TableViewColor { return DarkTableViewColor() }
     override var urlbar: URLBarColor { return DarkURLBarColor() }

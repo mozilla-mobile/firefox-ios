@@ -6,8 +6,8 @@
 /// which comprise of a set of standardized colours (including light and
 /// dark mode) and fonts for the application.
 protocol Theme {
-    var colours: ThemeColourPalette { get }
-    var fonts: ThemeFontPalette { get }
+    var type: ThemeType { get }
+    var colors: ThemeColourPalette { get }
 }
 
 /// The colour palette for the theme.
@@ -41,8 +41,4 @@ protocol ThemeColourPalette {
     var textPrimary: UIColor { get }
     var textSecondary: UIColor { get }
     var textWarning: UIColor { get }
-}
-
-protocol ThemeFontPalette {
-
 }

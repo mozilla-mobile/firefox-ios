@@ -8,15 +8,13 @@ import UIKit
 // While no fonts have yet been implemented, they will be part of the
 // themeing system, and as such, have been roughly included.
 
-struct FxDefaultTheme: Theme {
-    var colours: ThemeColourPalette = FxDefaultColourPalette()
-    var fonts: ThemeFontPalette = FxDefaultFontPalette()
+struct LightTheme: Theme {
+    var type: ThemeType = .light
+    var colors: ThemeColourPalette = LightColourPalette()
 }
 
-private struct FxDefaultColourPalette: ThemeColourPalette {
-    // Generally, force unwrapping should be avoided. However,
-    // because we expect to ship these colours, we should force
-    // unwrap to force a crash in case that these colours aren't found.
+private struct LightColourPalette: ThemeColourPalette {
+// TODO: Replace with colors from the Mobile Styles Figma
     var actionPrimary: UIColor { return UIColor(named: "ActionPrimary")! }
     var actionSecondary: UIColor { return UIColor(named: "ActionSecondary")! }
     var borderDivider: UIColor { return UIColor(named: "BorderDivider")! }
@@ -46,8 +44,4 @@ private struct FxDefaultColourPalette: ThemeColourPalette {
     var textPrimary: UIColor { return UIColor(named: "TextPrimary")! }
     var textSecondary: UIColor { return UIColor(named: "TextSecondary")! }
     var textWarning: UIColor { return UIColor(named: "TextWarning")! }
-}
-
-private struct FxDefaultFontPalette: ThemeFontPalette {
-
 }

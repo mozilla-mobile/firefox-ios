@@ -445,13 +445,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
 
             // If we've enabled night mode and the theme is normal, enable dark theme
             if NightModeHelper.isActivated(self.profile.prefs), LegacyThemeManager.instance.currentName == .normal {
-                LegacyThemeManager.instance.current = DarkTheme()
+                LegacyThemeManager.instance.current = LegacyDarkTheme()
                 NightModeHelper.setEnabledDarkTheme(self.profile.prefs, darkTheme: true)
             }
 
             // If we've disabled night mode and dark theme was activated by it then disable dark theme
             if !NightModeHelper.isActivated(self.profile.prefs), NightModeHelper.hasEnabledDarkTheme(self.profile.prefs), LegacyThemeManager.instance.currentName == .dark {
-                LegacyThemeManager.instance.current = NormalTheme()
+                LegacyThemeManager.instance.current = LegacyNormalTheme()
                 NightModeHelper.setEnabledDarkTheme(self.profile.prefs, darkTheme: false)
             }
         }.items
