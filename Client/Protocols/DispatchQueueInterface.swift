@@ -9,7 +9,10 @@ protocol DispatchQueueInterface {
                qos: DispatchQoS,
                flags: DispatchWorkItemFlags,
                execute work: @escaping @convention(block) () -> Void)
+
     func ensureMainThread(execute work: @escaping @convention(block) () -> Swift.Void)
+
+    func asyncAfter(deadline: DispatchTime, execute: DispatchWorkItem)
 }
 
 extension DispatchQueueInterface {
@@ -17,10 +20,7 @@ extension DispatchQueueInterface {
                qos: DispatchQoS = .unspecified,
                flags: DispatchWorkItemFlags = [],
                execute work: @escaping @convention(block) () -> Void) {
-        async(group: group,
-              qos: qos,
-              flags: flags,
-              execute: work)
+        async(group: group, qos: qos, flags: flags, execute: work)
     }
 
     func ensureMainThread(execute work: @escaping @convention(block) () -> Swift.Void) {

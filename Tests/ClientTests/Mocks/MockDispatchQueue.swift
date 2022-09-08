@@ -16,4 +16,8 @@ class MockDispatchQueue: DispatchQueueInterface {
     func ensureMainThread(execute work: @escaping () -> Void) {
         work()
     }
+
+    func asyncAfter(deadline: DispatchTime, execute: DispatchWorkItem) {
+        execute.perform()
+    }
 }
