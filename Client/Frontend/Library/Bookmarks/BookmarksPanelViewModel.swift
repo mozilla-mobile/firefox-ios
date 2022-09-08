@@ -22,12 +22,6 @@ class BookmarksPanelViewModel {
     var bookmarkNodes = [FxBookmarkNode]()
     private var flashLastRowOnNextReload = false
 
-    /// Error case at the moment is setting data to nil and showing nothing
-    private func setErrorCase() {
-        self.bookmarkFolder = nil
-        self.bookmarkNodes = []
-    }
-
     /// By default our root folder is the mobile folder. Desktop folders are shown in the local desktop folders.
     init(profile: Profile,
          bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID) {
@@ -44,7 +38,10 @@ class BookmarksPanelViewModel {
 
     func reloadData(completion: @escaping () -> Void) {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
-        if profile.isShutdown { return }
+        if profile.isShutdown {
+            completion()
+            return
+        }
 
         if bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID {
             setupMobileFolderData(completion: completion)
@@ -61,12 +58,44 @@ class BookmarksPanelViewModel {
         flashLastRowOnNextReload = true
     }
 
+    func moveRow(at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        guard let bookmarkNode = bookmarkNodes[safe: sourceIndexPath.row] else {
+            return
+        }
+
+        let newIndex = getNewIndex(from: destinationIndexPath.row)
+        _ = profile.places.updateBookmarkNode(guid: bookmarkNode.guid, position: UInt32(newIndex))
+
+        bookmarkNodes.remove(at: sourceIndexPath.row)
+        bookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
+    }
+
+    // MARK: - Private
+
+    /// Since we have a Local Desktop folder that isn't referenced in A-S under the mobile folder, we need to account for this when saving bookmark index in A-S.
+    /// Index is calculated by inverting it inside the mobile folder. We also need to account for the local desktop folder spot it takes.
+    func getNewIndex(from index: Int) -> Int {
+        if bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID {
+            let mobileFolderIndex = bookmarkNodes.count - index - LocalDesktopFolder.numberOfRowsTaken
+            if mobileFolderIndex < 0 {
+                return 0
+            } else if mobileFolderIndex > bookmarkNodes.count {
+                return bookmarkNodes.count - LocalDesktopFolder.numberOfRowsTaken
+            }
+
+            return mobileFolderIndex
+        } else {
+            return index
+        }
+    }
+
     private func setupMobileFolderData(completion: @escaping () -> Void) {
         profile.places
             .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false)
             .uponQueue(.main) { result in
                 guard let mobileFolder = result.successValue as? BookmarkFolderData else {
                     self.setErrorCase()
+                    completion()
                     return
                 }
 
@@ -99,6 +128,7 @@ class BookmarksPanelViewModel {
                                         recursive: false).uponQueue(.main) { result in
             guard let folder = result.successValue as? BookmarkFolderData else {
                 self.setErrorCase()
+                completion()
                 return
             }
 
@@ -107,5 +137,11 @@ class BookmarksPanelViewModel {
 
             completion()
         }
+    }
+
+    /// Error case at the moment is setting data to nil and showing nothing
+    private func setErrorCase() {
+        self.bookmarkFolder = nil
+        self.bookmarkNodes = []
     }
 }

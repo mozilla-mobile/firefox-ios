@@ -14,6 +14,9 @@ class LocalDesktopFolder: FxBookmarkNode {
     // Guid used locally, but never synced to Firefox Sync accounts
     static let localDesktopFolderGuid = "localDesktopFolder"
 
+    // The space a local desktop folder takes in a certain folder
+    static let numberOfRowsTaken = 1
+
     private let forcedGuid: Guid
 
     init(forcedGuid: Guid = LocalDesktopFolder.localDesktopFolderGuid) {
