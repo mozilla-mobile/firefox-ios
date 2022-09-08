@@ -28,12 +28,12 @@ final class NimbusFeatureFlagLayer {
                 .topSites:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
-        case .contextualHintForJumpBackInSyncedTab:
-            return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
-
-        case .copyForJumpBackIn,
-                .copyForToolbar:
-            return checkHintCopyFeature(for: featureID, from: nimbus)
+//        case .contextualHintForJumpBackInSyncedTab:
+//            return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
+//
+//        case .copyForJumpBackIn,
+//                .copyForToolbar:
+//            return checkHintCopyFeature(for: featureID, from: nimbus)
 
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
@@ -48,9 +48,9 @@ final class NimbusFeatureFlagLayer {
                 .tabTrayGroups:
             return checkGroupingFeature(for: featureID, from: nimbus)
 
-        case .onboardingUpgrade,
-                .onboardingFreshInstall:
-            return checkNimbusForOnboardingFeature(for: featureID, from: nimbus)
+//        case .onboardingUpgrade,
+//                .onboardingFreshInstall:
+//            return checkNimbusForOnboardingFeature(for: featureID, from: nimbus)
 
         case .sponsoredTiles:
             return checkSponsoredTilesFeature(from: nimbus)
@@ -62,8 +62,20 @@ final class NimbusFeatureFlagLayer {
                 .wallpaperVersion:
             return checkNimbusForWallpapersFeature(using: nimbus)
 
-        case .wallpaperOnboardingSheet:
-            return checkNimbusForWallpaperOnboarding(using: nimbus)
+//        case .wallpaperOnboardingSheet:
+//            return checkNimbusForWallpaperOnboarding(using: nimbus)
+
+        // MARK: - Temp Nimbus Redirect for MR22
+        // This section overrides the other sections specifically for the MR22 experiment.
+        // TODO: Remove this section & corresponding function after experiment conculdes.
+        // https://mozilla-hub.atlassian.net/browse/FXIOS-4875
+        case .wallpaperOnboardingSheet,
+                .onboardingFreshInstall,
+                .onboardingUpgrade,
+                .contextualHintForJumpBackInSyncedTab,
+                .copyForJumpBackIn,
+                .copyForToolbar:
+            return checkNimbusForMR22Feature(for: featureID, using: nimbus)
         }
     }
 
@@ -75,6 +87,31 @@ final class NimbusFeatureFlagLayer {
         case .disabled: return .disabled
         case .afterFourHours: return .afterFourHours
         case .always: return .always
+        }
+    }
+
+    // MARK: - Temp Nimbus Redirect for MR22
+
+    private func checkNimbusForMR22Feature(for featureID: NimbusFeatureFlagID,
+                                           using nimbus: FxNimbus
+    ) -> Bool {
+        let config = nimbus.features.mr2022.value().sectionsEnabled
+        // We've already filtered on the appropriate featureID's previously,
+        // so we can saftely have a default here
+        switch featureID {
+        case .wallpaperOnboardingSheet:
+            return config.wallpaperOnboardingSheet
+        case .onboardingFreshInstall:
+            return config.onboardingFirstRunFlow
+        case .onboardingUpgrade:
+            return config.onboardingUpgradeFlow
+        case .contextualHintForJumpBackInSyncedTab:
+            return config.syncCfr
+        case .copyForJumpBackIn:
+            return config.jumpBackInCfrUpdate
+        case .copyForToolbar:
+            return config.toolbarCfrUpdate
+        default: return false
         }
     }
 
