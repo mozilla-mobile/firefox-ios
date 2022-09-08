@@ -5,7 +5,14 @@
 import Foundation
 import Storage
 
-class RecentlySavedCellViewModel {
+struct RecentlySavedCellViewModel {
+    let site: Site
+    var heroImage: UIImage?
+    var favIconImage: UIImage?
+    var shouldAddBlur: Bool
+}
+
+class RecentlySavedViewModel {
 
     struct UX {
         static let cellWidth: CGFloat = 150
@@ -25,6 +32,12 @@ class RecentlySavedCellViewModel {
 
     weak var delegate: HomepageDataModelDelegate?
 
+    var shouldAddBlur: Bool {
+        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
+
+        return wallpaperManager.currentWallpaper.type != .defaultWallpaper
+    }
+
     init(profile: Profile,
          isZeroSearch: Bool = false,
          wallpaperManager: WallpaperManager) {
@@ -42,7 +55,7 @@ class RecentlySavedCellViewModel {
 }
 
 // MARK: HomeViewModelProtocol
-extension RecentlySavedCellViewModel: HomepageViewModelProtocol, FeatureFlaggable {
+extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
     var sectionType: HomepageSectionType {
         return .recentlySaved
@@ -119,7 +132,7 @@ extension RecentlySavedCellViewModel: HomepageViewModelProtocol, FeatureFlaggabl
 }
 
 // MARK: FxHomeSectionHandler
-extension RecentlySavedCellViewModel: HomepageSectionHandler {
+extension RecentlySavedViewModel: HomepageSectionHandler {
 
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
@@ -129,9 +142,11 @@ extension RecentlySavedCellViewModel: HomepageSectionHandler {
         if let item = recentItems[safe: indexPath.row] {
             let site = Site(url: item.url, title: item.title, bookmarked: true)
 
-            recentlySavedCell.configure(site: site,
-                                        heroImage: recentlySavedDataAdaptor.getHeroImage(forSite: site),
-                                        favIconImage: recentlySavedDataAdaptor.getFaviconImage(forSite: site))
+            let viewModel = RecentlySavedCellViewModel(site: site,
+                                                       heroImage: recentlySavedDataAdaptor.getHeroImage(forSite: site),
+                                                       favIconImage: recentlySavedDataAdaptor.getFaviconImage(forSite: site),
+                                                       shouldAddBlur: shouldAddBlur)
+            recentlySavedCell.configure(viewModel: viewModel)
         }
 
         return recentlySavedCell
@@ -166,7 +181,7 @@ extension RecentlySavedCellViewModel: HomepageSectionHandler {
     }
 }
 
-extension RecentlySavedCellViewModel: RecentlySavedDelegate {
+extension RecentlySavedViewModel: RecentlySavedDelegate {
     func didLoadNewData() {
         ensureMainThread {
             self.recentItems = self.recentlySavedDataAdaptor.getRecentlySavedData()

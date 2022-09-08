@@ -24,7 +24,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
 
     // MARK: - UI Elements
     private var rootContainer: UIView = .build { view in
-        view.backgroundColor = .white
+        view.backgroundColor = .clear
     }
 
     // Contains the hero image and fallback favicons
@@ -93,11 +93,11 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         applyTheme()
     }
 
-    func configure(site: Site, heroImage: UIImage?, favIconImage: UIImage?) {
-        configureImages(heroImage: heroImage, favIconImage: favIconImage)
+    func configure(viewModel: RecentlySavedCellViewModel) {
+        configureImages(heroImage: viewModel.heroImage, favIconImage: viewModel.favIconImage)
 
-        itemTitle.text = site.title
-        adjustLayout()
+        itemTitle.text = viewModel.site.title
+        adjustLayout(shouldAddBlur: viewModel.shouldAddBlur)
     }
 
     private func configureImages(heroImage: UIImage?, favIconImage: UIImage?) {
@@ -123,13 +123,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
     // MARK: - Helpers
 
     private func setupLayout() {
-        rootContainer.layer.cornerRadius = UX.generalCornerRadius
-        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                      cornerRadius: UX.generalCornerRadius).cgPath
-        rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        rootContainer.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
-        rootContainer.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
-        rootContainer.layer.shadowRadius = UX.shadowRadius
+        contentView.backgroundColor = .clear
 
         fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
         imageContainer.addSubviews(heroImageView, fallbackFaviconBackground)
@@ -182,31 +176,41 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
             itemTitle.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
                                               constant: -UX.generalSpacing)
         ])
-
-        adjustLayout()
     }
 
-    func adjustLayout() {
+    func adjustLayout(shouldAddBlur: Bool) {
+        // If blur is disabled set background color
+        guard shouldAddBlur else {
+            let isDarkMode = LegacyThemeManager.instance.currentName == .dark
+                rootContainer.backgroundColor = isDarkMode ? UIColor.Photon.DarkGrey40 : .white
+            setupShadow()
+
+            return
+        }
+
         rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-        fallbackFaviconBackground.addBlurEffectWithClearBackgroundAndClipping(using: .systemMaterial)
     }
 
     func applyTheme() {
         if LegacyThemeManager.instance.currentName == .dark {
             itemTitle.textColor = UIColor.Photon.LightGrey10
-            rootContainer.backgroundColor = UIColor.Photon.DarkGrey40
+            fallbackFaviconBackground.backgroundColor = UIColor.Photon.DarkGrey60
         } else {
             itemTitle.textColor = UIColor.Photon.DarkGrey90
-            rootContainer.backgroundColor = .white
-        }
-
-        // If blur is disabled set background color
-        if UIAccessibility.isReduceTransparencyEnabled {
-            fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey20
-            rootContainer.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
+            fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey10
         }
 
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
+    }
+
+    private func setupShadow() {
+        rootContainer.layer.cornerRadius = UX.generalCornerRadius
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                      cornerRadius: UX.generalCornerRadius).cgPath
+        rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        rootContainer.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+        rootContainer.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
+        rootContainer.layer.shadowRadius = UX.shadowRadius
     }
 }
 

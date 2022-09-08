@@ -13,6 +13,7 @@ struct SyncedTabCellViewModel {
     var syncedDeviceImage: UIImage?
     var heroImage: UIImage?
     var fallbackFaviconImage: UIImage?
+    var shouldAddBlur: Bool
     var accessibilityLabel: String {
         return "\(cardTitleText): \(titleText), \(descriptionText)"
     }
@@ -135,8 +136,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.itemCell
 
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .DynamicFontChanged])
+                           observing: [.DisplayThemeChanged])
         setupLayout()
         applyTheme()
     }
@@ -196,7 +196,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapSyncedTab(_:)))
         syncedTabTapTargetView.addGestureRecognizer(tapRecognizer)
         applyTheme()
-        adjustLayout()
+        adjustLayout(shouldAddBlur: viewModel.shouldAddBlur)
 
         let showAllSyncedTabsA11yAction = UIAccessibilityCustomAction(name: viewModel.syncedTabsButtonText,
                                                                       target: self,
@@ -238,13 +238,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupLayout() {
-        contentView.layer.cornerRadius = UX.generalCornerRadius
-        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = UX.stackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
-        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = 0.12
+        setupShadow()
 
         fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
         imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
@@ -322,7 +316,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         adjustLayout()
     }
 
-    private func adjustLayout() {
+    private func adjustLayout(shouldAddBlur: Bool = false) {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
@@ -337,8 +331,23 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         itemTitleTopConstraint.constant = itemTitleTopAnchorConstant
 
         // Add blur
-        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-        fallbackFaviconBackground.addBlurEffectWithClearBackgroundAndClipping(using: .systemMaterial)
+        if shouldAddBlur {
+            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
+            UIColor.Photon.DarkGrey40 : .white
+            setupShadow()
+        }
+    }
+
+    private func setupShadow() {
+        contentView.layer.cornerRadius = UX.generalCornerRadius
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                    cornerRadius: UX.generalCornerRadius).cgPath
+        contentView.layer.shadowRadius = UX.stackViewShadowRadius
+        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
+        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        contentView.layer.shadowOpacity = 0.12
     }
 }
 
@@ -350,6 +359,7 @@ extension SyncedTabCell: NotificationThemeable {
             itemTitle.textColor = UIColor.Photon.LightGrey05
             descriptionLabel.textColor = UIColor.Photon.LightGrey40
             fallbackFaviconImage.tintColor = UIColor.Photon.LightGrey40
+            fallbackFaviconBackground.backgroundColor = UIColor.Photon.DarkGrey60
             syncedTabsButton.tintColor = UIColor.Photon.LightGrey40
             syncedDeviceImage.image = syncedDeviceImage.image?.tinted(withColor: UIColor.Photon.LightGrey40)
         } else {
@@ -357,14 +367,9 @@ extension SyncedTabCell: NotificationThemeable {
             itemTitle.textColor = UIColor.Photon.DarkGrey90
             descriptionLabel.textColor = UIColor.Photon.DarkGrey05
             fallbackFaviconImage.tintColor = .black
+            fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey10
             syncedTabsButton.tintColor = .black
             syncedDeviceImage.image = syncedDeviceImage.image?.tinted(withColor: .black)
-        }
-
-        // If blur is disabled set background color
-        if !UIAccessibility.isReduceTransparencyEnabled {
-            fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey20
-            contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
         }
 
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
@@ -377,8 +382,6 @@ extension SyncedTabCell: Notifiable {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
-        case .DynamicFontChanged:
-            adjustLayout()
         default: break
         }
     }

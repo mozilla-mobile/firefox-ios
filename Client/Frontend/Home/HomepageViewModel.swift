@@ -70,7 +70,7 @@ class HomepageViewModel: FeatureFlaggable {
     var headerViewModel: HomeLogoHeaderViewModel
     var messageCardViewModel: HomepageMessageCardViewModel
     var topSiteViewModel: TopSitesViewModel
-    var recentlySavedViewModel: RecentlySavedCellViewModel
+    var recentlySavedViewModel: RecentlySavedViewModel
     var jumpBackInViewModel: JumpBackInViewModel
     var historyHighlightsViewModel: HistoryHighlightsViewModel
     var pocketViewModel: PocketViewModel
@@ -110,7 +110,7 @@ class HomepageViewModel: FeatureFlaggable {
             wallpaperManager: wallpaperManager)
         adaptor.delegate = jumpBackInViewModel
 
-        self.recentlySavedViewModel = RecentlySavedCellViewModel(profile: profile, wallpaperManager: wallpaperManager)
+        self.recentlySavedViewModel = RecentlySavedViewModel(profile: profile, wallpaperManager: wallpaperManager)
         let deletionUtility = HistoryDeletionUtility(with: profile)
         let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
             profile: profile,
