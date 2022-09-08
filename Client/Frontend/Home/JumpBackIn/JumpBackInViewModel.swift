@@ -40,6 +40,12 @@ class JumpBackInViewModel: FeatureFlaggable {
     private var wallpaperManager: WallpaperManager
     var sectionLayout: JumpBackInSectionLayout = .compactJumpBackIn // We use the compact layout as default
 
+    var shouldAddDefaultBackground: Bool {
+        guard !UIAccessibility.isReduceTransparencyEnabled else { return true }
+
+        return wallpaperManager.currentWallpaper.type == .defaultWallpaper
+    }
+
     init(
         isZeroSearch: Bool = false,
         profile: Profile,
@@ -138,6 +144,12 @@ class JumpBackInViewModel: FeatureFlaggable {
     private var hasJumpBackIn: Bool {
         return jumpBackInList.itemsToDisplay > 0
     }
+
+    var shouldAddBlur: Bool {
+        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
+
+        return wallpaperManager.currentWallpaper.type != .defaultWallpaper
+    }
 }
 
 // MARK: - Private: Configure UI
@@ -152,7 +164,8 @@ private extension JumpBackInViewModel {
         let cellViewModel = JumpBackInCellViewModel(titleText: group.searchTerm.localizedCapitalized,
                                                     descriptionText: descriptionText,
                                                     favIconImage: faviconImage,
-                                                    heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site))
+                                                    heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site),
+                                                    shouldAddBlur: shouldAddBlur)
         cell.configure(viewModel: cellViewModel)
     }
 
@@ -164,7 +177,8 @@ private extension JumpBackInViewModel {
         let cellViewModel = JumpBackInCellViewModel(titleText: site.title,
                                                     descriptionText: descriptionText,
                                                     favIconImage: jumpBackInDataAdaptor.getFaviconImage(forSite: site),
-                                                    heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site))
+                                                    heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site),
+                                                    shouldAddBlur: shouldAddBlur)
         cell.configure(viewModel: cellViewModel)
     }
 
@@ -181,7 +195,8 @@ private extension JumpBackInViewModel {
             url: item.tab.URL,
             syncedDeviceImage: image,
             heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site),
-            fallbackFaviconImage: jumpBackInDataAdaptor.getFaviconImage(forSite: site)
+            fallbackFaviconImage: jumpBackInDataAdaptor.getFaviconImage(forSite: site),
+            shouldAddBlur: shouldAddBlur
         )
 
         cell.configure(
