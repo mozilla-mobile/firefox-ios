@@ -295,7 +295,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         }
     }
 
-    private func saveTabs(toProfile profile: Profile, _ tabs: [Tab], writeCompletion: (() -> Void)? = nil) {
+    private func saveTabs(toProfile profile: Profile, _ tabs: [Tab]) {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
         let storedTabs: [RemoteTab] = tabs.compactMap( Tab.toRemoteTab )
 
@@ -303,25 +303,12 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         // work like querying for top sites.
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
             profile.storeTabs(storedTabs)
-            writeCompletion?()
         }
     }
 
-    func storeChanges(writeCompletion: (() -> Void)? = nil) {
-        let group = DispatchGroup()
-        group.enter()
-        saveTabs(toProfile: profile, normalTabs) {
-            group.leave()
-        }
-
-        group.enter()
-        store.preserveTabs(tabs, selectedTab: selectedTab) {
-            group.leave()
-        }
-
-        group.notify(queue: .main) {
-            writeCompletion?()
-        }
+    func storeChanges() {
+        saveTabs(toProfile: profile, normalTabs)
+        store.preserveTabs(tabs, selectedTab: selectedTab)
     }
 
     func hasTabsToRestoreAtStartup() -> Bool {
@@ -339,9 +326,16 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         isRestoringTabs = true
 
         var tabToSelect = store.restoreStartupTabs(clearPrivateTabs: shouldClearPrivateTabs(),
-                                                   tabManager: self)
+                                                   addTabClosure: addTabForRestoration(isPrivate:))
+
+        // If tabToSelect is nil after restoration, force selection of first tab normal tab
         if tabToSelect == nil {
-            tabToSelect = addTab()
+            tabToSelect = tabs.first(where: { $0.isPrivate == false })
+
+            // If tabToSelect is still nil, create a new tab
+            if tabToSelect == nil {
+                tabToSelect = addTab()
+            }
         }
 
         selectTab(tabToSelect)
@@ -351,6 +345,10 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         }
 
         isRestoringTabs = false
+    }
+
+    private func addTabForRestoration(isPrivate: Bool) -> Tab {
+        return addTab(flushToDisk: false, zombie: true, isPrivate: isPrivate)
     }
 
     private func checkForSingleTab() {
@@ -945,17 +943,6 @@ extension TabManager {
     func testRemoveAll() {
         assert(AppConstants.isRunningTest)
         removeTabs(self.tabs)
-    }
-
-//    func testTabCountOnDisk() -> Int {
-//        assert(AppConstants.isRunningTest)
-//        return store.testTabCountOnDisk()
-//    }
-
-    func testCountRestoredTabs() -> Int {
-        assert(AppConstants.isRunningTest)
-        _ = store.restoreStartupTabs(clearPrivateTabs: true, tabManager: self)
-        return count
     }
 
     func testClearArchive() {
