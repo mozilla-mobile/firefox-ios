@@ -29,13 +29,10 @@
 "About.safariBullet1" = "Block trackers for improved privacy";
 
 /* Label on About screen */
-"About.safariBullet2" = "Block Web fonts to reduce page size";
+"About.safariBullet2" = "Block web fonts to reduce page size";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Use it as a Safari extension:";
-
-/* (No Comment) */
-"About.screenTitle" = "About";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "About %@";
@@ -124,9 +121,6 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Select Location Bar";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Link you copied: %@";
-
 /* Label on button to complete edits */
 "Done" = "Done";
 
@@ -172,9 +166,6 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Close";
 
-/* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Request Desktop Site";
-
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Tap Safari, then select Content Blockers";
 
@@ -209,13 +200,7 @@
 "Settings.autocompleteSection" = "URL Autocomplete";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blocking other content trackers may break some videos and Web pages.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "No, Thanks";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "I Understand";
+"Settings.blockOtherMessage" = "Blocking other content trackers may break some videos and web pages.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ will send what you type in the address bar to your search engine.";
@@ -260,7 +245,7 @@
 "Settings.Search.SearchTemplate" = "Search string to use";
 
 /* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Example: searchengineexample.com/search/?q=%s";
+"settings.Search.SearchTemplateExample" = "Example: searchengine.example.com/search/?q=%s";
 
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Paste or enter search string. If necessary, replace search term with: %s.";
@@ -274,9 +259,6 @@
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "SEARCH";
 
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRATION";
-
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
@@ -284,19 +266,7 @@
 "Settings.sectionPrivacy" = "PRIVACY";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Advertising";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Analytics";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Block Web fonts";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Content";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Social";
+"Settings.toggleBlockFonts" = "Block web fonts";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Use Face ID to unlock app";
@@ -319,9 +289,6 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID can unlock %@ if a URL is already open in the app";
 
-/* URL for the learn more of the send usage data toggle */
-"Settings.usageData" = "usage-data";
-
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "What’s New";
 
@@ -337,9 +304,6 @@
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Find in Page";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Open in %@";
-
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Request Desktop Site";
 
@@ -351,9 +315,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Open in Firefox";
-
-/* Text for the share menu option when a user wants to open the current website in the Safari app. */
-"ShareMenu.ShareOpenSafari" = "Open in Safari";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Share Page With…";
@@ -385,7 +346,7 @@
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Tracking Protection";
 
-/* Text for the toggle that temporarily disables tracking protection. */
+/* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "Enhanced Tracking Protection";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
@@ -396,9 +357,6 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ERASE";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Browsing history cleared";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Find in page: %@";
@@ -418,13 +376,13 @@
 /* Text for a label that indicates the title for release tip. */
 "Tip.Release.Title" = "Why yes, we do have a fresh new look!";
 
-/* Text for a label that indicates the description for release tip. */
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
 "Tip.Release.Description" = "Read more about this and other updates to %@.";
 
 /* Text for a label that indicates the title for shortcuts tip. */
 "Tip.Shortcuts.Title" = "Create shortcuts to the sites you visit most:";
 
-/* Text for a label that indicates the description for shortcuts tip. */
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
 "Tip.Shortcuts.Description" = "Select Add to Shortcuts from the %@ menu";
 
 /* Text for a label that indicates the title for sites not working tip. */
@@ -433,7 +391,7 @@
 /* Text for a label that indicates the description for sites not working tip. */
 "Tip.SitesNotWorking.Description" = "Try turning off Tracking Protection";
 
-/* Text for a label that indicates the title for biometric tip. */
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
 "Tip.Biometric.Title" = "Lock %@ when a site is open:";
 
 /* Text for a label that indicates the description for biometric Face ID tip. */
@@ -448,17 +406,17 @@
 /* Text for a label that indicates the title for siri favorite tip. */
 "Tip.SiriFavorite.Title" = "“Siri, open my favorite site.”";
 
-/* Text for a label that indicates the description for siri favorite tip. */
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriFavorite.Description" = "Add Siri shortcut";
 
-/* Text for a label that indicates the title for siri erase tip. */
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
 "Tip.SiriErase.Title" = "“Siri, erase my %@ session.”";
 
-/* Text for a label that indicates the description for siri erase tip. */
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "Add Siri shortcut";
 
-/* Text for a label that indicates the title for share trackers tip. */
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
 "Tip.ShareTrackers.Title" = "You browse. %@ blocks.";
 
-/* Text for a label that indicates the description for share trackers tip. */
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
 "Tip.ShareTrackers.Description" = "%@ trackers blocked so far";
