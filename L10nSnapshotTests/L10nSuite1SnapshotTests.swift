@@ -35,16 +35,18 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         sleep(3)
         waitForExistence(app.scrollViews.staticTexts["WelcomeCardTitleLabel"], timeout: 15)
         snapshot("Onboarding-1")
+
         // Swipe to the second screen
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
-        waitForExistence(app.buttons["\(rootA11yId)PrimaryButton"])
+        waitForExistence(app.buttons["SignSyncCardPrimaryButton"])
+        waitForExistence(app.buttons["SignSyncCardSecondaryButton"])
         snapshot("Onboarding-2")
 
-        // Swipe to the third screen
-        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        // Swipe to the Homescreen
+        app.buttons["SignSyncCardSecondaryButton"].tap()
         currentScreen += 1
-        snapshot("Onboarding-3")
+        snapshot("Homescreen-first-visit")
     }
 
     func testWebViewContextMenu () throws {
