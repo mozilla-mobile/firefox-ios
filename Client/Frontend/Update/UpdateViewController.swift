@@ -84,7 +84,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
         let cardViewController = OnboardingCardViewController(viewModel: viewModel,
                                                               delegate: self)
-        view.addSubviews(/*backgroundImageView,*/ closeButton)
+        view.addSubview(closeButton)
         addChild(cardViewController)
         view.addSubview(cardViewController.view)
         cardViewController.didMove(toParent: self)

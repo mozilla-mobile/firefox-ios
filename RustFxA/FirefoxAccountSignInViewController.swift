@@ -22,6 +22,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         static let horizontalPadding: CGFloat = 16
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
+        static let buttonFontSize: CGFloat = 16
         static let signInLabelFontSize: CGFloat = 20
         static let descriptionFontSize: CGFloat = 17
     }
@@ -41,6 +42,14 @@ class FirefoxAccountSignInViewController: UIViewController {
     private let fxaDismissStyle: DismissType
 
     // UI
+    private lazy var scrollView: UIScrollView = .build { view in
+        view.backgroundColor = .clear
+    }
+
+    lazy var containerView: UIView = .build { view in
+        view.backgroundColor = .clear
+    }
+
     let qrSignInLabel: UILabel = .build { label in
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -62,17 +71,20 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textColor = .label
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
+                                                                       size: UX.signInLabelFontSize)
+        label.adjustsFontForContentSizeCategory = true
 
         let placeholder = "firefox.com/pair"
         RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { manager in
             manager.getPairingAuthorityURL { result in
-                guard let url = try? result.get(),
-                      let host = url.host
-                else { return }
+                guard let url = try? result.get(), let host = url.host else { return }
 
+                let font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .headline,
+                                                                             size: UX.signInLabelFontSize)
                 let shortUrl = host + url.path // "firefox.com" + "/pair"
                 let msg: String = .FxASignin_QRInstructions.replaceFirstOccurrence(of: placeholder, with: shortUrl)
-                label.attributedText = msg.attributedText(boldString: shortUrl, font: DynamicFontHelper().MediumSizeRegularWeightAS)
+                label.attributedText = msg.attributedText(boldString: shortUrl, font: font)
             }
         }
     }
@@ -80,14 +92,19 @@ class FirefoxAccountSignInViewController: UIViewController {
     lazy var scanButton: ResizableButton = .build { button in
         button.backgroundColor = UIColor.Photon.Blue50
         button.layer.cornerRadius = 8
-        button.setImage(UIImage(named: "qr-code-icon-white")?.tinted(withColor: .white), for: .normal)
-        button.setImage(UIImage(named: "qr-code-icon-white")?.tinted(withColor: .white), for: .highlighted)
-        let imageWidth = button.imageView?.frame.width ?? 0.0
+        button.setImage(UIImage(named: ImageIdentifiers.signinSyncQRButton)?
+            .tinted(withColor: .white), for: .normal)
+        button.setImage(UIImage(named: ImageIdentifiers.signinSyncQRButton)?
+            .tinted(withColor: .white), for: .highlighted)
         button.setTitle(.FxASignin_QRScanSignin, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.FirefoxAccount.qrButton
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
             withTextStyle: .callout,
-            maxSize: 51)
+            size: UX.buttonFontSize)
+        button.titleEdgeInsets = UIEdgeInsets(top: 0,
+                                              left: UX.buttonHorizontalInset,
+                                              bottom: 0,
+                                              right: UX.buttonHorizontalInset)
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
                                                 left: UX.buttonHorizontalInset,
                                                 bottom: UX.buttonVerticalInset,
@@ -102,12 +119,12 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 8
         button.setTitle(.FxASignin_EmailSignin, for: .normal)
-        button.accessibilityIdentifier = "EmailSignIn.button"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSignInButton
         button.addTarget(self, action: #selector(self.emailLoginTapped), for: .touchUpInside)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
             withTextStyle: .callout,
-            maxSize: 51)
+            size: UX.buttonFontSize)
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
                                                 left: UX.buttonHorizontalInset,
                                                 bottom: UX.buttonVerticalInset,
@@ -163,36 +180,55 @@ class FirefoxAccountSignInViewController: UIViewController {
     // MARK: - Helpers
 
     private func setupLayout() {
-        view.addSubviews(qrSignInLabel, pairImageView, instructionsLabel, scanButton, emailButton)
+        containerView.addSubviews(qrSignInLabel, pairImageView, instructionsLabel, scanButton, emailButton)
+        scrollView.addSubviews(containerView)
+        view.addSubview(scrollView)
 
         NSLayoutConstraint.activate([
-            qrSignInLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
-            qrSignInLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.frameLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.frameLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.frameLayoutGuide.heightAnchor.constraint(equalTo: containerView.heightAnchor).priority(.defaultLow),
+
+            scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
+            scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            scrollView.contentLayoutGuide.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+
+            qrSignInLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 40),
+            qrSignInLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                    constant: UX.horizontalPadding),
-            qrSignInLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+            qrSignInLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                     constant: -UX.horizontalPadding),
 
             pairImageView.topAnchor.constraint(equalTo: qrSignInLabel.bottomAnchor,
                                                constant: UX.horizontalPadding),
-            pairImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pairImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
 
             instructionsLabel.topAnchor.constraint(equalTo: pairImageView.bottomAnchor,
                                                    constant: UX.horizontalPadding),
-            instructionsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+            instructionsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                        constant: UX.horizontalPadding),
-            instructionsLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+            instructionsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                         constant: -UX.horizontalPadding),
 
             scanButton.topAnchor.constraint(equalTo: instructionsLabel.bottomAnchor, constant: 24),
-            scanButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+            scanButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                        constant: UX.horizontalPadding),
-            scanButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+            scanButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                         constant: -UX.horizontalPadding),
 
             emailButton.topAnchor.constraint(equalTo: scanButton.bottomAnchor, constant: 8),
-            emailButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+            emailButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                        constant: UX.horizontalPadding),
-            emailButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+            emailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                         constant: -UX.horizontalPadding),
         ])
     }

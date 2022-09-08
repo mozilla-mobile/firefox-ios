@@ -21,6 +21,7 @@ class OnboardingCardViewController: UIViewController {
         static let scrollViewVerticalPadding: CGFloat = 62
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
+        static let buttonFontSize: CGFloat = 16
         static let titleFontSize: CGFloat = 34
         static let descriptionBoldFontSize: CGFloat = 20
         static let descriptionFontSize: CGFloat = 17
@@ -44,8 +45,8 @@ class OnboardingCardViewController: UIViewController {
         view.backgroundColor = .clear
     }
 
-    lazy var containerView: UIView = .build { stack in
-        stack.backgroundColor = .clear
+    lazy var containerView: UIView = .build { view in
+        view.backgroundColor = .clear
     }
 
     lazy var contentContainerView: UIView = .build { stack in
@@ -104,7 +105,7 @@ class OnboardingCardViewController: UIViewController {
     private lazy var primaryButton: ResizableButton = .build { button in
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
             withTextStyle: .callout,
-            maxSize: 51)
+            size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.backgroundColor = UIColor.Photon.Blue50
         button.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
@@ -121,7 +122,7 @@ class OnboardingCardViewController: UIViewController {
     private lazy var secondaryButton: ResizableButton = .build { button in
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
             withTextStyle: .callout,
-            maxSize: 51)
+            size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.backgroundColor = UIColor.Photon.LightGrey30
         button.setTitleColor(UIColor.Photon.DarkGrey90, for: .normal)
