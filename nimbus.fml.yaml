@@ -449,7 +449,7 @@ features:
         default:
           {
             "status": true,
-            "version": legacy,
+            "version": v1,
           }
       onboarding-sheet:
         description: This property defines whether the wallpaper onboarding is shown or not
@@ -460,7 +460,7 @@ features:
         value: {
           "configuration": {
             "status": true,
-            "version": legacy,
+            "version": v1,
           },
           "onboarding-sheet": false
         }
@@ -468,7 +468,7 @@ features:
         value: {
           "configuration": {
             "status": true,
-            "version": legacy,
+            "version": v1,
           },
           "onboarding-sheet": true
         }
