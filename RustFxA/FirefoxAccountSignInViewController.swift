@@ -189,18 +189,13 @@ class FirefoxAccountSignInViewController: UIViewController {
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
-            scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.frameLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.frameLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollView.frameLayoutGuide.heightAnchor.constraint(equalTo: containerView.heightAnchor).priority(.defaultLow),
+            
+            scrollView.frameLayoutGuide.widthAnchor.constraint(equalTo: containerView.widthAnchor),
 
             scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
             scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            scrollView.contentLayoutGuide.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
 
             qrSignInLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 40),
             qrSignInLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
@@ -230,6 +225,7 @@ class FirefoxAccountSignInViewController: UIViewController {
                                                        constant: UX.horizontalPadding),
             emailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                         constant: -UX.horizontalPadding),
+            emailButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
         ])
     }
 
