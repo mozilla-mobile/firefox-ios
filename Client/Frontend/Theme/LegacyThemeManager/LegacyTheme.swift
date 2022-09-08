@@ -270,7 +270,7 @@ protocol LegacyTheme {
     var remotePanel: RemoteTabTrayColor { get }
 }
 
-class NormalTheme: LegacyTheme {
+class LegacyNormalTheme: LegacyTheme {
     var name: String { return BuiltinThemeName.normal.rawValue }
     var tableView: TableViewColor { return TableViewColor() }
     var urlbar: URLBarColor { return URLBarColor() }

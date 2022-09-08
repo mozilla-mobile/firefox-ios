@@ -14,6 +14,7 @@ struct JumpBackInCellViewModel {
     var accessibilityLabel: String {
         return "\(titleText), \(descriptionText)"
     }
+    var shouldAddBlur: Bool
 }
 
 // MARK: - JumpBackInCell
@@ -107,8 +108,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
         applyTheme()
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .DynamicFontChanged])
+                           observing: [.DisplayThemeChanged])
         setupLayout()
     }
 
@@ -142,7 +142,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         itemTitle.text = viewModel.titleText
         descriptionLabel.text = viewModel.descriptionText
         accessibilityLabel = viewModel.accessibilityLabel
-        adjustLayout()
+        adjustLayout(shouldAddBlur: viewModel.shouldAddBlur)
     }
 
     private func configureImages(viewModel: JumpBackInCellViewModel) {
@@ -168,13 +168,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupLayout() {
-        contentView.layer.cornerRadius = UX.generalCornerRadius
-        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = UX.stackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
-        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = 0.12
+        setupShadow()
 
         fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
         imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
@@ -224,11 +218,9 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
                                                                                          constant: -UX.faviconSize.height / 2)
 
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
-
-        adjustLayout()
     }
 
-    private func adjustLayout() {
+    private func adjustLayout(shouldAddBlur: Bool) {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
@@ -236,8 +228,23 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         faviconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
 
         // Add blur
-        contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-        fallbackFaviconBackground.addBlurEffectWithClearBackgroundAndClipping(using: .systemMaterial)
+        if shouldAddBlur {
+            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
+            UIColor.Photon.DarkGrey40 : .white
+            setupShadow()
+        }
+    }
+
+    private func setupShadow() {
+        contentView.layer.cornerRadius = UX.generalCornerRadius
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                    cornerRadius: UX.generalCornerRadius).cgPath
+        contentView.layer.shadowRadius = UX.stackViewShadowRadius
+        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
+        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        contentView.layer.shadowOpacity = 0.12
     }
 }
 
@@ -248,16 +255,12 @@ extension JumpBackInCell: NotificationThemeable {
             [itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
             faviconImage.tintColor = UIColor.Photon.LightGrey10
             fallbackFaviconImage.tintColor = UIColor.Photon.LightGrey10
+            fallbackFaviconBackground.backgroundColor = UIColor.Photon.DarkGrey60
         } else {
             [itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.DarkGrey90 }
             faviconImage.tintColor = UIColor.Photon.DarkGrey90
             fallbackFaviconImage.tintColor = UIColor.Photon.DarkGrey90
-        }
-
-        // If blur is disabled set background color
-        if UIAccessibility.isReduceTransparencyEnabled {
-            fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey20
-            contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
+            fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey10
         }
 
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
@@ -270,8 +273,6 @@ extension JumpBackInCell: Notifiable {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
-        case .DynamicFontChanged:
-            adjustLayout()
         default: break
         }
     }

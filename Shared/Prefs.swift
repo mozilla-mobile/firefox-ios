@@ -120,9 +120,6 @@ public struct PrefsKeys {
     public static let WidgetKitSimpleTabKey = "WidgetKitSimpleTabKey"
     public static let WidgetKitSimpleTopTab = "WidgetKitSimpleTopTab"
 
-    // ThemeManager key
-    public static let ThemeManagerCustomizationKey = "ThemeManagerCustomizationKey"
-
     // WallpaperManager Keys - Legacy
     public static let WallpaperManagerCurrentWallpaperObject = "WallpaperManagerCurrentWallpaperObject"
     public static let WallpaperManagerCurrentWallpaperImage = "WallpaperManagerCurrentWallpaperImage"

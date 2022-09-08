@@ -71,9 +71,9 @@ class LegacyThemeManager {
         let screenLessThanPref = Float(UIScreen.main.brightness) < prefValue
 
         if screenLessThanPref, self.currentName == .normal {
-            self.current = DarkTheme()
+            self.current = LegacyDarkTheme()
         } else if !screenLessThanPref, self.currentName == .dark {
-            self.current = NormalTheme()
+            self.current = LegacyNormalTheme()
         }
     }
 
@@ -84,11 +84,11 @@ class LegacyThemeManager {
 }
 
 private func themeFrom(name: String?) -> LegacyTheme {
-    guard let name = name, let theme = BuiltinThemeName(rawValue: name) else { return NormalTheme() }
+    guard let name = name, let theme = BuiltinThemeName(rawValue: name) else { return LegacyNormalTheme() }
     switch theme {
     case .dark:
-        return DarkTheme()
+        return LegacyDarkTheme()
     default:
-        return NormalTheme()
+        return LegacyNormalTheme()
     }
 }
