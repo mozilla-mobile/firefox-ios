@@ -15,9 +15,9 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
         static let generalCornerRadius: CGFloat = 12
-        static let titleFontSize: CGFloat = 49 // Style subheadline - AX5
-        static let sponsoredMaxFontSize: CGFloat = 49 // Style subheadline - AX5
-        static let siteFontSize: CGFloat = 43 // Style caption1 - AX5
+        static let titleFontSize: CGFloat = 16 // Style subheadline - AX5
+        static let sponsoredFontSize: CGFloat = 16 // Style subheadline - AX5
+        static let siteFontSize: CGFloat = 16 // Style caption1 - AX5
         static let stackViewShadowRadius: CGFloat = 4
         static let stackViewShadowOffset: CGFloat = 2
         static let heroImageSize =  CGSize(width: 108, height: 80)
@@ -36,8 +36,8 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     private lazy var titleLabel: UILabel = .build { title in
         title.adjustsFontForContentSizeCategory = true
-        title.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                   maxSize: UX.titleFontSize)
+        title.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
+                                                                       size: UX.titleFontSize)
         title.numberOfLines = 2
     }
 
@@ -58,7 +58,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
     private lazy var sponsoredLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   maxSize: UX.sponsoredMaxFontSize)
+                                                                   size: UX.sponsoredFontSize)
         label.textColor = .secondaryLabel
         label.numberOfLines = 1
         label.text = .FirefoxHomepage.Pocket.Sponsored
@@ -75,7 +75,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
     private lazy var descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   maxSize: UX.siteFontSize)
+                                                                   size: UX.siteFontSize)
     }
 
     // MARK: - Variables

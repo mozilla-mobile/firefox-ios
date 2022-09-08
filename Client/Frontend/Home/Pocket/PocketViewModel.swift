@@ -11,7 +11,7 @@ class PocketViewModel {
     struct UX {
         static let numberOfItemsInColumn = 3
         static let discoverMoreMaxFontSize: CGFloat = 55 // Title 3 xxxLarge
-        static let fractionalWidthiPhonePortrait: CGFloat = 0.93
+        static let fractionalWidthiPhonePortrait: CGFloat = 0.90
         static let fractionalWidthiPhoneLanscape: CGFloat = 0.46
     }
 
