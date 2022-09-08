@@ -132,18 +132,7 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        activityIndicatorView.startAnimating()
-        viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
-            ensureMainThread {
-                switch result {
-                case .success:
-                    self?.showToast()
-                case .failure(let error):
-                    self?.browserLog.info(error.localizedDescription)
-                }
-                self?.activityIndicatorView.stopAnimating()
-            }
-        }
+        downloadAndSetWallpaper(at: indexPath)
     }
 }
 
@@ -265,6 +254,49 @@ private extension WallpaperSettingsViewController {
     func preferredContentSizeChanged(_ notification: Notification) {
         // Reload the complete collection view as the section headers are not adjusting their size correctly otherwise
         collectionView.reloadData()
+    }
+
+    func downloadAndSetWallpaper(at indexPath: IndexPath) {
+        activityIndicatorView.startAnimating()
+        viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
+            ensureMainThread {
+                switch result {
+                case .success:
+                    self?.showToast()
+                case .failure(let error):
+                    self?.browserLog.info(error.localizedDescription)
+                    self?.showError(error) { _ in
+                        self?.downloadAndSetWallpaper(at: indexPath)
+                    }
+                }
+                self?.activityIndicatorView.stopAnimating()
+            }
+        }
+    }
+
+    func showError(_ error: Error, retryHandler: @escaping (UIAlertAction) -> Void) {
+        let alert: UIAlertController
+
+        switch error {
+        case WallpaperManagerError.downloadFailed(_):
+            alert = UIAlertController(title: .CouldntDownloadWallpaperErrorTitle,
+                                      message: .CouldntDownloadWallpaperErrorBody,
+                                      preferredStyle: .alert)
+        default:
+            alert = UIAlertController(title: .CouldntChangeWallpaperErrorTitle,
+                                      message: .CouldntChangeWallpaperErrorBody,
+                                      preferredStyle: .alert)
+        }
+
+        let retryAction = UIAlertAction(title: .WallpaperErrorTryAgain,
+                                        style: .default,
+                                        handler: retryHandler)
+        let dismissAction = UIAlertAction(title: .WallpaperErrorDismiss,
+                                          style: .cancel,
+                                          handler: nil)
+        alert.addAction(retryAction)
+        alert.addAction(dismissAction)
+        present(alert, animated: true, completion: nil)
     }
 }
 

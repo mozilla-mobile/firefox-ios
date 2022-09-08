@@ -137,15 +137,7 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        activityIndicatorView.startAnimating()
-        viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
-            ensureMainThread {
-                if case .failure(let error) = result {
-                    self?.browserLog.info(error.localizedDescription)
-                }
-                self?.activityIndicatorView.stopAnimating()
-            }
-        }
+        downloadAndSetWallpaper(at: indexPath)
     }
 }
 
@@ -236,6 +228,46 @@ private extension WallpaperSelectorViewController {
     /// since it's `.regular` on both. We updateOnRotation from viewWillTransition in that case.
     func updateOnRotation() {
         configureCollectionView()
+    }
+
+    func downloadAndSetWallpaper(at indexPath: IndexPath) {
+        activityIndicatorView.startAnimating()
+        viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
+            ensureMainThread {
+                self?.showErrorIfNeeded(result) { _ in
+                    self?.downloadAndSetWallpaper(at: indexPath)
+                }
+                self?.activityIndicatorView.stopAnimating()
+            }
+        }
+    }
+
+    func showErrorIfNeeded(_ result: Result<Void, Error>, retryHandler: @escaping (UIAlertAction) -> Void) {
+        guard case .failure(let error) = result else { return }
+
+        browserLog.info(error.localizedDescription)
+        let alert: UIAlertController
+
+        switch error {
+        case WallpaperManagerError.downloadFailed(_):
+            alert = UIAlertController(title: .CouldntDownloadWallpaperErrorTitle,
+                                      message: .CouldntDownloadWallpaperErrorBody,
+                                      preferredStyle: .alert)
+        default:
+            alert = UIAlertController(title: .CouldntChangeWallpaperErrorTitle,
+                                      message: .CouldntChangeWallpaperErrorBody,
+                                      preferredStyle: .alert)
+        }
+
+        let retryAction = UIAlertAction(title: .WallpaperErrorTryAgain,
+                                        style: .default,
+                                        handler: retryHandler)
+        let dismissAction = UIAlertAction(title: .WallpaperErrorDismiss,
+                                          style: .cancel,
+                                          handler: nil)
+        alert.addAction(retryAction)
+        alert.addAction(dismissAction)
+        present(alert, animated: true, completion: nil)
     }
 
     /// Settings button tapped
