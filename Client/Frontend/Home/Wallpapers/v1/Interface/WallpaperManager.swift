@@ -158,8 +158,9 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         guard let metadata = getMetadata() else { return addDefaultWallpaper(to: []) }
 
         let collections = metadata.collections.filter { $0.isAvailable }
+        let collectionWithThumbnails = filterUnavailableThumbnailsFrom(collections)
+        let collectionsWithDefault = addDefaultWallpaper(to: collectionWithThumbnails)
 
-        let collectionsWithDefault = addDefaultWallpaper(to: collections)
         return collectionsWithDefault
     }
 
@@ -204,6 +205,19 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         } catch {
             browserLog.error("Error getting stored metadata: \(error.localizedDescription)")
             return nil
+        }
+    }
+
+    private func filterUnavailableThumbnailsFrom(_ collections: [WallpaperCollection]) -> [WallpaperCollection] {
+        return collections.map { collection in
+            return WallpaperCollection(
+                id: collection.id,
+                learnMoreURL: collection.learnMoreUrl?.absoluteString,
+                availableLocales: collection.availableLocales,
+                availability: collection.availability,
+                wallpapers: collection.wallpapers.filter { $0.thumbnail != nil },
+                description: collection.description,
+                heading: collection.heading)
         }
     }
 }
