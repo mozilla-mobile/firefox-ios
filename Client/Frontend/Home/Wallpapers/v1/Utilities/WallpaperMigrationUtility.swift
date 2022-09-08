@@ -7,46 +7,92 @@ import Shared
 
 struct WallpaperMigrationUtility: Loggable {
 
-    private let migrationKey = PrefsKeys.Wallpapers.v1MigrationCheck
+    private let metadataMigration = PrefsKeys.Wallpapers.v1MigrationCheck
+    private let legacyAssetMigration = PrefsKeys.Wallpapers.legacyAssetMigrationCheck
     private let userDefaults: UserDefaultsInterface
     private let oldPromotionID = "trPromotion"
 
     // For ease of legibility, we're performing an inverse check here. If a migration
     // has already been performed, then we should not perform it again.
-    private var shouldPerformMigration: Bool {
-        return !userDefaults.bool(forKey: migrationKey)
+    private var shouldPerformMetadataMigration: Bool {
+        return !userDefaults.bool(forKey: metadataMigration)
+    }
+
+    // For ease of legibility, we're performing an inverse check here. If a migration
+    // has already been performed, then we should not perform it again.
+    private var shouldPerformLegacyAssetMigration: Bool {
+        return !userDefaults.bool(forKey: legacyAssetMigration)
     }
 
     init(with userDefaults: UserDefaultsInterface = UserDefaults.standard) {
         self.userDefaults = userDefaults
     }
 
-    func attemptMigration() {
-        guard shouldPerformMigration else { return }
+    /// Performs a migration of existing assets without having to download
+    /// any metadata.
+    ///
+    /// To perform proper migration, we require metadata. However, to preserve
+    /// user experience, having shifted to the JSON based metadata, we must have
+    /// some form of migration that doesn't depend on metadata, which we won't
+    /// have available at startup. To do this, we shift any existing wallpapers
+    /// using the identifier and assets to a place that the wallpaper system
+    /// will be able to find/use, and then migrate the correct identifiers
+    /// once the metadata has been downloaded.
+    func migrateExistingAssetWithoutMetadata() {
+        guard shouldPerformLegacyAssetMigration else { return }
         let legacyStorageUtility = LegacyWallpaperStorageUtility()
         let storageUtility = WallpaperStorageUtility()
 
+        // If no legacy wallpaper exists, then don't worry about migration
+        guard let legacyWallpaperObject = legacyStorageUtility.getCurrentWallpaperObject(),
+              let legacyImagePortrait = legacyStorageUtility.getPortraitImage(),
+              let legacyImageLandscape = legacyStorageUtility.getLandscapeImage()
+        else {
+            markLegacyAssetMigrationComplete()
+            markMetadataMigrationComplete()
+            return
+        }
+
+        // Create a temporary dummy wallpaper
+        let wallpaper = Wallpaper(id: legacyWallpaperObject.name,
+                                  textColor: nil,
+                                  cardColor: nil)
+
         do {
-            // If no legacy wallpaper exists, then don't worry about migration
-            guard let legacyWallpaperObject = legacyStorageUtility.getCurrentWallpaperObject(),
-                  let legacyImagePortrait = legacyStorageUtility.getPortraitImage(),
-                  let legacyImageLandscape = legacyStorageUtility.getLandscapeImage(),
-                  let matchingID = getMatchingIdBasedOn(legacyId: legacyWallpaperObject.name),
+            try store(portait: legacyImagePortrait,
+                      landscape: legacyImageLandscape,
+                      for: wallpaper,
+                      with: storageUtility)
+
+            markLegacyAssetMigrationComplete()
+
+        } catch {
+            browserLog.error("Migration error: \(error.localizedDescription)")
+        }
+    }
+
+    func attemptMetadataMigration() {
+        guard shouldPerformMetadataMigration else { return }
+        let storageUtility = WallpaperStorageUtility()
+
+        do {
+            let currentWallpaper = storageUtility.fetchCurrentWallpaper()
+            guard currentWallpaper.type != .defaultWallpaper,
+                  let landscape = currentWallpaper.landscape,
+                  let portrait = currentWallpaper.portrait,
+                  let matchingID = getMatchingIdBasedOn(legacyId: currentWallpaper.id),
                   let matchingWallpaper = try getMatchingWallpaperUsing(matchingID, from: storageUtility)
             else {
-                markMigrationComplete()
+                markMetadataMigrationComplete()
                 return
             }
 
-            try storageUtility.store(legacyImagePortrait,
-                                     withName: matchingWallpaper.portraitID,
-                                     andKey: matchingWallpaper.id)
-            try storageUtility.store(legacyImageLandscape,
-                                     withName: matchingWallpaper.landscapeID,
-                                     andKey: matchingWallpaper.id)
-            try storageUtility.store(matchingWallpaper)
+            try store(portait: portrait,
+                      landscape: landscape,
+                      for: matchingWallpaper,
+                      with: storageUtility)
 
-            markMigrationComplete()
+            markMetadataMigrationComplete()
 
         } catch {
             browserLog.error("Migration error: \(error.localizedDescription)")
@@ -54,6 +100,21 @@ struct WallpaperMigrationUtility: Loggable {
     }
 
     // MARK: - Private helpers
+    private func store(
+        portait: UIImage,
+        landscape: UIImage,
+        for wallpaper: Wallpaper,
+        with storageUtility: WallpaperStorageUtility
+    ) throws {
+        try storageUtility.store(portait,
+                                 withName: wallpaper.portraitID,
+                                 andKey: wallpaper.id)
+        try storageUtility.store(landscape,
+                                 withName: wallpaper.landscapeID,
+                                 andKey: wallpaper.id)
+        try storageUtility.store(wallpaper)
+    }
+
     private func getMatchingIdBasedOn(legacyId: String) -> String? {
         return [
             "fxAmethyst": "amethyst",
@@ -88,7 +149,11 @@ struct WallpaperMigrationUtility: Loggable {
 
     }
 
-    private func markMigrationComplete() {
-        userDefaults.set(true, forKey: migrationKey)
+    private func markMetadataMigrationComplete() {
+        userDefaults.set(true, forKey: metadataMigration)
+    }
+
+    private func markLegacyAssetMigrationComplete() {
+        userDefaults.set(true, forKey: metadataMigration)
     }
 }

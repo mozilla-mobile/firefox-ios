@@ -44,4 +44,7 @@ class WallpaperManagerMock: WallpaperManagerInterface {
 
     func checkForUpdates() {
     }
+
+    func migrateLegacyAssets() {
+    }
 }
