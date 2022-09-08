@@ -531,6 +531,9 @@
 		8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */; };
 		8A471185287F6E4800F5A6EA /* SeparatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */; };
 		8A4AC0F128C92BE500439F83 /* FxColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0F028C92BE500439F83 /* FxColors.swift */; };
+		8A4AC0F328C9348D00439F83 /* FxTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0F228C9348D00439F83 /* FxTheme.swift */; };
+		8A4AC0F528C936AE00439F83 /* FxLightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0F428C936AE00439F83 /* FxLightTheme.swift */; };
+		8A4AC0F728C9371000439F83 /* FxDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0F628C9371000439F83 /* FxDarkTheme.swift */; };
 		8A56955227C68AE00077A89E /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A56955127C68AE00077A89E /* UILabel+Extension.swift */; };
 		8A57519927AD80B800A84DBF /* ReaderModeStyleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */; };
 		8A590C6128C123100032F1AA /* OpenPassBookHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590C6028C123100032F1AA /* OpenPassBookHelper.swift */; };
@@ -3216,6 +3219,9 @@
 		8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksPanelViewModel.swift; sourceTree = "<group>"; };
 		8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorTableViewCell.swift; sourceTree = "<group>"; };
 		8A4AC0F028C92BE500439F83 /* FxColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxColors.swift; sourceTree = "<group>"; };
+		8A4AC0F228C9348D00439F83 /* FxTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxTheme.swift; sourceTree = "<group>"; };
+		8A4AC0F428C936AE00439F83 /* FxLightTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxLightTheme.swift; sourceTree = "<group>"; };
+		8A4AC0F628C9371000439F83 /* FxDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxDarkTheme.swift; sourceTree = "<group>"; };
 		8A5143D6BF179870414566ED /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Search.strings; sourceTree = "<group>"; };
 		8A56955127C68AE00077A89E /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleViewModel.swift; sourceTree = "<group>"; };
@@ -6824,6 +6830,8 @@
 		C8742DB92729A69E00E724F6 /* LegacyThemeManager */ = {
 			isa = PBXGroup;
 			children = (
+				2C49854D206173C800893DAE /* photon-colors.swift */,
+				4390F7FE246DAFBE00570811 /* FirefoxColors.swift */,
 				EB9A179820E69A7E00B12184 /* LegacyThemeManager.swift */,
 				EB9A179920E69A7E00B12184 /* LegacyDarkTheme.swift */,
 				EB9A179A20E69A7E00B12184 /* LegacyTheme.swift */,
@@ -7805,6 +7813,9 @@
 				C8954A4F2729AD9C001C7283 /* ThemeManager.swift */,
 				C8954A4E2729AD9B001C7283 /* Theme.swift */,
 				8A4AC0F028C92BE500439F83 /* FxColors.swift */,
+				8A4AC0F228C9348D00439F83 /* FxTheme.swift */,
+				8A4AC0F428C936AE00439F83 /* FxLightTheme.swift */,
+				8A4AC0F628C9371000439F83 /* FxDarkTheme.swift */,
 				C8954A4D2729AD9A001C7283 /* FxDefaultTheme.swift */,
 				C8954A502729AD9D001C7283 /* CustomTheme.swift */,
 			);
@@ -8157,8 +8168,6 @@
 				8AB8572D27D94A1A0075C173 /* UXSizeClass.swift */,
 				23ED80FD25C899D700D0E9D5 /* DefaultBrowserOnboarding */,
 				43C5A0972555DF7300BA37AD /* BottomSheet */,
-				2C49854D206173C800893DAE /* photon-colors.swift */,
-				4390F7FE246DAFBE00570811 /* FirefoxColors.swift */,
 				392ED7D51D0AEEEE009D9B62 /* Accessors */,
 				E692E3271C46E62D009D1240 /* AuthenticationManager */,
 				D3A994941A368691008AD1AC /* Browser */,
@@ -10253,6 +10262,7 @@
 				E1877A832875DEDE00F5BDF2 /* SyncedTabCell.swift in Sources */,
 				CA8226F324C11DB7008A6F38 /* LoginListTableViewCell.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
+				8A4AC0F728C9371000439F83 /* FxDarkTheme.swift in Sources */,
 				048B4C8324A53F26001B56E8 /* ButtonWithSublabel.swift in Sources */,
 				435D660323D793DF0046EFA2 /* OnboardingInfoModel.swift in Sources */,
 				8AD40FCB27BADC4B00672675 /* StatefulButton.swift in Sources */,
@@ -10279,6 +10289,7 @@
 				E19B38B528A42EBC00D8C541 /* WallpaperCellViewModel.swift in Sources */,
 				8A5BD95C2878AA74000FE773 /* PinnedSite.swift in Sources */,
 				5A3A7DCE2886F7880065F81A /* RecentlySavedDataAdaptor.swift in Sources */,
+				8A4AC0F528C936AE00439F83 /* FxLightTheme.swift in Sources */,
 				C8680C5728BFDF7F00BC902A /* WallpaperThumbnailUtility.swift in Sources */,
 				8AE80BBE2891C21A00BC12EA /* JumpBackInSyncedTab.swift in Sources */,
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
@@ -10489,6 +10500,7 @@
 				A83E5AB71C1D993D0026D912 /* UIPasteboard+Extension.swift in Sources */,
 				D8EFFA0C1FF5B1FA001D3A09 /* NavigationRouter.swift in Sources */,
 				C84655E22887388F00861B4A /* Wallpaper.swift in Sources */,
+				8A4AC0F328C9348D00439F83 /* FxTheme.swift in Sources */,
 				C849E46326B9C3AF00260F0B /* EnhancedTrackingProtectionVM.swift in Sources */,
 				D0E55C4F1FB4FD23006DC274 /* FormPostHelper.swift in Sources */,
 				E118B9292862674E00C84831 /* InactiveTabItemCellModel.swift in Sources */,
