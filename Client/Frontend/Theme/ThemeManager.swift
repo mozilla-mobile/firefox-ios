@@ -9,70 +9,72 @@ import Shared
 /// through the `themeManager` variable, while using dependency injection.
 protocol Themeable { }
 
-extension Themeable {
-    //var themeSystem: ThemeManager { return ThemeManager.shared }
-}
+extension Themeable {}
 
 enum ThemeType: String {
-    case normal
+    case light = "normal" // This needs to match the string used in the legacy system
     case dark
 
-//    func getTheme() {
-//        switch self {
-//        case .normal:
-//            return
-//        }
-//    }
+    func getInterfaceStyle() -> UIUserInterfaceStyle {
+        switch self {
+        case .light:
+            return .light
+        case .dark:
+            return .dark
+        }
+    }
 }
 
 protocol ThemeManager {
     var currentTheme: Theme { get }
+
+    func getInterfaceStyle() -> UIUserInterfaceStyle
 }
 
 /// The `ThemeManager` will be responsible for providing the theme throughout the app
 final class DefaultThemeManager: ThemeManager {
 
-    private enum ThemeKeys: String {
-        case themeName = "prefKeyThemeName"
-        case automaticBrightness = "prefKeyAutomaticSliderValue"
-        case systemThemeIsOn = "prefKeySystemThemeSwitchOnOff"
-        case automaticSwitchIsOn = "prefKeyAutomaticSwitchOnOff"
+    private enum ThemeKeys {
+        static let themeName = "prefKeyThemeName"
+        static let automaticBrightness = "prefKeyAutomaticSliderValue"
+        static let systemThemeIsOn = "prefKeySystemThemeSwitchOnOff"
+        static let automaticSwitchIsOn = "prefKeyAutomaticSwitchOnOff"
     }
 
     // MARK: Singleton
+
     static let shared = DefaultThemeManager()
 
     // MARK: - Variables
-    var currentTheme: Theme = FxDefaultTheme()
-//    private var userDefaults: UserDefaults
 
+    var currentTheme: Theme = LightTheme()
+    private var userDefaults: UserDefaults
 
-//    private init() {
-//        let themeDescription = userDefaults.string(forKey: ThemeKeys.themeName)
-//
-//    }
+    // MARK: - Init
 
-    /// The theme key of the current set theme. If no custom theme is set, then
-    /// this will return the `defaultThemeKey`
-//    private var themeKey: String {
-//        if let key = profile.prefs.stringForKey(PrefsKeys.ThemeManagerCustomizationKey) { return key }
-//        return defaultThemeKey
-//    }
+    private init(userDefaults: UserDefaults = UserDefaults.standard) {
+        self.userDefaults = userDefaults
+        self.currentTheme = generateTheme()
+    }
 
-    private let defaultThemeKey = "FxDefaultThemeThemeManagerKey"
+    // MARK: - ThemeManager
 
-//    /// The current theme set in the application.
-//    public var currentTheme: Theme {
-//        guard let customThemeKey = profile.prefs.stringForKey(themeKey),
-//              let customTheme = getTheme(from: customThemeKey)
-//        else { return FxDefaultTheme() }
-//
-//        return customTheme
-//    }
-
-    // MARK: - Public methods
-
+    func getInterfaceStyle() -> UIUserInterfaceStyle {
+        return currentTheme.type.getInterfaceStyle()
+    }
 
     // MARK: - Private methods
 
+    private func generateTheme() -> Theme {
+        let typeDescription = userDefaults.string(forKey: ThemeKeys.themeName) ?? ""
+        let themeType = ThemeType(rawValue: typeDescription)
+        switch themeType {
+        case .light:
+            return LightTheme()
+        case .dark:
+            return DarkTheme()
+        default:
+            return LightTheme()
+        }
+    }
 }

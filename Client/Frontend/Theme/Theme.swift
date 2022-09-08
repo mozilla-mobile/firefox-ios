@@ -6,6 +6,7 @@
 /// which comprise of a set of standardized colours (including light and
 /// dark mode) and fonts for the application.
 protocol Theme {
+    var type: ThemeType { get }
     var colors: ThemeColourPalette { get }
 }
 
