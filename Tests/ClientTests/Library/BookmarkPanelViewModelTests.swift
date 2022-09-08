@@ -177,7 +177,7 @@ extension BookmarksPanelViewModelTests {
 class MockBookmarkNode: FxBookmarkNode {
     var type: BookmarkNodeType = .bookmark
     var guid: String = "12345"
-    var parentGUID: String? = nil
+    var parentGUID: String?
     var position: UInt32 = 0
     var isRoot: Bool = false
     var title: String
