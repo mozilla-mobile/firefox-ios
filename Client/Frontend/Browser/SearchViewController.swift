@@ -578,7 +578,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                                                  isCollapsible: false,
                                                  collapsibleState: nil)
         headerView.configure(viewModel)
-
         return headerView
     }
 

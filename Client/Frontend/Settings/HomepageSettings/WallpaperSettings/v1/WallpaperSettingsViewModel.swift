@@ -38,7 +38,7 @@ class WallpaperSettingsViewModel {
     private var wallpaperCollections = [WallpaperCollection]()
     var tabManager: TabManagerProtocol
     var sectionLayout: WallpaperSettingsLayout = .compact // We use the compact layout as default
-    var selectedIndexPath: IndexPath = IndexPath(row: 0, section: 0)
+    var selectedIndexPath: IndexPath?
 
     var numberOfSections: Int {
         return wallpaperCollections.count
@@ -95,7 +95,6 @@ class WallpaperSettingsViewModel {
         } else {
             sectionLayout = .regular
         }
-        setupWallpapers()
     }
 
     func cellViewModel(for indexPath: IndexPath) -> WallpaperCellViewModel? {
@@ -139,8 +138,18 @@ class WallpaperSettingsViewModel {
 
 private extension WallpaperSettingsViewModel {
 
+    var initialSelectedIndexPath: IndexPath? {
+        for (sectionIndex, collection) in wallpaperCollections.enumerated() {
+            if let rowIndex = collection.wallpapers.firstIndex(where: {$0 == wallpaperManager.currentWallpaper}) {
+                return IndexPath(row: rowIndex, section: sectionIndex)
+            }
+        }
+        return nil
+    }
+
     func setupWallpapers() {
         wallpaperCollections = wallpaperManager.availableCollections
+        selectedIndexPath = initialSelectedIndexPath
     }
 
     func cellViewModel(for wallpaper: Wallpaper,
@@ -157,10 +166,6 @@ private extension WallpaperSettingsViewModel {
             a11yLabel = "\(stringIds.LimitedEditionWallpaper) \(indexPath.row + 1)"
         }
 
-        if wallpaperManager.currentWallpaper == wallpaper {
-            selectedIndexPath = indexPath
-        }
-
         let cellViewModel = WallpaperCellViewModel(image: wallpaper.thumbnail,
                                                    a11yId: a11yId,
                                                    a11yLabel: a11yLabel)
@@ -171,8 +176,6 @@ private extension WallpaperSettingsViewModel {
                                 in collection: WallpaperCollection,
                                 completion: @escaping (Result<Void, Error>) -> Void) {
         wallpaperManager.setCurrentWallpaper(to: wallpaper) { [weak self] result in
-            self?.setupWallpapers()
-
             guard let extra = self?.telemetryMetadata(for: wallpaper, in: collection) else {
                 completion(result)
                 return
