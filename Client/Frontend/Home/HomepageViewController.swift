@@ -107,7 +107,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
             self?.displayWallpaperSelector()
         }
     }

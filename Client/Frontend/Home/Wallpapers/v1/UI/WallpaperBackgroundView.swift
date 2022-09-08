@@ -54,9 +54,11 @@ class WallpaperBackgroundView: UIView {
     }
 
     private func updateImageToCurrentWallpaper() {
-        let currentWallpaper = currentWallpaperImage()
-        UIView.animate(withDuration: 0.3) {
-            self.pictureView.image = currentWallpaper
+        ensureMainThread {
+            let currentWallpaper = self.currentWallpaperImage()
+            UIView.animate(withDuration: 0.3) {
+                self.pictureView.image = currentWallpaper
+            }
         }
     }
 
