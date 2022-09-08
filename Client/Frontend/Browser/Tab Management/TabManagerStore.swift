@@ -178,7 +178,10 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 
         do {
             let unarchiver = try NSKeyedUnarchiver(forReadingFrom: tabData)
-            let tabs = unarchiver.decodeDecodable([SavedTab].self, forKey: tabsKey)!
+            guard let tabs = unarchiver.decodeDecodable([SavedTab].self, forKey: tabsKey) else {
+                // TODO: Laurie
+                return [SavedTab]()
+            }
             return tabs
         } catch {
             // TODO: Laurie
