@@ -62,7 +62,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
                                        secondaryAction: nil,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
         case (.welcome, true):
-            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcome),
+            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcomev106),
                                        title: .Onboarding.IntroWelcomeTitle,
                                        description: .Onboarding.IntroWelcomeDescription,
                                        primaryAction: .Onboarding.IntroAction,
@@ -83,7 +83,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
                                        secondaryAction: .WhatsNew.RecentButtonTitle,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
         case (.signSync, true):
-            return OnboardingInfoModel(image: nil,
+            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSyncv106),
                                        title: .Onboarding.IntroSyncTitle,
                                        description: .Onboarding.IntroSyncDescription,
                                        primaryAction: .IntroSignInButtonTitle,
