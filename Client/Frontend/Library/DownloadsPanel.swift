@@ -10,7 +10,6 @@ private struct DownloadsPanelUX {
     static let WelcomeScreenTopPadding: CGFloat = 120
     static let WelcomeScreenPadding: CGFloat = 15
     static let WelcomeScreenItemWidth: CGFloat = 170
-    static let HeaderHeight: CGFloat = 28
 }
 
 struct DownloadedFile: Equatable {
@@ -46,8 +45,6 @@ struct DownloadedFile: Equatable {
 class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, LibraryPanel {
 
     weak var libraryPanelDelegate: LibraryPanelDelegate?
-    let TwoLineImageOverlayCellIdentifier = "TwoLineImageOverlayCellIdentifier"
-    let SiteTableViewHeaderIdentifier = "SiteTableViewHeaderIdentifier"
     let profile: Profile
     var state: LibraryPanelMainState
     var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
@@ -56,8 +53,10 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         guard let self = self else { return }
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: self.TwoLineImageOverlayCellIdentifier)
-        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: self.SiteTableViewHeaderIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self,
+                           forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
+        tableView.register(SiteTableViewHeader.self,
+                           forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
         tableView.layoutMargins = .zero
         tableView.keyboardDismissMode = .onDrag
         tableView.accessibilityIdentifier = "DownloadsTable"
@@ -312,7 +311,8 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     // MARK: - TableView Delegate / DataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCellIdentifier, for: indexPath) as! TwoLineImageOverlayCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
+                                                 for: indexPath) as! TwoLineImageOverlayCell
 
         return configureDownloadedFile(cell, for: indexPath)
     }
@@ -327,30 +327,37 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard groupedDownloadedFiles.numberOfItemsForSection(section) > 0 else { return 0 }
 
-        return DownloadsPanelUX.HeaderHeight
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard groupedDownloadedFiles.numberOfItemsForSection(section) > 0 else { return nil }
+        guard groupedDownloadedFiles.numberOfItemsForSection(section) > 0,
+              let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier) as?
+                SiteTableViewHeader
+        else { return nil }
 
-        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeaderIdentifier) as? SiteTableViewHeader
+        var title = ""
 
         switch section {
         case 0:
-            header?.textLabel?.text = .LibraryPanel.Sections.Today
+            title = .LibraryPanel.Sections.Today
         case 1:
-            header?.textLabel?.text = .LibraryPanel.Sections.Yesterday
+            title = .LibraryPanel.Sections.Yesterday
         case 2:
-            header?.textLabel?.text = .LibraryPanel.Sections.LastWeek
+            title = .LibraryPanel.Sections.LastWeek
         case 3:
-            header?.textLabel?.text = .LibraryPanel.Sections.LastMonth
+            title = .LibraryPanel.Sections.LastMonth
         default:
             assertionFailure("Invalid Downloads section \(section)")
         }
 
-        header?.showBorder(for: .top, !isFirstSection(section))
+        let headerViewModel = SiteTableViewHeaderModel(title: title,
+                                                       isCollapsible: false,
+                                                       collapsibleState: nil)
+        headerView.configure(headerViewModel)
+        headerView.showBorder(for: .top, !isFirstSection(section))
 
-        return header
+        return headerView
     }
 
     func isFirstSection(_ section: Int) -> Bool {
