@@ -80,8 +80,8 @@ class FirefoxAccountSignInViewController: UIViewController {
             manager.getPairingAuthorityURL { result in
                 guard let url = try? result.get(), let host = url.host else { return }
 
-                let font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .headline,
-                                                                             size: UX.signInLabelFontSize)
+                let font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
+                                                                         size: UX.signInLabelFontSize)
                 let shortUrl = host + url.path // "firefox.com" + "/pair"
                 let msg: String = .FxASignin_QRInstructions.replaceFirstOccurrence(of: placeholder, with: shortUrl)
                 label.attributedText = msg.attributedText(boldString: shortUrl, font: font)
