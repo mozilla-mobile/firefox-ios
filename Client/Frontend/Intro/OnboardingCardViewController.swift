@@ -37,6 +37,8 @@ class OnboardingCardViewController: UIViewController {
     var viewModel: OnboardingCardProtocol
     weak var delegate: OnboardingCardDelegate?
 
+    // Adjusting layout for devices with height lower than 667
+    // including now iPhone SE 2nd generation and iPad
     var shouldUseSmallDeviceLayout: Bool {
         return view.frame.height <= 667 || UIDevice.current.userInterfaceIdiom == .pad
     }
