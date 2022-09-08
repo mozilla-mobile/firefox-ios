@@ -4,7 +4,7 @@
 
 import UIKit
 
-class WallpaperSelectorViewController: UIViewController, Loggable {
+class WallpaperSelectorViewController: WallpaperBaseViewController, Loggable {
 
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
@@ -104,18 +104,8 @@ class WallpaperSelectorViewController: UIViewController, Loggable {
         viewModel.sendImpressionTelemetry()
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
-            || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
-            updateOnRotation()
-        }
-    }
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        updateOnRotation()
+    override func updateOnRotation() {
+        configureCollectionView()
     }
 }
 
@@ -223,51 +213,19 @@ private extension WallpaperSelectorViewController {
         return layout
     }
 
-    /// On iPhone, we call updateOnRotation when the trait collection has changed, to ensure calculation
-    /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
-    /// since it's `.regular` on both. We updateOnRotation from viewWillTransition in that case.
-    func updateOnRotation() {
-        configureCollectionView()
-    }
-
     func downloadAndSetWallpaper(at indexPath: IndexPath) {
         activityIndicatorView.startAnimating()
         viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
             ensureMainThread {
-                self?.showErrorIfNeeded(result) { _ in
+                self?.activityIndicatorView.stopAnimating()
+
+                guard case .failure(let error) = result else { return }
+
+                self?.showError(error) { _ in
                     self?.downloadAndSetWallpaper(at: indexPath)
                 }
-                self?.activityIndicatorView.stopAnimating()
             }
         }
-    }
-
-    func showErrorIfNeeded(_ result: Result<Void, Error>, retryHandler: @escaping (UIAlertAction) -> Void) {
-        guard case .failure(let error) = result else { return }
-
-        browserLog.info(error.localizedDescription)
-        let alert: UIAlertController
-
-        switch error {
-        case WallpaperManagerError.downloadFailed(_):
-            alert = UIAlertController(title: .CouldntDownloadWallpaperErrorTitle,
-                                      message: .CouldntDownloadWallpaperErrorBody,
-                                      preferredStyle: .alert)
-        default:
-            alert = UIAlertController(title: .CouldntChangeWallpaperErrorTitle,
-                                      message: .CouldntChangeWallpaperErrorBody,
-                                      preferredStyle: .alert)
-        }
-
-        let retryAction = UIAlertAction(title: .WallpaperErrorTryAgain,
-                                        style: .default,
-                                        handler: retryHandler)
-        let dismissAction = UIAlertAction(title: .WallpaperErrorDismiss,
-                                          style: .cancel,
-                                          handler: nil)
-        alert.addAction(retryAction)
-        alert.addAction(dismissAction)
-        present(alert, animated: true, completion: nil)
     }
 
     /// Settings button tapped

@@ -4,7 +4,7 @@
 
 import UIKit
 
-class WallpaperSettingsViewController: UIViewController, Loggable {
+class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable {
 
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
@@ -76,16 +76,10 @@ class WallpaperSettingsViewController: UIViewController, Loggable {
 
         // Fixes bug where selection state gets lost when switching themes
         collectionView.selectItem(at: viewModel.selectedIndexPath, animated: false, scrollPosition: [])
-
-        if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
-            || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
-            updateOnRotation()
-        }
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        updateOnRotation()
+    override func updateOnRotation() {
+        configureCollectionView()
     }
 }
 
@@ -213,13 +207,6 @@ private extension WallpaperSettingsViewController {
         return layout
     }
 
-    /// On iPhone, we call updateOnRotation when the trait collection has changed, to ensure calculation
-    /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
-    /// since it's `.regular` on both. We updateOnRotation from viewWillTransition in that case.
-    func updateOnRotation() {
-        configureCollectionView()
-    }
-
     func showToast() {
         let toast = ButtonToast(
             labelText: WallpaperSettingsViewModel.Constants.Strings.Toast.label,
@@ -272,31 +259,6 @@ private extension WallpaperSettingsViewController {
                 self?.activityIndicatorView.stopAnimating()
             }
         }
-    }
-
-    func showError(_ error: Error, retryHandler: @escaping (UIAlertAction) -> Void) {
-        let alert: UIAlertController
-
-        switch error {
-        case WallpaperManagerError.downloadFailed(_):
-            alert = UIAlertController(title: .CouldntDownloadWallpaperErrorTitle,
-                                      message: .CouldntDownloadWallpaperErrorBody,
-                                      preferredStyle: .alert)
-        default:
-            alert = UIAlertController(title: .CouldntChangeWallpaperErrorTitle,
-                                      message: .CouldntChangeWallpaperErrorBody,
-                                      preferredStyle: .alert)
-        }
-
-        let retryAction = UIAlertAction(title: .WallpaperErrorTryAgain,
-                                        style: .default,
-                                        handler: retryHandler)
-        let dismissAction = UIAlertAction(title: .WallpaperErrorDismiss,
-                                          style: .cancel,
-                                          handler: nil)
-        alert.addAction(retryAction)
-        alert.addAction(dismissAction)
-        present(alert, animated: true, completion: nil)
     }
 }
 
