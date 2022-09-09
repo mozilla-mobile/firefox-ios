@@ -553,7 +553,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
                                      iconString: ImageIdentifiers.share) { _ in
 
             guard let tab = self.selectedTab,
-                  let url = tab.canonicalURL?.displayURL,
+                  let url = tab.url,
                   let presentableVC = self.menuActionDelegate as? PresentableVC
             else { return }
 
