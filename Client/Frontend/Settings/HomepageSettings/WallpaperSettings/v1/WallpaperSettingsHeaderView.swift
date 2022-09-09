@@ -92,20 +92,14 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
             contentStackView.addArrangedSubview(descriptionLabel)
         }
 
-        if let buttonTitle = viewModel.buttonTitle,
+        if let _ = viewModel.buttonTitle,
            let buttonA11y = viewModel.buttonA11yIdentifier,
            let _ = viewModel.buttonAction {
-            // make button underlined
-            let labelAttributes: [NSAttributedString.Key: Any] = [
-                .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 12.0),
-                .foregroundColor: UIColor.Photon.Grey75A60,
-                .underlineStyle: NSUnderlineStyle.single.rawValue
-            ]
-
-            let attributeString = NSMutableAttributedString(string: buttonTitle,
-                                                            attributes: labelAttributes)
-            learnMoreButton.setAttributedTitle(attributeString, for: .normal)
-            learnMoreButton.addTarget(self, action: #selector((buttonTapped(_:))), for: .touchUpInside)
+            setButtonStyle()
+            learnMoreButton.addTarget(
+                self,
+                action: #selector((buttonTapped(_:))),
+                for: .touchUpInside)
             learnMoreButton.accessibilityIdentifier = buttonA11y
 
             contentStackView.addArrangedSubview(learnMoreButton)
@@ -146,27 +140,31 @@ extension WallpaperSettingsHeaderView: NotificationThemeable, Notifiable {
 
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        let buttonTitleColor: UIColor
 
         if theme == .dark {
             contentStackView.backgroundColor = UIColor.Photon.DarkGrey40
             titleLabel.textColor = UIColor.Photon.Grey10
             descriptionLabel.textColor = UIColor.Photon.Grey10
-            buttonTitleColor = UIColor.Photon.Grey10
         } else {
             contentStackView.backgroundColor = UIColor.Photon.LightGrey10
             titleLabel.textColor = UIColor.Photon.Grey75A60
             descriptionLabel.textColor = UIColor.Photon.Grey75A60
-            buttonTitleColor = UIColor.Photon.Grey75A60
         }
+        setButtonStyle()
+    }
 
-        learnMoreButton.setTitleColor(buttonTitleColor, for: .normal)
+    func setButtonStyle() {
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+
+        let color = theme == .dark ? UIColor.Photon.Grey10 : UIColor.Photon.Grey75A60
+
+        learnMoreButton.setTitleColor(color, for: .normal)
 
         // in iOS 13 the title color set is not used for the attributed text color so we have to set it via attributes
         guard let buttonTitle = viewModel?.buttonTitle else { return }
         let labelAttributes: [NSAttributedString.Key: Any] = [
             .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 12.0),
-            .foregroundColor: buttonTitleColor,
+            .foregroundColor: color,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
 
