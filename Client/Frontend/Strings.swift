@@ -2069,7 +2069,7 @@ extension String {
     public static let CouldntChangeWallpaperErrorTitle = MZLocalizedString(
         "Wallpaper.Change.Error.Title.v106",
         value: "Couldn’t Change Wallpaper",
-        comment: "The title of the error displayed to a user when they trying to change a wallpaper failed.",
+        comment: "The title of the error displayed when changing wallpaper fails.",
         lastUpdated: .v106)
     public static let CouldntChangeWallpaperErrorBody = MZLocalizedString(
         "Wallpaper.Change.Error.Title.v106",
