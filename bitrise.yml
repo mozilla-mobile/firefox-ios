@@ -922,7 +922,8 @@ workflows:
             #cd -
             cd ios-l10n-scripts
             pip3 install --user virtualenv
-            ./import-locales-firefox.sh --release
+            cd ..
+            ./ios-l10n-scripts/import-locales-firefox.sh --release
     - script@1:
         inputs:
         - content: >-
