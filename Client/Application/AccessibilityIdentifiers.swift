@@ -186,6 +186,7 @@ public struct AccessibilityIdentifiers {
             static let emailTextField = "Enter your email"
             static let fxaNavigationBar = "Sync and Save Data"
             static let fxaSettingsButton = "Sync and Save Data"
+            static let fxaSignInButton = "EmailSignIn.button"
         }
 
         struct Search {

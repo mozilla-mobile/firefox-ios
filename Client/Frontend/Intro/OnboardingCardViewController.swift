@@ -21,30 +21,34 @@ class OnboardingCardViewController: UIViewController {
         static let scrollViewVerticalPadding: CGFloat = 62
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
+        static let buttonFontSize: CGFloat = 16
         static let titleFontSize: CGFloat = 34
         static let descriptionBoldFontSize: CGFloat = 20
         static let descriptionFontSize: CGFloat = 17
-        static let imageViewSize: CGFloat = 109
+        static let imageViewSize = CGSize(width: 240, height: 300)
 
         // small device
         static let smallStackViewSpacing: CGFloat = 8
         static let smallStackViewSpacingButtons: CGFloat = 16
         static let smallScrollViewVerticalPadding: CGFloat = 20
+        static let smallImageViewSize = CGSize(width: 240, height: 300)
     }
 
     var viewModel: OnboardingCardProtocol
     weak var delegate: OnboardingCardDelegate?
 
+    // Adjusting layout for devices with height lower than 667
+    // including now iPhone SE 2nd generation and iPad
     var shouldUseSmallDeviceLayout: Bool {
-        return view.frame.height < 600
+        return view.frame.height <= 667 || UIDevice.current.userInterfaceIdiom == .pad
     }
 
     private lazy var scrollView: UIScrollView = .build { view in
         view.backgroundColor = .clear
     }
 
-    lazy var containerView: UIView = .build { stack in
-        stack.backgroundColor = .clear
+    lazy var containerView: UIView = .build { view in
+        view.backgroundColor = .clear
     }
 
     lazy var contentContainerView: UIView = .build { stack in
@@ -53,6 +57,7 @@ class OnboardingCardViewController: UIViewController {
 
     lazy var contentStackView: UIStackView = .build { stack in
         stack.backgroundColor = .clear
+        stack.alignment = .center
         stack.distribution = .fill
         stack.spacing = UX.stackViewSpacing
         stack.axis = .vertical
@@ -102,7 +107,7 @@ class OnboardingCardViewController: UIViewController {
     private lazy var primaryButton: ResizableButton = .build { button in
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
             withTextStyle: .callout,
-            maxSize: 51)
+            size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.backgroundColor = UIColor.Photon.Blue50
         button.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
@@ -119,7 +124,7 @@ class OnboardingCardViewController: UIViewController {
     private lazy var secondaryButton: ResizableButton = .build { button in
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
             withTextStyle: .callout,
-            maxSize: 51)
+            size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.backgroundColor = UIColor.Photon.LightGrey30
         button.setTitleColor(UIColor.Photon.DarkGrey90, for: .normal)
@@ -179,6 +184,8 @@ class OnboardingCardViewController: UIViewController {
         // Adapt layout for smaller screens
         let scrollViewVerticalPadding = shouldUseSmallDeviceLayout ? UX.smallScrollViewVerticalPadding :  UX.scrollViewVerticalPadding
         let stackViewSpacingButtons = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacingButtons :  UX.stackViewSpacingButtons
+        let imageViewHeight = shouldUseSmallDeviceLayout ?
+            UX.imageViewSize.height : UX.smallImageViewSize.height
 
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -214,7 +221,7 @@ class OnboardingCardViewController: UIViewController {
             buttonStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.stackViewPadding),
             buttonStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewPadding),
 
-            imageView.heightAnchor.constraint(equalToConstant: UX.imageViewSize)
+            imageView.heightAnchor.constraint(equalToConstant: imageViewHeight)
         ])
 
         contentStackView.spacing = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacing : UX.stackViewSpacing
