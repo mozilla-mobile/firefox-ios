@@ -264,7 +264,9 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
 
     @objc private func dismissKeyboard() {
-        currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? urlBar.leaveOverlayMode() : nil
+        if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
+            urlBar.leaveOverlayMode()
+        }
     }
 
     func updatePocketCellsWithVisibleRatio(cells: [UICollectionViewCell], relativeRect: CGRect) {
