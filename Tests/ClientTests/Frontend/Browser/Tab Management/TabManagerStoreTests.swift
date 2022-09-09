@@ -104,7 +104,7 @@ class TabManagerStoreTests: XCTestCase {
         XCTAssertEqual(retrievedTabs[0].title, "Title 0 isPrivate: false")
         XCTAssertEqual(retrievedTabs[1].title, "Title 1 isPrivate: false")
         XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
-        XCTAssertEqual(fileManager.remoteItemCalledCount, 2)
+        XCTAssertEqual(fileManager.remoteItemCalledCount, 4)
         XCTAssertEqual(fileManager.fileExistsCalledCount, 2)
     }
 
@@ -152,7 +152,7 @@ class TabManagerStoreTests: XCTestCase {
             return createTab(isPrivate: isPrivate)
         })
 
-        XCTAssertNotNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
+        XCTAssertNotNil(tabToSelect, "Tab was selected in restore")
         XCTAssertEqual(tabToSelect?.lastTitle, tabs[0].lastTitle, "Selected tab is same that was previously selected")
         let retrievedTabs = manager.testTabOnDisk()
         XCTAssertEqual(retrievedTabs.count, 3, "Expected 3 tabs on disk")
@@ -187,7 +187,7 @@ class TabManagerStoreTests: XCTestCase {
             return createTab(isPrivate: isPrivate)
         })
 
-        XCTAssertNotNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
+        XCTAssertNotNil(tabToSelect, "Tab was selected in restore")
         XCTAssertEqual(tabToSelect?.lastTitle, tabs[0].lastTitle, "Selected tab is same that was previously selected")
         let retrievedTabs = manager.testTabOnDisk()
         XCTAssertEqual(retrievedTabs.count, 3, "Expected 3 tabs on disk")
@@ -222,6 +222,47 @@ class TabManagerStoreTests: XCTestCase {
         })
 
         XCTAssertNil(tabToSelect, "No tab selected since the selected one was deleted, tab manager will deal with it")
+    }
+
+    // MARK: Migration
+
+    func testMigrationForward_savingOnlyWithDeprecatedMethod() {
+        let manager = createManager()
+        let tabs = createTabs(tabNumber: 2)
+        // Save tabs only with deprecated method, as if we're in v105
+        manager.preserveTabs(tabs, selectedTab: nil, useNewArchivingMethod: false)
+
+        // Retrieve tabs as if we're in v106
+        let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: false,
+                                                     addTabClosure: { isPrivate in
+            XCTAssertFalse(isPrivate)
+            return createTab(isPrivate: isPrivate)
+        })
+
+        XCTAssertNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
+        let retrievedTabs = manager.testTabOnDisk()
+        XCTAssertEqual(retrievedTabs.count, 2, "Expected 2 tabs on disk")
+        XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
+    }
+
+    func testMigrationBackWards_retrievingOnlyWithDeprecatedMethod() {
+        let manager = createManager()
+        let tabs = createTabs(tabNumber: 2)
+        // Save tabs as if we're in v106, with both methods old and new
+        manager.preserveTabs(tabs, selectedTab: nil, useNewArchivingMethod: true)
+
+        // Retrieve tabs as if we're in v105
+        let tabToSelect = manager.restoreTabs(savedTabs: manager.deprecatedTabsToMigrate,
+                                              clearPrivateTabs: false,
+                                              addTabClosure: { isPrivate in
+            XCTAssertFalse(isPrivate)
+            return createTab(isPrivate: isPrivate)
+        })
+
+        XCTAssertNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
+        let retrievedTabs = manager.testTabOnDisk(useNewArchivingMethod: false)
+        XCTAssertEqual(retrievedTabs.count, 2, "Expected 2 tabs on disk")
+        XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
     }
 }
 
