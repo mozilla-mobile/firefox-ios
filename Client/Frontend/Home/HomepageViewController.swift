@@ -264,7 +264,9 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
 
     @objc private func dismissKeyboard() {
-        currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? urlBar.leaveOverlayMode() : nil
+        if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
+            urlBar.leaveOverlayMode()
+        }
     }
 
     func updatePocketCellsWithVisibleRatio(cells: [UICollectionViewCell], relativeRect: CGRect) {
@@ -297,11 +299,22 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        // make sure the keyboard is dismissed when wallpaper onboarding is shown
+        // Can be removed once underlying problem is solved (FXIOS-4904)
+        if let presentedViewController = presentedViewController,
+           presentedViewController.isKind(of: BottomSheetViewController.self) {
+            self.dismissKeyboard()
+        }
+    }
+
     private func displayWallpaperSelector() {
         let wallpaperManager = WallpaperManager()
         guard wallpaperManager.canOnboardingBeShown,
-              !contextualHintViewController.isPresenting,
-              !UserDefaults.standard.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
+              !UserDefaults.standard.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey),
+              !(presentedViewController is ContextualHintViewController)
         else { return }
 
         self.dismissKeyboard()
