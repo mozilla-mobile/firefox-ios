@@ -5,6 +5,11 @@
 import Foundation
 import UIKit
 
+enum WallpaperManagerError: Error {
+    case downloadFailed(Error)
+    case other(Error)
+}
+
 protocol WallpaperManagerInterface {
     var currentWallpaper: Wallpaper { get }
     var availableCollections: [WallpaperCollection] { get }
@@ -86,7 +91,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
 
         } catch {
             browserLog.error("Failed to set wallpaper: \(error.localizedDescription)")
-            completion(.failure(error))
+            completion(.failure(WallpaperManagerError.other(error)))
         }
     }
 
@@ -105,7 +110,6 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         let storageUtility = WallpaperStorageUtility()
 
         Task(priority: .userInitiated) {
-
             do {
                 // Download both images at the same time for efficiency
                 async let portraitFetchRequest = dataService.getImage(
@@ -124,7 +128,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
                 completion(.success(()))
             } catch {
                 browserLog.error("Error fetching wallpaper resources: \(error.localizedDescription)")
-                completion(.failure(error))
+                completion(.failure(WallpaperManagerError.downloadFailed(error)))
             }
         }
     }

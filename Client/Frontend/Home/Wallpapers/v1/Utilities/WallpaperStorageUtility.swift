@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-enum WallpaperStorageErrors: Error {
+enum WallpaperStorageError: Error {
     case fileDoesNotExistError
     case noDataAtFilePath
     case failedToConvertImage
@@ -45,7 +45,7 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, Loggable {
                 attributes: nil)
 
             if !successfullyCreated {
-                throw WallpaperStorageErrors.failedSavingFile
+                throw WallpaperStorageError.failedSavingFile
             }
         }
     }
@@ -60,7 +60,7 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, Loggable {
 
         guard let filePath = filePathProvider.imagePathWith(name: name),
               let pngRepresentation = image.pngData()
-        else { throw WallpaperStorageErrors.failedToConvertImage }
+        else { throw WallpaperStorageError.failedToConvertImage }
 
         try removeFileIfItExists(at: filePath)
         try pngRepresentation.write(to: filePath, options: .atomic)
@@ -73,14 +73,14 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, Loggable {
         guard let filePath = filePathProvider.metadataPath() else { return nil }
 
         if !fileManager.fileExists(atPath: filePath.path) {
-            throw WallpaperStorageErrors.fileDoesNotExistError
+            throw WallpaperStorageError.fileDoesNotExistError
         }
 
         if let data = fileManager.contents(atPath: filePath.path) {
             return try decodeMetadata(from: data)
 
         } else {
-            throw WallpaperStorageErrors.noDataAtFilePath
+            throw WallpaperStorageError.noDataAtFilePath
         }
     }
 
@@ -117,7 +117,7 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, Loggable {
         let filePathProvider = WallpaperFilePathProvider(with: fileManager)
 
         guard let wallpaperDirectory = filePathProvider.wallpaperDirectoryPath() else {
-            throw WallpaperStorageErrors.cannotFindWallpaperDirectory
+            throw WallpaperStorageError.cannotFindWallpaperDirectory
         }
 
         try removefiles(from: wallpaperDirectory, excluding: try directoriesToKeep())
@@ -138,7 +138,7 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, Loggable {
 
         guard let thumbnailsDirectory = filePathProvider.folderPath(forKey: filePathProvider.thumbnailsKey),
               let metadata = try fetchMetadata()
-        else { throw WallpaperStorageErrors.cannotFindThumbnailDirectory }
+        else { throw WallpaperStorageError.cannotFindThumbnailDirectory }
 
         let availableThumbnailIDs = metadata.collections
             .filter { $0.isAvailable }

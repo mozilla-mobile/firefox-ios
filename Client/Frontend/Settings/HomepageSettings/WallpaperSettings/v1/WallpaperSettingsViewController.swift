@@ -4,7 +4,7 @@
 
 import UIKit
 
-class WallpaperSettingsViewController: UIViewController, Loggable {
+class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable {
 
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
@@ -81,16 +81,10 @@ class WallpaperSettingsViewController: UIViewController, Loggable {
 
         // Fixes bug where selection state gets lost when switching themes
         collectionView.selectItem(at: viewModel.selectedIndexPath, animated: false, scrollPosition: [])
-
-        if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
-            || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
-            updateOnRotation()
-        }
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        updateOnRotation()
+    override func updateOnRotation() {
+        configureCollectionView()
     }
 }
 
@@ -137,18 +131,7 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        activityIndicatorView.startAnimating()
-        viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
-            ensureMainThread {
-                switch result {
-                case .success:
-                    self?.showToast()
-                case .failure(let error):
-                    self?.browserLog.info(error.localizedDescription)
-                }
-                self?.activityIndicatorView.stopAnimating()
-            }
-        }
+        downloadAndSetWallpaper(at: indexPath)
     }
 }
 
@@ -229,13 +212,6 @@ private extension WallpaperSettingsViewController {
         return layout
     }
 
-    /// On iPhone, we call updateOnRotation when the trait collection has changed, to ensure calculation
-    /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
-    /// since it's `.regular` on both. We updateOnRotation from viewWillTransition in that case.
-    func updateOnRotation() {
-        configureCollectionView()
-    }
-
     func showToast() {
         let toast = ButtonToast(
             labelText: WallpaperSettingsViewModel.Constants.Strings.Toast.label,
@@ -270,6 +246,24 @@ private extension WallpaperSettingsViewController {
     func preferredContentSizeChanged(_ notification: Notification) {
         // Reload the complete collection view as the section headers are not adjusting their size correctly otherwise
         collectionView.reloadData()
+    }
+
+    func downloadAndSetWallpaper(at indexPath: IndexPath) {
+        activityIndicatorView.startAnimating()
+        viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
+            ensureMainThread {
+                switch result {
+                case .success:
+                    self?.showToast()
+                case .failure(let error):
+                    self?.browserLog.info(error.localizedDescription)
+                    self?.showError(error) { _ in
+                        self?.downloadAndSetWallpaper(at: indexPath)
+                    }
+                }
+                self?.activityIndicatorView.stopAnimating()
+            }
+        }
     }
 }
 
