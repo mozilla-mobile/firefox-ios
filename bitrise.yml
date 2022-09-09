@@ -98,7 +98,7 @@ workflows:
         - text: Build status using latest Rust-Component
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
     - script@1.1:
-        title: Compress Derived Data
+        title: Compress Derived Data hello!!!!!
         is_always_run: true
         inputs:
         - content: |
