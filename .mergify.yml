@@ -13,7 +13,9 @@ pull_request_rules:
   - name: github-actions
     conditions:
       - author=github-actions[bot]
-      - files~=(bitrise.yml)
+      - files=bitrise.yml
+      - -files~=^(?!bitrise.yml).+$
+      - head=update-br-new-xcode-version
     actions:
       review:
         type: APPROVE
