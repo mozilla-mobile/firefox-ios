@@ -87,14 +87,14 @@ class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol? {
         switch cardType {
         case .updateWelcome:
-            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcome),
+            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcomev106),
                                        title: .Upgrade.WelcomeTitle,
                                        description: .Upgrade.WelcomeDescription,
                                        primaryAction: .Upgrade.WelcomeAction,
                                        secondaryAction: nil,
                                        a11yIdRoot: AccessibilityIdentifiers.Upgrade.welcomeCard)
         case .updateSignSync:
-            return OnboardingInfoModel(image: nil,
+            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSyncv106),
                                        title: .Upgrade.SyncSignTitle,
                                        description: .Upgrade.SyncSignDescription,
                                        primaryAction: .Upgrade.SyncAction,
