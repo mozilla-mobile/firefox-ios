@@ -916,11 +916,13 @@ workflows:
             # builds. Import all locales on Beta and Fennec_Enterprise, except for pull
             # requests.
             git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||exit 1
+            #pip3 install --user virtualenv
+            #cd /usr/local/bin
+            #ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
+            #cd -
+            cd ios-l10n-scripts
             pip3 install --user virtualenv
-            cd /usr/local/bin
-            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
-            cd -
-            ./ios-l10n-scripts/import-locales-firefox.sh --release
+            ./import-locales-firefox.sh --release
     - script@1:
         inputs:
         - content: >-
@@ -1406,6 +1408,7 @@ trigger_map:
 - push_branch: v105.0
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
-  pipeline: pipeline_multiple_shards
+  #pipeline: pipeline_multiple_shards
+  workflow: L10nSnapshotTest
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
