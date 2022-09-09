@@ -2,6 +2,9 @@
 "About.learnMoreButton" = "තව දැනගන්න";
 
 /* Label on About screen */
+"About.missionLabel" = "මොසිල්ලා හරහා %@ නිෂ්පාදනය කෙරේ. හිතකර, විවෘත අන්තර්ජාලයකට පිහිටාධාර සැපයීම අපගේ මෙහෙවරයි.";
+
+/* Label on About screen */
 "About.privateBullet1" = "යෙදුමෙහි සොයන්න හා පිරික්සන්න";
 
 /* Label on About screen */
@@ -196,6 +199,9 @@
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "පෞද්ගලික පිරික්සීම ඊළඟ මට්ටමට ගෙන යන්න.";
 
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "ෆයර්ෆොක්ස් %@ වෙත පිළිගනිමු!";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "සෆාරි ඔබන්න, ඉන්පසු අන්තර්ගත අවහිර තෝරන්න";
 
@@ -307,6 +313,9 @@
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "සොයන්න";
 
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "මොසිල්ලා";
+
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "රහස්‍යතාව";
 
@@ -411,6 +420,9 @@
 
 /* Text for the share menu option when a user wants to open the current website in the default browser. */
 "ShareMenu.ShareOpenDefaultBrowser" = "පෙරනිමි අතිරික්සුවෙන් අරින්න";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "ෆයර්ෆොක්ස් හි අරින්න";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "සමඟ පිටුව බෙදාගන්න…";

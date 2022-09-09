@@ -319,6 +319,12 @@
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVATLIV";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Angiv som standardbrowser";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Indstil links fra websteder, mails og beskeder til automatisk at blive åbnet i %@.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "System-tema";
 
@@ -388,6 +394,9 @@
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "Føj til genveje";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Føjet til genveje";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Kopier adresse";
 
@@ -396,6 +405,9 @@
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Fjern fra genveje";
+
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Genvej fjernet";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Bed om desktop-version";
@@ -507,6 +519,9 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Disse standard-indstillinger giver stærk beskyttelse. Men det er nemt at tilpasse indstillingerne, så de opfylder dine specifikke behov.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Start din private browsing-session - vi blokerer sporings-mekanismer og andet skidt.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Tryk på papirkurven når som helst for at fjerne alle spor af din nuværende session.";
