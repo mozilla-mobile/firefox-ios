@@ -729,32 +729,32 @@ workflows:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Fennec_Enterprise_XCUITests
     - xcode-test@4.5:
+        is_always_run: true
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
         - test_plan: "SmokeXCUITests"
-        - simulator_os_version: latest
-        - simulator_device: iPad Pro (12.9-inch) (5th generation)
+        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=latest
         description: This Workflow is to run SmokeTest on iPad simulator device
     - xcode-test@4.5:
+        is_always_run: true
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
         - test_plan: "Smoketest2"
-        - simulator_os_version: latest
-        - simulator_device: iPad Pro (12.9-inch) (5th generation)
+        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=latest
         description: This Workflow is to run SmokeTest on iPad simulator device Smoketest2
     - xcode-test@4.5:
+        is_always_run: true
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
         - test_plan: "Smoketest3"
-        - simulator_os_version: latest
-        - simulator_device: iPad Pro (12.9-inch) (5th generation)
+        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=latest
         description: This Workflow is to run SmokeTest on iPad simulator device Smoketest3
     - xcode-test@4.5:
+        is_always_run: true
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
         - test_plan: "Smoketest4"
-        - simulator_os_version: latest
-        - simulator_device: iPad Pro (12.9-inch) (5th generation)
+        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=latest
         description: This Workflow is to run SmokeTest on iPad simulator device Smoketest4
     meta:
       bitrise.io:
