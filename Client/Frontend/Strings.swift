@@ -2058,7 +2058,7 @@ extension String {
         lastUpdated: .unknown)
     public static let CouldntDownloadWallpaperErrorTitle = MZLocalizedString(
         "Wallpaper.Download.Error.Title.v106",
-        value: "Couldn't Download Wallpaper",
+        value: "Couldn’t Download Wallpaper",
         comment: "The title of the error displayed to a user when they try change a wallpaper that failed downloading.",
         lastUpdated: .v106)
     public static let CouldntDownloadWallpaperErrorBody = MZLocalizedString(
