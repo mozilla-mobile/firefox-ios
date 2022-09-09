@@ -6,6 +6,7 @@ import UIKit
 
 class WallpaperBaseViewController: UIViewController {
 
+    // Updates the layout when the horizontal or vertical size class changes
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -15,6 +16,7 @@ class WallpaperBaseViewController: UIViewController {
         }
     }
 
+    // Updates the layout on rotation
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         updateOnRotation()
