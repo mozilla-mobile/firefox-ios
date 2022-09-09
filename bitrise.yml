@@ -1409,6 +1409,6 @@ trigger_map:
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
   #pipeline: pipeline_multiple_shards
-  workflow: L10nSnapshotTest
+  workflow: L10nScreenshotsTests
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
