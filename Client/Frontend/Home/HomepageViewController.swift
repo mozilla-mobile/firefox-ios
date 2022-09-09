@@ -299,6 +299,17 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        // make sure the keyboard is dismissed when wallpaper onboarding is shown
+        // Can be removed once underlying problem is solved (FXIOS-4904)
+        if let presentedViewController = presentedViewController,
+           presentedViewController.isKind(of: BottomSheetViewController.self) {
+            self.dismissKeyboard()
+        }
+    }
+
     private func displayWallpaperSelector() {
         let wallpaperManager = WallpaperManager()
         guard wallpaperManager.canOnboardingBeShown,
