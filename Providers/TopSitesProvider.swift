@@ -21,10 +21,6 @@ protocol TopSitesProvider {
     /// Default maximum number of items fetched for frecency
     static var numberOfMaxItems: Int { get }
 
-    /// Hide with search param is defined by adMarketplace, indicates this URL was registered through sponsored clicks
-    /// and should not show in top sites
-    var hideWithSearchParam: String { get }
-
     /// Default key for suggested sites
     var defaultSuggestedSitesKey: String { get }
 }
@@ -38,10 +34,6 @@ extension TopSitesProvider {
 
     static var numberOfMaxItems: Int {
         return UIDevice.current.userInterfaceIdiom == .pad ? 32 : 16
-    }
-
-    var hideWithSearchParam: String {
-        return "mfadid=adm"
     }
 
     var defaultSuggestedSitesKey: String {
@@ -113,7 +105,7 @@ private extension TopSitesProviderImplementation {
 
     func calculateTopSites(completion: ([Site]?) -> Void) {
         // Filter out frecency history which resulted from sponsored tiles clicks
-        let sites = frecencySites.filter { !$0.url.contains(hideWithSearchParam) }
+        let sites = SponsoredContentFilterUtility().filterSponsoredSites(from: frecencySites)
 
         // How sites are merged together. We compare against the url's base domain.
         // Example m.youtube.com is compared against `youtube.com`
