@@ -91,7 +91,9 @@ class WallpaperSelectorViewModel {
 
         let setWallpaperBlock = { [weak self] in
             self?.updateCurrentWallpaper(for: wallpaperItem) { result in
-                self?.selectedIndexPath = indexPath
+                if case .success = result {
+                    self?.selectedIndexPath = indexPath
+                }
                 completion(result)
             }
         }
@@ -124,6 +126,10 @@ class WallpaperSelectorViewModel {
                                      object: .onboardingWallpaperSelector,
                                      value: nil,
                                      extras: nil)
+    }
+
+    func removeAssetsOnDismiss() {
+        wallpaperManager.removeUnusedAssets()
     }
 }
 

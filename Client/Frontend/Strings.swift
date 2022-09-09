@@ -2056,6 +2056,36 @@ extension String {
         value: "Cannot Open Page",
         comment: "Title of the message shown when the user attempts to navigate to an invalid link.",
         lastUpdated: .unknown)
+    public static let CouldntDownloadWallpaperErrorTitle = MZLocalizedString(
+        "Wallpaper.Download.Error.Title.v106",
+        value: "Couldn’t Download Wallpaper",
+        comment: "The title of the error displayed if download fails when changing a wallpaper.",
+        lastUpdated: .v106)
+    public static let CouldntDownloadWallpaperErrorBody = MZLocalizedString(
+        "Wallpaper.Download.Error.Title.v106",
+        value: "Something went wrong with your download.",
+        comment: "The message of the error displayed to a user when they try change a wallpaper that failed downloading.",
+        lastUpdated: .v106)
+    public static let CouldntChangeWallpaperErrorTitle = MZLocalizedString(
+        "Wallpaper.Change.Error.Title.v106",
+        value: "Couldn’t Change Wallpaper",
+        comment: "The title of the error displayed when changing wallpaper fails.",
+        lastUpdated: .v106)
+    public static let CouldntChangeWallpaperErrorBody = MZLocalizedString(
+        "Wallpaper.Change.Error.Title.v106",
+        value: "Something went wrong with this wallpaper.",
+        comment: "The message of the error displayed to a user when they trying to change a wallpaper failed.",
+        lastUpdated: .v106)
+    public static let WallpaperErrorTryAgain = MZLocalizedString(
+        "Wallpaper.Error.TryAgain.v106",
+        value: "Try Again",
+        comment: "Action displayed when changing wallpaper fails.",
+        lastUpdated: .v106)
+    public static let WallpaperErrorDismiss = MZLocalizedString(
+        "Wallpaper.Error.Dismiss.v106",
+        value: "Cancel",
+        comment: "An action for the error displayed to a user when they trying to change a wallpaper failed.",
+        lastUpdated: .v106)
 }
 
 // MARK: - Download Helper
