@@ -2079,7 +2079,7 @@ extension String {
     public static let WallpaperErrorTryAgain = MZLocalizedString(
         "Wallpaper.Error.TryAgain.v106",
         value: "Try Again",
-        comment: "An action for the error displayed to a user when they trying to change a wallpaper failed which allows them to try again.",
+        comment: "Action displayed when changing wallpaper fails.",
         lastUpdated: .v106)
     public static let WallpaperErrorDismiss = MZLocalizedString(
         "Wallpaper.Error.Dismiss.v106",
