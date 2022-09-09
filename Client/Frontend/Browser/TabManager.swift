@@ -93,6 +93,8 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             return tab.isURLStartingPage
         }
 
+        eligibleTabs = SponsoredContentFilterUtility().filterSponsoredTabs(from: eligibleTabs)
+
         // sort the tabs chronologically
         eligibleTabs = eligibleTabs.sorted {
             let firstTab = $0.lastExecutedTime ?? $0.sessionData?.lastUsedTime ?? $0.firstCreatedTime ?? 0

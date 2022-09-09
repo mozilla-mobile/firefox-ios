@@ -115,9 +115,11 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
                 return
             }
 
-            let filterHighlights = highlights.filter { highlights in
+            var filterHighlights = highlights.filter { highlights in
                 !tabs.contains { highlights.urlFromString == $0.lastKnownUrl }
             }
+
+            filterHighlights = SponsoredContentFilterUtility().filterSponsoredHighlights(from: filterHighlights)
 
             if shouldGroupHighlights {
                 self.buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
