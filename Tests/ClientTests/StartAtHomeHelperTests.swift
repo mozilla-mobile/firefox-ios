@@ -18,6 +18,8 @@ class StartAtHomeHelperTests: XCTestCase {
         profile = MockProfile(databasePrefix: "startAtHomeHelper_tests")
         profile.reopen()
         tabManager = TabManager(profile: profile, imageStore: nil)
+
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
