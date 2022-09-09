@@ -189,7 +189,7 @@ class FirefoxAccountSignInViewController: UIViewController {
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
+
             scrollView.frameLayoutGuide.widthAnchor.constraint(equalTo: containerView.widthAnchor),
 
             scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
