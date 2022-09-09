@@ -184,7 +184,19 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         do {
             let unarchiver = try NSKeyedUnarchiver(forReadingFrom: tabData)
             guard let tabs = unarchiver.decodeDecodable([SavedTab].self, forKey: tabsKey) else {
-                return savedTabError(description: "Unarchiver could not decode Saved tab")
+
+                // In case tabs aren't migrated to Codable yet
+                // We'll be able to remove this when adoption rate to v106 and greater is high enough
+                let deprecatedUnarchiver = NSKeyedUnarchiver(forReadingWith: tabData)
+                deprecatedUnarchiver.setClass(SavedTab.self, forClassName: "Client.SavedTab")
+                deprecatedUnarchiver.setClass(SessionData.self, forClassName: "Client.SessionData")
+                deprecatedUnarchiver.decodingFailurePolicy = .setErrorAndReturn
+                guard let migratedTabs = deprecatedUnarchiver.decodeObject(forKey: tabsKey) as? [SavedTab] else {
+                    let error = String(describing: deprecatedUnarchiver.error)
+                    return savedTabError(description: "Deprecated unarchiver could not decode Saved tab with: \(error)")
+                }
+                return migratedTabs
+
             }
             return tabs
 

@@ -7,7 +7,9 @@ import WebKit
 import Shared
 import MozillaAppServices
 
-class SavedTab: NSObject, Codable {
+// We have both Codable and NSCoding protocol conformance since we're currently migrating users to
+// Codable for SavedTab. We'll be able to remove NSCoding when adoption rate to v106 and greater is high enough.
+class SavedTab: NSObject, Codable, NSCoding {
 
     var isSelected: Bool
     var title: String?
@@ -86,5 +88,33 @@ class SavedTab: NSObject, Codable {
         self.hasHomeScreenshot = hasHomeScreenshot
 
         super.init()
+    }
+
+    required init?(coder: NSCoder) {
+        self.sessionData = coder.decodeObject(forKey: CodingKeys.sessionData.rawValue) as? SessionData
+        self.screenshotUUID = coder.decodeObject(forKey: CodingKeys.screenshotUUID.rawValue) as? UUID
+        self.isSelected = coder.decodeBool(forKey: CodingKeys.isSelected.rawValue)
+        self.title = coder.decodeObject(forKey: CodingKeys.title.rawValue) as? String
+        self.isPrivate = coder.decodeBool(forKey: CodingKeys.isPrivate.rawValue)
+        self.faviconURL = coder.decodeObject(forKey: CodingKeys.faviconURL.rawValue) as? String
+        self.url = coder.decodeObject(forKey: CodingKeys.url.rawValue) as? URL
+        self.UUID = coder.decodeObject(forKey: CodingKeys.UUID.rawValue) as? String
+        self.tabGroupData = coder.decodeObject(forKey: CodingKeys.tabGroupData.rawValue) as? TabGroupData
+        self.createdAt = coder.decodeObject(forKey: CodingKeys.createdAt.rawValue) as? Timestamp
+        self.hasHomeScreenshot = coder.decodeBool(forKey: CodingKeys.hasHomeScreenshot.rawValue)
+    }
+
+    func encode(with coder: NSCoder) {
+        coder.encode(sessionData, forKey: CodingKeys.sessionData.rawValue)
+        coder.encode(screenshotUUID, forKey: CodingKeys.screenshotUUID.rawValue)
+        coder.encode(isSelected, forKey: CodingKeys.isSelected.rawValue)
+        coder.encode(title, forKey: CodingKeys.title.rawValue)
+        coder.encode(isPrivate, forKey: CodingKeys.isPrivate.rawValue)
+        coder.encode(faviconURL, forKey: CodingKeys.faviconURL.rawValue)
+        coder.encode(url, forKey: CodingKeys.url.rawValue)
+        coder.encode(UUID, forKey: CodingKeys.UUID.rawValue)
+        coder.encode(tabGroupData, forKey: CodingKeys.tabGroupData.rawValue)
+        coder.encode(createdAt, forKey: CodingKeys.createdAt.rawValue)
+        coder.encode(hasHomeScreenshot, forKey: CodingKeys.hasHomeScreenshot.rawValue)
     }
 }
