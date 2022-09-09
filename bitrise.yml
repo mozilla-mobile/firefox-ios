@@ -916,14 +916,11 @@ workflows:
             # builds. Import all locales on Beta and Fennec_Enterprise, except for pull
             # requests.
             git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||exit 1
-            #pip3 install --user virtualenv
-            #cd /usr/local/bin
-            #ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
-            #cd -
-            cd ios-l10n-scripts
             pip3 install --user virtualenv
+            cd /usr/local/bin
+            ln -s /Users/vagrant/Library/Python/3.10/bin/virtualenv .
+            cd -
             virtualenv --version
-            cd ..
             ./ios-l10n-scripts/import-locales-firefox.sh --release
     - script@1:
         inputs:
