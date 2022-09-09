@@ -64,6 +64,11 @@ class WallpaperSettingsViewController: UIViewController, Loggable {
                            observing: [.DisplayThemeChanged, UIContentSizeCategory.didChangeNotification])
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.removeAssetsOnDismiss()
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()

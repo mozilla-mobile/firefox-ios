@@ -134,6 +134,10 @@ class WallpaperSettingsViewModel {
             setWallpaperBlock()
         }
     }
+
+    func removeAssetsOnDismiss() {
+        wallpaperManager.removeUnusedAssets()
+    }
 }
 
 private extension WallpaperSettingsViewModel {

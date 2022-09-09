@@ -125,6 +125,10 @@ class WallpaperSelectorViewModel {
                                      value: nil,
                                      extras: nil)
     }
+
+    func removeAssetsOnDismiss() {
+        wallpaperManager.removeUnusedAssets()
+    }
 }
 
 private extension WallpaperSelectorViewModel {
