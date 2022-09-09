@@ -16,5 +16,5 @@ import Dip
 /// used - that detail can be kept out of here. However, every service provider is expected
 /// to resolve services. 
 protocol ServiceProvider {
-    func resolve<T>(type: T.Type) -> T
+    func resolve<T>() -> T
 }

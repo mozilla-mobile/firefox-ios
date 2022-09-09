@@ -19,12 +19,12 @@ class AppContainer: ServiceProvider {
     /// The item holding registered services.
     private var container: DependencyContainer?
 
-    init() {
+    private init() {
         container = bootstrapContainer()
     }
 
     /// Any services needed by the client can be resolved by calling this and passing the type.
-    func resolve<T>(type: T.Type) -> T {
+    func resolve<T>() -> T {
         do {
             return try container?.resolve(T.self) as! T
         } catch {
@@ -60,6 +60,18 @@ class AppContainer: ServiceProvider {
                             files: (try container.resolve() as Profile).files,
                             namespace: "TabManagerScreenshots",
                             quality: UIConstants.ScreenshotQuality))
+                }
+
+                container.register(.singleton) {
+                    UserDefaults.standard
+                }
+
+                container.register(.singleton) {
+                    NotificationCenter.default as NotificationProtocol
+                }
+
+                container.register(.singleton) {
+                    UIApplication.shared.delegate as UIApplicationDelegate?
                 }
 
                 try container.bootstrap()
