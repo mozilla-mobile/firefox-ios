@@ -406,6 +406,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Usuń ze skrótów";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Usunięto skrót";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Zażądaj wersji na komputery";
 
@@ -516,6 +519,9 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Domyślne ustawienia zapewniają silną ochronę, ale łatwo można dostosować je do własnych potrzeb.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Zacznij przeglądać w trybie prywatnym, a będziemy blokować elementy śledzące i inne złe rzeczy.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Stuknij przycisk kosza w dowolnej chwili, by usunąć wszystkie ślady obecnej sesji.";

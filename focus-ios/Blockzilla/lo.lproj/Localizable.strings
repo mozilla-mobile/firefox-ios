@@ -208,8 +208,14 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "ການບັອກຕົວຕິດຕາມຂອງເນື້ອຫາຕ່າງໆອາດຈະເຮັດໃຫ້ບາງວິດີໂອ ແລະ ຫນ້າເວັບບໍ່ສົມບູນໄດ້.";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "ຍົກເລີກ";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla ພະຍາຍາມທີ່ຈະເກັບຮວບຮ່ວມສະເພາະສິ່ງທີ່ຈຳເປັນຕໍ່ການປັບປູງ %@ ສຳລັບທຸກໆຄົນ.";
+
+/* Title for section in settings menu */
+"Settings.general" = "ທົ່ວໄປ";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
@@ -259,8 +265,14 @@
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
 
+/* Theme section in settings menu */
+"Settings.theme" = "ຊຸດປັບແຕ່ງ";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "ບັອກຕົວອັກສອນເວັບ";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "ເນື້ອຫາ";
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "ສັງຄົມ";
@@ -270,6 +282,12 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "ສົ່ງຂໍ້ມູນການນຳໃຊ້";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "ປິດ";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "ເປີດ";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "ສິງໃຫມ່ໆ";
