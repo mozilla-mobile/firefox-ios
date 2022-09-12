@@ -67,7 +67,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
             if arg.starts(with: LaunchArguments.LoadTabsStateArchive) {
                 if launchArguments.contains(LaunchArguments.ClearProfile) {
-                    fatalError("Clearing profile and loading a codableTabsState.archive is not a supported combination.")
+                    fatalError("Clearing profile and loading a \(TabManagerStoreImplementation.storePath) is not a supported combination.")
                 }
 
                 // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
@@ -76,8 +76,8 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                                                                                           ofType: nil,
                                                                                           inDirectory: "test-fixtures")!)
                 try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
-                let deprecatedOutput = URL(fileURLWithPath: "\(dirForTestProfile)/tabsState.archive")
-                let output = URL(fileURLWithPath: "\(dirForTestProfile)/codableTabsState.archive")
+                let deprecatedOutput = URL(fileURLWithPath: "\(dirForTestProfile)/\(TabManagerStoreImplementation.deprecatedStorePath)")
+                let output = URL(fileURLWithPath: "\(dirForTestProfile)/\(TabManagerStoreImplementation.storePath)")
 
                 let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
                 let filePaths = enumerator?.allObjects as! [String]

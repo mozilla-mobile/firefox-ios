@@ -41,6 +41,8 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 
     private var deprecatedTabDataRetriever: TabDataRetriever
     private var tabDataRetriever: TabDataRetriever
+    static let storePath = "codableTabsState.archive"
+    static let deprecatedStorePath = "tabsState.archive"
 
     var isRestoringTabs: Bool {
         return lockedForReading
@@ -226,7 +228,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
             profilePath = fileManager.tabPath
         }
         guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent("codableTabsState.archive")
+        return URL(fileURLWithPath: path).appendingPathComponent(TabManagerStoreImplementation.storePath)
     }
 
     private func prepareSavedTabs(fromTabs tabs: [Tab], selectedTab: Tab?) -> [SavedTab]? {
@@ -295,7 +297,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
             profilePath = fileManager.tabPath
         }
         guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive")
+        return URL(fileURLWithPath: path).appendingPathComponent(TabManagerStoreImplementation.deprecatedStorePath)
     }
 
     private func write(deprecatedTabStateData: NSMutableData) {
