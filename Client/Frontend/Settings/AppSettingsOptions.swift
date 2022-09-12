@@ -603,6 +603,19 @@ class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
     }
 }
 
+class ResetWallpaperOnboardingPage: HiddenSetting, FeatureFlaggable {
+    override var title: NSAttributedString? {
+        let seenStatus = UserDefaults.standard.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey) ? "SEEN" : "UNSEEN"
+        return NSAttributedString(string: "Reset wallpaper onboarding sheet (\(seenStatus))",
+                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        UserDefaults.standard.set(false, forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
+        updateCell(navigationController)
+    }
+}
+
 class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly) ? "OFF" : "ON"

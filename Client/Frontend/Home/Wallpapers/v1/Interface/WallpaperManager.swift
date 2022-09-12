@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import Shared
 
 enum WallpaperManagerError: Error {
     case downloadFailed(Error)
@@ -32,10 +33,15 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
 
     // MARK: - Properties
     private var networkingModule: WallpaperNetworking
+    private var userDefaults: UserDefaultsInterface
 
     // MARK: - Initializers
-    init(with networkingModule: WallpaperNetworking = WallpaperNetworkingModule()) {
+    init(
+        with networkingModule: WallpaperNetworking = WallpaperNetworkingModule(),
+        userDefaults: UserDefaultsInterface = UserDefaults.standard
+    ) {
         self.networkingModule = networkingModule
+        self.userDefaults = userDefaults
     }
 
     // MARK: Public Interface
@@ -56,6 +62,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     var canOnboardingBeShown: Bool {
         guard featureAvailable,
               hasEnoughThumbnailsToShow,
+              userDefaults.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey),
               featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet,
                                             checking: .buildOnly)
         else { return false }
