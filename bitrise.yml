@@ -905,7 +905,7 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6.2: {}
     - certificate-and-profile-installer@1.10: {}
-    - script@1:
+    - script@1.1:
         title: Pull in L10n
         inputs:
         - content: |
@@ -918,8 +918,9 @@ workflows:
             git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||exit 1
             pip3 install --user virtualenv
             cd /usr/local/bin
-            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.10/bin/virtualenv .
             cd -
+            virtualenv --version
             ./ios-l10n-scripts/import-locales-firefox.sh --release
     - script@1:
         inputs:
