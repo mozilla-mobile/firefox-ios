@@ -329,14 +329,10 @@ enum NavigationPath {
             controller.pushViewController(ThemeSettingsController(), animated: true)
 
         case .wallpaper:
-            let wallpaperVersion: WallpaperVersion? = FeatureFlagsManager.shared.getCustomState(for: .wallpaperVersion)
-            if let wallpaperVersion = wallpaperVersion, wallpaperVersion == .v1 {
-                let viewModel = WallpaperSettingsViewModel(wallpaperManager: WallpaperManager(), tabManager: tabManager)
+            let wallpaperManager = WallpaperManager()
+            if wallpaperManager.canSettingsBeShown {
+                let viewModel = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager, tabManager: tabManager)
                 let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
-                controller.pushViewController(wallpaperVC, animated: true)
-            } else {
-                let viewModel = LegacyWallpaperSettingsViewModel(with: tabManager, and: LegacyWallpaperManager())
-                let wallpaperVC = LegacyWallpaperSettingsViewController(with: viewModel)
                 controller.pushViewController(wallpaperVC, animated: true)
             }
         }
