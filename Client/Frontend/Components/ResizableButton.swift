@@ -33,6 +33,7 @@ class ResizableButton: UIButton {
         titleLabel?.numberOfLines = 0
         titleLabel?.adjustsFontForContentSizeCategory = true
         titleLabel?.lineBreakMode = .byWordWrapping
+        adjustsImageSizeForAccessibilityContentSizeCategory = true
         contentEdgeInsets = UIEdgeInsets(top: 0,
                                          left: buttonEdgeSpacing,
                                          bottom: 0,
