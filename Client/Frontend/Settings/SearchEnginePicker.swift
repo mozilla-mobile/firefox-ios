@@ -24,7 +24,9 @@ class SearchEnginePicker: ThemedTableViewController {
         let engine = engines[indexPath.item]
         let cell = ThemedTableViewCell()
         cell.textLabel?.text = engine.shortName
-        cell.imageView?.image = engine.image.createScaled(CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize))
+        let size = CGSize(width: OpenSearchEngine.UX.preferredIconSize,
+                          height: OpenSearchEngine.UX.preferredIconSize)
+        cell.imageView?.image = engine.image.createScaled(size)
         if engine.shortName == selectedSearchEngineName {
             cell.accessoryType = .checkmark
         }

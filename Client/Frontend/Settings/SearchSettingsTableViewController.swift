@@ -17,7 +17,8 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     fileprivate let NumberOfItemsInSectionDefault = 2
     fileprivate let SectionOrder = 1
     fileprivate let NumberOfSections = 2
-    fileprivate let IconSize = CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize)
+    fileprivate let IconSize = CGSize(width: OpenSearchEngine.UX.preferredIconSize,
+                                      height: OpenSearchEngine.UX.preferredIconSize)
 
     fileprivate var showDeletion = false
 
