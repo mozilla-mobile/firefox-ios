@@ -329,7 +329,7 @@ struct UIConstants {
         static let tootipBodyTextForContextMenuIcon = NSLocalizedString("TooltipBodyText.ContextMenu", value: "Go to Settings to manage specific privacy & security options.", comment: "This is the body text that is displayed for the Context Menu icon tooltip")
         static let tooltipBodyTextStartPrivateBrowsing = NSLocalizedString("TooltipBodyText.SearchBar", value: "Start your private browsing session, and we’ll block trackers and other bad stuff as you go.", comment: "This is the body text that is displayed for the Search Bar tooltip")
         static let tooltipBodyTextForTrashIcon = NSLocalizedString("TooltipBodyText.TrashIcon", value: "Tap the trash anytime to remove all traces of your current session.", comment: "This is the body text that is displayed for the Trash icon tooltip")
-        static let tooltipBodyTextForTrashIconV2 = NSLocalizedString("TooltipBodyText.TrashIcon.V2", value: "Tap here to trash it all—history, cookies, everything—and start fresh on a new tab.", comment: "This is the body text that is displayed for the Trash icon tooltip")
+        static let tooltipBodyTextForTrashIconV2 = NSLocalizedString("TooltipBodyText.TrashIcon.V2", value: "Tap here to trash it all — history, cookies, everything — and start fresh on a new tab.", comment: "This is the body text that is displayed for the Trash icon tooltip")
 
         // Quick Action - Small Size - Gallery View
         static let quickActionGalleryDescription = NSLocalizedString(
