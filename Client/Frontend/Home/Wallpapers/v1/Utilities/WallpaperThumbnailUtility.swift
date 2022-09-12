@@ -69,7 +69,7 @@ class WallpaperThumbnailUtility: Loggable {
 
     private func verifyThumbnailsFor(_ collections: [WallpaperCollection]) {
         // The mininmum number of thumbnails we require to show the onboarding or
-        // the wallpaper settings.
+        // the wallpaper settings. Includes the default wallpaper.
         let requiredThumbs = 4
         var numberOfAvailableThumbs = 0
 
