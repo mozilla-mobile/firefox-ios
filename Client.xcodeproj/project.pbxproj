@@ -16299,7 +16299,7 @@
 		};
 		43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/nbhasin2/MappaMundi.git";
+			repositoryURL = "https://github.com/mozilla-mobile/MappaMundi.git";
 			requirement = {
 				branch = master;
 				kind = branch;
