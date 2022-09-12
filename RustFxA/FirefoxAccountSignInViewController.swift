@@ -101,14 +101,12 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0,
-                                              left: UX.buttonHorizontalInset,
-                                              bottom: 0,
-                                              right: UX.buttonHorizontalInset)
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
+
+        let contentPadding = UIEdgeInsets(top: UX.buttonVerticalInset,
+                                          left: UX.buttonHorizontalInset,
+                                          bottom: UX.buttonVerticalInset,
+                                          right: UX.buttonHorizontalInset)
+        button.setInsets(forContentPadding: contentPadding, imageTitlePadding: UX.buttonHorizontalInset)
         button.addTarget(self, action: #selector(self.scanbuttonTapped), for: .touchUpInside)
     }
 
