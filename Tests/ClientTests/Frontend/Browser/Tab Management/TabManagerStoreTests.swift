@@ -252,7 +252,7 @@ class TabManagerStoreTests: XCTestCase {
         manager.preserveTabs(tabs, selectedTab: nil, useNewArchivingMethod: true)
 
         // Retrieve tabs as if we're in v105
-        let tabToSelect = manager.restoreTabs(savedTabs: manager.deprecatedTabsToMigrate,
+        let tabToSelect = manager.restoreTabs(savedTabs: manager.getDeprecatedTabsToMigrate(),
                                               clearPrivateTabs: false,
                                               addTabClosure: { isPrivate in
             XCTAssertFalse(isPrivate)

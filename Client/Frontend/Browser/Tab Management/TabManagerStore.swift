@@ -195,7 +195,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
     private var tabs: [SavedTab] {
         guard let tabData = tabDataRetriever.getTabData() else {
             // In case tabs aren't migrated yet, we retrieve with deprecated methods
-            return deprecatedTabsToMigrate
+            return getDeprecatedTabsToMigrate()
         }
 
         do {
@@ -264,7 +264,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
     // MARK: - Deprecated
     // To remove once migration is completed, see FXIOS-4912 && FXIOS-4913
 
-    var deprecatedTabsToMigrate: [SavedTab] {
+    func getDeprecatedTabsToMigrate() -> [SavedTab] {
         guard let tabData = deprecatedTabDataRetriever.getTabData() else { return [SavedTab]() }
 
         // In case tabs aren't migrated to Codable yet
@@ -328,7 +328,7 @@ extension TabManagerStoreImplementation {
         if useNewArchivingMethod {
             return tabs
         } else {
-            return deprecatedTabsToMigrate
+            return getDeprecatedTabsToMigrate()
         }
     }
 }
