@@ -229,6 +229,12 @@
 /* Title of option in settings to set up Siri to erase and then open the app. */
 "Siri.eraseAndOpen" = "తుడిచివేసి తెరువు";
 
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "అభిమాన సైటును తెరవండి";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "అభిమాన సైటును తెరవండి";
+
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "తెరవాల్సిన చిరునామా";
 
