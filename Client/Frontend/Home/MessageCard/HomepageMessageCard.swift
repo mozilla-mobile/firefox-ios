@@ -41,8 +41,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     private var viewModel: MessageSurfaceProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var shadowLayer: CAShapeLayer?
-
-    var kvoToken: NSKeyValueObservation?
+    private var kvoToken: NSKeyValueObservation?
 
     // UI
     private lazy var titleContainerView: UIView = .build { view in
@@ -194,7 +193,8 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     private func updateShadowPath() {
         guard let shadowLayer = shadowLayer else { return }
 
-        shadowLayer.path = UIBezierPath(roundedRect: cardView.bounds, cornerRadius: UX.cornerRadius).cgPath
+        shadowLayer.path = UIBezierPath(roundedRect: cardView.bounds,
+                                        cornerRadius: UX.cornerRadius).cgPath
         shadowLayer.shadowPath = shadowLayer.path
     }
 
