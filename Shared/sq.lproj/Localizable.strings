@@ -20,25 +20,10 @@
 "ActivityStream.ContextMenu.AddToShortcuts" = "Shtoje te Shkurtoret";
 
 /* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Fiksoje te Sajtet Kryesues";
-
-/* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "Fiksoje";
-
-/* The title for removing a shortcut action */
-"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Hiqe nga Shkurtoret";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Hiqe Sajtin e Fiksuar";
 
 /* The title for the unpinning a topsite action */
 "ActivityStream.ContextMenu.UnpinTopsite" = "Shfiksoje";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "I faqeruajtur";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "I vizituar";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "Hidhu Mbrapa Te";
@@ -46,50 +31,17 @@
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Skeda: %d";
 
-/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
-"ActivityStream.JumpBackIn.TabGroup.Title" = "Kërkimi juaj për “%@”";
-
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "Ruajtur Së Fundi";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "Faqerojtës Së Fundi";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "Më tepër";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "Në modë në Pocket";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle2" = "Rekomanduar nga Pocket";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "Në modë";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Vizituar Së Fundi";
 
-/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
-"ActivityStream.RecentlySaved.SectionTitle" = "Ruajtur Së Fundi";
-
-/* This button will open the library showing all the users bookmarks */
-"ActivityStream.RecentlySaved.ShowAll" = "Shfaqi krejt";
-
-/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
-"ActivityStream.RecentlyVisited.RemoveButton.Title" = "Hiqe";
-
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Shkurtore";
 
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "Rreshta: %d";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Caktoni Rreshta";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Sajte Kryesues";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Shtoni Skedë";
@@ -125,23 +77,11 @@
 /* Authentication prompt title */
 "Authentication required" = "Lyp mirëfilltësim";
 
-/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Description" = "Kërkoni me %@ drejt e nga shtylla e adresave";
-
-/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Title" = "Kërko me %@";
-
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Mbrapsht";
 
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "Blloko Dritare Flluskash";
-
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Faqerojtës";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Dosje";
 
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "Titull";
@@ -151,15 +91,6 @@
 
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Faqerojtës";
-
-/* A label indicating the action of adding a web page as a bookmark. */
-"Bookmarks.Actions.Add" = "Shtoje";
-
-/* A label indicating the action of bookmarking all currently open non private tabs. */
-"Bookmarks.Actions.BookmarkAllTabs" = "Faqeruani Krejt Skedat";
-
-/* A label indicating the action of bookmarking the current tab. */
-"Bookmarks.Actions.BookmarkCurrentTab" = "Faqeruaj Skedën e Tanishme";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "Përpunojeni";
@@ -173,17 +104,8 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Dosje";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Vend";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Emër Dosjeje";
-
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
 "Bookmarks.Menu.DesktopBookmarks" = "Faqerojtës Desktopi";
-
-/* A label indicating all bookmarks that were recently added. */
-"Bookmarks.Menu.RecentlyBookmarked" = "Faqeruajtur Së Fundi";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Faqerojtës i Ri";
@@ -194,17 +116,8 @@
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "Ndarës i Ri";
 
-/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
-"Bookmarks.Search.SearchBookmarks" = "Kërkoni Te Faqerojtësit";
-
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Titull";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "Këtu do të shfaqen faqerojtësit që ruani.";
 
 /* Describes the date on which the breach occurred */
 "BreachAlerts.BreachDate" = "Ky cenim ndodhi më";
@@ -245,14 +158,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "Po mbyllet skeda";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "kompjuter";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "Faqeruani Lidhjen";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Kaloni në të";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "U hap Skedë e Re Private";
@@ -277,12 +184,6 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Hape në Skedë të Re";
-
-/* Context menu item for opening a link in a new private tab */
-"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Hape Lidhjen në Skedë të Re Private";
-
-/* Context menu item for opening a link in a new tab */
-"ContextMenu.OpenLinkInNewTabButtonTitle" = "Hape Lidhjen në Skedë të Re";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Ruajeni Figurën";
@@ -313,12 +214,6 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Faqja s’u shtua dot.";
-
-/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "Për përdorues të iOS 13-s, Firefox-i tani kalon automatikisht nën një temë të errët, kur për telefonin tuaj është zgjedhur Dark Mode. Që të ndryshoni këtë sjellje, kaloni te Rregullime > Temë.";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "Tema e errët tani përfshin një tastierë të errët dhe një skenë përshëndetëse të errët.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "Mbrojtja e brendshme e Thelluar Nga Gjurmimet ndihmon të ndalet gjurmimi juaj nga reklamat. Aktivizoni mënyrën Strikte, për të bllokuar edhe më shumë gjurmues reklama dhe flluska.";
@@ -370,17 +265,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "Anuloje Shkarkimin";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Ky lloj shkarkimi s’mbulohet ende nga Firefox-i.";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Shkarkimi u Anulua";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "Shkarkimi Dështoi";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "Riprovo";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Shkarkime";
@@ -460,18 +349,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Përpara";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Email i gabuar? Shkëputuni më poshtë që t’ia riniset.";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "Lypset Verifikim Llogarie";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Lypset të verifikoni %@. Shihni te email-et tuaj për lidhjen e verifikimit nga Firefox-i.";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Lidhni Pajisje Tjetër";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Llogari Firefox";
 
@@ -481,32 +358,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "S’ka Lidhje në Internet";
 
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Hap Parapëlqime Sync-u";
-
-/* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "Skanoni kodin QR te firefox.com/pair";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "Hiqe";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Hiqeni Llogarinë Firefox përshoqëruar kësaj pajisjeje, për të hyrë si përdorues tjetër.";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "Hiqe Llogarinë";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "Ridërgoje Email-in";
-
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "Hyni Me Kamerën Tuaj";
-
-/* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "Njëkohësoni Firefox-in mes pajisjesh me një llogari.";
-
-/* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Krijoni llogari Firefox.";
 
 /* FxA sign in view qr code instructions */
 "fxa.signin.qr-link-instruction" = "Te kompjuteri juaj, hapni Firefox-in dhe kaloni te firefox.com/pair";
@@ -514,23 +367,11 @@
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Gati për Skanim";
 
-/* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "Aktivizo Sync-un";
-
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "Më mirë Përdorni Email";
 
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Bëni hyrjen në Sync";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "Merrni skedat, faqerojtësit dhe fjalëkalimet tuaja nga pajisje të tjera tuajat.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Njëkohësoji Tani";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "Merreni Web-in Me Vete";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Firefox Sync është lidhur me %@";
@@ -556,9 +397,6 @@
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Stemë Firefox-i, ndryshoni sfondin.";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "Merrni skedat tuaja të hapura, faqerojtësit dhe fjalëkalimet tuaja nga pajisje të tjera tuajat.";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Ndihmë";
 
@@ -580,9 +418,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Sot dhe Dje";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Pastrimi i Historikut Së Fundi do të heqë të dhëna të historikut, cookie-eve dhe të tjera të dhëna shfletuesi.";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "Këtu do të shfaqen sajtet që keni vizituar tani afër.";
 
@@ -591,15 +426,6 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Bëni hyrjen që të shihni një listë skedash nga pajisjet tuaja të tjera.";
-
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Llogaria juaj duhet verifikuar.";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Doni të shihni këtu skedat tuaja prej pajisjesh të tjera?";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Aktivizoni njëkohësim skedash që të shihni një listë skedash prej pajisjeve tuaja të tjera.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
@@ -610,35 +436,14 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Mbyllur së fundi";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d device(s) të lidhura";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "Pajisje të njëkohësuara";
-
 /* Accessibility label for the tab toolbar indicating the Home button. */
 "Home" = "Kreu";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "Anuloje";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "Këtë mund ta ndryshoni kurdo, te Rregullime";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Vëre si Krye";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Doni të përdoret kjo faqe web si faqja juaj hyrëse?";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Faqerojtës";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Fshije prej Historiku";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Hape në Skedë të Re Private";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Hape në Skedë të Re";
@@ -688,15 +493,6 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Shfaq Skedën e Mëparshme";
 
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
-"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Aktivizo Vetëmbyllje";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox-i do të mbyllë skedat që s’i keni parë gjatë muajit të kaluar.";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
-"InactiveTabs.TabTray.AutoClosePrompt.Title" = "Të vetëmbyllen pas një muaji?";
-
 /* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
 "InactiveTabs.TabTray.CloseButtonTitle" = "Mbylli Krejt Skedat Jo Aktive";
 
@@ -715,41 +511,17 @@
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ClearRecentHistory" = "Spastro Historikun Së Fundi";
 
-/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.DownloadLink" = "Lidhje Shkarkimi";
-
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Gjeje Sërish";
 
-/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.NewNormalTab" = "Skedë e Re Normale";
-
-/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.OpenLinkInBackground" = "Hape Lidhjen në Prapaskenë";
-
-/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.OpenLinkInNewTab" = "Hape Lidhjen në Skedë të Re";
-
-/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.SavePageAs" = "Ruajeni Faqen Si…";
-
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "Faqerojtës";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.Edit" = "Përpunoni";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.File" = "Kartelë";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.History" = "Historik";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Tools" = "Mjete";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.View" = "Shfaqje";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Window" = "Dritare";
@@ -772,12 +544,6 @@
 /* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowLastTab" = "Shfaq Skedën e Fundit";
 
-/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowTabNumber" = "Shfaq Numër Skede 1-9";
-
-/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.UndoCloseTab" = "Zhbëje Mbylljen e Skedës";
-
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "Zmadhojeni";
 
@@ -786,9 +552,6 @@
 
 /* History tableview section header */
 "Last month" = "Muajin e fundit";
-
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Njëkohësuar së fundi më: %@";
 
 /* History tableview section header */
 "Last week" = "Javën e fundit";
@@ -813,9 +576,6 @@
 
 /* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
 "LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Jepni terma kërkimi";
-
-/* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
-"LibraryPanel.History.SyncedFromOtherDevices.v99" = "Njëkohësuar prej Pajisjesh të Tjera";
 
 /* Within the History Panel, users can see the option of viewing their history from synced tabs. */
 "LibraryPanel.History.SyncedHistory.v100" = "Histori e Njëkohësuar";
@@ -853,9 +613,6 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.Onboarding.LearnMoreButtonTitle" = "Mësoni Më Tepër";
 
-/* Message shown when you enter Logins & Passwords for the first time. */
-"Logins.Onboarding.Message" = "Kredencialet tuaja të hyrjeve dhe fjalëkalimet tani mbrohen nga Face ID, Touch ID, ose një kodkalim pajisjeje.";
-
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
 "Logins.PasscodeRequirement.Warning" = "Që të përdorni veçorinë Vetëplotësim për Firefox, duhet të keni të aktivizuar një kodkalim pajisjeje.";
 
@@ -867,12 +624,6 @@
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Aktivizo Vetëplotësim";
-
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "Ndryshuar më";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "Kredenciale Hyrjesh";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Mos i Ruaj";
@@ -897,15 +648,6 @@
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "Përditësoje";
-
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "Kredenciale Hyrjesh";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "Krejt";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "Sajt";
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtër";
@@ -954,9 +696,6 @@
 /* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
 "Menu.AddBookmark.Label.v99" = "Shtoje";
 
-/* Toast displayed to the user after adding the item to the Top Sites. */
-"Menu.AddPin.Confirm" = "Fiksuar te Sajtet Kryesues";
-
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "U shtua te Shkurtoret";
 
@@ -984,29 +723,11 @@
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Shkarkime";
 
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "Mbrojtja e Thelluar Nga Gjurmimet është OFF për këtë sajt.";
-
-/* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "Mbrojtja e Thelluar Nga Gjurmimet është ON për këtë sajt.";
-
-/* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox-i bllokon gjurmues nga sajti në sajt, gjurmues shoqërorësh, nxjerrës kriptomonedhash dhe profilizues.";
-
-/* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox-i bllokon gjurmues nga sajti në sajt, gjurmues shoqërorësh, nxjerrës kriptomonedhash, profilizues dhe lëndë ndjekjeje.";
-
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Ndihmë";
 
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "Historik";
-
-/* Label for the button displayed in the menu used to stop the reload of the webpage */
-"Menu.Library.StopReload" = "Ndale";
-
-/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
-"Menu.ManageAccount.Label" = "Administroni Llogarinë %@";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Skedë e Re";
@@ -1015,19 +736,7 @@
 "Menu.NightModeTurnOff.Label2" = "Çaktivizo Mënyrën Natë";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "Aktivizo Mënyrën Natë";
-
-/* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "Aktivizo Mënyrën Natë";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "Blloko Figura";
-
-/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
-"Menu.NoImageModeShowImages.Label" = "Shfaqi Figurat";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "Veprime Faqeje";
 
 /* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
 "Menu.Passwords.Label" = "Fjalëkalime";
@@ -1056,9 +765,6 @@
 /* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
 "Menu.RemovedFromShortcuts.v99" = "Hiqe nga Shkurtoret";
 
-/* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "Hequr Prej Sajteve Kryesues";
-
 /* Toast displayed to the user after removing the item to the Shortcuts. */
 "Menu.RemovePin.Confirm2.v99" = "U hoq nga Shkurtoret";
 
@@ -1083,35 +789,17 @@
 /* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
 "Menu.Toolbar.Home.AccessibilityLabel.v99" = "Kreu";
 
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "Të bllokuar";
-
 /* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
 "Menu.TrackingProtection.Details.Verifier" = "Verifikuar nga: %@";
 
-/* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Në këtë faqe s’u pikasën gjurmues të ditur nga Firefox-i.";
-
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Rregullime për Mbrojtje";
-
-/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "Mbrojtje për %@";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "Lëndë gjurmimi";
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "Gjurmues Shoqërorësh";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox-i po bllokon pjesë të kësaj faqeje që mund të ndjekin shfletimin tuaj.";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Blloko gjurmues internetorë";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "“Cookies” Gjurmimi Nga Sajte Në Sajte";
 
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Gjurmues Nga Sajte Në Sajte";
@@ -1134,47 +822,8 @@
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Rrjetet shoqërore vendosin gjurmues në sajte të tjerë për të krijuar një profil më të plotë dhe më të përqendruar rreth jush. Bllokimi i këtyre gjurmuesve redukton sasinë e hollësive që shoqëritë e mediave shoqërore mund të shohin prej asaj çka bëni në internet.";
 
-/* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "E çaktivizuar për këtë sajt";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "Mbrojtja Nga Gjurmimet tani është e çaktivizuar për këtë sajt.";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "Aktivizo Mbrojtje Nga Gjurmimet";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "E aktivizuar për këtë sajt";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "Mbrojtja Nga Gjurmimet tani është e aktivizuar për këtë sajt.";
-
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Krijues shenja gishtash";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "“Cookies” Gjurmimi Nga Sajte Në Sajte të Bllokuar";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "Nxjerrës kriptomonedhash të Bllokuar";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "Krijuesh Shenjash Gishtash të Bllokuar";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "Gjurmues Shoqërorësh të Bllokuar";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "Mësoni më tepër se si Mbrojtja Nga Gjurmimet bllokon gjurmues internetorë që grumbullojnë të dhëna shfletimi tuajat nëpër shumë sajte.";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "S’u pikasën elemente gjurmimi në këtë faqe.";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Ky sajt përmban elemente që mund të ndjekin shfletimin tuaj. Mbrojtjen e keni të çaktivizuar.";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "Aktivizoje për këtë sajt";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Ç’ka të Re";
@@ -1210,28 +859,6 @@
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Filloni të Shfletoni";
 
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about. */
-"Onboarding.WhatsNew.Description" = "Tani është më e lehtë t’ia rifilloni atje ku e latë.";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
-"Onboarding.WhatsNew.PersonalizedHome.Description" = "Kaloni te skeda tuajat të hapura, faqerojtës dhe historik shfletimesh.";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
-"Onboarding.WhatsNew.RecentSearches.Description" = "Rivizitoni kërkimet tuaja më të reja, që nga faqja juaj hyrëse.";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
-"Onboarding.WhatsNew.RecentSearches.Title" = "Kërkime Së Fundi";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card */
-"Onboarding.WhatsNew.TabGroups.Description" = "Faqet prej të njëjtit kërkim grupohen tok.";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card */
-"Onboarding.WhatsNew.TabGroups.Title" = "Grupe Më të Qëruar Skedash";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
-   The title for the new onboarding card letting users know what is new in Firefox iOS */
-"Onboarding.WhatsNew.Title" = "Ç’ka të Re te Firefox-i";
-
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Hëm! Firefox-i u vithis";
 
@@ -1250,23 +877,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "S’hap Dot Faqen";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "Menu Mundësish Faqeje";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "Zgjedhës Panelesh";
-
 /* Password textbox in Authentication prompt */
 "Password" = "Fjalëkalim";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "S’keni kredenciale hyrjesh të njëkohësuara prej Llogarisë tuaj Firefox";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "Kredenciale Hyrjesh të Gatshëm:";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Kredenciale Hyrjesh Firefox";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Kjo ju lejon të ruani figurën te Camera Roll juaj.";
@@ -1334,9 +946,6 @@
 /* Reopen alert title shown at home page. */
 "ReopenAlert.Title" = "Rihap Skedën e Fundit të Mbyllur";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "Rihap Skedat e Mbyllura";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "Kthim madhësie teksti te parazgjedhjet";
 
@@ -1354,9 +963,6 @@
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Të dhënat janë të pavlefshme";
-
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Ju lutemi, lejojeni Firefox-in të hyjë te kamera e pajisjes tuaj, që nga ‘Rregullime’ -> ‘Privatësi’ -> ‘Kamera’.";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
 "ScanQRCode.PermissionError.Message.v100" = "Kaloni te ‘Rregullime’ pajisjeje > ‘Firefox’. Lejoni Firefox-in të përdorë kamerën.";
@@ -1408,12 +1014,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
 
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "Sugjerime për kërkimin";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Lidhje e sigurt";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Të dërgohet një raport vithisjeje, që kështu Mozilla të mund të ndreqë problemin?";
 
@@ -1454,9 +1054,6 @@
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Dërgoje";
 
-/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Hyni në Firefox";
-
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Ka ardhur skedë e re prej pajisjeje tjetër.";
 
@@ -1468,12 +1065,6 @@
 
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "U mor skedë prej %@";
-
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "Shtoje te Listë Leximesh";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "Faqeruaje";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Prekeni që të fillohet";
@@ -1522,9 +1113,6 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Spastroni të Dhënat Private";
-
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Spastroni të Dhëna Private";
 
 /* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
 "Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Spastroji Objektet: %1$@";
@@ -1598,15 +1186,6 @@
 
 /* Title in main app settings for Theme settings */
 "Settings.DisplayTheme.Title.v2" = "Temë";
-
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "Përherë";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Vetëm kur përdoret Mbrojtje Nga Gjurmimet";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "Dërgojuni sajteve një sinjal Mos Më Gjurmo se nuk doni të ndiqeni";
 
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Emër Pajisjeje";
@@ -1683,9 +1262,6 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
 "Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Shiheni";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "Spastroje";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Faqe hyrëse";
 
@@ -1710,23 +1286,11 @@
 /* Toggled ON to show the shortcuts section */
 "Settings.Homepage.Shortcuts.ToggleOn.v100" = "On";
 
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Rregullime Faqeje Hyrëse";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Jepni një faqe web";
-
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Faqja Hyrëse e Tanishme";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Përdor Lidhjen e Kopjuar";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Përdor Faqen e Tanishme";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "Përdor Parazgjedhjen";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "Kredenciale Hyrjesh & Fjalëkalime";
@@ -1734,56 +1298,14 @@
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "URL Vetjake";
 
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "Kur hapni një Skedë të Re:";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "Përshtatni Sajtet Kryesues";
-
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Faqe të Zbrazët";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "Faqerojtës";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "Sajtet që vizitoni më tepër";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter2" = "Sajte që ruani ose vizitoni";
-
-/* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Përshtatni Kreun për Firefox-in";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Kreun e Firefox-it";
 
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "Faqerojtës Së Fundi";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "Vizituar";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "Historik";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Kreu";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "Në modë në Pocket";
-
-/* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "Lëndë e goditur, nga anembanë internetit.";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "Shfaq Listën tuaj të Leximeve";
-
-/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
-"Settings.NewTab.Option.RecommendedByPocket" = "Rekomanduar nga %@";
-
-/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
-"Settings.NewTab.Option.RecommendedByPocketDescription" = "Lëndë speciale, nën kujdesin e %1$@, pjesë e familjes %2$@";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Skedë e Re";
@@ -1848,32 +1370,11 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Shkurtore Siri";
 
-/* Section title for all studies that are currently active */
-"Settings.Studies.Active.SectionName" = "Aktive";
-
-/* Section title for all studies that are completed */
-"Settings.Studies.Completed.SectionName" = "Të plotësuara";
-
-/* Button title displayed next to each study allowing the user to opt-out of the study */
-"Settings.Studies.Remove.Button" = "Hiqe";
-
-/* Title displayed in header of the Studies panel */
-"Settings.Studies.SectionName" = "Studime";
-
-/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
-"Settings.Studies.Title" = "Studime";
-
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Toggle.Link" = "Mësoni Më Tepër.";
 
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Toggle.Message" = "Firefox-i mund të instalojë dhe zhvillojë studime herë pas here.";
-
-/* Toggled OFF to opt-out of studies */
-"Settings.Studies.Toggle.Off" = "Off";
-
-/* Toggled ON to participate in studies */
-"Settings.Studies.Toggle.On" = "On";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Studime";
@@ -1908,23 +1409,11 @@
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Kini mendjen!";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Mund të zgjidhni cilën listë do të përdorë Firefox-i për të bllokuar elementë Web që mund të gjurmojnë veprimtarinë tuaj të shfletimit.";
-
-/* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "E baraspeshuar për mbrojtje dhe funksionim.";
-
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "BLLOKIME";
 
-/* Explanation of strict mode. */
-"Settings.TrackingProtection.Info.StrictTitle" = "Ofron mbrojtje më të fuqishme, por mund të sjellë mosfunksionim si duhet të disa sajteve.";
-
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "Mësoni më tepër";
-
-/* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "Më Tepër të Dhëna…";
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Ul numrin e reklamave të qepura enkas për ju dhe ndihmon të ndalen gjurmimi i shfletimeve tuaja nga reklamues.";
@@ -1944,53 +1433,17 @@
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Mbrojtje Nga Gjurmimet";
 
-/* Additional information about the strict level setting */
-"Settings.TrackingProtection.StrictLevelInfoFooter" = "Bllokimi i gjurmuesve mund të ndikojë në funksionimin e disa sajteve.";
-
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Standarde (parazgjedhje)";
-
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Lejon ndoca gjurmues, që sajtet të funksionojnë si duhet.";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Strikte";
 
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Bllokon gjurmuesit e ditur. Disa sajte mund të mos punojnë si duhet.";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Gjurmim do të thotë grumbullim i të dhënave tuaja të shfletimit nga shumë sajte.";
-
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Mbrojtje e Thelluar Nga Gjurmimet";
 
-/* Translation settings footer describing how language detection and translation happens. */
-"Settings.TranslateSnackBar.SectionFooter" = "Gjuha e faqes zbulohet në pajisje, dhe ofrohet përkthim nga një shërbim i largët.";
-
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "Shërbime";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchSubtitle" = "Ofrim të përkthehet çfarëdo sajti i shkruar në një gjuhë që është e ndryshme nga gjuha juaj parazgjedhje.";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchTitle" = "Ofrim Përkthimi";
-
-/* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "Përkthim";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Diagnostikoje";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "Fshije";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "U bë";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "Përpunoni";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Shfaq Më Tepër";
@@ -2025,9 +1478,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Hape në Firefox";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "Hape nën Mënyrën Private";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Kërko në Firefox";
 
@@ -2050,59 +1500,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Që të mbyllet skeda, fërkojeni majtas ose djathtas me tre gishta.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Mënyra Shfletim Normal";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Mënyra Shfletim Privat";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Njëkohësoni skedat, faqerojtësit, fjalëkalimet tuaja, etj.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "Njëkohësoni skedat, fjalëkalimet tuaja, etj.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "Njëkohësimi juaj i parë mund të hajë ca kohë";
-
-/* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "Pa llogari? Krijoni një të tillë, që të njëkohësoni Firefox-in mes pajisjesh.";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Po njëkohësohet";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Po njëkohësohet…";
 
-/* Panel accessibility label */
-"Synced Tabs" = "Skeda të Njëkohësuara";
-
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Faqerojtës";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Klientë të Largët";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Njëkohësimi dështoi";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "Historik";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "Kredenciale Hyrjesh";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Njëkohësimi s’është gati";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Sync-u s’është në linjë";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "Sync-u po ka probleme me njëkohësimin e %@";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "Skeda";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Skeda %1$@ nga %2$@";
@@ -2122,17 +1524,11 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "U mbyllën %d skeda";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "Kërko Në Skeda";
-
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Shtoni Skedë";
 
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Mbylli Krejt Skedat";
-
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "Hap Skedat e Përzgjedhura";
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Skeda e përzgjedhur aktualisht.";
@@ -2143,29 +1539,8 @@
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Skeda Jo Aktive";
 
-/* The section header for tabs opened last week */
-"TabTray.LastWeek.Header" = "Javën e Kaluar";
-
-/* The title on the button to copy the tab address. */
-"TabTray.MoreMenu.Copy" = "Kopjoje";
-
-/* The section header for tabs opened before last week */
-"TabTray.Older.Header" = "Më të vjetra";
-
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Hap Skedë të Re";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "Hap Skedën e Përzgjedhur";
-
-/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
-"TabTray.OtherTabs.Title" = "Skeda të tjera";
-
-/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
-"TabTray.RecentlyClosed.Description" = "Skedat janë të passhme këtu për 30 ditë. Pas kësaj kohe, skedat do të mbyllen automatikisht.";
-
-/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
-"TabTray.RecentlyClosed.SectionTitle" = "Mbyllur së fundi";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Private";
@@ -2176,17 +1551,8 @@
 /* The title on the button to look at regular tabs. */
 "TabTray.SegmentedControlTitles.Tabs" = "Skeda";
 
-/* The button title to see more options to perform on the tab. */
-"TabTray.SwipeMenu.More" = "Më tepër";
-
 /* The title for the tab tray */
 "TabTray.Title" = "Hapi Skedat";
-
-/* The section header for tabs opened today */
-"TabTray.Today.Header" = "Sot";
-
-/* The section header for tabs opened yesterday */
-"TabTray.Yesterday.Header" = "Dje";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Faqja s’u shfaq dot nën Pamjen Lexues.";
@@ -2221,12 +1587,6 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Mbylli Krejt Skedat";
 
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Këtu do të shfaqen sajtet më të vizituar nga ju.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Mirë se vini te Sajtet Kryesues";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Hiqe faqen - %@";
 
@@ -2251,20 +1611,11 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "të palexuara";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Përmirësoni Firefox-in që të bëhet lidhja";
-
 /* Debug option */
 "Use stage servers" = "Përdor shërbyes provash";
 
 /* Username textbox in Authentication prompt */
 "Username" = "Emër përdoruesi";
-
-/* Text message in the settings table view */
-"Verify your email address" = "Verifikoni adresën tuaj email";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Versioni %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Lëndë Web";

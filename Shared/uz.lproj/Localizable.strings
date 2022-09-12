@@ -16,8 +16,14 @@
 /* About settings section title */
 "About" = "Hakkında";
 
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Yuqori reytingli saytlar";
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Yorliqlarga qoʻshish";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Yopishtirish";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Ajratish";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Sekme ekle";
@@ -59,29 +65,14 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Yer imleri";
 
-/* A label indicating the action of bookmarking all currently open non private tabs. */
-"Bookmarks.Actions.BookmarkAllTabs" = "Barcha varaqlarni xatchoʻplash";
-
-/* A label indicating the action of bookmarking the current tab. */
-"Bookmarks.Actions.BookmarkCurrentTab" = "Joriy varaqni xatchoʻplash";
-
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Jild";
-
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Manzil";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Jild nomi";
 
 /* The button to create a new folder */
 "Bookmarks.NewFolder.Label" = "Yangi jild";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Sarlavha";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Parlaklık";
@@ -107,14 +98,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "Ichki oyna yopilmoqda";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "bilgisayar";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "Havolani xatchoʻplarga qoʻshish";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Almashish";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Yangi maxfiy ichki oyna ochildi";
@@ -166,9 +151,6 @@
 /* Done button on left side of the Settings view controller title bar */
 "Done" = "Tayyor";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Hozircha Firefox orqali yuklab olib bo‘lmaydi.";
-
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "Qo‘shimcha";
 
@@ -199,9 +181,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Oldinga";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "Boshqa qurilmalardagi ochiq ichki oynalar, xatcho‘plar va parollarni olish.";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Yordam";
 
@@ -222,24 +201,6 @@
 
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Yaqinda yopilgan";
-
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d ta qurilma ulandi";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "Sinxronlangan qurilmalar";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "Bekor qilish";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "Siz uni xohlagan vaqtingizda Sozlamalardan o‘zgartirishingiz mumkin";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Bosh sahifa sifatida o‘rnatish";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Bu sahifadan bosh sahifa sifatida foydalanishni xohlaysizmi?";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.Back.DiscoveryTitle" = "Orqaga";
@@ -283,12 +244,6 @@
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "Xatchoʻplar";
 
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.Edit" = "Tahrirlash";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.File" = "Fayl";
-
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.History" = "Tarix";
 
@@ -303,9 +258,6 @@
 
 /* History tableview section header */
 "Last month" = "O‘tgan oy";
-
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "So‘nggi marta sinxornlangan: %@";
 
 /* History tableview section header */
 "Last week" = "O‘tgan hafta";
@@ -397,9 +349,6 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Sahifa ochilmadi";
 
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "Panel tanlagich";
-
 /* Password textbox in Authentication prompt */
 "Password" = "Parol";
 
@@ -486,12 +435,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
 
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "Tavsiyalar uchun izlash";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Xavfsiz ulanish";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Mozilla muammolarni bartaraf qilish uchun nosozlik hisobotlari jo‘natilsinmi?";
 
@@ -550,38 +493,14 @@
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Maxfiy ma’lumotlarni tozalash";
 
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Maxfiy ma’lumotlarni tozalash";
-
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "Tozalash";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Bosh sahifa";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Bosh sahifani sozlash";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Veb sahifaga kirish";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Joriy bosh sahifa";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Nusxa olingan havoladan foydalanish";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Joriy sahifadan foydalanish";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "Standart bosh sahifadan foydalanish";
-
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "Yangi ichki oyna ochilganda:";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "O‘qish rejimi ko‘rsatilsin";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Yangi ichki oyna";
@@ -614,47 +533,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Ichki oynani yopish uchun 3 ta barmog‘ingiz bilan o‘ngga yoki chapga silang.";
 
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Ichki oynalar, xatcho‘plar, parollar va boshqalarni sinxronlang.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "Ichki oynalar, parollar va boshqalarni sinxronlang.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "Birinchi marta sinxronlash biroz vaqt olishi mumkin";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Sinxronlanmoqda";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Sinxronlanmoqda…";
 
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Xatcho‘plar";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Masofadagi mijozlar";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Sinxronlanmadi";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "Tarix";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "Taxalluslar";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Sinxronlash mavjud emas";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Sinxronlash oflayn holatda";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "%@ sinxronlanayotganda muammo yuz berdi";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "Ichki oynalar";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Ichki oynalar: %1$@/%2$@";
@@ -692,12 +575,6 @@
 /* Accessibility label for the Menu button. */
 "Toolbar.Menu.AccessibilityLabel" = "Menyu";
 
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Ko‘p kirilgan saytlar bu yerda ko‘rinadi.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Sara saytlarga xush kelibsiz";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Sahifani olib tashlash - %@";
 
@@ -709,9 +586,6 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "Foydalanuvchi";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Versiyasi: %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Veb sayt";

@@ -16,44 +16,14 @@
 /* About settings section title */
 "About" = "Хакында";
 
-/* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Төп сайтларга беркетү";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Беркетелгән сайтны бетерү";
-
 /* The title for the unpinning a topsite action */
 "ActivityStream.ContextMenu.UnpinTopsite" = "Аерып алу";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "Кыстыргычларга өстәлде";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "Каралган";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "Соңгы кыстыргычлар";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "Күбрәк";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "Pocket-та популяр";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "Популяр";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Соңгы каралган";
 
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "Юллар: %d";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Юллар саны";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Еш каралганнар";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Таб өстәү";
@@ -92,12 +62,6 @@
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "Калкып чыгучы тәрәзәләрне блоклау";
 
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Кыстыргыч";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Папка";
-
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "Исем";
 
@@ -119,12 +83,6 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Папка";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Урнашу";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Папка исеме";
-
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Яңа кыстыргыч";
 
@@ -136,12 +94,6 @@
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Баш исем";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "Сез саклаган кыстыргычлар монда күрсәтеләчәк.";
 
 /* Describes the date on which the breach occurred */
 "BreachAlerts.BreachDate" = "Бу югалту килеп чыккан вакыт";
@@ -179,14 +131,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "Таб ябыла";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "компьютер";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "Кыстыргычларга өстәү";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Күчү";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Яңа хосусый таб ачылды";
@@ -229,9 +175,6 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Битне йөкләп булмады.";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "Караңгы тема хәзер үз эченә караңгы клавиатура һәм караңгы башлангыч экранны да ала.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "Программа эчендә булган Күзәтүдән көчәйтелгән сак рекламаның артыгыздан йөрүен туктатырга ярдәм итә. Тагын да күбрәк күзәтүчеләрне, рекламаларны, калкыч чыгучы тәрәзәләрне блоклау өчен, «Катгый» режимын кабызыгыз.";
@@ -283,17 +226,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "Йөкләүдән баш тарту";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Firefox-та йөкләп алулар әлегә эшләми.";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Йөкләп алудан баш тартылды";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "Йөкләп алып булмады";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "Янәдән";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Йөкләп алулар";
@@ -349,18 +286,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Алга";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Ялгыш эл. почтамы? Түбәндәрәк элемтәне өзеп, янәдән башлагыз.";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "Хисапны раслау кирәк";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "%@ адресын раслау кирәк. Firefox җибәргән раслау сылтамасы өчен эл. почтагызны тикшерегез.";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Башка бер җиһазны тоташтыру";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Firefox Хисабы";
 
@@ -370,32 +295,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Интернетка тоташу юк";
 
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Синхронлау көйләүләрен ачу";
-
-/* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "<b>firefox.com/pair</b> адресында күрсәтелгән QR кодны сканерлагыз";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "Бетерү";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Башка кулланучы буларак керү өчен, бу җиһаз белән бәйле Firefox хисап язмасын бетерегез.";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "Хисапны бетерү";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "Хатны яңадан җибәрү";
-
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "Камерагыз ярдәмендә керегез";
-
-/* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "Хисап булдырып Сез Firefox-ны җиһазлар арасында синхронлый аласыз.";
-
-/* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Firefox хисабын булдыру.";
 
 /* FxA sign in view qr code instructions */
 "fxa.signin.qr-link-instruction" = "Компьютерыгызда Firefox-ны ачыгыз һәм firefox.com/pair адресына күчегез";
@@ -403,23 +304,11 @@
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Сканерларга әзер";
 
-/* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "Синхронлауны кабызу";
-
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "Моның урынына эл. почта куллану";
 
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Синхронлауга керү";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "Башка җиһазларыгыздан таб, кыстыргыч һәм серсүзләрегезне алу.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Хәзер синхронлау";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "Интернетыгызны үзегез белән алыгыз";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Firefox Синхронлау яңа җиһазга тоташтырылды: %@";
@@ -442,9 +331,6 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Җиһаз Firefox синхронлау хезмәтеннән өзелде";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "Башка җиһазларыгыздан ачык таб, кыстыргыч һәм серүзләрегезне алу.";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Ярдәм";
 
@@ -466,9 +352,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Бүген һәм кичә";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Соңгы тарихны чистарту гизү тарихын, кукиларны һәм башка браузер мәгълүматларын бетерәчәк.";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "Соңгы каралган вебсайтлар монда күрсәтеләчәк.";
 
@@ -477,15 +360,6 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Башка җиһазларыгыздагы таблар исемлеген карау өчен керегез.";
-
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Хисабыгызны раслау кирәк.";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Башка җиһазларыгыздагы табларны монда күрәсегез киләме?";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Башка җиһазларыгыздагы таблар исемлеген карау өчен табларны синхронлауны кабызыгыз.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
@@ -496,32 +370,11 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Күптән түгел ябылган";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d җиһаз тоташкан";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "Синхронланган җиһазлар";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "Баш тарту";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "Моны Сез һәрвакыт Көйләүләрдә үзгәртә аласыз";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Баш битне урнаштыру";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Бу веб-битне баш битегез буларак кулланасыгыз киләме?";
-
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Кыстыргыч";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Тарихтан бетерү";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Яңа хосусый табта ачу";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Яңа табта ачу";
@@ -580,17 +433,8 @@
 /* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.AddBookmark" = "Кыстыргыч өстәү";
 
-/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.NewNormalTab" = "Яңа гадәти таб";
-
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "Кыстыргычлар";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.Edit" = "Үзгәртү";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.File" = "Файл";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.History" = "Тарих";
@@ -619,12 +463,6 @@
 /* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowLastTab" = "Соңгы табны күрсәтү";
 
-/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowTabNumber" = "1-9 номерлы табларны күрсәтү";
-
-/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.UndoCloseTab" = "Ябылган табны кире кайтару";
-
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "Зурайту";
 
@@ -633,9 +471,6 @@
 
 /* History tableview section header */
 "Last month" = "Үткән айда";
-
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Соңгы синхронлау: %@";
 
 /* History tableview section header */
 "Last week" = "Үткән атнада";
@@ -661,12 +496,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "Логиннар";
 
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "Үзгәртелгән";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "Логин";
-
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Сакламау";
 
@@ -691,15 +520,6 @@
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "Яңарту";
 
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "Логин";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "Бөтенесе";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "Вебсайт";
-
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Сөзгеч";
 
@@ -720,9 +540,6 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Кыстаргыч өстәлде";
 
-/* Toast displayed to the user after adding the item to the Top Sites. */
-"Menu.AddPin.Confirm" = "Төп сайтларга беркетелгән";
-
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Уку исемлегенә өстәлде";
 
@@ -731,30 +548,6 @@
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL алмашу буферына копияләнде";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "Бу сайт өчен Күзәтелүдән көчәйтелгән саклау СҮНДЕРЕЛГӘН.";
-
-/* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "Бу сайт өчен Күзәтелүдән көчәйтелгән саклау КАБЫНГАН.";
-
-/* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox cайт-ара һәм социаль челтәр күзәтүчеләрен, криптомайнерләрне һәм браузерның «бармак эзләрен» җыючыларны блоклый.";
-
-/* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox cайт-ара һәм социаль челтәр күзәтүчеләрен, криптомайнерләрне, браузернең «бармак эзләрен җыючыларны һәм күзәтүче эчтәлекләрне блоклый.";
-
-/* Label for the button displayed in the menu used to stop the reload of the webpage */
-"Menu.Library.StopReload" = "Туктату";
-
-/* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "Төнге режимны кабызу";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "Рәсемнәрне блоклау";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "Бит гамәлләре";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Ябыштыру";
@@ -771,23 +564,11 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Кыстаргыч бетерелде";
 
-/* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "Төп сайтлардан бетерелде";
-
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Таб җибәрелде";
 
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "Блокланган";
-
-/* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Бу биттә билгеле Firefox күзәтүчеләре табылмады.";
-
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Саклау көйләүләре";
-
-/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "%@ өчен саклау";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "Күзәтүче эчтәлек";
@@ -795,59 +576,14 @@
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "Социаль челтәр күзәтүчеләре";
 
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox бу битнең Сезне күзәтеп торырга мөмкин өлешләрен блоклый.";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Онлайн күзәтүчеләрне блоклау";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "Сайт-ара күзәтүче сookie файллары";
-
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Сайт-ара күзәтеп торучылар";
 
 /* The title that shows the number of cryptomining scripts blocked */
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Криптомайнерләр";
 
-/* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "Бу сайт өчен сүндерелгән";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "Бу сайт өчен Күзәтелүдән Саклау хәзер сүндерелгән.";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "Күзәтелүдән саклауны кабызу";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "Бу сайт өчен кабызылган";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "Бу сайт өчен Күзәтелүдән Саклау кабызылган.";
-
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Бармак эзләрен җыючылар (идентификаторлар)";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Блокланган сайт-ара күзәтүче сookie файллары";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "Блокланган криптомайнерләр";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "Блокланган бармак эзләрен җыючылар";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "Блокланган cоциаль челтәр күзәтүчеләре";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "Бу биттә күзәтүче элементлар табылмады.";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Бу сайтта Сезнең гамәлләрегезне күзәтеп торырга мөмкин элементлар бар. Алардан саклау сүндерелгән.";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "Бу сайт өчен кабызу";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Яңалыклар";
@@ -880,12 +616,6 @@
 /* Restore Tabs Affirmative Action */
 "Okay" = "Ярар";
 
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
-"Onboarding.WhatsNew.PersonalizedHome.Description" = "Ачык табларыгызга, кыстыргычларга, гизү тарихына күчегез.";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
-"Onboarding.WhatsNew.RecentSearches.Description" = "Соңгы эзләүләрегезне баш биттән кабатлап була.";
-
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Абау! Firefox ватылды";
 
@@ -904,23 +634,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Битне ачып булмый";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "Бит көйләүләре менюсы";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "Панельләрне cайлау";
-
 /* Password textbox in Authentication prompt */
 "Password" = "Серсүз";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Firefox хисабыгыздан cинхронланган һичбер теркәлү мәгълүматы юк";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "Кулланырлык хисап мәгълүматлары:";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox хисап мәгълүматлары";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Бу Сезгә рәсемне фото-галереягә сакларга мөмкинлек бирә.";
@@ -976,9 +691,6 @@
 /* Reopen alert title shown at home page. */
 "ReopenAlert.Title" = "Соңгы ябылган табны яңадан ачу";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "Ябылган табны яңадан ачу";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "Текст үлчәмен ташлату";
 
@@ -996,9 +708,6 @@
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Мәгълүмат яраксыз";
-
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Зинһар, «Көйләүләр -> Хосусыйлык -> Камера» менюсына кереп, Firefox-ка җиһазыгызның камерасын куллануны рөхсәт итегез.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR кодны сканерлау";
@@ -1044,12 +753,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ОК";
 
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "Тәкъдим итү өчен эзләү";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Хәвефсез бәйләнеш";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Mozilla проблеманы хәл итә алсын өчен, ватылу турында хәбәр җибәрелсенме?";
 
@@ -1087,9 +790,6 @@
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Җибәрү";
 
-/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Firefox-ка керү";
-
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Башка җиһаздан яңа бер таб килде.";
 
@@ -1101,12 +801,6 @@
 
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "%@ бер таб җибәрде";
-
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "Уку исемлегенә өстәү";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "Кыстырып кую";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Башлау өчен басыгыз";
@@ -1155,9 +849,6 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Хосусый мәгълүматны чистарту";
-
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Хосусый мәгълүматны чистарту";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Алмашу буферына күчермәләнде";
@@ -1226,12 +917,6 @@
 /* Title in main app settings for Theme settings */
 "Settings.DisplayTheme.Title.v2" = "Тема";
 
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "Һәрвакыт";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Күзәтелүдән саклауны кулланганда гына";
-
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Җиһаз исеме";
 
@@ -1274,29 +959,14 @@
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
 "Settings.Home.Option.StartAtHome.Title" = "Башлангыч экран";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "Чистарту";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Баш бит";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Баш бит көйләүләре";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Веб-битне кертү";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Хәзерге баш бит";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Копияләнгән сылтаманы куллану";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Хәзерге битне куллану";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "Килешенгәнне куллану";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "Хисаплар & серсүзләр";
@@ -1304,47 +974,14 @@
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "Үзгә URL";
 
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "Яңа таб ачканда:";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "Төп сайтларны яраклаштыру";
-
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Буш бит ";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "Кыстыргычлар";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "Сез иң күп караган сайтлар";
-
-/* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Firefox-ның баш битен көйләү";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox баш бит";
 
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "Соңгы кыстыргычлар";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "Каралган";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "Тарих";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Баш бит";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "Pocket-та популяр";
-
-/* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "Интернеттан бик яхшы эчтәлек.";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "Уку исемлегегезне күрсәтү";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Яңа таб";
@@ -1427,17 +1064,11 @@
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Игътибар!";
 
-/* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "Саклау һәм җитештерүчәнлек өчен балансланган.";
-
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "БЛОКЛАНДЫ";
 
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "Күбрәк белү";
-
-/* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "Күбрәк белү…";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "Cаклау дәрәҗәсе";
@@ -1454,26 +1085,8 @@
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Күзәтелүдән Көчәйтелгән Саклау";
 
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "Хезмәтләр";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchTitle" = "Тәрҗемә тәкъдим итү";
-
-/* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "Тәрҗемә";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Хаталарны төзәтү";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "Бетерү";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "Әзер";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "Үзгәртү";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Күбрәк күрсәтү";
@@ -1508,9 +1121,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Firefox-та ачу";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "Хосусый режимда ачу";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Firefox-та эзләү";
 
@@ -1533,56 +1143,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Табны ябу өчен өч бармак белән уңга яки сулга сөйрәгез.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Нормаль гизү режимы";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Хосусый гизү режимы";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Табларыгыз, кыстыргычларыгыз, серсүзләрегез һәм башкаларны cинхронлау.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "Табларыгыз, серсүзләрегез һәм башкаларны cинхронлау.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "Беренче синхронлау бераз вакыт алырга мөмкин";
-
-/* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "Хисабыгыз юкмы? Firefox-ны җиһазлар арасында синхронлау өчен, бер хисап ачыгыз.";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Синхронлау";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Синхронлау…";
 
-/* Panel accessibility label */
-"Synced Tabs" = "Синхронланган таблар";
-
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Кыстыргычлар";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Ерактагы клиентлар";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Синхронлау барып чыкмады";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "Тарих";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "Логиннар";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Синхронлау мөмкин түгел";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Синхронлау автоном режимда";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "Таблар";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Таб: %1$@ / %2$@";
@@ -1602,53 +1167,20 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d таб ябылды";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "Таблардан эзләү";
-
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Таб өстәү";
 
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Барлык табларны да ябу";
 
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "Сайланган табны ябу";
-
 /* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
 "TabTray.Header.FilteredTabs.SectionHeader" = "Башкалар";
-
-/* The section header for tabs opened last week */
-"TabTray.LastWeek.Header" = "Үткән атнада";
-
-/* The title on the button to copy the tab address. */
-"TabTray.MoreMenu.Copy" = "Күчереп алу";
-
-/* The section header for tabs opened before last week */
-"TabTray.Older.Header" = "Искерәк";
 
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Яңа таб ачу";
 
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "Сайланган табны ачу";
-
-/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
-"TabTray.OtherTabs.Title" = "Башка таблар";
-
-/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
-"TabTray.RecentlyClosed.SectionTitle" = "Күптән түгел ябылган";
-
-/* The button title to see more options to perform on the tab. */
-"TabTray.SwipeMenu.More" = "Күбрәк";
-
 /* The title for the tab tray */
 "TabTray.Title" = "Ачык таблар";
-
-/* The section header for tabs opened today */
-"TabTray.Today.Header" = "Бүген";
-
-/* The section header for tabs opened yesterday */
-"TabTray.Yesterday.Header" = "Кичә";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Битне уку режимында күрсәтеп булмады.";
@@ -1683,12 +1215,6 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Барлык табларны да ябу";
 
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Сез иң күп караган сайтлар монда күрсәтеләчәк.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Төп сайтларга рәхим итегез";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Битне бетерү — %@";
 
@@ -1713,20 +1239,11 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "укылмаган";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Тоташу өчен Firefox-ны яңартыгыз";
-
 /* Debug option */
 "Use stage servers" = "Сынау серверларын куллану";
 
 /* Username textbox in Authentication prompt */
 "Username" = "Кулланучы исеме";
-
-/* Text message in the settings table view */
-"Verify your email address" = "Эл. почта адресыгызны раслагыз";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Версия: %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Веб-эчтәлек";

@@ -16,38 +16,11 @@
 /* About settings section title */
 "About" = "Ngenani";
 
-/* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Pasang ing Situs Dhuwur";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Busek Situs Kapasang";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "Ditengeri";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "Katekan";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "Liyané";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "Moncér ing Sak";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "Moncèr";
-
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Bar Ditiliki";
 
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "Larik: %d";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Setèl Larik";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Situs Ndhuwur";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Tambah Tab";
@@ -86,12 +59,6 @@
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "Blokir Windows Menthungul";
 
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Tetenger";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Foldher";
-
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "Judhul";
 
@@ -104,12 +71,6 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Folder";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Pernah";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Jeneng Folder";
-
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Tetenger anyar";
 
@@ -118,12 +79,6 @@
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Judhul";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "Tetenger kang sampéyan simpen bakal muncul ing kéné.";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Pepadhang";
@@ -151,9 +106,6 @@
 
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "Tengeri Pranala";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Ijol";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Tab Pribadi Anyar kebukak";
@@ -193,9 +145,6 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Ora bisa ngemot laman.";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "Téma peteng saiki klebu kibor peteng lan layar peteng.";
 
 /* See http://mzl.la/1Qtkf0j */
 "Create an account" = "Nggawé akun";
@@ -238,17 +187,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "Batalaké Undhuhan";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Undhuhan durung disengkuyung ing Firefox.";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Undhuhan Dibatalaké";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "Undhuhan Gagal";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "Coba manèh";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Undhuhan";
@@ -310,18 +253,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Bacutaké";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Salah alamat layang-èl? Paténi ngisor iki lan balèni manéh.";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "Butuh Verifikasi Akun";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Sampéyan perlu verifikasi %@. Cèk layang-èl sampéyan kanggo verifikasi pranala saka Firefox.";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Sambung Piranti Liyané";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Akun Firefox";
 
@@ -331,32 +262,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Ora Ana Sambungan Internet";
 
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Bukak Prèferènsi Sinkronisasi";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "Busak";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Busak akun Firefox sing duwé sesambungan karo piranti iki kanggo mlebu minangka beda panganggo.";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "Busak Akun";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "Balèni Kirim Layang-Èl";
-
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Mlebu ning Sync";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "Jupuk tab, tetenger, lan sandhi saka piranti liyané.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Sync Saiki";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "Gawanen Situs Sampéyan";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Sync Firefox wis nyambung karo %@";
@@ -379,9 +286,6 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Piranti wis dipedhot saka Sync Firefox";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "Jupuk tab, tetenger, lan sandhi saka piranti liyané.";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Pitulung";
 
@@ -403,9 +307,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Dina iki lan Wingi";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Mbusak Sejarah Anyar bakal mbusak riwayat, kuki, lan data paramban liyané.";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "Situs wèb sing bar dibukak bakal methungul ing kéné.";
 
@@ -414,12 +315,6 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Mlebu kanggo ndeleng dhaptar tab saka piranti liyané.";
-
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Akun sampéyan kudu divèrifikasi.";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Pèngèn weruh tab sampéyan saka piranti liya ning kéné?";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
@@ -430,26 +325,11 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Tembé Waé Ditutup";
 
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "Batal";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "Sampeyan bisa ngowahi iki kapan waé ing Setèlan";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Setèl Kaca Utama";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Apa sampéyan pengin nggunakaké kaca wèb iki minangka kaca ngarep?";
-
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Tetenger";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Busak saka Riwayat";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Bukak ing Tab Pribadi Anyar";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Bukak ing Tab Anyar";
@@ -508,9 +388,6 @@
 /* History tableview section header */
 "Last month" = "Sasi kapungkur";
 
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Pungkasan disinkronké: %@";
-
 /* History tableview section header */
 "Last week" = "Minggu kapungkur";
 
@@ -532,12 +409,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "Log Mlebu";
 
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "Diowahi";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "Log Mlebu";
-
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Aja Simpen";
 
@@ -555,15 +426,6 @@
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "Nganyari";
-
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "Log Mlebu";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "Kabèh";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "Situs Wèb";
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Saring";
@@ -594,15 +456,6 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL Disalin menyang Klip";
 
-/* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "Urubaké Mode Wengi";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "Blokir Gambar";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "Kaca Tindakan";
-
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Tèmpèl";
 
@@ -621,32 +474,14 @@
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Tab dikirim";
 
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "Diblokir";
-
-/* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Ora ana sing nglacak sing dikenal karo Firefox sing ora ditemokaké ing kaca iki.";
-
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Setèlan Perlindhungan";
-
-/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "Perlindhungan kanggo %@";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "Nelusuri kontèn";
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "Pelacak sosial";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox ngalangi bagéan kaca sing bisa dilacak dlajahan sampéyan.";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Blokir pelacak daring";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "Kuki Nglacak Lintas-Situs";
 
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Pelacak Lintas-Situs";
@@ -715,9 +550,6 @@
 /* Title for the button that removes a reading list item */
 "Remove" = "Buwang";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "Tab kang Tembé Waé Ditutup";
-
 /* Font type setting in the reading view settings */
 "Sans-serif" = "Sans-serif";
 
@@ -750,9 +582,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OKÉ";
 
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Sambungan aman";
-
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Kirim Tanggepan";
 
@@ -783,9 +612,6 @@
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Kirim";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "Tetenger";
 
 /* Title of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
@@ -829,9 +655,6 @@
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Resikaké Dhata Pribadi";
 
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Resikaké Dhata Pribadi";
-
 /* Default text in search bar for Data Management */
 "Settings.DataManagement.SearchLabel" = "Saring Situs";
 
@@ -860,9 +683,6 @@
    Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
 "Settings.DisplayTheme.SwitchTitle" = "Otomatis";
 
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "Tansah";
-
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Jeneng Piranti";
 
@@ -872,26 +692,11 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Umum";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "Resikaké";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Kaca Utama";
 
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Mlebu kaca wèb";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "Tetenger";
-
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox Home";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "Katekan";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "Riwayat";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Kaca Utama";
@@ -926,15 +731,6 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Trabasan Siri";
 
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "Busak";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "Rampung";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "Besut";
-
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Dhata Situs Wèb";
 
@@ -959,9 +755,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Bukak ing Firefox";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "Bukak ing Modhe Pribadi";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Golèk ing Firefox";
 
@@ -970,21 +763,6 @@
 
 /* Support section title */
 "Support" = "Dhukungan";
-
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Modhe Dlajahan Normal";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Modhe Dlajahan Pribadi";
-
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Tetenger";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "Riwayat";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "Tab";
 
 /* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "Tab.ShowTabTray.KeyCodeTitle" = "Tuduhaké Kabèh Tab";
@@ -998,14 +776,8 @@
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Tutup Kabèh Tab";
 
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "Tutup Tab kang Dipilih";
-
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Bukak Tab Anyar";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "Bukak Tab Kapilih";
 
 /* Relative date for date in past week. */
 "this week" = "minggu iki";

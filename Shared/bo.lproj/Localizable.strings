@@ -7,17 +7,11 @@
 /* About settings section title */
 "About" = "ངོ་སྤྲོད།";
 
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "དེ་བས་མང་།";
-
 /* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
 "AddPass.Error.Dismiss" = "ཆོག";
 
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "ཕྱིར་ལོག།";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
 
 /* Label for Cancel button */
 "Cancel" = "འདོར་བ།";
@@ -30,9 +24,6 @@
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "རོགས་རམ།";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "འདོར་བ།";
 
 /* The title for the Share context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Share" = "བགོ་འགྲེམས།";
@@ -84,15 +75,6 @@
 
 /* Button displayed at the top of the search settings. */
 "Settings.Search.Edit.Button" = "བཅོས་བསྒྲིགས།";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "འདོར་སུབ།";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "ཚར་བ།";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "བཅོས་བསྒྲིགས།";
 
 /* Username textbox in Authentication prompt */
 "Username" = "ཐོ་མིང་།";

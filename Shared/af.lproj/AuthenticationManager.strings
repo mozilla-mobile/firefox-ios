@@ -1,47 +1,5 @@
-/* 'After 1 hour' interval item for selecting when to require passcode */
-"After 1 hour" = "Na 1 uur";
-
-/* 'After 1 minute' interval item for selecting when to require passcode */
-"After 1 minute" = "Na 1 minuut";
-
-/* 'After 5 minutes' interval item for selecting when to require passcode */
-"After 5 minutes" = "Na 5 minute";
-
-/* 'After 10 minutes' interval item for selecting when to require passcode */
-"After 10 minutes" = "Na 10 minute";
-
-/* 'After 15 minutes' interval item for selecting when to require passcode */
-"After 15 minutes" = "Na 15 minute";
-
-/* Label used as a setting item and title of the following screen to change the current passcode */
-"Change Passcode" = "Verander wagkode";
-
 /* Text displayed above the input field when changing the existing passcode */
 "Enter passcode" = "Voer wagkode in";
-
-/* Title of the dialog used to request the passcode */
-"Enter Passcode" = "Voer wagkode in";
-
-/* 'Immediately' interval item for selecting when to require passcode */
-"Immediately" = "Onmiddellik";
-
-/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
-"Maximum attempts reached. Please try again in an hour." = "Maksimum aantal pogings bereik. Probeer gerus weer oor ’n uur.";
-
-/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
-"Maximum attempts reached. Please try again later." = "Maksimum aantal pogings bereik. Probeer gerus weer later.";
-
-/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
-"Require Passcode" = "Vereis wagkode";
-
-/* Title of the dialog used to set a passcode */
-"Set Passcode" = "Stel wagkode";
-
-/* Touch ID prompt subtitle when disabling Touch ID */
-"touchid.disable.reason.label" = "Gebruik ’n vingerafdruk om Touch ID te deaktiveer.";
-
-/* List section title for when to use Touch ID */
-"Use Touch ID" = "Gebruik Touch ID";
 
 /* Touch ID prompt subtitle when accessing logins */
 "Use your fingerprint to access Logins now." = "Gebruik ’n vingerafdruk om nou toegang tot aanmeldings te kry.";

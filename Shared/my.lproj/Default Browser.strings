@@ -1,6 +1,3 @@
-/* Button string to open settings that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Button" = "အပြင်အဆင်များသို့ သွားပါ";
-
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Firefox တွင်ဝက်ဘ်ဆိုက်များ၊ အီးမေးလ်များနှင့်မက်ဆေ့ခ်ျများမှလင့်ခ်များကိုသတ်မှတ်ပါ။";
 

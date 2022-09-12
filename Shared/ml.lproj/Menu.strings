@@ -1,20 +1,8 @@
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction.Title" = "ഈ താള്‍ അടയാളപ്പെടുത്തുക";
-
-/* Label for the button, displayed in the menu, used to add a page to the reading list. */
-"Menu.AddToReadingList.Title" = "വായനാ പട്ടികയിലേക്ക് ചേര്‍ക്കുക";
-
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "എല്ലാ ടാബുകളും അടയ്ക്കുക";
 
-/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
-"Menu.CopyAddress.Title" = "വിലാസം പകര്‍ത്തുക";
-
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "താളില്‍ കണ്ടെത്തുക";
-
-/* Label for the button, displayed in the menu, used to open the Library */
-"Menu.Library.Title" = "നിങ്ങളുടെ ലൈബ്രറി";
 
 /* Label for the button, displayed in the menu, used to open a new private tab. */
 "Menu.NewPrivateTabAction.Title" = "പുതിയ സ്വകാര്യ ടാബിൽ തുറക്കുക";
@@ -31,9 +19,6 @@
 /* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "നാള്‍വഴി";
 
-/* Label for the button, displayed in the menu, used to navigate to the home page. */
-"Menu.OpenHomePageAction.Title" = "പൂമുഖം";
-
 /* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "വായനാ പട്ടിക";
 
@@ -43,29 +28,11 @@
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "സമന്വയിപ്പിച്ച ടാബുകൾ";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
-"Menu.OpenTopSitesAction.AccessibilityLabel" = "പ്രധാന സൈറ്റുകൾ";
-
-/* Label for the button, displayed in the menu, used to show the html page source */
-"Menu.PageSourceAction.Title" = "താളിന്റെ സ്രോതസ്സ്‌ കാണുക";
-
-/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
-"Menu.RemoveBookmarkAction.Title" = "അടയാളം നീക്കം ചെയ്യുക";
-
-/* Label for the button, displayed in the menu, used to open the QR code scanner. */
-"Menu.ScanQRCodeAction.Title" = "QR കോഡ് സ്കാൻ ചെയ്യുക";
-
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "മുഴുവന്‍ കാണുക";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
 "Menu.SharePageAction.Title" = "ഉപയോഗിച്ച് പേജ് പങ്കിടുക…";
-
-/* Label for the button, displayed in the menu, used to open the tabs tray */
-"Menu.ShowTabs.Title" = "ടാബുകള്‍ കാണിക്കുക";
-
-/* Label for the button, displayed in the menu, used to translate the current page. */
-"Menu.TranslatePageAction.Title" = "പേജ് വിവർത്തനം ചെയ്യുക";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "ഡെസ്ക്ടോപ്പ് സൈറ്റ് ആവശ്യപ്പെടുക";

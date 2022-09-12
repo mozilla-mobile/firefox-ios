@@ -13,38 +13,11 @@
 /* About settings section title */
 "About" = "ಬಗ್ಗೆ";
 
-/* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "ಅಗ್ರತಾಣಗಳಿಗೆ ಪಿನ್ ಮಾಡಿ";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "ಪಿನ್ ಮಾಡಲಾದ ತಾಣ ತೆಗೆದುಹಾಕಿ";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "ಪುಟಗುರುತು ಮಾಡಲಾದ";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "ಭೇಟಿ ನೀಡಲಾದ‍";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "ಇತ್ತೀಚಿನ ಪುಟಗುರುತುಗಳು";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "ಇನ್ನಷ್ಟು";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "ಪ್ರಚಲಿತ";
-
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "ಇತ್ತೀಚೆಗೆ ಭೇಟಿನೀಡಿದವು";
 
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "ಅಡ್ಡಸಾಲು %d";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "ಸಾಲುಗಳನ್ನು ಹೊಂದಿಸಿ";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "ಪ್ರಮುಖ ತಾಣಗಳು";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "ಟ್ಯಾಬ್ ಸೇರಿಸು";
@@ -80,12 +53,6 @@
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "ಪಾಪ್-ಅಪ್ ಕಿಟಕಿಗಳನ್ನು ತಡೆ ಹಿಡಿ";
 
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "ಪುಟಗುರುತು";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "ಕಡತಕೋಶ";
-
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "ಶೀರ್ಷಿಕೆ";
 
@@ -104,12 +71,6 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "ಕಡತಕೋಶ";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "ಸ್ಥಳ";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "ಕಡತಕೋಶದ ಹೆಸರು";
-
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "ಹೊಸ ಬುಕ್‌ಮಾರ್ಕ್";
 
@@ -121,9 +82,6 @@
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "ಶೀರ್ಷಿಕೆ";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "ಜಾಲತಾಣಸೂಚಿ";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "ಪ್ರಕಾಶಮಾನ";
@@ -149,14 +107,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "ಟ್ಯಾಬ್ ಮುಚ್ಚಲಾಗುತ್ತಿದೆ";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "ಗಣಕ";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "ಪುಟಗುರುತು ಕೊಂಡಿ";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "ಬದಲಾಯಿಸು";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "ಹೊಸ ಖಾಸಗಿ ಹಾಳೆ ತೆಗೆಯಲಾಗಿದೆ";
@@ -241,9 +193,6 @@
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "ಡೌನ್‌ಲೋಡ್ ವಿಫಲವಾಗಿದೆ";
 
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "ಮರಳಿ ಪ್ರಯತ್ನಿಸು";
-
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "ಡೌನ್‌ಲೋಡ್‌ಗಳು";
 
@@ -280,9 +229,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "ಮುಂದೆ";
 
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "ಖಾತೆಯ ದೃಢೀಕರಣದ ಅಗತ್ಯವಿದೆ";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Firefox ಖಾತೆ";
 
@@ -292,20 +238,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕ ಲಭ್ಯವಿಲ್ಲ";
 
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "ತೆಗೆದುಹಾಕು";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "ಇ-ಮೇಲ್ಅನ್ನು ಮರುಕಳುಹಿಸು";
-
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "ಸಿಂಕ್ ಮಾಡಲು ಸೈನ್ ಇನ್ ಆಗಿ";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "ಈಗ ಸಿಂಕ್ ಮಾಡು";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "ಜಾಲವನ್ನು ನಿಮ್ಮೊಂದಿಗೆ ಒಯ್ಯಿರಿ";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "ಸಿಂಕ್ ಸಂಪರ್ಕಿತಗೊಂಡಿದೆ";
@@ -340,29 +274,11 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "ಇತ್ತೀಚೆಗೆ ಮುಚ್ಚಲಾದವು";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d ಸಾಧನ(ಗಳನ್ನು) ಜೋಡಿಸಲಾಗಿದೆ";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "ಸಿಂಕ್ ಮಾಡಲಾದ ಸಾಧನಗಳು";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "ರದ್ದು ಮಾಡು";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "ನೀವು ಇದನ್ನು ಯಾವುದೆ ಸಮಯದಲ್ಲಿ ಸಿದ್ಧತೆಗಳಲ್ಲಿ ಬದಲಾಯಿಸಬಹುದು";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "ಮುಖಪುಟ ಹೊಂದಿಸು";
-
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "ಪುಟ ಗುರುತು";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "ಇತಿಹಾಸದಿಂದ ಅಳಿಸು‍";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "ಹೊಸ ಖಾಸಗಿ ಹಾಳೆಯನ್ನು ತೆರೆ";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "ಹೊಸ ಹಾಳೆಯಲ್ಲಿ ತೆರೆ";
@@ -421,9 +337,6 @@
 /* History tableview section header */
 "Last month" = "ಹಿಂದಿನ ತಿಂಗಳು";
 
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "ಕಡೆಯ ಬಾರಿ ಸಿಂಕ್ ಮಾಡಿದ್ದು: %@";
-
 /* History tableview section header */
 "Last week" = "ಹಿಂದಿನ ವಾರ";
 
@@ -445,12 +358,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "ಲಾಗಿನ್‌ಗಳು";
 
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "ಮಾರ್ಪಡಿಸಿದ";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "ಲಾಗಿನ್";
-
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "ಉಳಿಸಬೇಡ";
 
@@ -468,15 +375,6 @@
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "ಅಪ್‌ಡೇಟ್‌";
-
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "ಲಾಗಿನ್";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "ಎಲ್ಲಾ";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "ಜಾಲತಾಣ";
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "ಸೋಸುಗ";
@@ -507,12 +405,6 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL ಕ್ಲಿಪ್‌ಬೋರ್ಡಿಗೆ ಪ್ರತಿ ಮಾಡಲಾಗಿದೆ";
 
-/* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "ರಾತ್ರಿ ಸ್ಥಿತಿಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "ಪುಟದ ಕಾರ್ಯಗಳು";
-
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "ಅಂಟಿಸು";
 
@@ -527,12 +419,6 @@
 
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "ಬುಕ್‌ಮಾರ್ಕನ್ನು ತೆಗೆಯಲಾಗಿದೆ";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "ಆನ್ಲೈನ್ ಜಾಡುಹಿಡಿಯುವರನ್ನು ನಿರ್ಬಂಧಿಸು";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "ಈ ತಾಣಕ್ಕೆ ಸಕ್ರಿಯಗೊಳಿಸಿ";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "ಹೊಸತೇನಿದೆ";
@@ -577,17 +463,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "ಪುಟ‍ವನ್ನು ತೆರೆಯಲಾಗಿಲ್ಲ‍";
 
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "ಫಲಕದ ಆಯ್ಕೆ";
-
 /* Password textbox in Authentication prompt */
 "Password" = "ಗುಪ್ತಪದ";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "ಲಭ್ಯವಿರುವ ರುಜುವಾತುಗಳು:";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "ಫೈರ್ಫಾಕ್ಸ್ ರುಜುವಾತುಗಳು";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "ಮುಚ್ಚು";
@@ -631,9 +508,6 @@
 /* Reopen button text shown in reopen-alert at home page. */
 "ReopenAlert.Actions.Reopen" = "ಮರುತೆರೆ";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "ಮುಚ್ಚಿದ ಟ್ಯಾಬ್ ಮತ್ತೆ ತೆರೆ";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "ಪಠ್ಯದ ಗಾತ್ರ ಮರುಹೊಂದಿಸಿ";
 
@@ -675,9 +549,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
 
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "ಸುರಕ್ಷಿತ ಸಂಪರ್ಕ";
-
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "ಅಭಿಪ್ರಾಯವನ್ನು ಕಳುಹಿಸಿ";
 
@@ -696,12 +567,6 @@
 
 /* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_title" = "ಪಡೆಯಲಾದ ಟ್ಯಾಬ್";
-
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "ಓದುಗ ಪಟ್ಟಿಗೆ ಸೇರಿಸು";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "ಪುಟ ಗುರುತು";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "ಪ್ರಾರಂಭಿಸಲು ಮೆಲ್ಲಗೆ ತಟ್ಟಿ";
@@ -745,9 +610,6 @@
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "ಖಾಸಗಿ ದತ್ತಾಂಶವನ್ನು ಖಾಲಿಮಾಡು";
 
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "ಖಾಸಗಿ ದತ್ತಾಂಶವನ್ನು ಖಾಲಿಮಾಡು";
-
 /* Default text in search bar for Data Management */
 "Settings.DataManagement.SearchLabel" = "ತಾಣಗಳ ಸೋಸಕ";
 
@@ -773,9 +635,6 @@
    Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
 "Settings.DisplayTheme.SwitchTitle" = "ಸ್ವಯಂಚಾಲಿತವಾಗಿ";
 
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "ಯಾವಾಗಲೂ";
-
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "ಸಾಧನದ ಹೆಸರು";
 
@@ -788,47 +647,20 @@
 /* General settings section title */
 "Settings.General.SectionName" = "ಸಾಮಾನ್ಯ";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "ಅಳಿಸು";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "ಮುಖಪುಟ";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "ಮುಖಪುಟದ ಸಿದ್ಧತೆಗಳು";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "ಪ್ರಸ್ತುತ ಮುಖಪುಟ";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "ನಕಲಿಸಿದ ಕೊಂಡಿ ಬಳಸಿ";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "ಈಗಿನ ಪುಟವನ್ನು ಬಳಸು";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "ಪೂರ್ವನಿಯೋಜಿತವಾದುದನ್ನು ಬಳಸು";
 
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "ಖಾಲಿ ಪುಟ";
 
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "ಪುಟಗುರುತುಗಳು";
-
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "ಇತ್ತೀಚಿನ ಬುಕ್‍ಮಾರ್ಕುಗಳು";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "ಭೇಟಿಯಾದ";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "ಇತಿಹಾಸ";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "ಮುಖಪುಟ";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "ಓದುಗ ಪಟ್ಟಿಗೆ ತೋರಿಸು";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "ಹೊಸ ಟ್ಯಾಬ್‍";
@@ -869,35 +701,14 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ಸರಿ, ಗೊತ್ತಾಯಿತು";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "ನೀಮ್ಮ ಜಾಲಾಟದ ಚಟುವಟಿಕೆಗಳ ಜಾಡುಹಿಡಿಯಬಲ್ಲ ಜಾಲ ಘಟಕಗಳನ್ನು ತಡೆಹಿಡಿಯಲು Firefox ಬಳಸಬಹುದಾದ ಪಟ್ಟಿಯನ್ನು ನೀವು ಆಯ್ಕೆ ಮಾಡಬಹುದು.";
-
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "ಜಾಡು ಇರಿಸುವಿಕೆ ಇಂದ ರಕ್ಷಣೆ";
-
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "ಜಾಲತಾಣಗಳು ಸರಿಯಾಗಿ ಕೆಲಸಮಾಡುವಂತೆ ಕೆಲವು ಜಾಡುಹಿಡಿಯುವಿಕೆಗಳನ್ನು ಅನುಮತಿಸುತ್ತದೆ.";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "ಕಡ್ಡಾಯ";
 
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "ಸೇವೆಗಳು";
-
-/* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "ಅನುವಾದ";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "ತೊಂದರೆನಿವಾರಣೆ‍";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "ಅಳಿಸು";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "ಆಯಿತು";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "ಸಂಪಾದಿಸಿ";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "ಇನ್ನಷ್ಟು ತೋರಿಸು";
@@ -926,9 +737,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "ಫೈರ್ಫಾಕ್ಸ್ನಲ್ಲಿ ತೆರೆಯಿರಿ";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "ಖಾಸಗಿ ಮೋಡ್ನಲ್ಲಿ ತೆರೆಯಿರಿ";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "ಫೈರ್ಫಾಕ್ಸ್ನಲ್ಲಿ ಹುಡುಕಿ";
 
@@ -951,47 +759,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "dಟ್ಯಾಬ್ ಅನ್ನು ಮುಚ್ಚಲು ಮೂರು ಬೆರಳುಗಳೊಂದಿಗೆ ಬಲ ಅಥವಾ ಎಡಕ್ಕೆ ಸ್ವೈಪ್ ಮಾಡಿ.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "ಸಾಮಾನ್ಯ ಬ್ರೌಸಿಂಗ್ ಸ್ಥಿತಿ";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "ಖಾಸಗಿ ಬ್ರೌಸಿಂಗ್ ಸ್ಥಿತಿ";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "ನಿಮ್ಮ ಟ್ಯಾಬ್ ಗಳು, ಪುಟಗುರುತುಗಳು, ಪ್ರವೇಶಪದಗಳು & ಇನ್ನಷ್ಟನ್ನು ಸಿಂಕ್ ಮಾಡಿ.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "ನಿಮ್ಮ ಟ್ಯಾಬ್ ಗಳು, ಪ್ರವೇಶಪದಗಳು ಮತ್ತು ಇನ್ನಷ್ಟನ್ನು ಸಿಂಕ್ ಮಾಡಿ.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "ನಿಮ್ಮ ಮೊದಲ ಸಿಂಕ್ ಸ್ವಲ್ಪ ಸಮಯ ತೆಗೆದುಕೊಳ್ಳಬಹುದು";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "ಸಿಂಕ್ ಮಾಡುತ್ತಿದೆ";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "ಸಿಂಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ…";
 
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "ಪುಟಗುರುತುಗಳು";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "ಸಿಂಕ್ ಮಾಡುವಿಕೆ ವಿಫಲವಾಗಿದೆ";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "ಇತಿಹಾಸ";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "ಲಾಗಿನ್‌ಗಳು";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "ಸಿಂಕ್ ಲಭ್ಯವಿಲ್ಲ";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "ಸಿಂಕ್ ಆಫ್ಲೈನ್ ​​ಆಗಿದೆ";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "ಟ್ಯಾಬ್‌ಗಳು";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "%2$@ ನಲ್ಲಿ %1$@";
@@ -1002,23 +774,14 @@
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "ರದ್ದು ಮಾಡು";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "ಹುಡುಕು ಟ್ಯಾಬ್ಗಳು";
-
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "ಟ್ಯಾಬ್ ಸೇರಿಸು";
 
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "ಎಲ್ಲ ಟ್ಯಾಬ್‍ಗಳನ್ನು ಮುಚ್ಚು";
 
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "ಆಯ್ಕೆಮಾಡಿದ ಟ್ಯಾಬ್ ಮುಚ್ಚಿ";
-
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "ಹೊಸ ಟ್ಯಾಬ್‌ ತೆರೆ‍";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "ಆಯ್ಕೆಮಾಡಿದ ಟ್ಯಾಬ್ ತೆರೆಯಿರಿ";
 
 /* Relative date for date in past week. */
 "this week" = "ಈ ವಾರ";
@@ -1041,9 +804,6 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "ಎಲ್ಲ ಟ್ಯಾಬ್‍ಗಳನ್ನು ಮುಚ್ಚು";
 
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "ಅಗ್ರತಾಣಗಳಿಗೆ ಸ್ವಾಗತ";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "ಪುಟವನ್ನು ತೆಗೆದುಹಾಕಿ — %@";
 
@@ -1065,17 +825,8 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "ಓದದೆ ಇರುವ";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "ಫೈರ್ಫಾಕ್ಸ್ ಅನ್ನು ಸಂಪರ್ಕಿಸಲು ಪರಿಷ್ಕರಣೆ ಮಾಡಿ";
-
 /* Username textbox in Authentication prompt */
 "Username" = "ಬಳಕೆದಾರ ಹೆಸರು";
-
-/* Text message in the settings table view */
-"Verify your email address" = "ನಿಮ್ಮ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ಧೃಡೀಕರಿಸಿ";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "ಆವೃತ್ತಿ %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "ಜಾಲ ವಿಷಯ";

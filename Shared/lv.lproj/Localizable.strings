@@ -16,32 +16,8 @@
 /* About settings section title */
 "About" = "Par";
 
-/* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Piespraust populārākās lapas";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Aizvākt piesprausto lapu";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "Saglabāta grāmatzīmēs";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "Apmeklēta";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "Vairāk";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "Populāri";
-
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "Rindas: %d";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Iestatiet rindas";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Populārākās lapas";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Pievienot cilni";
@@ -86,20 +62,11 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Mape";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Atrašanās vieta";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Mapes nosaukums";
-
 /* The button to create a new folder */
 "Bookmarks.NewFolder.Label" = "Jauna mape";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Virsraksts";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Spilgtums";
@@ -125,14 +92,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "Cilņu aizvēršana";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "dators";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "Saglabāt grāmatzīmēs";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Pārslēgt";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Atvērta jauna privātā cilne";
@@ -214,17 +175,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "Atcelt lejupielādi";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Lejupielādes Firefox šobrīd vēl neatbalsta.";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Lejupielāde atcelta";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "Lejupielāde neizdevās";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "Atkārtot";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Lejupielādes";
@@ -277,18 +232,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Pārsūtīt";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Nepareizs epasts? Atslēdzieties zemāk, lai sāktu no jauna.";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "Nepieciešama konta pārbaude";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Jums jāpārbauda %@. Firefox apstiprinājuma saiti atradīsiet savā epastā.";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Savienot citu ierīci";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Firefox konts";
 
@@ -298,23 +241,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Nav savienojuma ar internetu";
 
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Atvērt Sync iestatījumus";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "Nosūtīt vēlreiz";
-
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Pieslēgties Sync";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "Iegūstiet savas atvērtās cilnes, grāmatzīmes un paroles no savām citām ierīcēm.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Sinhronizēt";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "Paņem tīmekli sev līdz";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Firefox Sync ir pievienots %@";
@@ -337,9 +265,6 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Ierīce ir atvienota no Firefox Sync";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "Iegūstiet savas atvērtās cilnes, grāmatzīmes un paroles no savām citām ierīcēm.";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Palīdzība";
 
@@ -358,9 +283,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Šodien un vakar";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Pēdējās vēstures dzēšana noņems vēsturi, sīkfailus un citus pārlūkprogrammas datus.";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "Šeit parādīsies lapas, ko esat nesen apmeklējis.";
 
@@ -369,15 +291,6 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Pierakstieties, lai redzētu šeit cilnes no šīm ierīcēm.";
-
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Jūsu kontam nepieciešams apstiprinājums.";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Gribat redzēt cilnes no citām savām ierīcēm?";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Ieslēdziet cilņu sinhronizāciju, lai redzētu cilnes no citām ierīcēm.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
@@ -388,32 +301,11 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Nesen aizvērtās";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d ierīce(s) pieslēgta(s)";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "Sinhronizētās ierīces";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "Atcelt";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "Šo var mainīt Iestatījumos";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Iestatīt mājas lapu";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Vai vēlaties izmantot šo lapu kā savu sākuma lapu?";
-
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Grāmatzīme";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Notīrīt no vēstures";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Atvērt jaunā privātā cilnē";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Atvērt jaunā cilnē";
@@ -472,9 +364,6 @@
 /* History tableview section header */
 "Last month" = "Pēdējā mēnesī";
 
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Pēdējā sinhronizācija: %@";
-
 /* History tableview section header */
 "Last week" = "Pagājušajā nedēļā";
 
@@ -496,12 +385,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "Paroles";
 
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "Rediģēts";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "Pieteikties";
-
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Nesaglabāt";
 
@@ -519,15 +402,6 @@
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "Atjaunināt";
-
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "Pieteikties";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "Visi";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "Mājas lapa";
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrs";
@@ -555,12 +429,6 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "Adrese nokopēta starpliktuvē";
 
-/* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "Aktivēt nakts režīmu";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "Lapas darbības";
-
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Ielīmēt";
 
@@ -575,33 +443,6 @@
 
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Grāmatzīme aizvākta";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox bloķē tās lapas daļas, kas var izsekot jūsu pārlūkošanas aktivitātēm.";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Bloķēt sekotājus internetā";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "Izsekošanas aizsardzība tagad ir izslēgta šai lapai.";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "Aktivēt izsekošanas aizsardzību";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "Izsekošanas aizsardzība tagad ir ieslēgta šai lapai.";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "Uzziniet vairāk kā Izsekošanas aizsardzība cīnās pret sekotājiem kas dažādās lapās vāc informāciju par jūsu uzvedību internetā.";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "Šajā lapā nav izsekojošu elementu.";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Šajā lapā ir elementi, kas var izsekot jūsu aktivitātēm internetā. Jūs esat deaktivējis aizsardzību.";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "Aktivēt šai lapai";
 
 /* Accessibility label for Mobile Device image in remote tabs list */
 "mobile device" = "mobilā ierīce";
@@ -649,12 +490,6 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Nevar atvērt lapu";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "Lapas iestatījumu izvēlne";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "Paneļu izvēlētājs";
-
 /* Password textbox in Authentication prompt */
 "Password" = "Parole";
 
@@ -694,9 +529,6 @@
 /* Name for button removing current article from reading list in reader mode */
 "Remove from Reading List" = "Noņemt no lasīšanas saraksta";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "Atjaunot aizvērtās cilnes";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "Atiestatīt teksta lielumu";
 
@@ -714,9 +546,6 @@
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Dati nav derīgi";
-
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Lūdzu atļaujiet Firefox piekļuvi ierīces kamerai 'Iestatījumi' -> 'Privātums' -> 'Kamera'.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Skanēt QR kodu";
@@ -762,12 +591,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Labi";
 
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "Meklēšanas ieteikumi";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Drošs savienojums";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Vai sūtīt avārijas ziņojumu lai Mozilla var salabot problēmu?";
 
@@ -810,12 +633,6 @@
 
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "Cilne saņemta no %@";
-
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "Pievienot lasīšanas sarakstam";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "Pievienot grāmatzīmi";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Pieskarieties, lai sāktu";
@@ -862,9 +679,6 @@
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Notīrīt privātos datus";
 
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Notīrīt privātos datus";
-
 /* Default text in search bar for Data Management */
 "Settings.DataManagement.SearchLabel" = "Filtrēt vietnes";
 
@@ -899,15 +713,6 @@
    Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
 "Settings.DisplayTheme.SwitchTitle" = "Automātiski";
 
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "Vienmēr";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Tagad izmantojot izsekošanas aizsardzību";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "Sūtīt lapām Do Not Track signālu, lai norādītu, ka nevēlaties, lai jūs izseko";
-
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Ierīces nosaukums";
 
@@ -920,59 +725,23 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Vispārīgi";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "Notīrīt";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Mājas lapa";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Mājas lapas iestatījumi";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Ievadiet tīmekļa lapu";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Pašreizējā mājas lapa";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Izmantot kopēto saiti";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Lietot pašreizējo lapu";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "Izmantot noklusētos";
-
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "Atverot jaunu cilni:";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "Pielāgot populārās lapas";
 
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Tukša lapa";
 
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "Grāmatzīmes";
-
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox sākumlapa";
 
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "Nesenās grāmatzīmes";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "Apmeklēta";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "Vēsture";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Mājas lapa";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "Rādīt lasīšanas sarakstu";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Jauna cilne";
@@ -1022,38 +791,14 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri saīsnes";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Jūs varat izvēlēties kādus sarakstus Firefox izmantos, lai bloķētu tīmekļa elementus, kas var izsekot jūsu aktivitātēm.";
-
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Izsekošanas aizsardzība";
-
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Ļauj dažiem izsekotājiem darboties, lai lapas darbotos korekti.";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Strikts";
 
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Bloķē visus izsekotājus. Dažas mājas lapas var nedarboties korekti.";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Izsekošana ir jūsu privāto datu vākšana dažādās lapās.";
-
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "Pakalpojumi";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Problēmu novēršana";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "Dzēst";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "Gatavs";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "Rediģēt";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Rādīt vairāk";
@@ -1079,9 +824,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Atvērt ar Firefox";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "Atvērt privātajā režīmā";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Meklēt ar Firefox";
 
@@ -1104,53 +846,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Pārvelciet pa labi vai kreisi ar trijiem pirkstiem lai aizvērtu cilni.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Parastās pārlūkošanas režīms";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Parastās pārlūkošanas režīms";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Sinhronizējiet cilnes, grāmatzīmes, paroles un citas lietas.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "Sinhronizējiet cilnes, paroles un citas lietas.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "Pirmā sinhronizācija var aizņemt zināmu laiku";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Sinhronizē";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Sinhronizē…";
 
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Grāmatzīmes";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Attālinātie klienti";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Sinhronizācija neizdevās";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "Vēsture";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "Paroles";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Sinhronizācija nav pieejema";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Sinhronizācija šobrīd nedarbojas";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "Šobrīd ir tehniskas problēmas ar sinhronizāciju %@";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "Cilnes";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Cilne %1$@ no %2$@";
@@ -1170,20 +870,11 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d cilne(s) nokopētas";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "Meklēt cilnes";
-
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Aizvērt visas cilnes";
 
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "Aizvērt atlasīto cilni";
-
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Atvērt jaunu cilni";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "Atvērt izvēlētās cilnes";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Lapu nevar attēlot lasīšanas skatā.";
@@ -1215,12 +906,6 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Aizvērt visas cilnes";
 
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Jūsu visvairāk apmeklētās mājaslapas te parādīsies.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Sveicināti uz Visbiežāk apmeklētajām lapām";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Aizvākt lapu - %@";
 
@@ -1242,17 +927,8 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "nelasīts";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Atjauniniet Firefox lai pieslēgtos";
-
 /* Username textbox in Authentication prompt */
 "Username" = "Lietotājvārds";
-
-/* Text message in the settings table view */
-"Verify your email address" = "Pārbaudiet savu epasta adresi";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Versija: %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Tīmekļa saturs";

@@ -20,25 +20,10 @@
 "ActivityStream.ContextMenu.AddToShortcuts" = "শর্টকাটে যুক্ত করুন";
 
 /* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "শীর্ষ সাইটে পিন করুন";
-
-/* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "পিন";
-
-/* The title for removing a shortcut action */
-"ActivityStream.ContextMenu.RemoveFromShortcuts" = "শর্টকাট থেকে সরিয়ে ফেলুন";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "পিনকৃত সাইট অপসারণ করুন";
 
 /* The title for the unpinning a topsite action */
 "ActivityStream.ContextMenu.UnpinTopsite" = "আনপিন করুন";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "বুকমার্ক করা হয়েছে";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "পরিদর্শিত";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "পূর্বাবস্থায় ফিরে যান";
@@ -46,50 +31,17 @@
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "ট্যাব: %d";
 
-/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
-"ActivityStream.JumpBackIn.TabGroup.Title" = "\"%@\" এর জন্য আপনার অনুসন্ধান";
-
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "সম্প্রতি সংরক্ষিত";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "সাম্প্রতিক বুকমার্ক";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "আরও";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "Pocket থেকে সুপারিশকৃত";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle2" = "Pocket থেকে সুপারিশকৃত";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "জনপ্রিয়";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "সম্প্রতি পরিদর্শিত";
 
-/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
-"ActivityStream.RecentlySaved.SectionTitle" = "সম্প্রতি সংরক্ষিত";
-
-/* This button will open the library showing all the users bookmarks */
-"ActivityStream.RecentlySaved.ShowAll" = "সব দেখুন";
-
-/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
-"ActivityStream.RecentlyVisited.RemoveButton.Title" = "অপসারণ করুন";
-
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "শর্টকাট";
 
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "সারি: %d";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "সারি সেট কতুন";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "শীর্ষ সাইট";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "ট্যাব যোগ করুন";
@@ -125,23 +77,11 @@
 /* Authentication prompt title */
 "Authentication required" = "অনুমোদন প্রয়োজন";
 
-/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Description" = "এড্রেস বার থেকে সরাসরি %@ অনুসন্ধান করুন";
-
-/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Title" = "%@ দিয়ে অনুসন্ধান করুন";
-
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "পূর্বে";
 
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "পপ-আপ উইন্ডো প্রতিরোধ করুন";
-
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "বুকমার্ক";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "ফোল্ডার";
 
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "শিরোনাম";
@@ -151,15 +91,6 @@
 
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "বুকমার্কসমূহ";
-
-/* A label indicating the action of adding a web page as a bookmark. */
-"Bookmarks.Actions.Add" = "যোগ করুন";
-
-/* A label indicating the action of bookmarking all currently open non private tabs. */
-"Bookmarks.Actions.BookmarkAllTabs" = "সকল ট্যাব বুকমার্ক করুন";
-
-/* A label indicating the action of bookmarking the current tab. */
-"Bookmarks.Actions.BookmarkCurrentTab" = "বর্তমান ট্যাব বুকমার্ক করুন";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "সম্পাদনা";
@@ -173,17 +104,8 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "ফোল্ডার";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "অবস্থান";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "ফোল্ডার নাম";
-
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
 "Bookmarks.Menu.DesktopBookmarks" = "ডেস্কটপ বুকমার্ক";
-
-/* A label indicating all bookmarks that were recently added. */
-"Bookmarks.Menu.RecentlyBookmarked" = "সম্প্রতি বুকমার্ক করা হয়েছে";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "নতুন বুকমার্ক";
@@ -194,17 +116,8 @@
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "নতুন বিভাজক";
 
-/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
-"Bookmarks.Search.SearchBookmarks" = "বুকমার্ক অনুসন্ধান করুন";
-
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "শিরনাম";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "আপনার সংরক্ষণ করা বুকমার্ক এখানে দেখানো হবে।";
 
 /* Describes the date on which the breach occurred */
 "BreachAlerts.BreachDate" = "এই ব্রিচটি ঘটেছে";
@@ -245,14 +158,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "ট্যাব বন্ধ হচ্ছে";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "কম্পিউটার";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "বুকমার্ক লিঙ্ক";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "পরিবর্তন";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "নতুন ব্যক্তিগত ট্যাব খোলা হয়েছে";
@@ -278,12 +185,6 @@
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "নতুন ট্যাবে খুলুন";
 
-/* Context menu item for opening a link in a new private tab */
-"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "নতুন ব্যক্তিগত ট্যাবে লিঙ্ক খুলুন";
-
-/* Context menu item for opening a link in a new tab */
-"ContextMenu.OpenLinkInNewTabButtonTitle" = "নতুন ট্যাবে লিঙ্ক খুলুন";
-
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "ছবি সংরক্ষণ করুন";
 
@@ -307,12 +208,6 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "পেজ লোড করা যাচ্ছে না";
-
-/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "iOS 13 ব্যাবহারকারিদের জন্য, এখন আপনার ফোন ডার্ক মোডে সেট করা থাকলে, Firefox স্বয়ংক্রিয়ভাবেই ডার্ক থিমে পরিবর্তন করে নেয়। এই আচরণটি পরিবর্তন করার জন্য, সেটিংস> থিম এ যান।";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "ডার্ক কীবোর্ড এবং ডার্ক স্প্ল্যাশ স্ক্রিন এখন ডার্ক থিম এর অন্তর্ভুক্ত।";
 
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "অন্তর্নির্মিত বর্ধিত ট্র্যাকিং সুরক্ষা বিজ্ঞাপনকে আপনার চারপাশে অনুসরণ করা থেকে বিরত রাখতে সহায়তা করে। আরও বেশি ট্র্যাকার, বিজ্ঞাপন এবং পপআপগুলি অবরুদ্ধ করতে স্ট্রাইক চালু করুন।";
@@ -364,17 +259,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "ডাউনলোড বাতিল করুন";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Firefox এখনো ডাউনলোডসমূহকে সমর্থন করে না।";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "ডাউনলোড বাতিল হয়েছে";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "ডাউনলোড ব্যর্থ হয়েছে";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "পুনরায় চেষ্টা করুন";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "ডাউনলোড";
@@ -439,18 +328,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "পরবর্তী";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "ভুল ইমেইল? পুনরায় শুরু করতে নীচে সংযোগ বিচ্ছিন্ন করুন।";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "অ্যাকাউন্ট যাচাইকরণ প্রয়োজন";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "আপনাকে %@ যাচাই করতে হবে। Firefox থেকে প্রেরিত যাচাইকরণ লিঙ্কের জন্যে আপনার ইমেইল দেখুন।";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "আরেকটি ডিভাইস সংযুক্ত করুন";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Firefox অ্যাকাউন্ট";
 
@@ -460,32 +337,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "ইন্টারনেট সংযোগ নেই";
 
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "সিঙ্ক এর পছন্দের অপশন খুলুন";
-
-/* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "firefox.com/pair এ QR কোডটি স্ক্যান করুন";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "অপসারণ করুন";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "একজন পৃথক ব্যাবহারকারী হিসেবে সাইন ইন করতে এই ডিভাইসের সাথে যুক্ত Firefox Account টি অপসারণ করুন।";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "অ্যাকাউন্ট অপসারণ করুন";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "পুনরায় ইমেল পাঠান";
-
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "আপনার ক্যামেরা দিয়ে সাইন ইন করুন";
-
-/* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "অ্যাকাউন্টের মাধ্যমে ডিভাইসের মধ্যে Firefox সিঙ্ক করুন।";
-
-/* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Firefox অ্যাকাউন্ট খুলুন।";
 
 /* FxA sign in view qr code instructions */
 "fxa.signin.qr-link-instruction" = "আপনার কম্পিউটারে Firefox খুলুন এবং firefox.com/pair এ যান";
@@ -493,23 +346,11 @@
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "স্ক্যান করার জন্য প্রস্তুত";
 
-/* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "সিঙ্ক চালু করুন";
-
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "পরিবর্তে ইমেল ব্যবহার করুন";
 
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "সিঙ্ক করতে সাইন ইন করুন";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "আপনার অন্যান্য ডিভাইস থেকে ট্যাব, বুকমার্ক এবং পাসওয়ার্ড এখানে উপভোগ করুন।";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "এখন সিঙ্ক করুন";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "আপনার সাথে আপনার ওয়েব নিন";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Firefox সিঙ্ক %@ এর সাথে যুক্ত হয়েছে";
@@ -532,9 +373,6 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "একটি ডিভাইস Firefox সিঙ্ক থেকে সংযোগ বিচ্ছিন্ন হয়েছে";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "আপনার অন্য ডিভাইস থেকে খুলে রাখা ট্যাব, বুকমার্ক, এবং পাসওয়ার্ড পান।";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "সাহায্য";
 
@@ -556,9 +394,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "আজ এবং গতকাল";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "সাম্প্রতিক ইতিহাস মুছে ফেলা হলে ইতিহাস, কুকিজ, এবং অন্যান্য ব্রাউজার তথ্য চলে যাবে।";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "যে ওয়েবসাইটগুলো আপনি সদ্য দর্শন করেছেন সেগুলি এখানে দেখাবে।";
 
@@ -567,15 +402,6 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "আপনার অন্যান্য ডিভাইস সমূহের ট্যাবের তালিকা দেখতে সাইন ইন করুন।";
-
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "আপনার অ্যাকাউন্ট যাচাই করা প্রয়োজন।";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "অন্যান্য ডিভাইস থেকে আপনার ট্যাবগুলি এখানে দেখতে চান?";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "আপনার অন্যান্য ডিভাইস থেকে ট্যাবের তালিকা দেখতে ট্যাব সিঙ্কিং চালু করুন।";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox সিঙ্ক";
@@ -586,35 +412,14 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "সদ্য বন্ধ হয়েছে";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d টি ডিভাইস সংযুক্ত আছে";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "সিঙ্ক করা ডিভাইসগুলি";
-
 /* Accessibility label for the tab toolbar indicating the Home button. */
 "Home" = "হোম";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "বাতিল করুন";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "আপনি যেকোনো সময় সেটিংসে গিয়ে পরিবর্তন করতে পারবেন";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "হোমপেজ হিসাবে সেট করুন";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "এই ওয়েপেজকে আপনার হোমপেজ হিসাবে ব্যবহার করবেন কি?";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "বুকমার্ক";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "ইতিহাস থেকে মুছে ফেলুন";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "নতুন ব্যক্তিগত ট্যাবে খুলুন";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "নতুন ট্যাবে খুলুন";
@@ -664,15 +469,6 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "পূর্ববর্তী ট্যাব দেখান";
 
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
-"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Auto Close চালু করুন";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox ট্যাবগুলি বন্ধ করবে, যা আপনি গত মাসে দেখেননি।";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
-"InactiveTabs.TabTray.AutoClosePrompt.Title" = "এক মাস পর স্বয়ংক্রিয়ভাবে বন্ধ?";
-
 /* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
 "InactiveTabs.TabTray.CloseButtonTitle" = "সব নিষ্ক্রিয় ট্যাব বন্ধ করুন";
 
@@ -691,41 +487,17 @@
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ClearRecentHistory" = "সাম্প্রতিক ইতিহাস মুছুন";
 
-/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.DownloadLink" = "ডাউনলোড লিংক";
-
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "আবার খুঁজুন";
 
-/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.NewNormalTab" = "নতুন সাধারণ ট্যাব";
-
-/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.OpenLinkInBackground" = "ব্যাকগ্রাউন্ডে লিঙ্ক খুলুন";
-
-/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.OpenLinkInNewTab" = "নতুন ট্যাবে লিংক খুলুন";
-
-/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.SavePageAs" = "পেজ নতুনভাবে সংরক্ষণ…";
-
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "বুকমার্ক";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.Edit" = "সম্পাদনা";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.File" = "ফাইল";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.History" = "ইতিহাস";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Tools" = "টুল";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.View" = "প্রদর্শন";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Window" = "উইন্ডো";
@@ -748,9 +520,6 @@
 /* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowLastTab" = "শেষ ট্যাব দেখান";
 
-/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowTabNumber" = "ট্যাব নম্বর 1-9 দেখান";
-
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "বড় করুন";
 
@@ -759,9 +528,6 @@
 
 /* History tableview section header */
 "Last month" = "গত মাস";
-
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "শেষ সিঙ্ক হয়েছে: %@";
 
 /* History tableview section header */
 "Last week" = "গত সপ্তাহ";
@@ -805,12 +571,6 @@
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "AutoFill চালু করুন";
 
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "সংশোধিত";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "লগইন";
-
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "সেভ করবেন না";
 
@@ -834,15 +594,6 @@
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "আপডেট করুন";
-
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "লগইন";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "সব";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "ওয়েবসাইট";
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "ফিল্টার";
@@ -885,9 +636,6 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "বুকমার্ক করা হয়েছে";
 
-/* Toast displayed to the user after adding the item to the Top Sites. */
-"Menu.AddPin.Confirm" = "টপ সাইটগুলোতে পিন করা হয়েছে";
-
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "শর্টকাট যুক্ত হয়েছে";
 
@@ -906,44 +654,14 @@
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "ডাউনলোড";
 
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "উন্নত ট্র্যাকিং সুরক্ষা এখন এই সাইটের জন্য বন্ধ আছে।";
-
-/* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "উন্নত ট্র্যাকিং সুরক্ষা এই সাইটের জন্য চালু আছে।";
-
-/* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox ক্রস-সাইট ট্র্যাকার, সোশ্যাল ট্র্যাকার, ক্রিপ্টোমিনিয়ারস এবং ফিঙ্গারপ্রিন্টারগুলিকে অবরুদ্ধ করে।";
-
-/* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox ক্রস-সাইট ট্র্যাকার, সোশ্যাল ট্র্যাকার, ক্রিপ্টোমিনিয়ারস, ফিঙ্গারপ্রিন্টারগুলি ও ট্র্যাকিং কন্টেন্টকে অবরুদ্ধ করে।";
-
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "ইতিহাস";
-
-/* Label for the button displayed in the menu used to stop the reload of the webpage */
-"Menu.Library.StopReload" = "থামুন";
-
-/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
-"Menu.ManageAccount.Label" = "অ্যাকাউন্ট পরিচালনা করুন %@";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
 "Menu.NightModeTurnOff.Label2" = "নাইট মোড বন্ধ করুন";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "নাইট মোড সক্রিয় করুন";
-
-/* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "নাইট মোড চালু করুন";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "চিত্র ব্লক করুন";
-
-/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
-"Menu.NoImageModeShowImages.Label" = "ছবি প্রদর্শন করুন";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "পেজ একশন";
 
 /* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
 "Menu.Passwords.Label" = "পাসওয়ার্ড";
@@ -966,41 +684,20 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "বুকমার্ক অপসারণ";
 
-/* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "টপ সাইটগুলো থেকে সরানো হয়েছে";
-
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ট্যাব প্রেরিত";
-
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "ব্লক করা হয়েছে";
 
 /* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
 "Menu.TrackingProtection.Details.Verifier" = "%@ যাচাই করেছে";
 
-/* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "এই পাতায় Firefox এর পরিচিত কোনও ট্র্যাকার সনাক্ত করা যায়নি।";
-
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "সুরক্ষা সেটিংস";
-
-/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "%@ এর জন্য সুরক্ষা";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "ট্র্যাকিং এর জন্য কনটেন্ট";
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "সামাজিক ট্র্যাকার";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox পেজের অংশবিশেষ ব্লক করছে, যা আপনার ব্রাউজিং ট্র্যাক করতে পারে।";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "অনলাইন ট্র্যাকার ব্লক করুন";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "ক্রস-সাইট ট্র্যাকিং কুকিজ";
 
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "ক্রস সাইট ট্র্যাকার";
@@ -1023,47 +720,8 @@
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "আপনার আরও সম্পূর্ণ এবং বিশদ প্রোফাইল তৈরি করতে সামাজিক নেটওয়ার্ক অন্য ওয়েবসাইটে ট্র্যাকার রাখে। এই ট্র্যাকারদের ব্লক করলে আপনার অনলাইন কার্যক্রম কতটা সোশ্যাল মিডিয়া সংস্থা দেখতে পারে তা হ্রাস পায়।";
 
-/* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "এই সাইটের জন্য নিষ্ক্রিয়";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "ট্র্যাকিং সুরক্ষা এখন এই সাইটের জন্য বন্ধ।";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "ট্র্যাকিং সুরক্ষা সক্ষম করুন";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "এই সাইটের জন্য সক্রিয়";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "ট্র্যাকিং সুরক্ষা এখন এই সাইটের জন্য চালু আছে।";
-
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "ফিঙ্গারপ্রিন্টার";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "ব্লক করা ক্রস-সাইট ট্র্যাকিং কুকি";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "ব্লক করা ক্রিপ্টোমাইনার";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "ব্লক করা ফিঙ্গারপ্রিন্টার";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "ব্লক করা সোশ্যাল ট্র্যাকার";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "যেসব ট্র্যাকার বিভিন্ন ওয়েবসাইটে আপনার ব্রাউজিং তথ্য-উপাত্ত সংগ্রহ করে, ট্র্যাকিং সুরক্ষা কিভাবে ওইসব অনলাইন ট্র্যাকার ব্লক করে, সেই সম্পর্কে আরও জানুন।";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "এই পৃষ্ঠায় কোন ট্র্যাকিং উপাদান সনাক্ত হয়নি।";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "এই সাইটটিতে এমন উপাদান রয়েছে যা আপনার ব্রাউজিং ট্র্যাক করতে পারে। আপনি সুরক্ষা নিষ্ক্রিয় করে রেখেছেন।";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "এই সাইটের জন্য সক্রিয় করুন";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "নতুন কি আছে";
@@ -1099,13 +757,6 @@
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "ব্রাউজিং শুরু করুন";
 
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
-"Onboarding.WhatsNew.RecentSearches.Title" = "সাম্প্রতিক সার্চ";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
-   The title for the new onboarding card letting users know what is new in Firefox iOS */
-"Onboarding.WhatsNew.Title" = "Firefox এ নতুন কি";
-
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "ওহহ! Firefox ক্রাশ করেছে";
 
@@ -1124,23 +775,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "পাতা খোলা সম্ভব নয়";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "পেজ অপশন মেনু";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "প্যানেল নির্বাচক";
-
 /* Password textbox in Authentication prompt */
 "Password" = "পাসওয়ার্ড";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "আপনার Firefox অ্যাকাউন্ট থেকে আপনার কোনও লগইন তথ্য সিঙ্ক করা নেই";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "উপলব্ধ লগইন তথ্য:";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox লগইন তথ্য";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "এটা আপনার ছবি ক্যামেরা রোলে সংরক্ষণ অনুমোদন করবে।";
@@ -1208,9 +844,6 @@
 /* Reopen alert title shown at home page. */
 "ReopenAlert.Title" = "শেষ বন্ধ ট্যাব পুনরায় খুলুন";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "বন্ধ ট্যাব পুনরায় খুলুন";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "অক্ষরের আকার রিসেট করুন";
 
@@ -1228,9 +861,6 @@
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "উপাত্তটি অশুদ্ধ";
-
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "অনুগ্রহ করে 'Settings' -> 'Privacy' -> 'Camera' গিয়ে Firefox কে আপনার ডিভাইস'র ক্যামেরা ব্যবহারের অনুমতি দিন।";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR কোড স্ক্যান করুন";
@@ -1279,12 +909,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ঠিক আছে";
 
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "পরামর্শের জন্য সন্ধান করুন";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "সুরক্ষিত সংযোগ";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "ক্রাশ সম্পর্কে একটি রিপোর্ট Mozilla-কে পাঠান যাতে এই সমস্যাটি ঠিক করতে পারে?";
 
@@ -1325,9 +949,6 @@
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "পাঠান";
 
-/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Firefox এ সাইন ইন করুন";
-
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "অন্য ডিভাইস থেকে নতুন ট্যাব এসেছে।";
 
@@ -1339,12 +960,6 @@
 
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "%@ থেকে প্রাপ্ত ট্যাব";
-
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "পঠিতব্য তালিকায় যোগ করুন";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "বুকমার্ক";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "শুরু করতে স্পর্শ করুন";
@@ -1393,9 +1008,6 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "ব্যাক্তিগত ডাটা মুছে দিন";
-
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "ব্যাক্তিগত ডাটা মুছে দিন";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "ক্লিপবোর্ডে অনুলিপি করা হয়েছে";
@@ -1467,15 +1079,6 @@
 /* Title in main app settings for Theme settings */
 "Settings.DisplayTheme.Title.v2" = "থিম";
 
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "সবসময়";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "শুধুমাত্র ট্র্যাকিং সুরক্ষা ব্যবহার করার সময়";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "যেসকল ওয়েবসাইট কর্তৃক আপনি ট্রাকিং হতে আগ্রহী নন, সেগুলোকে আমাকে অনুসরণ করোনা সংকেত পাঠান";
-
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "ডিভাইসের নাম";
 
@@ -1509,29 +1112,14 @@
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
 "Settings.Home.Option.StartAtHome.Title" = "খোলা পর্দা";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "মুছে দিন";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "হোমপেজ";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "হোমপেজ সেটিংস্‌";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "একটা ওয়েবপেজের নাম দিন";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "বর্তমান হোমপেজ";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "কপি করা লিঙ্ক ব্যবহার করুন";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "বর্তমান পেজ ব্যবহার করুন";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "ডিফল্ট ব্যবহার করুন";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "লগইন এবং পাসওয়ার্ড";
@@ -1539,53 +1127,14 @@
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "কাস্টম URL";
 
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "যখন আপনি একটা নতুন ট্যাব খুলছেন:";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "শীর্ষস্থানীয় সাইট কাস্টমাইজ করুন";
-
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "ফাঁকা পেজ";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "বুকমার্কসমূহ";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "আপনার সবচেয়ে বেশি দেখা সাইট";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter2" = "আপনার সংরক্ষণকৃত বা ভিজিট করা সাইট";
-
-/* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Firefox Home কাস্টমাইজ করুন";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox Home";
 
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "সাম্প্রতিক বুকমার্ক";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "পরিদর্শিত";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "ইতিহাস";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "হোমপেজ";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "Pocket থেকে সুপারিশকৃত";
-
-/* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "ওয়েব থেকে দারুন সব কন্টেন্ট।";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "আপনার পড়ার তালিকা দেখান";
-
-/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
-"Settings.NewTab.Option.RecommendedByPocket" = "সুপারিশ করেছে %@";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "নতুন ট্যাব";
@@ -1647,32 +1196,11 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri শর্টকাটসমূহ";
 
-/* Section title for all studies that are currently active */
-"Settings.Studies.Active.SectionName" = "সক্রিয়";
-
-/* Section title for all studies that are completed */
-"Settings.Studies.Completed.SectionName" = "সম্পন্ন হয়েছে";
-
-/* Button title displayed next to each study allowing the user to opt-out of the study */
-"Settings.Studies.Remove.Button" = "অপসারণ করুন";
-
-/* Title displayed in header of the Studies panel */
-"Settings.Studies.SectionName" = "অধ্যয়ন";
-
-/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
-"Settings.Studies.Title" = "অধ্যয়ন";
-
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Toggle.Link" = "আরও জানুন।";
 
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Toggle.Message" = "কিছু দিন পর Firefox স্টাডিস ইনস্টল করতে এবং চালাতে পারে।";
-
-/* Toggled OFF to opt-out of studies */
-"Settings.Studies.Toggle.Off" = "বন্ধ";
-
-/* Toggled ON to participate in studies */
-"Settings.Studies.Toggle.On" = "চালু";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "অধ্যয়ন";
@@ -1698,23 +1226,11 @@
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "প্রস্তুত হোন!";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "আপনাকে ট্রাকিং করে এমন ওয়েব এলিমেন্টসমূহ ব্লক করতে, Firefox কোন তালিকা ব্যবহার করবে তা আপনি পছন্দ করে দিতে পারবেন।";
-
-/* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "সুরক্ষা এবং কর্মক্ষমতার মধ্যে ভারসাম্যপূর্ণ।";
-
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "BLOCKS";
 
-/* Explanation of strict mode. */
-"Settings.TrackingProtection.Info.StrictTitle" = "শক্তিশালী নিরাপত্তা দেয় , কিন্তু কিছু সাইট ঠিকঠাক কাজ নাও করতে পারে ।";
-
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "আরও জানুন";
-
-/* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "আরও তথ্য…";
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "লক্ষ্যযুক্ত বিজ্ঞাপনগুলি হ্রাস করে এবং বিজ্ঞাপনদাতাদেরকে আপনার ব্রাউজিং ট্র্যাক করা থেকে বিরত রাখতে সহায়তা করে।";
@@ -1734,53 +1250,17 @@
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "ট্র্যাকিং সুরক্ষা";
 
-/* Additional information about the strict level setting */
-"Settings.TrackingProtection.StrictLevelInfoFooter" = "ট্র্যাকারদের ব্লক করলে কিছু ওয়েবসাইটের কার্যকারিতা প্রভাবিত হতে পারে।";
-
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "আদর্শ (ডিফল্ট)";
-
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "এমন কিছু ট্র্যাকার কে অনুমোদন দেয় যেনো ওয়েবসাইট সঠিকভাবে কাজ করতে পারে।";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "কঠোর";
 
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "পরিচিত ট্র্যাকার ব্লক করে। কিছু ওয়েবসাইট সঠিকভাবে কাজ নাও করতে পারে।";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "বিভিন্ন ওয়েবসাইটে আপনার ব্রাউজিংয়ের তথ্য-উপাত্ত আপনাকে না জানিয়ে, অন্য কেউ সংগ্রহ করাকে ট্রাকিং বলে।";
-
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "ট্র্যাকিং সুরক্ষা বাড়ানো হয়েছে";
 
-/* Translation settings footer describing how language detection and translation happens. */
-"Settings.TranslateSnackBar.SectionFooter" = "ডিভাইসে ওয়েব পাতার ভাষা সনাক্ত করা হয় এবং একটি দূরবর্তী পরিষেবা থেকে একটি অনুবাদ দেওয়া হয়।";
-
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "পরিষেবাসমূহ";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchSubtitle" = "আপনার ডিফল্ট ভাষা থেকে আলাদা ভাষাতে লিখিত কোন সাইট অনুবাদ করার প্রস্তাব দেওয়া হবে।";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchTitle" = "যে ভাষায় অনুবাদ রয়েছে";
-
-/* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "অনুবাদ";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "ট্রাবলশুট";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "মুছুন";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "সম্পন্ন";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "সম্পাদনা";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "আরো দেখাও";
@@ -1812,9 +1292,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Firefox এ খুলুন";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "ব্যক্তিগত মোডে খুলুন";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Firefox এ অনুসন্ধান করুন";
 
@@ -1837,59 +1314,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "ট্যাবটি বন্ধ করার জন্য ডানদিকে অথবা বাঁদিকে তিনটি আঙ্গুল দিয়ে সোয়্যাপ করুন।";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "সাধারণ ব্রাউজিং মোড";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "ব্যক্তিগত ব্রাউজিং মোড";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "আপনার ট্যাব, বুকমার্ক, পাসওয়ার্ড এবং বিশদ জিনিসপত্র সুসংগত করুন।";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "আপনার ট্যাব, পাসওয়ার্ড এবং আরোকিছু সিঙ্ক করুন";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "আপনার প্রথম সিঙ্কে একটু সময়ে নিতে পারে";
-
-/* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "কোন অ্যাকাউন্ট নেই? ডিভাইসের মধ্যে Firefox সিঙ্ক করতে একটি তৈরি করুন।";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "সিঙ্ক করা হচ্ছে";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "সিঙ্ক করা হচ্ছে…";
 
-/* Panel accessibility label */
-"Synced Tabs" = "সিঙ্ককৃত ট্যাব";
-
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "বুকমার্কগুলি";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "দূরবর্তী ক্লায়েন্টগুলি";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "সিঙ্কিং ব্যর্থ হয়েছে";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "ইতিহাস";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "লগইনগুলি";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "সিঙ্ক এখন অপ্রাপ্য আছে";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "সিঙ্ক এখন অফলাইন আছে";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "সিঙ্ক এখন সিঙ্কিং %@ অসুবিধা বোধ করছে";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "ট্যাবগুলি";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "ট্যাব %2$@ এর %1$@";
@@ -1909,17 +1338,11 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d ট্যাব(গুলি) বন্ধ হয়েছে";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "অনুসন্ধান ট্যাব";
-
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "ট্যাব যোগ করুন";
 
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "সকল ট্যাব বন্ধ করুন";
-
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "নির্বাচিত ট্যাব বন্ধ করুন";
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "বর্তমানে নির্বাচিত ট্যাব।";
@@ -1930,26 +1353,8 @@
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "নিষ্ক্রিয় ট্যাব";
 
-/* The section header for tabs opened last week */
-"TabTray.LastWeek.Header" = "গত সপ্তাহ";
-
-/* The title on the button to copy the tab address. */
-"TabTray.MoreMenu.Copy" = "অনুলিপি";
-
-/* The section header for tabs opened before last week */
-"TabTray.Older.Header" = "পুরাতন";
-
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "নতুন ট্যাব খুলুন";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "নির্বাচিত ট্যাব খুলুন";
-
-/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
-"TabTray.OtherTabs.Title" = "অন্যান্য ট্যাব";
-
-/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
-"TabTray.RecentlyClosed.SectionTitle" = "সম্প্রতি বন্ধ করা ট্যাব";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "ব্যক্তিগত";
@@ -1960,17 +1365,8 @@
 /* The title on the button to look at regular tabs. */
 "TabTray.SegmentedControlTitles.Tabs" = "ট্যাব";
 
-/* The button title to see more options to perform on the tab. */
-"TabTray.SwipeMenu.More" = "আরো";
-
 /* The title for the tab tray */
 "TabTray.Title" = "ট্যাব খুলুন";
-
-/* The section header for tabs opened today */
-"TabTray.Today.Header" = "আজ";
-
-/* The section header for tabs opened yesterday */
-"TabTray.Yesterday.Header" = "গতকাল";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "পেজটি রিডার ভিউতে দেখানো যাচ্ছে না।";
@@ -2005,12 +1401,6 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "সকল ট্যাব বন্ধ করুন";
 
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "আপনার সর্বাধিক দেখা ওয়েবসাইটগুলি এখানে দেখানো হবে।";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "শীর্ষ সাইটগুলিতে আপনাকে স্বাগতম";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "পৃষ্ঠাকে সরিয়ে দিন - %@";
 
@@ -2035,20 +1425,11 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "পড়া হয়নি";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "সংযোগ স্থাপন করতে Firefox আপগ্রেড করুন।";
-
 /* Debug option */
 "Use stage servers" = "স্টেজ সার্ভার ব্যবহার করুন";
 
 /* Username textbox in Authentication prompt */
 "Username" = "ব্যবহারকারীর নাম";
-
-/* Text message in the settings table view */
-"Verify your email address" = "আপনার ইমেল যাচাই করুন।";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "সংস্করণ %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "ওয়েব সম্পর্কিত বিষয়বস্তু";

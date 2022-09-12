@@ -20,25 +20,10 @@
 "ActivityStream.ContextMenu.AddToShortcuts" = "Pridėti prie leistukų";
 
 /* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Įsegti prie lankomiausių svetainių";
-
-/* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "Įsegti";
-
-/* The title for removing a shortcut action */
-"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Pašalinti iš leistukų";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Pašalinti įsegtą svetainę";
 
 /* The title for the unpinning a topsite action */
 "ActivityStream.ContextMenu.UnpinTopsite" = "Išsegti";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "Adresyne";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "Lankytasi";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "Sugrįžkite";
@@ -46,50 +31,17 @@
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Kortelių: %d";
 
-/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
-"ActivityStream.JumpBackIn.TabGroup.Title" = "Jūsų paieška „%@“";
-
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "Paskiausiai įtraukta";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "Paskiausi adresyno įrašai";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "Daugiau";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "„Pocket“ rekomenduoja";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle2" = "„Pocket“ rekomenduoja";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "Populiaru";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Paskiausiai lankytos svetainės";
 
-/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
-"ActivityStream.RecentlySaved.SectionTitle" = "Paskiausiai įtraukta";
-
-/* This button will open the library showing all the users bookmarks */
-"ActivityStream.RecentlySaved.ShowAll" = "Rodyti viską";
-
-/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
-"ActivityStream.RecentlyVisited.RemoveButton.Title" = "Pašalinti";
-
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Leistukai";
 
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "Eilutės: %d";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Nustatyti eilutes";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Lankomiausios svetainės";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Pridėti kortelę";
@@ -122,23 +74,11 @@
 /* Authentication prompt title */
 "Authentication required" = "Reikalingas tapatumo nustatymas";
 
-/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Description" = "Ieškokite „%@“ tiesiai iš adreso lauko";
-
-/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Title" = "Ieškoti per „%@“";
-
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Atgal";
 
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "Blokuoti iškylančiuosius langus";
-
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Adresyno įrašas";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Aplankas";
 
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "Pavadinimas";
@@ -148,15 +88,6 @@
 
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Adresynas";
-
-/* A label indicating the action of adding a web page as a bookmark. */
-"Bookmarks.Actions.Add" = "Įtraukti";
-
-/* A label indicating the action of bookmarking all currently open non private tabs. */
-"Bookmarks.Actions.BookmarkAllTabs" = "Įrašyti visas korteles į adresyną";
-
-/* A label indicating the action of bookmarking the current tab. */
-"Bookmarks.Actions.BookmarkCurrentTab" = "Įrašyti šią kortelę į adresyną";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "Keisti";
@@ -170,17 +101,8 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Aplankas";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Vieta";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Aplanko pavadinimas";
-
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
 "Bookmarks.Menu.DesktopBookmarks" = "Kompiuterio adresynas";
-
-/* A label indicating all bookmarks that were recently added. */
-"Bookmarks.Menu.RecentlyBookmarked" = "Paskiausi adresyno įrašai";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Naujas adresas";
@@ -191,17 +113,8 @@
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "Naujas skirtukas";
 
-/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
-"Bookmarks.Search.SearchBookmarks" = "Ieškoti adresyne";
-
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Pavadinimas";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "Įrašyti adresai atsiras čia.";
 
 /* Describes the date on which the breach occurred */
 "BreachAlerts.BreachDate" = "Šis pažeidimas nutiko";
@@ -242,14 +155,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "Kortelės užvėrimas";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "kompiuteris";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "Įtraukti saitą į adresyną";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Perjungti";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Atverta nauja privačioji kortelė";
@@ -274,12 +181,6 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Atverti naujoje kortelėje";
-
-/* Context menu item for opening a link in a new private tab */
-"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Atverti saitą naujoje privačioje kortelėje";
-
-/* Context menu item for opening a link in a new tab */
-"ContextMenu.OpenLinkInNewTabButtonTitle" = "Atverti saitą naujoje kortelėje";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Įrašyti paveikslą";
@@ -310,12 +211,6 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Nepavyko įkelti tinklalapio.";
-
-/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "Turintiems „iOS“ 13, „Firefox“ automatiškai naudos tamsų grafinį apvalkalą, jei telefone įjungta tamsioji veiksena. Norėdami tai pakeisti, eikite į „Nuostatos“ > „Grafinis apvalkalas“.";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "Tamsus grafinis apvalkalas dabar naudoja tamsią klaviatūrą bei tamsų paleidimo ekraną.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "Integruota išplėsta apsauga nuo stebėjimo padeda neleisti reklamoms sekti jus naršant. Įjunkite griežtą režimą, norėdami blokuoti dar daugiau stebėjimo elementų, reklamų, ir iššokančių langų.";
@@ -367,17 +262,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "Atsisakyti atsiuntimo";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Atsiuntimų „Firefox“ dar nepalaiko.";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Atsiuntimas nutrauktas";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "Atsiuntimas nepavyko";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "Kartoti";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Atsiuntimai";
@@ -451,18 +340,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Pirmyn";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Ne tas el. paštas? Atsijunkite žemiau, norėdami pradėti iš naujo.";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "Reikalingas paskyros patvirtinimas";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Jūs turite patvirtinti %@. Savo el. pašte ieškokite patvirtinimo nuorodos iš „Firefox“.";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Susieti kitą įrenginį";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "„Firefox“ paskyra";
 
@@ -472,32 +349,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Nėra ryšio su internetu";
 
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Atverti sinchronizavimo nuostatas";
-
-/* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "Nuskaitykite QR kodą iš firefox.com/pair";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "Pašalinti";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Pašalinti su šiuo įrenginiu susietą „Firefox“ paskyrą, kad būtų galima prisijungti su kitu naudotoju.";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "Pašalinti paskyrą";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "Siųsti laišką dar kartą";
-
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "Prisijunkite su savo kamera";
-
-/* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "Sinchronizuokite „Firefox“ tarp įrenginių su paskyra.";
-
-/* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Susikurkite „Firefox“ paskyrą.";
 
 /* FxA sign in view qr code instructions */
 "fxa.signin.qr-link-instruction" = "Atverkite „Firefox“ savo kompiuteryje, ir eikite į firefox.com/pair";
@@ -505,23 +358,11 @@
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Pasiruošti nuskaitymui";
 
-/* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "Įjungti „Sync“";
-
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "Naudoti el. paštą";
 
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Prisijungti prie „Sync“";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "Gaukite korteles, adresyną bei slaptažodžius iš kitų savo įrenginių.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Sinchronizuoti dabar";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "Pasiimkite savo saityną kartu";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "„Firefox Sync“ prisijungė prie „%@“";
@@ -544,9 +385,6 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Įrenginys buvo atjungtas nuo „Firefox Sync“";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "Gaukite atviras korteles, adresyną bei slaptažodžius iš kitų savo įrenginių.";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Žinynas";
 
@@ -568,9 +406,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Šiandienos ir vakar";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Po žurnalo valymo bus pašalinta naršymo žurnalas, slapukai, ir kiti naršyklės duomenys.";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "Čia atsiras jūsų paskiausiai lankytos svetainės.";
 
@@ -579,15 +414,6 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Prisijunkite, norėdami peržiūrėti kituose įrenginiuose esančias korteles.";
-
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Jūsų paskyra turi būti patvirtinta.";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Norite čia matyti savo korteles iš kitų įrenginių?";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Įjunkite kortelių sinchronizavimą, norėdami peržiūrėti kituose įrenginiuose esančias korteles.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "„Firefox Sync“";
@@ -598,35 +424,14 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Paskiausiai užverta";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "Prijungta įrenginių: %d";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "Sinchronizuoti įrenginiai";
-
 /* Accessibility label for the tab toolbar indicating the Home button. */
 "Home" = "Pradžia";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "Atsisakyti";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "Vėliau tai galėsite pakeisti nuostatose";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Nustatyti pradžios tinklalapį";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Ar norite šį tinklalapį naudoti kaip savo pradžios tinklalapį?";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Įtraukti į adresyną";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Ištrinti iš žurnalo";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Atverti naujoje privačioje kortelėje";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Atverti naujoje kortelėje";
@@ -676,15 +481,6 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Rodyti ankstesnę kortelę";
 
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
-"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Įjungti automatinį kortelių užvėrimą";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "„Firefox“ gali užverti korteles, kuriomis paskutinį mėnesį nesinaudojote.";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
-"InactiveTabs.TabTray.AutoClosePrompt.Title" = "Užverti automatiškai po mėnesio?";
-
 /* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
 "InactiveTabs.TabTray.CloseButtonTitle" = "Užverti visas neaktyvias korteles";
 
@@ -703,41 +499,17 @@
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ClearRecentHistory" = "Žurnalo valymas";
 
-/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.DownloadLink" = "Atsiųsti saitą";
-
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Ieškoti toliau";
 
-/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.NewNormalTab" = "Nauja normali kortelė";
-
-/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.OpenLinkInBackground" = "Atverti saitą fone";
-
-/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.OpenLinkInNewTab" = "Atverti saitą naujoje kortelėje";
-
-/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.SavePageAs" = "Įrašyti tinklalapį kaip…";
-
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "Adresynas";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.Edit" = "Keisti";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.File" = "Failas";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.History" = "Žurnalas";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Tools" = "Priemonės";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.View" = "Rodymas";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Window" = "Langas";
@@ -760,12 +532,6 @@
 /* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowLastTab" = "Rodyti paskutinę kortelę";
 
-/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowTabNumber" = "Rodyti kortelę nr. 1-9";
-
-/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.UndoCloseTab" = "Atšaukti kortelės užvėrimą";
-
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "Padidinti";
 
@@ -774,9 +540,6 @@
 
 /* History tableview section header */
 "Last month" = "Praėjęs mėnuo";
-
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Paskiausiai sinchronizuota: %@";
 
 /* History tableview section header */
 "Last week" = "Praėjusi savaitė";
@@ -814,9 +577,6 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.Onboarding.LearnMoreButtonTitle" = "Sužinoti daugiau";
 
-/* Message shown when you enter Logins & Passwords for the first time. */
-"Logins.Onboarding.Message" = "Dabar jūsų prisijungimai ir slaptažodžiai yra apsaugoti su „Face ID“, „Touch ID“ arba įrenginio apsaugos kodu.";
-
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
 "Logins.PasscodeRequirement.Warning" = "Norėdami naudoti automatinio užpildymo funkciją su „Firefox“, turite įjungti įrenginio apsaugos kodą.";
 
@@ -828,12 +588,6 @@
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Įjungti automatinį užpildymą";
-
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "Atnaujinta";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "Prisijungimas";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Neįrašyti";
@@ -858,15 +612,6 @@
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "Atnaujinti";
-
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "Prisijungimas";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "Visi";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "Svetainė";
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtras";
@@ -909,9 +654,6 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Įtraukta į adresyną";
 
-/* Toast displayed to the user after adding the item to the Top Sites. */
-"Menu.AddPin.Confirm" = "Įsegta prie lankomiausių svetainių";
-
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "Pridėta prie leistukų";
 
@@ -930,44 +672,14 @@
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Atsiuntimai";
 
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "Išplėsta apsauga nuo stebėjimo šioje svetainėje išjungta.";
-
-/* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "Išplėsta apsauga nuo stebėjimo šioje svetainėje įjungta.";
-
-/* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "„Firefox“ blokuoja tarp svetainių veikiančius stebėjimo elementus, soc. tinklų stebėjimo elementus, kriptovaliutų kasėjus, ir skaitmeninių atspaudų stebėjimą.";
-
-/* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "„Firefox“ blokuoja tarp svetainių veikiančius stebėjimo elementus, soc. tinklų stebėjimo elementus, kriptovaliutų kasėjus, skaitmeninių atspaudų stebėjimą, ir stebėjimui naudojamas turinį.";
-
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "Žurnalas";
-
-/* Label for the button displayed in the menu used to stop the reload of the webpage */
-"Menu.Library.StopReload" = "Stabdyti";
-
-/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
-"Menu.ManageAccount.Label" = "Tvarkyti „%@“ paskyrą";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
 "Menu.NightModeTurnOff.Label2" = "Išjungti nakties veikseną";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "Įjungti nakties veikseną";
-
-/* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "Įjungti nakties veikseną";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "Blokuoti paveikslus";
-
-/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
-"Menu.NoImageModeShowImages.Label" = "Rodyti paveikslus";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "Tinklalapio veiksmai";
 
 /* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
 "Menu.Passwords.Label" = "Slaptažodžiai";
@@ -990,41 +702,20 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Adresas pašalintas";
 
-/* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "Pašalinta iš lankomiausių svetainių";
-
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Kortelė nusiųsta";
-
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "Užblokuota";
 
 /* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
 "Menu.TrackingProtection.Details.Verifier" = "Tai liudija „%@“";
 
-/* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Tinklalapyje nerasta „Firefox“ žinomų stebėjimo elementų.";
-
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Apsaugos nuostatos";
-
-/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "Apsaugos, skirtos %@";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "Stebėjimui naudojamas turinys";
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "Socialiniai stebėjimo elementai";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "„Firefox“ blokuoja jūsų naršymą galinčias stebėti šio tinklalapio dalis.";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Blokuoti stebėjimo elementus";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "Tarp svetainių veikiantys stebėjimo slapukai";
 
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Tarp svetainių veikiantys stebėjimo elementai";
@@ -1047,47 +738,8 @@
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Socialiniai tinklai naudoja stebėjimo įrankius kitose svetainėse, kad sudarytų išsamesnį ir tikslingesnį jūsų profilį. Blokuojant šį stebėjimą socialinės žiniasklaidos kompanijos gauna mažiau informacijos apie tai, ką jūs veikiate internete.";
 
-/* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "Šioje svetainėje išjungta";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "Apsauga nuo stebėjimo šioje svetainėje išjungta.";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "Įjungti apsaugą nuo stebėjimo";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "Šioje svetainėje įjungta";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "Apsauga nuo stebėjimo šioje svetainėje įjungta.";
-
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Skaitmeninių atspaudų stebėjimas";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Blokuojami tarp svetainių veikiantys stebėjimo slapukai";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "Blokuojami kriptovaliutų kasėjai";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "Blokuojami skaitmeninių atspaudų stebėjimo elementai";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "Blokuojami socialiniai stebėjimo elementai";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "Sužinokite, kaip apsauga nuo stebėjimo blokuoja stebėjimo elementus, renkančius jūsų naršymo duomenis daugelyje svetainių.";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "Tinklalapyje nerasta stebėjimui naudojamų elementų.";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Šiame tinklalapyje yra jūsų naršymą galinčių stebėti elementų. Jūsų apsauga yra išjungta.";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "Įjungti šioje svetainėje";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Kas naujo";
@@ -1123,28 +775,6 @@
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Pradėti naršymą";
 
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about. */
-"Onboarding.WhatsNew.Description" = "Dabar lengviau tęsti nuo ten, kur baigėte.";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
-"Onboarding.WhatsNew.PersonalizedHome.Description" = "Pereikite prie atvertų kortelių, adresyno, ir naršymo istorijos.";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
-"Onboarding.WhatsNew.RecentSearches.Description" = "Peržiūrėkite savo paskiausias paieškas iš pradžios tinklalapio ir kortelių.";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
-"Onboarding.WhatsNew.RecentSearches.Title" = "Paskiausios paieškos";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card */
-"Onboarding.WhatsNew.TabGroups.Description" = "Tinklalapiai iš tos pačios paieškos bus sugrupuojami.";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card */
-"Onboarding.WhatsNew.TabGroups.Title" = "Tvarkingesnės kortelių grupės";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
-   The title for the new onboarding card letting users know what is new in Firefox iOS */
-"Onboarding.WhatsNew.Title" = "Kas naujo „Firefox“";
-
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Oi! „Firefox“ užstrigo";
 
@@ -1163,23 +793,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Nepavyko atverti tinklalapio.";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "Tinklalapio parinkčių meniu";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "Skydelių parinkimas";
-
 /* Password textbox in Authentication prompt */
 "Password" = "Slaptažodis";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Jūs neturite jokių iš savo „Firefox“ paskyros sinchronizuotų prisijungimų duomenų";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "Galimi prisijungimai:";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "„Firefox“ prisijungimai";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Tai jums leis paveikslą įrašyti į „Camera Roll“.";
@@ -1247,9 +862,6 @@
 /* Reopen alert title shown at home page. */
 "ReopenAlert.Title" = "Atverti paskiausiai užvertą kortelę";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "Atkurti užvertą kortelę";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "Atstatyti teksto dydį";
 
@@ -1267,9 +879,6 @@
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Netinkami duomenys";
-
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Prašome leisti „Firefox“ pasiekti jūsų įrenginio kamerą per „Nustatymai“ -> „Privatumas“ -> „Kamera“.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Skenuoti QR kodą";
@@ -1318,12 +927,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Gerai";
 
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "Pasiūlymo paieškos";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Saugus ryšys";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Siųsti strigties pranešimą, kad „Mozilla“ galėtų išspręsti problemą?";
 
@@ -1364,9 +967,6 @@
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Siųsti";
 
-/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Prisijungti prie „Firefox“";
-
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Iš kito įrenginio atkeliavo nauja kortelė";
 
@@ -1378,12 +978,6 @@
 
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "Iš „%@“ gauta kortelė";
-
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "Įtraukti į skaitinių sąrašą";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "Įtraukti į adresyną";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Bakstelėkite pradėjimui";
@@ -1432,9 +1026,6 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Privačių duomenų šalinimas";
-
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Privačių duomenų šalinimas";
 
 /* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
 "Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Išvalyti elementus: %1$@";
@@ -1509,15 +1100,6 @@
 /* Title in main app settings for Theme settings */
 "Settings.DisplayTheme.Title.v2" = "Grafinis apvalkalas";
 
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "Visada";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Tik naudojant apsaugą nuo sekimo";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "Siųsti svetainėms „Do Not Track“ signalą, nurodant pageidavimą nebūti sekamiems";
-
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Įrenginio pavadinimas";
 
@@ -1578,29 +1160,14 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
 "Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Rodyti";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "Išvalyti";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Pradžios tinklalapis";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Pradžios tinklalapio nuostatos";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Įveskite tinklalapį";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Esamas pradžios tinklalapis";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Naudoti nukopijuotą saitą";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Naudoti šiuo metu atvertą tinklalapį";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "Naudoti numatytąjį";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "Prisijungimai ir slaptažodžiai";
@@ -1608,56 +1175,14 @@
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "Kitas adresas";
 
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "Kai atveriate naują kortelę:";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "Individualizuokite lankomiausias svetaines";
-
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Tuščias puslapis";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "Adresynas";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "Dažniausiai lankomos svetainės";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter2" = "Jūsų įrašytos arba lankomos svetainės";
-
-/* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "„Firefox“ pradžios tinklalapio individualizavimas";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "„Firefox“ pradžios tinklalapis";
 
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "Paskiausi adresyno įrašai";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "Aplankyta";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "Žurnalas";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Pradžios tinklalapis";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "„Pocket“ rekomenduoja";
-
-/* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "Puikus turinys iš viso žiniatinklio.";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "Rodyti skaitinių sąrašą";
-
-/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
-"Settings.NewTab.Option.RecommendedByPocket" = "„%@“ rekomenduoja";
-
-/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
-"Settings.NewTab.Option.RecommendedByPocketDescription" = "Išskirtinis turinys, kuruojamas „%1$@“, dalis „%2$@“ šeimos";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Nauja kortelė";
@@ -1719,32 +1244,11 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "„Siri“ leistukai";
 
-/* Section title for all studies that are currently active */
-"Settings.Studies.Active.SectionName" = "Aktyvūs";
-
-/* Section title for all studies that are completed */
-"Settings.Studies.Completed.SectionName" = "Užbaigti";
-
-/* Button title displayed next to each study allowing the user to opt-out of the study */
-"Settings.Studies.Remove.Button" = "Pašalinti";
-
-/* Title displayed in header of the Studies panel */
-"Settings.Studies.SectionName" = "Tyrimai";
-
-/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
-"Settings.Studies.Title" = "Tyrimai";
-
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Toggle.Link" = "Sužinoti daugiau.";
 
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Toggle.Message" = "„Firefox“ retkarčiais gali įdiegti ir vykdyti tyrimus.";
-
-/* Toggled OFF to opt-out of studies */
-"Settings.Studies.Toggle.Off" = "Išjungta";
-
-/* Toggled ON to participate in studies */
-"Settings.Studies.Toggle.On" = "Įjungta";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Tyrimai";
@@ -1779,23 +1283,11 @@
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Dėmesio!";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Galite pasirinkti, kurį sąrašą „Firefox“ naudos blokavimui saityno elementų, kurie gali sekti jūsų veiklą internete.";
-
-/* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "Subalansuota apsauga ir našumas.";
-
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "BLOKAVIMAI";
 
-/* Explanation of strict mode. */
-"Settings.TrackingProtection.Info.StrictTitle" = "Stipresnė apsauga, tačiau gali sutrikti kai kurių svetainių veikimas.";
-
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "Sužinoti daugiau";
-
-/* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "Daugiau informacijos…";
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Sumažina tikslinių reklamų kiekį, ir padeda neleisti reklamų tiekėjams sekti jūsų naršymo.";
@@ -1815,53 +1307,17 @@
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Apsauga nuo stebėjimo";
 
-/* Additional information about the strict level setting */
-"Settings.TrackingProtection.StrictLevelInfoFooter" = "Stebėjimo elementų blokavimas gali turėti įtakos kai kurių svetainių veikimui.";
-
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Standartinis (numatytasis)";
-
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Leidžia dalį stebėjimo elementų, kad svetainės galėtų tinkamai veikti.";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Griežtas";
 
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Blokuoja žinomus stebėjimo elementus. Gali sutrikti kai kurių svetainių veikimas.";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Stebėjimas yra jūsų naršymo duomenų rinkimas daugelyje svetainių.";
-
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Išplėsta apsauga nuo stebėjimo";
 
-/* Translation settings footer describing how language detection and translation happens. */
-"Settings.TranslateSnackBar.SectionFooter" = "Įrenginyje yra aptinkama tinklalapio kalba, o vertimas pateikiamas per išorinę tarnybą.";
-
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "Tarnybos";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchSubtitle" = "Siūlyti išversti visas ne jūsų numatytąja kalba parašytas svetaines.";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchTitle" = "Siūlyti vertimą";
-
-/* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "Vertimas";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Diagnozuoti triktis";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "Pašalinti";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "Atlikta";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "Keisti";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Rodyti daugiau";
@@ -1896,9 +1352,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Atverti per „Firefox“";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "Atverti privačiojoje kortelėje";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Ieškoti per „Firefox“";
 
@@ -1921,59 +1374,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Jei norite užverti kortelę, trimis pirštais nustumkite ją kairėn arba dešinėn.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Įprasto naršymo veiksena";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Privačiojo naršymo veiksena";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Sinchronizuokite savo korteles, adresyną, slaptažodžius ir kitką.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "Sinchronizuokite savo korteles, slaptažodžius ir kitką.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "Jūsų pirmas sinchronizavimas gali užtrukti";
-
-/* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "Neturite paskyros? Susikurkite, norėdami sinchronizuoti „Firefox“ tarp įrenginių.";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Sinchronizuojama";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Sinchronizuojama…";
 
-/* Panel accessibility label */
-"Synced Tabs" = "Sinchr. kortelės";
-
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Adresynas";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Nuotoliniai klientai";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Sinchronizavimas nepavyko";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "Žurnalas";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "Prisijungimai";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Sinchronizavimas negalimas";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "„Sync“ nepasiekimas";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "„Sync“ turi problemų sinchronizuojant „%@“";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "Kortelės";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "%1$@–oji kortelė iš %2$@";
@@ -1993,17 +1398,11 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "Uždaryta kortelių: %d";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "Ieškokite kortelių";
-
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Pridėti kortelę";
 
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Užverti visas korteles";
-
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "Užverti pasirinktą kortelę";
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Dabar pažymėta kortelė.";
@@ -2014,29 +1413,8 @@
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Neaktyvios kortelės";
 
-/* The section header for tabs opened last week */
-"TabTray.LastWeek.Header" = "Pastarąją savaitę";
-
-/* The title on the button to copy the tab address. */
-"TabTray.MoreMenu.Copy" = "Kopijuoti";
-
-/* The section header for tabs opened before last week */
-"TabTray.Older.Header" = "Seniau";
-
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Atverti naują kortelę";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "Atverti pažymėtą kortelę";
-
-/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
-"TabTray.OtherTabs.Title" = "Kitos kortelės";
-
-/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
-"TabTray.RecentlyClosed.Description" = "Kortelės čia bus laikomos 30 dienų. Po šio laiko jos bus automatiškai užvertos.";
-
-/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
-"TabTray.RecentlyClosed.SectionTitle" = "Paskiausiai užverta";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Privačios";
@@ -2047,17 +1425,8 @@
 /* The title on the button to look at regular tabs. */
 "TabTray.SegmentedControlTitles.Tabs" = "Kortelės";
 
-/* The button title to see more options to perform on the tab. */
-"TabTray.SwipeMenu.More" = "Daugiau";
-
 /* The title for the tab tray */
 "TabTray.Title" = "Atvertos kortelės";
-
-/* The section header for tabs opened today */
-"TabTray.Today.Header" = "Šiandien";
-
-/* The section header for tabs opened yesterday */
-"TabTray.Yesterday.Header" = "Vakar";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Šio tinklalapio atvaizduoti skaitymo veiksenoje nepavyko.";
@@ -2092,12 +1461,6 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Užverti visas korteles";
 
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Jūsų dažniausiai lankomos svetainės atsiras čia.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Sveiki, čia lankomiausios svetainės";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Pašalinti tinklalapį – %@";
 
@@ -2122,20 +1485,11 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "neskaityta";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Norėdami prisijungti, atnaujinkite „Firefox“";
-
 /* Debug option */
 "Use stage servers" = "Naudoti bandomuosius serverius";
 
 /* Username textbox in Authentication prompt */
 "Username" = "Naudotojo vardas";
-
-/* Text message in the settings table view */
-"Verify your email address" = "Patvirtinkite el. pašto adresą";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Versija %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Saityno turinys";
