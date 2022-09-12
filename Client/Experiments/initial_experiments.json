@@ -11,7 +11,7 @@
       "channel": "beta",
       "userFacingName": "Firefox iOS First Run Validation A/A 2 weeks",
       "userFacingDescription": "This is an internal test of new functionality.",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
@@ -47,8 +47,8 @@
       ],
       "targeting": "((is_already_enrolled) || ((days_since_install < 7) && (app_version|versionCompare('105.!') >= 0)))",
       "startDate": "2022-08-17",
-      "enrollmentEndDate": "2022-08-24",
-      "endDate": null,
+      "enrollmentEndDate": "2022-08-31",
+      "endDate": "2022-09-07",
       "proposedDuration": 14,
       "proposedEnrollment": 7,
       "referenceBranch": "control-1"
@@ -64,7 +64,7 @@
       "channel": "beta",
       "userFacingName": "Firefox iOS First Run Validation A/A 4 weeks",
       "userFacingDescription": "This is an internal test of new functionality.",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
@@ -100,11 +100,82 @@
       ],
       "targeting": "((is_already_enrolled) || ((days_since_install < 7) && (app_version|versionCompare('105.!') >= 0)))",
       "startDate": "2022-08-17",
-      "enrollmentEndDate": "2022-08-24",
+      "enrollmentEndDate": "2022-08-31",
       "endDate": null,
       "proposedDuration": 28,
       "proposedEnrollment": 7,
       "referenceBranch": "control-1"
+    },
+    {
+      "schemaVersion": "1.9.0",
+      "slug": "firefox-ios-mr-new-user-onboarding",
+      "id": "firefox-ios-mr-new-user-onboarding",
+      "arguments": {},
+      "application": "org.mozilla.ios.Fennec",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Fennec",
+      "channel": "nightly",
+      "userFacingName": "[QA] Firefox iOS MR New User Onboarding",
+      "userFacingDescription": "This is for testing.",
+      "isEnrollmentPaused": false,
+      "isRollout": false,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-mr2022-nightly-1",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "mr2022"
+      ],
+      "probeSets": [],
+      "outcomes": [],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "mr2022",
+            "enabled": true,
+            "value": {
+              "sections-enabled": {
+                "onboarding-first-run-flow": false,
+                "onboarding-upgrade-flow": false,
+                "sync-cfr": false,
+                "jump-back-in-cfr-update": false,
+                "toolbar-cfr-update": false,
+                "wallpaper-onboarding-sheet": false
+              }
+            }
+          }
+        },
+        {
+          "slug": "treatment-a",
+          "ratio": 1,
+          "feature": {
+            "featureId": "mr2022",
+            "enabled": true,
+            "value": {
+              "sections-enabled": {
+                "onboarding-first-run-flow": true,
+                "onboarding-upgrade-flow": true,
+                "sync-cfr": true,
+                "jump-back-in-cfr-update": true,
+                "toolbar-cfr-update": true,
+                "wallpaper-onboarding-sheet": true
+              }
+            }
+          }
+        }
+      ],
+      "targeting": "((is_already_enrolled) || ((days_since_install < 7)))",
+      "startDate": null,
+      "enrollmentEndDate": null,
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 7,
+      "referenceBranch": "control"
     }
   ]
 }
