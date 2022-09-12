@@ -6,8 +6,11 @@ import Foundation
 import Shared
 
 class WallpaperThumbnailUtility: Loggable {
-
     // MARK: - Properties
+    /// The mininmum number of thumbnails we require to show the onboarding or
+    /// the wallpaper settings. Includes the default wallpaper.
+    private let requiredThumbs = 4
+
     public var areThumbnailsAvailable: Bool {
         return userDefaults.bool(forKey: prefsKey)
     }
@@ -68,9 +71,6 @@ class WallpaperThumbnailUtility: Loggable {
     }
 
     private func verifyThumbnailsFor(_ collections: [WallpaperCollection]) {
-        // The mininmum number of thumbnails we require to show the onboarding or
-        // the wallpaper settings. Includes the default wallpaper.
-        let requiredThumbs = 4
         var numberOfAvailableThumbs = 0
 
         collections.forEach { collection in
