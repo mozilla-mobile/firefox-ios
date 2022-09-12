@@ -84,7 +84,8 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
+                           observing: [.DisplayThemeChanged,
+                                       .DynamicFontChanged])
 
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
@@ -116,24 +117,20 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
             self.heroImageView.image = image
         }
 
-        sponsoredStack.isHidden = viewModel.sponsor == nil
-        descriptionLabel.font = viewModel.sponsor == nil
+        sponsoredStack.isHidden = viewModel.shouldHideSponsor
+        descriptionLabel.font = viewModel.shouldHideSponsor
         ? DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                        maxSize: UX.siteFontSize)
+                                                        size: UX.siteFontSize)
         : DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
-                                                            maxSize: UX.siteFontSize)
+                                                            size: UX.siteFontSize)
 
-        if viewModel.sponsor == nil {
-            sponsoredStack.isHidden  = viewModel.sponsor == nil
-        }
+        sponsoredStack.isHidden  = viewModel.shouldHideSponsor
 
         applyTheme()
         adjustLayout(shouldAddBlur: viewModel.shouldAddBlur)
     }
 
     private func setupLayout() {
-        setupShadow()
-
         contentView.addSubviews(titleLabel, heroImageView)
         sponsoredStack.addArrangedSubview(sponsoredIcon)
         sponsoredStack.addArrangedSubview(sponsoredLabel)
@@ -186,6 +183,9 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         sponsoredImageCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
         sponsoredImageFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
 
+//        contentView.layoutIfNeeded()
+//        contentView.setNeedsLayout()
+
         // Add blur
         if shouldAddBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
@@ -197,6 +197,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupShadow() {
+        print("YRD shadow bounds: \(contentView.bounds)")
         contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
                                                     cornerRadius: UX.generalCornerRadius).cgPath
@@ -204,6 +205,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = 0.12
+        contentView.layer.masksToBounds = false
     }
 }
 
@@ -213,6 +215,8 @@ extension PocketStandardCell: Notifiable {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
+        case .DynamicFontChanged:
+            setupShadow()
         default: break
         }
     }

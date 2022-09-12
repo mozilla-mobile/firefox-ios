@@ -20,6 +20,10 @@ class PocketStandardCellViewModel {
         return "\(title), \(description)"
     }
 
+    var shouldHideSponsor: Bool {
+        return sponsor == nil
+    }
+
     var onTap: (IndexPath) -> Void = { _ in }
     var shouldAddBlur: Bool
 
