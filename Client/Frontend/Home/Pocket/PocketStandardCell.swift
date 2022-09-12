@@ -204,7 +204,8 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         contentView.layer.shadowOpacity = 0.12
     }
 
-    private func updateShadowPath() {
+    override func layoutSubviews() {
+        super.layoutSubviews()
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
                                                     cornerRadius: UX.generalCornerRadius).cgPath
     }
