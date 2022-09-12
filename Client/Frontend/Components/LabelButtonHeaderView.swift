@@ -89,9 +89,6 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         ])
 
         moreButton.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-        moreButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        titleLabel.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
-        titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
     required init?(coder aDecoder: NSCoder) {
