@@ -6,8 +6,9 @@ import Foundation
 import Shared
 
 class WallpaperThumbnailUtility: Loggable {
-    
+
     // MARK: - Properties
+
     /// The mininmum number of thumbnails we require to show the onboarding or
     /// the wallpaper settings. Includes the default wallpaper.
     private let requiredThumbs = 4
