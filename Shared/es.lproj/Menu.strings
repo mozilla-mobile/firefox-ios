@@ -1,3 +1,6 @@
+/* Long label for the button displayed in the menu, used to add a page to the reading list. */
+"Menu.AddToReadingList.AlternateLabel.v99" = "Añadir a lista de lectura";
+
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "Cerrar todas las pestañas";
 

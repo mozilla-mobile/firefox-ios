@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "ที่อยู่และการค้นหา";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "เพิ่มไปยังรายการอ่าน";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "แถบที่อยู่";
 
@@ -195,6 +198,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "เพื่อให้ใส่ข้อมูลได้ง่ายขึ้น จึงได้กำหนดแถบเครื่องมือให้อยู่ด้านล่างเป็นค่าเริ่มต้นในขณะนี้";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "ขณะนี้หน้าแรกของ Firefox ที่ปรับแต่งแบบคุณได้รับการปรับปรุงให้คุณสามารถกลับมาดูหน้าเว็บที่คุณดูค้างไว้ได้ง่ายขึ้นแล้ว ค้นหาแท็บ ที่คั่นหน้า และผลการค้นหาล่าสุดของคุณ";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "การตั้งค่าแถบเครื่องมือ";
@@ -354,6 +360,9 @@
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "สปอนเซอร์ของเราและความเป็นส่วนตัวของคุณ";
+
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "เปิดแท็บที่ซิงค์";
 
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "ดูแท็บที่ซิงค์ทั้งหมด";
@@ -577,6 +586,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "สัปดาห์ที่แล้ว";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "ที่คั่นหน้า";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "ประวัติ";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "ยกเลิก";
 
@@ -744,6 +759,12 @@
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "การดาวน์โหลด";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "การป้องกันถูก ปิด สำหรับไซต์นี้";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "การป้องกันถูก เปิด สำหรับไซต์นี้";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "ช่วยเหลือ";

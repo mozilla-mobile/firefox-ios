@@ -199,6 +199,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "כדי להקל על הזנת המידע, סרגל הכלים נמצא כעת בתחתית כברירת מחדל.";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "כעת קל יותר להמשיך מהמקום שבו הפסקת, במסך הבית של Firefox המותאם אישית שלך. ניתן למצוא את הלשוניות האחרונות, הסימניות ותוצאות החיפוש שלך.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "הגדרות סרגל הכלים";
 
@@ -1362,6 +1365,12 @@
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "מסך הפתיחה";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "מידע נוסף";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "מהדורה מוגבלת";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
 "Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "החלפת הרקע על־ידי נגיעה בלוגו דף הבית של Firefox";
