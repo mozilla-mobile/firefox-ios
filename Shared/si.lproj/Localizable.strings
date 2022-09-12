@@ -199,6 +199,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "තොරතුරු ඇතුල් කිරීම පහසු කිරීමට, මෙවලම් තීරුව පෙරනිමි ලෙස පහළ ඇත.";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "ඔබගේ පුද්ගලීකරණය කළ ෆයර්ෆොක්ස් මුල් පිටුව දැන් ඔබ නතර කළ තැනින් අතට ගැනීමට පහසු කරයි. ඔබගේ මෑත පටිති, පොත්යොමු සහ සෙවුම් ප්‍රතිඵල සොයා ගන්න.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "මෙවලම් තීරුවේ සැකසුම්";
 
@@ -386,7 +389,7 @@
 "FxA.NoInternetConnection" = "අන්තර්ජාල සම්බන්ධතාවයක් නැත";
 
 /* FxA sign in view subtitle */
-"fxa.signin.camera-signin" = "කැමරාව සමඟ පිවිසෙන්න";
+"fxa.signin.camera-signin" = "රූගතය සමඟ පිවිසෙන්න";
 
 /* FxA sign in view qr code instructions */
 "fxa.signin.qr-link-instruction" = "පරිගණකයෙහි ෆයර්ෆොක්ස් විවෘත කර firefox.com/pair වෙත යන්න";
@@ -1066,6 +1069,9 @@
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "දත්ත වලංගු නොවේ";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "උපාංගයේ ‘සැකසුම්’ > ‘ෆයර්ෆොක්ස්’ වෙත යන්න. රූගතයට ප්‍රවේශය දෙන්න.";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR කේතය සුපිරික්සන්න ";
 
@@ -1354,14 +1360,41 @@
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "බිතුපත";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "ෆයර්ෆොක්ස් බිතුපත, අඹතේස්ත රටාව.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "ෆයර්ෆොක්ස් බිතුපත, වෙරළ බෑවුම රටාව.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "ෆයර්ෆොක්ස් බිතුපත, නීලවර්ණ රටාව.";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "පෙරනිමි පැහැදිලි බිතුපත.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "ෆයර්ෆොක්ස් බිතුපත, හිරු උදාව රටාව.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "මුල් පිටුවට බිතුපත් චක්‍රීයව යෙදීම";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "ෆයර්ෆොක්ස් බිතුපත, අඳුරු කඳු රටාව.";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "විවෘත වන තිරය";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "තව දැනගන්න";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "නව එකතුව බලන්න.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "නව ස්වාධීන හඬ එකතුව.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "සීමිතයි";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
 "Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "ෆයර්ෆොක්ස් මුල්පිටුවේ ලාංඡනය එබීමෙන් බිතුපත වෙනස් කරන්න";

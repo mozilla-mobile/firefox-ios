@@ -5,7 +5,7 @@
 "New Tab" = "නව පටිත්ත";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox uses your camera to scan QR codes and take photos and video.";
+"NSCameraUsageDescription" = "QR කේත සුපිරික්සීමට, ඡායාරූප සහ දෘශ්‍යක ගැනීමට ෆයර්ෆොක්ස් රූගතය භාවිතා කරයි.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "ඔබගේ සුරැකි පිවිසුම් වෙත ප්‍රවේශයට මුහුණු හැඳු. අවශ්‍යයි.";

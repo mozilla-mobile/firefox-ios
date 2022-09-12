@@ -4,6 +4,9 @@
 /* Context menu option for opening a link in a new private tab */
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "නව පෞද්. පටිත්තකින් අරින්න";
 
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "ෆයර්ෆොක්ස් ඔබගේ ඉතිහාසය හෝ දත්තකඩ රඳවා නොගනී, නමුත් නව පොත්යොමු සුරැකෙනු ඇත.";
+
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "තව දැනගන්න";
 
