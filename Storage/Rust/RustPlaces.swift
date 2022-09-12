@@ -74,6 +74,7 @@ public class RustPlaces: BookmarksHandler {
 
         writerQueue.async {
             guard self.isOpen else {
+                log.info("[MIG] ERROR: NOT OPEN")
                 deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
@@ -428,6 +429,28 @@ public class RustPlaces: BookmarksHandler {
         let deferredResponse = deleteHistoryMetadata(since: startDate)
         deferredResponse.upon { result in
             completion(result.isSuccess)
+        }
+    }
+
+    private func migrateHistory(dbPath: String) -> Deferred<Maybe<HistoryMigrationResult?>> {
+        return withWriter { connection in
+            return try connection.migrateHistoryFromBrowserDb(path: dbPath)
+        }
+    }
+
+    public func migrateHistory(dbPath: String, completion: @escaping (HistoryMigrationResult?) -> Void, errCallback: @escaping (Error?) -> Void) {
+        _ = reopenIfClosed()
+        let deferredResponse = self.migrateHistory(dbPath: dbPath)
+        deferredResponse.upon { result in
+            guard result.isSuccess else {
+                errCallback(result.failureValue)
+                return
+            }
+            if let result = result.successValue {
+                completion(result)
+                return
+            }
+            completion(nil)
         }
     }
 

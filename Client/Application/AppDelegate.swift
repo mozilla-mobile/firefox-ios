@@ -50,6 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         menuBuilderHelper = MenuBuilderHelper()
 
         setupRootViewController()
+        runAppServicesHistoryMigration()
 
         log.info("startApplication end")
 
@@ -281,5 +282,52 @@ extension AppDelegate {
         guard builder.system == .main else { return }
 
         menuBuilderHelper?.mainMenu(for: builder)
+    }
+}
+
+// MARK: - Application Services History Migration
+// A convinient mapping, `Profile.swift` can't depend
+// on `PlacesMigrationConfiguration` directly since
+// the FML is only usable from `Client` at the moment
+extension PlacesMigrationConfiguration {
+    func into() -> HistoryMigrationConfiguration {
+        switch self {
+        case .disabled:
+            return HistoryMigrationConfiguration.disabled
+        case .dryRun:
+            return HistoryMigrationConfiguration.dryRun
+        case .real:
+            return HistoryMigrationConfiguration.real
+        }
+    }
+}
+
+extension AppDelegate {
+    func runAppServicesHistoryMigration() {
+        let placesHistory = FxNimbus.shared.features.placesHistory.value()
+        let p = self.profile as? BrowserProfile
+        let migrationRanKey = "PlacesHistoryMigrationRan" + placesHistory.migration.rawValue
+        let migrationRan = UserDefaults.standard.bool(forKey: migrationRanKey)
+        if !migrationRan {
+            p?.migrateHistoryToPlaces(
+            migrationConfig: placesHistory.migration.into(),
+            callback: { result in
+                if let result = result {
+                    self.log.info("Successful Migration took \(result.totalDuration / 1000) seconds")
+                    // Record results to telemetry here
+                    UserDefaults.standard.setValue(true, forKey: migrationRanKey)
+                }
+            },
+            errCallback: { err in
+                // record error to telemetry here
+                if let err = err {
+                    self.log.error("Error running migration: \(err as NSError)")
+                } else {
+                    self.log.error("Unknown error running migration")
+                }
+            })
+        } else {
+            log.info("History Migration skipped, already migrated")
+        }
     }
 }
