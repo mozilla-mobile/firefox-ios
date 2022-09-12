@@ -62,7 +62,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     var canOnboardingBeShown: Bool {
         guard featureAvailable,
               hasEnoughThumbnailsToShow,
-              userDefaults.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey),
+              !userDefaults.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey),
               featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet,
                                             checking: .buildOnly)
         else { return false }
