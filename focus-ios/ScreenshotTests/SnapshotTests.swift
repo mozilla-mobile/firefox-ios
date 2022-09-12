@@ -7,14 +7,8 @@ import XCTest
 class SnapshotTests: BaseTestCaseL10n {
 
     func test01FirstRunScreens() {
+        waitForExistence(app.buttons["IntroViewController.startBrowsingButton"], timeout: 10)
         snapshot("00FirstRun")
-        app.swipeLeft()
-        snapshot("01FirstRun")
-        app.swipeLeft()
-        snapshot("02FirstRun")
-        waitForExistence(app.buttons["IntroViewController.button"], timeout: 15)
-        app.buttons["IntroViewController.button"].tap()
-        snapshot("03Home")
     }
 
     func test02Settings() {
@@ -57,23 +51,6 @@ class SnapshotTests: BaseTestCaseL10n {
         waitForExistence(app.cells["settingsViewController.about"])
         app.cells["settingsViewController.about"].tap()
         snapshot("13About")
-    }
-
-    func test04ShareMenu() {
-        app.textFields["URLBar.urlText"].tap()
-        app.textFields["URLBar.urlText"].typeText("example.com\n")
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "example")
-        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
-        app.buttons["HomeView.settingsButton"].tap()
-        snapshot("WebsiteSettingsMenu")
-        waitForExistence(app.cells.buttons.element(boundBy: 6))
-        app.cells.buttons.element(boundBy: 6).tap()
-        waitForExistence(app.buttons["HomeView.settingsButton"])
-        app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.cells.buttons.element(boundBy: 5))
-        snapshot("WebsiteSettingsMenu-RemovePin")
-        app.cells.buttons.element(boundBy: 5).tap()
-        snapshot("14ShareMenu")
     }
 
     func test05SafariIntegration() {
@@ -147,24 +124,30 @@ class SnapshotTests: BaseTestCaseL10n {
         waitForWebPageLoad()
 
         // Tap on shortcuts settings menu option
+        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 8))
-        app.collectionViews.cells.buttons.element(boundBy: 8).tap()
+        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 7), timeout: 10)
+        snapshot("WebsiteBrowserMenu")
+        app.collectionViews.cells.buttons.element(boundBy: 7).tap()
 
         // Tap on erase button to go to homepage and check the shortcut created
+        waitForExistence(app.buttons["URLBar.deleteButton"])
         app.buttons["URLBar.deleteButton"].firstMatch.tap()
         // Verify the shortcut is created
         waitForExistence(app.otherElements.staticTexts["Mozilla"], timeout: 5)
 
         // Open shortcut to check the tab menu label for shortcut option
         app.otherElements.staticTexts["Mozilla"].tap()
+        waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 8), timeout: 5)
+        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 7), timeout: 5)
         snapshot("1-RemoveShortcutTabMenu")
 
         // Go back to homescreen
         app.collectionViews.cells.buttons.element(boundBy: 0).tap()
+        waitForExistence(app.navigationBars.buttons["SettingsViewController.doneButton"])
         app.navigationBars.buttons["SettingsViewController.doneButton"].tap()
+        waitForExistence(app.buttons["URLBar.deleteButton"].firstMatch)
         app.buttons["URLBar.deleteButton"].firstMatch.tap()
         waitForExistence(app.otherElements.staticTexts["Mozilla"], timeout: 5)
 
