@@ -171,16 +171,18 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     private func getAvailableCollections(filtering filter: ThumbnailFilter) -> [WallpaperCollection] {
         guard let metadata = getMetadata() else { return addDefaultWallpaper(to: []) }
 
-        let collections = metadata.collections.filter { $0.isAvailable }
+        var collections = metadata.collections.filter { $0.isAvailable }
         switch filter {
         case .none:
-            return addDefaultWallpaper(to: collections)
+            collections = addDefaultWallpaper(to: collections)
 
         case .thumbnailsAvailable:
             let collectionWithThumbnails = filterUnavailableThumbnailsFrom(collections)
-            return addDefaultWallpaper(to: collectionWithThumbnails)
+            collections = addDefaultWallpaper(to: collectionWithThumbnails)
         }
 
+        collections = collections.filter { !$0.wallpapers.isEmpty }
+        return collections
     }
 
     private func addDefaultWallpaper(to availableCollections: [WallpaperCollection]) -> [WallpaperCollection] {
