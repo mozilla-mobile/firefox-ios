@@ -3,13 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-import Shared
-
-/// The `Themable` protocol gives access to the `ThemeManager` singleton
-/// through the `themeManager` variable, while using dependency injection.
-protocol Themeable { }
-
-extension Themeable {}
 
 enum ThemeType: String {
     case light = "normal" // This needs to match the string used in the legacy system
