@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Հասցեն և Որոնում";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Ավելացնել ընթերցման ցուցակում";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "Հասցեագոտի";
 
@@ -195,6 +198,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "Տեղեկությունների մուտքագրումը հեշտացնելու համար գործիքագոտին այժմ լռելյայնորեն ներքևում է:";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "Firefox-ի ձեր անհատականացված գլխավոր էջն այժմ ավելի հեշտ է դարձնում շարունակել այնտեղ, որտեղ թողել եք: Գտեք ձեր վերջին ներդիրները, էջանիշները և որոնման արդյունքները:";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Ներդիրի կարգավորումներ";
@@ -354,6 +360,9 @@
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Մեր հովանավորները և ձեր գաղտնիությունը";
+
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Բացեք համաժամացված ներդիրը";
 
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Դիտեք բոլոր համաժամացված ներդիրները";
@@ -580,6 +589,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Վերջին շաբաթը";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Էջանիշեր";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Պատմություն";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Չեղարկել";
 
@@ -748,6 +763,12 @@
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Ներբեռնումներ";
 
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Պաշտպանությունները անջատված են այս կայքի համար";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Պաշտպանությունը միացված է այս կայքի համար";
+
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Օգնություն";
 
@@ -895,6 +916,15 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "Ոչ հիմա";
 
+/* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Description.v106" = "Ձեռք բերեք ներդիրներն ու գաղտնաբառերը ձեր մյուս սարքերից՝ շարունակելու այնտեղից, որտեղ թողել եք:";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
+"Onboarding.Sync.Skip.Action.v106" = "Բաց թողնել";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Title.v106" = "Անցեք հեռախոսից նոութբուք և ետ";
+
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "Գրանցվեք և մուտք գործեք";
 
@@ -904,11 +934,32 @@
 /* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
 "Onboarding.SyncTitle.v102" = "Համաժամեցեք՝ ձեր հոսքի մեջ մնալու համար";
 
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.Classic.v106" = "Դասական Պաստառ";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Սահմանափակ թողարկումով պաստառ";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v106" = "Ուսումնասիրեք ավելի շատ պաստառներ";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v106" = "Ընտրեք պաստառ, որը խոսում է ձեզ հետ:";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Title.v106" = "Փորձեք գույն շաղ տալ";
+
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "Կայել պաստառ";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
 "Onboarding.WallpaperTitle.v102" = "Ընտրեք Firefox Պաստառ";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Description.v106" = "Firefox-ը մարդկանց վեր է դասում շահույթից և պաշտպանում է ձեր գաղտնիությունը:";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v106" = "Բարի գալուստ անկախ համացանց";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Սկսել զննումը";
@@ -969,6 +1020,12 @@
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Ընթերցելու կերպը հասանելի է";
+
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Նշել որպես ընթերցված";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Նշել որպես չընթերցված";
 
 /* Panel accessibility label */
 "Reading list" = "Ընթերցելու ցանկ";
@@ -1069,6 +1126,15 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Լավ";
 
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Հիմնական որոնիչը";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "Հիմնական որոնիչը";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "Որոնում";
+
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Ուղարկե՞լ վթարի զեկույց Mozilla-ին, որպեսզի այն շտկվի:";
 
@@ -1080,6 +1146,9 @@
 
 /* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "Չեղարկել";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "Փակել";
 
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "Հասնանելի սարքեր․";
@@ -1219,6 +1288,9 @@
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "Ձևավորումը ինքնաբերաբար կփոխվի ՝ ելնելով ձեր ցուցադրման պայծառությունից: Կարող եք սահմանել այն շեմը, որտեղ թեման փոխվում է: Շրջանակը ցույց է տալիս ձեր ցուցադրման ներկայիս պայծառությունը:";
 
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "Ինքնաշխատ";
+
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "Փոխել աշխատատեսակը";
 
@@ -1318,8 +1390,23 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox-ի պաստառ, լողափի բլուրների նախշ:";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Դասական Firefox";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "ԲԱՑՎՈՂ ԷԿՐԱՆ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "Իմանալ ավելին";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "Փորձեք նոր հավաքածուն։";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "Անկախ ձայների նոր հավաքածուն։";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Սահմանափակ թողարկում";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
 "Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Փոխեք պաստառը՝ կտտացնելով Firefox-ի գլխավոր էջի պատկերանշանին";
@@ -1624,6 +1711,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Թաքցնել ոչ ակտիվ ներդիրները";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Որոնում";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Ավելացնել ներդիր";
 
@@ -1654,6 +1744,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "Բացել ներդիրները";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Ցուցադրել ներդիրները";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Էջը չի կարող ցուցադրվել ընթերցման դիտումում։";
 
@@ -1665,6 +1758,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "այս շաբաթ";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "երեկ";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "Ոչ հիմա";
