@@ -266,29 +266,26 @@ extension HomePageSettingViewController {
 
         var profile: Profile
         var tabManager: TabManager
+        var wallpaperManager: WallpaperManagerInterface
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.wallpaper }
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         init(settings: SettingsTableViewController,
-             and tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager
+             and tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
+             wallpaperManager: WallpaperManagerInterface = WallpaperManager()
         ) {
             self.profile = settings.profile
             self.tabManager = tabManager
+            self.wallpaperManager = wallpaperManager
             super.init(title: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Wallpaper))
         }
 
         override func onClick(_ navigationController: UINavigationController?) {
-            if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-               wallpaperVersion == .v1 {
-                let viewModel = WallpaperSettingsViewModel(wallpaperManager: WallpaperManager(), tabManager: tabManager)
+            if wallpaperManager.canSettingsBeShown {
+                let viewModel = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager, tabManager: tabManager)
                 let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
-                navigationController?.pushViewController(wallpaperVC, animated: true)
-            } else {
-                let viewModel = LegacyWallpaperSettingsViewModel(with: tabManager,
-                                                           and: LegacyWallpaperManager())
-                let wallpaperVC = LegacyWallpaperSettingsViewController(with: viewModel)
                 navigationController?.pushViewController(wallpaperVC, animated: true)
             }
         }
