@@ -25,7 +25,7 @@
 
 set -e
 
-GLEAN_PARSER_VERSION=6.1.2
+GLEAN_PARSER_VERSION=6.1
 
 # CMDNAME is used in the usage text below.
 # shellcheck disable=SC2034
@@ -33,18 +33,25 @@ CMDNAME=$(basename "$0")
 USAGE=$(cat <<'HEREDOC'
 $(CMDNAME)
 Glean Team <glean-team@mozilla.com>
+
 Glean SDK metrics build script.
+
 More about Glean at https://mozilla.github.io/glean
+
 This script generates metrics and pings as defined in user-provided files
 and generates Swift code to be included in the final build.
 It uses the `glean_parser`.
 See https://mozilla.github.io/glean_parser/ for details.
+
 This script should be executed as a "Run Build Script" phase from Xcode.
+
 USAGE:
     ${CMDNAME} [OPTIONS] [PATH ...]
+
 ARGS:
     <PATH>...  Explicit list of definition files to parse.
                If not specified the plugin will use the \$SCRIPT_INPUT_FILE_{N} environment variables.
+
 OPTIONS:
     -a, --allow-reserved               Allow reserved names.
     -o, --output  <PATH>               Folder to place generated code in. Default: \$SOURCE_ROOT/\$PROJECT/Generated
@@ -152,7 +159,7 @@ VENVDIR="${SOURCE_ROOT}/.venv"
 # We need at least pip 20.3 for Big Sur support, see https://pip.pypa.io/en/stable/news/#id48
 # Latest pip is 21.0.1
 "${VENVDIR}"/bin/pip install "pip>=20.3"
-"${VENVDIR}"/bin/pip install --upgrade glean_parser==$GLEAN_PARSER_VERSION
+"${VENVDIR}"/bin/pip install --upgrade "glean_parser~=$GLEAN_PARSER_VERSION"
 
 # Run the glinter
 # Turn its warnings into warnings visible in Xcode (but don't do for the success message)
