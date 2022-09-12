@@ -204,7 +204,10 @@ private extension RatingPromptManagerTests {
     func createBookmarks(bookmarkCount: Int, withRoot root: String) {
         (1...bookmarkCount).forEach { index in
             let bookmark = ShareItem(url: "http://www.example.com/\(index)", title: "Example \(index)", favicon: nil)
-            _ = mockProfile.places.createBookmark(parentGUID: root, url: bookmark.url, title: bookmark.title).value
+            _ = mockProfile.places.createBookmark(parentGUID: root,
+                                                  url: bookmark.url,
+                                                  title: bookmark.title,
+                                                  position: nil).value
         }
 
         // Make sure the bookmarks we create are deleted at the end of the test
