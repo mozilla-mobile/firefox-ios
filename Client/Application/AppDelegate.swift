@@ -11,6 +11,8 @@ let LatestAppVersionProfileKey = "latestAppVersion"
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    // This is the easiest way to force a bootstrap that's guaranteed to happen on app launch
+    private var appContainer: ServiceProvider = AppContainer.shared
     var window: UIWindow?
     var browserViewController: BrowserViewController!
     var rootViewController: UIViewController!

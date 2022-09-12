@@ -35,8 +35,10 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     private var shouldHideSystemThemeSection = false
+    private let themeManager: ThemeManager
 
-    init() {
+    init(themeManager: ThemeManager = DefaultThemeManager.shared) {
+        self.themeManager = themeManager
         super.init(style: .grouped)
     }
 
@@ -123,6 +125,7 @@ class ThemeSettingsController: ThemedTableViewController {
 
     @objc func systemThemeSwitchValueChanged(control: UISwitch) {
         LegacyThemeManager.instance.systemThemeIsOn = control.isOn
+        themeManager.setSystemTheme(isOn: control.isOn)
 
         if control.isOn {
             // Reset the user interface style to the default before choosing our theme
@@ -145,6 +148,7 @@ class ThemeSettingsController: ThemedTableViewController {
     @objc func sliderValueChanged(control: UISlider, event: UIEvent) {
         guard let touch = event.allTouches?.first, touch.phase == .ended else { return }
 
+        themeManager.setAutomaticBrightnessValue(control.value)
         LegacyThemeManager.instance.automaticBrightnessValue = control.value
         brightnessChanged()
     }
@@ -264,12 +268,14 @@ class ThemeSettingsController: ThemedTableViewController {
         if indexPath.section == Section.automaticBrightness.rawValue {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             LegacyThemeManager.instance.automaticBrightnessIsOn = indexPath.row != 0
+            themeManager.setAutomaticBrightness(isOn: indexPath.row != 0)
             tableView.reloadSections(IndexSet(integer: Section.lightDarkPicker.rawValue), with: .automatic)
             tableView.reloadSections(IndexSet(integer: Section.automaticBrightness.rawValue), with: .none)
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: indexPath.row == 0 ? .themeModeManually : .themeModeAutomatically)
         } else if indexPath.section == Section.lightDarkPicker.rawValue {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             LegacyThemeManager.instance.current = indexPath.row == 0 ? LegacyNormalTheme() : LegacyDarkTheme()
+            themeManager.changeCurrentTheme(indexPath.row == 0 ? .light : .dark)
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: indexPath.row == 0 ? .themeLight : .themeDark)
         }
         applyTheme()

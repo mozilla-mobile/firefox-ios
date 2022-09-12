@@ -153,6 +153,7 @@ class BrowserViewController: UIViewController {
     let downloadQueue = DownloadQueue()
 
     private var keyboardPressesHandlerValue: Any?
+    private var themeManager: ThemeManager
 
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
@@ -165,16 +166,18 @@ class BrowserViewController: UIViewController {
 
     fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
 
-    init(profile: Profile, tabManager: TabManager) {
+    init(profile: Profile,
+         tabManager: TabManager,
+         themeManager: ThemeManager = DefaultThemeManager.shared) {
         self.profile = profile
         self.tabManager = tabManager
+        self.themeManager = themeManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.ratingPromptManager = RatingPromptManager(profile: profile)
 
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)
         self.contextHintVC = ContextualHintViewController(with: contextViewModel)
-
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
@@ -636,8 +639,11 @@ class BrowserViewController: UIViewController {
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            themeManager.systemThemeChanged()
+        }
 
-        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection), LegacyThemeManager.instance.systemThemeIsOn {
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection), LegacyThemeManager.instance.systemThemeIsOn {
             let userInterfaceStyle = traitCollection.userInterfaceStyle
             LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
         }

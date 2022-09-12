@@ -49,6 +49,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     private let tabUrl: URL?
     private let isFileURL: Bool
     private let showFXASyncAction: (FXASyncClosure) -> Void
+    private let themeManager: ThemeManager
 
     let profile: Profile
     let tabManager: TabManager
@@ -65,7 +66,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     init(profile: Profile,
          tabManager: TabManager,
          buttonView: UIButton,
-         showFXASyncAction: @escaping (FXASyncClosure) -> Void) {
+         showFXASyncAction: @escaping (FXASyncClosure) -> Void,
+         themeManager: ThemeManager = DefaultThemeManager.shared) {
 
         self.profile = profile
         self.tabManager = tabManager
@@ -76,6 +78,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         self.tabUrl = selectedTab?.url
         self.isFileURL = tabUrl?.isFileURL ?? false
         self.isHomePage = selectedTab?.isFxHomeTab ?? false
+        self.themeManager = themeManager
     }
 
     func getToolbarActions(navigationController: UINavigationController?,
@@ -446,12 +449,14 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             // If we've enabled night mode and the theme is normal, enable dark theme
             if NightModeHelper.isActivated(self.profile.prefs), LegacyThemeManager.instance.currentName == .normal {
                 LegacyThemeManager.instance.current = LegacyDarkTheme()
+                self.themeManager.changeCurrentTheme(.dark)
                 NightModeHelper.setEnabledDarkTheme(self.profile.prefs, darkTheme: true)
             }
 
             // If we've disabled night mode and dark theme was activated by it then disable dark theme
             if !NightModeHelper.isActivated(self.profile.prefs), NightModeHelper.hasEnabledDarkTheme(self.profile.prefs), LegacyThemeManager.instance.currentName == .dark {
                 LegacyThemeManager.instance.current = LegacyNormalTheme()
+                self.themeManager.changeCurrentTheme(.light)
                 NightModeHelper.setEnabledDarkTheme(self.profile.prefs, darkTheme: false)
             }
         }.items

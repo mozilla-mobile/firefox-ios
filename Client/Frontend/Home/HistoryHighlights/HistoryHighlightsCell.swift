@@ -160,7 +160,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 }
 
-extension HistoryHighlightsCell: Themeable {
+extension HistoryHighlightsCell {
     func applyTheme() {
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
         heroImage.tintColor = UIColor.theme.homePanel.recentlyVisitedCellGroupImage
