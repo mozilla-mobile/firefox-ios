@@ -5,13 +5,13 @@
 import Foundation
 
 protocol TabDataRetriever {
-    var tabsStateArchivePath: String? { get set }
+    var tabsStateArchivePath: URL? { get set }
     func getTabData() -> Data?
 }
 
 struct TabDataRetrieverImplementation: TabDataRetriever {
 
-    var tabsStateArchivePath: String?
+    var tabsStateArchivePath: URL?
     let fileManager: TabFileManager
 
     init(fileManager: TabFileManager = FileManager.default) {
@@ -20,8 +20,8 @@ struct TabDataRetrieverImplementation: TabDataRetriever {
 
     func getTabData() -> Data? {
         guard let tabStateArchivePath = tabsStateArchivePath,
-              fileManager.fileExists(atPath: tabStateArchivePath) else { return nil }
+              fileManager.fileExists(atPath: tabStateArchivePath.path) else { return nil }
 
-        return try? Data(contentsOf: URL(fileURLWithPath: tabStateArchivePath))
+        return try? Data(contentsOf: tabStateArchivePath)
     }
 }

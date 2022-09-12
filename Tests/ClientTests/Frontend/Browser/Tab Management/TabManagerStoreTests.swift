@@ -33,7 +33,9 @@ class TabManagerStoreTests: XCTestCase {
 
     func testNoData() {
         let manager = createManager()
-        XCTAssertEqual(manager.testTabCountOnDisk(), 0, "Expected 0 tabs on disk")
+
+        let retrievedTabs = manager.testTabOnDisk()
+        XCTAssertEqual(retrievedTabs.count, 0, "Expected 0 tabs on disk")
         XCTAssertFalse(manager.hasTabsToRestoreAtStartup)
     }
 
@@ -42,7 +44,9 @@ class TabManagerStoreTests: XCTestCase {
     func testPreserve_withNoTabs() {
         let manager = createManager()
         manager.preserveTabs([], selectedTab: nil)
-        XCTAssertEqual(manager.testTabCountOnDisk(), 0, "Expected 0 tabs on disk")
+
+        let retrievedTabs = manager.testTabOnDisk()
+        XCTAssertEqual(retrievedTabs.count, 0, "Expected 0 tabs on disk")
         XCTAssertFalse(manager.hasTabsToRestoreAtStartup)
     }
 
@@ -51,7 +55,11 @@ class TabManagerStoreTests: XCTestCase {
         let tabs = createTabs(tabNumber: 3)
         manager.preserveTabs(tabs, selectedTab: nil)
 
-        XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
+        let retrievedTabs = manager.testTabOnDisk()
+        XCTAssertEqual(retrievedTabs.count, 3, "Expected 3 tabs on disk")
+        XCTAssertEqual(retrievedTabs[0].title, "Title 0 isPrivate: false")
+        XCTAssertEqual(retrievedTabs[1].title, "Title 1 isPrivate: false")
+        XCTAssertEqual(retrievedTabs[2].title, "Title 2 isPrivate: false")
         XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
     }
 
@@ -60,7 +68,11 @@ class TabManagerStoreTests: XCTestCase {
         let tabs = createTabs(tabNumber: 3)
         manager.preserveTabs(tabs, selectedTab: tabs[0])
 
-        XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
+        let retrievedTabs = manager.testTabOnDisk()
+        XCTAssertEqual(retrievedTabs.count, 3, "Expected 3 tabs on disk")
+        XCTAssertEqual(retrievedTabs[0].title, "Title 0 isPrivate: false")
+        XCTAssertEqual(retrievedTabs[1].title, "Title 1 isPrivate: false")
+        XCTAssertEqual(retrievedTabs[2].title, "Title 2 isPrivate: false")
         XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
     }
 
@@ -69,7 +81,11 @@ class TabManagerStoreTests: XCTestCase {
         let tabs = createTabs(tabNumber: 3, isPrivate: true)
         manager.preserveTabs(tabs, selectedTab: tabs[0])
 
-        XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
+        let retrievedTabs = manager.testTabOnDisk()
+        XCTAssertEqual(retrievedTabs.count, 3, "Expected 3 tabs on disk")
+        XCTAssertEqual(retrievedTabs[0].title, "Title 0 isPrivate: true")
+        XCTAssertEqual(retrievedTabs[1].title, "Title 1 isPrivate: true")
+        XCTAssertEqual(retrievedTabs[2].title, "Title 2 isPrivate: true")
         XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
     }
 
@@ -83,9 +99,12 @@ class TabManagerStoreTests: XCTestCase {
         let twoTabs = createTabs(tabNumber: 2)
         manager.preserveTabs(twoTabs, selectedTab: nil)
 
-        XCTAssertEqual(manager.testTabCountOnDisk(), 2, "Expected 2 tabs on disk")
+        let retrievedTabs = manager.testTabOnDisk()
+        XCTAssertEqual(retrievedTabs.count, 2, "Expected 2 tabs on disk")
+        XCTAssertEqual(retrievedTabs[0].title, "Title 0 isPrivate: false")
+        XCTAssertEqual(retrievedTabs[1].title, "Title 1 isPrivate: false")
         XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
-        XCTAssertEqual(fileManager.remoteItemCalledCount, 2)
+        XCTAssertEqual(fileManager.remoteItemCalledCount, 4)
         XCTAssertEqual(fileManager.fileExistsCalledCount, 2)
     }
 
@@ -100,7 +119,8 @@ class TabManagerStoreTests: XCTestCase {
         })
 
         XCTAssertNil(tabToSelect, "There's no tabs to restore, so nothing is selected")
-        XCTAssertEqual(manager.testTabCountOnDisk(), 0, "Expected 0 tabs on disk")
+        let retrievedTabs = manager.testTabOnDisk()
+        XCTAssertEqual(retrievedTabs.count, 0, "Expected 0 tabs on disk")
         XCTAssertFalse(manager.hasTabsToRestoreAtStartup)
     }
 
@@ -116,7 +136,8 @@ class TabManagerStoreTests: XCTestCase {
         })
 
         XCTAssertNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
-        XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
+        let retrievedTabs = manager.testTabOnDisk()
+        XCTAssertEqual(retrievedTabs.count, 3, "Expected 3 tabs on disk")
         XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
     }
 
@@ -131,9 +152,10 @@ class TabManagerStoreTests: XCTestCase {
             return createTab(isPrivate: isPrivate)
         })
 
-        XCTAssertNotNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
+        XCTAssertNotNil(tabToSelect, "Tab was selected in restore")
         XCTAssertEqual(tabToSelect?.lastTitle, tabs[0].lastTitle, "Selected tab is same that was previously selected")
-        XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
+        let retrievedTabs = manager.testTabOnDisk()
+        XCTAssertEqual(retrievedTabs.count, 3, "Expected 3 tabs on disk")
         XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
     }
 
@@ -149,7 +171,8 @@ class TabManagerStoreTests: XCTestCase {
         })
 
         XCTAssertNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
-        XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
+        let retrievedTabs = manager.testTabOnDisk()
+        XCTAssertEqual(retrievedTabs.count, 3, "Expected 3 tabs on disk")
         XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
     }
 
@@ -164,9 +187,10 @@ class TabManagerStoreTests: XCTestCase {
             return createTab(isPrivate: isPrivate)
         })
 
-        XCTAssertNotNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
+        XCTAssertNotNil(tabToSelect, "Tab was selected in restore")
         XCTAssertEqual(tabToSelect?.lastTitle, tabs[0].lastTitle, "Selected tab is same that was previously selected")
-        XCTAssertEqual(manager.testTabCountOnDisk(), 3, "Expected 3 tabs on disk")
+        let retrievedTabs = manager.testTabOnDisk()
+        XCTAssertEqual(retrievedTabs.count, 3, "Expected 3 tabs on disk")
         XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
     }
 
@@ -199,6 +223,47 @@ class TabManagerStoreTests: XCTestCase {
 
         XCTAssertNil(tabToSelect, "No tab selected since the selected one was deleted, tab manager will deal with it")
     }
+
+    // MARK: Migration
+
+    func testMigrationForward_savingOnlyWithDeprecatedMethod() {
+        let manager = createManager()
+        let tabs = createTabs(tabNumber: 2)
+        // Save tabs only with deprecated method, as if we're in v105
+        manager.preserveTabs(tabs, selectedTab: nil, useNewArchivingMethod: false)
+
+        // Retrieve tabs as if we're in v106
+        let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: false,
+                                                     addTabClosure: { isPrivate in
+            XCTAssertFalse(isPrivate)
+            return createTab(isPrivate: isPrivate)
+        })
+
+        XCTAssertNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
+        let retrievedTabs = manager.testTabOnDisk()
+        XCTAssertEqual(retrievedTabs.count, 2, "Expected 2 tabs on disk")
+        XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
+    }
+
+    func testMigrationBackWards_retrievingOnlyWithDeprecatedMethod() {
+        let manager = createManager()
+        let tabs = createTabs(tabNumber: 2)
+        // Save tabs as if we're in v106, with both methods old and new
+        manager.preserveTabs(tabs, selectedTab: nil, useNewArchivingMethod: true)
+
+        // Retrieve tabs as if we're in v105
+        let tabToSelect = manager.restoreTabs(savedTabs: manager.getDeprecatedTabsToMigrate(),
+                                              clearPrivateTabs: false,
+                                              addTabClosure: { isPrivate in
+            XCTAssertFalse(isPrivate)
+            return createTab(isPrivate: isPrivate)
+        })
+
+        XCTAssertNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
+        let retrievedTabs = manager.testTabOnDisk(useNewArchivingMethod: false)
+        XCTAssertEqual(retrievedTabs.count, 2, "Expected 2 tabs on disk")
+        XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
+    }
 }
 
 // MARK: - Helper methods
@@ -229,8 +294,11 @@ private extension TabManagerStoreTests {
                     file: StaticString = #file,
                     line: UInt = #line) -> [Tab] {
         var tabs = [Tab]()
-        for _ in 0..<tabNumber {
-            let tab = createTab(title: "Title\(tabNumber)/\(isPrivate)", isPrivate: isPrivate, file: file, line: line)
+        (0..<tabNumber).forEach { index in
+            let tab = createTab(title: "Title \(index) isPrivate: \(isPrivate)",
+                                isPrivate: isPrivate,
+                                file: file,
+                                line: line)
             tabs.append(tab)
         }
         return tabs
@@ -254,9 +322,9 @@ private extension TabManagerStoreTests {
 class MockFileManager: TabFileManager {
 
     var remoteItemCalledCount = 0
-    func removeItem(atPath path: String) throws {
+    func removeItem(at URL: URL) throws {
         remoteItemCalledCount += 1
-        try FileManager.default.removeItem(atPath: path)
+        try FileManager.default.removeItem(at: URL)
     }
 
     var fileExistsCalledCount = 0

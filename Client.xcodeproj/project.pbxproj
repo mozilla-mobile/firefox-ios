@@ -6354,9 +6354,18 @@
 		8A590C6228C13E1D0032F1AA /* Tab Management */ = {
 			isa = PBXGroup;
 			children = (
-				63306D422110B3CD00F25400 /* TabManagerStore.swift */,
+				63306D3821103EAE00F25400 /* SavedTab.swift */,
+				1DA3CE6224EEE83200422BB2 /* SavedTab+ConfigureExtension.swift */,
+				74C027441B2A348C001B1E88 /* SessionData.swift */,
+				D3A994961A3686BD008AD1AC /* Tab.swift */,
+				C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */,
 				1DA3CE5E24EEE7C600422BB2 /* TabDataRetriever.swift */,
 				8A03309428C2653600286539 /* TabFileManager.swift */,
+				215B457E27D7FD4B00E5E800 /* TabGroupData.swift */,
+				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
+				6ACB550B28633860007A6ABD /* TabManagerNavDelegate.swift */,
+				63306D422110B3CD00F25400 /* TabManagerStore.swift */,
+				215B458127DA420400E5E800 /* TabMetadataManager.swift */,
 			);
 			path = "Tab Management";
 			sourceTree = "<group>";
@@ -6541,6 +6550,19 @@
 				2197DF89287624BF00215624 /* LibraryViewModelTests.swift */,
 			);
 			path = Library;
+			sourceTree = "<group>";
+		};
+		8AED868428CA7B1200351A50 /* Tab Management */ = {
+			isa = PBXGroup;
+			children = (
+				6A5F591C28627C0100FABA92 /* TabManagerNavDelegateTests.swift */,
+				63306D442110BAF000F25400 /* TabManagerStoreTests.swift */,
+				7BBFEE731BB405D900A305AA /* TabManagerTests.swift */,
+				215B458327DA87FC00E5E800 /* TabMetadataManagerTests.swift */,
+				39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */,
+				8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */,
+			);
+			path = "Tab Management";
 			sourceTree = "<group>";
 		};
 		9614BF3F28A53F2000D3F7EA /* ContextualHints */ = {
@@ -7322,7 +7344,6 @@
 				C8F457A61F1FD75A000CB895 /* BrowserViewController */,
 				D3A994951A3686BD008AD1AC /* BrowserViewController.swift */,
 				C4F3B2991CFCF93A00966259 /* ButtonToast.swift */,
-				C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */,
 				31ADB5D91E58CEC300E87909 /* ClipboardBarDisplayHandler.swift */,
 				D0625C97208E87F10081F3B2 /* DownloadQueue.swift */,
 				D04D1B852097859B0074B35F /* DownloadToast.swift */,
@@ -7344,12 +7365,8 @@
 				D34510871ACF415700EC27F0 /* SearchLoader.swift */,
 				D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */,
 				23D57E6D25ED6F2700883FAD /* SearchViewController.swift */,
-				74C027441B2A348C001B1E88 /* SessionData.swift */,
 				3BF56D261CDBBE1F00AC4D75 /* SimpleToast.swift */,
 				E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */,
-				D3A994961A3686BD008AD1AC /* Tab.swift */,
-				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
-				6ACB550B28633860007A6ABD /* TabManagerNavDelegate.swift */,
 				213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */,
 				7BA0601A1C0F4DE200DFADB6 /* TabPeekViewController.swift */,
 				DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */,
@@ -7366,11 +7383,7 @@
 				8AD40FD227BB068F00672675 /* MainMenuActionHelper.swift */,
 				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
 				884CA7482344A301002E4711 /* TextContentDetector.swift */,
-				63306D3821103EAE00F25400 /* SavedTab.swift */,
-				1DA3CE6224EEE83200422BB2 /* SavedTab+ConfigureExtension.swift */,
 				43BDBBFD2752FA8600254DE4 /* TabCell.swift */,
-				215B457E27D7FD4B00E5E800 /* TabGroupData.swift */,
-				215B458127DA420400E5E800 /* TabMetadataManager.swift */,
 				E1877A7F286E0EFD00F5BDF2 /* WebView */,
 			);
 			path = Browser;
@@ -7547,6 +7560,7 @@
 		E1AEC173286E0CF500062E29 /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				8AED868428CA7B1200351A50 /* Tab Management */,
 				8A1E3BE828CBC57E003388C4 /* SearchEngines */,
 				E1AEC174286E0CF500062E29 /* WebView */,
 				8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */,
@@ -8140,12 +8154,6 @@
 				F84B21D71A090F8100AAB793 /* Supporting Files */,
 				E60D03291D5118DB002FE3F6 /* SyncStatusResolverTests.swift */,
 				8A8A05E32746ACAC004267A0 /* TabDisplayManagerTests.swift */,
-				39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */,
-				6A5F591C28627C0100FABA92 /* TabManagerNavDelegateTests.swift */,
-				63306D442110BAF000F25400 /* TabManagerStoreTests.swift */,
-				7BBFEE731BB405D900A305AA /* TabManagerTests.swift */,
-				215B458327DA87FC00E5E800 /* TabMetadataManagerTests.swift */,
-				8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */,
 				D525DFB225FBE5E000B18763 /* TabTests.swift */,
 				D815A3A724A53F3200AAB221 /* TabToolbarHelperTests.swift */,
 				8AFE4C2027480D0B00B97C65 /* TabTrayViewControllerTests.swift */,

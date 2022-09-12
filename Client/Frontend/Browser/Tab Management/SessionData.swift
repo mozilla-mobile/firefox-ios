@@ -40,16 +40,25 @@ private func migrate(urls: [URL]) -> [URL] {
     }
 }
 
-class SessionData: NSObject, NSCoding {
+// We have both Codable and NSCoding protocol conformance since we're currently migrating users to
+// Codable for SessionData. We'll be able to remove NSCoding when adoption rate to v106 and greater is high enough.
+class SessionData: NSObject, Codable, NSCoding {
+
     let currentPage: Int
     let lastUsedTime: Timestamp
     let urls: [URL]
 
+    enum CodingKeys: String, CodingKey {
+        case currentPage = "user_first_name"
+        case lastUsedTime = "user_last_name"
+        case urls
+    }
+
     var jsonDictionary: [String: Any] {
         return [
-            "currentPage": String(self.currentPage),
-            "lastUsedTime": String(self.lastUsedTime),
-            "urls": urls.map { $0.absoluteString }
+            CodingKeys.currentPage.rawValue: String(self.currentPage),
+            CodingKeys.lastUsedTime.rawValue: String(self.lastUsedTime),
+            CodingKeys.urls.rawValue: urls.map { $0.absoluteString }
         ]
     }
 
@@ -71,14 +80,14 @@ class SessionData: NSObject, NSCoding {
     }
 
     required init?(coder: NSCoder) {
-        self.currentPage = coder.decodeAsInt(forKey: "currentPage")
-        self.urls = migrate(urls: coder.decodeObject(forKey: "urls") as? [URL] ?? [URL]())
-        self.lastUsedTime = coder.decodeAsUInt64(forKey: "lastUsedTime")
+        self.currentPage = coder.decodeAsInt(forKey: CodingKeys.currentPage.rawValue)
+        self.urls = migrate(urls: coder.decodeObject(forKey: CodingKeys.urls.rawValue) as? [URL] ?? [URL]())
+        self.lastUsedTime = coder.decodeAsUInt64(forKey: CodingKeys.lastUsedTime.rawValue)
     }
 
     func encode(with coder: NSCoder) {
-        coder.encode(currentPage, forKey: "currentPage")
-        coder.encode(migrate(urls: urls), forKey: "urls")
-        coder.encode(Int64(lastUsedTime), forKey: "lastUsedTime")
+        coder.encode(currentPage, forKey: CodingKeys.currentPage.rawValue)
+        coder.encode(migrate(urls: urls), forKey: CodingKeys.urls.rawValue)
+        coder.encode(Int64(lastUsedTime), forKey: CodingKeys.lastUsedTime.rawValue)
     }
 }

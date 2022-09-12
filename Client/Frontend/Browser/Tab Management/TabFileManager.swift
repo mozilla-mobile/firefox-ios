@@ -6,14 +6,14 @@ import Foundation
 import Shared
 
 protocol TabFileManager {
-    func removeItem(atPath path: String) throws
+    func removeItem(at URL: URL) throws
     func fileExists(atPath path: String) -> Bool
     var tabPath: String? { get }
 }
 
 extension FileManager: TabFileManager {
     var tabPath: String? {
-        return self.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?
+        return containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?
             .appendingPathComponent("profile.profile")
             .path
     }
