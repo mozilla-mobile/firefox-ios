@@ -19,8 +19,8 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         static let sponsoredFontSize: CGFloat = 12
         static let siteFontSize: CGFloat = 12
         static let horizontalMargin: CGFloat = 16
-        static let stackViewShadowRadius: CGFloat = 4
-        static let stackViewShadowOffset: CGFloat = 2
+        static let shadowRadius: CGFloat = 4
+        static let shadowOffset: CGFloat = 2
         static let heroImageSize =  CGSize(width: 108, height: 80)
         static let sponsoredIconSize = CGSize(width: 12, height: 12)
         static let sponsoredStackSpacing: CGFloat = 4
@@ -83,9 +83,9 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
+
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .DynamicFontChanged])
+                           observing: [.DisplayThemeChanged])
 
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
@@ -183,9 +183,6 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         sponsoredImageCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
         sponsoredImageFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
 
-//        contentView.layoutIfNeeded()
-//        contentView.setNeedsLayout()
-
         // Add blur
         if shouldAddBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
@@ -197,15 +194,19 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupShadow() {
-        print("YRD shadow bounds: \(contentView.bounds)")
         contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
                                                     cornerRadius: UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = UX.stackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
+        contentView.layer.shadowRadius = UX.shadowRadius
+        contentView.layer.shadowOffset = CGSize(width: 0,
+                                                height: UX.shadowOffset)
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = 0.12
-        contentView.layer.masksToBounds = false
+    }
+
+    private func updateShadowPath() {
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                    cornerRadius: UX.generalCornerRadius).cgPath
     }
 }
 
@@ -215,8 +216,6 @@ extension PocketStandardCell: Notifiable {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
-        case .DynamicFontChanged:
-            setupShadow()
         default: break
         }
     }

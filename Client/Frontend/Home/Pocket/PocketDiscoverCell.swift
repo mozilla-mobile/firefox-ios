@@ -81,7 +81,7 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
         contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
                                                     cornerRadius: UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = PocketStandardCell.UX.stackViewShadowRadius
+        contentView.layer.shadowRadius = PocketStandardCell.UX.shadowRadius
         contentView.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = 0.12
