@@ -106,6 +106,9 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 
         writeOperation.cancel()
 
+        let path = tabsStateArchivePath()
+        let deprecatedPath = deprecatedTabsStateArchivePath()
+
         let tabStateData = archive(savedTabs: savedTabs)
         let deprecatedTabStateData = deprecatedArchive(savedTabs: savedTabs)
         let simpleTabs = SimpleTab.convertToSimpleTabs(savedTabs)
@@ -113,11 +116,11 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         writeOperation = DispatchWorkItem { [weak self] in
             SimpleTab.saveSimpleTab(tabs: simpleTabs)
             if useNewArchivingMethod {
-                self?.write(tabStateData: tabStateData)
+                self?.write(tabStateData: tabStateData, path: path)
             }
 
             // We save to depracted path to support revert migration for now
-            self?.write(deprecatedTabStateData: deprecatedTabStateData)
+            self?.write(deprecatedTabStateData: deprecatedTabStateData, path: deprecatedPath)
         }
 
         // Delay by 100ms to debounce repeated calls to preserveTabs in quick succession.
@@ -251,8 +254,8 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         return savedTabs.isEmpty ? nil : savedTabs
     }
 
-    private func write(tabStateData: Data?) {
-        guard let data = tabStateData, let path = tabsStateArchivePath() else { return }
+    private func write(tabStateData: Data?, path: URL?) {
+        guard let data = tabStateData, let path = path else { return }
         do {
             try data.write(to: path, options: [])
         } catch {
@@ -300,8 +303,8 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         return URL(fileURLWithPath: path).appendingPathComponent(TabManagerStoreImplementation.deprecatedStorePath)
     }
 
-    private func write(deprecatedTabStateData: NSMutableData) {
-        guard let path = deprecatedTabsStateArchivePath() else { return }
+    private func write(deprecatedTabStateData: NSMutableData, path: URL?) {
+        guard let path = path else { return }
         let written = deprecatedTabStateData.write(to: path, atomically: true)
         // Failure could happen when restoring
         self.browserLog.debug("PreserveTabs write ok: \(written), bytes: \(deprecatedTabStateData.length)")
