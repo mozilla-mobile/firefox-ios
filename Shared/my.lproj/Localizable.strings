@@ -16,41 +16,11 @@
 /* About settings section title */
 "About" = "အကြောင်း";
 
-/* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "ထိပ်တန်းဆိုက်များစာရင်းတွင် တွဲပါ";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "ထိပ်တန်းဝဘ်ဆိုက်စာရင်းမှ ဖယ်ရှားပါ";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "စာမှတ်ထားသည်များ";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "လည်ပတ်ထားသည်များ";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "လတ်တလော မှတ်ခဲ့သော စာမှတ်များ";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "ထပ်မံ";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "Pocket တွင် ရေပန်းစားနေသည်များ";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "လူကြိုက်များနေသည်များ";
-
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "လတ်တလော သုံးခဲ့သော";
 
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "အတန်း %d တန်း";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "အတန်းသတ်မှတ်ရန်";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "ထိပ်တန်းဝတ်ဆိုက်များ";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "တပ်ဗ်တစ်ခုဖွင့်";
@@ -89,12 +59,6 @@
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "ပွင့်ထွက်ဝင်းဒိုးများကိုပိတ်ဆို့ပါ";
 
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "စာမှတ်များ";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "ဖိုင်တွဲ";
-
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "ခေါင်းစဉ်";
 
@@ -113,12 +77,6 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "ဖိုင်တွဲ";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "တည်နေရာ";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "ဖိုင်တွဲ အမည်";
-
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "စာမှတ်အသစ်";
 
@@ -130,12 +88,6 @@
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "ခေါင်းစဉ်";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "သင်သိမ်းလိုက်သည့် စာမှတ်များကို ဒီနေရာမှာ ပြပါမည်။";
 
 /* Describes the date on which the breach occurred */
 "BreachAlerts.BreachDate" = "ဒီဖောက်ဖျက်မှုဖြစ်ပွားခဲ့သည်";
@@ -176,14 +128,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "တပ်ဗ်အားပိတ်နေသှ်";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "ကွန်ပျူတာ";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "စာမှတ်လင့်ခ်";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "ကူးပြောင်းပါ";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "သီးသန့်တပ်ဗ်အသစ် ဖွင့်ပြီး";
@@ -223,12 +169,6 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "စာမျက်နှာအား မရယူနိုင်ပါ";
-
-/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "iOS13 သုံးစွဲသူများအတွက် အလိုအလျောက် Dark Theme ကို ‌ပြောင်းပေးပါတယ်။ ယခု ပုံစံ ကိုမကြိုက်ပါက Settings > Theme တွင် ပြင်ပါ။";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "ယခုအခါ Dark theme တွင် Dark ကီးဘုတ် နှင့် Dark အစစကရင် ပါဝင်သည်။";
 
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "မူလပါရှိအဆင့်မြင့်ခြေရာခံကာကွယ်ရေးစနစ်သည် သင့်နောက်သို့လိုက်နေသောကြော်ငြာများကိုပိတ်ပင်ပေးသည်။ ခြေရာခံသူများ၊ကြော်ငြာများ၊popups များကိုပို၍ပိတ်ဆို့ရန် strict ကိုဖွင့်ပါ။";
@@ -280,17 +220,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "ဆွဲယူမှုကို ဖျက်သိမ်း";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "မီးမြေခွေးတွင် ဖိုင်များဆွဲယူခြင်းကို အထောက်အပံ့ မပေးသေးပါ။";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "ဆွဲယူမှုကို ဖျက်သိမ်းပြီး";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "ဆွဲယူမှု မအောင်မြင်";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "ထပ်ကြိုးစားပါ";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "ဆွဲချချက်များ";
@@ -352,18 +286,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "လွှဲပြောင်းပို့ရန်";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "အီးမေးလ် မှားနေပါသလား။ ပြန်လည်ချိတ်ဆက်ရန် အောက်တွင် ချိတ်ဆက်ဖြုတ်ပါ။";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "အကောင့် အတည်ပြုခြင်း လိုအပ်သည်";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "%@ ကို အတည်ပြုရန် လိုအပ်သည်။ Firefox မှ အတည်ပြုလင့်ခ်အတွက် အီးမေးလ်ကို စစ်ဆေးပါ။";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "အခြား ကိရိယာ တပ်ပါ";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Firefox အကောင့်";
 
@@ -372,24 +294,6 @@
 
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "အင်တာနက်ချိတ်ဆက်မှု မရှိပါ";
-
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "ချိတ်ဆက် အပြင်အဆင် အားဖွင့်";
-
-/* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "Firefox.com/pair တွင်ဖော်ပြထားသော QR ကုဒ်ကိုစစ်ဆေးပါ";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "ဖယ်ရှားပါ";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "တခြား အသုံးပြုသူ အဖြစ်ဝင်ရောက်ရန် ဤကိရိယာနှင့် ဆက်စပ်သော Firefox အကောင့်ကို ဖယ်ရှားပါ။";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "အကောင့်ကို ဖယ်ရှားပါ";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "အီးမေးလ်ကို ပြန်ပို့ပါ";
 
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "သင်၏ကင်မရာဖြင့်ဝင်ပါ";
@@ -400,23 +304,11 @@
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "စကင်ဖတ်ရန်အဆင်သင့်";
 
-/* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "ထပ်တူပြုခြင်းကိုဖွင့်ပါ";
-
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "အဲဒီအစားအီးမေးလ်ကိုသုံးပါ";
 
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Sync သို့ ဝင်ရောက်ပါ";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "အခြားကိရိယာများမှ တပ်ဗ်များ၊ စာမှတ်များနှင့် စကားဝှက်များကို ရယူပါ။";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "ယခုပင် တစ်ပြေးညီ ပြုလုပ်ပါ";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "ဝဘ်ကို သင်နှင့်အတူ ရှိနေစေပါ";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Firefox Sync သည် %@ ကို ချိတ်ဆက်ထားပြီးပြီ";
@@ -439,9 +331,6 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "ကိရိယာသည် Firefox Sync သို့ ချိတ်ဆက်မထားပါ";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "အခြားကိရိယာများမှ သင်ဖွင့်ထားသည့်တပ်ဗ်များ၊ စာမှတ်များနှင့် စကားဝှက်များကို ရယူပါ။";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "အကူအညီ";
 
@@ -463,9 +352,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "ယနေ့နှင့် မနေ့က";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "လတ်တလော ကြည့်ရှုမှတ်တမ်းကို ရှင်းလင်းခြင်းသည် မှတ်တမ်း၊ ကွတ်ကီးများနှင့် အခြား ဘရောင်ဇာအချက်အလက်များကို ဖယ်ရှားပါမည်။";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "လတ်တလော ကြည့်ရှုထားသည့် ဝဘ်ဆိုက်များကို ဒီမှာ ပြသပါမည်။";
 
@@ -474,15 +360,6 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "အခြား ဖွင့်ထားသောကိရိယာများမှ တပ်ဗ်များကိုကြည့်";
-
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "သင့်အကောင့်အား အတည်ပြုပေးရမည်";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "အခြား ကိရိယာများမှ တပ်ဗ်များကို မြင်ချင်သလား ?";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "ချိက်ဆက်ခြင်းကို ဖွင့်ပြီး အခြားကိရိယာများမှ တပ်ဗ်များကို ကြည့်ပါ";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
@@ -493,32 +370,11 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "လတ်တလော ပိတ်ထားသည်များ";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "ကိရိယာ %d ခု ချိတ်ဆက်ထားသည်";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "တပြေးညီဖြစ်နေသာ ကိရိယာများ";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "မဆောင်ရွက်ပါ";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "မည်သည့်အချိန်တွင်မဆို အပြင်အဆင်များတွင် ပြောင်းလဲသတ်မှတ်နိုင်ပါသည်။";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "အဖွင့်စာမျက်နှာ သတ်မှတ်ရန်";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "ဒီဝဘ်စာမျက်နှာကို အဖွင့်စာမျက်နှာအဖြစ် သတ်မှတ်ချင်ပါသလား။";
-
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "စာမှတ်";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "မှတ်တမ်းမှ ဖယ်ရှားပါ";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "သီးသန့်တပ်ဗ်အသစ်တွင် ဖွင့်ရန်";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "တပ်ဗ်အသစ်တွင် ဖွင့်ပါ";
@@ -577,9 +433,6 @@
 /* History tableview section header */
 "Last month" = "နောက်ဆုံးလ";
 
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "နောက်ဆုံး ချိတ်ဆက်ခဲ့ချိန် - %@";
-
 /* History tableview section header */
 "Last week" = "နောက်ဆုံးအပတ်";
 
@@ -600,12 +453,6 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "ဝင်ရောက်မှု အချက်အလက်များ";
-
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "ပြင်ထားသည်";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "ဝင်ရောက်ခြင်း";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "မသိမ်းပါနှင့်";
@@ -631,15 +478,6 @@
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "နောက်ဆုံးပေါ်အခြေအနေ";
 
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "ဝင်ရောက်မှု";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "အားလုံး";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "ဝဘ်ဆိုက်";
-
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "စစ်ထုတ်ရန်";
 
@@ -660,9 +498,6 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "စာမှတ် မှတ်ပြီး";
 
-/* Toast displayed to the user after adding the item to the Top Sites. */
-"Menu.AddPin.Confirm" = "ထိပ်တန်းဆိုက်များစာရင်းတွင် တွဲခဲ့သည်။";
-
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "စာဖတ်စာရင်းသို့ ထည့်ပြီးပြီ";
 
@@ -671,30 +506,6 @@
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL ကို ကလစ်ဘုတ်သို့ ကူးယူပြီး";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "ဤဆိုက်အတွက် ခြေရာခံကာကွယ်ရေးများကိုပိတ်ပါ။";
-
-/* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "ဤဆိုက်အတွက် ခြေရာခံကာကွယ်ရေးများကိုဖွင့်ပါ။";
-
-/* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox သည် cross-site tracker များ၊ social tracker များ၊ cryptominers နှင့် fingerprinters များကိုပိတ်ပင်ထားသည်။";
-
-/* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox သည် cross-site tracker များ၊ social tracker များ၊ cryptominers နှင့် fingerprinters များကိုပိတ်ပင်ထားသည်။";
-
-/* Label for the button displayed in the menu used to stop the reload of the webpage */
-"Menu.Library.StopReload" = "ရပ်ပါ";
-
-/* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "ညဘက်သုံးပုံစံကို ဖွင့်ရန်";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "ရုပ်ပုံများကို မပြပါနှင့်";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "ဆောင်ရွက်နိုင်သည်များ";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "ပွားပါ";
@@ -711,38 +522,17 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "စာမှတ်ကို ဖျက်ပြီး";
 
-/* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "ထိပ်တန်းဆိုက်များမှဖယ်ရှားခဲ့သည်";
-
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "တဗ်များကိုအောင်မြင်စွာပို့ပေးပြီးပြီ";
 
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "ပိတ်ဆို့ထားသည်";
-
-/* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "ဤစာမျက်နှာတွင် Firefox နှင့်သက်ဆိုင်သော tracker များကိုရှာမတွေ့ပါ။";
-
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "ကာကွယ်မှုဆိုင်ရာ အပြင်အဆင်များ";
-
-/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "%@ အတွက် ကာကွယ်မှုများ";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "နောက်ယောင်ခံသည့် အရာများ";
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "လူမှုဆိုင်ရာ ခြေရာခံကိရိယာများ";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox သည် သင့်ရှာဖွေမှုကို ခြေရာခံနိုင်သည့် လက်ရှိစာမျက်နှာ၏ အစိတ်အပိုင်းတစ်ချို့ကို ပိတ်ထားသည်။";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "အွန်လိုင်းနောက်ယောက်ခံ ကိရိယာများကို ပိတ်ပင်ပါ";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "မူလမတူသော ဝဘ်ဆိုက်ကို ခြေရာခံသော ကွတ်ကီးများ";
 
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "မူလမတူသော ဝဘ်ဆိုက် ခြေရာခံ ကိရိယာများ";
@@ -765,47 +555,8 @@
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "လူမှုကွန်ယက်ဝဘ်ဆိုက်များသည် ပိုမိုပြည့်စုံပြီး သင်တစ်ယောက်တည်းကိုသာ ဦးတည်ထားသည့် ပရိုဖိုင်း တည်ဆောက်ရန် နောက်ယောင်ခံကိရိယာများကို အခြားဝဘ်ဆိုက်များပေါ်တွင် ထားပါသည်။ ၎င်းနောက်ယောင်ခံကိရိယာများကို တားဆီးခြင်းသည် လူမှုမီဒီယာ ကုမ္ပဏီများက အွန်လိုင်းတွင် သင့်လှုပ်ရှားမှုများ မြင်နိုင်သည်များကို လျှော့ချပေးသည်။";
 
-/* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "ယခုဝဘ်ဆိုက်အတွက် ပိတ်ထားသည်";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "ယခုဆိုက်အတွက် ခြေရာခံကာကွယ်မှုကို ပိတ်ထားသည်။";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "ခြေရာခံကာကွယ်မှုကို ဖွင့်";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "ယခုဝဘ်ဆိုက်အတွက် ဖွင့်ထားသည်";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "ယခုဆိုက်အတွက် ခြေရာခံကာကွယ်မှုကို ဖွင့်ထားသည်။";
-
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "လက်ဗွေထုတ် ကိရိယာများ";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "မူလမတူသော ဝဘ်ဆိုက် ခြေရာခံကွတ်ကီးများကို ပိတ်ထားသည်";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "Cryptominers ကို ပိတ်ထားသည်";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "လက်ဗွေထုတ် ကိရိယာများကို ပိတ်ထားသည်";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "လူမှုမီဒီယာ နောက်ယောင်ခံကိရိယာများကို ပိတ်ထားသည်";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "ဝဘ်ဆိုက်များကို ကြည့်ရှုထားသည့် အချက်အလက်များကို ကောက်ယူသည့် အွန်လိုင်းခြေရာခံကိရိယာများကို ခြေရာခံကာကွယ်မှုစနစ်က မည်သို့ ပိတ်ပင်သလဲဆိုတာကို လေ့လာကြည့်ရှုပါ။";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "ယခုစာမျက်နှာတွင် ခြေရာခံသည့် အစိတ်အပိုင်းများကို မတွေ့ရပါ။";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "ယခုဆိုက်တွင် ဝဘ်ဆိုက်ကြည့်ရှုခြင်းကို ခြေရာခံသည့် အစိတ်အပိုင်းများ ပါဝင်သည်။ သင်သည် ခြေရာခံကာကွယ်မှုကို ပိတ်ထားသည်။";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "ယခုဆိုက်အတွက် ဖွင့်";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "ဘာအသစ်ရှိမလဲ";
@@ -856,23 +607,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "စာမျက်နှာကို မဖွင့်နိုင်ပါ";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "စာမျက်နှာ အပြင်အဆင်များ စာရင်း";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "အကွက်ရွေးသူ";
-
 /* Password textbox in Authentication prompt */
 "Password" = "စကားဝှက်";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "သင့် Firefox Account ထံမှ သက်သေခံများ ရယူထားခြင်းမရှိပါ";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "ရနိုင်သော သက်သေခံများ၊";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox သက်သေခံများ";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ရုပ်ပုံများကို သင့် Camera Roll တွင် သိမ်းနိုင်စေမည်။";
@@ -928,9 +664,6 @@
 /* Reopen alert title shown at home page. */
 "ReopenAlert.Title" = "နောက်ဆုံးပိတ်ခဲ့သည့် တပ်ဗ်ကို ပြန်ဖွင့်ပါ";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "ပိတ်လိုက်သည့်တပ်ဗ်ကို ပြန်ဖွင့်";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "စာလုံးဆိုဒ်အားချိန်ညှိပါ";
 
@@ -948,9 +681,6 @@
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "အချက်အလက်မှားနေသည်";
-
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "ကိရိယာရှိ ကင်မရာကို အသုံးပြုရန် Firefox အား ‘Settings’ -> ‘Privacy’ -> ‘Camera’ မှတဆင့် ခွင့်ပြုပေးပါ။";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR ကုဒ်ဖတ်ရန်";
@@ -995,12 +725,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ကောင်းပြီ";
-
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "အကြံပေးချက်များရရှိရန် ရှာပါ";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "လုံခြုံသော ချိတ်ဆက်မှု";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "မော်ဇီလာထံ အပျက်အစီးစာရင်း ပေးပို့မည်လား။ ထိုသို့ပေးပို့လျှင် မော်ဇီလာက ပြုပြင်မွမ်းနိုင်ပါသည်။";
@@ -1054,12 +778,6 @@
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "%@ ထံမှ တပ်ဗ် ရောက်ရှိသည်";
 
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "စာဖတ်စာရင်းသို့ ထည့်ပါ";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "စာမှတ်";
-
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "စတင်ရန် တို့ထိပါ";
 
@@ -1107,9 +825,6 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "တစ်ကိုယ်ရေသုံး အချက်အလက်များကို ရှင်းပါ";
-
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "တစ်ကိုယ်ရေသုံး အချက်အလက်များကို ရှင်းပါ";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "ကူးယူထားပြီး";
@@ -1181,15 +896,6 @@
 /* Title in main app settings for Theme settings */
 "Settings.DisplayTheme.Title.v2" = "မူပုံ";
 
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "အမြဲတမ်း";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "ခြေရာခံကာကွယ်မှု အသုံးပြုနေစဉ်အတွင်းသာ";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "နောက်ယောင်မခံလိုပါက နောက်ယောင်မခံပါနှင့် သင်္ကေတကို ဝဘ်ဆိုက်များသို့ ပေးပို့ပါ";
-
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "ကိရိယာအမည်";
 
@@ -1202,29 +908,14 @@
 /* General settings section title */
 "Settings.General.SectionName" = "အထွေထွေ";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "ရှင်းလင်းပါ";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "အဖွင့်စာမျက်နှာ";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "အဖွင့်စာမျက်နှာ အပြင်အဆင်";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "ဝဘ်စာမျက်နှာကို ရေးထည့်ပါ";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "လက်ရှိ အဖွင့်စာမျက်နှာ";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "ကူးယူထားသည့် လင့်ကို အသုံးပြုပါ";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "လက်ရှိ စာမျက်နှာကို အသုံးပြုပါ";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "မူလသတ်မှတ်ထားသည်ကို အသုံးပြုပါ";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "ဝင်ရောက်မှုများနှင့် စကားဝှက်များ";
@@ -1232,47 +923,14 @@
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "စိတ်ကြိုက် URL";
 
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "တပ်ဗ်အသစ်တစ်ခုအားဖွင့့်သောအခါ -";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "ထိပ်တန်းဆိုက်များကိုတက်ပ်အသစ်တွင် စုစည်းမည်";
-
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "စာမျက်နှာအလွတ်";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "စာမှတ်များ";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "သင်အလည်ပတ်များဆုံး ဝဘ်ဆိုက်များ";
-
-/* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Firefox အဖွင့်စာမျက်နှာ ကို စိတ်ကြိုက်ပြင်ဆင်ရန်";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox အဖွင့်စာမျက်နှာ";
 
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "လတ်တလော စာမှတ်များ";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "လည်ပတ်ထားသည်များ";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "မှတ်တမ်း";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "အဖွင့်စာမျက်နှာ";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "Pocket တွင် ရေပန်းစားနေသည်များ";
-
-/* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "ဝဘ်ပေါ်မှ စိတ်ဝင်စားဖွယ် အကြောင်းအရာများ။";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "သင့့်စာဖတ်စာရင်းအားပြပါ";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "တဗ်အသစ်";
@@ -1343,23 +1001,11 @@
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "ကြိုတင်အသိပေးချက်!";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "သင့်ရှာဖွေမှုကို ခြေရာခံကောင်းခံနိုင်သည့် ဝဘ်အဲလိမန့်ကို Firefox က ပိတ်ရမည့်စာရင်းကို သင်ရွေးချယ်နိုင်ပါသည်။";
-
-/* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "လုံခြုံရေးနှင့် စွမ်းဆောင်ရည်ကို ဟန်ချက်ညီစေရန် ပြုလုပ်ထားသည်။";
-
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "BLOCKS";
 
-/* Explanation of strict mode. */
-"Settings.TrackingProtection.Info.StrictTitle" = "ပိုမိုကောင်းမွန်သော လုံခြုံရေးကို ပေးစွမ်းသည်၊ သို့သော် အချို့ဝဘ်ဆိုက်များသည် ကောင်းမွန်စွာ ဆောင်ရွက်နိုင်ကောင်း ဆောင်ရွက်နိုင်မည်။";
-
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "ပိုမို လေ့လာရန်";
-
-/* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "နောက်ထပ်အချက်အလက်…";
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "ပစ်မှတ်ထားသောကြော်ငြာများကိုလျှော့ချပြီးကြော်ငြာရှင်များကိုသင်၏ရှာဖွေမှုကိုကြော်ငြာရှင်များခြေရာခံခြင်းမှရပ်တန့်စေသည်။";
@@ -1379,53 +1025,17 @@
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "ခြေရာခံ ကာကွယ်မှု";
 
-/* Additional information about the strict level setting */
-"Settings.TrackingProtection.StrictLevelInfoFooter" = "ခြေရာခံကိရိယာများကို ပိတ်ဆို့ခြင်းသည် အချို့သော ဝဘ်ဆိုက်များ၏ လုပ်ဆောင်ချက်ကို ထိခိုက်စေနိုင်သည်။";
-
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "စံ (ပုံသေ)";
-
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "လိုက်လံမှတ်သားသည့်စနစ်အချို့ကို ခွင့်ပြုပါ။ သို့မှသာ ဝဘ်ဆိုက်များသည် ကောင်းမွန်စွာ လုပ်ဆောင်ပါမည်။";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "တင်းကျပ်ရန်";
 
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "သိရှိထားသည့် ခြေရာခံစနစ်များကို ပိတ်ပင်ပါ။ အချို့သော ဝဘ်ဆိုက်များ ကောင်းမွန်စွာ လုပ်ဆောင်လိမ့်မည် မဟုတ်ပါ။";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "နောက်ယောင်ခံခြင်းသည် ဝဘ်ဆိုက်များကို ကြည့်ရှုထားသည့် အချက်အလက်များကို ကောက်ယူ စုစည်းထားခြင်း ဖြစ်သည်။";
-
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "အဆင့်မြှင့် ခြေရာခံကာကွယ်မှု";
 
-/* Translation settings footer describing how language detection and translation happens. */
-"Settings.TranslateSnackBar.SectionFooter" = "ကိရိယာတွင် ကြည့်ရှုနေသော ဝဘ်စာမျက်နှာ၏ ဘာသာစကားကို သိရသည့်အတွက် remote service ထံမှ ဘာသာပြန်ဆိုချက်ကို ကမ်းလှမ်းနေသည်။";
-
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "ဝန်ဆောင်မှုများ";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchSubtitle" = "မည်သည့်စာမျက်နှာတွင်မဆို အသုံးပြုထားသည့် ဘာသာစကားသည် မိမိ၏ မူသေ သတ်မှတ်ထားသော ဘာသာစကားနှင့် မတူပါက ဘာသာပြန်ဆိုမှု အသုံးပြုနိုင်ရန် ကမ်းလှမ်းပါ။";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchTitle" = "ဘာသာပြန်ဆိုရန်";
-
-/* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "ဘာသာပြန်ခြင်း";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "ဖြေရှင်းဖော်ထုတ်ရန်";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "ဖျက်ရန်";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "ပြီးပြီ";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "တည်းဖြတ်ရန်";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "ထပ်ပြပါ";
@@ -1457,9 +1067,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Firefox နှင့် ဖွင့်ပါ";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "သီးသန့်ပုံစံနှင့် ဖွင့်ပါ";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Firefox တွင် ရှာပါ";
 
@@ -1482,56 +1089,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "တပ်ဗ်အားပိတ်ရန် လက်သုံးချောင်းဖြင့် ဘယ် သို့ ညာသို့ ပွတ်ပါ";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "ပုံမှန်ကြည့်ရှုခြင်းပုံစံ";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "သီးသန့်ကြည့်ရှုခြင်းပုံစံ";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "သင့် တပ်ဗ်များ၊ စကားဝှက်များ နှင့် စာအမှတ်များအား ချိတ်ဆက်သုံးပါ";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "သင့် တပ်ဗ်များ၊ စကားဝှက်များ နှင့် အခြားအရာများကို ချိတ်ဆက်သုံးပါ။";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "ပထမဆုံး ထပ်တူပြုပြိုင်တူဆောင်ရွက်မှုသည် အချိန်အနည်းငယ် ကြာနိုင်ပါသည်။";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "တစ်ပြေးညီဖြစ်စေရန် ဆောင်ရွက်နေသည်";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "တစ်ပြေးညီဖြစ်စေရန် ဆောင်ရွက်နေသည်…";
 
-/* Panel accessibility label */
-"Synced Tabs" = "တွဲဆက်ထားသောတပ်ဗ်များ";
-
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "မှတ်သားချက်များ";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Remote Clients";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "တစ်ပြေးညီဆောင်ရွက်မှု မအောင်မြင်ပါ";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "မှတ်တမ်း";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "ဝင်ရောက်မှု အချက်အလက်များ";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "တစ်ပြေးညီဆောင်ရွက်မှုကို အသုံးမပြုနိုင်ပါ";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "တစ်ပြေးညီဆောင်ရွက်မှုသည် အော့ဖ်လိုင်း ဖြစ်နေသည်";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "%@ ကို တစ်ပြေးညီဖြစ်စေရန် ဆောင်ရွက်နေစဉ် ပြဿနာတစ်စုံတစ်ရာ ကြုံတွေ့သည်";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "တဗ်များ";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "တပ်ဗ် %2$@ ၏ %1$@";
@@ -1551,44 +1113,17 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "တဗ် %d ခု ပိတ်လိုက်သည်";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "တက်ပ်များကိုရှာဖွေပါ";
-
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "တပ်ဗ် ပေါင်းထည့်ပါ။";
 
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "တပ်ဗ်အားလုံးကို ပိတ်ပါ";
 
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "ရွေးထားသည့် တပ်ဗ်ကို ပိတ်";
-
-/* The section header for tabs opened last week */
-"TabTray.LastWeek.Header" = "ပြီးခဲ့သည့် အပတ်";
-
-/* The title on the button to copy the tab address. */
-"TabTray.MoreMenu.Copy" = "ကူးပါ";
-
-/* The section header for tabs opened before last week */
-"TabTray.Older.Header" = "အဟောင်းများ";
-
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "တပ်ဗ်အသစ်ဖွင့်";
 
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "ရွေးထားသည့်တပ်ဗ်ကို ဖွင့်";
-
-/* The button title to see more options to perform on the tab. */
-"TabTray.SwipeMenu.More" = "နောက်ထပ်";
-
 /* The title for the tab tray */
 "TabTray.Title" = "ဖွင့်ထားသော တက်ဗ်များ";
-
-/* The section header for tabs opened today */
-"TabTray.Today.Header" = "ယနေ့";
-
-/* The section header for tabs opened yesterday */
-"TabTray.Yesterday.Header" = "မနေ့က";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "စာမျက်နှာအား စာဖတ်ပုံစံဖြင့် မဖွင့်နိုင်ပါ";
@@ -1623,12 +1158,6 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "တပ်ဗ်အားလုံးကို ပိတ်ရန်";
 
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "အကြည့်ရှုအများဆုံး ဝဘ်ဆိုက်များကို ဒီနေရာတွင် ပြသပါမည်။";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "ထိပ်တန်းအကြည့်များဆုံး ဆိုက်များက ကြိုဆိုပါသည်။";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "စာမျက်နှာကို ဖျက်ရန်။ ။%@";
 
@@ -1653,20 +1182,11 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "မဖတ်";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "ချိတ်ဆက်ရန် Firefox ကို အဆင့်မြှင့်ပါ";
-
 /* Debug option */
 "Use stage servers" = "ဆာဗာကိုသုံးပါ";
 
 /* Username textbox in Authentication prompt */
 "Username" = "အသုံးပြုသူ အမည်";
-
-/* Text message in the settings table view */
-"Verify your email address" = "အီးမေးလ်လိပ်စာကို အတည်ပြုပါ";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "ဗားရှင်း %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "ဝတ်ဘ်စာကိုယ်";

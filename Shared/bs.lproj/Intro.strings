@@ -1,21 +1,3 @@
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Koristite bilo koju aplikaciju e-pošte — ne samo Mail — s Firefoxom.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Postavke e-pošte";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Dodirnite ikonu maske da biste prešli u način privatnog pretraživanja.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Šretražujte kao da vas niko ne gleda";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Da li tražite nešto drugačije? U vašim postavkama izaberite drugačiji standardni pretraživač (ili dodajte svoj).";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Tražite, na svoj način";
-
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Započnite pretraživanje";
 

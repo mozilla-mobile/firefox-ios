@@ -49,6 +49,9 @@
 /* Title for the search field at the top of the Logins list screen */
 "Search" = "සොයන්න";
 
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "ආදාන ක්‍ෂේත්‍රයෙහි සොයන්න";
+
 /* Label for the button used to select all logins. */
 "Select All" = "සියල්ල තෝරන්න";
 

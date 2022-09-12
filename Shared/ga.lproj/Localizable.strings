@@ -16,21 +16,6 @@
 /* About settings section title */
 "About" = "Maidir Leis";
 
-/* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Pionnáil leis na Barrshuímh";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Bain Suíomh Pionnáilte";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "Ina leabharmharc";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "Cuairt tugtha air";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Barrshuíomhanna";
-
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Cuir Cluaisín Leis";
 
@@ -74,20 +59,11 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Fillteán";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Suíomh";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Ainm an Fhillteáin";
-
 /* The button to create a new folder */
 "Bookmarks.NewFolder.Label" = "Fillteán Nua";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Teideal";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Gile";
@@ -112,12 +88,6 @@
 
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "Cluaisín á dhúnadh";
-
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "ríomhaire";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Athraigh";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Osclaíodh Cluaisín Príobháideach nua";
@@ -160,9 +130,6 @@
 /* Done button on left side of the Settings view controller title bar */
 "Done" = "Déanta";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Ní féidir comhaid a íoslódáil in Firefox fós.";
-
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "Casta";
 
@@ -193,9 +160,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Ar Aghaidh";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "Faigh na cluaisíní oscailte, leabharmharcanna, agus focail fhaire ó do chuid gléasanna eile.";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Cabhair";
 
@@ -217,32 +181,11 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Dúnta le déanaí";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d gléas ceangailte";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "Gléasanna Sioncronaithe";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "Cealaigh";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "Is féidir leat an rogha seo a athrú sna Socruithe am ar bith";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Roghnaigh Leathanach Baile";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "An bhfuil fonn ort an leathanach seo a úsáid mar leathanach baile?";
-
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Leabharmharc";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Scrios ón Stair";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Oscail i gCluaisín Príobháideach Nua";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Oscail i gCluaisín Nua";
@@ -294,9 +237,6 @@
 
 /* History tableview section header */
 "Last month" = "An mhí seo caite";
-
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "An sioncronú is déanaí: %@";
 
 /* History tableview section header */
 "Last week" = "An tseachtain seo caite";
@@ -387,9 +327,6 @@
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Ní féidir an leathanach a oscailt";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "Roghnóir Painéil";
 
 /* Password textbox in Authentication prompt */
 "Password" = "Focal Faire";
@@ -483,12 +420,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
 
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "Déanann seo cuardach ar an moladh";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Ceangal slán";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "An bhfuil fonn ort tuairisc tuairteála a sheoladh chuig Mozilla leis an bhfadhb a réiteach?";
 
@@ -565,38 +496,14 @@
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Glan Sonraí Príobháideacha";
 
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Glan Sonraí Príobháideacha";
-
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "Bánaigh";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Leathanach Baile";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Socruithe: Leathanach Baile";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Cuir leathanach isteach";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Leathanach Baile faoi láthair";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Úsáid an Nasc Cóipeáilte";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Úsáid na Leathanaigh Oscailte";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "Úsáid an Réamhshocrú";
-
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "Nuair a osclaíonn tú Cluaisín Nua:";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "Taispeáin an Liosta Léitheoireachta";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Cluaisín Nua";
@@ -629,47 +536,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Svaidhpeáil anoir nó aniar le trí mhéar le cluaisín a dhúnadh.";
 
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Sioncronaigh cluaisíní, leabharmharcanna, focail fhaire agus tuilleadh.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "Sioncronaigh cluaisíní, focail fhaire, agus tuilleadh.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "Seans go dtógfaidh an chéad sioncronú tamall fada";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Á Shioncronú";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Á Shioncronú…";
 
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Leabharmharcanna";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Cliaint i gCéin";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Theip ar an sioncronú";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "Stair";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "Focail Fhaire";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Níl sioncronú ar fáil";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Sioncronú as líne";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "Ní féidir le Sync %@ a shioncronú faoi láthair";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "Cluaisíní";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Cluaisín %1$@ as %2$@";
@@ -707,12 +578,6 @@
 /* Accessibility label for the Menu button. */
 "Toolbar.Menu.AccessibilityLabel" = "Roghchlár";
 
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Taispeánann na suímh a dtugann tú cuairt orthu is minice anseo.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Fáilte go dtí na Barrshuímh";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Bain an leathanach - %@";
 
@@ -724,9 +589,6 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "Ainm úsáideora";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Leagan %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Ábhar Gréasáin";

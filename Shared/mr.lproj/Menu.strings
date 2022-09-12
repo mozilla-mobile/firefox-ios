@@ -1,20 +1,8 @@
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction.Title" = "या पृष्ठाला वाचणखूण लावा";
-
-/* Label for the button, displayed in the menu, used to add a page to the reading list. */
-"Menu.AddToReadingList.Title" = "वाचनयादित समाविष्ट करा";
-
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "सर्व टॅब बंद करा";
 
-/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
-"Menu.CopyAddress.Title" = "पत्त्याची प्रत बनवा";
-
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "पृष्ठामध्ये शोधा";
-
-/* Label for the button, displayed in the menu, used to open the Library */
-"Menu.Library.Title" = "आपले ग्रंथालय";
 
 /* Label for the button, displayed in the menu, used to open a new private tab. */
 "Menu.NewPrivateTabAction.Title" = "नवीन खाजगी टॅब उघडा";
@@ -31,9 +19,6 @@
 /* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "इतिहास";
 
-/* Label for the button, displayed in the menu, used to navigate to the home page. */
-"Menu.OpenHomePageAction.Title" = "मुखपृष्ठ";
-
 /* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "वाचन यादी";
 
@@ -43,29 +28,11 @@
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "सिंक केलेले टॅब";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
-"Menu.OpenTopSitesAction.AccessibilityLabel" = "खास साईट्स";
-
-/* Label for the button, displayed in the menu, used to show the html page source */
-"Menu.PageSourceAction.Title" = "पृष्ठाचे स्रोत पहा";
-
-/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
-"Menu.RemoveBookmarkAction.Title" = "वाचनखूण काढा";
-
-/* Label for the button, displayed in the menu, used to open the QR code scanner. */
-"Menu.ScanQRCodeAction.Title" = "QR कोड स्कॅन करा";
-
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "सर्व पहा";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
 "Menu.SharePageAction.Title" = "यासोबत पृष्ठ सामायिक करा…";
-
-/* Label for the button, displayed in the menu, used to open the tabs tray */
-"Menu.ShowTabs.Title" = "टॅब दाखवा";
-
-/* Label for the button, displayed in the menu, used to translate the current page. */
-"Menu.TranslatePageAction.Title" = "पृष्ठ भाषांतर करा";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "डेस्कटॉप साइट विनंती";

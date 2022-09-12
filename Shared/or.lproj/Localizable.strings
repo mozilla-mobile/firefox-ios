@@ -16,41 +16,11 @@
 /* About settings section title */
 "About" = "ବାବଦରେ";
 
-/* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "ସାଇଟ ଉପରେ ପିନକରନ୍ତୁ";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "ପିନ କରା ସାଇଟ ହଟାନ୍ତୁ";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "ଚିହ୍ନିତ ସ୍ଥାନ ହେଲା";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "ପରିଦର୍ଶିତ";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "ନଗଦ ଚିହ୍ନିତ ସ୍ଥାନ";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "ଅଧିକ";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "ପକେଟରେ ଟ୍ରେଂଡିଙ୍ଗ କରୁଛି";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "ଟ୍ରେଣ୍ଡିଂ";
-
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "ନଗଦ ଦେଖିଥିଲେ";
 
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "ଧାଡ଼ି: %d";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "ଧାଡ଼ି ସେଟ୍ କରନ୍ତୁ";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "ସବୁଠାରୁ ଭଲ ସାଇଟଗୁଡ଼ିକ";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "ଟ୍ୟାବ ଯୋଡ଼ନ୍ତୁ";
@@ -89,12 +59,6 @@
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "ପପ-ଅପ ଉଇଣ୍ଡୋ ଅଟକାନ୍ତୁ";
 
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "ଚିହ୍ନିତ ସ୍ଥାନ";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "ଫୋଲ୍ଡର";
-
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "ଶୀର୍ଷକ";
 
@@ -113,12 +77,6 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "ଫୋଲଡର";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "ଅବସ୍ଥିତି";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "ଫୋଲଡର ନାମ";
-
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "ନୂତନ ଚିହ୍ନିତସ୍ଥାନ";
 
@@ -130,12 +88,6 @@
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "ନାମ";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "ଆପଣ ସାଇତୁଥିବା ବୁକମାର୍କସବୁ ଏଠାରେ ଦିଶିବ ।";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "ଉଜ୍ଜଳତା";
@@ -163,9 +115,6 @@
 
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "ଲିଙ୍କକୁ ଚିହ୍ନଟ କରନ୍ତୁ";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "ପରିବର୍ତ୍ତନ";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "ନୂଆ ବ୍ୟକ୍ତିଗତ ଟ୍ୟାବ ଖୋଲାଗଲା";
@@ -205,12 +154,6 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "ପୃଷ୍ଠା ଲୋଡ କରିପାରିଲା ନାହିଁ ।";
-
-/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "IOS 13 ବ୍ୟବହାରକାରୀଙ୍କ ପାଇଁ, Firefox ବର୍ତ୍ତମାନ ସ୍ୱୟଂଚାଳିତ ଭାବରେ ଏକ କଳା ଥିମ୍ କୁ ବଦଳିଯାଏ ଯେତେବେଳେ ଆପଣଙ୍କର ଫୋନ୍ ଡାର୍କ ମୋଡ୍ ରେ ସେଟ୍ ହୋଇଯାଏ | ଏହି ଆଚରଣ ପରିବର୍ତ୍ତନ କରିବାକୁ, ସେଟିଂସମୂହ> ଥିମ୍ କୁ ଯାଆନ୍ତୁ";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "ଡାର୍କ ଥିମ୍ ବର୍ତ୍ତମାନ ଏକ ଡାର୍କ କୀବୋର୍ଡ୍ ଏବଂ ଡାର୍କ ସ୍ପ୍ଲାସ୍ ସ୍କ୍ରିନ୍ ଅନ୍ତର୍ଭୁକ୍ତ କରେ";
 
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "ବିଲ୍ଟ-ଇନ୍ ବର୍ଦ୍ଧିତ ଟ୍ରାକିଂ ସୁରକ୍ଷା ବିଜ୍ଞାପନଗୁଡ଼ିକୁ ଆପଣଙ୍କୁ ଅନୁସରଣ କରିବା ବନ୍ଦ କରିବାରେ ସାହାଯ୍ୟ କରେ | ଅଧିକ ଟ୍ରାକର୍, ବିଜ୍ଞାପନ, ଏବଂ ପପ୍-ଅପ୍ କୁ ଅବରୋଧ କରିବାକୁ କଠୋର ମୋଡ ଚାଲୁ କରନ୍ତୁ";
@@ -262,17 +205,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "ଡାଉନଲୋଡ଼ ବାତିଲ କରନ୍ତୁ";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "ଡାଉନଲୋଡ଼ଟି ଏଯାଏ Firefoxରେ ଆସିନାହିଁ ।";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "ଆହରଣ ବାତିଲ ହେଲା";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "ଡାଉନଲୋଡ଼ ବିଫଳ ହେଲା";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "ପୁନଃ ଚେଷ୍ଟା";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "ଡାଉନଲୋଡ଼ସମୂହ";
@@ -334,18 +271,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "ଆଗକୁ";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "ଭୁଲ ଇମେଲ? ଆରମ୍ଭ କରିବା ପାଇଁ ନିମ୍ନରେ ବିଚ୍ଛିନ୍ନ କରନ୍ତୁ";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "ଖାତା ଯାଞ୍ଚ ଆବଶ୍ୟକ";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "ଆପଣଙ୍କୁ %@ ଯାଞ୍ଚ କରିବାକୁ ପଡିବ | Firefoxରୁ ଯାଞ୍ଚ ଲିଙ୍କ ପାଇଁ ଆପଣଙ୍କର ଇମେଲ୍ ଯାଞ୍ଚ କରନ୍ତୁ";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "ଅନ୍ୟ ଏକ ଉପକରଣ ସଂଯୋଗ କରନ୍ତୁ";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "ଫାୟାରଫକ୍ସ ଖାତା";
 
@@ -354,21 +279,6 @@
 
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "ଇଣ୍ଟରନେଟ୍ ସଂଯୋଗ ନାହିଁ";
-
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "ସମୟାନୁସାମୟିକ ପସନ୍ଦଗୁଡ଼ିକୁ ଖୋଲନ୍ତୁ";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "କାଢ଼ନ୍ତୁ";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "ଇମେଲକୁ ଆଉଥରେ ପଠାନ୍ତୁ";
-
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "ସମୟାନୁସାମୟିକ ହେବାପାଇଁ ଲଗ ଇନ କରନ୍ତୁ";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "ନିଜର ଅନ୍ୟ ଡିଭାଇସରୁ ଟ୍ୟାବ, ବୁକମାର୍କ ଓ ପାସୱାର୍ଡ଼ ଆଦି ଆଣନ୍ତୁ ।";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "ବର୍ତ୍ତମାନ ସମୟସାମୟିକ କରନ୍ତୁ";
@@ -381,9 +291,6 @@
 
 /* Title of a notification displayed when named device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_title" = "ସମୟାନୁସାମୟିକ ସଂଯୋଗ ବିଚ୍ୟୁତି ହୋଇଗଲା";
-
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "ନିଜର ଅନ୍ୟ ଡିଭାଇସରୁ ଖୋଲା ଟ୍ୟାବ, ବୁକମାର୍କ ଓ ପାସୱାର୍ଡ଼ ଆଦି ଆଣନ୍ତୁ ।";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "ସହଯୋଗ";
@@ -406,9 +313,6 @@
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "ଆପଣ ସବୁଠାରୁ ଅଧିକ ଥର ପଢ଼ିଥିବା ୱେବସାଇଟସବୁ ଏଠାରେ ଦେଖିପାରିବେ ।";
 
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "ଆପଣ ଯାଞ୍ଚ ହେବା ଆବଶ୍ୟକ ।";
-
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "ଫାୟାରଫକ୍ସ ସମୟାନୁସାମୟିକ";
 
@@ -418,23 +322,11 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "ନିକଟରେ ବନ୍ଦ ହୋଇଥିବା";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d ଉପକରଣ(ଗୁଡ଼ିକ) ସଂଯୋଗ କରାଯାଇଛି";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "ବାତିଲ କରନ୍ତୁ";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "ମୂଳ ପୃଷ୍ଠା ବିନ୍ୟାସ କରନ୍ତୁ";
-
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "ଚିହ୍ନିତ ସ୍ଥାନ";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "ପୁରୁଣା ତଥ୍ୟରୁ ବାହାର କରନ୍ତୁ";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "ଗୋପନ ଟ୍ୟାବରେ ଖୋଲନ୍ତୁ";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "ନୂତନ ଟ୍ୟାବରେ ଖୋଲନ୍ତୁ";
@@ -481,9 +373,6 @@
 /* History tableview section header */
 "Last month" = "ଗତ ମାସ";
 
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "ଶେଷ ସିଂକ୍ରୋନାଇଜ: %@";
-
 /* History tableview section header */
 "Last week" = "ଗତ ସପ୍ତାହ";
 
@@ -505,12 +394,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "ଲଗଇନ";
 
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "ପରିବର୍ତ୍ତିତ ହୋଇଛି";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "ଲଗଇନ୍";
-
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "ସଂରକ୍ଷଣ କରନ୍ତୁ ନାହିଁ";
 
@@ -522,15 +405,6 @@
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "ଅଦ୍ୟତନ କରନ୍ତୁ";
-
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "ଲଗଇନ୍";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "ସମସ୍ତ";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "ୱେବ୍‌ସାଇଟ୍";
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "ବାଛନ୍ତୁ";
@@ -560,9 +434,6 @@
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL କ୍ଲିପବୋର୍ଡରେ ନକଲ କରାହୋଇଛି";
-
-/* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "ରାତ୍ର ମୋଡ ସକ୍ଷମ କରନ୍ତୁ";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "ଲଗାନ୍ତୁ";
@@ -643,9 +514,6 @@
 /* Reopen button text shown in reopen-alert at home page. */
 "ReopenAlert.Actions.Reopen" = "ପୁନର୍ବାର ଖୋଲନ୍ତୁ";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "ବନ୍ଦ ହୋଇଥିବା ଟ୍ୟାବଗୁଡ଼ିକୁ ପୁନଃସ୍ଥାପନ କରନ୍ତୁ";
-
 /* Font type setting in the reading view settings */
 "Sans-serif" = "ସାନ୍ସ- ସେରିଫ୍‌";
 
@@ -700,12 +568,6 @@
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "ପଠାନ୍ତୁ";
 
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "ପଢ଼ା ତାଲିକାରେ ଯୋଡ଼ନ୍ତୁ";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "ଚିହ୍ନିତ ସ୍ଥାନ";
-
 /* Title of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.title" = "ଫାୟାରଫକ୍ସ ସମୟାନୁସାମୟିକ";
 
@@ -745,9 +607,6 @@
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "ବ୍ୟକ୍ତିଗତ ତଥ୍ୟ ସଫାକରନ୍ତୁ";
 
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "ବ୍ୟକ୍ତିଗତ ତଥ୍ୟ ସଫାକରନ୍ତୁ";
-
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "କ୍ଲିପବୋର୍ଡରେ ନକଲ କରାହୋଇଛି";
 
@@ -773,9 +632,6 @@
    Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
 "Settings.DisplayTheme.SwitchTitle" = "ସ୍ଵୟଂକ୍ରିୟଭାବେ";
 
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "ସର୍ବଦା";
-
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "ଉପକରଣର ନାମ";
 
@@ -785,38 +641,14 @@
 /* General settings section title */
 "Settings.General.SectionName" = "ସାଧାରଣ";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "ସଫାକରନ୍ତୁ";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "ମୂଳ ପୃଷ୍ଠା";
 
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "ପ୍ରଚଳିତ ପୃଷ୍ଠା ବ୍ୟବହାର କରନ୍ତୁ";
 
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "ପୂର୍ବନିର୍ଦ୍ଧାରିତକୁ ବ୍ୟବହାର କରନ୍ତୁ";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "ଚିହ୍ନିତ ସ୍ଥାନଗୁଡ଼ିକ";
-
-/* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Firefox କୁ ଇଚ୍ଛାମୂତାବକ ସଜାନ୍ତୁ";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "ପରିଦର୍ଶିତ";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "ଇତିହାସ";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "ମୂଳ ପୃଷ୍ଠା";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "ପକେଟରେ ଟ୍ରେଂଡିଙ୍ଗ କରୁଛି";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "ପଢ଼ା ତାଲିକା ଦେଖାନ୍ତୁ";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "ନୂତନ ଟ୍ୟାବ";

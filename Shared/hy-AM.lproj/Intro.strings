@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "Ընդլայնված Հետագծման պաշտպանությունը արգելափակում է չարամիտ ծրագիրը և դադարեցնում հետքերը:";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "Ինքնաշխատ գաղտնիություն";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Հաջորդը";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Մուտք գործել";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Գրանցվել";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "Որոնման առաջարկներն ավելի արագ են հասցնում կայքեր:";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Արագ որոնում";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Այս սարքում բերեք էջանիշեր, պատմություն և գաղտնաբառեր Firefox- ին:";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Համաժամեցնել Firefox-ը սարքերի միջև";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Օգտագործեք ցանկացած էլ. ֊փոստի գործադիր — ոչ միայն փոստ — Firefox-ով։";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Դուք ստացել եք նամակ… ընտրանքներ";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Հպեք դիմակի պատկերակին` անձնական զննարկման աշխատատեսակ անցնելու համար։";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Զննարկեք այնպես, կարծես ոչ ոք ձեզ չի նայում";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Պաշտպանեք ձեր մուտքագրումները և տվյալները Firefox-ում՝ ամենուրեք:";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Անվտանգ համաժամեցում";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Որոնում եք ինչ-որ այլ բան? Ընտրեք մեկ այլ որոնիչ (կամ ավելացրեք ձեր սեփական) Կարգավորումներում։";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Ձեր որոնումը, ձեր ընտրությունը";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Մուտք գործեք ձեր հաշիվ լրացուցիչ հատկություններ համաժամեցնելու և մատչելու համար։";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Համաժամեցրեք ձեր էջանիշերը, պատմությունը և գաղտնաբառերը ձեր հեռախոսում։";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Արագ է, գաղտնի և ձեր կողմից։";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Բարի գալուստ Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Սկսել դիտարկումը";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Միացնել համաժամեցումը…";
 

@@ -4,24 +4,6 @@
 /* Close Private Tabs */
 "TodayWidget.ClosePrivateTabsLabelV2" = "Đóng thẻ riêng tư";
 
-/* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV3" = "Đóng thẻ riêng tư";
-
-/* Copied Link from clipboard displayed */
-"TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "Đã sao chép liên kết vào bộ nhớ tạm";
-
-/* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemClearPrivateTabs" = "Xóa các thẻ riêng tư";
-
-/* Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemGoToCopiedLink" = "Chuyển đến liên kết đã sao chép";
-
-/* Quick Actions drop down menu item for new private search when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemNewPrivateSearch" = "Tìm kiếm riêng tư mới";
-
-/* Quick Actions drop down menu item for new search when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemNewSearch" = "Tìm kiếm mới";
-
 /* Description for medium size widget to add Firefox Shortcut to home screen */
 "TodayWidget.FirefoxShortcutGalleryDescription" = "Thêm lối tắt Firefox tới màn hình chính của bạn.";
 
@@ -31,20 +13,8 @@
 /* Go to copied link */
 "TodayWidget.GoToCopiedLinkLabelV2" = "Đi đến liên kết đã sao chép";
 
-/* Go To Copied Link text pasted on the clipboard but this string doesn't have new line character */
-"TodayWidget.GoToCopiedLinkLabelV3" = "Đi đến liên kết đã sao chép";
-
-/* Go to copied link */
-"TodayWidget.GoToCopiedLinkLabelV4" = "Đi đến liên kết đã sao chép";
-
 /* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
 "TodayWidget.MoreTabsLabel" = "+%d thêm…";
-
-/* Open New Private Tab button label for medium size action */
-"TodayWidget.NewPrivateTabButtonLabelV2" = "Tìm kiếm trong thẻ riêng tư";
-
-/* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Tìm kiếm trong Firefox";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Tìm kiếm mới";
@@ -52,29 +22,11 @@
 /* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.NoOpenTabsLabel" = "Không có thẻ đang mở.";
 
-/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.NoOpenTabsLabelV2" = "Không có thẻ đang mở";
-
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.OpenFirefoxLabel" = "Mở Firefox";
 
-/* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetGalleryDescription" = "Khám phá những câu chuyện hấp dẫn và kích thích tư duy từ khắp nơi trên web do Pocket quản lý.";
-
-/* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Đề xuất bởi Pocket";
-
-/* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetTitle" = "Được đề xuất bởi Pocket";
-
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Tìm kiếm riêng tư";
-
-/* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Chọn lối tắt Firefox để thêm vào màn hình chính của bạn.";
-
-/* Quick Actions left label text for dropdown menu when widget enters edit mode */
-"TodayWidget.QuickActionDropDownMenu" = "Hành động nhanh";
 
 /* Description for small size widget to add it to home screen */
 "TodayWidget.QuickActionGalleryDescription" = "Thêm lối tắt Firefox vào màn hình chính của bạn. Sau khi thêm tiện ích, hãy chạm và giữ để chỉnh sửa tiện ích và chọn một phím tắt khác.";
@@ -85,26 +37,11 @@
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
 "TodayWidget.QuickActionsGalleryTitleV2" = "Lối tắt Firefox";
 
-/* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - Hành động nhanh";
-
-/* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewGalleryDescription" = "Truy cập các thẻ đang mở của bạn trực tiếp trên màn hình chính.";
-
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Thêm phím tắt vào các thẻ đang mở của bạn.";
 
 /* Title for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryTitle" = "Xem nhanh";
-
-/* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewLargeGalleryDescription" = "Thêm phím tắt vào các thẻ đang mở của bạn.";
-
-/* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - Thẻ đang mở";
-
-/* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Tìm kiếm trong Firefox";
 
 /* Search in Firefox. Do not translate the word Firefox */
 "TodayWidget.SearchInFirefoxV2" = "Tìm kiếm trong Firefox";
@@ -120,16 +57,4 @@
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitleV2" = "Lối tắt trên trang web";
-
-/* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - Trang web hàng đầu";
-
-/* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - Lối tắt cho trang web";
-
-/* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
-"TodayWidget.ViewMore" = "Xem thêm";
-
-/* View More… for Firefox Pocket stories widget where we don't know how many articles are available. */
-"TodayWidget.ViewMoreDots" = "Xem thêm…";
 

@@ -2,7 +2,7 @@
 "Add to Bookmarks" = "ᱵᱩᱠᱢᱟᱨᱠ ᱨᱮ ᱡᱚᱲᱹᱟᱣ";
 
 /* Label for preview action on Tab Tray Tab to close the current tab */
-"Close Tab" = "ᱴᱮᱵ ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
+"Close Tab" = "ᱴᱮᱵᱽ ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
 
 /* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
 "Copy URL" = "URL ᱱᱚᱠᱚᱞ‌ ᱢᱮ";
@@ -12,9 +12,6 @@
 
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
 "Open Last Bookmark" = "ᱢᱩᱪᱟᱹᱫ ᱵᱩᱠᱢᱟᱨᱠ ᱠᱷᱩᱞᱟᱹᱭ ᱢᱮ";
-
-/* String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch */
-"Open Last Tab" = "ᱢᱩᱪᱟᱹᱫ ᱴᱮᱵ ᱠᱷᱩᱞᱟᱹᱭ ᱢᱮ";
 
 /* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
 "Preview of %@" = "%@ ᱨᱮᱭᱟᱜ ᱞᱟᱦᱟ ᱛᱮᱭᱟᱜ ᱧᱮᱞ";

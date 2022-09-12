@@ -16,44 +16,11 @@
 /* About settings section title */
 "About" = "Относно";
 
-/* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Закачане в предпочитаните";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Премахване";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "Отметната";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "Посетена";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "Последни отметки";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "Още";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "Популярно в Pocket";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "Популярни";
-
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Наскоро посетени";
 
-/* This button will open the library showing all the users bookmarks */
-"ActivityStream.RecentlySaved.ShowAll" = "Всички";
-
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "Редове: %d";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Избиране на брой редове";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Предпочитани";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Добавяне на раздел";
@@ -92,12 +59,6 @@
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "Блокиране на изскачащи прозорци";
 
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Отметка";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Папка";
-
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "Заглавие";
 
@@ -116,12 +77,6 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Папка";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Местоположение";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Име на папка";
-
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Нова отметка";
 
@@ -133,9 +88,6 @@
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Титла";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "Линк";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "Научете повече";
@@ -163,12 +115,6 @@
 
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "Затваряне на раздел";
-
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "компютър";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Превключване";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Отворен е нов поверителен раздел";
@@ -208,9 +154,6 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Страницата не може да бъде отворена.";
-
-/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "За потребителите на iOS 13 Firefox автоматично преминава към тъмна тема, когато телефонът ви е настроен на Dark Mode. За да промените това поведение, отидете на Настройки > Тема.";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Към настройките";
@@ -256,17 +199,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "Отмяна на изтеглянето";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Изтегляния не се поддържат във Firefox";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Oтменено изтегляне";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "Неуспешно изтегляне";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "Повторен опит";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Изтегляния";
@@ -328,18 +265,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Напред";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Грешен адрес на ел. поща? Изключете по-долу и започнете отново.";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "Изисква се потвърждение";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Необходимо е да потвърдите %@. Проверете своята ел. поща за потвърждаваща препратка от Firefox.";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Свързване на друго устройство";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Firefox Account";
 
@@ -349,35 +274,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Няма връзка с Интернет";
 
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Отваряне на настройките на Sync";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "Премахване";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Премахнете Firefox Account, свързан с устройството, за да влезете като друг потребител.";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "Премахване на сметка";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "Повторно изпращане";
-
-/* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "Включване на Sync";
-
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Вписване в Sync";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "Вземете отворените раздели, отметки и пароли от другите ваши устройства.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Синхронизиране";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "Вземете Мрежата със себе си";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Firefox Sync е свързан към %@";
@@ -399,9 +297,6 @@
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Устройство е изключено успешно от Firefox Sync";
-
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "Вземи отворени раздели, отметки и пароли от други устройства.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Помощ";
@@ -433,15 +328,6 @@
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Впишете се, за да видите списък с раздели от други ваши устройства.";
 
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Сметката ви трябва да бъде потвърдена.";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Искате ли да видите свои раздели от други устройства тук?";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Включете синхронизирането на раздели, за да видите списък с раздели от други ваши устройства.";
-
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Синхронизиране на Firefox";
 
@@ -451,32 +337,11 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Наскоро затворени";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d устройства свързани";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "Синхронизирани устройства";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "Отказ";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "Можете да промените това по всяко време в настройките";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Задаване на начална страница";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Искате ли да използвате тази страница като начална?";
-
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Отметка";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Премахване от историята";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Отваряне в поверителен раздел";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Отваряне в раздел";
@@ -526,15 +391,6 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Показване на предишен раздел";
 
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
-"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Включване на автоматично затваряне";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox ще да затваря разделите, които не са преглеждани през последния месец.";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
-"InactiveTabs.TabTray.AutoClosePrompt.Title" = "Автоматично затваряне след един месец?";
-
 /* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
 "InactiveTabs.TabTray.CloseButtonTitle" = "Затваряне на всички неактивни раздели";
 
@@ -546,9 +402,6 @@
 
 /* History tableview section header */
 "Last month" = "Миналия месец";
-
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Последна синхронизация: %@";
 
 /* History tableview section header */
 "Last week" = "Миналата седмица";
@@ -580,15 +433,6 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.Onboarding.LearnMoreButtonTitle" = "Научете повече";
 
-/* Message shown when you enter Logins & Passwords for the first time. */
-"Logins.Onboarding.Message" = "Вашите регистрациите вече са защитени с Face ID, Touch ID или паролата на устройството.";
-
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "Последна промяна";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "Вход";
-
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Отказ";
 
@@ -613,15 +457,6 @@
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "Обновяване";
 
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "Влизане";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "Всички";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "Страница";
-
 /* Restore Tabs Prompt Description */
 "Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Изглежда, че Firefox се е сринал преди. Искате ли разделите да бъдат възстановени?";
 
@@ -636,9 +471,6 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Отметката е добавена";
 
-/* Toast displayed to the user after adding the item to the Top Sites. */
-"Menu.AddPin.Confirm" = "Закачена в предпочитаните страници";
-
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Добавено към списъка за четене";
 
@@ -647,12 +479,6 @@
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "Адресът е копиран в системния буфер";
-
-/* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "Включване на нощния режим";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "Действия със страницата";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Поставяне";
@@ -669,53 +495,11 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Отметката е премахната";
 
-/* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "Премахната от предпочитаните страници";
-
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "Спрени";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox спря части от страницата, които може би проследяват вашето разглеждане.";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Блокирани проследяващи елементи";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "Бисквитки за следене в различни сайтове";
-
 /* Description of cross-site trackers. */
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "Тези бисквитки ви следват от сайт на сайт и събират данни за това, което правите онлайн. Те се разполагат от трети страни като рекламодатели и компании за събиране и анализ на статистически данни.";
 
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "Защитата от проследяване вече е изключена за този сайт.";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "Включване на защита от проследяване";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "Защитата от проследяване вече е включена за този сайт.";
-
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Снемане на цифров отпечатък";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Спрени бисквитки за следене в различни сайтове";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "Спряно снемане на цифров отпечатък";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "Научете повече как защитата от проследяване спира проследяващите елементи, които събират на едно място данни за разглеждането на несвързани сайтове.";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "Не са открити проследяващи елементи в тази страница.";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Този сайт съдържа елементи, които могат да проследяват вашето разглеждане. Вие сте изключили защитата от проследяване.";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "Разрешаване за този сайт";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Новото в това издание";
@@ -748,9 +532,6 @@
 /* Restore Tabs Affirmative Action */
 "Okay" = "Добре";
 
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
-"Onboarding.WhatsNew.RecentSearches.Title" = "Скорошни търсения";
-
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Ами сега! Firefox се срина";
 
@@ -769,23 +550,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Страница не може да бъде отворена";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "Меню настройки на страницата";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "Избор на панел";
-
 /* Password textbox in Authentication prompt */
 "Password" = "Парола";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Нямате никакви удостоверения, синхронизирани от вашия Firefox Account";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "Налични удостоверения:";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Удостоверения на Firefox";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Затваряне";
@@ -823,9 +589,6 @@
 /* Name for button removing current article from reading list in reader mode */
 "Remove from Reading List" = "Премахване от Списък за четене";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "Възстановяване на затворен раздел";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "Нулиране размера на текста";
 
@@ -843,9 +606,6 @@
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Данните са невалидни";
-
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Моля, позволете на Firefox да има достъп то камерата на устройството от „Настройки“ -> „Поверителност“ -> „Камера“.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Сканиране на QR код";
@@ -891,12 +651,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ОК";
 
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "Резултати от подсказката";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Шифрована връзка";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Ше изпратете ли доклад за срива, така че Mozilla да реши проблема?";
 
@@ -933,12 +687,6 @@
 
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "Раздел е получен от %@";
-
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "Добавяне към списъка за четене";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "Отметка";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Докоснете за начало";
@@ -987,9 +735,6 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Изчистване на лични данни";
-
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Изчистване на лични данни";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Копирано в буфера";
@@ -1040,15 +785,6 @@
 /* Title in main app settings for Theme settings */
 "Settings.DisplayTheme.Title.v2" = "Тема";
 
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "Винаги";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Само при използване на защита от проследяване";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "Указване на страниците, че не желаете да бъдете проследявани";
-
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Име на устройството";
 
@@ -1061,74 +797,23 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Основни";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "Изчистване";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Начална страница";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Настройки на начална страница";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Въвеждане на страница";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Текуща начална страница";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Използване на копирана препратка";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Използване на текущата страница";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "Стандартна";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "Регистрации и пароли";
 
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "При отваряне на раздел:";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "Настройки на предпочитаните страници";
-
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Празна страница";
 
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "Отметки";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "Предпочитани от вас страници";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter2" = "За преглед по-късно";
-
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "Последни отметки";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "Посетена";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "История";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Начална страница";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "Популярно в Pocket";
-
-/* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "Страхотно съдържание от мрежата.";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "Показване на списъка за четене";
-
-/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
-"Settings.NewTab.Option.RecommendedByPocketDescription" = "Изключително съдържание, подбрано от %1$@ част от семейството на %2$@";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Нов раздел";
@@ -1187,47 +872,20 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Добре, разбрах";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Може да изберете кой списък да използва Firefox, за да блокира елементи от страниците, които следят вашето поведение в Мрежата.";
-
-/* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "Баланс между защита и бързодействие.";
-
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "Научете повече";
-
-/* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "Повече информация…";
 
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Защита от проследяване";
 
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Разрешава някакво следене, за да работят правилно страниците.";
-
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Стриктна защита";
-
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Блокира известните проследители. Някои страници може да не работят правилно.";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Проследяването е събиране на едно място на данни за вашето разглеждане на видимо несвързани сайтове в Мрежата.";
 
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Подобрена защита от проследяване";
 
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Oтстраняване на неизправности";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "Изтриване";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "Готово";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "Редактиране";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Повече";
@@ -1259,9 +917,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Отваряне в Firefox";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "Отваряне в поверителен режим";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Търсене в Firefox";
 
@@ -1284,53 +939,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Плъзнете наляво или надясно с три пръста, за да затворите раздел.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Обикновен режим на разглеждане";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Поверителен режим на разглеждане";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Синхронизирйте своите раздели, отметки, пароли и други.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "Синхронизирйте своите раздели, пароли и други.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "Първия цикъл на синхронизиране може да отнеме известно време";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Синхронизиране";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Синхронизиране…";
 
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Отметки";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Oтдалечени клиенти";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Синхронизацията се провали";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "История";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "Входящи данни";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Синхронизация не е налична";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Синхроницията е офлайн";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "Синхронизирането има проблем %@";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "Раздели";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Раздел %1$@ от %2$@";
@@ -1350,23 +963,14 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d затворен(и) раздел(а)";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "Търсене на раздели";
-
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Затваряне на всички раздели";
-
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "Затваряне на избрания раздел";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Неактивни раздели";
 
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Отваряне на нов раздел";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "Отваряне на избрания раздел";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Страницата не можа да бъде показана в изгледа за четене.";
@@ -1398,12 +1002,6 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Затваряне на всички раздели";
 
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Вашите предпочитани страници се показват тук.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Добре дошли в предпочитаните страници";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Премахване на страница - %@";
 
@@ -1419,17 +1017,8 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "непрочетена";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Обновете Firefox, за да се свържете";
-
 /* Username textbox in Authentication prompt */
 "Username" = "Потребителско име";
-
-/* Text message in the settings table view */
-"Verify your email address" = "Потвърдете своя адрес на ел. поща";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Версия %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Съдържание от Мрежата";

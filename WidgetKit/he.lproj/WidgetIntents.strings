@@ -14,6 +14,30 @@
 "eV8mOT" = "סוג פעולה מהירה";
 
 /* (No Comment) */
+"fi3W24-2GqvPe" = "There are ${count} options matching ‘Go to Copied Link’.";
+
+/* (No Comment) */
+"fi3W24-eHmH1H" = "There are ${count} options matching ‘Clear Private Tabs’.";
+
+/* (No Comment) */
+"fi3W24-scEmjs" = "There are ${count} options matching ‘New Private Search’.";
+
+/* (No Comment) */
+"fi3W24-xRJbBP" = "There are ${count} options matching ‘New Search’.";
+
+/* (No Comment) */
+"PzSrmZ-2GqvPe" = "Just to confirm, you wanted ‘Go to Copied Link’?";
+
+/* (No Comment) */
+"PzSrmZ-eHmH1H" = "Just to confirm, you wanted ‘Clear Private Tabs’?";
+
+/* (No Comment) */
+"PzSrmZ-scEmjs" = "Just to confirm, you wanted ‘New Private Search’?";
+
+/* (No Comment) */
+"PzSrmZ-xRJbBP" = "Just to confirm, you wanted ‘New Search’?";
+
+/* (No Comment) */
 "scEmjs" = "חיפוש פרטי חדש";
 
 /* (No Comment) */

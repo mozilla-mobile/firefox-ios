@@ -20,25 +20,10 @@
 "ActivityStream.ContextMenu.AddToShortcuts" = "Aldoni al ŝparvojoj";
 
 /* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Alplingli al la plej vizititaj";
-
-/* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "Alpingli";
-
-/* The title for removing a shortcut action */
-"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Forigi el ŝparvojoj";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Forigi alpinglitan retejon";
 
 /* The title for the unpinning a topsite action */
 "ActivityStream.ContextMenu.UnpinTopsite" = "Depingli";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "En legosignoj";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "Vizitita";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "Reiri";
@@ -46,50 +31,17 @@
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Langetoj: %d";
 
-/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
-"ActivityStream.JumpBackIn.TabGroup.Title" = "Via serĉo de \"%@\"";
-
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "Ĵuse konservitaj";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "Ĵusaj legosignoj";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "Pli";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "Tendencoj en Pocket";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle2" = "Rekomendita de Pocket";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "Tendencoj";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Ĵusaj vizitoj";
 
-/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
-"ActivityStream.RecentlySaved.SectionTitle" = "Ĵuse konservitaj";
-
-/* This button will open the library showing all the users bookmarks */
-"ActivityStream.RecentlySaved.ShowAll" = "Montri ĉiujn";
-
-/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
-"ActivityStream.RecentlyVisited.RemoveButton.Title" = "Forigi";
-
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Ŝparvojoj";
 
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "Vicoj: %d";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Difini nombron de vicoj";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Plej vizititaj";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Aldoni langeton";
@@ -125,23 +77,11 @@
 /* Authentication prompt title */
 "Authentication required" = "Legitimo postulata";
 
-/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Description" = "Serĉi per %@ rekte el la adresa strio";
-
-/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Title" = "Serĉi per %@";
-
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Reen";
 
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "Bloki ŝprucfenestrojn";
-
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Legosigno";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Dosierujo";
 
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "Titolo";
@@ -151,15 +91,6 @@
 
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Legosignoj";
-
-/* A label indicating the action of adding a web page as a bookmark. */
-"Bookmarks.Actions.Add" = "Aldoni";
-
-/* A label indicating the action of bookmarking all currently open non private tabs. */
-"Bookmarks.Actions.BookmarkAllTabs" = "Aldoni legosignon por ĉiuj langetoj";
-
-/* A label indicating the action of bookmarking the current tab. */
-"Bookmarks.Actions.BookmarkCurrentTab" = "Aldoni legosignon por la nuna langeto";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "Modifi";
@@ -173,17 +104,8 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Dosierujo";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Loko";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Nomo de dosierujo";
-
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
 "Bookmarks.Menu.DesktopBookmarks" = "Skribotablaj langetoj";
-
-/* A label indicating all bookmarks that were recently added. */
-"Bookmarks.Menu.RecentlyBookmarked" = "Ĵusaj legosignoj";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Nova legosigno";
@@ -194,17 +116,8 @@
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "Nova apartigilo";
 
-/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
-"Bookmarks.Search.SearchBookmarks" = "Serĉi legosignojn";
-
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Titolo";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "Retadreso";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "Konservitaj legosignoj aperos ĉi tie.";
 
 /* Describes the date on which the breach occurred */
 "BreachAlerts.BreachDate" = "Tiu ĉi datumfuĝo okazis je";
@@ -245,14 +158,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "Langeto fermata";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "komputilo";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "Aldoni legosignon por ligilo";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Ŝanĝi";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Nova privata langeto malfermita";
@@ -277,12 +184,6 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Malfermi en nova langeto";
-
-/* Context menu item for opening a link in a new private tab */
-"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Malfermi ligilon en nova privata langeto";
-
-/* Context menu item for opening a link in a new tab */
-"ContextMenu.OpenLinkInNewTabButtonTitle" = "Malfermi ligilon en nova langeto";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Konservi bildon";
@@ -313,12 +214,6 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Ne eblis ŝargi paĝon.";
-
-/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "Por uzantoj de iOS13 Firefox nun aŭtomate elektas malhelan etoson se via telefono uzas malhelan reĝimon. Por ŝanĝi tiun konduton, iru al Agordoj > Etoso.";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "La malhela etoso nun inkluzivas malhelan klavaron kaj malhelan komencan ekranon.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "La integrita plibonigita protekto kontraŭ spurado helpas eviti ke reklamoj spuru vin. Ŝaltu la rigoran reĝimon por bloki eĉ pli da spuriloj, reklamoj kaj ŝprucaĵoj.";
@@ -373,17 +268,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "Nuligi elŝuton";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Elŝutoj ne estas ankoraŭ subtenataj en Firefox";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Elŝuto nuligita";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "Elŝuto malsukcesa";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "Klopodi denove";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Elŝutoj";
@@ -481,18 +370,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Antaŭen";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Ĉu malĝusta retpoŝto? Malkonektiĝu malsupre kaj rekomencu denove.";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "Konfirmo de konto postulata";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Vi bezonas konfirmi %@. Kontrolu vian retpoŝton, kie vi ricevos konfirman ligilon de Firefox.";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Konekti alian aparaton";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Konto de Firefox";
 
@@ -502,32 +379,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Sen retaliro";
 
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Malfermi preferojn de Spegulado";
-
-/* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "Skani la kodon QR montrita ĉe firefox.com/pair";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "Forigi";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Forigi la konton de Firefox asociita kun tiu ĉi aparato por komenci seancon de alia uzanto.";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "Forigi konton";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "Resendi retpoŝton";
-
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "Komencu seancon per via filmilo";
-
-/* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "Per konto, speguli Firefox inter aparatoj.";
-
-/* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Krei konton de Firefox.";
 
 /* FxA sign in view qr code instructions */
 "fxa.signin.qr-link-instruction" = "En via komputilo malfermu Firefox kaj vizitu firefox.com/pair";
@@ -535,23 +388,11 @@
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Preta skani";
 
-/* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "Ŝalti Speguladon";
-
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "Anstataŭe uzi retpoŝton";
 
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Komenci seancon en Spegulado";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "Ricevi viajn langetojn, legosignojn kaj pasvortojn el viaj aliaj aparatoj.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Speguli nun";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "Kunporti vian Teksaĵon kun vi";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Spegulado de Firefox konektiĝis al %@";
@@ -577,9 +418,6 @@
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Emblemo de Firefox, ŝanĝi ekranfonon.";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "Ricevi viajn malfermitajn langetojn, legosignojn kaj pasvortojn el viaj aliaj aparatoj.";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Helpo";
 
@@ -601,9 +439,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Hodiaŭ kaj hieraŭ";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Viŝado de la ĵusa historio forigos historion, kuketojn kaj aliajn retumilajn datumojn.";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "Ĵuse vizititaj retejoj aperos ĉi tie.";
 
@@ -612,15 +447,6 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Komencu seancon por vidi liston de langetoj de viaj aliaj aparatoj.";
-
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Via konto bezonas esti kontrolita.";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Ĉu vi volas vidi ĉi tie viajn langetojn de aliaj aparatoj?";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Ŝaltu la speguladon de langetoj por vidi liston de langetoj de viaj aliaj aparatoj.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Spegulado de Firefox";
@@ -631,35 +457,14 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Ĵuse fermitaj";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d konektitaj aparato(j)";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "Spegulitaj aparatoj";
-
 /* Accessibility label for the tab toolbar indicating the Home button. */
 "Home" = "Eka paĝo";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "Nuligi";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "Vi povas ŝanĝi tion ĉi iam ajn en Agordoj";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Uzi kiel hejman";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Ĉu vi volas uzi tiun ĉi paĝon kiel hejman?";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Legosigno";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Forigi el la historio";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Malfermi en nova privata langeto";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Malfermi en privata langeto";
@@ -712,15 +517,6 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Montri antaŭan langeton";
 
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
-"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Ŝalti aŭtomatan fermon";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox aŭtomate fermos langetojn, kiuj ne estis vizititaj dum la lasta monato.";
-
-/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
-"InactiveTabs.TabTray.AutoClosePrompt.Title" = "Ĉu aŭtomate fermi post unu monato?";
-
 /* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
 "InactiveTabs.TabTray.CloseButtonTitle" = "Fermi ĉiujn neaktivajn langetojn";
 
@@ -739,41 +535,17 @@
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ClearRecentHistory" = "Viŝi ĵusan historion";
 
-/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.DownloadLink" = "Elŝuta ligilo";
-
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Serĉi denove";
 
-/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.NewNormalTab" = "Nova normala langeto";
-
-/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.OpenLinkInBackground" = "Fone malfermi ligilon";
-
-/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.OpenLinkInNewTab" = "Malfermi ligilon en nova langeto";
-
-/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.SavePageAs" = "Konservi paĝon kiel…";
-
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "Legosignoj";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.Edit" = "Modifi";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.File" = "Dosiero";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.History" = "Historio";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Tools" = "Iloj";
-
-/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.View" = "Vidi";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Window" = "Fenestro";
@@ -796,12 +568,6 @@
 /* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowLastTab" = "Montri lastan langeton";
 
-/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowTabNumber" = "Montri numeron de langeto 1-9";
-
-/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.UndoCloseTab" = "Malfari fermon de langeto";
-
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "Pligrandigi";
 
@@ -810,9 +576,6 @@
 
 /* History tableview section header */
 "Last month" = "Lasta monato";
-
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Laste aktualigita: %@";
 
 /* History tableview section header */
 "Last week" = "Lasta semajno";
@@ -840,9 +603,6 @@
 
 /* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
 "LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Tajpu serĉan tekston";
-
-/* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
-"LibraryPanel.History.SyncedFromOtherDevices.v99" = "Spegulita de aliaj aparatoj";
 
 /* Within the History Panel, users can see the option of viewing their history from synced tabs. */
 "LibraryPanel.History.SyncedHistory.v100" = "Spegulita historio";
@@ -880,9 +640,6 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.Onboarding.LearnMoreButtonTitle" = "Pli da informo";
 
-/* Message shown when you enter Logins & Passwords for the first time. */
-"Logins.Onboarding.Message" = "Viaj legitimiloj kaj pasvortoj estas nun protektitaj de Face ID, Touch ID aŭ aparata paskodo.";
-
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
 "Logins.PasscodeRequirement.Warning" = "Por uzi la aŭtomata pleniga trajto en Firefox, vi devas unue havi aparatan paskodon aktivita.";
 
@@ -894,12 +651,6 @@
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Ŝalti aŭtomatan plenigon";
-
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "Modifita";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "Akreditiloj";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Ne konservi";
@@ -924,15 +675,6 @@
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "Ĝisdatigi";
-
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "Akreditilo";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "Ĉiuj";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "Retejo";
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtri";
@@ -981,9 +723,6 @@
 /* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
 "Menu.AddBookmark.Label.v99" = "Aldoni";
 
-/* Toast displayed to the user after adding the item to the Top Sites. */
-"Menu.AddPin.Confirm" = "Alpinglita al la plej vizititaj";
-
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "Aldonita al ŝparvojoj";
 
@@ -1011,29 +750,11 @@
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Elŝutoj";
 
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "La plibonigita protekto kontraŭ spurado estas MALAKTIVA por tiu ĉi retejo.";
-
-/* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "La plibonigita protekto kontraŭ spurado estas AKTIVA por tiu ĉi retejo.";
-
-/* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox blokas interretejajn spurilojn, sociretajn spurilojn, minilojn de ĉifromono kaj identigilojn de ciferecaj spuroj.";
-
-/* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox blokas interretejajn spurilojn, sociretajn spurilojn, minilojn de ĉifromono kaj spurilan enhavon.";
-
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Helpo";
 
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "Historio";
-
-/* Label for the button displayed in the menu used to stop the reload of the webpage */
-"Menu.Library.StopReload" = "Haltigi";
-
-/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
-"Menu.ManageAccount.Label" = "Administri konton %@";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Nova langeto";
@@ -1042,19 +763,7 @@
 "Menu.NightModeTurnOff.Label2" = "Malŝalti noktan reĝimon";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "Aktivigi noktan reĝimon";
-
-/* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "Ŝalti noktan reĝimon";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "Bloki bildojn";
-
-/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
-"Menu.NoImageModeShowImages.Label" = "Montri bildojn";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "Retpaĝaj agoj";
 
 /* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
 "Menu.Passwords.Label" = "Pasvortoj";
@@ -1083,9 +792,6 @@
 /* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
 "Menu.RemovedFromShortcuts.v99" = "Forigi el ŝparvojoj";
 
-/* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "Forigita el la listo de la plej vizititaj";
-
 /* Toast displayed to the user after removing the item to the Shortcuts. */
 "Menu.RemovePin.Confirm2.v99" = "Forigita el ŝparvojoj";
 
@@ -1113,35 +819,17 @@
 /* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
 "Menu.Toolbar.Home.AccessibilityLabel.v99" = "Eka paĝo";
 
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "Blokitaj";
-
 /* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
 "Menu.TrackingProtection.Details.Verifier" = "Kontrolita de %@";
 
-/* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Neniu spurilo, konata de Firefox, estis trovita en tiu ĉi paĝo.";
-
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Agordoj de protekto";
-
-/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "Protektoj por %@";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "Spurila enhavo";
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "Sociaj spuriloj";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox blokas partojn de la paĝo, kiuj povus spuri vian retumadon.";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Bloki retajn spurilojn";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "Interretejaj spurilaj kuketoj";
 
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Interetejaj spuriloj";
@@ -1164,47 +852,8 @@
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Sociaj retoj enmetas spurilojn en aliajn retejojn por havi pli kompletan kaj celan profilon de vi. La blokado de tiuj spuriloj reduktas la parton de via retumo, kiu estas videbla de sociaretaj entreprenoj.";
 
-/* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "Malaktivigita por tiu ĉi retejo";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "La protekto kontraŭ spurado estas nun malaktiva por tiu ĉi retejo.";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "Aktivigi protekton kontraŭ spurado";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "Aktiva por tiu ĉi retejo";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "La protekto kontraŭ spurado estas nun aktiva por tiu ĉi retejo.";
-
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Identigiloj de ciferecaj spuroj";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Interretejaj spurilaj kuketoj blokitaj";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "Blokitaj miniloj de ĉifromono";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "Blokitaj identigiloj de ciferecaj spuroj";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "Sociretaj spuriloj blokitaj";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "Pli da informo pri la maniero kiel la protekto kontraŭ spurado blokas retajn spurilojn, kiuj kolektas viajn retumajn datumojn tra pluraj retejoj.";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "Neniu spurila elemento trovita en tiu ĉi paĝo.";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Tiu ĉi retejo enhavas elementojn, kiuj povus spuri vian retumon. Vi malaktivigis la protekton.";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "Aktiva por tiu ĉi retejo";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Novaĵoj";
@@ -1267,28 +916,6 @@
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Komenci retumi";
 
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about. */
-"Onboarding.WhatsNew.Description" = "Nun estas pli facile repreni vian retumon tie, kie vi ĝin interrompis.";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
-"Onboarding.WhatsNew.PersonalizedHome.Description" = "Aliru viajn malfermitajn langetojn, legosignojn kaj retuman historion.";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
-"Onboarding.WhatsNew.RecentSearches.Description" = "Kontrolu viajn lastajn serĉojn el via eka paĝo.";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
-"Onboarding.WhatsNew.RecentSearches.Title" = "Ĵusaj serĉoj";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card */
-"Onboarding.WhatsNew.TabGroups.Description" = "Paĝoj el la sama serĉo kungrupiĝas.";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card */
-"Onboarding.WhatsNew.TabGroups.Title" = "Pli klare grupigitaj langetoj";
-
-/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
-   The title for the new onboarding card letting users know what is new in Firefox iOS */
-"Onboarding.WhatsNew.Title" = "Novaĵoj en Firefox";
-
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Fuŝ! Firefox paneis";
 
@@ -1307,23 +934,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Ne eblas malfermi la paĝon";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "Menuo de elektebloj de paĝo";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "Elektilo de panelo";
-
 /* Password textbox in Authentication prompt */
 "Password" = "Pasvorto";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Vi ne havas legitimilojn spegulitajn el via konto de Firefox";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "Disponeblaj legitimiloj:";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Legitimiloj de Firefox";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Tio permesas al vi konservi la bildon en via filmila rulo.";
@@ -1391,9 +1003,6 @@
 /* Reopen alert title shown at home page. */
 "ReopenAlert.Title" = "Malfermi denove la laste fermitan langeton";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "Malfermi denove fermitan langeton";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "Normigi tekstan grandon";
 
@@ -1411,9 +1020,6 @@
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Nevalidaj datumoj";
-
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Bonvolu permesi al Firefox aliri la filmilon de via aparato en ‘Agordoj‘ -> ‘Privateco‘ -> ‘Filmilo‘.";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
 "ScanQRCode.PermissionError.Message.v100" = "Iru al ‘Agordoj‘ > ‘Firefox‘ en la aparato. Permesu al Firefox aliri la filmilon.";
@@ -1468,12 +1074,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Akcepti";
 
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "Serĉoj por sugestoj";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Sekura konekto";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Ĉu sendi raporton pri paneo, tiel ke Mozilla povas solvi la problemon?";
 
@@ -1514,9 +1114,6 @@
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Sendi";
 
-/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Komenci seancon en Firefox";
-
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Alvenis nova langeto el alia aparato.";
 
@@ -1528,12 +1125,6 @@
 
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "Langeto ricevita el %@";
-
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "Aldoni al legolisto";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "Aldoni al legosignoj";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Tuŝetu por komenci";
@@ -1582,9 +1173,6 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Viŝi privatajn datumojn";
-
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Viŝi privatajn datumojn";
 
 /* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
 "Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Viŝi elementojn: %1$@";
@@ -1658,15 +1246,6 @@
 
 /* Title in main app settings for Theme settings */
 "Settings.DisplayTheme.Title.v2" = "Etoso";
-
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "Ĉiam";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Nur dum uzo de protekto kontraŭ spurado";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "Sendi al retejoj sciigon, ke vi ne volas esti spurata";
 
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Nomo de aparato";
@@ -1761,9 +1340,6 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
 "Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Vidi";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "Viŝi";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Hejmpaĝo";
 
@@ -1788,23 +1364,11 @@
 /* Toggled ON to show the shortcuts section */
 "Settings.Homepage.Shortcuts.ToggleOn.v100" = "Ŝaltita";
 
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Agordoj de hejmpaĝo";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Viziti retpaĝon";
-
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Nuna hejmpaĝo";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Uzi kopiitan ligilon";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Uzi nunan paĝon";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "Uzi la normon";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "Akreditiloj kaj pasvortoj";
@@ -1812,56 +1376,14 @@
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "Personecigita retadreso";
 
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "Kiam vi malfermas novan langeton:";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "Personecigi la plej vizititajn";
-
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Malplena paĝo";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "Legosignoj";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "La retejoj plej vizititaj de vi";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter2" = "Retejoj konservitaj aŭ vizititaj de vi";
-
-/* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Personecigi la ekan paĝon de Firefox";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Eka paĝo de Firefox";
 
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "Ĵusaj legosignoj";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "Vizititaj";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "Historion";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Hejmpaĝo";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "Tendencoj en Pocket";
-
-/* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "Bonega enhavo el la tuta teksaĵo.";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "Montri vian legoliston";
-
-/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
-"Settings.NewTab.Option.RecommendedByPocket" = "Rekomendita de %@";
-
-/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
-"Settings.NewTab.Option.RecommendedByPocketDescription" = "Eksterordinara enhavo apartigita de %1$@, kiu apartenas al la familio %2$@";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Nova langeto";
@@ -1938,32 +1460,11 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Ŝparvojoj de Siri";
 
-/* Section title for all studies that are currently active */
-"Settings.Studies.Active.SectionName" = "Aktiva";
-
-/* Section title for all studies that are completed */
-"Settings.Studies.Completed.SectionName" = "Kompleta";
-
-/* Button title displayed next to each study allowing the user to opt-out of the study */
-"Settings.Studies.Remove.Button" = "Forigi";
-
-/* Title displayed in header of the Studies panel */
-"Settings.Studies.SectionName" = "Studoj";
-
-/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
-"Settings.Studies.Title" = "Studoj";
-
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Toggle.Link" = "Pli da informo.";
 
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Toggle.Message" = "Firefox povas de tempo al tempo instali kaj fari studojn.";
-
-/* Toggled OFF to opt-out of studies */
-"Settings.Studies.Toggle.Off" = "Malŝaltita";
-
-/* Toggled ON to participate in studies */
-"Settings.Studies.Toggle.On" = "Ŝaltita";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Studoj";
@@ -2010,23 +1511,11 @@
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Atento!";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Vi povas elekti la liston, kiun Firefox uzos por bloki Teksaĵajn elementojn, kiuj povus spuri vian retumon.";
-
-/* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "Ekvilibro inter protekto kaj efikeco.";
-
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "BLOKADO";
 
-/* Explanation of strict mode. */
-"Settings.TrackingProtection.Info.StrictTitle" = "Pli forta protekto, kiu povus misfunkciigi kelkajn retejojn.";
-
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "Pli da informo";
-
-/* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "Pli da informo…";
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Tio ĉi reduktas alcelajn reklamojn kaj helpas eviti ke reklamistoj spuru vian retumon.";
@@ -2046,53 +1535,17 @@
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Protekto kontraŭ spurado";
 
-/* Additional information about the strict level setting */
-"Settings.TrackingProtection.StrictLevelInfoFooter" = "Blokado de spuriloj povus influi la funkciadon de kelkaj retejoj.";
-
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Norma";
-
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Permesi kelkajn spurilojn, tiel ke retejoj bone funkcios.";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Strikta";
 
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Bloki konatajn spurilojn. Kelkaj retejoj povus ne bone funkcii.";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Spurado estas la kolekto de viaj retumaj datumoj tra pluraj retejoj.";
-
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Plibonigita protekto kontraŭ spurado";
 
-/* Translation settings footer describing how language detection and translation happens. */
-"Settings.TranslateSnackBar.SectionFooter" = "La lingvo de la retpaĝo estas trovita en la aparato kaj fora traduka servo estas proponita.";
-
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "Servoj";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchSubtitle" = "Proponi traduki iun ajn retejon, kies lingvo ne egalas vian norman lingvon.";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchTitle" = "Proponi tradukon";
-
-/* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "Traduko";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Solvi problemojn";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "Forigi";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "Farita";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "Modifi";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Montri pli";
@@ -2127,9 +1580,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Malfermi en Firefox";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "Malfermi en privata reĝimo";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Serĉi en Firefox";
 
@@ -2152,59 +1602,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Glitigu dekstren aŭ maldekstren per tri fingroj por fermi la langeton.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Reĝimo de normala retumo";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Reĝimo de privata retumo";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Speguli viajn langetojn, legosignojn, pasvortojn kaj pli.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "Speguli viajn langetojn, pasvortojn, kaj pli.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "Via unua spegulado povas postuli iom da tempo";
-
-/* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "Ĉu vi ne havas konton? Kreu ĝin por speguli Firefox inter aparatoj.";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Spegulado";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Spegulado…";
 
-/* Panel accessibility label */
-"Synced Tabs" = "Spegulitaj langetoj";
-
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Legosignoj";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Foraj klientoj";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Malsukcesa spegulado";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "Historio";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "Akreditiloj";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Spegulado ne disponeblas";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Spegulado ne estas konektita";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "Spegulado havas problemojn spegulante %@";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "Langetoj";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Langeto %1$@ el %2$@";
@@ -2224,9 +1626,6 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d fermitaj langeto(j)";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "Serĉi langetojn";
-
 /* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Vidi neaktivajn langetojn";
 
@@ -2239,9 +1638,6 @@
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Fermi ĉiujn langetojn";
 
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "Fermi elektitan langeton";
-
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Nune elektita langeto.";
 
@@ -2251,29 +1647,8 @@
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Neaktivaj langetoj";
 
-/* The section header for tabs opened last week */
-"TabTray.LastWeek.Header" = "Pasintsemajne";
-
-/* The title on the button to copy the tab address. */
-"TabTray.MoreMenu.Copy" = "Kopii";
-
-/* The section header for tabs opened before last week */
-"TabTray.Older.Header" = "Pli malnovaj";
-
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Malfermi novan langeton";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "Malfermi elektitan langeton";
-
-/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
-"TabTray.OtherTabs.Title" = "Aliaj langetoj";
-
-/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
-"TabTray.RecentlyClosed.Description" = "Langetoj restos ĉi tie dum 30 tagoj. Post tiu tempo, langetoj estos aŭtomate fermitaj.";
-
-/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
-"TabTray.RecentlyClosed.SectionTitle" = "Ĵuse fermitaj";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Privataj";
@@ -2284,17 +1659,8 @@
 /* The title on the button to look at regular tabs. */
 "TabTray.SegmentedControlTitles.Tabs" = "Langetoj";
 
-/* The button title to see more options to perform on the tab. */
-"TabTray.SwipeMenu.More" = "Pli";
-
 /* The title for the tab tray */
 "TabTray.Title" = "Malfermitaj langetoj";
-
-/* The section header for tabs opened today */
-"TabTray.Today.Header" = "Hodiaŭ";
-
-/* The section header for tabs opened yesterday */
-"TabTray.Yesterday.Header" = "Hieraŭ";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Tiu ĉi paĝo ne povis esti montrita en legila vido.";
@@ -2329,12 +1695,6 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Fermi ĉiujn langetojn";
 
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Viaj plej vizititaj retejoj aperos ĉi tie.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Bonvenon al la plej vizititaj retejoj";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Forigi paĝon - %@";
 
@@ -2359,20 +1719,11 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "ne legita";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Ĝisdatigi Firefox por konektiĝi";
-
 /* Debug option */
 "Use stage servers" = "Uzi ŝajnigajn servilojn";
 
 /* Username textbox in Authentication prompt */
 "Username" = "Nomo de uzanto";
-
-/* Text message in the settings table view */
-"Verify your email address" = "Kontrolu vian retpoŝtan adreson";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Versio %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Teksaĵa enhavo";

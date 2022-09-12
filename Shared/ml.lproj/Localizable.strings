@@ -16,41 +16,11 @@
 /* About settings section title */
 "About" = "ഇതിനെക്കുറിച്ച്";
 
-/* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "പ്രധാന സൈറ്റുകളിലേക്ക് പിൻ ചെയ്യുക";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "പിൻ ചെയ്ത സൈറ്റില്‍നിന്നും നീക്കംചെയ്യുക";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "അടയാളപ്പെടുത്തിയത്";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "സന്ദർശിച്ചത്";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "അടുത്തിടെയുള്ള അടയാളക്കുറിപ്പുകള്‍";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "കൂടുതല്‍";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "പോക്കറ്റിൽ ട്രെൻഡുചെയ്യുന്നവ";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "ട്രെൻഡിംഗ്";
-
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "സമീപകാലത്ത് സന്ദർശിച്ചത്";
 
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "വരികൾ: %d";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "വരികൾ സജ്ജമാക്കുക";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "ഏറ്റവും ഉയർന്ന സൈറ്റുകൾ";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "ടാബ് ചേര്‍ക്കുക";
@@ -89,12 +59,6 @@
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "പോപ്പപ്പുകള്‍ തടയുക";
 
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "അടയാളക്കുറിപ്പു്";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "ഫോള്‍ഡര്‍";
-
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "തലക്കെട്ട്";
 
@@ -113,12 +77,6 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "ഫോള്‍ഡര്‍";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "സ്ഥാനം";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "ഫോള്‍ഡറിന്റെ പേരു്";
-
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "പുതിയ അടയാളക്കുറിപ്പു്";
 
@@ -130,12 +88,6 @@
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "തലക്കെട്ട്";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "താങ്കള്‍ സൂക്ഷിച്ചിട്ടുള്ള അടയാളക്കുറിപ്പുകള്‍ ഇവിടെ കാണിക്കും.";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "തെളിച്ചം";
@@ -161,14 +113,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "ടാബ് അടയ്ക്കുന്നു";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "കമ്പ്യൂട്ടര്‍";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "കണ്ണി അടയാളപ്പെടുത്തുക";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "മാറുക";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "പുതിയ സ്വകാര്യ ടാബ് തുറന്നു";
@@ -208,9 +154,6 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "താള്‍ കൊണ്ടു വരാന്‍ കഴിയുന്നില്ല.";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "ഇരുണ്ട തീമിൽ ഇപ്പോൾ ഇരുണ്ട കീബോർഡും ഇരുണ്ട സ്പ്ലാഷ് സ്ക്രീനും ഉൾപ്പെടുന്നു.";
 
 /* See http://mzl.la/1Qtkf0j */
 "Create an account" = "അക്കൗണ്ട്‌ ഉണ്ടാക്കുക";
@@ -253,17 +196,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "ഡൗൺലോഡ് റദ്ദാക്കുക";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "ഈ ഡൗൻലോഡുകള്‍ക്ക് ഫയര്‍ഫോക്സില്‍ ഇതുവരെ പിന്‍തുണയായിട്ടില്ല.";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "ഡൗൺലോഡ് റദ്ദാക്കി";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "ഡൗൺലോഡ് പരാജയപ്പെട്ടു";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "വീണ്ടും ശ്രമിയ്ക്കുക";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "ഡൌണ്‍ലോഡുകള്‍";
@@ -325,18 +262,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "മുന്നോട്ട്";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "തെറ്റായ ഇമെയില്‍? വിച്ഛേദിച്ച് താഴേ നിന്നും വീണ്ടും തുടങ്ങുക.";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "അക്കൗണ്ട് പരിശോധന ആവശ്യമാണ്";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "നിങ്ങൾ %@ പരിശോധിക്കേണ്ടതുണ്ട്. ഫയർ ഫോക്സിന്റെ സ്ഥിരീകരണ കണ്ണിയ്ക്കായി നിങ്ങളുടെ ഇമെയിൽ പരിശോധിക്കുക.";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "മറ്റൊരു ഉപകരണം ബന്ധിപ്പിക്കുക";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "ഫയര്‍ഫോക്സ് അക്കൌണ്ട്";
 
@@ -346,32 +271,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "ഇന്റർനെറ്റ് ബന്ധം ഇല്ല";
 
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "സമന്വയ മുൻഗണനകൾ തുറക്കുക";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "നീക്കം ചെയ്യുക";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "മറ്റൊരു ഉപയോക്താവായി പ്രവേശിക്കുന്നതിന് ഈ ഉപകരണവുമായി ബന്ധപ്പെട്ട ഫയർഫോക്സ് അക്കൗണ്ട് നീക്കംചെയ്യുക.";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "അക്കൗണ്ട് നീക്കംചെയ്യുക";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "ഇമെയില്‍ വീണ്ടും അയക്കുക";
-
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "സമന്വയിപ്പിക്കാനായി പ്രവേശിക്കുക";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "താങ്കളുടെ മറ്റു ഡിവൈസുകളില്‍ നിന്നും താങ്കളുടെ ടാബുകള്‍, അടയാളക്കുറിപ്പുകള്‍, രഹസ്യവാക്കുകള്‍ മുതലായവ ലഭ്യമാക്കുക.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "ഇപ്പോൾ സമന്വയിപ്പിക്കുൂ";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "നിങ്ങളുടെ വെബിനെ കൂടെ കൊണ്ട് പോകൂ";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "%@ലേക്ക് ഫയർഫോക്സ് സമന്വയം ബന്ധിപ്പിച്ചു";
@@ -394,9 +295,6 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "ഫയർഫോക്സ് സമന്വയത്തിൽ നിന്നും ഒരു ഉപകരണം വിച്ഛേദിച്ചിരിക്കുന്നു";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "താങ്കളുടെ മറ്റു ഡിവൈസുകളില്‍ നിന്നും താങ്കളുടെ തുറന്ന ടാബുകള്‍, അടയാളക്കുറിപ്പുകള്‍, രഹസ്യവാക്കുകള്‍ മുതലായവ ലഭ്യമാക്കുക.";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "സഹായം";
 
@@ -418,9 +316,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "ഇന്നും ഇന്നലെയും";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "സമീപകാല ചരിത്രം മായ്ക്കുന്നതു് ചരിത്രം, കുക്കികൾ, മറ്റ് ബ്രൗസർ ഡാറ്റ എന്നിവയെ നീക്കംചെയ്യും.";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "താങ്കൾ അടുത്തകാലത്ത് സന്ദർശിച്ച വെബ്സൈറ്റുകൾ ഇവിടെ കാണിക്കും.";
 
@@ -429,15 +324,6 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "മറ്റു ഉപകരണങ്ങളില്‍ നിന്നുള്ള ടാബുകള്‍ കാണാന്‍ സൈന്‍ ഇന്‍ ചെയ്യുക.";
-
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "നിങ്ങളുടെ അക്കൌണ്ട് സ്ഥിരീകരിക്കേണ്ടതുണ്ട്.";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "മറ്റു ഉപകരണങ്ങളില്‍ നിന്നുള്ള ടാബുകള്‍ ഇവിടെ കാണിക്കണോ?";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "മറ്റുള്ള ഉപകരണങ്ങളില്‍ നിന്നുള്ള ടാബുകള്‍ കാണുവാന്‍ ടാബ് സമന്വയം ഓണാക്കുക.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "ഫയർഫോക്സ് സമന്വയം";
@@ -448,32 +334,11 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "അടുത്ത് അടച്ചത്";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d ഉപകരണം ബന്ധിപ്പിച്ചു";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "സമന്വയിപ്പിച്ച ഉപകരണങ്ങള്‍";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "റദ്ദാക്കുക";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "നിങ്ങൾക്ക് ഇത് ഏത് സമയത്തും ക്രമീകരണങ്ങളിൽ പോയി മാറ്റാം";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "ഹോംപേജ് സെറ്റ് ചെയ്യുക";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "നിങ്ങൾക്ക് ഊ വെബ് പേജ് ഹോം പേജായി ഉപയോഗിക്കേണമോ?";
-
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "അടയാളം";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "നാള്‍വഴിയിൽ നിന്ന് ഒഴിവാക്കുക";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "പുതിയ സ്വകാര്യ ടാബിൽ തുറക്കുക";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "പുതിയ ടാബില്‍ തുറക്കുക";
@@ -532,9 +397,6 @@
 /* History tableview section header */
 "Last month" = "കഴിഞ്ഞ മാസം";
 
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "അവസാനം സമന്വയിപ്പിച്ചത്: %@";
-
 /* History tableview section header */
 "Last week" = "കഴിഞ്ഞ ആഴ്ച";
 
@@ -556,12 +418,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "പ്രവേശനങ്ങള്‍";
 
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "നവീകരിച്ചത്";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "പ്രവേശിക്കുക";
-
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "സംരക്ഷിക്കരുത്";
 
@@ -579,15 +435,6 @@
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "പുതുക്കുക";
-
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "പ്രവേശിക്കുക";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "എല്ലാം";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "വെബ്‌സൈറ്റ്";
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "ഫില്‍റ്റര്‍";
@@ -618,15 +465,6 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL ക്ലിപ്ബോർഡിലേക്ക് പകർത്തി";
 
-/* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "രാത്രി മോഡ് പ്രവർത്തനക്ഷമമാക്കുക";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "ചിത്രങ്ങള്‍ തടയുക";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "പേജ് പ്രവർത്തനങ്ങൾ";
-
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "ഒട്ടിക്കുക";
 
@@ -645,32 +483,14 @@
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ടാബ് അയച്ചു";
 
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "തടഞ്ഞു";
-
-/* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "ഈ പേജിൽ ഫയർഫോക്സിന് അറിയാവുന്ന ട്രാക്കറുകളൊന്നും കണ്ടെത്തിയില്ല.";
-
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "പരിരക്ഷണ ക്രമീകരണങ്ങൾ";
-
-/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "%@ നായുള്ള പരിരക്ഷകൾ";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "ഉള്ളടക്കം ട്രാക്കുചെയ്യുന്നു";
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "സോഷ്യൽ ട്രാക്കർമാർ";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "&brandShortName; നിങ്ങളുടെ ബ്രൌസിങ്ങ് ട്രാക്ക് ചെയ്യാനിടയുള്ള ഭാഗങ്ങളെ തടഞ്ഞു വെച്ചിരിക്കുന്നു.";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "ഓൺലൈൻ ട്രാക്കറുകൾ തടയുക";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "ക്രോസ്-സൈറ്റ് ട്രാക്കിംഗ് കുക്കികൾ";
 
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "ക്രോസ്-സൈറ്റ് ട്രാക്കറുകൾ";
@@ -693,47 +513,8 @@
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "നിങ്ങളുടെ കൂടുതൽ‌ പൂർ‌ണ്ണവും ടാർ‌ഗെറ്റു ചെയ്‌തതുമായ ഒരു പ്രൊഫൈൽ‌ സൃഷ്‌ടിക്കുന്നതിന് സോഷ്യൽ നെറ്റ്‌വർ‌ക്കുകൾ‌ മറ്റ് വെബ്‌സൈറ്റുകളിൽ‌ ട്രാക്കറുകൾ‌ സ്ഥാപിക്കുന്നു. ഈ ട്രാക്കറുകൾ തടയുന്നത് സോഷ്യൽ മീഡിയ കമ്പനികൾക്ക് നിങ്ങൾ ഓൺലൈനിൽ എന്താണ് ചെയ്യുന്നതെന്ന് കാണാൻ കഴിയുന്നത് കുറയ്ക്കും.";
 
-/* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "ഈ സൈറ്റിനായി അപ്രാപ്‌തമാക്കി";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "ഈ സൈറ്റിനിപ്പോള്‍ ട്രാക്കുചെയ്യൽ പരിരക്ഷയില്ല.";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "പിന്തുടരല്‍ സംരക്ഷണം സജ്ജമാക്കുക";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "ഈ സൈറ്റിനായി പ്രാപ്തമാക്കി";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "ഈ സൈറ്റിനായി ട്രാക്കിംഗ് പരിരക്ഷ ഇപ്പോൾ ലഭ്യമാണ്.";
-
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "ഫിംഗർപ്രിന്ററുകൾ";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "തടഞ്ഞ ക്രോസ്-സൈറ്റ് ട്രാക്കിംഗ് കുക്കികൾ";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "തടഞ്ഞ ക്രിപ്‌റ്റോമിനറുകൾ";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "തടഞ്ഞ ഫിംഗർപ്രിന്ററുകൾ";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "തടഞ്ഞ സോഷ്യൽ ട്രാക്കറുകൾ";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "പല വെബ്സൈറ്റുകളിൽനിന്നും നിങ്ങളുടെ ബ്രൗസിംഗ് ഡാറ്റ ശേഖരിക്കുന്ന ഓൺലൈൻ ട്രാക്കറുകളെ ട്രാക്കിംഗ് പ്രൊട്ടക്ഷൻ ഉപയോഗിച്ചു് തടയുന്നത് എങ്ങനെ എന്നറിയുക.";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "ഈ പേജില്‍ നിങ്ങളെ ട്രാക്ക് ചെയ്യുന്ന കാര്യങ്ങളൊന്നും കണ്ടില്ല.";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "ഈ സൈറ്റില്‍ താങ്കളുടെ ബ്രൗസിങ്ങ് നിരീക്ഷിക്കാന്‍ ഇടയുള്ള ഘടകങ്ങള്‍ ഉണ്ടു്. താങ്കള്‍ സംരക്ഷണം നിര്‍വീര്യമാക്കിയിരിക്കുന്നു.";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "ഈ സൈറ്റിനായി പ്രാപ്തമാക്കുക";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "പുതിയതെന്തെല്ലാം";
@@ -784,23 +565,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "താൾ തുറക്കാനാവുന്നില്ല";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "പേജ് ഓപ്ഷനുകള്‍ക്കായുള്ള മെനു";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "പാനല്‍ തെരഞ്ഞെടുക്കല്‍";
-
 /* Password textbox in Authentication prompt */
 "Password" = "രഹസ്യവാക്ക്";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "നിങ്ങളുടെ ഫയർഫോക്സ് അക്കൗണ്ടുമായി യോഗ്യതാപത്രങ്ങളൊന്നും (ക്രെഡന്‍ഷ്യലുകള്‍) നിങ്ങൾ സമന്വയിപ്പിച്ചിട്ടില്ല";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "ലഭ്യമായ ക്രെഡൻഷ്യലുകൾ:";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "ഫയർഫോക്സ് ക്രെഡൻഷ്യലുകൾ";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ഇത് താങ്കളെ താങ്കളുടെ ക്യാമറ റോളിലേക്ക് ചിത്രം സൂക്ഷിക്കാന്‍ അനുവദിയ്ക്കുന്നു.";
@@ -853,9 +619,6 @@
 /* Reopen alert title shown at home page. */
 "ReopenAlert.Title" = "അവസാനം അടച്ച ടാബ് വീണ്ടും തുറക്കുക";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "അടച്ച ടാബുകള്‍ വീണ്ടെടുക്കുക";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "വാചക വലുപ്പം പുനഃസജ്ജമാക്കുക";
 
@@ -873,9 +636,6 @@
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "ഈ ഡാറ്റ അസാധുവാണ്";
-
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "‘സജ്ജീകരണങ്ങൾ‘ -> ‘സ്വകാര്യത‘ -> ‘ക്യാമറ‘ എന്നതിൽ നിങ്ങളുടെ ഉപകരണത്തിന്റെ ക്യാമറ ആക്സസ് ചെയ്യുന്നതില്‍ ഫയർഫോക്സിനെ അനുവദിക്കുക.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR കോഡ് പരിശോധിക്കുക";
@@ -920,12 +680,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ശരി";
-
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "നിര്‍ദ്ദേശത്തിന് വേണ്ടി തിരയുക";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "സുരക്ഷിതമായ കണക്ഷന്‍";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "തകര്‍ച്ചയുടെ വിവരം മോസില്ലയ്ക്കയച്ച്, മൂലകാരണം ശെരിയാക്കാന്‍ സഹായിക്കാം?";
@@ -979,12 +733,6 @@
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "%@ൽ നിന്നും ലഭിച്ച ടാബ്";
 
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "വായനാ പട്ടികയിലേക്ക് ചേര്‍ക്കുക";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "അടയാളക്കുറിപ്പു്";
-
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "ആരംഭിക്കാൻ തട്ടുക";
 
@@ -1032,9 +780,6 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "സ്വകാര്യ വിവരം ഇല്ലാതാക്കുക";
-
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "സ്വകാര്യ വിവരം ഇല്ലാതാക്കുക";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "ക്ലിപ്പ്ബോര്‍ഡിലേക്കു് പകര്‍ത്തിയിരിയ്ക്കുന്നു";
@@ -1106,15 +851,6 @@
 /* Title in main app settings for Theme settings */
 "Settings.DisplayTheme.Title.v2" = "തീം";
 
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "എല്ലായ്പ്പോഴും";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "ട്രാക്കിംഗ് പ്രൊട്ടക്ഷൻ ഉപയോഗിക്കുമ്പോൾ മാത്രം";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "ട്രാക്ക് ചെയ്യരുത് എന്ന സിഗ്നൽ വെബ്സൈറ്റുകൾക്ക് അയയ്ക്കുക";
-
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "ഉപകരണത്തിന്റെ പേരു്";
 
@@ -1127,29 +863,14 @@
 /* General settings section title */
 "Settings.General.SectionName" = "പൊതുവായവ";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "വൃത്തിയാകുക";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "ആസ്ഥാനതാള്‍";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "ആസ്ഥാനതാള്‍ ക്രമീകരണങ്ങൾ";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "ഒരു താൾ സന്ദർശിക്കുക";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "നിലവിലെ ഹോംപേജ്";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "പകർത്തിയ ലിങ്ക് ഉപയോഗിക്കുക";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "നിലവിലെ താൾ ഉപയോഗിക്കുക";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "സ്വതവേയുള്ളതു് ഉപയോഗിക്കുക";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "ഉപകരണങ്ങളും പ്രവേശനങ്ങളും";
@@ -1157,47 +878,14 @@
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "ഇഷ്ടാനുസൃത URL";
 
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "നിങ്ങൾ ഒരു പുതിയ ടാബ് തുറക്കുമ്പോൾ:";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "മികച്ച സൈറ്റുകൾ ഇച്ഛാനുസൃതമാക്കുക";
-
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "ഒരു ശൂന്യമായ താൾ കാണിക്കുക";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "അടയാളക്കുറിപ്പുകള്‍";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "നിങ്ങൾ കൂടുതൽ സന്ദർശിക്കുന്ന സൈറ്റുകൾ";
-
-/* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "ഫയല്‍ഫോക്സ് പൂമുഖം യഥേഷ്ടമാക്കുക";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "ഫയർഫോക്സ് പൂമുഖം";
 
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "അടുത്തിടെയുള്ള അടയാളക്കുറിപ്പുകള്‍";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "സന്ദർശിച്ചവ";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "നാള്‍വഴി";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "ആസ്ഥാനതാള്‍";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "പോക്കറ്റിൽ ട്രെൻഡുചെയ്യുന്നവ";
-
-/* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "വെബിൽ നിന്നുള്ള മികച്ച ഉള്ളടക്കങ്ങള്‍.";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "നിങ്ങളുടെ വായനാ പട്ടിക കാണിക്കുക";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "പുതിയ ടാബ്";
@@ -1253,20 +941,8 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "സിരി കുറുക്കുവഴികൾ";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "ഫയര്‍ഫോക്സ് ഏത് പട്ടിക താങ്കളുടെ ബ്രൗസിംഗ് കർമങ്ങളെ നിരീക്ഷിക്കുന്ന വെബ് എലമെന്റുകൾ തടയാനായി ഉപയോഗിക്കുമെന്ന് താങ്കൾക്ക് തീരുമാനിക്കാം.";
-
-/* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "പരിരക്ഷണത്തിനും പ്രകടനത്തിനും ഒരുപോലെ.";
-
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "തടയലുകള്‍";
-
-/* Explanation of strict mode. */
-"Settings.TrackingProtection.Info.StrictTitle" = "ശക്തമായ പരിരക്ഷ വാഗ്ദാനം ചെയ്യുന്നു, പക്ഷേ ചില സൈറ്റുകൾ തകരാൻ കാരണമായേക്കാം.";
-
-/* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "കൂടുതൽ വിവരങ്ങള്‍…";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "പരിരക്ഷണ നില";
@@ -1274,53 +950,17 @@
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "പിന്തുടരല്‍ സംരക്ഷണം";
 
-/* Additional information about the strict level setting */
-"Settings.TrackingProtection.StrictLevelInfoFooter" = "ട്രാക്കറുകൾ തടയുന്നത് ചില വെബ്‌സൈറ്റുകളുടെ പ്രവർത്തനത്തെ ബാധിച്ചേക്കാം.";
-
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "സ്റ്റാൻഡേർഡ് (സ്ഥിരസ്ഥിതി)";
-
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "വെബ്‍സൈറ്റുകള്‍ നന്നായി പ്രവര്‍ത്തിക്കാന്‍ ചില ട്രാക്കറുകളെ അനുവദിക്കുക.";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "കണിശമായി";
 
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "അറിയാവുന്ന ട്രാക്കറുകളെ തടയുന്നു. ചില വെബ്സൈറ്റുകൾ ശരിയായി പ്രവർത്തിച്ചേക്കില്ല.";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "പല വെബ്സൈറ്റുകളിലായുള്ല നിങ്ങളുടെ ബ്രൗസിംഗ് ഡാറ്റയുടെ ശേഖരത്തെ ട്രാക്കിംഗ് എന്നു വിളിയ്ക്കാം.";
-
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "മെച്ചപ്പെടുത്തിയ ട്രാക്കിംഗ് പരിരക്ഷണം";
 
-/* Translation settings footer describing how language detection and translation happens. */
-"Settings.TranslateSnackBar.SectionFooter" = "ഈ ഉപകരണത്തിലെ ഭാഷ വെച്ച്, ഒരു വിദൂര സേവനം വിവർത്തനം വാഗ്ദാനം ചെയ്യുന്നുണ്ട്.";
-
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "സേവനങ്ങള്‍";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchSubtitle" = "നിങ്ങളുടെ സ്ഥിര ഭാഷയിൽ നിന്ന് വ്യത്യസ്തമായ ഭാഷയിൽ എഴുതിയ ഏതെങ്കിലും സൈറ്റ് വിവർത്തനം ചെയ്യാമെന്നു വാഗ്ദാനം ചെയ്യുക.";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchTitle" = "പരിഭാഷപ്പെടുത്തല്‍ വാഗ്ദാനം ചെയ്യുക";
-
-/* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "തര്‍ജ്ജമ";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "പ്രശ്നപരിഹാരം";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "നീക്കം ചെയ്യുക";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "ചെയ്തു";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "തിരുത്തുക";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "കൂടുതൽ കാണിക്കുക";
@@ -1352,9 +992,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "ഫയർഫോക്സിൽ തുറക്കുക";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "സ്വകാര്യ മോഡില്‍ തുറക്കുക";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "ഫയർഫോക്സിൽ തിരയുക";
 
@@ -1377,56 +1014,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "ടാബുകള്‍ അടയ്ക്കുവാന്‍ ഇടത്തോട്ടോ വലത്തോട്ടോ മൂന്ന് വിരലുകളുപയോഗിച്ച് അമര്‍ത്തി വീശുക.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "സാധാരണ ബ്രൗസിംഗ് മോഡ്";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "സ്വകാര്യ ബ്രൌസിംഗ് മോഡ്";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "താങ്കളുടെ ടാബുകള്‍, അടയാളക്കുറിപ്പുകള്‍, രഹസ്യവാക്കുകള്‍ തുടങ്ങിയവ സിങ്ക് ചെയ്യുക.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "താങ്കളുടെ ടാബുകള്‍, രഹസ്യവാക്കുകള്‍ തുടങ്ങിയവ സിങ്ക് ചെയ്യുക.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "താങ്കളുദടെ ആദ്യത്തെ സിന്‍ക് അല്‍പസമയമെടുത്തേക്കാം";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "സമന്വയിപ്പിക്കുന്നു";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "സമന്വയിപ്പിക്കുന്നു…";
 
-/* Panel accessibility label */
-"Synced Tabs" = "സിങ്ക് ചെയ്ത ടാബുകൾ";
-
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "അടയാളങ്ങള്‍";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "വിദൂര ഉപകരണങ്ങള്‍";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "സമന്വയിപ്പിക്കുന്നത് പരാജയപ്പെട്ടു";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "നാള്‍വഴി";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "പ്രവേശനങ്ങള്‍";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "സിങ്ക് ലഭ്യമല്ല";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "സിങ്ക് ഓഫ്ലൈനാണ്";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "%@ സമന്വയിപ്പിക്കുന്നതിൽ പ്രശ്നങ്ങൾ അനുഭവപ്പെടുന്നു";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "ടാബുകള്‍";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "ടാബ് %2$@ ന്‍റെ %1$@";
@@ -1446,20 +1038,11 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d ടാബ്(കൾ) അടച്ചിരിക്കുന്നു";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "ടാബുകൾ തിരയുക";
-
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "എല്ലാ ടാബുകളും അടയ്ക്കുക";
 
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "തിരഞ്ഞെടുത്ത ടാബ് അടയ്ക്കുക";
-
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "പുതിയ റ്റാബ് തുറക്കുക";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "തിരഞ്ഞെടുത്ത ടാബ് തുറക്കുക";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "വായനാരീതിയില്‍ പേജ് കാണിക്കുവാന്‍ കഴിയുന്നില്ല.";
@@ -1491,12 +1074,6 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "എല്ലാ ടാബുകളും അടയ്ക്കുക";
 
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "താങ്കൾ ഏറ്റവും കൂടുതൽ സന്ദർശിച്ച സൈറ്റുകൾ ഇവിടെ കാണിക്കും.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "മുന്നേറിയ സൈറ്റുകളിലേക്ക് സ്വാഗതം";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "താള്‍ - %@ കളയുക";
 
@@ -1521,17 +1098,8 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "വായിക്കാത്തത്";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "കണക്ട് ചെയ്യാൻ ഫയർഫോക്സ് പുതുക്കുക";
-
 /* Username textbox in Authentication prompt */
 "Username" = "ഉപയോക്തൃനാമം";
-
-/* Text message in the settings table view */
-"Verify your email address" = "ഇമെയില്‍ വിലാസം സ്ഥിരീകരിയ്ക്കുക";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "പതിപ്പ് %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "വെബ്‌ ഉള്ളടക്കം";

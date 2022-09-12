@@ -16,41 +16,11 @@
 /* About settings section title */
 "About" = "Tungkol";
 
-/* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "I-pin sa Nangungunang mga Site";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Tanggalin ang Naka-Pin na Lugar";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "Bookmarked";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "Binisita";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "Mga Kamakailang Bookmark";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "Marami pa";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "Trending sa Pocket";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "Pagpapauso";
-
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Kabibisita Lang";
 
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "Mga Row: %d";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "I-set ang mga Row";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Sikat na Sites";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Magdagdag ng Tab";
@@ -89,12 +59,6 @@
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "Harangan ang mga Pop-up";
 
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Bookmark";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Folder";
-
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "Pamagat";
 
@@ -113,12 +77,6 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Folder";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Lokasyon";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Ngalan ng Folder";
-
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Bagong Bookmark";
 
@@ -130,12 +88,6 @@
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Pamagat";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "Ang mga bookmarks na iyong na i-save ay makikita dito.";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Tinkad";
@@ -161,14 +113,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "Isinasara ang tab";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "computer";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "Bookmark Link";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Lumipat";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Bagong Pribadong bukas na Tab";
@@ -208,12 +154,6 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Hindi maiload ang pahina.";
-
-/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "Para sa gumagamit ng iOS 13, ang Firefox ngayon ay awtomatikong lumilipat sa Dark theme pag nai-set mo ang iyong phone sa Dark Mode. para baguhin ito, pumunta sa Settings> Theme.";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "ang Dark theme ngayon ay sinama na ang dark keyboard at dark splash screen.";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Magpunta sa Settings";
@@ -259,17 +199,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "Kanselahin ang Download";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Hindi pa suportado ng Firefox ang mga Downloads.";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Na-kansela ang Download";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "Hindi natuloy ang Download";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "Ulitin";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Mga Downloads";
@@ -331,18 +265,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Sulong";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Maling email? Idiskonekta sa ibaba upang magsimula.";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "Kinakailangan ang Pag-verify ng Account";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Kailangan mong i-verify ang %@. Suriin ang iyong email para sa link ng pag-verify mula sa Firefox.";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Ikonekta ang Isa pang Device";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Firefox Account";
 
@@ -352,32 +274,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Walang Internet Koneksyon";
 
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Buksan ang Mga Kagustuhan sa Pag-sync";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "Tanggalin";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Alisin ang Firefox Account na nauugnay sa device na ito upang mag-sign in bilang ibang user.";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "Alisin ang Account";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "Ipadala ulit ang Email";
-
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Mag sign in para ma Sync";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "Kunin ang iyong mga tab, bookmark, at password mula sa iyong iba pang mga device.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "I-sync Ngayon";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "Dalhin ang Iyong Web Sa Iyo";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Konektado ang Firefox Sync sa %@";
@@ -400,9 +298,6 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Ang isang aparato ay naka-disconnect mula sa Firefox Sync";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "Kunin ang mga bukas na tab, bookmark, at password mula sa iba pang mga device.";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Help";
 
@@ -424,9 +319,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Ngayon at Kahapon";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Ang paglilinis ng Kasaysayan ng Kamakailan lang ay aalisin ang kasaysayan, cookies, at iba pang data ng browser.";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "Websites you've visited recently will show up here.";
 
@@ -435,15 +327,6 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Mag-sign in upang tingnan ang isang listahan ng mga tab mula sa iyong iba pang mga device.";
-
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Ang iyong account ay kailangang ma-verify.";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Gusto mong makita ang iyong mga tab mula sa iba pang mga device dito?";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "I-on ang pag-sync ng tab upang tingnan ang isang listahan ng mga tab mula sa iyong iba pang mga device.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
@@ -454,32 +337,11 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Kakasarado lang";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d device(s) connected";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "Synced devices";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "I-cancel";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "You can change this at any time in Settings";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "I-set ang Homepage";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Do you want to use this web page as your home page?";
-
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Bookmark";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Burahin sa Kasaysayan";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Buksan sa Bagong Pribadong Tab";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Buksan sa Bagong Tab";
@@ -538,9 +400,6 @@
 /* History tableview section header */
 "Last month" = "Nakaraang buwan";
 
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Huling na-sync: %@";
-
 /* History tableview section header */
 "Last week" = "Nakaraang linggo";
 
@@ -562,12 +421,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "Mga Login";
 
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "Binago";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "Login";
-
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Huwag I-save";
 
@@ -585,15 +438,6 @@
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "I-update";
-
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "Login";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "Lahat";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "Website";
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filter";
@@ -624,15 +468,6 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL Kinopya sa Clipboard";
 
-/* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "Paganahin ang Mode ng Night";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "I-block ang mga Larawan";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "Page Actions";
-
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "I-paste";
 
@@ -651,32 +486,14 @@
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Ipinadala ang Tab";
 
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "Hinarangan";
-
-/* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Walang mga tracker na kilala sa Firefox ang nakita sa pahinang ito.";
-
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Setting ng mga Proteksyon";
-
-/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "Mga proteksyon para sa %@";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "Pagsubaybay ng nilalaman";
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "Social Trackers";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox ay hinahayaan ang mga bahagi ng pahina na maaaring subaybayan ang iyong pag-browse.";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "I-block ang mga tracker sa online";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "Cross-Site sa Pagsubaybay ng Cookie";
 
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Mga tracker ng Cross-Site";
@@ -699,47 +516,8 @@
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Ang mga social network ay naglalagay ng mga tracker sa iba pang mga website upang makabuo ng isang mas kumpleto at naka-target na profile sa iyo. Ang pagbara sa mga tracker na ito ay nagbabawas kung magkano ang nakikita ng mga kumpanya ng social media kung ano ang ginagawa mo sa online.";
 
-/* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "Huwag paganahin para sa site na ito";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "Naka-off na ang Proteksyon sa Pagsubaybay para sa site na ito.";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "Paganahin ang Pagsubaybay";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "Pinagana para sa site na ito";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "Naka-on na ang Proteksyon sa Pagsubaybay para sa site na ito.";
-
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Fingerprinters";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Na-block ang Mga Cooking sa Pagsubaybay sa Cross-Site";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "Na-block ang mga Cryptominer";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "Na-block ang mga fingerprint";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "Na-block ang Mga Social Tracker";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "Matuto nang higit pa tungkol sa kung paano sinusubaybayan ng Mga Pagsubaybay sa Pagsubaybay ang mga online na tracker na nangongolekta ng iyong data sa pagba-browse sa maraming mga website.";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "Walang nakitang mga elemento sa pagsubaybay sa pahinang ito.";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Kasama sa site ang mga elemento na maaaring subaybayan ang iyong pagba-browse. Pinigilan mo ang proteksyon.";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "Paganahin para sa site na ito";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Ano ang Bago";
@@ -790,23 +568,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Hindi maaaring buksan ang pahina";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "Menu ng Mga Pagpipilian sa Pahina";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "Tagapili ng Panel";
-
 /* Password textbox in Authentication prompt */
 "Password" = "Password";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "You don’t have any credentials synced from your Firefox Account";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "Available Credentials:";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox Credentials";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Ito ay pumapayag na i-save ang imahe sa iyong Camera Roll.";
@@ -859,9 +622,6 @@
 /* Reopen alert title shown at home page. */
 "ReopenAlert.Title" = "Buksan ulit ang Huling Nasaradong Tab";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "Buksan ulit ang Saradong Tab";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "i-Reset ang sukat ng text";
 
@@ -879,9 +639,6 @@
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Di-wasto ang data";
-
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Mangyaring payagan ang Firefox na ma-access ang camera ng iyong device sa 'Mga Setting' -> 'Privacy' -> 'Camera'.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "I-scan ang QR Code";
@@ -926,12 +683,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
-
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "Mga hanap para sa suhuwestiyon";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Ligtas na koneksyon";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Magpadala ng crash report sa Mozilla upang ayusin ang problema?";
@@ -985,12 +736,6 @@
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "Natanggap na tab galing %@";
 
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "Idagdag sa Listahan ng Pagbabasa";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "Bookmark";
-
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Tapikin upang magsimula";
 
@@ -1038,9 +783,6 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Burahin ang Private Data.";
-
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Burahin ang Private Data.";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Kinopya sa clipboard";
@@ -1112,15 +854,6 @@
 /* Title in main app settings for Theme settings */
 "Settings.DisplayTheme.Title.v2" = "Tema";
 
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "Palagi";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Lamang kapag gumagamit ng Pagsubaybay na Proteksyon";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "Magpadala ng mga website ng isang Hindi Subaybayan ang signal na hindi mo gustong masubaybayan";
-
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Pangalan ng Device";
 
@@ -1133,29 +866,14 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Pangkalahatan";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "I-clear";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Homepage";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Settings ng Homepage";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Enter a webpage";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Current Homepage";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Gamitin ang Kinopyang Link";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Gamitin ang Kasalukuyang Pahina";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "Use Default";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "Mga Login at Mga Password";
@@ -1163,47 +881,14 @@
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "Custom URL";
 
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "When you open a New Tab:";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "Ipasadya ang mga Nangungunang Site";
-
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Magpakita ng Blank na Pahina";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "Ipakita ang iyong mga Bookmarks";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "Ang mga site na iyong pinupuntahan";
-
-/* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Ipasadya ang Firefox Home";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox Home";
 
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "Mga Kamakailang Bookmark";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "Bisitahin";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "Ipakita ang iyong Kasaysayan";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Ipakita ang Iyong Homepage";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "Trending sa Pocket";
-
-/* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "Mahusay na mga nilalaman mula sa web.";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "Ipakita ang iyong Reading List";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Bagong Tab";
@@ -1259,20 +944,8 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri Shortcuts";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Maaari mong piliin kung aling listahan ang gagamitin ng Firefox upang harangan ang mga elemento ng Web na maaaring subaybayan ang iyong aktibidad sa pagba-browse.";
-
-/* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "Balanse para sa proteksyon at pagganap.";
-
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "BLOCKS";
-
-/* Explanation of strict mode. */
-"Settings.TrackingProtection.Info.StrictTitle" = "Nagbibigay ng mas matibay na proteksyon, ngunit maaaring maging sanhi ng pagkasira ng ilang mga site.";
-
-/* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "Dagdag Kaalaman…";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "Antas ng Proteksyon";
@@ -1280,53 +953,17 @@
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Proteksyon sa Pagsubaybay";
 
-/* Additional information about the strict level setting */
-"Settings.TrackingProtection.StrictLevelInfoFooter" = "Ang pagharang sa mga tracker ay maaaring makaapekto sa pag-andar ng ilang mga website.";
-
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Pamantayan (default)";
-
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Pinapayagan ang ilang mga tagasubaybay upang ang mga website ay gumana ng maayos.";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Mahigpit";
 
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Bina-block ang mga kilalang tracker. Ang ilang mga website ay maaaring hindi gumana ng maayos.";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Ang pagsubaybay ay ang koleksyon ng iyong data sa pag-browse sa maramihang mga website.";
-
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Pinahusay na Proteksyon sa Pagsubaybay";
 
-/* Translation settings footer describing how language detection and translation happens. */
-"Settings.TranslateSnackBar.SectionFooter" = "Ang wika ng web page ay nakita sa device, at inaalok ang isang pagsasalin mula sa isang malayong serbisyo.";
-
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "Mga Serbisyo";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchSubtitle" = "Bigyan ng pagkakataon para isalin ang anumang site na nakasulat sa isang wika na naiiba sa iyong default na wika.";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchTitle" = "Nag-aalok ng Pagsasalin";
-
-/* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "Pagsasalin";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Troubleshoot";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "Tanggalin";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "Tapos na";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "I-edit";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Ipakita ang Higit Pa";
@@ -1358,9 +995,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Buksan sa Firefox";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "Buksan sa Private Mode";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Hanapin sa Firefox";
 
@@ -1383,56 +1017,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Gamitin ang tatlong daliri at i-swipe sa kaliwa o kanan para maisara ang tab.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Normal na Pag-browse Mode";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Pribado na Pag-browse Mode";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "I-Sync ang iyong mga tab, bookmark, password, atbp.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "I-Sync ang iyong mga tab, bookmark, password atbp.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "May katagalan bago matapos ang iyong unang sync";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Syncing";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Syncing…";
 
-/* Panel accessibility label */
-"Synced Tabs" = "Mga Naka-sync na Tab";
-
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Mga Bookmarks";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Remote Clients";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Hindi matagumpay na Syncing";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "Kasaysayan";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "Logins";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Hindi available ang Sync";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Ang Sync ay offline";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "Sync is experiencing issues syncing %@";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "Tabs";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Tab %1$@ ng %2$@";
@@ -1452,20 +1041,11 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d tab(s) closed";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "Paghahanap ng Mga Tab";
-
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Isarado ang Lahat na mga Tab";
 
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "Isarado ang Napiling Tab";
-
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Magbukas ng Bagong Tab";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "Magbukas ng Napiling Tab";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Ang pahinang ito ay hindi maipakita sa Reader View.";
@@ -1500,12 +1080,6 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Isara ang Lahat na mga Tab";
 
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Dito makikita ang laga mong binibisitang sites.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Ito ang Top Sites";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Alisin ang pahina - %@";
 
@@ -1530,17 +1104,8 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "Hindi pa nabasa";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "I-upgrade ang Firefox upang makakonek";
-
 /* Username textbox in Authentication prompt */
 "Username" = "Username";
-
-/* Text message in the settings table view */
-"Verify your email address" = "Beripikahin ang iyong email address";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Bersyon %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Nilalaman ng web";

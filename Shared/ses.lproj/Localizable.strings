@@ -16,27 +16,6 @@
 /* About settings section title */
 "About" = "Fahami";
 
-/* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Kanji sanda nungu kaasu";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Kaa nungu kaasey ra";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "Doo-šilbante";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "Gunante";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "Ka tonton";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "Yaayi hayey";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Nungu kaasey";
-
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Kanji tonton";
 
@@ -80,20 +59,11 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Foolo";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "Gorodoo";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "Fooloo maa";
-
 /* The button to create a new folder */
 "Bookmarks.NewFolder.Label" = "Foolo taaga";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Maa";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Gaayay";
@@ -118,12 +88,6 @@
 
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "Kanji daabuyan";
-
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "ordinater";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Cebe";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Sutura kanji taaga feera";
@@ -184,17 +148,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "Zumandiyanoo naŋ";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Zumandiyaney ši koy Firefox bande jina.";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Zumandiyanoo naŋandi";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "Zumandiyanoo kaŋ";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "Ceeci taaga";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Zumandiyaney";
@@ -247,18 +205,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Jine";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Bataga laala? Benandi ganda ka šintin taaga.";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "A ga waažibi kontoo m'alhakiikandi";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "War ga hima ka %@ alhakiikandi. War batagaa guna Firefox alhakiikandiyan doboo se.";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Jinay tana dobu";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Firefox kontu";
 
@@ -268,23 +214,8 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Interneti dobuyan šii";
 
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Sync ibaayey feeri";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "Batagaa sanda taaga";
-
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Huru Sync ra";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "Wa war jinay tanawey kanjey, doo-šilbawey nda šennikufaley zaa.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Hangandi sohõ";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "War internetoo kanbe war bande";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Firefox Sync dobu %@ ga";
@@ -307,9 +238,6 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Jinay dobante foo hun Firefox Sync ga";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "War kanji feerantey, doo-šilbawey nda šennikufaley zaa jinay taney ga.";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Faaba";
 
@@ -325,15 +253,6 @@
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Huru ka dii kanjey kaŋ goo war jinay tanawey ga maaŋey.";
 
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "War kontoo ga hima k'alhakiikandi.";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "War ga boona ka dii ne war kanjey jinay tanawey ga?";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Kanji hangandiyan tunandi ka dii kanjey maaɲey war jinay tanawey ga.";
-
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
 
@@ -343,32 +262,11 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Kanjey kaŋ kokor ka daaba";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "Jinay dobante %d";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "Jinay hangantey";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "Naŋ";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "War ga hin ka woo barmay waati kul kayandiyaney ra";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Šintinmoo kayandi";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "War ga boona ka interneti moɲoo woo tee war se šintin moo?";
-
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Moɲoo woo šilbay";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Kaa taarikoo ra";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Feeri sutura kanji taaga ra";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Feeri kanji taaga ra";
@@ -426,9 +324,6 @@
 
 /* History tableview section header */
 "Last month" = "Handu koraa";
-
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Hangandiyan koraa: %@";
 
 /* History tableview section header */
 "Last week" = "Jirbiyye koraa";
@@ -492,12 +387,6 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "Aderesoo berandi deeki-walha ga";
 
-/* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "Cijinhere alhaali tunandi";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "Moo teerawey";
-
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Dobu";
 
@@ -512,33 +401,6 @@
 
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Doo-šilbay hunnante";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox goo ma moɲoo cerawey gagay kaŋ ga hin ka war naarumaa gana.";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Interneti-ra ganakey gagay";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "Ganayan jejebu buu sohõ nungoo woo se.";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "Ganayan jejebu tunandi";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "Ganayan jejebu tunandi sohõ nungoo woo se.";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "Bay ka tonton taka kaŋ nda ganayan jejebu ka internet-ra ganakey kaŋ ga naaruyan bayhayan gagay nungu booboyaŋ game.";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "Ganayan jere kulyaŋ mana maatandi moɲoo woo ga.";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Moɲoo goo nda jereyaŋ kaŋ ga hin ka war naarumaa gana. War n' ka jejeboo kaa.";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "Tunandi nungoo woo se";
 
 /* Accessibility label for Mobile Device image in remote tabs list */
 "mobile device" = "kanbe jinay";
@@ -586,23 +448,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Ši hin ka moɲoo feeri";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "Moo suubarey maaboŋ";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "Fasaldoo suubakaw";
-
 /* Password textbox in Authentication prompt */
 "Password" = "Šennikufal";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Wara šii nda alhaku tammaasa hanganteyaŋ kul war Firefox kontoo ga";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "Alhaku tammaasa barantey:";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox alhaku tammaasawey";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Daabu";
@@ -640,9 +487,6 @@
 /* Name for button removing current article from reading list in reader mode */
 "Remove from Reading List" = "Kaa caw maašeedaa ra";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "Kanji daabantey feeri taaga";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "Hantum azzaati yeeti";
 
@@ -660,9 +504,6 @@
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Bayhayey ga laybu";
-
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Naŋ Firefox ma duu war jinaa biizaahayaa ‘Kayandiyaney’ -> ‘Sutura’ -> ‘Biizaahaya’.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR tammaasa bii zaa";
@@ -708,12 +549,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Ayyo";
 
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "Honnandiyan ceeciyaney";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Ciyari saajante";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Kaŋyan bayrandi sanba hala Mozilla ma hin ka layboo hanse?";
 
@@ -747,12 +582,6 @@
 
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "Kanji kaŋ hun %@ do";
-
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "Tonton caw maašeedaa ga";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "Doo-šilbay";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Naagu ka šintin";
@@ -802,9 +631,6 @@
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Sutura bayhayey tuusu";
 
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "Sutura bayhayey tuusu";
-
 /* Default text in search bar for Data Management */
 "Settings.DataManagement.SearchLabel" = "Interneti nungey fay";
 
@@ -845,15 +671,6 @@
    Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
 "Settings.DisplayTheme.SwitchTitle" = "Ga tee nga boŋ se";
 
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "Waati kul";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Waati de kaŋ ganayan jejebu ga dira";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "Ma ši ay gana yaamar sanba interneti nungey se kaŋ war ši baa i ma war gana";
-
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Jinay maa";
 
@@ -866,56 +683,20 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Hayakul";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "Kaa";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Šintinmoo";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Šintinmoo kayandiyaney";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Interneti moo dam";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Sohõda sintinmoɲoo";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Goy nda dobu berantaa";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Goy nda sohõda moɲoo";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "Tilasu goyandi";
-
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "Nda war na kanji taaga feeri:";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "Nungu kaasey hanse war boŋ se";
 
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Moo koonu";
 
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "Doo-šilbawey";
-
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "Doo-šilbay kokorantey";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "Gunante";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "Taariki";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Šintinmoo";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "War caw maašeedaa cebe";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Kanji taaga";
@@ -965,35 +746,14 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri duurandiyaney";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "War ga hin ka suuba maašeedaa kaŋ nda Firefox ga goy ka interneti haya-izey ganji a ma war naarumaa gana.";
-
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Ganayan jejebu";
-
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Ganakaw fooyaŋ naŋ hala nungey ma dira ka boori.";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Šendante";
 
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Ga ganakaw bayantey gagay. A ga tee kaŋ nungu fooyaŋ ši dira ka boori.";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Ganayan ti war naaruyan bayhaya margantey interneti nungu taney bande.";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Karkahatta";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "Tuusu";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "A ben";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "Fasal";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Cebe ka tonton";
@@ -1025,9 +785,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Feeri Firefox ra";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "Feeri sutura alhaali ra";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Ceeci Firefox ra";
 
@@ -1050,53 +807,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "Kabiize hinza mooru ceraw wowa wal'iguma here ka kanjoo daabu.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Hankul naarumi alhaali";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Sutura naarumi alhaali";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "War kanjey, doo-šilbawey, šennikufaley nda taney hangandi cere.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "War kanjey, doo-šilbawey nda taney hangandi cere.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "War hangandiyanoo ga hin ka gay kayna";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Hangandiyan";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Hangandiyan…";
 
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Doo-šilbawey";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Daykaw moorey";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Hangandiyan kaŋ";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "Taariki";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "Huruyan tammaasawey";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Hangandiyan ši bara";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Hangandiyan ši ciyari ra";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "Sync goo ma dii šenday %@ hangandiyanoo ra";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "Kanjey";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Kanje %1$@ %2$@ se";
@@ -1116,20 +831,11 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "Kanji %d daaba";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "Kanjey ceeci";
-
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Kanjey kul daabu";
 
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "Kanji suubantey daabu";
-
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Kanji taaga daabu";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "Kanji suubante daabu";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Moɲoo mana hin ka cebe Cawkaw gunaroo ra.";
@@ -1161,12 +867,6 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Kanjey kul daabu";
 
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Nungey kaŋ war felle ka dii y'ey ga fatta ne.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Kubayni nungu kaasey do";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Moɲoo kaa — %@";
 
@@ -1182,17 +882,8 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "mana cawandi";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Firefox taagandi ka ciya";
-
 /* Username textbox in Authentication prompt */
 "Username" = "Goykaw maa";
-
-/* Text message in the settings table view */
-"Verify your email address" = "War bataga aderesoo koroši";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "Dumi %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Interneti gundekuna";

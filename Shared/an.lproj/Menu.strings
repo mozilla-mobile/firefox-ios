@@ -1,23 +1,8 @@
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction.Title" = "Adhibir a marcapachinas";
-
-/* Label for the button, displayed in the menu, used to add a page to the reading list. */
-"Menu.AddToReadingList.Title" = "Adhibir a la lista de lectura";
-
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "Zarrar todas las pestanyas";
 
-/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
-"Menu.CopyAddress.Title" = "Copiar l'adreza";
-
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "Trobar en a pachina";
-
-/* Label for the button, displayed in the menu, used to Reload the webpage */
-"Menu.Library.Reload" = "Recargar";
-
-/* Label for the button, displayed in the menu, used to open the Library */
-"Menu.Library.Title" = "La tuya biblioteca";
 
 /* Label for the button, displayed in the menu, used to open a new private tab. */
 "Menu.NewPrivateTabAction.Title" = "Ubrir una nueva pestanya privada";
@@ -34,9 +19,6 @@
 /* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "Historial";
 
-/* Label for the button, displayed in the menu, used to navigate to the home page. */
-"Menu.OpenHomePageAction.Title" = "Inicio";
-
 /* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "Lista de lectura";
 
@@ -46,29 +28,11 @@
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Pestanyas sincronizadas";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
-"Menu.OpenTopSitesAction.AccessibilityLabel" = "Puestos web favoritos";
-
-/* Label for the button, displayed in the menu, used to show the html page source */
-"Menu.PageSourceAction.Title" = "Veyer codigo fuent d'a pachina";
-
-/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
-"Menu.RemoveBookmarkAction.Title" = "Eliminar marcapachinas";
-
-/* Label for the button, displayed in the menu, used to open the QR code scanner. */
-"Menu.ScanQRCodeAction.Title" = "Escaniar codigo QR";
-
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "Veyer-lo tot";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
 "Menu.SharePageAction.Title" = "Compartir pachina con…";
-
-/* Label for the button, displayed in the menu, used to open the tabs tray */
-"Menu.ShowTabs.Title" = "Amostrar pestanyas";
-
-/* Label for the button, displayed in the menu, used to translate the current page. */
-"Menu.TranslatePageAction.Title" = "Traducir pachina";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "Solicitar versión d'escritorio";

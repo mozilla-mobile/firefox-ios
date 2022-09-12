@@ -16,47 +16,14 @@
 /* About settings section title */
 "About" = "பற்றி";
 
-/* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "முக்கிய தளங்களில் சேர்";
-
-/* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "முனையிலிருந்து நீக்குக";
-
-/* The description of a highlight if it is a site the user has bookmarked */
-"ActivityStream.Highlights.Bookmark" = "புத்தகக்குறியிட்டது";
-
-/* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "பார்வையிட்டது";
-
-/* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "சமீபத்திய புத்தகக்குறிகள்";
-
-/* The link that shows more Pocket trending stories */
-"ActivityStream.Pocket.MoreLink" = "மேலும்";
-
-/* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "பாக்கெட்டில் பிரபலமானவை";
-
-/* The description of a Pocket Story */
-"ActivityStream.Pocket.Trending" = "பிரபலமான";
-
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "சமீபத்தில் பார்வையிட்டது";
-
-/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
-"ActivityStream.RecentlyVisited.RemoveButton.Title" = "அகற்றவும்";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "குறுக்குவழிகள்";
 
-/* label showing how many rows of topsites are shown. %d represents a number */
-"ActivityStream.TopSites.RowCount" = "வரிசைகள்: %d";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "வரிசைகளை அமை";
-
-/* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "முதன்மை தளங்கள்";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "கீற்றை சேர்";
@@ -95,12 +62,6 @@
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "துள்ளும் சாளரங்களை தடு";
 
-/* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "புத்தகக்குறி";
-
-/* The header title for the fields when editing a Folder */
-"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "அடைவு";
-
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "தலைப்பு";
 
@@ -119,12 +80,6 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "அடைவு";
 
-/* The label for the location of the new folder */
-"Bookmarks.FolderLocation.Label" = "இடம்";
-
-/* The label for the title of the new folder */
-"Bookmarks.FolderName.Label" = "அடைவு பெயர்";
-
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "புதிய புத்தகக்குறி";
 
@@ -136,12 +91,6 @@
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "தலைப்பு";
-
-/* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "உரல்";
-
-/* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "நீங்கள் சேமித்த புத்தகக்குறிகள் இங்கே தோன்றும்.";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "ஒளிர்வு தன்மை";
@@ -167,14 +116,8 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "கீற்றை மூடுகிறது";
 
-/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
-"computer" = "கணினி";
-
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "இணைப்பை புத்தகக்குறியிடு";
-
-/* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "தாவு";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "அந்தரங்க கீற்று திறந்தது";
@@ -214,12 +157,6 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "பக்கத்தை ஏற்ற முடியவில்லை.";
-
-/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "IOS 13 பயனர்களுக்கு, உங்கள் கைப்பேசி இருண்ட பயன்முறையில் அமைக்கப்பட்டால் பயர்பாக்ஸ் இப்போது தானாகவே இருண்ட கருப்பொருளுக்கு மாறுகிறது. இந்த நடத்தையயை மாற்ற, அமைப்புகள்> தீம் என்பதற்குச் செல்லவும்.";
-
-/* Title for the new dark mode change in the version 22 app release. */
-"CoverSheet.v22.DarkMode.Title" = "இருண்ட தீம் இப்போது இருண்ட விசைப்பலகை மற்றும் இருண்ட மின்னும திரை ஆகியவற்றை உள்ளடக்கியது.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "உள்ளமைக்கப்பட்ட மேம்பட்ட கண்காணிப்பு பாதுகாப்பு உங்களைச் சுற்றி விளம்பரங்களைத் தடுக்க உதவுகிறது. இன்னும் அதிகமான தடமறிகள், விளம்பரங்கள் மற்றும் திடீர் தோனற்ல்களைத் தடுக்க கண்டிப்பாக இயக்கவும்.";
@@ -271,17 +208,11 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "பதிவிறக்கத்தை ரத்து செய்";
 
-/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "பதிவிறக்கங்கள் பயர்பாஃசால் இன்னும் ஆதரிக்கப்படவில்லை.";
-
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "பதிவிறக்கம் ரத்துசெய்யப்பட்டது";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "பதிவிறக்கம் தோல்வியடைந்தது";
-
-/* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "மறுமுயற்சி";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "பதிவிறக்கங்கள்";
@@ -343,18 +274,6 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "முன்செலுத்து";
 
-/* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "தவறான மின்னஞ்சல்? மீண்டும் தொடங்க கீழே துண்டிக்கவும்.";
-
-/* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "கணக்கைச் சரிபார்க்க வேண்டும்";
-
-/* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "நீங்கள் %@ என்பதைச் சரிபார்க்க வேண்டும். பயர்பாக்சிலிருந்து சரிபார்ப்பு தொடுப்பிற்கு உங்கள் மின்னஞ்சலைப் பார்க்கவும்.";
-
-/* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "மற்றொரு சாதனத்தை இணை";
-
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "பயர்பாஃசு கணக்கு";
 
@@ -363,24 +282,6 @@
 
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "இணைய இணைப்பு இல்லை";
-
-/* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "ஒத்திசைவு முன்னுரிமைகளைத் திற";
-
-/* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "Firefox.com/pair தளத்தில் காட்டிய QR குறியீட்டை வருடுங்கள்";
-
-/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
-"FxA.RemoveAccount" = "நீக்கு";
-
-/* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "வேறு பயனராக உள்நுழைய இச்சாதனத்துடன் தொடர்புடைய பயர்பாக்சு கணக்கை அகற்று.";
-
-/* Remove account alert is the final confirmation before user removes their firefox account */
-"FxA.RemoveAccountAlertTitle" = "கணக்கை அகற்று";
-
-/* Button label to resend email */
-"FxA.ResendEmail" = "மின்னஞ்சலை மீட்டனப்பு";
 
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "பகைப்படக்கருவி மூலம் உள்நுழைக";
@@ -391,23 +292,11 @@
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "வருடி தயார்";
 
-/* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "ஒத்திசைவை இயக்கு";
-
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "பதிலாக மின்னஞ்சல் பயன்படுத்தவும்";
 
-/* Button label to sign into Sync */
-"FxA.SignIntoSync" = "ஒத்திசைக்க உள்நுழை";
-
-/* Label explaining what sync does */
-"FxA.SyncExplain" = "மற்ற சாதனங்களிலிருந்து கீற்றுகள், புத்தகக்குறிகள் மற்றும் கடவுச்சொற்களை பெற்றிடுங்கள்.";
-
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "இப்போது ஒத்திசை";
-
-/* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "இணைத்தை உங்களுடன் வைத்திருங்கள்";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "%@ உடன பயர்பாஃசு ஒத்திசைவு இணைந்தது";
@@ -430,9 +319,6 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "பயர்பாக்சு ஒத்திசைவிலிருந்து ஒரு கருவி துண்டிக்கப்பட்டது";
 
-/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "மற்ற சாதனங்களிலிருந்து கீற்றுகள், புத்தகக்குறிகள் மற்றும் கடவுச்சொற்களை பெற்றிடுங்கள்.";
-
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "உதவி";
 
@@ -454,9 +340,6 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "இன்றும் நேற்றும்";
 
-/* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "சமீபத்திய வரலாற்றை அழிப்பது வரலாறு, நினைவிகள் மற்றும் பிற உலாவி தரவை நீக்கும்.";
-
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "அண்மையில் பார்த்த இணையத்தளங்கள் இங்கே தோன்றும்.";
 
@@ -465,15 +348,6 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "உங்கள் மற்ற கருவிகளிலிருந்து கீற்றுகளின் பட்டியலைப் பார்க்க உள்நுழை.";
-
-/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "உங்கள் கணக்கு சரிபார்க்கப்பட வேண்டும்.";
-
-/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "மற்ற கருவிகளிலிருந்து உங்கள் கீற்றுகளை இங்குப் பார்க்க விருப்பமா?";
-
-/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "மற்ற கருவிகளிலிருந்து கீற்றுகளின் பட்டியலைக் காண கீற்று ஒத்திசைவை இயக்கு.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "பயர்பாஃசு ஒத்திசைவு";
@@ -484,32 +358,11 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "சற்றுமுன் மூடப்பட்டவை";
 
-/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "இணைந்துள்ள %d சாதனங்கள்";
-
-/* Title for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Title" = "ஒத்திசைவு சாதனங்கள்";
-
-/* Button cancelling changes setting the home page for the first time. */
-"HomePage.Set.Dialog.Cancel" = "ரத்து";
-
-/* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "நீங்கள் இதை எப்பொழுது வேண்டுமாயின் அமைவுகளிலிருந்து மாற்ற முடியும்";
-
-/* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "முகப்பு பக்கத்தை அமை";
-
-/* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "இதை உங்களின் முகப்பு பக்கமாக அமைக்க வேண்டுமா?";
-
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "புத்தகக்குறி";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "வரலாற்றிலிருந்து அழி";
-
-/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "அந்தரங்க கீற்றில் திற";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "புதிய கீற்றில் திற";
@@ -568,9 +421,6 @@
 /* History tableview section header */
 "Last month" = "கடந்த மாதம்";
 
-/* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "கடைசி ஒத்திசைவு: %@";
-
 /* History tableview section header */
 "Last week" = "கடந்த கிழமை";
 
@@ -591,12 +441,6 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "உள்நுழைவுகள்";
-
-/* Login detail view field name for the last modified date */
-"LoginsDetailView.LoginModified" = "மாற்றப்பட்டது";
-
-/* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "உள்நுழை";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "வேண்டாம்";
@@ -622,15 +466,6 @@
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "புதுப்பி";
 
-/* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "உள்நுழை";
-
-/* For filtering the login list, search both website and login names. */
-"LoginsList.LoginsListFilterSearchAll" = "அனைத்தும்";
-
-/* For filtering the login list, search only the website names */
-"LoginsList.LoginsListFilterWebsite" = "வலைத்தளம்";
-
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "வடிப்பி";
 
@@ -651,9 +486,6 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "புத்தகக்குறி சேர்க்கப்பட்டது";
 
-/* Toast displayed to the user after adding the item to the Top Sites. */
-"Menu.AddPin.Confirm" = "சிறந்த தளங்களுள் வைக்கப்பட்டது";
-
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "வாசிப்பு பட்டியலில் சேர்க்கப்பட்டது";
 
@@ -662,21 +494,6 @@
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL ஒட்டுப்பலகையில் வைக்கப்பட்டது";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "இத்தளத்திற்கு மேம்பட்ட தடமறி பாதுகாப்பு முடக்கப்பட்டுள்ளது.";
-
-/* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "இத்தளத்திற்கு மேம்பட்ட தடமறி பாதுகாப்பு இயக்கப்பட்டுள்ளது.";
-
-/* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label" = "இரா முறைமையை துவக்கு";
-
-/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "படங்களைத் தடு";
-
-/* Label for title in page action menu. */
-"Menu.PageActions.Title" = "பக்க செயல்கள்";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "ஒட்டு";
@@ -693,38 +510,17 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "புத்தகக்குறி நீக்கப்பட்டது";
 
-/* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "சிறந்த தளங்களிலிருந்து அகற்றப்பட்டது";
-
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "கீற்று அனுப்பப்பட்டது";
 
-/* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "தடுக்கப்பட்டது";
-
-/* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "இந்தப் பக்கத்தில் Firefix -க்கு தெரிந்த எந்தத் தடமறிகளும் கண்டறியப்படவில்லை.";
-
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "பாதுகாப்பு அமைவுகள்";
-
-/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "%@ தளத்திற்கான பாதுகாப்புகள்";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "உள்ளடக்கத் தடமறியல்";
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "சமூக தடமறிகள்";
-
-/* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "பயர்பாக்ஸ் உங்களது தேடல்களைத் தடமறியக்கூடிய பக்கத்தின் பகுதிகளை முடக்குகிறது.";
-
-/* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "இணைய பின்தொடரிகளைத் தடு";
-
-/* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "குறுக்கு தள கண்காணிப்பு நினைவீகள்";
 
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "குறுக்கு தள தடமறிகள்";
@@ -747,47 +543,8 @@
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "உங்களைப் பற்றிய முழுமையான மற்றும் இலக்கு சுயவிவரத்தை உருவாக்கச் சமூக வலைத்தளங்கள் பிற வலைத்தளங்களில் பின்தொடரிகளை வைக்கின்றன. இந்த பின்தொடரிகளைத் தடுப்பதால், இயக்கலையில் நீங்கள் என்ன செய்கிறீர்கள் என்பதை சமூக ஊடக நிறுவனங்கள் பார்க்கக்கூடிய அளவைக் குறைக்கிறது.";
 
-/* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "இந்தத் தளத்திற்காக முடக்கப்பட்டது";
-
-/* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "இப்போது தடமறியல் பாதுகாப்பு இந்த தளத்தில் அணைக்கப்பட்டுள்ளது.";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "தடமறியல் பாதுகாப்பை செயற்படுத்து";
-
-/* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "இந்த தளத்திற்காக இயக்கப்பட்டது";
-
-/* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "இப்போது தடமறியல் பாதுகாப்பு இந்த தளத்தில் இயக்கப்பட்டுள்ளது.";
-
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "கைரேகைகள்";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "தடுக்கப்பட்ட பிற தள நினைவீகள்";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "தடுக்கப்பட்ட இரகசிய பரிவர்த்தனையாளர்கள்";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "தடுக்கப்பட்ட கைரேகையாளர்கள்";
-
-/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "தடுக்கப்பட்ட சமூக தடமறிகள்";
-
-/* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "வலைத்தளங்களில் உலாவல் தரவைச் சேகரிக்கும் இணைய பின்தொடரிகளை தடமறியல் பாதுகாப்பு எப்படித் தடுக்கிறது என்பது பற்றி மேலும் அறிக.";
-
-/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "எந்த தடமறியல் உறுப்புகளும் இப்பக்கத்தில் இல்லை.";
-
-/* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "இத்தளம் உங்களை தடமறியக்கூடிய உறுப்புகளைக் கொண்டுள்ளது. நீங்கள் பாதுகாப்பை முடக்கியுள்ளீர்கள்.";
-
-/* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "இந்த தளத்தில் இயக்கு";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "புதியன எவை";
@@ -838,23 +595,8 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "பக்கத்தை திறக்க முடியவில்லை";
 
-/* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "பக்க விருப்ப பட்டி";
-
-/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
-"Panel Chooser" = "பலகம் தேர்வி";
-
 /* Password textbox in Authentication prompt */
 "Password" = "கடவுச்சொல்";
-
-/* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "உங்கள் ஃபயர்பாக்ஸ் கணக்கிலிருந்து ஒத்திசைவான எந்த சான்றுகளும் உங்களிடம் இல்லை";
-
-/* Header for the list of credentials table */
-"PasswordAutoFill.PasswordsListTitle" = "கிடைக்கும் சான்றுகள்:";
-
-/* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "பயர்பாக்ஸ் சான்றுகள்";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "இது கருவினுள் படத்தைச் சேமிக்க அனுமதிக்கிறது.";
@@ -907,9 +649,6 @@
 /* Reopen alert title shown at home page. */
 "ReopenAlert.Title" = "இறுதியாக அடைத்த கீற்றைத்திற";
 
-/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"ReopenClosedTab.KeyCodeTitle" = "மூடிய கீற்றுகளைத் திற";
-
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "உரை அளவை மீட்டமை";
 
@@ -927,9 +666,6 @@
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "தரவு செல்லாதது";
-
-/* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "தயவுசெய்து பயர்பாஃசு உங்கள் சாதனத்தின் படக்கருவியை அணுக அனுமதியுங்கள் 'அமைவுகள்' -> 'தனியுரிமை' ->'படக்கருவி'.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR குறியீடை வருடு";
@@ -974,12 +710,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "சரி";
-
-/* Accessibility hint describing the action performed when a search suggestion is clicked */
-"Searches for the suggestion" = "பரிந்துரைக்கான தேடல்கள்";
-
-/* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "பாதுகாப்பான இணைப்பு";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "சிக்கலைத் தீர்க்க மொசில்லாவிற்கு சிதைவு அறிக்கையைச் சமர்ப்பிக்கவா?";
@@ -1033,12 +763,6 @@
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "%@ சாதனத்திலிருந்து கீற்று பெறப்பட்டது";
 
-/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "வாசிப்பு பட்டியலில் சேர்";
-
-/* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "புத்தகக்குறி";
-
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "துவங்க தட்டவும்";
 
@@ -1086,9 +810,6 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "அந்தரங்க தரவைத் துடை";
-
-/* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "அந்தரங்க தரவைத் துடை";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "ஒட்டுப்பலகைக்கு நகலெடுத்தது";
@@ -1160,15 +881,6 @@
 /* Title in main app settings for Theme settings */
 "Settings.DisplayTheme.Title.v2" = "கருப்பொருள்";
 
-/* DNT Settings option for always on */
-"Settings.DNT.OptionAlwaysOn" = "எப்போதும்";
-
-/* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "தடமறியல் பாதுகாப்பைப் பயன்படுத்தும்போது மட்டுமே";
-
-/* DNT Settings title */
-"Settings.DNT.Title" = "நீங்கள் தடமறியப்பட விரும்பவில்லையென்று வலைத்தளங்களுக்கு தடமறியாதே சைகையை அனுப்பு";
-
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "சாதனத்தின் பெயர்";
 
@@ -1181,29 +893,14 @@
 /* General settings section title */
 "Settings.General.SectionName" = "பொது";
 
-/* Button in settings to clear the home page. */
-"Settings.HomePage.Clear.Button" = "துடை";
-
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "முகப்பு பக்கம்";
-
-/* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "முகப்பு பக்கம்";
-
-/* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "வலைப்பக்கத்தை இடுக";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "தற்போதுள்ள முகப்பு பக்கம்";
 
-/* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "நகலெடுத்த தொடுப்பைப் பயன்படுத்து";
-
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "நடப்பு பக்கத்தைப் பயன்படுத்து";
-
-/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "முன்னிருப்பை பயன்படுத்து";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "நுழைவுகள் & கடவுச்சொற்கள்";
@@ -1211,47 +908,14 @@
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "தனிப்பயன் URL";
 
-/* A description in settings of what the new tab choice means */
-"Settings.NewTab.Description" = "புதிய கீற்றை திறக்கும்போது:";
-
-/* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "முக்கியத் தளங்களைத் தனிபயனாக்கு";
-
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "வெற்று பக்கம்";
-
-/* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "புத்தகக்குறிகள்";
-
-/* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "நீங்கள் மிகவும் பார்வையிடும் தளங்கள்";
-
-/* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "பயர்பாக்ஸ் முகப்பை தனிப்பயனாக்கு";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "பயர்பாக்ஸ் முகப்பு";
 
-/* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "சமீபத்திய புத்தகக்குறிகள்";
-
-/* Option in settings to turn off history in the highlights section */
-"Settings.NewTab.Option.HighlightsHistory" = "பார்வையிட்டது";
-
-/* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "வரலாறு";
-
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "முகப் பக்கம்";
-
-/* Option in settings to turn on off pocket recommendations */
-"Settings.NewTab.Option.Pocket" = "பாக்கெட்டில் பிரபலமானவை";
-
-/* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "உலகம் முழுவதும் இருந்து சிறந்த உள்ளடக்கம்.";
-
-/* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "வாசிப்பு பட்டியலைக் காண்பி";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "புதிய கீற்று";
@@ -1322,23 +986,11 @@
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "முன்னறிவிப்பு";
 
-/* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "உங்கள் உலாவலைத் தடமறியும் வலை உறுப்புகளை முடக்க பயர்பாக்ஸ் எந்த பட்டியலைப் பயன்படுத்த வேண்டும் என்பதை தேர்ந்தெடுக்கலாம்.";
-
-/* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "பாதுகாப்பு மற்றும் செயல்திறனுக்காகச் சமப்படுத்தப்பட்டது.";
-
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "தொகுதிகள்";
 
-/* Explanation of strict mode. */
-"Settings.TrackingProtection.Info.StrictTitle" = "வலுவான பாதுகாப்பை வழங்குகிறது, ஆனால் சில தளங்கள் உடைந்து போகக்கூடும்.";
-
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "மேலும் அறிய";
-
-/* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "மேலும் தகவலுக்கு…";
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "இலக்கு விளம்பரங்களைக் குறைக்கிறது மற்றும் விளம்பரதாரர்கள் உங்கள் உலாவலைக் கண்காணிப்பதைத் தடுக்க உதவுகிறது.";
@@ -1358,53 +1010,17 @@
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "தடமறியல் பாதுகாப்பு";
 
-/* Additional information about the strict level setting */
-"Settings.TrackingProtection.StrictLevelInfoFooter" = "டிராக்கர்களைத் தடுப்பது சில வலைத்தளங்களின் செயல்பாட்டைப் பாதிக்கும்.";
-
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "நிலையான (இயல்புநிலை)";
-
-/* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "வலைதளம் முறையாக இயங்க சில தடமறிகளை அனுமதி.";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "கண்டிப்பாக";
 
-/* Tracking protection settings option description for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrictDescription" = "தெரிந்த தடமறிகளை முடக்குகிறது. சில தளங்கள் முறையாக இயங்காமல் போகலாம்.";
-
-/* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "தடமறியல் என்பது பல தளங்களில் உங்களின் உலாவல் தொகுப்பாகும்.";
-
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "மேம்படுத்தப்பட்ட தடமறி பாதுகாப்பு";
 
-/* Translation settings footer describing how language detection and translation happens. */
-"Settings.TranslateSnackBar.SectionFooter" = "சாதனத்தில் வலைத்தளத்தின் மொழி கண்டறியப்பட்டுள்ளது, தொலைதூர சேவையிலிருந்து மொழிபெயர்ப்பு வழங்கப்படுகிறது.";
-
-/* Translation settings section title */
-"Settings.TranslateSnackBar.SectionHeader" = "சேவைகள்";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchSubtitle" = "உங்கள் இயல்பு மொழியில் இருந்து வேறுபட்ட மொழியில் எழுதப்பட்ட எந்த தளத்தையும் மொழிபெயர்ப்பதற்கு வழங்குக.";
-
-/* Switch to choose if the language of a page is detected and offer to translate. */
-"Settings.TranslateSnackBar.SwitchTitle" = "மொழிபெயர்ப்பைக் காண்பி";
-
-/* Title in main app settings for Translation toast settings */
-"Settings.TranslateSnackBar.Title" = "மொழிபெயர்ப்பு";
-
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "தீர்வுகள்";
-
-/* Button to delete website in search results */
-"Settings.WebsiteData.ButtonDelete" = "அழி";
-
-/* Button to exit edit website search results */
-"Settings.WebsiteData.ButtonDone" = "முடிந்தது";
-
-/* Button to edit website search results */
-"Settings.WebsiteData.ButtonEdit" = "தொகு";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "மேலும் காட்டு";
@@ -1436,9 +1052,6 @@
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "பயர்பாக்சில் திறக்கவும்";
 
-/* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "தனிப்பட்ட முறையில் கீற்றை திறக்கவும்";
-
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "பயர்பாக்சில் தேடவும்";
 
@@ -1461,56 +1074,11 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "கீற்றை மூட இடதாக (அ) வலதாக மூன்று விரல்களால் தேய்க்கவும்.";
 
-/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "சாதாரண உலாவல் முறைமை";
-
-/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "அந்தரங்க உலாவல் முறைமை";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "உங்கள் கிற்றுகள் புத்தகக்குறிகள் கடவுச்சொற்கள் போன்றவற்றை ஒத்திசை.";
-
-/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "உங்கள் கிற்றுகள், கடவுச்சொற்கள் போன்றவற்றை ஒத்திசை.";
-
-/* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "முதல் தடவை ஒத்திசைக்க சற்று நேரம் ஆகலாம்";
-
-/* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "ஒத்திசைக்கிறது";
-
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "ஒத்திசைக்கிறது…";
 
-/* Panel accessibility label */
-"Synced Tabs" = "ஒத்திசைத்த கீற்றுகள்";
-
-/* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "புத்தகக்குறிகள்";
-
-/* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "தொலைநிலை உலாவிகள்";
-
-/* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "ஒத்திசைவு தோல்வியடைந்தது";
-
-/* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "வரலாறு";
-
-/* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "உள்நுழைவுகள்";
-
-/* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "ஒத்திசைவு கிடைக்கவில்லை";
-
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "ஒத்திசைவு இல்லை";
-
-/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "ஒத்திசைவு %@ ஒத்திசைப்பதில் தடங்களைச் சந்திக்கிறது";
-
-/* The Tabs sync component, used in SyncState.Partial.Title */
-"SyncState.Tabs.Title" = "கீற்றுகள்";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "%1$@ இல் %2$@ கீற்று";
@@ -1530,23 +1098,14 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d கீற்று(கள்) மூடப்பட்டது";
 
-/* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "கீற்றைகளைத் தேடு";
-
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "கீற்றைச் சேர்";
 
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "அனைத்தையும் மூடு";
 
-/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseTab.KeyCodeTitle" = "தேர்ந்தெடுத்ததை மூடு";
-
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "புதிய கீற்றைத் திற";
-
-/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenSelectedTab.KeyCodeTitle" = "தேர்ந்தெடுத்ததைத் திற";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "வாசிப்பு தோற்றத்தில் பக்கத்தைக் காட்ட முடியவில்லை.";
@@ -1581,12 +1140,6 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "எல்லா கீற்றுக்களையும் மூடு";
 
-/* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "அடிக்கடி பார்த்த தளங்கள் இங்கே தோன்றும்.";
-
-/* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "முக்கிய தளங்களுக்கு வருக";
-
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "%@ - பக்கத்தை நீக்கு";
 
@@ -1611,20 +1164,11 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "படிக்காததென";
 
-/* Text message in the settings table view */
-"Upgrade Firefox to connect" = "இணைக்க பயர்பாக்சைப் புதுப்பி";
-
 /* Debug option */
 "Use stage servers" = "இடைநிலை சேவையகங்களைப் பயன்படுத்தவும்";
 
 /* Username textbox in Authentication prompt */
 "Username" = "பயனர்பெயர்";
-
-/* Text message in the settings table view */
-"Verify your email address" = "மின்னஞ்சல் முகவரியை உறுதிச்செய்க";
-
-/* Version number of Firefox shown in settings */
-"Version %@ (%@)" = "பதிப்பு %1$@ (%2$@)";
 
 /* Accessibility label for the main web content view */
 "Web content" = "வலை உள்ளடக்கம்";
