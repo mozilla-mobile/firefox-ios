@@ -18,6 +18,7 @@ class WallpaperManagerMock: WallpaperManagerInterface {
     }
 
     var canOnboardingBeShown: Bool = true
+    var canSettingsBeShown: Bool = true
 
     var setCurrentWallpaperCallCount = 0
     var setCurrentWallpaperResult: Result<Void, Error> = .success(())

@@ -14,6 +14,7 @@ protocol WallpaperManagerInterface {
     var currentWallpaper: Wallpaper { get }
     var availableCollections: [WallpaperCollection] { get }
     var canOnboardingBeShown: Bool { get }
+    var canSettingsBeShown: Bool { get }
 
     func setCurrentWallpaper(to wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
     func fetchAssetsFor(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
@@ -54,6 +55,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     /// Determines whether the wallpaper onboarding can be shown
     var canOnboardingBeShown: Bool {
         guard featureAvailable,
+              hasEnoughThumbnailsToShow,
               featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet,
                                             checking: .buildOnly)
         else { return false }
@@ -61,15 +63,28 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         return true
     }
 
-    /// Returns true if:
-    /// 1. The feature is enabled for the build
-    /// 2. The metadata & thumbnails are available
-    var featureAvailable: Bool {
+    /// Determines whether the wallpaper settings can be shown
+    var canSettingsBeShown: Bool {
+        guard featureAvailable,
+              hasEnoughThumbnailsToShow
+        else { return false }
+
+        return true
+    }
+
+    /// Returns true if the metadata & thumbnails are available
+    private var hasEnoughThumbnailsToShow: Bool {
         let thumbnailUtility = WallpaperThumbnailUtility(with: networkingModule)
 
+        guard featureAvailable, thumbnailUtility.areThumbnailsAvailable else { return false }
+
+        return true
+    }
+
+    /// Returns true if the feature is enabled for the build
+    private var featureAvailable: Bool {
         guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-              wallpaperVersion == .v1,
-              thumbnailUtility.areThumbnailsAvailable
+              wallpaperVersion == .v1
         else { return false }
 
         return true
@@ -171,16 +186,18 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     private func getAvailableCollections(filtering filter: ThumbnailFilter) -> [WallpaperCollection] {
         guard let metadata = getMetadata() else { return addDefaultWallpaper(to: []) }
 
-        let collections = metadata.collections.filter { $0.isAvailable }
+        var collections = metadata.collections.filter { $0.isAvailable }
         switch filter {
         case .none:
-            return addDefaultWallpaper(to: collections)
+            collections = addDefaultWallpaper(to: collections)
 
         case .thumbnailsAvailable:
             let collectionWithThumbnails = filterUnavailableThumbnailsFrom(collections)
-            return addDefaultWallpaper(to: collectionWithThumbnails)
+            collections = addDefaultWallpaper(to: collectionWithThumbnails)
         }
 
+        collections = collections.filter { !$0.wallpapers.isEmpty }
+        return collections
     }
 
     private func addDefaultWallpaper(to availableCollections: [WallpaperCollection]) -> [WallpaperCollection] {

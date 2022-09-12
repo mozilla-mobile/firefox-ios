@@ -13,6 +13,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     var currentNewTabChoice: NewTabPage!
     var currentStartAtHomeSetting: StartAtHomeSetting!
     var hasHomePage = false
+    var wallpaperManager: WallpaperManagerInterface
 
     var isJumpBackInSectionEnabled: Bool {
         return featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly)
@@ -23,7 +24,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     var isWallpaperSectionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
+        return wallpaperManager.canSettingsBeShown &&
+            featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
     }
 
     var isPocketSectionEnabled: Bool {
@@ -39,12 +41,14 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     // MARK: - Initializers
-    init(prefs: Prefs) {
+    init(prefs: Prefs,
+         wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
         self.prefs = prefs
+        self.wallpaperManager = wallpaperManager
         super.init(style: .grouped)
 
-        self.title = .SettingsHomePageSectionName
-        self.navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar
+        title = .SettingsHomePageSectionName
+        navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -54,7 +58,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.keyboardDismissMode = .onDrag
+        tableView.keyboardDismissMode = .onDrag
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -64,7 +68,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
     // MARK: - Methods
     override func generateSettings() -> [SettingSection] {
-
         let customizeFirefoxHomeSection = customizeFirefoxSettingSection()
         let customizeHomePageSection = customizeHomeSettingSection()
 
@@ -142,8 +145,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
         let historyHighlightsSetting = BoolSetting(with: .historyHighlights,
                                                    titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlyVisited))
-
-        let wallpaperSetting = WallpaperSettings(settings: self)
+        let wallpaperSetting = WallpaperSettings(settings: self, wallpaperManager: wallpaperManager)
 
         // Section ordering
         sectionItems.append(TopSitesSettings(settings: self))
@@ -266,29 +268,26 @@ extension HomePageSettingViewController {
 
         var profile: Profile
         var tabManager: TabManager
+        var wallpaperManager: WallpaperManagerInterface
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.wallpaper }
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         init(settings: SettingsTableViewController,
-             and tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager
+             and tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
+             wallpaperManager: WallpaperManagerInterface = WallpaperManager()
         ) {
             self.profile = settings.profile
             self.tabManager = tabManager
+            self.wallpaperManager = wallpaperManager
             super.init(title: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Wallpaper))
         }
 
         override func onClick(_ navigationController: UINavigationController?) {
-            if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-               wallpaperVersion == .v1 {
-                let viewModel = WallpaperSettingsViewModel(wallpaperManager: WallpaperManager(), tabManager: tabManager)
+            if wallpaperManager.canSettingsBeShown {
+                let viewModel = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager, tabManager: tabManager)
                 let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
-                navigationController?.pushViewController(wallpaperVC, animated: true)
-            } else {
-                let viewModel = LegacyWallpaperSettingsViewModel(with: tabManager,
-                                                           and: LegacyWallpaperManager())
-                let wallpaperVC = LegacyWallpaperSettingsViewController(with: viewModel)
                 navigationController?.pushViewController(wallpaperVC, animated: true)
             }
         }
