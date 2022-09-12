@@ -31,13 +31,18 @@ extension TabManagerStore {
 class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable {
 
     // MARK: - Variables
+    private let tabsKey = "tabs"
     private let prefs: Prefs
     private let imageStore: DiskImageStore?
     private var fileManager: TabFileManager
     private var writeOperation = DispatchWorkItem {}
     private let serialQueue: DispatchQueueInterface
     private var lockedForReading = false
+
+    private var deprecatedTabDataRetriever: TabDataRetriever
     private var tabDataRetriever: TabDataRetriever
+    static let storePath = "codableTabsState.archive"
+    static let deprecatedStorePath = "tabsState.archive"
 
     var isRestoringTabs: Bool {
         return lockedForReading
@@ -57,7 +62,10 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         self.imageStore = imageStore
         self.fileManager = fileManager
         self.serialQueue = serialQueue
+
+        self.deprecatedTabDataRetriever = TabDataRetrieverImplementation(fileManager: fileManager)
         self.tabDataRetriever = TabDataRetrieverImplementation(fileManager: fileManager)
+        deprecatedTabDataRetriever.tabsStateArchivePath = deprecatedTabsStateArchivePath()
         tabDataRetriever.tabsStateArchivePath = tabsStateArchivePath()
     }
 
@@ -77,15 +85,20 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 
     // MARK: - Saving
 
+    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) {
+        // Using the new archiving method for v106 and upwards
+        preserveTabs(tabs, selectedTab: selectedTab, useNewArchivingMethod: true)
+    }
+
     /// Async write of the tab state. In most cases, code doesn't care about performing an operation
     /// after this completes. Write failures (i.e. due to read locks) are considered inconsequential, as preserveTabs will be called frequently.
     /// - Parameters:
     ///   - tabs: The tabs to preserve
     ///   - selectedTab: One of the saved tabs will be saved as the selected tab.
-    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) {
+    ///   - useNewArchivingMethod: Used for tests only, to abstain to use the new archiving method to migration
+    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, useNewArchivingMethod: Bool) {
         assertIsMainThread("Preserving tabs is a main-only operation")
-        guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab),
-              let path = tabsStateArchivePath()
+        guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab)
         else {
             clearArchive()
             return
@@ -93,14 +106,21 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 
         writeOperation.cancel()
 
+        let path = tabsStateArchivePath()
+        let deprecatedPath = deprecatedTabsStateArchivePath()
+
         let tabStateData = archive(savedTabs: savedTabs)
+        let deprecatedTabStateData = deprecatedArchive(savedTabs: savedTabs)
         let simpleTabs = SimpleTab.convertToSimpleTabs(savedTabs)
 
         writeOperation = DispatchWorkItem { [weak self] in
             SimpleTab.saveSimpleTab(tabs: simpleTabs)
-            let written = tabStateData.write(toFile: path, atomically: true)
-            // Ignore write failure (could be restoring).
-            self?.browserLog.debug("PreserveTabs write ok: \(written), bytes: \(tabStateData.length)")
+            if useNewArchivingMethod {
+                self?.write(tabStateData: tabStateData, path: path)
+            }
+
+            // We save to depracted path to support revert migration for now
+            self?.write(deprecatedTabStateData: deprecatedTabStateData, path: deprecatedPath)
         }
 
         // Delay by 100ms to debounce repeated calls to preserveTabs in quick succession.
@@ -117,9 +137,9 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
                            addTabClosure: addTabClosure)
     }
 
-    private func restoreTabs(savedTabs: [SavedTab],
-                             clearPrivateTabs: Bool,
-                             addTabClosure: (Bool) -> Tab) -> Tab? {
+    func restoreTabs(savedTabs: [SavedTab],
+                     clearPrivateTabs: Bool,
+                     addTabClosure: (Bool) -> Tab) -> Tab? {
         assertIsMainThread("Restoration is a main-only operation")
         guard !lockedForReading, !savedTabs.isEmpty else { return nil }
         lockedForReading = true
@@ -145,44 +165,65 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
     }
 
     func clearArchive() {
+        clearDeprecatedArchive()
         guard let path = tabsStateArchivePath() else { return }
+
         do {
-            try fileManager.removeItem(atPath: path)
+            try fileManager.removeItem(at: path)
         } catch let error {
-            browserLog.warning("Clear archive couldn't be completed with error: \(error.localizedDescription)")
+            SentryIntegration.shared.send(message: "Clear archive couldn't be completed",
+                                          tag: .tabManager,
+                                          severity: .warning,
+                                          description: error.localizedDescription)
         }
     }
 
     // MARK: - Private
 
-    private func archive(savedTabs: [SavedTab]) -> NSMutableData {
-        let tabData = NSMutableData()
-        let archiver = NSKeyedArchiver(forWritingWith: tabData)
-        archiver.encode(savedTabs, forKey: "tabs")
-        archiver.finishEncoding()
-        return tabData
+    private func archive(savedTabs: [SavedTab]) -> Data? {
+        let archiver = NSKeyedArchiver(requiringSecureCoding: false)
+        do {
+            try archiver.encodeEncodable(savedTabs, forKey: tabsKey)
+        } catch let error {
+            SentryIntegration.shared.send(message: "Archiving savedTabs failed",
+                                          tag: .tabManager,
+                                          severity: .warning,
+                                          description: error.localizedDescription)
+            return nil
+        }
+
+        return archiver.encodedData
     }
 
     private var tabs: [SavedTab] {
-        guard let tabData = tabDataRetriever.getTabData() else { return [SavedTab]() }
-
-        let unarchiver = try NSKeyedUnarchiver(forReadingWith: tabData)
-        unarchiver.setClass(SavedTab.self, forClassName: "Client.SavedTab")
-        unarchiver.setClass(SessionData.self, forClassName: "Client.SessionData")
-        unarchiver.decodingFailurePolicy = .setErrorAndReturn
-        guard let tabs = unarchiver.decodeObject(forKey: "tabs") as? [SavedTab] else {
-            SentryIntegration.shared.send(message: "Failed to restore tabs",
-                                          tag: .tabManager,
-                                          severity: .error,
-                                          description: "\(unarchiver.error ??? "nil")")
-            SimpleTab.saveSimpleTab(tabs: nil)
-            return [SavedTab]()
+        guard let tabData = tabDataRetriever.getTabData() else {
+            // In case tabs aren't migrated yet, we retrieve with deprecated methods
+            return getDeprecatedTabsToMigrate()
         }
 
-        return tabs
+        do {
+            let unarchiver = try NSKeyedUnarchiver(forReadingFrom: tabData)
+            guard let tabs = unarchiver.decodeDecodable([SavedTab].self, forKey: tabsKey) else {
+                let message = "\(unarchiver.error?.localizedDescription ?? "Couldn't decode from tabsKey")"
+                return savedTabError(description: message)
+            }
+            return tabs
+
+        } catch let error {
+            return savedTabError(description: error.localizedDescription)
+        }
     }
 
-    private func tabsStateArchivePath() -> String? {
+    private func savedTabError(description: String) -> [SavedTab] {
+        SentryIntegration.shared.send(message: "Failed to restore tabs",
+                                      tag: .tabManager,
+                                      severity: .error,
+                                      description: description)
+        SimpleTab.saveSimpleTab(tabs: nil)
+        return [SavedTab]()
+    }
+
+    private func tabsStateArchivePath() -> URL? {
         let profilePath: String?
         if  AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
             profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
@@ -190,7 +231,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
             profilePath = fileManager.tabPath
         }
         guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
+        return URL(fileURLWithPath: path).appendingPathComponent(TabManagerStoreImplementation.storePath)
     }
 
     private func prepareSavedTabs(fromTabs tabs: [Tab], selectedTab: Tab?) -> [SavedTab]? {
@@ -212,12 +253,85 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         _ = imageStore?.clearExcluding(savedUUIDs)
         return savedTabs.isEmpty ? nil : savedTabs
     }
+
+    private func write(tabStateData: Data?, path: URL?) {
+        guard let data = tabStateData, let path = path else { return }
+        do {
+            try data.write(to: path, options: [])
+        } catch {
+            // Failure could happen when restoring
+            self.browserLog.debug("PreserveTabs write failed with bytes count: \(data.count)")
+        }
+    }
+
+    // MARK: - Deprecated
+    // To remove once migration is completed, see FXIOS-4912 && FXIOS-4913
+
+    func getDeprecatedTabsToMigrate() -> [SavedTab] {
+        guard let tabData = deprecatedTabDataRetriever.getTabData() else { return [SavedTab]() }
+
+        // In case tabs aren't migrated to Codable yet
+        // We'll be able to remove this when adoption rate to v106 and greater is high enough
+        let deprecatedUnarchiver = NSKeyedUnarchiver(forReadingWith: tabData)
+        deprecatedUnarchiver.setClass(SavedTab.self, forClassName: "Client.SavedTab")
+        deprecatedUnarchiver.setClass(SessionData.self, forClassName: "Client.SessionData")
+        deprecatedUnarchiver.decodingFailurePolicy = .setErrorAndReturn
+        guard let migratedTabs = deprecatedUnarchiver.decodeObject(forKey: tabsKey) as? [SavedTab] else {
+            let error = String(describing: deprecatedUnarchiver.error)
+            return savedTabError(description: "Deprecated unarchiver could not decode Saved tab with: \(error)")
+        }
+        return migratedTabs
+    }
+
+    /// Archive under old path in case a reverse migration needs to happen
+    private func deprecatedArchive(savedTabs: [SavedTab]) -> NSMutableData {
+        let tabData = NSMutableData()
+        let archiver = NSKeyedArchiver(forWritingWith: tabData)
+        archiver.encode(savedTabs, forKey: "tabs")
+        archiver.finishEncoding()
+        return tabData
+    }
+
+    private func deprecatedTabsStateArchivePath() -> URL? {
+        let profilePath: String?
+        if  AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
+            profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
+        } else {
+            profilePath = fileManager.tabPath
+        }
+        guard let path = profilePath else { return nil }
+        return URL(fileURLWithPath: path).appendingPathComponent(TabManagerStoreImplementation.deprecatedStorePath)
+    }
+
+    private func write(deprecatedTabStateData: NSMutableData, path: URL?) {
+        guard let path = path else { return }
+        let written = deprecatedTabStateData.write(to: path, atomically: true)
+        // Failure could happen when restoring
+        self.browserLog.debug("PreserveTabs write ok: \(written), bytes: \(deprecatedTabStateData.length)")
+    }
+
+    private func clearDeprecatedArchive() {
+        guard let deprecatedPath = deprecatedTabsStateArchivePath() else { return }
+
+        do {
+            try fileManager.removeItem(at: deprecatedPath)
+        } catch let error {
+            SentryIntegration.shared.send(message: "Clear deprecated archive couldn't be completed",
+                                          tag: .tabManager,
+                                          severity: .warning,
+                                          description: error.localizedDescription)
+        }
+    }
 }
 
 // MARK: Tests
 extension TabManagerStoreImplementation {
-    func testTabCountOnDisk() -> Int {
+    func testTabOnDisk(useNewArchivingMethod: Bool = true) -> [SavedTab] {
         assert(AppConstants.isRunningTest)
-        return tabs.count
+        if useNewArchivingMethod {
+            return tabs
+        } else {
+            return getDeprecatedTabsToMigrate()
+        }
     }
 }
