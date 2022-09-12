@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Pasek adresu i wyszukiwania";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Dodaj do czytelni";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "Pasek adresu";
 
@@ -196,6 +199,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "Aby ułatwić wpisywanie informacji, pasek narzędzi jest teraz domyślnie na dole.";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "Spersonalizowana strona startowa Firefoksa ułatwia teraz kontynuowanie od miejsca, w którym skończono. Znajdź swoje ostatnie karty, zakładki i wyniki wyszukiwania.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Ustawienia paska narzędzi";
 
@@ -204,6 +210,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Wyłącz w ustawieniach";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "Zamknij";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Nie można było dodać strony do czytelni.";
@@ -351,6 +360,9 @@
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Nasi sponsorzy i Twoja prywatność";
+
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Otwórz kartę z innego urządzenia";
 
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Wszystkie karty z innych urządzeń";
@@ -577,6 +589,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Ostatnie 7 dni";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Zakładki";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Historia";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Anuluj";
 
@@ -745,6 +763,12 @@
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Pobrane pliki";
 
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Ochrona jest wyłączona na tej witrynie";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Ochrona jest włączona na tej witrynie";
+
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Pomoc";
 
@@ -892,6 +916,15 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "Nie teraz";
 
+/* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Description.v106" = "Otwieraj karty i pobierz hasła z innych urządzeń, aby kontynuować w tym samym miejscu.";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
+"Onboarding.Sync.Skip.Action.v106" = "Pomiń";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Title.v106" = "Przełączaj się z telefonu na laptopa i z powrotem";
+
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "Zarejestruj się i zaloguj";
 
@@ -901,11 +934,32 @@
 /* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
 "Onboarding.SyncTitle.v102" = "Synchronizuj i nie trać flow";
 
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.Classic.v106" = "Klasyczna tapeta";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Tapeta z edycji limitowanej";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v106" = "Odkrywaj więcej tapet";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v106" = "Wybierz tapetę, która do Ciebie pasuje.";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Title.v106" = "Wypróbuj odrobiny koloru";
+
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "Ustaw tapetę";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
 "Onboarding.WallpaperTitle.v102" = "Wybierz tapetę Firefoksa";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Description.v106" = "Firefox stawia ludzi ponad zyski i domyślnie broni Twojej prywatności.";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v106" = "Witamy w niezależnym Internecie";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Zacznij przeglądać Internet";
@@ -966,6 +1020,12 @@
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Dostępny widok poprawionej czytelności";
+
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Oznacz jako przeczytane";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Oznacz jako nieprzeczytane";
 
 /* Panel accessibility label */
 "Reading list" = "Czytelnia";
@@ -1066,6 +1126,15 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
 
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Domyślna wyszukiwarka";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "Domyślna wyszukiwarka";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "Wyszukiwanie";
+
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Czy wysłać raport z awarii, by ułatwić Mozilli naprawę problemu?";
 
@@ -1077,6 +1146,9 @@
 
 /* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "Anuluj";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "Zamknij";
 
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "Dostępne urządzenia:";
@@ -1216,6 +1288,9 @@
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "Motyw będzie automatycznie zmieniany na podstawie jasności ekranu. Można ustawić próg, po jakim to następuje. Kółko wskazuje obecną jasność ekranu.";
 
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "Automatyczny";
+
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "Tryb przełączania";
 
@@ -1315,8 +1390,23 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Tapeta Firefoksa, wzór wzgórz o zmierzchu.";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Klasyczny Firefox";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "Ekran początkowy";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "Więcej informacji";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "Wypróbuj nową kolekcję.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "Nowa kolekcja „Niezależne głosy”.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Edycja limitowana";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
 "Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Zmień tapetę, stukając logo na stronie startowej Firefoksa";
@@ -1621,6 +1711,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Ukryj nieaktywne karty";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Szukaj";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Otwórz nową kartę";
 
@@ -1651,6 +1744,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "Otwarte karty";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Wyświetl karty";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Strona nie może zostać wyświetlona w widoku poprawionej czytelności";
 
@@ -1662,6 +1758,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "w tym tygodniu";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "wczoraj";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "Nie teraz";
@@ -1707,6 +1806,24 @@
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "nieprzeczytane";
+
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v106" = "Zaloguj się";
+
+/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v106" = "Kontynuuj w tym samym miejscu, korzystając z kart z innych urządzeń, które teraz są na stronie startowej.";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "Przechodzenie między urządzeniami jest łatwiejsze niż kiedykolwiek";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v106" = "Pierwsze kroki";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "Nowe kolory. Większa wygoda. Stawianie ludzi ponad zyski — bez zmian.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v106" = "Witamy w bardziej spersonalizowanym Internecie";
 
 /* Debug option */
 "Use stage servers" = "Używaj serwerów testowych";
