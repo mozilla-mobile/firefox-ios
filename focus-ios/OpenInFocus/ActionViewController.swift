@@ -71,14 +71,18 @@ class ActionViewController: SLComposeServiceViewController {
         // the text item to a URL falling back to sending just the text.
         if let urlProvider = urlProvider {
             urlProvider.processUrl { (urlItem, error) in
-                guard let focusUrl = (urlItem as? NSURL)?.encodedUrl.flatMap(self.focusUrl) else { self.cancel(); return }
-                self.handleUrl(focusUrl)
+                Task { @MainActor in
+                    guard let url = (urlItem as? NSURL)?.encodedUrl, let focusUrl = self.focusUrl(url: url) else { self.cancel(); return }
+                    self.handleUrl(focusUrl)
+                }
             }
         } else if let textProvider = textProvider {
             textProvider.processText { (textItem, error) in
-                guard let text = textItem as? String else { self.cancel(); return }
-                guard let focusUrl = self.textUrl(text: text) else { self.cancel(); return }
-                self.handleUrl(focusUrl)
+                Task { @MainActor in
+                    guard let text = textItem as? String else { self.cancel(); return }
+                    guard let focusUrl = self.textUrl(text: text) else { self.cancel(); return }
+                    self.handleUrl(focusUrl)
+                }
             }
         } else {
             // If no item was processed. Cancel the share action to prevent the

@@ -253,19 +253,21 @@ workflows:
         - configuration: FocusDebug
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Focus
+        - simulator_device: iPhone 14
     - xcode-test@4.5:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -testPlan UnitTests
         - scheme: Focus
         - test_plan: UnitTests
+        - destination: platform=iOS Simulator,name=iPhone 14,OS=latest
     - xcode-test@4.5:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan $TEST_PLAN_NAME
         - scheme: Focus
         - test_plan: $TEST_PLAN_NAME
-        - destination: platform=iOS Simulator,name=iPhone 11,OS=latest
+        - destination: platform=iOS Simulator,name=iPhone 14,OS=latest
     - deploy-to-bitrise-io@2: {}
     - github-status@2:
         inputs:
@@ -324,24 +326,33 @@ workflows:
             set -x
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
+    - script@1:
+        title: See available sims
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            xcrun simctl list
     - xcode-build-for-simulator@0.12:
         inputs:
         - configuration: FocusDebug
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Klar
+        - simulator_device: iPhone 14 Plus
+        - simulator_os_version: latest
     - xcode-test@4.5:
         inputs:
         - scheme: Klar
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -testPlan UnitTests
         - test_plan: UnitTests
+        - destination: platform=iOS Simulator,name=iPhone 14,OS=latest
     - xcode-test@4.5:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan "$TEST_PLAN_NAME"
         - scheme: Klar
-        - simulator_device: iPhone 11
-        - destination: platform=iOS Simulator,name=iPhone 11,OS=latest
+        - simulator_device: iPhone 14
+        - destination: platform=iOS Simulator,name=iPhone 14,OS=latest
         - test_plan: "$TEST_PLAN_NAME"
     - deploy-to-bitrise-io@2: {}
     - github-status@2:
