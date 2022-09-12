@@ -8,11 +8,18 @@ import Foundation
 /// A cell to be placed at the last position in the Pocket section
 class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
 
+    struct UX {
+        static let discoverMoreFontSize: CGFloat = 20
+        static let horizontalMargin: CGFloat = 16
+        static let generalCornerRadius: CGFloat = 12
+        static let shadowOffset: CGFloat = 2
+    }
+
     // MARK: - UI Elements
     let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
-                                                                       maxSize: PocketViewModel.UX.discoverMoreMaxFontSize)
+                                                                       size: UX.discoverMoreFontSize)
         label.numberOfLines = 0
         label.textAlignment = .left
     }
@@ -24,10 +31,10 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
 
-        applyTheme()
         setupNotifications(forObserver: self,
                            observing: [.DisplayThemeChanged])
         setupLayout()
+        applyTheme()
     }
 
     required init?(coder: NSCoder) {
@@ -43,21 +50,41 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
         notificationCenter.removeObserver(self)
     }
 
+    func configure(text: String, shouldAddBlur: Bool) {
+        itemTitle.text = text
+
+        if shouldAddBlur {
+            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
+            UIColor.Photon.DarkGrey30 : .white
+            setupShadow()
+        }
+    }
+
     // MARK: - Helpers
 
     private func setupLayout() {
-        contentView.layer.cornerRadius = PocketStandardCell.UX.generalCornerRadius
-        contentView.layer.shadowRadius = PocketStandardCell.UX.stackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: PocketStandardCell.UX.stackViewShadowOffset)
-        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = 0.12
-
+        setupShadow()
         contentView.addSubviews(itemTitle)
+
         NSLayoutConstraint.activate([
-            itemTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            itemTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                               constant: UX.horizontalMargin),
+            itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                constant: -UX.horizontalMargin),
             itemTitle.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
+    }
+
+    private func setupShadow() {
+        contentView.layer.cornerRadius = UX.generalCornerRadius
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                    cornerRadius: UX.generalCornerRadius).cgPath
+        contentView.layer.shadowRadius = PocketStandardCell.UX.shadowRadius
+        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
+        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        contentView.layer.shadowOpacity = 0.12
     }
 }
 
@@ -69,8 +96,6 @@ extension PocketDiscoverCell: NotificationThemeable {
         } else {
             itemTitle.textColor = UIColor.Photon.DarkGrey90
         }
-
-        contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
     }
 }
 

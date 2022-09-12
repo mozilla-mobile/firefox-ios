@@ -10,8 +10,7 @@ class PocketViewModel {
 
     struct UX {
         static let numberOfItemsInColumn = 3
-        static let discoverMoreMaxFontSize: CGFloat = 55 // Title 3 xxxLarge
-        static let fractionalWidthiPhonePortrait: CGFloat = 0.93
+        static let fractionalWidthiPhonePortrait: CGFloat = 0.90
         static let fractionalWidthiPhoneLanscape: CGFloat = 0.46
     }
 
@@ -28,6 +27,12 @@ class PocketViewModel {
     private var dataAdaptor: PocketDataAdaptor
     private var pocketStoriesViewModels = [PocketStandardCellViewModel]()
     private var wallpaperManager: WallpaperManager
+
+    var shouldAddBlur: Bool {
+        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
+
+        return wallpaperManager.currentWallpaper.type != .defaultWallpaper
+    }
 
     init(pocketDataAdaptor: PocketDataAdaptor,
          isZeroSearch: Bool = false,
@@ -96,7 +101,7 @@ class PocketViewModel {
         pocketStoriesViewModels = []
         // Add the story in the view models list
         for story in stories {
-            bind(pocketStoryViewModel: .init(story: story))
+            bind(pocketStoryViewModel: .init(story: story, shouldAddBlur: shouldAddBlur))
         }
     }
 
@@ -215,7 +220,8 @@ extension PocketViewModel: HomepageSectionHandler {
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketDiscoverCell.cellIdentifier,
                                                           for: indexPath) as! PocketDiscoverCell
-            cell.itemTitle.text = .FirefoxHomepage.Pocket.DiscoverMore
+            cell.configure(text: .FirefoxHomepage.Pocket.DiscoverMore,
+                           shouldAddBlur: shouldAddBlur)
             return cell
         }
     }
