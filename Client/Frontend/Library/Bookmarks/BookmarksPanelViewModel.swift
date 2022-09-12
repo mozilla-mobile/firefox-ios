@@ -82,8 +82,7 @@ class BookmarksPanelViewModel {
                 }
 
                 self.bookmarkFolder = mobileFolder
-                // Reversed since we want the newest mobile bookmarks at the top
-                self.bookmarkNodes = mobileFolder.fxChildren?.reversed() ?? []
+                self.bookmarkNodes = mobileFolder.fxChildren ?? []
 
                 let desktopFolder = LocalDesktopFolder()
                 self.bookmarkNodes.insert(desktopFolder, at: 0)
