@@ -49,7 +49,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     }
 
     var enabledCards: [IntroViewModel.InformationCards] {
-        return isv106Version ? [ .welcome, .signSync] : [.welcome, .wallpapers, .signSync]
+        return [.welcome, .signSync]
     }
 
     func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol? {

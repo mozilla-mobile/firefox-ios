@@ -64,8 +64,7 @@ extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     var headerViewModel: LabelButtonHeaderViewModel {
         var textColor: UIColor?
         if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-           wallpaperVersion == .v1,
-           featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly) {
+           wallpaperVersion == .v1 {
             textColor = wallpaperManager.currentWallpaper.textColor
         }
 

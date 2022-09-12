@@ -28,7 +28,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManagerProtocol
     private var urlBar: URLBarViewProtocol
-    private var wallpaperManager: LegacyWallpaperManager
+    private var userDefaults: UserDefaultsInterface
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var contextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
@@ -47,11 +47,11 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     init(profile: Profile,
          tabManager: TabManagerProtocol,
          urlBar: URLBarViewProtocol,
-         wallpaperManager: LegacyWallpaperManager = LegacyWallpaperManager()
+         userDefaults: UserDefaultsInterface = UserDefaults.standard
     ) {
         self.urlBar = urlBar
         self.tabManager = tabManager
-        self.wallpaperManager = wallpaperManager
+        self.userDefaults = userDefaults
         let isPrivate = tabManager.selectedTab?.isPrivate ?? true
         self.viewModel = HomepageViewModel(profile: profile,
                                            isPrivate: isPrivate,
@@ -311,9 +311,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
 
     private func displayWallpaperSelector() {
-        let wallpaperManager = WallpaperManager()
+        let wallpaperManager = WallpaperManager(userDefaults: userDefaults)
         guard wallpaperManager.canOnboardingBeShown,
-              !UserDefaults.standard.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey),
               !(presentedViewController is ContextualHintViewController)
         else { return }
 
@@ -331,7 +330,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         )
 
         self.present(bottomSheetVC, animated: false, completion: nil)
-        UserDefaults.standard.set(true, forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
+        userDefaults.set(true, forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
     }
 
     // MARK: - Contextual hint

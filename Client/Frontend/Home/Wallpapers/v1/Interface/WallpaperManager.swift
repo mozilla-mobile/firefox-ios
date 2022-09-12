@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import Shared
 
 enum WallpaperManagerError: Error {
     case downloadFailed(Error)
@@ -32,10 +33,15 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
 
     // MARK: - Properties
     private var networkingModule: WallpaperNetworking
+    private var userDefaults: UserDefaultsInterface
 
     // MARK: - Initializers
-    init(with networkingModule: WallpaperNetworking = WallpaperNetworkingModule()) {
+    init(
+        with networkingModule: WallpaperNetworking = WallpaperNetworkingModule(),
+        userDefaults: UserDefaultsInterface = UserDefaults.standard
+    ) {
         self.networkingModule = networkingModule
+        self.userDefaults = userDefaults
     }
 
     // MARK: Public Interface
@@ -56,6 +62,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     var canOnboardingBeShown: Bool {
         guard featureAvailable,
               hasEnoughThumbnailsToShow,
+              !userDefaults.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey),
               featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet,
                                             checking: .buildOnly)
         else { return false }
@@ -163,17 +170,14 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         Task {
             let didFetchNewData = await metadataUtility.metadataUpdateFetchedNewData()
             if didFetchNewData {
-                do {
-                    let migrationUtility = WallpaperMigrationUtility()
-                    migrationUtility.attemptMetadataMigration()
-
-                    try await thumbnailUtility.fetchAndVerifyThumbnails(for: getAvailableCollections(filtering: .none))
-                } catch {
-                    browserLog.error("Wallpaper update check error: \(error.localizedDescription)")
-                }
-            } else {
-                thumbnailUtility.verifyThumbnailsFor(getAvailableCollections(filtering: .none))
+                let migrationUtility = WallpaperMigrationUtility()
+                migrationUtility.attemptMetadataMigration()
             }
+
+            // It is possible we haven't downloaded all thumbnails, and so
+            // we'll attempt to download missing ones even if the metadata hasn't
+            // actually changed
+            await thumbnailUtility.fetchAndVerifyThumbnails(for: getAvailableCollections(filtering: .none))
         }
     }
 

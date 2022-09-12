@@ -5,9 +5,14 @@
 import Foundation
 import Shared
 
-class WallpaperThumbnailUtility {
+class WallpaperThumbnailUtility: Loggable {
 
     // MARK: - Properties
+
+    /// The mininmum number of thumbnails we require to show the onboarding or
+    /// the wallpaper settings. Includes the default wallpaper.
+    private let requiredThumbs = 4
+
     public var areThumbnailsAvailable: Bool {
         return userDefaults.bool(forKey: prefsKey)
     }
@@ -40,23 +45,14 @@ class WallpaperThumbnailUtility {
         return missingThumbnails
     }
 
-    public func fetchAndVerifyThumbnails(for collections: [WallpaperCollection]) async throws {
-        try await fetchMissingThumbnails(from: collections)
-        verifyThumbnailsFor(collections)
-    }
-
-    public func verifyThumbnailsFor(_ collections: [WallpaperCollection]) {
-        userDefaults.set(false, forKey: prefsKey)
-        var thumbnailStatus = true
-        collections.forEach { collection in
-            collection.wallpapers.forEach { wallpaper in
-                if wallpaper.type != .defaultWallpaper && wallpaper.thumbnail == nil {
-                    thumbnailStatus = thumbnailStatus && false
-                }
-            }
+    public func fetchAndVerifyThumbnails(for collections: [WallpaperCollection]) async {
+        do {
+            userDefaults.set(false, forKey: prefsKey)
+            try await fetchMissingThumbnails(from: collections)
+            verifyThumbnailsFor(collections)
+        } catch {
+            browserLog.error("Wallpaper thumbnail update error: \(error.localizedDescription)")
         }
-
-        userDefaults.set(thumbnailStatus, forKey: prefsKey)
     }
 
     private func fetchMissingThumbnails(from collections: [WallpaperCollection]) async throws {
@@ -66,9 +62,29 @@ class WallpaperThumbnailUtility {
         let missingThumbnails = getListOfMissingTumbnails(from: collections)
         if !missingThumbnails.isEmpty {
             for (key, fileName) in missingThumbnails {
-                let thumbnail = try await dataService.getImage(named: fileName, withFolderName: key)
+                guard let thumbnail = try? await dataService.getImage(
+                    named: fileName,
+                    withFolderName: key)
+                else { break }
+
                 try storageUtility.store(thumbnail, withName: fileName, andKey: key)
             }
+        }
+    }
+
+    private func verifyThumbnailsFor(_ collections: [WallpaperCollection]) {
+        var numberOfAvailableThumbs = 0
+
+        collections.forEach { collection in
+            collection.wallpapers.forEach { wallpaper in
+                if wallpaper.type == .defaultWallpaper || wallpaper.thumbnail != nil {
+                    numberOfAvailableThumbs += 1
+                }
+            }
+        }
+
+        if numberOfAvailableThumbs >= requiredThumbs {
+            userDefaults.set(true, forKey: prefsKey)
         }
     }
 }
