@@ -205,6 +205,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "ປິດຢູ່ໃນການຕັ້ງຄ່າ";
 
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "ປິດ";
+
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "ບໍ່ສາມາດເພີ່ມຫນ້າເວັບເຂົ້າໄປໃນລາຍການອ່ານ";
 
@@ -234,6 +237,9 @@
 
 /* Title for default search engine picker. */
 "Default Search Engine" = "ຄ່າພື້ນຖານການຄົ້ນຫາ";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "ປິດ";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "ການຕັ້ງຄ່າການສະແດງຜົນ";
@@ -348,6 +354,12 @@
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "ຜູ້ສະຫນັບສະຫນູນຂອງພວກເຮົາ & ຄວາມເປັນສ່ວນຕົວຂອງທ່ານ";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "ເອົາແຖບ";
+
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Pocket.Sponsored.v103" = "ໄດ້ຮັບການສະຫນັບສະຫນູນ";
 
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "ໄດ້ຮັບການສະຫນັບສະຫນູນ";
@@ -565,6 +577,9 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "ອາທິດທີ່ຜ່ານມາ";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "ປະຫວັດການໃຊ້ງານ";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "ຍົກເລີກ";
 
@@ -573,6 +588,9 @@
 
 /* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
 "LibraryPanel.History.ClearGroupedTabsTitle.v100" = "ລຶບທຸກເວັບໄຊໃນ %@ ບໍ?";
+
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "ລຶບ";
 
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
 "LibraryPanel.Section.Older" = "ເກົ່າກວ່າ";
@@ -682,8 +700,14 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "ເພີ່ມບຸກມາກແລ້ວ";
 
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "ເພີ່ມ";
+
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "ເພີ່ມໄປໄວ້ໃນທາງລັດ";
+
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "ເພີ່ມ";
 
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "ເພີ່ມເຂົ້າໄປໃນລາຍການອ່ານແລ້ວ";
@@ -700,8 +724,14 @@
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "ດາວໂຫລດ";
 
+/* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
+"Menu.Help.v99" = "ຊ່ວຍເຫລືອ";
+
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "ປະຫວັດການໃຊ້ງານ";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "ເປີດໜ້າຕ່າງໃໝ່";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
 "Menu.NightModeTurnOff.Label2" = "ປິດໂຫມດກາງຄືນ";
@@ -730,8 +760,14 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "ລຶບບຸກມາກອອກແລ້ວ";
 
+/* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
+"Menu.RemoveBookmark.Label.v99" = "ລຶບ";
+
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ແທັບຖືກສົ່ງແລ້ວ";
+
+/* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "ໜ້າຫຼັກ";
 
 /* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
 "Menu.TrackingProtection.Details.Verifier" = "ຢັ້ງຢືນໂດຍ %@";
@@ -798,6 +834,15 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "ຕົກລົງ";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
+"Onboarding.IntroAction.v102" = "ເລີ່ມຕົ້ນໃຊ້ງານ";
+
+/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
+"Onboarding.LaterAction.v102" = "ບໍ່ແມ່ນຕອນນີ້";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
+"Onboarding.Sync.Skip.Action.v106" = "ຂ້າມ";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "ເລີ່ມການທ່ອງເວັບ";

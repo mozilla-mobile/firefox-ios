@@ -1,0 +1,3 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.Toolbar.Top.Description.v106" = "გადაიტანეთ ხელსაწყოები ქვემოთ პარამეტრებიდან, თუ ასე უფრო მოსახერხებელია თქვენთვის.";
+
