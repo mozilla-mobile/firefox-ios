@@ -40,8 +40,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/glean-swift",
       "state" : {
-        "revision" : "3cbb2c255aeb18805d3783248d89a93a845acaac",
-        "version" : "51.0.1"
+        "revision" : "5b810598dbe39579703af99af4afe4de92811d0c",
+        "version" : "51.2.0"
       }
     },
     {
@@ -74,10 +74,10 @@
     {
       "identity" : "mappamundi",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/nbhasin2/MappaMundi.git",
+      "location" : "https://github.com/mozilla-mobile/MappaMundi.git",
       "state" : {
         "branch" : "master",
-        "revision" : "7fcd2b7910550227088480490ac19ea66044b3d1"
+        "revision" : "ded1e15d9e3a973f723185e07d0f2573a7fe1034"
       }
     },
     {

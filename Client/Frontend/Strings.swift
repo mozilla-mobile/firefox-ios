@@ -2062,7 +2062,7 @@ extension String {
         comment: "The title of the error displayed if download fails when changing a wallpaper.",
         lastUpdated: .v106)
     public static let CouldntDownloadWallpaperErrorBody = MZLocalizedString(
-        "Wallpaper.Download.Error.Title.v106",
+        "Wallpaper.Download.Error.Body.v106",
         value: "Something went wrong with your download.",
         comment: "The message of the error displayed to a user when they try change a wallpaper that failed downloading.",
         lastUpdated: .v106)
@@ -2072,7 +2072,7 @@ extension String {
         comment: "The title of the error displayed when changing wallpaper fails.",
         lastUpdated: .v106)
     public static let CouldntChangeWallpaperErrorBody = MZLocalizedString(
-        "Wallpaper.Change.Error.Title.v106",
+        "Wallpaper.Change.Error.Body.v106",
         value: "Something went wrong with this wallpaper.",
         comment: "The message of the error displayed to a user when they trying to change a wallpaper failed.",
         lastUpdated: .v106)

@@ -3,12 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import GCDWebServers
-@testable import Client
 import UIKit
-
 import XCTest
 
+@testable import Client
+
 class SearchTests: XCTestCase {
+
     func testParsing() {
         let parser = OpenSearchParser(pluginMode: true)
         let file = Bundle.main.path(forResource: "google-b-m", ofType: "xml", inDirectory: "SearchPlugins/")
@@ -16,10 +17,12 @@ class SearchTests: XCTestCase {
         XCTAssertEqual(engine.shortName, "Google")
 
         // Test regular search queries.
-        XCTAssertEqual(engine.searchURLForQuery("foobar")!.absoluteString, "https://www.google.com/search?q=foobar&ie=utf-8&oe=utf-8&client=firefox-b-m")
+        XCTAssertEqual(engine.searchURLForQuery("foobar")!.absoluteString,
+                       "https://www.google.com/search?q=foobar&ie=utf-8&oe=utf-8&client=firefox-b-m")
 
         // Test search suggestion queries.
-        XCTAssertEqual(engine.suggestURLForQuery("foobar")!.absoluteString, "https://www.google.com/complete/search?client=firefox&q=foobar")
+        XCTAssertEqual(engine.suggestURLForQuery("foobar")!.absoluteString,
+                       "https://www.google.com/complete/search?client=firefox&q=foobar")
     }
 
     func testURIFixup() {
@@ -53,14 +56,6 @@ class SearchTests: XCTestCase {
         checkValidURL("http://创业咖啡.中国/", afterFixup: "http://xn--vhq70hq9bhxa.xn--fiqs8s/")
         checkValidURL("创业咖啡.中国", afterFixup: "http://xn--vhq70hq9bhxa.xn--fiqs8s")
         checkValidURL(" 创业咖啡.中国 ", afterFixup: "http://xn--vhq70hq9bhxa.xn--fiqs8s")
-    }
-
-    fileprivate func checkValidURL(_ beforeFixup: String, afterFixup: String) {
-        XCTAssertEqual(URIFixup.getURL(beforeFixup)!.absoluteString, afterFixup)
-    }
-
-    fileprivate func checkInvalidURL(_ beforeFixup: String) {
-        XCTAssertNil(URIFixup.getURL(beforeFixup))
     }
 
     func testSuggestClient() {
@@ -162,11 +157,16 @@ class SearchTests: XCTestCase {
         let containsPartnerCode = engine.searchTemplate.contains("pc=MOZL")
         XCTAssertTrue(containsPartnerCode)
     }
+}
 
-    fileprivate func startMockSuggestServer() -> String {
+// MARK: - Helper
+private extension SearchTests {
+    func startMockSuggestServer() -> String {
         let webServer: GCDWebServer = GCDWebServer()
 
-        webServer.addHandler(forMethod: "GET", path: "/", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
+        webServer.addHandler(forMethod: "GET",
+                             path: "/",
+                             request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             var suggestions: [String]!
             let query = request.query!["q"]!
             switch query {
@@ -185,5 +185,13 @@ class SearchTests: XCTestCase {
         }
 
         return "http://localhost:\(webServer.port)"
+    }
+
+    func checkValidURL(_ beforeFixup: String, afterFixup: String) {
+        XCTAssertEqual(URIFixup.getURL(beforeFixup)!.absoluteString, afterFixup)
+    }
+
+    func checkInvalidURL(_ beforeFixup: String) {
+        XCTAssertNil(URIFixup.getURL(beforeFixup))
     }
 }
