@@ -47,31 +47,27 @@ class AppContainer: ServiceProvider {
                 unowned let container = container
 
                 container.register(.eagerSingleton) {
-                    BrowserProfile(
-                        localName: "profile",
-                        syncDelegate: UIApplication.shared.syncDelegate) as Profile
+                    return BrowserProfile(
+                            localName: "profile",
+                            syncDelegate: UIApplication.shared.syncDelegate) as Profile
                 }
 
                 /// TabManager can remain a singleton until we support multiple scenes.
                 container.register(.singleton) {
-                    TabManager(
-                        profile: try container.resolve(),
-                        imageStore: DiskImageStore(
+                    return TabManager(
+                            profile: try container.resolve(),
+                            imageStore: DiskImageStore(
                             files: (try container.resolve() as Profile).files,
                             namespace: "TabManagerScreenshots",
                             quality: UIConstants.ScreenshotQuality))
                 }
 
-                container.register(.singleton) {
-                    UserDefaults.standard
-                }
-
-                container.register(.singleton) {
-                    NotificationCenter.default as NotificationProtocol
-                }
-
-                container.register(.singleton) {
-                    UIApplication.shared.delegate as UIApplicationDelegate?
+                container.register(.singleton) { () -> ThemeManager in
+                    if let delegate = UIApplication.shared.delegate as? AppDelegate {
+                        return delegate.themeManager
+                    } else {
+                        return DefaultThemeManager(appDelegate: UIApplication.shared.delegate)
+                    }
                 }
 
                 try container.bootstrap()

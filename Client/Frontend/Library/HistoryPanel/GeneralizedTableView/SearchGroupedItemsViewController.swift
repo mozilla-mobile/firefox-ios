@@ -52,7 +52,7 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
 
     init(viewModel: SearchGroupedItemsViewModel,
          profile: Profile,
-         themeManager: ThemeManager = DefaultThemeManager.shared) {
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
         self.profile = profile
         self.themeManager = themeManager
@@ -216,7 +216,7 @@ extension SearchGroupedItemsViewController: NotificationThemeable {
         }
 
         view.backgroundColor = .systemBackground
-        tableView.separatorColor = themeManager.currentTheme.colors.borderDivider
+        tableView.separatorColor = themeManager.currentTheme.colors.layer4
 
         tableView.reloadData()
     }

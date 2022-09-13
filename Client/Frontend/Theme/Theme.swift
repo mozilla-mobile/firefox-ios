@@ -10,35 +10,62 @@ protocol Theme {
     var colors: ThemeColourPalette { get }
 }
 
-/// The colour palette for the theme.
+struct Gradient {
+    var start: UIColor
+    var end: UIColor
+}
+
+/// The colour palette for a theme.
 protocol ThemeColourPalette {
-    var actionPrimary: UIColor { get }
-    var actionSecondary: UIColor { get }
-    var borderDivider: UIColor { get }
-    var borderSelectedDefault: UIColor { get }
-    var borderSelectedPrivate: UIColor { get }
-    var controlActive: UIColor { get }
-    var controlBase: UIColor { get }
-    var iconAccentBlue: UIColor { get }
-    var iconAccentGreen: UIColor { get }
-    var iconAccentPink: UIColor { get }
-    var iconAccentViolet: UIColor { get }
-    var iconAccentYellow: UIColor { get }
-    var iconDisabled: UIColor { get }
-    var iconInverted: UIColor { get }
-    var iconPrimary: UIColor { get }
-    var iconSecondary: UIColor { get }
+
+    // MARK: - Layers
     var layer1: UIColor { get }
     var layer2: UIColor { get }
-    var layer2Blur: UIColor { get }
     var layer3: UIColor { get }
     var layer4: UIColor { get }
-    var layerEmphasis: UIColor { get }
-    var scrim: UIColor { get }
-    var textDisabled: UIColor { get }
-    var textInverted: UIColor { get }
-    var textLink: UIColor { get }
+    var layer5: UIColor { get }
+    var layerScrim: UIColor { get }
+    var layerGradient: Gradient { get }
+    var layerAccentNonOpaque: UIColor { get }
+    var layerAccentPrivate: UIColor { get }
+    var layerAccentPrivateNonOpaque: UIColor { get }
+    var layerLightGrey30: UIColor { get }
+
+    // MARK: - Actions
+    var actionPrimary: UIColor { get }
+    var actionPrimaryHover: UIColor { get }
+    var actionSecondary: UIColor { get }
+    var actionSecondaryHover: UIColor { get }
+    var formSurfaceOff: UIColor { get }
+    var formKnob: UIColor { get }
+    var indicatorActive: UIColor { get }
+    var indicatorInactive: UIColor { get }
+
+    // MARK: - Text
     var textPrimary: UIColor { get }
     var textSecondary: UIColor { get }
+    var textDisabled: UIColor { get }
     var textWarning: UIColor { get }
+    var textAccent: UIColor { get }
+    var textOnColor: UIColor { get }
+    var textInverted: UIColor { get }
+
+    // MARK: - Icons
+    var iconPrimary: UIColor { get }
+    var iconSecondary: UIColor { get }
+    var iconDisabled: UIColor { get }
+    var iconAction: UIColor { get }
+    var iconOnColor: UIColor { get }
+    var iconWarning: UIColor { get }
+    var iconAccentViolet: UIColor { get }
+    var iconAccentBlue: UIColor { get }
+    var iconAccentPink: UIColor { get }
+    var iconAccentGreen: UIColor { get }
+    var iconAccentYellow: UIColor { get }
+
+    // MARK: - Border
+    var borderPrimary: UIColor { get }
+    var borderAccent: UIColor { get }
+    var borderAccentNonOpaque: UIColor { get }
+    var borderAccentPrivate: UIColor { get }
 }
