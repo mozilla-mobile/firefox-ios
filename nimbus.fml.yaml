@@ -20,6 +20,17 @@ features:
           "wallpaper-onboarding-sheet": false,
         }
     defaults:
+      - channel: beta
+        value: {
+            "sections-enabled": {
+              "onboarding-first-run-flow": true,
+              "onboarding-upgrade-flow": true,
+              "sync-cfr": true,
+              "jump-back-in-cfr-update": true,
+              "toolbar-cfr-update": true,
+              "wallpaper-onboarding-sheet": true,
+          }
+        }
       - channel: developer
         value: {
             "sections-enabled": {
