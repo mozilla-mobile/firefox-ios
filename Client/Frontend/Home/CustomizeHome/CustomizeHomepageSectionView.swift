@@ -51,12 +51,18 @@ class CustomizeHomepageSectionView: UICollectionViewCell, ReusableCell {
         contentView.addSubview(goToSettingsButton)
 
         NSLayoutConstraint.activate([
-            goToSettingsButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight),
             goToSettingsButton.topAnchor.constraint(equalTo: contentView.topAnchor),
             goToSettingsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             goToSettingsButton.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            goToSettingsButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -UX.buttonTrailingSpace)
+            goToSettingsButton.rightAnchor.constraint(equalTo: contentView.rightAnchor,
+                                                      constant: -UX.buttonTrailingSpace)
         ])
+
+        goToSettingsButton.setContentHuggingPriority(.required, for: .vertical)
+
+        // needed so the button sizes correctly
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 
     func configure(onTapAction: ((UIButton) -> Void)?) {
