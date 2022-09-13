@@ -7,8 +7,8 @@ import Shared
 
 class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
-    let profile: Profile
     static let prefsKey: String = PrefsKeys.KeyLastVersionNumber
+    let profile: Profile
     var hasSyncableAccount: Bool?
 
     var shouldShowSingleCard: Bool {

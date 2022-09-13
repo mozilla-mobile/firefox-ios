@@ -182,6 +182,8 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
                                          style: .plain,
                                          target: self,
                                          action: #selector(dismissSignInViewController))
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        buttonItem.tintColor = theme == .dark ? UIColor.theme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
         controller.onViewDismissed = {
