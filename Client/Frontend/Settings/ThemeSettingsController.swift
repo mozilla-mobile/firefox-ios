@@ -37,7 +37,7 @@ class ThemeSettingsController: ThemedTableViewController {
     private var shouldHideSystemThemeSection = false
     private let themeManager: ThemeManager
 
-    init(themeManager: ThemeManager = DefaultThemeManager.shared) {
+    init(themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.themeManager = themeManager
         super.init(style: .grouped)
     }

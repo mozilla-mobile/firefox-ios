@@ -67,7 +67,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
          tabManager: TabManager,
          buttonView: UIButton,
          showFXASyncAction: @escaping (FXASyncClosure) -> Void,
-         themeManager: ThemeManager = DefaultThemeManager.shared) {
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
 
         self.profile = profile
         self.tabManager = tabManager
