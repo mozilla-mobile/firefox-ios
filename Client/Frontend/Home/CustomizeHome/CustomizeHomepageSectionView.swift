@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import Foundation
+import UIKit
 
 class CustomizeHomepageSectionView: UICollectionViewCell, ReusableCell {
 
@@ -12,6 +12,7 @@ class CustomizeHomepageSectionView: UICollectionViewCell, ReusableCell {
         static let buttonHeight: CGFloat = 36
         static let buttonMaxFontSize: CGFloat = 49
         static let buttonTrailingSpace: CGFloat = 12
+        static let buttonVerticalInset: CGFloat = 11
     }
 
     // MARK: - UI Elements
@@ -21,6 +22,10 @@ class CustomizeHomepageSectionView: UICollectionViewCell, ReusableCell {
                                                                                     maxSize: UX.buttonMaxFontSize)
         button.layer.cornerRadius = 5
         button.accessibilityIdentifier = a11y.customizeHome
+        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
+                                                left: ResizableButton.UX.buttonEdgeSpacing,
+                                                bottom: UX.buttonVerticalInset,
+                                                right: ResizableButton.UX.buttonEdgeSpacing)
     }
 
     // MARK: - Variables
