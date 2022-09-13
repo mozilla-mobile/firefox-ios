@@ -103,6 +103,10 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
             learnMoreButton.accessibilityIdentifier = buttonA11y
 
             contentStackView.addArrangedSubview(learnMoreButton)
+
+            // needed so the button sizes correctly
+            setNeedsLayout()
+            layoutIfNeeded()
         }
     }
 
