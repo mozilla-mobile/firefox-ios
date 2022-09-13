@@ -4,10 +4,6 @@
 
 import UIKit
 
-// This file contains the default theme for iOS, as outlined in Figma.
-// While no fonts have yet been implemented, they will be part of the
-// themeing system, and as such, have been roughly included.
-
 struct LightTheme: Theme {
     var type: ThemeType = .light
     var colors: ThemeColourPalette = LightColourPalette()
