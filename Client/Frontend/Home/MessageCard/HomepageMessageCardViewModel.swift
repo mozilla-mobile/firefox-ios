@@ -15,15 +15,25 @@ class HomepageMessageCardViewModel: MessageSurfaceProtocol {
 
     private let dataAdaptor: MessageCardDataAdaptor
     private let messagingManager: GleanPlumbMessageManagerProtocol
+    private let wallpaperManager: WallpaperManager
 
     weak var delegate: HomepageDataModelDelegate?
     var message: GleanPlumbMessage?
     var dismissClosure: (() -> Void)?
 
+    var shouldAddBlur: Bool {
+        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
+
+        return wallpaperManager.currentWallpaper.type != .defaultWallpaper
+    }
+
     init(dataAdaptor: MessageCardDataAdaptor,
-         messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared) {
+         messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared,
+         wallpaperManager: WallpaperManager = WallpaperManager()
+    ) {
         self.dataAdaptor = dataAdaptor
         self.messagingManager = messagingManager
+        self.wallpaperManager = wallpaperManager
     }
 
     func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {

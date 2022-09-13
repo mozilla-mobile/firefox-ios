@@ -157,7 +157,7 @@ private class DarkGeneralColor: GeneralColor {
 }
 
 class DarkHomeTabBannerColor: HomeTabBannerColor {
-    override var backgroundColor: UIColor { return UIColor.Photon.Grey60 }
+    override var backgroundColor: UIColor { return UIColor.Photon.DarkGrey40 }
     override var textColor: UIColor { return UIColor.white }
     override var closeButtonBackground: UIColor { return UIColor.Photon.Grey80 }
     override var closeButton: UIColor { return UIColor.Photon.Grey20 }

@@ -38,9 +38,8 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Properties
-    private var viewModel: MessageSurfaceProtocol?
+    private var viewModel: HomepageMessageCardViewModel?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
-    private var shadowLayer: CAShapeLayer?
     private var kvoToken: NSKeyValueObservation?
 
     // UI
@@ -126,6 +125,8 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         if let message = viewModel.getMessage(for: .newTabCard) {
             applyGleanMessage(message)
         }
+
+        applyTheme()
     }
 
     // MARK: - Layout
@@ -177,32 +178,31 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     }
 
     private func addShadow() {
-        guard shadowLayer == nil else { return }
-
-        let layer = CAShapeLayer()
-        layer.fillColor = UIColor.theme.homeTabBanner.backgroundColor.cgColor
-        layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        layer.shadowOffset = CGSize(width: 0.0, height: UX.shadowOffset)
-        layer.shadowOpacity = UX.shadowOpacity
-        layer.shadowRadius = UX.shadowRadius
-        shadowLayer = layer
+        cardView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        cardView.layer.shadowOffset = CGSize(width: 0.0, height: UX.shadowOffset)
+        cardView.layer.shadowOpacity = UX.shadowOpacity
+        cardView.layer.shadowRadius = UX.shadowRadius
         updateShadowPath()
-        cardView.layer.insertSublayer(layer, at: 0)
     }
 
     private func updateShadowPath() {
-        guard let shadowLayer = shadowLayer else { return }
-
-        shadowLayer.path = UIBezierPath(roundedRect: cardView.bounds,
-                                        cornerRadius: UX.cornerRadius).cgPath
-        shadowLayer.shadowPath = shadowLayer.path
+        cardView.layer.shadowPath = UIBezierPath(roundedRect: cardView.bounds,
+                                                 cornerRadius: UX.cornerRadius).cgPath
     }
 
     func applyTheme() {
-        cardView.backgroundColor = UIColor.theme.homeTabBanner.backgroundColor
-        bannerTitle.textColor = UIColor.theme.homeTabBanner.textColor
-        descriptionText.textColor = UIColor.theme.homeTabBanner.textColor
-        dismissButton.imageView?.tintColor = UIColor.theme.homeTabBanner.textColor
+
+        if let shouldAddBlur = viewModel?.shouldAddBlur, shouldAddBlur {
+            cardView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            cardView.backgroundColor = LegacyThemeManager.instance.current.homeTabBanner.backgroundColor
+        }
+
+        updateShadowPath()
+
+        bannerTitle.textColor = LegacyThemeManager.instance.current.homeTabBanner.textColor
+        descriptionText.textColor = LegacyThemeManager.instance.current.homeTabBanner.textColor
+        dismissButton.imageView?.tintColor = LegacyThemeManager.instance.current.homeTabBanner.textColor
         backgroundColor = .clear
     }
 
