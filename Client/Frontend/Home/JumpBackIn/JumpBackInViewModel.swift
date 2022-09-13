@@ -164,8 +164,7 @@ private extension JumpBackInViewModel {
         let cellViewModel = JumpBackInCellViewModel(titleText: group.searchTerm.localizedCapitalized,
                                                     descriptionText: descriptionText,
                                                     favIconImage: faviconImage,
-                                                    heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site),
-                                                    shouldAddBlur: shouldAddBlur)
+                                                    heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site))
         cell.configure(viewModel: cellViewModel)
     }
 
@@ -177,8 +176,7 @@ private extension JumpBackInViewModel {
         let cellViewModel = JumpBackInCellViewModel(titleText: site.title,
                                                     descriptionText: descriptionText,
                                                     favIconImage: jumpBackInDataAdaptor.getFaviconImage(forSite: site),
-                                                    heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site),
-                                                    shouldAddBlur: shouldAddBlur)
+                                                    heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site))
         cell.configure(viewModel: cellViewModel)
     }
 

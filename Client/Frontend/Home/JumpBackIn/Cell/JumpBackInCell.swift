@@ -14,7 +14,11 @@ struct JumpBackInCellViewModel {
     var accessibilityLabel: String {
         return "\(titleText), \(descriptionText)"
     }
-    var shouldAddBlur: Bool
+    var shouldAddBlur: Bool {
+        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
+
+        return WallpaperManager().currentWallpaper.type != .defaultWallpaper
+    }
 }
 
 // MARK: - JumpBackInCell
@@ -36,6 +40,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     private var faviconCenterConstraint: NSLayoutConstraint?
     private var faviconFirstBaselineConstraint: NSLayoutConstraint?
+    private var viewModel: JumpBackInCellViewModel?
 
     // MARK: - UI Elements
     private let heroImage: UIImageView = .build { imageView in
@@ -145,10 +150,11 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     func configure(viewModel: JumpBackInCellViewModel) {
         configureImages(viewModel: viewModel)
 
+        self.viewModel = viewModel
         itemTitle.text = viewModel.titleText
         descriptionLabel.text = viewModel.descriptionText
         accessibilityLabel = viewModel.accessibilityLabel
-        adjustLayout(shouldAddBlur: viewModel.shouldAddBlur)
+        adjustLayout()
     }
 
     private func configureImages(viewModel: JumpBackInCellViewModel) {
@@ -226,7 +232,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
     }
 
-    private func adjustLayout(shouldAddBlur: Bool) {
+    private func adjustLayout() {
+        let shouldAddBlur = viewModel?.shouldAddBlur ?? false
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
@@ -270,6 +277,7 @@ extension JumpBackInCell: NotificationThemeable {
         }
 
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
+        adjustLayout()
     }
 }
 
