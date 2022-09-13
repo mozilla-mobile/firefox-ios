@@ -134,6 +134,12 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         descriptionContainer.addArrangedViewToTop(faviconImage)
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                    cornerRadius: UX.generalCornerRadius).cgPath
+    }
+
     // MARK: - Helpers
 
     func configure(viewModel: JumpBackInCellViewModel) {
