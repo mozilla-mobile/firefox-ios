@@ -168,7 +168,7 @@ class BrowserViewController: UIViewController {
 
     init(profile: Profile,
          tabManager: TabManager,
-         themeManager: ThemeManager = DefaultThemeManager.shared) {
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager

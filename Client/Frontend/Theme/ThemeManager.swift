@@ -43,10 +43,6 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
         }
     }
 
-    // MARK: Singleton
-
-    static let shared = DefaultThemeManager()
-
     // MARK: - Variables
 
     var currentTheme: Theme = LightTheme()
@@ -56,10 +52,12 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Init
 
-    private init() {
-        self.userDefaults = AppContainer.shared.resolve()
-        self.notificationCenter = AppContainer.shared.resolve()
-        self.appDelegate = AppContainer.shared.resolve()
+    init(userDefaults: UserDefaults = UserDefaults.standard,
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         appDelegate: UIApplicationDelegate?) {
+        self.userDefaults = userDefaults
+        self.notificationCenter = notificationCenter
+        self.appDelegate = appDelegate
 
         userDefaults.register(defaults: [ThemeKeys.systemThemeIsOn: true])
 

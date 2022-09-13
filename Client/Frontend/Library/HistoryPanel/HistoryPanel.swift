@@ -145,7 +145,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
 
     init(profile: Profile,
          tabManager: TabManager,
-         themeManager: ThemeManager = DefaultThemeManager.shared) {
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.clearHistoryHelper = ClearHistorySheetProvider(profile: profile, tabManager: tabManager)
         self.viewModel = HistoryPanelViewModel(profile: profile)
         self.profile = profile

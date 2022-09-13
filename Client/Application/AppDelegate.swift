@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var tabManager: TabManager!
     var receivedURLs = [URL]()
     var orientationLock = UIInterfaceOrientationMask.all
+    lazy var themeManager: ThemeManager = DefaultThemeManager(appDelegate: self)
     lazy var profile: Profile = BrowserProfile(localName: "profile",
                                                syncDelegate: UIApplication.shared.syncDelegate)
     private let log = Logger.browserLogger
