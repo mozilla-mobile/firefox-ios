@@ -78,6 +78,9 @@ class BrowserViewController: UIViewController {
 
     var contextHintVC: ContextualHintViewController
 
+    // To avoid presenting multiple times in same launch when forcing to show
+    var hasPresentedUpgrade = false
+
     // popover rotation handling
     var displayedPopoverController: UIViewController?
     var updateDisplayedPopoverProperties: (() -> Void)?
@@ -2217,9 +2220,10 @@ extension BrowserViewController {
 
     func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) {
         let viewModel = UpdateViewModel(profile: profile)
-        if viewModel.shouldShowUpdateSheet(force: force) {
+        if viewModel.shouldShowUpdateSheet(force: force) && !hasPresentedUpgrade {
             viewModel.hasSyncableAccount {
                 self.buildUpdateVC(viewModel: viewModel, animated: animated)
+                self.hasPresentedUpgrade = true
             }
         }
     }
