@@ -631,30 +631,34 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        // Check if this response should be displayed in a QuickLook for USDZ files.
-        if let previewHelper = OpenQLPreviewHelper(request: request, response: response, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self) {
-
+        if OpenQLPreviewHelper.shouldOpenPreviewHelper(response: response,
+                                                       forceDownload: forceDownload),
+           let tab = tabManager[webView],
+           let request = request {
+            let previewHelper = OpenQLPreviewHelper(presenter: self)
             // Certain files are too large to download before the preview presents,
             // block and use a temporary document instead
-            if let tab = tabManager[webView] {
-                if response.mimeType != MIMEType.HTML, let request = request {
-                    tab.temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
-                    previewHelper.url = tab.temporaryDocument!.getURL().value as NSURL
+            tab.temporaryDocument = TemporaryDocument(preflightResponse: response,
+                                                      request: request)
+            let url = tab.temporaryDocument?.getURL().value
 
-                    // Open our helper and cancel this response from the webview.
-                    previewHelper.open()
-                    decisionHandler(.cancel)
-                    return
-                } else {
-                    tab.temporaryDocument = nil
-                }
+            if previewHelper.canOpen(url: url) {
+                // Open our helper and cancel this response from the webview.
+                previewHelper.open()
+                decisionHandler(.cancel)
+                return
+            } else {
+                tab.temporaryDocument = nil
+                // We don't have a temporary document, fallthrough
             }
-
-            // We don't have a temporary document, fallthrough
         }
 
         // Check if this response should be downloaded.
-        if let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore, canShowInWebView: canShowInWebView, forceDownload: forceDownload) {
+        if let downloadHelper = DownloadHelper(request: request,
+                                               response: response,
+                                               cookieStore: cookieStore,
+                                               canShowInWebView: canShowInWebView,
+                                               forceDownload: forceDownload) {
             // Clear the pending download web view so that subsequent navigations from the same
             // web view don't invoke another download.
             pendingDownloadWebView = nil
