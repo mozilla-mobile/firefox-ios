@@ -9,8 +9,7 @@ class CustomizeHomepageSectionView: UICollectionViewCell, ReusableCell {
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     private struct UX {
-        static let buttonHeight: CGFloat = 36
-        static let buttonMaxFontSize: CGFloat = 49
+        static let buttonFontSize: CGFloat = 15
         static let buttonTrailingSpace: CGFloat = 12
         static let buttonVerticalInset: CGFloat = 11
     }
@@ -19,7 +18,7 @@ class CustomizeHomepageSectionView: UICollectionViewCell, ReusableCell {
     private let goToSettingsButton: ActionButton = .build { button in
         button.setTitle(.FirefoxHomepage.CustomizeHomepage.ButtonTitle, for: .normal)
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .subheadline,
-                                                                                    maxSize: UX.buttonMaxFontSize)
+                                                                                    size: UX.buttonFontSize)
         button.layer.cornerRadius = 5
         button.accessibilityIdentifier = a11y.customizeHome
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
