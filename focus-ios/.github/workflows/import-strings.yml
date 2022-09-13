@@ -6,7 +6,8 @@ permissions:
 
 on:
   schedule:
-    - cron: '0 22 * * *'
+    # Runs at 10pm on Monday
+    - cron: '0 22 * * 1'
 
 jobs:
   build:
