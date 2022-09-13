@@ -556,7 +556,7 @@ class BrowserViewController: UIViewController {
         super.viewDidAppear(animated)
 
         presentIntroViewController()
-        presentUpdateViewController(true)
+        presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
 
         if let toast = self.pendingToast {
