@@ -691,11 +691,12 @@ workflows:
         inputs:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Fennec
+        - simulator_device: iPhone 14
     - xcode-test@4.5:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - scheme: Fennec
-        - simulator_device: iPhone 8
+        - simulator_device: iPhone 14
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4: {}
     - slack@3.1:
