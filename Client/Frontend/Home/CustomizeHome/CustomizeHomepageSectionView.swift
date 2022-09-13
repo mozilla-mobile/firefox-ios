@@ -2,25 +2,29 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import Foundation
+import UIKit
 
 class CustomizeHomepageSectionView: UICollectionViewCell, ReusableCell {
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     private struct UX {
-        static let buttonHeight: CGFloat = 36
-        static let buttonMaxFontSize: CGFloat = 49
+        static let buttonFontSize: CGFloat = 15
         static let buttonTrailingSpace: CGFloat = 12
+        static let buttonVerticalInset: CGFloat = 11
     }
 
     // MARK: - UI Elements
     private let goToSettingsButton: ActionButton = .build { button in
         button.setTitle(.FirefoxHomepage.CustomizeHomepage.ButtonTitle, for: .normal)
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .subheadline,
-                                                                                    maxSize: UX.buttonMaxFontSize)
+                                                                                    size: UX.buttonFontSize)
         button.layer.cornerRadius = 5
         button.accessibilityIdentifier = a11y.customizeHome
+        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
+                                                left: ResizableButton.UX.buttonEdgeSpacing,
+                                                bottom: UX.buttonVerticalInset,
+                                                right: ResizableButton.UX.buttonEdgeSpacing)
     }
 
     // MARK: - Variables
@@ -51,12 +55,18 @@ class CustomizeHomepageSectionView: UICollectionViewCell, ReusableCell {
         contentView.addSubview(goToSettingsButton)
 
         NSLayoutConstraint.activate([
-            goToSettingsButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight),
             goToSettingsButton.topAnchor.constraint(equalTo: contentView.topAnchor),
             goToSettingsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             goToSettingsButton.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            goToSettingsButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -UX.buttonTrailingSpace)
+            goToSettingsButton.rightAnchor.constraint(equalTo: contentView.rightAnchor,
+                                                      constant: -UX.buttonTrailingSpace)
         ])
+
+        goToSettingsButton.setContentHuggingPriority(.required, for: .vertical)
+
+        // needed so the button sizes correctly
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 
     func configure(onTapAction: ((UIButton) -> Void)?) {
