@@ -32,6 +32,7 @@ class FirefoxAccountSignInViewController: UIViewController {
 
     private let profile: Profile
     private var deepLinkParams: FxALaunchParams?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     /// This variable is used to track parent page that launched this sign in VC.
     /// telemetryObject deduced from parentType initializer is sent with telemetry events on button click
@@ -113,8 +114,8 @@ class FirefoxAccountSignInViewController: UIViewController {
     }
 
     lazy var emailButton: ResizableButton = .build { button in
-        button.backgroundColor = .white
-        button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
+        button.backgroundColor = UIColor.Photon.LightGrey30
+        button.setTitleColor(UIColor.Photon.DarkGrey90, for: .normal)
         button.layer.borderColor = UIColor.Photon.Grey30.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 8
@@ -174,7 +175,10 @@ class FirefoxAccountSignInViewController: UIViewController {
         title = .Settings.Sync.SignInView.Title
         accessibilityLabel = "FxASingin.navBar"
 
+        setupNotifications(forObserver: self,
+                                   observing: [.DisplayThemeChanged])
         setupLayout()
+        applyTheme()
     }
 
     // MARK: - Helpers
@@ -227,6 +231,22 @@ class FirefoxAccountSignInViewController: UIViewController {
                                                         constant: -UX.horizontalPadding),
             emailButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
         ])
+    }
+
+    func applyTheme() {
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+
+        if theme == .dark {
+            scanButton.setImage(UIImage(named: ImageIdentifiers.signinSyncQRButton)?
+                .tinted(withColor: .black), for: .normal)
+            scanButton.setTitleColor(.black, for: .normal)
+            scanButton.backgroundColor = UIColor.theme.homePanel.activityStreamHeaderButton
+        } else {
+            scanButton.setImage(UIImage(named: ImageIdentifiers.signinSyncQRButton)?
+                .tinted(withColor: .white), for: .normal)
+            scanButton.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
+            scanButton.backgroundColor = UIColor.Photon.Blue50
+        }
     }
 
     // MARK: Button Tap Functions
@@ -300,5 +320,18 @@ extension FirefoxAccountSignInViewController {
         let settingsTableViewController = SyncContentSettingsViewController()
         settingsTableViewController.profile = profile
         return settingsTableViewController
+    }
+}
+
+// MARK: - Notifiable
+extension FirefoxAccountSignInViewController: Notifiable {
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default:
+            break
+        }
     }
 }
