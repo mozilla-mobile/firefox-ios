@@ -696,7 +696,7 @@ workflows:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - scheme: Fennec
-        - simulator_device: iPhone 14
+        - destination: platform=iOS Simulator,name=iPhone 14,OS=latest
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4: {}
     - slack@3.1:
