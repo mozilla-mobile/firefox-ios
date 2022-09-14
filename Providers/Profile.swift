@@ -18,10 +18,6 @@ import MozillaAppServices
 
 private let log = Logger.syncLogger
 
-
-private let HistoryDryRunMigrationKey = "HistoryDryRunMigrationSuccessful"
-private let HistoryRealMigrationKey = "HistoryRealMigrationSuccessful"
-
 public protocol SyncManager {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }

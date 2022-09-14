@@ -74,7 +74,6 @@ public class RustPlaces: BookmarksHandler {
 
         writerQueue.async {
             guard self.isOpen else {
-                log.info("[MIG] ERROR: NOT OPEN")
                 deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
