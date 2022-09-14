@@ -18,7 +18,7 @@ struct WallpaperFilenameIdentifiers {
 }
 
 /// A single wallpaper instance.
-struct Wallpaper: Equatable {
+struct Wallpaper: Equatable, Loggable {
     typealias fileId = WallpaperFilenameIdentifiers
 
     static func == (lhs: Wallpaper, rhs: Wallpaper) -> Bool {
@@ -107,21 +107,19 @@ extension Wallpaper: Decodable {
         let cardHexString = try values.decode(String.self, forKey: .cardColor)
         let logoHexString = try values.decode(String.self, forKey: .logoTextColor)
 
-        let getColor: (String) throws -> UIColor = { hexString in
+        // Returning `nil` if the strings aren't valid as we already handle nil cases
+        let getColorFrom: (String) -> UIColor? = { hexString in
             var colorInt: UInt64 = 0
             if Scanner(string: hexString).scanHexInt64(&colorInt) {
                 return UIColor(colorString: hexString)
             } else {
-                throw DecodingError.dataCorrupted(
-                    DecodingError.Context(
-                        codingPath: decoder.codingPath,
-                        debugDescription: "Received text-color is not a proper hex code"))
+                return nil
             }
         }
 
-        textColor = try getColor(textHexString)
-        cardColor = try getColor(cardHexString)
-        logoTextColor = try getColor(logoHexString)
+        textColor = getColorFrom(textHexString)
+        cardColor = getColorFrom(cardHexString)
+        logoTextColor = getColorFrom(logoHexString)
     }
 }
 

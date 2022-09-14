@@ -151,17 +151,19 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
 
     func testFailToExtractWallpaperMetadata_WithBadTextColor() async {
         let data = getDataFromJSONFile(named: .badTextColor)
+        let expectedMetadata = getExpectedMetadata(for: .badTextColor)
 
         networking.result = .success(data)
         let subject = WallpaperDataService(with: networking)
 
         do {
-            _ = try await subject.getMetadata()
-            XCTFail("We should fail the extraction process")
+            let actualMetadata = try await subject.getMetadata()
+            XCTAssertEqual(
+                actualMetadata,
+                expectedMetadata,
+                "The metadata that was decoded from data was not what was expected.")
         } catch let error {
-            XCTAssertEqual(error.localizedDescription,
-                           "The data couldn’t be read because it isn’t in the correct format.",
-                           "Expected decoding failure when decoding bad text color json")
+            XCTFail("We should not fail the extraction process despite bad text color, but did with error: \(error)")
         }
     }
 
