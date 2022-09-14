@@ -12,7 +12,7 @@ import Foundation
                      object anObject: Any?)
     func addObserver(name: NSNotification.Name?,
                      queue: OperationQueue?,
-                     using block: @escaping (Notification) -> Void) -> NSObjectProtocol
+                     using block: @escaping (Notification) -> Void) -> NSObjectProtocol?
     func removeObserver(_ observer: Any)
 }
 
@@ -23,7 +23,7 @@ extension NotificationCenter: NotificationProtocol {
 
     func addObserver(name: NSNotification.Name?,
                      queue: OperationQueue?,
-                     using block: @escaping (Notification) -> Void) -> NSObjectProtocol {
+                     using block: @escaping (Notification) -> Void) -> NSObjectProtocol? {
         self.addObserver(forName: name,
                          object: nil,
                          queue: queue,
