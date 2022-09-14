@@ -26,10 +26,25 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         static let overlayColor = UIColor(white: 0.0, alpha: 0.25)
         static let pinAlignmentSpacing: CGFloat = 2
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
-        static let shadowRadius: CGFloat = 6
+        static let shadowRadius: CGFloat = 4
+        static let shadowOffset: CGFloat = 2
         static let topSpace: CGFloat = 8
-        static let textSafeSpace: CGFloat = 4
-        static let bottomSpace: CGFloat = 10
+        static let textSafeSpace: CGFloat = 8
+        static let bottomSpace: CGFloat = 8
+        static let titleFontSize: CGFloat = 12
+        static let sponsorFontSize: CGFloat = 11
+    }
+
+    private var blurEffectView: UIVisualEffectView?
+    private var shouldApplyBlur: Bool {
+        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
+
+        return WallpaperManager().currentWallpaper.type != .defaultWallpaper
+    }
+
+    private var rootContainer: UIView = .build { view in
+        view.backgroundColor = .clear
+        view.layer.cornerRadius = UX.cellCornerRadius
     }
 
     private lazy var imageView: UIImageView = .build { imageView in
@@ -65,35 +80,19 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     private lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.textAlignment = .center
         titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                        maxSize: 26)
+                                                                        size: UX.titleFontSize)
         titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
-        titleLabel.numberOfLines = 1
+        titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + UX.shadowRadius
         titleLabel.backgroundColor = UIColor.clear
         titleLabel.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
     }
 
     private lazy var sponsoredLabel: UILabel = .build { sponsoredLabel in
         sponsoredLabel.textAlignment = .center
-        sponsoredLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                            maxSize: 26)
+        sponsoredLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption2,
+                                                                            size: UX.sponsorFontSize)
         sponsoredLabel.adjustsFontForContentSizeCategory = true
         sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
-        sponsoredLabel.numberOfLines = 1
-    }
-
-    private lazy var faviconBG: UIView = .build { view in
-        view.layer.cornerRadius = UX.cellCornerRadius
-        view.layer.borderWidth = UX.borderWidth
-        view.layer.borderColor = UX.borderColor.cgColor
-
-        view.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        view.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
-        view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.cornerRadius = UX.cellCornerRadius
-        let shadowRect = CGRect(width: UX.imageBackgroundSize.width, height: UX.imageBackgroundSize.height)
-        view.layer.shadowPath = UIBezierPath(rect: shadowRect).cgPath
-        view.layer.shadowRadius = UX.shadowRadius
     }
 
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
@@ -121,10 +120,11 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
 
-        applyTheme()
         setupLayout()
+        applyTheme()
 
-        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
+        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged,
+                                                          .WallpaperDidChange])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -138,8 +138,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
-        imageView.backgroundColor = UIColor.clear
-
+        rootContainer.backgroundColor = .clear
         titleLabel.text = nil
         sponsoredLabel.text = nil
         pinViewHolder.isHidden = true
@@ -149,6 +148,12 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         selectedOverlay.isHidden = true
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
+                                                      cornerRadius: UX.cellCornerRadius).cgPath
     }
 
     // MARK: - Public methods
@@ -164,6 +169,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         configureSponsoredSite(topSite)
 
         applyTheme()
+        adjustLayout()
     }
 
     // MARK: - Setup Helper methods
@@ -175,39 +181,45 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
         descriptionWrapper.addArrangedSubview(titlePinWrapper)
         descriptionWrapper.addArrangedSubview(sponsoredLabel)
-        contentView.addSubview(descriptionWrapper)
+        rootContainer.addSubview(descriptionWrapper)
 
-        faviconBG.addSubview(imageView)
-        contentView.addSubview(faviconBG)
-        contentView.addSubview(selectedOverlay)
+        rootContainer.addSubview(imageView)
+        rootContainer.addSubview(selectedOverlay)
+        contentView.addSubview(rootContainer)
 
         NSLayoutConstraint.activate([
-            descriptionWrapper.topAnchor.constraint(equalTo: faviconBG.bottomAnchor, constant: UX.topSpace),
-            descriptionWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.bottomSpace),
-            descriptionWrapper.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.textSafeSpace),
-            descriptionWrapper.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.textSafeSpace),
+            rootContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
+            rootContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            rootContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                    constant: -UX.textSafeSpace),
+            rootContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
-            faviconBG.topAnchor.constraint(equalTo: contentView.topAnchor),
-            faviconBG.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            faviconBG.widthAnchor.constraint(equalToConstant: UX.imageBackgroundSize.width),
-            faviconBG.heightAnchor.constraint(equalToConstant: UX.imageBackgroundSize.height),
-
+            imageView.topAnchor.constraint(equalTo: rootContainer.topAnchor,
+                                           constant: UX.topSpace),
+            imageView.centerXAnchor.constraint(equalTo: rootContainer.centerXAnchor),
             imageView.widthAnchor.constraint(equalToConstant: UX.iconSize.width),
             imageView.heightAnchor.constraint(equalToConstant: UX.iconSize.height),
-            imageView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor),
-            imageView.centerYAnchor.constraint(equalTo: faviconBG.centerYAnchor),
+            imageView.bottomAnchor.constraint(lessThanOrEqualTo: descriptionWrapper.topAnchor,
+                                              constant: -UX.bottomSpace),
 
-            selectedOverlay.topAnchor.constraint(equalTo: faviconBG.topAnchor),
-            selectedOverlay.leadingAnchor.constraint(equalTo: faviconBG.leadingAnchor),
-            selectedOverlay.trailingAnchor.constraint(equalTo: faviconBG.trailingAnchor),
-            selectedOverlay.bottomAnchor.constraint(equalTo: faviconBG.bottomAnchor),
+            descriptionWrapper.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor,
+                                                        constant: UX.textSafeSpace),
+            descriptionWrapper.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor,
+                                                         constant: -UX.textSafeSpace),
+            descriptionWrapper.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
+                                                       constant: -UX.bottomSpace),
 
-            pinViewHolder.bottomAnchor.constraint(equalTo: titleLabel.firstBaselineAnchor, constant: UX.pinAlignmentSpacing),
+            selectedOverlay.topAnchor.constraint(equalTo: rootContainer.topAnchor),
+            selectedOverlay.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor),
+            selectedOverlay.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor),
+            selectedOverlay.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor),
 
+            pinViewHolder.bottomAnchor.constraint(equalTo: titleLabel.firstBaselineAnchor,
+                                                  constant: UX.pinAlignmentSpacing),
             pinViewHolder.leadingAnchor.constraint(equalTo: pinImageView.leadingAnchor),
-            pinViewHolder.trailingAnchor.constraint(equalTo: pinImageView.trailingAnchor, constant: UX.titleOffset),
+            pinViewHolder.trailingAnchor.constraint(equalTo: pinImageView.trailingAnchor,
+                                                    constant: UX.titleOffset),
             pinViewHolder.topAnchor.constraint(equalTo: pinImageView.topAnchor),
-            pinViewHolder.bottomAnchor.constraint(equalTo: pinImageView.bottomAnchor),
 
             pinImageView.widthAnchor.constraint(equalToConstant: UX.pinIconSize.width),
             pinImageView.heightAnchor.constraint(equalToConstant: UX.pinIconSize.height),
@@ -216,6 +228,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     private func configurePinnedSite(_ topSite: TopSite) {
         guard topSite.isPinned else { return }
+
         pinViewHolder.isHidden = false
         pinImageView.isHidden = false
     }
@@ -225,6 +238,28 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
         sponsoredLabel.text = topSite.sponsoredText
     }
+
+    private func adjustLayout() {
+        // If blur is disabled set background color
+        if shouldApplyBlur {
+            blurEffectView = rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            blurEffectView?.removeFromSuperview()
+            blurEffectView = nil
+            rootContainer.backgroundColor = LegacyThemeManager.instance.current.homePanel.topSitesContainerView
+            setupShadow()
+        }
+    }
+
+    private func setupShadow() {
+        rootContainer.layer.cornerRadius = UX.cellCornerRadius
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                      cornerRadius: UX.cellCornerRadius).cgPath
+        rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        rootContainer.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+        rootContainer.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
+        rootContainer.layer.shadowRadius = UX.shadowRadius
+    }
 }
 
 // MARK: NotificationThemeable
@@ -232,19 +267,23 @@ extension TopSiteItemCell: NotificationThemeable {
     func applyTheme() {
         pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
         titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
-        faviconBG.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-        faviconBG.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         sponsoredLabel.textColor = UIColor.theme.homePanel.sponsored
+
+        adjustLayout()
     }
 }
 
 // MARK: - Notifiable
 extension TopSiteItemCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .DisplayThemeChanged:
+                self?.applyTheme()
+            case .WallpaperDidChange:
+                self?.adjustLayout()
+            default: break
+            }
         }
     }
 }

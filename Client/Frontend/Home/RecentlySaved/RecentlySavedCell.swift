@@ -63,6 +63,11 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
 
     // MARK: - Variables
     var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var shouldApplyBlur: Bool {
+        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
+
+        return WallpaperManager().currentWallpaper.type != .defaultWallpaper
+    }
 
     // MARK: - Inits
 
@@ -97,7 +102,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         configureImages(heroImage: viewModel.heroImage, favIconImage: viewModel.favIconImage)
 
         itemTitle.text = viewModel.site.title
-        adjustLayout(shouldAddBlur: viewModel.shouldAddBlur)
+        adjustLayout()
     }
 
     private func configureImages(heroImage: UIImage?, favIconImage: UIImage?) {
@@ -178,9 +183,9 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         ])
     }
 
-    func adjustLayout(shouldAddBlur: Bool) {
+    func adjustLayout() {
         // If blur is disabled set background color
-        guard shouldAddBlur else {
+        guard shouldApplyBlur else {
             let isDarkMode = LegacyThemeManager.instance.currentName == .dark
                 rootContainer.backgroundColor = isDarkMode ? UIColor.Photon.DarkGrey40 : .white
             setupShadow()

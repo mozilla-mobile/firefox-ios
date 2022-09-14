@@ -182,9 +182,11 @@ class HomePanelColor {
 
     var siteTableHeaderBorder: UIColor { return UIColor.Photon.Grey30.withAlphaComponent(0.8) }
 
+    var topSitesBackground: UIColor { return UIColor.Photon.LightGrey10 }
     var topSiteDomain: UIColor { return UIColor.Photon.DarkGrey90 }
     var topSitePin: UIColor { return UIColor.Photon.DarkGrey05 }
-    var topSitesBackground: UIColor { return UIColor.Photon.LightGrey10 }
+    var topSitesContainerView: UIColor { return .white }
+    var emptyTopSitesBorder: UIColor { return UIColor.Photon.DarkGrey40 }
 
     var shortcutBackground: UIColor { return .white }
     var shortcutShadowColor: CGColor { return UIColor(red: 0.23, green: 0.22, blue: 0.27, alpha: 1.0).cgColor }
