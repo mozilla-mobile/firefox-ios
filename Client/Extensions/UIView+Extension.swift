@@ -51,8 +51,7 @@ extension UIView {
     /// using the desired blur style.
     ///
     /// - Parameter style: The strength of the blur desired
-    func addBlurEffectWithClearBackgroundAndClipping(using style: UIBlurEffect.Style)
-        -> UIVisualEffectView? {
+    func addBlurEffectWithClearBackgroundAndClipping(using style: UIBlurEffect.Style) -> UIVisualEffectView? {
         guard !UIAccessibility.isReduceTransparencyEnabled, shouldAddBlur else { return nil }
 
         clipsToBounds = true

@@ -36,7 +36,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     }
 
     private var blurEffectView: UIVisualEffectView?
-    var shouldApplyBlur: Bool {
+    private var shouldApplyBlur: Bool {
         guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
 
         return WallpaperManager().currentWallpaper.type != .defaultWallpaper
