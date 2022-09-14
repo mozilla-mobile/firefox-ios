@@ -6,13 +6,28 @@ import Foundation
 
 @objc protocol NotificationProtocol {
     func post(name: NSNotification.Name)
-    func addObserver(_ observer: Any, selector aSelector: Selector, name aName: NSNotification.Name?, object anObject: Any?)
+    func addObserver(_ observer: Any,
+                     selector aSelector: Selector,
+                     name aName: NSNotification.Name?,
+                     object anObject: Any?)
+    func addObserver(name: NSNotification.Name?,
+                     queue: OperationQueue?,
+                     using block: @escaping (Notification) -> Void) -> NSObjectProtocol?
     func removeObserver(_ observer: Any)
 }
 
 extension NotificationCenter: NotificationProtocol {
     func post(name: NSNotification.Name) {
         self.post(name: name, object: nil)
+    }
+
+    func addObserver(name: NSNotification.Name?,
+                     queue: OperationQueue?,
+                     using block: @escaping (Notification) -> Void) -> NSObjectProtocol? {
+        self.addObserver(forName: name,
+                         object: nil,
+                         queue: queue,
+                         using: block)
     }
 }
 

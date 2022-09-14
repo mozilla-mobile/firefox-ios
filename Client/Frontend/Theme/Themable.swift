@@ -4,21 +4,20 @@
 
 import Foundation
 
-protocol Themeable: Notifiable {
+protocol Themeable: UIViewController {
     var themeManager: ThemeManager { get }
-    func listenForThemeUpdates()
+    var themeObserver: NSObjectProtocol? { get set }
+    var notificationCenter: NotificationProtocol { get set }
+    func listenForThemeChange()
     func applyTheme()
 }
 
 extension Themeable {
-    func listenForThemeUpdates() {
-        setupNotifications(forObserver: self,
-                           observing: [.ThemeDidChange])
-    }
-
-    func handleNotifications(_ notification: Notification) {
-        if notification.name == .ThemeDidChange {
-            applyTheme()
+    func listenForThemeChange() {
+        let mainQueue = OperationQueue.main
+        themeObserver = notificationCenter.addObserver(name: .ThemeDidChange,
+                                                       queue: mainQueue) { [weak self] _ in
+            self?.applyTheme()
         }
     }
 }

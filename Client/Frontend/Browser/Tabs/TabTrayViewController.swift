@@ -19,7 +19,7 @@ protocol TabTrayViewDelegate: UIViewController {
 }
 // swiftlint:enable class_delegate_protocol
 
-class TabTrayViewController: UIViewController {
+class TabTrayViewController: UIViewController, Themeable {
 
     struct UX {
         struct NavigationMenu {
@@ -34,6 +34,8 @@ class TabTrayViewController: UIViewController {
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)?
     var notificationCenter: NotificationProtocol
     var nimbus: FxNimbus
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
 
     // MARK: - UI Elements
     // Buttons & Menus
@@ -73,9 +75,10 @@ class TabTrayViewController: UIViewController {
     lazy var syncLoadingView: UIStackView = {
         let syncingLabel = UILabel()
         syncingLabel.text = .SyncingMessageWithEllipsis
+        syncingLabel.textColor = themeManager.currentTheme.colors.textPrimary
 
         let activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.color = .systemGray
+        activityIndicator.color = themeManager.currentTheme.colors.textPrimary
         activityIndicator.startAnimating()
 
         let stackView = UIStackView(arrangedSubviews: [syncingLabel, activityIndicator])
@@ -163,11 +166,13 @@ class TabTrayViewController: UIViewController {
          tabToFocus: Tab? = nil,
          tabManager: TabManager,
          focusedSegment: TabTrayViewModel.Segment? = nil,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default,
          with nimbus: FxNimbus = FxNimbus.shared
     ) {
         self.nimbus = nimbus
         self.notificationCenter = notificationCenter
+        self.themeManager = themeManager
         self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate,
                                           profile: profile,
                                           tabToFocus: tabToFocus,
@@ -217,11 +222,6 @@ class TabTrayViewController: UIViewController {
 
     private func viewSetup() {
         viewModel.syncedTabsController.remotePanelDelegate = self
-
-        if let appWindow = (UIApplication.shared.delegate?.window),
-           let window = appWindow as UIWindow? {
-            window.backgroundColor = .black
-        }
 
         if shouldUseiPadSetup() {
             iPadViewSetup()
@@ -367,6 +367,14 @@ class TabTrayViewController: UIViewController {
             break
         }
     }
+
+    // MARK: - Themable
+
+    func applyTheme() {
+        view.backgroundColor = themeManager.currentTheme.colors.layer4
+        navigationToolbar.barTintColor = themeManager.currentTheme.colors.layer1
+        viewModel.syncedTabsController.applyTheme()
+    }
 }
 
 // MARK: - Notifiable protocol
@@ -374,8 +382,6 @@ extension TabTrayViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         ensureMainThread { [weak self] in
             switch notification.name {
-            case .DisplayThemeChanged:
-                self?.applyTheme()
             case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
                 self?.updateButtonTitle(notification)
             case .UpdateLabelOnTabClosed:
@@ -387,22 +393,6 @@ extension TabTrayViewController: Notifiable {
         }
     }
 }
-
-// MARK: - Theme protocol
-extension TabTrayViewController: NotificationThemeable {
-     @objc func applyTheme() {
-         view.backgroundColor = UIColor.theme.tabTray.background
-         navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
-         navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-         if theme == .dark {
-             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-         } else {
-             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-         }
-         viewModel.syncedTabsController.applyTheme()
-     }
- }
 
 // MARK: - UIToolbarDelegate
 extension TabTrayViewController: UIToolbarDelegate {
@@ -416,11 +406,9 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
     // Returning None here, for the iPhone makes sure that the Popover is actually presented as a
     // Popover and not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-
         if shouldUseiPadSetup() {
             return .overFullScreen
         }
-
         return .none
     }
 

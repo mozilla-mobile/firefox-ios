@@ -78,7 +78,9 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
         // TODO: Check for nightmode FXIOS-4910
         currentTheme = newThemeForType(newTheme)
 
-        notificationCenter.post(name: .ThemeDidChange)
+        ensureMainThread { [weak self] in
+            self?.notificationCenter.post(name: .ThemeDidChange)
+        }
     }
 
     func systemThemeChanged() {

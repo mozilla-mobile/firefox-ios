@@ -4,19 +4,35 @@
 
 import UIKit
 
-class ThemedDefaultNavigationController: DismissableNavigationViewController {
+class ThemedDefaultNavigationController: DismissableNavigationViewController, Themeable {
+
+    var themeManager: ThemeManager
+    var notificationCenter: NotificationProtocol
+    var themeObserver: NSObjectProtocol?
+
+    init(rootViewController: UIViewController,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
+        super.init(rootViewController: rootViewController)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        listenForThemeChange()
         applyTheme()
     }
-}
-
-extension ThemedDefaultNavigationController: NotificationThemeable {
 
     private func setupNavigationBarAppearance() {
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithDefaultBackground()
-        standardAppearance.backgroundColor = UIColor.theme.tabTray.toolbar
+        standardAppearance.backgroundColor = themeManager.currentTheme.colors.layer1
         standardAppearance.shadowColor = nil
         standardAppearance.shadowImage = UIImage()
 
@@ -26,13 +42,13 @@ extension ThemedDefaultNavigationController: NotificationThemeable {
         if #available(iOS 15.0, *) {
             navigationBar.compactScrollEdgeAppearance = standardAppearance
         }
-        navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+        navigationBar.tintColor = themeManager.currentTheme.colors.textPrimary
     }
 
     private func setupToolBarAppearance() {
         let standardAppearance = UIToolbarAppearance()
         standardAppearance.configureWithDefaultBackground()
-        standardAppearance.backgroundColor = UIColor.theme.tabTray.toolbar
+        standardAppearance.backgroundColor = themeManager.currentTheme.colors.layer1
         standardAppearance.shadowColor = nil
         standardAppearance.shadowImage = UIImage()
 
@@ -42,14 +58,18 @@ extension ThemedDefaultNavigationController: NotificationThemeable {
             toolbar.scrollEdgeAppearance = standardAppearance
             toolbar.compactScrollEdgeAppearance = standardAppearance
         }
-        toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+        toolbar.tintColor = themeManager.currentTheme.colors.textPrimary
     }
+
+    // MARK: - Themable
 
     func applyTheme() {
         setupNavigationBarAppearance()
         setupToolBarAppearance()
 
         setNeedsStatusBarAppearanceUpdate()
+
+        // TODO: Remove with legacy theme clean up FXIOS-3960
         viewControllers.forEach { ($0 as? NotificationThemeable)?.applyTheme() }
     }
 }

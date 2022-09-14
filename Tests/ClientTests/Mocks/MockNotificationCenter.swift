@@ -21,6 +21,12 @@ class MockNotificationCenter: NotificationProtocol {
     func addObserver(_ observer: Any, selector aSelector: Selector, name aName: NSNotification.Name?, object anObject: Any?) {
         addObserverCallCount += 1
     }
+
+    func addObserver(name: NSNotification.Name?, queue: OperationQueue?, using block: @escaping (Notification) -> Void) -> NSObjectProtocol? {
+        addObserverCallCount += 1
+        return nil
+    }
+
     func removeObserver(_ observer: Any) {
         removeObserverCallCount += 1
     }
