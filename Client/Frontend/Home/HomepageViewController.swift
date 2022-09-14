@@ -72,7 +72,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
         setupNotifications(forObserver: self,
                            observing: [.HomePanelPrefsChanged,
-                                       .TabsPrivacyModeChanged])
+                                       .TabsPrivacyModeChanged,
+                                       .WallpaperDidChange])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -647,10 +648,10 @@ extension HomepageViewController: HomepageViewModelDelegate {
     func reloadView() {
         ensureMainThread { [weak self] in
             // If the view controller is not visible ignore updates
-            guard let self = self
-            else { return }
+            guard let self = self else { return }
 
             self.viewModel.refreshData(for: self.traitCollection)
+            self.collectionView.collectionViewLayout.invalidateLayout()
             self.collectionView.reloadData()
         }
     }
@@ -666,7 +667,8 @@ extension HomepageViewController: Notifiable {
             case .TabsPrivacyModeChanged:
                 self.adjustPrivacySensitiveSections(notification: notification)
 
-            case .HomePanelPrefsChanged:
+            case .HomePanelPrefsChanged,
+                    .WallpaperDidChange:
                 self.reloadView()
 
             default: break
