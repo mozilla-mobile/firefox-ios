@@ -5,8 +5,6 @@ disabled_rules: # rule identifiers to exclude from running
 # Disabled all default rules
 - block_based_kvo
 - closure_parameter_position
-- compiler_protocol_init
-- computed_accessors_order
 - custom_rules
 - cyclomatic_complexity
 - deployment_target
@@ -15,7 +13,6 @@ disabled_rules: # rule identifiers to exclude from running
 - duplicate_enum_cases
 - duplicate_imports
 - duplicated_key_in_dictionary_literal
-- dynamic_inline
 - fallthrough
 - file_length
 - for_where
