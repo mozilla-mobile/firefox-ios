@@ -303,7 +303,7 @@ class BrowserViewController: UIViewController {
                     let controller = self.tooltipController(
                         anchoredBy: self.urlBar.shieldIcon,
                         sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
-                        body: UIConstants.strings.tooltipBodyTextForShieldIconV2,
+                        body: UIConstants.strings.tooltipBodyTextForShieldIcon,
                         dismiss: {
                             self.onboardingEventsHandler.route = nil
                             self.onboardingEventsHandler.send(.showTrash)
@@ -319,7 +319,7 @@ class BrowserViewController: UIViewController {
                     let controller = self.tooltipController(
                         anchoredBy: sourceButton,
                         sourceRect: sourceRect,
-                        body: UIConstants.strings.tooltipBodyTextForTrashIconV2,
+                        body: UIConstants.strings.tooltipBodyTextForTrashIcon,
                         dismiss: { self.onboardingEventsHandler.route = nil }
                     )
                     self.present(controller, animated: true)
@@ -327,12 +327,9 @@ class BrowserViewController: UIViewController {
 
                 case .searchBar:
                     let controller = self.tooltipController(
-                        anchoredBy: self.urlBar.textFieldAnchor,
-                        sourceRect: CGRect(
-                            x: self.urlBar.textFieldAnchor.bounds.minX,
-                            y: self.urlBar.textFieldAnchor.bounds.maxY, width: 0, height: 0
-                        ),
-                        body: UIConstants.strings.tooltipBodyTextStartPrivateBrowsing,
+                        anchoredBy: self.urlBar.contextMenuButton,
+                        sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 12, width: 0, height: 0),
+                        body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
                         dismiss: { self.onboardingEventsHandler.route = nil }
                     )
                     self.present(controller, animated: true)
