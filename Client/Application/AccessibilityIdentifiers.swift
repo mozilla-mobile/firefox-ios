@@ -32,7 +32,8 @@ public struct AccessibilityIdentifiers {
         }
 
         struct OtherButtons {
-            static let logoButton = "FxHomeLogoButton"
+            static let logoImage = "FxHomeLogoImage"
+            static let logoText = "FxHomeLogoText"
             static let customizeHome = "FxHomeCustomizeHomeSettingButton"
         }
 

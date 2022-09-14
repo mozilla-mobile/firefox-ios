@@ -8,27 +8,32 @@ import UIKit
 
 class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     private struct UX {
-        static let imageHeight: CGFloat = 40
-        static let imageWidth: CGFloat = 214.74
+        struct Logo {
+            static let imageSize: CGFloat = 40
+            static let topConstant: CGFloat = 32
+            static let bottomConstant: CGFloat = -10
+        }
+
+        struct TextImage {
+            static let imageWidth: CGFloat = 165.5
+            static let imageHeight: CGFloat = 17.5
+            static let leadingConstant: CGFloat = 9
+            static let trailingConstant: CGFloat = -15
+        }
     }
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     // MARK: - UI Elements
-    lazy var logoButton: ActionButton = .build { button in
-        if #available(iOS 15.0, *) {
-            var config = UIButton.Configuration.plain()
-            config.title = ""
-            config.contentInsets = .zero
-            button.configuration = config
-        } else {
-            button.setTitle("", for: .normal)
-            button.backgroundColor = .clear
-            button.contentEdgeInsets = .zero
-        }
+    lazy var logoImage: UIImageView = .build { imageView in
+        imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
+        imageView.contentMode = .scaleAspectFit
+        imageView.accessibilityIdentifier = a11y.logoImage
+    }
 
-        button.accessibilityIdentifier = a11y.logoButton
-        button.accessibilityLabel = .Settings.Homepage.Wallpaper.AccessibilityLabels.FxHomepageWallpaperButton
+    lazy var logoTextImage: UIImageView = .build { imageView in
+        imageView.contentMode = .scaleAspectFit
+        imageView.accessibilityIdentifier = a11y.logoText
     }
 
     // MARK: - Variables
@@ -55,29 +60,42 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     // MARK: - UI Setup
     func setupView() {
         contentView.backgroundColor = .clear
-        contentView.addSubview(logoButton)
+        contentView.addSubview(logoImage)
+        contentView.addSubview(logoTextImage)
 
         NSLayoutConstraint.activate([
-            logoButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 32),
-            logoButton.widthAnchor.constraint(equalToConstant: UX.imageWidth),
-            logoButton.heightAnchor.constraint(equalToConstant: UX.imageHeight),
-            logoButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            logoButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
-        ])
-    }
+            logoImage.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                           constant: UX.Logo.topConstant),
+            logoImage.widthAnchor.constraint(equalToConstant: UX.Logo.imageSize),
+            logoImage.heightAnchor.constraint(equalToConstant: UX.Logo.imageSize),
+            logoImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            logoImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                              constant: UX.Logo.bottomConstant),
 
-    func configure(onTapAction: ((UIButton) -> Void)?) {
-        logoButton.touchUpAction = onTapAction
+            logoTextImage.widthAnchor.constraint(equalToConstant: UX.TextImage.imageWidth),
+            logoTextImage.heightAnchor.constraint(equalToConstant: UX.TextImage.imageHeight),
+            logoTextImage.leadingAnchor.constraint(equalTo: logoImage.trailingAnchor,
+                                                   constant: UX.TextImage.leadingConstant),
+            logoTextImage.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor,
+                                                    constant: UX.TextImage.trailingConstant),
+            logoTextImage.centerYAnchor.constraint(equalTo: logoImage.centerYAnchor)
+        ])
     }
 }
 
 // MARK: - Theme
 extension HomeLogoHeaderCell: NotificationThemeable {
     func applyTheme() {
-        let resourceName = "fxHomeHeaderLogo"
-        let resourceNameDark = "fxHomeHeaderLogo_dark"
-        let imageString = LegacyThemeManager.instance.currentName == .dark ? resourceNameDark : resourceName
-        logoButton.setImage(UIImage(imageLiteralResourceName: imageString), for: .normal)
+        let wallpaperManager = WallpaperManager()
+        if let logoTextColor = wallpaperManager.currentWallpaper.logoTextColor {
+            logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
+                .withRenderingMode(.alwaysTemplate)
+            logoTextImage.tintColor = logoTextColor
+        } else {
+            logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
+                .withRenderingMode(.alwaysTemplate)
+            logoTextImage.tintColor = LegacyThemeManager.instance.current.homePanel.topSiteHeaderTitle
+        }
     }
 }
 

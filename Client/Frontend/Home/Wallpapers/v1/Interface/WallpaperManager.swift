@@ -208,7 +208,8 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
 
         let defaultWallpaper = [Wallpaper(id: "fxDefault",
                                           textColor: nil,
-                                          cardColor: nil)]
+                                          cardColor: nil,
+                                          logoTextColor: nil)]
 
         if availableCollections.isEmpty {
             return [WallpaperCollection(id: "classic-firefox",

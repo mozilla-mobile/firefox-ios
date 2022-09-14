@@ -270,21 +270,6 @@ class TelemetryWrapperTests: XCTestCase {
         XCTAssertNil(GleanMetrics.WallpaperAnalytics.themedWallpaper[wallpaperName].testGetValue())
     }
 
-    func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
-        let profile = MockProfile()
-        TelemetryWrapper.shared.setup(profile: profile)
-
-        LegacyWallpaperManager().updateSelectedWallpaperIndex(to: 1)
-        XCTAssertNotEqual(LegacyWallpaperManager().currentWallpaper.type, .defaultBackground)
-
-        let fakeNotif = NSNotification(name: UIApplication.didEnterBackgroundNotification, object: nil)
-        TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
-
-        testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
-        let wallpaperName = LegacyWallpaperManager().currentWallpaper.name.lowercased()
-        XCTAssertEqual(GleanMetrics.WallpaperAnalytics.themedWallpaper[wallpaperName].testGetValue(), 1)
-    }
-
     // MARK: - Awesomebar result tap
     func test_AwesomebarResults_GleanIsCalledForSearchSuggestion() {
         let extra = [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.searchSuggestion.rawValue]

@@ -22,6 +22,7 @@ extension WallpaperMetadataTestProvider {
         case .goodData: return getInitialMetadata()
         case .noLearnMoreURL: return getNoLearnMoreURLMetadata()
         case .noAvailabilityRange: return getFullAvailabilityMetadata()
+        case .badTextColor: return getBadTextColorMetadata()
         case .noLocales: return getNoLocalesMetadata()
         case .availabilityStart: return getAvailabilityStartMetadata()
         case .availabilityEnd: return getAvailabilityEndMetadata()
@@ -44,13 +45,35 @@ extension WallpaperMetadataTestProvider {
                     wallpapers: [
                         Wallpaper(id: "beachVibes",
                                   textColor: textColor,
-                                  cardColor: textColor)
+                                  cardColor: textColor,
+                                  logoTextColor: textColor)
                     ],
                 description: nil,
                 heading: nil)
             ])
     }
 
+    private func getBadTextColorMetadata() -> WallpaperMetadata {
+        return WallpaperMetadata(
+            lastUpdated: lastUpdatedDate,
+            collections: [
+                WallpaperCollection(
+                    id: "firefox",
+                    learnMoreURL: learnMoreURL,
+                    availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
+                    availability: WallpaperCollectionAvailability(
+                        start: startDate,
+                        end: endDate),
+                    wallpapers: [
+                        Wallpaper(id: "beachVibes",
+                                  textColor: nil,
+                                  cardColor: nil,
+                                  logoTextColor: nil)
+                    ],
+                description: nil,
+                heading: nil)
+            ])
+    }
     private func getNoLearnMoreURLMetadata() -> WallpaperMetadata {
         return WallpaperMetadata(
             lastUpdated: lastUpdatedDate,
@@ -65,7 +88,8 @@ extension WallpaperMetadataTestProvider {
                     wallpapers: [
                         Wallpaper(id: "beachVibes",
                                   textColor: textColor,
-                                  cardColor: textColor)
+                                  cardColor: textColor,
+                                  logoTextColor: textColor)
                     ],
                     description: nil,
                     heading: nil)
@@ -84,7 +108,8 @@ extension WallpaperMetadataTestProvider {
                     wallpapers: [
                         Wallpaper(id: "beachVibes",
                                   textColor: textColor,
-                                  cardColor: textColor)
+                                  cardColor: textColor,
+                                  logoTextColor: textColor)
                     ],
                     description: nil,
                     heading: nil)
@@ -105,7 +130,8 @@ extension WallpaperMetadataTestProvider {
                     wallpapers: [
                         Wallpaper(id: "beachVibes",
                                   textColor: textColor,
-                                  cardColor: textColor)
+                                  cardColor: textColor,
+                                  logoTextColor: textColor)
                         ],
                     description: nil,
                     heading: nil)
@@ -126,7 +152,8 @@ extension WallpaperMetadataTestProvider {
                     wallpapers: [
                         Wallpaper(id: "beachVibes",
                                   textColor: textColor,
-                                  cardColor: textColor)
+                                  cardColor: textColor,
+                                  logoTextColor: textColor)
                     ],
                     description: nil,
                     heading: nil)
@@ -147,7 +174,8 @@ extension WallpaperMetadataTestProvider {
                     wallpapers: [
                         Wallpaper(id: "beachVibes",
                                   textColor: textColor,
-                                  cardColor: textColor)
+                                  cardColor: textColor,
+                                  logoTextColor: textColor)
                     ],
                 description: nil,
                 heading: nil)
