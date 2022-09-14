@@ -38,7 +38,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         static let heroImageSize =  CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 56, height: 56)
         static let syncedDeviceImageSize = CGSize(width: 24, height: 24)
-        static let itemTitleTopAnchorConstant: CGFloat = 64
+//        static let itemTitleTopAnchorConstant: CGFloat = 64
         static let itemTitleTopAnchorCompactPhoneConstant: CGFloat = 24
     }
 
@@ -74,17 +74,33 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     private let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline)
-        label.numberOfLines = 2
+        label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.itemTitle
     }
 
     // Contains the faviconImage and descriptionLabel
     private var descriptionContainer: UIStackView = .build { stackView in
         stackView.backgroundColor = .clear
-        stackView.spacing = 8
+        stackView.spacing = 20
         stackView.axis = .horizontal
         stackView.alignment = .leading
         stackView.distribution = .fillProportionally
+    }
+    
+    private var syncInfoContainer: UIStackView = .build { stackView in
+        stackView.backgroundColor = .clear
+//        stackView.spacing = 8
+        stackView.axis = .horizontal
+        stackView.alignment = .leading
+        stackView.distribution = .fillProportionally
+    }
+
+    private var syncInfoDescriptionContainer: UIStackView = .build { stackView in
+        stackView.backgroundColor = .clear
+//        stackView.spacing = 8
+        stackView.axis = .vertical
+        stackView.alignment = .top
+        stackView.distribution = .fillEqually
     }
 
     private let syncedDeviceImage: UIImageView = .build { imageView in
@@ -95,6 +111,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
     private let descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1)
         label.textColor = .label
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.descriptionLabel
@@ -113,6 +130,14 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     private var fallbackFaviconBackground: UIView = .build { view in
         view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
         view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
+    }
+
+    private var syncDeviceImageContainer: UIView = .build { view in
+        view.backgroundColor = .clear
+    }
+    
+    private var itemTitleContainer: UIView = .build { view in
+        view.backgroundColor = .clear
     }
 
     // Contains the hero image and fallback favicons
@@ -136,7 +161,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.itemCell
 
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
+                           observing: [.DisplayThemeChanged, .DynamicFontChanged])
         setupLayout()
         applyTheme()
     }
@@ -148,20 +173,6 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     deinit {
         contextualHintViewController?.stopTimer()
         notificationCenter.removeObserver(self)
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        heroImage.image = nil
-        syncedDeviceImage.image = nil
-        fallbackFaviconImage.image = nil
-        descriptionLabel.text = nil
-        itemTitle.text = nil
-        setFallBackFaviconVisibility(isHidden: false)
-        applyTheme()
-
-        syncedDeviceImage.isHidden = false
-        descriptionContainer.addArrangedViewToTop(syncedDeviceImage)
     }
 
     // MARK: - Helpers
@@ -236,25 +247,63 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         fallbackFaviconBackground.isHidden = isHidden
         fallbackFaviconImage.isHidden = isHidden
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        heroImage.image = nil
+        syncedDeviceImage.image = nil
+        fallbackFaviconImage.image = nil
+        descriptionLabel.text = nil
+        itemTitle.text = nil
+        setFallBackFaviconVisibility(isHidden: false)
+        applyTheme()
+
+        syncedDeviceImage.isHidden = false
+//        tempView.addSubview(syncedDeviceImage)
+//        descriptionContainer.addArrangedViewToTop(tempView)
+        descriptionContainer.backgroundColor = .cyan
+        itemTitle.backgroundColor = .purple
+//        syncInfoDescriptionContainer.addArrangedSubview(itemTitle)
+        itemTitleContainer.backgroundColor = .systemPink
+        syncInfoDescriptionContainer.addArrangedSubview(itemTitleContainer)
+        syncInfoDescriptionContainer.backgroundColor = .yellow
+        syncInfoDescriptionContainer.addArrangedSubview(descriptionContainer)
+        syncInfoContainer.addArrangedSubview(imageContainer)
+        syncInfoContainer.addArrangedSubview(syncInfoDescriptionContainer)
+        syncInfoContainer.backgroundColor = .orange
+    }
 
     private func setupLayout() {
         setupShadow()
 
         fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
         imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
-        descriptionContainer.addArrangedSubview(syncedDeviceImage)
+        syncDeviceImageContainer.addSubview(syncedDeviceImage)
+        itemTitleContainer.addSubview(itemTitle)
+        descriptionContainer.addArrangedSubview(syncDeviceImageContainer)
         descriptionContainer.addArrangedSubview(descriptionLabel)
+        
+//        syncInfoDescriptionContainer.addArrangedSubview(itemTitle)
+        syncInfoDescriptionContainer.addArrangedSubview(itemTitleContainer)
+        syncInfoDescriptionContainer.backgroundColor = .yellow
+        syncInfoDescriptionContainer.addArrangedSubview(descriptionContainer)
+        
+        syncInfoContainer.addArrangedSubview(imageContainer)
+        syncInfoContainer.addArrangedSubview(syncInfoDescriptionContainer)
+        
+        syncedDeviceImage.backgroundColor = .brown
+        descriptionLabel.backgroundColor = .green
         contentView.addSubviews(
             cardTitle,
             syncedTabsButton,
-            itemTitle,
             imageContainer,
-            descriptionContainer,
-            syncedTabTapTargetView)
-
-        itemTitleTopConstraint = itemTitle.topAnchor.constraint(
-            equalTo: syncedTabsButton.bottomAnchor,
-            constant: SyncedTabCell.UX.itemTitleTopAnchorConstant)
+            syncedTabTapTargetView,
+            syncInfoContainer,
+            syncInfoDescriptionContainer)
+//
+//        itemTitleTopConstraint = itemTitle.topAnchor.constraint(
+//            equalTo: syncedTabsButton.bottomAnchor,
+//            constant: SyncedTabCell.UX.itemTitleTopAnchorConstant)
 
         NSLayoutConstraint.activate([
             cardTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
@@ -265,15 +314,15 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             syncedTabsButton.leadingAnchor.constraint(equalTo: cardTitle.leadingAnchor, constant: 0),
             syncedTabsButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: 0),
 
-            itemTitleTopConstraint,
-            itemTitle.leadingAnchor.constraint(equalTo: imageContainer.trailingAnchor, constant: 16),
-            itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+//            itemTitleTopConstraint,
+//            itemTitle.leadingAnchor.constraint(equalTo: imageContainer.trailingAnchor, constant: 16),
+//            itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
             // Image container, hero image and fallback
             imageContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             imageContainer.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
             imageContainer.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
-            imageContainer.topAnchor.constraint(equalTo: itemTitle.topAnchor),
+            imageContainer.topAnchor.constraint(equalTo: topAnchor),
             imageContainer.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -24),
 
             heroImage.topAnchor.constraint(equalTo: imageContainer.topAnchor),
@@ -291,19 +340,49 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             fallbackFaviconImage.centerXAnchor.constraint(equalTo: fallbackFaviconBackground.centerXAnchor),
             fallbackFaviconImage.centerYAnchor.constraint(equalTo: fallbackFaviconBackground.centerYAnchor),
 
+            
             // Description container, it's image and label
-            descriptionContainer.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.bottomAnchor, constant: 8),
-            descriptionContainer.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
-            descriptionContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            descriptionContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
+//            descriptionContainer.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.bottomAnchor, constant: 8),
+//            descriptionContainer.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
+//            descriptionContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+//            descriptionContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
+            
+            // Sync info description container has title and description container
+//            syncInfoDescriptionContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+//            syncInfoDescriptionContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+//            syncInfoDescriptionContainer.topAnchor.constraint(equalTo: syncedTabsButton.bottomAnchor),
+//            syncInfoDescriptionContainer.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -24),
 
+            // Sync info container has the hero image and sync info description container
+            syncInfoContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            syncInfoContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            syncInfoContainer.topAnchor.constraint(equalTo: syncedTabsButton.bottomAnchor, constant: 24),
+            syncInfoContainer.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -16),
+
+
+
+            syncDeviceImageContainer.topAnchor.constraint(equalTo: descriptionContainer.topAnchor),
+            syncDeviceImageContainer.bottomAnchor.constraint(equalTo: descriptionContainer.bottomAnchor),
+            syncDeviceImageContainer.leadingAnchor.constraint(equalTo: descriptionContainer.leadingAnchor),
+            syncDeviceImageContainer.widthAnchor.constraint(equalToConstant: UX.syncedDeviceImageSize.width),
+            
+            itemTitleContainer.topAnchor.constraint(equalTo: syncInfoDescriptionContainer.topAnchor),
+//            tempView2.bottomAnchor.constraint(equalTo: syncInfoDescriptionContainer.bottomAnchor),
+            itemTitleContainer.leadingAnchor.constraint(equalTo: syncInfoDescriptionContainer.leadingAnchor),
+            itemTitleContainer.trailingAnchor.constraint(equalTo: syncInfoDescriptionContainer.trailingAnchor),
+            
             syncedDeviceImage.heightAnchor.constraint(equalToConstant: UX.syncedDeviceImageSize.height),
             syncedDeviceImage.widthAnchor.constraint(equalToConstant: UX.syncedDeviceImageSize.width),
+            syncedDeviceImage.topAnchor.constraint(equalTo: syncDeviceImageContainer.topAnchor, constant: 10),
+            syncedDeviceImage.leadingAnchor.constraint(equalTo: descriptionContainer.leadingAnchor, constant: 10),
 
-            syncedTabTapTargetView.topAnchor.constraint(equalTo: itemTitle.topAnchor, constant: -24),
+            syncedTabTapTargetView.topAnchor.constraint(equalTo: syncInfoContainer.topAnchor, constant: 0),
             syncedTabTapTargetView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             syncedTabTapTargetView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            syncedTabTapTargetView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            syncedTabTapTargetView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            
+            itemTitle.leadingAnchor.constraint(equalTo: itemTitleContainer.leadingAnchor, constant: 10),
+            itemTitle.topAnchor.constraint(equalTo: itemTitleContainer.topAnchor, constant: 10)
         ])
 
         syncedDeviceIconCenterConstraint = descriptionLabel.centerYAnchor.constraint(equalTo: syncedDeviceImage.centerYAnchor).priority(UILayoutPriority(999))
@@ -320,15 +399,18 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
-        syncedDeviceIconCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
-        syncedDeviceIconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
+        syncedDeviceIconCenterConstraint?.isActive = true //!contentSizeCategory.isAccessibilityCategory
+        syncedDeviceIconFirstBaselineConstraint?.isActive = false //contentSizeCategory.isAccessibilityCategory
+        syncInfoContainer.axis = contentSizeCategory.isAccessibilityCategory ? .vertical : .horizontal
+        
+//        var itemTitleTopAnchorConstant = SyncedTabCell.UX.itemTitleTopAnchorConstant
 
-        var itemTitleTopAnchorConstant = SyncedTabCell.UX.itemTitleTopAnchorConstant
-        let isPhoneInLandscape = UIDevice.current.userInterfaceIdiom == .phone && UIWindow.isLandscape
-        if traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
-            itemTitleTopAnchorConstant = SyncedTabCell.UX.itemTitleTopAnchorCompactPhoneConstant
-        }
-        itemTitleTopConstraint.constant = itemTitleTopAnchorConstant
+//        let isPhoneInLandscape = UIDevice.current.userInterfaceIdiom == .phone && UIWindow.isLandscape
+//        if traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
+//            itemTitleTopAnchorConstant = SyncedTabCell.UX.itemTitleTopAnchorCompactPhoneConstant
+//
+//        }
+//        itemTitleTopConstraint.constant = itemTitleTopAnchorConstant
 
         // Add blur
         if shouldAddBlur {
@@ -382,6 +464,8 @@ extension SyncedTabCell: Notifiable {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
+        case .DynamicFontChanged:
+            adjustLayout()
         default: break
         }
     }
