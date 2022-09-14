@@ -26,7 +26,7 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
     lazy var logoImage: UIImageView = .build { imageView in
-        imageView.image = UIImage(imageLiteralResourceName: "fxHomeHeaderLogoBall")
+        imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = a11y.logoImage
     }
@@ -88,11 +88,11 @@ extension HomeLogoHeaderCell: NotificationThemeable {
     func applyTheme() {
         let wallpaperManager = WallpaperManager()
         if let logoTextColor = wallpaperManager.currentWallpaper.logoTextColor {
-            logoTextImage.image = UIImage(imageLiteralResourceName: "fxHomeHeaderLogoText")
+            logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
                 .withRenderingMode(.alwaysTemplate)
             logoTextImage.tintColor = logoTextColor
         } else {
-            logoTextImage.image = UIImage(imageLiteralResourceName: "fxHomeHeaderLogoText")
+            logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
                 .withRenderingMode(.alwaysTemplate)
             logoTextImage.tintColor = LegacyThemeManager.instance.current.homePanel.topSiteHeaderTitle
         }
