@@ -63,31 +63,13 @@ class BookmarksPanelViewModel {
             return
         }
 
-        let newIndex = getNewIndex(from: destinationIndexPath.row)
-        _ = profile.places.updateBookmarkNode(guid: bookmarkNode.guid, position: UInt32(newIndex))
+        _ = profile.places.updateBookmarkNode(guid: bookmarkNode.guid, position: UInt32(destinationIndexPath.row))
 
         bookmarkNodes.remove(at: sourceIndexPath.row)
         bookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
     }
 
     // MARK: - Private
-
-    /// Since we have a Local Desktop folder that isn't referenced in A-S under the mobile folder, we need to account for this when saving bookmark index in A-S.
-    /// Index is calculated by inverting it inside the mobile folder. We also need to account for the local desktop folder spot it takes.
-    func getNewIndex(from index: Int) -> Int {
-        if bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID {
-            let mobileFolderIndex = bookmarkNodes.count - index - LocalDesktopFolder.numberOfRowsTaken
-            if mobileFolderIndex < 0 {
-                return 0
-            } else if mobileFolderIndex > bookmarkNodes.count {
-                return bookmarkNodes.count - LocalDesktopFolder.numberOfRowsTaken
-            }
-
-            return mobileFolderIndex
-        } else {
-            return index
-        }
-    }
 
     private func setupMobileFolderData(completion: @escaping () -> Void) {
         profile.places
@@ -100,8 +82,7 @@ class BookmarksPanelViewModel {
                 }
 
                 self.bookmarkFolder = mobileFolder
-                // Reversed since we want the newest mobile bookmarks at the top
-                self.bookmarkNodes = mobileFolder.fxChildren?.reversed() ?? []
+                self.bookmarkNodes = mobileFolder.fxChildren ?? []
 
                 let desktopFolder = LocalDesktopFolder()
                 self.bookmarkNodes.insert(desktopFolder, at: 0)
