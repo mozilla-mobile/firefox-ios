@@ -313,7 +313,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     private func displayWallpaperSelector() {
         let wallpaperManager = WallpaperManager(userDefaults: userDefaults)
         guard wallpaperManager.canOnboardingBeShown,
-              !(presentedViewController is ContextualHintViewController)
+              presentedViewController == nil
         else { return }
 
         self.dismissKeyboard()
