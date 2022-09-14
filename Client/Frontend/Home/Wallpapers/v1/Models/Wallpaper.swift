@@ -103,12 +103,13 @@ extension Wallpaper: Decodable {
 
         id = try values.decode(String.self, forKey: .id)
 
-        let textHexString = try values.decode(String.self, forKey: .textColor)
-        let cardHexString = try values.decode(String.self, forKey: .cardColor)
-        let logoHexString = try values.decode(String.self, forKey: .logoTextColor)
-
         // Returning `nil` if the strings aren't valid as we already handle nil cases
-        let getColorFrom: (String) -> UIColor? = { hexString in
+        let textHexString = try? values.decode(String.self, forKey: .textColor)
+        let cardHexString = try? values.decode(String.self, forKey: .cardColor)
+        let logoHexString = try? values.decode(String.self, forKey: .logoTextColor)
+
+        let getColorFrom: (String?) -> UIColor? = { hexString in
+            guard let hexString = hexString else { return nil }
             var colorInt: UInt64 = 0
             if Scanner(string: hexString).scanHexInt64(&colorInt) {
                 return UIColor(colorString: hexString)
