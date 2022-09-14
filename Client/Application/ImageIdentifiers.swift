@@ -37,6 +37,8 @@ public struct ImageIdentifiers {
     public static let findPrevious = "find_previous"
     public static let help = "help"
     public static let history = "menu-panel-History"
+    public static let homeHeaderLogoBall = "fxHomeHeaderLogoBall"
+    public static let homeHeaderLogoText = "fxHomeHeaderLogoText"
     public static let key = "key"
     public static let libraryBookmarks = "library-bookmark"
     public static let libraryDownloads = "library-downloads"

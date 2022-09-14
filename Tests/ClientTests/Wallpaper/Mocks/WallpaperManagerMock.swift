@@ -9,8 +9,9 @@ import Foundation
 class WallpaperManagerMock: WallpaperManagerInterface {
 
     var currentWallpaper: Wallpaper = Wallpaper(id: "fxDefault",
-                                                textColor: UIColor.green,
-                                                cardColor: .purple)
+                                                textColor: .green,
+                                                cardColor: .purple,
+                                                logoTextColor: .purple)
 
     var mockAvailableCollections = [WallpaperCollection]()
     var availableCollections: [WallpaperCollection] {

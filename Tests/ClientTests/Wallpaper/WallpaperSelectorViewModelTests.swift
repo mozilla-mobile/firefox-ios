@@ -97,13 +97,15 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         var wallpapersForClassic: [Wallpaper] {
             var wallpapers = [Wallpaper]()
             wallpapers.append(Wallpaper(id: "fxDefault",
-                                        textColor: UIColor.green,
-                                        cardColor: .purple))
+                                        textColor: .green,
+                                        cardColor: .purple,
+                                        logoTextColor: .purple))
 
             for _ in 0..<4 {
                 wallpapers.append(Wallpaper(id: "fxAmethyst",
-                                            textColor: UIColor.red,
-                                            cardColor: .purple))
+                                            textColor: .red,
+                                            cardColor: .purple,
+                                            logoTextColor: .purple))
             }
 
             return wallpapers
@@ -114,8 +116,9 @@ class WallpaperSelectorViewModelTests: XCTestCase {
             let rangeEnd = Int.random(in: 3...6)
             for _ in 0..<rangeEnd {
                 wallpapers.append(Wallpaper(id: "fxCerulean",
-                                            textColor: UIColor.purple,
-                                            cardColor: .purple))
+                                            textColor: .purple,
+                                            cardColor: .purple,
+                                            logoTextColor: .purple))
             }
 
             return wallpapers

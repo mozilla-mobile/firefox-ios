@@ -16,6 +16,7 @@
                     "id": "beachVibes",
                     "text-color": "I am a not a hex code",
                     "card-color": "I am a not a hex code",
+                    "logo-text-color": "I am a not a hex code",
                 }
             ]
         }

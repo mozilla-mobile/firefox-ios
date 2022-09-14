@@ -26,18 +26,6 @@ class HomeLogoHeaderViewModelTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(subject.numberOfItemsInSection(), 1)
         XCTAssertTrue(subject.isEnabled)
     }
-
-    func testConfigureOnTapAction() throws {
-        let subject = createSubject()
-
-        let cellBeforeConfig = HomeLogoHeaderCell(frame: CGRect.zero)
-        XCTAssertNil(cellBeforeConfig.logoButton.touchUpAction)
-
-        subject.onTapAction = { _ in }
-        let cellAfterConfig = try XCTUnwrap(subject.configure(HomeLogoHeaderCell(frame: CGRect.zero),
-                                                              at: IndexPath()) as? HomeLogoHeaderCell)
-        XCTAssertNotNil(cellAfterConfig.logoButton.touchUpAction)
-    }
 }
 
 extension HomeLogoHeaderViewModelTests {

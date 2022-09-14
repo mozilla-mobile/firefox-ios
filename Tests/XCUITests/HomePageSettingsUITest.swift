@@ -142,7 +142,6 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(NewTabScreen)
         app.buttons["Done"].tap()
 
-        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.logoButton])
         waitForNoExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         waitForNoExistence(app.collectionViews.cells.staticTexts["YouTube"])
     }
