@@ -186,6 +186,7 @@ class HomePanelColor {
     var topSiteDomain: UIColor { return UIColor.Photon.DarkGrey90 }
     var topSitePin: UIColor { return UIColor.Photon.DarkGrey05 }
     var topSitesContainerView: UIColor { return .white }
+    var emptyTopSitesBorder: UIColor { return UIColor.Photon.DarkGrey40 }
 
     var shortcutBackground: UIColor { return .white }
     var shortcutShadowColor: CGColor { return UIColor(red: 0.23, green: 0.22, blue: 0.27, alpha: 1.0).cgColor }

@@ -120,8 +120,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
 
-        applyTheme()
         setupLayout()
+        applyTheme()
 
         setupNotifications(forObserver: self, observing: [.DisplayThemeChanged,
                                                           .WallpaperDidChange])
