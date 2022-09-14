@@ -51,19 +51,19 @@ extension UIView {
     /// using the desired blur style.
     ///
     /// - Parameter style: The strength of the blur desired
-    func addBlurEffectWithClearBackgroundAndClipping(using style: UIBlurEffect.Style) {
-        guard !UIAccessibility.isReduceTransparencyEnabled, shouldAddBlur else { return }
+    func addBlurEffectWithClearBackgroundAndClipping(using style: UIBlurEffect.Style) -> UIVisualEffectView? {
+        guard !UIAccessibility.isReduceTransparencyEnabled, shouldAddBlur else { return nil }
 
         clipsToBounds = true
         backgroundColor = .clear
-        addBlurEffect(using: style)
+        return addBlurEffect(using: style)
     }
 
     /// Shortcut to set a blur effect on a view, given a specified style of blur desired.
     ///
     /// - Parameter style: The strength of the blur desired
-    func addBlurEffect(using style: UIBlurEffect.Style) {
-        guard !UIAccessibility.isReduceTransparencyEnabled else { return }
+    func addBlurEffect(using style: UIBlurEffect.Style) -> UIVisualEffectView? {
+        guard !UIAccessibility.isReduceTransparencyEnabled else { return nil }
 
         let blurEffect = UIBlurEffect(style: style)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -78,6 +78,8 @@ extension UIView {
             blurEffectView.topAnchor.constraint(equalTo: topAnchor),
             blurEffectView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+
+        return blurEffectView
     }
 
     /// Performs a deep copy of the view. Does not copy constraints.

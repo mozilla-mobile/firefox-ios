@@ -9,7 +9,6 @@ struct RecentlySavedCellViewModel {
     let site: Site
     var heroImage: UIImage?
     var favIconImage: UIImage?
-    var shouldAddBlur: Bool
 }
 
 class RecentlySavedViewModel {
@@ -31,12 +30,6 @@ class RecentlySavedViewModel {
     var headerButtonAction: ((UIButton) -> Void)?
 
     weak var delegate: HomepageDataModelDelegate?
-
-    var shouldAddBlur: Bool {
-        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
-
-        return wallpaperManager.currentWallpaper.type != .defaultWallpaper
-    }
 
     init(profile: Profile,
          isZeroSearch: Bool = false,
@@ -143,8 +136,7 @@ extension RecentlySavedViewModel: HomepageSectionHandler {
 
             let viewModel = RecentlySavedCellViewModel(site: site,
                                                        heroImage: recentlySavedDataAdaptor.getHeroImage(forSite: site),
-                                                       favIconImage: recentlySavedDataAdaptor.getFaviconImage(forSite: site),
-                                                       shouldAddBlur: shouldAddBlur)
+                                                       favIconImage: recentlySavedDataAdaptor.getFaviconImage(forSite: site))
             recentlySavedCell.configure(viewModel: viewModel)
         }
 

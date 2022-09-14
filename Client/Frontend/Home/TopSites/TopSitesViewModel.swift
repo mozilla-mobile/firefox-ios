@@ -10,7 +10,7 @@ class TopSitesViewModel {
 
     struct UX {
         static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
-        static let cellEstimatedSize: CGSize = CGSize(width: 100, height: 120)
+        static let cellEstimatedSize: CGSize = CGSize(width: 100, height: 87)
     }
 
     weak var delegate: HomepageDataModelDelegate?
@@ -167,11 +167,12 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: sectionDimension.numberOfTilesPerRow)
         let section = NSCollectionLayoutSection(group: group)
 
-        let leadingInset = HomepageViewModel.UX.topSiteLeadingInset(traitCollection: traitCollection)
+        let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                         leading: leadingInset,
                                                         bottom: HomepageViewModel.UX.spacingBetweenSections - TopSiteItemCell.UX.bottomSpace,
-                                                        trailing: 0)
+                                                        trailing: leadingInset)
+        section.interGroupSpacing = 8
 
         return section
     }

@@ -120,6 +120,8 @@ private class DarkHomePanelColor: HomePanelColor {
     override var topSiteDomain: UIColor { return UIColor.Photon.LightGrey05 }
     override var topSitePin: UIColor { return UIColor.Photon.LightGrey05 }
     override var topSitesBackground: UIColor { return UIColor.Photon.DarkGrey60 }
+    override var topSitesContainerView: UIColor { return UIColor.Photon.DarkGrey40 }
+    override var emptyTopSitesBorder: UIColor { return .white }
 
     override var shortcutBackground: UIColor { return UIColor.Photon.DarkGrey30 }
     override var shortcutShadowColor: CGColor { return UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.0).cgColor }
