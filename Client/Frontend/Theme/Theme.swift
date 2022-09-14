@@ -68,4 +68,7 @@ protocol ThemeColourPalette {
     var borderAccent: UIColor { get }
     var borderAccentNonOpaque: UIColor { get }
     var borderAccentPrivate: UIColor { get }
+
+    // MARK: - Shadow
+    var shadow: UIColor { get }
 }
