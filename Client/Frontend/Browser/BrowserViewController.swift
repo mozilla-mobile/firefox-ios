@@ -923,6 +923,13 @@ class BrowserViewController: UIViewController {
         homepageViewController?.reloadView()
         NotificationCenter.default.post(name: .ShowHomepage, object: nil)
 
+        let wallpaperOnboardingClosure = {
+            // Display wallpaper onboarding if needed when homepage appears
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
+                self?.homepageViewController?.displayWallpaperSelector()
+            }
+        }
+
         UIView.animate(
             withDuration: 0.2,
             animations: { () -> Void in
@@ -931,6 +938,7 @@ class BrowserViewController: UIViewController {
                 guard finished else { return }
                 self.webViewContainer.accessibilityElementsHidden = true
                 UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
+                wallpaperOnboardingClosure()
             })
 
         // Make sure reload button is hidden on homepage
