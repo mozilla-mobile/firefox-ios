@@ -86,7 +86,7 @@ class WallpaperSettingsViewModel {
             descriptionA11yIdentifier: "\(a11yIds.collectionDescription)_\(sectionIndex)",
             buttonTitle: buttonTitle,
             buttonA11yIdentifier: "\(a11yIds.collectionButton)_\(sectionIndex)",
-            buttonAction: buttonAction)
+            buttonAction: collection.learnMoreUrl != nil ? buttonAction : nil)
     }
 
     func updateSectionLayout(for traitCollection: UITraitCollection) {
