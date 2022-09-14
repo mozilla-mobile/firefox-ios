@@ -17,6 +17,7 @@ class ManageFxAccountSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
+        // TODO: Laurie - textPrimary
         super.init(title: NSAttributedString(string: .FxAManageAccount, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
@@ -33,6 +34,7 @@ class DisconnectSetting: Setting {
     override var textAlignment: NSTextAlignment { return .center }
 
     override var title: NSAttributedString? {
+        // TODO: Laurie - textWarning
         return NSAttributedString(string: .SettingsDisconnectSyncButton, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.destructiveRed])
     }
 

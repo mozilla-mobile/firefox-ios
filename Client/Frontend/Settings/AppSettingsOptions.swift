@@ -16,6 +16,7 @@ private var DebugSettingsClickCount: Int = 0
 private var disclosureIndicator: UIImageView {
     let disclosureIndicator = UIImageView()
     disclosureIndicator.image = UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
+    // TODO: Laurie - actionSecondary
     disclosureIndicator.tintColor = UIColor.theme.tableView.accessoryViewTint
     disclosureIndicator.sizeToFit()
     return disclosureIndicator
@@ -27,6 +28,7 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         return NSAttributedString(string: .Settings.Sync.ButtonTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -41,6 +43,7 @@ class ConnectSetting: WithoutAccountSetting {
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
         cell.imageView?.image = UIImage.templateImageNamed("FxA-Default")
+        // TODO: Laurie - textDisabled
         cell.imageView?.tintColor = UIColor.theme.tableView.disabledRowText
         cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.size.width)! / 2
         cell.imageView?.layer.masksToBounds = true
@@ -54,6 +57,7 @@ class SyncNowSetting: WithAccountSetting {
     let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")
     let syncIcon: UIImage? = {
         let image = UIImage(named: "FxA-Sync")
+        // TODO: Laurie - iconPrimary
         return LegacyThemeManager.instance.currentName == .dark ? image?.tinted(withColor: .white) : image
     }()
 
@@ -76,13 +80,16 @@ class SyncNowSetting: WithAccountSetting {
             return NSAttributedString(
                 string: .FxANoInternetConnection,
                 attributes: [
+                    // TODO: Laurie - textWarning
                     NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.errorText,
                     NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultMediumFont
                 ]
             )
         }
 
+        // TODO: Laurie - textPrimary
         let syncText = UIColor.theme.tableView.syncText
+        // TODO: Laurie - textSecondary
         let headerLightText = UIColor.theme.tableView.headerTextLight
         return NSAttributedString(
             string: .FxASyncNow,
@@ -95,6 +102,7 @@ class SyncNowSetting: WithAccountSetting {
 
     fileprivate let syncingTitle = NSAttributedString(
         string: .SyncingMessageWithEllipsis,
+        // TODO: Laurie - textPrimary
         attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText,
                      NSAttributedString.Key.font: UIFont.systemFont(
                         ofSize: DynamicFontHelper.defaultHelper.DefaultStandardFontSize,
@@ -138,12 +146,14 @@ class SyncNowSetting: WithAccountSetting {
             return NSAttributedString(
                 string: message,
                 attributes: [
+                    // TODO: Laurie - textWarning
                     NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.errorText,
                     NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFont])
         case .warning(let message):
             return  NSAttributedString(
                 string: message,
                 attributes: [
+                    // TODO: Laurie - textWarning
                     NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.warningText,
                     NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFont])
         case .inProgress:
@@ -158,6 +168,7 @@ class SyncNowSetting: WithAccountSetting {
 
         let formattedLabel = timestampFormatter.string(from: Date.fromTimestamp(timestamp))
         let attributedString = NSMutableAttributedString(string: formattedLabel)
+        // TODO: Laurie - textSecondary
         let attributes = [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)]
         let range = NSRange(location: 0, length: attributedString.length)
         attributedString.setAttributes(attributes, range: range)
@@ -182,6 +193,7 @@ class SyncNowSetting: WithAccountSetting {
         let troubleshootButton = UIButton(type: .roundedRect)
         troubleshootButton.setTitle(.FirefoxSyncTroubleshootTitle, for: .normal)
         troubleshootButton.addTarget(self, action: #selector(self.troubleshoot), for: .touchUpInside)
+        // TODO: Laurie - actionPrimary
         troubleshootButton.tintColor = UIColor.theme.tableView.rowActionAccessory
         troubleshootButton.titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
         troubleshootButton.sizeToFit()
@@ -319,6 +331,7 @@ class AccountStatusSetting: WithAccountSetting {
                 string: displayName,
                 attributes: [
                     NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold,
+                    // TODO: Laurie - textPrimary
                     NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
         }
 
@@ -327,6 +340,7 @@ class AccountStatusSetting: WithAccountSetting {
                 string: email,
                 attributes: [
                     NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold,
+                    // TODO: Laurie - textPrimary
                     NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
         }
 
@@ -336,9 +350,10 @@ class AccountStatusSetting: WithAccountSetting {
     override var status: NSAttributedString? {
         if RustFirefoxAccounts.shared.isActionNeeded {
             let string: String = .FxAAccountVerifyPassword
-            let orange = UIColor.theme.tableView.warningText
+            // TODO: Laurie - textWarning
+            let color = UIColor.theme.tableView.warningText
             let range = NSRange(location: 0, length: string.count)
-            let attrs = [NSAttributedString.Key.foregroundColor: orange]
+            let attrs = [NSAttributedString.Key.foregroundColor: color]
             let res = NSMutableAttributedString(string: string)
             res.setAttributes(attrs, range: range)
             return res
@@ -401,6 +416,7 @@ class HiddenSetting: Setting {
 class DeleteExportedDataSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
+        // TODO: Laurie - textPrimary
         return NSAttributedString(string: "Debug: delete exported databases", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -423,6 +439,7 @@ class DeleteExportedDataSetting: HiddenSetting {
 class ExportBrowserDataSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
+        // TODO: Laurie - textPrimary
         return NSAttributedString(string: "Debug: copy databases to app container", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -443,6 +460,7 @@ class ExportBrowserDataSetting: HiddenSetting {
 class ExportLogDataSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
+        // TODO: Laurie - textPrimary
         return NSAttributedString(string: "Debug: copy log files to app container", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -481,6 +499,7 @@ class FeatureSwitchSetting: BoolSetting {
 
 class ForceCrashSetting: HiddenSetting {
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         return NSAttributedString(string: "💥 Debug: Force Crash", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -491,6 +510,7 @@ class ForceCrashSetting: HiddenSetting {
 
 class ChangeToChinaSetting: HiddenSetting {
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         return NSAttributedString(string: "Debug: toggle China version (needs restart)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -504,6 +524,7 @@ class ChangeToChinaSetting: HiddenSetting {
 }
 
 class SlowTheDatabase: HiddenSetting {
+    // TODO: Laurie - textPrimary
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: simulate slow database operations", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
@@ -515,6 +536,7 @@ class SlowTheDatabase: HiddenSetting {
 
 class ForgetSyncAuthStateDebugSetting: HiddenSetting {
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         return NSAttributedString(
             string: "Debug: forget Sync auth state",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
@@ -529,6 +551,7 @@ class ForgetSyncAuthStateDebugSetting: HiddenSetting {
 class SentryIDSetting: HiddenSetting {
     let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: "SentryDeviceAppHash") ?? "0000000000000000000000000000000000000000"
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         return NSAttributedString(
             string: "Sentry ID: \(deviceAppHash)",
             attributes: [
@@ -563,6 +586,7 @@ class SentryIDSetting: HiddenSetting {
 class ShowEtpCoverSheet: HiddenSetting {
     let profile: Profile
 
+    // TODO: Laurie - textPrimary
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: ETP Cover Sheet On", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
@@ -591,6 +615,7 @@ class ExperimentsSettings: HiddenSetting {
 
 class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         let toNewStatus = featureFlags.isFeatureEnabled(.pullToRefresh, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle Pull to Refresh \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
@@ -605,6 +630,7 @@ class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
 
 class ResetWallpaperOnboardingPage: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         let seenStatus = UserDefaults.standard.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey) ? "SEEN" : "UNSEEN"
         return NSAttributedString(string: "Reset wallpaper onboarding sheet (\(seenStatus))",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
@@ -618,6 +644,7 @@ class ResetWallpaperOnboardingPage: HiddenSetting, FeatureFlaggable {
 
 class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         let toNewStatus = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
@@ -633,6 +660,7 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
 
 class ToggleHistoryGroups: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         let toNewStatus = featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(
             string: "Toggle history groups \(toNewStatus)",
@@ -652,6 +680,7 @@ class ResetContextualHints: HiddenSetting {
     override var accessibilityIdentifier: String? { return "ResetContextualHints.Setting" }
 
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         return NSAttributedString(
             string: "Reset all contextual hints",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
@@ -674,6 +703,7 @@ class OpenFiftyTabsDebugOption: HiddenSetting {
     override var accessibilityIdentifier: String? { return "OpenFiftyTabsOption.Setting" }
 
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         return NSAttributedString(string: "⚠️ Open 50 `mozilla.org` tabs ⚠️", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -695,6 +725,7 @@ class VersionSetting: Setting {
     }
 
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         return NSAttributedString(string: "\(AppName.shortName) \(AppInfo.appVersion) (\(AppInfo.buildNumber))", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -738,6 +769,7 @@ class VersionSetting: Setting {
 // Opens the license page in a new tab
 class LicenseAndAcknowledgementsSetting: Setting {
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         return NSAttributedString(string: .AppSettingsLicenses, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -754,6 +786,7 @@ class LicenseAndAcknowledgementsSetting: Setting {
 class AppStoreReviewSetting: Setting {
 
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         return NSAttributedString(string: .Settings.About.RateOnAppStore, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -765,6 +798,7 @@ class AppStoreReviewSetting: Setting {
 // Opens about:rights page in the content view controller
 class YourRightsSetting: Setting {
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         return NSAttributedString(string: .AppSettingsYourRights, attributes:
             [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
@@ -786,6 +820,7 @@ class ShowIntroductionSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
+        // TODO: Laurie - textPrimary
         super.init(title: NSAttributedString(string: .AppSettingsShowTour, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
@@ -798,6 +833,7 @@ class ShowIntroductionSetting: Setting {
 
 class SendFeedbackSetting: Setting {
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         return NSAttributedString(string: .AppSettingsSendFeedback, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -813,8 +849,10 @@ class SendFeedbackSetting: Setting {
 class SendAnonymousUsageDataSetting: BoolSetting {
     init(prefs: Prefs, delegate: SettingsDelegate?) {
         let statusText = NSMutableAttributedString()
+        // TODO: Laurie - textSecondary
         statusText.append(NSAttributedString(string: .SendUsageSettingMessage, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight]))
         statusText.append(NSAttributedString(string: " "))
+        // TODO: Laurie - actionPrimary
         statusText.append(NSAttributedString(string: .SendUsageSettingLink, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.highlightBlue]))
 
         super.init(
@@ -848,8 +886,10 @@ class SendAnonymousUsageDataSetting: BoolSetting {
 class StudiesToggleSetting: BoolSetting {
     init(prefs: Prefs, delegate: SettingsDelegate?) {
         let statusText = NSMutableAttributedString()
+        // TODO: Laurie - textSecondary
         statusText.append(NSAttributedString(string: .SettingsStudiesToggleMessage, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight]))
         statusText.append(NSAttributedString(string: " "))
+        // TODO: Laurie - actionPrimary
         statusText.append(NSAttributedString(string: .SettingsStudiesToggleLink, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.highlightBlue]))
 
         super.init(
@@ -881,6 +921,7 @@ class StudiesToggleSetting: BoolSetting {
 // Opens the SUMO page in a new tab
 class OpenSupportPageSetting: Setting {
     init(delegate: SettingsDelegate?) {
+        // TODO: Laurie - textPrimary
         super.init(title: NSAttributedString(string: .AppSettingsHelp, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
             delegate: delegate)
     }
@@ -908,6 +949,7 @@ class SearchSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
+        // TODO: Laurie - textPrimary
         super.init(title: NSAttributedString(string: .AppSettingsSearch, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
@@ -936,6 +978,7 @@ class LoginsSetting: Setting {
         self.settings = settings as? AppSettingsTableViewController
 
         super.init(
+            // TODO: Laurie - textPrimary
             title: NSAttributedString(
                 string: .Settings.Passwords.Title,
                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]
@@ -1014,6 +1057,7 @@ class ContentBlockerSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
+        // TODO: Laurie - textPrimary
         super.init(title: NSAttributedString(string: .SettingsTrackingProtectionSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
@@ -1037,6 +1081,7 @@ class ClearPrivateDataSetting: Setting {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
 
+        // TODO: Laurie - textPrimary
         let clearTitle: String = .SettingsDataManagementSectionName
         super.init(title: NSAttributedString(string: clearTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
@@ -1051,6 +1096,7 @@ class ClearPrivateDataSetting: Setting {
 
 class PrivacyPolicySetting: Setting {
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         return NSAttributedString(string: .AppSettingsPrivacyPolicy, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -1073,10 +1119,12 @@ class ChinaSyncServiceSetting: Setting {
     override var hidden: Bool { return !AppInfo.isChinaEdition }
 
     override var title: NSAttributedString? {
+        // TODO: Laurie - textPrimary
         return NSAttributedString(string: "本地同步服务", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override var status: NSAttributedString? {
+        // TODO: Laurie - textSecondary
         return NSAttributedString(string: "禁用后使用全球服务同步数据", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
     }
 
@@ -1088,6 +1136,7 @@ class ChinaSyncServiceSetting: Setting {
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
         let control = UISwitchThemed()
+        // TODO: Laurie - actionPrimary
         control.onTintColor = UIColor.theme.tableView.controlTint
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? AppInfo.isChinaEdition
@@ -1136,6 +1185,7 @@ class NewTabPageSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
+        // TODO: Laurie - textPrimary
         super.init(title: NSAttributedString(string: .SettingsNewTabSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
@@ -1161,7 +1211,7 @@ class HomeSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-
+        // TODO: Laurie - textPrimary
         super.init(title: NSAttributedString(string: .SettingsHomePageSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
@@ -1179,6 +1229,7 @@ class TabsSetting: Setting {
     override var accessibilityIdentifier: String? { return "TabsSetting" }
 
     init() {
+        // TODO: Laurie - textPrimary
         super.init(title: NSAttributedString(string: .Settings.SectionTitles.TabsTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
@@ -1198,6 +1249,7 @@ class SiriPageSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
+        // TODO: Laurie - textPrimary
         super.init(title: NSAttributedString(string: .SettingsSiriSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
@@ -1238,6 +1290,7 @@ class DefaultBrowserSetting: Setting {
     override var accessibilityIdentifier: String? { return "DefaultBrowserSettings" }
 
     init() {
+        // TODO: Laurie - actionPrimary
         super.init(title: NSAttributedString(string: String.DefaultBrowserMenuItem, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowActionAccessory]))
     }
 
@@ -1272,6 +1325,7 @@ class OpenWithSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
+        // TODO: Laurie - textPrimary
         super.init(title: NSAttributedString(string: .SettingsOpenWithSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
@@ -1288,6 +1342,7 @@ class AdvancedAccountSetting: HiddenSetting {
 
     override var accessibilityIdentifier: String? { return "AdvancedAccount.Setting" }
 
+    // TODO: Laurie - textPrimary
     override var title: NSAttributedString? {
         return NSAttributedString(string: .SettingsAdvancedAccountTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
@@ -1327,6 +1382,7 @@ class ThemeSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
+        // TODO: Laurie - textPrimary
         super.init(title: NSAttributedString(string: .SettingsDisplayThemeTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
@@ -1350,6 +1406,7 @@ class SearchBarSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.viewModel = SearchBarSettingsViewModel(prefs: settings.profile.prefs)
+        // TODO: Laurie - textPrimary
         super.init(title: NSAttributedString(string: viewModel.title,
                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }

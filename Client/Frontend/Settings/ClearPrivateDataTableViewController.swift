@@ -57,6 +57,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     fileprivate var clearButtonEnabled = true {
         didSet {
+            // TODO: Laurie - textWarning && textDisabled
             clearButton?.textLabel?.textColor = clearButtonEnabled ? UIColor.theme.general.destructiveRed : UIColor.theme.tableView.disabledRowText
         }
     }
@@ -84,6 +85,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         } else if indexPath.section == SectionToggles {
             cell.textLabel?.text = clearables[indexPath.item].clearable.label
             let control = UISwitchThemed()
+            // TODO: Laurie - actionPrimary
             control.onTintColor = UIColor.theme.tableView.controlTint
             control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
             control.isOn = toggles[indexPath.item]
@@ -94,6 +96,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             assert(indexPath.section == SectionButton)
             cell.textLabel?.text = .SettingsClearPrivateDataClearButton
             cell.textLabel?.textAlignment = .center
+            // TODO: Laurie - textWarning
             cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ClearPrivateData"

@@ -15,6 +15,7 @@ class SettingsLoadingView: UIView {
     lazy var indicator: UIActivityIndicatorView = {
         let isDarkTheme = LegacyThemeManager.instance.currentName == .dark
         let indicator = UIActivityIndicatorView(style: .medium)
+        // TODO: Laurie - spinner color? Asked Crystal
         indicator.color = isDarkTheme ? .white : .systemGray
         indicator.hidesWhenStopped = false
         return indicator
@@ -27,6 +28,7 @@ class SettingsLoadingView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(indicator)
+        // TODO: Laurie - layer1
         backgroundColor = UIColor.theme.tableView.headerBackground
         indicator.startAnimating()
     }

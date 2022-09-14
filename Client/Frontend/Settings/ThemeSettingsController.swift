@@ -24,6 +24,7 @@ class ThemeSettingsController: ThemedTableViewController {
     private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
 
     // TODO decide if this is themeable, or if it is being replaced by a different style of slider
+    // TODO: Laurie - formKnob
     private let deviceBrightnessIndicatorColor = UIColor(white: 182/255, alpha: 1.0)
 
     var isAutoBrightnessOn: Bool {
@@ -50,6 +51,7 @@ class ThemeSettingsController: ThemedTableViewController {
         super.viewDidLoad()
         title = .SettingsDisplayThemeTitle
         tableView.accessibilityIdentifier = "DisplayTheme.Setting.Options"
+        // TODO: Laurie - layer1
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
 
         tableView.register(ThemedTableSectionHeaderFooterView.self,
@@ -92,6 +94,7 @@ class ThemeSettingsController: ThemedTableViewController {
             label.text = .DisplayThemeSectionFooter
             label.numberOfLines = 0
             label.font = UIFont.systemFont(ofSize: UX.footerFontSize)
+            // TODO: Laurie - textSecondary
             label.textColor = UIColor.theme.tableView.headerTextLight
         }
         footer.addSubview(label)
@@ -156,6 +159,7 @@ class ThemeSettingsController: ThemedTableViewController {
     private func makeSlider(parent: UIView) -> UISlider {
         let size = CGSize(width: UX.moonSunIconSize, height: UX.moonSunIconSize)
         let images = [ImageIdentifiers.nightMode, "themeBrightness"].map { name in
+            // TODO: Laurie - layerLightGrey30??
             UIImage(imageLiteralResourceName: name).createScaled(size).tinted(withColor: UIColor.theme.browser.tint)
         }
 
@@ -187,6 +191,7 @@ class ThemeSettingsController: ThemedTableViewController {
             let control = UISwitchThemed()
 
             control.accessibilityIdentifier = "SystemThemeSwitchValue"
+            // TODO: Laurie - actionPrimary
             control.onTintColor = UIColor.theme.tableView.controlTint
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
             control.isOn = LegacyThemeManager.instance.systemThemeIsOn

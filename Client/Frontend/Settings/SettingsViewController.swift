@@ -29,6 +29,7 @@ class SettingsViewController: UIViewController {
     }
 
     @objc func updateTheme() {
+        // TODO: Laurie - layer1
         view.backgroundColor = theme.current.tableView.headerBackground
     }
 

@@ -91,6 +91,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             case ItemDefaultSuggestions:
                 cell.textLabel?.text = .SearchSettingsShowSearchSuggestions
                 let toggle = UISwitchThemed()
+                // TODO: Laurie - actionPrimary
                 toggle.onTintColor = UIColor.theme.tableView.controlTint
                 toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
                 toggle.isOn = model.shouldShowSearchSuggestions
@@ -108,6 +109,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 cell.showsReorderControl = true
 
                 let toggle = UISwitchThemed()
+                // TODO: Laurie - actionPrimary
                 toggle.onTintColor = UIColor.theme.tableView.controlTint
                 // This is an easy way to get from the toggle control to the corresponding index.
                 toggle.tag = index
@@ -200,6 +202,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             for subViewB in subViewA.subviews {
                 if let imageView = subViewB as? UIImageView {
                     imageView.image = imageView.image?.withRenderingMode(.alwaysTemplate)
+                    // TODO: Laurie - iconSecondary
                     imageView.tintColor = UIColor.theme.tableView.accessoryViewTint
                 }
             }

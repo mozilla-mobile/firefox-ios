@@ -73,6 +73,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         self.interstitialSpinnerView.startAnimating()
     }
 
+    // TODO: Laurie - White
     init(backgroundColor: UIColor = UIColor.Photon.White100, title: NSAttributedString? = nil) {
         interstitialBackgroundColor = backgroundColor
         settingsTitle = title
@@ -139,12 +140,14 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         view.backgroundColor = interstitialBackgroundColor
 
         let spinner = UIActivityIndicatorView(style: .medium)
+        // TODO: Laurie - spinner color? Asked Crystal
         spinner.color = .systemGray
         view.addSubview(spinner)
 
         let error = UILabel()
         if let _ = settingsTitle {
             error.text = .SettingsContentPageLoadError
+            // TODO: Laurie - textWarning
             error.textColor = UIColor.theme.tableView.errorText
             error.textAlignment = .center
         }

@@ -282,6 +282,7 @@ extension WallpaperSettingsViewController: NotificationThemeable, Notifiable {
 
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        // TODO: Laurie - layer5
         if theme == .dark {
             contentView.backgroundColor = UIColor.Photon.DarkGrey40
         } else {

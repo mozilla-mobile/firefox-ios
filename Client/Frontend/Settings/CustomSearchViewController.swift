@@ -32,6 +32,7 @@ class CustomSearchViewController: SettingsTableViewController {
     fileprivate var engineTitle = ""
     fileprivate lazy var spinnerView: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .medium)
+        // TODO: Laurie - spinner color? Asked Crystal
         spinner.color = .systemGray
         spinner.hidesWhenStopped = true
         return spinner
@@ -225,6 +226,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         }
 
         placeholderLabel.adjustsFontSizeToFitWidth = true
+        // TODO: Laurie - textDisabled? asked Crystal
         placeholderLabel.textColor = UIColor.theme.general.settingsTextPlaceholder
         placeholderLabel.text = placeholder
         placeholderLabel.isHidden = !textField.text.isEmpty
@@ -238,7 +240,9 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         }
         textField.autocorrectionType = .no
         textField.delegate = self
+        // TODO: Laurie - layer2
         textField.backgroundColor = UIColor.theme.tableView.rowBackground
+        // TODO: Laurie - textPrimary
         textField.textColor = UIColor.theme.tableView.rowText
         cell.isUserInteractionEnabled = true
         cell.accessibilityTraits = UIAccessibilityTraits.none
@@ -273,6 +277,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         placeholderLabel.isHidden = !textField.text.isEmpty
         settingDidChange?(textView.text)
+        // TODO: Laurie - textPrimary && textWarning
         let color = isValid(textField.text) ? UIColor.theme.tableView.rowText : UIColor.theme.general.destructiveRed
         textField.textColor = color
     }

@@ -36,7 +36,9 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         tableView = UITableView()
         tableView.dataSource = self
         tableView.delegate = self
+        // TODO: Laurie - layer4
         tableView.separatorColor = UIColor.theme.tableView.separator
+        // TODO: Laurie - layer1
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
@@ -89,6 +91,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         case .clearButton:
             cell.textLabel?.text = viewModel.clearButtonTitle
             cell.textLabel?.textAlignment = .center
+            // TODO: Laurie - textWarning
             cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ClearAllWebsiteData"

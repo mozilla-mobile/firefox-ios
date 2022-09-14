@@ -58,6 +58,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         let header = UILabel()
         header.text = .TPAccessoryInfoBlocksTitle
         header.font = DynamicFontHelper.defaultHelper.DefaultMediumBoldFont
+        // TODO: Laurie - textSecondary
         header.textColor = UIColor.theme.tableView.headerTextLight
 
         stack.addArrangedSubview(UIView())
@@ -76,6 +77,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         topStack.layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
         topStack.isLayoutMarginsRelativeArrangement = true
 
+        // TODO: Laurie - layer4
         sep.backgroundColor = UIColor.theme.tableView.separator
         sep.snp.makeConstraints { make in
             make.height.equalTo(0.5)
@@ -125,6 +127,7 @@ class TPAccessoryInfo: ThemedTableViewController {
                 cell.textLabel?.text = .TPCategoryDescriptionContentTrackers
             }
         }
+        // TODO: Laurie - iconPrimary
         cell.imageView?.tintColor = UIColor.theme.tableView.rowText
         if indexPath.row == 1 {
             cell.textLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
@@ -132,6 +135,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         cell.textLabel?.numberOfLines = 0
         cell.detailTextLabel?.numberOfLines = 0
         cell.backgroundColor = .clear
+        // TODO: Laurie - textPrimary
         cell.textLabel?.textColor = UIColor.theme.tableView.rowDetailText
         cell.selectionStyle = .none
         return cell
@@ -240,6 +244,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         let font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
         var attributes = [NSAttributedString.Key: AnyObject]()
         attributes[NSAttributedString.Key.font] = font
+        // TODO: Laurie - actionPrimary
         attributes[NSAttributedString.Key.foregroundColor] = UIColor.theme.general.highlightBlue
 
         let button = UIButton()

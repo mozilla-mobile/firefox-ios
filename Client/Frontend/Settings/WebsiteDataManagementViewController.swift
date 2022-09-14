@@ -115,7 +115,9 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         tableView = UITableView()
         tableView.dataSource = self
         tableView.delegate = self
+        // TODO: Laurie - layer4
         tableView.separatorColor = UIColor.theme.tableView.separator
+        // TODO: Laurie - layer1
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
@@ -192,6 +194,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
             }
         case .showMore:
             cell.textLabel?.text = .SettingsWebsiteDataShowMoreButton
+            // TODO: Laurie - actionPrimary && textDisabled
             cell.textLabel?.textColor = showMoreButtonEnabled ? UIColor.theme.general.highlightBlue : UIColor.gray
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
@@ -199,6 +202,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         case .clearButton:
             cell.textLabel?.text = viewModel.clearButtonTitle
             cell.textLabel?.textAlignment = .center
+            // TODO: Laurie - textWarning
             cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ClearAllWebsiteData"

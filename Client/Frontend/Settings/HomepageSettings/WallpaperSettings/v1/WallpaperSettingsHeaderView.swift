@@ -145,6 +145,10 @@ extension WallpaperSettingsHeaderView: NotificationThemeable, Notifiable {
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
 
+        // TODO: Laurie
+        // contentStackView.backgroundColor = layer5
+        // titleLabel.textColor = textSecondary
+        // descriptionLabel.textColor = textSecondary
         if theme == .dark {
             contentStackView.backgroundColor = UIColor.Photon.DarkGrey40
             titleLabel.textColor = UIColor.Photon.Grey10

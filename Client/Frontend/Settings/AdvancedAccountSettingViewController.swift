@@ -71,6 +71,7 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
         let prefs = profile.prefs
 
+        // TODO: Laurie - textPrimary
         let useStage = BoolSetting(
             prefs: prefs,
             prefKey: PrefsKeys.UseStageServer,

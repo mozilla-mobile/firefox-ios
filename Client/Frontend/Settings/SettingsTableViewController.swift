@@ -17,6 +17,7 @@ extension UILabel {
         let attribs = attributed.attributes(at: 0, effectiveRange: nil)
         if attribs[NSAttributedString.Key.foregroundColor] == nil {
             // If the text color attribute isn't set, use the table view row text color.
+            // TODO: Laurie - textPrimary
             textColor = UIColor.theme.tableView.rowText
         } else {
             textColor = nil
@@ -105,6 +106,7 @@ class Setting: NSObject {
         cell.layoutMargins = .zero
 
         let backgroundView = UIView()
+        // TODO: Laurie - actionSecondaryHover
         backgroundView.backgroundColor = UIColor.theme.tableView.selectedBackground
         backgroundView.bounds = cell.bounds
         cell.selectedBackgroundView = backgroundView
@@ -226,8 +228,10 @@ class BoolSetting: Setting, FeatureFlaggable {
     ) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
+            // TODO: Laurie - textSecondary
             statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
         }
+        // TODO: Laurie - textPrimary
         self.init(
             prefs: prefs,
             prefKey: prefKey,
@@ -260,6 +264,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         super.onConfigureCell(cell)
 
         let control = UISwitchThemed()
+        // TODO: Laurie - actionPrimary
         control.onTintColor = UIConstants.SystemBlueColor
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
@@ -449,12 +454,15 @@ class StringSetting: Setting, UITextFieldDelegate {
         if let id = accessibilityIdentifier {
             textField.accessibilityIdentifier = id + "TextField"
         }
+        // TODO: Laurie - textDisabled?
         let placeholderColor = UIColor.theme.general.settingsTextPlaceholder
         textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: placeholderColor])
 
+        // TODO: Laurie - actionPrimary
         cell.tintColor = self.persister.readPersistedValue() != nil ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
         textField.textAlignment = .center
         textField.delegate = self
+        // TODO: Laurie - actionPrimary
         textField.tintColor = UIColor.theme.tableView.rowActionAccessory
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         cell.isUserInteractionEnabled = true
@@ -493,6 +501,7 @@ class StringSetting: Setting, UITextFieldDelegate {
     }
 
     @objc func textFieldDidChange(_ textField: UITextField) {
+        // TODO: Laurie - textPrimary && textWarning
         let color = isValid(textField.text) ? UIColor.theme.tableView.rowText : UIColor.theme.general.destructiveRed
         textField.textColor = color
     }
@@ -549,6 +558,7 @@ class CheckmarkSetting: Setting {
 
         if checkmarkStyle == .rightSide {
             cell.accessoryType = .checkmark
+            // TODO: Laurie - actionPrimary
             cell.tintColor = isChecked() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
         } else {
             let window = UIWindow.keyWindow
@@ -557,8 +567,10 @@ class CheckmarkSetting: Setting {
             cell.indentationLevel = 1
 
             cell.accessoryType = .detailButton
+            // TODO: Laurie - actionPrimary
             cell.tintColor = UIColor.theme.tableView.rowActionAccessory // Sets accessory color only
 
+            // TODO: Laurie - actionPrimary
             let checkColor = isChecked() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
             let check = UILabel()
             cell.contentView.addSubview(check)
@@ -573,6 +585,7 @@ class CheckmarkSetting: Setting {
             check.textColor = checkColor
 
             let result = NSMutableAttributedString()
+            // TODO: Laurie - textPrimary
             if let str = title?.string {
                 result.append(NSAttributedString(string: str, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
             }
@@ -616,8 +629,10 @@ class ButtonSetting: Setting {
         super.onConfigureCell(cell)
 
         if isEnabled?() ?? true {
+            // TODO: Laurie - textWarning && actionPrimary
             cell.textLabel?.textColor = destructive ? UIColor.theme.general.destructiveRed : UIColor.theme.general.highlightBlue
         } else {
+            // TODO: Laurie - textDisabled
             cell.textLabel?.textColor = UIColor.theme.tableView.disabledRowText
         }
         cell.textLabel?.snp.makeConstraints({ make in
@@ -777,6 +792,7 @@ class SettingsTableViewController: ThemedTableViewController {
         if let setting = section[indexPath.row] {
             let cell = ThemedTableViewCell(style: setting.style, reuseIdentifier: nil)
             setting.onConfigureCell(cell)
+            // TODO: Laurie - white
             cell.backgroundColor = UIColor.theme.tableView.rowBackground
             return cell
         }

@@ -31,7 +31,9 @@ extension ThemedNavigationController: NotificationThemeable {
     private func setupNavigationBarAppearance() {
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithDefaultBackground()
+        // TODO: Laurie - layer1
         standardAppearance.backgroundColor = UIColor.theme.tableView.headerBackground
+        // TODO: Laurie - layer4. not sure
         standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.theme.tableView.headerTextDark]
 
         navigationBar.standardAppearance = standardAppearance
@@ -40,6 +42,7 @@ extension ThemedNavigationController: NotificationThemeable {
         if #available(iOS 15.0, *) {
             navigationBar.compactScrollEdgeAppearance = standardAppearance
         }
+        // TODO: Laurie - actionPrimary
         navigationBar.tintColor = UIColor.theme.general.controlTint
     }
     func applyTheme() {

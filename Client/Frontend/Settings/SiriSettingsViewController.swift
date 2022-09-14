@@ -34,6 +34,7 @@ class SiriOpenURLSetting: Setting {
     override var accessibilityIdentifier: String? { return "SiriSettings" }
 
     init(settings: SettingsTableViewController) {
+        // TODO: Laurie - textPrimary
         super.init(title: NSAttributedString(string: .SettingsSiriOpenURL, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
