@@ -242,8 +242,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     private func adjustLayout() {
         // If blur is disabled set background color
         if shouldApplyBlur {
-            blurEffectView = rootContainer.
-                addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+            blurEffectView = rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             blurEffectView?.removeFromSuperview()
             blurEffectView = nil
