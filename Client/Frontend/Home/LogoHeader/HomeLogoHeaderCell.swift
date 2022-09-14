@@ -8,9 +8,18 @@ import UIKit
 
 class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     private struct UX {
-        static let logoImageSize: CGFloat = 40
-        static let textImageWidth: CGFloat = 165.5
-        static let textImageHeight: CGFloat = 17.5
+        struct Logo {
+            static let imageSize: CGFloat = 40
+            static let topConstant: CGFloat = 32
+            static let bottomConstant: CGFloat = -10
+        }
+
+        struct TextImage {
+            static let imageWidth: CGFloat = 165.5
+            static let imageHeight: CGFloat = 17.5
+            static let leadingConstant: CGFloat = 9
+            static let trailingConstant: CGFloat = -15
+        }
     }
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
@@ -55,16 +64,20 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         contentView.addSubview(logoTextImage)
 
         NSLayoutConstraint.activate([
-            logoImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 32),
-            logoImage.widthAnchor.constraint(equalToConstant: UX.logoImageSize),
-            logoImage.heightAnchor.constraint(equalToConstant: UX.logoImageSize),
+            logoImage.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                           constant: UX.Logo.topConstant),
+            logoImage.widthAnchor.constraint(equalToConstant: UX.Logo.imageSize),
+            logoImage.heightAnchor.constraint(equalToConstant: UX.Logo.imageSize),
             logoImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            logoImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            logoImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                              constant: UX.Logo.bottomConstant),
 
-            logoTextImage.widthAnchor.constraint(equalToConstant: UX.textImageWidth),
-            logoTextImage.heightAnchor.constraint(equalToConstant: UX.textImageHeight),
-            logoTextImage.leadingAnchor.constraint(equalTo: logoImage.trailingAnchor, constant: 9),
-            logoTextImage.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -15),
+            logoTextImage.widthAnchor.constraint(equalToConstant: UX.TextImage.imageWidth),
+            logoTextImage.heightAnchor.constraint(equalToConstant: UX.TextImage.imageHeight),
+            logoTextImage.leadingAnchor.constraint(equalTo: logoImage.trailingAnchor,
+                                                   constant: UX.TextImage.leadingConstant),
+            logoTextImage.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor,
+                                                    constant: UX.TextImage.trailingConstant),
             logoTextImage.centerYAnchor.constraint(equalTo: logoImage.centerYAnchor)
         ])
     }
