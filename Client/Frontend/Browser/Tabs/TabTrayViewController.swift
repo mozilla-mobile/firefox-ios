@@ -36,7 +36,7 @@ class TabTrayViewController: UIViewController, Themeable {
     var nimbus: FxNimbus
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    
+
     // MARK: - UI Elements
     // Buttons & Menus
     lazy var deleteButton: UIBarButtonItem = {
