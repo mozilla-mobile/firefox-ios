@@ -241,7 +241,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
         // Add blur
         if shouldAddBlur {
-            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+            _ = contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
             UIColor.Photon.DarkGrey40 : .white

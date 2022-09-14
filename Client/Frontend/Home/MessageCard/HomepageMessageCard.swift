@@ -193,7 +193,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     func applyTheme() {
 
         if let shouldAddBlur = viewModel?.shouldAddBlur, shouldAddBlur {
-            cardView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+            _ = cardView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             cardView.backgroundColor = LegacyThemeManager.instance.current.homeTabBanner.backgroundColor
         }

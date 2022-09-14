@@ -10,7 +10,7 @@ struct HistoryHighlightsModel {
     let title: String
     let description: String?
     let favIconImage: UIImage?
-    let corners: UIRectCorner?
+    let corners: CACornerMask?
     let hideBottomLine: Bool
     let isFillerCell: Bool
     let shouldAddShadow: Bool
@@ -25,7 +25,7 @@ struct HistoryHighlightsModel {
     init(title: String,
          description: String?,
          shouldHideBottomLine: Bool,
-         with corners: UIRectCorner? = nil,
+         with corners: CACornerMask? = nil,
          and heroImage: UIImage? = nil,
          andIsFillerCell: Bool = false,
          shouldAddShadow: Bool = false) {
@@ -41,7 +41,7 @@ struct HistoryHighlightsModel {
 
     // Filler cell init
     init(shouldHideBottomLine: Bool,
-         with corners: UIRectCorner? = nil,
+         with corners: CACornerMask? = nil,
          shouldAddShadow: Bool) {
 
         self.init(title: "",
@@ -340,15 +340,23 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
         return false
     }
 
-    private func determineCornerToRound(indexPath: IndexPath, totalItems: Int?) -> UIRectCorner {
-        guard let totalItems = totalItems else { return [] }
+    private func determineCornerToRound(indexPath: IndexPath, totalItems: Int?) -> CACornerMask? {
+        guard let totalItems = totalItems else { return nil }
 
-        var cornersToRound = UIRectCorner()
+        var cornersToRound = CACornerMask()
 
-        if isTopLeftCell(index: indexPath.row) { cornersToRound.insert(.topLeft) }
-        if isTopRightCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.topRight) }
-        if isBottomLeftCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.bottomLeft) }
-        if isBottomRightCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.bottomRight) }
+        if isTopLeftCell(index: indexPath.row) {
+            cornersToRound.insert(.layerMinXMinYCorner)
+        }
+
+        if isTopRightCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.layerMaxXMinYCorner)
+        }
+
+        if isBottomLeftCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.layerMinXMaxYCorner)
+        }
+
+        if isBottomRightCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.layerMaxXMaxYCorner)
+        }
 
         return cornersToRound
     }
@@ -392,7 +400,7 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
 
     private func configureIndividualHighlightCell(_ cell: UICollectionViewCell,
                                                   hideBottomLine: Bool,
-                                                  cornersToRound: UIRectCorner,
+                                                  cornersToRound: CACornerMask?,
                                                   shouldAddShadow: Bool,
                                                   item: HighlightItem) -> UICollectionViewCell {
 
@@ -418,7 +426,7 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
 
     private func configureGroupHighlightCell(_ cell: UICollectionViewCell,
                                              hideBottomLine: Bool,
-                                             cornersToRound: UIRectCorner,
+                                             cornersToRound: CACornerMask?,
                                              shouldAddShadow: Bool,
                                              item: HighlightItem) -> UICollectionViewCell {
 
@@ -438,7 +446,7 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
 
     private func configureFillerCell(_ cell: UICollectionViewCell,
                                      hideBottomLine: Bool,
-                                     cornersToRound: UIRectCorner,
+                                     cornersToRound: CACornerMask?,
                                      shouldAddShadow: Bool) -> UICollectionViewCell {
 
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }

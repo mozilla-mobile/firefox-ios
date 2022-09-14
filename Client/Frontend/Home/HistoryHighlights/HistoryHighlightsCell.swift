@@ -14,8 +14,14 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         static let shadowOffset: CGFloat = 2
     }
 
+    private var shouldApplyBlur: Bool {
+        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
+
+        return WallpaperManager().currentWallpaper.type != .defaultWallpaper
+    }
+
     // MARK: - UI Elements
-    var shadowViewLayer: CAShapeLayer?
+    private var blurEffectView: UIVisualEffectView?
 
     let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
@@ -26,16 +32,14 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 
     let itemTitle: UILabel = .build { label in
-        // Limiting max size since background/shadow of cell can't support self-sizing (shadow doesn't follow)
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   maxSize: 23)
+                                                                   size: 15)
         label.adjustsFontForContentSizeCategory = true
     }
 
     let itemDescription: UILabel = .build { label in
-        // Limiting max size since background/shadow of cell can't support self-sizing (shadow doesn't follow)
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   maxSize: 18)
+                                                                   size: 13)
         label.adjustsFontForContentSizeCategory = true
     }
 
@@ -97,20 +101,14 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         isFillerCell = options.isFillerCell
         accessibilityLabel = options.accessibilityLabel
 
-        if let corners = options.corners {
-            addRoundedCorners([corners], radius: UX.generalCornerRadius)
-        }
-
-        if options.shouldAddShadow {
-            addShadowLayer(cornersToRound: options.corners ?? UIRectCorner())
-        }
+        setupShadow(cornersToRound: options.corners)
         heroImage.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
+        adjustLayout()
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        shadowViewLayer?.removeFromSuperlayer()
         heroImage.image = nil
         itemDescription.isHidden = true
     }
@@ -138,43 +136,51 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         ])
     }
 
-    private func addShadowLayer(cornersToRound: UIRectCorner) {
-        let shadowLayer = CAShapeLayer()
+    private func setupShadow(cornersToRound: CACornerMask?) {
+        contentView.clipsToBounds = true
+        contentView.layer.maskedCorners = cornersToRound ?? .layerMaxXMinYCorner
+        contentView.layer.cornerRadius = UX.generalCornerRadius
 
-        shadowLayer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        shadowLayer.shadowOffset = CGSize(width: 0,
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                    cornerRadius: UX.generalCornerRadius).cgPath
+        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        contentView.layer.shadowOffset = CGSize(width: 0,
                                           height: UX.shadowOffset)
-        shadowLayer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
-        shadowLayer.shadowRadius = UX.shadowRadius
+        contentView.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+        contentView.layer.shadowRadius = UX.shadowRadius
 
-        let radiusSize = CGSize(width: UX.generalCornerRadius,
-                                height: UX.generalCornerRadius)
-        shadowLayer.shadowPath = UIBezierPath(roundedRect: bounds,
-                                              byRoundingCorners: cornersToRound,
-                                              cornerRadii: radiusSize).cgPath
-        shadowLayer.shouldRasterize = true
-        shadowLayer.rasterizationScale = UIScreen.main.scale
-
-        shadowViewLayer = shadowLayer
-        layer.insertSublayer(shadowLayer, at: 0)
     }
-}
 
-extension HistoryHighlightsCell {
-    func applyTheme() {
+    private func applyTheme() {
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
         heroImage.tintColor = UIColor.theme.homePanel.recentlyVisitedCellGroupImage
         bottomLine.backgroundColor = UIColor.theme.homePanel.recentlyVisitedCellBottomLine
+    }
+
+    private func adjustLayout() {
+        // If blur is disabled set background color
+        if shouldApplyBlur {
+            blurEffectView = contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            blurEffectView?.removeFromSuperview()
+            blurEffectView = nil
+            contentView.backgroundColor = LegacyThemeManager.instance.current.homePanel.topSitesContainerView
+            setupShadow(cornersToRound: nil)
+        }
     }
 }
 
 // MARK: - Notifiable
 extension HistoryHighlightsCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .DisplayThemeChanged:
+                self?.applyTheme()
+            case .WallpaperDidChange:
+                self?.adjustLayout()
+            default: break
+            }
         }
     }
 }

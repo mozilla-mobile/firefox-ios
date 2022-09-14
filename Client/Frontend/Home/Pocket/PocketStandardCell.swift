@@ -131,6 +131,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupLayout() {
+        contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.addSubviews(titleLabel, heroImageView)
         sponsoredStack.addArrangedSubview(sponsoredIcon)
         sponsoredStack.addArrangedSubview(sponsoredLabel)
