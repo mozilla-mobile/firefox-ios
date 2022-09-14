@@ -118,12 +118,12 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     }
 
     var clientRecordLastUpload: Timestamp {
-        set(value) {
-            self.prefs.setLong(value, forKey: "lastClientUpload")
-        }
-
         get {
             return self.prefs.unsignedLongForKey("lastClientUpload") ?? 0
+        }
+
+        set(value) {
+            self.prefs.setLong(value, forKey: "lastClientUpload")
         }
     }
 
