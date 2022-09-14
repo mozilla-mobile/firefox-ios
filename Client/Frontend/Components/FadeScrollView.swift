@@ -47,7 +47,10 @@ class FadeScrollView: UIScrollView, UIScrollViewDelegate {
                                      width: bounds.size.width,
                                      height: bounds.size.height)
         gradientLayer.colors = [topOpacity, opaqueColor, opaqueColor, bottomOpacity]
-        gradientLayer.locations = [0, NSNumber(floatLiteral: fadePercentage), NSNumber(floatLiteral: 1 - fadePercentage), 1]
+        gradientLayer.locations = [0,
+                                   NSNumber(value: fadePercentage),
+                                   NSNumber(value: 1 - fadePercentage),
+                                   1]
         maskLayer.addSublayer(gradientLayer)
 
         layer.mask = maskLayer
