@@ -164,8 +164,7 @@ private extension JumpBackInViewModel {
         let cellViewModel = JumpBackInCellViewModel(titleText: group.searchTerm.localizedCapitalized,
                                                     descriptionText: descriptionText,
                                                     favIconImage: faviconImage,
-                                                    heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site),
-                                                    shouldAddBlur: shouldAddBlur)
+                                                    heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site))
         cell.configure(viewModel: cellViewModel)
     }
 
@@ -177,8 +176,7 @@ private extension JumpBackInViewModel {
         let cellViewModel = JumpBackInCellViewModel(titleText: site.title,
                                                     descriptionText: descriptionText,
                                                     favIconImage: jumpBackInDataAdaptor.getFaviconImage(forSite: site),
-                                                    heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site),
-                                                    shouldAddBlur: shouldAddBlur)
+                                                    heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site))
         cell.configure(viewModel: cellViewModel)
     }
 
@@ -212,27 +210,27 @@ private extension JumpBackInViewModel {
         // Items
         let syncedTabItemSize = NSCollectionLayoutSize(
             widthDimension: groupWidth,
-            heightDimension: .estimated(JumpBackInViewModel.UX.syncedTabCellHeight))
+            heightDimension: .estimated(UX.syncedTabCellHeight))
         let syncedTabItem = NSCollectionLayoutItem(layoutSize: syncedTabItemSize)
 
         let jumpBackInItemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(JumpBackInViewModel.UX.jumpBackInCellHeight))
+            heightDimension: .estimated(UX.jumpBackInCellHeight))
         let jumpBackInItem = NSCollectionLayoutItem(layoutSize: jumpBackInItemSize)
 
         // Nested Group (Jump Back In)
         let nestedGroupSize = NSCollectionLayoutSize(widthDimension: groupWidth,
-                                                     heightDimension: .fractionalHeight(1))
+                                                     heightDimension: .estimated(UX.syncedTabCellHeight))
         let nestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: nestedGroupSize,
                                                            subitems: [jumpBackInItem, jumpBackInItem])
         nestedGroup.interItemSpacing = JumpBackInCell.UX.interItemSpacing
 
         // Main Group
-        let mainGroupHeight: CGFloat = JumpBackInViewModel.UX.syncedTabCellHeight
+        let mainGroupHeight: CGFloat = UX.syncedTabCellHeight
         let mainGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                    heightDimension: .estimated(mainGroupHeight))
 
-        let maxJumpBackInPerGroup = JumpBackInViewModel.UX.maxJumpBackInItemsPerGroup
+        let maxJumpBackInPerGroup = UX.maxJumpBackInItemsPerGroup
         let jumpBackInItems = jumpBackInList.itemsToDisplay
         let numberOfGroups = ceil(Double(jumpBackInItems) / Double(maxJumpBackInPerGroup))
         var subItems: [NSCollectionLayoutItem] = Array(repeating: nestedGroup, count: Int(numberOfGroups))
@@ -250,7 +248,7 @@ private extension JumpBackInViewModel {
     // compact layout with synced tab
     private func sectionWithSyncedTabCompact(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         // Items
-        let syncedTabCellHeight = JumpBackInViewModel.UX.syncedTabCellPortraitCompactHeight
+        let syncedTabCellHeight = UX.syncedTabCellPortraitCompactHeight
         let syncedTabItemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(syncedTabCellHeight))
@@ -258,13 +256,13 @@ private extension JumpBackInViewModel {
 
         let jumpBackInItemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(JumpBackInViewModel.UX.jumpBackInCellHeight))
+            heightDimension: .estimated(UX.jumpBackInCellHeight))
         let jumpBackInItem = NSCollectionLayoutItem(layoutSize: jumpBackInItemSize)
 
         // Main Group
         let groupWidth = sectionLayout.widthDimension
-        let groupHeight: CGFloat = syncedTabCellHeight + JumpBackInViewModel.UX.jumpBackInCellHeight
-        + JumpBackInCell.UX.interItemSpacing.spacing
+        let groupHeight: CGFloat = syncedTabCellHeight + UX.jumpBackInCellHeight
+            + JumpBackInCell.UX.interItemSpacing.spacing
         let groupSize = NSCollectionLayoutSize(widthDimension: groupWidth,
                                                heightDimension: .estimated(groupHeight))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize,
@@ -306,7 +304,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     }
 
     func numberOfItemsInSection() -> Int {
-        return jumpBackInList.itemsToDisplay + (hasSyncedTab ? JumpBackInViewModel.UX.maxDisplayedSyncedTabs : 0)
+        return jumpBackInList.itemsToDisplay + (hasSyncedTab ? UX.maxDisplayedSyncedTabs : 0)
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {

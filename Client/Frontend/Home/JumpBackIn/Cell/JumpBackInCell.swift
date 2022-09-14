@@ -14,7 +14,6 @@ struct JumpBackInCellViewModel {
     var accessibilityLabel: String {
         return "\(titleText), \(descriptionText)"
     }
-    var shouldAddBlur: Bool
 }
 
 // MARK: - JumpBackInCell
@@ -25,8 +24,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
         static let generalCornerRadius: CGFloat = 12
-        static let titleFontSize: CGFloat = 16 // Style subheadline - AX5
-        static let siteFontSize: CGFloat = 12 // Style caption1 - AX5
+        static let titleFontSize: CGFloat = 16
+        static let siteFontSize: CGFloat = 12
         static let stackViewShadowRadius: CGFloat = 4
         static let stackViewShadowOffset: CGFloat = 2
         static let heroImageSize =  CGSize(width: 108, height: 80)
@@ -98,6 +97,12 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     // MARK: - Variables
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
+    private var shouldBlurCell: Bool {
+        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
+
+        return WallpaperManager().currentWallpaper.type != .defaultWallpaper
+    }
+
     // MARK: - Inits
 
     override init(frame: CGRect) {
@@ -134,6 +139,12 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         descriptionContainer.addArrangedViewToTop(faviconImage)
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                    cornerRadius: UX.generalCornerRadius).cgPath
+    }
+
     // MARK: - Helpers
 
     func configure(viewModel: JumpBackInCellViewModel) {
@@ -142,7 +153,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         itemTitle.text = viewModel.titleText
         descriptionLabel.text = viewModel.descriptionText
         accessibilityLabel = viewModel.accessibilityLabel
-        adjustLayout(shouldAddBlur: viewModel.shouldAddBlur)
+        adjustLayout()
     }
 
     private func configureImages(viewModel: JumpBackInCellViewModel) {
@@ -220,7 +231,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
     }
 
-    private func adjustLayout(shouldAddBlur: Bool) {
+    private func adjustLayout() {
+        let shouldAddBlur = shouldBlurCell
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
@@ -264,6 +276,7 @@ extension JumpBackInCell: NotificationThemeable {
         }
 
         fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
+        adjustLayout()
     }
 }
 
