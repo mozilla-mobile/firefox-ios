@@ -27,11 +27,19 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         static let pinAlignmentSpacing: CGFloat = 2
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
         static let shadowRadius: CGFloat = 6
+        static let shadowOffset: CGFloat = 2
         static let topSpace: CGFloat = 8
         static let textSafeSpace: CGFloat = 8
         static let bottomSpace: CGFloat = 8
         static let titleFontSize: CGFloat = 12
         static let sponsorFontSize: CGFloat = 11
+    }
+
+    private var blurEffectView: UIVisualEffectView?
+    var shouldApplyBlur: Bool {
+        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
+
+        return WallpaperManager().currentWallpaper.type != .defaultWallpaper
     }
 
     private var rootContainer: UIView = .build { view in
@@ -115,7 +123,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         applyTheme()
         setupLayout()
 
-        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
+        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged,
+                                                          .WallpaperDidChange])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -129,8 +138,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
-        imageView.backgroundColor = UIColor.clear
-
+        rootContainer.backgroundColor = .clear
         titleLabel.text = nil
         sponsoredLabel.text = nil
         pinViewHolder.isHidden = true
@@ -140,6 +148,12 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         selectedOverlay.isHidden = true
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
+                                                    cornerRadius: UX.cellCornerRadius).cgPath
     }
 
     // MARK: - Public methods
@@ -155,6 +169,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         configureSponsoredSite(topSite)
 
         applyTheme()
+        adjustLayout()
     }
 
     // MARK: - Setup Helper methods
@@ -170,7 +185,6 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
         rootContainer.addSubview(imageView)
         rootContainer.addSubview(selectedOverlay)
-
         contentView.addSubview(rootContainer)
 
         NSLayoutConstraint.activate([
@@ -223,17 +237,26 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         sponsoredLabel.text = topSite.sponsoredText
     }
 
-    func adjustLayout(shouldAddBlur: Bool) {
+    private func adjustLayout() {
         // If blur is disabled set background color
-        guard shouldAddBlur else {
-            let isDarkMode = LegacyThemeManager.instance.currentName == .dark
-                rootContainer.backgroundColor = isDarkMode ? UIColor.Photon.DarkGrey40 : .white
+        if shouldApplyBlur {
+            blurEffectView = rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            blurEffectView?.removeFromSuperview()
+            blurEffectView = nil
+            rootContainer.backgroundColor = LegacyThemeManager.instance.current.homePanel.topSitesContainerView
             setupShadow()
-
-            return
         }
+    }
 
-        rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+    private func setupShadow() {
+        rootContainer.layer.cornerRadius = UX.cellCornerRadius
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                      cornerRadius: UX.cellCornerRadius).cgPath
+        rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        rootContainer.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+        rootContainer.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
+        rootContainer.layer.shadowRadius = UX.shadowRadius
     }
 }
 
@@ -243,16 +266,22 @@ extension TopSiteItemCell: NotificationThemeable {
         pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
         titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
         sponsoredLabel.textColor = UIColor.theme.homePanel.sponsored
+
+        adjustLayout()
     }
 }
 
 // MARK: - Notifiable
 extension TopSiteItemCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .DisplayThemeChanged:
+                self?.applyTheme()
+            case .WallpaperDidChange:
+                self?.adjustLayout()
+            default: break
+            }
         }
     }
 }
