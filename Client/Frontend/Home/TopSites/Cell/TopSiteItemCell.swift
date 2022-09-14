@@ -153,7 +153,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
-                                                    cornerRadius: UX.cellCornerRadius).cgPath
+                                                      cornerRadius: UX.cellCornerRadius).cgPath
     }
 
     // MARK: - Public methods
@@ -200,7 +200,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
             imageView.widthAnchor.constraint(equalToConstant: UX.iconSize.width),
             imageView.heightAnchor.constraint(equalToConstant: UX.iconSize.height),
             imageView.bottomAnchor.constraint(lessThanOrEqualTo: descriptionWrapper.topAnchor,
-                                             constant: -UX.bottomSpace),
+                                              constant: -UX.bottomSpace),
 
             descriptionWrapper.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor,
                                                         constant: UX.textSafeSpace),
@@ -214,9 +214,11 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
             selectedOverlay.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor),
             selectedOverlay.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor),
 
-            pinViewHolder.bottomAnchor.constraint(equalTo: titleLabel.firstBaselineAnchor, constant: UX.pinAlignmentSpacing),
+            pinViewHolder.bottomAnchor.constraint(equalTo: titleLabel.firstBaselineAnchor,
+                                                  constant: UX.pinAlignmentSpacing),
             pinViewHolder.leadingAnchor.constraint(equalTo: pinImageView.leadingAnchor),
-            pinViewHolder.trailingAnchor.constraint(equalTo: pinImageView.trailingAnchor, constant: UX.titleOffset),
+            pinViewHolder.trailingAnchor.constraint(equalTo: pinImageView.trailingAnchor,
+                                                    constant: UX.titleOffset),
             pinViewHolder.topAnchor.constraint(equalTo: pinImageView.topAnchor),
 
             pinImageView.widthAnchor.constraint(equalToConstant: UX.pinIconSize.width),
@@ -240,7 +242,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     private func adjustLayout() {
         // If blur is disabled set background color
         if shouldApplyBlur {
-            blurEffectView = rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+            blurEffectView = rootContainer.
+                addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             blurEffectView?.removeFromSuperview()
             blurEffectView = nil
