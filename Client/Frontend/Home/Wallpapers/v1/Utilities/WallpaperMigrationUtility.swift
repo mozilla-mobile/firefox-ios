@@ -56,7 +56,8 @@ struct WallpaperMigrationUtility: Loggable {
         // Create a temporary dummy wallpaper
         let wallpaper = Wallpaper(id: legacyWallpaperObject.name,
                                   textColor: nil,
-                                  cardColor: nil)
+                                  cardColor: nil,
+                                  logoTextColor: nil)
 
         do {
             try store(portait: legacyImagePortrait,
@@ -137,7 +138,8 @@ struct WallpaperMigrationUtility: Loggable {
             // Thus, we must create a new wallpaper to continue storing
             return Wallpaper(id: matchingID,
                              textColor: UIColor(colorString: "FBFBFE"),
-                             cardColor: nil)
+                             cardColor: nil,
+                             logoTextColor: UIColor(colorString: "FBFBFE"))
 
         } else {
             guard let metadata = try storageUtility.fetchMetadata(),

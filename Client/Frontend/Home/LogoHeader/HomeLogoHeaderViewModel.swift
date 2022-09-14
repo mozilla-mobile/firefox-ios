@@ -68,7 +68,6 @@ extension HomeLogoHeaderViewModel: HomepageSectionHandler {
 
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
         guard let logoHeaderCell = cell as? HomeLogoHeaderCell else { return UICollectionViewCell() }
-        logoHeaderCell.configure(onTapAction: onTapAction)
         return logoHeaderCell
     }
 }

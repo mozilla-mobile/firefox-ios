@@ -25,6 +25,7 @@ struct Wallpaper: Equatable {
         return lhs.id == rhs.id
                 && lhs.textColor == rhs.textColor
                 && lhs.cardColor == rhs.cardColor
+                && lhs.logoTextColor == rhs.logoTextColor
     }
 
     enum ImageTypeID {
@@ -36,12 +37,14 @@ struct Wallpaper: Equatable {
     enum CodingKeys: String, CodingKey {
         case textColor = "text-color"
         case cardColor = "card-color"
+        case logoTextColor = "logo-text-color"
         case id
     }
 
     let id: String
     let textColor: UIColor?
     let cardColor: UIColor?
+    let logoTextColor: UIColor?
 
     var thumbnailID: String { return "\(id)\(fileId.thumbnail)" }
     var portraitID: String { return "\(id)\(deviceVersionID)\(fileId.portrait)" }
@@ -102,26 +105,23 @@ extension Wallpaper: Decodable {
 
         let textHexString = try values.decode(String.self, forKey: .textColor)
         let cardHexString = try values.decode(String.self, forKey: .cardColor)
+        let logoHexString = try values.decode(String.self, forKey: .logoTextColor)
 
-        var colorInt: UInt64 = 0
-        if Scanner(string: textHexString).scanHexInt64(&colorInt) {
-            textColor = UIColor(colorString: textHexString)
-        } else {
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(
-                    codingPath: decoder.codingPath,
-                    debugDescription: "Received text-color is not a proper hex code"))
+        let getColor: (String) throws -> UIColor = { hexString in
+            var colorInt: UInt64 = 0
+            if Scanner(string: hexString).scanHexInt64(&colorInt) {
+                return UIColor(colorString: hexString)
+            } else {
+                throw DecodingError.dataCorrupted(
+                    DecodingError.Context(
+                        codingPath: decoder.codingPath,
+                        debugDescription: "Received text-color is not a proper hex code"))
+            }
         }
 
-        colorInt = 0
-        if Scanner(string: cardHexString).scanHexInt64(&colorInt) {
-            cardColor = UIColor(colorString: cardHexString)
-        } else {
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(
-                    codingPath: decoder.codingPath,
-                    debugDescription: "Received text-color is not a proper hex code"))
-        }
+        textColor = try getColor(textHexString)
+        cardColor = try getColor(cardHexString)
+        logoTextColor = try getColor(logoHexString)
     }
 }
 
