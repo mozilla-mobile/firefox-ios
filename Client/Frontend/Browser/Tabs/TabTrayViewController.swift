@@ -35,7 +35,8 @@ class TabTrayViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var nimbus: FxNimbus
     var themeManager: ThemeManager
-
+    var themeObserver: NSObjectProtocol?
+    
     // MARK: - UI Elements
     // Buttons & Menus
     lazy var deleteButton: UIBarButtonItem = {
@@ -369,7 +370,7 @@ class TabTrayViewController: UIViewController, Themeable {
 
     // MARK: - Themable
 
-    @objc func applyTheme() {
+    func applyTheme() {
         view.backgroundColor = themeManager.currentTheme.colors.layer4
         navigationToolbar.barTintColor = themeManager.currentTheme.colors.layer1
         viewModel.syncedTabsController.applyTheme()
@@ -381,8 +382,6 @@ extension TabTrayViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         ensureMainThread { [weak self] in
             switch notification.name {
-            case .ThemeDidChange:
-                self?.applyTheme()
             case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
                 self?.updateButtonTitle(notification)
             case .UpdateLabelOnTabClosed:

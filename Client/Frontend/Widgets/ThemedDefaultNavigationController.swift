@@ -4,10 +4,11 @@
 
 import UIKit
 
-class ThemedDefaultNavigationController: DismissableNavigationViewController, Themeable, Notifiable {
+class ThemedDefaultNavigationController: DismissableNavigationViewController, Themeable {
 
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
+    var themeObserver: NSObjectProtocol?
 
     init(rootViewController: UIViewController,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -24,8 +25,7 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController, Th
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNotifications(forObserver: self,
-                           observing: [.ThemeDidChange])
+        listenForThemeChange()
         applyTheme()
     }
 
@@ -71,13 +71,5 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController, Th
 
         // TODO: Remove with legacy theme clean up FXIOS-3960
         viewControllers.forEach { ($0 as? NotificationThemeable)?.applyTheme() }
-    }
-
-    // MARK: - Notifiable
-
-    func handleNotifications(_ notification: Notification) {
-        if notification.name == .ThemeDidChange {
-            applyTheme()
-        }
     }
 }

@@ -6,5 +6,18 @@ import Foundation
 
 protocol Themeable: UIViewController {
     var themeManager: ThemeManager { get }
+    var themeObserver: NSObjectProtocol? { get set }
+    var notificationCenter: NotificationProtocol { get set }
+    func listenForThemeChange()
     func applyTheme()
+}
+
+extension Themeable {
+    func listenForThemeChange() {
+        let mainQueue = OperationQueue.main
+        themeObserver = notificationCenter.addObserver(name: .ThemeDidChange,
+                                                       queue: mainQueue) { [weak self] _ in
+            self?.applyTheme()
+        }
+    }
 }
