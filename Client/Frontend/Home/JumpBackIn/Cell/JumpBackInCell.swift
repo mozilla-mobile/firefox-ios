@@ -14,11 +14,6 @@ struct JumpBackInCellViewModel {
     var accessibilityLabel: String {
         return "\(titleText), \(descriptionText)"
     }
-    var shouldAddBlur: Bool {
-        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
-
-        return WallpaperManager().currentWallpaper.type != .defaultWallpaper
-    }
 }
 
 // MARK: - JumpBackInCell
@@ -40,7 +35,6 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     private var faviconCenterConstraint: NSLayoutConstraint?
     private var faviconFirstBaselineConstraint: NSLayoutConstraint?
-    private var viewModel: JumpBackInCellViewModel?
 
     // MARK: - UI Elements
     private let heroImage: UIImageView = .build { imageView in
@@ -103,6 +97,12 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     // MARK: - Variables
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
+    private var shouldBlurCell: Bool {
+        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
+
+        return WallpaperManager().currentWallpaper.type != .defaultWallpaper
+    }
+
     // MARK: - Inits
 
     override init(frame: CGRect) {
@@ -150,7 +150,6 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     func configure(viewModel: JumpBackInCellViewModel) {
         configureImages(viewModel: viewModel)
 
-        self.viewModel = viewModel
         itemTitle.text = viewModel.titleText
         descriptionLabel.text = viewModel.descriptionText
         accessibilityLabel = viewModel.accessibilityLabel
@@ -233,7 +232,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     }
 
     private func adjustLayout() {
-        let shouldAddBlur = viewModel?.shouldAddBlur ?? false
+        let shouldAddBlur = shouldBlurCell
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
