@@ -32,8 +32,8 @@ class CustomSearchViewController: SettingsTableViewController {
     fileprivate var engineTitle = ""
     fileprivate lazy var spinnerView: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .medium)
-        // TODO: Laurie - spinner color? Asked Crystal
-        spinner.color = .systemGray
+        // TODO: Laurie - Crystal - Spinner color
+        spinner.color = themeManager.currentTheme.colors.textPrimary
         spinner.hidesWhenStopped = true
         return spinner
     }()
@@ -219,15 +219,15 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         super.init(cellHeight: TextFieldHeight)
     }
 
-    override func onConfigureCell(_ cell: UITableViewCell) {
-        super.onConfigureCell(cell)
+    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
+        super.onConfigureCell(cell, theme: theme)
         if let id = accessibilityIdentifier {
             textField.accessibilityIdentifier = id + "TextField"
         }
 
         placeholderLabel.adjustsFontSizeToFitWidth = true
-        // TODO: Laurie - textDisabled? asked Crystal
-        placeholderLabel.textColor = UIColor.theme.general.settingsTextPlaceholder
+        // TODO: Laurie - Crystal - Placeholder color
+        placeholderLabel.textColor = theme.colors.textDisabled
         placeholderLabel.text = placeholder
         placeholderLabel.isHidden = !textField.text.isEmpty
         placeholderLabel.frame = CGRect(width: TextLabelWidth, height: TextLabelHeight)
@@ -240,10 +240,8 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         }
         textField.autocorrectionType = .no
         textField.delegate = self
-        // TODO: Laurie - layer2
-        textField.backgroundColor = UIColor.theme.tableView.rowBackground
-        // TODO: Laurie - textPrimary
-        textField.textColor = UIColor.theme.tableView.rowText
+        textField.backgroundColor = theme.colors.layer2
+        textField.textColor = theme.colors.textPrimary
         cell.isUserInteractionEnabled = true
         cell.accessibilityTraits = UIAccessibilityTraits.none
         cell.contentView.addSubview(textField)
@@ -277,8 +275,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         placeholderLabel.isHidden = !textField.text.isEmpty
         settingDidChange?(textView.text)
-        // TODO: Laurie - textPrimary && textWarning
-        let color = isValid(textField.text) ? UIColor.theme.tableView.rowText : UIColor.theme.general.destructiveRed
+        let color = isValid(textField.text) ? theme.colors.textPrimary : theme.colors.textWarning
         textField.textColor = color
     }
 

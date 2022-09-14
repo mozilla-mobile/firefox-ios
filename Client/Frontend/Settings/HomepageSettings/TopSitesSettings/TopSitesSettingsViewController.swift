@@ -64,9 +64,8 @@ extension TopSitesSettingsViewController {
 
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
-            // TODO: Laurie - textPrimary
             super.init(title: NSAttributedString(string: .Settings.Homepage.Shortcuts.Rows,
-                                                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+                                                 attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
         }
 
         override func onClick(_ navigationController: UINavigationController?) {

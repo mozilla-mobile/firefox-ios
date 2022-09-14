@@ -23,7 +23,12 @@ class ThemedTableViewCell: UITableViewCell, NotificationThemeable {
     }
 }
 
-class ThemedTableViewController: UITableViewController, NotificationThemeable {
+class ThemedTableViewController: UITableViewController, Themeable {
+
+    var themeManager: ThemeManager = AppContainer.shared.resolve()
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var themeObserver: NSObjectProtocol?
+
     override init(style: UITableView.Style = .grouped) {
         super.init(style: style)
     }
@@ -40,13 +45,15 @@ class ThemedTableViewController: UITableViewController, NotificationThemeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         applyTheme()
+        listenForThemeChange()
     }
 
     func applyTheme() {
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+        tableView.separatorColor = themeManager.currentTheme.colors.layer4
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
         tableView.reloadData()
 
+        // TODO: Remove with legacy theme clean up FXIOS-3960
         (tableView.tableHeaderView as? NotificationThemeable)?.applyTheme()
     }
 }

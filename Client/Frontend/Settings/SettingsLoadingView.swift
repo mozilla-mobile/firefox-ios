@@ -13,10 +13,7 @@ class SettingsLoadingView: UIView {
     }
 
     lazy var indicator: UIActivityIndicatorView = {
-        let isDarkTheme = LegacyThemeManager.instance.currentName == .dark
         let indicator = UIActivityIndicatorView(style: .medium)
-        // TODO: Laurie - spinner color? Asked Crystal
-        indicator.color = isDarkTheme ? .white : .systemGray
         indicator.hidesWhenStopped = false
         return indicator
     }()
@@ -28,9 +25,13 @@ class SettingsLoadingView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(indicator)
-        // TODO: Laurie - layer1
-        backgroundColor = UIColor.theme.tableView.headerBackground
         indicator.startAnimating()
+    }
+
+    func configure(theme: Theme) {
+        // TODO: Laurie - Crystal - Spinner color
+        indicator.color = theme.colors.textPrimary
+        backgroundColor = theme.colors.layer1
     }
 
     internal override func updateConstraints() {
