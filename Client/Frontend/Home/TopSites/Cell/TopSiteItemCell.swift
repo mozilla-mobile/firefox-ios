@@ -26,7 +26,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         static let overlayColor = UIColor(white: 0.0, alpha: 0.25)
         static let pinAlignmentSpacing: CGFloat = 2
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
-        static let shadowRadius: CGFloat = 6
+        static let shadowRadius: CGFloat = 4
         static let shadowOffset: CGFloat = 2
         static let topSpace: CGFloat = 8
         static let textSafeSpace: CGFloat = 8
