@@ -151,7 +151,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 // MARK: - Theme
 extension LabelButtonHeaderView: NotificationThemeable {
     func applyTheme() {
-        let textColor = viewModel?.textColor ?? UIColor.theme.homePanel.topSiteHeaderTitle
+        let textColor = viewModel?.textColor ?? LegacyThemeManager.instance.current.homePanel.topSiteHeaderTitle
 
         titleLabel.textColor = textColor
         moreButton.setTitleColor(textColor, for: .normal)
