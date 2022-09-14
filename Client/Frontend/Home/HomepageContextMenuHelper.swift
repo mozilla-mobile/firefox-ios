@@ -146,7 +146,11 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     private func getAddBookmarkAction(site: Site) -> SingleActionViewModel {
         return SingleActionViewModel(title: .BookmarkContextMenuTitle, iconString: ImageIdentifiers.actionAddBookmark, tapHandler: { _ in
             let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
-            _ = self.viewModel.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: shareItem.url, title: shareItem.title)
+            // Add new mobile bookmark at the top of the list
+            _ = self.viewModel.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
+                                                             url: shareItem.url,
+                                                             title: shareItem.title,
+                                                             position: 0)
 
             var userData = [QuickActions.TabURLKey: shareItem.url]
             if let title = shareItem.title {

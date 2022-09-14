@@ -91,68 +91,6 @@ class BookmarksPanelViewModelTests: XCTestCase {
         }
         waitForExpectations(timeout: 1)
     }
-
-    // MARK: - Move row at index
-
-    func testMoveRowAtGetNewIndex_NotMobileStaysSame_atZero() {
-        let subject = createSubject(guid: BookmarkRoots.MenuFolderGUID)
-        let expectedIndex = 0
-        let index = subject.getNewIndex(from: expectedIndex)
-        XCTAssertEqual(index, expectedIndex)
-    }
-
-    func testMoveRowAtGetNewIndex_NotMobileStaysSame_atFive() {
-        let subject = createSubject(guid: BookmarkRoots.MenuFolderGUID)
-        let expectedIndex = 5
-        let index = subject.getNewIndex(from: expectedIndex)
-        XCTAssertEqual(index, expectedIndex)
-    }
-
-    func testMoveRowAtGetNewIndex_MobileWithZeroBookmarks_zeroIndex() {
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        let index = subject.getNewIndex(from: 0)
-        XCTAssertEqual(index, 0)
-    }
-
-    func testMoveRowAtGetNewIndex_MobileWithZeroBookmarks_minusIndex() {
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        let index = subject.getNewIndex(from: -1)
-        XCTAssertEqual(index, 0)
-    }
-
-    func testMoveRowAtGetNewIndex_MobileWithZeroBookmarks_greaterThanCount() {
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        let index = subject.getNewIndex(from: 5)
-        XCTAssertEqual(index, 0)
-    }
-
-    func testMoveRowAtGetNewIndex_MobileWithBookmarks_zeroIndex() {
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        subject.bookmarkNodes = createBookmarksNode(count: 5)
-        let index = subject.getNewIndex(from: 5)
-        XCTAssertEqual(index, 0)
-    }
-
-    func testMoveRowAtGetNewIndex_MobileWithBookmarks_greaterThanCount() {
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        subject.bookmarkNodes = createBookmarksNode(count: 5)
-        let index = subject.getNewIndex(from: 10)
-        XCTAssertEqual(index, 0)
-    }
-
-    func testMoveRowAtGetNewIndex_MobileWithBookmarks_smallerThanCount() {
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        subject.bookmarkNodes = createBookmarksNode(count: 5)
-        let index = subject.getNewIndex(from: -1)
-        XCTAssertEqual(index, 5)
-    }
-
-    func testMoveRowAtGetNewIndex_MobileWithBookmarks_inMiddleOfCount() {
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        subject.bookmarkNodes = createBookmarksNode(count: 5)
-        let index = subject.getNewIndex(from: 3)
-        XCTAssertEqual(index, 1)
-    }
 }
 
 extension BookmarksPanelViewModelTests {

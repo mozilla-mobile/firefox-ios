@@ -245,12 +245,18 @@ class BookmarkDetailPanel: SiteTableViewController {
     // MARK: - Save Functionality
     func save() -> Success {
         if isNew {
+            // Add new mobile node at the top of the list
+            let position: UInt32? = parentBookmarkFolder.guid == BookmarkRoots.MobileFolderGUID ? 0 : nil
+
             if bookmarkNodeType == .bookmark {
                 guard let bookmarkItemURL = self.bookmarkItemURL else {
                     return deferMaybe(BookmarkDetailPanelError())
                 }
 
-                return profile.places.createBookmark(parentGUID: parentBookmarkFolder.guid, url: bookmarkItemURL, title: bookmarkItemOrFolderTitle).bind({ result in
+                return profile.places.createBookmark(parentGUID: parentBookmarkFolder.guid,
+                                                     url: bookmarkItemURL,
+                                                     title: bookmarkItemOrFolderTitle,
+                                                     position: position).bind({ result in
                     return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : succeed()
                 })
             } else if bookmarkNodeType == .folder {
@@ -258,7 +264,9 @@ class BookmarkDetailPanel: SiteTableViewController {
                     return deferMaybe(BookmarkDetailPanelError())
                 }
 
-                return profile.places.createFolder(parentGUID: parentBookmarkFolder.guid, title: bookmarkItemOrFolderTitle).bind({ result in
+                return profile.places.createFolder(parentGUID: parentBookmarkFolder.guid,
+                                                   title: bookmarkItemOrFolderTitle,
+                                                   position: position).bind({ result in
                     return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : succeed()
                 })
             }

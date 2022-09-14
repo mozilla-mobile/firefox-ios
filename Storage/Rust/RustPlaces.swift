@@ -255,20 +255,25 @@ public class RustPlaces: BookmarksHandler {
         }
     }
 
-    public func createFolder(parentGUID: GUID, title: String, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
+    public func createFolder(parentGUID: GUID, title: String,
+                             position: UInt32?) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
             return try connection.createFolder(parentGUID: parentGUID, title: title, position: position)
         }
     }
 
-    public func createSeparator(parentGUID: GUID, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
+    public func createSeparator(parentGUID: GUID,
+                                position: UInt32?) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
             return try connection.createSeparator(parentGUID: parentGUID, position: position)
         }
     }
 
     @discardableResult
-    public func createBookmark(parentGUID: GUID, url: String, title: String?, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
+    public func createBookmark(parentGUID: GUID,
+                               url: String,
+                               title: String?,
+                               position: UInt32?) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
             let response = try connection.createBookmark(parentGUID: parentGUID, url: url, title: title, position: position)
             self.notificationCenter.post(name: .BookmarksUpdated, object: self)

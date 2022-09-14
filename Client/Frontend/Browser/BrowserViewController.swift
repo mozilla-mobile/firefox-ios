@@ -1130,7 +1130,11 @@ class BrowserViewController: UIViewController {
         }
 
         let shareItem = ShareItem(url: url, title: title, favicon: favicon)
-        profile.places.createBookmark(parentGUID: "mobile______", url: shareItem.url, title: shareItem.title)
+        // Add new mobile bookmark at the top of the list
+        profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
+                                      url: shareItem.url,
+                                      title: shareItem.title,
+                                      position: 0)
 
         var userData = [QuickActions.TabURLKey: shareItem.url]
         if let title = shareItem.title {
@@ -1167,7 +1171,7 @@ class BrowserViewController: UIViewController {
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
 
             guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
-                  let bookmarkNode = bookmarkFolder.children?.last as? FxBookmarkNode
+                  let bookmarkNode = bookmarkFolder.children?.first as? FxBookmarkNode
             else { return }
 
             let detailController = BookmarkDetailPanel(profile: self.profile,
