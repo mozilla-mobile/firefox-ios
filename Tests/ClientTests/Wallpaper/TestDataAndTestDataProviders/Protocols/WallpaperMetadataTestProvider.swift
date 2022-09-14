@@ -44,7 +44,8 @@ extension WallpaperMetadataTestProvider {
                     wallpapers: [
                         Wallpaper(id: "beachVibes",
                                   textColor: textColor,
-                                  cardColor: textColor)
+                                  cardColor: textColor,
+                                  logoTextColor: textColor)
                     ],
                 description: nil,
                 heading: nil)
@@ -65,7 +66,8 @@ extension WallpaperMetadataTestProvider {
                     wallpapers: [
                         Wallpaper(id: "beachVibes",
                                   textColor: textColor,
-                                  cardColor: textColor)
+                                  cardColor: textColor,
+                                  logoTextColor: textColor)
                     ],
                     description: nil,
                     heading: nil)
@@ -84,7 +86,8 @@ extension WallpaperMetadataTestProvider {
                     wallpapers: [
                         Wallpaper(id: "beachVibes",
                                   textColor: textColor,
-                                  cardColor: textColor)
+                                  cardColor: textColor,
+                                  logoTextColor: textColor)
                     ],
                     description: nil,
                     heading: nil)
@@ -105,7 +108,8 @@ extension WallpaperMetadataTestProvider {
                     wallpapers: [
                         Wallpaper(id: "beachVibes",
                                   textColor: textColor,
-                                  cardColor: textColor)
+                                  cardColor: textColor,
+                                  logoTextColor: textColor)
                         ],
                     description: nil,
                     heading: nil)
@@ -126,7 +130,8 @@ extension WallpaperMetadataTestProvider {
                     wallpapers: [
                         Wallpaper(id: "beachVibes",
                                   textColor: textColor,
-                                  cardColor: textColor)
+                                  cardColor: textColor,
+                                  logoTextColor: textColor)
                     ],
                     description: nil,
                     heading: nil)
@@ -147,7 +152,8 @@ extension WallpaperMetadataTestProvider {
                     wallpapers: [
                         Wallpaper(id: "beachVibes",
                                   textColor: textColor,
-                                  cardColor: textColor)
+                                  cardColor: textColor,
+                                  logoTextColor: textColor)
                     ],
                 description: nil,
                 heading: nil)
