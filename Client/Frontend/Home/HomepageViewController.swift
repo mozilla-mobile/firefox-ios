@@ -104,14 +104,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         reloadView()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
-            self?.displayWallpaperSelector()
-        }
-    }
-
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         contextualHintViewController.stopTimer()
@@ -310,7 +302,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         }
     }
 
-    private func displayWallpaperSelector() {
+    func displayWallpaperSelector() {
         let wallpaperManager = WallpaperManager(userDefaults: userDefaults)
         guard wallpaperManager.canOnboardingBeShown,
               presentedViewController == nil
