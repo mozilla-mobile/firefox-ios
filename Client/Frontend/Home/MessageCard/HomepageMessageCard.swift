@@ -44,8 +44,6 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
 
     // UI
 
-    private var blurView: UIVisualEffectView?
-
     private lazy var titleContainerView: UIView = .build { view in
         view.backgroundColor = .clear
     }
