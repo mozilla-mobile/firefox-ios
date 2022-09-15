@@ -5,7 +5,6 @@
 import Foundation
 import MobileCoreServices
 import WebKit
-import QuickLook
 import Shared
 
 struct MIMEType {
@@ -131,40 +130,5 @@ class DownloadHelper: NSObject {
                                                    modalStyle: .overCurrentContext)
 
         return viewModel
-    }
-}
-
-class OpenQLPreviewHelper: NSObject, QLPreviewControllerDataSource {
-    var url: NSURL
-
-    fileprivate let browserViewController: BrowserViewController
-
-    fileprivate let previewController: QLPreviewController
-
-    required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
-        guard let mimeType = response.mimeType,
-              (mimeType == MIMEType.USDZ || mimeType == MIMEType.Reality),
-              let responseURL = response.url as NSURL?,
-              !forceDownload,
-              !canShowInWebView else { return nil }
-        self.url = responseURL
-        self.browserViewController = browserViewController
-        self.previewController = QLPreviewController()
-        super.init()
-    }
-
-    func open() {
-        self.previewController.dataSource = self
-        ensureMainThread {
-            self.browserViewController.present(self.previewController, animated: true, completion: nil)
-        }
-    }
-
-    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-        return 1
-    }
-
-    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-        return self.url
     }
 }
