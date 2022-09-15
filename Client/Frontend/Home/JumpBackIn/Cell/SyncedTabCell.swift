@@ -13,7 +13,6 @@ struct SyncedTabCellViewModel {
     var syncedDeviceImage: UIImage?
     var heroImage: UIImage?
     var fallbackFaviconImage: UIImage?
-    var shouldAddBlur: Bool
     var accessibilityLabel: String {
         return "\(cardTitleText): \(titleText), \(descriptionText)"
     }
@@ -29,7 +28,7 @@ struct SyncedTabCellViewModel {
 }
 
 /// A cell used in FxHomeScreen's Jump Back In section
-class SyncedTabCell: UICollectionViewCell, ReusableCell {
+class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
 
     struct UX {
         static let generalCornerRadius: CGFloat = 12
@@ -136,7 +135,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.itemCell
 
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
+                           observing: [.DisplayThemeChanged,
+                                       .WallpaperDidChange])
         setupLayout()
         applyTheme()
     }
@@ -196,7 +196,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapSyncedTab(_:)))
         syncedTabTapTargetView.addGestureRecognizer(tapRecognizer)
         applyTheme()
-        adjustLayout(shouldAddBlur: viewModel.shouldAddBlur)
+        adjustLayout()
 
         let showAllSyncedTabsA11yAction = UIAccessibilityCustomAction(name: viewModel.syncedTabsButtonText,
                                                                       target: self,
@@ -316,7 +316,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         adjustLayout()
     }
 
-    private func adjustLayout(shouldAddBlur: Bool = false) {
+    private func adjustLayout() {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
@@ -331,9 +331,10 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         itemTitleTopConstraint.constant = itemTitleTopAnchorConstant
 
         // Add blur
-        if shouldAddBlur {
+        if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
+            contentView.removeVisualEffectView()
             contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
             UIColor.Photon.DarkGrey40 : .white
             setupShadow()
@@ -379,10 +380,14 @@ extension SyncedTabCell: NotificationThemeable {
 // MARK: - Notifiable
 extension SyncedTabCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .DisplayThemeChanged:
+                self?.applyTheme()
+            case .WallpaperDidChange:
+                self?.adjustLayout()
+            default: break
+            }
         }
     }
 }

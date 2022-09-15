@@ -6,7 +6,7 @@ import Foundation
 
 // MARK: - FxHomePocketDiscoverMoreCell
 /// A cell to be placed at the last position in the Pocket section
-class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
+class PocketDiscoverCell: BlurrableCollectionViewCell, ReusableCell {
 
     struct UX {
         static let discoverMoreFontSize: CGFloat = 20
@@ -32,7 +32,8 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
         super.init(frame: .zero)
 
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
+                           observing: [.DisplayThemeChanged,
+                                       .WallpaperDidChange])
         setupLayout()
         applyTheme()
     }
@@ -50,16 +51,9 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
         notificationCenter.removeObserver(self)
     }
 
-    func configure(text: String, shouldAddBlur: Bool) {
+    func configure(text: String) {
         itemTitle.text = text
-
-        if shouldAddBlur {
-            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-        } else {
-            contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
-            UIColor.Photon.DarkGrey30 : .white
-            setupShadow()
-        }
+        adjustLayout()
     }
 
     // MARK: - Helpers
@@ -75,6 +69,17 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
                                                 constant: -UX.horizontalMargin),
             itemTitle.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
+    }
+
+    private func adjustLayout() {
+        if shouldApplyWallpaperBlur {
+            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            contentView.removeVisualEffectView()
+            contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
+            UIColor.Photon.DarkGrey30 : .white
+            setupShadow()
+        }
     }
 
     private func setupShadow() {
@@ -102,10 +107,14 @@ extension PocketDiscoverCell: NotificationThemeable {
 // MARK: - Notifiable
 extension PocketDiscoverCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .DisplayThemeChanged:
+                self?.applyTheme()
+            case .WallpaperDidChange:
+                self?.adjustLayout()
+            default: break
+            }
         }
     }
 }
