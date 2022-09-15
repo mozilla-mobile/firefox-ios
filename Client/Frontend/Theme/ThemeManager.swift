@@ -41,6 +41,10 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
             static let isOn = "prefKeyAutomaticSwitchOnOff"
             static let thresholdValue = "prefKeyAutomaticSliderValue"
         }
+
+        enum NightMode {
+            static let isOn = "profile.NightModeStatus"
+        }
     }
 
     // MARK: - Variables
@@ -59,12 +63,14 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
         self.notificationCenter = notificationCenter
         self.appDelegate = appDelegate
 
-        userDefaults.register(defaults: [ThemeKeys.systemThemeIsOn: true])
+        userDefaults.register(defaults: [ThemeKeys.systemThemeIsOn: true,
+                                         ThemeKeys.NightMode.isOn: NSNumber(value: false)])
 
         self.currentTheme = generateInitialTheme()
 
         setupNotifications(forObserver: self,
-                           observing: [UIScreen.brightnessDidChangeNotification])
+                           observing: [UIScreen.brightnessDidChangeNotification,
+                                       UIApplication.willEnterForegroundNotification])
     }
 
     // MARK: - ThemeManager
@@ -77,6 +83,7 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
         guard currentTheme.type != newTheme else { return }
         // TODO: Check for nightmode FXIOS-4910
         currentTheme = newThemeForType(newTheme)
+        appDelegate?.window??.overrideUserInterfaceStyle = currentTheme.type.getInterfaceStyle()
 
         ensureMainThread { [weak self] in
             self?.notificationCenter.post(name: .ThemeDidChange)
@@ -84,7 +91,10 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     func systemThemeChanged() {
-        guard userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn) else { return }
+        // Ignore if the system theme is off or night mode is on
+        guard userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn),
+              let nightModeIsOn = userDefaults.object(forKey: ThemeKeys.NightMode.isOn) as? NSNumber,
+              nightModeIsOn.boolValue == false else { return }
         changeCurrentTheme(getSystemThemeType())
     }
 
@@ -123,7 +133,7 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func getSystemThemeType() -> ThemeType {
-        return appDelegate?.window??.traitCollection.userInterfaceStyle == .dark ? ThemeType.dark : ThemeType.light
+        return UIScreen.main.traitCollection.userInterfaceStyle == .dark ? ThemeType.dark : ThemeType.light
     }
 
     private func newThemeForType(_ type: ThemeType) -> Theme {
@@ -162,6 +172,12 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
         switch notification.name {
         case UIScreen.brightnessDidChangeNotification:
             brightnessChanged()
+        case UIApplication.willEnterForegroundNotification:
+            // It seems this notification is fired before the UI is informed of any changes to dark mode
+            // So dispatching to the end of the main queue will ensure it's always got the latest info
+            DispatchQueue.main.async {
+                self.systemThemeChanged()
+            }
         default:
             return
         }
