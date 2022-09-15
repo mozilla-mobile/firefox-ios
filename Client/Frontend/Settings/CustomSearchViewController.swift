@@ -32,8 +32,7 @@ class CustomSearchViewController: SettingsTableViewController {
     fileprivate var engineTitle = ""
     fileprivate lazy var spinnerView: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .medium)
-        // TODO: Laurie - Crystal - Spinner color
-        spinner.color = themeManager.currentTheme.colors.textPrimary
+        spinner.color = themeManager.currentTheme.colors.iconSpinnerDefault
         spinner.hidesWhenStopped = true
         return spinner
     }()
@@ -226,8 +225,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         }
 
         placeholderLabel.adjustsFontSizeToFitWidth = true
-        // TODO: Laurie - Crystal - Placeholder color
-        placeholderLabel.textColor = theme.colors.textDisabled
+        placeholderLabel.textColor = theme.colors.textSecondary
         placeholderLabel.text = placeholder
         placeholderLabel.isHidden = !textField.text.isEmpty
         placeholderLabel.frame = CGRect(width: TextLabelWidth, height: TextLabelHeight)

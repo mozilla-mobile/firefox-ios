@@ -29,8 +29,7 @@ class SettingsLoadingView: UIView {
     }
 
     func configure(theme: Theme) {
-        // TODO: Laurie - Crystal - Spinner color
-        indicator.color = theme.colors.textPrimary
+        indicator.color = theme.colors.iconSpinnerDefault
         backgroundColor = theme.colors.layer1
     }
 

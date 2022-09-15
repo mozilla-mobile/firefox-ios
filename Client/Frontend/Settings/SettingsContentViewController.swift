@@ -141,8 +141,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     fileprivate func makeInterstitialViews() -> InterstitialViews {
         let view = UIView()
         let spinner = UIActivityIndicatorView(style: .medium)
-        // TODO: Laurie - Crystal - Spinner color
-        spinner.color = themeManager.currentTheme.colors.textPrimary
+        spinner.color = themeManager.currentTheme.colors.iconSpinnerDefault
         view.addSubview(spinner)
 
         let error = UILabel()
