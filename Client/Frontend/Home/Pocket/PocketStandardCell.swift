@@ -7,7 +7,7 @@ import Shared
 
 // MARK: - PocketStandardCell
 /// A cell used in FxHomeScreen's Pocket section
-class PocketStandardCell: UICollectionViewCell, ReusableCell {
+class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
 
     struct UX {
         static let cellHeight: CGFloat = 112
@@ -127,7 +127,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         sponsoredStack.isHidden  = viewModel.shouldHideSponsor
 
         applyTheme()
-        adjustLayout(shouldAddBlur: viewModel.shouldAddBlur)
+        adjustLayout()
     }
 
     private func setupLayout() {
@@ -176,7 +176,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         }
     }
 
-    private func adjustLayout(shouldAddBlur: Bool) {
+    private func adjustLayout() {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
@@ -184,9 +184,10 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         sponsoredImageFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
 
         // Add blur
-        if shouldAddBlur {
+        if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
+            contentView.removeVisualEffectView()
             contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
             UIColor.Photon.DarkGrey30 : .white
             setupShadow()
@@ -214,10 +215,14 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 // MARK: - Notifiable
 extension PocketStandardCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .DisplayThemeChanged:
+                self?.applyTheme()
+            case .WallpaperDidChange:
+                self?.adjustLayout()
+            default: break
+            }
         }
     }
 }

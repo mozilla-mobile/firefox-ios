@@ -11,7 +11,7 @@ import UIKit
 /// The HomeTabBanner is one UI surface that is being targeted for experimentation with `GleanPlumb` AKA Messaging.
 /// When there are GleanPlumbMessages, the card will get populated with that data. Otherwise, we'll continue showing the
 /// default browser message AKA the evergreen.
-class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
+class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner
     typealias BannerCopy = String.FirefoxHomepage.HomeTabBanner.EvergreenMessage
@@ -43,6 +43,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     private var kvoToken: NSKeyValueObservation?
 
     // UI
+
     private lazy var titleContainerView: UIView = .build { view in
         view.backgroundColor = .clear
     }
@@ -108,7 +109,8 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         setupLayout()
         observeCardViewBounds()
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
+                           observing: [.DisplayThemeChanged,
+                                       .WallpaperDidChange])
     }
 
     required init(coder: NSCoder) {
@@ -192,9 +194,10 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 
     func applyTheme() {
 
-        if let shouldAddBlur = viewModel?.shouldAddBlur, shouldAddBlur {
+        if shouldApplyWallpaperBlur {
             cardView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
+            cardView.removeVisualEffectView()
             cardView.backgroundColor = LegacyThemeManager.instance.current.homeTabBanner.backgroundColor
         }
 
@@ -243,10 +246,13 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 // MARK: - Notifiable
 extension HomepageMessageCardCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .DisplayThemeChanged,
+                    .WallpaperDidChange:
+                self?.applyTheme()
+            default: break
+            }
         }
     }
 }
