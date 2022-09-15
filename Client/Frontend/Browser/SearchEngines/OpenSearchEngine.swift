@@ -47,7 +47,7 @@ class OpenSearchEngine: NSObject, NSCoding {
 
     required init?(coder aDecoder: NSCoder) {
         let isCustomEngine = aDecoder.decodeAsBool(forKey: CodingKeys.isCustomEngine.rawValue)
-        guard let searchTemplate = aDecoder.decodeObject(forKey: CodingKeys.isCustomEngine.rawValue) as? String,
+        guard let searchTemplate = aDecoder.decodeObject(forKey: CodingKeys.searchTemplate.rawValue) as? String,
               let shortName = aDecoder.decodeObject(forKey: CodingKeys.shortName.rawValue) as? String,
               let image = aDecoder.decodeObject(forKey: CodingKeys.image.rawValue) as? UIImage else {
             assertionFailure()
@@ -63,7 +63,7 @@ class OpenSearchEngine: NSObject, NSCoding {
     }
 
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(searchTemplate, forKey: CodingKeys.isCustomEngine.rawValue)
+        aCoder.encode(searchTemplate, forKey: CodingKeys.searchTemplate.rawValue)
         aCoder.encode(shortName, forKey: CodingKeys.shortName.rawValue)
         aCoder.encode(isCustomEngine, forKey: CodingKeys.isCustomEngine.rawValue)
         aCoder.encode(image, forKey: CodingKeys.image.rawValue)
