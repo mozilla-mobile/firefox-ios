@@ -29,6 +29,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         }
         currentScreen = 0
         super.setUp()
+        app.launch()
     }
 
     func testIntro() {

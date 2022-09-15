@@ -26,7 +26,6 @@ class L10nBaseSnapshotTests: XCTestCase {
         continueAfterFailure = false
         app = XCUIApplication()
         setupSnapshot(app)
-        app.terminate()
 
         springboardStart(app, args: args)
 
@@ -34,6 +33,7 @@ class L10nBaseSnapshotTests: XCTestCase {
         navigator = map.navigator()
         userState = navigator.userState
 
+        app.launch()
         navigator.synchronizeWithUserState()
     }
 
