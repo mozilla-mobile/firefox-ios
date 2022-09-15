@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
+import Shared
 
 enum ThemeType: String {
     case light = "normal" // This needs to match the string used in the legacy system
@@ -56,7 +57,7 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Init
 
-    init(userDefaults: UserDefaults = UserDefaults.standard,
+    init(userDefaults: UserDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          appDelegate: UIApplicationDelegate?) {
         self.userDefaults = userDefaults
