@@ -28,12 +28,6 @@ class PocketViewModel {
     private var pocketStoriesViewModels = [PocketStandardCellViewModel]()
     private var wallpaperManager: WallpaperManager
 
-    var shouldAddBlur: Bool {
-        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
-
-        return wallpaperManager.currentWallpaper.type != .defaultWallpaper
-    }
-
     init(pocketDataAdaptor: PocketDataAdaptor,
          isZeroSearch: Bool = false,
          wallpaperManager: WallpaperManager) {
@@ -101,7 +95,7 @@ class PocketViewModel {
         pocketStoriesViewModels = []
         // Add the story in the view models list
         for story in stories {
-            bind(pocketStoryViewModel: .init(story: story, shouldAddBlur: shouldAddBlur))
+            bind(pocketStoryViewModel: .init(story: story))
         }
     }
 
@@ -220,8 +214,7 @@ extension PocketViewModel: HomepageSectionHandler {
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketDiscoverCell.cellIdentifier,
                                                           for: indexPath) as! PocketDiscoverCell
-            cell.configure(text: .FirefoxHomepage.Pocket.DiscoverMore,
-                           shouldAddBlur: shouldAddBlur)
+            cell.configure(text: .FirefoxHomepage.Pocket.DiscoverMore)
             return cell
         }
     }

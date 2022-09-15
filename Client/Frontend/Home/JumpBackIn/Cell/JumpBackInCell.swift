@@ -18,7 +18,7 @@ struct JumpBackInCellViewModel {
 
 // MARK: - JumpBackInCell
 /// A cell used in Home page Jump Back In section
-class JumpBackInCell: UICollectionViewCell, ReusableCell {
+class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
 
     struct UX {
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
@@ -97,12 +97,6 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     // MARK: - Variables
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    private var shouldBlurCell: Bool {
-        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
-
-        return WallpaperManager().currentWallpaper.type != .defaultWallpaper
-    }
-
     // MARK: - Inits
 
     override init(frame: CGRect) {
@@ -113,7 +107,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
         applyTheme()
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
+                           observing: [.DisplayThemeChanged,
+                                       .WallpaperDidChange])
         setupLayout()
     }
 
@@ -232,7 +227,6 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     }
 
     private func adjustLayout() {
-        let shouldAddBlur = shouldBlurCell
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
@@ -240,9 +234,10 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         faviconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
 
         // Add blur
-        if shouldAddBlur {
+        if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
+            contentView.removeVisualEffectView()
             contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
             UIColor.Photon.DarkGrey40 : .white
             setupShadow()
@@ -283,10 +278,13 @@ extension JumpBackInCell: NotificationThemeable {
 // MARK: - Notifiable
 extension JumpBackInCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .DisplayThemeChanged,
+                    .WallpaperDidChange:
+                self?.applyTheme()
+            default: break
+            }
         }
     }
 }
