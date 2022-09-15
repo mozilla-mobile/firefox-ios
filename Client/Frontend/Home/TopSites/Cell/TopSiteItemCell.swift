@@ -31,6 +31,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         static let topSpace: CGFloat = 8
         static let textSafeSpace: CGFloat = 8
         static let bottomSpace: CGFloat = 8
+        static let imageBottomSpace: CGFloat = 3
         static let titleFontSize: CGFloat = 12
         static let sponsorFontSize: CGFloat = 11
     }
@@ -190,8 +191,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         NSLayoutConstraint.activate([
             rootContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
             rootContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            rootContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                    constant: -UX.textSafeSpace),
+            rootContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             rootContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             imageView.topAnchor.constraint(equalTo: rootContainer.topAnchor,
@@ -200,7 +200,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
             imageView.widthAnchor.constraint(equalToConstant: UX.iconSize.width),
             imageView.heightAnchor.constraint(equalToConstant: UX.iconSize.height),
             imageView.bottomAnchor.constraint(lessThanOrEqualTo: descriptionWrapper.topAnchor,
-                                              constant: -UX.bottomSpace),
+                                              constant: -UX.imageBottomSpace),
 
             descriptionWrapper.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor,
                                                         constant: UX.textSafeSpace),
