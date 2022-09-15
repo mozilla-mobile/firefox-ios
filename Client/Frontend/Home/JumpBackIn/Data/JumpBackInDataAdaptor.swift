@@ -263,9 +263,7 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         var mostRecentTab: (client: RemoteClient, tab: RemoteTab)?
 
         desktopClientAndTabs.forEach { remoteClient in
-            guard let firstClient = remoteClient.tabs.first else {
-                return
-            }
+            guard let firstClient = remoteClient.tabs.first else { return }
             let mostRecentClientTab = remoteClient.tabs.reduce(firstClient, {
                                                                 $0.lastUsed > $1.lastUsed ? $0 : $1 })
 
