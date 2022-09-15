@@ -130,6 +130,17 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         }
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        // make sure the keyboard is dismissed when wallpaper onboarding is shown
+        // Can be removed once underlying problem is solved (FXIOS-4904)
+        if let presentedViewController = presentedViewController,
+           presentedViewController.isKind(of: BottomSheetViewController.self) {
+            self.dismissKeyboard()
+        }
+    }
+
     // MARK: - Layout
 
     func configureCollectionView() {
@@ -206,18 +217,27 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         viewModel.handleLongPress(with: collectionView, indexPath: indexPath)
     }
 
-    // MARK: - Helpers
+    // MARK: - Homepage view cycle
+    /// Normal viewcontroller view cycles cannot be relied on the homepage since the current way of showing and hiding the homepage is through alpha.
+    /// This is a problem that need to be fixed but until then we have to rely on the methods here.
 
-    /// Called to update the appearance source of the home page, and send tracking telemetry
-    func recordHomepageAppeared(isZeroSearch: Bool) {
+    func homepageWillAppear(isZeroSearch: Bool) {
         viewModel.isZeroSearch = isZeroSearch
         viewModel.recordViewAppeared()
     }
 
-    func recordHomepageDisappeared() {
+    func homepageDidAppear() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
+            self?.displayWallpaperSelector()
+        }
+    }
+
+    func homepageWillDisappear() {
         contextualHintViewController.stopTimer()
         viewModel.recordViewDisappeared()
     }
+
+    // MARK: - Helpers
 
     /// On iPhone, we call reloadOnRotation when the trait collection has changed, to ensure calculation
     /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
@@ -292,22 +312,11 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        // make sure the keyboard is dismissed when wallpaper onboarding is shown
-        // Can be removed once underlying problem is solved (FXIOS-4904)
-        if let presentedViewController = presentedViewController,
-           presentedViewController.isKind(of: BottomSheetViewController.self) {
-            self.dismissKeyboard()
-        }
-    }
-
     func displayWallpaperSelector() {
         let wallpaperManager = WallpaperManager(userDefaults: userDefaults)
-        guard wallpaperManager.canOnboardingBeShown,
-              presentedViewController == nil
-        else { return }
+        guard wallpaperManager.canOnboardingBeShown, canModalBePresented else {
+            return
+        }
 
         self.dismissKeyboard()
 
@@ -326,6 +335,12 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         userDefaults.set(true, forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
     }
 
+    // Check if we already present something on top of the homepage,
+    // and if the homepage is actually being shown to the user
+    private var canModalBePresented: Bool {
+        return presentedViewController == nil && view.alpha == 1
+    }
+
     // MARK: - Contextual hint
     private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
         guard contextualHintViewController.shouldPresentHint(),
@@ -342,9 +357,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
 
     @objc private func presentContextualHint() {
-        guard BrowserViewController.foregroundBVC().searchController == nil,
-              presentedViewController == nil
-        else {
+        guard BrowserViewController.foregroundBVC().searchController == nil, canModalBePresented else {
             contextualHintViewController.stopTimer()
             return
         }
