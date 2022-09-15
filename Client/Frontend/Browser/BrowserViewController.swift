@@ -919,26 +919,18 @@ class BrowserViewController: UIViewController {
         guard homepageViewController?.view.alpha != 1 else { return }
 
         homepageViewController?.applyTheme()
-        homepageViewController?.recordHomepageAppeared(isZeroSearch: !inline)
+        homepageViewController?.homepageWillAppear(isZeroSearch: !inline)
         homepageViewController?.reloadView()
         NotificationCenter.default.post(name: .ShowHomepage, object: nil)
-
-        let wallpaperOnboardingClosure = {
-            // Display wallpaper onboarding if needed when homepage appears
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
-                self?.homepageViewController?.displayWallpaperSelector()
-            }
-        }
 
         UIView.animate(
             withDuration: 0.2,
             animations: { () -> Void in
                 self.homepageViewController?.view.alpha = 1
             }, completion: { finished in
-                guard finished else { return }
                 self.webViewContainer.accessibilityElementsHidden = true
                 UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
-                wallpaperOnboardingClosure()
+                self.homepageViewController?.homepageDidAppear()
             })
 
         // Make sure reload button is hidden on homepage
@@ -959,6 +951,8 @@ class BrowserViewController: UIViewController {
         addChild(homepageViewController)
         view.addSubview(homepageViewController.view)
         homepageViewController.didMove(toParent: self)
+        // When we first create the homepage, set it's alpha to 0 to ensure we trigger the custom homepage view cycles
+        homepageViewController.view.alpha = 0
         view.bringSubviewToFront(overKeyboardContainer)
     }
 
@@ -970,7 +964,7 @@ class BrowserViewController: UIViewController {
         // Return early if the home page is already hidden
         guard self.homepageViewController?.view.alpha != 0 else { return }
 
-        homepageViewController.recordHomepageDisappeared()
+        homepageViewController.homepageWillDisappear()
         UIView.animate(
             withDuration: 0.2,
             delay: 0,

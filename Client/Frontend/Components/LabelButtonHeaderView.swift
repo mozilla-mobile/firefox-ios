@@ -80,7 +80,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
     func setConstraints(viewModel: LabelButtonHeaderViewModel) {
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
+            stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor,
                                                constant: viewModel.leadingInset),
             stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
