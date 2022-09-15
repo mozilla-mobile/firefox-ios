@@ -28,7 +28,7 @@ private let defaultSeparator = UIColor.Photon.Grey30
 private let defaultTextAndTint = UIColor.Photon.Grey80 // textPrimary in new system
 
 class TableViewColor {
-    var rowBackground: UIColor { return UIColor.Photon.White100 } // white
+    var rowBackground: UIColor { return UIColor.Photon.White100 } // layer2
     var rowText: UIColor { return UIColor.Photon.Grey90 } // textPrimary
     var rowDetailText: UIColor { return UIColor.Photon.Grey60 }
     var disabledRowText: UIColor { return UIColor.Photon.Grey40 } // textDisabled

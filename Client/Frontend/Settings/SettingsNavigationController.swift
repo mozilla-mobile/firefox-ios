@@ -38,8 +38,7 @@ extension ThemedNavigationController {
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithDefaultBackground()
         standardAppearance.backgroundColor = theme.colors.layer1
-        // TODO: Laurie - Not sure - UIColor.theme.tableView.headerTextDark
-        standardAppearance.titleTextAttributes = [.foregroundColor: theme.colors.layer4]
+        standardAppearance.titleTextAttributes = [.foregroundColor: theme.colors.textPrimary]
 
         navigationBar.standardAppearance = standardAppearance
         navigationBar.compactAppearance = standardAppearance

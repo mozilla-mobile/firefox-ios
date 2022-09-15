@@ -102,6 +102,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
     fileprivate let loadingView = SettingsLoadingView()
 
+    // TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
     fileprivate var showMoreButton: ThemedTableViewCell?
 
     private let viewModel = WebsiteDataManagementViewModel()
@@ -168,11 +169,8 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = .SettingsFilterSitesSearchLabel
         searchController.searchBar.delegate = self
+        searchController.searchBar.barStyle = themeManager.currentTheme.type.getBarStyle()
 
-        // Laurie - Orla - Bar style 
-//        if theme == .dark {
-//            searchController.searchBar.barStyle = .black
-//        }
         navigationItem.searchController = searchController
         self.searchController = searchController
 
@@ -188,6 +186,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
         let cell = ThemedTableViewCell(style: .default, reuseIdentifier: nil)
         let section = Section(rawValue: indexPath.section)!
         switch section {

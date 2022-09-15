@@ -3,23 +3,21 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 import UIKit
 
-class ThemedTableViewCell: UITableViewCell, NotificationThemeable {
-    var detailTextColor = UIColor.theme.tableView.disabledRowText
+class ThemedTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func applyTheme() {
-        textLabel?.textColor = UIColor.theme.tableView.rowText
-        detailTextLabel?.textColor = detailTextColor
-        backgroundColor = UIColor.theme.tableView.rowBackground
-        tintColor = UIColor.theme.general.controlTint
+    func applyTheme(theme: Theme) {
+        textLabel?.textColor = theme.colors.textPrimary
+        detailTextLabel?.textColor = theme.colors.textSecondary
+        backgroundColor = theme.colors.layer2
+        tintColor = theme.colors.actionPrimary
     }
 }
 
@@ -38,8 +36,7 @@ class ThemedTableViewController: UITableViewController, Themeable {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
-        return cell
+        return ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
     }
 
     override func viewDidLoad() {

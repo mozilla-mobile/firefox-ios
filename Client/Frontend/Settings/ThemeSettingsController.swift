@@ -174,6 +174,7 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
         let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
         cell.selectionStyle = .none
         let section = Section(rawValue: indexPath.section) ?? .automaticBrightness

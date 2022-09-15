@@ -114,7 +114,7 @@ class Setting: NSObject {
         // So that the separator line goes all the way to the left edge.
         cell.separatorInset = .zero
         if let cell = cell as? ThemedTableViewCell {
-            cell.applyTheme()
+            cell.applyTheme(theme: theme)
         }
     }
 
@@ -229,7 +229,7 @@ class BoolSetting: Setting, FeatureFlaggable {
     ) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
-            let attributes = [NSAttributedString.Key.foregroundColor:  theme.colors.textSecondary]
+            let attributes = [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
             statusTextAttributedString = NSAttributedString(string: statusTextString,
                                                             attributes: attributes)
         }
@@ -782,6 +782,7 @@ class SettingsTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
+            // TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
             let cell = ThemedTableViewCell(style: setting.style, reuseIdentifier: nil)
             setting.onConfigureCell(cell, theme: themeManager.currentTheme)
             cell.backgroundColor = themeManager.currentTheme.colors.layer2
