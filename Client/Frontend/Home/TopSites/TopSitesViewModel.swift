@@ -11,6 +11,7 @@ class TopSitesViewModel {
     struct UX {
         static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
         static let cellEstimatedSize: CGSize = CGSize(width: 73, height: 83)
+        static let cardSpacing: CGFloat = 16
     }
 
     weak var delegate: HomepageDataModelDelegate?
@@ -167,7 +168,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitem: item,
                                                        count: sectionDimension.numberOfTilesPerRow)
-        group.interItemSpacing = NSCollectionLayoutSpacing.fixed(16)
+        group.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.cardSpacing)
         let section = NSCollectionLayoutSection(group: group)
 
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
@@ -175,7 +176,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
                                                         leading: leadingInset,
                                                         bottom: HomepageViewModel.UX.spacingBetweenSections - TopSiteItemCell.UX.bottomSpace,
                                                         trailing: leadingInset)
-        section.interGroupSpacing = 16
+        section.interGroupSpacing = UX.cardSpacing
 
         return section
     }
