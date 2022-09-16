@@ -39,6 +39,10 @@ class AppInfo {
         return Bundle.main.infoDictionary!["CFBundleName"] as! String
     }
 
+    static var shortProductName: String {
+        return isKlar ? "Klar" : "Focus"
+    }
+
     /// Return application's ShortVersionString. Like `35`, `38.0` or `38.1.1`. Will crash if the value is missing
     /// from the Info.plist. (Which is a fatal packaging error.)
     static var shortVersion: String {

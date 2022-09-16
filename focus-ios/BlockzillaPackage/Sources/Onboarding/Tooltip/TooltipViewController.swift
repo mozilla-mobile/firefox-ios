@@ -9,7 +9,7 @@ public class TooltipViewController: UIViewController {
 
     private let tooltipView = TooltipView()
 
-    public var dismiss: (()->Void)?
+    public var dismiss: (() -> Void)?
 
     public override func viewDidLoad() {
         super.viewDidLoad()

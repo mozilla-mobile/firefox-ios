@@ -221,11 +221,11 @@ class TrackingProtectionViewController: UIViewController {
     }
     var state: TrackingProtectionState
     let favIconPublisher: AnyPublisher<URL?, Never>?
-    private let onboardingEventsHandler: OnboardingEventsHandler
+    private let onboardingEventsHandler: OnboardingEventsHandling
     private var cancellable: AnyCancellable?
 
     // MARK: - VC Lifecycle
-    init(state: TrackingProtectionState, onboardingEventsHandler: OnboardingEventsHandler, favIconPublisher: AnyPublisher<URL?, Never>? = nil) {
+    init(state: TrackingProtectionState, onboardingEventsHandler: OnboardingEventsHandling, favIconPublisher: AnyPublisher<URL?, Never>? = nil) {
         self.state = state
         self.onboardingEventsHandler = onboardingEventsHandler
         self.favIconPublisher = favIconPublisher
@@ -279,7 +279,7 @@ class TrackingProtectionViewController: UIViewController {
 
             onboardingEventsHandler.send(.showTrackingProtection)
             cancellable = onboardingEventsHandler
-                .$route
+                .routePublisher
                 .sink { [unowned self] route in
                     switch route {
                     case .none:

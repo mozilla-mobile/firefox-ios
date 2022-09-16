@@ -330,21 +330,42 @@ struct UIConstants {
         static let tooltipBodyTextStartPrivateBrowsing = NSLocalizedString("TooltipBodyText.SearchBar", value: "Start your private browsing session, and we’ll block trackers and other bad stuff as you go.", comment: "This is the body text that is displayed for the Search Bar tooltip")
         static let tooltipBodyTextForTrashIcon = NSLocalizedString("TooltipBodyText.TrashIcon", value: "Tap the trash anytime to remove all traces of your current session.", comment: "This is the body text that is displayed for the Trash icon tooltip")
         static let tooltipBodyTextForTrashIconV2 = NSLocalizedString("TooltipBodyText.TrashIcon.V2", value: "Tap here to trash it all — history, cookies, everything — and start fresh on a new tab.", comment: "This is the body text that is displayed for the Trash icon tooltip")
+        static let titleShowMeHowOnboardingV2 = String(format: NSLocalizedString("ShowMeHowOnboarding.Title.V2", value: "Add a %@ Widget", comment: "This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar)"), AppInfo.shortProductName)
+        static let subtitleStepOneShowMeHowOnboardingV2 = NSLocalizedString("ShowMeHowOnboarding.SubtitleStepOne.V2", value: "Long press on the Home screen until the icons start to jiggle.", comment: "This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen")
+        static let subtitleStepTwoShowMeHowOnboardingV2 = NSLocalizedString("ShowMeHowOnboarding.SubtitleStepTwo.V2", value: "Tap on the plus icon.", comment: "This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen")
+        static let subtitleStepThreeShowMeHowOnboardingV2 = String(format: NSLocalizedString("ShowMeHowOnboarding.SubtitleStepThree.V2", value: "Search for %@. Then choose a widget.", comment: "This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar)"), AppInfo.shortProductName)
+        static let buttonTextShowMeHowOnboardingV2 = NSLocalizedString("ShowMeHowOnboarding.ButtonText.V2", value: "Done", comment: "This is the button text that is displayed in the Show Me How Onboarding Screen")
 
         // Quick Action - Small Size - Gallery View
         static let quickActionGalleryDescription = NSLocalizedString(
                 "TodayWidget.QuickActionGalleryDescription",
-                value: "Add a Firefox shortcut to your Home screen. After adding the widget, touch and hold to edit it and select a different shortcut.",
-                comment: "Description for small size widget to add it to home screen")
+                value: "Add a %@ shortcut to your Home screen. After adding the widget, touch and hold to edit it and select a different shortcut.",
+                comment: "Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar).")
         public static let quickActionsGalleryTitle = NSLocalizedString(
                 "TodayWidget.QuickActionsGalleryTitle",
                 value: "Quick Actions",
                 comment: "Quick Actions title when widget enters edit mode")
 
-        public static let searchInApp = NSLocalizedString(
+        public static let searchInAppFormat = NSLocalizedString(
                 "TodayWidget.SearchInApp",
-                value: "Search in",
-                comment: "Translate only 'Search in'. App name will is rendered in a different label.")
+                value: "Search in %@",
+                comment: "Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar).")
+        public static let searchInApp = String(format: searchInAppFormat, AppInfo.shortProductName)
+
+        public static let widgetOnboardingCardTitle = NSLocalizedString(
+                "WidgetOnboardingCard.Title",
+                value: "Browsing history cleared! 🎉",
+                comment: "Title shown on card view explaining the app has a widget option")
+
+        public static let widgetOnboardingCardSubtitle = String(format: NSLocalizedString(
+                "WidgetOnboardingCard.Subtitle",
+                value: "We’ll leave you to your private browsing, but get a quicker start next time with the %@ widget on your Home screen.",
+                comment: "Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar)."), AppInfo.shortProductName)
+
+        public static let widgetOnboardingCardActionButton = NSLocalizedString(
+                "WidgetOnboardingCard.ActionButton",
+                value: "Show Me How",
+                comment: "Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget")
 
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"

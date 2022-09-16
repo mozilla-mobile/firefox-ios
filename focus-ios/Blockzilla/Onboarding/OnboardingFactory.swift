@@ -4,12 +4,62 @@
 
 import UIKit
 import Onboarding
+import SwiftUI
+
+class TestOnboarding: OnboardingEventsHandling {
+    @Published var route: Onboarding.ToolTipRoute? = nil
+    var routePublisher: Published<Onboarding.ToolTipRoute?>.Publisher { $route }
+    func send(_ action: Onboarding.Action) {}
+}
 
 class OnboardingFactory {
-    static func make(onboardingType :OnboardingEventsHandler.OnboardingType, dismissAction: @escaping () -> Void) -> (onboardingViewController: UIViewController, animated: Bool) {
+    static func makeOnboardingEventsHandler(_ shouldShowNewOnboarding: () -> Bool) -> OnboardingEventsHandling {
+        let getShownTips: () -> Set<ToolTipRoute> = {
+            return UserDefaults
+                .standard
+                .data(forKey: OnboardingConstants.shownTips)
+                .flatMap {
+                    try? JSONDecoder().decode(Set<ToolTipRoute>.self, from: $0)
+                } ?? []
+        }
+
+        let setShownTips: (Set<ToolTipRoute>) -> Void = { tips in
+            let data = try? JSONEncoder().encode(tips)
+            UserDefaults.standard.set(data, forKey: OnboardingConstants.shownTips)
+        }
+
+        if shouldShowNewOnboarding() {
+            return OnboardingEventsHandlerV2(
+                getShownTips: getShownTips,
+                setShownTips: setShownTips
+            )
+        } else {
+            return OnboardingEventsHandlerV1(
+                getShownTips: getShownTips,
+                setShownTips: setShownTips
+            )
+        }
+    }
+
+    static func make(onboardingType: OnboardingVersion, dismissAction: @escaping () -> Void) -> UIViewController {
         switch onboardingType {
-        case .new:
-            let newOnboardingViewController = OnboardingViewController(
+        case .v2:
+            let controller = UIHostingController(rootView: GetStartedOnboardingView(
+                config: .init(title: .onboardingTitle, subtitle: .onboardingSubtitleV2, buttonTitle: .onboardingButtonTitleV2),
+                defaultBrowserConfig: .init(
+                    title: .defaultBrowserOnboardingViewTitleV2,
+                    firstSubtitle: .defaultBrowserOnboardingViewFirstSubtitleV2,
+                    secondSubtitle: .defaultBrowserOnboardingViewSecondSubtitleV2,
+                    topButtonTitle: .defaultBrowserOnboardingViewTopButtonTitleV2,
+                    bottomButtonTitle: .defaultBrowserOnboardingViewBottomButtonTitleV2),
+                dismissAction: dismissAction))
+
+            controller.modalPresentationStyle = .formSheet
+            controller.isModalInPresentation = true
+            return controller
+
+        case .v1:
+            let controller = OnboardingViewController(
                 config: .init(
                     onboardingTitle: .onboardingTitle,
                     onboardingSubtitle: .onboardingSubtitle,
@@ -22,15 +72,9 @@ class OnboardingFactory {
                 ),
                 dismissOnboardingScreen: dismissAction
             )
-            newOnboardingViewController.modalPresentationStyle = .formSheet
-            newOnboardingViewController.isModalInPresentation = true
-            return (newOnboardingViewController, true)
-
-        case .old:
-            let introViewController = IntroViewController()
-            introViewController.modalPresentationStyle = .fullScreen
-            introViewController.dismissOnboardingScreen = dismissAction
-            return (introViewController, false)
+            controller.modalPresentationStyle = .formSheet
+            controller.isModalInPresentation = true
+            return controller
         }
     }
 }
@@ -39,6 +83,7 @@ fileprivate extension String {
     static let onboardingTitle = String(format: .onboardingTitleFormat, AppInfo.config.productName)
     static let onboardingTitleFormat = NSLocalizedString("Onboarding.Title", value: "Welcome to Firefox %@!", comment: "Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar).")
     static let onboardingSubtitle = NSLocalizedString("Onboarding.Subtitle", value: "Take your private browsing to the next level.", comment: "Text for a label that indicates the subtitle for onboarding screen.")
+    static let onboardingSubtitleV2 = NSLocalizedString("NewOnboarding.Subtitle.V2", value: "Fast. Private. No Distractions.", comment: "Text for a label that indicates the subtitle for the onboarding screen version 2.")
     static let onboardingIncognitoTitle = NSLocalizedString("Onboarding.Incognito.Title", value: "More than just incognito", comment: "Text for a label that indicates the title of incognito section from onboarding screen.")
     static let onboardingIncognitoDescription = String(format: NSLocalizedString("Onboarding.Incognito.Description", value: "%@ is a dedicated privacy browser with tracking protection and content blocking.", comment: "Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar)."), AppInfo.productName)
     static let onboardingHistoryTitle = NSLocalizedString("Onboarding.History.Title", value: "Your history doesn’t follow you", comment: "Text for a label that indicates the title of history section from onboarding screen.")
@@ -46,4 +91,11 @@ fileprivate extension String {
     static let onboardingProtectionTitle = NSLocalizedString("Onboarding.Protection.Title", value: "Protection at your own discretion", comment: "Text for a label that indicates the title of protection section from onboarding screen.")
     static let onboardingProtectionDescription = NSLocalizedString("Onboarding.Protection.Description", value: "Configure settings so you can decide how much or how little you share.", comment: "Text for a label that indicates the description of protection section from onboarding screen.")
     static let onboardingButtonTitle = NSLocalizedString("Onboarding.Button.Title", value: "Start browsing", comment: "Text for a label that indicates the title of button from onboarding screen")
+    static let onboardingButtonTitleV2 = NSLocalizedString("NewOnboarding.Button.Title.V2", value: "Get Started", comment: "Text for a label that indicates the title of button from onboarding screen version 2.")
+
+    static let defaultBrowserOnboardingViewTitleV2 = String(format: NSLocalizedString("Onboarding.DefaultBrowser.Title.V2", value: "%@ isn't like other browsers", comment: "Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar)"), AppInfo.shortProductName)
+    static let defaultBrowserOnboardingViewFirstSubtitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.FirstSubtitle.V2", value: "We clear your history when you close the app for extra privacy.", comment: "Text for a label that indicates the first subtitle for the default browser onboarding screen version 2.")
+    static let defaultBrowserOnboardingViewSecondSubtitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.SecondSubtitle.V2", value: "Make Focus your default to protect your data with every link you open.", comment: "Text for a label that indicates the second subtitle for the default browser onboarding screen version 2.")
+    static let defaultBrowserOnboardingViewTopButtonTitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.TopButtonTitle.V2", value: "Set as Default Browser", comment: "Text for a label that indicates the title of the top button from the default browser onboarding screen version 2.")
+    static let defaultBrowserOnboardingViewBottomButtonTitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.BottomButtonTitle.V2", value: "Skip", comment: "Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2.")
 }

@@ -60,7 +60,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return doneButton
     }()
 
-    private var onboardingEventsHandler: OnboardingEventsHandler
+    private var onboardingEventsHandler: OnboardingEventsHandling
     private var themeManager: ThemeManager
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
@@ -133,7 +133,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     init(
         searchEngineManager: SearchEngineManager,
         authenticationManager: AuthenticationManager,
-        onboardingEventsHandler: OnboardingEventsHandler,
+        onboardingEventsHandler: OnboardingEventsHandling,
         themeManager: ThemeManager,
         dismissScreenCompletion:  @escaping (() -> Void),
         shouldScrollToSiri: Bool = false
@@ -328,10 +328,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .integration:
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .mozilla:
-
-            if !onboardingEventsHandler.shouldShowNewOnboarding() && indexPath.row == 0 {
-                cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
-            } else if (!onboardingEventsHandler.shouldShowNewOnboarding() && indexPath.row == 1) || indexPath.row == 0 {
+            if indexPath.row == 0 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.about"
@@ -364,13 +361,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .search: return 3
         case .siri: return 3
         case .integration: return 1
-        case .mozilla: return 3
+        case .mozilla: return 2
         case .secret: return 1
         }
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        (sections[section] == .mozilla && onboardingEventsHandler.shouldShowNewOnboarding()) ? 2 : numberOfRows(for: sections[section])
+        numberOfRows(for: sections[section])
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -450,7 +447,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 navigationController?.pushViewController(siriFavoriteVC, animated: true)
             }
         case .mozilla:
-            if (!onboardingEventsHandler.shouldShowNewOnboarding() && indexPath.row == 1) || indexPath.row == 0 {
+            if indexPath.row == 0 {
                 aboutClicked()
             } else {
                 let appId = AppInfo.config.appId

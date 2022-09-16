@@ -15,13 +15,7 @@ import AppShortcuts
 class BrowserViewControllerTests: XCTestCase {
     private let mockUserDefaults = MockUserDefaults()
     
-    private lazy var onboardingEventsHandler = OnboardingEventsHandler(
-        alwaysShowOnboarding: {
-            false
-        },
-        shouldShowNewOnboarding: { [unowned self] in
-            false
-        },
+    private lazy var onboardingEventsHandler = OnboardingEventsHandlerV1(
         getShownTips: {
             return []
         }, setShownTips: { _ in

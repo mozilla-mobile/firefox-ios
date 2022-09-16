@@ -5,6 +5,7 @@
 import WidgetKit
 import SwiftUI
 import Intents
+import Onboarding
 
 struct Provider: TimelineProvider {
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> Void) {
@@ -30,7 +31,7 @@ struct FocusWidgetsEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        SearchWidgetView()
+        SearchWidgetView(title: String(format: UIConstants.strings.searchInAppFormat, String.appNameForBundle))
     }
 }
 
@@ -43,7 +44,7 @@ struct FocusWidgets: Widget {
             FocusWidgetsEntryView(entry: entry)
         }
         .configurationDisplayName(UIConstants.strings.quickActionsGalleryTitle)
-        .description(UIConstants.strings.quickActionGalleryDescription)
+        .description(String(format: UIConstants.strings.quickActionGalleryDescription, String.appNameForBundle))
         .supportedFamilies([.systemSmall])
     }
 }
@@ -52,5 +53,12 @@ struct FocusWidgets_Previews: PreviewProvider {
     static var previews: some View {
         FocusWidgetsEntryView(entry: SimpleEntry(date: Date()))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
+    }
+}
+
+fileprivate extension String {
+    static var appNameForBundle: String {
+        var isKlar: Bool { return (Bundle.main.infoDictionary!["CFBundleIdentifier"] as! String).contains("Klar") }
+        return isKlar ? "Klar" : "Focus"
     }
 }

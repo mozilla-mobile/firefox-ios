@@ -11,14 +11,20 @@ struct InternalOnboardingSettingsView {
 extension InternalOnboardingSettingsView: View {
     var body: some View {
         Form {
-            Toggle(isOn: $internalSettings.ignoreOnboardingExperiment) {
-                Text(verbatim: "Ignore Onboarding Experiment")
+            Section(footer: Text("To show the old version of onboarding disable first the Nimbus experiment, then turn on the option.")) {
+                Toggle(isOn: $internalSettings.ignoreOnboardingExperiment) {
+                    Text(verbatim: "Ignore Onboarding Experiment")
+                }
+                Toggle(isOn: $internalSettings.showOldOnboarding) {
+                    Text(verbatim: "Show Old Onboarding")
+                }
             }
-            Toggle(isOn: $internalSettings.alwaysShowOnboarding) {
-                Text(verbatim: "Always Show Onboarding + Tips")
-            }
-            Toggle(isOn: $internalSettings.showOldOnboarding) {
-                Text(verbatim: "Show Old Onboarding")
+
+            Section {
+                Button("Clear cached shown tips") {
+                    UserDefaults.standard.removeObject(forKey: OnboardingConstants.shownTips)
+                    Toast(text: "Cache cleared").show()
+                }
             }
         }.navigationBarTitle(Text(verbatim: "Onboarding Settings"))
     }
