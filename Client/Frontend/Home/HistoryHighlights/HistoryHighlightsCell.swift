@@ -5,7 +5,7 @@
 import UIKit
 
 /// A cell used in FxHomeScreen's History Highlights section.
-class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
+class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
 
     struct UX {
         static let generalCornerRadius: CGFloat = 10
@@ -14,15 +14,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         static let shadowOffset: CGFloat = 2
     }
 
-    private var shouldApplyBlur: Bool {
-        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
-
-        return WallpaperManager().currentWallpaper.type != .defaultWallpaper
-    }
-
     // MARK: - UI Elements
-    private var blurEffectView: UIVisualEffectView?
-
     let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
@@ -159,11 +151,10 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     private func adjustLayout() {
         // If blur is disabled set background color
-        if shouldApplyBlur {
-            blurEffectView = contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        if shouldApplyWallpaperBlur {
+            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
-            blurEffectView?.removeFromSuperview()
-            blurEffectView = nil
+            contentView.removeVisualEffectView()
             contentView.backgroundColor = LegacyThemeManager.instance.current.homePanel.topSitesContainerView
             setupShadow(cornersToRound: nil)
         }
