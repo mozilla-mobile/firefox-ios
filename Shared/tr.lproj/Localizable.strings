@@ -263,7 +263,7 @@
 "Downloads.Alert.DownloadNow" = "Hemen indir";
 
 /* Button confirming the cancellation of the download. */
-"Downloads.CancelDialog.Cancel" = "Vazgeç";
+"Downloads.CancelDialog.Cancel" = "İptal";
 
 /* Alert dialog body when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Message" = "Bu indirmeden vazgeçmek istediğinizden emin misiniz?";
@@ -1830,6 +1830,24 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "Kullanıcı adı";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "Bu duvar kâğıdıyla ilgili bir sorun oluştu.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "Duvar kâğıdı değiştirilemedi";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "İndirme işleminizde bir sorun oluştu.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "Duvar kâğıdı indirilemedi";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "İptal";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Yeniden dene";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Web içeriği";

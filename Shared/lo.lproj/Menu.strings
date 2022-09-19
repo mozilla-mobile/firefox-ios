@@ -1,3 +1,6 @@
+/* Long label for the button displayed in the menu, used to add a page to the reading list. */
+"Menu.AddToReadingList.AlternateLabel.v99" = "ເພີ່ມເຂົ້າໄປໃນລາຍການອ່ານ";
+
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "ປິດແທັບທັງຫມົດ";
 
@@ -30,6 +33,9 @@
 
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "ແທັບທີ່ Sync ແລ້ວ";
+
+/* Long label for the remove bookmark button displayed in the menu. Pressing this button remove the current page from the bookmarks. */
+"Menu.RemoveBookmark.AlternateLabel.v99" = "ລຶບບຸກມາກອອກ";
 
 /* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
 "Menu.ReportSiteIssueAction.Title" = "ລາຍງານບັນຫາເວັບໄຊທ";
