@@ -217,12 +217,12 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
                                                                  alignment: .top)
         section.boundarySupplementaryItems = [header]
 
-        let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
+        let horizontalInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
-            leading: leadingInset,
+            leading: horizontalInset,
             bottom: HomepageViewModel.UX.spacingBetweenSections,
-            trailing: 0)
+            trailing: horizontalInset)
         section.orthogonalScrollingBehavior = .continuous
 
         return section
