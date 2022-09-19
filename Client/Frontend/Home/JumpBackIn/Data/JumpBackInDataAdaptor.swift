@@ -72,9 +72,10 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         setupNotifications(forObserver: self, observing: [.ShowHomepage,
                                                           .TabsTrayDidClose,
                                                           .TabsTrayDidSelectHomeTab,
-                                                          .TopTabsTabClosed])
-        getHasSyncAccount()
-        updateData()
+                                                          .TopTabsTabClosed,
+                                                          .ProfileDidFinishSyncing,
+                                                          .FirefoxAccountChanged])
+        updateTabsAndAccountData()
     }
 
     deinit {
@@ -84,8 +85,7 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     // MARK: Public interface
 
     var hasSyncedTabFeatureEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly) &&
-            hasSyncAccount ?? false
+        return featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly) && hasSyncAccount ?? false
     }
 
     func getJumpBackInData() -> JumpBackInList {
@@ -133,26 +133,30 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
     // MARK: Jump back in data
 
-    private func updateData() {
-        // Has to be on main due to tab manager needing main tread
-        // This can be fixed when tab manager has been revisited
-        mainQueue.async { [weak self] in
-            guard let self = self else { return }
-
-            self.dispatchGroup.enter()
-            self.updateJumpBackInData {
-                self.dispatchGroup.leave()
+    private func updateTabsAndAccountData() {
+        getHasSyncAccount { [weak self] in
+            // Has to be on main due to tab manager needing main tread
+            // This can be fixed when tab manager has been revisited
+            self?.mainQueue.async { [weak self] in
+                self?.updateTabsData()
             }
+        }
+    }
 
-            self.dispatchGroup.enter()
-            self.updateRemoteTabs {
-                self.dispatchGroup.leave()
-            }
+    private func updateTabsData() {
+        dispatchGroup.enter()
+        updateJumpBackInData { [weak self] in
+            self?.dispatchGroup.leave()
+        }
 
-            self.dispatchGroup.notify(queue: .main) {
-                self.refreshData()
-                self.delegate?.didLoadNewData()
-            }
+        dispatchGroup.enter()
+        updateRemoteTabs { [weak self] in
+            self?.dispatchGroup.leave()
+        }
+
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            self?.refreshData()
+            self?.delegate?.didLoadNewData()
         }
     }
 
@@ -216,14 +220,15 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
     // MARK: Synced tab data
 
-    private func getHasSyncAccount() {
-        guard featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly) else { return }
+    private func getHasSyncAccount(completion: @escaping () -> Void) {
+        guard featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly) else {
+            completion()
+            return
+        }
 
         profile.hasSyncAccount { hasSync in
             self.hasSyncAccount = hasSync
-            self.updateRemoteTabs {
-                self.delegate?.didLoadNewData()
-            }
+            completion()
         }
     }
 
@@ -289,7 +294,10 @@ extension JumpBackInDataAdaptorImplementation: Notifiable {
                 .TabsTrayDidClose,
                 .TabsTrayDidSelectHomeTab,
                 .TopTabsTabClosed:
-            updateData()
+            updateTabsData()
+        case .ProfileDidFinishSyncing,
+                .FirefoxAccountChanged:
+            updateTabsAndAccountData()
         default: break
         }
     }

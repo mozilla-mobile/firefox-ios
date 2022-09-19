@@ -25,12 +25,10 @@ class PocketStandardCellViewModel {
     }
 
     var onTap: (IndexPath) -> Void = { _ in }
-    var shouldAddBlur: Bool
 
     private let story: PocketStory
 
-    init(story: PocketStory, shouldAddBlur: Bool) {
+    init(story: PocketStory) {
         self.story = story
-        self.shouldAddBlur = shouldAddBlur
     }
 }

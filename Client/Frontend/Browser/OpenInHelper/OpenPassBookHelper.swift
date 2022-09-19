@@ -25,7 +25,7 @@ class OpenPassBookHelper {
          cookieStore: WKHTTPCookieStore,
          presenter: Presenter) {
         self.response = response
-        self.url  = response.url
+        self.url = response.url
         self.cookieStore = cookieStore
         self.presenter = presenter
     }
