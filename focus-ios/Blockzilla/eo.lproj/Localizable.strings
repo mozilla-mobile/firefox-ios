@@ -406,6 +406,9 @@
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Forigi el ŝparvojoj";
 
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Ŝparvojo forigita";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Peti skribotablan retejon";
 
@@ -516,6 +519,9 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Tiuj ĉi normaj agordoj provizas fortan protekton. Sed estas facile modifi ilin por viaj specifaj bezonoj.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Komencu vian seancon de privata retumo kaj ni blokos spurilojn kaj aliajn aĉaĵojn dum vi retumas.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Tuŝetu la rubujon kiam ajn vi volas forigi ĉiujn spurojn de via nuna seanco.";
