@@ -62,7 +62,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
     lazy var titleText: UILabel = .build { label in
         label.isUserInteractionEnabled = false
         label.numberOfLines = 1
-        label.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
+        label.font = .preferredFont(forTextStyle: .footnote).bold()
         label.textColor = UIColor.theme.tabTray.tabTitleText
     }
 
@@ -80,9 +80,10 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         button.imageEdgeInsets = UIEdgeInsets(equalInset: GridTabTrayControllerUX.CloseButtonEdgeInset)
     }
 
-    var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.theme.tabTray.tabTitleBlur))
+    var title = UIView()
     var animator: SwipeAnimator?
     var isSelectedTab = false
+    var isPrivate = false
 
     weak var delegate: TabCellDelegate?
 
@@ -107,9 +108,9 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
 
         backgroundHolder.addSubview(title)
         title.translatesAutoresizingMaskIntoConstraints = false
-        title.contentView.addSubview(self.closeButton)
-        title.contentView.addSubview(self.titleText)
-        title.contentView.addSubview(self.favicon)
+        title.addSubview(self.closeButton)
+        title.addSubview(self.titleText)
+        title.addSubview(self.favicon)
 
         setupConstraint()
     }
@@ -133,12 +134,12 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
 
             closeButton.heightAnchor.constraint(equalToConstant: GridTabTrayControllerUX.CloseButtonSize),
             closeButton.widthAnchor.constraint(equalToConstant: GridTabTrayControllerUX.CloseButtonSize),
-            closeButton.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
+            closeButton.centerYAnchor.constraint(equalTo: title.centerYAnchor),
             closeButton.trailingAnchor.constraint(equalTo: title.trailingAnchor),
 
             titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor, constant: 6),
             titleText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: 6),
-            titleText.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
+            titleText.centerYAnchor.constraint(equalTo: title.centerYAnchor),
 
             screenshotView.topAnchor.constraint(equalTo: topAnchor),
             screenshotView.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
@@ -163,13 +164,18 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
-        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.borderWidth).cgPath
+        if isSelectedTab {
+            let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
+            layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.borderWidth).cgPath
+        } else {
+            layer.shadowPath = nil
+        }
     }
 
     // MARK: - Configure tab cell with a Tab
     func configureWith(tab: Tab, isSelected selected: Bool) {
         isSelectedTab = selected
+        isPrivate = tab.isPrivate
 
         titleText.text = tab.getTabTrayTitle()
         accessibilityLabel = getA11yTitleLabel(tab: tab)
@@ -186,6 +192,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
             }
         }
 
+        /* Ecosia
         if selected {
             setTabSelected(tab.isPrivate)
         } else {
@@ -193,6 +200,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
             layer.shadowPath = nil
             layer.shadowOpacity = 0
         }
+         */
 
         faviconBG.isHidden = true
 
@@ -214,19 +222,23 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         } else {
             setFaviconImage(for: tab, with: smallFaviconView)
         }
+        applyTheme()
     }
 
     override func prepareForReuse() {
         // Reset any close animations.
         super.prepareForReuse()
-        screenshotView.image = nil
+        // Ecosia // screenshotView.image = nil
         backgroundHolder.transform = .identity
         backgroundHolder.alpha = 1
-        self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
+        // Ecosia // self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
         layer.shadowOffset = .zero
         layer.shadowPath = nil
         layer.shadowOpacity = 0
         isHidden = false
+        isSelectedTab = false
+        isPrivate = false
+        applyTheme()
     }
 
     override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
@@ -247,6 +259,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         delegate?.tabCellDidClose(self)
     }
 
+    /* Ecosia: unused method
     private func setTabSelected(_ isPrivate: Bool) {
         // This creates a border around a tabcell. Using the shadow creates a border _outside_ of the tab frame.
         layer.shadowColor = (isPrivate ? UIColor.theme.tabTray.privateModePurple : UIConstants.SystemBlueColor).cgColor
@@ -258,6 +271,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
         layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.borderWidth).cgPath
     }
+     */
 
     func setFaviconImage(for tab: Tab, with imageView: UIImageView) {
         if let url = tab.url?.domainURL ?? tab.sessionData?.urls.last?.domainURL {

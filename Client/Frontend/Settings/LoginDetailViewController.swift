@@ -15,12 +15,13 @@ enum InfoItem: Int {
     case deleteItem
 
     var indexPath: IndexPath {
-        return IndexPath(row: rawValue, section: 0)
+        return IndexPath(row: 0, section: rawValue)
     }
 }
 
 struct LoginDetailUX {
-    static let InfoRowHeight: CGFloat = 58
+    static let InfoRowHeight: CGFloat = 48
+    static let WebsiteRowHeight: CGFloat = 64
     static let DeleteRowHeight: CGFloat = 44
     static let SeparatorHeight: CGFloat = 84
 }
@@ -33,12 +34,10 @@ private class CenteredDetailCell: ThemedTableViewCell {
         detailTextLabel?.frame = f
     }
 }
-
-class LoginDetailViewController: SensitiveViewController {
+class LoginDetailViewController: SensitiveViewController, NotificationThemeable {
     private let profile: Profile
-
-    private lazy var tableView: UITableView = .build { [weak self] tableView in
-        guard let self = self else { return }
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
 
         tableView.separatorColor = UIColor.theme.tableView.separator
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
@@ -48,7 +47,8 @@ class LoginDetailViewController: SensitiveViewController {
 
         // Add empty footer view to prevent separators from being drawn past the last item.
         tableView.tableFooterView = UIView()
-    }
+        return tableView
+    } ()
 
     private weak var websiteField: UITextField?
     private weak var usernameField: UITextField?
@@ -104,6 +104,8 @@ class LoginDetailViewController: SensitiveViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         tableView.estimatedRowHeight = 44.0
+
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -113,13 +115,19 @@ class LoginDetailViewController: SensitiveViewController {
         // but since we don't use the tableView's editing flag for editing we handle this ourselves.
         KeyboardHelper.defaultHelper.addDelegate(self)
     }
+
+    func applyTheme() {
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+        tableView.reloadData()
+    }
 }
 
 // MARK: - UITableViewDataSource
 extension LoginDetailViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch InfoItem(rawValue: indexPath.row)! {
+        switch InfoItem(rawValue: indexPath.section)! {
         case .breachItem:
             let breachCell = cell(forIndexPath: indexPath)
             guard let breach = breach else { return breachCell }
@@ -170,7 +178,6 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .websiteItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = .LoginDetailWebsite
             loginCell.descriptionLabel.text = login.hostname
             websiteField = loginCell.descriptionLabel
             websiteField?.accessibilityIdentifier = "websiteField"
@@ -229,14 +236,18 @@ extension LoginDetailViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 6
+        return 1
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        6
     }
 }
 
 // MARK: - UITableViewDelegate
 extension LoginDetailViewController: UITableViewDelegate {
     private func showMenuOnSingleTap(forIndexPath indexPath: IndexPath) {
-        guard let item = InfoItem(rawValue: indexPath.row) else { return }
+        guard let item = InfoItem(rawValue: indexPath.section) else { return }
         if ![InfoItem.passwordItem, InfoItem.websiteItem, InfoItem.usernameItem].contains(item) {
             return
         }
@@ -259,7 +270,7 @@ extension LoginDetailViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch InfoItem(rawValue: indexPath.row)! {
+        switch InfoItem(rawValue: indexPath.section)! {
         case .breachItem:
             guard let _ = breach else { return 0 }
             return UITableView.automaticDimension
@@ -271,6 +282,34 @@ extension LoginDetailViewController: UITableViewDelegate {
             return LoginDetailUX.DeleteRowHeight
         }
     }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch InfoItem(rawValue: section)! {
+        case .usernameItem:
+            return .LoginDetailUsername
+        case .passwordItem:
+            return .LoginDetailPassword
+        case .websiteItem:
+            return .LoginDetailWebsite
+        default:
+            return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        switch InfoItem(rawValue: section)! {
+        case .usernameItem, .passwordItem, .websiteItem:
+            return UITableView.automaticDimension
+        default:
+            return 0
+        }
+    }
+
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let header = view as? UITableViewHeaderFooterView else { return }
+        header.textLabel?.textColor = .theme.ecosia.secondaryText
+    }
+
 }
 
 // MARK: - KeyboardHelperDelegate
@@ -415,7 +454,7 @@ extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
 
     func infoItemForCell(_ cell: LoginDetailTableViewCell) -> InfoItem? {
         if let index = tableView.indexPath(for: cell),
-            let item = InfoItem(rawValue: index.row) {
+            let item = InfoItem(rawValue: index.section) {
             return item
         }
         return nil

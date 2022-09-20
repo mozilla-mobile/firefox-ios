@@ -9,7 +9,7 @@ import CoreSpotlight
 import MobileCoreServices
 import WebKit
 
-private let browsingActivityType: String = "org.mozilla.ios.firefox.browsing"
+private let browsingActivityType: String = "com.ecosia.ecosiaapp.browsing"
 
 private let searchableIndex = CSSearchableIndex.default()
 
@@ -81,6 +81,7 @@ extension UserActivityHandler {
               !InternalURL.isValid(url: url)
         else { return }
 
+        /* Ecosia: disable Spotlight
         let spotlightConfig = FxNimbus.shared.features.spotlightSearch.value()
         if !spotlightConfig.enabled { return }
 
@@ -137,6 +138,7 @@ extension UserActivityHandler {
                 log.info("Spotlight: Search item successfully indexed!")
             }
         }
+         */
     }
 
     func spotlightDeindex(_ page: ReadabilityResult) {

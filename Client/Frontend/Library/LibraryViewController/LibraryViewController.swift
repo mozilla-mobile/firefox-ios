@@ -27,12 +27,21 @@ class LibraryViewController: UIViewController {
 
     // Views
     private var controllerContainerView: UIView = .build { view in }
+    fileprivate lazy var topSeparator: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.theme.ecosia.barSeparator
+        return view
+    }()
 
     // UI Elements
     private lazy var librarySegmentControl: UISegmentedControl = {
         var librarySegmentControl: UISegmentedControl
-        librarySegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
+        librarySegmentControl = UISegmentedControl(items: [UIImage(named: "library-bookmark")!,
+                                                           UIImage(named: "library-history")!,
+                                                           UIImage(named: "library-readinglist")!,
+                                                           UIImage(named: "library-downloads")!])
         librarySegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
+        //Ecosia TODO: librarySegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
         librarySegmentControl.selectedSegmentIndex = 1
         librarySegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         librarySegmentControl.translatesAutoresizingMaskIntoConstraints = false
@@ -66,6 +75,7 @@ class LibraryViewController: UIViewController {
         self.notificationCenter = notificationCenter
 
         super.init(nibName: nil, bundle: nil)
+        modalPresentationCapturesStatusBarAppearance = true
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -96,10 +106,12 @@ class LibraryViewController: UIViewController {
     }
 
     private func viewSetup() {
+        /* Ecosia
         if let appWindow = (UIApplication.shared.delegate?.window),
            let window = appWindow as UIWindow? {
             window.backgroundColor = .black
         }
+         */
 
         navigationItem.rightBarButtonItem = topRightButton
         view.addSubviews(controllerContainerView, segmentControlToolbar)
@@ -157,28 +169,26 @@ class LibraryViewController: UIViewController {
     }
 
     @objc func panelChanged() {
-        var eventValue: TelemetryWrapper.EventValue
+        // Ecosia // var eventValue: TelemetryWrapper.EventValue
         var selectedPanel: LibraryPanelType
 
         switch librarySegmentControl.selectedSegmentIndex {
         case 0:
             selectedPanel = .bookmarks
-            eventValue = .bookmarksPanel
+            // Ecosia // eventValue = .bookmarksPanel
         case 1:
             selectedPanel = .history
-            eventValue = .historyPanel
+            // Ecosia // eventValue = .historyPanel
         case 2:
-            selectedPanel = .downloads
-            eventValue = .downloadsPanel
-        case 3:
             selectedPanel = .readingList
-            eventValue = .readingListPanel
+        case 3:
+            selectedPanel = .downloads
         default:
             return
         }
 
         setupOpenPanel(panelType: selectedPanel)
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: eventValue)
+        // Ecosia // TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: eventValue)
     }
 
     func setupOpenPanel(panelType: LibraryPanelType) {
@@ -250,7 +260,7 @@ class LibraryViewController: UIViewController {
             topLeftButton.image = UIImage.templateImageNamed("goBack")?.imageFlippedForRightToLeftLayoutDirection()
             navigationItem.leftBarButtonItem = topLeftButton
         case .bookmarks(state: .itemEditMode):
-            topLeftButton.image = UIImage.templateImageNamed("nav-stop")
+            topLeftButton.image = UIImage.templateImageNamed("goBack")
             navigationItem.leftBarButtonItem = topLeftButton
         default:
             navigationItem.leftBarButtonItem = nil
@@ -319,18 +329,37 @@ extension LibraryViewController: NotificationThemeable, Notifiable {
         // There is an ANNOYING bar in the nav bar above the segment control. These are the
         // UIBarBackgroundShadowViews. We must set them to be clear images in order to
         // have a seamless nav bar, if embedding the segmented control.
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
+        let navAppearance = UINavigationBarAppearance()
+        navAppearance.configureWithOpaqueBackground()
+        navAppearance.backgroundColor = UIColor.theme.homePanel.panelBackground
+        navAppearance.shadowImage = UIImage()
+        navAppearance.shadowColor = .clear
+        navAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.theme.ecosia.primaryText]
+        navigationController?.navigationBar.standardAppearance = navAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navAppearance
+        navigationController?.navigationBar.tintColor = UIColor.theme.ecosia.primaryButton
 
         view.backgroundColor = UIColor.theme.homePanel.panelBackground
-        navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
-        navigationController?.navigationBar.tintColor = .systemBlue
-        navigationController?.navigationBar.backgroundColor = UIColor.theme.tabTray.toolbar
-        navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
-        navigationController?.toolbar.tintColor = .systemBlue
-        segmentControlToolbar.barTintColor = UIColor.theme.tabTray.toolbar
-        segmentControlToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+
+        let appearance = UIToolbarAppearance()
+        appearance.configureWithDefaultBackground()
+        appearance.backgroundColor = UIColor.theme.tabTray.toolbar
+        appearance.shadowColor = UIColor.theme.ecosia.barSeparator
+        navigationController?.toolbar.standardAppearance = appearance
+        if #available(iOS 15.0, *) {
+            navigationController?.toolbar.scrollEdgeAppearance = appearance
+        }
+        navigationController?.toolbar.tintColor = UIColor.theme.ecosia.primaryButton
+
+        segmentControlToolbar.barTintColor = UIColor.theme.homePanel.panelBackground
+        segmentControlToolbar.tintColor = UIColor.theme.ecosia.primaryButton
         segmentControlToolbar.isTranslucent = false
+        segmentControlToolbar.setShadowImage(UIImage(), forToolbarPosition: .any)
+
+        librarySegmentControl.setTitleTextAttributes([.foregroundColor: UIColor.theme.ecosia.primaryText], for: .normal)
+        librarySegmentControl.setTitleTextAttributes([.foregroundColor: UIColor.Light.Text.primary], for: .selected)
+        librarySegmentControl.selectedSegmentTintColor = .Light.Background.primary
+        librarySegmentControl.backgroundColor = UIColor.theme.ecosia.segmentBackground
 
         setNeedsStatusBarAppearanceUpdate()
         setupToolBarAppearance()

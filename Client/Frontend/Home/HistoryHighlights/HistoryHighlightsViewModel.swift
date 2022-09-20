@@ -54,6 +54,7 @@ struct HistoryHighlightsModel {
     }
 }
 
+/* Ecosia
 class HistoryHighlightsViewModel {
 
     struct UX {
@@ -244,6 +245,7 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
 }
+
 
 // MARK: FxHomeSectionHandler
 extension HistoryHighlightsViewModel: HomepageSectionHandler {
@@ -455,3 +457,4 @@ extension HistoryHighlightsViewModel: HistoryHighlightsDelegate {
         }
     }
 }
+ */

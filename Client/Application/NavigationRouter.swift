@@ -4,7 +4,8 @@
 
 import Foundation
 import Shared
-import Glean
+// Ecosia: import Glean
+import Core
 
 struct FxALaunchParams {
     var query: [String: String]
@@ -45,7 +46,7 @@ enum DeepLink {
     case settings(SettingsPage)
     case homePanel(HomePanelPath)
     case defaultBrowser(DefaultBrowserPath)
-
+    case referral(String)
     init?(urlString: String) {
         let paths = urlString.split(separator: "/")
         guard let component = paths[safe: 0],
@@ -58,6 +59,8 @@ enum DeepLink {
             self = .homePanel(link)
         } else if component == "default-browser", let link = DefaultBrowserPath(rawValue: String(componentPath)) {
             self = .defaultBrowser(link)
+        } else if component == Referrals.host {
+            self = .referral(String(componentPath))
         } else {
             return nil
         }
@@ -78,7 +81,7 @@ enum NavigationPath {
     case fxa(params: FxALaunchParams)
     case deepLink(DeepLink)
     case text(String)
-    case glean(url: URL)
+    // Ecosia // case glean(url: URL)
     case closePrivateTabs
 
     init?(url: URL) {
@@ -109,7 +112,11 @@ enum NavigationPath {
 
         let isOurScheme = [URL.mozPublicScheme, URL.mozInternalScheme].contains(scheme)
         if isOurScheme, let host = components.host?.lowercased(), !host.isEmpty {
-            if host == "deep-link", let deepURL = components.valueForQuery("url"), let link = DeepLink(urlString: deepURL.lowercased()) {
+            // Ecosia TODO: Referall deeplink
+            if host == Referrals.host, let link = DeepLink(urlString: url.normalizedHostAndPath ?? "") {
+                self = .deepLink(link)
+                Analytics.shared.deeplink()
+            } else if host == "deep-link", let deepURL = components.valueForQuery("url"), let link = DeepLink(urlString: deepURL.lowercased()) {
                 self = .deepLink(link)
             } else if host == "fxa-signin", components.valueForQuery("signin") != nil {
                 self = .fxa(params: FxALaunchParams(query: url.getQuery()))
@@ -120,9 +127,9 @@ enum NavigationPath {
             } else if host == "open-text" {
                 let text = components.valueForQuery("text")
                 self = .text(text ?? "")
-            } else if host == "glean" {
+            } /* Ecosia // else if host == "glean" {
                 self = .glean(url: url)
-            } else {
+            } */ else {
                 return nil
             }
 
@@ -132,7 +139,7 @@ enum NavigationPath {
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)
-
+            Analytics.shared.defaultBrowser()
         } else {
             return nil
         }
@@ -144,7 +151,7 @@ enum NavigationPath {
         case .deepLink(let link): NavigationPath.handleDeepLink(link, with: bvc)
         case .url(let url, let isPrivate): NavigationPath.handleURL(url: url, isPrivate: isPrivate, with: bvc)
         case .text(let text): NavigationPath.handleText(text: text, with: bvc)
-        case .glean(let url): NavigationPath.handleGlean(url: url)
+        // Ecosia // case .glean(let url): NavigationPath.handleGlean(url: url)
         case .closePrivateTabs: NavigationPath.handleClosePrivateTabs(with: bvc)
         case .widgetUrl(webURL: let webURL, uuid: let uuid):
             NavigationPath.handleWidgetURL(url: webURL, uuid: uuid, with: bvc)
@@ -171,6 +178,8 @@ enum NavigationPath {
 
         case .defaultBrowser(let path):
             NavigationPath.handleDefaultBrowser(path: path, with: bvc)
+        case .referral(let code):
+            bvc.openBlankNewTabAndClaimReferral(code: code)
         }
     }
 
@@ -239,7 +248,7 @@ enum NavigationPath {
     }
 
     private static func handleFxA(params: FxALaunchParams, with bvc: BrowserViewController) {
-        bvc.presentSignInViewController(params)
+        // bvc.presentSignInViewController(params)
     }
 
     private static func handleClosePrivateTabs(with bvc: BrowserViewController) {
@@ -251,9 +260,11 @@ enum NavigationPath {
         bvc.tabManager.selectTab(tab)
     }
 
+    /* Ecosia: disable Glean
     private static func handleGlean(url: URL) {
         Glean.shared.handleCustomUrl(url: url)
     }
+     */
 
     private static func handleHomePanel(panel: HomePanelPath, with bvc: BrowserViewController) {
         switch panel {
@@ -323,8 +334,9 @@ enum NavigationPath {
             viewController.tabManager = tabManager
             controller.pushViewController(viewController, animated: true)
         case .fxa:
-            let viewController = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(flowType: .emailLoginFlow, referringPage: .settings, profile: bvc.profile)
-            controller.pushViewController(viewController, animated: true)
+            /* let viewController = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(flowType: .emailLoginFlow, referringPage: .settings, profile: bvc.profile)
+            controller.pushViewController(viewController, animated: true)*/
+            break
         case .theme:
             controller.pushViewController(ThemeSettingsController(), animated: true)
 
@@ -372,6 +384,8 @@ func == (lhs: DeepLink, rhs: DeepLink) -> Bool {
     case let (.homePanel(lhs), .homePanel(rhs)):
         return lhs == rhs
     case let (.defaultBrowser(lhs), .defaultBrowser(rhs)):
+        return lhs == rhs
+    case let (.referral(lhs), .referral(rhs)):
         return lhs == rhs
     default:
         return false

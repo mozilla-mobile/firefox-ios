@@ -20,6 +20,7 @@ extension HasNimbusSearchBar {
     }
 }
 
+/* Ecosia: disable sponsored tiles
 protocol HasNimbusSponsoredTiles { }
 
 extension HasNimbusSponsoredTiles {
@@ -27,6 +28,8 @@ extension HasNimbusSponsoredTiles {
         return NimbusManager.shared.sponsoredTileLayer
     }
 }
+ */
+
 
 class NimbusManager {
 
@@ -38,15 +41,15 @@ class NimbusManager {
 
     // MARK: - Properties
     var featureFlagLayer: NimbusFeatureFlagLayer
-    var sponsoredTileLayer: NimbusSponsoredTileLayer
+    // Ecosia // var sponsoredTileLayer: NimbusSponsoredTileLayer
     var bottomSearchBarLayer: NimbusSearchBarLayer
 
     init(with featureFlagLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer(),
-         sponsoredTileLayer: NimbusSponsoredTileLayer = NimbusSponsoredTileLayer(),
+         // Ecosia //sponsoredTileLayer: NimbusSponsoredTileLayer = NimbusSponsoredTileLayer(),
          bottomSearchBarLayer: NimbusSearchBarLayer = NimbusSearchBarLayer()
     ) {
         self.featureFlagLayer = featureFlagLayer
-        self.sponsoredTileLayer = sponsoredTileLayer
+        // Ecosia //self.sponsoredTileLayer = sponsoredTileLayer
         self.bottomSearchBarLayer = bottomSearchBarLayer
     }
 }

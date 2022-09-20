@@ -5,10 +5,16 @@ import UIKit
 
 class ThemedTableViewCell: UITableViewCell, NotificationThemeable {
     var detailTextColor = UIColor.theme.tableView.disabledRowText
+    let style: UITableViewCell.CellStyle
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.style = style
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectedBackgroundView = UIView()
         applyTheme()
+
+        // Ecosia: adjust layout margins
+        contentView.directionalLayoutMargins.leading = 16
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -16,10 +22,78 @@ class ThemedTableViewCell: UITableViewCell, NotificationThemeable {
     }
 
     func applyTheme() {
-        textLabel?.textColor = UIColor.theme.tableView.rowText
-        detailTextLabel?.textColor = detailTextColor
+        textLabel?.textColor = UIColor.theme.ecosia.primaryText
+        detailTextLabel?.textColor = .theme.ecosia.secondaryText
         backgroundColor = UIColor.theme.tableView.rowBackground
+        selectedBackgroundView?.backgroundColor = .theme.ecosia.primarySelectedBackground
         tintColor = UIColor.theme.general.controlTint
+    }
+
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        applyTheme()
+    }
+
+    // Ecosia: fix layouting
+    private var textFrame: CGRect?
+    private var detailFrame: CGRect?
+
+    override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
+
+        // Fix autosizing of UITableViewCellStyle.Value1
+        guard style == .value1, let textLabel = self.textLabel, let detailTextLabel = self.detailTextLabel else {
+            return super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+        }
+
+        self.layoutIfNeeded()
+        var size = super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+
+        let detailHeight = detailTextLabel.frame.size.height
+        let textHeight = textLabel.frame.size.height
+        let xMargin: CGFloat = 16
+        let yMargin:CGFloat = 10
+        let labelsMargin: CGFloat = 6
+        let factor: CGFloat = 0.6
+
+        size.height = max(detailHeight, textHeight) + 2 * yMargin
+
+        var accessoryOffset = accessoryView?.frame.size.width ?? 0.0
+        if accessoryOffset > 0 { accessoryOffset += 8 }
+
+        if textLabel.frame.maxX > size.width * factor, textLabel.frame.maxX + labelsMargin >= detailTextLabel.frame.minX {
+            var textFrame = textLabel.frame
+            textFrame.origin.y = yMargin
+            textFrame.size.width = size.width * factor
+            textFrame.size.height = size.height - 2.0 * yMargin
+            textFrame.size = textLabel.sizeThatFits(textFrame.size)
+            self.textFrame = textFrame
+
+            var detailFrame = detailTextLabel.frame
+            detailFrame.origin.y = yMargin
+            detailFrame.origin.x = textFrame.maxX + labelsMargin
+            detailFrame.size.height = size.height - 2 * yMargin
+            detailFrame.size.width = size.width - 2 * xMargin - textFrame.width - accessoryOffset - labelsMargin
+            self.detailFrame = detailFrame
+            size.height = max(detailFrame.height, textFrame.height) + 2 * yMargin
+        } else if textFrame != nil, detailFrame != nil {
+            // fix position on rotation
+            textFrame!.size = textLabel.sizeThatFits(size)
+            detailFrame!.size = detailTextLabel.sizeThatFits(size)
+            size.height = max(detailFrame!.height, textFrame!.height) + 2 * yMargin
+            detailFrame!.origin.x = textFrame!.maxX + labelsMargin
+            detailFrame!.size.height = size.height - 2 * yMargin
+            detailFrame!.size.width = size.width - 2 * xMargin - textFrame!.width - accessoryOffset - labelsMargin
+        }
+        return size
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if let textFrame = textFrame, let detailFrame = detailFrame {
+            self.textLabel?.frame = textFrame
+            self.detailTextLabel?.frame = detailFrame
+        }
     }
 }
 
@@ -48,6 +122,7 @@ class ThemedTableViewController: UITableViewController, NotificationThemeable {
         tableView.reloadData()
 
         (tableView.tableHeaderView as? NotificationThemeable)?.applyTheme()
+        (tableView.tableFooterView as? NotificationThemeable)?.applyTheme()
     }
 }
 
@@ -92,8 +167,8 @@ class ThemedHeaderFooterViewBordersHelper: NotificationThemeable {
     }
 
     func applyTheme() {
-        topBorder.backgroundColor = UIColor.theme.tableView.separator
-        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
+        topBorder.backgroundColor = UIColor.theme.ecosia.border
+        bottomBorder.backgroundColor = UIColor.theme.ecosia.border
     }
 }
 
@@ -101,5 +176,6 @@ class UISwitchThemed: UISwitch {
     override func layoutSubviews() {
         super.layoutSubviews()
         onTintColor = UIColor.theme.general.controlTint
+        subviews.first?.subviews.first?.backgroundColor = .theme.ecosia.tertiaryBackground
     }
 }

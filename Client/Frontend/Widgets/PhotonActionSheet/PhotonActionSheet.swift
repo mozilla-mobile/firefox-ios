@@ -55,7 +55,7 @@ class PhotonActionSheet: UIViewController {
 
     private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)
-        button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
+        button.setTitleColor(UIColor.theme.ecosia.primaryButton, for: .normal)
         button.layer.cornerRadius = UX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
         button.addTarget(self, action: #selector(self.dismiss), for: .touchUpInside)
@@ -148,10 +148,8 @@ class PhotonActionSheet: UIViewController {
         tableView.isScrollEnabled = true
         tableView.showsVerticalScrollIndicator = false
         tableView.layer.cornerRadius = UX.CornerRadius
-        // Don't show separators on ETP menu
-        if viewModel.title != nil {
-            tableView.separatorStyle = .none
-        }
+        // Ecosia: never show separators
+        tableView.separatorStyle = .none
         tableView.separatorColor = UIColor.clear
         tableView.separatorInset = .zero
         tableView.cellLayoutMarginsFollowReadableWidth = false
@@ -401,6 +399,11 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
             cell.hideBottomBorder(isHidden: isLastRow)
         }
 
+        /* TODO Ecosia: don't show separators
+        if (title == nil) {
+            cell.bottomBorder.isHidden = !(indexPath != [tableView.numberOfSections - 1, tableView.numberOfRows(inSection: tableView.numberOfSections - 1) - 1])
+        }
+        */
         return cell
     }
 

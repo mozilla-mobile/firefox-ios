@@ -11,5 +11,6 @@
 #import "Account-Bridging-Header.h"
 #import "Shared-Bridging-Header.h"
 #import "Storage-Bridging-Header.h"
+#import "Account-Bridging-Header.h"
 
 #endif

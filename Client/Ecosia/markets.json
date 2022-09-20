@@ -1,0 +1,260 @@
+[
+  {
+    "value": "es-ar",
+    "label": "Argentina",
+  },
+  {
+    "value": "en-au",
+    "label": "Australia",
+  },
+  {
+    "value": "de-at",
+    "label": "Austria",
+  },
+  {
+    "value": "fr-be",
+    "label": "Belgium (French)",
+    "languageInLabel": "true",
+  },
+  {
+    "value": "nl-be",
+    "label": "Belgium (Dutch)",
+    "languageInLabel": "true",
+  },
+  {
+    "value": "pt-br",
+    "label": "Brazil",
+  },
+  {
+    "value": "bg-bg",
+    "label": "Bulgaria",
+  },
+  {
+    "value": "en-ca",
+    "label": "Canada (English)",
+    "languageInLabel": "true",
+  },
+  {
+    "value": "fr-ca",
+    "label": "Canada (French)",
+    "languageInLabel": "true",
+  },
+  {
+    "value": "es-cl",
+    "label": "Chile",
+  },
+  {
+    "value": "zh-cn",
+    "label": "China",
+  },
+  {
+    "value": "es-co",
+    "label": "Colombia",
+  },
+  {
+    "value": "hr-hr",
+    "label": "Croatia",
+  },
+  {
+    "value": "cz-cz",
+    "label": "Czech Republic",
+  },
+  {
+    "value": "da-dk",
+    "label": "Denmark",
+  },
+  {
+    "value": "ee-ee",
+    "label": "Estonia",
+  },
+  {
+    "value": "fi-fi",
+    "label": "Finland",
+  },
+  {
+    "value": "fr-fr",
+    "label": "France",
+  },
+  {
+    "value": "de-de",
+    "label": "Germany",
+  },
+  {
+    "value": "gr-gr",
+    "label": "Greece",
+  },
+  {
+    "value": "zh-hk",
+    "label": "Hong Kong",
+  },
+  {
+    "value": "en-in",
+    "label": "India",
+  },
+  {
+    "value": "en-id",
+    "label": "Indonesia",
+  },
+  {
+    "value": "en-ie",
+    "label": "Ireland",
+  },
+  {
+    "value": "it-it",
+    "label": "Italy",
+  },
+  {
+    "value": "ja-jp",
+    "label": "Japan",
+  },
+  {
+    "value": "lv-lv",
+    "label": "Latvia",
+  },
+  {
+    "value": "lt-lt",
+    "label": "Lithuania",
+  },
+  {
+    "value": "en-my",
+    "label": "Malaysia",
+  },
+  {
+    "value": "es-mx",
+    "label": "Mexico",
+  },
+  {
+    "value": "nl-nl",
+    "label": "Netherlands",
+  },
+  {
+    "value": "en-nz",
+    "label": "New Zealand",
+  },
+  {
+    "value": "nb-no",
+    "label": "Norway",
+  },
+  {
+    "value": "es-pe",
+    "label": "Peru",
+  },
+  {
+    "value": "en-ph",
+    "label": "Philippines",
+  },
+  {
+    "value": "pl-pl",
+    "label": "Poland",
+  },
+  {
+    "value": "pt-pt",
+    "label": "Portugal",
+  },
+  {
+    "value": "ro-ro",
+    "label": "Romania",
+  },
+  {
+    "value": "ru-ru",
+    "label": "Russia",
+  },
+  {
+    "value": "ar-sa",
+    "label": "Saudi Arabia (Arabic)",
+    "languageInLabel": "true",
+  },
+  {
+    "value": "en-sa",
+    "label": "Saudi Arabia (English)",
+    "languageInLabel": "true",
+  },
+  {
+    "value": "en-sg",
+    "label": "Singapore",
+  },
+  {
+    "value": "sk-sk",
+    "label": "Slovakia",
+  },
+  {
+    "value": "en-za",
+    "label": "South Africa",
+  },
+  {
+    "value": "ko-kr",
+    "label": "South Korea",
+  },
+  {
+    "value": "es-es",
+    "label": "Spain",
+  },
+  {
+    "value": "sv-se",
+    "label": "Sweden",
+  },
+  {
+    "value": "de-ch",
+    "label": "Switzerland (German)",
+    "languageInLabel": "true",
+  },
+  {
+    "value": "fr-ch",
+    "label": "Switzerland (French)",
+    "languageInLabel": "true",
+  },
+  {
+    "value": "zh-tw",
+    "label": "Taiwan",
+  },
+  {
+    "value": "en-th",
+    "label": "Thailand (English)",
+    "languageInLabel": "true",
+  },
+  {
+    "value": "th-th",
+    "label": "Thailand (Thai)",
+    "languageInLabel": "true",
+  },
+  {
+    "value": "tr-tr",
+    "label": "Turkey",
+  },
+  {
+    "value": "uk-ua",
+    "label": "Ukraine",
+  },
+  {
+    "value": "en-gb",
+    "label": "United Kingdom",
+  },
+  {
+    "value": "en-us",
+    "label": "United States (English)",
+    "languageInLabel": "true",
+  },
+  {
+    "value": "es-us",
+    "label": "United States (Spanish)",
+    "languageInLabel": "true",
+  },
+  {
+    "value": "es-ve",
+    "label": "Venezuela",
+  },
+  {
+    "value": "en-vn",
+    "label": "Vietnam (English)",
+    "languageInLabel": "true",
+  },
+  {
+    "value": "vi-vn",
+    "label": "Vietnam (Vietnamese)",
+    "languageInLabel": "true",
+  },
+  {
+    "value": "en-ww",
+    "label": "All regions",
+  },
+]

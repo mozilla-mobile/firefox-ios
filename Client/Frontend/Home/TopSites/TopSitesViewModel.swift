@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import Storage
+import Core
 
 class TopSitesViewModel {
 
@@ -43,10 +44,11 @@ class TopSitesViewModel {
     }
 
     func tilePressed(site: TopSite, position: Int) {
-        topSitePressTracking(homeTopSite: site, position: position)
+        // Ecosia //topSitePressTracking(homeTopSite: site, position: position)
         tilePressedHandler?(site.site, site.isGoogleURL)
     }
 
+    /* Ecosia: Disable Telemetry
     // MARK: - Telemetry
 
     func sendImpressionTelemetry(_ homeTopSite: TopSite, position: Int) {
@@ -83,6 +85,7 @@ class TopSitesViewModel {
         }
         return true
     }
+     */
 
     // MARK: - Context actions
 
@@ -129,7 +132,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.topSites, checking: .buildAndUser)
+        return User.shared.topSites // Ecosia // featureFlags.isFeatureEnabled(.topSites, checking: .buildAndUser)
     }
 
     func numberOfItemsInSection() -> Int {
@@ -155,11 +158,11 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: sectionDimension.numberOfTilesPerRow)
         let section = NSCollectionLayoutSection(group: group)
 
-        let leadingInset = HomepageViewModel.UX.topSiteLeadingInset(traitCollection: traitCollection)
+        let insets = sectionType.sectionInsets(traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                        leading: leadingInset,
+                                                        leading: insets,
                                                         bottom: HomepageViewModel.UX.spacingBetweenSections - TopSiteItemCell.UX.bottomSpace,
-                                                        trailing: 0)
+                                                        trailing: insets)
 
         return section
     }
@@ -200,7 +203,7 @@ extension TopSitesViewModel: HomepageSectionHandler {
         if let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath),
            let contentItem = topSites[safe: indexPath.row] {
             cell.configure(contentItem, position: indexPath.row)
-            sendImpressionTelemetry(contentItem, position: indexPath.row)
+            // Ecosia // sendImpressionTelemetry(contentItem, position: indexPath.row)
             return cell
 
         } else if let cell = collectionView.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) {

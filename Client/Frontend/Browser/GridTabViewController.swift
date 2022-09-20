@@ -7,9 +7,9 @@ import Storage
 import Shared
 
 struct GridTabTrayControllerUX {
-    static let CornerRadius = CGFloat(6.0)
+    static let CornerRadius = CGFloat(10.0)
     static let TextBoxHeight = CGFloat(32.0)
-    static let NavigationToolbarHeight = CGFloat(44)
+    static let NavigationToolbarHeight = CGFloat(0) // Ecosia: hide Toolbar
     static let FaviconSize = CGFloat(20)
     static let Margin = CGFloat(15)
     static let ToolbarButtonOffset = CGFloat(10.0)
@@ -271,6 +271,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         if tabDisplayManager.isDragging {
             return
         }
+        Analytics.shared.browser(.open, label: .newTab, property: .toolbar)
 
         // Ensure Firefox home page is refreshed if privacy mode was changed
         if tabManager.selectedTab?.isPrivate != isPrivate {
@@ -409,6 +410,7 @@ extension GridTabViewController {
 
 extension GridTabViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
+        Analytics.shared.browser(.open, label: .tabs)
         if let tab = tabDisplayManager.dataStore.at(index) {
             if tab.isFxHomeTab {
                 notificationCenter.post(name: .TabsTrayDidSelectHomeTab)
@@ -546,7 +548,7 @@ extension GridTabViewController {
 
 // MARK: - Toolbar Actions
 extension GridTabViewController {
-    func performToolbarAction(_ action: TabTrayViewAction, sender: UIBarButtonItem) {
+    func performToolbarAction(_ action: TabTrayViewAction, sender: Any) {
         switch action {
         case .addTab:
             didTapToolbarAddTab()
@@ -562,7 +564,7 @@ extension GridTabViewController {
         openNewTab(isPrivate: tabDisplayManager.isPrivate)
     }
 
-    func didTapToolbarDelete(_ sender: UIBarButtonItem) {
+    func didTapToolbarDelete(_ sender: Any) {
         if tabDisplayManager.isDragging {
             return
         }
@@ -576,7 +578,14 @@ extension GridTabViewController {
                                            style: .cancel,
                                            handler: nil),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
-        controller.popoverPresentationController?.barButtonItem = sender
+        // Ecosia: fix crash when sent by button
+        if let view = sender as? UIView {
+            controller.popoverPresentationController?.sourceView = view
+        }
+        if let item = sender as? UIBarButtonItem {
+            controller.popoverPresentationController?.barButtonItem = item
+        }
+        controller.view.tintColor = UIColor.theme.ecosia.information
         present(controller, animated: true, completion: nil)
     }
 }
@@ -749,15 +758,28 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
         else { return nil }
 
         let tabVC = TabPeekViewController(tab: tab, delegate: tabPeekDelegate)
-        if let browserProfile = tabDisplayManager.profile as? BrowserProfile,
-           let pickerDelegate = tabPeekDelegate as? DevicePickerViewControllerDelegate {
-            tabVC.setState(withProfile: browserProfile, clientPickerDelegate: pickerDelegate)
+        if let browserProfile = tabDisplayManager.profile as? BrowserProfile {
+            tabVC.setState(withProfile: browserProfile)
         }
 
         return UIContextMenuConfiguration(identifier: nil, previewProvider: { return tabVC }, actionProvider: tabVC.contextActions(defaultActions:))
+	}
+    
+	// Ecosia: separator logic
+    fileprivate var showSeparator = false {
+        didSet {
+            if showSeparator != oldValue {
+                (tabSelectionDelegate as? NotificationThemeable)?.applyTheme()
+            }
+        }
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        showSeparator = scrollView.contentOffset.y + scrollView.adjustedContentInset.top > 12
     }
 }
 
+/*
 // MARK: - DevicePickerViewControllerDelegate
 extension GridTabViewController: DevicePickerViewControllerDelegate {
     func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
@@ -771,6 +793,7 @@ extension GridTabViewController: DevicePickerViewControllerDelegate {
         devicePickerViewController.dismiss(animated: true, completion: nil)
     }
 }
+*/
 
 // MARK: - Presentation Delegates
 extension GridTabViewController: UIAdaptivePresentationControllerDelegate, UIPopoverPresentationControllerDelegate {
@@ -795,7 +818,11 @@ protocol TabCellDelegate: AnyObject {
 extension GridTabViewController: NotificationThemeable {
     @objc func applyTheme() {
         webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
-        collectionView.backgroundColor = UIColor.theme.tabTray.background
+        collectionView.backgroundColor = UIColor.theme.homePanel.panelBackground
+
+        // show/hide separator
+        navigationController?.navigationBar.scrollEdgeAppearance?.shadowColor = tabLayoutDelegate.showSeparator ? UIColor.theme.ecosia.border : nil
+        collectionView.visibleCells.forEach({ ($0 as? NotificationThemeable)?.applyTheme() })
     }
 }
 

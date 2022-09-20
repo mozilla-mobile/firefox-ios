@@ -7,14 +7,14 @@
 // application (i.e. App Extensions). Introducing new dependencies here
 // may have unintended negative consequences for App Extensions such as
 // increased startup times which may lead to termination by the OS.
-import Account
+// Ecosia // import Account
 import Shared
 import Storage
-import Sync
+// Ecosia // import Sync
 import XCGLogger
-import SyncTelemetry
+// Ecosia // import SyncTelemetry
 import AuthenticationServices
-import MozillaAppServices
+import Core
 
 // Import these dependencies ONLY for the main `Client` application target.
 #if MOZ_TARGET_CLIENT
@@ -24,14 +24,16 @@ private let log = Logger.syncLogger
 
 public let ProfileRemoteTabsSyncDelay: TimeInterval = 0.1
 
+/*
 public protocol SyncManager {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }
-    var syncDisplayState: SyncDisplayState? { get }
+    //var syncDisplayState: SyncDisplayState? { get }
 
     func hasSyncedHistory() -> Deferred<Maybe<Bool>>
     func hasSyncedLogins() -> Deferred<Maybe<Bool>>
 
+    
     func syncClients() -> SyncResult
     func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
@@ -53,6 +55,7 @@ public protocol SyncManager {
 
 typealias SyncFunction = (SyncDelegate, Prefs, Ready, SyncReason) -> SyncResult
 
+ */
 class ProfileFileAccessor: FileAccessor {
     convenience init(profile: Profile) {
         self.init(localName: profile.localName())
@@ -75,6 +78,7 @@ class ProfileFileAccessor: FileAccessor {
     }
 }
 
+/*
 class CommandStoringSyncDelegate: SyncDelegate {
     let profile: Profile
 
@@ -87,6 +91,7 @@ class CommandStoringSyncDelegate: SyncDelegate {
         _ = self.profile.queue.addToQueue(item)
     }
 }
+*/
 
 /**
  * A Profile manages access to the user's data.
@@ -116,7 +121,7 @@ protocol Profile: AnyObject {
 
     /// WARNING: Only to be called as part of the app lifecycle from the AppDelegate
     /// or from App Extension code.
-    func _shutdown()
+    func _shutdown(force: Bool)
 
     /// WARNING: Only to be called as part of the app lifecycle from the AppDelegate
     /// or from App Extension code.
@@ -135,12 +140,15 @@ protocol Profile: AnyObject {
     // Do we have an account that (as far as we know) is in a syncable state?
     func hasSyncableAccount() -> Bool
 
-    var rustFxA: RustFirefoxAccounts { get }
+    // var rustFxA: RustFirefoxAccounts { get }
 
+    /*
     func removeAccount()
+     */
 
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
     func getCachedClients()-> Deferred<Maybe<[RemoteClient]>>
+
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
 
     func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void)
@@ -148,15 +156,18 @@ protocol Profile: AnyObject {
 
     func cleanupHistoryIfNeeded()
 
+    /*
     func sendQueuedSyncEvents()
-
+     */
     @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
+    /*
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
 
     var syncManager: SyncManager! { get }
 
     func syncCredentialIdentities() -> Deferred<Result<Void, Error>>
+     */
     func updateCredentialIdentities() -> Deferred<Result<Void, Error>>
     func clearCredentialStore() -> Deferred<Result<Void, Error>>
 }
@@ -247,9 +258,9 @@ open class BrowserProfile: Profile {
 
     let db: BrowserDB
     let readingListDB: BrowserDB
-    var syncManager: SyncManager!
+    // var syncManager: SyncManager!
 
-    var syncDelegate: SyncDelegate?
+    // var syncDelegate: SyncDelegate?
 
     /**
      * N.B., BrowserProfile is used from our extensions, often via a pattern like
@@ -263,12 +274,12 @@ open class BrowserProfile: Profile {
      * A SyncDelegate can be provided in this initializer, or once the profile is initialized.
      * However, if we provide it here, it's assumed that we're initializing it from the application.
      */
-    init(localName: String, syncDelegate: SyncDelegate? = nil, clear: Bool = false) {
+    init(localName: String, clear: Bool = false) {
         log.debug("Initing profile \(localName) on thread \(Thread.current).")
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
         self.keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
-        self.syncDelegate = syncDelegate
+        // self.syncDelegate = syncDelegate
 
         if clear {
             do {
@@ -330,7 +341,7 @@ open class BrowserProfile: Profile {
 
         // This has to happen prior to the databases being opened, because opening them can trigger
         // events to which the SyncManager listens.
-        self.syncManager = BrowserSyncManager(profile: self)
+        // self.syncManager = BrowserSyncManager(profile: self)
 
         let notificationCenter = NotificationCenter.default
 
@@ -372,7 +383,7 @@ open class BrowserProfile: Profile {
         log.debug("Reopening profile.")
         isShutdown = false
 
-        if !places.isOpen && !RustFirefoxAccounts.shared.hasAccount() {
+        if !places.isOpen /* && !RustFirefoxAccounts.shared.hasAccount()*/ {
             places.migrateBookmarksIfNeeded(fromBrowserDB: db)
         }
 
@@ -382,7 +393,9 @@ open class BrowserProfile: Profile {
         _ = tabs.reopenIfClosed()
     }
 
-    func _shutdown() {
+    func _shutdown(force: Bool = false) {
+        guard User.shared.migrated == true || force else { return }
+
         log.debug("Shutting down profile.")
         isShutdown = true
 
@@ -432,7 +445,7 @@ open class BrowserProfile: Profile {
 
     deinit {
         log.debug("Deiniting profile \(self.localName()).")
-        self.syncManager.endTimedSyncs()
+        // self.syncManager.endTimedSyncs()
     }
 
     func localName() -> String {
@@ -508,14 +521,15 @@ open class BrowserProfile: Profile {
         return ClosedTabsStore(prefs: self.prefs)
     }()
 
+    /*
     open func getSyncDelegate() -> SyncDelegate {
         return syncDelegate ?? CommandStoringSyncDelegate(profile: self)
     }
-
+     */
     public func getClients() -> Deferred<Maybe<[RemoteClient]>> {
-        return self.syncManager.syncClients()
-           >>> { self.remoteClientsAndTabs.getClients() }
+        return self.remoteClientsAndTabs.getClients()
     }
+
 
     public func getCachedClients()-> Deferred<Maybe<[RemoteClient]>> {
         return self.remoteClientsAndTabs.getClients()
@@ -560,9 +574,9 @@ open class BrowserProfile: Profile {
         }
     }
 
+
     public func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
-        return self.syncManager.syncClientsThenTabs()
-        >>> { self.getTabsWithNativeClients() }
+         return self.getTabsWithNativeClients()
     }
 
     public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void) {
@@ -580,6 +594,7 @@ open class BrowserProfile: Profile {
         recommendations.cleanupHistoryIfNeeded()
     }
 
+    /*
     public func sendQueuedSyncEvents() {
         if !hasAccount() {
             // We shouldn't be called at all if the user isn't signed in.
@@ -597,11 +612,14 @@ open class BrowserProfile: Profile {
                                       why: .schedule) >>== { SyncTelemetry.send(ping: $0, docType: .sync) }
         }
     }
+     */
+
 
     func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return self.tabs.setLocalTabs(localTabs: tabs)
     }
 
+    /*
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
         let deferred = Success()
         RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
@@ -623,6 +641,7 @@ open class BrowserProfile: Profile {
         }
         return deferred
     }
+     */
 
     lazy var logins: RustLogins = {
         let sqlCipherDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("logins.db").path
@@ -632,23 +651,29 @@ open class BrowserProfile: Profile {
     }()
 
     func hasSyncAccount(completion: @escaping (Bool) -> Void) {
+        /*
         rustFxA.hasAccount { hasAccount in
             completion(hasAccount)
-        }
+        }*/
+        completion(false)
     }
 
     func hasAccount() -> Bool {
-        return rustFxA.hasAccount()
+        return false
+        // return rustFxA.hasAccount()
     }
 
     func hasSyncableAccount() -> Bool {
-        return hasAccount() && !rustFxA.accountNeedsReauth()
+        return false
+        //return hasAccount() && !rustFxA.accountNeedsReauth()
     }
 
+    /*
     var rustFxA: RustFirefoxAccounts {
         return RustFirefoxAccounts.shared
     }
-
+     */
+    /*
     func removeAccount() {
         RustFirefoxAccounts.shared.disconnect()
 
@@ -689,6 +714,7 @@ open class BrowserProfile: Profile {
         // client-specific data from the server.
         self.syncManager.onRemovedAccount()
     }
+     */
 
     // Profile exists in extensions, UIApp is unavailable there, make this code run for the main app only
     @available(iOSApplicationExtension, unavailable, message: "UIApplication.shared is unavailable in application extensions")
@@ -702,6 +728,7 @@ open class BrowserProfile: Profile {
         var description = "No account."
     }
 
+    /*
     // Extends NSObject so we can use timers.
     public class BrowserSyncManager: NSObject, SyncManager, CollectionChangedNotifier {
         // We shouldn't live beyond our containing BrowserProfile, either in the main app or in
@@ -1485,4 +1512,5 @@ open class BrowserProfile: Profile {
             return succeed()
         }
     }
+     */
 }

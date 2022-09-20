@@ -59,7 +59,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                 actions.append(UIPreviewAction(title: .TabPeekCopyUrl, style: .default) {[weak self] previewAction, viewController in
                     guard let wself = self, let url = wself.tab?.canonicalURL else { return }
                     UIPasteboard.general.url = url
-                    SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage, bottomContainer: wself.view)
+                    SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage, image: "menu-Copy-Link", bottomContainer: wself.view)
                 })
             }
         }
@@ -92,7 +92,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             actions.append(UIAction(title: .TabPeekCopyUrl, image: UIImage.templateImageNamed(ImageIdentifiers.copyLink), identifier: nil) { [weak self] _ in
                 guard let wself = self, let url = wself.tab?.canonicalURL else { return }
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage, bottomContainer: wself.view)
+                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage, image: "menu-Copy-Link", bottomContainer: wself.view)
             })
         }
         actions.append(UIAction(title: .TabPeekCloseTab, image: UIImage.templateImageNamed("menu-CloseTabs"), identifier: nil) { [weak self] _ in
@@ -165,7 +165,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         clonedWebView.load(URLRequest(url: url))
     }
 
-    func setState(withProfile browserProfile: BrowserProfile, clientPickerDelegate: DevicePickerViewControllerDelegate) {
+    func setState(withProfile browserProfile: BrowserProfile) {
         assert(Thread.current.isMainThread)
 
         guard let tab = self.tab else { return }
@@ -176,6 +176,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             self.isBookmarked = isBookmarked
         }
 
+        /*
         browserProfile.remoteClientsAndTabs.getClientGUIDs().uponQueue(.main) {
             guard let clientGUIDs = $0.successValue else { return }
 
@@ -190,6 +191,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
             self.fxaDevicePicker = UINavigationController(rootViewController: clientPickerController)
         }
+         */
 
         let result = browserProfile.readingList.getRecordWithURL(displayURL).value.successValue
 

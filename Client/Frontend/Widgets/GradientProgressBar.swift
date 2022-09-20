@@ -82,7 +82,7 @@ open class GradientProgressBar: UIProgressView {
 
     private func setupAlphaMaskLayer() {
         alphaMaskLayer.frame = bounds
-        alphaMaskLayer.cornerRadius = 3
+        alphaMaskLayer.cornerRadius = 22
 
         alphaMaskLayer.anchorPoint = .zero
         alphaMaskLayer.position = .zero

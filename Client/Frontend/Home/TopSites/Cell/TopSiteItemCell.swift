@@ -16,13 +16,13 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     struct UX {
-        static let borderColor = UIColor(white: 0, alpha: 0.1)
+        static var borderColor: UIColor { return .theme.ecosia.secondaryButton }
         static let borderWidth: CGFloat = 0.5
-        static let cellCornerRadius: CGFloat = 8
+        static let cellCornerRadius: CGFloat = 26
         static let titleOffset: CGFloat = 4
-        static let iconSize = CGSize(width: 36, height: 36)
+        static let iconSize = CGSize(width: 32, height: 32)
         static let iconCornerRadius: CGFloat = 4
-        static let imageBackgroundSize = CGSize(width: 60, height: 60)
+        static let imageBackgroundSize = CGSize(width: 52, height: 52)
         static let overlayColor = UIColor(white: 0.0, alpha: 0.25)
         static let pinAlignmentSpacing: CGFloat = 2
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
@@ -37,6 +37,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         imageView.layer.masksToBounds = true
     }
 
+    /* Ecosia
     // Holds the title and the pin image of the top site
     private lazy var titlePinWrapper: UIStackView = .build { stackView in
         stackView.backgroundColor = .clear
@@ -52,10 +53,13 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         stackView.alignment = .center
         stackView.distribution = .fillProportionally
     }
+     */
 
+    /* Ecosia
     private lazy var pinViewHolder: UIView = .build { view in
         view.isHidden = true
     }
+     */
 
     private lazy var pinImageView: UIImageView = .build { imageView in
         imageView.image = UIImage.templateImageNamed(ImageIdentifiers.pinSmall)
@@ -64,15 +68,18 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     private lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.textAlignment = .center
-        titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                        maxSize: 26)
+        titleLabel.font = .preferredFont(forTextStyle: .footnote)
         titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.allowsDefaultTighteningForTruncation = true
+        titleLabel.lineBreakMode = .byTruncatingTail
         titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
-        titleLabel.numberOfLines = 1
+        titleLabel.numberOfLines = 2
         titleLabel.backgroundColor = UIColor.clear
         titleLabel.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
+        titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
+    /* Ecosia
     private lazy var sponsoredLabel: UILabel = .build { sponsoredLabel in
         sponsoredLabel.textAlignment = .center
         sponsoredLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
@@ -81,19 +88,21 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
         sponsoredLabel.numberOfLines = 1
     }
+     */
 
     private lazy var faviconBG: UIView = .build { view in
         view.layer.cornerRadius = UX.cellCornerRadius
+        /* Ecosia
         view.layer.borderWidth = UX.borderWidth
         view.layer.borderColor = UX.borderColor.cgColor
 
         view.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         view.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.cornerRadius = UX.cellCornerRadius
         let shadowRect = CGRect(width: UX.imageBackgroundSize.width, height: UX.imageBackgroundSize.height)
         view.layer.shadowPath = UIBezierPath(rect: shadowRect).cgPath
         view.layer.shadowRadius = UX.shadowRadius
+        */
     }
 
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
@@ -141,8 +150,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         imageView.backgroundColor = UIColor.clear
 
         titleLabel.text = nil
-        sponsoredLabel.text = nil
-        pinViewHolder.isHidden = true
+        // Ecosia // sponsoredLabel.text = nil
+        // Ecosia // pinViewHolder.isHidden = true
         pinImageView.isHidden = true
     }
 
@@ -156,12 +165,14 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     func configure(_ topSite: TopSite, position: Int) {
         homeTopSite = topSite
         titleLabel.text = topSite.title
+        let words = titleLabel.text?.components(separatedBy: .whitespacesAndNewlines).count ?? 0
+        titleLabel.numberOfLines = min(max(words, 1), 2)
         accessibilityLabel = topSite.accessibilityLabel
 
         imageView.setFaviconOrDefaultIcon(forSite: topSite.site) {}
 
         configurePinnedSite(topSite)
-        configureSponsoredSite(topSite)
+        // Ecosia // configureSponsoredSite(topSite)
 
         applyTheme()
     }
@@ -169,6 +180,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     // MARK: - Setup Helper methods
 
     private func setupLayout() {
+        /* Ecosia
         titlePinWrapper.addArrangedSubview(pinViewHolder)
         titlePinWrapper.addArrangedSubview(titleLabel)
         pinViewHolder.addSubview(pinImageView)
@@ -176,16 +188,20 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         descriptionWrapper.addArrangedSubview(titlePinWrapper)
         descriptionWrapper.addArrangedSubview(sponsoredLabel)
         contentView.addSubview(descriptionWrapper)
+         */
 
         faviconBG.addSubview(imageView)
         contentView.addSubview(faviconBG)
         contentView.addSubview(selectedOverlay)
+        contentView.addSubview(pinImageView)
+        contentView.addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
-            descriptionWrapper.topAnchor.constraint(equalTo: faviconBG.bottomAnchor, constant: UX.topSpace),
-            descriptionWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.bottomSpace),
-            descriptionWrapper.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.textSafeSpace),
-            descriptionWrapper.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.textSafeSpace),
+            titleLabel.topAnchor.constraint(equalTo: faviconBG.bottomAnchor, constant: UX.topSpace),
+            titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -UX.bottomSpace),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.bottomSpace, priority: .defaultHigh),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.textSafeSpace),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.textSafeSpace),
 
             faviconBG.topAnchor.constraint(equalTo: contentView.topAnchor),
             faviconBG.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -202,13 +218,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
             selectedOverlay.trailingAnchor.constraint(equalTo: faviconBG.trailingAnchor),
             selectedOverlay.bottomAnchor.constraint(equalTo: faviconBG.bottomAnchor),
 
-            pinViewHolder.bottomAnchor.constraint(equalTo: titleLabel.firstBaselineAnchor, constant: UX.pinAlignmentSpacing),
-
-            pinViewHolder.leadingAnchor.constraint(equalTo: pinImageView.leadingAnchor),
-            pinViewHolder.trailingAnchor.constraint(equalTo: pinImageView.trailingAnchor, constant: UX.titleOffset),
-            pinViewHolder.topAnchor.constraint(equalTo: pinImageView.topAnchor),
-            pinViewHolder.bottomAnchor.constraint(equalTo: pinImageView.bottomAnchor),
-
+            pinImageView.leadingAnchor.constraint(equalTo: faviconBG.leadingAnchor),
+            pinImageView.topAnchor.constraint(equalTo: faviconBG.topAnchor),
             pinImageView.widthAnchor.constraint(equalToConstant: UX.pinIconSize.width),
             pinImageView.heightAnchor.constraint(equalToConstant: UX.pinIconSize.height),
         ])
@@ -216,25 +227,27 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     private func configurePinnedSite(_ topSite: TopSite) {
         guard topSite.isPinned else { return }
-        pinViewHolder.isHidden = false
+        // Ecosia // pinViewHolder.isHidden = false
         pinImageView.isHidden = false
     }
 
+    /* Ecosia
     private func configureSponsoredSite(_ topSite: TopSite) {
         guard topSite.isSponsoredTile else { return }
 
         sponsoredLabel.text = topSite.sponsoredText
     }
+     */
 }
 
 // MARK: NotificationThemeable
 extension TopSiteItemCell: NotificationThemeable {
     func applyTheme() {
         pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
-        titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
-        faviconBG.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-        faviconBG.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        sponsoredLabel.textColor = UIColor.theme.homePanel.sponsored
+        faviconBG.backgroundColor = .theme.ecosia.secondaryButton
+        selectedOverlay.backgroundColor = UX.overlayColor
+        titleLabel.backgroundColor = UIColor.clear
+        titleLabel.textColor = UIColor.theme.ecosia.primaryText
     }
 }
 

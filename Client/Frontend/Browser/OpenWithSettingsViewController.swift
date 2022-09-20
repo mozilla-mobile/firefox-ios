@@ -14,7 +14,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
 
     init(prefs: Prefs) {
         self.prefs = prefs
-        super.init()
+        super.init(style: .insetGrouped)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -24,7 +24,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = .SettingsOpenWithSectionName
-
+        navigationItem.largeTitleDisplayMode = .never
         tableView.accessibilityIdentifier = "OpenWithPage.Setting.Options"
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)

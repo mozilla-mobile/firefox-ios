@@ -66,6 +66,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     public func checkNimbusConfigForStartAtHome(using nimbus: FxNimbus = FxNimbus.shared) -> StartAtHomeSetting {
+        /* Ecosia: always start at home
         let config = nimbus.features.startAtHomeFeature.value()
         let nimbusSetting = config.setting
 
@@ -74,18 +75,21 @@ final class NimbusFeatureFlagLayer {
         case .afterFourHours: return .afterFourHours
         case .always: return .always
         }
+         */
+        return .always
     }
 
     // MARK: - Private methods
     private func checkGeneralFeature(for featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus
     ) -> Bool {
+        /* Ecosia: hard code flags
         let config = nimbus.features.generalAppFeatures.value()
-
+        */
         switch featureID {
-        case .pullToRefresh: return config.pullToRefresh.status
-        case .reportSiteIssue: return config.reportSiteIssue.status
-        case .shakeToRestore: return config.shakeToRestore.status
+        case .pullToRefresh: return true // Ecosia // config.pullToRefresh.status
+        case .reportSiteIssue: return false // Ecosia // config.reportSiteIssue.status
+        case .shakeToRestore: return false // Ecosia // config.shakeToRestore.status
         default: return false
         }
     }
@@ -93,11 +97,12 @@ final class NimbusFeatureFlagLayer {
     private func checkAwesomeBarFeature(for featureID: NimbusFeatureFlagID,
                                         from nimbus: FxNimbus
     ) -> Bool {
+        /* Ecosia: hard code flags
         let config = nimbus.features.search.value().awesomeBar
-
+         */
         switch featureID {
-        case .bottomSearchBar: return config.position.isPositionFeatureEnabled
-        case .searchHighlights: return config.searchHighlights
+        case .bottomSearchBar: return true // Ecosia // config.position.isPositionFeatureEnabled
+        case .searchHighlights: return true // Ecosia // config.searchHighlights
         default: return false
         }
     }
@@ -105,74 +110,99 @@ final class NimbusFeatureFlagLayer {
     private func checkHomescreenSectionsFeature(for featureID: NimbusFeatureFlagID,
                                                 from nimbus: FxNimbus
     ) -> Bool {
+        /* Ecosia: hard code flags
         let config = nimbus.features.homescreenFeature.value()
         var nimbusID: HomeScreenSection
+         */
 
         switch featureID {
-        case .topSites: nimbusID = HomeScreenSection.topSites
-        case .jumpBackIn: nimbusID = HomeScreenSection.jumpBackIn
-        case .recentlySaved: nimbusID = HomeScreenSection.recentlySaved
-        case .historyHighlights: nimbusID = HomeScreenSection.recentExplorations
-        case .pocket: nimbusID = HomeScreenSection.pocket
+        case .topSites: return true // Ecosia // nimbusID = HomeScreenSection.topSites
+        case .jumpBackIn: return false // Ecosia //  nimbusID = HomeScreenSection.jumpBackIn
+        case .recentlySaved: return false // Ecosia //nimbusID = HomeScreenSection.recentlySaved
+        case .historyHighlights: return false // Ecosia //nimbusID = HomeScreenSection.recentExplorations
+        case .pocket: return false // Ecosia //nimbusID = HomeScreenSection.pocket
         default: return false
         }
 
+        /* Ecosia
         guard let status = config.sectionsEnabled[nimbusID] else { return false }
 
         return status
+         */
     }
 
     private func checkNimbusForJumpBackInSyncedTabFeature(using nimbus: FxNimbus) -> Bool {
+        /* Ecosia: deactivate JBI
         return nimbus.features.homescreenFeature.value().jumpBackInSyncedTab
+         */
+        false
     }
 
     private func checkNimbusForContextualHintsFeature(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
     ) -> Bool {
+        /* Ecosia: hard code flags
         let config = nimbus.features.contextualHintFeature.value()
         var nimbusID: ContextualHint
-
+         */
         switch featureID {
-        case .contextualHintForToolbar: nimbusID = ContextualHint.toolbarContextualHint
-        case .contextualHintForJumpBackIn: nimbusID = ContextualHint.jumpBackInContextualHint
-        case .contextualHintForJumpBackInSyncedTab: nimbusID = ContextualHint.jumpBackInSyncedTabContextualHint
+        case .contextualHintForToolbar: return true // Ecosia // nimbusID = ContextualHint.toolbarContextualHint
+        case .contextualHintForJumpBackIn:  return false // Ecosia //nimbusID = ContextualHint.jumpBackInContextualHint
+        case .contextualHintForJumpBackInSyncedTab:  return false // Ecosia //nimbusID = ContextualHint.jumpBackInSyncedTabContextualHint
         default: return false
         }
 
+        /* Ecosia
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
+         */
     }
 
     private func checkNimbusForWallpapersFeature(using nimbus: FxNimbus) -> Bool {
+        /* Ecosia
         let config = nimbus.features.wallpaperFeature.value()
 
         return config.configuration.status
+         */
+        false
     }
 
     private func checkNimbusForWallpaperOnboarding(using nimbus: FxNimbus) -> Bool {
+        /* Ecosia
         return nimbus.features.wallpaperFeature.value().onboardingSheet
+         */
+        false
     }
 
+    /* Ecosia
     public func checkNimbusForWallpapersVersion(using nimbus: FxNimbus = FxNimbus.shared) -> String {
         let config = nimbus.features.wallpaperFeature.value()
 
         return config.configuration.version.rawValue
     }
+     */
 
     private func checkNimbusForPocketSponsoredStoriesFeature(using nimbus: FxNimbus) -> Bool {
+        /* Ecosia
         return nimbus.features.homescreenFeature.value().pocketSponsoredStories
+         */
+        false
     }
 
     private func checkSponsoredTilesFeature(from nimbus: FxNimbus) -> Bool {
+        /* Ecosia
         let config = nimbus.features.homescreenFeature.value()
         return config.sponsoredTiles.status
+         */
+        false
     }
 
     private func checkNimbusForOnboardingFeature(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
     ) -> Bool {
+        /* Ecosia: no FF onboarding
         let config = nimbus.features.onboardingFeature.value()
 
         switch featureID {
@@ -180,27 +210,33 @@ final class NimbusFeatureFlagLayer {
         case .onboardingFreshInstall: return config.firstRunFlow
         default: return false
         }
+         */
+        false
     }
 
     private func checkTabTrayFeature(for featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus
     ) -> Bool {
+        /* Ecosia
         let config = nimbus.features.tabTrayFeature.value()
         var nimbusID: TabTraySection
+         */
 
         switch featureID {
-        case .inactiveTabs: nimbusID = TabTraySection.inactiveTabs
+        case .inactiveTabs: return true // Ecosia // nimbusID = TabTraySection.inactiveTabs
         default: return false
         }
-
+        /* Ecosia
         guard let status = config.sectionsEnabled[nimbusID] else { return false }
 
         return status
+         */
     }
 
     private func checkGroupingFeature(for featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus
     ) -> Bool {
+        /* Ecosia: disable grouping
         let config = nimbus.features.searchTermGroupsFeature.value()
         var nimbusID: SearchTermGroups
 
@@ -213,5 +249,7 @@ final class NimbusFeatureFlagLayer {
         guard let status = config.groupingEnabled[nimbusID] else { return false }
 
         return status
+         */
+        false
     }
 }

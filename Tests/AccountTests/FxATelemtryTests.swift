@@ -4,7 +4,7 @@
 
 @testable import Account
 import SwiftyJSON
-import SyncTelemetry
+// Ecosia // import SyncTelemetry
 import Foundation
 
 import Shared

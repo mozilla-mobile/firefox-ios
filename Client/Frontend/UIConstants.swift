@@ -11,7 +11,7 @@ extension UIColor {
         static let MobileGreyF = UIColor(rgb: 0x636369)
         static let iOSTextHighlightBlue = UIColor(rgb: 0xccdded) // This color should exactly match the ios text highlight
         static let Purple60A30 = UIColor(rgba: 0x8000d74c)
-        static let MobilePrivatePurple = UIColor.Photon.Purple60
+        static let MobilePrivatePurple = UIColor.theme.ecosia.secondaryBrand
         // Reader Mode Sepia
         static let LightBeige = UIColor(rgb: 0xf0e6dc)
     }
@@ -20,7 +20,7 @@ extension UIColor {
 public struct UIConstants {
     static let DefaultPadding: CGFloat = 10
     static let SnackbarButtonHeight: CGFloat = 57
-    static let TopToolbarHeight: CGFloat = 56
+    static let TopToolbarHeight: CGFloat = 60
     static let TopToolbarHeightMax: CGFloat = 75
     static var ToolbarHeight: CGFloat = 46
 

@@ -14,6 +14,10 @@ class EnhancedTrackingProtectionMenuVM {
     var onOpenSettingsTapped: (() -> Void)?
 
     var websiteTitle: String {
+        return tab.title ?? ""
+    }
+    
+    var websiteDomain: String {
         return tab.url?.baseDomain ?? ""
     }
 
@@ -27,8 +31,8 @@ class EnhancedTrackingProtectionMenuVM {
     }
 
     var connectionStatusImage: UIImage {
-        let insecureImageString = LegacyThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
-        let image = connectionSecure ? UIImage(imageLiteralResourceName: "lock_verified").withRenderingMode(.alwaysTemplate) : UIImage(imageLiteralResourceName: insecureImageString)
+        let insecureImageString = "lock_blocked"
+        let image = connectionSecure ? UIImage(named: "secureLock")! : UIImage(imageLiteralResourceName: insecureImageString)
         return image
     }
 

@@ -53,7 +53,7 @@ final class TopSite {
     }
 
     // MARK: Telemetry
-
+    /* Ecosia
     func impressionTracking(position: Int) {
         // Only sending sponsored tile impressions for now
         guard let tile = site as? SponsoredTile else { return }
@@ -74,4 +74,5 @@ final class TopSite {
 
         return "history-based"
     }
+     */
 }

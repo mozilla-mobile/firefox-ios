@@ -73,8 +73,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        tabManager.selectTab(tabManager.addTab(nil, isPrivate: isPrivate))
-        focusLocationTextField(forTab: tabManager.selectedTab)
+        openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
     }
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -84,8 +83,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         let menuHelper = MainMenuActionHelper(profile: profile,
                                               tabManager: tabManager,
-                                              buttonView: button,
-                                              showFXASyncAction: presentSignInViewController)
+                                              buttonView: button)
         menuHelper.delegate = self
         menuHelper.menuActionDelegate = self
 
@@ -99,6 +97,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         showTabTray()
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
+        Analytics.shared.browser(.open, label: .tabs, property: .home)
     }
 
     func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonRowActions] {
@@ -183,7 +182,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        focusLocationTextField(forTab: tabManager.selectedTab)
+        if isBottomSearchBar {
+            tabToolbarDidPressAddNewTab(tabToolbar, button: button)
+        } else {
+            focusLocationTextField(forTab: tabManager.selectedTab)
+        }
     }
 }
 
@@ -206,7 +209,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
             }
             show(toast: toast)
         default:
-            SimpleToast().showAlertWithText(message, bottomContainer: webViewContainer)
+            SimpleToast().showAlertWithText(message, image: "bookmarksEmpty", bottomContainer: webViewContainer)
         }
     }
 

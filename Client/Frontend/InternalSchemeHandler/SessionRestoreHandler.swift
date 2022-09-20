@@ -4,7 +4,6 @@
 
 import Foundation
 import WebKit
-import GCDWebServers
 import Shared
 
 private let apostropheEncoded = "%27"

@@ -16,8 +16,8 @@ class TabEventHandlers {
             FaviconHandler(),
             UserActivityHandler(),
             MetadataParserHelper(),
-            MediaImageLoader(profile.prefs),
-            AccountSyncHandler(with: profile)
+            MediaImageLoader(profile.prefs)
+            //AccountSyncHandler(with: profile)
         ]
 
         return handlers

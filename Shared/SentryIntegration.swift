@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import Sentry
+//import Sentry
 
 public enum SentryTag: String {
     case swiftData = "SwiftData"
@@ -45,7 +45,7 @@ public class SentryIntegration: SentryProtocol {
     private var attributes: [String: Any] = [:]
 
     public var crashedLastLaunch: Bool {
-        return SentrySDK.crashedLastRun
+        false // Ecosia: return SentrySDK.crashedLastRun
     }
 
     private var releaseName: String {
@@ -53,6 +53,7 @@ public class SentryIntegration: SentryProtocol {
     }
 
     public func setup(sendUsageData: Bool) {
+        /* Ecosia
         // Setup should only be called once
         guard !enabled else { return }
 
@@ -106,20 +107,23 @@ public class SentryIntegration: SentryProtocol {
         if let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier), defaults.string(forKey: SentryDeviceAppHashKey) == nil {
             defaults.set(Bytes.generateRandomBytes(DeviceAppHashLength).hexEncodedString, forKey: SentryDeviceAppHashKey)
         }
-
+         */
         // Ignore SIGPIPE exceptions globally.
         // https://stackoverflow.com/questions/108183/how-to-prevent-sigpipes-or-handle-them-properly
         signal(SIGPIPE, SIG_IGN)
     }
 
     public func crash() {
+        /* Ecosia
         // Send crash if Sentry is enabled
         guard enabled else { return }
 
         SentrySDK.crash()
+         */
     }
 
     public func captureEvent(event: Event) {
+        /* Ecosia
         // Capture event if Sentry is enabled and a message is available
         guard let message = event.message?.formatted, enabled else { return }
 
@@ -127,12 +131,15 @@ public class SentryIntegration: SentryProtocol {
             scope.setEnvironment(event.environment)
             scope.setExtras(event.extra)
         }
+         */
     }
 
     public func captureError(error: NSError) {
+        /* Ecosia
         guard enabled else { return }
 
         SentrySDK.capture(error: error)
+         */
     }
 
     public func send(message: String,
@@ -141,7 +148,9 @@ public class SentryIntegration: SentryProtocol {
                      extra: [String: Any]? = nil,
                      description: String? = nil,
                      completion: SentryRequestFinished? = nil) {
+        /* Ecosia
         sendWithStacktrace(message: message, tag: tag, severity: severity, extra: extra, description: description, completion: completion)
+         */
     }
 
     public func sendWithStacktrace(message: String,
@@ -150,6 +159,7 @@ public class SentryIntegration: SentryProtocol {
                                    extra: [String: Any]? = nil,
                                    description: String? = nil,
                                    completion: SentryRequestFinished? = nil) {
+        /* Ecosia*/
         var extraEvents: [String: Any] = [:]
         if let paramEvents = extra {
             extraEvents = extraEvents.merge(with: paramEvents)
@@ -175,9 +185,11 @@ public class SentryIntegration: SentryProtocol {
 
     // Add manual breadcrumb
     public func addBreadcrumb(category: String, message: String) {
+        /* Ecosia
         let breadcrumb = Breadcrumb(level: .info, category: category)
         breadcrumb.message = message
         SentrySDK.addBreadcrumb(crumb: breadcrumb)
+         */
     }
 
     // MARK: - Private
@@ -203,6 +215,7 @@ public class SentryIntegration: SentryProtocol {
             event.extra = extra
         }
         return event
+
     }
 
     private func printMessage(message: String, extra: [String: Any]? = nil) {

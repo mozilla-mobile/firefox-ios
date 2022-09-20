@@ -147,13 +147,18 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
 
         currentBlockingStrength = prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({BlockingStrength(rawValue: $0)}) ?? .basic
 
-        super.init(style: .grouped)
+        super.init(style: .insetGrouped)
 
         self.title = .SettingsTrackingProtectionSectionName
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.largeTitleDisplayMode = .never
     }
 
     override func generateSettings() -> [SettingSection] {

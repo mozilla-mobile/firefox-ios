@@ -5,19 +5,19 @@
 import UIKit
 import Shared
 import Storage
-import Glean
-import Telemetry
+//Ecosia: import Glean
+//Ecosia: import Telemetry
 
 private enum SearchListSection: Int, CaseIterable {
     case searchSuggestions
-    case remoteTabs
+    // Ecosia: case remoteTabs
     case openedTabs
     case bookmarksAndHistory
     case searchHighlights
 }
 
 private struct SearchViewControllerUX {
-    static var SearchEngineScrollViewBackgroundColor: CGColor { return UIColor.theme.homePanel.toolbarBackground.withAlphaComponent(0.8).cgColor }
+    static var SearchEngineScrollViewBackgroundColor: CGColor { return UIColor.theme.ecosia.barBackground.withAlphaComponent(0.8).cgColor }
     static let SearchEngineScrollViewBorderColor = UIColor.black.withAlphaComponent(0.2).cgColor
 
     // TODO: This should use ToolbarHeight in BVC. Fix this when we create a shared theming file.
@@ -73,9 +73,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
+    /* Ecosia: deactivate search engine customization
     private let searchEngineContainerView = UIView()
     private let searchEngineScrollView = ButtonScrollView()
     private let searchEngineScrollViewContent = UIView()
+    */
 
     private lazy var bookmarkedBadge: UIImage = {
         return UIImage(named: "bookmark_results")!
@@ -87,7 +89,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     var suggestions: [String]? = []
     var savedQuery: String = ""
-    var searchFeature: FeatureHolder<Search>
+    // Ecosia // var searchFeature: FeatureHolder<Search>
     static var userAgent: String?
 
     var hasFirefoxSuggestions: Bool {
@@ -101,13 +103,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     init(profile: Profile,
          viewModel: SearchViewModel,
          tabManager: TabManager,
-         featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
+         // Ecosia // featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
          highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
         self.viewModel = viewModel
         self.tabManager = tabManager
-        self.searchFeature = featureConfig
+        // Ecosia // self.searchFeature = featureConfig
         self.highlightManager = highlightManager
-        super.init(profile: profile)
+        super.init(profile: profile, style: .insetGrouped)
 
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
@@ -119,14 +121,16 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = UIColor.theme.homePanel.panelBackground
+        /* Ecosia: deactivate blur
         let blur = UIVisualEffectView(effect: UIBlurEffect(style: .light))
         view.addSubview(blur)
+         */
 
         super.viewDidLoad()
         getCachedTabs()
         KeyboardHelper.defaultHelper.addDelegate(self)
 
+        /* Ecosia: deactivate search engine customization
         searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
         searchEngineContainerView.layer.shadowRadius = 0
         searchEngineContainerView.layer.shadowOpacity = 100
@@ -140,18 +144,25 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         searchEngineScrollViewContent.layer.backgroundColor = UIColor.clear.cgColor
         searchEngineScrollView.addSubview(searchEngineScrollViewContent)
+        */
 
         layoutTable()
+        /* Ecosia: deactivate search engine customization
         layoutSearchEngineScrollView()
         layoutSearchEngineScrollViewContent()
+        */
 
+        /* Ecosia: deactivate blur
         blur.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
-
+        */
+    
+        /* Ecosia: deactivate search engine customization
         searchEngineContainerView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
         }
+        */
 
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
     }
@@ -183,6 +194,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         reloadData()
     }
 
+    /* Ecosia: deactivate search engine customization
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         searchFeature.recordExposure()
@@ -200,8 +212,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             }
         }
     }
+    */
 
     private func layoutSearchEngineScrollViewContent() {
+        /* Ecosia: remove alternative search
         searchEngineScrollViewContent.snp.remakeConstraints { make in
             make.center.equalTo(self.searchEngineScrollView).priority(10)
             // left-align the engines on iphones, center on ipad
@@ -214,6 +228,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             make.top.equalTo(self.searchEngineScrollView)
             make.bottom.equalTo(self.searchEngineScrollView)
         }
+        */
     }
 
     var searchEngines: SearchEngines! {
@@ -262,15 +277,17 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         // the constraints to be aligned with Search Engine Scroll View top anchor
         tableView.removeFromSuperview()
         view.addSubviews(tableView)
+        tableView.contentInsetAdjustmentBehavior = .scrollableAxes
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: searchEngineScrollView.topAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
     func reloadSearchEngines() {
+        /* Ecosia: deactivate search engine customization
         searchEngineScrollViewContent.subviews.forEach { $0.removeFromSuperview() }
         var leftEdge = searchEngineScrollViewContent.snp.leading
 
@@ -321,9 +338,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             }
             leftEdge = engineButton.snp.trailing
         }
+        */
     }
 
     func didSelectEngine(_ sender: UIButton) {
+        /* Ecosia: deactivate search engine customization
         // The UIButtons are the same cardinality and order as the array of quick search engines.
         // Subtract 1 from index to account for magnifying glass accessory.
         guard let index = searchEngineScrollViewContent.subviews.firstIndex(of: sender) else {
@@ -342,6 +361,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.quickSearch.rawValue)"].add()
 
         searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: "")
+        */
     }
 
     func didClickSearchButton() {
@@ -370,7 +390,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     private func animateSearchEnginesWithKeyboard(_ keyboardState: KeyboardState) {
-        layoutSearchEngineScrollView()
+        // Ecosia: remove search customization
+        // layoutSearchEngineScrollView()
 
         UIView.animate(
             withDuration: keyboardState.animationDuration,
@@ -412,11 +433,16 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 $0 && content.range(of: $1, options: .caseInsensitive) != nil
             }
         }
+        /* Ecosia: hardcode config
         let config = searchFeature.value().awesomeBar
         // Searching within the content will get annoying, so only start searching
         // in content when there are at least one word with more than 3 letters in.
+
         let searchInContent = config.usePageContent
             && searchTerms.find { $0.count >= config.minSearchTerm } != nil
+         */
+        let searchInContent = searchTerms.find { $0.count >= 3 } != nil
+
 
         filteredOpenedTabs = currentTabs.filter { tab in
             guard let url = tab.url ?? tab.sessionData?.urls.last,
@@ -536,10 +562,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             recordSearchListSelectionTelemetry(type: .openedTabs)
             let tab = self.filteredOpenedTabs[indexPath.row]
             searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
+        /* Ecosia:
         case .remoteTabs:
             recordSearchListSelectionTelemetry(type: .remoteTabs)
             let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
             searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL, searchTerm: nil)
+         */
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
                 recordSearchListSelectionTelemetry(type: .bookmarksAndHistory,
@@ -561,12 +589,16 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        /* Ecosia
         guard section == SearchListSection.remoteTabs.rawValue,
               hasFirefoxSuggestions else { return 0 }
 
         return UITableView.automaticDimension
+         */
+        return 0
     }
 
+    /* Ecosia: deactivate headers
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard section == SearchListSection.remoteTabs.rawValue,
               hasFirefoxSuggestions,
@@ -578,11 +610,16 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         return headerView
     }
+     */
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let twoLineImageOverlayCell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath) as! TwoLineImageOverlayCell
         let oneLineTableViewCell = tableView.dequeueReusableCell(withIdentifier: OneLineCellIdentifier, for: indexPath) as! OneLineTableViewCell
         return getCellForSection(twoLineImageOverlayCell, oneLineCell: oneLineTableViewCell, for: SearchListSection(rawValue: indexPath.section)!, indexPath)
+    }
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = .theme.ecosia.ntpImpactBackground
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -592,8 +629,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return count < 4 ? count : 4
         case .openedTabs:
             return filteredOpenedTabs.count
-        case .remoteTabs:
-            return filteredRemoteClientTabs.count
+        /* Ecosia: case .remoteTabs:
+            return filteredRemoteClientTabs.count */
         case .bookmarksAndHistory:
             return data.count
         case .searchHighlights:
@@ -616,7 +653,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     override func applyTheme() {
         super.applyTheme()
-        searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
+        view.backgroundColor = .theme.ecosia.ntpBackground
+        tableView.backgroundColor = .theme.ecosia.ntpBackground
+        //Ecosia: searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
         reloadData()
     }
 
@@ -647,14 +686,15 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 oneLineCell.leftImageView.contentMode = .center
                 oneLineCell.leftImageView.layer.borderWidth = 0
                 oneLineCell.leftImageView.image = UIImage(named: SearchViewControllerUX.SearchImage)
-                oneLineCell.leftImageView.tintColor = LegacyThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
+                oneLineCell.leftImageView.tintColor = UIColor.theme.ecosia.primaryButton
                 oneLineCell.leftImageView.backgroundColor = nil
                 let appendButton = UIButton(type: .roundedRect)
                 appendButton.setImage(searchAppendImage?.withRenderingMode(.alwaysTemplate), for: .normal)
                 appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
-                appendButton.tintColor = LegacyThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
+                appendButton.tintColor = UIColor.theme.ecosia.secondaryText
                 appendButton.sizeToFit()
                 oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil
+                oneLineCell.backgroundColor = UIColor.theme.ecosia.autocompleteBackground
                 cell = oneLineCell
             }
         case .openedTabs:
@@ -663,17 +703,23 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 twoLineCell.descriptionLabel.isHidden = false
                 twoLineCell.titleLabel.text = openedTab.title ?? openedTab.lastTitle
                 twoLineCell.descriptionLabel.text = String.SearchSuggestionCellSwitchToTabLabel
+                /* Ecosia:
                 twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
-                twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+                twoLineCell.leftImageView.layer.borderColor = UIColor.theme.ecosia.border.cgColor
                 twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
                 twoLineCell.leftImageView.contentMode = .center
                 twoLineCell.leftImageView.setImageAndBackground(forIcon: openedTab.displayFavicon, website: openedTab.url) { [weak twoLineCell] in
                     twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
                 }
                 twoLineCell.accessoryView = nil
+                 */
+                twoLineCell.leftImageView.contentMode = .center
+                twoLineCell.leftImageView.image = .init(named: "switchTab")
+                twoLineCell.leftImageView.tintColor = .theme.ecosia.secondaryText
+                twoLineCell.backgroundColor = UIColor.theme.ecosia.autocompleteBackground
                 cell = twoLineCell
             }
-        case .remoteTabs:
+        /* Ecosia: case .remoteTabs:
             if self.filteredRemoteClientTabs.count > indexPath.row {
                 let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
                 let remoteClient = self.filteredRemoteClientTabs[indexPath.row].client
@@ -687,9 +733,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 twoLineCell.leftImageView.setImageAndBackground(forIcon: nil, website: remoteTab.URL) { [weak twoLineCell] in
                     twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
                 }
+                twoLineCell.backgroundColor = UIColor.theme.ecosia.autocompleteBackground
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
-            }
+            } */
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
                 let isBookmark = site.bookmarked ?? false
@@ -697,6 +744,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 twoLineCell.descriptionLabel.isHidden = false
                 twoLineCell.titleLabel.text = site.title
                 twoLineCell.descriptionLabel.text = site.url
+                /* Ecosia:
                 twoLineCell.leftOverlayImageView.image = isBookmark ? self.bookmarkedBadge : nil
                 twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
                 twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
@@ -704,7 +752,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 twoLineCell.leftImageView.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak twoLineCell] in
                     twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
                 }
+                 */
+                twoLineCell.backgroundColor = UIColor.theme.ecosia.autocompleteBackground
                 twoLineCell.accessoryView = nil
+                let imageName = isBookmark ? "bookmarksEmpty" : "libraryHistory"
+                twoLineCell.leftImageView.contentMode = .center
+                twoLineCell.leftImageView.image = .init(named: imageName)
+                twoLineCell.leftImageView.tintColor = .theme.ecosia.secondaryText
                 cell = twoLineCell
             }
         case .searchHighlights:
@@ -763,8 +817,10 @@ private extension SearchViewController {
         switch type {
         case .searchSuggestions:
             extra = TelemetryWrapper.EventValue.searchSuggestion.rawValue
+        /* Ecosia
         case .remoteTabs:
             extra = TelemetryWrapper.EventValue.remoteTab.rawValue
+         */
         case .openedTabs:
             extra = TelemetryWrapper.EventValue.openedTab.rawValue
         case .bookmarksAndHistory:

@@ -37,7 +37,7 @@ class ThemeSettingsController: ThemedTableViewController {
     private var shouldHideSystemThemeSection = false
 
     init() {
-        super.init(style: .grouped)
+        super.init(style: .insetGrouped)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -46,6 +46,7 @@ class ThemeSettingsController: ThemedTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.largeTitleDisplayMode = .never
         title = .SettingsDisplayThemeTitle
         tableView.accessibilityIdentifier = "DisplayTheme.Setting.Options"
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
@@ -183,7 +184,7 @@ class ThemeSettingsController: ThemedTableViewController {
             let control = UISwitchThemed()
 
             control.accessibilityIdentifier = "SystemThemeSwitchValue"
-            control.onTintColor = UIColor.theme.tableView.controlTint
+            control.onTintColor = .theme.tableView.controlTint
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
             control.isOn = LegacyThemeManager.instance.systemThemeIsOn
             cell.accessoryView = control

@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 import Shared
 import UIKit
+import Core
 
 private let log = Logger.browserLogger
 
@@ -511,6 +512,21 @@ extension BrowserViewController: WKNavigationDelegate {
         //            return
         //        }
 
+        // Second special case are a set of URLs that look like regular http links, but should be handed over to iOS
+        // instead of being loaded in the webview. Note that there is no point in calling canOpenURL() here, because
+        // iOS will always say yes.
+
+        if isAppleMapsURL(url) {
+            UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { couldOpen in
+                if couldOpen {
+                    decisionHandler(.cancel)
+                } else {
+                    decisionHandler(.allow)
+                }
+            }
+            return
+        }
+
         if isStoreURL(url) {
             decisionHandler(.cancel)
 
@@ -801,7 +817,8 @@ extension BrowserViewController: WKNavigationDelegate {
         self.scrollController.resetZoomState()
 
         if tabManager.selectedTab === tab {
-            updateUIForReaderHomeStateForTab(tab, focusUrlBar: true)
+            // Ecosia: flaggable autofocus
+            updateUIForReaderHomeStateForTab(tab)
         }
     }
 

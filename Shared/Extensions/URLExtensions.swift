@@ -464,7 +464,7 @@ extension URL {
     public static var mozPublicScheme: String = {
         guard let string = Bundle.main.object(forInfoDictionaryKey: "MozPublicURLScheme") as? String, !string.isEmpty else {
             // Something went wrong/weird, fall back to hard-coded.
-            return "firefox"
+            return "ecosia"
         }
         return string
     }()

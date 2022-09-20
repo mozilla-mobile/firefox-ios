@@ -7,6 +7,7 @@ import WebKit
 import Storage
 import Shared
 import XCGLogger
+import Core
 
 private let log = Logger.browserLogger
 
@@ -181,7 +182,15 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
         addNavigationDelegate(self)
 
+        // Ecosia: cookie observing
+        configuration.websiteDataStore.httpCookieStore.add(self)
+
         NotificationCenter.default.addObserver(self, selector: #selector(prefsDidChange), name: UserDefaults.didChangeNotification, object: nil)
+    }
+
+    // Ecosia: Cookie observing
+    deinit {
+        configuration.websiteDataStore.httpCookieStore.remove(self)
     }
 
     func addNavigationDelegate(_ delegate: WKNavigationDelegate) {
@@ -277,7 +286,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         }
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
-            tab.applyTheme()
+            // Ecosia: tab.applyTheme()
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
     }
@@ -383,6 +392,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         }
 
         storeChanges()
+        Analytics.shared.browser(.edit, label: .tabs)
     }
 
     func configureTab(_ tab: Tab, request: URLRequest?, afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPopup: Bool = false) {
@@ -487,6 +497,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             object: .tab,
             value: tab.isPrivate ? .privateTab : .normalTab
         )
+        Analytics.shared.browser(.delete, label: .tabs)
     }
 
     private func updateIndexAfterRemovalOf(_ tab: Tab, deletedIndex: Int) {
@@ -721,7 +732,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         var toast: ButtonToast?
         let numberOfTabs = recentlyClosedForUndo.count
         if numberOfTabs > 0 {
-            toast = ButtonToast(labelText: String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, numberOfTabs), buttonText: .TabsDeleteAllUndoAction, completion: { buttonPressed in
+            toast = ButtonToast(labelText: String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, numberOfTabs), imageName: "tabs", buttonText: .TabsDeleteAllUndoAction, completion: { buttonPressed in
                 if buttonPressed {
                     self.undoCloseTabs()
                     self.storeChanges()
@@ -880,7 +891,11 @@ extension TabManager {
             tabToSelect = addTab()
         }
 
-        selectTab(tabToSelect)
+        // Ecosia: this logic makes us start on NTP if user should see rebrand intro
+        let startOnNTP = User.shared.showsRebrandIntro || User.shared.firstTime
+        if !(startOnNTP) {
+            selectTab(tabToSelect)
+        }
 
         for delegate in self.delegates {
             delegate.get()?.tabManagerDidRestoreTabs(self)
@@ -890,10 +905,13 @@ extension TabManager {
     }
 
     private func checkForSingleTab() {
+        // Ecosia: this logic makes us start on NTP if user should see rebrand intro
+        let startOnNTP = User.shared.showsRebrandIntro || User.shared.firstTime
+
         // Always make sure there is a single normal tab.
-        if normalTabs.isEmpty {
+        if normalTabs.isEmpty || startOnNTP {
             let tab = addTab()
-            if selectedTab == nil { selectTab(tab) }
+            if selectedTab == nil || startOnNTP { selectTab(tab) }
         }
     }
 
@@ -1020,3 +1038,15 @@ extension TabManager {
         store.clearArchive()
     }
 }
+
+// Ecosia: Cookie observer
+extension TabManager: WKHTTPCookieStoreObserver {
+    func cookiesDidChange(in cookieStore: WKHTTPCookieStore) {
+        cookieStore.getAllCookies { cookies in
+            DispatchQueue.main.async {
+                Cookie.received(cookies)
+            }
+        }
+    }
+}
+

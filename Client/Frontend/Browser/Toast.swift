@@ -4,9 +4,10 @@
 
 import Foundation
 import UIKit
+import SnapKit
 
 class Toast: UIView {
-    var animationConstraint: NSLayoutConstraint?
+    var animationConstraint: Constraint?
     var completionHandler: ((Bool) -> Void)?
     var didDismissWithoutTapHandler: (() -> Void)?
 
@@ -16,12 +17,13 @@ class Toast: UIView {
 
     lazy var gestureRecognizer: UITapGestureRecognizer = {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        gestureRecognizer.cancelsTouchesInView = false
         return gestureRecognizer
     }()
 
     lazy var toastView: UIView = .build { view in
         view.backgroundColor = SimpleToastUX.ToastDefaultColor
+        view.layer.cornerRadius = 10
+        view.layer.masksToBounds = true
     }
 
     override func didMoveToSuperview() {
@@ -47,7 +49,7 @@ class Toast: UIView {
             UIView.animate(
                 withDuration: SimpleToastUX.ToastAnimationDuration,
                 animations: {
-                    self.animationConstraint?.constant = 0
+                    self.animationConstraint?.update(offset: 0) // TODO Ecosia: verify
                     self.layoutIfNeeded()
                 }) { finished in
                     if let duration = duration {
@@ -65,17 +67,15 @@ class Toast: UIView {
         dismissed = true
         superview?.removeGestureRecognizer(gestureRecognizer)
 
-        UIView.animate(
-            withDuration: SimpleToastUX.ToastAnimationDuration,
-            animations: {
-                self.animationConstraint?.constant = SimpleToastUX.ToastHeight
-                self.layoutIfNeeded()
-            }) { finished in
-                self.removeFromSuperview()
-                if !buttonPressed {
-                    self.completionHandler?(false)
-                }
+        UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
+            self.animationConstraint?.update(offset: SimpleToastUX.ToastHeight + SimpleToastUX.Offset)
+            self.layoutIfNeeded()
+        }) { finished in
+            self.removeFromSuperview()
+            if !buttonPressed {
+                self.completionHandler?(false)
             }
+        }
     }
 
     @objc func handleTap(_ gestureRecognizer: UIGestureRecognizer) {

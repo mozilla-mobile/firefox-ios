@@ -525,7 +525,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         return overlayView
     }
 
-    // MARK: - Themeable
+    // MARK: - NotificationThemeable
 
     func applyTheme() {
         updateEmptyPanelState()
@@ -695,6 +695,7 @@ extension HistoryPanel {
     }
 
     private func resyncHistory() {
+        /*
         profile.syncManager.syncHistory().uponQueue(.main) { syncResult in
             self.endRefreshing()
 
@@ -702,6 +703,7 @@ extension HistoryPanel {
                 self.fetchDataAndUpdateLayout(animating: true)
             }
         }
+         */
     }
 }
 
@@ -738,7 +740,7 @@ extension HistoryPanel {
     func pinToTopSites(_ site: Site) {
         profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
             if result.isSuccess {
-                SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage, bottomContainer: self.view)
+                SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage, image: "action_pin", bottomContainer: self.view)
             }
         }
     }
@@ -765,9 +767,10 @@ extension HistoryPanel {
         presentContextMenu(for: indexPath)
     }
 
+    
     @objc private func onRefreshPulled() {
         refreshControl?.beginRefreshing()
-        resyncHistory()
+        // resyncHistory()
     }
 }
 

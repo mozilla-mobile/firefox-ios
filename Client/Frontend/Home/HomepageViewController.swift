@@ -5,8 +5,9 @@
 import Shared
 import UIKit
 import Storage
-import SyncTelemetry
+// Ecosia // import SyncTelemetry
 import MozillaAppServices
+import Core
 
 class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
@@ -18,7 +19,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     weak var browserBarViewDelegate: BrowserBarViewDelegate? {
         didSet {
-            viewModel.jumpBackInViewModel.browserBarViewDelegate = browserBarViewDelegate
+            // Ecosia viewModel.jumpBackInViewModel.browserBarViewDelegate = browserBarViewDelegate
         }
     }
 
@@ -31,7 +32,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     private var wallpaperManager: LegacyWallpaperManager
     private lazy var wallpaperView: LegacyWallpaperBackgroundView = .build { _ in }
     private var contextualHintViewController: ContextualHintViewController
-    private var collectionView: UICollectionView! = nil
+    var collectionView: UICollectionView! = nil
 
     // Content stack views contains collection view.
     lazy var contentStackView: UIStackView = .build { stackView in
@@ -47,8 +48,10 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     init(profile: Profile,
          tabManager: TabManagerProtocol,
          urlBar: URLBarViewProtocol,
-         wallpaperManager: LegacyWallpaperManager = LegacyWallpaperManager()
-    ) {
+         wallpaperManager: LegacyWallpaperManager = LegacyWallpaperManager(),
+         delegate: HomepageViewControllerDelegate?,
+         referrals: Referrals) {
+
         self.urlBar = urlBar
         self.tabManager = tabManager
         self.wallpaperManager = wallpaperManager
@@ -57,6 +60,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
                                            isPrivate: isPrivate,
                                            tabManager: tabManager,
                                            urlBar: urlBar)
+        self.delegate = delegate
+        self.referrals = referrals
 
         let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
                                                           with: viewModel.profile)
@@ -91,6 +96,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         configureWallpaperView()
         configureContentStackView()
         configureCollectionView()
+        configureEcosiaSetup()
 
         // Delay setting up the view model delegate to ensure the views have been configured first
         viewModel.delegate = self
@@ -160,6 +166,11 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = a11y.collectionView
         contentStackView.addArrangedSubview(collectionView)
+
+        // Ecosia: TODO
+        (collectionView?.collectionViewLayout as? UICollectionViewFlowLayout)?.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        collectionView?.backgroundColor = .clear
+
     }
 
     func configureContentStackView() {
@@ -253,7 +264,11 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
 
     func applyTheme() {
-        view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        view.backgroundColor = .theme.ecosia.ntpBackground
+        collectionView?.backgroundColor = .theme.ecosia.ntpBackground
+        collectionView.visibleCells.forEach({
+            ($0 as? NotificationThemeable)?.applyTheme()
+        })
     }
 
     func scrollToTop(animated: Bool = false) {
@@ -281,6 +296,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // Find visible pocket cells that holds pocket stories
+        /* Ecosia
         let cells = self.collectionView.visibleCells.filter { $0.reuseIdentifier == PocketStandardCell.cellIdentifier }
 
         // Relative frame is the collectionView frame plus the status bar height
@@ -291,6 +307,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
             height: collectionView.frame.height + UIWindow.statusBarHeight
         )
         updatePocketCellsWithVisibleRatio(cells: cells, relativeRect: relativeRect)
+         */
     }
 
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
@@ -322,7 +339,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     // MARK: - Contextual hint
     private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
         guard contextualHintViewController.shouldPresentHint(),
-              viewModel.jumpBackInViewModel.isFlagForHintEnabled(),
+              // Ecosia // viewModel.jumpBackInViewModel.isFlagForHintEnabled(),
               !viewModel.shouldDisplayHomeTabBanner
         else { return }
 
@@ -347,6 +364,30 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
         UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
     }
+
+    // MARK: Ecosia
+    weak var delegate: HomepageViewControllerDelegate?
+    var inOverlayMode = false {
+        didSet {
+            /* TODO: check if needed
+            guard isViewLoaded else { return }
+            if inOverlayMode && !oldValue, let cell = searchbarCell {
+                UIView.animate(withDuration: 0.3, delay: 0, options: [.beginFromCurrentState], animations: { [weak self] in
+                    self?.collectionView.setContentOffset(.init(x: 0, y: cell.frame.maxY - FirefoxHomeUX.ScrollSearchBarOffset), animated: true)
+                })
+            } else if oldValue && !inOverlayMode && !collectionView.isDragging {
+                UIView.animate(withDuration: 0.3, delay: 0, options: [.beginFromCurrentState], animations: { [weak self] in
+                    self?.collectionView.contentOffset = .zero
+                })
+            }*/
+        }
+    }
+    let personalCounter = PersonalCounter()
+    weak var referrals: Referrals!
+    let flowLayout = NTPLayout()
+    weak var searchbarCell: UICollectionViewCell?
+    weak var emptyCell: EmptyCell?
+    weak var impactCell: NTPImpactCell?
 }
 
 // MARK: - CollectionView Data Source
@@ -362,11 +403,13 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
               let sectionViewModel = viewModel.getSectionViewModel(shownSection: indexPath.section)
         else { return UICollectionReusableView() }
 
+        /* Ecosia
         // Jump back in header specific setup
         if sectionViewModel.sectionType == .jumpBackIn {
             viewModel.jumpBackInViewModel.sendImpressionTelemetry()
             prepareJumpBackInContextualHint(onView: headerView)
         }
+         */
 
         // Configure header only if section is shown
         let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : LabelButtonHeaderViewModel.emptyHeader
@@ -404,6 +447,7 @@ private extension HomepageViewController {
     private func setupSectionsAction() {
 
         // Header view
+        /* Ecosia
         viewModel.headerViewModel.onTapAction = { [weak self] _ in
             self?.changeHomepageWallpaper()
         }
@@ -412,6 +456,7 @@ private extension HomepageViewController {
         viewModel.messageCardViewModel.dismissClosure = { [weak self] in
             self?.reloadView()
         }
+         */
 
         // Top sites
         viewModel.topSiteViewModel.tilePressedHandler = { [weak self] site, isGoogle in
@@ -423,6 +468,7 @@ private extension HomepageViewController {
             self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .topSites)
         }
 
+        /* Ecosia
         // Recently saved
         viewModel.recentlySavedViewModel.headerButtonAction = { [weak self] button in
             self?.openBookmarks(button)
@@ -506,8 +552,10 @@ private extension HomepageViewController {
         viewModel.customizeButtonViewModel.onTapAction = { [weak self] _ in
             self?.openCustomizeHomeSettings()
         }
+         */
     }
 
+    /* Ecosia
     private func openHistoryHighlightsSearchGroup(item: HighlightItem) {
         guard let groupItem = item.group else { return }
 
@@ -533,11 +581,14 @@ private extension HomepageViewController {
 
         asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
     }
+     */
 
+    /* Ecosia
     private func buildSite(from highlight: HighlightItem) -> Site {
         let itemURL = highlight.siteUrl?.absoluteString ?? ""
         return Site(url: itemURL, title: highlight.displayTitle)
     }
+     */
 
     func openTabTray(_ sender: UIButton) {
         homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: nil)
@@ -575,6 +626,7 @@ private extension HomepageViewController {
         }
     }
 
+    /* Ecosia
     func openCustomizeHomeSettings() {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeHomepage)
         TelemetryWrapper.recordEvent(category: .action,
@@ -582,6 +634,7 @@ private extension HomepageViewController {
                                      object: .firefoxHomepage,
                                      value: .customizeHomepageButton)
     }
+     */
 
     func contextualHintPresented() {
         homePanelDelegate?.homePanelDidPresentContextualHintOf(type: .jumpBackIn)
@@ -591,9 +644,11 @@ private extension HomepageViewController {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeTabs)
     }
 
+    /* Ecosia
     func changeHomepageWallpaper() {
         wallpaperView.cycleWallpaper()
     }
+     */
 
     func getPopoverSourceRect(sourceView: UIView?) -> CGRect {
         let cellRect = sourceView?.frame ?? .zero

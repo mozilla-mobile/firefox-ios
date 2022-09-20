@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import Storage
 import XCGLogger
+import Core
 
 private let log = Logger.browserLogger
 
@@ -43,7 +44,6 @@ class SearchEngines {
     init(prefs: Prefs, files: FileAccessor) {
         self.prefs = prefs
         // By default, show search suggestions
-        self.shouldShowSearchSuggestions = prefs.boolForKey(ShowSearchSuggestions) ?? true
         self.fileAccessor = files
         self.disabledEngineNames = getDisabledEngineNames()
         self.orderedEngines = getOrderedEngines()
@@ -88,9 +88,7 @@ class SearchEngines {
     }
 
     var shouldShowSearchSuggestions: Bool {
-        didSet {
-            self.prefs.setObject(shouldShowSearchSuggestions, forKey: ShowSearchSuggestions)
-        }
+        return User.shared.autoComplete
     }
 
     func isEngineEnabled(_ engine: OpenSearchEngine) -> Bool {

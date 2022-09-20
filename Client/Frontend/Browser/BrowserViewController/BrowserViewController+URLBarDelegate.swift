@@ -4,8 +4,8 @@
 
 import Shared
 import Storage
-import Telemetry
-import Glean
+// Ecosia: import Telemetry
+// Ecosia: import Glean
 
 protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }
@@ -46,7 +46,7 @@ extension BrowserViewController: URLBarDelegate {
             // If in overlay mode switching doesnt correctly dismiss the homepanels
             guard !self.topTabsVisible, !self.urlBar.inOverlayMode else { return }
             // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-            let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+            let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, imageName: "tabs", buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
                 if buttonPressed {
                     self.tabManager.selectTab(tab)
                 }
@@ -163,7 +163,7 @@ extension BrowserViewController: URLBarDelegate {
         switch result.value {
         case .success:
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageSuccessAcessibilityLabel)
-            SimpleToast().showAlertWithText(.ShareAddToReadingListDone, bottomContainer: self.webViewContainer)
+            SimpleToast().showAlertWithText(.ShareAddToReadingListDone, image: "reader", bottomContainer: self.webViewContainer)
         case .failure(let error):
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel)
             print("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
@@ -308,6 +308,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
+        homepageViewController?.inOverlayMode = true
         libraryDrawerViewController?.close()
         urlBar.updateSearchEngineImage()
         guard let profile = profile as? BrowserProfile else { return }
@@ -324,8 +325,10 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
+        homepageViewController?.inOverlayMode = false
         destroySearchController()
-        updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
+        // Ecosia: fix slow hiding of ntp when network is slow
+        updateInContentHomePanel(urlBar.currentURL ?? tabManager.selectedTab?.url)
     }
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {

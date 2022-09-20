@@ -92,9 +92,9 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
         if launchArguments.contains(LaunchArguments.ClearProfile) {
             // Use a clean profile for each test session.
             log.debug("Deleting all files in 'Documents' directory to clear the profile")
-            profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate, clear: true)
+            profile = BrowserProfile(localName: "testProfile", clear: true)
         } else {
-            profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate)
+            profile = BrowserProfile(localName: "testProfile")
         }
 
         if launchArguments.contains(LaunchArguments.SkipAddingGoogleTopSite) {

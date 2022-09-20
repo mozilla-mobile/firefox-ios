@@ -107,7 +107,7 @@ public class DrawerViewController: UIViewController, NotificationThemeable {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didRecognizeTapGesture))
         backgroundOverlayView.addGestureRecognizer(tapGestureRecognizer)
 
-        drawerView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ? UIColor.theme.tableView.rowBackground : UIColor.theme.tableView.headerBackground
+        drawerView.backgroundColor = UIColor.theme.ecosia.barBackground
         view.addSubview(drawerView)
 
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didRecognizePanGesture))
@@ -148,7 +148,7 @@ public class DrawerViewController: UIViewController, NotificationThemeable {
     }
 
     public func applyTheme() {
-        drawerView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ? UIColor.theme.tableView.rowBackground : UIColor.theme.tableView.headerBackground
+        drawerView.backgroundColor = UIColor.theme.ecosia.barBackground
     }
 
     override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

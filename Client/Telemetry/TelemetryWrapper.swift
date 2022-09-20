@@ -4,9 +4,9 @@
 
 import Glean
 import Shared
-import Telemetry
-import Account
-import Sync
+//Ecosia: import Telemetry
+//Ecosia: import Account
+//Ecosia: import Sync
 
 protocol TelemetryWrapperProtocol {
     func recordEvent(category: TelemetryWrapper.EventCategory,
@@ -166,6 +166,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
     }
 
     func initGlean(_ profile: Profile, sendUsageData: Bool) {
+        /*
         // Get the legacy telemetry ID and record it in Glean for the deletion-request ping
         if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"), let uuid = UUID(uuidString: uuidString) {
             GleanMetrics.LegacyIds.clientId.set(uuid)
@@ -194,10 +195,12 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             name: UIApplication.didFinishLaunchingNotification,
             object: nil
         )
+        */
     }
 
     // Sets hashed fxa sync device id for glean deletion ping
     func setSyncDeviceId() {
+        /* Ecosia
         guard let prefs = profile?.prefs else { return }
         // Grab our token so we can use the hashed_fxa_uid and clientGUID from our scratchpad for deletion-request ping
         RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: true) >>== { (token, kSync) in
@@ -207,8 +210,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             let deviceId = (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
             GleanMetrics.Deletion.syncDeviceId.set(deviceId)
         }
+        */
     }
     @objc func recordFinishedLaunchingPreferenceMetrics(notification: NSNotification) {
+        /* Ecosia
         guard let profile = self.profile else { return }
         // Pocket stories visible
         if let pocketStoriesVisible = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.ASPocketStories) {
@@ -216,13 +221,14 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         } else {
             GleanMetrics.FirefoxHomePage.pocketStoriesVisible.set(true)
         }
+         */
     }
 
     // Function for recording metrics that are better recorded when going to background due
     // to the particular measurement, or availability of the information.
     @objc func recordEnteredBackgroundPreferenceMetrics(notification: NSNotification) {
+        /*
         guard let profile = self.profile else { assert(false); return; }
-
         // Record default search engine setting
         let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
         GleanMetrics.Search.defaultEngine.set(searchEngines.defaultEngine.engineID ?? "custom")
@@ -302,6 +308,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.name.lowercased()].add()
         }
 
+        */
     }
 
     @objc func uploadError(notification: NSNotification) {
@@ -631,6 +638,7 @@ extension TelemetryWrapper {
     }
 
     static func gleanRecordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
+        /*
         switch (category, method, object, value, extras) {
         // MARK: Bookmarks
         case (.action, .view, .bookmarksPanel, let from?, _):
@@ -714,7 +722,7 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.close[privateOrNormal.rawValue].add()
         case (.action, .closeAll, .tab, let privateOrNormal?, _):
             GleanMetrics.Tabs.closeAll[privateOrNormal.rawValue].add()
-        case (.action, .tap, .addNewTabButton, _, _):
+        case (.action, .tap, .circleButton, _, _):
             GleanMetrics.Tabs.newTabPressed.add()
         case (.action, .tap, .tab, _, _):
             GleanMetrics.Tabs.clickTab.record()
@@ -1269,6 +1277,7 @@ extension TelemetryWrapper {
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
         }
+        */
     }
 
     private static func recordUninstrumentedMetrics(

@@ -1,11 +1,11 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/. 
+opt_out_usage
 
-fastlane_version "1.39.0"
+fastlane_version "2.178.0"
 
 default_platform :ios
-
 
 import_build_tools(
   url: 'git@github.com:mozilla/firefox-ios-build-tools.git',
@@ -13,14 +13,85 @@ import_build_tools(
 )
 
 #move all the build tools to the right places
-clone_folder = "../../build-tools"
-sh("rsync -a #{clone_folder}/scripts ../")
-sh("rsync -a #{clone_folder}/fastlane/Appfile Appfile")
-sh("rsync -a #{clone_folder}/fastlane/Snapfile Snapfile")
-sh("rsync -a #{clone_folder}/fastlane/SnapshotHelper.swift SnapshotHelper.swift")
-sh("rsync -a #{clone_folder}/fastlane/scripts .")
-sh("rsync -a #{clone_folder}/fastlane/frames .")
-sh("rsync -a #{clone_folder}/fastlane/templates .")
+#clone_folder = "../../build-tools"
+#sh("rsync -a #{clone_folder}/scripts ../")
+#sh("rsync -a #{clone_folder}/fastlane/Appfile Appfile")
+#sh("rsync -a #{clone_folder}/fastlane/Snapfile Snapfile")
+#sh("rsync -a #{clone_folder}/fastlane/SnapshotHelper.swift SnapshotHelper.swift")
+#sh("rsync -a #{clone_folder}/fastlane/scripts .")
+#sh("rsync -a #{clone_folder}/fastlane/frames .")
+#sh("rsync -a #{clone_folder}/fastlane/templates .")
+
 
 #import the fastfile
-import "#{clone_folder}/fastlane/BaseFastfile"
+#import "#{clone_folder}/fastlane/BaseFastfile"
+
+platform :ios do
+  before_all do
+    setup_circle_ci
+  end
+
+  desc "Deploy to MS App-Center"
+  lane :appcenter do
+    match(
+      app_identifier: ['com.ecosia.ecosiaapp.firefox', 'com.ecosia.ecosiaapp.firefox.WidgetKit', 'com.ecosia.ecosiaapp.firefox.ShareTo', 'com.ecosia.ecosiaapp.firefox.CredentialProvider'], 
+      type: "adhoc",
+      readonly: true
+    )
+    gym(
+      scheme: "Ecosia",
+      project: "Client.xcodeproj",
+      export_method: "ad-hoc",
+      configuration: "EcosiaAppCenter",
+      export_options: {iCloudContainerEnvironment: 'Development'}
+    )
+    appcenter_upload(
+      api_token: ENV["APPCENTER_API_TOKEN"],
+      owner_name: ENV["APPCENTER_OWNER_NAME"],
+      app_name: "iOS-FF-Beta",
+      file: ENV["IPA_OUTPUT_PATH"],
+      dsym: ENV["DSYM_OUTPUT_PATH"],
+      should_clip: false,
+      release_notes: ENV["CIRCLE_BRANCH"],
+      notify_testers: false
+    )
+  end
+  
+  desc "Testflight build for Beta Channel"
+  lane :testflight_beta do
+    match(
+      app_identifier: ['com.ecosia.ecosiaapp.firefox', 'com.ecosia.ecosiaapp.firefox.WidgetKit', 'com.ecosia.ecosiaapp.firefox.ShareTo', 'com.ecosia.ecosiaapp.firefox.CredentialProvider'], 
+      type: 'appstore',
+      readonly: true
+    )
+    gym(
+      scheme: "Ecosia",
+      export_method: "app-store",
+      configuration: "EcosiaBeta"
+    )
+    pilot(
+      skip_waiting_for_build_processing: true, 
+      apple_id: "1541358670"
+    )
+  end
+
+  desc "Testflight build for Live Channel"
+  lane :testflight_live do
+    match(
+      app_identifier: ['com.ecosia.ecosiaapp', 'com.ecosia.ecosiaapp.searchWidget', 'com.ecosia.ecosiaapp.WidgetKit', 'com.ecosia.ecosiaapp.ShareTo', 'com.ecosia.ecosiaapp.CredentialProvider'], 
+      type: 'appstore',
+      readonly: true
+    )
+    gym(
+      scheme: "Ecosia",
+      export_method: "app-store",
+      configuration: "Ecosia",
+      include_bitcode: true
+    )
+    pilot(
+      skip_waiting_for_build_processing: true, 
+      apple_id: "670881887"
+    )
+  end 
+
+end

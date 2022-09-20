@@ -1,9 +1,5 @@
-*Thank you for submitting a pull request, your contributions are greatly appreciated!*
+# Ticket
 
-Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
+[MOB-####](https://ecosia.atlassian.net/browse/MOB-####)
 
-Please make sure you've run the test scheme and all the tests pass. If your changes affect existing tests please make sure to update the tests as well.
-
-Below is the PR naming guidelines we follow:
-
-https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide
+## Description

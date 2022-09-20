@@ -18,7 +18,7 @@ class SlideOverPresentationController: UIPresentationController {
 
     init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?, withGlobalETPStatus status: Bool) {
         globalETPStatus = status
-        let blurEffect = UIBlurEffect(style: .dark)
+        let blurEffect = UIBlurEffect(style: .systemThickMaterialDark)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
 
@@ -53,7 +53,7 @@ class SlideOverPresentationController: UIPresentationController {
         blurEffectView.alpha = 0
         containerView?.addSubview(blurEffectView)
         presentedViewController.transitionCoordinator?.animate(alongsideTransition: { (UIViewControllerTransitionCoordinatorContext) in
-            self.blurEffectView.alpha = 0.1
+            self.blurEffectView.alpha = 0.4
         }, completion: { (UIViewControllerTransitionCoordinatorContext) in })
     }
 

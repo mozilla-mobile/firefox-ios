@@ -85,7 +85,7 @@ class WebsiteDataManagementViewModel {
     }
 }
 
-class WebsiteDataManagementViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+class WebsiteDataManagementViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, NotificationThemeable {
     private enum Section: Int {
         case sites = 0
         case showMore = 1
@@ -106,17 +106,16 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
 
     private lazy var searchResultsViewController = WebsiteDataSearchResultsViewController(viewModel: viewModel)
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = .SettingsWebsiteDataTitle
+        navigationItem.largeTitleDisplayMode = .never
         navigationController?.setToolbarHidden(true, animated: false)
 
-        tableView = UITableView()
+        tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.allowsSelectionDuringEditing = true
@@ -163,18 +162,31 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         searchController.searchBar.placeholder = .SettingsFilterSitesSearchLabel
         searchController.searchBar.delegate = self
 
-        if theme == .dark {
-            searchController.searchBar.barStyle = .black
-        }
         navigationItem.searchController = searchController
         self.searchController = searchController
 
         definesPresentationContext = true
+
+        applyTheme()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         unfoldSearchbar()
+    }
+
+    func applyTheme() {
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+        tableView.reloadData()
+        (tableView.tableHeaderView as? NotificationThemeable)?.applyTheme()
+        (tableView.tableFooterView as? NotificationThemeable)?.applyTheme()
+
+        if theme == .dark {
+            searchController?.searchBar.searchTextField.backgroundColor = .Dark.Background.secondary
+        } else {
+            searchController?.searchBar.searchTextField.backgroundColor = .Light.Background.primary
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -199,7 +211,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         case .clearButton:
             cell.textLabel?.text = viewModel.clearButtonTitle
             cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
+            cell.textLabel?.textColor = .Light.State.warning
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ClearAllWebsiteData"
         }

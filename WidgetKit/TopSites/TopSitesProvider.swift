@@ -9,11 +9,11 @@ import Shared
 struct TopSitesProvider: TimelineProvider {
     public typealias Entry = TopSitesEntry
 
-    func placeholder(in context: Context) -> TopSitesEntry {
+    func placeholder(in context: TopSitesProvider.Context) -> TopSitesEntry {
         return TopSitesEntry(date: Date(), favicons: [String: Image](), sites: [])
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (TopSitesEntry) -> Void) {
+    func getSnapshot(in context: TopSitesProvider.Context, completion: @escaping (TopSitesEntry) -> Void) {
         var tabFaviconDictionary = [String: Image]()
         let widgetKitTopSites = WidgetKitTopSiteModel.get()
         for site in widgetKitTopSites {
@@ -37,7 +37,7 @@ struct TopSitesProvider: TimelineProvider {
         return image.withBackgroundAndPadding(color: color)
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<TopSitesEntry>) -> Void) {
+    func getTimeline(in context: TopSitesProvider.Context, completion: @escaping (Timeline<TopSitesEntry>) -> Void) {
         getSnapshot(in: context, completion: { topSitesEntry in
             let timeline = Timeline(entries: [topSitesEntry], policy: .atEnd)
             completion(timeline)

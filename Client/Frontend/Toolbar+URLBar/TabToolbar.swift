@@ -5,41 +5,28 @@
 import UIKit
 import Shared
 
-class TabToolbar: UIView, FeatureFlaggable {
-
-    // MARK: - Variables
-
+class TabToolbar: UIView {
     weak var tabToolbarDelegate: TabToolbarDelegate?
 
     let tabsButton = TabsButton()
-    let addNewTabButton = ToolbarButton()
+    let circleButton = CircleButton(config: .search)
     let appMenuButton = ToolbarButton()
     let bookmarksButton = ToolbarButton()
     let forwardButton = ToolbarButton()
     let backButton = ToolbarButton()
     let multiStateButton = ToolbarButton()
+    let ecosiaButton = ToolbarButton()
     let actionButtons: [NotificationThemeable & UIButton]
 
-    private var isBottomSearchBar: Bool {
-        guard SearchBarSettingsViewModel.isEnabled else { return false }
-
-        if let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) {
-            return position == .bottom
-        }
-
-        return false
-    }
-
-    private let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
-    private let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
-    private let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
+    fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
+    fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
+    fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
 
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
 
-    // MARK: - Initializers
-    private override init(frame: CGRect) {
-        actionButtons = [backButton, forwardButton, multiStateButton, addNewTabButton, tabsButton, appMenuButton]
+    fileprivate override init(frame: CGRect) {
+        actionButtons = [backButton, forwardButton, ecosiaButton, circleButton, tabsButton, appMenuButton]
         super.init(frame: frame)
         setupAccessibility()
 
@@ -53,38 +40,33 @@ class TabToolbar: UIView, FeatureFlaggable {
 
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
-        contentView.translatesAutoresizingMaskIntoConstraints = false
     }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - View Setup
 
     override func updateConstraints() {
         privateModeBadge.layout(onButton: tabsButton)
         appMenuBadge.layout(onButton: appMenuButton)
         warningMenuBadge.layout(onButton: appMenuButton)
 
-        NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
-        ])
+        contentView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalTo(self)
+            make.bottom.equalTo(self.safeArea.bottom)
+        }
         super.updateConstraints()
     }
 
     private func setupAccessibility() {
         backButton.accessibilityIdentifier = "TabToolbar.backButton"
         forwardButton.accessibilityIdentifier = "TabToolbar.forwardButton"
-        multiStateButton.accessibilityIdentifier = "TabToolbar.multiStateButton"
+        ecosiaButton.accessibilityIdentifier = "TabToolbar.ecosiaButton"
         tabsButton.accessibilityIdentifier = "TabToolbar.tabsButton"
-        addNewTabButton.accessibilityIdentifier = "TabToolbar.addNewTabButton"
-        appMenuButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.settingsMenuButton
+        circleButton.accessibilityIdentifier = "TabToolbar.circleButton"
+        appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"
         accessibilityNavigationStyle = .combined
         accessibilityLabel = .TabToolbarNavigationToolbarAccessibilityLabel
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     func addButtons(_ buttons: [UIButton]) {
@@ -92,15 +74,12 @@ class TabToolbar: UIView, FeatureFlaggable {
     }
 
     override func draw(_ rect: CGRect) {
-        // No line when the search bar is on top of the toolbar
-        guard !isBottomSearchBar else { return }
-
         if let context = UIGraphicsGetCurrentContext() {
             drawLine(context, start: .zero, end: CGPoint(x: frame.width, y: 0))
         }
     }
 
-    private func drawLine(_ context: CGContext, start: CGPoint, end: CGPoint) {
+    fileprivate func drawLine(_ context: CGContext, start: CGPoint, end: CGPoint) {
         context.setStrokeColor(UIColor.black.withAlphaComponent(0.05).cgColor)
         context.setLineWidth(2)
         context.move(to: CGPoint(x: start.x, y: start.y))
@@ -109,7 +88,6 @@ class TabToolbar: UIView, FeatureFlaggable {
     }
 }
 
-// MARK: - TabToolbarProtocol
 extension TabToolbar: TabToolbarProtocol {
     var homeButton: ToolbarButton { multiStateButton }
 
@@ -144,16 +122,16 @@ extension TabToolbar: TabToolbarProtocol {
     }
 }
 
-// MARK: - Theme protocols
-
 extension TabToolbar: NotificationThemeable, PrivateModeUI {
     func applyTheme() {
-        backgroundColor = UIColor.theme.browser.background
+        backgroundColor = UIColor.theme.ecosia.barBackground
         helper?.setTheme(forButtons: actionButtons)
 
-        privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
-        appMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
-        warningMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        privateModeBadge.badge.tintBackground(color: UIColor.theme.ecosia.barBackground)
+        privateModeBadge.backdrop.backgroundColor = UIColor.theme.ecosia.personalCounterSelection
+        privateModeBadge.backdrop.alpha = 1
+        appMenuBadge.badge.tintBackground(color: UIColor.theme.ecosia.barBackground)
+        warningMenuBadge.badge.tintBackground(color: UIColor.theme.ecosia.barBackground)
     }
 
     func applyUIMode(isPrivate: Bool) {

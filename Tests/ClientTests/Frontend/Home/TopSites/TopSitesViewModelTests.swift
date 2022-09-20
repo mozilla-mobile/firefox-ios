@@ -7,7 +7,7 @@ import XCTest
 @testable import Client
 import Shared
 import Storage
-import SyncTelemetry
+// Ecosia // import SyncTelemetry
 
 class TopSitesViewModelTests: XCTestCase {
     var profile: MockProfile!

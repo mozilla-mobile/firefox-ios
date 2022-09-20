@@ -8,7 +8,7 @@ struct TextFieldTableViewCellUX {
     static let HorizontalMargin: CGFloat = 16
     static let VerticalMargin: CGFloat = 10
     static let TitleLabelFont = UIFont.systemFont(ofSize: 12)
-    static let TitleLabelTextColor = UIConstants.SystemBlueColor
+    static let TitleLabelTextColor = UIColor.theme.ecosia.primaryBrand
     static let TextFieldFont = UIFont.systemFont(ofSize: 16)
 }
 
@@ -70,7 +70,7 @@ class TextFieldTableViewCell: UITableViewCell, NotificationThemeable {
 
     func applyTheme() {
         backgroundColor = UIColor.theme.tableView.rowBackground
-        titleLabel.textColor = TextFieldTableViewCellUX.TitleLabelTextColor
+        titleLabel.textColor = UIColor.theme.ecosia.secondaryText
         textField.textColor = UIColor.theme.tableView.rowText
     }
 }

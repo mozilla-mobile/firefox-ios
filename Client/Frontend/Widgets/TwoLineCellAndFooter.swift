@@ -32,12 +32,15 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
         return imgView
     }()
 
+    /* Ecosia: design
     var leftOverlayImageView: UIImageView = {
         let imgView = UIImageView()
         imgView.contentMode = .scaleAspectFit
         imgView.clipsToBounds = true
+        imgView.layer.cornerRadius = 11
         return imgView
     }()
+     */
 
     var titleLabel: UILabel = {
         let label = UILabel()
@@ -78,13 +81,12 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
         containerView.addSubview(leftImageView)
         containerView.addSubview(midView)
 
-        containerView.addSubview(leftOverlayImageView)
         addSubview(containerView)
         contentView.addSubview(containerView)
         bringSubviewToFront(containerView)
 
         containerView.snp.makeConstraints { make in
-            make.height.equalTo(58)
+            make.height.equalTo(58).priority(.veryHigh)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             if let accessoryView = accessoryView {
@@ -100,11 +102,12 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
             make.centerY.equalTo(containerView.snp.centerY)
         }
 
+        /* Ecosia
         leftOverlayImageView.snp.makeConstraints { make in
             make.height.width.equalTo(22)
             make.trailing.equalTo(leftImageView).offset(7)
             make.bottom.equalTo(leftImageView).offset(7)
-        }
+        }*/
 
         midView.snp.makeConstraints { make in
             make.height.equalTo(46)
@@ -134,16 +137,13 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
-            self.backgroundColor = UIColor.Photon.Grey80
-            self.titleLabel.textColor = .white
-            self.descriptionLabel.textColor = UIColor.Photon.Grey40
-            self.selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
+            self.backgroundColor = .Dark.Background.tertiary
         } else {
-            self.backgroundColor = .white
-            self.titleLabel.textColor = .black
-            self.descriptionLabel.textColor = UIColor.Photon.DarkGrey05
-            self.selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
+            self.backgroundColor = .Light.Background.primary
         }
+        selectedView.backgroundColor = .theme.ecosia.secondarySelectedBackground
+        titleLabel.textColor = UIColor.theme.ecosia.primaryText
+        descriptionLabel.textColor = UIColor.theme.ecosia.secondaryText
     }
 
     override func prepareForReuse() {
@@ -157,7 +157,7 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
     override func layoutSubviews() {
         super.layoutSubviews()
         containerView.snp.remakeConstraints { make in
-            make.height.equalTo(58)
+            make.height.equalTo(58).priority(.veryHigh)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             if let accessoryView = accessoryView {

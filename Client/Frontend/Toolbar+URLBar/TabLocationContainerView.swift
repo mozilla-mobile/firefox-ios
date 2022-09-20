@@ -9,7 +9,7 @@ import Foundation
 class TabLocationContainerView: UIView {
 
     private struct LocationContainerUX {
-        static let CornerRadius: CGFloat = 8
+        static let CornerRadius: CGFloat = 22
     }
 
     override init(frame: CGRect) {

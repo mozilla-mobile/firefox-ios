@@ -48,8 +48,7 @@ class AppContainer: ServiceProvider {
 
                 container.register(.eagerSingleton) {
                     BrowserProfile(
-                        localName: "profile",
-                        syncDelegate: UIApplication.shared.syncDelegate) as Profile
+                        localName: "profile") as Profile
                 }
 
                 /// TabManager can remain a singleton until we support multiple scenes.

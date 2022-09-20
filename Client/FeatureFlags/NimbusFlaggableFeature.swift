@@ -154,7 +154,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return nimbusLayer.checkNimbusConfigForStartAtHome().rawValue
 
         case .wallpaperVersion:
-            return nimbusLayer.checkNimbusForWallpapersVersion()
+            return nil // Ecosia // nimbusLayer.checkNimbusForWallpapersVersion()
 
         default: return nil
         }

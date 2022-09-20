@@ -18,6 +18,15 @@
       }
     },
     {
+      "identity" : "fmdb",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ccgus/fmdb",
+      "state" : {
+        "revision" : "61e51fde7f7aab6554f30ab061cc588b28a97d04",
+        "version" : "2.7.7"
+      }
+    },
+    {
       "identity" : "fuzi",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nbhasin2/Fuzi.git",
@@ -45,12 +54,12 @@
       }
     },
     {
-      "identity" : "ios_sdk",
+      "identity" : "ios-core",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/adjust/ios_sdk.git",
+      "location" : "https://github.com/ecosia/ios-core.git",
       "state" : {
-        "revision" : "43c5bb5eb8f77c72da856637dac5c46087c27848",
-        "version" : "4.29.6"
+        "branch" : "main",
+        "revision" : "52b40969b5d6b90bd47dc12922ff411c0eaa8963"
       }
     },
     {
@@ -99,21 +108,21 @@
       }
     },
     {
-      "identity" : "sentry-cocoa",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/getsentry/sentry-cocoa.git",
-      "state" : {
-        "revision" : "967f04b3cd6989df3f9ced3060481a21646c146d",
-        "version" : "7.9.0"
-      }
-    },
-    {
       "identity" : "snapkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SnapKit/SnapKit.git",
       "state" : {
         "revision" : "d458564516e5676af9c70b4f4b2a9178294f1bc6",
         "version" : "5.0.1"
+      }
+    },
+    {
+      "identity" : "snowplow-objc-tracker",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/snowplow/snowplow-objc-tracker.git",
+      "state" : {
+        "revision" : "dc5ecb6ad2921a50f629ef600cc1ee700e608f66",
+        "version" : "3.2.0"
       }
     },
     {
@@ -132,15 +141,6 @@
       "state" : {
         "revision" : "b3dcd7dbd0d488e1a7077cb33b00f2083e382f07",
         "version" : "5.0.1"
-      }
-    },
-    {
-      "identity" : "telemetry-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mozilla-mobile/telemetry-ios",
-      "state" : {
-        "revision" : "68f2d813320c9fda2fb4aee4548c64293500200a",
-        "version" : "2.0.0"
       }
     },
     {

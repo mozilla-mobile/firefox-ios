@@ -9,7 +9,7 @@ import Storage
 private struct DownloadsPanelUX {
     static let WelcomeScreenTopPadding: CGFloat = 120
     static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenItemWidth: CGFloat = 170
+    static let WelcomeScreenItemWidth:CGFloat = 220
     static let HeaderHeight: CGFloat = 28
 }
 
@@ -69,7 +69,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     private let events: [Notification.Name] = [.FileDidDownload, .PrivateDataClearedDownloadedFiles, .DynamicFontChanged]
 
-    private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
+    private lazy var emptyStateOverlayView = EmptyHeader(icon: "downloadsEmpty", title: .localized(.noDownloadsYet), subtitle: .localized(.whenYouDownloadFiles))
 
     private var groupedDownloadedFiles = DateGroupedTableData<DownloadedFile>()
     private var fileExtensionIcons: [String: UIImage] = [:]
@@ -116,13 +116,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.reloadData()
 
             switch notification.name {
-            case .FileDidDownload, .PrivateDataClearedDownloadedFiles:
-                break
-            case .DynamicFontChanged:
-                if self.emptyStateOverlayView.superview != nil {
-                    self.emptyStateOverlayView.removeFromSuperview()
-                }
-                self.emptyStateOverlayView = self.createEmptyStateOverlayView()
+            case .FileDidDownload, .PrivateDataClearedDownloadedFiles, .DynamicFontChanged:
                 break
             default:
                 // no need to do anything at all
@@ -255,18 +249,11 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     private func updateEmptyPanelState() {
         if groupedDownloadedFiles.isEmpty {
             if emptyStateOverlayView.superview == nil {
-                view.addSubview(emptyStateOverlayView)
-                view.bringSubviewToFront(emptyStateOverlayView)
-
-                NSLayoutConstraint.activate([
-                    emptyStateOverlayView.topAnchor.constraint(equalTo: view.topAnchor),
-                    emptyStateOverlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                    emptyStateOverlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                    emptyStateOverlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-                ])
+                tableView.tableHeaderView = emptyStateOverlayView
+                emptyStateOverlayView.applyTheme()
             }
         } else {
-            emptyStateOverlayView.removeFromSuperview()
+            tableView.tableHeaderView = nil
         }
     }
 
@@ -317,13 +304,14 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return configureDownloadedFile(cell, for: indexPath)
     }
 
+    /* Ecosia
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
             header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
             header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground // UIColor.theme.tableView.headerBackground
         }
     }
-
+    */
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard groupedDownloadedFiles.numberOfItemsForSection(section) > 0 else { return 0 }
 
@@ -349,6 +337,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
 
         header?.showBorder(for: .top, !isFirstSection(section))
+        header?.textLabel?.text = header?.textLabel?.text?.uppercased()
 
         return header
     }
@@ -417,6 +406,9 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
                 completion(false)
             }
         }
+		// Ecosia: Theming
+        deleteAction.backgroundColor = .Light.State.warning
+
 
         let shareAction = UIContextualAction(style: .normal, title: .DownloadsPanelShareTitle) { [weak self] (_, view, completion) in
             guard let strongSelf = self else { completion(false); return }
@@ -430,6 +422,9 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
                 completion(false)
             }
         }
+		// Ecosia: Theming
+		shareAction.backgroundColor = .Light.State.information
+
 
         return UISwipeActionsConfiguration(actions: [deleteAction, shareAction])
     }
@@ -445,12 +440,10 @@ extension DownloadsPanel: UIDocumentInteractionControllerDelegate {
 // MARK: - NotificationThemeable
 extension DownloadsPanel: NotificationThemeable {
     func applyTheme() {
-        emptyStateOverlayView.removeFromSuperview()
-        emptyStateOverlayView = createEmptyStateOverlayView()
+        emptyStateOverlayView.applyTheme()
         updateEmptyPanelState()
-
-        tableView.backgroundColor =  UIColor.theme.homePanel.panelBackground
         tableView.separatorColor = UIColor.theme.tableView.separator
+        tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
 
         reloadData()
     }

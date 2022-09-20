@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import UIKit
 
 class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, ReusableCell {
 
@@ -12,12 +13,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
 
     var isSelectedTab = false {
         didSet {
-            backgroundColor = .clear
-            titleText.textColor = UIColor.theme.topTabs.tabForegroundSelected
-            closeButton.tintColor = UIColor.theme.topTabs.closeButtonSelectedTab
-            closeButton.backgroundColor = backgroundColor
-            closeButton.layer.shadowColor = backgroundColor?.cgColor
-            selectedBackground.isHidden = !isSelectedTab
+            applyTheme()
         }
     }
 
@@ -143,7 +139,16 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
     }
 
     func applyTheme() {
-        selectedBackground.backgroundColor = UIColor.theme.topTabs.tabBackgroundSelected
+        selectedBackground.backgroundColor = UIColor.theme.ecosia.primaryButton
+
+        backgroundColor = .clear
+        let tint = isSelectedTab ? UIColor.theme.ecosia.primaryTextInverted : UIColor.theme.ecosia.primaryText
+        titleText.textColor = tint
+        closeButton.tintColor = tint
+        favicon.tintColor = tint
+        closeButton.backgroundColor = backgroundColor
+        closeButton.layer.shadowColor = backgroundColor?.cgColor
+        selectedBackground.isHidden = !isSelectedTab
     }
 }
 

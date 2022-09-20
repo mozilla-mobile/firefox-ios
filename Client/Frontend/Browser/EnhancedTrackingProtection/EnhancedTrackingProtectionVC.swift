@@ -61,20 +61,23 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     private let siteDomainLabel: UILabel = .build { label in
-        label.font = ETPMenuUX.Fonts.websiteTitle
-        label.numberOfLines = 0
+//        label.font = ETPMenuUX.Fonts.websiteTitle
+        label.numberOfLines = 2
     }
 
     private var closeButton: UIButton = .build { button in
+        /*
         button.layer.cornerRadius = 0.5 * ETPMenuUX.UX.closeButtonSize
-        button.clipsToBounds = true
-        button.setImage(UIImage(named: "close-medium"), for: .normal)
-        button.imageView?.contentMode = .scaleAspectFit
+        button.clipsToBounds = true*/
+        button.setImage(UIImage(named: "xmark"), for: .normal)
+//        button.imageView?.contentMode = .scaleAspectFit
     }
 
+    /*
     private let horizontalLine: UIView = .build { line in
         line.backgroundColor = UIColor.theme.etpMenu.horizontalLine
     }
+     */
 
     // Connection Info view
     private let connectionView = ETPSectionView(frame: .zero)
@@ -197,7 +200,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     private func setupHeaderView() {
-        headerContainer.addSubviews(heroImage, siteDomainLabel, closeButton, horizontalLine)
+        headerContainer.addSubviews(heroImage, siteDomainLabel, closeButton/*, horizontalLine */)
         view.addSubview(headerContainer)
 
         var headerConstraints = [
@@ -218,11 +221,12 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
             closeButton.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.closeButtonSize),
             closeButton.widthAnchor.constraint(equalToConstant: ETPMenuUX.UX.closeButtonSize),
 
+            /*
             horizontalLine.leadingAnchor.constraint(equalTo: headerContainer.leadingAnchor),
             horizontalLine.trailingAnchor.constraint(equalTo: headerContainer.trailingAnchor),
             horizontalLine.topAnchor.constraint(equalTo: heroImage.bottomAnchor, constant: ETPMenuUX.UX.Line.distanceFromHeroImage),
-            horizontalLine.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.Line.height),
-            headerContainer.bottomAnchor.constraint(equalTo: horizontalLine.bottomAnchor)
+            horizontalLine.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.Line.height),*/
+            headerContainer.bottomAnchor.constraint(equalTo: heroImage.bottomAnchor)
         ]
 
         if asPopover {
@@ -257,8 +261,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
 
             connectionDetailArrow.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
             connectionDetailArrow.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor),
-            connectionDetailArrow.heightAnchor.constraint(equalToConstant: 20),
-            connectionDetailArrow.widthAnchor.constraint(equalToConstant: 20),
+            connectionDetailArrow.heightAnchor.constraint(equalToConstant: 24),
+            connectionDetailArrow.widthAnchor.constraint(equalToConstant: 24),
 
             connectionButton.leadingAnchor.constraint(equalTo: connectionView.leadingAnchor),
             connectionButton.topAnchor.constraint(equalTo: connectionView.topAnchor),
@@ -343,8 +347,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
                 self?.heroImage.image = image
             }
         }
-
-        siteDomainLabel.text = viewModel.websiteTitle
 
         connectionLabel.text = viewModel.connectionStatusString
         connectionImage.image = viewModel.connectionStatusImage
@@ -431,20 +433,37 @@ extension EnhancedTrackingProtectionMenuVC: PresentingModalViewControllerDelegat
 extension EnhancedTrackingProtectionMenuVC: NotificationThemeable {
     @objc func applyTheme() {
         overrideUserInterfaceStyle =  LegacyThemeManager.instance.userInterfaceStyle
-        view.backgroundColor = UIColor.theme.etpMenu.background
-        closeButton.backgroundColor = UIColor.theme.etpMenu.closeButtonColor
+        view.backgroundColor = UIColor.theme.ecosia.trackingSheetBackground
+        
+        siteDomainLabel.attributedText = { mutable, style in
+            style.lineBreakMode = .byTruncatingTail
+            
+            mutable.append(.init(string: viewModel.websiteTitle, attributes: [
+                .foregroundColor: UIColor.theme.ecosia.primaryText,
+                .font: UIFont.preferredFont(forTextStyle: .body),
+                .paragraphStyle: style]))
+            mutable.append(.init(string: "\n"))
+            mutable.append(.init(string: viewModel.websiteDomain, attributes: [
+                .foregroundColor: UIColor.theme.ecosia.secondaryText,
+                .font: UIFont.preferredFont(forTextStyle: .footnote),
+                .paragraphStyle: style]))
+            return mutable
+        } (NSMutableAttributedString(), NSMutableParagraphStyle())
+        
         connectionView.backgroundColor = UIColor.theme.etpMenu.sectionColor
         connectionImage.image = viewModel.connectionStatusImage
+        connectionImage.tintColor = .theme.ecosia.primaryBrand
         connectionDetailArrow.tintColor = UIColor.theme.etpMenu.defaultImageTints
         if viewModel.connectionSecure {
             connectionImage.tintColor = UIColor.theme.etpMenu.defaultImageTints
         }
         toggleView.backgroundColor = UIColor.theme.etpMenu.sectionColor
-        toggleSwitch.tintColor = UIColor.theme.etpMenu.switchAndButtonTint
-        toggleSwitch.onTintColor = UIColor.theme.etpMenu.switchAndButtonTint
+        toggleSwitch.tintColor = .theme.ecosia.primaryButton
+        toggleSwitch.onTintColor = .theme.ecosia.primaryButton
         toggleStatusLabel.textColor = UIColor.theme.etpMenu.subtextColor
         protectionView.backgroundColor = UIColor.theme.etpMenu.sectionColor
-        protectionButton.setTitleColor(UIColor.theme.etpMenu.switchAndButtonTint, for: .normal)
+        protectionButton.setTitleColor(.theme.ecosia.primaryButton, for: .normal)
+        closeButton.imageView?.tintColor = .theme.ecosia.primaryIcon
         setNeedsStatusBarAppearanceUpdate()
      }
  }

@@ -106,15 +106,17 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
 
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
+        titleLabel.font = .preferredFont(forTextStyle: .body)
+        titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.textAlignment = .left
-        titleLabel.numberOfLines = 2
+        titleLabel.numberOfLines = 1
         return titleLabel
     }()
 
     lazy var descriptionLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
+        titleLabel.font = .preferredFont(forTextStyle: .footnote)
+        titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
         return titleLabel
@@ -127,6 +129,9 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
         siteImageView.layer.cornerRadius = PhotonActionSheet.UX.CornerRadius
         siteImageView.layer.borderColor = PhotonActionSheet.UX.BorderColor.cgColor
         siteImageView.layer.borderWidth = PhotonActionSheet.UX.BorderWidth
+        siteImageView.translatesAutoresizingMaskIntoConstraints = false
+        siteImageView.widthAnchor.constraint(equalToConstant: .init(PhotonActionSheet.UX.SiteImageViewSize)).isActive = true
+        siteImageView.heightAnchor.constraint(equalTo: siteImageView.widthAnchor).isActive = true
         return siteImageView
     }()
 
@@ -146,16 +151,15 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
 
         let stackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
         stackView.spacing = PhotonActionSheetSiteHeaderView.VerticalPadding
-        stackView.alignment = .leading
+        stackView.alignment = .center
         stackView.axis = .vertical
 
         contentView.addSubview(stackView)
 
-        stackView.snp.makeConstraints { make in
-            make.leading.equalTo(siteImageView.snp.trailing).offset(PhotonActionSheetSiteHeaderView.Padding)
-            make.trailing.equalTo(contentView).inset(PhotonActionSheetSiteHeaderView.Padding)
-            make.centerY.equalTo(siteImageView.snp.centerY)
-        }
+        stackView.topAnchor.constraint(equalTo: topAnchor, constant: 19).isActive = true
+        stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 16).isActive = true
+        stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -16).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -19).isActive = true
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -182,9 +186,9 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
                 self.siteImageView.image = image.createScaled(PhotonActionSheet.UX.IconSize)
             }
         }
-        self.titleLabel.text = site.title.isEmpty ? site.url : site.title
+        self.titleLabel.text = site.url
         self.descriptionLabel.text = site.tileURL.baseDomain
-        self.titleLabel.textColor = LegacyThemeManager.instance.current.actionMenu.foreground
+        self.titleLabel.textColor = .theme.ecosia.primaryText
         self.descriptionLabel.textColor = LegacyThemeManager.instance.current.actionMenu.foreground
 
     }

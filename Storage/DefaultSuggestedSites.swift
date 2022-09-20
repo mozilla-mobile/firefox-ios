@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Core
 
 open class DefaultSuggestedSites {
     public static let urlMap = [
@@ -36,99 +37,36 @@ open class DefaultSuggestedSites {
     public static let sites = [
         "default": [
             SuggestedSiteData(
-                url: "https://m.facebook.com/",
-                bgColor: "0x385185",
-                imageUrl: "asset://suggestedsites_facebook",
-                faviconUrl: "asset://defaultFavicon",
-                trackingId: 632,
-                title: .DefaultSuggestedFacebook
-            ),
-            SuggestedSiteData(
-                url: "https://m.youtube.com/",
-                bgColor: "0xcd201f",
-                imageUrl: "asset://suggestedsites_youtube",
-                faviconUrl: "asset://defaultFavicon",
-                trackingId: 631,
-                title: .DefaultSuggestedYouTube
-            ),
-            SuggestedSiteData(
-                url: "https://www.amazon.com/",
+                url: Environment.current.financialReports.absoluteString,
                 bgColor: "0x000000",
-                imageUrl: "asset://suggestedsites_amazon",
+                imageUrl: "asset://suggestedsites_ecosia-org",
                 faviconUrl: "asset://defaultFavicon",
-                trackingId: 630,
-                title: .DefaultSuggestedAmazon
+                trackingId: 0,
+                title: NSLocalizedString("Financial reports", tableName: "Ecosia", comment: "")
             ),
             SuggestedSiteData(
-                url: "https://www.wikipedia.org/",
+                url: Environment.current.shop.absoluteString,
                 bgColor: "0x000000",
-                imageUrl: "asset://suggestedsites_wikipedia",
+                imageUrl: "asset://suggestedsites_ecosia-org",
                 faviconUrl: "asset://defaultFavicon",
-                trackingId: 629,
-                title: .DefaultSuggestedWikipedia
+                trackingId: 0,
+                title: NSLocalizedString("Ecosia shop", tableName: "Ecosia", comment: "")
             ),
             SuggestedSiteData(
-                url: "https://mobile.twitter.com/",
-                bgColor: "0x55acee",
-                imageUrl: "asset://suggestedsites_twitter",
+                url: Environment.current.privacy.absoluteString,
+                bgColor: "0x000000",
+                imageUrl: "asset://suggestedsites_ecosia-org",
                 faviconUrl: "asset://defaultFavicon",
-                trackingId: 628,
-                title: .DefaultSuggestedTwitter
-            )
-        ],
-        "zh_CN": [
-            SuggestedSiteData(
-                url: "http://mozilla.com.cn",
-                bgColor: "0xbc3326",
-                imageUrl: "asset://suggestedsites_mozchina",
-                faviconUrl: "asset://mozChinaLogo",
-                trackingId: 700,
-                title: "火狐社区"
+                trackingId: 0,
+                title: NSLocalizedString("Privacy", tableName: "Ecosia", comment: "")
             ),
             SuggestedSiteData(
-                url: "https://m.baidu.com/?from=1000969c",
-                bgColor: "0x00479d",
-                imageUrl: "asset://suggestedsites_baidu",
-                faviconUrl: "asset://baiduLogo",
-                trackingId: 701,
-                title: "百度"
-            ),
-            SuggestedSiteData(
-                url: "http://sina.cn",
-                bgColor: "0xe60012",
-                imageUrl: "asset://suggestedsites_sina",
-                faviconUrl: "asset://sinaLogo",
-                trackingId: 702,
-                title: "新浪"
-            ),
-            SuggestedSiteData(
-                url: "http://info.3g.qq.com/g/s?aid=index&g_f=23946&g_ut=3",
-                bgColor: "0x028cca",
-                imageUrl: "asset://suggestedsites_qq",
-                faviconUrl: "asset://qqLogo",
-                trackingId: 703,
-                title: "腾讯"
-            ),
-            SuggestedSiteData(
-                url: "http://m.taobao.com",
-                bgColor: "0xee5900",
-                imageUrl: "asset://suggestedsites_taobao",
-                faviconUrl: "asset://taobaoLogo",
-                trackingId: 704,
-                title: "淘宝"
-            ),
-            SuggestedSiteData(
-                url: """
-                https://union-click.jd.com/jdc?e=618%7Cpc%7C&p=JF8BAKgJK1olXDYDZBoCUBV\
-                IMzZNXhpXVhgcCEEGXVRFXTMWFQtAM1hXWFttFkhAaihBfRN1XE5ZMipYVQ1uYwxAa1cZb\
-                QIHUV9bCUkQAF8LGFoRXgcAXVttOEsSMyRmGmsXXAcAXFdaAEwVM28PH10TVAMHVVpbDE8\
-                nBG8BKydLFl5fCQ5eCUsSM184GGsSXQ8WUiwcWl8RcV84G1slXTZdEAMAOEkWAmsBK2s
-                """,
-                bgColor: "0xc71622",
-                imageUrl: "asset://suggestedsites_jd",
-                faviconUrl: "asset://jdLogo",
-                trackingId: 705,
-                title: "京东"
+                url: Environment.current.blog.absoluteString,
+                bgColor: "0x000000",
+                imageUrl: "asset://suggestedsites_ecosia-org",
+                faviconUrl: "asset://defaultFavicon",
+                trackingId: 0,
+                title: NSLocalizedString("Trees update", tableName: "Ecosia", comment: "")
             )
         ]
     ]

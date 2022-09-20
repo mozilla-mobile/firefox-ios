@@ -15,7 +15,7 @@ enum TabTrayViewAction {
 // swiftlint:disable class_delegate_protocol
 protocol TabTrayViewDelegate: UIViewController {
     func didTogglePrivateMode(_ togglePrivateModeOn: Bool)
-    func performToolbarAction(_ action: TabTrayViewAction, sender: UIBarButtonItem)
+    func performToolbarAction(_ action: TabTrayViewAction, sender: Any)
 }
 // swiftlint:enable class_delegate_protocol
 
@@ -38,20 +38,38 @@ class TabTrayViewController: UIViewController {
     // MARK: - UI Elements
     // Buttons & Menus
     lazy var deleteButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(didTapDeleteTabs(_:)))
+        let button = UIButton(type: .system)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .body)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = "closeAllTabsButtonTabTray"
+        button.setTitle(.localized(.closeAll), for: .normal)
+        button.addTarget(self, action: #selector(didTapDeleteTabs), for: .primaryActionTriggered)
         button.accessibilityLabel = .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel
-        return button
+        return UIBarButtonItem(customView: button)
     }()
 
+    lazy var addNewTabButton = CircleButton(config: .init(hideCircle: false, image: "nav-add", margin: 2))
     lazy var newTabButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapAddTab(_:))))
-        button.accessibilityIdentifier = "newTabButtonTabTray"
-        button.accessibilityLabel = .TabTrayAddTabAccessibilityLabel
-        return button
+        addNewTabButton.translatesAutoresizingMaskIntoConstraints = false
+        let height = addNewTabButton.heightAnchor.constraint(equalToConstant: 50)
+        height.priority = .init(rawValue: 999)
+        height.isActive = true
+
+        let width = addNewTabButton.widthAnchor.constraint(equalToConstant: 50)
+        width.priority = .init(rawValue: 999)
+        width.isActive = true
+
+        addNewTabButton.addTarget(self, action: #selector(didTapAddTab(_:)), for: .primaryActionTriggered)
+        let buttonItem = UIBarButtonItem(customView: addNewTabButton)
+        buttonItem.accessibilityIdentifier = "newTabButtonTabTray"
+        return buttonItem
+    }()
+
+    lazy var maskButton = PrivateModeButton()
+    lazy var maskButtonItem: UIBarButtonItem  = {
+        maskButton.addTarget(self, action: #selector(togglePrivateMode), for: .primaryActionTriggered)
+        let item = UIBarButtonItem(customView: maskButton)
+        return item
     }()
 
     lazy var doneButton: UIBarButtonItem = {
@@ -107,7 +125,7 @@ class TabTrayViewController: UIViewController {
     }()
 
     lazy var bottomToolbarItems: [UIBarButtonItem] = {
-        return [deleteButton, flexibleSpace, newTabButton]
+        return [maskButtonItem, flexibleSpace, newTabButton, flexibleSpace, deleteButton]
     }()
 
     lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
@@ -140,10 +158,11 @@ class TabTrayViewController: UIViewController {
     lazy var iPhoneNavigationMenuIdentifiers: UISegmentedControl = {
         return UISegmentedControl(items: [
             TabTrayViewModel.Segment.tabs.image!.overlayWith(image: countLabel),
-            TabTrayViewModel.Segment.privateTabs.image!,
-            TabTrayViewModel.Segment.syncedTabs.image!])
+            TabTrayViewModel.Segment.privateTabs.image!])
+            // Ecosia: remove sync: TabTrayViewModel.Segment.syncedTabs.image!])
     }()
 
+    /* Ecosia: hide navigation Toolbar
     // Toolbars
     lazy var navigationToolbar: UIToolbar = {
         let toolbar = UIToolbar()
@@ -152,6 +171,7 @@ class TabTrayViewController: UIViewController {
         toolbar.isTranslucent = false
         return toolbar
     }()
+    */
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -175,6 +195,7 @@ class TabTrayViewController: UIViewController {
                                           segmentToFocus: focusedSegment)
 
         super.init(nibName: nil, bundle: nil)
+        modalPresentationCapturesStatusBarAppearance = true
 
         setupNotifications(forObserver: self,
                            observing: [.DisplayThemeChanged,
@@ -205,7 +226,7 @@ class TabTrayViewController: UIViewController {
         super.viewWillAppear(animated)
 
         // We expose the tab tray feature whenever it's going to be seen by the user
-        nimbus.features.tabTrayFeature.recordExposure()
+        // Ecosia // nimbus.features.tabTrayFeature.recordExposure()
 
         if shouldUseiPadSetup() {
             navigationController?.isToolbarHidden = true
@@ -216,12 +237,14 @@ class TabTrayViewController: UIViewController {
     }
 
     private func viewSetup() {
-        viewModel.syncedTabsController.remotePanelDelegate = self
+        // viewModel.syncedTabsController.remotePanelDelegate = self
 
+        /* Ecosia
         if let appWindow = (UIApplication.shared.delegate?.window),
            let window = appWindow as UIWindow? {
             window.backgroundColor = .black
         }
+         */
 
         if shouldUseiPadSetup() {
             iPadViewSetup()
@@ -249,12 +272,15 @@ class TabTrayViewController: UIViewController {
     fileprivate func iPhoneViewSetup() {
         navigationItem.rightBarButtonItem = doneButton
 
+        /* Ecosia: hide navigationToolbar
         view.addSubview(navigationToolbar)
 
         navigationToolbar.snp.makeConstraints { make in
             make.left.right.equalTo(view)
             make.top.equalTo(view.safeArea.top)
         }
+        */
+        navigationItem.rightBarButtonItem = doneButton
 
         navigationMenu.snp.makeConstraints { make in
             make.width.lessThanOrEqualTo(UX.NavigationMenu.width)
@@ -276,6 +302,7 @@ class TabTrayViewController: UIViewController {
             switchBetweenLocalPanels(withPrivateMode: false)
         case .privateTabs:
             switchBetweenLocalPanels(withPrivateMode: true)
+            /*
         case .syncedTabs:
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .syncPanel, extras: nil)
             if children.first == viewModel.tabTrayView {
@@ -283,9 +310,22 @@ class TabTrayViewController: UIViewController {
                 updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
                 showPanel(viewModel.syncedTabsController)
             }
+             */
         default:
             return
         }
+    }
+
+    // Ecosia: custom private mode UI
+    @objc func togglePrivateMode() {
+        guard let grid = viewModel.tabTrayView as? GridTabViewController else { return }
+        switchBetweenLocalPanels(withPrivateMode: !grid.tabDisplayManager.isPrivate)
+    }
+
+    fileprivate func updateMaskButton() {
+        guard let grid = viewModel.tabTrayView as? GridTabViewController else { return }
+        maskButton.isSelected = grid.tabDisplayManager.isPrivate
+        maskButton.applyUIMode(isPrivate: grid.tabDisplayManager.isPrivate)
     }
 
     private func switchBetweenLocalPanels(withPrivateMode privateMode: Bool) {
@@ -299,13 +339,17 @@ class TabTrayViewController: UIViewController {
         viewModel.tabTrayView.didTogglePrivateMode(privateMode)
         updatePrivateUIState()
         updateTitle()
+
+        // Ecosia: update private button
+        maskButton.setSelected(privateMode, animated: true)
+        maskButton.applyUIMode(isPrivate: privateMode)
     }
 
     private func showPanel(_ panel: UIViewController) {
         addChild(panel)
         panel.beginAppearanceTransition(true, animated: true)
         view.addSubview(panel.view)
-        view.bringSubviewToFront(navigationToolbar)
+        //Ecosia: view.bringSubviewToFront(navigationToolbar)
         let topEdgeInset = shouldUseiPadSetup() ? 0 : GridTabTrayControllerUX.NavigationToolbarHeight
         panel.additionalSafeAreaInsets = UIEdgeInsets(top: topEdgeInset, left: 0, bottom: 0, right: 0)
         panel.endAppearanceTransition()
@@ -314,6 +358,7 @@ class TabTrayViewController: UIViewController {
         }
         panel.didMove(toParent: self)
         updateTitle()
+        updateMaskButton()
     }
 
     private func hideCurrentPanel() {
@@ -392,15 +437,24 @@ extension TabTrayViewController: Notifiable {
 extension TabTrayViewController: NotificationThemeable {
      @objc func applyTheme() {
          view.backgroundColor = UIColor.theme.tabTray.background
-         navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
-         navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-         if theme == .dark {
-             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-         } else {
-             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+         //Ecosia: navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
+         //Ecosia: navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.theme.ecosia.primaryText]
+         // viewModel.syncedTabsController.applyTheme()
+
+         // Ecosia
+         if traitCollection.userInterfaceIdiom == .phone {
+             navigationController?.navigationBar.tintColor = UIColor.theme.ecosia.primaryButton
          }
-         viewModel.syncedTabsController.applyTheme()
+         maskButton.applyUIMode(isPrivate: maskButton.isSelected)
+         addNewTabButton.applyTheme()
+
+         if shouldUseiPadSetup() {
+             navigationItem.leftBarButtonItem?.tintColor = UIColor.theme.ecosia.primaryButton
+             navigationItem.rightBarButtonItem?.tintColor = UIColor.theme.ecosia.primaryButton
+             navigationMenu.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.theme.ecosia.primaryText], for: .normal)
+             navigationMenu.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.theme.ecosia.segmentSelectedText], for: .selected)
+         }
      }
  }
 
@@ -436,7 +490,7 @@ extension TabTrayViewController {
         viewModel.didTapAddTab(sender)
     }
 
-    @objc func didTapDeleteTabs(_ sender: UIBarButtonItem) {
+    @objc func didTapDeleteTabs(_ sender: Any) {
         viewModel.didTapDeleteTab(sender)
     }
 
@@ -450,6 +504,7 @@ extension TabTrayViewController {
     }
 }
 
+/*
 // MARK: - RemoteTabsPanel : LibraryPanelDelegate
 extension TabTrayViewController: RemotePanelDelegate {
     func remotePanelDidRequestToSignIn() {
@@ -482,3 +537,4 @@ extension TabTrayViewController: RemotePanelDelegate {
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: controller, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 }
+ */

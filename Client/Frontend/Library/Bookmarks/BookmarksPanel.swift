@@ -501,7 +501,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
                                                tapHandler: { _ in
             self.profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
                 if result.isSuccess {
-                    SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage,
+                    SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage, image: "action_pin",
                                                     bottomContainer: self.view)
                 }
             }

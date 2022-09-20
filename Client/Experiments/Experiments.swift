@@ -163,6 +163,7 @@ enum Experiments {
 
     /// The `NimbusApi` object. This is the entry point to do anything with the Nimbus SDK on device.
     public static var shared: NimbusApi = {
+        /* Ecosia: deactivate Nimbus SDK
         guard let dbPath = Experiments.dbPath else {
             log.error("Nimbus didn't get to create, because of a nil dbPath")
             return NimbusDisabled.shared
@@ -201,6 +202,8 @@ enum Experiments {
             log.error("Nimbus errored during create")
             return NimbusDisabled.shared
         }
+        */
+        return NimbusDisabled.shared
     }()
 
     /// A convenience method to initialize the `NimbusApi` object at startup.

@@ -47,7 +47,8 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             return icon
         }
         let fullURL = url.absoluteDisplayString.remove("\(url.scheme ?? "")://")
-        if let name = url.baseDomain, let icon = bundledIcons[name] ?? bundledIcons[fullURL] {
+        /* Ecosia: fetch icon via fullURL first*/
+        if let name = url.baseDomain, let icon = bundledIcons[fullURL] ?? bundledIcons[name] {
             return icon
         }
         return nil
@@ -55,7 +56,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
     lazy internal var urlSession: URLSession = makeURLSession(userAgent: FaviconFetcher.userAgent, configuration: URLSessionConfiguration.default, timeout: 5)
 
-    private struct BundledIcon: Codable {
+    struct BundledIcon: Codable {
         var title: String
         var url: String?
         var image_url: String

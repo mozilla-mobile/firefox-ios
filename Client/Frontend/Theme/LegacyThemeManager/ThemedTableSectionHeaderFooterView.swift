@@ -66,7 +66,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
     func applyTheme() {
         bordersHelper.applyTheme()
         contentView.backgroundColor = UIColor.theme.tableView.headerBackground
-        titleLabel.textColor = UIColor.theme.tableView.headerTextLight
+        titleLabel.textColor = UIColor.theme.ecosia.secondaryText
     }
 
     func showBorder(for location: ThemedHeaderFooterViewBordersHelper.BorderLocation, _ show: Bool) {

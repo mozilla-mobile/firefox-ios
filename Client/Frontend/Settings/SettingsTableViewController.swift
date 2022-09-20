@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import Account
+// import Account
 import Shared
 import UIKit
 
@@ -110,7 +110,6 @@ class Setting: NSObject {
         cell.selectedBackgroundView = backgroundView
 
         // So that the separator line goes all the way to the left edge.
-        cell.separatorInset = .zero
         if let cell = cell as? ThemedTableViewCell {
             cell.applyTheme()
         }
@@ -260,7 +259,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         super.onConfigureCell(cell)
 
         let control = UISwitchThemed()
-        control.onTintColor = UIConstants.SystemBlueColor
+        control.onTintColor = .theme.ecosia.primaryBrand
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
         control.isEnabled = enabled
@@ -557,7 +556,7 @@ class CheckmarkSetting: Setting {
             cell.indentationLevel = 1
 
             cell.accessoryType = .detailButton
-            cell.tintColor = UIColor.theme.tableView.rowActionAccessory // Sets accessory color only
+            cell.tintColor = UIColor.theme.tableView.accessoryViewTint // Sets accessory color only
 
             let checkColor = isChecked() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
             let check = UILabel()
@@ -641,6 +640,7 @@ class ButtonSetting: Setting {
 
 // A helper class for prefs that deal with sync. Handles reloading the tableView data if changes to
 // the fxAccount happen.
+/*
 class AccountSetting: Setting {
     unowned var settings: SettingsTableViewController
 
@@ -672,6 +672,7 @@ class WithAccountSetting: AccountSetting {
 class WithoutAccountSetting: AccountSetting {
     override var hidden: Bool { return profile.hasAccount() }
 }
+*/
 
 @objc
 protocol SettingsDelegate: AnyObject {
@@ -701,6 +702,9 @@ class SettingsTableViewController: ThemedTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // Ecosia
+        navigationItem.largeTitleDisplayMode = .always
+        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
@@ -716,9 +720,11 @@ class SettingsTableViewController: ThemedTableViewController {
         super.viewWillAppear(animated)
 
         settings = generateSettings()
+        /* Ecosia: disable sync
         NotificationCenter.default.addObserver(self, selector: #selector(syncDidChangeState), name: .ProfileDidStartSyncing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(syncDidChangeState), name: .ProfileDidFinishSyncing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(firefoxAccountDidChange), name: .FirefoxAccountChanged, object: nil)
+         */
 
         applyTheme()
     }
@@ -736,9 +742,11 @@ class SettingsTableViewController: ThemedTableViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
+        /* Ecosia: deactivate sync
         [Notification.Name.ProfileDidStartSyncing, Notification.Name.ProfileDidFinishSyncing, Notification.Name.FirefoxAccountChanged].forEach { name in
             NotificationCenter.default.removeObserver(self, name: name, object: nil)
         }
+         */
     }
 
     // Override to provide settings in subclasses
@@ -777,6 +785,8 @@ class SettingsTableViewController: ThemedTableViewController {
         if let setting = section[indexPath.row] {
             let cell = ThemedTableViewCell(style: setting.style, reuseIdentifier: nil)
             setting.onConfigureCell(cell)
+            cell.textLabel?.alpha = setting.enabled ? 1 : 0.5
+            cell.imageView?.alpha = setting.enabled ? 1 : 0.5
             cell.backgroundColor = UIColor.theme.tableView.rowBackground
             return cell
         }

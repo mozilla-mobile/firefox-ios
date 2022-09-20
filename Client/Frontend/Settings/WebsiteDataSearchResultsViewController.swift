@@ -7,6 +7,12 @@ import SnapKit
 import Shared
 import WebKit
 
+protocol WebsiteDataSearchResultsViewControllerDelegate: AnyObject {
+    func websiteDataSearchResultsViewController(_ viewController: WebsiteDataSearchResultsViewController, didDeleteRecord record: WKWebsiteDataRecord)
+}
+
+private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
+
 class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     private enum Section: Int {
         case sites = 0

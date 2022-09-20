@@ -65,7 +65,7 @@ class OpenSearchEngine: NSObject, NSCoding {
      * Returns the search URL for the given query.
      */
     func searchURLForQuery(_ query: String) -> URL? {
-        return getURLFromTemplate(searchTemplate, query: query)
+        return URL.search(query: query)
     }
 
     /**

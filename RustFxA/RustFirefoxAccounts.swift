@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import MozillaAppServices
 
-let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
+public let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
 // Used to ignore unknown classes when de-archiving
 final class Unknown: NSObject, NSCoding {

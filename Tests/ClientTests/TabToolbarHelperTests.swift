@@ -10,8 +10,12 @@ class TabToolbarHelperTests: XCTestCase {
     var subject: TabToolbarHelper!
     var mockToolbar: MockTabToolbar!
 
-    let backButtonImage = UIImage.templateImageNamed("nav-back")?.imageFlippedForRightToLeftLayoutDirection()
-    let forwardButtonImage = UIImage.templateImageNamed("nav-forward")?.imageFlippedForRightToLeftLayoutDirection()
+    let backButtonImage = UIImage(systemName: "arrow.left")?
+        .withConfiguration(UIImage.SymbolConfiguration.init(pointSize: 18,
+                                                            weight: .medium))
+    let forwardButtonImage = UIImage(systemName: "arrow.right")?
+        .withConfiguration(UIImage.SymbolConfiguration.init(pointSize: 18,
+                                                            weight: .medium))
     let menuButtonImage = UIImage.templateImageNamed("nav-menu")
     let searchButtonImage = UIImage.templateImageNamed("search")
     let ImageNewTab = UIImage.templateImageNamed("nav-add")
@@ -65,6 +69,16 @@ class MockToolbarButton: ToolbarButton {
     }
 }
 
+class MockAddNewTabButton: CircleButton {
+    init() {
+        super.init(frame: .zero)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class MockTabToolbar: TabToolbarProtocol {
     var tabToolbarDelegate: TabToolbarDelegate? {
         get { return nil }
@@ -76,12 +90,15 @@ class MockTabToolbar: TabToolbarProtocol {
         get { _tabsButton }
     }
 
+    var _ecosiaButton = MockToolbarButton()
+    var ecosiaButton: ToolbarButton { get {_ecosiaButton } }
+
     var _bookmarksButton = MockToolbarButton()
     var bookmarksButton: ToolbarButton { get { _bookmarksButton } }
-
-    var _addNewTabButton = MockToolbarButton()
-    var addNewTabButton: ToolbarButton { get { _addNewTabButton } }
-
+    
+    var _addNewTabButton = MockAddNewTabButton()
+    var circleButton: CircleButton { get { _addNewTabButton } }
+    
     var _homeButton = MockToolbarButton()
     var homeButton: ToolbarButton { get { _homeButton } }
 

@@ -43,7 +43,7 @@ struct SearchQuickLinksEntryView: View {
             }
         }
         .padding(10.0)
-        .background(Color("backgroundColor"))
+        .background(Color("PrimaryBackground"))
     }
 }
 

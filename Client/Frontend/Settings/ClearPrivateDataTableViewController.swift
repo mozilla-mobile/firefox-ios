@@ -37,10 +37,12 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             (DownloadedFilesClearable(), false), // Don't clear downloaded files by default
         ]
 
+        /* Ecosia: Disable experiment
         let spotlightConfig = FxNimbus.shared.features.spotlightSearch.value()
         if spotlightConfig.enabled {
             items.append((SpotlightClearable(), false)) // On device only, so don't clear by default.)
         }
+         */
 
         return items
     }()
@@ -57,14 +59,23 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     fileprivate var clearButtonEnabled = true {
         didSet {
-            clearButton?.textLabel?.textColor = clearButtonEnabled ? UIColor.theme.general.destructiveRed : UIColor.theme.tableView.disabledRowText
+            clearButton?.textLabel?.textColor = clearButtonEnabled ? .Light.State.warning: .theme.tableView.disabledRowText
         }
     }
-
+    
+    required init?(coder: NSCoder) {
+        nil
+    }
+    
+    init() {
+        super.init(style: .insetGrouped)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = .SettingsDataManagementTitle
+        navigationItem.largeTitleDisplayMode = .never
 
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
@@ -94,7 +105,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             assert(indexPath.section == SectionButton)
             cell.textLabel?.text = .SettingsClearPrivateDataClearButton
             cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
+            cell.textLabel?.textColor = .Light.State.warning
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ClearPrivateData"
             clearButton = cell
@@ -153,9 +164,15 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
                         // Disable the Clear Private Data button after it's clicked.
                         self.clearButtonEnabled = false
                         self.tableView.deselectRow(at: indexPath, animated: true)
+                        
+                        /*
+                         Ecosia
+                         */
+                        Analytics.shared.reset()
                 }
             }
 
+            /*
             if self.toggles[HistoryClearableIndex] && profile.hasAccount() {
                 profile.syncManager.hasSyncedHistory().uponQueue(.main) { yes in
                     // Err on the side of warning, but this shouldn't fail.
@@ -170,10 +187,10 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
                     self.present(alert, animated: true, completion: nil)
                     return
                 }
-            } else {
-                let alert = UIAlertController.clearPrivateDataAlert(okayCallback: clearPrivateData)
-                self.present(alert, animated: true, completion: nil)
-            }
+            } else {*/
+            let alert = UIAlertController.clearPrivateDataAlert(okayCallback: clearPrivateData)
+            self.present(alert, animated: true, completion: nil)
+
         }
         tableView.deselectRow(at: indexPath, animated: false)
     }

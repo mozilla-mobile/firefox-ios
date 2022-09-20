@@ -5,7 +5,7 @@
 import Foundation
 import XCTest
 import Shared
-@testable import SyncTelemetry
+// Ecosia // @testable import SyncTelemetry
 @testable import Client
 
 class EventTests: XCTestCase {

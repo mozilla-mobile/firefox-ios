@@ -17,7 +17,7 @@ enum QuickLink: Int {
     public var imageName: String {
         switch self {
         case .search:
-            return "faviconFox"
+            return "openEcosia"
         case .privateSearch:
             return "smallPrivateMask"
         case .copiedLink:
@@ -69,13 +69,31 @@ enum QuickLink: Int {
     public var backgroundColors: [Color] {
         switch self {
         case .search:
-            return [Color("searchButtonColorTwo"), Color("searchButtonColorOne")]
+            return [Color("PrimaryBrand")]
         case .privateSearch:
-            return [Color("privateGradientThree"), Color("privateGradientTwo"), Color("privateGradientOne")]
+            return [Color("TertiaryBackground")]
         case .copiedLink:
-            return [Color("goToCopiedLinkSolid")]
+            return [Color("TertiaryBackground")]
         case .closePrivateTabs:
-            return [Color("privateGradientThree"), Color("privateGradientTwo"), Color("privateGradientOne")]
+            return [Color("TertiaryBackground")]
+        }
+    }
+
+    public var textColor: Color {
+        switch self {
+        	case .search:
+            return .init("PrimaryBackground")
+        default:
+            return .init("PrimaryText")
+        }
+    }
+
+    public var iconColor: Color {
+        switch self {
+            case .search:
+            return .init("PrimaryBackground")
+        default:
+            return .init("SecondaryIcon")
         }
     }
 

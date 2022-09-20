@@ -11,12 +11,14 @@ class HomeLogoHeaderViewModel {
         static let bottomSpacing: CGFloat = 12
     }
 
+    /* Ecosia
     private let profile: Profile
     var onTapAction: ((UIButton) -> Void)?
 
     init(profile: Profile) {
         self.profile = profile
     }
+     */
 }
 
 // MARK: HomeViewModelProtocol
@@ -41,10 +43,9 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
         let section = NSCollectionLayoutSection(group: group)
 
-        let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
-            leading: leadingInset,
+            leading: 0,
             bottom: UX.bottomSpacing,
             trailing: 0)
 
@@ -56,7 +57,8 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
+        // Ecosia // return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
+        true
     }
 
     func refreshData(for traitCollection: UITraitCollection,
@@ -67,8 +69,8 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 extension HomeLogoHeaderViewModel: HomepageSectionHandler {
 
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let logoHeaderCell = cell as? HomeLogoHeaderCell else { return UICollectionViewCell() }
-        logoHeaderCell.configure(onTapAction: onTapAction)
+        guard let logoHeaderCell = cell as? NTPLogoCell else { return UICollectionViewCell() }
+        // Ecosia // logoHeaderCell.configure(onTapAction: onTapAction)
         return logoHeaderCell
     }
 }

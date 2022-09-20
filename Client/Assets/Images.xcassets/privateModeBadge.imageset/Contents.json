@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Private mode circle fill.pdf",
+      "filename" : "tiger_fav_light.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "tiger_fav_light-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "tiger_fav_light-2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

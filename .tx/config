@@ -1,0 +1,32 @@
+[main]
+host = https://www.transifex.com
+
+[ecosia-ios-search-app.ecosiastrings]
+source_file = Client/Ecosia/L10N/en.lproj/Ecosia.strings
+source_lang = en
+trans.de = Client/Ecosia/L10N/de.lproj/Ecosia.strings
+trans.es = Client/Ecosia/L10N/es.lproj/Ecosia.strings
+trans.fr = Client/Ecosia/L10N/fr.lproj/Ecosia.strings
+trans.it = Client/Ecosia/L10N/it.lproj/Ecosia.strings
+trans.nl = Client/Ecosia/L10N/nl.lproj/Ecosia.strings
+type = STRINGS
+
+[ecosia-ios-search-app.pluralsstringsdict]
+source_file = Client/Ecosia/L10N/en.lproj/Plurals.stringsdict
+source_lang = en
+trans.de = Client/Ecosia/L10N/de.lproj/Plurals.stringsdict
+trans.es = Client/Ecosia/L10N/es.lproj/Plurals.stringsdict
+trans.fr = Client/Ecosia/L10N/fr.lproj/Plurals.stringsdict
+trans.it = Client/Ecosia/L10N/it.lproj/Plurals.stringsdict
+trans.nl = Client/Ecosia/L10N/nl.lproj/Plurals.stringsdict
+type = STRINGSDICT
+
+[ecosia-ios-search-app.appstorestrings]
+source_file = Client/Ecosia/L10N/en.lproj/AppStore.strings
+source_lang = en
+trans.de = Client/Ecosia/L10N/de.lproj/AppStore.strings
+trans.es = Client/Ecosia/L10N/es.lproj/AppStore.strings
+trans.fr = Client/Ecosia/L10N/fr.lproj/AppStore.strings
+trans.it = Client/Ecosia/L10N/it.lproj/AppStore.strings
+trans.nl = Client/Ecosia/L10N/nl.lproj/AppStore.strings
+type = STRINGS

@@ -7,6 +7,7 @@ import WebKit
 import Storage
 import Shared
 import XCGLogger
+import Core
 
 private var debugTabCount = 0
 
@@ -248,6 +249,14 @@ class Tab: NSObject {
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
                 url = URL(string: internalUrl.stripAuthorization)
             }
+
+            /* Ecosia: backgroundColor of WKWebview is only taken if isOpaque is `false`
+               -> should be false for empty URLs, internal URLs (like NTP) and nightMode */
+            guard let url = url else {
+                webView?.isOpaque = false
+                return
+            }
+            webView?.isOpaque = !(nightMode || InternalURL.isValid(url: url))
         }
     }
     var lastKnownUrl: URL? {
@@ -422,7 +431,10 @@ class Tab: NSObject {
             webView.allowsLinkPreview = true
 
             // Night mode enables this by toggling WKWebView.isOpaque, otherwise this has no effect.
-            webView.backgroundColor = .black
+            /* Ecosia: isOpaque is set to false to have effect for initial backgroundColor*/
+            webView.isOpaque = false
+            webView.backgroundColor = UIColor.theme.browser.background
+
 
             // Turning off masking allows the web content to flow outside of the scrollView's frame
             // which allows the content appear beneath the toolbars in the BrowserViewController
@@ -538,7 +550,8 @@ class Tab: NSObject {
         _ = webView?.go(to: item)
     }
 
-    @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {
+    // Ecosia: adding async callback for navigation result to inject cookie
+    func loadRequest(_ request: URLRequest, completion: ((WKNavigation?) -> ())? = nil ) {
         if let webView = webView {
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
             if let url = request.url,
@@ -546,15 +559,25 @@ class Tab: NSObject {
                let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
                 let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
                 lastRequest = readerModeRequest
-                return webView.load(readerModeRequest)
+                let navigation = webView.load(readerModeRequest)
+                completion?(navigation)
             }
             lastRequest = request
             if let url = request.url, url.isFileURL, request.isPrivileged {
-                return webView.loadFileURL(url, allowingReadAccessTo: url)
+                let navigation = webView.loadFileURL(url, allowingReadAccessTo: url)
+                completion?(navigation)
             }
-            return webView.load(request)
+
+            // Ecosia: inject cookie and analytics id
+            var request = request
+            request.url = request.url?.ecosified
+
+            let cookie: HTTPCookie = isPrivate ? Cookie.incognito : Cookie.standard
+            webView.configuration.websiteDataStore.httpCookieStore.setCookie(cookie) {
+                let navigation = webView.load(request)
+                completion?(navigation)
+            }
         }
-        return nil
     }
 
     func stop() {
@@ -568,6 +591,14 @@ class Tab: NSObject {
             return
         }
 
+        // Ecosia: Cookie inject before reload
+        let cookie: HTTPCookie = isPrivate ? Cookie.incognito : Cookie.standard
+        webView?.configuration.websiteDataStore.httpCookieStore.setCookie(cookie) { [weak self] in
+            self?.reloadOrRestore()
+        }
+    }
+
+    private func reloadOrRestore() {
         if let _ = webView?.reloadFromOrigin() {
             print("reloaded zombified tab from origin")
             return
@@ -746,10 +777,12 @@ class Tab: NSObject {
         }
     }
 
+    /* Ecosia: fix keyboard theming
     func applyTheme() {
         UITextField.appearance().keyboardAppearance = isPrivate ? .dark : (LegacyThemeManager.instance.currentName == .dark ? .dark : .light)
     }
-
+     */
+    
     func getProviderForUrl() -> SearchEngine {
         guard let url = self.webView?.url else {
             return .none

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import MozillaAppServices
+import Core
 
 protocol HomepageViewModelDelegate: AnyObject {
     func reloadView()
@@ -47,14 +48,16 @@ class HomepageViewModel: FeatureFlaggable {
         }
     }
 
-    let nimbus: FxNimbus
+    //Ecosia: let nimbus: FxNimbus
     let profile: Profile
+    fileprivate let personalCounter = PersonalCounter()
+
     var isZeroSearch: Bool {
         didSet {
             topSiteViewModel.isZeroSearch = isZeroSearch
-            jumpBackInViewModel.isZeroSearch = isZeroSearch
-            recentlySavedViewModel.isZeroSearch = isZeroSearch
-            pocketViewModel.isZeroSearch = isZeroSearch
+            // Ecosia // jumpBackInViewModel.isZeroSearch = isZeroSearch
+            // Ecosia // recentlySavedViewModel.isZeroSearch = isZeroSearch
+            // Ecosia // pocketViewModel.isZeroSearch = isZeroSearch
         }
     }
 
@@ -67,16 +70,17 @@ class HomepageViewModel: FeatureFlaggable {
     // Child View models
     private var childViewModels: [HomepageViewModelProtocol]
     var headerViewModel: HomeLogoHeaderViewModel
-    var messageCardViewModel: HomepageMessageCardViewModel
+    // Ecosia // var messageCardViewModel: HomepageMessageCardViewModel
     var topSiteViewModel: TopSitesViewModel
-    var recentlySavedViewModel: RecentlySavedCellViewModel
-    var jumpBackInViewModel: JumpBackInViewModel
-    var historyHighlightsViewModel: HistoryHighlightsViewModel
-    var pocketViewModel: PocketViewModel
-    var customizeButtonViewModel: CustomizeHomepageSectionViewModel
+    var impactViewModel: NTPImpactViewModel
+    // Ecosia // var recentlySavedViewModel: RecentlySavedCellViewModel
+    // Ecosia // var jumpBackInViewModel: JumpBackInViewModel
+    // Ecosia // var historyHighlightsViewModel: HistoryHighlightsViewModel
+    // Ecosia // var pocketViewModel: PocketViewModel
+    // Ecosia // var customizeButtonViewModel: CustomizeHomepageSectionViewModel
 
     var shouldDisplayHomeTabBanner: Bool {
-        return messageCardViewModel.shouldDisplayMessageCard
+        return false // Ecoaia: return messageCardViewModel.shouldDisplayMessageCard
     }
 
     // MARK: - Initializers
@@ -84,17 +88,21 @@ class HomepageViewModel: FeatureFlaggable {
          isPrivate: Bool,
          tabManager: TabManagerProtocol,
          urlBar: URLBarViewProtocol,
-         nimbus: FxNimbus = FxNimbus.shared,
+         //Ecosia: remove experiments // nimbus: FxNimbus = FxNimbus.shared,
          isZeroSearch: Bool = false) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
 
-        self.headerViewModel = HomeLogoHeaderViewModel(profile: profile)
+        self.headerViewModel = .init()
+        /* Ecosia
         let messageCardAdaptor = MessageCardDataAdaptorImplementation()
         self.messageCardViewModel = HomepageMessageCardViewModel(dataAdaptor: messageCardAdaptor)
         messageCardAdaptor.delegate = messageCardViewModel
+         */
         self.topSiteViewModel = TopSitesViewModel(profile: profile)
+        self.impactViewModel = NTPImpactViewModel(personalCounter: personalCounter)
 
+        /* Ecosia
         let siteImageHelper = SiteImageHelper(profile: profile)
         let adaptor = JumpBackInDataAdaptorImplementation(profile: profile,
                                                           tabManager: tabManager,
@@ -127,23 +135,21 @@ class HomepageViewModel: FeatureFlaggable {
         pocketDataAdaptor.delegate = pocketViewModel
 
         self.customizeButtonViewModel = CustomizeHomepageSectionViewModel()
+         */
         self.childViewModels = [headerViewModel,
-                                messageCardViewModel,
                                 topSiteViewModel,
-                                jumpBackInViewModel,
-                                recentlySavedViewModel,
-                                historyHighlightsViewModel,
-                                pocketViewModel,
-                                customizeButtonViewModel]
+                                impactViewModel]
         self.isPrivate = isPrivate
 
-        self.nimbus = nimbus
+        //Ecosia: self.nimbus = nimbus
         topSiteViewModel.delegate = self
+        /* Ecosia
         historyHighlightsViewModel.delegate = self
         recentlySavedViewModel.delegate = self
         pocketViewModel.delegate = self
         jumpBackInViewModel.delegate = self
         messageCardViewModel.delegate = self
+         */
 
         updateEnabledSections()
     }
@@ -154,7 +160,7 @@ class HomepageViewModel: FeatureFlaggable {
         guard !viewAppeared else { return }
 
         viewAppeared = true
-        nimbus.features.homescreenFeature.recordExposure()
+        //Ecosia: nimbus.features.homescreenFeature.recordExposure()
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .firefoxHomepage,

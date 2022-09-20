@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Account
+// import Account
 import Foundation
 import Shared
 import Storage
@@ -41,14 +41,14 @@ enum MenuButtonToastAction {
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
 class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemoveQuickActionBookmark {
 
-    typealias FXASyncClosure = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
+    // typealias FXASyncClosure = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
 
     private let isHomePage: Bool
     private let buttonView: UIButton
     private let selectedTab: Tab?
     private let tabUrl: URL?
     private let isFileURL: Bool
-    private let showFXASyncAction: (FXASyncClosure) -> Void
+    // private let showFXASyncAction: (FXASyncClosure) -> Void
 
     let profile: Profile
     let tabManager: TabManager
@@ -64,13 +64,12 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     ///   - showFXASyncAction: the closure that will be executed for the sync action in the library section
     init(profile: Profile,
          tabManager: TabManager,
-         buttonView: UIButton,
-         showFXASyncAction: @escaping (FXASyncClosure) -> Void) {
+         buttonView: UIButton) {
 
         self.profile = profile
         self.tabManager = tabManager
         self.buttonView = buttonView
-        self.showFXASyncAction = showFXASyncAction
+        // self.showFXASyncAction = showFXASyncAction
 
         self.selectedTab = tabManager.selectedTab
         self.tabUrl = selectedTab?.url
@@ -195,8 +194,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             append(to: &section, action: readingListSection)
         }
 
-        let syncAction = syncMenuButton(showFxA: showFXASyncAction)
-        append(to: &section, action: syncAction)
+        // let syncAction = syncMenuButton(showFxA: showFXASyncAction)
+        // append(to: &section, action: syncAction)
 
         return section
     }
@@ -240,8 +239,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             let copyAction = getCopyAction()
             append(to: &section, action: copyAction)
 
+            /*
             let sendToDeviceAction = getSendToDevice()
             append(to: &section, action: sendToDeviceAction)
+             */
 
             let shareAction = getShareAction()
             append(to: &section, action: shareAction)
@@ -343,6 +344,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         }.items
     }
 
+    /*
     private func getSendToDevice() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.TouchActions.SendLinkToDeviceTitle,
                                      iconString: ImageIdentifiers.sendToDevice) { _ in
@@ -367,7 +369,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             self.delegate?.showViewController(viewController: navigationController)
         }.items
     }
-
+     */
     private func getReportSiteIssueAction() -> PhotonRowActions? {
         guard featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly) else { return nil }
 
@@ -457,6 +459,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         return items
     }
 
+    /*
     private func syncMenuButton(showFxA: @escaping (FXASyncClosure) -> Void) -> PhotonRowActions? {
         let action: (SingleActionViewModel) -> Void = { action in
             let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
@@ -497,6 +500,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
                                                tapHandler: action).items
         return syncOption
     }
+     */
 
     // MARK: Whats New
 

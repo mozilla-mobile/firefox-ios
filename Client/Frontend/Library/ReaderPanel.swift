@@ -12,8 +12,8 @@ private let log = Logger.browserLogger
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
 
-    static let ReadIndicatorWidth: CGFloat = 12  // image width
-    static let ReadIndicatorHeight: CGFloat = 12 // image height
+    static let ReadIndicatorWidth: CGFloat = 20  // image width
+    static let ReadIndicatorHeight: CGFloat = 20 // image height
     static let ReadIndicatorLeftOffset: CGFloat = 18
     static let ReadAccessibilitySpeechPitch: Float = 0.7 // 1.0 default, 0.0 lowest, 2.0 highest
 
@@ -35,11 +35,16 @@ private struct ReadingListPanelUX {
     // Welcome Screen
     static let WelcomeScreenPadding: CGFloat = 15
     static let WelcomeScreenHorizontalMinPadding: CGFloat = 40
-
+   
     static let WelcomeScreenMaxWidth: CGFloat = 400
     static let WelcomeScreenItemImageWidth: CGFloat = 20
 
     static let WelcomeScreenTopPadding: CGFloat = 120
+
+    static let WelcomeScreenItemWidth = 220
+    static let WelcomeScreenCircleWidth = 40
+    static let WelcomeScreenCircleOffset = 20
+    static let WelcomeScreenCircleSpacer = 10
 }
 
 class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
@@ -59,9 +64,11 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
 
     var unread: Bool = true {
         didSet {
-            readStatusImageView.image = UIImage(named: unread ? "MarkAsRead" : "MarkAsUnread")
-            titleLabel.textColor = unread ? UIColor.theme.homePanel.readingListActive : UIColor.theme.homePanel.readingListDimmed
-            hostnameLabel.textColor = unread ? UIColor.theme.homePanel.readingListActive : UIColor.theme.homePanel.readingListDimmed
+            readStatusImageView.image = UIImage(systemName: unread ? "circle" : "checkmark.circle.fill")
+            let alpha = unread ? 1.0 : 0.5
+            readStatusImageView.tintColor = UIColor.theme.ecosia.secondaryText.withAlphaComponent(alpha)
+            titleLabel.textColor = UIColor.theme.ecosia.primaryText.withAlphaComponent(alpha)
+            hostnameLabel.textColor = UIColor.theme.ecosia.secondaryText.withAlphaComponent(alpha)
             updateAccessibilityLabel()
         }
     }
@@ -71,11 +78,13 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
     }
     let titleLabel: UILabel = .build { label in
         label.numberOfLines = 2
-        label.font = DynamicFontHelper.defaultHelper.DeviceFont
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
     }
     let hostnameLabel: UILabel = .build { label in
         label.numberOfLines = 1
-        label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
+        label.font = .preferredFont(forTextStyle: .footnote)
+        label.adjustsFontForContentSizeCategory = true
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -111,8 +120,16 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
     }
 
     func applyTheme() {
-        titleLabel.textColor = UIColor.theme.homePanel.readingListActive
-        hostnameLabel.textColor = UIColor.theme.homePanel.readingListActive
+        titleLabel.textColor = UIColor.theme.ecosia.primaryText
+        hostnameLabel.textColor = UIColor.theme.ecosia.secondaryText
+        readStatusImageView.tintColor = UIColor.theme.ecosia.secondaryText
+
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            self.backgroundColor = .Dark.Background.tertiary
+        } else {
+            self.backgroundColor = .Light.Background.primary
+        }
     }
 
     override func prepareForReuse() {
@@ -177,7 +194,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
     init(profile: Profile) {
         self.profile = profile
         self.state = .readingList
-        super.init(nibName: nil, bundle: nil)
+        super.init(style: .insetGrouped)
 
         [ Notification.Name.FirefoxAccountChanged,
           Notification.Name.DynamicFontChanged,
@@ -236,54 +253,83 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             records = newRecords
 
             if let records = records, records.isEmpty {
-                tableView.isScrollEnabled = false
-                DispatchQueue.main.async { self.tableView.backgroundView = self.emptyStateView }
+                tableView.tableHeaderView = createEmptyStateOverview()
             } else {
                 if prevNumberOfRecords == 0 {
-                    tableView.isScrollEnabled = true
-                    DispatchQueue.main.async { self.tableView.backgroundView = nil }
+                tableView.tableHeaderView = nil
                 }
             }
             self.tableView.reloadData()
         }
     }
+    
+    fileprivate func createEmptyStateOverview() -> UIView {
+        let overlayView = UIView(frame: .zero)
 
-    private lazy var emptyStateView: UIView = {
-        let view = UIView()
-
-        let welcomeLabel: UILabel = .build { label in
-            label.text = .ReaderPanelWelcome
-            label.textAlignment = .center
-            label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
-            label.adjustsFontSizeToFitWidth = true
-            label.textColor = .label
-        }
-        let readerModeLabel: UILabel = .build { label in
-            label.text = .ReaderPanelReadingModeDescription
-            label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
-            label.numberOfLines = 0
-            label.textColor = .label
-        }
-        let readerModeImageView: UIImageView = .build { imageView in
-            imageView.contentMode = .scaleAspectFit
-            imageView.image = UIImage(named: "ReaderModeCircle")
-        }
-        let readingListLabel: UILabel = .build { label in
-            label.text = .ReaderPanelReadingListDescription
-            label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
-            label.numberOfLines = 0
-            label.textColor = .label
-        }
-        let readingListImageView: UIImageView = .build { imageView in
-            imageView.contentMode = .scaleAspectFit
-            imageView.image = UIImage(named: "AddToReadingListCircle")
-        }
-        let emptyStateViewWrapper: UIView = .build { view in
-            view.addSubviews(welcomeLabel, readerModeLabel, readerModeImageView, readingListLabel, readingListImageView)
+        let welcomeLabel = UILabel()
+        overlayView.addSubview(welcomeLabel)
+        welcomeLabel.text = .localized(.noArticles)
+        welcomeLabel.textColor = .theme.ecosia.primaryText
+        welcomeLabel.textAlignment = .center
+        welcomeLabel.font = .preferredFont(forTextStyle: .headline).bold()
+        welcomeLabel.adjustsFontSizeToFitWidth = true
+        welcomeLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(16)
+            make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)
         }
 
-        view.addSubview(emptyStateViewWrapper)
+        let readerModeLabel = UILabel()
+        overlayView.addSubview(readerModeLabel)
+        readerModeLabel.text = .localized(.openArticlesInReader)
+        readerModeLabel.font = .preferredFont(forTextStyle: .callout)
+        readerModeLabel.numberOfLines = 0
+        readerModeLabel.snp.makeConstraints { make in
+            make.top.equalTo(welcomeLabel.snp.bottom).offset(24)
+            make.trailing.equalTo(welcomeLabel.snp.trailing).offset(24)
+        }
 
+        let readerModeImageView = UIImageView()
+        readerModeImageView.image = .init(named: "readerEmpty")
+        readerModeImageView.tintColor = .theme.ecosia.secondaryText
+        overlayView.addSubview(readerModeImageView)
+        readerModeImageView.snp.makeConstraints { make in
+            make.leading.equalTo(welcomeLabel.snp.leading).offset(-24)
+            make.centerY.equalTo(readerModeLabel)
+            make.trailing.equalTo(readerModeLabel.snp.leading).offset(-16)
+            make.size.equalTo(24)
+        }
+
+        let readingListLabel = UILabel()
+        overlayView.addSubview(readingListLabel)
+        readingListLabel.text = .localized(.saveArticlesToReader)
+        readingListLabel.font = .preferredFont(forTextStyle: .callout)
+        readingListLabel.numberOfLines = 0
+        readingListLabel.snp.makeConstraints { make in
+            make.leading.equalTo(readerModeLabel.snp.leading)
+            make.top.equalTo(readerModeLabel.snp.bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
+            make.trailing.equalTo(readerModeLabel.snp.trailing)
+        }
+
+        let readingListImageView = UIImageView()
+        readingListImageView.image = .init(named: "addToReadingList")
+        readingListImageView.tintColor = .theme.ecosia.secondaryText
+        overlayView.addSubview(readingListImageView)
+        readingListImageView.snp.makeConstraints { make in
+            make.leading.equalTo(readerModeImageView.snp.leading)
+            make.centerY.equalTo(readingListLabel)
+            make.size.equalTo(24)
+        }
+
+        [readerModeLabel, readingListLabel].forEach {
+            $0.textColor = .theme.ecosia.secondaryText
+        }
+
+		return overlayView
+
+        /* Ecosia: custom empty view
+        view.addSubviews(welcomeLabel, readerModeLabel, readerModeImageView, readingListLabel, readingListImageView)
+        
         NSLayoutConstraint.activate([
             // title
             welcomeLabel.topAnchor.constraint(equalTo: emptyStateViewWrapper.topAnchor),
@@ -318,9 +364,8 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             emptyStateViewWrapper.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyStateViewWrapper.topAnchor.constraint(equalTo: view.topAnchor, constant: ReadingListPanelUX.WelcomeScreenTopPadding)
         ])
-
-        return view
-    }()
+        */
+    }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
@@ -459,7 +504,7 @@ extension ReadingListPanel: UITableViewDragDelegate {
 extension ReadingListPanel: NotificationThemeable {
     func applyTheme() {
         tableView.separatorColor = UIColor.theme.tableView.separator
-        view.backgroundColor = UIColor.theme.tableView.rowBackground
+        view.backgroundColor = UIColor.theme.homePanel.panelBackground
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
         refreshReadingList()
     }

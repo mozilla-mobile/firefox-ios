@@ -70,9 +70,9 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
     override var accessibilityLabel: String? {
         get {
             if descriptionLabel.isSecureTextEntry {
-                return highlightedLabel.text ?? ""
+                return ""
             } else {
-                return "\(highlightedLabel.text ?? ""), \(descriptionLabel.text ?? "")"
+                return descriptionLabel.text
             }
         }
         set {
@@ -90,9 +90,9 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
         return descriptionText.size(withAttributes: attributes)
     }
 
-    var placeholder: String? {
-        get { descriptionLabel.placeholder }
-        set { descriptionLabel.placeholder = newValue }
+    var attributedPlaceholder: NSAttributedString? {
+        get { descriptionLabel.attributedPlaceholder }
+        set { descriptionLabel.attributedPlaceholder = newValue }
     }
 
     var displayDescriptionAsPassword: Bool = false {
@@ -105,7 +105,6 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
         didSet {
             guard isEditingFieldData != oldValue else { return }
             descriptionLabel.isUserInteractionEnabled = isEditingFieldData
-            highlightedLabel.textColor = isEditingFieldData ? UIColor.theme.tableView.headerTextLight: LoginTableViewCellUX.highlightedLabelTextColor
         }
     }
 
@@ -122,7 +121,6 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
 
-        labelContainer.addSubview(highlightedLabel)
         labelContainer.addSubview(descriptionLabel)
         contentView.addSubview(labelContainer)
 
@@ -165,6 +163,9 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
     override func applyTheme() {
         super.applyTheme()
         descriptionLabel.textColor = UIColor.theme.tableView.rowText
+        if let text = attributedPlaceholder?.string {
+            attributedPlaceholder = NSAttributedString(string: text, attributes: [.foregroundColor: UIColor.theme.ecosia.secondaryText])
+        }
     }
 }
 

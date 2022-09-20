@@ -1082,3 +1082,29 @@ extension SQLiteHistory: AccountRemovalDelegate {
         return self.db.run(discard) >>> self.resetClient
     }
 }
+
+
+extension SQLiteHistory {
+    public func storeDomains(_ urls: [String: Int]) -> Success {
+        let domainArgs = urls.map({ [$0.key, $0.value] })
+        return db.bulkInsert(TableDomains, op: .InsertOrIgnore, columns: ["domain", "id"], values: domainArgs)
+    }
+
+    public func storeSites(_ sites: [(Site, Int)]) -> Success {
+        let now = Date.now()
+
+        let args = sites.map({ site in
+            [site.0.id!, Bytes.generateGUID(), site.0.url, site.0.title, now, 0, 0, site.1]
+        })
+
+        let columns = ["id", "guid", "url", "title", "local_modified", "is_deleted", "should_upload", "domain_id"]
+        return db.bulkInsert(TableHistory, op: .InsertOrIgnore, columns: columns, values: args)
+    }
+
+    public func storeVisits(_ visits: [(SiteVisit, Int)]) -> Success {
+        let visitArgs = visits.map { visit in
+            return [visit.1, visit.0.date, VisitType.link.rawValue, 1]
+        }
+        return self.db.bulkInsert(TableVisits, op: .InsertOrIgnore, columns: ["siteID", "date", "type", "is_local"], values: visitArgs)
+    }
+}

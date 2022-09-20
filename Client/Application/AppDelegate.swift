@@ -6,6 +6,7 @@ import Shared
 import Storage
 import CoreSpotlight
 import SDWebImage
+import Core
 
 let LatestAppVersionProfileKey = "latestAppVersion"
 
@@ -13,17 +14,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var browserViewController: BrowserViewController!
-    var rootViewController: UIViewController!
+    var rootViewController: UINavigationController!
     var tabManager: TabManager!
     var receivedURLs = [URL]()
     var orientationLock = UIInterfaceOrientationMask.all
-    lazy var profile: Profile = BrowserProfile(localName: "profile",
-                                               syncDelegate: UIApplication.shared.syncDelegate)
+    lazy var profile: Profile = BrowserProfile(localName: "profile")
     private let log = Logger.browserLogger
     private var shutdownWebServer: DispatchSourceTimer?
     private var webServerUtil: WebServerUtil?
     private var appLaunchUtil: AppLaunchUtil?
-    private var backgroundSyncUtil: BackgroundSyncUtil?
+    // Ecosia: Disable BG sync // private var backgroundSyncUtil: BackgroundSyncUtil?
 
     func application(_ application: UIApplication,
                      willFinishLaunchingWithOptions
@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // We have only five seconds here, so let's hope this doesn't take too long.
-        profile._shutdown()
+        profile._shutdown(force: true)
 
         // Allow deinitializers to close our database connections.
         tabManager = nil
@@ -65,9 +65,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         window!.makeKeyAndVisible()
-        pushNotificationSetup()
+        // Ecosia: pushNotificationSetup()
         appLaunchUtil?.setUpPostLaunchDependencies()
-        backgroundSyncUtil = BackgroundSyncUtil(profile: profile, application: application)
+        // Ecosia: Disable BG sync //backgroundSyncUtil = BackgroundSyncUtil(profile: profile, application: application)
 
         return true
     }
@@ -80,11 +80,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         profile._reopen()
 
+        /*
         if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
             profile.removeAccount()
         }
 
         profile.syncManager.applicationDidBecomeActive()
+         */
         webServerUtil?.setUpWebServer()
 
         /// When transitioning to scenes, each scene's BVC needs to resume its file download queue.
@@ -135,7 +137,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         singleShotTimer.resume()
         shutdownWebServer = singleShotTimer
+        /* Ecosia: deactivate MZ background sync
         backgroundSyncUtil?.scheduleSyncOnAppBackground()
+        */
         tabManager.preserveTabs()
 
         // send glean telemetry and clear cache
@@ -262,11 +266,26 @@ extension AppDelegate {
         browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         browserViewController.edgesForExtendedLayout = []
 
-        let navigationController = UINavigationController(rootViewController: browserViewController)
+        // Ecosia: custom root logic
+        let rootVC: UIViewController
+
+        if User.shared.firstTime {
+            rootVC = Welcome(delegate: self)
+            Analytics.shared.install()
+        } else {
+            rootVC = browserViewController!
+        }
+
+        let navigationController = UINavigationController(rootViewController: rootVC)
         navigationController.isNavigationBarHidden = true
         navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
         rootViewController = navigationController
-
         window!.rootViewController = rootViewController
+    }
+}
+
+extension AppDelegate: WelcomeDelegate {
+    func welcomeDidFinish(_ welcome: Welcome) {
+        rootViewController.setViewControllers([browserViewController], animated: true)
     }
 }

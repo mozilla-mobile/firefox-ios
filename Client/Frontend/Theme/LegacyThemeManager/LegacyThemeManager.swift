@@ -81,6 +81,20 @@ class LegacyThemeManager {
         guard automaticBrightnessIsOn else { return }
         updateCurrentThemeBasedOnScreenBrightness()
     }
+
+    // Ecosia: theme changing on a central place
+    func themeChanged(from: UITraitCollection?, to: UITraitCollection, forceDark: Bool = false) {
+        let colorHasChanged = to.hasDifferentColorAppearance(comparedTo: from)
+
+
+        // Do not change theme if it was dark before night mode already
+        guard colorHasChanged,
+              !forceDark,
+              systemThemeIsOn else { return }
+
+        let userInterfaceStyle = to.userInterfaceStyle
+        current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+    }
 }
 
 private func themeFrom(name: String?) -> LegacyTheme {

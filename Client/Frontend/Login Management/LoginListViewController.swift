@@ -19,7 +19,7 @@ private extension UITableView {
 let CellReuseIdentifier = "cell-reuse-id"
 let LoginsSettingsSection = 0
 
-class LoginListViewController: SensitiveViewController {
+class LoginListViewController: SensitiveViewController, NotificationThemeable {
 
     private let viewModel: LoginListViewModel
 
@@ -33,7 +33,7 @@ class LoginListViewController: SensitiveViewController {
     fileprivate var deleteAlert: UIAlertController?
     fileprivate var selectionButtonHeightConstraint: NSLayoutConstraint?
     fileprivate var selectedIndexPaths = [IndexPath]()
-    fileprivate let tableView: UITableView = .build()
+    fileprivate let tableView = UITableView(frame: .zero, style: .insetGrouped)
 
     weak var settingsDelegate: SettingsDelegate?
     var shownFromAppMenu: Bool = false
@@ -90,11 +90,11 @@ class LoginListViewController: SensitiveViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = .Settings.Passwords.LoginsAndPasswordsTitle
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
+        navigationItem.largeTitleDisplayMode = .never
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: CellReuseIdentifier)
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
@@ -186,8 +186,10 @@ class LoginListViewController: SensitiveViewController {
 
         // Theme the search text field (Dark / Light)
         if isDarkTheme {
+            searchTextField.backgroundColor = .Dark.Background.secondary
             searchTextField.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = UIColor.white
         } else {
+            searchTextField.backgroundColor = .Light.Background.primary
             searchTextField.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = UIColor.black
         }
         // Theme the glass icon next to the search text field
@@ -384,7 +386,7 @@ extension LoginListViewController: UITableViewDelegate {
         if indexPath.section == LoginsSettingsSection, searchController.isActive || tableView.isEditing {
             return 0
         }
-        return UITableView.automaticDimension
+        return indexPath.section == 0 ? UITableView.automaticDimension : LoginDetailUX.WebsiteRowHeight
     }
 
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {

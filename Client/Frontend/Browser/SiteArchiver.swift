@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import Sentry
+//import Sentry
 import Shared
 
 // Struct that retrives saved tabs and simple tabs dictionary for WidgetKit

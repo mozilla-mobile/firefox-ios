@@ -252,8 +252,8 @@ class TopTabsTest: BaseTestCase {
             waitForExistence(app.buttons["TopTabsViewController.newTabButton"])
             app.buttons["TopTabsViewController.newTabButton"].tap()
         } else {
-            waitForExistence(app.buttons["TabToolbar.addNewTabButton"], timeout: 15)
-            app.buttons["TabToolbar.addNewTabButton"].tap()
+            waitForExistence(app.buttons["TabToolbar.circleButton"], timeout: 15)
+            app.buttons["TabToolbar.circleButton"].tap()
         }
         app.typeText("google.com\n")
         waitUntilPageLoad()
@@ -262,7 +262,7 @@ class TopTabsTest: BaseTestCase {
         XCUIDevice.shared.orientation = .portrait
         // Verify that the '+' is not displayed
         if !iPad() {
-            waitForNoExistence(app.buttons["TabToolbar.addNewTabButton"])
+            waitForNoExistence(app.buttons["TabToolbar.circleButton"])
         }
     }
 

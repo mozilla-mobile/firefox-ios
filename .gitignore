@@ -42,7 +42,6 @@ DerivedData
 /provisioning-profiles
 /assets
 #build tools
-/fastlane/Appfile
 /fastlane/Snapfile
 /fastlane/SnapshotHelper.swift
 /fastlane/frames
@@ -105,3 +104,7 @@ export-strings.log
 
 # Nimbus
 nimbus-fml/
+
+# bundler
+vendor/bundle
+.bundle/config

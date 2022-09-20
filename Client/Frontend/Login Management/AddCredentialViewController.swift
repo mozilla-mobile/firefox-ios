@@ -16,20 +16,18 @@ enum AddCredentialField: Int {
     }
 }
 
-class AddCredentialViewController: UIViewController {
-
-    lazy var tableView: UITableView = .build { [weak self] tableView in
-        guard let self = self else { return }
-
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+class AddCredentialViewController: UIViewController, NotificationThemeable {
+    
+    fileprivate lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.accessibilityIdentifier = "Add Credential"
         tableView.delegate = self
         tableView.dataSource = self
         tableView.estimatedRowHeight = 44.0
         // Add empty footer view to prevent separators from being drawn past the last item.
         tableView.tableFooterView = UIView()
-    }
+        return tableView
+    }()
     fileprivate weak var websiteField: UITextField!
     fileprivate weak var usernameField: UITextField!
     fileprivate weak var passwordField: UITextField!
@@ -65,6 +63,10 @@ class AddCredentialViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+
+        applyTheme()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(themeChanged), name: .DisplayThemeChanged, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -75,6 +77,18 @@ class AddCredentialViewController: UIViewController {
         KeyboardHelper.defaultHelper.addDelegate(self)
     }
 
+    func applyTheme() {
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+        tableView.reloadData()
+        cancelButton.tintColor = .theme.general.controlTint
+        saveButton.tintColor = .theme.general.controlTint
+    }
+
+    @objc func themeChanged() {
+        applyTheme()
+    }
+    
     @objc func addCredential() {
         guard let hostname = websiteField.text,
               let username = usernameField.text,
@@ -117,13 +131,27 @@ class AddCredentialViewController: UIViewController {
 
 // MARK: - UITableViewDataSource
 extension AddCredentialViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch AddCredentialField(rawValue: section)! {
+        case .usernameItem:
+            return .LoginDetailUsername
+        case .passwordItem:
+            return .LoginDetailPassword
+        case .websiteItem:
+            return .LoginDetailWebsite
+        }
+    }
 
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let header = view as? UITableViewHeaderFooterView else { return }
+        header.textLabel?.textColor = .theme.ecosia.secondaryText
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch AddCredentialField(rawValue: indexPath.row)! {
+        switch AddCredentialField(rawValue: indexPath.section)! {
 
         case .usernameItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = .LoginDetailUsername
             loginCell.descriptionLabel.keyboardType = .emailAddress
             loginCell.descriptionLabel.returnKeyType = .next
             loginCell.isEditingFieldData = true
@@ -133,7 +161,6 @@ extension AddCredentialViewController: UITableViewDataSource {
 
         case .passwordItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = .LoginDetailPassword
             loginCell.descriptionLabel.returnKeyType = .default
             loginCell.displayDescriptionAsPassword = true
             loginCell.isEditingFieldData = true
@@ -143,9 +170,8 @@ extension AddCredentialViewController: UITableViewDataSource {
 
         case .websiteItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = .LoginDetailWebsite
             websiteField = loginCell.descriptionLabel
-            loginCell.placeholder = "https://www.example.com"
+            loginCell.attributedPlaceholder = NSAttributedString(string: "https://www.example.com", attributes: [.foregroundColor: UIColor.theme.ecosia.secondaryText])
             websiteField?.accessibilityIdentifier = "websiteField"
             websiteField?.keyboardType = .URL
             loginCell.isEditingFieldData = true
@@ -160,8 +186,12 @@ extension AddCredentialViewController: UITableViewDataSource {
         return loginCell
     }
 
+    func numberOfSections(in tableView: UITableView) -> Int {
+        3
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        1
     }
 }
 

@@ -86,7 +86,10 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     var tabDisplayOrder: TabDisplayOrder = TabDisplayOrder()
 
     var shouldEnableGroupedTabs: Bool {
+        /* Ecosia: disable Grouped Tabs
         return featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser)
+        */
+        return false
     }
 
     var shouldEnableInactiveTabs: Bool {
@@ -178,8 +181,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
          reuseID: String,
          tabDisplayType: TabDisplayType,
          profile: Profile,
-         cfrDelegate: InactiveTabsCFRProtocol? = nil,
-         nimbus: FxNimbus = FxNimbus.shared
+         cfrDelegate: InactiveTabsCFRProtocol? = nil
+         //Ecosia: remove experiments // nimbus: FxNimbus = FxNimbus.shared
     ) {
         self.collectionView = collectionView
         self.tabDisplayer = tabDisplayer
@@ -189,7 +192,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         self.tabDisplayType = tabDisplayType
         self.profile = profile
         self.cfrDelegate = cfrDelegate
-        self.nimbus = nimbus
+        //Ecosia: remove experiments // self.nimbus = nimbus
         self.notificationCenter = NotificationCenter.default
 
         super.init()

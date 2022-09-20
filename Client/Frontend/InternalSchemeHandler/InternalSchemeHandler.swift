@@ -32,6 +32,7 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
         let allowedInternalResources = [
             "/errorpage-resource/NetError.css",
             "/errorpage-resource/CertError.css",
+            "/errorpage-resource/EcosiaError.png",
            // "/reader-mode/..."
         ]
 
@@ -39,6 +40,13 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
         if allowedInternalResources.contains(where: { url.path == $0 }) {
             let path = url.lastPathComponent
             if let res = Bundle.main.path(forResource: path, ofType: nil), let str = try? String(contentsOfFile: res, encoding: .utf8), let data = str.data(using: .utf8) {
+                urlSchemeTask.didReceive(URLResponse(url: url, mimeType: nil, expectedContentLength: -1, textEncodingName: nil))
+                urlSchemeTask.didReceive(data)
+                urlSchemeTask.didFinish()
+                return true
+            } else if path.hasSuffix("EcosiaError.png"),
+                      let res = Bundle.main.url(forResource: path, withExtension: nil),
+                      let data = try? Data(contentsOf: res) {
                 urlSchemeTask.didReceive(URLResponse(url: url, mimeType: nil, expectedContentLength: -1, textEncodingName: nil))
                 urlSchemeTask.didReceive(data)
                 urlSchemeTask.didFinish()

@@ -96,7 +96,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
         bringSubviewToFront(containerView)
 
         containerView.snp.makeConstraints { make in
-            make.height.equalTo(44)
+            make.height.equalTo(44).priority(.veryHigh)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalTo(accessoryView?.snp.leading ?? contentView.snp.trailing)
@@ -167,19 +167,23 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
 
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
+        selectedView.backgroundColor = .theme.ecosia.secondarySelectedBackground
         if theme == .dark {
-            self.backgroundColor = UIColor.Photon.Grey80
-            self.titleLabel.textColor = .white
+            self.backgroundColor = .Dark.Background.tertiary
+            self.titleLabel.textColor = .Dark.Text.primary
         } else {
-            self.backgroundColor = .white
-            self.titleLabel.textColor = .black
+            self.backgroundColor = .Light.Background.primary
+            self.titleLabel.textColor = .Light.Text.primary
         }
+        leftImageView.tintColor = UIColor.theme.ecosia.primaryText
+        tintColor = UIColor.theme.ecosia.primaryButton
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
         self.selectionStyle = .default
+        self.accessoryView = nil
+        self.accessoryType = .none
         separatorInset = defaultSeparatorInset
         titleLabel.text = nil
         leftImageView.image = nil
@@ -247,9 +251,9 @@ class OneLineFooterView: UITableViewHeaderFooterView, NotificationThemeable {
     }
 
     func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        // Ecosia: let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         self.containerView.backgroundColor = UIColor.theme.tableView.selectedBackground
-        self.titleLabel.textColor =  theme == .dark ? .white : .black
+        self.titleLabel.textColor =  UIColor.theme.ecosia.primaryText
         bordersHelper.applyTheme()
     }
 

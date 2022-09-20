@@ -21,8 +21,9 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
     }
 
     let titleLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
-        label.textColor = UIColor.theme.tableView.headerTextDark
+        label.font = .preferredFont(forTextStyle: .caption1)
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = UIColor.theme.ecosia.secondaryText
     }
 
     let headerActionButton: UIButton = .build { button in
@@ -80,8 +81,8 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
     }
 
     func applyTheme() {
-        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        backgroundView?.backgroundColor = UIColor.theme.tableView.selectedBackground
+        titleLabel.textColor = UIColor.theme.ecosia.secondaryText
+        contentView.backgroundColor = UIColor.theme.homePanel.panelBackground
         bordersHelper.applyTheme()
     }
 
@@ -90,8 +91,8 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
     }
 
     func setDefaultBordersValues() {
-        bordersHelper.showBorder(for: .top, true)
-        bordersHelper.showBorder(for: .bottom, true)
+        bordersHelper.showBorder(for: .top, false)
+        bordersHelper.showBorder(for: .bottom, false)
     }
 }
 
@@ -104,21 +105,27 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     let OneLineCellIdentifier = "OneLineCellIdentifier"
     let HeaderIdentifier = "HeaderIdentifier"
     let profile: Profile
+    // Ecosia: Branding
+    let style: UITableView.Style
 
     var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
-    lazy var tableView: UITableView = .build { [weak self] table in
-        guard let self = self else { return }
+    lazy var tableView: UITableView = {
+        let table = UITableView(frame: .zero, style: self.style)
+        table.translatesAutoresizingMaskIntoConstraints = false
         table.delegate = self
         table.dataSource = self
         table.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: self.CellIdentifier)
         table.register(OneLineTableViewCell.self, forCellReuseIdentifier: self.OneLineCellIdentifier)
         table.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: self.HeaderIdentifier)
-        table.layoutMargins = .zero
+        // Ecosia: table.layoutMargins = .zero
         table.keyboardDismissMode = .onDrag
         table.accessibilityIdentifier = "SiteTable"
         table.cellLayoutMarginsFollowReadableWidth = false
         table.estimatedRowHeight = SiteTableViewControllerUX.RowHeight
         table.setEditing(false, animated: false)
+        if style == .insetGrouped {
+            table.contentInset.top = 24
+        }
 
         if let _ = self as? LibraryPanelContextMenu {
             table.dragDelegate = self
@@ -130,14 +137,16 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         if #available(iOS 15.0, *) {
             table.sectionHeaderTopPadding = 0
         }
-    }
+        return table
+    }()
 
     private override init(nibName: String?, bundle: Bundle?) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    init(profile: Profile) {
+    init(profile: Profile, style: UITableView.Style = .insetGrouped) {
         self.profile = profile
+        self.style = style
         super.init(nibName: nil, bundle: nil)
         applyTheme()
     }
@@ -212,8 +221,8 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
-            header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
-            header.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+            header.textLabel?.textColor = UIColor.theme.ecosia.secondaryText
+            header.contentView.backgroundColor = UIColor.theme.homePanel.panelBackground
         }
     }
 
@@ -230,16 +239,19 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func applyTheme() {
-        navigationController?.navigationBar.barTintColor = UIColor.theme.tableView.headerBackground
+        navigationController?.navigationBar.barTintColor = UIColor.theme.ecosia.barBackground
         navigationController?.navigationBar.tintColor = UIColor.theme.general.controlTint
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextDark]
         setNeedsStatusBarAppearanceUpdate()
 
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
-        tableView.separatorColor = UIColor.theme.tableView.separator
+        tableView.separatorColor = UIColor.theme.ecosia.border
+        tableView.visibleCells.forEach({ ($0 as? NotificationThemeable)?.applyTheme() })
         if let rows = tableView.indexPathsForVisibleRows {
-            tableView.reloadRows(at: rows, with: .none)
-            tableView.reloadSections(IndexSet(rows.map { $0.section }), with: .none)
+            IndexSet(rows.map { $0.section }).forEach {
+                (tableView.headerView(forSection: $0) as? NotificationThemeable)?.applyTheme()
+                (tableView.footerView(forSection: $0) as? NotificationThemeable)?.applyTheme()
+            }
         }
     }
 }

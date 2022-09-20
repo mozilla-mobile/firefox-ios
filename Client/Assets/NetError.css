@@ -10,7 +10,7 @@ body {
 }
 
 body {
-    background-color: white;
+    background-color: #F8F8F6;
     padding: 0 65px;
     color: #333;
     font-size: 16px;
@@ -27,20 +27,34 @@ h1 {
 }
 
 /* Add a set of stripes at the top of pages */
-#decoration {
-    background-image: repeating-linear-gradient(-65deg,      #eee,  #eee 10px,
-                                                       white 10px, white 20px,
-                                                                    #eee 20px);
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 32px;
-    width: 100%;
-}
+/*#decoration {*/
+/*    background-image: repeating-linear-gradient(-65deg,      #eee,  #eee 10px,*/
+/*                                                       white 10px, white 20px,*/
+/*                                                                    #eee 20px);*/
+/*    position: fixed;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    height: 32px;*/
+/*    width: 100%;*/
+/*}*/
 
 a {
     color: rgb(76, 158, 255);
     text-decoration: none;
+}
+
+#errorTitleText {
+    color: #0F0F0F;
+    font-size: 17px;
+    font-weight: 600;
+    text-align: center;
+}
+
+#errorShortDescText {
+    color: #6C6C6C;
+    font-size: 17px;
+    font-weight: 400;
+    text-align: center;
 }
 
 #errorShortDesc {
@@ -55,15 +69,16 @@ button {
     border: none;
     padding: 1rem;
     font: -apple-system-body;
-    background-color: rgb(76, 158, 255);
-    color: white;
-    font-size: 16px;
+    background-color: transparent;
     font-weight: 300;
     border-radius: 5px;
     background-image: none;
     margin: 10px 0 0;
     position: -webkit-sticky;
     bottom: 5px;
+    font-weight: 400;
+    font-size: 17px;
+    color: #008009;
 }
 
 #errorPageContainer {
@@ -107,4 +122,13 @@ button {
 
 #errorLongDesc {
     margin-bottom: 78px;
+}
+
+#errorImage {
+    display: inline-block;
+    text-align: center;
+}
+
+#errorImage img {
+    width: 50%;
 }

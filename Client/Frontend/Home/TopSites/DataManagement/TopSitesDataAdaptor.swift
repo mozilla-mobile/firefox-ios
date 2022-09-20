@@ -31,7 +31,7 @@ protocol TopSitesDataAdaptor {
     func recalculateTopSiteData(for numberOfTilesPerRow: Int)
 }
 
-class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, HasNimbusSponsoredTiles {
+class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
 
     private let profile: Profile
     private var topSites: [TopSite] = []
@@ -88,6 +88,8 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     func recalculateTopSiteData(for numberOfTilesPerRow: Int) {
         var sites = historySites
         let availableSpaceCount = getAvailableSpaceCount(numberOfTilesPerRow: numberOfTilesPerRow)
+
+        /* Ecosia: remove sponsored tiles
         let shouldAddGoogle = shouldAddGoogle(availableSpaceCount: availableSpaceCount)
 
         // Add Sponsored tile
@@ -101,7 +103,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         if shouldAddGoogle {
             addGoogleTopSite(sites: &sites)
         }
-
+         */
         sites.removeDuplicates()
 
         topSites = sites.map { TopSite(site: $0) }
@@ -122,6 +124,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     }
 
     private func loadContiles() {
+        /* Ecosia: deactivate sponsored tiles
         guard shouldLoadSponsoredTiles else { return }
 
         dispatchGroup.enter()
@@ -131,6 +134,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
             }
             self?.dispatchGroup.leave()
         }
+         */
     }
 
     private func loadTopSites() {
@@ -163,6 +167,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         return Int(preferredNumberOfRows ?? defaultNumberOfRows)
     }
 
+    /*
     func addSponsoredTiles(sites: inout [Site], shouldAddGoogle: Bool, availableSpaceCount: Int) {
         let sponsoredTileSpaces = getSponsoredNumberTiles(shouldAddGoogle: shouldAddGoogle,
                                                           availableSpaceCount: availableSpaceCount)
@@ -174,6 +179,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
                                     maxNumberOfSponsoredTile: maxNumberOfTiles)
         }
     }
+     */
 
     private func countPinnedSites(sites: [Site]) -> Int {
         var pinnedSites = 0
@@ -183,6 +189,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         return pinnedSites
     }
 
+    /* Ecosia: remove sponsored tiles
     // MARK: - Google Tile
 
     private func shouldAddGoogle(availableSpaceCount: Int) -> Bool {
@@ -208,10 +215,13 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         let googleAdjustedSpaceCount = availableSpaceCount - GoogleTopSiteManager.Constants.reservedSpaceCount
         return shouldAddGoogle ? googleAdjustedSpaceCount : availableSpaceCount
     }
+     */
 }
 
 // MARK: Site Array extension
 private extension Array where Element == Site {
+
+    /* Ecosia: remove sponsored tiles
 
     /// Add sponsored tiles to the top sites.
     /// - Parameters:
@@ -238,6 +248,7 @@ private extension Array where Element == Site {
             guard siteAddedCount < maxNumberOfSponsoredTile else { break }
         }
     }
+     */
 
     // Keeping the order of the sites, we remove duplicate tiles.
     // Ex: If a sponsored tile is present then it has precedence over the history sites.

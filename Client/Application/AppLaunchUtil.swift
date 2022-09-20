@@ -5,19 +5,19 @@
 import Foundation
 import Shared
 import Storage
-import Account
+// import Account
 
 class AppLaunchUtil {
 
     private var log: RollingFileLogger
-    private var adjustHelper: AdjustHelper
+    // Ecosia: disable adjust // private var adjustHelper: AdjustHelper
     private var profile: Profile
 
     init(log: RollingFileLogger = Logger.browserLogger,
          profile: Profile) {
         self.log = log
         self.profile = profile
-        self.adjustHelper = AdjustHelper(profile: profile)
+        // Ecosia: disable adjust // self.adjustHelper = AdjustHelper(profile: profile)
     }
 
     func setUpPreLaunchDependencies() {
@@ -75,9 +75,10 @@ class AppLaunchUtil {
 
         SystemUtils.onFirstRun()
 
+        /* Ecosia
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
             print("RustFirefoxAccounts started")
-        }
+        }*/
     }
 
     func setUpPostLaunchDependencies() {
@@ -104,7 +105,7 @@ class AppLaunchUtil {
         }
 
         updateSessionCount()
-        adjustHelper.setupAdjust()
+        // Ecosia // adjustHelper.setupAdjust()
     }
 
     private func setUserAgent() {
@@ -119,6 +120,7 @@ class AppLaunchUtil {
     }
 
     private func initializeExperiments() {
+        /* Ecosia: disable Experiments
         // We initialize the generated FxNimbus singleton very early on with a lazily
         // constructed singleton.
         FxNimbus.shared.initialize(with: { Experiments.shared })
@@ -158,6 +160,7 @@ class AppLaunchUtil {
         }
 
         Experiments.intialize(options)
+         */
     }
 
     private func updateSessionCount() {

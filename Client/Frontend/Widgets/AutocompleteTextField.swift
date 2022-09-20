@@ -40,6 +40,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     fileprivate var notifyTextChanged: (() -> Void)?
     private var lastReplacement: String?
 
+    static var isPrivate = false
     static var textSelectionColor = URLBarColor.TextSelectionHighlight(labelMode: UIColor(), textFieldMode: nil)
 
     override var text: String? {
@@ -246,7 +247,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         label.font = self.font
         label.accessibilityIdentifier = "autocomplete"
         label.backgroundColor = self.backgroundColor
-        label.textColor = self.textColor
+        label.textColor = UIColor.theme.ecosia.secondaryText
         label.textAlignment = .left
 
         let enteredTextSize = self.attributedText?.boundingRect(with: self.frame.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)

@@ -1,0 +1,5 @@
+scheme("Ecosia")
+project("Client.xcodeproj")
+device("iPhone 11 Pro")
+output_types("junit")
+output_directory("test_output/xml")

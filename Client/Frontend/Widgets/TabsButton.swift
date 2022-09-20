@@ -13,12 +13,12 @@ struct TabsButtonUX {
 }
 
 class TabsButton: UIButton {
-    var textColor = UIColor.Photon.Blue40 {
+    var textColor = UIColor.theme.ecosia.primaryBrand {
         didSet {
             countLabel.textColor = textColor
         }
     }
-    var titleBackgroundColor = UIColor.Photon.Blue40 {
+    var titleBackgroundColor = UIColor.theme.ecosia.primaryBrand {
         didSet {
             labelBackground.backgroundColor = titleBackgroundColor
         }
@@ -64,7 +64,7 @@ class TabsButton: UIButton {
     }()
 
     fileprivate lazy var borderView: UIImageView = {
-        let border = UIImageView(image: UIImage(named: ImageIdentifiers.navTabCounter)?.withRenderingMode(.alwaysTemplate))
+        let border = UIImageView(image: UIImage(systemName: "square")?.withRenderingMode(.alwaysTemplate))
         border.tintColor = UIColor.theme.browser.tint
         return border
     }()

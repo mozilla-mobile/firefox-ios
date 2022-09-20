@@ -60,7 +60,7 @@ public struct ImageIdentifiers {
     public static let pasteAndGo = "menu-PasteAndGo"
     public static let pinSmall = "pin_small"
     public static let placeholderAvatar = "placeholder-avatar"
-    public static let privateMaskSmall = "smallPrivateMask"
+    public static let privateMaskSmall = "smallPrivateMaskDark"
     public static let readingList = "menu-panel-ReadingList"
     public static let removeFromBookmark = "menu-Bookmark-Remove"
     public static let removeFromReadingList = "removeFromReadingList"

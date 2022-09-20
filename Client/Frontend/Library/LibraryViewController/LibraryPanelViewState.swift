@@ -72,6 +72,8 @@ enum LibraryPanelSubState {
             if oldState == .mainView { return true }
         case .inFolderEditMode:
             if oldState == .inFolder { return true }
+            // Ecosia: mainView is one level deeper so it can go to inFolderEditMode
+            if oldState == .mainView { return true }
         case .itemEditMode:
             if oldState == .inFolderEditMode { return true }
         default:
