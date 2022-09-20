@@ -17,6 +17,10 @@ func registerHandlersForTestMethods(server: GCDWebServer) {
         return GCDWebServerDataResponse(html: "<html><body>\(textNodes)</body></html>")
     }
 
+    server.addHandler(forMethod: "GET", path: "/test-fixture/test-example.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+           return GCDWebServerDataResponse(html: "<html><head><title>Example Domain</title></head><body><div><h1>Example Domain</h1><p>This domain is established to be used for illustrative examples in documents. You may use this domain in examples without prior coordination or asking for permission.</p><p><a href=\"http://www.iana.org/domains/example\">More information...</a></p></div></body></html>")
+         }
+    
     ["test-indexeddb-private", "test-window-opener", "test-password", "test-password-submit", "test-password-2", "test-password-submit-2", "empty-login-form", "empty-login-form-submit", "test-example", "test-example-link", "test-mozilla-book", "test-mozilla-org", "test-popup-blocker", "test-user-agent"].forEach {
         addHTMLFixture(name: $0, server: server)
     }
