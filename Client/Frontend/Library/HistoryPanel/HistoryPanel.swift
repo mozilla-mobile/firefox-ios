@@ -52,9 +52,11 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     }
 
     var shouldShowSearch: Bool {
+        /* Ecosia: disable flag
         guard viewModel.featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) else {
             return false
         }
+         */
 
         return state == .history(state: .mainView) || state == .history(state: .search)
     }
