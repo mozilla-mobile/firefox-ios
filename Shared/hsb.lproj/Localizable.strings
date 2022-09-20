@@ -1831,6 +1831,24 @@
 /* Username textbox in Authentication prompt */
 "Username" = "Wužiwarske mjeno";
 
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "Něšto je so z tutym pozadkowym wobrazom nimokuliło.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "Pozadkowy wobraz njeda so změnić";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "Něšto je so z wašim sćehnjenjom nimokuliło.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "Pozadkowy wobraz njeda so sćahnyć";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "Přetorhnyć";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Hišće raz spytać";
+
 /* Accessibility label for the main web content view */
 "Web content" = "Webwobsah";
 
