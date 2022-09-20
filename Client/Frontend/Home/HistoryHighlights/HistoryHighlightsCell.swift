@@ -9,6 +9,7 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
 
     struct UX {
         static let verticalSpacing: CGFloat = 20
+        static let horizontalSpacing: CGFloat = 16
         static let generalCornerRadius: CGFloat = 10
         static let heroImageDimension: CGFloat = 24
         static let shadowRadius: CGFloat = 4
@@ -120,24 +121,30 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
         contentView.addSubview(bottomLine)
 
         NSLayoutConstraint.activate([
-            heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                               constant: UX.horizontalSpacing),
             heroImage.heightAnchor.constraint(equalToConstant: UX.heroImageDimension),
             heroImage.widthAnchor.constraint(equalToConstant: UX.heroImageDimension),
             heroImage.centerYAnchor.constraint(equalTo: textStack.centerYAnchor),
-            heroImage.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: UX.verticalSpacing),
+            heroImage.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor,
+                                           constant: UX.verticalSpacing),
             heroImage.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor,
                                               constant: -UX.verticalSpacing),
 
-            textStack.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 12),
-            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            textStack.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor,
+                                               constant: UX.horizontalSpacing),
+            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                constant: -UX.horizontalSpacing),
             textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            textStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: UX.verticalSpacing),
+            textStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor,
+                                           constant: UX.verticalSpacing),
             textStack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor,
                                               constant: -UX.verticalSpacing),
 
             bottomLine.heightAnchor.constraint(equalToConstant: 0.5),
             bottomLine.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
-            bottomLine.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            bottomLine.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                 constant: -UX.horizontalSpacing),
             bottomLine.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
@@ -180,6 +187,9 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
         // If blur is disabled set background color
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+            contentView.backgroundColor = .clear
+            contentView.layer.maskedCorners = cellModel?.corners ?? .layerMaxXMinYCorner
+            contentView.layer.cornerRadius = UX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
             contentView.backgroundColor = LegacyThemeManager.instance.current.homePanel.topSitesContainerView
