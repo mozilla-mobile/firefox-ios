@@ -23,16 +23,13 @@ jobs:
         ruby-version: 2.7
         bundler-cache: true
     - uses: bahmutov/npm-install@v1.6.0
-    - run: npm run build
+    - run: ./content_blocker_update.sh
     - name: fix up private Github URLs
       run: find . -type f \( -name '*.pbxproj' -o -name 'Package.swift' -o -name 'Package.resolved' \) -exec sed -i '' "s/https:\/\/github.com\/${GITHUB_REPOSITORY_OWNER}/https:\/\/${GITHUB_ACCESS_TOKEN}@github.com\/${GITHUB_REPOSITORY_OWNER}/g" {} \;
       env:
         GITHUB_ACCESS_TOKEN: ${{ secrets.IOS_CORE_TOKEN }}
     - name: clean packages
       run: xcodebuild -scheme Ecosia -project Client.xcodeproj clean
-    - name: setup content blocking scripts
-      run: |
-        ./content_blocker_update.sh
     - name: run unit tests
       run: bundle exec fastlane scan
     - name: Publish Test Report
