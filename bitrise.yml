@@ -45,7 +45,7 @@ workflows:
             set -euxo pipefail
             echo "-- build-for-testing --"
             mkdir DerivedData
-                
+
             xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec_Enterprise_XCUITests" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 11,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
     - script@1.1:
         title: Detect number of warnings
@@ -104,7 +104,7 @@ workflows:
         - content: |
             set -euxo pipefail
             echo "-- compress --"
-                
+
             exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/Client.xcodeproj" "$BITRISE_SOURCE_DIR/Tests/SmokeXCUITests.xctestplan" "$BITRISE_SOURCE_DIR/Tests/Smoketest2.xctestplan" "$BITRISE_SOURCE_DIR/Tests/Smoketest3.xctestplan" "$BITRISE_SOURCE_DIR/Tests/Smoketest4.xctestplan" "$BITRISE_SOURCE_DIR/xcodebuild.log" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Fennec_Enterprise_XCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_SmokeXCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest2_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" "$BITRISE_SOURCE_DIR/Client/" "$BITRISE_SOURCE_DIR/Tests/XCUITests"
     - deploy-to-bitrise-io@2:
         inputs:
@@ -121,9 +121,9 @@ workflows:
         inputs:
         - content: |
             set -euxo pipefail
-                
+
             echo "$BITRISE_ARTIFACT_PATHS"
-                
+
             echo "-- unzip -- "
             exec unzip "${BITRISE_ARTIFACT_PATHS}"
             echo "show dir"
@@ -133,7 +133,7 @@ workflows:
         inputs:
         - content: |
             #!/usr/bin/env bash
-            set -ex 
+            set -ex
 
             ls ./Users/vagrant/git/Tests/
             cp -r ./Users/vagrant/git/Tests/* .
@@ -159,9 +159,9 @@ workflows:
         inputs:
         - content: |
             set -euxo pipefail
-                
+
             echo "$BITRISE_ARTIFACT_PATHS"
-                
+
             echo "-- unzip -- "
             exec unzip "${BITRISE_ARTIFACT_PATHS}"
             echo "show dir"
@@ -171,7 +171,7 @@ workflows:
         inputs:
         - content: |
             #!/usr/bin/env bash
-            set -ex 
+            set -ex
 
             ls ./Users/vagrant/git/Tests/
             cp -r ./Users/vagrant/git/Tests/* .
@@ -197,9 +197,9 @@ workflows:
         inputs:
         - content: |
             set -euxo pipefail
-                
+
             echo "$BITRISE_ARTIFACT_PATHS"
-                
+
             echo "-- unzip -- "
             exec unzip "${BITRISE_ARTIFACT_PATHS}"
             echo "show dir"
@@ -209,7 +209,7 @@ workflows:
         inputs:
         - content: |
             #!/usr/bin/env bash
-            set -ex 
+            set -ex
             ls ./Users/vagrant/git/Tests/
             cp -r ./Users/vagrant/git/Tests/* .
             mv ./Users/vagrant/git/* .
@@ -234,9 +234,9 @@ workflows:
         inputs:
         - content: |
             set -euxo pipefail
-                
+
             echo "$BITRISE_ARTIFACT_PATHS"
-                
+
             echo "-- unzip -- "
             exec unzip "${BITRISE_ARTIFACT_PATHS}"
             echo "show dir"
@@ -246,7 +246,7 @@ workflows:
         inputs:
         - content: |
             #!/usr/bin/env bash
-            set -ex 
+            set -ex
 
             ls ./Users/vagrant/git/Tests/
             cp -r ./Users/vagrant/git/Tests/* .
@@ -284,7 +284,7 @@ workflows:
         inputs:
         - content: |
             #!/usr/bin/env bash
-            set -ex 
+            set -ex
 
             ls -la
             ls ./Users/vagrant/git/Tests/
@@ -333,7 +333,7 @@ workflows:
             set -euxo pipefail
             echo "-- build-for-testing --"
             mkdir DerivedData2
-                
+
             xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 11,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" | xcpretty | tee xcodebuild_fennec.log
             echo "show files"
             ls
@@ -1390,10 +1390,10 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '105.0'
+    BITRISE_RELEASE_VERSION: '106.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '105.0'
+    BITRISE_BETA_VERSION: '106.0'
 
 meta:
   bitrise.io:
@@ -1405,7 +1405,7 @@ trigger_map:
   pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
-- push_branch: v105.0
+- push_branch: v106.0
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
   pipeline: pipeline_multiple_shards
