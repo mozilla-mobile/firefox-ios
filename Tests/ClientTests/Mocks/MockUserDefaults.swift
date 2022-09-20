@@ -32,4 +32,14 @@ class MockUserDefaults: UserDefaultsInterface {
     func bool(forKey defaultName: String) -> Bool {
         return savedData[defaultName] as? Bool ?? false
     }
+
+    func string(forKey defaultName: String) -> String? {
+        return savedData[defaultName] as? String
+    }
+
+    func float(forKey defaultName: String) -> Float {
+        return savedData[defaultName] as? Float ?? 0
+    }
+
+    func register(defaults registrationDictionary: [String: Any]) {}
 }
