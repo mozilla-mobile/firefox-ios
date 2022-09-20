@@ -2,15 +2,15 @@ name: UnitTests
 
 on:
   push:
-    branches: [ main, main-39 ]
+    branches: [ main, main-39, main-104-no-strings ]
   pull_request:
     branches: [ main, main-39 ]
 
 jobs:
   test:
-    runs-on: macos-11
+    runs-on: macos-12
     env:
-      DEVELOPER_DIR: /Applications/Xcode_13.0.0.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_13.4.1.app/Contents/Developer
 
     steps:
     - uses: actions/checkout@v2
@@ -24,19 +24,6 @@ jobs:
         bundler-cache: true
     - uses: bahmutov/npm-install@v1.6.0
     - run: npm run build
-    - name: restore carthage cache 
-      uses: actions/cache@v2
-      id: cache-carthage
-      with:
-        path: Carthage
-        key: ${{ runner.os }}-carthage-${{ hashFiles('**/Cartfile.resolved') }}
-    - name: bootstrap apllication services 
-      uses: olejnjak/carthage-workaround@v3
-      if: steps.cache-carthage.outputs.cache-hit != 'true'
-      with:
-        action: bootstrap application-services --platform iOS --cache-builds
-      env:
-        GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: fix up private Github URLs
       run: find . -type f \( -name '*.pbxproj' -o -name 'Package.swift' -o -name 'Package.resolved' \) -exec sed -i '' "s/https:\/\/github.com\/${GITHUB_REPOSITORY_OWNER}/https:\/\/${GITHUB_ACCESS_TOKEN}@github.com\/${GITHUB_REPOSITORY_OWNER}/g" {} \;
       env:
