@@ -19,29 +19,6 @@ features:
           "toolbar-cfr-update": true,
           "wallpaper-onboarding-sheet": true,
         }
-    defaults:
-      - channel: beta
-        value: {
-            "sections-enabled": {
-              "onboarding-first-run-flow": true,
-              "onboarding-upgrade-flow": true,
-              "sync-cfr": true,
-              "jump-back-in-cfr-update": true,
-              "toolbar-cfr-update": true,
-              "wallpaper-onboarding-sheet": true,
-          }
-        }
-      - channel: developer
-        value: {
-            "sections-enabled": {
-              "onboarding-first-run-flow": true,
-              "onboarding-upgrade-flow": true,
-              "sync-cfr": true,
-              "jump-back-in-cfr-update": true,
-              "toolbar-cfr-update": true,
-              "wallpaper-onboarding-sheet": true,
-          }
-        }
   general-app-features:
     description: The feature that contains feature flags for the entire application
     variables:
