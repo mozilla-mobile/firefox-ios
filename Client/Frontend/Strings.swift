@@ -916,8 +916,8 @@ extension String {
 
                 public static let ClassicWallpaper = MZLocalizedString(
                     "Settings.Home.Option.Wallpaper.Classic.Title.v106",
-                    value: "Classic Firefox",
-                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user.",
+                    value: "Classic %@",
+                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation.",
                     lastUpdated: .v106)
                 public static let LimitedEditionWallpaper = MZLocalizedString(
                     "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106",
