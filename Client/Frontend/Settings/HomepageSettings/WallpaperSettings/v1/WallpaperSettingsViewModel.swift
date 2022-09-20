@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 public enum WallpaperSettingsError: Error {
     case itemNotFound
@@ -60,7 +61,8 @@ class WallpaperSettingsViewModel {
         guard let collection = wallpaperCollections[safe: sectionIndex] else { return nil }
 
         let isClassic = collection.type == .classic
-        let title: String = isClassic ? stringIds.ClassicWallpaper : stringIds.LimitedEditionWallpaper
+        let classicString = String(format: stringIds.ClassicWallpaper, AppName.shortName.rawValue)
+        let title: String = isClassic ? classicString : stringIds.LimitedEditionWallpaper
         var description: String? = isClassic ? nil : stringIds.IndependentVoicesDescription
         let buttonTitle: String? = isClassic ? nil : stringIds.LearnMoreButton
 
