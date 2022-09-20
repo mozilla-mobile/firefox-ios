@@ -31,7 +31,8 @@ jobs:
     - name: clean packages
       run: xcodebuild -scheme Ecosia -project Client.xcodeproj clean
     - name: setup content blocking scripts
-      run: (cd content-blocker-lib-ios/ContentBlockerGen && swift run)
+      run: |
+        ./content_blocker_update.sh
     - name: run unit tests
       run: bundle exec fastlane scan
     - name: Publish Test Report
