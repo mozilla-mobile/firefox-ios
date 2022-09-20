@@ -22,6 +22,7 @@ extension URLCaching {
     func findCachedData(for request: URLRequest, timestamp: Timestamp) -> Data? {
         let cachedResponse = urlCache.cachedResponse(for: request)
         guard let cachedAtTime = cachedResponse?.userInfo?[cacheAgeKey] as? Timestamp,
+              timestamp >= cachedAtTime, // crash fix: make sure timestamp is greater or equal time of cache
               (timestamp - cachedAtTime) < maxCacheAge,
               let data = cachedResponse?.data else {
             return nil
