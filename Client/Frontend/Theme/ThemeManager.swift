@@ -95,7 +95,8 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
         // Ignore if the system theme is off or night mode is on
         guard userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn),
               let nightModeIsOn = userDefaults.object(forKey: ThemeKeys.NightMode.isOn) as? NSNumber,
-              nightModeIsOn.boolValue == false else { return }
+              nightModeIsOn.boolValue == false
+        else { return }
         changeCurrentTheme(getSystemThemeType())
     }
 
