@@ -57,12 +57,13 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
         }
     }
 
+    // Utility for this method explained in ContextualHintEligibilityUtility with hasHintBeenConfigured function
     func markContextualHintConfiguration(configured: Bool) {
         switch hintType {
         case .jumpBackIn:
-            profile.prefs.setBool(configured, forKey: PrefsKeys.ContextualHints.jumpBackInConfiguredKey.rawValue)
+            profile.prefs.setBool(configured, forKey: CFRPrefsKeys.jumpBackInConfiguredKey.rawValue)
         case .jumpBackInSyncedTab:
-            profile.prefs.setBool(configured, forKey: PrefsKeys.ContextualHints.jumpBackInSyncedTabConfiguredKey.rawValue)
+            profile.prefs.setBool(configured, forKey: CFRPrefsKeys.jumpBackInSyncedTabConfiguredKey.rawValue)
         default:
             break
         }
