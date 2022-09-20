@@ -6,7 +6,7 @@ import Foundation
 import Storage
 
 /// A cell used in FxHomeScreen's Recently Saved section. It holds bookmarks and reading list items.
-class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeable {
+class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, NotificationThemeable {
 
     private struct UX {
         static let generalCornerRadius: CGFloat = 12
@@ -25,6 +25,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
     // MARK: - UI Elements
     private var rootContainer: UIView = .build { view in
         view.backgroundColor = .clear
+        view.layer.cornerRadius = UX.generalCornerRadius
     }
 
     // Contains the hero image and fallback favicons
@@ -71,7 +72,8 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
 
         setupLayout()
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
+                           observing: [.DisplayThemeChanged,
+                                       .WallpaperDidChange])
         applyTheme()
     }
 
@@ -93,11 +95,17 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         applyTheme()
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                      cornerRadius: UX.generalCornerRadius).cgPath
+    }
+
     func configure(viewModel: RecentlySavedCellViewModel) {
         configureImages(heroImage: viewModel.heroImage, favIconImage: viewModel.favIconImage)
 
         itemTitle.text = viewModel.site.title
-        adjustLayout(shouldAddBlur: viewModel.shouldAddBlur)
+        adjustLayout()
     }
 
     private func configureImages(heroImage: UIImage?, favIconImage: UIImage?) {
@@ -178,17 +186,17 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         ])
     }
 
-    func adjustLayout(shouldAddBlur: Bool) {
+    func adjustLayout() {
         // If blur is disabled set background color
-        guard shouldAddBlur else {
+        if shouldApplyWallpaperBlur {
+
+            rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            rootContainer.removeVisualEffectView()
             let isDarkMode = LegacyThemeManager.instance.currentName == .dark
                 rootContainer.backgroundColor = isDarkMode ? UIColor.Photon.DarkGrey40 : .white
             setupShadow()
-
-            return
         }
-
-        rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
     }
 
     func applyTheme() {
@@ -217,11 +225,15 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
 // MARK: - Notifiable
 extension RecentlySavedCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default:
-            break
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .DisplayThemeChanged:
+                self?.applyTheme()
+            case .WallpaperDidChange:
+                self?.adjustLayout()
+            default:
+                break
+            }
         }
     }
 }

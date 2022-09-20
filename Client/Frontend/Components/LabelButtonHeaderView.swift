@@ -80,7 +80,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
     func setConstraints(viewModel: LabelButtonHeaderViewModel) {
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
+            stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor,
                                                constant: viewModel.leadingInset),
             stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
@@ -151,7 +151,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 // MARK: - Theme
 extension LabelButtonHeaderView: NotificationThemeable {
     func applyTheme() {
-        let textColor = viewModel?.textColor ?? UIColor.theme.homePanel.topSiteHeaderTitle
+        let textColor = viewModel?.textColor ?? LegacyThemeManager.instance.current.homePanel.topSiteHeaderTitle
 
         titleLabel.textColor = textColor
         moreButton.setTitleColor(textColor, for: .normal)

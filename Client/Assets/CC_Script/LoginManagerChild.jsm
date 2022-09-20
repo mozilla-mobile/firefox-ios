@@ -2326,6 +2326,10 @@ class LoginManagerChild extends JSWindowActorChild {
       ...docState._getFormFields(form, true, recipes, { ignoreConnect }),
     };
 
+    if (fields.usernameField) {
+      lazy.gFormFillService.markAsLoginManagerField(fields.usernameField);
+    }
+
     // It's possible the field triggering this message isn't one of those found by _getFormFields' heuristics
     if (
       passwordField &&

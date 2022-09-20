@@ -144,12 +144,6 @@ class JumpBackInViewModel: FeatureFlaggable {
     private var hasJumpBackIn: Bool {
         return jumpBackInList.itemsToDisplay > 0
     }
-
-    var shouldAddBlur: Bool {
-        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
-
-        return wallpaperManager.currentWallpaper.type != .defaultWallpaper
-    }
 }
 
 // MARK: - Private: Configure UI
@@ -193,8 +187,7 @@ private extension JumpBackInViewModel {
             url: item.tab.URL,
             syncedDeviceImage: image,
             heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site),
-            fallbackFaviconImage: jumpBackInDataAdaptor.getFaviconImage(forSite: site),
-            shouldAddBlur: shouldAddBlur
+            fallbackFaviconImage: jumpBackInDataAdaptor.getFaviconImage(forSite: site)
         )
 
         cell.configure(

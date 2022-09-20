@@ -1831,6 +1831,24 @@
 /* Username textbox in Authentication prompt */
 "Username" = "Användarnamn";
 
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "Något gick fel med den här bakgrundsbilden.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "Det gick inte att ändra bakgrundsbild";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "Något gick fel med din nedladdning.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "Det gick inte att ladda ner bakgrundsbild";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "Avbryt";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Försök igen";
+
 /* Accessibility label for the main web content view */
 "Web content" = "Webbinnehåll";
 

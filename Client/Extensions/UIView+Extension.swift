@@ -6,13 +6,6 @@ import UIKit
 
 extension UIView {
 
-    // Wait for contentView bounds to be correct and check if is has been added before
-    var shouldAddBlur: Bool {
-        guard !bounds.isEmpty else { return false }
-
-        return !subviews.contains(where: { $0 is UIVisualEffectView })
-    }
-
     /// Convenience function to ease creating new views.
     ///
     /// Calling this function creates a new view with `translatesAutoresizingMaskIntoConstraints`
@@ -46,6 +39,13 @@ extension UIView {
         views.forEach(addSubview)
     }
 
+    // Wait for contentView bounds to be correct and check if is has been added before
+    var shouldAddBlur: Bool {
+        guard !bounds.isEmpty else { return false }
+
+        return !subviews.contains(where: { $0 is UIVisualEffectView })
+    }
+
     /// Shortcut to set the view's background color to `.clear`, set the view's
     /// `clipsToBounds` property set to true, and then add a blur effect on the view,
     /// using the desired blur style.
@@ -67,7 +67,6 @@ extension UIView {
 
         let blurEffect = UIBlurEffect(style: style)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.layer.cornerRadius = 5
         blurEffectView.clipsToBounds = true
         blurEffectView.translatesAutoresizingMaskIntoConstraints = false
         insertSubview(blurEffectView, at: 0)
@@ -78,6 +77,12 @@ extension UIView {
             blurEffectView.topAnchor.constraint(equalTo: topAnchor),
             blurEffectView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+    }
+
+    func removeVisualEffectView() {
+        for subview in self.subviews {
+            if subview is UIVisualEffectView { subview.removeFromSuperview() }
+        }
     }
 
     /// Performs a deep copy of the view. Does not copy constraints.

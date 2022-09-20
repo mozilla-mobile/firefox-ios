@@ -1831,6 +1831,21 @@
 /* Username textbox in Authentication prompt */
 "Username" = "Uporabniško ime";
 
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "Ozadja ni bilo mogoče spremeniti";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "Pri prenosu je šlo nekaj narobe.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "Ozadja ni bilo mogoče prenesti";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "Prekliči";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Poskusi znova";
+
 /* Accessibility label for the main web content view */
 "Web content" = "Spletna vsebina";
 

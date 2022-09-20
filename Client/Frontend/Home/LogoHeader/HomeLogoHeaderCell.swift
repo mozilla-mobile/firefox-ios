@@ -46,7 +46,8 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         setupView()
         applyTheme()
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
+                           observing: [.DisplayThemeChanged,
+                                       .WallpaperDidChange])
     }
 
     required init?(coder: NSCoder) {
@@ -103,8 +104,11 @@ extension HomeLogoHeaderCell: NotificationThemeable {
 extension HomeLogoHeaderCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
+        case .DisplayThemeChanged,
+                .WallpaperDidChange:
+            ensureMainThread {
+                self.applyTheme()
+            }
         default: break
         }
     }

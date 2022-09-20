@@ -1822,6 +1822,12 @@
 /* Username textbox in Authentication prompt */
 "Username" = "Пайдаланушы аты";
 
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "Бас тарту";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Қайтадан көру";
+
 /* Accessibility label for the main web content view */
 "Web content" = "Веб құрамасы";
 

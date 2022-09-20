@@ -103,12 +103,13 @@ extension Wallpaper: Decodable {
 
         id = try values.decode(String.self, forKey: .id)
 
-        let textHexString = try values.decode(String.self, forKey: .textColor)
-        let cardHexString = try values.decode(String.self, forKey: .cardColor)
-        let logoHexString = try values.decode(String.self, forKey: .logoTextColor)
-
         // Returning `nil` if the strings aren't valid as we already handle nil cases
-        let getColorFrom: (String) -> UIColor? = { hexString in
+        let textHexString = try? values.decode(String.self, forKey: .textColor)
+        let cardHexString = try? values.decode(String.self, forKey: .cardColor)
+        let logoHexString = try? values.decode(String.self, forKey: .logoTextColor)
+
+        let getColorFrom: (String?) -> UIColor? = { hexString in
+            guard let hexString = hexString else { return nil }
             var colorInt: UInt64 = 0
             if Scanner(string: hexString).scanHexInt64(&colorInt) {
                 return UIColor(colorString: hexString)
@@ -128,21 +129,25 @@ extension Wallpaper: Encodable {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         guard let textColorHexString = textColor?.hexString,
-              let cardColorHexString = cardColor?.hexString
+              let cardColorHexString = cardColor?.hexString,
+              let logoColorHexString = logoTextColor?.hexString
         else {
             let nilString: String? = nil
             try container.encode(id, forKey: .id)
             try container.encode(nilString, forKey: .textColor)
             try container.encode(nilString, forKey: .cardColor)
+            try container.encode(nilString, forKey: .logoTextColor)
             return
         }
 
         let textHex = dropOctothorpeIfAvailable(from: textColorHexString)
         let cardHex = dropOctothorpeIfAvailable(from: cardColorHexString)
+        let logoHex = dropOctothorpeIfAvailable(from: logoColorHexString)
 
         try container.encode(id, forKey: .id)
         try container.encode(textHex, forKey: .textColor)
         try container.encode(cardHex, forKey: .cardColor)
+        try container.encode(logoHex, forKey: .logoTextColor)
     }
 
     private func dropOctothorpeIfAvailable(from string: String) -> String {

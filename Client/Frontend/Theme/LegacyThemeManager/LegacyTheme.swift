@@ -23,9 +23,9 @@ enum BuiltinThemeName: String {
 }
 
 // Convenience reference to these normal mode colors which are used in a few color classes.
-private let defaultBackground = UIColor.Photon.Grey10
+private let defaultBackground = UIColor.Photon.Grey10 // layer1 in new system
 private let defaultSeparator = UIColor.Photon.Grey30
-private let defaultTextAndTint = UIColor.Photon.Grey80
+private let defaultTextAndTint = UIColor.Photon.Grey80 // textPrimary in new system
 
 class TableViewColor {
     var rowBackground: UIColor { return UIColor.Photon.White100 }
@@ -182,9 +182,11 @@ class HomePanelColor {
 
     var siteTableHeaderBorder: UIColor { return UIColor.Photon.Grey30.withAlphaComponent(0.8) }
 
+    var topSitesBackground: UIColor { return UIColor.Photon.LightGrey10 }
     var topSiteDomain: UIColor { return UIColor.Photon.DarkGrey90 }
     var topSitePin: UIColor { return UIColor.Photon.DarkGrey05 }
-    var topSitesBackground: UIColor { return UIColor.Photon.LightGrey10 }
+    var topSitesContainerView: UIColor { return .white }
+    var emptyTopSitesBorder: UIColor { return UIColor.Photon.DarkGrey40 }
 
     var shortcutBackground: UIColor { return .white }
     var shortcutShadowColor: CGColor { return UIColor(red: 0.23, green: 0.22, blue: 0.27, alpha: 1.0).cgColor }
