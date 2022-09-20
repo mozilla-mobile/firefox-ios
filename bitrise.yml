@@ -315,9 +315,9 @@ workflows:
         - test_name: Unit Test
     - deploy-to-bitrise-io@2.0: {}
     meta:
-        bitrise.io:
-            stack: osx-xcode-13.4.x
-            machine_type_id: g2.8core
+      bitrise.io:
+        stack: osx-xcode-13.4.x
+        machine_type_id: g2.8core
   just_build_fennec_to_get_warnings:
     before_run:
     - 1_git_clone_and_post_clone
@@ -379,9 +379,9 @@ workflows:
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
     meta:
-        bitrise.io:
-            stack: osx-xcode-13.4.x
-            machine_type_id: g2.4core
+      bitrise.io:
+        stack: osx-xcode-13.4.x
+        machine_type_id: g2.4core
   send_slack_notification:
     steps:
     - slack@3.1:
@@ -709,7 +709,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-14.0.x
+        stack: osx-xcode-14.1.x
         machine_type_id: g2.4core
   RunAllXCUITests:
     steps: []
