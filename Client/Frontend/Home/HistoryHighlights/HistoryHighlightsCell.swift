@@ -8,9 +8,10 @@ import UIKit
 class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
 
     struct UX {
+        static let verticalSpacing: CGFloat = 20
         static let generalCornerRadius: CGFloat = 10
         static let heroImageDimension: CGFloat = 24
-        static let shadowRadius: CGFloat = 0
+        static let shadowRadius: CGFloat = 4
         static let shadowOffset: CGFloat = 2
     }
 
@@ -59,6 +60,7 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
 
     // MARK: - Variables
     var notificationCenter: NotificationProtocol = NotificationCenter.default
+    private var cellModel: HistoryHighlightsModel?
 
     // MARK: - Inits
 
@@ -84,16 +86,18 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
 
     // MARK: - Public methods
     public func updateCell(with options: HistoryHighlightsModel) {
+        cellModel = options
         itemTitle.text = options.title
+
         if let descriptionCount = options.description {
             itemDescription.text = descriptionCount
             itemDescription.isHidden = false
         }
+
         bottomLine.alpha = options.hideBottomLine ? 0 : 1
         isFillerCell = options.isFillerCell
         accessibilityLabel = options.accessibilityLabel
 
-        setupShadow(cornersToRound: options.corners)
         heroImage.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
         adjustLayout()
     }
@@ -103,6 +107,10 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
 
         heroImage.image = nil
         itemDescription.isHidden = true
+
+        contentView.layer.shadowRadius = 0.0
+        contentView.layer.shadowOpacity = 0.0
+        contentView.layer.shadowPath = nil
     }
 
     // MARK: - Setup Helper methods
@@ -134,19 +142,32 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
         ])
     }
 
-    private func setupShadow(cornersToRound: CACornerMask?) {
-        contentView.clipsToBounds = true
+    private func setupShadow(_ shouldAddShadow: Bool, cornersToRound: CACornerMask?) {
         contentView.layer.maskedCorners = cornersToRound ?? .layerMaxXMinYCorner
         contentView.layer.cornerRadius = UX.generalCornerRadius
 
-        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
-        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOffset = CGSize(width: 0,
-                                          height: UX.shadowOffset)
-        contentView.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
-        contentView.layer.shadowRadius = UX.shadowRadius
+        var needsShadow = shouldAddShadow
+        if let cornersToRound = cornersToRound {
+            needsShadow = cornersToRound.contains(.layerMinXMaxYCorner) ||
+                cornersToRound.contains(.layerMaxXMaxYCorner) ||
+                shouldAddShadow
+        }
 
+        if needsShadow {
+            let size: CGFloat = 5
+            let distance: CGFloat = 0
+            let rect = CGRect(
+                x: -size,
+                y: contentView.frame.height - (size * 0.4) + distance,
+                width: contentView.frame.width + size * 2,
+                height: size
+            )
+
+            contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+            contentView.layer.shadowRadius = UX.shadowRadius
+            contentView.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+            contentView.layer.shadowPath = UIBezierPath(ovalIn: rect).cgPath
+        }
     }
 
     private func applyTheme() {
@@ -162,7 +183,7 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
         } else {
             contentView.removeVisualEffectView()
             contentView.backgroundColor = LegacyThemeManager.instance.current.homePanel.topSitesContainerView
-            setupShadow(cornersToRound: nil)
+            setupShadow(cellModel?.shouldAddShadow ?? false, cornersToRound: cellModel?.corners)
         }
     }
 }

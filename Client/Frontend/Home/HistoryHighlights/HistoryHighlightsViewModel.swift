@@ -29,7 +29,6 @@ struct HistoryHighlightsModel {
          and heroImage: UIImage? = nil,
          andIsFillerCell: Bool = false,
          shouldAddShadow: Bool = false) {
-
         self.title = title
         self.description = description
         self.hideBottomLine = shouldHideBottomLine
@@ -349,13 +348,16 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
             cornersToRound.insert(.layerMinXMinYCorner)
         }
 
-        if isTopRightCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.layerMaxXMinYCorner)
+        if isTopRightCell(index: indexPath.row, totalItems: totalItems) {
+            cornersToRound.insert(.layerMaxXMinYCorner)
         }
 
-        if isBottomLeftCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.layerMinXMaxYCorner)
+        if isBottomLeftCell(index: indexPath.row, totalItems: totalItems) {
+            cornersToRound.insert(.layerMinXMaxYCorner)
         }
 
-        if isBottomRightCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.layerMaxXMaxYCorner)
+        if isBottomRightCell(index: indexPath.row, totalItems: totalItems) {
+            cornersToRound.insert(.layerMaxXMaxYCorner)
         }
 
         return cornersToRound
