@@ -5,18 +5,18 @@
 import UIKit
 
 /// A cell used in FxHomeScreen's History Highlights section.
-class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
+class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
 
     struct UX {
+        static let verticalSpacing: CGFloat = 20
+        static let horizontalSpacing: CGFloat = 16
         static let generalCornerRadius: CGFloat = 10
         static let heroImageDimension: CGFloat = 24
-        static let shadowRadius: CGFloat = 0
+        static let shadowRadius: CGFloat = 4
         static let shadowOffset: CGFloat = 2
     }
 
     // MARK: - UI Elements
-    var shadowViewLayer: CAShapeLayer?
-
     let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
@@ -26,16 +26,14 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 
     let itemTitle: UILabel = .build { label in
-        // Limiting max size since background/shadow of cell can't support self-sizing (shadow doesn't follow)
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   maxSize: 23)
+                                                                   size: 15)
         label.adjustsFontForContentSizeCategory = true
     }
 
     let itemDescription: UILabel = .build { label in
-        // Limiting max size since background/shadow of cell can't support self-sizing (shadow doesn't follow)
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   maxSize: 18)
+                                                                   size: 13)
         label.adjustsFontForContentSizeCategory = true
     }
 
@@ -63,6 +61,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
     var notificationCenter: NotificationProtocol = NotificationCenter.default
+    private var cellModel: HistoryHighlightsModel?
 
     // MARK: - Inits
 
@@ -88,31 +87,31 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Public methods
     public func updateCell(with options: HistoryHighlightsModel) {
+        cellModel = options
         itemTitle.text = options.title
+
         if let descriptionCount = options.description {
             itemDescription.text = descriptionCount
             itemDescription.isHidden = false
         }
+
         bottomLine.alpha = options.hideBottomLine ? 0 : 1
         isFillerCell = options.isFillerCell
         accessibilityLabel = options.accessibilityLabel
 
-        if let corners = options.corners {
-            addRoundedCorners([corners], radius: UX.generalCornerRadius)
-        }
-
-        if options.shouldAddShadow {
-            addShadowLayer(cornersToRound: options.corners ?? UIRectCorner())
-        }
         heroImage.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
+        adjustLayout()
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        shadowViewLayer?.removeFromSuperlayer()
         heroImage.image = nil
         itemDescription.isHidden = true
+
+        contentView.layer.shadowRadius = 0.0
+        contentView.layer.shadowOpacity = 0.0
+        contentView.layer.shadowPath = nil
     }
 
     // MARK: - Setup Helper methods
@@ -122,59 +121,94 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         contentView.addSubview(bottomLine)
 
         NSLayoutConstraint.activate([
-            heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                               constant: UX.horizontalSpacing),
             heroImage.heightAnchor.constraint(equalToConstant: UX.heroImageDimension),
             heroImage.widthAnchor.constraint(equalToConstant: UX.heroImageDimension),
             heroImage.centerYAnchor.constraint(equalTo: textStack.centerYAnchor),
+            heroImage.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor,
+                                           constant: UX.verticalSpacing),
+            heroImage.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor,
+                                              constant: -UX.verticalSpacing),
 
-            textStack.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 12),
-            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            textStack.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor,
+                                               constant: UX.horizontalSpacing),
+            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                constant: -UX.horizontalSpacing),
             textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            textStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor,
+                                           constant: UX.verticalSpacing),
+            textStack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor,
+                                              constant: -UX.verticalSpacing),
 
             bottomLine.heightAnchor.constraint(equalToConstant: 0.5),
             bottomLine.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
-            bottomLine.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            bottomLine.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                 constant: -UX.horizontalSpacing),
             bottomLine.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 
-    private func addShadowLayer(cornersToRound: UIRectCorner) {
-        let shadowLayer = CAShapeLayer()
+    private func setupShadow(_ shouldAddShadow: Bool, cornersToRound: CACornerMask?) {
+        contentView.layer.maskedCorners = cornersToRound ?? .layerMaxXMinYCorner
+        contentView.layer.cornerRadius = UX.generalCornerRadius
 
-        shadowLayer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        shadowLayer.shadowOffset = CGSize(width: 0,
-                                          height: UX.shadowOffset)
-        shadowLayer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
-        shadowLayer.shadowRadius = UX.shadowRadius
+        var needsShadow = shouldAddShadow
+        if let cornersToRound = cornersToRound {
+            needsShadow = cornersToRound.contains(.layerMinXMaxYCorner) ||
+                cornersToRound.contains(.layerMaxXMaxYCorner) ||
+                shouldAddShadow
+        }
 
-        let radiusSize = CGSize(width: UX.generalCornerRadius,
-                                height: UX.generalCornerRadius)
-        shadowLayer.shadowPath = UIBezierPath(roundedRect: bounds,
-                                              byRoundingCorners: cornersToRound,
-                                              cornerRadii: radiusSize).cgPath
-        shadowLayer.shouldRasterize = true
-        shadowLayer.rasterizationScale = UIScreen.main.scale
+        if needsShadow {
+            let size: CGFloat = 5
+            let distance: CGFloat = 0
+            let rect = CGRect(
+                x: -size,
+                y: contentView.frame.height - (size * 0.4) + distance,
+                width: contentView.frame.width + size * 2,
+                height: size
+            )
 
-        shadowViewLayer = shadowLayer
-        layer.insertSublayer(shadowLayer, at: 0)
+            contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+            contentView.layer.shadowRadius = UX.shadowRadius
+            contentView.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+            contentView.layer.shadowPath = UIBezierPath(ovalIn: rect).cgPath
+        }
     }
-}
 
-extension HistoryHighlightsCell {
-    func applyTheme() {
+    private func applyTheme() {
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
         heroImage.tintColor = UIColor.theme.homePanel.recentlyVisitedCellGroupImage
         bottomLine.backgroundColor = UIColor.theme.homePanel.recentlyVisitedCellBottomLine
+    }
+
+    private func adjustLayout() {
+        // If blur is disabled set background color
+        if shouldApplyWallpaperBlur {
+            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+            contentView.backgroundColor = .clear
+            contentView.layer.maskedCorners = cellModel?.corners ?? .layerMaxXMinYCorner
+            contentView.layer.cornerRadius = UX.generalCornerRadius
+        } else {
+            contentView.removeVisualEffectView()
+            contentView.backgroundColor = LegacyThemeManager.instance.current.homePanel.topSitesContainerView
+            setupShadow(cellModel?.shouldAddShadow ?? false, cornersToRound: cellModel?.corners)
+        }
     }
 }
 
 // MARK: - Notifiable
 extension HistoryHighlightsCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .DisplayThemeChanged:
+                self?.applyTheme()
+            case .WallpaperDidChange:
+                self?.adjustLayout()
+            default: break
+            }
         }
     }
 }

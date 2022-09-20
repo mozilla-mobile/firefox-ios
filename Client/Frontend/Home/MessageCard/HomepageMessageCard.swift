@@ -193,7 +193,6 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     func applyTheme() {
-
         if shouldApplyWallpaperBlur {
             cardView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
