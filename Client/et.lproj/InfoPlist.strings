@@ -13,12 +13,3 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "See võimaldab sul salvestada fotosid.";
 
-/* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Uus privaatne kaart";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Uus kaart";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skanni QR-kood";
-

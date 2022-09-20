@@ -1,69 +1,9 @@
-/* Description for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Description" = "La protecció contra el seguiment millorada bloca el programari maliciós i atura els elements de seguiment.";
-
-/* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "Privadesa automàtica";
-
-/* Next button on the first intro screen. */
-"Intro.Slides.Button.Next" = "Següent";
-
 /* Sign in to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignIn" = "Inicia la sessió";
-
-/* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Registre";
-
-/* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "Els suggeriments de cerca us permeten anar als llocs web més ràpidament.";
-
-/* Title for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Title" = "Cerca ràpida";
-
-/* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Importeu les adreces d'interès, l'historial i les contrasenyes al Firefox d'aquest dispositiu.";
-
-/* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Sincronitzeu el Firefox entre dispositius";
-
-/* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Utilitzeu qualsevol aplicació de correu electrònic (no només el Mail) amb el Firefox.";
-
-/* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Més opcions per llegir el correu";
-
-/* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Toqueu la icona de màscara per entrar en el mode de navegació privada.";
-
-/* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "Navegueu sense sentir-vos observat";
-
-/* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Protegiu els vostres inicis de sessió i les vostres dades arreu on utilitzeu el Firefox.";
-
-/* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "Sincronització segura";
-
-/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Busqueu una altra cosa? Trieu un altre motor de cerca per defecte (o afegiu-ne qualsevol altre) als Paràmetres.";
-
-/* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Cerqueu com vulgueu";
-
-/* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Inicieu la sessió al vostre compte per sincronitzar i accedir a més funcions.";
-
-/* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Sincronitzeu les vostres adreces d'interès, historial i contrasenyes en el telèfon.";
-
-/* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "Ràpid, privat i al vostre costat.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title.v2" = "Us donem la benvinguda al Firefox";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Comença a navegar";
-
-/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "Activa la sincronització…";
 

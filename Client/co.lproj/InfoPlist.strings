@@ -13,12 +13,3 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Quessu vi permette d’arregistrà fotò.";
 
-/* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nova unghjetta privata";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nova unghjetta";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Analizà un codice QR";
-

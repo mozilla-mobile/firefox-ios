@@ -13,12 +13,3 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Lader dig gemme fotos.";
 
-/* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nyt privat faneblad";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nyt faneblad";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skan QR-kode";
-

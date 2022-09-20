@@ -10,12 +10,3 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Esto te permite d'alzar fotos.";
 
-/* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nueva pestanya privada";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nueva pestanya";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Escaniar codigo QR";
-

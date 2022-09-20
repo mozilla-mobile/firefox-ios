@@ -13,12 +13,3 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "এটা আপনাকে ছবি সংরক্ষণ করতে দিবে।";
 
-/* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "নতুন ব্যাক্তিগত ট্যাব";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "নতুন ট্যাব";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "QR কোড স্ক্যান করুন";
-

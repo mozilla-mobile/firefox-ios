@@ -4,12 +4,11 @@
 
 @testable import Client
 import Foundation
-import Account
 import Shared
 import Storage
-import Sync
 import XCTest
 
+/* Ecosia: remove accounts and sync
 open class MockSyncManager: SyncManager {
     open var isSyncing = false
     open var lastSyncFinishTime: Timestamp?
@@ -57,6 +56,7 @@ open class MockSyncManager: SyncManager {
         return deferMaybe(true)
     }
 }
+ */
 
 open class MockTabQueue: TabQueue {
     open func addToQueue(_ tab: ShareItem) -> Success {
@@ -80,10 +80,6 @@ class MockFiles: FileAccessor {
 }
 
 open class MockProfile: Client.Profile {
-    public var rustFxA: RustFirefoxAccounts {
-        return RustFirefoxAccounts.shared
-    }
-
     // Read/Writeable properties for mocking
     public var recommendations: HistoryRecommendations
     public var places: RustPlaces
@@ -91,7 +87,6 @@ open class MockProfile: Client.Profile {
     public var files: FileAccessor
     public var history: BrowserHistory & SyncableHistory & ResettableSyncStorage
     public var logins: RustLogins
-    public var syncManager: SyncManager!
 
     fileprivate var legacyPlaces: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
 
@@ -102,7 +97,6 @@ open class MockProfile: Client.Profile {
 
     init(databasePrefix: String = "mock") {
         files = MockFiles()
-        syncManager = MockSyncManager()
 
         let oldLoginsDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_logins.db").path
         try? files.remove("\(databasePrefix)_logins.db")
@@ -210,7 +204,6 @@ open class MockProfile: Client.Profile {
     public func flushAccount() {}
 
     public func removeAccount() {
-        self.syncManager.onRemovedAccount()
     }
 
     public func getClients() -> Deferred<Maybe<[RemoteClient]>> {

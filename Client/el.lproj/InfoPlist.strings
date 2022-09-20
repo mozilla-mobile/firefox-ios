@@ -13,12 +13,3 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Αυτό σας επιτρέπει να αποθηκεύετε φωτογραφίες.";
 
-/* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Νέα ιδιωτική καρτέλα";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Νέα καρτέλα";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Σάρωση κωδικού QR";
-

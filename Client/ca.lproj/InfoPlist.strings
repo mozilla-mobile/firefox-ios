@@ -13,12 +13,3 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Això permet desar fotos.";
 
-/* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Pestanya privada nova";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Pestanya nova";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Escaneja un codi QR";
-

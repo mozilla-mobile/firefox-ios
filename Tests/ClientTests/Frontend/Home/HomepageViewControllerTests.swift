@@ -53,7 +53,7 @@ class HomepageViewControllerTests: XCTestCase {
 
         let firefoxHomeViewController = HomepageViewController(profile: profile,
                                                                tabManager: tabManager,
-                                                               urlBar: urlBar)
+                                                               urlBar: urlBar, delegate: nil, referrals: .init())
 
         trackForMemoryLeaks(firefoxHomeViewController)
     }

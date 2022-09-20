@@ -13,12 +13,3 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Tio ĉi permesas al vi konservi fotojn.";
 
-/* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Nova privata langeto";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Nova langeto";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skani kodon QR";
-

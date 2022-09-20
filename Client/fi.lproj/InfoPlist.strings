@@ -13,12 +13,3 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Näin voit tallentaa kuvia.";
 
-/* (No Comment) */
-"ShortcutItemTitleNewPrivateTab" = "Uusi yksityinen välilehti";
-
-/* (No Comment) */
-"ShortcutItemTitleNewTab" = "Uusi välilehti";
-
-/* (No Comment) */
-"ShortcutItemTitleQRCode" = "Skannaa QR-koodi";
-
