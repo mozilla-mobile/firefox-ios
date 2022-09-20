@@ -10,6 +10,11 @@ protocol UserDefaultsInterface {
 
     func set(_ value: Bool, forKey defaultName: String)
     func bool(forKey defaultName: String) -> Bool
+
+    func string(forKey defaultName: String) -> String?
+    func float(forKey defaultName: String) -> Float
+
+    func register(defaults registrationDictionary: [String: Any])
 }
 
 extension UserDefaults: UserDefaultsInterface {}

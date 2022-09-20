@@ -50,7 +50,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         menuBuilderHelper = MenuBuilderHelper()
 
         setupRootViewController()
-        startListeningForThemeUpdates()
 
         log.info("startApplication end")
 
@@ -184,16 +183,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 // This functionality will need to be moved to the SceneDelegate when the time comes
 extension AppDelegate {
-
-    func startListeningForThemeUpdates() {
-        NotificationCenter.default.addObserver(forName: .DisplayThemeChanged, object: nil, queue: .main) { (_) -> Void in
-            if !LegacyThemeManager.instance.systemThemeIsOn {
-                self.window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
-            } else {
-                self.window?.overrideUserInterfaceStyle = .unspecified
-            }
-        }
-    }
 
     // Orientation lock for views that use new modal presenter
     func application(_ application: UIApplication,
