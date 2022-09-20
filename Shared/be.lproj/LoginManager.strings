@@ -1,6 +1,36 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Вы ўпэўнены?";
+
 /* Prompt option for cancelling out of deletion */
 "Cancel" = "Скасаваць";
 
 /* Label for the button used to delete the current login. */
 "Delete" = "Выдаліць";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Зняць выбар з усіх";
+
+/* Hide password text selection menu item */
+"Hide" = "Схаваць";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Лагіны не знойдзены";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Пароль";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Пошук";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Пошук";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Вылучыць усе";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Імя карыстальніка";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Вэб-сайт";
 

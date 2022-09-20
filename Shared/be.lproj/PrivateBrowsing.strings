@@ -1,0 +1,15 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Закрыць прыватныя карткі";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Адкрыць у новай прыватнай картцы";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Падрабязней";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Прыватнае агляданне";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Прыватны рэжым";
+

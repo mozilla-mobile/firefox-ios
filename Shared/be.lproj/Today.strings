@@ -1,0 +1,21 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "Закрыць прыватныя карткі";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "Перайсці па скапіяванай спасылцы";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "Новы пошук";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "Няма адкрытых картак.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Адкрыць Firefox";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Прыватны пошук";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Хуткія дзеянні";
+

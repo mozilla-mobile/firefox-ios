@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "ທີ່ຢູ່ ແລະ ການຄົ້ນຫາ";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "ເພີ່ມເຂົ້າໄປໃນລາຍການອ່ານ";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "ແທັບທີ່ຢູ່";
 
@@ -195,6 +198,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "ເພື່ອເຮັດໃຫ້ການປ້ອນຂໍ້ມູນງ່າຍຂື້ນ ຕອນນີ້ໄດ້ປັບໃຫ້ແທບເຄືອງມືໄປຢູ່ດ້ານແລ້ວ.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "ຕອນນີ້ຫນ້າທໍາອິດຂອງ Firefox ທີ່ໄດ້ຮັບການປັບແຕ່ງຕາມແບບຂອງທ່ານຈະເຮັດໃຫ້ທ່ານສາມາດກັບໄປເບິງຫນ້າເວັບທີ່ໄດ້ເປີດປະໄວ້ໄດ້ງ່າຍຂື້ນແລ້ວ. ຊອກຫາແທັບ, ບຸກມາກ, ແລະ ຜົນການຄົ້ນຫາຫຼ້າສຸດຂອງທ່ານ.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "ການຕັ້ງຄ່າແທບເຄື່ອງມື";
@@ -354,6 +360,12 @@
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "ຜູ້ສະຫນັບສະຫນູນຂອງພວກເຮົາ & ຄວາມເປັນສ່ວນຕົວຂອງທ່ານ";
+
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "ເປີດແຖບທີ່ຊິ້ງແລ້ວ";
+
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "ເບິງແທັບທີ່ sync ທັງຫມົດ";
 
 /* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
 "FirefoxHomepage.JumpBackIn.TabPickup.v104" = "ເອົາແຖບ";
@@ -578,6 +590,9 @@
 "Last week" = "ອາທິດທີ່ຜ່ານມາ";
 
 /* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "ບຸກມາກ";
+
+/* Panel accessibility label */
 "LibraryPanel.Accessibility.History.v106" = "ປະຫວັດການໃຊ້ງານ";
 
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
@@ -589,8 +604,23 @@
 /* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
 "LibraryPanel.History.ClearGroupedTabsTitle.v100" = "ລຶບທຸກເວັບໄຊໃນ %@ ບໍ?";
 
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "ລຶບປະຫວັດ (ລວມທັງປະຫວັດການຊິງຄ໌ຈາກອຸປະກອນອື່ນ), ຄຸກກີ້ ແລະຂໍ້ມູນການທ່ອງເວັບອື່ນໆ.";
+
 /* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
 "LibraryPanel.History.DeleteGroupedItem.v104" = "ລຶບ";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "ບໍ່ພົບປະຫວັດ";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "ແຖບທີ່ຫາກໍ່ປິດໄປມື້ກີ້ນີ້";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "ປ້ອນຄຳທີ່ຕ້ອງການຄົ້ນຫາ";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "ປະຫວັດການຊິງຄ໌";
 
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
 "LibraryPanel.Section.Older" = "ເກົ່າກວ່າ";
@@ -697,6 +727,9 @@
 /* Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "ໝາຍໄວ້ວ່າຫຍັງບໍ່ທັນໄດ້ອ່ານເທື່ອ";
 
+/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
+"Menu.AddBookmark.AlternateLabel.v99" = "ເພີ່ມບຸກມາກ";
+
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "ເພີ່ມບຸກມາກແລ້ວ";
 
@@ -712,6 +745,9 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "ເພີ່ມເຂົ້າໄປໃນລາຍການອ່ານແລ້ວ";
 
+/* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
+"Menu.AddToShortcuts.v99" = "ເພີ່ມທາງລັດ";
+
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "ບຸກມາກ";
 
@@ -721,8 +757,17 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL ໄດ້ຖືກບັນທຶກໄປໄວ້ໃນ Clipboard ແລ້ວ";
 
+/* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
+"Menu.CustomizeHomePage.v99" = "ປັບແຕ່ງຫນ້າທຳອິດ";
+
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "ດາວໂຫລດ";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "ການປົກປ້ອງຖືກປິດໄວ້ສຳລັບເວັບໄຊນີ້";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "ການປົກປ້ອງແມ່ນເປີດຢູ່ສຳລັບເວັບໄຊນີ້";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "ຊ່ວຍເຫລືອ";
@@ -763,8 +808,32 @@
 /* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
 "Menu.RemoveBookmark.Label.v99" = "ລຶບ";
 
+/* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
+"Menu.RemovedFromShortcuts.v99" = "ລຶບອອກຈາກທາງລັດ";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2.v99" = "ລຶບອອກຈາກທາງລັດແລ້ວ";
+
+/* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
+"Menu.RemoveReadingList.AlternateLabel.v99" = "ລືບອອກຈາກລາຍການອ່ານ";
+
+/* Toast displayed to confirm to the user that his reading list item was correctly removed. */
+"Menu.RemoveReadingList.Confirm.v99" = "ລືບອອກຈາກລາຍການອ່ານ";
+
+/* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
+"Menu.RemoveReadingList.Label.v99" = "ລຶບ";
+
+/* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
+"Menu.Share.v99" = "ແບ່ງປັນ";
+
+/* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
+"Menu.SyncAndSaveData.v103" = "ຊິງຄ໌ແລະບັນທຶກຂໍ້ມູນ";
+
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ແທັບຖືກສົ່ງແລ້ວ";
+
+/* Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu */
+"Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "ບຸກມາກ";
 
 /* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
 "Menu.Toolbar.Home.AccessibilityLabel.v99" = "ໜ້າຫຼັກ";
@@ -838,11 +907,59 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
 "Onboarding.IntroAction.v102" = "ເລີ່ມຕົ້ນໃຊ້ງານ";
 
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
+"Onboarding.IntroDescriptionPart1.v102" = "ອິນດີ້. ບໍ່ຫວັງຜົນກຳໄລ. ເພື່ອຄວາມຖືກຕ້ອງ.";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v102" = "ຄໍາຫມັ້ນສັນຍາຂອງອິນເຕີເນັດທີ່ດີກວ່າສໍາລັບທຸກຄົນ.";
+
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "ບໍ່ແມ່ນຕອນນີ້";
 
+/* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Description.v106" = "ດຶງເອົາແຖບ ແລະ ລະຫັດຜ່ານຈາກອຸປະກອນອື່ນຂອງທ່ານອອກຈາກບ່ອນທີ່ເຈົ້າຄ້າງໄວ້.";
+
 /* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v106" = "ຂ້າມ";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Title.v106" = "ເລື່ອນຈາກໂທລະສັບໄປຫາແລັບທັອບ ແລະຫຼັງ";
+
+/* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
+"Onboarding.SyncAction.v102" = "ລົງທະບຽນແລະເຂົ້າສູ່ລະບົບ";
+
+/* Description for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. */
+"Onboarding.SyncDescription.v102" = "ຊິງຄ໌ແຖບ ແລະບຸກມາກອັດຕະໂນມັດໃນທົ່ວອຸປະກອນສຳລັບການເລື່ອນໜ້າຈໍແບບບໍ່ມີຮອຍຕໍ່.";
+
+/* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
+"Onboarding.SyncTitle.v102" = "Sync ເພື່ອຢູ່ໃນຮູບແບບຂອງທ່ານ";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.Classic.v106" = "ຮູບພື້ນຫຼັງຄລາສິກ";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "ວໍເປເປີສະບັບຈໍາກັດ";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v106" = "ສຳຫຼວດຮູບພື້ນຫຼັງເພີ່ມເຕີມ";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v106" = "ເລືອກຮູບວໍເປເປີທີ່ບົ່ງບອກຄວາມເປັນໂຕຕົນຂອງທ່ານ.";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Title.v106" = "ລອງເລືອກສີສັນທີທ່ານມັກ";
+
+/* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
+"Onboarding.WallpaperAction.v102" = "ຕັ້ງພາບພື້ນຫຼັງ";
+
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
+"Onboarding.WallpaperTitle.v102" = "ເລືອກຮູບພື້ນຫຼັງຂອງ Firefox";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Description.v106" = "Firefox ໃຫ້ຄວາມສຳຄັນກັບຜູ້ຄົນຫຼາຍກວ່າສະແຫວງຫາຜົນກຳໄລ ແລະ ປົກປ້ອງຄວາມເປັນສ່ວນໂຕຂອງທ່ານໂດຍອັດຕະໂນມັດ.";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v106" = "ຍິນດີຕ້ອນຮັບສູ່ອິນເຕີເນັດທີບໍ່ມີຂອບຈຳກັດ";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "ເລີ່ມການທ່ອງເວັບ";
@@ -904,6 +1021,12 @@
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "ນຳໃຊ້ໂຫມດຜູ້ອ່ານໄດ້";
 
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "ໝາຍໄວ້ວ່າໄດ້ອ່ານແລ້ວ";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "ໝາຍໄວ້ວ່າຫຍັງບໍ່ທັນໄດ້ອ່ານເທື່ອ";
+
 /* Panel accessibility label */
 "Reading list" = "ລາຍການການອ່ານ";
 
@@ -952,6 +1075,9 @@
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "ຂໍ້ມູນບໍ່ຖືກຕ້ອງ";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "ໄປທີ່ອຸປະກອນ ‘ການຕັ້ງຄ່າ’> ‘Firefox’. ອະນຸຍາດໃຫ້ Firefox ເຂົ້າເຖິງກ້ອງຖ່າຍຮູບ.";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "ສະແກນລະຫັດ QR";
 
@@ -963,6 +1089,9 @@
 
 /* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
 "Search.Awesomebar.SwitchToTab" = "ປ່ຽນໄປຫາແທັບ";
+
+/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
+"Search.SuggestSectionTitle.v102" = "Firefox ແນະນໍາ";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "ເຄື່ອງມືການຄົ້ນຫາໃຫມ່ຈະປະກົດຢູ່ໃນບາຂອງການຄົ້ນຫາ.";
@@ -997,6 +1126,15 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ຕົກລົງ";
 
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "ເຄື່ອງມືການຊອກຫາເລີ່ມຕົ້ນ";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "ເຄື່ອງມືການຊອກຫາເລີ່ມຕົ້ນ";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "ຄົ້ນຫາ";
+
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "ຕ້ອງການສົ່ງລາຍງານຂໍ້ຜິດພາດນີ້ໄປເພື່ອເຮັດໃຫ້ Mozilla ສາມາດແກ້ໄຂບັນຫານີ້ໄດ້ບໍ?";
 
@@ -1008,6 +1146,9 @@
 
 /* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "ຍົກເລີກ";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "ປິດ";
 
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "ອຸປະກອນທີ່ມີຢູ່:";
@@ -1147,6 +1288,9 @@
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "ຊຸດປັບແຕ່ງຈະປ່ຽນໄປຕາມຄວາມແຈ້ງຂອງຫນ້າຈໍຂອງທ່ານໂດຍອັດຕະໂນມັດ. ທ່ານສາມາດຕັ້ງຄ່າຕົວປ່ຽນໄວ້ໃນຊຸດປັບແຕ່ງທີ່ຈະປ່ຽນ. ວົງມົນໄດ້ບົ່ງບອກເຖິງຄວາມແຈ້ງປະຈຸບັນຂອງຫນ້າຈໍຂອງທ່ານ.";
 
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "ອັດຕະໂນມັດ";
+
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "ປ່ຽນໂຫມດ";
 
@@ -1180,6 +1324,12 @@
 /* General settings section title */
 "Settings.General.SectionName" = "ທົ່ວໄປ";
 
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "ເລືອກສິ່ງທີ່ສະແດງເປັນຫນ້າທໍາອິດ.";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description.v101" = "ເລືອກສິ່ງທີ່ຢູ່ໃນຫນ້າທໍາອິດຂອງ Firefox.";
+
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "ກັບໄປໃນ";
 
@@ -1194,6 +1344,9 @@
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "ທາງລັດ";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off */
+"Settings.Home.Option.SponsoredPocket.v103" = "ເລື່ອງລາວທີ່ໄດ້ຮັບການສະຫນັບສະຫນູນ";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
 "Settings.Home.Option.StartAtHome.AfterFourHours" = "ຫນ້າທໍາອິດຫຼັງຈາກທີ່ບໍ່ມີການເຄື່ອນໄຫວເປັນເວລາສີ່ຊົ່ວໂມງ";
@@ -1210,8 +1363,86 @@
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
 "Settings.Home.Option.StartAtHome.Title" = "ໜ້າຈໍກຳລັງເປີດຢູ່";
 
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title.v101" = "ລວມຢູ່ໃນຫນ້າທໍາອິດ";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "ພາບພື້ນຫຼັງ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "ຮູບວໍເປເປີ Firefox, ຮູບແບບ amethyst.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "ຮູບວໍເປເປີ Firefox, ຮູບແບບເນີນພູຫາດຊາຍ.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "ຮູບວໍເປເປີ Firefox, ຮູບແບບ cerulean.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "ພາບພື້ນຫຼັງທີ່ຊັດເຈນເປັນຄ່າເລີ່ມຕົ້ນ.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "ຮູບວໍເປເປີ Firefox, ຮູບແບບຕາເວັນຂຶ້ນ.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "ປ່ຽນພາບພື້ນຫຼັງໜ້າທຳອິດແບບໝູນວຽນ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "ຮູບວໍເປເປີ Firefox, ຮູບແບບເນີນພູ twilight.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Firefox ຄລາສສິກ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "ກຳລັງເປີດໜ້າຈໍ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "ລອງຄໍເລັກຊັນໃໝ່.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "ຄໍເລັກຊັນສຽງເອກະລາດໃໝ່.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "ມີ​ຈໍາ​ນວນ​ຈໍາ​ກັດ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "ປ່ຽນຮູບວໍເປເປີໂດຍການແຕະໃສ່ໂລໂກ້ຂອງໜ້າຫຼັກຂອງ Firefox";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "ພາບພື້ນຫຼັງ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "ອັບເດດຮູບວໍເປເປີແລ້ວ!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "ເບິ່ງ";
+
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "ຫນ້າທຳອິດ";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "ແຖວ";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "ແຖວ";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "ທາງ​ລັດ";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "ທາງລັດ";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "ທາງລັດສະປອນເຊີ";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "ປິດ";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "ເປີດ";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "ຫນ້າທຳອິດ";
@@ -1246,6 +1477,9 @@
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
 "Settings.NewTab.TopSectionNameFooter" = "ເລື່ອກສິ່ງທີ່ຈະໂຫລດເມື່ອເປີດແທັບໃຫມ່";
 
+/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
+"Settings.NoImageModeBlockImages.Label.v99" = "ບັອກຮູບພາບ";
+
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "ເມື່ອເປີດ Firefox";
 
@@ -1257,6 +1491,18 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "ແອັບເມລ";
+
+/* Touch ID prompt subtitle when accessing logins and passwords */
+"Settings.Passwords.FingerPrintReason.v103" = "ໃຊ້ລາຍນິ້ວມືຂອງທ່ານເພື່ອເຂົ້າເຖິງລະຫັດຜ່ານດຽວນີ້.";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "ດຽວນີ້ລະຫັດຜ່ານຂອງທ່ານຖືກປົກປ້ອງໂດຍ Face ID, Touch ID ຫຼືລະຫັດຜ່ານຂອງອຸປະກອນ.";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "ບັນທຶກລະຫັດຜ່ານ";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "ລະຫັດຜ່ານ";
 
 /* Setting to enable the built-in password manager */
 "Settings.SaveLogins.Title" = "ບັກທຶກການເຂົ້າສູ່ລະບົບ";
@@ -1303,8 +1549,20 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "ການສຶກສາ";
 
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "ເຂົ້າສູ່ລະບົບເພື່ອຊິ້ງແຖບ, ບຸກມາກ, ລະຫັດຜ່ານ ແລະອື່ນໆອີກ.";
+
+/* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
+"Settings.Sync.ButtonTitle.v103" = "ຊິງຄ໌ແລະບັນທຶກຂໍ້ມູນ";
+
+/* Title for the page where the user sign in to their Firefox Sync account. */
+"Settings.Sync.SignInView.Title.v103" = "ຊິງຄ໌ແລະບັນທຶກຂໍ້ມູນ";
+
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "ແທັບທີ່ບໍ່ໄດ້ນຳໃຊ້";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "ແຖບທີ່ທ່ານບໍ່ໄດ້ເບິ່ງເປັນເວລາສອງອາທິດຈະຖືກຍ້າຍໄປພາກສ່ວນທີ່ບໍ່ເຄື່ອນໄຫວ.";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "ກຸ່ມແທັບ";
@@ -1314,6 +1572,15 @@
 
 /* In the settings menu, this is the title for the Tabs customization section option */
 "Settings.Tabs.Title" = "ແທັບ";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "ລຸ່ມ";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "ແຖບເຄື່ອງມື";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "ເທິງ";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ໂອເຄ, ເຂົ້າໃຈແລ້ວ";
@@ -1438,6 +1705,15 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "ປິດ %d ແທັບແລ້ວ";
 
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "ເບິ່ງແທັບທີ່ບໍ່ໄດ້ນຳໃຊ້";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "ເຊື່ອງແທັບທີ່ບໍ່ໄດ້ນຳໃຊ້";
+
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "ຄົ້ນຫາ";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "ເພີ່ມແທັບ";
 
@@ -1468,6 +1744,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "ເປີດແທັບ";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "ສະແດງແທັບ";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "ຫນ້າເວັບນີ້ບໍ່ສາມາດສະແດງຢູ່ໃນ Reader View.";
 
@@ -1479,6 +1758,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "ອາທິດນີ້";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "ມື້ວານ";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "ບໍ່ແມ່ນຕອນນີ້";
@@ -1525,11 +1807,47 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "ຍັງບໍ່ທັນອ່ານ";
 
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v106" = "ເຂົ້າ​ສູ່​ລະ​ບົບ";
+
+/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v106" = "ເລືອກເອົາບ່ອນທີ່ທ່ານປະໄວ້ດ້ວຍແຖບຈາກອຸປະກອນອື່ນໃນຫນ້າທໍາອິດຂອງທ່ານ.";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "ການສະຫຼັບໜ້າຈໍແມ່ນງ່າຍກວ່າທີ່ເຄີຍ";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v106" = "ເລີ່ມຕົ້ນໃຊ້ງານ";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "ສີໃໝ່. ຄວາມສະດວກສະບາຍໃໝ່. ຄໍາຫມັ້ນສັນຍາດຽວກັນກັບປະຊາຊົນຫຼາຍກວ່າກໍາໄລ.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v106" = "ຍິນດີຕ້ອນຮັບສູ່ອິນເຕີເນັດທີມີຄວາມເປັນສ່ວນຕົວສູງ";
+
 /* Debug option */
 "Use stage servers" = "ໃຊ້ stage servers";
 
 /* Username textbox in Authentication prompt */
 "Username" = "ຊື່ຜູ້ໃຊ້";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "ມີບາງຢ່າງຜິດພາດກັບພາບພື້ນຫຼັງນີ້.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "ບໍ່ສາມາດດາວໂຫຼດວໍເປເປີໄດ້";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "ມີບາງຢ່າງຜິດພາດກັບການດາວໂຫຼດຂອງທ່ານ.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "ບໍ່ສາມາດດາວໂຫຼດວໍເປເປີໄດ້";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "ຍົກເລີກ";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "ລອງໃຫມ່ອີກຄັ້ງ";
 
 /* Accessibility label for the main web content view */
 "Web content" = "ເນື້ອຫາໃນເວັບ";
