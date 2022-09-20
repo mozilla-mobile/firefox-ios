@@ -95,6 +95,7 @@ class UpdateViewModelTests: XCTestCase {
         XCTAssertFalse(shouldShow)
     }
 
+    /* Ecosia
     func testShouldShowCoverSheetFromUpdateVersion() {
         let olderTestAppVersion = "21.0"
         let updatedTestAppVersion = "22.0"
@@ -108,6 +109,7 @@ class UpdateViewModelTests: XCTestCase {
         XCTAssertTrue(shouldShow)
     }
 
+
     func testShouldShowCoverSheetForVersionNil() {
         let currentTestAppVersion = "22.0"
 
@@ -117,7 +119,8 @@ class UpdateViewModelTests: XCTestCase {
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
         XCTAssertTrue(shouldShow)
     }
-
+     */
+    
     func testShouldSaveVersion_CleanInstall() {
         let currentTestAppVersion = "22.0"
 

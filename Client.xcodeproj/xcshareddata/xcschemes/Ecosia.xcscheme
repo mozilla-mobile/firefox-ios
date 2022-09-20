@@ -155,6 +155,9 @@
                   Identifier = "TabManagerStoreTests/testAddedTabsAreStored()">
                </Test>
                <Test
+                  Identifier = "TabManagerTests/testPrivatePreference_togglePBMDeletesPrivate()">
+               </Test>
+               <Test
                   Identifier = "TestFavicons/testFaviconFetcherParse()">
                </Test>
             </SkippedTests>
