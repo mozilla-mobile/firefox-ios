@@ -25,6 +25,7 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
     // MARK: - UI Elements
     private var rootContainer: UIView = .build { view in
         view.backgroundColor = .clear
+        view.layer.cornerRadius = UX.generalCornerRadius
     }
 
     // Contains the hero image and fallback favicons
@@ -92,6 +93,12 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         itemTitle.text = nil
         setFallBackFaviconVisibility(isHidden: false)
         applyTheme()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                      cornerRadius: UX.generalCornerRadius).cgPath
     }
 
     func configure(viewModel: RecentlySavedCellViewModel) {
