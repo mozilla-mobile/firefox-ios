@@ -935,16 +935,16 @@
 "Onboarding.SyncTitle.v102" = "登入同步，使用不中斷";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
-"Onboarding.Wallpaper.Accessibility.Classic.v106" = "經典背景";
+"Onboarding.Wallpaper.Accessibility.Classic.v106" = "經典背景圖";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
-"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "限量版桌布";
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "限量版背景圖";
 
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
-"Onboarding.Wallpaper.Action.v106" = "探索更多桌布";
+"Onboarding.Wallpaper.Action.v106" = "探索更多背景圖";
 
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
-"Onboarding.Wallpaper.Description.v106" = "選擇有您的風格的桌布。";
+"Onboarding.Wallpaper.Description.v106" = "選擇有您的風格的背景圖。";
 
 /* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Title.v106" = "試用新色彩";
@@ -1830,6 +1830,24 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "使用者名稱";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "這張背景圖檔案有些不對勁。";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "無法變更背景圖";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "您下載的檔案有些不對勁。";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "無法下載背景圖";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "取消";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "重試";
 
 /* Accessibility label for the main web content view */
 "Web content" = "網頁內容";

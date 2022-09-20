@@ -1831,6 +1831,24 @@
 /* Username textbox in Authentication prompt */
 "Username" = "Nama Pengguna";
 
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "Ada yang salah dengan wallpaper ini.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "Tidak Dapat Mengubah Wallpaper";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "Ada yang salah dengan unduhan Anda.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "Tidak Dapat Mengunduh Wallpaper";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "Batal";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Coba Lagi";
+
 /* Accessibility label for the main web content view */
 "Web content" = "Isi web";
 

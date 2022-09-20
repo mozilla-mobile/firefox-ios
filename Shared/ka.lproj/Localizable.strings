@@ -947,7 +947,7 @@
 "Onboarding.Wallpaper.Description.v106" = "აირჩიეთ ფონი, რომელიც შთაგაგონებთ.";
 
 /* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
-"Onboarding.Wallpaper.Title.v106" = "შეაფრქვიეთ ფერები";
+"Onboarding.Wallpaper.Title.v106" = "შეაფერადეთ";
 
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "ფონის დაყენება";
@@ -1830,6 +1830,24 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "მომხმარებლის სახელი";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "რაღაც ხარვეზი აქვს ამ ფონს.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "ფონის შეცვლა ვერ მოხერხდა";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "რაღაც ხარვეზი წარმოიშვა ჩამოტვირთვისას.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "ფონის ჩამოტვირთვა ვერ მოხერხდა";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "გაუქმება";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "ხელახლა ცდა";
 
 /* Accessibility label for the main web content view */
 "Web content" = "ვებშიგთავსი";

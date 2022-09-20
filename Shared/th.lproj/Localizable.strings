@@ -367,6 +367,9 @@
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "ดูแท็บที่ซิงค์ทั้งหมด";
 
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "การรับแท็บ";
+
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
 "FirefoxHomepage.Pocket.Sponsored.v103" = "ได้รับการสนับสนุน";
 
@@ -913,8 +916,14 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "ไม่ใช่ตอนนี้";
 
+/* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Description.v106" = "นำแท็บและรหัสผ่านจากอุปกรณ์อื่น ๆ ของคุณเข้ามาเพื่อเรียกดูต่อจากที่คุณค้างไว้";
+
 /* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v106" = "ข้าม";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Title.v106" = "สับเปลี่ยนไปมาระหว่างโทรศัพท์กับแล็ปท็อป";
 
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "ลงทะเบียนและเข้าสู่ระบบ";
@@ -922,11 +931,35 @@
 /* Description for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. */
 "Onboarding.SyncDescription.v102" = "ซิงค์แท็บและที่คั่นหน้าในอุปกรณ์ต่าง ๆ โดยอัตโนมัติเพื่อการข้ามหน้าจออย่างราบรื่น";
 
+/* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
+"Onboarding.SyncTitle.v102" = "ซิงค์เพื่อเรียกดูอย่างต่อเนื่อง";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.Classic.v106" = "วอลล์เปเปอร์แบบคลาสสิก";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "วอลล์เปเปอร์แบบเวลาจำกัด";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v106" = "สำรวจวอลล์เปเปอร์เพิ่มเติม";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v106" = "เลือกวอลล์เปเปอร์ที่บ่งบอกความเป็นคุณ";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Title.v106" = "ลองเลือกสีสันที่คุณชอบ";
+
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "ตั้งค่ารูปพื้นหลัง";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
 "Onboarding.WallpaperTitle.v102" = "เลือกภาพพื้นหลัง Firefox";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Description.v106" = "Firefox ให้ความสำคัญกับผู้คนมากกว่าผลกำไร และปกป้องความเป็นส่วนตัวของคุณโดยอัตโนมัติ";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v106" = "ยินดีต้อนรับสู่อินเทอร์เน็ตที่เป็นอิสระ";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "เริ่มการเรียกดู";
@@ -987,6 +1020,12 @@
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "มีโหมดผู้อ่าน";
+
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "ทำเครื่องหมายว่าอ่านแล้ว";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "ทำเครื่องหมายว่ายังไม่ได้อ่าน";
 
 /* Panel accessibility label */
 "Reading list" = "รายการอ่าน";
@@ -1086,6 +1125,15 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ตกลง";
+
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "เครื่องมือค้นหาเริ่มต้น";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "เครื่องมือค้นหาเริ่มต้น";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "ค้นหา";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "ส่งรายงานข้อขัดข้องเพื่อให้ Mozilla สามารถแก้ไขปัญหา?";
@@ -1342,8 +1390,17 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "วอลล์เปเปอร์ Firefox, ลายทิวเขายามพลบค่ำ";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Firefox แบบคลาสสิก";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "หน้าจอเปิด";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "เรียนรู้เพิ่มเติม";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "เวลาจำกัด";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
 "Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "เปลี่ยนวอลเปเปอร์โดยแตะโลโก้หน้าแรกของ Firefox";
@@ -1648,6 +1705,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "ซ่อนแท็บที่ไม่ใช้งาน";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "ค้นหา";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "เพิ่มแท็บ";
 
@@ -1678,6 +1738,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "แท็บที่เปิด";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "แสดงแท็บ";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "ไม่สามารถแสดงผลหน้าในมุมมองผู้อ่าน";
 
@@ -1689,6 +1752,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "สัปดาห์นี้";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "เมื่อวานนี้";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "ไม่ใช่ตอนนี้";
@@ -1737,6 +1803,9 @@
 
 /* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
 "Upgrade.SyncSign.Action.v106" = "ลงชื่อเข้า";
+
+/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v106" = "เรียกดูต่อจากที่คุณค้างไว้ด้วยแท็บจากอุปกรณ์อื่นๆ บนหน้าแรกของคุณได้แล้วตอนนี้";
 
 /* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
 "Upgrade.Welcome.Action.v106" = "เริ่มต้นใช้งาน";

@@ -52,6 +52,9 @@
 /* Accessibility label for the search input field in the Logins list */
 "Search Input Field" = "ບ່ອນປ້ອນຄຳທີ່ຕ້ອງການຄົ້ນຫາ";
 
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "​ຄົ້ນ​ຫາ";
+
 /* Label for the button used to select all logins. */
 "Select All" = "ເລືອ​ກທັງໝົດ";
 

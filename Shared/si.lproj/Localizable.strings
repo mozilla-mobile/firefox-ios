@@ -1819,6 +1819,24 @@
 /* Username textbox in Authentication prompt */
 "Username" = "පරිශීලක නාමය";
 
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "මෙම බිතුපතෙහි යම් දෙයක් වැරදී ඇත.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "බිතුපත වෙනස් කළ නොහැකි විය";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "ඔබගේ බාගැනීමෙහි යමක් වැරදී ඇත.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "බිතුපත බාගැනීමට නොහැකි විය";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "අවලංගු";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "යළි උත්සාහය";
+
 /* Accessibility label for the main web content view */
 "Web content" = "වියමන අන්තර්ගතය";
 

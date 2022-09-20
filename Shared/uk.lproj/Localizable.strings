@@ -1831,6 +1831,24 @@
 /* Username textbox in Authentication prompt */
 "Username" = "Ім'я користувача";
 
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "Щось пішло не так із цими шпалерами.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "Не вдалося змінити шпалери";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "Під час завантаження щось пішло не так.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "Не вдалося завантажити шпалери";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "Скасувати";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Спробувати знову";
+
 /* Accessibility label for the main web content view */
 "Web content" = "Вебвміст";
 
