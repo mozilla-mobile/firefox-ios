@@ -26,11 +26,7 @@ open class SuggestedSitesCursor: ArrayCursor<SuggestedSite> {
         let sites = DefaultSuggestedSites.sites[locale.identifier] ??
                     DefaultSuggestedSites.sites["default"]! as [SuggestedSiteData]
         let tiles = sites.map({ data -> SuggestedSite in
-            var site = data
-            if let domainMap = DefaultSuggestedSites.urlMap[data.url], let localizedURL = domainMap[locale.identifier] {
-                site.url = localizedURL
-            }
-            return SuggestedSite(data: site)
+            return SuggestedSite(data: data)
         })
         super.init(data: tiles, status: .success, statusMessage: "Loaded")
     }
