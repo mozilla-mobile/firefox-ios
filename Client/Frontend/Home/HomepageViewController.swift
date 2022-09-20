@@ -348,7 +348,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         return presentedViewController == nil && view.alpha == 1
     }
 
-    // MARK: - Jump back in contextual hint
+    // MARK: - Contextual hint
 
     private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
         guard jumpBackInContextualHintViewController.shouldPresentHint(),
@@ -359,52 +359,36 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
             anchor: headerView.titleLabel,
             withArrowDirection: .down,
             andDelegate: self,
-            presentedUsing: presentJumpBackInContextualHint,
+            presentedUsing: { self.presentContextualHint(contextualHintViewController: self.jumpBackInContextualHintViewController) },
             withActionBeforeAppearing: { self.contextualHintPresented(type: .jumpBackIn) },
             andActionForButton: { self.openTabsSettings() })
     }
 
-    @objc private func presentJumpBackInContextualHint() {
-        guard BrowserViewController.foregroundBVC().searchController == nil, canModalBePresented else {
-            jumpBackInContextualHintViewController.stopTimer()
-            return
-        }
-
-        present(jumpBackInContextualHintViewController, animated: true, completion: nil)
-
-        UIAccessibility.post(notification: .layoutChanged, argument: jumpBackInContextualHintViewController)
-    }
-
-    // MARK: - Sync tab contextual hint
-
-    private func prepareSyncedTabOnJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
+    private func prepareSyncedTabContextualHint(onCell cell: SyncedTabCell) {
         guard syncTabContextualHintViewController.shouldPresentHint(),
               featureFlags.isFeatureEnabled(.contextualHintForJumpBackInSyncedTab, checking: .buildOnly)
         else {
-            viewModel.profile.prefs.setBool(false, forKey: PrefsKeys.ContextualHints.jumpBackInSyncedTabConfiguredKey.rawValue)
+            syncTabContextualHintViewController.unconfigure()
             return
         }
 
         syncTabContextualHintViewController.configure(
-            anchor: headerView.titleLabel,
+            anchor: cell.getContextualHintAnchor(),
             withArrowDirection: .down,
             andDelegate: self,
-            presentedUsing: presentSyncTabContextualHint,
-            withActionBeforeAppearing: { self.contextualHintPresented(type: .jumpBackInSyncedTab) },
-            onHintConfigured: {
-                self.viewModel.profile.prefs.setBool(true, forKey: PrefsKeys.ContextualHints.jumpBackInSyncedTabConfiguredKey.rawValue)
-            })
+            presentedUsing: { self.presentContextualHint(contextualHintViewController: self.syncTabContextualHintViewController) },
+            withActionBeforeAppearing: { self.contextualHintPresented(type: .jumpBackInSyncedTab) })
     }
 
-    private func presentSyncTabContextualHint() {
+    @objc private func presentContextualHint(contextualHintViewController: ContextualHintViewController) {
         guard BrowserViewController.foregroundBVC().searchController == nil, canModalBePresented else {
-            syncTabContextualHintViewController.stopTimer()
+            contextualHintViewController.stopTimer()
             return
         }
 
-        present(syncTabContextualHintViewController, animated: true, completion: nil)
+        present(contextualHintViewController, animated: true, completion: nil)
 
-        UIAccessibility.post(notification: .layoutChanged, argument: syncTabContextualHintViewController)
+        UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
     }
 }
 
@@ -522,6 +506,10 @@ private extension HomepageViewController {
                                          object: .firefoxHomepage,
                                          value: .jumpBackInSectionSyncedTabOpened,
                                          extras: extras)
+        }
+
+        viewModel.jumpBackInViewModel.prepareContextualHint = { [weak self] syncedTabCell in
+            self?.prepareSyncedTabContextualHint(onCell: syncedTabCell)
         }
 
         // History highlights

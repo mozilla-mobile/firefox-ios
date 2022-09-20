@@ -57,6 +57,17 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
         }
     }
 
+    func markContextualHintConfiguration(configured: Bool) {
+        switch hintType {
+        case .jumpBackIn:
+            profile.prefs.setBool(configured, forKey: PrefsKeys.ContextualHints.jumpBackInConfiguredKey.rawValue)
+        case .jumpBackInSyncedTab:
+            profile.prefs.setBool(configured, forKey: PrefsKeys.ContextualHints.jumpBackInSyncedTabConfiguredKey.rawValue)
+        default:
+            break
+        }
+    }
+
     func startTimer() {
         var timeInterval: TimeInterval = 0
 

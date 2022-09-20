@@ -198,6 +198,10 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
         accessibilityCustomActions = [showAllSyncedTabsA11yAction, openSyncedTabA11yAction]
     }
 
+    func getContextualHintAnchor() -> UIView {
+        return cardTitle
+    }
+
     @objc func showAllSyncedTabs(_ sender: Any) {
         showAllSyncedTabsAction?()
     }
