@@ -52,20 +52,20 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
 
     var currentTheme: Theme = LightTheme()
     var notificationCenter: NotificationProtocol
-    private var userDefaults: UserDefaults
+    private var userDefaults: UserDefaultsInterface
     private var appDelegate: UIApplicationDelegate?
 
     // MARK: - Init
 
-    init(userDefaults: UserDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!,
+    init(userDefaults: UserDefaultsInterface? = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          appDelegate: UIApplicationDelegate?) {
-        self.userDefaults = userDefaults
+        self.userDefaults = userDefaults ?? UserDefaults.standard
         self.notificationCenter = notificationCenter
         self.appDelegate = appDelegate
 
-        userDefaults.register(defaults: [ThemeKeys.systemThemeIsOn: true,
-                                         ThemeKeys.NightMode.isOn: NSNumber(value: false)])
+        self.userDefaults.register(defaults: [ThemeKeys.systemThemeIsOn: true,
+                                              ThemeKeys.NightMode.isOn: NSNumber(value: false)])
 
         self.currentTheme = generateInitialTheme()
 
