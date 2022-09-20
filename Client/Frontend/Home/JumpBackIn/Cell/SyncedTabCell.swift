@@ -382,6 +382,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             syncedTabTapTargetView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
             itemTitle.leadingAnchor.constraint(equalTo: itemTitleContainer.leadingAnchor, constant: 10),
+            itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             itemTitle.topAnchor.constraint(equalTo: itemTitleContainer.topAnchor, constant: 10)
         ])
 
