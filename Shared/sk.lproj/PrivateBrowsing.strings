@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Otvoriť na novej súkromnej karte";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox si nebude pamätať históriu prehliadania či cookies, ale nové záložky ostanú zachované.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia si nebude pamätať históriu prehliadania či cookies, ale nové záložky ostanú zachované.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Ďalšie informácie";

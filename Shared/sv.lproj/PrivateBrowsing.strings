@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Öppna i ny privat flik";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox kommer inte komma ihåg något av din historik eller kakor, men nya bokmärken kommer att sparas som vanligt.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia kommer inte komma ihåg något av din historik eller kakor, men nya bokmärken kommer att sparas som vanligt.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Lär dig mer";

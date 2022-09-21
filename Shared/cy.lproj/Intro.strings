@@ -20,13 +20,13 @@
 "Intro.Slides.Fast.Search.Title" = "Chwilio Cyflym";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Dewch â nodau tudalen, hanes, a chyfrineiriau i Firefox ar y ddyfais hon.";
+"Intro.Slides.Firefox.Account.Sync.Description" = "Dewch â nodau tudalen, hanes, a chyfrineiriau i Ecosia ar y ddyfais hon.";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Cydweddu Firefox Rhwng Dyfeisiau";
+"Intro.Slides.Firefox.Account.Sync.Title" = "Cydweddu Ecosia Rhwng Dyfeisiau";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Defnyddiwch unrhyw ap e-bost - nid dim ond Mail - gyda Firefox.";
+"Intro.Slides.Mail.Description" = "Defnyddiwch unrhyw ap e-bost - nid dim ond Mail - gyda Ecosia.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "Mae gennych chi ddewisiadau… e-bost";
@@ -38,7 +38,7 @@
 "Intro.Slides.Private.Title" = "Pori fel petai neb yn eich gwylio";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Diogelwch eich mewngofnodi a'ch data ym mhobman rydych chi'n defnyddio Firefox.";
+"Intro.Slides.Safe.Sync.Description" = "Diogelwch eich mewngofnodi a'ch data ym mhobman rydych chi'n defnyddio Ecosia.";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Title" = "Sync Diogel";
@@ -59,7 +59,7 @@
 "Intro.Slides.Welcome.Description.v2" = "Cyflym, preifat, ac o'ch plaid.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Croeso i Firefox";
+"Intro.Slides.Welcome.Title.v2" = "Croeso i Ecosia";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Cychwyn Pori";

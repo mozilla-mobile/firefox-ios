@@ -207,7 +207,7 @@
 "Could not load page." = "ପୃଷ୍ଠା ଲୋଡ କରିପାରିଲା ନାହିଁ ।";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "IOS 13 ବ୍ୟବହାରକାରୀଙ୍କ ପାଇଁ, Firefox ବର୍ତ୍ତମାନ ସ୍ୱୟଂଚାଳିତ ଭାବରେ ଏକ କଳା ଥିମ୍ କୁ ବଦଳିଯାଏ ଯେତେବେଳେ ଆପଣଙ୍କର ଫୋନ୍ ଡାର୍କ ମୋଡ୍ ରେ ସେଟ୍ ହୋଇଯାଏ | ଏହି ଆଚରଣ ପରିବର୍ତ୍ତନ କରିବାକୁ, ସେଟିଂସମୂହ> ଥିମ୍ କୁ ଯାଆନ୍ତୁ";
+"CoverSheet.v22.DarkMode.Description" = "IOS 13 ବ୍ୟବହାରକାରୀଙ୍କ ପାଇଁ, Ecosia ବର୍ତ୍ତମାନ ସ୍ୱୟଂଚାଳିତ ଭାବରେ ଏକ କଳା ଥିମ୍ କୁ ବଦଳିଯାଏ ଯେତେବେଳେ ଆପଣଙ୍କର ଫୋନ୍ ଡାର୍କ ମୋଡ୍ ରେ ସେଟ୍ ହୋଇଯାଏ | ଏହି ଆଚରଣ ପରିବର୍ତ୍ତନ କରିବାକୁ, ସେଟିଂସମୂହ> ଥିମ୍ କୁ ଯାଆନ୍ତୁ";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "ଡାର୍କ ଥିମ୍ ବର୍ତ୍ତମାନ ଏକ ଡାର୍କ କୀବୋର୍ଡ୍ ଏବଂ ଡାର୍କ ସ୍ପ୍ଲାସ୍ ସ୍କ୍ରିନ୍ ଅନ୍ତର୍ଭୁକ୍ତ କରେ";
@@ -263,7 +263,7 @@
 "Downloads.CancelDialog.Title" = "ଡାଉନଲୋଡ଼ ବାତିଲ କରନ୍ତୁ";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "ଡାଉନଲୋଡ଼ଟି ଏଯାଏ Firefoxରେ ଆସିନାହିଁ ।";
+"Downloads.Error.Message" = "ଡାଉନଲୋଡ଼ଟି ଏଯାଏ Ecosiaରେ ଆସିନାହିଁ ।";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "ଆହରଣ ବାତିଲ ହେଲା";
@@ -341,7 +341,7 @@
 "FxA.AccountVerificationRequired" = "ଖାତା ଯାଞ୍ଚ ଆବଶ୍ୟକ";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "ଆପଣଙ୍କୁ %@ ଯାଞ୍ଚ କରିବାକୁ ପଡିବ | Firefoxରୁ ଯାଞ୍ଚ ଲିଙ୍କ ପାଇଁ ଆପଣଙ୍କର ଇମେଲ୍ ଯାଞ୍ଚ କରନ୍ତୁ";
+"FxA.AccountVerificationRequiredSurface" = "ଆପଣଙ୍କୁ %@ ଯାଞ୍ଚ କରିବାକୁ ପଡିବ | Ecosiaରୁ ଯାଞ୍ଚ ଲିଙ୍କ ପାଇଁ ଆପଣଙ୍କର ଇମେଲ୍ ଯାଞ୍ଚ କରନ୍ତୁ";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "ଅନ୍ୟ ଏକ ଉପକରଣ ସଂଯୋଗ କରନ୍ତୁ";
@@ -539,7 +539,7 @@
 "LoginsList.Title" = "SAVED LOGINS";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ଲାଗୁଛି ଗତଥର Firefox ବନ୍ଦ ହୋଇଗଲା । ପୁରୁଣା ଟ୍ୟାବ ଫେରାଇବାକୁ ଚାହାନ୍ତି କି?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ଲାଗୁଛି ଗତଥର Ecosia ବନ୍ଦ ହୋଇଗଲା । ପୁରୁଣା ଟ୍ୟାବ ଫେରାଇବାକୁ ଚାହାନ୍ତି କି?";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -755,7 +755,7 @@
 "Settings.DataManagement.SearchLabel" = "ସ୍କ୍ରିପ୍ଟଗୁଡ଼ିକୁ ଛାଣନ୍ତୁ";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox ଆପଣଙ୍କ ଆକାଉଣ୍ଟ ସହ ସିଙ୍କ କରିବା ବନ୍ଦ କରିଦେଲେ ମଧ୍ୟ ଆପଣଙ୍କ ଏହି ଡିଭାଇସରେ ବ୍ରାଉଜିଂ ଡାଟା ଲିଭାଇବ ନାହିଁ ।";
+"Settings.Disconnect.Body" = "Ecosia ଆପଣଙ୍କ ଆକାଉଣ୍ଟ ସହ ସିଙ୍କ କରିବା ବନ୍ଦ କରିଦେଲେ ମଧ୍ୟ ଆପଣଙ୍କ ଏହି ଡିଭାଇସରେ ବ୍ରାଉଜିଂ ଡାଟା ଲିଭାଇବ ନାହିଁ ।";
 
 /* Cancel action button in alert when user is prompted for disconnect */
 "Settings.Disconnect.CancelButton" = "ବାତିଲ କରନ୍ତୁ";
@@ -801,7 +801,7 @@
 "Settings.NewTab.Option.Bookmarks" = "ଚିହ୍ନିତ ସ୍ଥାନଗୁଡ଼ିକ";
 
 /* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Firefox କୁ ଇଚ୍ଛାମୂତାବକ ସଜାନ୍ତୁ";
+"Settings.NewTab.Option.CustomizeTitle" = "Ecosia କୁ ଇଚ୍ଛାମୂତାବକ ସଜାନ୍ତୁ";
 
 /* Option in settings to turn off history in the highlights section */
 "Settings.NewTab.Option.HighlightsHistory" = "ପରିଦର୍ଶିତ";

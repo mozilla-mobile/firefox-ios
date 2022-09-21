@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "იხილეთ, როგორ";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "შედეგად ბმულებს საიტებიდან, ელფოსტიდან, წერილებიდან, პირდაპირ გახსნის Firefox.";
+"DefaultBrowserCard.Description" = "შედეგად ბმულებს საიტებიდან, ელფოსტიდან, წერილებიდან, პირდაპირ გახსნის Ecosia.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "აქციეთ მთავარ ბრაუზერად";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. შეეხეთ ნაგულისხმევ ბრაუზერს";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. აირჩიეთ Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. აირჩიეთ Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "ნაგულისხმევი ბრაუზერი";

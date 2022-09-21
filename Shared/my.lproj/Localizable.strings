@@ -347,7 +347,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = " Firefox ပင်မစာမျက်နှာ";
+"Firefox.HomePage.Title" = " Ecosia ပင်မစာမျက်နှာ";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "လွှဲပြောင်းပို့ရန်";
@@ -359,13 +359,13 @@
 "FxA.AccountVerificationRequired" = "အကောင့် အတည်ပြုခြင်း လိုအပ်သည်";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "%@ ကို အတည်ပြုရန် လိုအပ်သည်။ Firefox မှ အတည်ပြုလင့်ခ်အတွက် အီးမေးလ်ကို စစ်ဆေးပါ။";
+"FxA.AccountVerificationRequiredSurface" = "%@ ကို အတည်ပြုရန် လိုအပ်သည်။ Ecosia မှ အတည်ပြုလင့်ခ်အတွက် အီးမေးလ်ကို စစ်ဆေးပါ။";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "အခြား ကိရိယာ တပ်ပါ";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox အကောင့်";
+"FxA.FirefoxAccount" = "Ecosia အကောင့်";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "အကောင့်နှင့် ကိရိယာများကို စီမံရန်";
@@ -377,13 +377,13 @@
 "FxA.OpenSyncPreferences" = "ချိတ်ဆက် အပြင်အဆင် အားဖွင့်";
 
 /* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "Firefox.com/pair တွင်ဖော်ပြထားသော QR ကုဒ်ကိုစစ်ဆေးပါ";
+"fxa.qr-scanning-view.instructions" = "Ecosia.com/pair တွင်ဖော်ပြထားသော QR ကုဒ်ကိုစစ်ဆေးပါ";
 
 /* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
 "FxA.RemoveAccount" = "ဖယ်ရှားပါ";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "တခြား အသုံးပြုသူ အဖြစ်ဝင်ရောက်ရန် ဤကိရိယာနှင့် ဆက်စပ်သော Firefox အကောင့်ကို ဖယ်ရှားပါ။";
+"FxA.RemoveAccountAlertMessage" = "တခြား အသုံးပြုသူ အဖြစ်ဝင်ရောက်ရန် ဤကိရိယာနှင့် ဆက်စပ်သော Ecosia အကောင့်ကို ဖယ်ရှားပါ။";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "အကောင့်ကို ဖယ်ရှားပါ";
@@ -395,7 +395,7 @@
 "fxa.signin.camera-signin" = "သင်၏ကင်မရာဖြင့်ဝင်ပါ";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "<b>https://firefox.com/pair</b> ကိုသွားပြီး သင့်ကွန်ပျူတာတွင် Firefox ဖွင့်ပါ။";
+"fxa.signin.qr-link-instruction" = "<b>https://Ecosia.com/pair</b> ကိုသွားပြီး သင့်ကွန်ပျူတာတွင် Ecosia ဖွင့်ပါ။";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "စကင်ဖတ်ရန်အဆင်သင့်";
@@ -419,7 +419,7 @@
 "FxA.TakeYourWebWithYou" = "ဝဘ်ကို သင်နှင့်အတူ ရှိနေစေပါ";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync သည် %@ ကို ချိတ်ဆက်ထားပြီးပြီ";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync သည် %@ ကို ချိတ်ဆက်ထားပြီးပြီ";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync ကို ချိတ်ဆက်ထားသည်";
@@ -428,7 +428,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ သည် ချိတ်ဆက်မှုကို ဖြုတ်ပြီးပြီ။";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "ယခုကိရိယာသည် Firefox Sync ထံသို့ ချိတ်ဆက်မှုကို အောင်မြင်စွာ ဖြုတ်ပြီးပြီ။";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "ယခုကိရိယာသည် Ecosia Sync ထံသို့ ချိတ်ဆက်မှုကို အောင်မြင်စွာ ဖြုတ်ပြီးပြီ။";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync ကို ချိတ်ဆက်မထားပါ";
@@ -437,7 +437,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync ကို ချိတ်ဆက်မထားပါ";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ကိရိယာသည် Firefox Sync သို့ ချိတ်ဆက်မထားပါ";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ကိရိယာသည် Ecosia Sync သို့ ချိတ်ဆက်မထားပါ";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "အခြားကိရိယာများမှ သင်ဖွင့်ထားသည့်တပ်ဗ်များ၊ စာမှတ်များနှင့် စကားဝှက်များကို ရယူပါ။";
@@ -485,7 +485,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "ချိက်ဆက်ခြင်းကို ဖွင့်ပြီး အခြားကိရိယာများမှ တပ်ဗ်များကို ကြည့်ပါ";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "မှတ်တမ်း";
@@ -679,10 +679,10 @@
 "Menu.EnhancedTrackingProtectionOn.Title" = "ဤဆိုက်အတွက် ခြေရာခံကာကွယ်ရေးများကိုဖွင့်ပါ။";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox သည် cross-site tracker များ၊ social tracker များ၊ cryptominers နှင့် fingerprinters များကိုပိတ်ပင်ထားသည်။";
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Ecosia သည် cross-site tracker များ၊ social tracker များ၊ cryptominers နှင့် fingerprinters များကိုပိတ်ပင်ထားသည်။";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox သည် cross-site tracker များ၊ social tracker များ၊ cryptominers နှင့် fingerprinters များကိုပိတ်ပင်ထားသည်။";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Ecosia သည် cross-site tracker များ၊ social tracker များ၊ cryptominers နှင့် fingerprinters များကိုပိတ်ပင်ထားသည်။";
 
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "ရပ်ပါ";
@@ -721,7 +721,7 @@
 "Menu.TrackingProtection.BlockedTitle" = "ပိတ်ဆို့ထားသည်";
 
 /* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "ဤစာမျက်နှာတွင် Firefox နှင့်သက်ဆိုင်သော tracker များကိုရှာမတွေ့ပါ။";
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "ဤစာမျက်နှာတွင် Ecosia နှင့်သက်ဆိုင်သော tracker များကိုရှာမတွေ့ပါ။";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "ကာကွယ်မှုဆိုင်ရာ အပြင်အဆင်များ";
@@ -736,7 +736,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "လူမှုဆိုင်ရာ ခြေရာခံကိရိယာများ";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox သည် သင့်ရှာဖွေမှုကို ခြေရာခံနိုင်သည့် လက်ရှိစာမျက်နှာ၏ အစိတ်အပိုင်းတစ်ချို့ကို ပိတ်ထားသည်။";
+"Menu.TrackingProtectionBlocking.Description" = "Ecosia သည် သင့်ရှာဖွေမှုကို ခြေရာခံနိုင်သည့် လက်ရှိစာမျက်နှာ၏ အစိတ်အပိုင်းတစ်ချို့ကို ပိတ်ထားသည်။";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
 "Menu.TrackingProtectionBlockingDisabled.Description" = "အွန်လိုင်းနောက်ယောက်ခံ ကိရိယာများကို ပိတ်ပင်ပါ";
@@ -851,7 +851,7 @@
 "Open Tabs" = "တပ်ဗ်များကို ဖွင့်";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "လိပ်စာ မှားယွင်းနေသောကြောင့် Firefox သည် စာမျက်နှာကို မဖွင့်နိုင်ပါ။";
+"OpenURL.Error.Message" = "လိပ်စာ မှားယွင်းနေသောကြောင့် Ecosia သည် စာမျက်နှာကို မဖွင့်နိုင်ပါ။";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "စာမျက်နှာကို မဖွင့်နိုင်ပါ";
@@ -866,19 +866,19 @@
 "Password" = "စကားဝှက်";
 
 /* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "သင့် Firefox Account ထံမှ သက်သေခံများ ရယူထားခြင်းမရှိပါ";
+"PasswordAutoFill.NoPasswordsFoundTitle" = "သင့် Ecosia Account ထံမှ သက်သေခံများ ရယူထားခြင်းမရှိပါ";
 
 /* Header for the list of credentials table */
 "PasswordAutoFill.PasswordsListTitle" = "ရနိုင်သော သက်သေခံများ၊";
 
 /* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox သက်သေခံများ";
+"PasswordAutoFill.SectionTitle" = "Ecosia သက်သေခံများ";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ရုပ်ပုံများကို သင့် Camera Roll တွင် သိမ်းနိုင်စေမည်။";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "သင့် Photos များကို Firefox က ရယူအသုံးပြုခွင့် ရှိချင်သည်";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "သင့် Photos များကို Ecosia က ရယူအသုံးပြုခွင့် ရှိချင်သည်";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "ပိတ်";
@@ -950,7 +950,7 @@
 "ScanQRCode.InvalidDataError.Message" = "အချက်အလက်မှားနေသည်";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "ကိရိယာရှိ ကင်မရာကို အသုံးပြုရန် Firefox အား ‘Settings’ -> ‘Privacy’ -> ‘Camera’ မှတဆင့် ခွင့်ပြုပေးပါ။";
+"ScanQRCode.PermissionError.Message" = "ကိရိယာရှိ ကင်မရာကို အသုံးပြုရန် Ecosia အား ‘Settings’ -> ‘Privacy’ -> ‘Camera’ မှတဆင့် ခွင့်ပြုပေးပါ။";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR ကုဒ်ဖတ်ရန်";
@@ -1031,13 +1031,13 @@
 "SendTo.NavBar.Title" = "တပ်ဗ်ကို ပို့ရန်";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Firefox Account ကို Sync ရန် သင့်တွင် ချိတ်ဆက်ထားသော အခြား ကိရိယာများ မရှိပါ။";
+"SendTo.NoDevicesFound.Message" = "Ecosia Account ကို Sync ရန် သင့်တွင် ချိတ်ဆက်ထားသော အခြား ကိရိယာများ မရှိပါ။";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Firefox ကို ကျေးဇူးပြု၍ ဖွင့်ပါ၊ အပြင်အဆင်များသို့ သွားပါ၊ ပြီးနောက် ဆက်လက်ဆောင်ရွက်ရန် ဝင်ရောက်ပါ။";
+"SendTo.NotSignedIn.Message" = "Ecosia ကို ကျေးဇူးပြု၍ ဖွင့်ပါ၊ အပြင်အဆင်များသို့ သွားပါ၊ ပြီးနောက် ဆက်လက်ဆောင်ရွက်ရန် ဝင်ရောက်ပါ။";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "သင့် Firefox Account သို့ ဝင်ရောက်ထားခြင်း မရှိပါ။";
+"SendTo.NotSignedIn.Title" = "သင့် Ecosia Account သို့ ဝင်ရောက်ထားခြင်း မရှိပါ။";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "ပို့ရန်";
@@ -1064,7 +1064,7 @@
 "SentTab.NoTabArrivingNotification.body" = "စတင်ရန် တို့ထိပါ";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "ကြည့်ရန်";
@@ -1124,7 +1124,7 @@
 "Settings.DataManagement.Title" = "အချက်အလက် စီမံခန့်ခွဲမှု";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox သည် အကောင့်နှင့် အချက်အလက်များ ထပ်တူပြုခြင်းကို ရပ်တန့်ပါမည်။ သို့သော် ယခုကိရိယာရှိ သင်၏ မည်သည့်အချက်အလက်ကိုမျှ ဖျက်ပစ်မည် မဟုတ်ပါ။";
+"Settings.Disconnect.Body" = "Ecosia သည် အကောင့်နှင့် အချက်အလက်များ ထပ်တူပြုခြင်းကို ရပ်တန့်ပါမည်။ သို့သော် ယခုကိရိယာရှိ သင်၏ မည်သည့်အချက်အလက်ကိုမျှ ဖျက်ပစ်မည် မဟုတ်ပါ။";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Sync နှင့် ချိတ်ဆက်ဖြုတ်ရန်";
@@ -1197,7 +1197,7 @@
 "Settings.FxA.Sync.SectionName" = "Sync အပြင်အဆင်များ";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox အကောင့်";
+"Settings.FxA.Title" = "Ecosia အကောင့်";
 
 /* General settings section title */
 "Settings.General.SectionName" = "အထွေထွေ";
@@ -1248,10 +1248,10 @@
 "Settings.NewTab.Option.CustomizeFooter" = "သင်အလည်ပတ်များဆုံး ဝဘ်ဆိုက်များ";
 
 /* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Firefox အဖွင့်စာမျက်နှာ ကို စိတ်ကြိုက်ပြင်ဆင်ရန်";
+"Settings.NewTab.Option.CustomizeTitle" = "Ecosia အဖွင့်စာမျက်နှာ ကို စိတ်ကြိုက်ပြင်ဆင်ရန်";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox အဖွင့်စာမျက်နှာ";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia အဖွင့်စာမျက်နှာ";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
 "Settings.NewTab.Option.HighlightsBookmarks" = "လတ်တလော စာမှတ်များ";
@@ -1287,7 +1287,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "တက်ပ်အသစ်ဖွင့်သည့်အခါတက်လာမည့်အရာကိုရွေးချယ်ပါ";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Firefox ကို ဖွင့်သည့်အခါ";
+"Settings.OfferClipboardBar.Status" = "Ecosia ကို ဖွင့်သည့်အခါ";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "ကူးယူထားသော လင့်ခ်များကို ဖွင့်ရန် မေးမြန်းပါ";
@@ -1311,7 +1311,7 @@
 "Settings.SendUsage.Link" = "ပိုမိုလေ့လာရန်။";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla သည် လူတိုင်းအတွက် Firefox ကို ပေးစွမ်းရန်နှင့် တိုးတက်ကောင်းမွန်စေရန်အတွက်သာ ကောက်ခံမှုပြုခြင်း ဖြစ်ပါသည်။";
+"Settings.SendUsage.Message" = "Ecosia သည် လူတိုင်းအတွက် Ecosia ကို ပေးစွမ်းရန်နှင့် တိုးတက်ကောင်းမွန်စေရန်အတွက်သာ ကောက်ခံမှုပြုခြင်း ဖြစ်ပါသည်။";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "အသုံးပြုမှုဆိုင်ရာ အချက်အလက်များကို ပေးပို့ရန်";
@@ -1329,7 +1329,7 @@
 "Settings.Siri.OpenTabShortcut" = "တပ်ဗ်အသစ် ဖွင့်ပါ";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Siri မှတဆင့် Firefox ကို မြန်မြန်ဆန်ဆန် ဖွင့်ရန် Siri နည်းလမ်းတိုများကို အသုံးပြုပါ";
+"Settings.Siri.SectionDescription" = "Siri မှတဆင့် Ecosia ကို မြန်မြန်ဆန်ဆန် ဖွင့်ရန် Siri နည်းလမ်းတိုများကို အသုံးပြုပါ";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri နည်းလမ်းတိုများ";
@@ -1344,7 +1344,7 @@
 "Settings.TrackingProtection.Alert.Title" = "ကြိုတင်အသိပေးချက်!";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "သင့်ရှာဖွေမှုကို ခြေရာခံကောင်းခံနိုင်သည့် ဝဘ်အဲလိမန့်ကို Firefox က ပိတ်ရမည့်စာရင်းကို သင်ရွေးချယ်နိုင်ပါသည်။";
+"Settings.TrackingProtection.BlockListsHeader" = "သင့်ရှာဖွေမှုကို ခြေရာခံကောင်းခံနိုင်သည့် ဝဘ်အဲလိမန့်ကို Ecosia က ပိတ်ရမည့်စာရင်းကို သင်ရွေးချယ်နိုင်ပါသည်။";
 
 /* Explanation of basic mode. */
 "Settings.TrackingProtection.Info.BasicTitle" = "လုံခြုံရေးနှင့် စွမ်းဆောင်ရည်ကို ဟန်ချက်ညီစေရန် ပြုလုပ်ထားသည်။";
@@ -1452,16 +1452,16 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "နောက်ကွယ်တွင် ဆောင်ရွက်ပါ";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox တွင် ဆောင်ရွက်နေသည်";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ecosia တွင် ဆောင်ရွက်နေသည်";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefox နှင့် ဖွင့်ပါ";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ecosia နှင့် ဖွင့်ပါ";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
 "ShareExtension.OpenInPrivateModeAction.Title" = "သီးသန့်ပုံစံနှင့် ဖွင့်ပါ";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefox တွင် ရှာပါ";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ecosia တွင် ရှာပါ";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "ရှာဖွေရေး အကြံပြုချက်များကို ပြပါ";
@@ -1648,13 +1648,13 @@
 "UIMenuItem.PasteGo" = "ကူးယူပြီးနောက်သွားမည်";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Firefox ဖြင့် ရှာပါ";
+"UIMenuItem.SearchWithFirefox" = "Ecosia ဖြင့် ရှာပါ";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "မဖတ်";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "ချိတ်ဆက်ရန် Firefox ကို အဆင့်မြှင့်ပါ";
+"Upgrade Firefox to connect" = "ချိတ်ဆက်ရန် Ecosia ကို အဆင့်မြှင့်ပါ";
 
 /* Debug option */
 "Use stage servers" = "ဆာဗာကိုသုံးပါ";

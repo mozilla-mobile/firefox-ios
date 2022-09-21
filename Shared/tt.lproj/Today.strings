@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "Яңа эзләү";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Өй экранына Firefox ярлыкларын өстәгез.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Өй экранына Ecosia ярлыкларын өстәгез.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Копияләнгән сылтамага күчү";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "Хосусый табта эзләү";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Firefox-та эзләү";
+"TodayWidget.NewSearchButtonLabelV1" = "Ecosia-та эзләү";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Яңа эзләү";
@@ -56,10 +56,10 @@
 "TodayWidget.NoOpenTabsLabelV2" = "Ачык таблар юк";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox-ны ачу";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia-ны ачу";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Pocket тарафыннан тәкъдим ителә";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - Pocket тарафыннан тәкъдим ителә";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Pocket тарафыннан тәкъдим ителә";
@@ -68,22 +68,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Хосусый эзләү";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Өй экранына өстәү өчен Firefox ярлыгын сайлагыз.";
+"TodayWidget.QuickActionDescription" = "Өй экранына өстәү өчен Ecosia ярлыгын сайлагыз.";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "Тиз гамәл";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Өй экранына Firefox ярлыгын өстәгез. Виджетны өстәгәннән соң, аны үзгәртү өчен өстенә басып торыгыз һәм бүтән бер ярлык сайлагыз.";
+"TodayWidget.QuickActionGalleryDescription" = "Өй экранына Ecosia ярлыгын өстәгез. Виджетны өстәгәннән соң, аны үзгәртү өчен өстенә басып торыгыз һәм бүтән бер ярлык сайлагыз.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Тиз гамәлләр";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox ярлыклары";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia ярлыклары";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - Тиз гамәлләр";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia - Тиз гамәлләр";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "Ачык табларыгызга турыдан-туры өй экраныннан ирешегез.";
@@ -98,13 +98,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "Ачык табларыгызга ярлыклар өстәгез.";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - Ачык таблар";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - Ачык таблар";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Firefox-та эзләү";
+"TodayWidget.SearchInFirefoxTitle" = "Ecosia-та эзләү";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox-та\nэзләү";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia-та\nэзләү";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Хосусый\nтабта эзләү";
@@ -116,7 +116,7 @@
 "TodayWidget.TopSitesGalleryTitle" = "Төп сайтлар";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - Төп сайтлар";
+"TodayWidget.TopSitesSubLabel" = "Ecosia - Төп сайтлар";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Күбрәк карау";

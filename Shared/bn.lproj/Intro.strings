@@ -20,10 +20,10 @@
 "Intro.Slides.Fast.Search.Title" = "দ্রুত অনুসন্ধান";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "এই ডিভাইসে FIrefox এ বুকমার্ক, ইতিহাস এবং পাসওয়ার্ড আনুন।";
+"Intro.Slides.Firefox.Account.Sync.Description" = "এই ডিভাইসে Ecosia এ বুকমার্ক, ইতিহাস এবং পাসওয়ার্ড আনুন।";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "ডিভাইসগুলির মধ্যে Firefox সিঙ্ক করুন";
+"Intro.Slides.Firefox.Account.Sync.Title" = "ডিভাইসগুলির মধ্যে Ecosia সিঙ্ক করুন";
 
 /* Description for the 'Mail' panel in the First Run tour. */
 "Intro.Slides.Mail.Description" = "ফায়ারফক্সের সাথে - শুধুমাত্র মেইল নয় - যেকোনো ইমেইল অ্যাপ ব্যবহার করুন।";
@@ -38,7 +38,7 @@
 "Intro.Slides.Private.Title" = "ব্রাউজ করুন এমন ভাবে, যেনো কেউ দেখছে না।";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "আপনি Firefox যেখানেই ব্যবহার করুন না কেন আপনার লগইন এবং ডেটাকে সুরক্ষিত করুন।";
+"Intro.Slides.Safe.Sync.Description" = "আপনি Ecosia যেখানেই ব্যবহার করুন না কেন আপনার লগইন এবং ডেটাকে সুরক্ষিত করুন।";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Title" = "নিরাপদ সিঙ্ক";
@@ -59,7 +59,7 @@
 "Intro.Slides.Welcome.Description.v2" = "দ্রুত, গোপনীয়, এবং আপনার পক্ষে।";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Firefox এ আপনাকে স্বাগতম";
+"Intro.Slides.Welcome.Title.v2" = "Ecosia এ আপনাকে স্বাগতম";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "ব্রাউজিং করা শুরু করুন";

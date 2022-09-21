@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Meer info";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Koppelingen van websites, e-mail en berichten automatisch in Firefox openen.";
+"DefaultBrowserCard.Description" = "Koppelingen van websites, e-mail en berichten automatisch in Ecosia openen.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Uw standaardbrowser wisselen";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Tik op Standaard browser-app";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Selecteer Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Selecteer Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Standaard browser-app";

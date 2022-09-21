@@ -11,7 +11,7 @@
 "Intro.Slides.Fast.Search.Title" = "Mabilis na Paghahanap";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Gamitin ang anumang email app - hindi lamang Mail - may Firefox.";
+"Intro.Slides.Mail.Description" = "Gamitin ang anumang email app - hindi lamang Mail - may Ecosia.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "Nakakuha ka ng mga mail… opsyon";
@@ -41,7 +41,7 @@
 "Intro.Slides.Welcome.Description.v2" = "Mabilis, pribado, at nasa tabi mo.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Maligayang pagdating sa Firefox";
+"Intro.Slides.Welcome.Title.v2" = "Maligayang pagdating sa Ecosia";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Simulang mag-Browse";

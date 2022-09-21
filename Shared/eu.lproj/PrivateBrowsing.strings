@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Ireki fitxa pribatu berrian";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefoxek ez du historia edo cookierik gogoratuko baina laster-markak gorde egingo dira.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosiak ez du historia edo cookierik gogoratuko baina laster-markak gorde egingo dira.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Argibide gehiago";

@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "بحث جديد";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "أضف اختصارات Firefox إلى شاشة البداية.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "أضف اختصارات Ecosia إلى شاشة البداية.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "انتقل إلى الرابط المنسوخ";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "ابحث في لسان خاص";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "ابحث في Firefox";
+"TodayWidget.NewSearchButtonLabelV1" = "ابحث في Ecosia";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "بحث جديد";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "لا ألسنة مفتوحة";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "افتح Firefox";
+"TodayWidget.OpenFirefoxLabel" = "افتح Ecosia";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "اكتشف القصص الآسرة والداعية للتأمل من كل أرجاء الوِب، اختارها Pocket بعناية.";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "متصفّح Firefox - يُوصي به Pocket";
+"TodayWidget.PocketWidgetSubLabel" = "متصفّح Ecosia - يُوصي به Pocket";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "يُوصي به Pocket";
@@ -71,22 +71,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "بحث خاص";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "اختر اختصار Firefox لإضافته إلى شاشة البداية.";
+"TodayWidget.QuickActionDescription" = "اختر اختصار Ecosia لإضافته إلى شاشة البداية.";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "إجراء سريع";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "أضف اختصار Firefox إلى الشاشة الرئيسية. المس الأداة بعد أن تُضاف مدةً لتعديلها، ثمّ اختر اختصارًا آخر.";
+"TodayWidget.QuickActionGalleryDescription" = "أضف اختصار Ecosia إلى الشاشة الرئيسية. المس الأداة بعد أن تُضاف مدةً لتعديلها، ثمّ اختر اختصارًا آخر.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "إجراءات سريعة";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "اختصارات Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "اختصارات Ecosia";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "‏Firefox - إجراءات سريعة";
+"TodayWidget.QuickActionsSubLabel" = "‏Ecosia - إجراءات سريعة";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "توصّل إلى الألسنة المفتوحة من الشاشة الرئيسية مباشرةً.";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "أضِف اختصارات إلى الألسنة المفتوحة.";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "‏Firefox - الألسنة المفتوحة";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "‏Ecosia - الألسنة المفتوحة";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "ابحث في Firefox";
+"TodayWidget.SearchInFirefoxTitle" = "ابحث في Ecosia";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "ابحث في Firefox";
+"TodayWidget.SearchInFirefoxV2" = "ابحث في Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "ابحث في لسان خاص";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "اختصارات المواقع";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "‏Firefox - المواقع الأكثر زيارة";
+"TodayWidget.TopSitesSubLabel" = "‏Ecosia - المواقع الأكثر زيارة";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "‏Firefox - اختصارات المواقع";
+"TodayWidget.TopSitesSubLabel2" = "‏Ecosia - اختصارات المواقع";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "اعرض المزيد";

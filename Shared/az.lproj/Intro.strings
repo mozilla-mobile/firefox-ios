@@ -11,7 +11,7 @@
 "Intro.Slides.Fast.Search.Title" = "Sürətli Axtarış";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "İstənilən e-poçt tətbiqini işlədin - sadəcə Mail-i deyil - Firefox ilə.";
+"Intro.Slides.Mail.Description" = "İstənilən e-poçt tətbiqini işlədin - sadəcə Mail-i deyil - Ecosia ilə.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "E-poçt seçimləri";
@@ -38,7 +38,7 @@
 "Intro.Slides.Welcome.Description.v2" = "Sürətli, məxfi və sizin tərəfinizdə.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Firefox-a Xoş Gəldiniz";
+"Intro.Slides.Welcome.Title.v2" = "Ecosia-a Xoş Gəldiniz";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Səyahətə Başla";

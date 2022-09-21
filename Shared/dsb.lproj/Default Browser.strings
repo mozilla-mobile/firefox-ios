@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Zgóńśo, kak to źo";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Nastajśo wótkaze z websedłow, mejlkow a powěsćow, aby se awtomatiski we Firefox wócynili.";
+"DefaultBrowserCard.Description" = "Nastajśo wótkaze z websedłow, mejlkow a powěsćow, aby se awtomatiski we Ecosia wócynili.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Standardny wobglědowak změniś";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Standardne nałoženje wobglědowaka pótusniś";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Firefox wubraś";
+"DefaultBrowserOnboarding.Description3" = "3. Ecosia wubraś";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Standardne nałoženje wobglědowaka";

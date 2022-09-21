@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "新建搜索";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "在主屏幕添加 Firefox 快捷指令。";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "在主屏幕添加 Ecosia 快捷指令。";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "打开已复制的链接";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "在隐私标签页中搜索";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "在 Firefox 中搜索";
+"TodayWidget.NewSearchButtonLabelV1" = "在 Ecosia 中搜索";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "新建搜索";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "没有打开的标签页";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "打开 Firefox";
+"TodayWidget.OpenFirefoxLabel" = "打开 Ecosia";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "品读由 Pocket 精选的有趣且发人深省的文章。";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Pocket 推荐";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - Pocket 推荐";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Pocket 推荐";
@@ -71,22 +71,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "隐私搜索";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "选择要添加至主屏幕的 Firefox 快捷指令。";
+"TodayWidget.QuickActionDescription" = "选择要添加至主屏幕的 Ecosia 快捷指令。";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "快捷操作";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "将 Firefox 快捷指令添加至主屏幕。小组件添加后，轻触并按住即可进行编辑，或选择其他快捷指令。";
+"TodayWidget.QuickActionGalleryDescription" = "将 Ecosia 快捷指令添加至主屏幕。小组件添加后，轻触并按住即可进行编辑，或选择其他快捷指令。";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "快捷操作";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox 快捷指令";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia 快捷指令";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - 快速操作";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia - 快速操作";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "直接从主屏幕上访问打开的标签页。";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "添加“打开的标签页”快捷指令。";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - 打开的标签页";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - 打开的标签页";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "在 Firefox 中搜索";
+"TodayWidget.SearchInFirefoxTitle" = "在 Ecosia 中搜索";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "在 Firefox 中搜索";
+"TodayWidget.SearchInFirefoxV2" = "在 Ecosia 中搜索";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "在隐私标签页中搜索";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "网站快捷方式";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - 常用网站";
+"TodayWidget.TopSitesSubLabel" = "Ecosia - 常用网站";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - 网站快捷指令";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia - 网站快捷指令";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "查看更多";

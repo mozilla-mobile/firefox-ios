@@ -2,7 +2,7 @@
 "DefaultBrowserCard.Button" = "Ir ta los achustes";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Achusta los vinclos de pachinas web, correus y mensaches ta ubrir-se automaticament en Firefox.";
+"DefaultBrowserCard.Description" = "Achusta los vinclos de pachinas web, correus y mensaches ta ubrir-se automaticament en Ecosia.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Cambiar lo tuyo navegador por defecto";

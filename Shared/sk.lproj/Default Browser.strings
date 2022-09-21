@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Ďalšie informácie";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Nastavte si automatické otváranie webových stránok, e-mailov a správ vo Firefoxe.";
+"DefaultBrowserCard.Description" = "Nastavte si automatické otváranie webových stránok, e-mailov a správ vo Ecosia.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Zmeňte svoj predvolený prehliadač";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Ťuknite na možnosť Predvolený prehliadač";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Vyberte Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Vyberte Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Predvolený prehliadač";

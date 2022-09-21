@@ -446,7 +446,7 @@
 "FxA.OpenSyncPreferences" = "بازکردن ترجیحات همگام سازی";
 
 /* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "کد QR نمایش داده شده در firefox.com/pair را اسکن کنید";
+"fxa.qr-scanning-view.instructions" = "کد QR نمایش داده شده در Ecosia.com/pair را اسکن کنید";
 
 /* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
 "FxA.RemoveAccount" = "حذف";
@@ -470,7 +470,7 @@
 "fxa.signin.create-account-pt-2" = "ایجاد یک حساب کاربری فایرفاکس.";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "بر روی کامپیوتر خود فایرفاکس را باز کرده و به firefox.com/pair بروید";
+"fxa.signin.qr-link-instruction" = "بر روی کامپیوتر خود فایرفاکس را باز کرده و به Ecosia.com/pair بروید";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "آماده برای اسکن";
@@ -835,10 +835,10 @@
 "Menu.EnhancedTrackingProtectionOn.Title" = "حفاظت پیشرفته در برابر ردیابی برای این سایت روشن است.";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox ردیاب های متقابل سایت ، ردیاب های اجتماعی ، رمزارزها و اثر انگشت را مسدود می کند.";
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Ecosia ردیاب های متقابل سایت ، ردیاب های اجتماعی ، رمزارزها و اثر انگشت را مسدود می کند.";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox ردیاب های متقابل سایت ، ردیاب های اجتماعی ، رمزارزها و اثر انگشت را مسدود می کند.";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Ecosia ردیاب های متقابل سایت ، ردیاب های اجتماعی ، رمزارزها و اثر انگشت را مسدود می کند.";
 
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "توقف";

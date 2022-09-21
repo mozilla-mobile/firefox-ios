@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "नयाँ खोजी";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Firefox लाई तपाईंको गृह स्क्रिनमा सर्टकटको रुपमा थप्नुहोस्।";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Ecosia लाई तपाईंको गृह स्क्रिनमा सर्टकटको रुपमा थप्नुहोस्।";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "कपि गरिएको लिङ्कमा जानुहोस्";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "निजी ट्याबमा खोज्नुहोस्";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Firefox मा खोज्नुहोस्";
+"TodayWidget.NewSearchButtonLabelV1" = "Ecosia मा खोज्नुहोस्";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "नयाँ खोजी";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "कुनैपनि खोलिएका ट्याबहरु छैनन्";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox खोल्नुहोस्";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia खोल्नुहोस्";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "Pocket द्वारा ब्यवस्थापन गरिएका, वेबभरिबाट मनमोहक र विचार-उत्तेजक कथाहरू पत्ता लगाउनुहोस्।";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Pocket द्वारा सिफारिस गरिएको";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - Pocket द्वारा सिफारिस गरिएको";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Pocket द्वारा सिफारिस गरिएको";
@@ -71,22 +71,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "निजी खोजी";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "आफ्नो गृह स्क्रिनमा थप्न Firefox सर्टकट चयन गर्नुहोस्।";
+"TodayWidget.QuickActionDescription" = "आफ्नो गृह स्क्रिनमा थप्न Ecosia सर्टकट चयन गर्नुहोस्।";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "द्रुत कार्य";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "तपाईंको गृह स्क्रिनमा Firefox सर्टकट थप्नुहोस्। विजेट थपेपछि, यसलाई सम्पादन गर्न छुनुहोस् र होल्ड गर्नुहोस् र फरक सर्टकट चयन गर्नुहोस्।";
+"TodayWidget.QuickActionGalleryDescription" = "तपाईंको गृह स्क्रिनमा Ecosia सर्टकट थप्नुहोस्। विजेट थपेपछि, यसलाई सम्पादन गर्न छुनुहोस् र होल्ड गर्नुहोस् र फरक सर्टकट चयन गर्नुहोस्।";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "द्रुत कार्यहरु";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox सर्टकटहरु";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia सर्टकटहरु";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - द्रुत कार्यहरू";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia - द्रुत कार्यहरू";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "आफ्नो खुला ट्याबहरू सिधै आफ्नो गृह स्क्रिनमा पहुँच गर्नुहोस्।";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "तपाईंको खुला ट्याबहरूमा सर्टकटहरू थप्नुहोस्।";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - ट्याबहरु खोल्नुहोस्";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - ट्याबहरु खोल्नुहोस्";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Firefox मा खोज्नुहोस्";
+"TodayWidget.SearchInFirefoxTitle" = "Ecosia मा खोज्नुहोस्";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox मा\nखोज्नुहोस्";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia मा\nखोज्नुहोस्";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "निजी ट्याबमा\nखोज्नुहोस्";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "वेबसाइट सर्टकटहरु";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - शीर्ष साइटहरू";
+"TodayWidget.TopSitesSubLabel" = "Ecosia - शीर्ष साइटहरू";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - वेबसाइट सर्टकटहरू";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia - वेबसाइट सर्टकटहरू";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "थप हेर्नुहोस्";

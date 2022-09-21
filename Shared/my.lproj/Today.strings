@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "ရှာဖွေမှုအသစ်";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "သင်၏မူလမြင်ကွင်းသို့ Firefox ဖြတ်လမ်းများကိုထည့်ပါ။";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "သင်၏မူလမြင်ကွင်းသို့ Ecosia ဖြတ်လမ်းများကိုထည့်ပါ။";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "ကူးယူထားသည့်လင့်သို့ သွားပါ။";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "သီးသန့်တဗ်တွင် ရှာဖွေပါ";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Firefox တွင် ရှာပါ";
+"TodayWidget.NewSearchButtonLabelV1" = "Ecosia တွင် ရှာပါ";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "ရှာဖွေမှုအသစ်";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "ဖွင့်ထားသည့်တပ်ဗ်များ မရှိပါ";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox ကို ဖွင့်ပါ";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia ကို ဖွင့်ပါ";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "Pocket မှကောက်ယူထားသော ၀က်ဆိုက်မှစိတ်ဝင်စားဖွယ်ကောင်းသောအတွေးအမြင်များကိုရှာဖွေပါ။";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Pocket မှအကြံပြုထားသည်။";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - Pocket မှအကြံပြုထားသည်။";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Pocket မှအကြံပြုထားသည်။";
@@ -71,19 +71,19 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "ကိုယ်ပိုင်ရှာဖွေမှု";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "သင်၏မူလမြင်ကွင်းသို့ Firefox ဖြတ်လမ်းများကိုထည့်ပါ။";
+"TodayWidget.QuickActionDescription" = "သင်၏မူလမြင်ကွင်းသို့ Ecosia ဖြတ်လမ်းများကိုထည့်ပါ။";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "လျင်မြန်စွာလုပ်ဆောင်ချက်";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "သင်၏မူလမြင်ကွင်းသို့ Firefox ဖြတ်လမ်းများကိုထည့်ပါ။ ဤအရာကိုထည့်ပြီးလျှင်အခြားဖြတ်လမ်းများကိုရွေးချယ်၍ထားရှိပါ။";
+"TodayWidget.QuickActionGalleryDescription" = "သင်၏မူလမြင်ကွင်းသို့ Ecosia ဖြတ်လမ်းများကိုထည့်ပါ။ ဤအရာကိုထည့်ပြီးလျှင်အခြားဖြတ်လမ်းများကိုရွေးချယ်၍ထားရှိပါ။";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "လျင်မြန်စွာလုပ်ဆောင်ချက်များ";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - လျင်မြန်စွာလုပ်ဆောင်ချက်များ";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia - လျင်မြန်စွာလုပ်ဆောင်ချက်များ";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "သင်၏ပင်မမြင်ကွင်းတွင်သင်၏ဖွင့်ထားသောတဗ်များကိုတိုက်ရိုက်ဝင်ရောက်ပါ။";
@@ -98,13 +98,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "သင်၏ အဖွင့်တဗ်များတွင် ဖြတ်လမ်းများကိုထည့်ပါ။";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - ဖွင့်ထားသည့်တဗ်များ";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - ဖွင့်ထားသည့်တဗ်များ";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Firefox တွင် ရှာပါ";
+"TodayWidget.SearchInFirefoxTitle" = "Ecosia တွင် ရှာပါ";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox တွင် ရှာပါ";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia တွင် ရှာပါ";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "သီးသန့်တဗ်တွင် ရှာဖွေပါ";
@@ -116,7 +116,7 @@
 "TodayWidget.TopSitesGalleryTitle" = "ထိပ်တန်းဝဘ်ဆိုက်များ";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - ထိပ်တန်းဆိုက်များ";
+"TodayWidget.TopSitesSubLabel" = "Ecosia - ထိပ်တန်းဆိုက်များ";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "ပို၍ ကြည့်ရန်";

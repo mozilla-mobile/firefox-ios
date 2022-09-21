@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "Nowe pytanje";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Přidajće swojej startowej wobrazowce zwjazanja Firefox";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Přidajće swojej startowej wobrazowce zwjazanja Ecosia";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Ke kopěrowanemu wotkazej";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "W priwatnym rajtarku pytać";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "W Firefox pytać";
+"TodayWidget.NewSearchButtonLabelV1" = "W Ecosia pytać";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Nowe pytanje";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "Žane wočinjene rajtarki";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox wočinić";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia wočinić";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "Wotkryjće fascinowace a k rozmyslowanju pohonjace stawiznički z cyłeho weba, kotrež so přez Pocket pěstuja.";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - wot Pocket doporučene";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - wot Pocket doporučene";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Wot Pocket doporučene";
@@ -71,22 +71,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Priwatne pytanje";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Wubjerće zwjazanje Firefox, zo byšće jo swojej startowej wobrazowce přidał.";
+"TodayWidget.QuickActionDescription" = "Wubjerće zwjazanje Ecosia, zo byšće jo swojej startowej wobrazowce přidał.";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "Spěšna akcija";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Přidajće startowej wobrazowce zwjazanje Firefox. Po tym zo sće asistent přidał, podótkńće so asistenta a dźeržće jón, zo byšće wobdźěłował a wubjerće druhe zwjazanje.";
+"TodayWidget.QuickActionGalleryDescription" = "Přidajće startowej wobrazowce zwjazanje Ecosia. Po tym zo sće asistent přidał, podótkńće so asistenta a dźeržće jón, zo byšće wobdźěłował a wubjerće druhe zwjazanje.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Spěšne akcije";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Zwjazanja Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Zwjazanja Ecosia";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - spěšne akcije";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia - spěšne akcije";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "Mějće přistup k swojim wočinjenym rajtarkam direktnje na swojej startowej wobrazowce.";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "Přidajće swojim wočinjenym rajtarkam zwjazanja.";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - Wočinjene rajtarki";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - Wočinjene rajtarki";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "W Firefox pytać";
+"TodayWidget.SearchInFirefoxTitle" = "W Ecosia pytać";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "W Firefox pytać";
+"TodayWidget.SearchInFirefoxV2" = "W Ecosia pytać";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "W priwatnym rajtarku pytać";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "Zwjazanja websydłow";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - najhusćišo wopytane sydła";
+"TodayWidget.TopSitesSubLabel" = "Ecosia - najhusćišo wopytane sydła";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - sydłowe zwjazanja";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia - sydłowe zwjazanja";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Wjace pokazać";

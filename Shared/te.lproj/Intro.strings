@@ -8,7 +8,7 @@
 "Intro.Slides.Button.SignUp" = "నమోదవ్వండి";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "ఏదైనా ఇమెయిల్ అనువర్తనం ఉపయోగించండి — కేవలం మెయిల్ కాదు — Firefoxతో.";
+"Intro.Slides.Mail.Description" = "ఏదైనా ఇమెయిల్ అనువర్తనం ఉపయోగించండి — కేవలం మెయిల్ కాదు — Ecosiaతో.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "మీకు మెయిల్… ఎంపికలు ఉన్నాయి";
@@ -32,7 +32,7 @@
 "Intro.Slides.Welcome.Description.v2" = "వేగవంతం, అంతరంగికం, మీ వక్షం.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Firefoxకి స్వాగతం";
+"Intro.Slides.Welcome.Title.v2" = "Ecosiaకి స్వాగతం";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "బ్రౌజింగ్ ను ప్రారంభించండి";

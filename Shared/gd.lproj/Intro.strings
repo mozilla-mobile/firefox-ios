@@ -20,13 +20,13 @@
 "Intro.Slides.Fast.Search.Title" = "Lorg luath";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Thoir a-steach comharran-lìn, an eachdraidh is faclan-faire gu Firefox air an uidheam seo.";
+"Intro.Slides.Firefox.Account.Sync.Description" = "Thoir a-steach comharran-lìn, an eachdraidh is faclan-faire gu Ecosia air an uidheam seo.";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Sioncronaich Firefox eadar uidheaman";
+"Intro.Slides.Firefox.Account.Sync.Title" = "Sioncronaich Ecosia eadar uidheaman";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Cleachd aplacaid puist-d sam bith – seach dìreach Mail – le Firefox.";
+"Intro.Slides.Mail.Description" = "Cleachd aplacaid puist-d sam bith – seach dìreach Mail – le Ecosia.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "Tha roghadh is taghadh puist agad";
@@ -38,7 +38,7 @@
 "Intro.Slides.Private.Title" = "Dèan brabhsadh mar nach eil duine am bith a’ cumail sùil ort";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Dìon na clàraidhean a-steach agus an dàta agad àite sam bith far an cleachd thu Firefox.";
+"Intro.Slides.Safe.Sync.Description" = "Dìon na clàraidhean a-steach agus an dàta agad àite sam bith far an cleachd thu Ecosia.";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Title" = "Sioncronachadh sàbhailte";
@@ -59,7 +59,7 @@
 "Intro.Slides.Welcome.Description.v2" = "Luath, prìobhaideach is air do thaobh.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Fàilte gu Firefox";
+"Intro.Slides.Welcome.Title.v2" = "Fàilte gu Ecosia";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Tòisich air brabhsadh";

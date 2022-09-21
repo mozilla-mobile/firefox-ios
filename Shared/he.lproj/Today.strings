@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "חיפוש חדש";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "הוספת קיצורי דרך של Firefox למסך הבית שלך.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "הוספת קיצורי דרך של Ecosia למסך הבית שלך.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "מעבר לקישור שהועתק";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "חיפוש בלשונית פרטית";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "חיפוש ב־Firefox";
+"TodayWidget.NewSearchButtonLabelV1" = "חיפוש ב־Ecosia";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "חיפוש חדש";
@@ -56,10 +56,10 @@
 "TodayWidget.NoOpenTabsLabelV2" = "אין לשוניות פתוחות";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "פתיחת Firefox";
+"TodayWidget.OpenFirefoxLabel" = "פתיחת Ecosia";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "‏Firefox - מומלץ על־ידי Pocket";
+"TodayWidget.PocketWidgetSubLabel" = "‏Ecosia - מומלץ על־ידי Pocket";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "מומלץ על־ידי Pocket";
@@ -68,22 +68,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "חיפוש פרטי";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "נא לבחור קיצור Firefox להוספה למסך הבית שלך.";
+"TodayWidget.QuickActionDescription" = "נא לבחור קיצור Ecosia להוספה למסך הבית שלך.";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "פעולה מהירה";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "ניתן להוסיף קיצור דרך ל־Firefox למסך הבית שלך. לאחר הוספת הווידג’ט, יש ללחוץ ולהחזיק כדי לערוך אותו לבחור בקיצור דרך שונה.";
+"TodayWidget.QuickActionGalleryDescription" = "ניתן להוסיף קיצור דרך ל־Ecosia למסך הבית שלך. לאחר הוספת הווידג’ט, יש ללחוץ ולהחזיק כדי לערוך אותו לבחור בקיצור דרך שונה.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "פעולות מהירות";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "קיצורי דרך של Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "קיצורי דרך של Ecosia";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "‏Firefox - פעולות מהירות";
+"TodayWidget.QuickActionsSubLabel" = "‏Ecosia - פעולות מהירות";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "קבלת גישה ללשוניות הפתוחות שלך היישר ממסך הבית שלך.";
@@ -98,13 +98,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "הוספת קיצורי דרך ללשוניות הפתוחות שלך.";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "‏Firefox - לשוניות פתוחות";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "‏Ecosia - לשוניות פתוחות";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "חיפוש ב־Firefox";
+"TodayWidget.SearchInFirefoxTitle" = "חיפוש ב־Ecosia";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "חיפוש ב־Firefox";
+"TodayWidget.SearchInFirefoxV2" = "חיפוש ב־Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "חיפוש בלשונית פרטית";
@@ -119,10 +119,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "קיצורי דרך לאתרים";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "‏Firefox - אתרים מובילים";
+"TodayWidget.TopSitesSubLabel" = "‏Ecosia - אתרים מובילים";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "‏Firefox - קיצורי דרך לאתרים";
+"TodayWidget.TopSitesSubLabel2" = "‏Ecosia - קיצורי דרך לאתרים";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "הצגת עוד";

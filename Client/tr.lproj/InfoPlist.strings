@@ -1,14 +1,14 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox, QR kodlarını taramak, fotoğraf ve video çekmek için kameranızı kullanır.";
+"NSCameraUsageDescription" = "Ecosia, QR kodlarını taramak, fotoğraf ve video çekmek için kameranızı kullanır.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox, kayıtlı hesaplarınıza erişmek için Face ID gerektirir.";
+"NSFaceIDUsageDescription" = "Ecosia, kayıtlı hesaplarınıza erişmek için Face ID gerektirir.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Ziyaret ettiğiniz web siteleri konumunuzu isteyebilir.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox, ses kaydetmek ve yüklemek için mikrofonunuzu kullanır.";
+"NSMicrophoneUsageDescription" = "Ecosia, ses kaydetmek ve yüklemek için mikrofonunuzu kullanır.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Fotoğraf kaydetmenize olanak sağlar.";

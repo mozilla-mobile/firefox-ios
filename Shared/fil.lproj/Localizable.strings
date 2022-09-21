@@ -210,7 +210,7 @@
 "Could not load page." = "Hindi maiload ang pahina.";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "Para sa gumagamit ng iOS 13, ang Firefox ngayon ay awtomatikong lumilipat sa Dark theme pag nai-set mo ang iyong phone sa Dark Mode. para baguhin ito, pumunta sa Settings> Theme.";
+"CoverSheet.v22.DarkMode.Description" = "Para sa gumagamit ng iOS 13, ang Ecosia ngayon ay awtomatikong lumilipat sa Dark theme pag nai-set mo ang iyong phone sa Dark Mode. para baguhin ito, pumunta sa Settings> Theme.";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "ang Dark theme ngayon ay sinama na ang dark keyboard at dark splash screen.";
@@ -260,7 +260,7 @@
 "Downloads.CancelDialog.Title" = "Kanselahin ang Download";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Hindi pa suportado ng Firefox ang mga Downloads.";
+"Downloads.Error.Message" = "Hindi pa suportado ng Ecosia ang mga Downloads.";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Na-kansela ang Download";
@@ -305,7 +305,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Maaari ito ay isang maling pag-configure o pakikialam ng isang nang-aatake. Magpatuloy kung tatanggapin mo ang mga potensyal na panganib.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Ang may-ari ng %@ ay maling nai-configure ang kanilang website. Upang maprotektahan and iyong impormasyon at hindi manakaw, Hindi kumonekta ang Firefox sa website.";
+"ErrorPages.CertWarning.Description" = "Ang may-ari ng %@ ay maling nai-configure ang kanilang website. Upang maprotektahan and iyong impormasyon at hindi manakaw, Hindi kumonekta ang Ecosia sa website.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Ang iyong koneksyon ay hindi pribado";
@@ -326,7 +326,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Home Page ng Firefox";
+"Firefox.HomePage.Title" = "Home Page ng Ecosia";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Sulong";
@@ -338,13 +338,13 @@
 "FxA.AccountVerificationRequired" = "Kinakailangan ang Pag-verify ng Account";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Kailangan mong i-verify ang %@. Suriin ang iyong email para sa link ng pag-verify mula sa Firefox.";
+"FxA.AccountVerificationRequiredSurface" = "Kailangan mong i-verify ang %@. Suriin ang iyong email para sa link ng pag-verify mula sa Ecosia.";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "Ikonekta ang Isa pang Device";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox Account";
+"FxA.FirefoxAccount" = "Ecosia Account";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Pamahalaan ang Account";
@@ -359,7 +359,7 @@
 "FxA.RemoveAccount" = "Tanggalin";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Alisin ang Firefox Account na nauugnay sa device na ito upang mag-sign in bilang ibang user.";
+"FxA.RemoveAccountAlertMessage" = "Alisin ang Ecosia Account na nauugnay sa device na ito upang mag-sign in bilang ibang user.";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "Alisin ang Account";
@@ -380,7 +380,7 @@
 "FxA.TakeYourWebWithYou" = "Dalhin ang Iyong Web Sa Iyo";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Konektado ang Firefox Sync sa %@";
+"FxAPush_DeviceConnected_body" = "Konektado ang Ecosia Sync sa %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "I-sync ang Konektado";
@@ -389,7 +389,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ ay matagumpay na naalis.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Matagumpay na na-disconnect ang device na ito mula sa Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Matagumpay na na-disconnect ang device na ito mula sa Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Nakakonekta ang Sync";
@@ -398,7 +398,7 @@
 "FxAPush_DeviceDisconnected_title" = "Hindi nakakonekta ang Sync";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Ang isang aparato ay naka-disconnect mula sa Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Ang isang aparato ay naka-disconnect mula sa Ecosia Sync";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Kunin ang mga bukas na tab, bookmark, at password mula sa iba pang mga device.";
@@ -446,7 +446,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "I-on ang pag-sync ng tab upang tingnan ang isang listahan ng mga tab mula sa iyong iba pang mga device.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Kasaysayan";
@@ -602,7 +602,7 @@
 "LoginsList.Title" = "SAVED LOGINS";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Mukhang bumagsak ang Firefox. Gusto mo bang ibalik ang iyong mga tab?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Mukhang bumagsak ang Ecosia. Gusto mo bang ibalik ang iyong mga tab?";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -655,7 +655,7 @@
 "Menu.TrackingProtection.BlockedTitle" = "Hinarangan";
 
 /* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Walang mga tracker na kilala sa Firefox ang nakita sa pahinang ito.";
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Walang mga tracker na kilala sa Ecosia ang nakita sa pahinang ito.";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Setting ng mga Proteksyon";
@@ -670,7 +670,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "Social Trackers";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox ay hinahayaan ang mga bahagi ng pahina na maaaring subaybayan ang iyong pag-browse.";
+"Menu.TrackingProtectionBlocking.Description" = "Ecosia ay hinahayaan ang mga bahagi ng pahina na maaaring subaybayan ang iyong pag-browse.";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
 "Menu.TrackingProtectionBlockingDisabled.Description" = "I-block ang mga tracker sa online";
@@ -773,7 +773,7 @@
 "Okay" = "Okay";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Oops! Bumagsak ang Firefox";
+"Oops! Firefox crashed" = "Oops! Bumagsak ang Ecosia";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Buksan ang basahin sa Reader View gamit ang book icon paglabas nito sa title bar.";
@@ -785,7 +785,7 @@
 "Open Tabs" = "Buksan ang mga Tab";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Hindi mabuksan ng Firefox ang pahina dahil ang address ay inbalido.";
+"OpenURL.Error.Message" = "Hindi mabuksan ng Ecosia ang pahina dahil ang address ay inbalido.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Hindi maaaring buksan ang pahina";
@@ -800,19 +800,19 @@
 "Password" = "Password";
 
 /* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "You don’t have any credentials synced from your Firefox Account";
+"PasswordAutoFill.NoPasswordsFoundTitle" = "You don’t have any credentials synced from your Ecosia Account";
 
 /* Header for the list of credentials table */
 "PasswordAutoFill.PasswordsListTitle" = "Available Credentials:";
 
 /* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox Credentials";
+"PasswordAutoFill.SectionTitle" = "Ecosia Credentials";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Ito ay pumapayag na i-save ang imahe sa iyong Camera Roll.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Gusto ng Firefox na mag-access ng iyong mga Larawan";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Gusto ng Ecosia na mag-access ng iyong mga Larawan";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Isarado";
@@ -881,7 +881,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Di-wasto ang data";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Mangyaring payagan ang Firefox na ma-access ang camera ng iyong device sa 'Mga Setting' -> 'Privacy' -> 'Camera'.";
+"ScanQRCode.PermissionError.Message" = "Mangyaring payagan ang Ecosia na ma-access ang camera ng iyong device sa 'Mga Setting' -> 'Privacy' -> 'Camera'.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "I-scan ang QR Code";
@@ -934,7 +934,7 @@
 "Secure connection" = "Ligtas na koneksyon";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Magpadala ng crash report sa Mozilla upang ayusin ang problema?";
+"Send a crash report so Mozilla can fix the problem?" = "Magpadala ng crash report sa Ecosia upang ayusin ang problema?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Ipadala ang Feedback";
@@ -962,13 +962,13 @@
 "SendTo.NavBar.Title" = "Ipadala ang Tab";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Wala kang ibang mga aparato na konektado sa Firefox Account na magagamit upang mai-sync.";
+"SendTo.NoDevicesFound.Message" = "Wala kang ibang mga aparato na konektado sa Ecosia Account na magagamit upang mai-sync.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Mangyaring i-open ang Firefox, pumunta ng Settings at mag sign in para ipagpatuloy.";
+"SendTo.NotSignedIn.Message" = "Mangyaring i-open ang Ecosia, pumunta ng Settings at mag sign in para ipagpatuloy.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Hindi ka naka-sign in sa iyong Firefox Account.";
+"SendTo.NotSignedIn.Title" = "Hindi ka naka-sign in sa iyong Ecosia Account.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Ipadala";
@@ -995,7 +995,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Tapikin upang magsimula";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Tingnan";
@@ -1055,7 +1055,7 @@
 "Settings.DataManagement.Title" = "PAgsasaayos ng Data";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Hihinto ang Firefox sa pag-sync sa iyong account, ngunit hindi tatanggalin ang alinman sa iyong data sa pagba-browse sa device na ito.";
+"Settings.Disconnect.Body" = "Hihinto ang Ecosia sa pag-sync sa iyong account, ngunit hindi tatanggalin ang alinman sa iyong data sa pagba-browse sa device na ito.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Idiskonekta ang Pag-sync";
@@ -1128,7 +1128,7 @@
 "Settings.FxA.Sync.SectionName" = "Mga sync setting";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox Account";
+"Settings.FxA.Title" = "Ecosia Account";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Pangkalahatan";
@@ -1179,10 +1179,10 @@
 "Settings.NewTab.Option.CustomizeFooter" = "Ang mga site na iyong pinupuntahan";
 
 /* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Ipasadya ang Firefox Home";
+"Settings.NewTab.Option.CustomizeTitle" = "Ipasadya ang Ecosia Home";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox Home";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia Home";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
 "Settings.NewTab.Option.HighlightsBookmarks" = "Mga Kamakailang Bookmark";
@@ -1218,7 +1218,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "Piliin kung ano ang mag-load kapag binubuksan ang isang bagong tab";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Kapag Binubuksan ang Firefox";
+"Settings.OfferClipboardBar.Status" = "Kapag Binubuksan ang Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Mag-alok sa Buksan ang Mga Nakopya";
@@ -1242,7 +1242,7 @@
 "Settings.SendUsage.Link" = "Matuto ng higit pa.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Nagsusumikap ang Mozilla na kolektahin lamang kung ano ang kailangan naming ibigay at pagbutihin ang Firefox para sa lahat.";
+"Settings.SendUsage.Message" = "Nagsusumikap ang Ecosia na kolektahin lamang kung ano ang kailangan naming ibigay at pagbutihin ang Ecosia para sa lahat.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Ipadala ang Data ng Paggamit";
@@ -1254,13 +1254,13 @@
 "Settings.Siri.OpenTabShortcut" = "Magbukas ng Bagong Tab";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Gumamit ng mga shortcut sa Siri upang mabilis na buksan ang Firefox sa pamamagitan ng Siri";
+"Settings.Siri.SectionDescription" = "Gumamit ng mga shortcut sa Siri upang mabilis na buksan ang Ecosia sa pamamagitan ng Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri Shortcuts";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Maaari mong piliin kung aling listahan ang gagamitin ng Firefox upang harangan ang mga elemento ng Web na maaaring subaybayan ang iyong aktibidad sa pagba-browse.";
+"Settings.TrackingProtection.BlockListsHeader" = "Maaari mong piliin kung aling listahan ang gagamitin ng Ecosia upang harangan ang mga elemento ng Web na maaaring subaybayan ang iyong aktibidad sa pagba-browse.";
 
 /* Explanation of basic mode. */
 "Settings.TrackingProtection.Info.BasicTitle" = "Balanse para sa proteksyon at pagganap.";
@@ -1353,16 +1353,16 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "I-load sa Background";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Nagloload sa Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Nagloload sa Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Buksan sa Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Buksan sa Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
 "ShareExtension.OpenInPrivateModeAction.Title" = "Buksan sa Private Mode";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Hanapin sa Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Hanapin sa Ecosia";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Ipakita ang Search Suggestions";
@@ -1525,13 +1525,13 @@
 "UIMenuItem.PasteGo" = "I-paste at Pumunta";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Maghanap gamit ang Firefox";
+"UIMenuItem.SearchWithFirefox" = "Maghanap gamit ang Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "Hindi pa nabasa";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "I-upgrade ang Firefox upang makakonek";
+"Upgrade Firefox to connect" = "I-upgrade ang Ecosia upang makakonek";
 
 /* Username textbox in Authentication prompt */
 "Username" = "Username";
@@ -1561,7 +1561,7 @@
 "Yesterday" = "Kahapon";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Walang ibang bukas na mga tab sa Firefox sa ibang device.";
+"You don’t have any tabs open in Firefox on your other devices." = "Walang ibang bukas na mga tab sa Ecosia sa ibang device.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Ang iyong mga Karapatan";

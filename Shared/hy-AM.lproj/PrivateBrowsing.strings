@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Բացել նոր անձնական ներդիրում";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox-֊ը չի հիշի ձեր պատմությունը կամ նշոցիկները, բայց նոր էջանիշերը կպահպանվեն։";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia-֊ը չի հիշի ձեր պատմությունը կամ նշոցիկները, բայց նոր էջանիշերը կպահպանվեն։";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Իմանալ ավելին";

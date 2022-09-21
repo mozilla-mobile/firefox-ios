@@ -62,7 +62,7 @@
 "TodayWidget.PocketWidgetGalleryDescription" = "ਪੂਰੇ ਵੈਬ ਤੋਂ ਰੌਚਕ ਅਤੇ ਸੋਚਣ ਲਈ ਮਜ਼ਬੂਰ ਕਰਨ ਵਾਲੀਆਂ, Pocket ਵਲੋਂ ਇਕੱਤਰ ਕੀਤੀਆਂ ਕਹਾਣੀਆਂ ਲਵੋ।";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Pocket ਵਲੋਂ ਸਿਫਾਰਸ਼ੀ";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - Pocket ਵਲੋਂ ਸਿਫਾਰਸ਼ੀ";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Pocket ਵਲੋਂ ਸਿਫਾਰਸ਼ੀ";
@@ -77,7 +77,7 @@
 "TodayWidget.QuickActionDropDownMenu" = "ਫ਼ੌਰੀ ਕਾਰਵਾਈ";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਉੱਤੇ Firefox ਜੋੜੋ। ਵਿਜੈਟ ਜੋੜਨ ਦੇ ਬਾਅਦ ਇਸ ਨੂੰ ਸੋਧਣ ਲਈ ਛੂਹ ਕੇ ਰੱਖੋ ਅਤੇ ਵੱਖਰਾ ਸ਼ਾਰਟਕੱਟ ਚੁਣੋ।";
+"TodayWidget.QuickActionGalleryDescription" = "ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਉੱਤੇ Ecosia ਜੋੜੋ। ਵਿਜੈਟ ਜੋੜਨ ਦੇ ਬਾਅਦ ਇਸ ਨੂੰ ਸੋਧਣ ਲਈ ਛੂਹ ਕੇ ਰੱਖੋ ਅਤੇ ਵੱਖਰਾ ਸ਼ਾਰਟਕੱਟ ਚੁਣੋ।";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "ਫ਼ੌਰੀ ਕਾਰਵਾਈਆਂ";
@@ -125,7 +125,7 @@
 "TodayWidget.TopSitesSubLabel" = "ਫਾਇਰਫਾਕਸ - ਮੁੱਖ ਸਾਈਟਾਂ";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - ਵੈੱਬਸਾਈਟ ਸ਼ਾਰਟਕੱਟ";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia - ਵੈੱਬਸਾਈਟ ਸ਼ਾਰਟਕੱਟ";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "ਹੋਰ ਵੇਖੋ";

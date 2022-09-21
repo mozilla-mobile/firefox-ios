@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "Yeni arama";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Ana ekranınıza Firefox kısayollarını ekleyin.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Ana ekranınıza Ecosia kısayollarını ekleyin.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Kopyalanan linke git";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "Gizlide ara";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Firefox’ta ara";
+"TodayWidget.NewSearchButtonLabelV1" = "Ecosia’ta ara";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Yeni arama";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "Açık sekme yok";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox’u aç";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia’u aç";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "Pocket editörlerinin seçtiği ilginç ve düşündürücü makaleleri keşfedin.";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Pocket Önerileri";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - Pocket Önerileri";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Pocket öneriyor";
@@ -71,22 +71,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Gizli arama";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Ana ekranınıza eklenecek Firefox kısayolunu seçin.";
+"TodayWidget.QuickActionDescription" = "Ana ekranınıza eklenecek Ecosia kısayolunu seçin.";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "Hızlı eylem";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Ana ekranınıza Firefox kısayolu ekleyin. Araç takımını ekledikten sonra düzenlemek isterseniz basılı tutup farklı bir kısayol seçebilirsiniz.";
+"TodayWidget.QuickActionGalleryDescription" = "Ana ekranınıza Ecosia kısayolu ekleyin. Araç takımını ekledikten sonra düzenlemek isterseniz basılı tutup farklı bir kısayol seçebilirsiniz.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Hızlı Eylemler";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox Kestirmeleri";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia Kestirmeleri";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - Hızlı Eylemler";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia - Hızlı Eylemler";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "Açık sekmelerinize doğrudan ana ekranınızdan erişin.";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "Açık sekmelerinize kısayollar ekleyin.";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - Açık Sekmeler";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - Açık Sekmeler";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Firefox’ta ara";
+"TodayWidget.SearchInFirefoxTitle" = "Ecosia’ta ara";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox’ta ara";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia’ta ara";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Gizlide ara";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "Web sitesi kısayolları";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - Sık Kullanılanlar";
+"TodayWidget.TopSitesSubLabel" = "Ecosia - Sık Kullanılanlar";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - Web sitesi kestirmeleri";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia - Web sitesi kestirmeleri";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Daha fazla göster";

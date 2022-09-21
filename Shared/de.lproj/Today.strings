@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "Neue Suche";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Fügen Sie Firefox-Verknüpfungen auf Ihrem Startbildschirm hinzu.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Fügen Sie Ecosia-Verknüpfungen auf Ihrem Startbildschirm hinzu.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Link in der Zwischenablage aufrufen";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "In privatem Tab suchen";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "In Firefox suchen";
+"TodayWidget.NewSearchButtonLabelV1" = "In Ecosia suchen";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Neue Suche";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "Keine offenen Tabs";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox öffnen";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia öffnen";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "Entdecken Sie faszinierende und zum Nachdenken anregende Geschichten aus dem Internet, die von Pocket kuratiert wurden.";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox – Empfohlen von Pocket";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia – Empfohlen von Pocket";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Empfehlung von Pocket";
@@ -71,22 +71,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Private Suche";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Wählen Sie eine Firefox-Verknüpfung aus, die Sie Ihrem Startbildschirm hinzufügen möchten.";
+"TodayWidget.QuickActionDescription" = "Wählen Sie eine Ecosia-Verknüpfung aus, die Sie Ihrem Startbildschirm hinzufügen möchten.";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "Schnellaktion";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Fügen Sie Ihrem Startbildschirm eine Firefox-Verknüpfung hinzu. Berühren und halten Sie das Widget nach dem Hinzufügen, um es zu bearbeiten und eine andere Verknüpfung auszuwählen.";
+"TodayWidget.QuickActionGalleryDescription" = "Fügen Sie Ihrem Startbildschirm eine Ecosia-Verknüpfung hinzu. Berühren und halten Sie das Widget nach dem Hinzufügen, um es zu bearbeiten und eine andere Verknüpfung auszuwählen.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Schnellaktionen";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox-Verknüpfungen";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia-Verknüpfungen";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox – Schnellaktionen";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia – Schnellaktionen";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "Greifen Sie auf Ihrem Startbildschirm direkt auf Ihre offenen Tabs zu.";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "Fügen Sie Verknüpfungen zu Ihren offenen Tabs hinzu.";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox – Offene Tabs";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia – Offene Tabs";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "In Firefox suchen";
+"TodayWidget.SearchInFirefoxTitle" = "In Ecosia suchen";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "In Firefox suchen";
+"TodayWidget.SearchInFirefoxV2" = "In Ecosia suchen";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "In privatem Tab suchen";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "Website-Verknüpfungen";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox – Meistbesuchte Seiten";
+"TodayWidget.TopSitesSubLabel" = "Ecosia – Meistbesuchte Seiten";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox – Website-Verknüpfungen";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia – Website-Verknüpfungen";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Mehr anzeigen";

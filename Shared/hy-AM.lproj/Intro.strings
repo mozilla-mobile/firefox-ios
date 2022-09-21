@@ -20,13 +20,13 @@
 "Intro.Slides.Fast.Search.Title" = "Արագ որոնում";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Այս սարքում բերեք էջանիշեր, պատմություն և գաղտնաբառեր Firefox- ին:";
+"Intro.Slides.Firefox.Account.Sync.Description" = "Այս սարքում բերեք էջանիշեր, պատմություն և գաղտնաբառեր Ecosia- ին:";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Համաժամեցնել Firefox-ը սարքերի միջև";
+"Intro.Slides.Firefox.Account.Sync.Title" = "Համաժամեցնել Ecosia-ը սարքերի միջև";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Օգտագործեք ցանկացած էլ. ֊փոստի գործադիր — ոչ միայն փոստ — Firefox-ով։";
+"Intro.Slides.Mail.Description" = "Օգտագործեք ցանկացած էլ. ֊փոստի գործադիր — ոչ միայն փոստ — Ecosia-ով։";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "Դուք ստացել եք նամակ… ընտրանքներ";
@@ -38,7 +38,7 @@
 "Intro.Slides.Private.Title" = "Զննարկեք այնպես, կարծես ոչ ոք ձեզ չի նայում";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Պաշտպանեք ձեր մուտքագրումները և տվյալները Firefox-ում՝ ամենուրեք:";
+"Intro.Slides.Safe.Sync.Description" = "Պաշտպանեք ձեր մուտքագրումները և տվյալները Ecosia-ում՝ ամենուրեք:";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Title" = "Անվտանգ համաժամեցում";
@@ -59,7 +59,7 @@
 "Intro.Slides.Welcome.Description.v2" = "Արագ է, գաղտնի և ձեր կողմից։";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Բարի գալուստ Firefox";
+"Intro.Slides.Welcome.Title.v2" = "Բարի գալուստ Ecosia";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Սկսել դիտարկումը";

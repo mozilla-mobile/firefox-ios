@@ -20,13 +20,13 @@
 "Intro.Slides.Fast.Search.Title" = "بحث سريع";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "اسحب العلامات والتأريخ وكلمات السر إلى Firefox على هذا الجهاز.";
+"Intro.Slides.Firefox.Account.Sync.Description" = "اسحب العلامات والتأريخ وكلمات السر إلى Ecosia على هذا الجهاز.";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "زامِن Firefox بين الأجهزة";
+"Intro.Slides.Firefox.Account.Sync.Title" = "زامِن Ecosia بين الأجهزة";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "استخدم أيّا من تطبيقات البريد على Firefox، ليس فقط تطبيق «البريد».";
+"Intro.Slides.Mail.Description" = "استخدم أيّا من تطبيقات البريد على Ecosia، ليس فقط تطبيق «البريد».";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "باتت لديك خيارات للبريد";
@@ -38,7 +38,7 @@
 "Intro.Slides.Private.Title" = "تصفح و لا أحد يراقبك";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "احمِ جلسات الولوج وبياناتك أينما استعملت Firefox.";
+"Intro.Slides.Safe.Sync.Description" = "احمِ جلسات الولوج وبياناتك أينما استعملت Ecosia.";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Title" = "المزامنة الآمنة";
@@ -59,7 +59,7 @@
 "Intro.Slides.Welcome.Description.v2" = "سريع وخاص ويقف صفًا صفًا معك.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "أهلا بك على Firefox";
+"Intro.Slides.Welcome.Title.v2" = "أهلا بك على Ecosia";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "ابدأ التصفح";

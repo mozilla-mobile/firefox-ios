@@ -1,14 +1,14 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox использует вашу камеру для сканирования QR-кодов и съемки фотографий и видео.";
+"NSCameraUsageDescription" = "Ecosia использует вашу камеру для сканирования QR-кодов и съемки фотографий и видео.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox необходим Face ID для доступа к сохранённым логинам.";
+"NSFaceIDUsageDescription" = "Ecosia необходим Face ID для доступа к сохранённым логинам.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Посещаемые вами веб-сайты могут запрашивать ваше местоположение.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox использует ваш микрофон для записи и выгрузки аудио.";
+"NSMicrophoneUsageDescription" = "Ecosia использует ваш микрофон для записи и выгрузки аудио.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Это позволит вам сохранять фотографии.";

@@ -20,13 +20,13 @@
 "Intro.Slides.Fast.Search.Title" = "Snabbsökning";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Ta med bokmärken, historik och lösenord till Firefox på den här enheten.";
+"Intro.Slides.Firefox.Account.Sync.Description" = "Ta med bokmärken, historik och lösenord till Ecosia på den här enheten.";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Synkronisera Firefox mellan enheter";
+"Intro.Slides.Firefox.Account.Sync.Title" = "Synkronisera Ecosia mellan enheter";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Använd vilken e-postapp som helst - inte bara Mail - med Firefox.";
+"Intro.Slides.Mail.Description" = "Använd vilken e-postapp som helst - inte bara Mail - med Ecosia.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "Fler val för din e-post";
@@ -38,7 +38,7 @@
 "Intro.Slides.Private.Title" = "Surfa utan att känna dig övervakad";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Skydda dina inloggningar och data överallt där du använder Firefox.";
+"Intro.Slides.Safe.Sync.Description" = "Skydda dina inloggningar och data överallt där du använder Ecosia.";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Title" = "Säker synkronisering";
@@ -59,7 +59,7 @@
 "Intro.Slides.Welcome.Description.v2" = "Snabb, privat och på din sida.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Välkommen till Firefox";
+"Intro.Slides.Welcome.Title.v2" = "Välkommen till Ecosia";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Börja surfa";

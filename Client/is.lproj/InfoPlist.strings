@@ -1,14 +1,14 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox notar myndavélina þína til að skanna QR-kóða og taka myndir og myndskeið.";
+"NSCameraUsageDescription" = "Ecosia notar myndavélina þína til að skanna QR-kóða og taka myndir og myndskeið.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox krefst andlitsauðkenna til að fá aðgang að vistuðu innskráningunum þínum.";
+"NSFaceIDUsageDescription" = "Ecosia krefst andlitsauðkenna til að fá aðgang að vistuðu innskráningunum þínum.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Vefsvæði sem þú skoðar gætu beðið um staðsetninguna þína.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox notar hljóðnemann þinn til að taka upp og senda inn hljóð.";
+"NSMicrophoneUsageDescription" = "Ecosia notar hljóðnemann þinn til að taka upp og senda inn hljóð.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Hér getur þú vistað myndir.";

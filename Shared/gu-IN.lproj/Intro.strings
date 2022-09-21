@@ -8,7 +8,7 @@
 "Intro.Slides.Button.SignUp" = "સાઇન અપ કરો";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "કોઈપણ ઇમેઇલ એપ્લિકેશનનો ઉપયોગ કરો — ફક્ત મેઇલ નહીં — Firefox સાથે.";
+"Intro.Slides.Mail.Description" = "કોઈપણ ઇમેઇલ એપ્લિકેશનનો ઉપયોગ કરો — ફક્ત મેઇલ નહીં — Ecosia સાથે.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "તમારી પાસે મેઇલ… વિકલ્પો";
@@ -35,7 +35,7 @@
 "Intro.Slides.Welcome.Description.v2" = "ઝડપી, ખાનગી અને તમારી બાજુએ.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Firefox માં તમારું સ્વાગત છે";
+"Intro.Slides.Welcome.Title.v2" = "Ecosia માં તમારું સ્વાગત છે";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "બ્રાઉઝિંગ પ્રારંભ કરો";

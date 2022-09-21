@@ -318,7 +318,7 @@
 "Could not load page." = "Gat ekki hlaðið síðu.";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "Fyrir notendur iOS 13 skiptir Firefox nú sjálfkrafa yfir í dökkt þema þegar síminn þinn er stilltur á dökkt þema. Til að breyta þessari hegðun skaltu fara í Stillingar > Þema.";
+"CoverSheet.v22.DarkMode.Description" = "Fyrir notendur iOS 13 skiptir Ecosia nú sjálfkrafa yfir í dökkt þema þegar síminn þinn er stilltur á dökkt þema. Til að breyta þessari hegðun skaltu fara í Stillingar > Þema.";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "Dökka þemað inniheldur nú dökkt lyklaborð og dökkan upphafsskjá.";
@@ -377,7 +377,7 @@
 "Downloads.CancelDialog.Title" = "Hætta við niðurhal";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Niðurhöl eru ekki studd í Firefox.";
+"Downloads.Error.Message" = "Niðurhöl eru ekki studd í Ecosia.";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Hætt var við niðurhal";
@@ -422,7 +422,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Það gæti verið röng stilling eða ytri aðili er búinn að eiga við stillingarnar. Haltu áfram ef þú metur það öruggt.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Eigandi %@ hefur stillt vefsvæðið sitt rangt. Firefox mun ekki tengjast þessu vefsvæði til að vernda upplýsingar þínar.";
+"ErrorPages.CertWarning.Description" = "Eigandi %@ hefur stillt vefsvæðið sitt rangt. Ecosia mun ekki tengjast þessu vefsvæði til að vernda upplýsingar þínar.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Þessi tenging er ótraust";
@@ -443,7 +443,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Upphafssíða Firefox";
+"Firefox.HomePage.Title" = "Upphafssíða Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Sérsníða upphafssíðu";
@@ -491,13 +491,13 @@
 "FxA.AccountVerificationRequired" = "Nauðsynlegt er að staðfesta reikninginn";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Þú þarft að staðfesta %@. Leitaðu í tölvupóstinum þínum að staðfesting tölvupósti frá Firefox.";
+"FxA.AccountVerificationRequiredSurface" = "Þú þarft að staðfesta %@. Leitaðu í tölvupóstinum þínum að staðfesting tölvupósti frá Ecosia.";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "Tengja annað tæki";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox reikningur";
+"FxA.FirefoxAccount" = "Ecosia reikningur";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Sýsla með reikning og tæki";
@@ -509,13 +509,13 @@
 "FxA.OpenSyncPreferences" = "Opna samstillar stillingar";
 
 /* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "Skannaðu QR-kóðann sem sýndur er á firefox.com/pair";
+"fxa.qr-scanning-view.instructions" = "Skannaðu QR-kóðann sem sýndur er á Ecosia.com/pair";
 
 /* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
 "FxA.RemoveAccount" = "Fjarlægja";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Fjarlæga Firefox reikninginn sem er tengdur þessu tæki til að skrá þig inn sem annar notandi.";
+"FxA.RemoveAccountAlertMessage" = "Fjarlæga Ecosia reikninginn sem er tengdur þessu tæki til að skrá þig inn sem annar notandi.";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "Fjarlægja reikning";
@@ -527,13 +527,13 @@
 "fxa.signin.camera-signin" = "Skráðu þig inn með myndavélinni þinni";
 
 /* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "Samstilltu Firefox á milli tækja með reikningi.";
+"fxa.signin.create-account-pt-1" = "Samstilltu Ecosia á milli tækja með reikningi.";
 
 /* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Stofna Firefox reikning.";
+"fxa.signin.create-account-pt-2" = "Stofna Ecosia reikning.";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Opnaðu Firefox í tölvunni þinni og farðu á firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Opnaðu Ecosia í tölvunni þinni og farðu á Ecosia.com/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Tilbúið til skönnunar";
@@ -557,7 +557,7 @@
 "FxA.TakeYourWebWithYou" = "Taktu vefinn þinn með þér";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox samstillingin er tengd %@";
+"FxAPush_DeviceConnected_body" = "Ecosia samstillingin er tengd %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Samstilling tengd";
@@ -566,7 +566,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ aftengt giftusamlega.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Þetta tæki er aftengt Firefox samstillingu.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Þetta tæki er aftengt Ecosia samstillingu.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Samstilling ótengd";
@@ -575,10 +575,10 @@
 "FxAPush_DeviceDisconnected_title" = "Samstilling ótengd";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Tæki hefur aftengt Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Tæki hefur aftengt Ecosia Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox merki - breyta bakgrunni.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Ecosia merki - breyta bakgrunni.";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Náðu í opnu flipana, bókamerki og lykilorð frá hinum tækjunum þínum.";
@@ -626,7 +626,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Kveiktu á samstillingu flipa til að skoða lista af flipum frá öðrum tækjum.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox samstilling";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia samstilling";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Ferill";
@@ -719,7 +719,7 @@
 "InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Kveikja á sjálfvirkri lokun";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox getur lokað flipum sem þú hefur ekki skoðað síðastliðinn mánuð.";
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Ecosia getur lokað flipum sem þú hefur ekki skoðað síðastliðinn mánuð.";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
 "InactiveTabs.TabTray.AutoClosePrompt.Title" = "Loka sjálfvirkt eftir einn mánuð?";
@@ -887,13 +887,13 @@
 "Logins.Onboarding.Message" = "Innskráningar þínar og lykilorð eru nú vernduð með Face ID andlitsauðkenni, Touch ID fingrafaraauðkenni eða aðgangskóða tækis.";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Til að nota sjálfvirka útfyllingareiginleikann fyrir Firefox verður þú að hafa aðgangskóða tækis virkan.";
+"Logins.PasscodeRequirement.Warning" = "Til að nota sjálfvirka útfyllingareiginleikann fyrir Ecosia verður þú að hafa aðgangskóða tækis virkan.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Taktu lykilorðin þín hvert sem er";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Sjálfvirk útfylling lykilorða í Firefox";
+"Logins.WelcomeView.Title2" = "Sjálfvirk útfylling lykilorða í Ecosia";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Kveikja á sjálfvirkri útfyllingu";
@@ -941,7 +941,7 @@
 "LoginsList.LoginsListSearchPlaceholder" = "Sía";
 
 /* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Vistaðar innskráningar munu birtast hér. Ef þú vistaðir innskráningar þínar í Firefox á öðru tæki skaltu skrá þig inn á Firefox reikninginn þinn.";
+"LoginsList.NoLoginsFound.Description" = "Vistaðar innskráningar munu birtast hér. Ef þú vistaðir innskráningar þínar í Ecosia á öðru tæki skaltu skrá þig inn á Ecosia reikninginn þinn.";
 
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Engar innskráningar fundust";
@@ -965,7 +965,7 @@
 "LoginsList.Title" = "SAVED LOGINS";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Lítur út fyrir að Firefox hafi hrunið. Viltu opna flipana þína aftur?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Lítur út fyrir að Ecosia hafi hrunið. Viltu opna flipana þína aftur?";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -1021,10 +1021,10 @@
 "Menu.EnhancedTrackingProtectionOn.Title" = "Kveikt er á auknum rakningarvörnum fyrir þetta vefsvæði.";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox lokar á rekjara milli vefsvæða, samfélagsmiðlarekjara, rafmyntagrafara og fingrafarasöfnun.";
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Ecosia lokar á rekjara milli vefsvæða, samfélagsmiðlarekjara, rafmyntagrafara og fingrafarasöfnun.";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox lokar á rekjara milli vefsvæða, samfélagsmiðlarekjara, rafmyntagrafara, fingrafarasöfnun og rakningu efnis.";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Ecosia lokar á rekjara milli vefsvæða, samfélagsmiðlarekjara, rafmyntagrafara, fingrafarasöfnun og rakningu efnis.";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Hjálp";
@@ -1123,7 +1123,7 @@
 "Menu.TrackingProtection.Details.Verifier" = "Sannvottað af %@";
 
 /* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Engir rekjarar sem Firefox þekkir til fundust á þessari síðu.";
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Engir rekjarar sem Ecosia þekkir til fundust á þessari síðu.";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Verndarstillingar";
@@ -1138,7 +1138,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "Samfélagsmiðlarekjarar";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox hefur lokað á suma hluta af þessari síðu sem gætu verið að fylgjast með vafra.";
+"Menu.TrackingProtectionBlocking.Description" = "Ecosia hefur lokað á suma hluta af þessari síðu sem gætu verið að fylgjast með vafra.";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
 "Menu.TrackingProtectionBlockingDisabled.Description" = "Loka á rekjara";
@@ -1265,7 +1265,7 @@
 "Onboarding.WallpaperAction.v102" = "Stilla bakgrunn";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
-"Onboarding.WallpaperTitle.v102" = "Veldu bakgrunnsmynd Firefox";
+"Onboarding.WallpaperTitle.v102" = "Veldu bakgrunnsmynd Ecosia";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Fara að vafra";
@@ -1290,10 +1290,10 @@
 
 /* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
    The title for the new onboarding card letting users know what is new in Firefox iOS */
-"Onboarding.WhatsNew.Title" = "Hvað er nýtt í Firefox";
+"Onboarding.WhatsNew.Title" = "Hvað er nýtt í Ecosia";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Æi! Firefox hrundi";
+"Oops! Firefox crashed" = "Æi! Ecosia hrundi";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Opnaðu greinar í lesham með því að ýta á bókartáknið þegar það birtist í titilslá.";
@@ -1305,7 +1305,7 @@
 "Open Tabs" = "Opna flipa";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox getur ekki opnað þessa síðu vegna þess að vistfangið er ógilt.";
+"OpenURL.Error.Message" = "Ecosia getur ekki opnað þessa síðu vegna þess að vistfangið er ógilt.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Geta ekki opnað síðu";
@@ -1320,19 +1320,19 @@
 "Password" = "Lykilorð";
 
 /* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Það eru engin samstillt auðkenni tengd Firefox reikningi þínum";
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Það eru engin samstillt auðkenni tengd Ecosia reikningi þínum";
 
 /* Header for the list of credentials table */
 "PasswordAutoFill.PasswordsListTitle" = "Aðgengileg auðkenni:";
 
 /* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox auðkenni";
+"PasswordAutoFill.SectionTitle" = "Ecosia auðkenni";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Þú getur vistað myndina í myndasafnið þitt.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox vill fá aðgang að myndunum þínum";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia vill fá aðgang að myndunum þínum";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Loka";
@@ -1416,10 +1416,10 @@
 "ScanQRCode.InvalidDataError.Message" = "Gögnin eru ógild";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Leyfðu Firefox að fá aðgang að myndavélinni í 'Settings' -> 'Privacy' -> 'Camera'.";
+"ScanQRCode.PermissionError.Message" = "Leyfðu Ecosia að fá aðgang að myndavélinni í 'Settings' -> 'Privacy' -> 'Camera'.";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Farðu á tækinu í 'Stillingar' > 'Firefox'. Leyfðu Firefox að fá aðgang að myndavélinni.";
+"ScanQRCode.PermissionError.Message.v100" = "Farðu á tækinu í 'Stillingar' > 'Ecosia'. Leyfðu Ecosia að fá aðgang að myndavélinni.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Skanna QR-kóða";
@@ -1436,7 +1436,7 @@
 "Search.Awesomebar.SwitchToTab" = "Skipta yfir á flipa";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox tillögur";
+"Search.SuggestSectionTitle.v102" = "Ecosia tillögur";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Nýja leitarvélin mun birtast í leitarsvæðinu";
@@ -1478,7 +1478,7 @@
 "Secure connection" = "Örugg tenging";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Senda hrunaskýrslu svo Mozilla geti lagað vandamálið?";
+"Send a crash report so Mozilla can fix the problem?" = "Senda hrunaskýrslu svo Ecosia geti lagað vandamálið?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Senda endurgjöf";
@@ -1506,19 +1506,19 @@
 "SendTo.NavBar.Title" = "Senda flipa";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Þú ert ekki með önnur tæki tengd við þennan Firefox reikning sem hægt er að samstilla.";
+"SendTo.NoDevicesFound.Message" = "Þú ert ekki með önnur tæki tengd við þennan Ecosia reikning sem hægt er að samstilla.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Vinsamlegast opnaðu Firefox, farðu í stillingar og skráðu þig inn til að halda áfram.";
+"SendTo.NotSignedIn.Message" = "Vinsamlegast opnaðu Ecosia, farðu í stillingar og skráðu þig inn til að halda áfram.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Þú ert ekki skráð/ur inn á Firefox reikninginn þinn.";
+"SendTo.NotSignedIn.Title" = "Þú ert ekki skráð/ur inn á Ecosia reikninginn þinn.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Senda";
 
 /* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Skráðu þig inn í Firefox";
+"SendTo.SignIn.Button" = "Skráðu þig inn í Ecosia";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Nýjum flipa bætt við frá öðrutæki.";
@@ -1542,7 +1542,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Ýttu á til að byrja";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox samstilling";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia samstilling";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Skoða";
@@ -1605,7 +1605,7 @@
 "Settings.DataManagement.Title" = "Gagnastýring";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox mun hætta að samstilla reikninginn þinn en mun ekki eyða neinum vafragögnum á þessu tæki.";
+"Settings.Disconnect.Body" = "Ecosia mun hætta að samstilla reikninginn þinn en mun ekki eyða neinum vafragögnum á þessu tæki.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Aftengja samstillingu";
@@ -1678,7 +1678,7 @@
 "Settings.FxA.Sync.SectionName" = "Stillingar samstillingar";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox reikningur";
+"Settings.FxA.Title" = "Ecosia reikningur";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Almennt";
@@ -1687,7 +1687,7 @@
 "Settings.Home.Current.Description.v101" = "Veldu hvað birtist sem upphafssíða.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Veldu það efni sem þú sérð á upphafssíðu Firefox.";
+"Settings.Home.Option.Description.v101" = "Veldu það efni sem þú sérð á upphafssíðu Ecosia.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Hoppa aftur inn";
@@ -1714,7 +1714,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Upphafssíða";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Veldu hvað þú sérð þegar þú ferð aftur í Firefox.";
+"Settings.Home.Option.StartAtHome.Description" = "Veldu hvað þú sérð þegar þú ferð aftur í Ecosia.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Síðasti flipi";
@@ -1729,31 +1729,31 @@
 "Settings.Home.Option.Wallpaper" = "Bakgrunnur";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox bakgrunnur, ametyst-mynstur.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Ecosia bakgrunnur, ametyst-mynstur.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox bakgrunnur, strandhólar-mynstur.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Ecosia bakgrunnur, strandhólar-mynstur.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox bakgrunnur, cerulean-mynstur.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Ecosia bakgrunnur, cerulean-mynstur.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Sjálfgefinn glær bakgrunnur.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox bakgrunnur, sólarupprás-mynstur.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Ecosia bakgrunnur, sólarupprás-mynstur.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Víxla af/á að fletta í gegnum bakgrunna";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox bakgrunnur, hæðir-í-rökkri-mynstur.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Ecosia bakgrunnur, hæðir-í-rökkri-mynstur.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "UPPHAFSSKJÁR";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Skiptu um bakgrunn með því að smella á táknmynd Firefox-heimasíðunnar";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Skiptu um bakgrunn með því að smella á táknmynd Ecosia-heimasíðunnar";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Bakgrunnur";
@@ -1834,10 +1834,10 @@
 "Settings.NewTab.Option.CustomizeFooter2" = "Vefsvæði sem þú vistar eða heimsækir";
 
 /* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Sérsníða upphafssíðu Firefox";
+"Settings.NewTab.Option.CustomizeTitle" = "Sérsníða upphafssíðu Ecosia";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Upphafssíða Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "Upphafssíða Ecosia";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
 "Settings.NewTab.Option.HighlightsBookmarks" = "Nýleg bókamerki";
@@ -1882,7 +1882,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Loka á myndir";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Þegar Firefox ræsir";
+"Settings.OfferClipboardBar.Status" = "Þegar Ecosia ræsir";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Bjóða uppá að opna afritaða hlekki";
@@ -1918,7 +1918,7 @@
 "Settings.SendUsage.Link" = "Fræðast meira.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla safnar eingöngu þeim gögnum sem við þurfum til að veita og betrum bæta Firefox fyrir alla.";
+"Settings.SendUsage.Message" = "Ecosia safnar eingöngu þeim gögnum sem við þurfum til að veita og betrum bæta Ecosia fyrir alla.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Senda notkunarupplýsingar";
@@ -1936,7 +1936,7 @@
 "Settings.Siri.OpenTabShortcut" = "Opna nýjan flipa";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Nota Siri flýtivísanir til að opna Firefox með Siri";
+"Settings.Siri.SectionDescription" = "Nota Siri flýtivísanir til að opna Ecosia með Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri flýtileiðir";
@@ -1960,7 +1960,7 @@
 "Settings.Studies.Toggle.Link" = "Fræðast meira.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox kann að setja upp og keyra rannsóknir af og til.";
+"Settings.Studies.Toggle.Message" = "Ecosia kann að setja upp og keyra rannsóknir af og til.";
 
 /* Toggled OFF to opt-out of studies */
 "Settings.Studies.Toggle.Off" = "Af";
@@ -2014,7 +2014,7 @@
 "Settings.TrackingProtection.Alert.Title" = "Gættu þín!";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Þú getur valið hvaða lista Firefox notar til að loka á þá vefhluta sem gætu verið að fylgjast með þér.";
+"Settings.TrackingProtection.BlockListsHeader" = "Þú getur valið hvaða lista Ecosia notar til að loka á þá vefhluta sem gætu verið að fylgjast með þér.";
 
 /* Explanation of basic mode. */
 "Settings.TrackingProtection.Info.BasicTitle" = "Jafnvægi milli verndar og afkasta.";
@@ -2125,16 +2125,16 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Hlaða í bakvinnslu";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Opnast í Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Opnast í Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Opna í Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Opna í Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
 "ShareExtension.OpenInPrivateModeAction.Title" = "Opna í huliðsham";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Leita í Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Leita í Ecosia";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Sýna leitar tillögur";
@@ -2171,7 +2171,7 @@
 "Sync.FirstTimeMessage.Label" = "Fyrsta samstillingin gæti tekið dálítinn tíma";
 
 /* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "Enginn reikningur? Búðu til einn slíkan til að samstilla Firefox á milli tækja.";
+"Sync.NoAccount.Description" = "Enginn reikningur? Búðu til einn slíkan til að samstilla Ecosia á milli tækja.";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "Samstilling í gangi";
@@ -2357,13 +2357,13 @@
 "UIMenuItem.PasteGo" = "Líma & áfram";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Leita með Firefox";
+"UIMenuItem.SearchWithFirefox" = "Leita með Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "ólesið";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Uppfæra Firefox til að tengjast";
+"Upgrade Firefox to connect" = "Uppfæra Ecosia til að tengjast";
 
 /* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
 "Upgrade.SyncSign.Action.v106" = "Skrá inn";
@@ -2414,7 +2414,7 @@
 "Yesterday" = "Í gær";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Þú ert ekki með neina Firefox flipa opna á hinum tækjunum þínum.";
+"You don’t have any tabs open in Firefox on your other devices." = "Þú ert ekki með neina Ecosia flipa opna á hinum tækjunum þínum.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Rétturinn þinn";

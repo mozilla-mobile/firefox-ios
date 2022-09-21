@@ -318,7 +318,7 @@
 "Could not load page." = "無法載入頁面。";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "現在起，若 iOS 13 使用者將手機設定為深色模式，Firefox 就會自動切換為暗色佈景主題。若要變更此行為，請到設定 > 佈景主題調整。";
+"CoverSheet.v22.DarkMode.Description" = "現在起，若 iOS 13 使用者將手機設定為深色模式，Ecosia 就會自動切換為暗色佈景主題。若要變更此行為，請到設定 > 佈景主題調整。";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "現在起，暗色佈景主題當中包含暗色鍵盤與暗色啟動畫面。";
@@ -377,7 +377,7 @@
 "Downloads.CancelDialog.Title" = "取消下載";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "尚不支援使用 Firefox 下載。";
+"Downloads.Error.Message" = "尚不支援使用 Ecosia 下載。";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "已取消下載";
@@ -422,7 +422,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "可能是設定錯誤，或是攻擊者惡意修改連線，若要繼續連線的話請小心會有安全性風險。";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ 的擁有者並未正確設定好網站。為了確保您的個資不被偷走，Firefox 並未連線至此網站。";
+"ErrorPages.CertWarning.Description" = "%@ 的擁有者並未正確設定好網站。為了確保您的個資不被偷走，Ecosia 並未連線至此網站。";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "此連線不受信任";
@@ -443,7 +443,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox 首頁";
+"Firefox.HomePage.Title" = "Ecosia 首頁";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "自訂首頁";
@@ -497,7 +497,7 @@
 "FxA.ConnectAnotherDevice" = "連結其他裝置";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox 帳號";
+"FxA.FirefoxAccount" = "Ecosia 帳號";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "管理帳號與裝置";
@@ -509,13 +509,13 @@
 "FxA.OpenSyncPreferences" = "開啟同步偏好設定";
 
 /* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "掃描 firefox.com/pair 網站上的 QR Code";
+"fxa.qr-scanning-view.instructions" = "掃描 Ecosia.com/pair 網站上的 QR Code";
 
 /* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
 "FxA.RemoveAccount" = "移除";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "請先移除與此裝置相關聯的 Firefox 帳號，再以不同使用者帳號登入。";
+"FxA.RemoveAccountAlertMessage" = "請先移除與此裝置相關聯的 Ecosia 帳號，再以不同使用者帳號登入。";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "移除帳號";
@@ -527,13 +527,13 @@
 "fxa.signin.camera-signin" = "使用相機登入";
 
 /* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "使用帳號同步不同裝置上的 Firefox。";
+"fxa.signin.create-account-pt-1" = "使用帳號同步不同裝置上的 Ecosia。";
 
 /* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "註冊 Firefox 帳號。";
+"fxa.signin.create-account-pt-2" = "註冊 Ecosia 帳號。";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "用您的電腦開啟 Firefox，前往 firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "用您的電腦開啟 Ecosia，前往 Ecosia.com/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "準備好了，開始掃描！";
@@ -557,7 +557,7 @@
 "FxA.TakeYourWebWithYou" = "把 Web 隨身帶著走";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox 同步已連結到 %@";
+"FxAPush_DeviceConnected_body" = "Ecosia 同步已連結到 %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "已連線至 Sync";
@@ -566,7 +566,7 @@
 "FxAPush_DeviceDisconnected_body" = "已成功取消 %@ 的連線。";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "已成功自 Firefox Sync 取消鏈結此裝置。";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "已成功自 Ecosia Sync 取消鏈結此裝置。";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "已與 Sync 取消連線";
@@ -575,10 +575,10 @@
 "FxAPush_DeviceDisconnected_title" = "已與 Sync 取消連線";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "有一台裝置已與 Firefox 取消連線";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "有一台裝置已與 Ecosia 取消連線";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox 圖示，點擊此圖示變更背景圖。";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Ecosia 圖示，點擊此圖示變更背景圖。";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "在您其他的裝置取得開啟的分頁、書籤與密碼。";
@@ -626,7 +626,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "開啟分頁同步功能以檢視您其他裝置中的分頁清單。";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "瀏覽紀錄";
@@ -719,7 +719,7 @@
 "InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "開啟「分頁自動關閉」功能";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox 將自動關閉您超過一個月未檢視的分頁。";
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Ecosia 將自動關閉您超過一個月未檢視的分頁。";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
 "InactiveTabs.TabTray.AutoClosePrompt.Title" = "等一個月後再自動關閉？";
@@ -887,13 +887,13 @@
 "Logins.Onboarding.Message" = "您的網站登入資訊與密碼將受 Face ID、Touch ID 或裝置解鎖碼保護。";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "若要使用 Firefox 的「自動填寫」功能，必須先設定使用裝置解鎖碼。";
+"Logins.PasscodeRequirement.Warning" = "若要使用 Ecosia 的「自動填寫」功能，必須先設定使用裝置解鎖碼。";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "密碼隨身帶著走";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "自動填寫 Firefox 密碼";
+"Logins.WelcomeView.Title2" = "自動填寫 Ecosia 密碼";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "開啟密碼「自動填寫」功能";
@@ -941,7 +941,7 @@
 "LoginsList.LoginsListSearchPlaceholder" = "篩選條件";
 
 /* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "儲存的登入資訊將顯示於此處。若您在其他裝置上儲存了登入資訊，請登入您的 Firefox 帳號。";
+"LoginsList.NoLoginsFound.Description" = "儲存的登入資訊將顯示於此處。若您在其他裝置上儲存了登入資訊，請登入您的 Ecosia 帳號。";
 
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "找不到登入資訊";
@@ -965,7 +965,7 @@
 "LoginsList.Title" = "儲存的登入資訊";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "看來 Firefox 之前掛掉了，要還原您先前的分頁嗎？";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "看來 Ecosia 之前掛掉了，要還原您先前的分頁嗎？";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -1021,10 +1021,10 @@
 "Menu.EnhancedTrackingProtectionOn.Title" = "已對此網站開啟加強型追蹤保護。";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox 會封鎖跨網站追蹤器、社交網路追蹤器、加密貨幣採礦程式與數位指紋追蹤程式。";
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Ecosia 會封鎖跨網站追蹤器、社交網路追蹤器、加密貨幣採礦程式與數位指紋追蹤程式。";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox 會封鎖跨網站追蹤器、社交網路追蹤器、加密貨幣採礦程式與數位指紋追蹤程式與網站中的追蹤用內容。";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Ecosia 會封鎖跨網站追蹤器、社交網路追蹤器、加密貨幣採礦程式與數位指紋追蹤程式與網站中的追蹤用內容。";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "說明";
@@ -1123,7 +1123,7 @@
 "Menu.TrackingProtection.Details.Verifier" = "由 %@ 驗證";
 
 /* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefox 未在此頁面偵測到已知的追蹤元素。";
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Ecosia 未在此頁面偵測到已知的追蹤元素。";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "保護設定";
@@ -1138,7 +1138,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "社交追蹤器";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox 已經封鎖頁面裡的部分元素，以防止您的瀏覽行為被其追蹤。";
+"Menu.TrackingProtectionBlocking.Description" = "Ecosia 已經封鎖頁面裡的部分元素，以防止您的瀏覽行為被其追蹤。";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
 "Menu.TrackingProtectionBlockingDisabled.Description" = "封鎖線上追蹤器";
@@ -1265,7 +1265,7 @@
 "Onboarding.WallpaperAction.v102" = "設定背景圖";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
-"Onboarding.WallpaperTitle.v102" = "挑選一張 Firefox 背景圖";
+"Onboarding.WallpaperTitle.v102" = "挑選一張 Ecosia 背景圖";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "開始上網";
@@ -1290,10 +1290,10 @@
 
 /* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
    The title for the new onboarding card letting users know what is new in Firefox iOS */
-"Onboarding.WhatsNew.Title" = "Firefox 有什麼新鮮事";
+"Onboarding.WhatsNew.Title" = "Ecosia 有什麼新鮮事";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "喔喔，Firefox 發生錯誤";
+"Oops! Firefox crashed" = "喔喔，Ecosia 發生錯誤";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "點選標題列出現的書本圖示，即可將該頁面於閱讀畫面開啟。";
@@ -1305,7 +1305,7 @@
 "Open Tabs" = "開啟分頁";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "由於網址錯誤，Firefox 無法開啟頁面。";
+"OpenURL.Error.Message" = "由於網址錯誤，Ecosia 無法開啟頁面。";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "無法開啟頁面";
@@ -1320,19 +1320,19 @@
 "Password" = "密碼";
 
 /* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "您沒有任何從 Firefox 帳號同步來的登入資訊";
+"PasswordAutoFill.NoPasswordsFoundTitle" = "您沒有任何從 Ecosia 帳號同步來的登入資訊";
 
 /* Header for the list of credentials table */
 "PasswordAutoFill.PasswordsListTitle" = "可用登入資訊:";
 
 /* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox 登入資訊";
+"PasswordAutoFill.SectionTitle" = "Ecosia 登入資訊";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "讓您可儲存照片到「照片串流」。";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox 想要存取您的照片";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia 想要存取您的照片";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "關閉";
@@ -1416,10 +1416,10 @@
 "ScanQRCode.InvalidDataError.Message" = "資料無效";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "請到「設定」->「隱私權」->「相機」允許 Firefox 使用裝置上的相機。";
+"ScanQRCode.PermissionError.Message" = "請到「設定」->「隱私權」->「相機」允許 Ecosia 使用裝置上的相機。";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "請到裝置的「設定」>「Firefox」允許 Firefox 存取攝影機。";
+"ScanQRCode.PermissionError.Message.v100" = "請到裝置的「設定」>「Ecosia」允許 Ecosia 存取攝影機。";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "掃描 QR Code";
@@ -1436,7 +1436,7 @@
 "Search.Awesomebar.SwitchToTab" = "切換至該分頁";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox 建議";
+"Search.SuggestSectionTitle.v102" = "Ecosia 建議";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "新的搜尋引擎將顯示於快速搜尋列。";
@@ -1478,7 +1478,7 @@
 "Secure connection" = "安全連線";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "要傳送錯誤報告，讓 Mozilla 改善這些問題嗎？";
+"Send a crash report so Mozilla can fix the problem?" = "要傳送錯誤報告，讓 Ecosia 改善這些問題嗎？";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "傳送意見回饋";
@@ -1506,19 +1506,19 @@
 "SendTo.NavBar.Title" = "傳送分頁";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "您沒有其他連結到此 Firefox 帳號的裝置可進行同步。";
+"SendTo.NoDevicesFound.Message" = "您沒有其他連結到此 Ecosia 帳號的裝置可進行同步。";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "請開啟 Firefox，到「設定」登入後繼續。";
+"SendTo.NotSignedIn.Message" = "請開啟 Ecosia，到「設定」登入後繼續。";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "您尚未登入 Firefox 帳號。";
+"SendTo.NotSignedIn.Title" = "您尚未登入 Ecosia 帳號。";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "傳送";
 
 /* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "登入 Firefox";
+"SendTo.SignIn.Button" = "登入 Ecosia";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "收到來自其他裝置的分頁。";
@@ -1542,7 +1542,7 @@
 "SentTab.NoTabArrivingNotification.body" = "點擊以開始";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "檢視";
@@ -1605,7 +1605,7 @@
 "Settings.DataManagement.Title" = "資料管理";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox 將會停止與您帳號間的同步，但不會刪除此裝置上的任何瀏覽資料。";
+"Settings.Disconnect.Body" = "Ecosia 將會停止與您帳號間的同步，但不會刪除此裝置上的任何瀏覽資料。";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "取消連線至 Sync";
@@ -1678,7 +1678,7 @@
 "Settings.FxA.Sync.SectionName" = "同步設定";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox 帳號";
+"Settings.FxA.Title" = "Ecosia 帳號";
 
 /* General settings section title */
 "Settings.General.SectionName" = "一般";
@@ -1687,7 +1687,7 @@
 "Settings.Home.Current.Description.v101" = "選擇要在首頁顯示哪些內容。";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "選擇要在 Firefox 首頁看到哪些東西。";
+"Settings.Home.Option.Description.v101" = "選擇要在 Ecosia 首頁看到哪些東西。";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "回到先前開啟頁面";
@@ -1714,7 +1714,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "首頁";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "選擇回到 Firefox 時想看到什麼。";
+"Settings.Home.Option.StartAtHome.Description" = "選擇回到 Ecosia 時想看到什麼。";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "最後開啟的分頁";
@@ -1729,31 +1729,31 @@
 "Settings.Home.Option.Wallpaper" = "背景圖";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "紫水晶圖案的 Firefox 背景圖。";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "紫水晶圖案的 Ecosia 背景圖。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "海灘山丘圖案的 Firefox 背景圖。";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "海灘山丘圖案的 Ecosia 背景圖。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "蔚藍圖案的 Firefox 背景圖。";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "蔚藍圖案的 Ecosia 背景圖。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "預設的明亮 Firefox 背景圖";
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "預設的明亮 Ecosia 背景圖";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "日出圖案的 Firefox 背景圖。";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "日出圖案的 Ecosia 背景圖。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "首頁背景圖切換開關";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "暮光山丘圖案的 Firefox 背景圖。";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "暮光山丘圖案的 Ecosia 背景圖。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "開啟畫面";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "點擊 Firefox 首頁的圖示即可更改背景圖案";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "點擊 Ecosia 首頁的圖示即可更改背景圖案";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "背景圖";
@@ -1834,10 +1834,10 @@
 "Settings.NewTab.Option.CustomizeFooter2" = "您儲存或造訪過的網站";
 
 /* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "自訂 Firefox 首頁";
+"Settings.NewTab.Option.CustomizeTitle" = "自訂 Ecosia 首頁";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox 首頁";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia 首頁";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
 "Settings.NewTab.Option.HighlightsBookmarks" = "最近加入的書籤";
@@ -1882,7 +1882,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "封鎖圖片";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "開啟 Firefox 時";
+"Settings.OfferClipboardBar.Status" = "開啟 Ecosia 時";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "讓您開啟複製的鏈結";
@@ -1918,7 +1918,7 @@
 "Settings.SendUsage.Link" = "了解更多。";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla 致力於只收集用來為眾人改善 Firefox 所需的必要資料。";
+"Settings.SendUsage.Message" = "Ecosia 致力於只收集用來為眾人改善 Ecosia 所需的必要資料。";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "傳送使用資料";
@@ -1936,7 +1936,7 @@
 "Settings.Siri.OpenTabShortcut" = "開啟新分頁";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "透過 Siri 使用捷徑快速開啟 Firefox";
+"Settings.Siri.SectionDescription" = "透過 Siri 使用捷徑快速開啟 Ecosia";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri 捷徑";
@@ -1960,7 +1960,7 @@
 "Settings.Studies.Toggle.Link" = "了解更多。";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox 會不定時安裝並執行使用者研究。";
+"Settings.Studies.Toggle.Message" = "Ecosia 會不定時安裝並執行使用者研究。";
 
 /* Toggled OFF to opt-out of studies */
 "Settings.Studies.Toggle.Off" = "關閉";
@@ -2014,7 +2014,7 @@
 "Settings.TrackingProtection.Alert.Title" = "注意！";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "您可以選擇 Firefox 要依照哪個清單來封鎖可能會追蹤您的上網行為的網頁元素。";
+"Settings.TrackingProtection.BlockListsHeader" = "您可以選擇 Ecosia 要依照哪個清單來封鎖可能會追蹤您的上網行為的網頁元素。";
 
 /* Explanation of basic mode. */
 "Settings.TrackingProtection.Info.BasicTitle" = "在保護與效能間取得平衡。";
@@ -2125,16 +2125,16 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "在背景載入";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "正在 Firefox 載入";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "正在 Ecosia 載入";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "於 Firefox 開啟";
+"ShareExtension.OpenInFirefoxAction.Title" = "於 Ecosia 開啟";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
 "ShareExtension.OpenInPrivateModeAction.Title" = "用隱私模式開啟";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "在 Firefox 中搜尋";
+"ShareExtension.SeachInFirefoxAction.Title" = "在 Ecosia 中搜尋";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "顯示搜尋建議";
@@ -2171,7 +2171,7 @@
 "Sync.FirstTimeMessage.Label" = "首次同步可能要花一點時間";
 
 /* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "沒有帳號嗎？註冊一組就能在不同裝置間同步 Firefox。";
+"Sync.NoAccount.Description" = "沒有帳號嗎？註冊一組就能在不同裝置間同步 Ecosia。";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "同步中";
@@ -2357,13 +2357,13 @@
 "UIMenuItem.PasteGo" = "貼上並瀏覽";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "使用 Firefox 搜尋";
+"UIMenuItem.SearchWithFirefox" = "使用 Ecosia 搜尋";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "未讀";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "升級 Firefox 以連線";
+"Upgrade Firefox to connect" = "升級 Ecosia 以連線";
 
 /* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
 "Upgrade.SyncSign.Action.v106" = "登入";
@@ -2414,7 +2414,7 @@
 "Yesterday" = "昨天";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "您其他裝置上的 Firefox 沒有任何開啟的分頁。";
+"You don’t have any tabs open in Firefox on your other devices." = "您其他裝置上的 Ecosia 沒有任何開啟的分頁。";
 
 /* Your Rights settings section title */
 "Your Rights" = "您的權利";

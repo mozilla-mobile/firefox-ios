@@ -440,7 +440,7 @@
 "FxA.NoInternetConnection" = "අන්තර්ජාල සම්බන්ධතාවයක් නැත";
 
 /* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "firefox.com/pair හි පෙන්වන QR කේතය සුපිරික්සන්න";
+"fxa.qr-scanning-view.instructions" = "Ecosia.com/pair හි පෙන්වන QR කේතය සුපිරික්සන්න";
 
 /* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
 "FxA.RemoveAccount" = "ඉවත් කරන්න";
@@ -458,7 +458,7 @@
 "fxa.signin.create-account-pt-2" = "ෆයර්ෆොක්ස් ගිණුමක් සාදන්න.";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "පරිගණකයෙහි ෆයර්ෆොක්ස් විවෘත කර firefox.com/pair වෙත යන්න";
+"fxa.signin.qr-link-instruction" = "පරිගණකයෙහි ෆයර්ෆොක්ස් විවෘත කර Ecosia.com/pair වෙත යන්න";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "සුපිරික්සීමට සූදානම්";

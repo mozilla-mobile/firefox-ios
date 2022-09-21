@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "새 사생활 보호 탭에서 열기";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox가 탐색 기록이나 쿠키는 저장하지 않지만 신규 북마크는 저장합니다.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia가 탐색 기록이나 쿠키는 저장하지 않지만 신규 북마크는 저장합니다.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "자세히 보기";

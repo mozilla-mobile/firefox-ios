@@ -246,7 +246,7 @@
 "Could not load page." = "పేజీ లోడ్ చేయడం సాధ్యపడలేదు.";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "iOS 13 వాడుకరుల కోసం, మీ ఫోను నల్లని రీతికి అమర్చినప్పుడు Firefox స్వయంచాలకంగా నల్లని అలంకారానికి మారుతుంది. ఈ ప్రవర్తనను మార్చుకోడానికి, ఇటు వెళ్ళండి: అమరికలు > అలంకారం.";
+"CoverSheet.v22.DarkMode.Description" = "iOS 13 వాడుకరుల కోసం, మీ ఫోను నల్లని రీతికి అమర్చినప్పుడు Ecosia స్వయంచాలకంగా నల్లని అలంకారానికి మారుతుంది. ఈ ప్రవర్తనను మార్చుకోడానికి, ఇటు వెళ్ళండి: అమరికలు > అలంకారం.";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "నల్లని అలంకారంలో ఇప్పుడు నల్లని కీబోర్డు, నల్లని ఆరంభ తెర ఉన్నాయి.";
@@ -296,7 +296,7 @@
 "Downloads.CancelDialog.Title" = "దింపుకోలును రద్దుచేయి";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Firefox ఇంకా దింపుకోళ్ళకు మద్దతు ఇవ్వట్లేదు.";
+"Downloads.Error.Message" = "Ecosia ఇంకా దింపుకోళ్ళకు మద్దతు ఇవ్వట్లేదు.";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "దింపుకోలు రద్దయింది";
@@ -362,7 +362,7 @@
 "Facebook" = "ఫేస్‌బుక్";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox ముంగిలి పేజీ";
+"Firefox.HomePage.Title" = "Ecosia ముంగిలి పేజీ";
 
 /* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
 "FirefoxHome.Pocket.Minutes.v99" = "%d నిమి";
@@ -389,13 +389,13 @@
 "FxA.AccountVerificationRequired" = "ఖాతా ధృవీకరణ అవసరం";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "మీరు %@ని ధృవీకరించాలి. Firefox నుండి ధృవీకరణ లంకె కోసం మీ ఇమెయిల్ను తనిఖీ చేయండి.";
+"FxA.AccountVerificationRequiredSurface" = "మీరు %@ని ధృవీకరించాలి. Ecosia నుండి ధృవీకరణ లంకె కోసం మీ ఇమెయిల్ను తనిఖీ చేయండి.";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "మరొక పరికరాన్ని అనుసంధానించు";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox ఖాతా";
+"FxA.FirefoxAccount" = "Ecosia ఖాతా";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "ఖాతా, పరికరాలను నిర్వహించండి";
@@ -410,7 +410,7 @@
 "FxA.RemoveAccount" = "తీసివేయి";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "వేరే వాడుకరిగా ప్రవేశించడానికి ఈ పరికరంతో అనుబంధమైన ఉన్న Firefox ఖాతాను తొలగించండి.";
+"FxA.RemoveAccountAlertMessage" = "వేరే వాడుకరిగా ప్రవేశించడానికి ఈ పరికరంతో అనుబంధమైన ఉన్న Ecosia ఖాతాను తొలగించండి.";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "ఖాతాను తొలగించు";
@@ -434,7 +434,7 @@
 "FxA.TakeYourWebWithYou" = "మీ జాలాన్ని మీతో తీసుకువెళ్ళండి";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync %@కు అనుసంధానమయింది";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync %@కు అనుసంధానమయింది";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync అనుసంధానించబడింది";
@@ -443,7 +443,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ విజయవంతంగా అనుసంధానం తెంచబడింది.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Firefox Syncతో ఈ పరికర అనుసంధానం విజయవంతంగా తెంచివేయబడింది.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Ecosia Syncతో ఈ పరికర అనుసంధానం విజయవంతంగా తెంచివేయబడింది.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync అనుసంధానం తెంచివేయబడింది";
@@ -452,7 +452,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync అనుసంధానం తెంచివేయబడింది";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Firefox Sync నుండి ఒక పరికర అనుసంధానం తెగిపోయింది";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Ecosia Sync నుండి ఒక పరికర అనుసంధానం తెగిపోయింది";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "మీ ఇతర పరికరాల నుండి మీ తెరిచిన ట్యాబ్లను, బుక్మార్క్లను మరియు పాస్వర్డ్లు పొందండి.";
@@ -826,7 +826,7 @@
 "Menu.TrackingProtection.BlockedTitle" = "నిరోధించబడినవి";
 
 /* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefoxకి తెలిసిన ట్రాకర్లేమీ ఈ పేజీలో కనబడలేదు.";
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Ecosiaకి తెలిసిన ట్రాకర్లేమీ ఈ పేజీలో కనబడలేదు.";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "సంరక్షణ అమరికలు";
@@ -841,7 +841,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "సామాజిక ట్రాకర్లు";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "ఈ పేజీలో మీ విహరణ జాడ తెలుసుకునే భాగాలను Firefox నిరోధిస్తోంది.";
+"Menu.TrackingProtectionBlocking.Description" = "ఈ పేజీలో మీ విహరణ జాడ తెలుసుకునే భాగాలను Ecosia నిరోధిస్తోంది.";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
 "Menu.TrackingProtectionBlockingDisabled.Description" = "ఆన్లైన్ ట్రాకర్లను బ్లాక్ చేయండి";
@@ -948,10 +948,10 @@
 
 /* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
    The title for the new onboarding card letting users know what is new in Firefox iOS */
-"Onboarding.WhatsNew.Title" = "Firefoxలో కొత్తవి ఏమిటి";
+"Onboarding.WhatsNew.Title" = "Ecosiaలో కొత్తవి ఏమిటి";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "అయ్యో! Firefox క్రాష్ అయింది";
+"Oops! Firefox crashed" = "అయ్యో! Ecosia క్రాష్ అయింది";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "టైటిల్ బార్ లో కనిపించినపుడు పుస్తకం చిహ్నాన్ని నొక్కడం ద్వారా రీడర్ లో వ్యాసాలు చూడండి.";
@@ -963,7 +963,7 @@
 "Open Tabs" = "తెరిచివున్న ట్యాబులు";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "అది ఒక చెల్లని చిరునామాను కలిగి ఉండటం వలన Firefox పేజీని తెరవలేదు.";
+"OpenURL.Error.Message" = "అది ఒక చెల్లని చిరునామాను కలిగి ఉండటం వలన Ecosia పేజీని తెరవలేదు.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "పేజీలను తెరవలేదు";
@@ -978,13 +978,13 @@
 "Password" = "సంకేతపదం";
 
 /* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "మీ Firefox ఖాతా నుండి సింక్రనించిన ప్రవేశ వివరాలు ఏమీ లేవు";
+"PasswordAutoFill.NoPasswordsFoundTitle" = "మీ Ecosia ఖాతా నుండి సింక్రనించిన ప్రవేశ వివరాలు ఏమీ లేవు";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ఇది బొమ్మను మీ కేమెరా రోల్‌కు భద్రపరుచుకోనిస్తుంది.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox మీ ఫోటోలను యాక్సెస్ చేయాలనుకుంటుంది";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia మీ ఫోటోలను యాక్సెస్ చేయాలనుకుంటుంది";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "మూసివేయి";
@@ -1056,7 +1056,7 @@
 "ScanQRCode.InvalidDataError.Message" = "డేటా చెల్లనిది";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "మీ పరికరపు కెమెరాను వాడటానికి Firefoxను ఇక్కడ అనుమతించండి ‘అమరికలు’ -> ‘అంతరంగికత’ -> ‘కెమెరా’.";
+"ScanQRCode.PermissionError.Message" = "మీ పరికరపు కెమెరాను వాడటానికి Ecosiaను ఇక్కడ అనుమతించండి ‘అమరికలు’ -> ‘అంతరంగికత’ -> ‘కెమెరా’.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR కోడ్ను స్కాన్ చేయండి";
@@ -1109,7 +1109,7 @@
 "Secure connection" = "సురక్షిత కనెక్షన్";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Mozilla సమస్యను పరిష్కరించాలి కాబట్టి క్రాష్ నివేదికను పంపాలా?";
+"Send a crash report so Mozilla can fix the problem?" = "Ecosia సమస్యను పరిష్కరించాలి కాబట్టి క్రాష్ నివేదికను పంపాలా?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "అభిప్రాయాన్ని పంపండి";
@@ -1137,13 +1137,13 @@
 "SendTo.NavBar.Title" = "ట్యాబును పంపు";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "సింక్రనించడానికి ఈ Firefox ఖాతాకు అనుసంధానించబడిన పరికరాలు ఏమీ మీకు లేవు.";
+"SendTo.NoDevicesFound.Message" = "సింక్రనించడానికి ఈ Ecosia ఖాతాకు అనుసంధానించబడిన పరికరాలు ఏమీ మీకు లేవు.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "కొనసాగించడానికి, దయచేసి Firefoxను తెరిచి, అమరికలకు వెళ్లి, ప్రవేశించండి.";
+"SendTo.NotSignedIn.Message" = "కొనసాగించడానికి, దయచేసి Ecosiaను తెరిచి, అమరికలకు వెళ్లి, ప్రవేశించండి.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "మీరు మీ Firefox ఖాతా లోనికి ప్రవేశించిలేరు.";
+"SendTo.NotSignedIn.Title" = "మీరు మీ Ecosia ఖాతా లోనికి ప్రవేశించిలేరు.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "పంపించు";
@@ -1170,7 +1170,7 @@
 "SentTab.NoTabArrivingNotification.body" = "నిష్క్రమించడానికి తాకండి";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox సమకాలీకరణ";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia సమకాలీకరణ";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "చూడండి";
@@ -1300,7 +1300,7 @@
 "Settings.FxA.Sync.SectionName" = "సింక్ అమరికలు";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox ఖాతా";
+"Settings.FxA.Title" = "Ecosia ఖాతా";
 
 /* General settings section title */
 "Settings.General.SectionName" = "సాధారణం";
@@ -1375,7 +1375,7 @@
 "Settings.NewTab.Option.CustomizeFooter2" = "మీరు భద్రపరచుకున్న లేదా చూసిన సైట్లు";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox ముంగిలి";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia ముంగిలి";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
 "Settings.NewTab.Option.HighlightsBookmarks" = "ఇటీవల ఇష్టాంశాలుగా చేసినవి";
@@ -1414,7 +1414,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "బొమ్మలను నిరోధించు";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Firefox తెరుస్తున్నపుడు";
+"Settings.OfferClipboardBar.Status" = "Ecosia తెరుస్తున్నపుడు";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "నకలు చేసిన లంకెలను తెరవడానికి సిద్దపడండి";
@@ -1438,7 +1438,7 @@
 "Settings.SendUsage.Link" = "ఇంకా తెలుసుకోండి.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla ప్రతి ఒక్కరికీ Firefoxను అందించడానికి మరియు మెరుగుపరచడానికి మాత్రమే అవసరమైనవి మాత్రమే సేకరించేందుకు కృషి చేస్తుంది.";
+"Settings.SendUsage.Message" = "Ecosia ప్రతి ఒక్కరికీ Ecosiaను అందించడానికి మరియు మెరుగుపరచడానికి మాత్రమే అవసరమైనవి మాత్రమే సేకరించేందుకు కృషి చేస్తుంది.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "వినియోగించిన డేటాను పంపు";
@@ -1456,7 +1456,7 @@
 "Settings.Siri.OpenTabShortcut" = "కొత్త ట్యాబును తెరువు";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "సిరి ద్వారా Firefoxను త్వరగా తెరవడానికి సిరి షార్టుకట్లను వాడుకోండి";
+"Settings.Siri.SectionDescription" = "సిరి ద్వారా Ecosiaను త్వరగా తెరవడానికి సిరి షార్టుకట్లను వాడుకోండి";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "సిరిలో సత్వరమార్గాలు";
@@ -1495,7 +1495,7 @@
 "Settings.TrackingProtection.Alert.Title" = "గమనిక!";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "మీ విహరణ జాడ తెలుసుకునే వెబ్ ఎలిమెంట్స్ నిరోధించుటకు Firefox ఏ జాబితా ఉపయోగించాలో మీరు ఎంచుకోవచ్చు.";
+"Settings.TrackingProtection.BlockListsHeader" = "మీ విహరణ జాడ తెలుసుకునే వెబ్ ఎలిమెంట్స్ నిరోధించుటకు Ecosia ఏ జాబితా ఉపయోగించాలో మీరు ఎంచుకోవచ్చు.";
 
 /* Explanation of basic mode. */
 "Settings.TrackingProtection.Info.BasicTitle" = "సంరక్షణకు, పనితనానికి మధ్య సమతుల్యమైనది.";
@@ -1591,16 +1591,16 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "వెనుతలంలో తెరువు";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox లో లోడ్ అవుతోంది";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ecosia లో లోడ్ అవుతోంది";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefox లో తెరవండి";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ecosia లో తెరవండి";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
 "ShareExtension.OpenInPrivateModeAction.Title" = "అంతరంగిక రీతిలో తెరువు";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefox లో శోధించండి";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ecosia లో శోధించండి";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "శోధన సలహాలను చూపించు";
@@ -1793,13 +1793,13 @@
 "UIMenuItem.PasteGo" = "అతికించి వెళ్ళు";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Firefox‌తో వెతుకు";
+"UIMenuItem.SearchWithFirefox" = "Ecosia‌తో వెతుకు";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "చదవ లేదు";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Firefoxతో కనెక్ట్ చేయడానికి అప్గ్రేడ్ చేయండి";
+"Upgrade Firefox to connect" = "Ecosiaతో కనెక్ట్ చేయడానికి అప్గ్రేడ్ చేయండి";
 
 /* Username textbox in Authentication prompt */
 "Username" = "వాడుకరి పేరు";
@@ -1829,7 +1829,7 @@
 "Yesterday" = "నిన్నటి రోజు";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "మీరు మీ ఇతర పరికరాల్లో Firefoxలో ఏ ట్యాబులు తెరిచి లేదు.";
+"You don’t have any tabs open in Firefox on your other devices." = "మీరు మీ ఇతర పరికరాల్లో Ecosiaలో ఏ ట్యాబులు తెరిచి లేదు.";
 
 /* Your Rights settings section title */
 "Your Rights" = "మీ హక్కులు";

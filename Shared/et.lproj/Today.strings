@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "Uus otsing";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Lisa Firefoxi otsetee oma avaekraanile.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Lisa Ecosiai otsetee oma avaekraanile.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Mine kopeeritud lingile";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "Otsi privaatsel kaardil";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Otsi Firefoxis";
+"TodayWidget.NewSearchButtonLabelV1" = "Otsi Ecosiais";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Uus otsing";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "Avatud kaardid puuduvad";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Ava Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Ava Ecosia";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "Avasta Pocketi kureeritud põnevaid ja mõtlemapanevaid lugusid kogu veebist.";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Pocketi poolt soovitatud";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - Pocketi poolt soovitatud";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Pocketi poolt soovitatud";
@@ -71,22 +71,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Privaatne otsing";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Vali avaekraanile lisamiseks Firefoxi otsetee.";
+"TodayWidget.QuickActionDescription" = "Vali avaekraanile lisamiseks Ecosiai otsetee.";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "Kiire tegevus";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Lisa Firefoxi otsetee oma avaekraanile. Pärast lisamist saad seda pikalt puudutades muuta ning soovi korral valida teise otsetee.";
+"TodayWidget.QuickActionGalleryDescription" = "Lisa Ecosiai otsetee oma avaekraanile. Pärast lisamist saad seda pikalt puudutades muuta ning soovi korral valida teise otsetee.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Kiired tegevused";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefoxi otseteed";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosiai otseteed";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - kiired tegevused";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia - kiired tegevused";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "Pääse ligi oma avatud kaartidele otse oma avaekraanilt.";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "Lisa otsetee oma avatud kaartideni.";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - avatud kaardid";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - avatud kaardid";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Otsi Firefoxis";
+"TodayWidget.SearchInFirefoxTitle" = "Otsi Ecosiais";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Otsi\nFirefoxis";
+"TodayWidget.SearchInFirefoxV2" = "Otsi\nEcosiais";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Otsi\nprivaatsel kaardil";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "Saitide otseteed";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - top saidid";
+"TodayWidget.TopSitesSubLabel" = "Ecosia - top saidid";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - saitide otseteed";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia - saitide otseteed";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Vaata rohkem";

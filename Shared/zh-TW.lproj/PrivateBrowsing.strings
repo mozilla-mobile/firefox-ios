@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "用新隱私分頁開啟";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox 不會留下瀏覽紀錄或 cookie，但會保留建立的書籤。";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia 不會留下瀏覽紀錄或 cookie，但會保留建立的書籤。";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "瞭解更多";

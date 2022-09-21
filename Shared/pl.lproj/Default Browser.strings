@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Dowiedz się, jak to zrobić";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Ustaw automatyczne otwieranie odnośników z witryn, wiadomości e-mail i aplikacji Messages w Firefoksie.";
+"DefaultBrowserCard.Description" = "Ustaw automatyczne otwieranie odnośników z witryn, wiadomości e-mail i aplikacji Messages w Ecosia.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Przełącz domyślną przeglądarkę";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Stuknij „Domyślna przeglądarka”";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Wybierz Firefoksa";
+"DefaultBrowserOnboarding.Description3" = "3. Wybierz Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Domyślna przeglądarka";

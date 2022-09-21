@@ -29,16 +29,16 @@
 "TodayWidget.QuickActionsGalleryTitle" = "త్వరిత చర్యలు";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - తెరిచివున్న ట్యాబులు";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - తెరిచివున్న ట్యాబులు";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Firefox‌తో వెతుకు";
+"TodayWidget.SearchInFirefoxTitle" = "Ecosia‌తో వెతుకు";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "మేటి సైట్లు";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - మేటి సైట్లు";
+"TodayWidget.TopSitesSubLabel" = "Ecosia - మేటి సైట్లు";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "ఇంకా చూడండి";

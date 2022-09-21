@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Scopre cumu fà";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Definisce chì i liami di i siti web, i currieri elettronichi è i messaghji s’aprinu autumaticamente in Firefox.";
+"DefaultBrowserCard.Description" = "Definisce chì i liami di i siti web, i currieri elettronichi è i messaghji s’aprinu autumaticamente in Ecosia.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Cambià di navigatore predefinitu";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Picchichjà l’appiecazione predefinita di navigazione";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Selezziunà Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Selezziunà Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Appiecazione predefinita di navigazione";

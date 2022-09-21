@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "باز کردن در زبانه خصوصی";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "جست‌وجو در Firefox";
+"TodayWidget.NewSearchButtonLabelV1" = "جست‌وجو در Ecosia";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "جست‌و‌جو جدید";
@@ -62,7 +62,7 @@
 "TodayWidget.PocketWidgetGalleryDescription" = "داستان های جذاب و قابل تامل را از سراسر وب ، که توسط Pocket تنظیم شده است ، کشف کنید.";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - توصیه شده توسط Pocket";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - توصیه شده توسط Pocket";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "توصیه شده توسط Pocket";
@@ -71,13 +71,13 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "جست‌و‌جوی خصوصی";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "یک میانبر Firefox برای افزودن به صفحه اصلی خود انتخاب کنید.";
+"TodayWidget.QuickActionDescription" = "یک میانبر Ecosia برای افزودن به صفحه اصلی خود انتخاب کنید.";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "واکنش سریع";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "یک میانبر Firefox به صفحه اصلی خود اضافه کنید. پس از افزودن ابزارک ، آن را لمس کنید و نگه دارید تا ویرایش شود و یک میانبر دیگر انتخاب کنید.";
+"TodayWidget.QuickActionGalleryDescription" = "یک میانبر Ecosia به صفحه اصلی خود اضافه کنید. پس از افزودن ابزارک ، آن را لمس کنید و نگه دارید تا ویرایش شود و یک میانبر دیگر انتخاب کنید.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "اقدامات سریع";
@@ -86,7 +86,7 @@
 "TodayWidget.QuickActionsGalleryTitleV2" = "میانبرهای فایرفاکس";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - اقدامات سریع";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia - اقدامات سریع";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "به برگه های باز خود به صورت مستقیم از طریق صفحه اصلی دسترسی پیدا کنید.";
@@ -101,7 +101,7 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "میانبرها را به برگه های باز خود اضافه کنید.";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - باز کردن برگه ها";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - باز کردن برگه ها";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
 "TodayWidget.SearchInFirefoxTitle" = "جست‌وجو در فایرفاکس";

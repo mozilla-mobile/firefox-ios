@@ -315,7 +315,7 @@
 "Could not load page." = "페이지를 열지 못했습니다.";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "전화기가 어두운 모드로 되어 있다면 iOS 13에서 Firefox가 자동으로 어두운 테마로 전환됩니다. 이 동작을 변경하려면 설정 > 테마로 이동하세요.";
+"CoverSheet.v22.DarkMode.Description" = "전화기가 어두운 모드로 되어 있다면 iOS 13에서 Ecosia가 자동으로 어두운 테마로 전환됩니다. 이 동작을 변경하려면 설정 > 테마로 이동하세요.";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "이제 어두운 테마에 어두운 키보드와 어두운 시작 화면이 포함됩니다.";
@@ -419,7 +419,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "설정이 잘 못 되었거나 공격자의 간섭일 수 있습니다. 잠재적인 위험을 감수한다면 진행하세요.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@의 소유자가 웹사이트를 적절하게 설정하지 않았습니다. 정보를 보호하기 위해서 Firefox가 웹사이트에 접속을 하지 않았습니다.";
+"ErrorPages.CertWarning.Description" = "%@의 소유자가 웹사이트를 적절하게 설정하지 않았습니다. 정보를 보호하기 위해서 Ecosia가 웹사이트에 접속을 하지 않았습니다.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "연결이 안전하지 않음";
@@ -440,7 +440,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox 홈 페이지";
+"Firefox.HomePage.Title" = "Ecosia 홈 페이지";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "홈페이지 개인화";
@@ -488,13 +488,13 @@
 "FxA.AccountVerificationRequired" = "계정 확인 필요함";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "%@ 계정을 확인해야 합니다. Firefox에서 이메일의 확인 링크를 확인하세요.";
+"FxA.AccountVerificationRequiredSurface" = "%@ 계정을 확인해야 합니다. Ecosia에서 이메일의 확인 링크를 확인하세요.";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "다른 기기 연결";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox 계정";
+"FxA.FirefoxAccount" = "Ecosia 계정";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "계정과 기기 관리";
@@ -506,13 +506,13 @@
 "FxA.OpenSyncPreferences" = "Sync 설정 열기";
 
 /* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "firefox.com/pair 에 표시된 QR 코드를 스캔하세요";
+"fxa.qr-scanning-view.instructions" = "Ecosia.com/pair 에 표시된 QR 코드를 스캔하세요";
 
 /* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
 "FxA.RemoveAccount" = "삭제";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "이 기기에 연결된 Firefox 계정을 삭제하고 다른 사용자로 로그인합니다.";
+"FxA.RemoveAccountAlertMessage" = "이 기기에 연결된 Ecosia 계정을 삭제하고 다른 사용자로 로그인합니다.";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "계정 삭제";
@@ -524,13 +524,13 @@
 "fxa.signin.camera-signin" = "카메라로 로그인";
 
 /* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "계정 하나로 여러 기기의 Firefox를 동기화하세요.";
+"fxa.signin.create-account-pt-1" = "계정 하나로 여러 기기의 Ecosia를 동기화하세요.";
 
 /* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Firefox 계정을 생성하세요.";
+"fxa.signin.create-account-pt-2" = "Ecosia 계정을 생성하세요.";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "컴퓨터에서 Firefox를 열고 firefox.com/pair 로 이동하세요";
+"fxa.signin.qr-link-instruction" = "컴퓨터에서 Ecosia를 열고 Ecosia.com/pair 로 이동하세요";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "스캔 준비 완료";
@@ -554,7 +554,7 @@
 "FxA.TakeYourWebWithYou" = "웹과 함께 하세요.";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync가 %@와 연결됨";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync가 %@와 연결됨";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync 연결됨";
@@ -563,7 +563,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@가 성공적으로 연결이 해제되었습니다.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "기기는 Firefox Sync와 연결이 끊어졌습니다.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "기기는 Ecosia Sync와 연결이 끊어졌습니다.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "동기화 연결끊김";
@@ -572,10 +572,10 @@
 "FxAPush_DeviceDisconnected_title" = "동기화 연결끊김";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "기기가 Firefox Sync와 연결이 끊김";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "기기가 Ecosia Sync와 연결이 끊김";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox 로고, 배경 화면 변경";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Ecosia 로고, 배경 화면 변경";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "다른 기기에서 열려있는 탭과 북마크, 비밀번호를 가져오세요.";
@@ -623,7 +623,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "다른 기기의 탭 목록을 보려면 탭 동기화를 켜십시오.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "방문목록";
@@ -716,7 +716,7 @@
 "InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "자동 닫기 켜기";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox는 지난 한 달 동안 보지 않은 탭을 닫습니다.";
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Ecosia는 지난 한 달 동안 보지 않은 탭을 닫습니다.";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
 "InactiveTabs.TabTray.AutoClosePrompt.Title" = "한 달 후 닫으시겠습니까?";
@@ -884,13 +884,13 @@
 "Logins.Onboarding.Message" = "로그인과 비밀번호가 Face ID나 Touch ID, 기기 암호로 보호됩니다.";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Firefox의 자동 완성 기능을 사용하려면 기기 암호가 활성화되어 있어야 합니다.";
+"Logins.PasscodeRequirement.Warning" = "Ecosia의 자동 완성 기능을 사용하려면 기기 암호가 활성화되어 있어야 합니다.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "어디에서나 비밀번호를 사용하세요.";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Firefox 비밀번호 자동 완성";
+"Logins.WelcomeView.Title2" = "Ecosia 비밀번호 자동 완성";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "자동 완성 켜기";
@@ -938,7 +938,7 @@
 "LoginsList.LoginsListSearchPlaceholder" = "필터";
 
 /* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "저장된 로그인이 여기에 보여집니다. 다른 기기의 Firefox에서 로그인을 저장했다면 Firefox 계정에 로그인 하세요.";
+"LoginsList.NoLoginsFound.Description" = "저장된 로그인이 여기에 보여집니다. 다른 기기의 Ecosia에서 로그인을 저장했다면 Ecosia 계정에 로그인 하세요.";
 
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "로그인을 찾을 수 없음";
@@ -962,7 +962,7 @@
 "LoginsList.Title" = "저장된 로그인";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "이전에 Firefox가 강제 종료되었습니다. 탭을 복구하시겠습니까?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "이전에 Ecosia가 강제 종료되었습니다. 탭을 복구하시겠습니까?";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -1018,10 +1018,10 @@
 "Menu.EnhancedTrackingProtectionOn.Title" = "이 사이트에 향상된 추적 방지 기능이 켜져 있습니다";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox는 교차 사이트 추적기, 소셜 추적기, 암호 채굴 기 및 디지털 지문을 차단합니다.";
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Ecosia는 교차 사이트 추적기, 소셜 추적기, 암호 채굴 기 및 디지털 지문을 차단합니다.";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox는 교차 사이트 추적기, 소셜 추적기, 암호화폐 채굴기, 디지털 지문 및 추적 콘텐츠를 차단합니다.";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Ecosia는 교차 사이트 추적기, 소셜 추적기, 암호화폐 채굴기, 디지털 지문 및 추적 콘텐츠를 차단합니다.";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "도움말";
@@ -1120,7 +1120,7 @@
 "Menu.TrackingProtection.Details.Verifier" = "인증 기관: %@";
 
 /* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "이 페이지에서 Firefox에 알려진 추적기가 탐지되지 않았습니다.";
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "이 페이지에서 Ecosia에 알려진 추적기가 탐지되지 않았습니다.";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "보호 설정";
@@ -1135,7 +1135,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "소셜 추적기";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox가 사용자의 탐색을 추적할 수 있는 페이지의 부분을 차단하였습니다.";
+"Menu.TrackingProtectionBlocking.Description" = "Ecosia가 사용자의 탐색을 추적할 수 있는 페이지의 부분을 차단하였습니다.";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
 "Menu.TrackingProtectionBlockingDisabled.Description" = "온라인 추적기 차단";
@@ -1262,7 +1262,7 @@
 "Onboarding.WallpaperAction.v102" = "배경화면 설정";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
-"Onboarding.WallpaperTitle.v102" = "Firefox 배경화면 선택";
+"Onboarding.WallpaperTitle.v102" = "Ecosia 배경화면 선택";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "사용하기";
@@ -1287,10 +1287,10 @@
 
 /* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
    The title for the new onboarding card letting users know what is new in Firefox iOS */
-"Onboarding.WhatsNew.Title" = "Firefox의 새 기능";
+"Onboarding.WhatsNew.Title" = "Ecosia의 새 기능";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "이런! Firefox가 종료됐습니다.";
+"Oops! Firefox crashed" = "이런! Ecosia가 종료됐습니다.";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "제목줄 옆에 나오는 책모양 아이콘을 눌러서 읽기 모드로 글을 열어보세요.";
@@ -1317,19 +1317,19 @@
 "Password" = "비밀번호";
 
 /* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Firefox 계정에서 동기화된 자격 증명이 없습니다";
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Ecosia 계정에서 동기화된 자격 증명이 없습니다";
 
 /* Header for the list of credentials table */
 "PasswordAutoFill.PasswordsListTitle" = "사용 가능한 자격 증명:";
 
 /* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox 자격 증명";
+"PasswordAutoFill.SectionTitle" = "Ecosia 자격 증명";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "카메라 롤에 사진을 저장할 수 있습니다.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox가 사진 정보에 접근하고자 합니다.";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia가 사진 정보에 접근하고자 합니다.";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "닫기";
@@ -1413,10 +1413,10 @@
 "ScanQRCode.InvalidDataError.Message" = "올바르지 않은 데이터";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "‘설정’ -> ‘개인 정보 보호’ -> ‘카메라’에서 Firefox가 기기의 카메라에 접근하는 것을 허용 해 주세요.";
+"ScanQRCode.PermissionError.Message" = "‘설정’ -> ‘개인 정보 보호’ -> ‘카메라’에서 Ecosia가 기기의 카메라에 접근하는 것을 허용 해 주세요.";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "기기의 ‘설정’ > ‘Firefox’에서 Firefox가 카메라에 접근할 수 있게 허용해 주세요.";
+"ScanQRCode.PermissionError.Message.v100" = "기기의 ‘설정’ > ‘Ecosia’에서 Ecosia가 카메라에 접근할 수 있게 허용해 주세요.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR 코드 스캔";
@@ -1433,7 +1433,7 @@
 "Search.Awesomebar.SwitchToTab" = "탭으로 전환";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox 제안";
+"Search.SuggestSectionTitle.v102" = "Ecosia 제안";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "새 검색 엔진이 빠른 검색창에 나타날 것입니다.";
@@ -1475,7 +1475,7 @@
 "Secure connection" = "보안 접속";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Mozilla가 문제를 고칠 수 있도록 보고서를 전송하시겠습니까?";
+"Send a crash report so Mozilla can fix the problem?" = "Ecosia가 문제를 고칠 수 있도록 보고서를 전송하시겠습니까?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "의견 보내기";
@@ -1503,19 +1503,19 @@
 "SendTo.NavBar.Title" = "탭 보내기";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "이 Firefox Account에 동기화 할 수 있는 다른 기기가 연결되어 있지 않습니다.";
+"SendTo.NoDevicesFound.Message" = "이 Ecosia Account에 동기화 할 수 있는 다른 기기가 연결되어 있지 않습니다.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Firefox를 열고 설정으로 이동 한 다음 로그인하여 계속하세요.";
+"SendTo.NotSignedIn.Message" = "Ecosia를 열고 설정으로 이동 한 다음 로그인하여 계속하세요.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Firefox Account에 로그인하지 않았습니다.";
+"SendTo.NotSignedIn.Title" = "Ecosia Account에 로그인하지 않았습니다.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "보내기";
 
 /* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Firefox에 로그인";
+"SendTo.SignIn.Button" = "Ecosia에 로그인";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "다른 기기에서 새 탭이 도착하였습니다.";
@@ -1539,7 +1539,7 @@
 "SentTab.NoTabArrivingNotification.body" = "탭해서 시작";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "보기";
@@ -1602,7 +1602,7 @@
 "Settings.DataManagement.Title" = "데이터 관리";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox가 계정의 동기화를 중지하지만 기기의 브라우징 데이터는 삭제하지 않습니다.";
+"Settings.Disconnect.Body" = "Ecosia가 계정의 동기화를 중지하지만 기기의 브라우징 데이터는 삭제하지 않습니다.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "동기화 끊기";
@@ -1675,7 +1675,7 @@
 "Settings.FxA.Sync.SectionName" = "동기화 설정";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox 계정";
+"Settings.FxA.Title" = "Ecosia 계정";
 
 /* General settings section title */
 "Settings.General.SectionName" = "일반";
@@ -1684,7 +1684,7 @@
 "Settings.Home.Current.Description.v101" = "홈페이지로 표시할 항목을 선택합니다.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Firefox 홈페이지에 포함된 것을 선택하십시오.";
+"Settings.Home.Option.Description.v101" = "Ecosia 홈페이지에 포함된 것을 선택하십시오.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "다시 돌아오기";
@@ -1711,7 +1711,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "홈페이지";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Firefox로 돌아왔을 때 표시할 항목을 선택하세요.";
+"Settings.Home.Option.StartAtHome.Description" = "Ecosia로 돌아왔을 때 표시할 항목을 선택하세요.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "마지막 탭";
@@ -1726,31 +1726,31 @@
 "Settings.Home.Option.Wallpaper" = "배경 화면";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox 배경화면, 자수정 패턴";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Ecosia 배경화면, 자수정 패턴";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox 배경화면, 비치 힐 패턴.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Ecosia 배경화면, 비치 힐 패턴.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox 배경화면, 세룰리안 패턴";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Ecosia 배경화면, 세룰리안 패턴";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "기본 클리어 배경화면";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox 배경화면, 일출 패턴";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Ecosia 배경화면, 일출 패턴";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "홈페이지 배경화면 순환 토글";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox 배경화면, 트와일라잇 힐 패턴.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Ecosia 배경화면, 트와일라잇 힐 패턴.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "오프닝 화면";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Firefox 홈페이지 로고를 눌러서 배경화면을 변경";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Ecosia 홈페이지 로고를 눌러서 배경화면을 변경";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "배경 화면";
@@ -1831,10 +1831,10 @@
 "Settings.NewTab.Option.CustomizeFooter2" = "저장하거나 방문한 사이트";
 
 /* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Firefox 홈 개인화";
+"Settings.NewTab.Option.CustomizeTitle" = "Ecosia 홈 개인화";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox 홈";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia 홈";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
 "Settings.NewTab.Option.HighlightsBookmarks" = "최근 북마크";
@@ -1915,7 +1915,7 @@
 "Settings.SendUsage.Link" = "자세히 알아보기";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla는 Firefox를 개선하기 위한 정보만 수집하기 위해 노력합니다.";
+"Settings.SendUsage.Message" = "Ecosia는 Ecosia를 개선하기 위한 정보만 수집하기 위해 노력합니다.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "사용현황 데이터 보내기";
@@ -1933,7 +1933,7 @@
 "Settings.Siri.OpenTabShortcut" = "새 탭 열기";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Siri를 통해 Firefox를 빠르게 열기 위한 Siri 단축키 사용";
+"Settings.Siri.SectionDescription" = "Siri를 통해 Ecosia를 빠르게 열기 위한 Siri 단축키 사용";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri 단축키";
@@ -1957,7 +1957,7 @@
 "Settings.Studies.Toggle.Link" = "자세히 알아보기";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox는 때때로 연구를 설치하고 실행할 수 있습니다.";
+"Settings.Studies.Toggle.Message" = "Ecosia는 때때로 연구를 설치하고 실행할 수 있습니다.";
 
 /* Toggled OFF to opt-out of studies */
 "Settings.Studies.Toggle.Off" = "끄기";
@@ -2011,7 +2011,7 @@
 "Settings.TrackingProtection.Alert.Title" = "주의하세요!";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Firefox가 어느 목록을 사용해서 사용자의 브라우징 활동을 추적하는 웹 요소를 차단할지 선택할 수 있습니다.";
+"Settings.TrackingProtection.BlockListsHeader" = "Ecosia가 어느 목록을 사용해서 사용자의 브라우징 활동을 추적하는 웹 요소를 차단할지 선택할 수 있습니다.";
 
 /* Explanation of basic mode. */
 "Settings.TrackingProtection.Info.BasicTitle" = "보호와 성능사이에서 균형이 잡혀있습니다.";
@@ -2122,16 +2122,16 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "백그라운드에서 로드";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox에서 로딩";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ecosia에서 로딩";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefox에서 열기";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ecosia에서 열기";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
 "ShareExtension.OpenInPrivateModeAction.Title" = "사생활 탭에서 열기";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefox에서 검색";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ecosia에서 검색";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "검색 추천 보기";
@@ -2168,7 +2168,7 @@
 "Sync.FirstTimeMessage.Label" = "첫 동기화는 시간이 걸릴 수 있습니다";
 
 /* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "계정이 없나요? 계정을 만들고 여러 기기의 Firefox를 동기화하세요.";
+"Sync.NoAccount.Description" = "계정이 없나요? 계정을 만들고 여러 기기의 Ecosia를 동기화하세요.";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "동기화";
@@ -2354,13 +2354,13 @@
 "UIMenuItem.PasteGo" = "붙여넣고 바로 가기";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Firefox에서 검색";
+"UIMenuItem.SearchWithFirefox" = "Ecosia에서 검색";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "않읽음";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "연결을 위해서 Firefox를 업그레이드";
+"Upgrade Firefox to connect" = "연결을 위해서 Ecosia를 업그레이드";
 
 /* Debug option */
 "Use stage servers" = "스테이지 서버 사용";

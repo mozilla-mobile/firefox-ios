@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "Serĉi en privata langeto";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Serĉi en Firefox";
+"TodayWidget.NewSearchButtonLabelV1" = "Serĉi en Ecosia";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Nova serĉo";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "Neniu malfermita langeto";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Malfermi Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Malfermi Ecosia";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "Malkovru ravajn kaj pensigajn artikolojn el la Teksaĵo, elektitaj de Pocket.";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Rekomenditaj de Pocket";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - Rekomenditaj de Pocket";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Rekomendita de Pocket";
@@ -71,22 +71,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Privata serĉo";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Elektu ŝparvojon de Firefox por aldoni ĝin al via hejmekrano.";
+"TodayWidget.QuickActionDescription" = "Elektu ŝparvojon de Ecosia por aldoni ĝin al via hejmekrano.";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "Rapida ago";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Aldonu ŝparvojon de Firefox al via hejmekrano. Post la aldono de la elemento, tuŝu longe por modifi ĝin kaj elekti alian ŝparvojon.";
+"TodayWidget.QuickActionGalleryDescription" = "Aldonu ŝparvojon de Ecosia al via hejmekrano. Post la aldono de la elemento, tuŝu longe por modifi ĝin kaj elekti alian ŝparvojon.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Rapidaj agoj";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Ŝparvojoj de Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ŝparvojoj de Ecosia";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - Rapidaj agoj";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia - Rapidaj agoj";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "Aliru viajn malfermitajn langetojn rekte el via hejmekrano.";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "Aldoni ŝparvojojn al viaj malfermitaj langetoj.";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - Malfermitaj langetoj";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - Malfermitaj langetoj";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Serĉi en Firefox";
+"TodayWidget.SearchInFirefoxTitle" = "Serĉi en Ecosia";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Serĉi en\nFirefox";
+"TodayWidget.SearchInFirefoxV2" = "Serĉi en\nEcosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Serĉi en\nprivata langeto";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "Retejaj ŝparvojoj";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - Plej vizititaj retejoj";
+"TodayWidget.TopSitesSubLabel" = "Ecosia - Plej vizititaj retejoj";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - Retejaj ŝparvojoj";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia - Retejaj ŝparvojoj";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Montri pli";

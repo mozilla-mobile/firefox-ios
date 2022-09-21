@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "新規検索";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "ホーム画面に Firefox のショートカットを追加します。";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "ホーム画面に Ecosia のショートカットを追加します。";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "コピーしたリンクを開く";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "プライベートタブで検索";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Firefox で検索";
+"TodayWidget.NewSearchButtonLabelV1" = "Ecosia で検索";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "新規検索";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "開いたタブはありません";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox を開く";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia を開く";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "Pocket によってウェブから集められた魅力的で示唆に富んだストーリーを見つけましょう。";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Pocket からのおすすめ";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - Pocket からのおすすめ";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Pocket からのおすすめ";
@@ -71,22 +71,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "プライベート検索";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "ホーム画面に追加する Firefox のショートカットを選択してください。";
+"TodayWidget.QuickActionDescription" = "ホーム画面に追加する Ecosia のショートカットを選択してください。";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "クイックアクション";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Firefox のショートカットをホーム画面に追加します。ウィジェットを追加したら、長押しして編集し、別のショートカットを選択します。";
+"TodayWidget.QuickActionGalleryDescription" = "Ecosia のショートカットをホーム画面に追加します。ウィジェットを追加したら、長押しして編集し、別のショートカットを選択します。";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "クイックアクション";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox ショートカット";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia ショートカット";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - クイックアクション";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia - クイックアクション";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "開いているタブにホーム画面から直接アクセスできます。";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "開いているタブへのショートカットを追加します。";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - 開いたタブ";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - 開いたタブ";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Firefox で検索";
+"TodayWidget.SearchInFirefoxTitle" = "Ecosia で検索";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox で検索";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia で検索";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "プライベートタブで検索";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "ウェブサイトショートカット";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - トップサイト";
+"TodayWidget.TopSitesSubLabel" = "Ecosia - トップサイト";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - ウェブサイトのショートカット";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia - ウェブサイトのショートカット";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "もっと見る";

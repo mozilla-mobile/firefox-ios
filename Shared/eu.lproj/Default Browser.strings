@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Ikasi nola";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Ireki webgune, mezu elektroniko eta Messages-eko loturak Firefoxen automatikoki.";
+"DefaultBrowserCard.Description" = "Ireki webgune, mezu elektroniko eta Messages-eko loturak Ecosia automatikoki.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Aldatu zure nabigatzaile lehenetsia";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Sakatu nabigatzaile lehenetsiaren aplikazioa";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Hautatu Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Hautatu Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Nabigatzaile lehenetsiaren aplikazioa";

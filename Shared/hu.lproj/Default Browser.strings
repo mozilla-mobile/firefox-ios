@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Tudja meg hogyan";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Állítsa be a webhelyek, e-mailek és üzenetek hivatkozásait, hogy azok automatikusan a Firefoxban nyíljanak meg.";
+"DefaultBrowserCard.Description" = "Állítsa be a webhelyek, e-mailek és üzenetek hivatkozásait, hogy azok automatikusan a Ecosia nyíljanak meg.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Az alapértelmezett böngésző módosítása";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Koppintson az alapértelmezett böngészőalkalmazás elemre";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Válassza a Firefoxot";
+"DefaultBrowserOnboarding.Description3" = "3. Válassza a Ecosiaot";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Alapértelmezett böngésző";

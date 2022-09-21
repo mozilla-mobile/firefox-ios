@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "방법 알아보기";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Firefox에서 자동으로 열리도록 웹 사이트, 이메일 및 메시지의 링크를 설정합니다.";
+"DefaultBrowserCard.Description" = "Ecosia에서 자동으로 열리도록 웹 사이트, 이메일 및 메시지의 링크를 설정합니다.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "기본 브라우저 전환";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. 기본 브라우저 앱을 탭";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Firefox 선택";
+"DefaultBrowserOnboarding.Description3" = "3. Ecosia 선택";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "기본 브라우저 앱";

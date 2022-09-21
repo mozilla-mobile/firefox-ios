@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Ничеклеген белү";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Вебсайтлардан, эл. почталардан һәм хәбәрләрдән сылтамаларны автоматик рәвештә Firefox'та ачу.";
+"DefaultBrowserCard.Description" = "Вебсайтлардан, эл. почталардан һәм хәбәрләрдән сылтамаларны автоматик рәвештә Ecosia'та ачу.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Башка браузерны төп браузер итү";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Төп браузер кушымтасына басыгыз";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Firefox-ны сайлагыз";
+"DefaultBrowserOnboarding.Description3" = "3. Ecosia-ны сайлагыз";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Төп браузер кушымтасы";

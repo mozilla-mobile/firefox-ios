@@ -1,14 +1,14 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "O Firefox utiliza a sua câmara para digitalizar códigos QR e tirar fotos e vídeos.";
+"NSCameraUsageDescription" = "O Ecosia utiliza a sua câmara para digitalizar códigos QR e tirar fotos e vídeos.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "O Firefox necessita do Face ID para aceder às suas credenciais guardadas.";
+"NSFaceIDUsageDescription" = "O Ecosia necessita do Face ID para aceder às suas credenciais guardadas.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Os websites que visita poderão solicitar a sua localização.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "O Firefox permite-lhe usar o seu microfone para gravar e carregar áudio.";
+"NSMicrophoneUsageDescription" = "O Ecosia permite-lhe usar o seu microfone para gravar e carregar áudio.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Isto deixa-lhe guardar fotos.";

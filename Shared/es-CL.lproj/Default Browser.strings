@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Aprender cómo";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Configura enlaces de sitios web, correos electrónicos y mensajes para que se abran automáticamente en Firefox.";
+"DefaultBrowserCard.Description" = "Configura enlaces de sitios web, correos electrónicos y mensajes para que se abran automáticamente en Ecosia.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Cambia tu navegador predeterminado";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Tocar aplicación de navegador predeterminada";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Seleccionar Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Seleccionar Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Aplicación de navegador predeterminada";

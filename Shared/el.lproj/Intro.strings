@@ -20,13 +20,13 @@
 "Intro.Slides.Fast.Search.Title" = "Γρήγορη αναζήτηση";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Φέρτε σελιδοδείκτες, ιστορικό και κωδικούς πρόσβασης στο Firefox σε αυτή τη συσκευή.";
+"Intro.Slides.Firefox.Account.Sync.Description" = "Φέρτε σελιδοδείκτες, ιστορικό και κωδικούς πρόσβασης στο Ecosia σε αυτή τη συσκευή.";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Συγχρονισμός του Firefox μεταξύ συσκευών";
+"Intro.Slides.Firefox.Account.Sync.Title" = "Συγχρονισμός του Ecosia μεταξύ συσκευών";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Χρησιμοποιήστε οποιαδήποτε εφαρμογή email - όχι μόνο το Mail - με το Firefox.";
+"Intro.Slides.Mail.Description" = "Χρησιμοποιήστε οποιαδήποτε εφαρμογή email - όχι μόνο το Mail - με το Ecosia.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "Έχετε επιλογές… αλληλογραφίας";
@@ -38,7 +38,7 @@
 "Intro.Slides.Private.Title" = "Περιηγηθείτε σαν να μην σας βλέπει κανείς";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Προστατέψτε τις συνδέσεις και τα δεδομένα σας όπου κι αν χρησιμοποιήσετε το Firefox.";
+"Intro.Slides.Safe.Sync.Description" = "Προστατέψτε τις συνδέσεις και τα δεδομένα σας όπου κι αν χρησιμοποιήσετε το Ecosia.";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Title" = "Ασφαλής συγχρονισμός";
@@ -59,7 +59,7 @@
 "Intro.Slides.Welcome.Description.v2" = "Γρήγορο, ιδιωτικό, στο πλευρό σας.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Καλώς ορίσατε στο Firefox";
+"Intro.Slides.Welcome.Title.v2" = "Καλώς ορίσατε στο Ecosia";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Έναρξη περιήγησης";

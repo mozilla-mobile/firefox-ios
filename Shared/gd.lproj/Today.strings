@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "Lorg ùr";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Cuir ath-ghoiridean Firefox ris an sgrìn-dhachaigh agad.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Cuir ath-ghoiridean Ecosia ris an sgrìn-dhachaigh agad.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Tadhail air a’ cheangal a rinn thu lethbhreac dheth";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "Lorg ann an taba prìobhaideach";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Lorg ann am Firefox";
+"TodayWidget.NewSearchButtonLabelV1" = "Lorg ann am Ecosia";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Lorg ùr";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "Chan eil taba fosgailte ann";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Fosgail Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Fosgail Ecosia";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "Faigh naidheachdan drùidhteach is smaoineachail o fheadh an lìon o Pocket.";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox – Air a mholadh le Pocket";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia – Air a mholadh le Pocket";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Air a mholadh le Pocket";
@@ -71,22 +71,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Lorg prìobhaideach";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Tagh ath-ghoirid Firefox airson a chur ris an sgrìn-dhachaigh agad.";
+"TodayWidget.QuickActionDescription" = "Tagh ath-ghoirid Ecosia airson a chur ris an sgrìn-dhachaigh agad.";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "Grad-ghnìomh";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Cuir ath-ghoirid Firefox ris an sgrìn-dhachaigh agad. An dèidh dhut a’ widget a chur ris, bean ris is cùm e airson a dheasachadh agus ath-ghoirid eadar-dhealaichte a thaghadh.";
+"TodayWidget.QuickActionGalleryDescription" = "Cuir ath-ghoirid Ecosia ris an sgrìn-dhachaigh agad. An dèidh dhut a’ widget a chur ris, bean ris is cùm e airson a dheasachadh agus ath-ghoirid eadar-dhealaichte a thaghadh.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Grad-ghnìomhan";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Ath-ghoiridean Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ath-ghoiridean Ecosia";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox – Grad-ghnìomhan";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia – Grad-ghnìomhan";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "Faigh cothrom air na tabaichean fosgailte agad air an sgrìn-dhachaigh agad ann.";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "Cuir ath-ghoiridean ris na tabaichean fosgailte agad.";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox – Tabaichean fosgailte";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia – Tabaichean fosgailte";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Lorg ann am Firefox";
+"TodayWidget.SearchInFirefoxTitle" = "Lorg ann am Ecosia";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Lorg ann am Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Lorg ann am Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Lorg ann an taba prìobhaideach";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "Ath-ghoiridean làraichean-lìn";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox – Brod nan làrach";
+"TodayWidget.TopSitesSubLabel" = "Ecosia – Brod nan làrach";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox – Ath-ghoiridean làraichean-lìn";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia – Ath-ghoiridean làraichean-lìn";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Seall barrachd";

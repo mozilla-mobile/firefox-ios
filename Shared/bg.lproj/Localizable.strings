@@ -210,7 +210,7 @@
 "Could not load page." = "Страницата не може да бъде отворена.";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "За потребителите на iOS 13 Firefox автоматично преминава към тъмна тема, когато телефонът ви е настроен на Dark Mode. За да промените това поведение, отидете на Настройки > Тема.";
+"CoverSheet.v22.DarkMode.Description" = "За потребителите на iOS 13 Ecosia автоматично преминава към тъмна тема, когато телефонът ви е настроен на Dark Mode. За да промените това поведение, отидете на Настройки > Тема.";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Към настройките";
@@ -257,7 +257,7 @@
 "Downloads.CancelDialog.Title" = "Отмяна на изтеглянето";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Изтегляния не се поддържат във Firefox";
+"Downloads.Error.Message" = "Изтегляния не се поддържат във Ecosia";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Oтменено изтегляне";
@@ -302,7 +302,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Може да е погрешна конфигурация или хакерски опит. Продължете, ако поемате понециалния риск.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Собственикът на %@ е настроил страницата неправилно. За да ви защити от кражба на информация, Firefox отказа да направи връзката с тази страница.";
+"ErrorPages.CertWarning.Description" = "Собственикът на %@ е настроил страницата неправилно. За да ви защити от кражба на информация, Ecosia отказа да направи връзката с тази страница.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Вашата връзка не е лична";
@@ -323,7 +323,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Начална страница на Firefox";
+"Firefox.HomePage.Title" = "Начална страница на Ecosia";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Напред";
@@ -335,13 +335,13 @@
 "FxA.AccountVerificationRequired" = "Изисква се потвърждение";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Необходимо е да потвърдите %@. Проверете своята ел. поща за потвърждаваща препратка от Firefox.";
+"FxA.AccountVerificationRequiredSurface" = "Необходимо е да потвърдите %@. Проверете своята ел. поща за потвърждаваща препратка от Ecosia.";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "Свързване на друго устройство";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox Account";
+"FxA.FirefoxAccount" = "Ecosia Account";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Управление на сметката и устройствата";
@@ -356,7 +356,7 @@
 "FxA.RemoveAccount" = "Премахване";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Премахнете Firefox Account, свързан с устройството, за да влезете като друг потребител.";
+"FxA.RemoveAccountAlertMessage" = "Премахнете Ecosia Account, свързан с устройството, за да влезете като друг потребител.";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "Премахване на сметка";
@@ -380,7 +380,7 @@
 "FxA.TakeYourWebWithYou" = "Вземете Мрежата със себе си";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync е свързан към %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync е свързан към %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync е свързан";
@@ -389,7 +389,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ е успешно изключено.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Устройството е изключено успешно от Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Устройството е изключено успешно от Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync е изключен";
@@ -398,7 +398,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync е изключен";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Устройство е изключено успешно от Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Устройство е изключено успешно от Ecosia Sync";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Вземи отворени раздели, отметки и пароли от други устройства.";
@@ -443,7 +443,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Включете синхронизирането на раздели, за да видите списък с раздели от други ваши устройства.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Синхронизиране на Firefox";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Синхронизиране на Ecosia";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "История";
@@ -530,7 +530,7 @@
 "InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Включване на автоматично затваряне";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox ще да затваря разделите, които не са преглеждани през последния месец.";
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Ecosia ще да затваря разделите, които не са преглеждани през последния месец.";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
 "InactiveTabs.TabTray.AutoClosePrompt.Title" = "Автоматично затваряне след един месец?";
@@ -623,7 +623,7 @@
 "LoginsList.LoginsListFilterWebsite" = "Страница";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Изглежда, че Firefox се е сринал преди. Искате ли разделите да бъдат възстановени?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Изглежда, че Ecosia се е сринал преди. Искате ли разделите да бъдат възстановени?";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -676,7 +676,7 @@
 "Menu.TrackingProtection.BlockedTitle" = "Спрени";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox спря части от страницата, които може би проследяват вашето разглеждане.";
+"Menu.TrackingProtectionBlocking.Description" = "Ecosia спря части от страницата, които може би проследяват вашето разглеждане.";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
 "Menu.TrackingProtectionBlockingDisabled.Description" = "Блокирани проследяващи елементи";
@@ -752,7 +752,7 @@
 "Onboarding.WhatsNew.RecentSearches.Title" = "Скорошни търсения";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Ами сега! Firefox се срина";
+"Oops! Firefox crashed" = "Ами сега! Ecosia се срина";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Отваряйте статии в изгледа за четене, докосвайки пиктограмата на книга, когато е налична в заглавната лента.";
@@ -764,7 +764,7 @@
 "Open Tabs" = "Отворени раздели";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox не може да отвори страницата, защото съдържа невалидни адреси.";
+"OpenURL.Error.Message" = "Ecosia не може да отвори страницата, защото съдържа невалидни адреси.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Страница не може да бъде отворена";
@@ -779,13 +779,13 @@
 "Password" = "Парола";
 
 /* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Нямате никакви удостоверения, синхронизирани от вашия Firefox Account";
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Нямате никакви удостоверения, синхронизирани от вашия Ecosia Account";
 
 /* Header for the list of credentials table */
 "PasswordAutoFill.PasswordsListTitle" = "Налични удостоверения:";
 
 /* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Удостоверения на Firefox";
+"PasswordAutoFill.SectionTitle" = "Удостоверения на Ecosia";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Затваряне";
@@ -845,7 +845,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Данните са невалидни";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Моля, позволете на Firefox да има достъп то камерата на устройството от „Настройки“ -> „Поверителност“ -> „Камера“.";
+"ScanQRCode.PermissionError.Message" = "Моля, позволете на Ecosia да има достъп то камерата на устройството от „Настройки“ -> „Поверителност“ -> „Камера“.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Сканиране на QR код";
@@ -898,7 +898,7 @@
 "Secure connection" = "Шифрована връзка";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Ше изпратете ли доклад за срива, така че Mozilla да реши проблема?";
+"Send a crash report so Mozilla can fix the problem?" = "Ше изпратете ли доклад за срива, така че Ecosia да реши проблема?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Изпращане обратна връзка";
@@ -944,7 +944,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Докоснете за начало";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Изглед";
@@ -1004,7 +1004,7 @@
 "Settings.DataManagement.Title" = "Управление на данните";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox ще спре синхронизирането на вашата сметка, но няма да изтрие никакви данни на разглеждането от устройството.";
+"Settings.Disconnect.Body" = "Ecosia ще спре синхронизирането на вашата сметка, но няма да изтрие никакви данни на разглеждането от устройството.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Изключване от Sync";
@@ -1056,7 +1056,7 @@
 "Settings.FxA.Sync.SectionName" = "Настройки за синхронизиране";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox Account";
+"Settings.FxA.Title" = "Ecosia Account";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Основни";
@@ -1143,7 +1143,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "Изберете какво да виждате в нов раздел";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "При отваряне на Firefox";
+"Settings.OfferClipboardBar.Status" = "При отваряне на Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Питане за отваряне на копираните препратки";
@@ -1164,7 +1164,7 @@
 "Settings.SendUsage.Link" = "Научете повече.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla се старае да събира само нужните данни за подобряване на Firefox за всички.";
+"Settings.SendUsage.Message" = "Ecosia се старае да събира само нужните данни за подобряване на Ecosia за всички.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Изпращане данни за използването";
@@ -1173,7 +1173,7 @@
 "Settings.Siri.OpenTabShortcut" = "Отваряне в раздел";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Използване на действия чрез Siri за бързо отваряне на Firefox чрез Siri";
+"Settings.Siri.SectionDescription" = "Използване на действия чрез Siri за бързо отваряне на Ecosia чрез Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Действия чрез Siri";
@@ -1188,7 +1188,7 @@
 "Settings.TrackingProtection.Alert.Button" = "Добре, разбрах";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Може да изберете кой списък да използва Firefox, за да блокира елементи от страниците, които следят вашето поведение в Мрежата.";
+"Settings.TrackingProtection.BlockListsHeader" = "Може да изберете кой списък да използва Ecosia, за да блокира елементи от страниците, които следят вашето поведение в Мрежата.";
 
 /* Explanation of basic mode. */
 "Settings.TrackingProtection.Info.BasicTitle" = "Баланс между защита и бързодействие.";
@@ -1254,16 +1254,16 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Зареждане във фонов режим";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Зареждане в Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Зареждане в Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Отваряне в Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Отваряне в Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
 "ShareExtension.OpenInPrivateModeAction.Title" = "Отваряне в поверителен режим";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Търсене в Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Търсене в Ecosia";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Предложения при търсене";
@@ -1414,13 +1414,13 @@
 "UIMenuItem.PasteGo" = "Поставяне и посещаване";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Търсене с Firefox";
+"UIMenuItem.SearchWithFirefox" = "Търсене с Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "непрочетена";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Обновете Firefox, за да се свържете";
+"Upgrade Firefox to connect" = "Обновете Ecosia, за да се свържете";
 
 /* Username textbox in Authentication prompt */
 "Username" = "Потребителско име";
@@ -1450,7 +1450,7 @@
 "Yesterday" = "Вчера";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Нямате отворени във Firefox раздели от другите ваши устройства.";
+"You don’t have any tabs open in Firefox on your other devices." = "Нямате отворени във Ecosia раздели от другите ваши устройства.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Вашите права";

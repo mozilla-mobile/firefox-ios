@@ -20,13 +20,13 @@
 "Intro.Slides.Fast.Search.Title" = "ການຄົ້ນຫາແບບວ່ອງໄວ";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "ນຳເອົາບຸກມາກ, ປະຫວັດ ແລະ ລະຫັດຜ່ານໄປໄວ້ໃນ Firefox ຈາກອຸປະກອນນີ້.";
+"Intro.Slides.Firefox.Account.Sync.Description" = "ນຳເອົາບຸກມາກ, ປະຫວັດ ແລະ ລະຫັດຜ່ານໄປໄວ້ໃນ Ecosia ຈາກອຸປະກອນນີ້.";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Sync Firefox ລະຫວ່າງອຸປະກອນ";
+"Intro.Slides.Firefox.Account.Sync.Title" = "Sync Ecosia ລະຫວ່າງອຸປະກອນ";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "ນຳໃຊ້ແອັບເມລ — ບໍ່ແມ່ນພຽງແຕ່ອີເມລ — ດ້ວຍ Firefox.";
+"Intro.Slides.Mail.Description" = "ນຳໃຊ້ແອັບເມລ — ບໍ່ແມ່ນພຽງແຕ່ອີເມລ — ດ້ວຍ Ecosia.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "ທ່ານໄດ້ຮັບເມລ… ຕົວເລືອກ";
@@ -38,7 +38,7 @@
 "Intro.Slides.Private.Title" = "ທ່ອງເວັບແບບບໍ່ມີໃຜມາຫລັກເຝົ້າຕິດຕາມ.";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "ຮັກສາການເຂົ້າສູ່ລະບົບ ແລະ ຂໍ້ມູນຂອງທ່ານໃນທຸກໆບ່ອນທີ່ນຳໃຊ້ Firefox.";
+"Intro.Slides.Safe.Sync.Description" = "ຮັກສາການເຂົ້າສູ່ລະບົບ ແລະ ຂໍ້ມູນຂອງທ່ານໃນທຸກໆບ່ອນທີ່ນຳໃຊ້ Ecosia.";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Title" = "Sync ທີ່ປອດໄພ";
@@ -59,7 +59,7 @@
 "Intro.Slides.Welcome.Description.v2" = "ວ່ອງໄວ, ເປັນສ່ວນຕົວ ແລະ ຢູ່ຄຽງຂ້າງທ່ານ.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "ຍິນດີຕ້ອນຮັບສູ່ Firefox";
+"Intro.Slides.Welcome.Title.v2" = "ຍິນດີຕ້ອນຮັບສູ່ Ecosia";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "ເລີ່ມການທ່ອງເວັບ";

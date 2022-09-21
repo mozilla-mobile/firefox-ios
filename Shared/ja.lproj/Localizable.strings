@@ -315,7 +315,7 @@
 "Could not load page." = "ページを読み込めませんでした。";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "iOS 13 ユーザーは、端末がダークモードに設定されている場合、Firefox も自動的にダークテーマに切り替わります。この動作を変更するには、「環境設定」 > 「テーマ」の順に開いてください。";
+"CoverSheet.v22.DarkMode.Description" = "iOS 13 ユーザーは、端末がダークモードに設定されている場合、Ecosia も自動的にダークテーマに切り替わります。この動作を変更するには、「環境設定」 > 「テーマ」の順に開いてください。";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "ダークテーマは、ダークキーボードとダークスプラッシュ画面を含みます。";
@@ -440,7 +440,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox ホームページ";
+"Firefox.HomePage.Title" = "Ecosia ホームページ";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "ホームページをカスタマイズ";
@@ -488,13 +488,13 @@
 "FxA.AccountVerificationRequired" = "アカウントの確認が必要です";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "%@ を確認する必要があります。確認のリンクが書かれた Firefox からのメールをチェックしてください。";
+"FxA.AccountVerificationRequiredSurface" = "%@ を確認する必要があります。確認のリンクが書かれた Ecosia からのメールをチェックしてください。";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "他の端末を接続";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox アカウント";
+"FxA.FirefoxAccount" = "Ecosia アカウント";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "アカウントと端末の管理";
@@ -506,13 +506,13 @@
 "FxA.OpenSyncPreferences" = "Sync 設定を開く";
 
 /* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "firefox.com/pair で表示された QR コードをスキャンしてください";
+"fxa.qr-scanning-view.instructions" = "Ecosia.com/pair で表示された QR コードをスキャンしてください";
 
 /* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
 "FxA.RemoveAccount" = "削除";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "このデバイスに関連付けされた Firefox アカウントを削除し、別のユーザーでログインする。";
+"FxA.RemoveAccountAlertMessage" = "このデバイスに関連付けされた Ecosia アカウントを削除し、別のユーザーでログインする。";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "アカウントを削除";
@@ -524,13 +524,13 @@
 "fxa.signin.camera-signin" = "カメラを使ってログイン";
 
 /* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "アカウントを持つ端末間で Firefox を同期する。";
+"fxa.signin.create-account-pt-1" = "アカウントを持つ端末間で Ecosia を同期する。";
 
 /* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Firefox アカウントを作成する。";
+"fxa.signin.create-account-pt-2" = "Ecosia アカウントを作成する。";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "コンピューターの Firefox で firefox.com/pair を開いてください";
+"fxa.signin.qr-link-instruction" = "コンピューターの Ecosia で Ecosia.com/pair を開いてください";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "スキャンの準備ができました";
@@ -554,7 +554,7 @@
 "FxA.TakeYourWebWithYou" = "ウェブを持ち歩こう";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync が %@ に接続しました";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync が %@ に接続しました";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync に接続しました";
@@ -563,7 +563,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ の接続が正常に解除されました。";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "この端末は Firefox Sync から正常に切断されました。";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "この端末は Ecosia Sync から正常に切断されました。";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync から切断されました";
@@ -572,10 +572,10 @@
 "FxAPush_DeviceDisconnected_title" = "Sync から切断されました";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "端末のひとつが Firefox Sync から切断されました";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "端末のひとつが Ecosia Sync から切断されました";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox ロゴ、壁紙を変更します。";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Ecosia ロゴ、壁紙を変更します。";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "他の端末で開いているタブや、ブックマーク、パスワードを読み込めます。";
@@ -623,7 +623,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "他の端末で開いているタブの一覧を表示するにはタブの同期を有効にしてください。";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "履歴";
@@ -716,7 +716,7 @@
 "InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "タブを自動的に閉じる";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox は 1 か月以上表示していないタブを閉じます。";
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Ecosia は 1 か月以上表示していないタブを閉じます。";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
 "InactiveTabs.TabTray.AutoClosePrompt.Title" = "1 か月後に自動的に閉じますか？";
@@ -884,13 +884,13 @@
 "Logins.Onboarding.Message" = "ログイン情報とパスワードが Face ID または Touch ID、端末のパスコードにより保護されるようになりました。";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Firefox の自動入力機能を使用するには、端末のパスコードを有効にする必要があります。";
+"Logins.PasscodeRequirement.Warning" = "Ecosia の自動入力機能を使用するには、端末のパスコードを有効にする必要があります。";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "どこでもパスワードが使える";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Firefox でパスワードを自動入力";
+"Logins.WelcomeView.Title2" = "Ecosia でパスワードを自動入力";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "自動入力をオンにする";
@@ -938,7 +938,7 @@
 "LoginsList.LoginsListSearchPlaceholder" = "フィルター";
 
 /* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "保存されたログイン情報がここに表示されます。別の端末の Firefox で保存したログイン情報を表示するには、Firefox アカウントにログインしてください。";
+"LoginsList.NoLoginsFound.Description" = "保存されたログイン情報がここに表示されます。別の端末の Ecosia で保存したログイン情報を表示するには、Ecosia アカウントにログインしてください。";
 
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "ログイン情報はありません";
@@ -962,7 +962,7 @@
 "LoginsList.Title" = "保存されたログイン情報";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Firefox は予期せず終了しました。タブを復元しますか？";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Ecosia は予期せず終了しました。タブを復元しますか？";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -1018,10 +1018,10 @@
 "Menu.EnhancedTrackingProtectionOn.Title" = "強化型トラッキング防止機能はこのサイトでオンです。";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox はクロスサイトトラッカー、ソーシャルトラッカー、暗号通貨マイニング、フィンガープリント採取をブロックします。";
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Ecosia はクロスサイトトラッカー、ソーシャルトラッカー、暗号通貨マイニング、フィンガープリント採取をブロックします。";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox はクロスサイトトラッカー、ソーシャルトラッカー、暗号通貨マイニング、フィンガープリント採取および追跡コンテンツをブロックします。";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Ecosia はクロスサイトトラッカー、ソーシャルトラッカー、暗号通貨マイニング、フィンガープリント採取および追跡コンテンツをブロックします。";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "ヘルプ";
@@ -1135,7 +1135,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "ソーシャルトラッカー";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "ユーザーのブラウジングを追跡する可能性のあるページの一部を Firefox がブロックしています。";
+"Menu.TrackingProtectionBlocking.Description" = "ユーザーのブラウジングを追跡する可能性のあるページの一部を Ecosia がブロックしています。";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
 "Menu.TrackingProtectionBlockingDisabled.Description" = "オンライン追跡をブロック";
@@ -1262,7 +1262,7 @@
 "Onboarding.WallpaperAction.v102" = "壁紙を設定します";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
-"Onboarding.WallpaperTitle.v102" = "Firefox の壁紙を選択";
+"Onboarding.WallpaperTitle.v102" = "Ecosia の壁紙を選択";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "ブラウジングを開始";
@@ -1287,10 +1287,10 @@
 
 /* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
    The title for the new onboarding card letting users know what is new in Firefox iOS */
-"Onboarding.WhatsNew.Title" = "Firefox の新機能";
+"Onboarding.WhatsNew.Title" = "Ecosia の新機能";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Firefox の動作に問題が発生し、不正終了してしまいました";
+"Oops! Firefox crashed" = "Ecosia の動作に問題が発生し、不正終了してしまいました";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "タイトルバーに表示されたブックアイコンをタップすると、記事をリーダービューで開きます。";
@@ -1302,7 +1302,7 @@
 "Open Tabs" = "タブを開く";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "アドレスが正しくないため、Firefox はこのページを開けません。";
+"OpenURL.Error.Message" = "アドレスが正しくないため、Ecosia はこのページを開けません。";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "ページを開けません";
@@ -1317,19 +1317,19 @@
 "Password" = "パスワード";
 
 /* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Firefox アカウントで同期しているログイン情報はありません";
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Ecosia アカウントで同期しているログイン情報はありません";
 
 /* Header for the list of credentials table */
 "PasswordAutoFill.PasswordsListTitle" = "利用可能なログイン情報:";
 
 /* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox ログイン情報";
+"PasswordAutoFill.SectionTitle" = "Ecosia ログイン情報";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "これは、画像を Camera Roll に保存することを許可します。";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox が写真データにアクセスしようとしています";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia が写真データにアクセスしようとしています";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "閉じる";
@@ -1413,10 +1413,10 @@
 "ScanQRCode.InvalidDataError.Message" = "データが無効です";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Firefox に端末のカメラへのアクセスを許可してください。設定 - > プライバシー -> カメラ。";
+"ScanQRCode.PermissionError.Message" = "Ecosia に端末のカメラへのアクセスを許可してください。設定 - > プライバシー -> カメラ。";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "端末の [設定] > [Firefox] を開き、Firefox にカメラへのアクセスを許可してください。";
+"ScanQRCode.PermissionError.Message.v100" = "端末の [設定] > [Ecosia] を開き、Ecosia にカメラへのアクセスを許可してください。";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR コードを読み取り";
@@ -1433,7 +1433,7 @@
 "Search.Awesomebar.SwitchToTab" = "タブを表示";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox Suggest";
+"Search.SuggestSectionTitle.v102" = "Ecosia Suggest";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "新規検索エンジンはクイック検索バーに表示されます。";
@@ -1503,19 +1503,19 @@
 "SendTo.NavBar.Title" = "タブを送る";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "この Firefox アカウントに接続された同期可能な端末はありません。";
+"SendTo.NoDevicesFound.Message" = "この Ecosia アカウントに接続された同期可能な端末はありません。";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "続けるには、Firefox を開いて環境設定からログインしてください。";
+"SendTo.NotSignedIn.Message" = "続けるには、Ecosia を開いて環境設定からログインしてください。";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Firefox アカウントにログインしていません。";
+"SendTo.NotSignedIn.Title" = "Ecosia アカウントにログインしていません。";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "送信";
 
 /* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Firefox にログイン";
+"SendTo.SignIn.Button" = "Ecosia にログイン";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "他の端末から新規タブが到着しました。";
@@ -1539,7 +1539,7 @@
 "SentTab.NoTabArrivingNotification.body" = "タップして開始する";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "表示";
@@ -1602,7 +1602,7 @@
 "Settings.DataManagement.Title" = "データ管理";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox はあなたのアカウントとの同期を中止しますが、この端末上の閲覧履歴は消去されません。";
+"Settings.Disconnect.Body" = "Ecosia はあなたのアカウントとの同期を中止しますが、この端末上の閲覧履歴は消去されません。";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Sync との接続を解除";
@@ -1675,7 +1675,7 @@
 "Settings.FxA.Sync.SectionName" = "Sync 設定";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox アカウント";
+"Settings.FxA.Title" = "Ecosia アカウント";
 
 /* General settings section title */
 "Settings.General.SectionName" = "一般";
@@ -1684,7 +1684,7 @@
 "Settings.Home.Current.Description.v101" = "ホームページに表示するものを選んでください。";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Firefox ホームページに表示するものを選んでください。";
+"Settings.Home.Option.Description.v101" = "Ecosia ホームページに表示するものを選んでください。";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "以前表示したタブ";
@@ -1711,7 +1711,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "ホームページ";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Firefox へ戻った時に表示するものを選んでください。";
+"Settings.Home.Option.StartAtHome.Description" = "Ecosia へ戻った時に表示するものを選んでください。";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "最後のタブ";
@@ -1726,31 +1726,31 @@
 "Settings.Home.Option.Wallpaper" = "壁紙";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox の壁紙、アメジストパターンです。";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Ecosia の壁紙、アメジストパターンです。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox の壁紙、砂浜の丘パターンです。";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Ecosia の壁紙、砂浜の丘パターンです。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox の壁紙、セルリアンパターンです。";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Ecosia の壁紙、セルリアンパターンです。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "デフォルトのすっきりした壁紙です。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox の壁紙、サンライズパターンです。";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Ecosia の壁紙、サンライズパターンです。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "ホームページの壁紙サイクルを切り替えます";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox の壁紙、夕暮れの丘パターンです。";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Ecosia の壁紙、夕暮れの丘パターンです。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "オープニング画面";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Firefox ホームページのロゴをタップして壁紙を変更する";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Ecosia ホームページのロゴをタップして壁紙を変更する";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "壁紙";
@@ -1831,10 +1831,10 @@
 "Settings.NewTab.Option.CustomizeFooter2" = "保存または訪問したサイト";
 
 /* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Firefox ホーム画面の設定";
+"Settings.NewTab.Option.CustomizeTitle" = "Ecosia ホーム画面の設定";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox ホーム";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia ホーム";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
 "Settings.NewTab.Option.HighlightsBookmarks" = "最近追加したブックマーク";
@@ -1879,7 +1879,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "画像をブロック";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Firefox 起動時";
+"Settings.OfferClipboardBar.Status" = "Ecosia 起動時";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "コピーしたリンクを開くか尋ねる";
@@ -1915,7 +1915,7 @@
 "Settings.SendUsage.Link" = "詳細情報。";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla は Firefox を皆さんに提供し改善するために必要な情報だけを収集するよう努めています。";
+"Settings.SendUsage.Message" = "Ecosia は Ecosia を皆さんに提供し改善するために必要な情報だけを収集するよう努めています。";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "利用統計データを送信";
@@ -1933,7 +1933,7 @@
 "Settings.Siri.OpenTabShortcut" = "新規タブを開く";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Siri ショートカットを使用して Siri から Firefox を素早く開きましょう";
+"Settings.Siri.SectionDescription" = "Siri ショートカットを使用して Siri から Ecosia を素早く開きましょう";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri ショートカット";
@@ -1957,7 +1957,7 @@
 "Settings.Studies.Toggle.Link" = "詳細情報";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox が調査をインストールして実行することがあります。";
+"Settings.Studies.Toggle.Message" = "Ecosia が調査をインストールして実行することがあります。";
 
 /* Toggled OFF to opt-out of studies */
 "Settings.Studies.Toggle.Off" = "オフ";
@@ -2122,16 +2122,16 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "バックグラウンドで読み込む";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox で読み込んでいます";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ecosia で読み込んでいます";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefox で開く";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ecosia で開く";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
 "ShareExtension.OpenInPrivateModeAction.Title" = "プライベートモードで開く";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefox で検索";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ecosia で検索";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "検索語句の候補を表示";
@@ -2168,7 +2168,7 @@
 "Sync.FirstTimeMessage.Label" = "初回の同期には時間がかかる場合があります";
 
 /* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "アカウントをお持ちでない方は、アカウントを作成して Firefox を端末間で同期しましょう。";
+"Sync.NoAccount.Description" = "アカウントをお持ちでない方は、アカウントを作成して Ecosia を端末間で同期しましょう。";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "同期中";
@@ -2354,13 +2354,13 @@
 "UIMenuItem.PasteGo" = "貼り付けて移動";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Firefox で検索";
+"UIMenuItem.SearchWithFirefox" = "Ecosia で検索";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "未読";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "接続するには Firefox をアップグレードしてください";
+"Upgrade Firefox to connect" = "接続するには Ecosia をアップグレードしてください";
 
 /* Debug option */
 "Use stage servers" = "ステージサーバーを使用";
@@ -2393,7 +2393,7 @@
 "Yesterday" = "昨日";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "他の端末の Firefox で開いているタブはありません。";
+"You don’t have any tabs open in Firefox on your other devices." = "他の端末の Ecosia で開いているタブはありません。";
 
 /* Your Rights settings section title */
 "Your Rights" = "あなたの権利";

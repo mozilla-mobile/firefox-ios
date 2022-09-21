@@ -318,7 +318,7 @@
 "Could not load page." = "Impossible de charger la page.";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "Si vous utilisez iOS 13, Firefox bascule désormais automatiquement sur le thème sombre lorsque votre téléphone est configuré en mode sombre. Pour modifier ce comportement, rendez-vous dans Paramètres > Thème.";
+"CoverSheet.v22.DarkMode.Description" = "Si vous utilisez iOS 13, Ecosia bascule désormais automatiquement sur le thème sombre lorsque votre téléphone est configuré en mode sombre. Pour modifier ce comportement, rendez-vous dans Paramètres > Thème.";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "Le thème sombre comprend désormais un clavier sombre et un écran de démarrage sombre.";
@@ -377,7 +377,7 @@
 "Downloads.CancelDialog.Title" = "Annuler le téléchargement";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Les téléchargements ne sont pas encore pris en charge par Firefox.";
+"Downloads.Error.Message" = "Les téléchargements ne sont pas encore pris en charge par Ecosia.";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Téléchargement annulé";
@@ -422,7 +422,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Il peut s’agir d’une erreur de configuration ou d’une tentative d’attaque. Poursuivez en ayant conscience du risque encouru.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Les propriétaires de %@ ont mal configuré leur site. Pour éviter que vos données ne soient dérobées, Firefox ne s’est pas connecté à ce site.";
+"ErrorPages.CertWarning.Description" = "Les propriétaires de %@ ont mal configuré leur site. Pour éviter que vos données ne soient dérobées, Ecosia ne s’est pas connecté à ce site.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Cette connexion n’est pas certifiée";
@@ -443,7 +443,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Page d’accueil de Firefox";
+"Firefox.HomePage.Title" = "Page d’accueil de Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Personnaliser la page d’accueil";
@@ -491,13 +491,13 @@
 "FxA.AccountVerificationRequired" = "Vérification du compte nécessaire";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Vous devez vérifier %@. Consultez votre boîte de réception pour accéder au lien de vérification envoyé par Firefox.";
+"FxA.AccountVerificationRequiredSurface" = "Vous devez vérifier %@. Consultez votre boîte de réception pour accéder au lien de vérification envoyé par Ecosia.";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "Connecter un autre appareil";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Compte Firefox";
+"FxA.FirefoxAccount" = "Compte Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Gérer le compte et les appareils";
@@ -509,13 +509,13 @@
 "FxA.OpenSyncPreferences" = "Ouvrir les préférences de synchronisation";
 
 /* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "Scannez le code QR affiché à l’adresse firefox.com/pair";
+"fxa.qr-scanning-view.instructions" = "Scannez le code QR affiché à l’adresse Ecosia.com/pair";
 
 /* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
 "FxA.RemoveAccount" = "Supprimer";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Retirez le compte Firefox associé à cet appareil pour vous connecter en tant qu’utilisateur différent.";
+"FxA.RemoveAccountAlertMessage" = "Retirez le compte Ecosia associé à cet appareil pour vous connecter en tant qu’utilisateur différent.";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "Supprimer le compte";
@@ -527,13 +527,13 @@
 "fxa.signin.camera-signin" = "Connectez-vous avec votre appareil photo";
 
 /* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "Synchronisez Firefox entre vos appareils en créant un compte.";
+"fxa.signin.create-account-pt-1" = "Synchronisez Ecosia entre vos appareils en créant un compte.";
 
 /* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Créer un compte Firefox";
+"fxa.signin.create-account-pt-2" = "Créer un compte Ecosia";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Sur votre ordinateur, ouvrez Firefox et accédez à firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Sur votre ordinateur, ouvrez Ecosia et accédez à Ecosia.com/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Prêt·e à scanner";
@@ -557,7 +557,7 @@
 "FxA.TakeYourWebWithYou" = "Emportez votre Web partout avec vous";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync s’est connecté à %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync s’est connecté à %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync connecté";
@@ -566,7 +566,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ a été déconnecté.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Cet appareil a été correctement déconnecté de Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Cet appareil a été correctement déconnecté de Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync déconnecté";
@@ -575,10 +575,10 @@
 "FxAPush_DeviceDisconnected_title" = "Sync déconnecté";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un appareil a été déconnecté de Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un appareil a été déconnecté de Ecosia Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo Firefox, changer le fond d’écran.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo Ecosia, changer le fond d’écran.";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Retrouvez vos onglets ouverts, marque-pages et mots de passe depuis vos autres appareils.";
@@ -626,7 +626,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Activez la synchronisation des onglets pour afficher la liste des onglets de vos autres appareils.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Historique";
@@ -719,7 +719,7 @@
 "InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Activer la fermeture automatique";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox peut fermer les onglets que vous n’avez pas consultés au cours du mois dernier.";
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Ecosia peut fermer les onglets que vous n’avez pas consultés au cours du mois dernier.";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
 "InactiveTabs.TabTray.AutoClosePrompt.Title" = "Fermeture automatique après un mois ?";
@@ -893,7 +893,7 @@
 "Logins.WelcomeView.Tagline" = "Emportez vos mots de passe partout avec vous";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Remplissage automatique des mots de passe par Firefox";
+"Logins.WelcomeView.Title2" = "Remplissage automatique des mots de passe par Ecosia";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Activer le remplissage automatique";
@@ -941,7 +941,7 @@
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrer";
 
 /* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Les identifiants enregistrés apparaîtront ici. Si vous avez enregistré vos identifiants dans Firefox sur un autre appareil, connectez-vous à votre compte Firefox.";
+"LoginsList.NoLoginsFound.Description" = "Les identifiants enregistrés apparaîtront ici. Si vous avez enregistré vos identifiants dans Ecosia sur un autre appareil, connectez-vous à votre compte Ecosia.";
 
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Aucun identifiant trouvé";
@@ -965,7 +965,7 @@
 "LoginsList.Title" = "IDENTIFIANTS ENREGISTRÉS";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Il semblerait que Firefox ait planté. Voulez-vous restaurer vos onglets ?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Il semblerait que Ecosia ait planté. Voulez-vous restaurer vos onglets ?";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -1021,10 +1021,10 @@
 "Menu.EnhancedTrackingProtectionOn.Title" = "La protection renforcée contre le pistage est ACTIVÉE pour ce site.";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox bloque les traqueurs intersites, les traqueurs de réseaux sociaux, les mineurs de cryptomonnaies et les détecteurs d’empreintes numériques.";
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Ecosia bloque les traqueurs intersites, les traqueurs de réseaux sociaux, les mineurs de cryptomonnaies et les détecteurs d’empreintes numériques.";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox bloque les traqueurs intersites, les traqueurs de réseaux sociaux, les mineurs de cryptomonnaies, les détecteurs d’empreintes numériques et le contenu utilisé pour le pistage.";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Ecosia bloque les traqueurs intersites, les traqueurs de réseaux sociaux, les mineurs de cryptomonnaies, les détecteurs d’empreintes numériques et le contenu utilisé pour le pistage.";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Aide";
@@ -1123,7 +1123,7 @@
 "Menu.TrackingProtection.Details.Verifier" = "Vérifié par %@";
 
 /* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Aucun traqueur connu par Firefox n’a été détecté sur cette page.";
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Aucun traqueur connu par Ecosia n’a été détecté sur cette page.";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Paramètres de protection";
@@ -1138,7 +1138,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "Traqueurs de réseaux sociaux";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox a bloqué des éléments de la page qui peuvent pister votre navigation.";
+"Menu.TrackingProtectionBlocking.Description" = "Ecosia a bloqué des éléments de la page qui peuvent pister votre navigation.";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
 "Menu.TrackingProtectionBlockingDisabled.Description" = "Bloquer les traqueurs en ligne";
@@ -1265,7 +1265,7 @@
 "Onboarding.WallpaperAction.v102" = "Définir un fond d’écran";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
-"Onboarding.WallpaperTitle.v102" = "Choisir un fond d’écran Firefox";
+"Onboarding.WallpaperTitle.v102" = "Choisir un fond d’écran Ecosia";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Commencer la navigation";
@@ -1290,10 +1290,10 @@
 
 /* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
    The title for the new onboarding card letting users know what is new in Firefox iOS */
-"Onboarding.WhatsNew.Title" = "Les nouveautés de Firefox";
+"Onboarding.WhatsNew.Title" = "Les nouveautés de Ecosia";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Oups, Firefox a planté";
+"Oops! Firefox crashed" = "Oups, Ecosia a planté";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Ouvrez des articles en mode lecture en appuyant sur l’icône de livre lorsqu’elle apparaît dans la barre de titre.";
@@ -1305,7 +1305,7 @@
 "Open Tabs" = "Onglets ouverts";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox ne parvient pas à ouvrir cette page, car l’adresse est invalide.";
+"OpenURL.Error.Message" = "Ecosia ne parvient pas à ouvrir cette page, car l’adresse est invalide.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Impossible d’ouvrir la page";
@@ -1320,19 +1320,19 @@
 "Password" = "Mot de passe";
 
 /* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Vous n’avez aucun identifiant synchronisé avec votre compte Firefox";
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Vous n’avez aucun identifiant synchronisé avec votre compte Ecosia";
 
 /* Header for the list of credentials table */
 "PasswordAutoFill.PasswordsListTitle" = "Identifiants disponibles :";
 
 /* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Identifiants Firefox";
+"PasswordAutoFill.SectionTitle" = "Identifiants Ecosia";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Ceci vous permet d’enregistrer l’image dans Pellicule.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox souhaite accéder à vos photos";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia souhaite accéder à vos photos";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Fermer";
@@ -1416,10 +1416,10 @@
 "ScanQRCode.InvalidDataError.Message" = "Données non valides";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Veuillez autoriser Firefox à accéder à l’appareil photo de votre appareil dans « Réglages » -> « Confidentialité » -> « Appareil photo ».";
+"ScanQRCode.PermissionError.Message" = "Veuillez autoriser Ecosia à accéder à l’appareil photo de votre appareil dans « Réglages » -> « Confidentialité » -> « Appareil photo ».";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Accédez à « Réglages » > « Firefox » et autorisez Firefox à accéder à l’appareil photo.";
+"ScanQRCode.PermissionError.Message.v100" = "Accédez à « Réglages » > « Ecosia » et autorisez Ecosia à accéder à l’appareil photo.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Scanner un code QR";
@@ -1436,7 +1436,7 @@
 "Search.Awesomebar.SwitchToTab" = "Aller à l’onglet";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox suggère";
+"Search.SuggestSectionTitle.v102" = "Ecosia suggère";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Le nouveau moteur de recherche apparaîtra dans la barre de recherche rapide.";
@@ -1478,7 +1478,7 @@
 "Secure connection" = "Connexion sécurisée";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Envoyer un rapport de plantage afin que Mozilla puisse corriger le problème ?";
+"Send a crash report so Mozilla can fix the problem?" = "Envoyer un rapport de plantage afin que Ecosia puisse corriger le problème ?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Donner mon avis";
@@ -1506,19 +1506,19 @@
 "SendTo.NavBar.Title" = "Envoyer l’onglet";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Vous n’avez aucun autre appareil prêt à être synchronisé et connecté à ce compte Firefox.";
+"SendTo.NoDevicesFound.Message" = "Vous n’avez aucun autre appareil prêt à être synchronisé et connecté à ce compte Ecosia.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Veuillez ouvrir Firefox, vous rendre dans les paramètres et vous connecter pour continuer.";
+"SendTo.NotSignedIn.Message" = "Veuillez ouvrir Ecosia, vous rendre dans les paramètres et vous connecter pour continuer.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Vous n’êtes pas connecté·e à votre compte Firefox.";
+"SendTo.NotSignedIn.Title" = "Vous n’êtes pas connecté·e à votre compte Ecosia.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Envoyer";
 
 /* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Se connecter via Firefox";
+"SendTo.SignIn.Button" = "Se connecter via Ecosia";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Nouvel onglet reçu depuis un autre appareil.";
@@ -1542,7 +1542,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Appuyer pour commencer";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Afficher";
@@ -1605,7 +1605,7 @@
 "Settings.DataManagement.Title" = "Gestion des données";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox ne se synchronisera plus avec votre compte, mais ne supprimera aucune donnée de navigation sur cet appareil.";
+"Settings.Disconnect.Body" = "Ecosia ne se synchronisera plus avec votre compte, mais ne supprimera aucune donnée de navigation sur cet appareil.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Déconnecter Sync";
@@ -1678,7 +1678,7 @@
 "Settings.FxA.Sync.SectionName" = "Paramètres de synchronisation";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Compte Firefox";
+"Settings.FxA.Title" = "Compte Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Général";
@@ -1687,7 +1687,7 @@
 "Settings.Home.Current.Description.v101" = "Choisissez ce qui s’affiche comme page d’accueil.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Choisissez le contenu de la page d’accueil de Firefox.";
+"Settings.Home.Option.Description.v101" = "Choisissez le contenu de la page d’accueil de Ecosia.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Revenir à cet onglet";
@@ -1714,7 +1714,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Page d’accueil";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Choisissez ce qui s’affiche lorsque vous rouvrez Firefox.";
+"Settings.Home.Option.StartAtHome.Description" = "Choisissez ce qui s’affiche lorsque vous rouvrez Ecosia.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Dernier onglet";
@@ -1729,31 +1729,31 @@
 "Settings.Home.Option.Wallpaper" = "Fond d’écran";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Fond d’écran de Firefox, motif améthyste.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Fond d’écran de Ecosia, motif améthyste.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Fond d’écran Firefox, motif collines de plage.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Fond d’écran Ecosia, motif collines de plage.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Fond d’écran de Firefox, motif bleu céruléen.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Fond d’écran de Ecosia, motif bleu céruléen.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Fond d’écran clair par défaut.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Fond d’écran de Firefox, motif de lever de soleil.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Fond d’écran de Ecosia, motif de lever de soleil.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Commutateur du diaporama du fond d’écran de la page d’accueil";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Fond d’écran Firefox, motif collines au crépuscule.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Fond d’écran Ecosia, motif collines au crépuscule.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "ÉCRAN À L’OUVERTURE";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Changer le fond d’écran en appuyant sur le logo Firefox de la page d’accueil";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Changer le fond d’écran en appuyant sur le logo Ecosia de la page d’accueil";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Fond d’écran";
@@ -1834,10 +1834,10 @@
 "Settings.NewTab.Option.CustomizeFooter2" = "Sites que vous enregistrez ou visitez";
 
 /* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Personnaliser l’accueil de Firefox";
+"Settings.NewTab.Option.CustomizeTitle" = "Personnaliser l’accueil de Ecosia";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "La page d’accueil de Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "La page d’accueil de Ecosia";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
 "Settings.NewTab.Option.HighlightsBookmarks" = "Marque-pages récents";
@@ -1882,7 +1882,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Bloquer les images";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "À l’ouverture de Firefox";
+"Settings.OfferClipboardBar.Status" = "À l’ouverture de Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Proposer d’ouvrir les liens copiés";
@@ -1918,7 +1918,7 @@
 "Settings.SendUsage.Link" = "En savoir plus.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla veille à collecter uniquement les données nécessaires afin d’offrir et d’améliorer Firefox pour tout le monde.";
+"Settings.SendUsage.Message" = "Ecosia veille à collecter uniquement les données nécessaires afin d’offrir et d’améliorer Ecosia pour tout le monde.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Envoyer des données d’utilisation";
@@ -1936,7 +1936,7 @@
 "Settings.Siri.OpenTabShortcut" = "Ouvrir un nouvel onglet";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Utilisez les raccourcis Siri pour ouvrir rapidement Firefox via Siri";
+"Settings.Siri.SectionDescription" = "Utilisez les raccourcis Siri pour ouvrir rapidement Ecosia via Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Raccourcis Siri";
@@ -1960,7 +1960,7 @@
 "Settings.Studies.Toggle.Link" = "En savoir plus.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox peut installer et lancer des études de temps en temps.";
+"Settings.Studies.Toggle.Message" = "Ecosia peut installer et lancer des études de temps en temps.";
 
 /* Toggled OFF to opt-out of studies */
 "Settings.Studies.Toggle.Off" = "Désactivées";
@@ -2014,7 +2014,7 @@
 "Settings.TrackingProtection.Alert.Title" = "Attention !";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Vous pouvez désormais choisir quelle liste Firefox doit utiliser pour bloquer les éléments web susceptibles de pister votre navigation.";
+"Settings.TrackingProtection.BlockListsHeader" = "Vous pouvez désormais choisir quelle liste Ecosia doit utiliser pour bloquer les éléments web susceptibles de pister votre navigation.";
 
 /* Explanation of basic mode. */
 "Settings.TrackingProtection.Info.BasicTitle" = "Équilibré entre la protection et la performance.";
@@ -2125,16 +2125,16 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Charger en arrière-plan";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Chargement dans Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Chargement dans Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Ouvrir dans Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ouvrir dans Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
 "ShareExtension.OpenInPrivateModeAction.Title" = "Ouvrir en navigation privée";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Rechercher dans Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Rechercher dans Ecosia";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Afficher les suggestions";
@@ -2171,7 +2171,7 @@
 "Sync.FirstTimeMessage.Label" = "La première synchronisation peut prendre un moment";
 
 /* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "Vous n’avez pas de compte ? Créez-en un pour synchroniser Firefox entre vos appareils.";
+"Sync.NoAccount.Description" = "Vous n’avez pas de compte ? Créez-en un pour synchroniser Ecosia entre vos appareils.";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "Synchronisation en cours";
@@ -2357,13 +2357,13 @@
 "UIMenuItem.PasteGo" = "Coller et ouvrir";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Rechercher avec Firefox";
+"UIMenuItem.SearchWithFirefox" = "Rechercher avec Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "Non lu";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Veuillez mettre à jour Firefox pour vous connecter.";
+"Upgrade Firefox to connect" = "Veuillez mettre à jour Ecosia pour vous connecter.";
 
 /* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
 "Upgrade.SyncSign.Action.v106" = "Se connecter";
@@ -2411,7 +2411,7 @@
 "Yesterday" = "Hier";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Vous n’avez aucun onglet ouvert dans Firefox sur vos autres appareils.";
+"You don’t have any tabs open in Firefox on your other devices." = "Vous n’avez aucun onglet ouvert dans Ecosia sur vos autres appareils.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Droits de l’utilisateur";

@@ -20,13 +20,13 @@
 "Intro.Slides.Fast.Search.Title" = "Жылдам іздеу";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Осы құрылғыдағы Firefox-қа бетбелгілер, шолу тарихын және парольдерді көшіру.";
+"Intro.Slides.Firefox.Account.Sync.Description" = "Осы құрылғыдағы Ecosia-қа бетбелгілер, шолу тарихын және парольдерді көшіру.";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Firefox-ты құрылғылар арасында синхрондау";
+"Intro.Slides.Firefox.Account.Sync.Title" = "Ecosia-ты құрылғылар арасында синхрондау";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Firefox көмегімен кез келген пошта қолданбасын - тек Mail емес - қолданыңыз.";
+"Intro.Slides.Mail.Description" = "Ecosia көмегімен кез келген пошта қолданбасын - тек Mail емес - қолданыңыз.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "Сізде поштаның… таңдауы бар";
@@ -38,7 +38,7 @@
 "Intro.Slides.Private.Title" = "Бақылаудан қорықпай-ақ интернетті шолыңыз";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Firefox-ті қолданатын барлық жерде логиндер және деректеріңізді қорғаңыз.";
+"Intro.Slides.Safe.Sync.Description" = "Ecosia-ті қолданатын барлық жерде логиндер және деректеріңізді қорғаңыз.";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Title" = "Қауіпсіз синхрондау";
@@ -59,7 +59,7 @@
 "Intro.Slides.Welcome.Description.v2" = "Жылдам, жеке және сіздің жағыңызда.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Firefox қолданбасына қош келдіңіз";
+"Intro.Slides.Welcome.Title.v2" = "Ecosia қолданбасына қош келдіңіз";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Шолуды бастау";

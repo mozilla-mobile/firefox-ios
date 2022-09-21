@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Abrir num novo separador privado";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "O Firefox não irá memorizar qualquer histórico ou cookies, mas os novos marcadores serão guardados.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "O Ecosia não irá memorizar qualquer histórico ou cookies, mas os novos marcadores serão guardados.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Saber mais";

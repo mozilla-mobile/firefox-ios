@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "新搜尋";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "將 Firefox 捷徑加入主畫面。";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "將 Ecosia 捷徑加入主畫面。";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "開啟複製的鏈結";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "用隱私分頁搜尋";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "用 Firefox 搜尋";
+"TodayWidget.NewSearchButtonLabelV1" = "用 Ecosia 搜尋";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "新搜尋結果";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "未開啟分頁";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "開啟 Firefox";
+"TodayWidget.OpenFirefoxLabel" = "開啟 Ecosia";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "探索由 Pocket 精心挑選的有趣與發人深省的文章。";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Pocket 推薦內容";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - Pocket 推薦內容";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Pocket 推薦內容";
@@ -71,22 +71,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "隱私搜尋";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "選擇要加到主畫面的 Firefox 捷徑。";
+"TodayWidget.QuickActionDescription" = "選擇要加到主畫面的 Ecosia 捷徑。";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "快速操作";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "把 Firefox 捷徑加到主畫面。新增小工具之後，請長按小工具選擇不同的捷徑。";
+"TodayWidget.QuickActionGalleryDescription" = "把 Ecosia 捷徑加到主畫面。新增小工具之後，請長按小工具選擇不同的捷徑。";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "快速操作";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox 捷徑";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia 捷徑";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - 快速操作";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia - 快速操作";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "直接從主畫面開啟分頁清單。";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "加入已開啟分頁的捷徑。";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - 開啟的分頁";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - 開啟的分頁";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "用 Firefox 搜尋";
+"TodayWidget.SearchInFirefoxTitle" = "用 Ecosia 搜尋";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "用 Firefox 搜尋";
+"TodayWidget.SearchInFirefoxV2" = "用 Ecosia 搜尋";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "用隱私分頁搜尋";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "網站捷徑";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - 熱門網站";
+"TodayWidget.TopSitesSubLabel" = "Ecosia - 熱門網站";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - 網站捷徑";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia - 網站捷徑";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "檢視更多";

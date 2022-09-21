@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "Nuova ricerca";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Aggiungi collegamenti Firefox alla schermata principale";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Aggiungi collegamenti Ecosia alla schermata principale";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Apri il link copiato";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "Cerca in scheda anonima";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Cerca in Firefox";
+"TodayWidget.NewSearchButtonLabelV1" = "Cerca in Ecosia";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Nuova ricerca";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "Nessuna scheda aperta";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Apri Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Apri Ecosia";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "Scopri storie affascinanti e stimolanti da tutto il Web, a cura di Pocket.";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox – Consigliati da Pocket";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia – Consigliati da Pocket";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Consigliati da Pocket";
@@ -71,22 +71,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Ricerca anonima";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Seleziona un collegamento Firefox da aggiungere alla schermata principale.";
+"TodayWidget.QuickActionDescription" = "Seleziona un collegamento Ecosia da aggiungere alla schermata principale.";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "Azione rapida";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Aggiungi un collegamento a Firefox alla schermata principale. Dopo aver aggiunto il widget, toccalo tenendo premuto per modificarlo e selezionare un collegamento diverso.";
+"TodayWidget.QuickActionGalleryDescription" = "Aggiungi un collegamento a Ecosia alla schermata principale. Dopo aver aggiunto il widget, toccalo tenendo premuto per modificarlo e selezionare un collegamento diverso.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Azioni rapide";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Scorciatoie di Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Scorciatoie di Ecosia";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox – Azioni rapide";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia – Azioni rapide";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "Accedi alle schede aperte direttamente dalla schermata principale.";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "Aggiungi collegamenti alle tue schede aperte.";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox – Schede aperte";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia – Schede aperte";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Cerca in Firefox";
+"TodayWidget.SearchInFirefoxTitle" = "Cerca in Ecosia";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Cerca in Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Cerca in Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Cerca in scheda anonima";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "Scorciatoie a siti web";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox – Siti principali";
+"TodayWidget.TopSitesSubLabel" = "Ecosia – Siti principali";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - Scorciatoie a siti web";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia - Scorciatoie a siti web";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Visualizza altro";

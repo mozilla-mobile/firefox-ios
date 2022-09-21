@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "নতুন অনুসন্ধান";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "আপনার হোম স্ক্রিনে Firefox শর্টকাট যুক্ত করুন।";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "আপনার হোম স্ক্রিনে Ecosia শর্টকাট যুক্ত করুন।";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "কপি করা লিঙ্কে যান";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "ব্যক্তিগত ট্যাবে অনুসন্ধান করুন";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Firefox এ অনুসন্ধান করুন";
+"TodayWidget.NewSearchButtonLabelV1" = "Ecosia এ অনুসন্ধান করুন";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "নতুন অনুসন্ধান";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "কোন ট্যাব খোলা নেই";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox খুলুন";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia খুলুন";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "পকেট দ্বারা সজ্জিত ওয়েব জুড়ে আকর্ষণীয় এবং চিন্তা-ভাবনামূলক গল্পগুলি আবিষ্কার করুন।";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Pocket দ্বারা প্রস্তাবিত";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - Pocket দ্বারা প্রস্তাবিত";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Pocket থেকে সুপারিশকৃত";
@@ -71,13 +71,13 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "ব্যক্তিগত অনুসন্ধান";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "আপনার হোম স্ক্রিনে যুক্ত করতে একটি Firefox শর্টকাট নির্বাচন করুন।";
+"TodayWidget.QuickActionDescription" = "আপনার হোম স্ক্রিনে যুক্ত করতে একটি Ecosia শর্টকাট নির্বাচন করুন।";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "কুইক একশন";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "আপনার হোম স্ক্রিনে একটি Firefox শর্টকাট যুক্ত করুন। উইজেট যুক্ত করার পরে, এটি সম্পাদনা করতে স্পর্শ করুন এবং ধরে রাখুন এবং একটি আলাদা শর্টকাট নির্বাচন করুন।";
+"TodayWidget.QuickActionGalleryDescription" = "আপনার হোম স্ক্রিনে একটি Ecosia শর্টকাট যুক্ত করুন। উইজেট যুক্ত করার পরে, এটি সম্পাদনা করতে স্পর্শ করুন এবং ধরে রাখুন এবং একটি আলাদা শর্টকাট নির্বাচন করুন।";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "দ্রুত পদক্ষেপ";
@@ -86,7 +86,7 @@
 "TodayWidget.QuickActionsGalleryTitleV2" = "দ্রুত পদক্ষেপ";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - দ্রুত পদক্ষেপ";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia - দ্রুত পদক্ষেপ";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "আপনার হোমস্ক্রিনে আপনার খোলা ট্যাবগুলিকে অ্যাক্সেস করুন।";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "আপনার খোলা ট্যাবগুলিতে শর্টকাট যুক্ত করুন।";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - ট্যাব খুলুন";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - ট্যাব খুলুন";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Firefox এ অনুসন্ধান করুন";
+"TodayWidget.SearchInFirefoxTitle" = "Ecosia এ অনুসন্ধান করুন";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox এ\nঅনুসন্ধান করুন";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia এ\nঅনুসন্ধান করুন";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "ব্যক্তিগত ট্যাবে\nঅনুসন্ধান করুন";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "ওয়েবসাইটের শর্টকাট";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - শীর্ষ সাইটগুলি";
+"TodayWidget.TopSitesSubLabel" = "Ecosia - শীর্ষ সাইটগুলি";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - ওয়েবসাইট শর্টকাট";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia - ওয়েবসাইট শর্টকাট";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "আরও দেখুন";

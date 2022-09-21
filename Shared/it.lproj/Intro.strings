@@ -20,13 +20,13 @@
 "Intro.Slides.Fast.Search.Title" = "Ricerca rapida";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Porta segnalibri, cronologia e password di Firefox su questo dispositivo.";
+"Intro.Slides.Firefox.Account.Sync.Description" = "Porta segnalibri, cronologia e password di Ecosia su questo dispositivo.";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Sincronizza Firefox tra vari dispositivi";
+"Intro.Slides.Firefox.Account.Sync.Title" = "Sincronizza Ecosia tra vari dispositivi";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Leggi le tue email da qualunque app, non solo Mail, con Firefox.";
+"Intro.Slides.Mail.Description" = "Leggi le tue email da qualunque app, non solo Mail, con Ecosia.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "C’è posta per te… con opzioni";
@@ -38,7 +38,7 @@
 "Intro.Slides.Private.Title" = "Naviga come se nessuno ti stesse guardando";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Proteggi credenziali e dati in tutti i dispositivi su cui utilizzi Firefox.";
+"Intro.Slides.Safe.Sync.Description" = "Proteggi credenziali e dati in tutti i dispositivi su cui utilizzi Ecosia.";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Title" = "Sincronizzazione sicura";
@@ -59,7 +59,7 @@
 "Intro.Slides.Welcome.Description.v2" = "Veloce, riservato e sempre al tuo fianco.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Benvenuto in Firefox";
+"Intro.Slides.Welcome.Title.v2" = "Benvenuto in Ecosia";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Inizia a navigare";

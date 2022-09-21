@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "Nowe pytanje";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Pśidajśo swójej startowej wobrazowce zwězanja Firefox";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Pśidajśo swójej startowej wobrazowce zwězanja Ecosia";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Ku kopěrowanemu wótkazoju";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "W priwatnem rejtariku pytaś";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "W Firefox pytaś";
+"TodayWidget.NewSearchButtonLabelV1" = "W Ecosia pytaś";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Nowe pytanje";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "Žedne wócynjone rejtarki";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox wócyniś";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia wócyniś";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "Namakajśo fasciněrujuce a k rozmyslowanjeju pógnuwajuce tšojeńka z cełego weba, kótarež se pśez Pocket woplěwaju.";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - wót Pocket dopórucone";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - wót Pocket dopórucone";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Wót Pocket dopórucony";
@@ -71,19 +71,19 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Priwatne pytanje";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Wubjeŕśo zwězanje Firefox, aby jo swójej startowej wobrazowce pśidał.";
+"TodayWidget.QuickActionDescription" = "Wubjeŕśo zwězanje Ecosia, aby jo swójej startowej wobrazowce pśidał.";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "Malsna akcija";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Pśidajśo startowej wobrazowce zwězanje Firefox. Za tym až sćo pśidał asistent, pótusniśo asistent a źaržćo jen, aby wobźěłował a wubjeŕśo druge zwězanje.";
+"TodayWidget.QuickActionGalleryDescription" = "Pśidajśo startowej wobrazowce zwězanje Ecosia. Za tym až sćo pśidał asistent, pótusniśo asistent a źaržćo jen, aby wobźěłował a wubjeŕśo druge zwězanje.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Malsne akcije";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Zwězanja Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Zwězanja Ecosia";
 
 /* Sub label for medium size quick action widget */
 "TodayWidget.QuickActionsSubLabel" = "Fiefox - malsne akcije";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "Pśidajśo swójim wócynjonym rejtarikam zwězanja.";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - wócynjone rejtariki";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - wócynjone rejtariki";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "W Firefox pytaś";
+"TodayWidget.SearchInFirefoxTitle" = "W Ecosia pytaś";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "W Firefox pytaś";
+"TodayWidget.SearchInFirefoxV2" = "W Ecosia pytaś";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "W priwatnem rejtariku pytaś";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "Zwězanja websedłow";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - nejcesćej woglědane sedła";
+"TodayWidget.TopSitesSubLabel" = "Ecosia - nejcesćej woglědane sedła";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - sedłowe zwězanja";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia - sedłowe zwězanja";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Wěcej pokazaś";

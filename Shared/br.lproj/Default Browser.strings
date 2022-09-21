@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Gouzout penaos";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Lakaat da zigeriñ e Firefox en un doare emgefreek liammoù al lec’hiennoù, posteloù, ha kemennadennoù.";
+"DefaultBrowserCard.Description" = "Lakaat da zigeriñ e Ecosia en un doare emgefreek liammoù al lec’hiennoù, posteloù, ha kemennadennoù.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Cheñch ho merdeer dre ziouer";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Stokañ an arload merdeer dre ziouer";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Dibab Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Dibab Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Arload merdeer dre ziouer";

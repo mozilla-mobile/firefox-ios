@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Hape në Skedë të Re Private";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox-i s’do të mbajë mend gjë nga historiku apo cookie-t, por faqerojtësit e rinj do të ruhen.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia-i s’do të mbajë mend gjë nga historiku apo cookie-t, por faqerojtësit e rinj do të ruhen.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Mësoni Më Tepër";

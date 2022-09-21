@@ -318,7 +318,7 @@
 "Could not load page." = "Ni bilo mogoče naložiti strani.";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "V sistemu iOS 13 Firefox sedaj samodejno preklopi na temno temo, če je telefon nastavljen na temen način. To lahko spremenite v meniju Nastavitve > Tema.";
+"CoverSheet.v22.DarkMode.Description" = "V sistemu iOS 13 Ecosia sedaj samodejno preklopi na temno temo, če je telefon nastavljen na temen način. To lahko spremenite v meniju Nastavitve > Tema.";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "Temna tema zdaj vključuje temno tipkovnico in temen pozdravni zaslon.";
@@ -377,7 +377,7 @@
 "Downloads.CancelDialog.Title" = "Prekliči prenos";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Prenosi v Firefoxu še niso podprti.";
+"Downloads.Error.Message" = "Prenosi v Ecosia še niso podprti.";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Prenos preklican";
@@ -422,7 +422,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Lahko gre za napačne nastavitve ali poseg napadalca. Nadaljujte, če ste pripravljeni tvegati.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Lastnik %@ je nepravilno nastavil svojo spletno stran. Firefox se ni povezal nanjo, da bi preprečil krajo vaših podatkov.";
+"ErrorPages.CertWarning.Description" = "Lastnik %@ je nepravilno nastavil svojo spletno stran. Ecosia se ni povezal nanjo, da bi preprečil krajo vaših podatkov.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Vaša povezava ni zasebna";
@@ -443,7 +443,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Domača stran Firefoxa";
+"Firefox.HomePage.Title" = "Domača stran Ecosiaa";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Prilagodi domačo stran";
@@ -491,13 +491,13 @@
 "FxA.AccountVerificationRequired" = "Zahtevana je potrditev računa";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "%@ morate potrditi. V svojem e-poštnem predalu poiščite Firefoxovo sporočilo s potrditveno povezavo.";
+"FxA.AccountVerificationRequiredSurface" = "%@ morate potrditi. V svojem e-poštnem predalu poiščite Ecosiaovo sporočilo s potrditveno povezavo.";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "Poveži drugo napravo";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox Račun";
+"FxA.FirefoxAccount" = "Ecosia Račun";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Upravljanje računa in naprav";
@@ -509,13 +509,13 @@
 "FxA.OpenSyncPreferences" = "Odpri nastavitve Synca";
 
 /* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "Skenirajte QR-kodo na strani firefox.com/pair";
+"fxa.qr-scanning-view.instructions" = "Skenirajte QR-kodo na strani Ecosia.com/pair";
 
 /* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
 "FxA.RemoveAccount" = "Odstrani";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Odstranite Firefox Račun, povezan s to napravo, da se prijavite kot drug uporabnik.";
+"FxA.RemoveAccountAlertMessage" = "Odstranite Ecosia Račun, povezan s to napravo, da se prijavite kot drug uporabnik.";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "Odstrani račun";
@@ -527,13 +527,13 @@
 "fxa.signin.camera-signin" = "Prijavite se s kamero";
 
 /* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "Sinhronizirajte Firefox med napravami z računom.";
+"fxa.signin.create-account-pt-1" = "Sinhronizirajte Ecosia med napravami z računom.";
 
 /* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Ustvarite Firefox Račun.";
+"fxa.signin.create-account-pt-2" = "Ustvarite Ecosia Račun.";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Na računalniku odprite Firefox in obiščite firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Na računalniku odprite Ecosia in obiščite Ecosia.com/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Pripravljeno za skeniranje";
@@ -557,7 +557,7 @@
 "FxA.TakeYourWebWithYou" = "Ponesite svoj splet s seboj";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync se je povezal z %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync se je povezal z %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync je povezan";
@@ -566,7 +566,7 @@
 "FxAPush_DeviceDisconnected_body" = "Naprava %@ je bila uspešno odklopljena.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Ta naprava ni več povezana s Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Ta naprava ni več povezana s Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync je prekinjen";
@@ -575,10 +575,10 @@
 "FxAPush_DeviceDisconnected_title" = "Sync je prekinjen";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Naprava je bila odklopljena iz Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Naprava je bila odklopljena iz Ecosia Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logtip Firefoxa, spremeni ozadje.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logtip Ecosiaa, spremeni ozadje.";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Uporabite odprte zavihke, zaznamke in gesla iz svojih drugih naprav.";
@@ -626,7 +626,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Vključite sinhronizacijo zavihkov za ogled seznama zavihkov drugih naprav.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Zgodovina";
@@ -719,7 +719,7 @@
 "InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Vklopi samodejno zapiranje";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox bo zaprl zavihke, ki si jih niste ogledali v zadnjem mesecu.";
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Ecosia bo zaprl zavihke, ki si jih niste ogledali v zadnjem mesecu.";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
 "InactiveTabs.TabTray.AutoClosePrompt.Title" = "Samodejno zapri po enem mesecu?";
@@ -887,13 +887,13 @@
 "Logins.Onboarding.Message" = "Vaše prijave in gesla so zdaj zaščitene s Face ID, Touch ID ali geslom naprave.";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Za uporabo samodejnega izpolnjevanja v Firefoxu mora biti omogočeno geslo naprave.";
+"Logins.PasscodeRequirement.Warning" = "Za uporabo samodejnega izpolnjevanja v Ecosia mora biti omogočeno geslo naprave.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Vzemite gesla s seboj";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Samodejno izpolnjevanje gesel za Firefox";
+"Logins.WelcomeView.Title2" = "Samodejno izpolnjevanje gesel za Ecosia";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Vklopi samodejno izpolnjevanje";
@@ -941,7 +941,7 @@
 "LoginsList.LoginsListSearchPlaceholder" = "Filter";
 
 /* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Tukaj se bodo prikazale shranjene prijave. Če ste prijave shranili v Firefox na drugi napravi, se prijavite v Firefox Račun.";
+"LoginsList.NoLoginsFound.Description" = "Tukaj se bodo prikazale shranjene prijave. Če ste prijave shranili v Ecosia na drugi napravi, se prijavite v Ecosia Račun.";
 
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Ni prijav";
@@ -965,7 +965,7 @@
 "LoginsList.Title" = "SHRANJENE PRIJAVE";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Očitno se je Firefox predhodno sesul. Želite obnoviti zavihke?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Očitno se je Ecosia predhodno sesul. Želite obnoviti zavihke?";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -1021,10 +1021,10 @@
 "Menu.EnhancedTrackingProtectionOn.Title" = "Izboljšana zaščita pred sledenjem je VKLJUČENA za to stran.";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox zavrača spletne sledilce, sledilce družbenih omrežij, kriptorudarje in sledilce prstnih odtisov.";
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Ecosia zavrača spletne sledilce, sledilce družbenih omrežij, kriptorudarje in sledilce prstnih odtisov.";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox zavrača spletne sledilce, sledilce družbenih omrežij, kriptorudarje, sledilce prstnih odtisov in sledilno vsebino.";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Ecosia zavrača spletne sledilce, sledilce družbenih omrežij, kriptorudarje, sledilce prstnih odtisov in sledilno vsebino.";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Pomoč";
@@ -1123,7 +1123,7 @@
 "Menu.TrackingProtection.Details.Verifier" = "Overil %@";
 
 /* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefox na strani ni zaznal znanih sledilcev.";
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Ecosia na strani ni zaznal znanih sledilcev.";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Nastavitve zaščite";
@@ -1138,7 +1138,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "Družbeni sledilci";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox zavrača dele strani, ki lahko sledijo vašemu brskanju.";
+"Menu.TrackingProtectionBlocking.Description" = "Ecosia zavrača dele strani, ki lahko sledijo vašemu brskanju.";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
 "Menu.TrackingProtectionBlockingDisabled.Description" = "Zavračaj spletne sledilce";
@@ -1265,7 +1265,7 @@
 "Onboarding.WallpaperAction.v102" = "Nastavi ozadje";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
-"Onboarding.WallpaperTitle.v102" = "Izberite ozadje za Firefox";
+"Onboarding.WallpaperTitle.v102" = "Izberite ozadje za Ecosia";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Začnite z brskanjem";
@@ -1290,10 +1290,10 @@
 
 /* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
    The title for the new onboarding card letting users know what is new in Firefox iOS */
-"Onboarding.WhatsNew.Title" = "Kaj je novega v Firefoxu";
+"Onboarding.WhatsNew.Title" = "Kaj je novega v Ecosia";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Ups! Firefox se je sesul";
+"Oops! Firefox crashed" = "Ups! Ecosia se je sesul";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Odprite članke v bralnem pogledu, tako da tapnete ikono knjige, ko se pojavi v naslovni vrstici.";
@@ -1305,7 +1305,7 @@
 "Open Tabs" = "Odprte zavihke";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox ne more odpreti strani, ker je njen naslov neveljaven.";
+"OpenURL.Error.Message" = "Ecosia ne more odpreti strani, ker je njen naslov neveljaven.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Strani ni mogoče odpreti";
@@ -1320,19 +1320,19 @@
 "Password" = "Geslo";
 
 /* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Nimate prijavnih podatkov, sinhroniziranih iz Firefox Accounts";
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Nimate prijavnih podatkov, sinhroniziranih iz Ecosia Accounts";
 
 /* Header for the list of credentials table */
 "PasswordAutoFill.PasswordsListTitle" = "Prijavni podatki na voljo:";
 
 /* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Prijavni podatki za Firefox";
+"PasswordAutoFill.SectionTitle" = "Prijavni podatki za Ecosia";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "To vam omogoča, da shranite sliko v Camera Roll.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox želi dostop do vaših slik";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia želi dostop do vaših slik";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Zapri";
@@ -1416,10 +1416,10 @@
 "ScanQRCode.InvalidDataError.Message" = "Podatek je neveljaven";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Dovolite Firefoxu dostop do kamere vaše naprave v \"Nastavitve\" -> \"Zasebnost\" -> \"Kamera\".";
+"ScanQRCode.PermissionError.Message" = "Dovolite Ecosia dostop do kamere vaše naprave v \"Nastavitve\" -> \"Zasebnost\" -> \"Kamera\".";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Izberite \"Nastavitve\" > \"Firefox\". Dajte Firefoxu dovoljenje za dostop do kamere.";
+"ScanQRCode.PermissionError.Message.v100" = "Izberite \"Nastavitve\" > \"Ecosia\". Dajte Ecosia dovoljenje za dostop do kamere.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Skenirajte QR-kodo";
@@ -1436,7 +1436,7 @@
 "Search.Awesomebar.SwitchToTab" = "Preklopi na zavihek";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefoxovi predlogi";
+"Search.SuggestSectionTitle.v102" = "Ecosiaovi predlogi";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Novi isklanik se bo pojavil v vrstici za hitro iskanje.";
@@ -1478,7 +1478,7 @@
 "Secure connection" = "Varna povezava";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Pošljem poročilo, da lahko Mozilla odpravi napako?";
+"Send a crash report so Mozilla can fix the problem?" = "Pošljem poročilo, da lahko Ecosia odpravi napako?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Pošlji povratne informacije";
@@ -1506,19 +1506,19 @@
 "SendTo.NavBar.Title" = "Pošlji zavihek";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "S tem Firefox Računom nimate povezanih drugih naprav na voljo za sinhronizacijo.";
+"SendTo.NoDevicesFound.Message" = "S tem Ecosia Računom nimate povezanih drugih naprav na voljo za sinhronizacijo.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Odprite Firefox, pojdite v Nastavitve in se prijavite za nadaljevanje.";
+"SendTo.NotSignedIn.Message" = "Odprite Ecosia, pojdite v Nastavitve in se prijavite za nadaljevanje.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Niste prijavljeni v vaš Firefox Račun.";
+"SendTo.NotSignedIn.Title" = "Niste prijavljeni v vaš Ecosia Račun.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Pošlji";
 
 /* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Prijavite se v Firefox";
+"SendTo.SignIn.Button" = "Prijavite se v Ecosia";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Nov zavihek je prispel iz druge naprave.";
@@ -1542,7 +1542,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Tapnite za začetek";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Prikaži";
@@ -1605,7 +1605,7 @@
 "Settings.DataManagement.Title" = "Upravljanje s podatki";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox se bo prenehal sinhronizirati z vašim računom, vendar ne bo izbrisal podatkov o brskanju na tej napravi.";
+"Settings.Disconnect.Body" = "Ecosia se bo prenehal sinhronizirati z vašim računom, vendar ne bo izbrisal podatkov o brskanju na tej napravi.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Prekini povezavo";
@@ -1678,7 +1678,7 @@
 "Settings.FxA.Sync.SectionName" = "Nastavitve Synca";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox Račun";
+"Settings.FxA.Title" = "Ecosia Račun";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Splošno";
@@ -1687,7 +1687,7 @@
 "Settings.Home.Current.Description.v101" = "Izberite, kaj se prikaže kot domača stran.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Izberite vsebino, ki bo prikazana na Firefoxovi domači strani.";
+"Settings.Home.Option.Description.v101" = "Izberite vsebino, ki bo prikazana na Ecosiaovi domači strani.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Skoči nazaj";
@@ -1714,7 +1714,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Domača stran";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Izberite, kaj naj se prikaže, ko se vrnete v Firefox.";
+"Settings.Home.Option.StartAtHome.Description" = "Izberite, kaj naj se prikaže, ko se vrnete v Ecosia.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Zadnji zavihek";
@@ -1729,31 +1729,31 @@
 "Settings.Home.Option.Wallpaper" = "Ozadje";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Ozadje za Firefox, vzorec ametista.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Ozadje za Ecosia, vzorec ametista.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Ozadje za Firefox, vzorec peščenih hribčkov.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Ozadje za Ecosia, vzorec peščenih hribčkov.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Ozadje za Firefox, vzorec nebeške modrine.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Ozadje za Ecosia, vzorec nebeške modrine.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Privzeto prazno ozadje.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Ozadje za Firefox, vzorec sončnega vzhoda.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Ozadje za Ecosia, vzorec sončnega vzhoda.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Preklop na naslednje ozadje domače strani";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Ozadje za Firefox, vzorec hribov v mraku.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Ozadje za Ecosia, vzorec hribov v mraku.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "ZAČETNI ZASLON";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Spremenite ozadje z dotikom logotipa domače strani Firefoxa";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Spremenite ozadje z dotikom logotipa domače strani Ecosiaa";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Ozadje";
@@ -1834,10 +1834,10 @@
 "Settings.NewTab.Option.CustomizeFooter2" = "Strani, ki jih shranite ali obiščete";
 
 /* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Prilagodite domačo stran Firefoxa";
+"Settings.NewTab.Option.CustomizeTitle" = "Prilagodite domačo stran Ecosiaa";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Domača stran Firefoxa";
+"Settings.NewTab.Option.FirefoxHome" = "Domača stran Ecosiaa";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
 "Settings.NewTab.Option.HighlightsBookmarks" = "Nedavni zaznamki";
@@ -1882,7 +1882,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Zavračaj slike";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Ko odprete Firefox";
+"Settings.OfferClipboardBar.Status" = "Ko odprete Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Ponudi odpiranje kopiranih povezav";
@@ -1918,7 +1918,7 @@
 "Settings.SendUsage.Link" = "Več o tem.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla se trudi, da zbira samo podatke, ki jih potrebuje za razvoj in izboljševanje Firefoxa.";
+"Settings.SendUsage.Message" = "Ecosia se trudi, da zbira samo podatke, ki jih potrebuje za razvoj in izboljševanje Ecosiaa.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Pošiljaj podatke o uporabi";
@@ -1936,7 +1936,7 @@
 "Settings.Siri.OpenTabShortcut" = "Odpri nov zavihek";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Uporabi bližnjice za hitro odpiranje Firefoxa s Siri";
+"Settings.Siri.SectionDescription" = "Uporabi bližnjice za hitro odpiranje Ecosiaa s Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Bližnjice Siri";
@@ -1960,7 +1960,7 @@
 "Settings.Studies.Toggle.Link" = "Več o tem.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox lahko občasno namesti in zažene raziskave.";
+"Settings.Studies.Toggle.Message" = "Ecosia lahko občasno namesti in zažene raziskave.";
 
 /* Toggled OFF to opt-out of studies */
 "Settings.Studies.Toggle.Off" = "Izklopljeno";
@@ -2014,7 +2014,7 @@
 "Settings.TrackingProtection.Alert.Title" = "Pozor!";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "Izberite, kateri seznam naj Firefox uporablja za zavračanje elementov, ki bi lahko sledili vašim aktivnostim na spletu.";
+"Settings.TrackingProtection.BlockListsHeader" = "Izberite, kateri seznam naj Ecosia uporablja za zavračanje elementov, ki bi lahko sledili vašim aktivnostim na spletu.";
 
 /* Explanation of basic mode. */
 "Settings.TrackingProtection.Info.BasicTitle" = "Uravnoteženo za zaščito in učinkovitost delovanja.";
@@ -2125,16 +2125,16 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Naloži v ozadju";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Nalaganje v Firefoxu";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Nalaganje v Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Odpri v Firefoxu";
+"ShareExtension.OpenInFirefoxAction.Title" = "Odpri v Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
 "ShareExtension.OpenInPrivateModeAction.Title" = "Odpri v zasebnem načinu";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Išči v Firefoxu";
+"ShareExtension.SeachInFirefoxAction.Title" = "Išči v Ecosia";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Prikaži predloge iskanja";
@@ -2171,7 +2171,7 @@
 "Sync.FirstTimeMessage.Label" = "Prva sinhronizacija lahko traja malce dlje";
 
 /* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "Nimate računa? Ustvarite ga za sinhronizacijo Firefoxa med napravami.";
+"Sync.NoAccount.Description" = "Nimate računa? Ustvarite ga za sinhronizacijo Ecosiaa med napravami.";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "Sinhroniziram";
@@ -2357,13 +2357,13 @@
 "UIMenuItem.PasteGo" = "Prilepi in odpri";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Iskanje s Firefoxom";
+"UIMenuItem.SearchWithFirefox" = "Iskanje s Ecosiaom";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "neprebrano";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Za povezavo nadgradite Firefox";
+"Upgrade Firefox to connect" = "Za povezavo nadgradite Ecosia";
 
 /* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
 "Upgrade.SyncSign.Action.v106" = "Prijava";
@@ -2411,7 +2411,7 @@
 "Yesterday" = "Včeraj";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "V Firefoxu na drugih napravah nimate odprtih drugih zavihkov.";
+"You don’t have any tabs open in Firefox on your other devices." = "V Ecosia na drugih napravah nimate odprtih drugih zavihkov.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Vaše pravice";

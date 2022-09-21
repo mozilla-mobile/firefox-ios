@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "ახალი ძიება";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "დაამატეთ სხვადასხვა Firefox-მალსახმობი მთავარ ეკრანზე.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "დაამატეთ სხვადასხვა Ecosia-მალსახმობი მთავარ ეკრანზე.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "აღებულ ბმულზე გადასვლა";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "პირად ჩანართში მოძიება";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Firefox-ში მოძიება";
+"TodayWidget.NewSearchButtonLabelV1" = "Ecosia-ში მოძიება";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "ახალი ძიება";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "გახსნილი ჩანართები არაა";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "გახსენით Firefox";
+"TodayWidget.OpenFirefoxLabel" = "გახსენით Ecosia";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "მონახეთ მომხიბლავი და სააზროვნო მასალები ვებსივრცეში, რომელთაც შეგირჩევთ Pocket.";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox – გთავაზობთ Pocket";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia – გთავაზობთ Pocket";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "გთავაზობთ Pocket";
@@ -71,22 +71,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "პირადი ძიება";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Firefox-მალსახმობის დამატება მთავარ ეკრანზე.";
+"TodayWidget.QuickActionDescription" = "Ecosia-მალსახმობის დამატება მთავარ ეკრანზე.";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "სწრაფი მოქმედება";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "დაამატეთ Firefox-მალსახმობი მთავარ ეკრანზე. დამატების შემდგომ, დიდხანს შეეხეთ, ჩასასწორებლად ან სხვა მალსახმობის შესარჩევად.";
+"TodayWidget.QuickActionGalleryDescription" = "დაამატეთ Ecosia-მალსახმობი მთავარ ეკრანზე. დამატების შემდგომ, დიდხანს შეეხეთ, ჩასასწორებლად ან სხვა მალსახმობის შესარჩევად.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "სწრაფი მოქმედებები";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox მალსახმობები";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia მალსახმობები";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox – სწრაფი მოქმედებები";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia – სწრაფი მოქმედებები";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "მიიღეთ წვდომა გახსნილ ჩანართებთან პირდაპირ მთავარი ეკრანიდან.";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "გახსნილი ჩანართების მალსახმობების დამატება";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox – გახსნილი ჩანართები";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia – გახსნილი ჩანართები";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Firefox-ში მოძიება";
+"TodayWidget.SearchInFirefoxTitle" = "Ecosia-ში მოძიება";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox-ში მოძიება";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia-ში მოძიება";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "პირად ჩანართში\nმოძიება";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "საიტის მალსახმობები";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox – რჩეული საიტები";
+"TodayWidget.TopSitesSubLabel" = "Ecosia – რჩეული საიტები";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - ვებსაიტის მალსახმობები";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia - ვებსაიტის მალსახმობები";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "მეტის ნახვა";

@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "Bilaketa berria";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Gehitu Firefoxen lasterbideak zure hasierako pantailan.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Gehitu Ecosia lasterbideak zure hasierako pantailan.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Joan kopiatutako loturara";
@@ -44,7 +44,7 @@
 "TodayWidget.NewPrivateTabButtonLabelV2" = "Bilatu fitxa pribatuan";
 
 /* Open New Tab button label */
-"TodayWidget.NewSearchButtonLabelV1" = "Bilatu Firefoxen";
+"TodayWidget.NewSearchButtonLabelV1" = "Bilatu Ecosia";
 
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Bilaketa berria";
@@ -56,13 +56,13 @@
 "TodayWidget.NoOpenTabsLabelV2" = "Irekitako fitxarik ez";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Ireki Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Ireki Ecosia";
 
 /* Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetGalleryDescription" = "Aurkitu webeko istorio erakargarri eta hausnartzeko modukoak, Pocket-ek bilduta.";
 
 /* Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app. */
-"TodayWidget.PocketWidgetSubLabel" = "Firefox - Pocket-ek gomendatuta";
+"TodayWidget.PocketWidgetSubLabel" = "Ecosia - Pocket-ek gomendatuta";
 
 /* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
 "TodayWidget.PocketWidgetTitle" = "Pocket-ek gomendatua";
@@ -71,22 +71,22 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Bilaketa pribatua";
 
 /* Quick action description when widget enters edit mode */
-"TodayWidget.QuickActionDescription" = "Hautatu hasierako pantailan gehitu beharreko Firefoxen lasterbidea.";
+"TodayWidget.QuickActionDescription" = "Hautatu hasierako pantailan gehitu beharreko Ecosia lasterbidea.";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "Ekintza bizkorra";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Gehitu Firefoxerako lasterbidea zure hasierako pantailan. Widget-a gehitu bezain laster, sakatu eta mantendu lasterbidea editatu eta beste bat hautatzeko.";
+"TodayWidget.QuickActionGalleryDescription" = "Gehitu Ecosiarako lasterbidea zure hasierako pantailan. Widget-a gehitu bezain laster, sakatu eta mantendu lasterbidea editatu eta beste bat hautatzeko.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Ekintza bizkorrak";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefoxen lasterbideak";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia lasterbideak";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - Ekintza bizkorrak";
+"TodayWidget.QuickActionsSubLabel" = "Ecosia - Ekintza bizkorrak";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "Izan irekitako zure fitxetarako sarbidea zuzenean hasierako pantailatik.";
@@ -101,13 +101,13 @@
 "TodayWidget.QuickViewLargeGalleryDescription" = "Gehitu irekitako zure fitxetarako lasterbideak.";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - Irekitako fitxak";
+"TodayWidget.QuickViewOpenTabsSubLabel" = "Ecosia - Irekitako fitxak";
 
 /* Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox. */
-"TodayWidget.SearchInFirefoxTitle" = "Bilatu Firefoxen";
+"TodayWidget.SearchInFirefoxTitle" = "Bilatu Ecosia";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Bilatu Firefoxen";
+"TodayWidget.SearchInFirefoxV2" = "Bilatu Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Bilatu fitxa pribatuan";
@@ -122,10 +122,10 @@
 "TodayWidget.TopSitesGalleryTitleV2" = "Webgunearen lasterbideak";
 
 /* Sub label for Top Sites widget */
-"TodayWidget.TopSitesSubLabel" = "Firefox - Gune erabilienak";
+"TodayWidget.TopSitesSubLabel" = "Ecosia - Gune erabilienak";
 
 /* Sub label for Shortcuts widget */
-"TodayWidget.TopSitesSubLabel2" = "Firefox - Webguneetako lasterbideak";
+"TodayWidget.TopSitesSubLabel2" = "Ecosia - Webguneetako lasterbideak";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Ikusi gehiago";

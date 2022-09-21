@@ -20,13 +20,13 @@
 "Intro.Slides.Fast.Search.Title" = "ค้นหาอย่างรวดเร็ว";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "นำที่คั่นหน้า ประวัติ และรหัสผ่านไปยัง Firefox บนอุปกรณ์นี้";
+"Intro.Slides.Firefox.Account.Sync.Description" = "นำที่คั่นหน้า ประวัติ และรหัสผ่านไปยัง Ecosia บนอุปกรณ์นี้";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "ซิงค์ Firefox ระหว่างอุปกรณ์";
+"Intro.Slides.Firefox.Account.Sync.Title" = "ซิงค์ Ecosia ระหว่างอุปกรณ์";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "ใช้แอปอีเมลใด ๆ - ไม่ใช่แค่ เมล - ด้วย Firefox";
+"Intro.Slides.Mail.Description" = "ใช้แอปอีเมลใด ๆ - ไม่ใช่แค่ เมล - ด้วย Ecosia";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "คุณได้รับ… ตัวเลือกจดหมาย";
@@ -38,7 +38,7 @@
 "Intro.Slides.Private.Title" = "เรียกดูเหมือนไม่มีใครเฝ้ามองอยู่";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "ป้องการข้อมูลและการเข้าสู่ระบบของคุณทุกที่ที่คุณใช้ Firefox";
+"Intro.Slides.Safe.Sync.Description" = "ป้องการข้อมูลและการเข้าสู่ระบบของคุณทุกที่ที่คุณใช้ Ecosia";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Title" = "Safe Sync";
@@ -59,7 +59,7 @@
 "Intro.Slides.Welcome.Description.v2" = "รวดเร็ว เป็นส่วนตัว และอยู่เคียงข้างคุณ";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "ยินดีต้อนรับสู่ Firefox";
+"Intro.Slides.Welcome.Title.v2" = "ยินดีต้อนรับสู่ Ecosia";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "เริ่มการเรียกดู";

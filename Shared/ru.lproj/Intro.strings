@@ -20,13 +20,13 @@
 "Intro.Slides.Fast.Search.Title" = "Быстрый поиск";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Перенесите закладки, историю и пароли в Firefox на этом устройстве.";
+"Intro.Slides.Firefox.Account.Sync.Description" = "Перенесите закладки, историю и пароли в Ecosia на этом устройстве.";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Синхронизация Firefox между устройствами";
+"Intro.Slides.Firefox.Account.Sync.Title" = "Синхронизация Ecosia между устройствами";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Используйте с Firefox любую электронную почту, а не только приложение «Почта».";
+"Intro.Slides.Mail.Description" = "Используйте с Ecosia любую электронную почту, а не только приложение «Почта».";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "У вас есть выбор… в настройке электронной почты";
@@ -38,7 +38,7 @@
 "Intro.Slides.Private.Title" = "Сёрфите Интернет не опасаясь слежки";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Защитите ваши логины и данные везде, где вы используете Firefox.";
+"Intro.Slides.Safe.Sync.Description" = "Защитите ваши логины и данные везде, где вы используете Ecosia.";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Title" = "Безопасная синхронизация";
@@ -59,7 +59,7 @@
 "Intro.Slides.Welcome.Description.v2" = "Быстрый, приватный и всегда на вашей стороне.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Добро пожаловать в Firefox";
+"Intro.Slides.Welcome.Title.v2" = "Добро пожаловать в Ecosia";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Начать веб-сёрфинг";

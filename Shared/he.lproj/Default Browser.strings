@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "מידע נוסף";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "פתיחה אוטומטית של קישורים מאתרים, מהודעות דוא״ל ומהיישום הודעות ב־Firefox.";
+"DefaultBrowserCard.Description" = "פתיחה אוטומטית של קישורים מאתרים, מהודעות דוא״ל ומהיישום הודעות ב־Ecosia.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "החלפת דפדפן ברירת המחדל שלך";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. להקיש על אפליקציית דפדפן ברירת מחדל";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. לבחור ב־Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. לבחור ב־Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "יישומון דפדפן ברירת המחדל";

@@ -312,7 +312,7 @@
 "Could not load page." = "Немагчыма загрузіць старонку.";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "Для карыстальнікаў iOS 13 Firefox цяпер аўтаматычна пераключаецца на цёмную тэму, калі ваш тэлефон усталяваны ў цёмны рэжым. Каб змяніць гэтыя паводзіны, перайдзіце ў Налады > Тэма.";
+"CoverSheet.v22.DarkMode.Description" = "Для карыстальнікаў iOS 13 Ecosia цяпер аўтаматычна пераключаецца на цёмную тэму, калі ваш тэлефон усталяваны ў цёмны рэжым. Каб змяніць гэтыя паводзіны, перайдзіце ў Налады > Тэма.";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "Цёмная тэма цяпер уключае цёмную клавіятуру і цёмны пачатковы экран.";
@@ -371,7 +371,7 @@
 "Downloads.CancelDialog.Title" = "Скасаваць сцягванне";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Сцягванні пакуль не падтрымліваюцца Firefox.";
+"Downloads.Error.Message" = "Сцягванні пакуль не падтрымліваюцца Ecosia.";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Сцягванне скасавана";
@@ -416,7 +416,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Гэта можа быць праз няправільную канфігурацыю альбо праз атаку зламысніка. Працягвайце, калі вы прымаеце патэнцыйную рызыку.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Уладальнік %@ наладзіў свой вэб-сайт няправільна. Каб абараніць вашы звесткі ад крадзяжу, Firefox не злучыўся з гэтым вэб-сайтам.";
+"ErrorPages.CertWarning.Description" = "Уладальнік %@ наладзіў свой вэб-сайт няправільна. Каб абараніць вашы звесткі ад крадзяжу, Ecosia не злучыўся з гэтым вэб-сайтам.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Гэтаму злучэнню няма даверу";
@@ -437,7 +437,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Хатняя старонка Firefox";
+"Firefox.HomePage.Title" = "Хатняя старонка Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Уладкаваць хатнюю старонку";
@@ -485,13 +485,13 @@
 "FxA.AccountVerificationRequired" = "Патрабуецца пацверджанне ўліковага запісу";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Вам трэба пацвердзіць %@. Пашукайце ў сваёй пошце спасылку для пацверждання, дасланую Firefox.";
+"FxA.AccountVerificationRequiredSurface" = "Вам трэба пацвердзіць %@. Пашукайце ў сваёй пошце спасылку для пацверждання, дасланую Ecosia.";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "Злучыць іншую прыладу";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Уліковы запіс Firefox";
+"FxA.FirefoxAccount" = "Уліковы запіс Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Кіраванне ўліковым запісам і прыладамі";
@@ -506,7 +506,7 @@
 "FxA.RemoveAccount" = "Выдаліць";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Выдаліць уліковы запіс Firefox, звязаны з гэтай праладай, каб увайсці як іншы карыстальнік.";
+"FxA.RemoveAccountAlertMessage" = "Выдаліць уліковы запіс Ecosia, звязаны з гэтай праладай, каб увайсці як іншы карыстальнік.";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "Выдаліць уліковы запіс";
@@ -527,7 +527,7 @@
 "FxA.TakeYourWebWithYou" = "Вазьміце сваё Сеціва з сабой";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Сінхранізацыя Firefox злучана з %@";
+"FxAPush_DeviceConnected_body" = "Сінхранізацыя Ecosia злучана з %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Сінхранізацыя падключана";
@@ -536,7 +536,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ была паспяхова адключана.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Гэта прылада паспяхова адключана ад сінхранізацыі Firefox.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Гэта прылада паспяхова адключана ад сінхранізацыі Ecosia.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Сінхранізацыя адключана";
@@ -545,10 +545,10 @@
 "FxAPush_DeviceDisconnected_title" = "Сінхранізацыя адключана";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Прылада адключана ад сінхранізацыі Firefox";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Прылада адключана ад сінхранізацыі Ecosia";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Лагатып Firefox, змяніць шпалеры.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Лагатып Ecosia, змяніць шпалеры.";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Атрымайце доступ да адкрытых картак, закладак і пароляў з іншых прылад.";
@@ -596,7 +596,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Уключыце сінхранізацыю картак, каб бачыць спіс картак з вашых іншых прылад.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Сінхранізацыя Firefox";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Сінхранізацыя Ecosia";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Гісторыя";
@@ -689,7 +689,7 @@
 "InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Уключыць аўтаматычнае закрыццё";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox будзе закрываць карткі, якія вы не праглядалі за апошні месяц.";
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Ecosia будзе закрываць карткі, якія вы не праглядалі за апошні месяц.";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
 "InactiveTabs.TabTray.AutoClosePrompt.Title" = "Аўтаматычна закрываць праз месяц?";
@@ -854,13 +854,13 @@
 "Logins.Onboarding.Message" = "Вашы лагіны і паролі цяпер абаронены Face ID, Touch ID альбо код-паролем прылады.";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Каб карыстацца функцыяй аўтазапаўнення Firefox, уключыце код-пароль прылады.";
+"Logins.PasscodeRequirement.Warning" = "Каб карыстацца функцыяй аўтазапаўнення Ecosia, уключыце код-пароль прылады.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Вазьміце свае паролі ўсюды";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Аўтазапаўненне пароляў Firefox";
+"Logins.WelcomeView.Title2" = "Аўтазапаўненне пароляў Ecosia";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Уключыць аўтазапаўненне";
@@ -908,7 +908,7 @@
 "LoginsList.LoginsListSearchPlaceholder" = "Фільтр";
 
 /* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Захаваныя лагіны з'явяцца тут. Калі вы захавалі лагіны ў Firefox на іншай прыладзе, увайдзіце ў свой уліковы запіс Firefox.";
+"LoginsList.NoLoginsFound.Description" = "Захаваныя лагіны з'явяцца тут. Калі вы захавалі лагіны ў Ecosia на іншай прыладзе, увайдзіце ў свой уліковы запіс Ecosia.";
 
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Лагіны не знойдзены";
@@ -932,7 +932,7 @@
 "LoginsList.Title" = "ЗАХАВАНЫЯ ЛАГІНЫ";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Падобна, што Firefox раней пацярпеў крах. Вы хочаце аднавіць карткі?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Падобна, што Ecosia раней пацярпеў крах. Вы хочаце аднавіць карткі?";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -988,10 +988,10 @@
 "Menu.EnhancedTrackingProtectionOn.Title" = "Узмоцненая ахова ад сачэння ўключана на гэтым сайце.";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox блакуе міжсайтавыя трэкеры, трэкеры сацыяльных сетак, крыптамайнеры і чытнікі лічбавых адбіткаў.";
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Ecosia блакуе міжсайтавыя трэкеры, трэкеры сацыяльных сетак, крыптамайнеры і чытнікі лічбавых адбіткаў.";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox блакуе міжсайтавыя трэкеры, трэкеры сацыяльных сетак, крыптамайнеры, чытнікі лічбавых адбіткаў і змесціва з элементамі сачэння.";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Ecosia блакуе міжсайтавыя трэкеры, трэкеры сацыяльных сетак, крыптамайнеры, чытнікі лічбавых адбіткаў і змесціва з элементамі сачэння.";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Даведка";
@@ -1090,7 +1090,7 @@
 "Menu.TrackingProtection.Details.Verifier" = "Пацверджана %@";
 
 /* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Ніводнага трэкера, вядомага Firefox, не выяўлена на гэтай старонцы.";
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Ніводнага трэкера, вядомага Ecosia, не выяўлена на гэтай старонцы.";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Налады аховы";
@@ -1105,7 +1105,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "Трэкеры сацыяльных сетак";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox блакуе асобныя часткі старонкі, якія могуць адсочваць вашы дзеянні ў Інтэрнэце.";
+"Menu.TrackingProtectionBlocking.Description" = "Ecosia блакуе асобныя часткі старонкі, якія могуць адсочваць вашы дзеянні ў Інтэрнэце.";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
 "Menu.TrackingProtectionBlockingDisabled.Description" = "Блакаваць онлайн-трэкеры";

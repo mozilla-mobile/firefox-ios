@@ -20,13 +20,13 @@
 "Intro.Slides.Fast.Search.Title" = "Hraðleit";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Komdu með bókamerki, feril og lykilorð yfir í Firefox á þessu tæki.";
+"Intro.Slides.Firefox.Account.Sync.Description" = "Komdu með bókamerki, feril og lykilorð yfir í Ecosia á þessu tæki.";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Samstilla Firefox á milli tækja";
+"Intro.Slides.Firefox.Account.Sync.Title" = "Samstilla Ecosia á milli tækja";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Nota hvaða tölvupóstforrit sem er - ekki aðeins Mail - í Firefox.";
+"Intro.Slides.Mail.Description" = "Nota hvaða tölvupóstforrit sem er - ekki aðeins Mail - í Ecosia.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "Þú hefur fengið póst… valkostir";
@@ -38,7 +38,7 @@
 "Intro.Slides.Private.Title" = "Vafraðu eins og enginn sjái til";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "Verndaðu innskráningar þínar og gögn allstaðar þar sem þú notar Firefox.";
+"Intro.Slides.Safe.Sync.Description" = "Verndaðu innskráningar þínar og gögn allstaðar þar sem þú notar Ecosia.";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Title" = "Örugg samstilling";
@@ -59,7 +59,7 @@
 "Intro.Slides.Welcome.Description.v2" = "Hraður, persónulegur og með þér í liði.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Verið velkomin í Firefox";
+"Intro.Slides.Welcome.Title.v2" = "Verið velkomin í Ecosia";
 
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Fara að vafra";

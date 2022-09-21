@@ -284,7 +284,7 @@
 "Downloads.CancelDialog.Title" = "Йөкләүдән баш тарту";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Firefox-та йөкләп алулар әлегә эшләми.";
+"Downloads.Error.Message" = "Ecosia-та йөкләп алулар әлегә эшләми.";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Йөкләп алудан баш тартылды";
@@ -344,7 +344,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox баш бит";
+"Firefox.HomePage.Title" = "Ecosia баш бит";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Алга";
@@ -356,13 +356,13 @@
 "FxA.AccountVerificationRequired" = "Хисапны раслау кирәк";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "%@ адресын раслау кирәк. Firefox җибәргән раслау сылтамасы өчен эл. почтагызны тикшерегез.";
+"FxA.AccountVerificationRequiredSurface" = "%@ адресын раслау кирәк. Ecosia җибәргән раслау сылтамасы өчен эл. почтагызны тикшерегез.";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "Башка бер җиһазны тоташтыру";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox Хисабы";
+"FxA.FirefoxAccount" = "Ecosia Хисабы";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Хисап һәм җиһазлар белән идарә итү";
@@ -374,13 +374,13 @@
 "FxA.OpenSyncPreferences" = "Синхронлау көйләүләрен ачу";
 
 /* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "<b>firefox.com/pair</b> адресында күрсәтелгән QR кодны сканерлагыз";
+"fxa.qr-scanning-view.instructions" = "<b>Ecosia.com/pair</b> адресында күрсәтелгән QR кодны сканерлагыз";
 
 /* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
 "FxA.RemoveAccount" = "Бетерү";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Башка кулланучы буларак керү өчен, бу җиһаз белән бәйле Firefox хисап язмасын бетерегез.";
+"FxA.RemoveAccountAlertMessage" = "Башка кулланучы буларак керү өчен, бу җиһаз белән бәйле Ecosia хисап язмасын бетерегез.";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "Хисапны бетерү";
@@ -392,13 +392,13 @@
 "fxa.signin.camera-signin" = "Камерагыз ярдәмендә керегез";
 
 /* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "Хисап булдырып Сез Firefox-ны җиһазлар арасында синхронлый аласыз.";
+"fxa.signin.create-account-pt-1" = "Хисап булдырып Сез Ecosia-ны җиһазлар арасында синхронлый аласыз.";
 
 /* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Firefox хисабын булдыру.";
+"fxa.signin.create-account-pt-2" = "Ecosia хисабын булдыру.";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Компьютерыгызда Firefox-ны ачыгыз һәм firefox.com/pair адресына күчегез";
+"fxa.signin.qr-link-instruction" = "Компьютерыгызда Ecosia-ны ачыгыз һәм Ecosia.com/pair адресына күчегез";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Сканерларга әзер";
@@ -422,7 +422,7 @@
 "FxA.TakeYourWebWithYou" = "Интернетыгызны үзегез белән алыгыз";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Синхронлау яңа җиһазга тоташтырылды: %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Синхронлау яңа җиһазга тоташтырылды: %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Синхронлау тоташтырылды";
@@ -431,7 +431,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ уңышлы өзелде.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Бу җиһаз Firefox синхронлау хезмәтеннән өзелде.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Бу җиһаз Ecosia синхронлау хезмәтеннән өзелде.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Синхронлау тоташмаган";
@@ -440,7 +440,7 @@
 "FxAPush_DeviceDisconnected_title" = "Синхронлау тоташмаган";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Җиһаз Firefox синхронлау хезмәтеннән өзелде";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Җиһаз Ecosia синхронлау хезмәтеннән өзелде";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Башка җиһазларыгыздан ачык таб, кыстыргыч һәм серүзләрегезне алу.";
@@ -488,7 +488,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Башка җиһазларыгыздагы таблар исемлеген карау өчен табларны синхронлауны кабызыгыз.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Тарих";
@@ -707,7 +707,7 @@
 "LoginsList.Title" = "САКЛАНГАН ЛОГИННАР";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Моңарчы Firefox ватылып алды ахрысы. Табларыгыз яңадан торгызылсынмы?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Моңарчы Ecosia ватылып алды ахрысы. Табларыгыз яңадан торгызылсынмы?";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -739,10 +739,10 @@
 "Menu.EnhancedTrackingProtectionOn.Title" = "Бу сайт өчен Күзәтелүдән көчәйтелгән саклау КАБЫНГАН.";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox cайт-ара һәм социаль челтәр күзәтүчеләрен, криптомайнерләрне һәм браузерның «бармак эзләрен» җыючыларны блоклый.";
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Ecosia cайт-ара һәм социаль челтәр күзәтүчеләрен, криптомайнерләрне һәм браузерның «бармак эзләрен» җыючыларны блоклый.";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox cайт-ара һәм социаль челтәр күзәтүчеләрен, криптомайнерләрне, браузернең «бармак эзләрен җыючыларны һәм күзәтүче эчтәлекләрне блоклый.";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Ecosia cайт-ара һәм социаль челтәр күзәтүчеләрен, криптомайнерләрне, браузернең «бармак эзләрен җыючыларны һәм күзәтүче эчтәлекләрне блоклый.";
 
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "Туктату";
@@ -781,7 +781,7 @@
 "Menu.TrackingProtection.BlockedTitle" = "Блокланган";
 
 /* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Бу биттә билгеле Firefox күзәтүчеләре табылмады.";
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Бу биттә билгеле Ecosia күзәтүчеләре табылмады.";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Саклау көйләүләре";
@@ -796,7 +796,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "Социаль челтәр күзәтүчеләре";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox бу битнең Сезне күзәтеп торырга мөмкин өлешләрен блоклый.";
+"Menu.TrackingProtectionBlocking.Description" = "Ecosia бу битнең Сезне күзәтеп торырга мөмкин өлешләрен блоклый.";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
 "Menu.TrackingProtectionBlockingDisabled.Description" = "Онлайн күзәтүчеләрне блоклау";
@@ -887,7 +887,7 @@
 "Onboarding.WhatsNew.RecentSearches.Description" = "Соңгы эзләүләрегезне баш биттән кабатлап була.";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Абау! Firefox ватылды";
+"Oops! Firefox crashed" = "Абау! Ecosia ватылды";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Мәкаләләрне уку режимында ачу өчен, исем юлында китап тамгачыгы пәйда булгач, аңа басыгыз.";
@@ -899,7 +899,7 @@
 "Open Tabs" = "Ачык таблар";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox бу битне ача алмый, чөнки аның адресы яраксыз.";
+"OpenURL.Error.Message" = "Ecosia бу битне ача алмый, чөнки аның адресы яраксыз.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Битне ачып булмый";
@@ -914,19 +914,19 @@
 "Password" = "Серсүз";
 
 /* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Firefox хисабыгыздан cинхронланган һичбер теркәлү мәгълүматы юк";
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Ecosia хисабыгыздан cинхронланган һичбер теркәлү мәгълүматы юк";
 
 /* Header for the list of credentials table */
 "PasswordAutoFill.PasswordsListTitle" = "Кулланырлык хисап мәгълүматлары:";
 
 /* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Firefox хисап мәгълүматлары";
+"PasswordAutoFill.SectionTitle" = "Ecosia хисап мәгълүматлары";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Бу Сезгә рәсемне фото-галереягә сакларга мөмкинлек бирә.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox сурәтләрегезгә ирешергә тели";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia сурәтләрегезгә ирешергә тели";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Ябу";
@@ -998,7 +998,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Мәгълүмат яраксыз";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Зинһар, «Көйләүләр -> Хосусыйлык -> Камера» менюсына кереп, Firefox-ка җиһазыгызның камерасын куллануны рөхсәт итегез.";
+"ScanQRCode.PermissionError.Message" = "Зинһар, «Көйләүләр -> Хосусыйлык -> Камера» менюсына кереп, Ecosia-ка җиһазыгызның камерасын куллануны рөхсәт итегез.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR кодны сканерлау";
@@ -1051,7 +1051,7 @@
 "Secure connection" = "Хәвефсез бәйләнеш";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Mozilla проблеманы хәл итә алсын өчен, ватылу турында хәбәр җибәрелсенме?";
+"Send a crash report so Mozilla can fix the problem?" = "Ecosia проблеманы хәл итә алсын өчен, ватылу турында хәбәр җибәрелсенме?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Кире элемтә хәбәрен җибәрү";
@@ -1079,16 +1079,16 @@
 "SendTo.NavBar.Title" = "Табны җибәрү";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Зинһар, дәвам итү өчен Firefox-ны ачып, көйләүләргә күчегез һәм керегез.";
+"SendTo.NotSignedIn.Message" = "Зинһар, дәвам итү өчен Ecosia-ны ачып, көйләүләргә күчегез һәм керегез.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Сез Firefox Хисабыгызга кермәгәнсез.";
+"SendTo.NotSignedIn.Title" = "Сез Ecosia Хисабыгызга кермәгәнсез.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Җибәрү";
 
 /* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Firefox-ка керү";
+"SendTo.SignIn.Button" = "Ecosia-ка керү";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Башка җиһаздан яңа бер таб килде.";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Башлау өчен басыгыз";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Карап чыгу";
@@ -1172,7 +1172,7 @@
 "Settings.DataManagement.Title" = "Мәгълүмат белән идарә итү";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox хисабыгыз белән синхронлауны туктатачак, ләкин бу җиһаздагы гизү мәгълүматларының берсен дә бетермәячәк.";
+"Settings.Disconnect.Body" = "Ecosia хисабыгыз белән синхронлауны туктатачак, ләкин бу җиһаздагы гизү мәгълүматларының берсен дә бетермәячәк.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Синхронлауны өзү";
@@ -1239,7 +1239,7 @@
 "Settings.FxA.Sync.SectionName" = "Синхронлау көйләүләре";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox Хисабы";
+"Settings.FxA.Title" = "Ecosia Хисабы";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Гомуми";
@@ -1266,7 +1266,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Баш бит";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Firefox-ка кире кайтканда нәрсә күрәчәгегезне сайлагыз.";
+"Settings.Home.Option.StartAtHome.Description" = "Ecosia-ка кире кайтканда нәрсә күрәчәгегезне сайлагыз.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Соңгы таб";
@@ -1320,10 +1320,10 @@
 "Settings.NewTab.Option.CustomizeFooter" = "Сез иң күп караган сайтлар";
 
 /* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Firefox-ның баш битен көйләү";
+"Settings.NewTab.Option.CustomizeTitle" = "Ecosia-ның баш битен көйләү";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox баш бит";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia баш бит";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
 "Settings.NewTab.Option.HighlightsBookmarks" = "Соңгы кыстыргычлар";
@@ -1359,7 +1359,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "Яңа табны ачканда нәрсә йөкләргә икәнен сайлагыз";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Firefox ачылганда";
+"Settings.OfferClipboardBar.Status" = "Ecosia ачылганда";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Күчереп алынган сылтамаларны ачарга тәкъдим итү";
@@ -1383,7 +1383,7 @@
 "Settings.SendUsage.Link" = "Күбрәк белү.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla, Firefox'ны һәркемгә дә тәкъдим итү һәм яхшырту өчен кирәкле мәгълүматларны гына җыярга тырыша.";
+"Settings.SendUsage.Message" = "Ecosia, Ecosia'ны һәркемгә дә тәкъдим итү һәм яхшырту өчен кирәкле мәгълүматларны гына җыярга тырыша.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Куллану мәгълүматларын җибәрү";
@@ -1401,13 +1401,13 @@
 "Settings.Siri.OpenTabShortcut" = "Яңа табны ачу";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Firefox-ны Siri аша тиз ачу өчен Siri ярлыкларын кулланыгыз";
+"Settings.Siri.SectionDescription" = "Ecosia-ны Siri аша тиз ачу өчен Siri ярлыкларын кулланыгыз";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri ярлыклары";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox ара-тирә тикшеренүләр урнаштырырга һәм үткәрергә мөмкин.";
+"Settings.Studies.Toggle.Message" = "Ecosia ара-тирә тикшеренүләр урнаштырырга һәм үткәрергә мөмкин.";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Актив булмаган таблар";
@@ -1503,16 +1503,16 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Фонда йөкләү";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox-та йөкләнә";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ecosia-та йөкләнә";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefox-та ачу";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ecosia-та ачу";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
 "ShareExtension.OpenInPrivateModeAction.Title" = "Хосусый режимда ачу";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefox-та эзләү";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ecosia-та эзләү";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Эзләү тәкъдимнәрен күрсәтү";
@@ -1549,7 +1549,7 @@
 "Sync.FirstTimeMessage.Label" = "Беренче синхронлау бераз вакыт алырга мөмкин";
 
 /* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "Хисабыгыз юкмы? Firefox-ны җиһазлар арасында синхронлау өчен, бер хисап ачыгыз.";
+"Sync.NoAccount.Description" = "Хисабыгыз юкмы? Ecosia-ны җиһазлар арасында синхронлау өчен, бер хисап ачыгыз.";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "Синхронлау";
@@ -1708,13 +1708,13 @@
 "UIMenuItem.PasteGo" = "Ябыштыру һәм күчү";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Firefox белән эзләү";
+"UIMenuItem.SearchWithFirefox" = "Ecosia белән эзләү";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "укылмаган";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Тоташу өчен Firefox-ны яңартыгыз";
+"Upgrade Firefox to connect" = "Тоташу өчен Ecosia-ны яңартыгыз";
 
 /* Debug option */
 "Use stage servers" = "Сынау серверларын куллану";
@@ -1747,7 +1747,7 @@
 "Yesterday" = "Кичә";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Башка җиһазларыгыздагы Firefox-ларда ачык таблар юк.";
+"You don’t have any tabs open in Firefox on your other devices." = "Башка җиһазларыгыздагы Ecosia-ларда ачык таблар юк.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Хокукларыгыз";

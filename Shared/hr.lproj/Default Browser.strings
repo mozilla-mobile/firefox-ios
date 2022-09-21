@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Saznaj kako";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Postavi automatsko otvaranje poveznica web lokacija, e-mailova i poruka u Firefoxu.";
+"DefaultBrowserCard.Description" = "Postavi automatsko otvaranje poveznica web lokacija, e-mailova i poruka u Ecosia.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Promijeni standardni preglednik";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Dodirni Zadana aplikacija preglednika";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Odaberi Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Odaberi Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Zadana aplikacija preglednika";

@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "اطّلع على الطريقة";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "اضبط روابط المواقع والبريد الإلكتروني والرسائل لتفتح تلقائيًا في Firefox.";
+"DefaultBrowserCard.Description" = "اضبط روابط المواقع والبريد الإلكتروني والرسائل لتفتح تلقائيًا في Ecosia.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "بدّل متصفّحك المبدئي";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. انقر ”تطبيق المتصفح الافتراضي“";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. اختر Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. اختر Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "تطبيق المتصفح الافتراضي";

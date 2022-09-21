@@ -1,14 +1,14 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox kasutab sinu kaamerat QR-koodide skannimiseks ning fotode ja videote tegemiseks.";
+"NSCameraUsageDescription" = "Ecosia kasutab sinu kaamerat QR-koodide skannimiseks ning fotode ja videote tegemiseks.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox vajab salvestatud kasutajatunnustele ligipääsemiseks Face ID'd.";
+"NSFaceIDUsageDescription" = "Ecosia vajab salvestatud kasutajatunnustele ligipääsemiseks Face ID'd.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Külastatavad saidid võivad küsida sinu asukohta.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox kasutab mikrofoni heli salvestamiseks ja üleslaadimiseks.";
+"NSMicrophoneUsageDescription" = "Ecosia kasutab mikrofoni heli salvestamiseks ja üleslaadimiseks.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "See võimaldab sul salvestada fotosid.";

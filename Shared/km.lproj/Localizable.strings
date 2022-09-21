@@ -282,7 +282,7 @@
 "Could not load page." = "មិន​អាច​ផ្ទុក​ទំព័រ​បាន​ទេ។";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "សម្រាប់អ្នកប្រើ iOS 13 ឥឡូវនេះ Firefox ប្តូរទៅជារចនាប័ទ្ម​ងងឹតនៅពេលទូរសព្ទរបស់អ្នកត្រូវបានកំណត់ទៅជាមុខងារ​ងងឹត។ ដើម្បីផ្លាស់ប្តូរឥរិយាបថនេះ សូម​ចូលទៅកាន់ ការកំណត់ > រចនាប័ទ្ម។";
+"CoverSheet.v22.DarkMode.Description" = "សម្រាប់អ្នកប្រើ iOS 13 ឥឡូវនេះ Ecosia ប្តូរទៅជារចនាប័ទ្ម​ងងឹតនៅពេលទូរសព្ទរបស់អ្នកត្រូវបានកំណត់ទៅជាមុខងារ​ងងឹត។ ដើម្បីផ្លាស់ប្តូរឥរិយាបថនេះ សូម​ចូលទៅកាន់ ការកំណត់ > រចនាប័ទ្ម។";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "ឥឡូវនេះ រចនាប័ទ្ម​ងងឹតរួម​បញ្ចូល​ទាំង​ក្តារ​ចុច​ងងឹត ​និង​អេក្រង់​ស្វាគមន៍​ងងឹត។";
@@ -338,7 +338,7 @@
 "Downloads.CancelDialog.Title" = "បោះបង់ការទាញយក";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "មិន​ស្គាល់​ការ​ទាញយក​​​នៅ​ក្នុង Firefox នៅ​ឡើយទេ។";
+"Downloads.Error.Message" = "មិន​ស្គាល់​ការ​ទាញយក​​​នៅ​ក្នុង Ecosia នៅ​ឡើយទេ។";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "បាន​បោះបង់​ការទាញយក";
@@ -383,7 +383,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "វា​អាច​ជា​ការ​កំណត់​រចនាសម្ព័ន្ធ​ខុស ឬ​​​ការ​លួច​ផ្លាស់ប្ដូរ​ដោយ​អ្នក​វាយប្រហារ។ ចាប់ផ្ដើម​ដំណើរការ បើ​អ្នក​ព្រម​ទទួល​ហានិភ័យ​ដ៏​ខ្លាំង​នេះ។";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "ម្ចាស់​នៃ %@ បាន​កំណត់​រចនាសម្ព័ន្ធ​​វេបសាយ​​របស់​ពួកគេ​មិន​សមរម្យ។ ដើម្បី​ការពារ​ព័ត៌មាន​របស់​អ្នក​ពី​ការ​លួច Firefox មិន​បាន​ភ្ជាប់​ទៅ​វេបសាយ​នេះ​ទេ។";
+"ErrorPages.CertWarning.Description" = "ម្ចាស់​នៃ %@ បាន​កំណត់​រចនាសម្ព័ន្ធ​​វេបសាយ​​របស់​ពួកគេ​មិន​សមរម្យ។ ដើម្បី​ការពារ​ព័ត៌មាន​របស់​អ្នក​ពី​ការ​លួច Ecosia មិន​បាន​ភ្ជាប់​ទៅ​វេបសាយ​នេះ​ទេ។";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "ការ​តភ្ជាប់​នេះ​មិន​ត្រូវ​បាន​ជឿ​ទុកចិត្ត​ឡើយ";
@@ -404,7 +404,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "ទំព័រដើម Firefox";
+"Firefox.HomePage.Title" = "ទំព័រដើម Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "កែ​គេហទំព័រ​តាមបំណង";
@@ -419,13 +419,13 @@
 "FxA.AccountVerificationRequired" = "តម្រូវ​ឲ្យ​ផ្ទៀងផ្ទាត់​គណនី";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "អ្នកត្រូវផ្ទៀងផ្ទាត់ %@។ ពិនិត្យអ៊ីមែលរបស់អ្នក រក​មើល​តំណផ្ទៀងផ្ទាត់ពី Firefox ។";
+"FxA.AccountVerificationRequiredSurface" = "អ្នកត្រូវផ្ទៀងផ្ទាត់ %@។ ពិនិត្យអ៊ីមែលរបស់អ្នក រក​មើល​តំណផ្ទៀងផ្ទាត់ពី Ecosia ។";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "ភ្ជាប់​​ឧបករណ៍​ផ្សេង";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "គណនី Firefox";
+"FxA.FirefoxAccount" = "គណនី Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "គ្រប់គ្រងគណនី និង​ឧបករណ៍";
@@ -440,7 +440,7 @@
 "FxA.RemoveAccount" = "យកចេញ";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "យកចេញ​គណនី Firefox ដែល​បាន​ភ្ជាប់ជាមួយឧបករណ៍នេះ ដើម្បីចូលជាអ្នកប្រើប្រាស់​ផ្សេងមួយ។";
+"FxA.RemoveAccountAlertMessage" = "យកចេញ​គណនី Ecosia ដែល​បាន​ភ្ជាប់ជាមួយឧបករណ៍នេះ ដើម្បីចូលជាអ្នកប្រើប្រាស់​ផ្សេងមួយ។";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "លុប​គណនី";
@@ -461,7 +461,7 @@
 "FxA.TakeYourWebWithYou" = "យក​គេហទំព័រ​របស់អ្នក​តាម​ខ្លួន";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "ការធ្វើសមកាលកម្ម Firefox បានតភ្ជាប់ទៅ %@";
+"FxAPush_DeviceConnected_body" = "ការធ្វើសមកាលកម្ម Ecosia បានតភ្ជាប់ទៅ %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "បានតភ្ជាប់ការធ្វើសមកាលកម្ម";
@@ -470,7 +470,7 @@
 "FxAPush_DeviceDisconnected_body" = "បានផ្តាច់ %@ ដោយជោគជ័យ។";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "ឧបករណ៍នេះត្រូវបានផ្តាច់ពី Firefox Sync ដោយជោគជ័យ។";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "ឧបករណ៍នេះត្រូវបានផ្តាច់ពី Ecosia Sync ដោយជោគជ័យ។";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "បានផ្តាច់ការធ្វើសមកាលកម្ម";
@@ -479,7 +479,7 @@
 "FxAPush_DeviceDisconnected_title" = "បានផ្តាច់ការធ្វើសមកាលកម្ម";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ឧបករណ៍មួយបានផ្តាច់ពី Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ឧបករណ៍មួយបានផ្តាច់ពី Ecosia Sync";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "ទទួល​បាន​ផ្ទាំង​ដែល​បើក ចំណាំ និង​ពាក្យ​សម្ងាត់​របស់​​អ្នក​ពី​ឧបករណ៍​ផ្សេងៗ​របស់​អ្នក។";
@@ -527,7 +527,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "បើក​ផ្ទាំង​ដែល​កំពុង​ធ្វើ​សមកាលកម្ម ដើម្បី​មើល​បញ្ជី​ផ្ទាំង​ពី​ឧបករណ៍​ផ្សេងៗ​របស់​អ្នក។";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "ការ​ធ្វើ​សមកាលកម្ម Firefox";
+"HistoryPanel.EmptySyncedTabsState.Title" = "ការ​ធ្វើ​សមកាលកម្ម Ecosia";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "ប្រវត្តិ​";
@@ -617,7 +617,7 @@
 "InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "បើក​ការបិទ​ស្វ័យប្រវត្តិ";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox នឹង​បិទ​ផ្ទាំង​ដែល​អ្នក​មិន​បាន​មើល​ជាងមួយ​ខែ​មុន។";
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Ecosia នឹង​បិទ​ផ្ទាំង​ដែល​អ្នក​មិន​បាន​មើល​ជាងមួយ​ខែ​មុន។";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
 "InactiveTabs.TabTray.AutoClosePrompt.Title" = "បិទ​ស្វ័យប្រវត្តិ​បន្ទាប់​ពី​មួយខែ​ឬ?";
@@ -719,7 +719,7 @@
 "LoginsList.Title" = "ការចូល​ដែល​បាន​រក្សាទុក";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Firefox ដូចជា​បាន​គាំង​កាល​ពី​មុន។ តើ​អ្នក​ចង់​ស្ដារ​ផ្ទាំង​របស់​អ្នក​មែន​ទេ?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Ecosia ដូចជា​បាន​គាំង​កាល​ពី​មុន។ តើ​អ្នក​ចង់​ស្ដារ​ផ្ទាំង​របស់​អ្នក​មែន​ទេ?";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -817,7 +817,7 @@
 "Menu.TrackingProtection.BlockedTitle" = "បាន​ទប់ស្កាត់";
 
 /* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "មិនមានកម្មវិធីតាមដានដែលស្គាល់ដោយ Firefox ត្រូវបានរកឃើញនៅលើទំព័រនេះទេ ។";
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "មិនមានកម្មវិធីតាមដានដែលស្គាល់ដោយ Ecosia ត្រូវបានរកឃើញនៅលើទំព័រនេះទេ ។";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "ការកំណត់ការការពារ";
@@ -832,7 +832,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "អ្នកតាមដានសង្គម";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Firefox កំពុង​ទប់ស្កាត់​ផ្នែក​នៃ​ទំព័រ​ដែល​អាច​តាមដាន​ការរុករក​របស់អ្នក។";
+"Menu.TrackingProtectionBlocking.Description" = "Ecosia កំពុង​ទប់ស្កាត់​ផ្នែក​នៃ​ទំព័រ​ដែល​អាច​តាមដាន​ការរុករក​របស់អ្នក។";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
 "Menu.TrackingProtectionBlockingDisabled.Description" = "ទប់ស្កាត់​កម្មវិធី​តាមដាន​លើ​អ៊ីនធឺណិត";
@@ -932,7 +932,7 @@
 "Okay" = "យល់ព្រម";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "អូ! Firefox បាន​គាំង​ហើយ";
+"Oops! Firefox crashed" = "អូ! Ecosia បាន​គាំង​ហើយ";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "បើក​អត្ថបទ​នៅ​ក្នុង​​ទិដ្ឋភាព​អ្នក​អាន​ដោយ​ប៉ះ​រូបតំណាង​សៀវភៅ​នៅ​ពេល​វា​បង្ហាញ​នៅ​ក្នុង​របារ​ចំណងជើង។";
@@ -944,7 +944,7 @@
 "Open Tabs" = "បើកផ្ទាំង";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "កម្មវិធី Firefox មិនអាចបើកទំព័របានទេ ដោយសារ​វាមានអាសយដ្ឋានមិនត្រឹមត្រូវ។";
+"OpenURL.Error.Message" = "កម្មវិធី Ecosia មិនអាចបើកទំព័របានទេ ដោយសារ​វាមានអាសយដ្ឋានមិនត្រឹមត្រូវ។";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "មិនអាចបើកទំព័រ​បាន​ទេ";
@@ -959,19 +959,19 @@
 "Password" = "ពាក្យ​សម្ងាត់";
 
 /* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "អ្នកមិនមានព័ត៌មាន​ផ្ទៀងផ្ទាត់​ណាមួយដែលបានធ្វើសមកាលកម្មពីគណនី Firefox របស់អ្នកទេ";
+"PasswordAutoFill.NoPasswordsFoundTitle" = "អ្នកមិនមានព័ត៌មាន​ផ្ទៀងផ្ទាត់​ណាមួយដែលបានធ្វើសមកាលកម្មពីគណនី Ecosia របស់អ្នកទេ";
 
 /* Header for the list of credentials table */
 "PasswordAutoFill.PasswordsListTitle" = "ព័ត៌មាន​ផ្ទៀងផ្ទាត់​ដែលមាន៖";
 
 /* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "ព័ត៌មាន​ផ្ទៀងផ្ទាត់ Firefox";
+"PasswordAutoFill.SectionTitle" = "ព័ត៌មាន​ផ្ទៀងផ្ទាត់ Ecosia";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "វា​អនុញ្ញាត​ឱ្យ​អ្នក​អាច​រក្សាទុក​រូបភាព​ទៅ​ក្នុង​របុំ​កាមេរ៉ា​របស់អ្នក។";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox ចង់​ចូល​​​ប្រើ​រូបថត​របស់​អ្នក";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia ចង់​ចូល​​​ប្រើ​រូបថត​របស់​អ្នក";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "បិទ";
@@ -1043,7 +1043,7 @@
 "ScanQRCode.InvalidDataError.Message" = "ទិន្នន័យនេះមិនត្រឹមត្រូវ​ទេ";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "សូមអនុញ្ញាតិឱ្យ Firefox ចូលប្រើកាមេរ៉ារបស់ឧបករណ៍អ្នកនៅក្នុង “ការកំណត់” -> “ឯកជនភាព” -> “កាមេរ៉ា” ។";
+"ScanQRCode.PermissionError.Message" = "សូមអនុញ្ញាតិឱ្យ Ecosia ចូលប្រើកាមេរ៉ារបស់ឧបករណ៍អ្នកនៅក្នុង “ការកំណត់” -> “ឯកជនភាព” -> “កាមេរ៉ា” ។";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "ស្កេនកូដ QR";
@@ -1099,7 +1099,7 @@
 "Secure connection" = "ការ​តភ្ជាប់​សុវត្ថិភាព";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "ផ្ញើ​របាយការណ៍​ជាប់​គាំង ​ដូច្នេះ Mozilla អាច​ដោះស្រាយ​បញ្ហា​បាន?";
+"Send a crash report so Mozilla can fix the problem?" = "ផ្ញើ​របាយការណ៍​ជាប់​គាំង ​ដូច្នេះ Ecosia អាច​ដោះស្រាយ​បញ្ហា​បាន?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "ផ្ញើ​មតិត្រឡប់";
@@ -1127,19 +1127,19 @@
 "SendTo.NavBar.Title" = "ផ្ញើ​ផ្ទាំង";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "អ្នក​មិន​មាន​ឧបករណ៍​ផ្សេង​ណា​មួយ​បាន​ភ្ជាប់​ទៅ​គណនី Firefox ដែល​អាច​ប្រើ ​​ដើម្បី​ធ្វើ​សមកាលកម្ម​​បាននោះ​ទេ។";
+"SendTo.NoDevicesFound.Message" = "អ្នក​មិន​មាន​ឧបករណ៍​ផ្សេង​ណា​មួយ​បាន​ភ្ជាប់​ទៅ​គណនី Ecosia ដែល​អាច​ប្រើ ​​ដើម្បី​ធ្វើ​សមកាលកម្ម​​បាននោះ​ទេ។";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "សូម​បើក​កម្មវិធី Firefox រួច​ទៅ​កាន់​ ការ​កំណត់ និង​ចូល​ដើម្បី​បន្ត។";
+"SendTo.NotSignedIn.Message" = "សូម​បើក​កម្មវិធី Ecosia រួច​ទៅ​កាន់​ ការ​កំណត់ និង​ចូល​ដើម្បី​បន្ត។";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "អ្នក​មិន​បាន​ចូល​ទៅ​គណនី Firefox របស់​អ្នក​ទេ។";
+"SendTo.NotSignedIn.Title" = "អ្នក​មិន​បាន​ចូល​ទៅ​គណនី Ecosia របស់​អ្នក​ទេ។";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "ផ្ញើ";
 
 /* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "ចូល​ទៅ Firefox";
+"SendTo.SignIn.Button" = "ចូល​ទៅ Ecosia";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "ផ្ទាំងថ្មី ដែលបានមកពីឧបករណ៍​ផ្សេង។";
@@ -1163,7 +1163,7 @@
 "SentTab.NoTabArrivingNotification.body" = "ចុច ដើម្បីចាប់ផ្ដើម";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "មើល";
@@ -1223,7 +1223,7 @@
 "Settings.DataManagement.Title" = "ការ​គ្រប់​គ្រង​ទិន្នន័យ";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox នឹង​ឈប់​ធ្វើ​សមកាលកម្ម​ជាមួយ​គណនី​របស់​អ្នក ប៉ុន្តែ​នឹង​មិន​លុប​ទិន្នន័យ​​ដែលរុករក​​​របស់​អ្នក​​​នៅ​លើ​ឧបករណ៍​នេះ​ទេ។";
+"Settings.Disconnect.Body" = "Ecosia នឹង​ឈប់​ធ្វើ​សមកាលកម្ម​ជាមួយ​គណនី​របស់​អ្នក ប៉ុន្តែ​នឹង​មិន​លុប​ទិន្នន័យ​​ដែលរុករក​​​របស់​អ្នក​​​នៅ​លើ​ឧបករណ៍​នេះ​ទេ។";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "ផ្តាច់​ការធ្វើ​សមកាលកម្ម";
@@ -1296,7 +1296,7 @@
 "Settings.FxA.Sync.SectionName" = "ធ្វើសមកាលកម្ម​ការកំណត់";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "គណនី Firefox";
+"Settings.FxA.Title" = "គណនី Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "ទូទៅ";
@@ -1350,10 +1350,10 @@
 "Settings.NewTab.Option.CustomizeFooter2" = "គេហទំព័រដែលអ្នករក្សាទុកឬចូលមើល";
 
 /* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "ប្ដូរ​ទំព័រដើម Firefox តាមបំណង";
+"Settings.NewTab.Option.CustomizeTitle" = "ប្ដូរ​ទំព័រដើម Ecosia តាមបំណង";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "ទំព័រដើម Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "ទំព័រដើម Ecosia";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
 "Settings.NewTab.Option.HighlightsBookmarks" = "ចំណាំថ្មីៗ";
@@ -1395,7 +1395,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "ជ្រើសរើសអ្វីដែលត្រូវផ្ទុកនៅពេលបើកផ្ទាំងថ្មី";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "នៅពេលបើក Firefox";
+"Settings.OfferClipboardBar.Status" = "នៅពេលបើក Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "ផ្តល់ជូនឲ្យបើកតំណដែលបានចម្លង";
@@ -1419,7 +1419,7 @@
 "Settings.SendUsage.Link" = "ស្វែងយល់បន្ថែម។";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla ខិតខំប្រមូលតែអ្វីដែល​យើងត្រូវការដើម្បីផ្តល់ និងធ្វើឱ្យ Firefox ប្រសើរឡើងសម្រាប់អ្នកគ្រប់គ្នា។";
+"Settings.SendUsage.Message" = "Ecosia ខិតខំប្រមូលតែអ្វីដែល​យើងត្រូវការដើម្បីផ្តល់ និងធ្វើឱ្យ Ecosia ប្រសើរឡើងសម្រាប់អ្នកគ្រប់គ្នា។";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "ផ្ញើទិន្នន័យការប្រើប្រាស់";
@@ -1437,7 +1437,7 @@
 "Settings.Siri.OpenTabShortcut" = "បើក​ផ្ទាំង​ថ្មី";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "ប្រើផ្លូវកាត់ Siri ដើម្បីបើក Firefox តាមរយៈកម្មវិធី Siri";
+"Settings.Siri.SectionDescription" = "ប្រើផ្លូវកាត់ Siri ដើម្បីបើក Ecosia តាមរយៈកម្មវិធី Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "ផ្លូវកាត់ Siri";
@@ -1461,7 +1461,7 @@
 "Settings.Studies.Toggle.Link" = "ស្វែងយល់បន្ថែម។";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox អាចតំឡើងនិងដំណើរការការសិក្សាម្តងម្កាល។";
+"Settings.Studies.Toggle.Message" = "Ecosia អាចតំឡើងនិងដំណើរការការសិក្សាម្តងម្កាល។";
 
 /* Toggled OFF to opt-out of studies */
 "Settings.Studies.Toggle.Off" = "បិទ";
@@ -1479,7 +1479,7 @@
 "Settings.TrackingProtection.Alert.Title" = "ងើយក្បាល!";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "អ្នកអាចជ្រើសរើសបញ្ជីដែល Firefox នឹងប្រើដើម្បីទប់ស្កាត់ធាតុបណ្តាញដែលអាចតាមដានសកម្មភាពរុករករបស់អ្នក។";
+"Settings.TrackingProtection.BlockListsHeader" = "អ្នកអាចជ្រើសរើសបញ្ជីដែល Ecosia នឹងប្រើដើម្បីទប់ស្កាត់ធាតុបណ្តាញដែលអាចតាមដានសកម្មភាពរុករករបស់អ្នក។";
 
 /* Explanation of basic mode. */
 "Settings.TrackingProtection.Info.BasicTitle" = "តុល្យភាពសម្រាប់ការពារ និងការដំណើរការ។";
@@ -1575,16 +1575,16 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "ផ្ទុកនៅផ្ទៃខាងក្រោយ";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "កំពុងផ្ទុកក្នុង Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "កំពុងផ្ទុកក្នុង Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "បើកក្នុង Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "បើកក្នុង Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
 "ShareExtension.OpenInPrivateModeAction.Title" = "បើកជាមុខងារឯកជន";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "ស្វែងរកក្នុង Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "ស្វែងរកក្នុង Ecosia";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "បង្ហាញ​​សំណើ​ស្វែងរក";
@@ -1744,13 +1744,13 @@
 "UIMenuItem.PasteGo" = "ដាក់ចូល និង​ទៅ";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "ស្វែងរកជាមួយ Firefox";
+"UIMenuItem.SearchWithFirefox" = "ស្វែងរកជាមួយ Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "មិន​ទាន់​អាន";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "ដំឡើងកំណែ Firefox ដើម្បីតភ្ជាប់";
+"Upgrade Firefox to connect" = "ដំឡើងកំណែ Ecosia ដើម្បីតភ្ជាប់";
 
 /* Username textbox in Authentication prompt */
 "Username" = "ឈ្មោះ​អ្នក​ប្រើប្រាស់";
@@ -1780,7 +1780,7 @@
 "Yesterday" = "ម្សិលមិញ";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "អ្នក​មិន​មាន​ផ្ទាំង​ណា​មួយ​បើក​ក្នុង Firefox លើ​ឧបករណ៍​ផ្សេង​របស់​អ្នក​ទេ។";
+"You don’t have any tabs open in Firefox on your other devices." = "អ្នក​មិន​មាន​ផ្ទាំង​ណា​មួយ​បើក​ក្នុង Ecosia លើ​ឧបករណ៍​ផ្សេង​របស់​អ្នក​ទេ។";
 
 /* Your Rights settings section title */
 "Your Rights" = "សិទ្ធិ​របស់​អ្នក";

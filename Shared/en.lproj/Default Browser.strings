@@ -1,5 +1,5 @@
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Set links from websites, emails, and Messages to open automatically in Firefox.";
+"DefaultBrowserCard.Description" = "Set links from websites, emails, and Messages to open automatically in Ecosia.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Switch Your Default Browser";

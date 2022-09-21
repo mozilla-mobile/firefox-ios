@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Mësoni Se Si";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Caktoni lidhje prej sajtesh, email-esh dhe Mesazhe për hapje automatike në Firefox.";
+"DefaultBrowserCard.Description" = "Caktoni lidhje prej sajtesh, email-esh dhe Mesazhe për hapje automatike në Ecosia.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Këmbeni Shfletuesin Tuaj Parazgjedhje";
@@ -20,7 +20,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Prekni Aplikacionin Shfletues Parazgjedhje";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Përzgjidhni Firefox-in";
+"DefaultBrowserOnboarding.Description3" = "3. Përzgjidhni Ecosia-in";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Aplikacioni Shfletues Parazgjedhje";

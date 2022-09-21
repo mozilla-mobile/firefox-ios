@@ -315,7 +315,7 @@
 "Could not load page." = "Cha b’ urrainn dhuinn an duilleag a luchdadh.";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "Dùisgidh Firefox an t-ùrlar dorcha gu fèin-obrachail a-nis air iOS 13 ma bhios am fòn agad sa mhodh dorcha. Airson an giùlan seo atharrachadh, tadhail air “Roghainnean” > “An t-ùrlar”.";
+"CoverSheet.v22.DarkMode.Description" = "Dùisgidh Ecosia an t-ùrlar dorcha gu fèin-obrachail a-nis air iOS 13 ma bhios am fòn agad sa mhodh dorcha. Airson an giùlan seo atharrachadh, tadhail air “Roghainnean” > “An t-ùrlar”.";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "Tha an t-ùrlar dorcha a’ gabhail a-staigh meur-chlàr dorcha agus sgrìn spladh dorch a-nis.";
@@ -374,7 +374,7 @@
 "Downloads.CancelDialog.Title" = "Sguir dhen luchdadh a-nuas";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Chan urrainnear luchdadh a-nuas ann am Firefox fhathast.";
+"Downloads.Error.Message" = "Chan urrainnear luchdadh a-nuas ann am Ecosia fhathast.";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Sguireadh dhen luchdadh a-nuas";
@@ -419,7 +419,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Dh’fhaoidte gu bheil e air a dhroch-rèiteachadh no gu bheil cuideigin a’ toirt ionnsaigh air. Lean air d’ adhart ma tha thu leagte ris a leithid a chunnart.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Rinn an neach aig a bheil %@ droch-rèiteachadh air an làrach-lìn aca. Cha do rinn Firefox ceangal ris an làrach-lìn seo air eagal ’s gun rachadh dàta a ghoid ort.";
+"ErrorPages.CertWarning.Description" = "Rinn an neach aig a bheil %@ droch-rèiteachadh air an làrach-lìn aca. Cha do rinn Ecosia ceangal ris an làrach-lìn seo air eagal ’s gun rachadh dàta a ghoid ort.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Chan eil earbsa sa cheangal";
@@ -440,7 +440,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Duilleag mhòr Firefox";
+"Firefox.HomePage.Title" = "Duilleag mhòr Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Gnàthaich an duilleag-dhachaigh";
@@ -488,13 +488,13 @@
 "FxA.AccountVerificationRequired" = "Feum air dearbhadh a’ chunntais";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Feumaidh tu %@ a dhearbhadh. Thoir sùil air a’ phost-d agad airson a’ cheangail dearbhaidh o Firefox.";
+"FxA.AccountVerificationRequiredSurface" = "Feumaidh tu %@ a dhearbhadh. Thoir sùil air a’ phost-d agad airson a’ cheangail dearbhaidh o Ecosia.";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "Ceangail uidheam eile ris";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Cunntas Firefox";
+"FxA.FirefoxAccount" = "Cunntas Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Stiùirich an cunntas ⁊ na h-uidheaman";
@@ -506,13 +506,13 @@
 "FxA.OpenSyncPreferences" = "Fosgail na roghainnean sioncronachaidh";
 
 /* Instructions shown on qr code scanning view */
-"fxa.qr-scanning-view.instructions" = "Sganaich an còd QR a chì thu aig firefox.com/pair";
+"fxa.qr-scanning-view.instructions" = "Sganaich an còd QR a chì thu aig Ecosia.com/pair";
 
 /* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
 "FxA.RemoveAccount" = "Thoir air falbh";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Thoir air falbh an cunntas Firefox a tha co-cheangailte ris an uidheam seo airson clàradh a-steach mar chleachdaiche eile.";
+"FxA.RemoveAccountAlertMessage" = "Thoir air falbh an cunntas Ecosia a tha co-cheangailte ris an uidheam seo airson clàradh a-steach mar chleachdaiche eile.";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "Thoir an cunntas air falbh";
@@ -524,13 +524,13 @@
 "fxa.signin.camera-signin" = "Clàraich a-steach leis a’ chamara agad";
 
 /* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "Sioncronaich Firefox eadar uidheaman le cunntas.";
+"fxa.signin.create-account-pt-1" = "Sioncronaich Ecosia eadar uidheaman le cunntas.";
 
 /* FxA sign in create account label. This will be linked to the site to create an account. */
-"fxa.signin.create-account-pt-2" = "Cruthaich cunntas Firefox.";
+"fxa.signin.create-account-pt-2" = "Cruthaich cunntas Ecosia.";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Fosgail Firefox air a’ choimpiutair agad is tadhail air firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Fosgail Ecosia air a’ choimpiutair agad is tadhail air Ecosia.com/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Deiseil airson sganadh";
@@ -554,7 +554,7 @@
 "FxA.TakeYourWebWithYou" = "Thoir leat an lìon";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Cheangail gleus sioncronachadh Firefox ri %@";
+"FxAPush_DeviceConnected_body" = "Cheangail gleus sioncronachadh Ecosia ri %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Rinn gleus an t-sioncronachaidh ceangal";
@@ -563,7 +563,7 @@
 "FxAPush_DeviceDisconnected_body" = "Chaidh %@ a dhì-cheangal.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Chaidh an t-uidheam seo a dhì-cheangal o ghleus sioncronachadh Firefox.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Chaidh an t-uidheam seo a dhì-cheangal o ghleus sioncronachadh Ecosia.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Chaidh gleus an t-sioncronachaidh a dhì-cheangal";
@@ -572,10 +572,10 @@
 "FxAPush_DeviceDisconnected_title" = "Chaidh gleus an t-sioncronachaidh a dhì-cheangal";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Dhì-cheangail uidheam o ghleus sioncronachadh Firefox";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Dhì-cheangail uidheam o ghleus sioncronachadh Ecosia";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Suaicheantas Firefox, atharraich am pàipear-balla";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Suaicheantas Ecosia, atharraich am pàipear-balla";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Faigh tabaichean fosgailte, comharran-lìn is faclan-faire o uidheaman eile agad.";
@@ -623,7 +623,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Cuir air sioncronachadh nan tabaichean airson cothrom fhaighinn air na tabaichean agad o uidheaman eile.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Sioncronachadh Firefox";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Sioncronachadh Ecosia";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "An eachdraidh";
@@ -716,7 +716,7 @@
 "InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Cuir gleus an fhèin-dùnaidh air";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Dùnaidh Firefox tabaichean nach tug thu sùil orra thairis air a’ mhìos seo chaidh.";
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Dùnaidh Ecosia tabaichean nach tug thu sùil orra thairis air a’ mhìos seo chaidh.";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
 "InactiveTabs.TabTray.AutoClosePrompt.Title" = "A bheil thu airson an dùnadh an dèidh mìos?";
@@ -884,13 +884,13 @@
 "Logins.Onboarding.Message" = "Tha na clàraidhean a-steach is faclan-faire agad gan dìon le ID aodainn, ID suathaidh no còd-faire uidheim a-nis.";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Feumaidh còd-faire uidheim a bhith an comas agad mus urrainn dhut gleus an fhèin-lìonaidh aig Firefox a chleachdadh.";
+"Logins.PasscodeRequirement.Warning" = "Feumaidh còd-faire uidheim a bhith an comas agad mus urrainn dhut gleus an fhèin-lìonaidh aig Ecosia a chleachdadh.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Thoir leat na faclan-faire agad ge be càit an tèid thu";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Fèin-lìon faclan-faire Firefox";
+"Logins.WelcomeView.Title2" = "Fèin-lìon faclan-faire Ecosia";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Cuir gleus an fhèin-lìonaidh air";
@@ -938,7 +938,7 @@
 "LoginsList.LoginsListSearchPlaceholder" = "Criathrag";
 
 /* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Nochdaidh clàraidhean a-steach a shàbhail thu an-seo. Ma shàbhail thu clàradh a-steach ann am Firefox air uidheam eile, clàraich a-steach dhan chunntas Firefox agad.";
+"LoginsList.NoLoginsFound.Description" = "Nochdaidh clàraidhean a-steach a shàbhail thu an-seo. Ma shàbhail thu clàradh a-steach ann am Ecosia air uidheam eile, clàraich a-steach dhan chunntas Ecosia agad.";
 
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Cha deach clàradh a-steach a lorg";
@@ -962,7 +962,7 @@
 "LoginsList.Title" = "CLÀRAIDHEAN A-STEACH A SHÀBHAILEADH";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Tha coltas gun do thuislich Firefox roimhe. A bheil thu ag iarraidh nan tabaichean air ais?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Tha coltas gun do thuislich Ecosia roimhe. A bheil thu ag iarraidh nan tabaichean air ais?";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -1018,10 +1018,10 @@
 "Menu.EnhancedTrackingProtectionOn.Title" = "Tha an dìon adhartach o thracadh air air an làrach seo.";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Bacaidh Firefox tracaichean thar-làraich, tracaichean sòisealta, criopto-mhèinneadairean agus lorgaichean-meòir.";
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Bacaidh Ecosia tracaichean thar-làraich, tracaichean sòisealta, criopto-mhèinneadairean agus lorgaichean-meòir.";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Bacaidh Firefox tracaichean thar-làraich, tracaichean sòisealta, criopto-mhèinneadairean, lorgaichean-meòir agus susbaint tracaidh.";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Bacaidh Ecosia tracaichean thar-làraich, tracaichean sòisealta, criopto-mhèinneadairean, lorgaichean-meòir agus susbaint tracaidh.";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Cobhair";
@@ -1120,7 +1120,7 @@
 "Menu.TrackingProtection.Details.Verifier" = "Air a dhearbhadh le %@";
 
 /* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Cha do mhothaich sinn do thracaiche as aithne dha Firefox air an duilleag seo.";
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Cha do mhothaich sinn do thracaiche as aithne dha Ecosia air an duilleag seo.";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Roghainnean an dìon";
@@ -1135,7 +1135,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "Tracaichean sòisealta";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
-"Menu.TrackingProtectionBlocking.Description" = "Tha Firefox a’ bacadh nan rudan air an duilleag a dhèanadh tracadh ort.";
+"Menu.TrackingProtectionBlocking.Description" = "Tha Ecosia a’ bacadh nan rudan air an duilleag a dhèanadh tracadh ort.";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
 "Menu.TrackingProtectionBlockingDisabled.Description" = "Bac tracaichean air loidhne";
@@ -1262,7 +1262,7 @@
 "Onboarding.WallpaperAction.v102" = "Suidhich pàipear-balla";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
-"Onboarding.WallpaperTitle.v102" = "Tagh pàipear-balla Firefox";
+"Onboarding.WallpaperTitle.v102" = "Tagh pàipear-balla Ecosia";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Tòisich air brabhsadh";
@@ -1287,10 +1287,10 @@
 
 /* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
    The title for the new onboarding card letting users know what is new in Firefox iOS */
-"Onboarding.WhatsNew.Title" = "Na tha ùr ann am Firefox";
+"Onboarding.WhatsNew.Title" = "Na tha ùr ann am Ecosia";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Ìoc! Thuislich Firefox";
+"Oops! Firefox crashed" = "Ìoc! Thuislich Ecosia";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Fosgail artaigilean san t-sealladh leughaidh le gnogag air ìomhaigheag an leabhair nuair a nochdas e ann am bàr an tiotail.";
@@ -1302,7 +1302,7 @@
 "Open Tabs" = "Tabaichean fosgailte";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Chan urrainn dha Firefox an duilleag fhosgladh a chionn ’s gu bheul an seòladh cearr.";
+"OpenURL.Error.Message" = "Chan urrainn dha Ecosia an duilleag fhosgladh a chionn ’s gu bheul an seòladh cearr.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Cha ghabh an duilleag fhosgladh";
@@ -1317,19 +1317,19 @@
 "Password" = "Facal-faire";
 
 /* Error message shown in the remote tabs panel */
-"PasswordAutoFill.NoPasswordsFoundTitle" = "Chan eil ainm-cleachdaiche ’s facal-faire sam bith ann a chaidh a shioncronachadh a-nall on chunntas Firefox agad";
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Chan eil ainm-cleachdaiche ’s facal-faire sam bith ann a chaidh a shioncronachadh a-nall on chunntas Ecosia agad";
 
 /* Header for the list of credentials table */
 "PasswordAutoFill.PasswordsListTitle" = "Teisteasan a tha ri làimh:";
 
 /* Title of the extension that shows firefox passwords */
-"PasswordAutoFill.SectionTitle" = "Teisteasan Firefox";
+"PasswordAutoFill.SectionTitle" = "Teisteasan Ecosia";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Bheir seo comas dhut an dealbh a shàbhaladh ann an albam a’ chamara agad.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Bu mhath le Firefox cothrom air na dealbhan agad";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Bu mhath le Ecosia cothrom air na dealbhan agad";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Dùin";
@@ -1413,10 +1413,10 @@
 "ScanQRCode.InvalidDataError.Message" = "Tha an dàta mì-dhligheach";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Thoir inntrigeadh do chamara an uidheim agad dha Firefox ann an “Roghainnean” » “Prìobhaideachd” » “Camara”.";
+"ScanQRCode.PermissionError.Message" = "Thoir inntrigeadh do chamara an uidheim agad dha Ecosia ann an “Roghainnean” » “Prìobhaideachd” » “Camara”.";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Tadhail air “Roghainnean” > “Firefox” is thoir cead-inntrigidh dha Firefox dhan chamara.";
+"ScanQRCode.PermissionError.Message.v100" = "Tadhail air “Roghainnean” > “Ecosia” is thoir cead-inntrigidh dha Ecosia dhan chamara.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Sganaich an còd QR";
@@ -1433,7 +1433,7 @@
 "Search.Awesomebar.SwitchToTab" = "Geàrr leum gun taba";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox Suggest";
+"Search.SuggestSectionTitle.v102" = "Ecosia Suggest";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Nochdaidh an t-einnsean-luirg ùr ann am bàr nan lorg gu luath.";
@@ -1475,7 +1475,7 @@
 "Secure connection" = "Ceangal tèarainte";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "A bheil thu deònach aithisg a chur gu Mozilla mun tuisleadh ach an urrainn dhuinn a chàradh?";
+"Send a crash report so Mozilla can fix the problem?" = "A bheil thu deònach aithisg a chur gu Ecosia mun tuisleadh ach an urrainn dhuinn a chàradh?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Cuir thugainn do bheachdan";
@@ -1503,19 +1503,19 @@
 "SendTo.NavBar.Title" = "Cuir an taba";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Cha do cheangail thu uidheam sam bith eile ris a’ chunntas Firefox seo as urrainn dhut sioncronachadh.";
+"SendTo.NoDevicesFound.Message" = "Cha do cheangail thu uidheam sam bith eile ris a’ chunntas Ecosia seo as urrainn dhut sioncronachadh.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Fosgail na roghainnean ann am Firefox is clàraich a-steach a leantainn air adhart.";
+"SendTo.NotSignedIn.Message" = "Fosgail na roghainnean ann am Ecosia is clàraich a-steach a leantainn air adhart.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Cha do rinn thu clàradh a-steach dhan chunntas Firefox agad.";
+"SendTo.NotSignedIn.Title" = "Cha do rinn thu clàradh a-steach dhan chunntas Ecosia agad.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Cuir";
 
 /* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Clàraich a-steach gu Firefox";
+"SendTo.SignIn.Button" = "Clàraich a-steach gu Ecosia";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Ràinig taba ùr o uidheam eile.";
@@ -1539,7 +1539,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Thoir gnogag airson tòiseachadh";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Sioncronachadh Firefox";
+"SentTab.NoTabArrivingNotification.title" = "Sioncronachadh Ecosia";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Sealladh";
@@ -1602,7 +1602,7 @@
 "Settings.DataManagement.Title" = "Stiùireadh dàta";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Sguiridh Firefox de shioncronachadh a’ chunntais agad ach cha sguab e às gin dhen dàta brabhsaidh agad air an uidheam seo.";
+"Settings.Disconnect.Body" = "Sguiridh Ecosia de shioncronachadh a’ chunntais agad ach cha sguab e às gin dhen dàta brabhsaidh agad air an uidheam seo.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Dì-cheangail gleus an t-sioncronachaidh";
@@ -1675,7 +1675,7 @@
 "Settings.FxA.Sync.SectionName" = "Roghainnean sioncronachaidh";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Cunntas Firefox";
+"Settings.FxA.Title" = "Cunntas Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Coitcheann";
@@ -1684,7 +1684,7 @@
 "Settings.Home.Current.Description.v101" = "Tagh na chì thu air an duilleag-dhachaigh.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Tagh na chì thu air duilleag-dhachaigh Firefox.";
+"Settings.Home.Option.Description.v101" = "Tagh na chì thu air duilleag-dhachaigh Ecosia.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Till gu far an robh thu";
@@ -1711,7 +1711,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Duilleag-dhachaigh";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Tagh na chì thu nuair a thilleas tu gu Firefox.";
+"Settings.Home.Option.StartAtHome.Description" = "Tagh na chì thu nuair a thilleas tu gu Ecosia.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "An taba mu dheireadh";
@@ -1726,31 +1726,31 @@
 "Settings.Home.Option.Wallpaper" = "Pàipear-balla";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Pàipear-balla Firefox, pàtran amaitist.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Pàipear-balla Ecosia, pàtran amaitist.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Pàipear-balla Firefox, pàtran chnoc ri taobh na mara.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Pàipear-balla Ecosia, pàtran chnoc ri taobh na mara.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Pàipear-balla Firefox, pàtran nan speuran.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Pàipear-balla Ecosia, pàtran nan speuran.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Pàipear-balla soilleir bunaiteach.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Pàipear-balla Firefox, pàtran èirigh na grèine.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Pàipear-balla Ecosia, pàtran èirigh na grèine.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Toglachadh cuairt pàipear-balla na duilleige-dachaigh";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Pàipear-balla Firefox, pàtran chnoc sa chamhanaich.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Pàipear-balla Ecosia, pàtran chnoc sa chamhanaich.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "AN SGRÌN FOSGLAIDH";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Atharraich am pàipear-balla le bhith a’ toirt gnogag air suaicheantas duilleag-dhachaigh Firefox";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Atharraich am pàipear-balla le bhith a’ toirt gnogag air suaicheantas duilleag-dhachaigh Ecosia";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Pàipear-balla";
@@ -1831,10 +1831,10 @@
 "Settings.NewTab.Option.CustomizeFooter2" = "Làraichean a shàbhail thu no a thadhail thu orra";
 
 /* The title for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeTitle" = "Gnàthaich dachaigh Firefox";
+"Settings.NewTab.Option.CustomizeTitle" = "Gnàthaich dachaigh Ecosia";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Dachaigh Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "Dachaigh Ecosia";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
 "Settings.NewTab.Option.HighlightsBookmarks" = "Comharran-lìn ùra";
@@ -1879,7 +1879,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Bac dealbhan";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Nuair a dh’fhosglas mi Firefox";
+"Settings.OfferClipboardBar.Status" = "Nuair a dh’fhosglas mi Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "faighnich a bheil mi airson ceangal a rinn mi lethbhreac dheth fhosgladh";
@@ -1915,7 +1915,7 @@
 "Settings.SendUsage.Link" = "Barrachd fiosrachaidh.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Tha Mozilla an dealas dìreach an dàta a chruinneachadh a dh’fheumas sinn airson Firefox a sholar is a leasachadh dhan a h-uile duine.";
+"Settings.SendUsage.Message" = "Tha Ecosia an dealas dìreach an dàta a chruinneachadh a dh’fheumas sinn airson Ecosia a sholar is a leasachadh dhan a h-uile duine.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Cuir an dàta cleachdaidh";
@@ -1933,7 +1933,7 @@
 "Settings.Siri.OpenTabShortcut" = "Fosgail taba ùr";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Cleachd ath-ghoiridean Siri airson Firefox fhosgladh gu luath le Siri";
+"Settings.Siri.SectionDescription" = "Cleachd ath-ghoiridean Siri airson Ecosia fhosgladh gu luath le Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Ath-ghoiridean Siri";
@@ -1957,7 +1957,7 @@
 "Settings.Studies.Toggle.Link" = "Barrachd fiosrachaidh.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Dh’fhaoidte gun stàlaich is ruith Firefox rannsachadh o àm gu àm.";
+"Settings.Studies.Toggle.Message" = "Dh’fhaoidte gun stàlaich is ruith Ecosia rannsachadh o àm gu àm.";
 
 /* Toggled OFF to opt-out of studies */
 "Settings.Studies.Toggle.Off" = "Dheth";
@@ -2011,7 +2011,7 @@
 "Settings.TrackingProtection.Alert.Title" = "An aire!";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
-"Settings.TrackingProtection.BlockListsHeader" = "’S urrainn dhut fhèin taghadh dè an liosta a chleachdadh Firefox gus eileamaidean-lìn a bhacadh a thracaicheas na nì thu air loidhne ma dh’fhaoidte.";
+"Settings.TrackingProtection.BlockListsHeader" = "’S urrainn dhut fhèin taghadh dè an liosta a chleachdadh Ecosia gus eileamaidean-lìn a bhacadh a thracaicheas na nì thu air loidhne ma dh’fhaoidte.";
 
 /* Explanation of basic mode. */
 "Settings.TrackingProtection.Info.BasicTitle" = "Cothromachadh eadar dìon is dèanadas.";
@@ -2122,16 +2122,16 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Luchdaich sa chùlaibh";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Ga luchdadh ann am Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ga luchdadh ann am Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Fosgail ann am Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Fosgail ann am Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
 "ShareExtension.OpenInPrivateModeAction.Title" = "Fosgail sa mhodh phrìobhaideach";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Lorg ann am Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Lorg ann am Ecosia";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Seall molaidhean-luirg";
@@ -2168,7 +2168,7 @@
 "Sync.FirstTimeMessage.Label" = "Dhʼfhaoidte gun doir aʼ chiad sionsronachadh greiseig mhath.";
 
 /* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "Nach eil cunntas agad? Cruthaich fear airson Firefox a shioncronachadh eadar uidheaman.";
+"Sync.NoAccount.Description" = "Nach eil cunntas agad? Cruthaich fear airson Ecosia a shioncronachadh eadar uidheaman.";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "ʼGa shioncronachadh";
@@ -2354,13 +2354,13 @@
 "UIMenuItem.PasteGo" = "Cuir ann ⁊ tadhail air";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Lorg le Firefox";
+"UIMenuItem.SearchWithFirefox" = "Lorg le Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "gun leughadh";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Àrdaich Firefox ma tha thu airson ceangal";
+"Upgrade Firefox to connect" = "Àrdaich Ecosia ma tha thu airson ceangal";
 
 /* Debug option */
 "Use stage servers" = "Cleachd frithealaichean stèidse";
@@ -2393,7 +2393,7 @@
 "Yesterday" = "An-dè";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Chan eil taba sam bith fosgailte agad ann am Firefox air uidheaman eile.";
+"You don’t have any tabs open in Firefox on your other devices." = "Chan eil taba sam bith fosgailte agad ann am Ecosia air uidheaman eile.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Do chòraichean";
