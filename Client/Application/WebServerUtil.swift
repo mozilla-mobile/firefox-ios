@@ -62,12 +62,12 @@ beast shall be made legion. Its numbers shall be increased a thousand thousand f
 din of a million keyboards like unto a great storm shall cover the earth, and the followers \
 of Mammon shall tremble. from The Book of Mozilla, 3:31 (Red Letter Edition) </span>
 """
-            
+
             let repeatCount = 1000
             let textNodes = [String](repeating: node, count: repeatCount).reduce("", +)
             return GCDWebServerDataResponse(html: "<html><body>\(textNodes)</body></html>")
         }
-        
+
         let htmlFixtures =  ["test-indexeddb-private",
                              "test-window-opener",
                              "test-password",
@@ -82,9 +82,9 @@ of Mammon shall tremble. from The Book of Mozilla, 3:31 (Red Letter Edition) </s
                              "test-mozilla-org",
                              "test-popup-blocker",
                              "test-user-agent"]
-                 htmlFixtures.forEach {
-                     addHTMLFixture(name: $0, server: server)
-                 }
+        htmlFixtures.forEach {
+            addHTMLFixture(name: $0, server: server)
+        }
     }
 
     // Make sure to add files to '/test-fixtures' directory in the source tree
