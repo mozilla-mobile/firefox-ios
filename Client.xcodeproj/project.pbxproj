@@ -535,6 +535,7 @@
 		8A35497227BD672700534A65 /* ToggleSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A35497127BD672700534A65 /* ToggleSwitch.swift */; };
 		8A355E5E27D267A400B9AF34 /* RecentItemsHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A355E5D27D267A400B9AF34 /* RecentItemsHelperTests.swift */; };
 		8A36AC2C2886F27F00CDC0AD /* MockTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */; };
+		8A37C79F28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37C79E28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift */; };
 		8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */; };
 		8A471185287F6E4800F5A6EA /* SeparatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */; };
 		8A4AC0EB28C929D700439F83 /* URLSessionDataTaskProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */; };
@@ -3256,6 +3257,7 @@
 		8A35497127BD672700534A65 /* ToggleSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleSwitch.swift; sourceTree = "<group>"; };
 		8A355E5D27D267A400B9AF34 /* RecentItemsHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentItemsHelperTests.swift; sourceTree = "<group>"; };
 		8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabManager.swift; sourceTree = "<group>"; };
+		8A37C79E28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualHintViewModelTests.swift; sourceTree = "<group>"; };
 		8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksPanelViewModel.swift; sourceTree = "<group>"; };
 		8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorTableViewCell.swift; sourceTree = "<group>"; };
 		8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionDataTaskProtocol.swift; sourceTree = "<group>"; };
@@ -6581,6 +6583,7 @@
 			isa = PBXGroup;
 			children = (
 				9614BF4028A53F7C00D3F7EA /* ContextualHintEligibilityUtilityTests.swift */,
+				8A37C79E28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift */,
 			);
 			path = ContextualHints;
 			sourceTree = "<group>";
@@ -10963,6 +10966,7 @@
 				8A635ECD289437A8006378BA /* SyncedTabCellTests.swift in Sources */,
 				8AE80BB12891A39F00BC12EA /* SpyNotificationCenter.swift in Sources */,
 				5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */,
+				8A37C79F28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift in Sources */,
 				8A355E5E27D267A400B9AF34 /* RecentItemsHelperTests.swift in Sources */,
 				C8699153289177FB007ACC5C /* WallpaperDataServiceTests.swift in Sources */,
 				8AFE4C2127480D0C00B97C65 /* TabTrayViewControllerTests.swift in Sources */,

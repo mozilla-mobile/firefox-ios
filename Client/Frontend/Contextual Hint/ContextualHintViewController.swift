@@ -258,11 +258,11 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }
 
     // MARK: - Interface
-    public func shouldPresentHint() -> Bool {
+    func shouldPresentHint() -> Bool {
         return viewModel.shouldPresentContextualHint()
     }
 
-    public func configure(
+    func configure(
         anchor: UIView,
         withArrowDirection arrowDirection: UIPopoverArrowDirection,
         andDelegate delegate: UIPopoverPresentationControllerDelegate,
@@ -270,8 +270,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         withActionBeforeAppearing preAction: (() -> Void)? = nil,
         actionOnDismiss postAction: (() -> Void)? = nil,
         andActionForButton buttonAction: (() -> Void)? = nil,
-        andShouldStartTimerRightAway shouldStartTimer: Bool = true,
-        onHintConfigured completion: (() -> Void)? = nil
+        andShouldStartTimerRightAway shouldStartTimer: Bool = true
     ) {
         stopTimer()
         self.modalPresentationStyle = .popover
@@ -290,14 +289,18 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
             viewModel.startTimer()
         }
 
-        completion?()
+        viewModel.markContextualHintConfiguration(configured: true)
     }
 
-    public func stopTimer() {
+    func unconfigure() {
+        viewModel.markContextualHintConfiguration(configured: false)
+    }
+
+    func stopTimer() {
         viewModel.stopTimer()
     }
 
-    public func startTimer() {
+    func startTimer() {
         viewModel.startTimer()
     }
 }

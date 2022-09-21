@@ -495,11 +495,6 @@ class BrowserViewController: UIViewController {
             selector: #selector(didTapUndoCloseAllTabToast),
             name: .DidTapUndoCloseAllTabToast,
             object: nil)
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(homePanelDidPresentContextualHintWith),
-            name: .DidPresentContextualHint,
-            object: nil)
     }
 
     func addSubviews() {
@@ -1880,20 +1875,6 @@ extension BrowserViewController: HomePanelDelegate {
                 .toolbarLocation:
             self.urlBar.leaveOverlayMode()
         default: break
-        }
-    }
-
-    /// We leave overlay mode this way when a contextual hint is too far out of reach from
-    /// accessing `homePanelDidPresentContextualHintOf(type: ContextualHintType)`
-    @objc func homePanelDidPresentContextualHintWith(notification: NSNotification) {
-        guard let userInfo = notification.userInfo,
-              let hint = userInfo["contextualHint"] as? ContextualHintType
-        else { return }
-
-        switch hint {
-        case .jumpBackIn, .jumpBackInSyncedTab, .toolbarLocation:
-            self.urlBar.leaveOverlayMode()
-        case .inactiveTabs: break
         }
     }
 

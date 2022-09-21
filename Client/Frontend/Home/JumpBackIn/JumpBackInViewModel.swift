@@ -21,6 +21,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     var onTapGroup: ((Tab) -> Void)?
     var syncedTabsShowAllAction: (() -> Void)?
     var openSyncedTabAction: ((URL) -> Void)?
+    var prepareContextualHint: ((SyncedTabCell) -> Void)?
 
     weak var browserBarViewDelegate: BrowserBarViewDelegate?
     weak var delegate: HomepageDataModelDelegate?
@@ -381,9 +382,11 @@ extension JumpBackInViewModel: HomepageSectionHandler {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SyncedTabCell.cellIdentifier,
                                                           for: indexPath)
             guard let syncedTabCell = cell as? SyncedTabCell,
-                    let mostRecentSyncedTab = mostRecentSyncedTab
+                  let mostRecentSyncedTab = mostRecentSyncedTab,
+                  let prepareContextualHint = prepareContextualHint
             else { return UICollectionViewCell() }
             configureSyncedTabCellForTab(item: mostRecentSyncedTab, cell: syncedTabCell, indexPath: indexPath)
+            prepareContextualHint(syncedTabCell)
             return syncedTabCell
         }
 

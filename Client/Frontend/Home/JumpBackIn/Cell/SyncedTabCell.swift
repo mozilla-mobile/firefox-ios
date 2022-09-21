@@ -42,7 +42,6 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     private var syncedDeviceIconFirstBaselineConstraint: NSLayoutConstraint?
-    private var contextualHintViewController: ContextualHintViewController!
     private var syncedDeviceIconCenterConstraint: NSLayoutConstraint?
     private var showAllSyncedTabsAction: (() -> Void)?
     private var itemTitleTopConstraint: NSLayoutConstraint!
@@ -146,7 +145,6 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     deinit {
-        contextualHintViewController?.stopTimer()
         notificationCenter.removeObserver(self)
     }
 
@@ -175,13 +173,6 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
         cardTitle.text = viewModel.cardTitleText
         configureImages(viewModel: viewModel)
 
-        let contextualHintViewModel = ContextualHintViewModel(
-            forHintType: .jumpBackInSyncedTab,
-            with: viewModel.profile
-        )
-        contextualHintViewController = ContextualHintViewController(with: contextualHintViewModel)
-        prepareSyncedTabOnJumpBackInContextualHint(with: viewModel.profile)
-
         let textAttributes: [NSAttributedString.Key: Any] = [ .underlineStyle: NSUnderlineStyle.single.rawValue ]
         let attributeString = NSMutableAttributedString(
             string: viewModel.syncedTabsButtonText,
@@ -205,6 +196,10 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
                                                                   target: self,
                                                                   selector: #selector(didTapSyncedTab(_:)))
         accessibilityCustomActions = [showAllSyncedTabsA11yAction, openSyncedTabA11yAction]
+    }
+
+    func getContextualHintAnchor() -> UIView {
+        return cardTitle
     }
 
     @objc func showAllSyncedTabs(_ sender: Any) {
@@ -390,52 +385,4 @@ extension SyncedTabCell: Notifiable {
             }
         }
     }
-}
-
-// MARK: - Contextual Hints related
-extension SyncedTabCell: FeatureFlaggable {
-    typealias CFRPrefsKeys = PrefsKeys.ContextualHints
-
-    private func prepareSyncedTabOnJumpBackInContextualHint(with profile: Profile) {
-        guard contextualHintViewController.shouldPresentHint(),
-              featureFlags.isFeatureEnabled(.contextualHintForJumpBackInSyncedTab, checking: .buildOnly)
-        else {
-            profile.prefs.setBool(false, forKey: CFRPrefsKeys.jumpBackInSyncedTabConfiguredKey.rawValue)
-            return
-        }
-
-        contextualHintViewController.configure(
-            anchor: cardTitle,
-            withArrowDirection: .down,
-            andDelegate: BrowserViewController.foregroundBVC(),
-            presentedUsing: presentContextualHint,
-            withActionBeforeAppearing: prepareToPresentHint,
-            actionOnDismiss: nil,
-            andActionForButton: nil,
-            andShouldStartTimerRightAway: true) {
-                profile.prefs.setBool(true, forKey: CFRPrefsKeys.jumpBackInSyncedTabConfiguredKey.rawValue)
-            }
-    }
-
-    private func presentContextualHint() {
-        let bvc = BrowserViewController.foregroundBVC()
-
-        guard bvc.searchController == nil,
-              bvc.presentedViewController == nil
-        else {
-            contextualHintViewController.stopTimer()
-            return
-        }
-
-        bvc.present(contextualHintViewController, animated: true, completion: nil)
-
-        UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
-    }
-
-    /// We need to leave overlay mode before the hint can show.
-    private func prepareToPresentHint() {
-        let info: [AnyHashable: Any] = ["contextualHint": ContextualHintType.jumpBackInSyncedTab]
-        NotificationCenter.default.post(name: .DidPresentContextualHint, object: self, userInfo: info)
-    }
-
 }

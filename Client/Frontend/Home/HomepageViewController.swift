@@ -30,7 +30,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     private var urlBar: URLBarViewProtocol
     private var userDefaults: UserDefaultsInterface
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
-    private var contextualHintViewController: ContextualHintViewController
+    private var jumpBackInContextualHintViewController: ContextualHintViewController
+    private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
 
     // Content stack views contains collection view.
@@ -58,9 +59,12 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
                                            tabManager: tabManager,
                                            urlBar: urlBar)
 
-        let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
-                                                          with: viewModel.profile)
-        self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
+        let jumpBackInContextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
+                                                                    with: viewModel.profile)
+        self.jumpBackInContextualHintViewController = ContextualHintViewController(with: jumpBackInContextualViewModel)
+        let syncTabContextualViewModel = ContextualHintViewModel(forHintType: .jumpBackInSyncedTab,
+                                                                 with: viewModel.profile)
+        self.syncTabContextualHintViewController = ContextualHintViewController(with: syncTabContextualViewModel)
         self.contextMenuHelper = HomepageContextMenuHelper(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
 
@@ -81,7 +85,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
 
     deinit {
-        contextualHintViewController.stopTimer()
+        jumpBackInContextualHintViewController.stopTimer()
+        syncTabContextualHintViewController.stopTimer()
         notificationCenter.removeObserver(self)
     }
 
@@ -107,7 +112,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        contextualHintViewController.stopTimer()
+        jumpBackInContextualHintViewController.stopTimer()
+        syncTabContextualHintViewController.stopTimer()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -233,7 +239,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
 
     func homepageWillDisappear() {
-        contextualHintViewController.stopTimer()
+        jumpBackInContextualHintViewController.stopTimer()
+        syncTabContextualHintViewController.stopTimer()
         viewModel.recordViewDisappeared()
     }
 
@@ -342,21 +349,38 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
 
     // MARK: - Contextual hint
+
     private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
-        guard contextualHintViewController.shouldPresentHint(),
+        guard jumpBackInContextualHintViewController.shouldPresentHint(),
               !viewModel.shouldDisplayHomeTabBanner
         else { return }
 
-        contextualHintViewController.configure(
+        jumpBackInContextualHintViewController.configure(
             anchor: headerView.titleLabel,
             withArrowDirection: .down,
             andDelegate: self,
-            presentedUsing: { self.presentContextualHint() },
-            withActionBeforeAppearing: { self.contextualHintPresented() },
+            presentedUsing: { self.presentContextualHint(contextualHintViewController: self.jumpBackInContextualHintViewController) },
+            withActionBeforeAppearing: { self.contextualHintPresented(type: .jumpBackIn) },
             andActionForButton: { self.openTabsSettings() })
     }
 
-    @objc private func presentContextualHint() {
+    private func prepareSyncedTabContextualHint(onCell cell: SyncedTabCell) {
+        guard syncTabContextualHintViewController.shouldPresentHint(),
+              featureFlags.isFeatureEnabled(.contextualHintForJumpBackInSyncedTab, checking: .buildOnly)
+        else {
+            syncTabContextualHintViewController.unconfigure()
+            return
+        }
+
+        syncTabContextualHintViewController.configure(
+            anchor: cell.getContextualHintAnchor(),
+            withArrowDirection: .down,
+            andDelegate: self,
+            presentedUsing: { self.presentContextualHint(contextualHintViewController: self.syncTabContextualHintViewController) },
+            withActionBeforeAppearing: { self.contextualHintPresented(type: .jumpBackInSyncedTab) })
+    }
+
+    @objc private func presentContextualHint(contextualHintViewController: ContextualHintViewController) {
         guard BrowserViewController.foregroundBVC().searchController == nil, canModalBePresented else {
             contextualHintViewController.stopTimer()
             return
@@ -484,6 +508,10 @@ private extension HomepageViewController {
                                          extras: extras)
         }
 
+        viewModel.jumpBackInViewModel.prepareContextualHint = { [weak self] syncedTabCell in
+            self?.prepareSyncedTabContextualHint(onCell: syncedTabCell)
+        }
+
         // History highlights
         viewModel.historyHighlightsViewModel.onTapItem = { [weak self] highlight in
             guard let url = highlight.siteUrl else {
@@ -602,8 +630,8 @@ private extension HomepageViewController {
                                      value: .customizeHomepageButton)
     }
 
-    func contextualHintPresented() {
-        homePanelDelegate?.homePanelDidPresentContextualHintOf(type: .jumpBackIn)
+    func contextualHintPresented(type: ContextualHintType) {
+        homePanelDelegate?.homePanelDidPresentContextualHintOf(type: type)
     }
 
     func openTabsSettings() {
@@ -643,7 +671,8 @@ extension HomepageViewController: UIPopoverPresentationControllerDelegate {
         in view: AutoreleasingUnsafeMutablePointer<UIView>
     ) {
         // Do not dismiss if the popover is a CFR
-        if contextualHintViewController.isPresenting { return }
+        guard !jumpBackInContextualHintViewController.isPresenting &&
+                !syncTabContextualHintViewController.isPresenting else { return }
         popoverPresentationController.presentedViewController.dismiss(animated: false, completion: nil)
     }
 
