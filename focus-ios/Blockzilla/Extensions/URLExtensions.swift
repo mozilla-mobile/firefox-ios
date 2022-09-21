@@ -134,6 +134,22 @@ extension URL {
         return results
     }
 
+    public static func getQuery(url: URL) -> [String: String] {
+        var results = [String: String]()
+        let keyValues =  url.query?.components(separatedBy: "&")
+
+        if keyValues?.count ?? 0 > 0 {
+            for pair in keyValues! {
+                let kv = pair.components(separatedBy: "=")
+                if kv.count > 1 {
+                    results[kv[0]] = kv[1]
+                }
+            }
+        }
+
+        return results
+    }
+
     public var hostPort: String? {
         if let host = self.host {
             if let port = (self as NSURL).port?.int32Value {

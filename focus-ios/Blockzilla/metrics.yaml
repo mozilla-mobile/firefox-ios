@@ -21,6 +21,21 @@ legacy.ids:
       - sarentz@mozilla.com
     expires: never
 
+app:
+  opened_as_default_browser:
+    type: counter
+    description: |
+      Recorded when a preference is changed and includes the
+      preference that changed as well as the value changed to
+      recorded in the extra keys.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3425
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3465
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-03-14"
+
 browser:
   total_uri_count:
     type: counter

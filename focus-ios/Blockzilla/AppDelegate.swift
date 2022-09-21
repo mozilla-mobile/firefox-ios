@@ -176,60 +176,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            return false
+        guard let navigation = NavigationPath(url: url) else { return false }
+        let navigationHandler = NavigationPath.handle(application, navigation: navigation, with: browserViewController)
+
+        if case .text = navigation {
+            queuedString = navigationHandler as? String
         }
-
-        guard let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [AnyObject],
-            let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String] else {
-                // Something very strange has happened; org.mozilla.Blockzilla should be the zeroeth URL type.
-                return false
-        }
-
-        guard let scheme = components.scheme,
-            let host = url.host,
-            urlSchemes.contains(scheme) else {
-            return false
-        }
-
-        let query = getQuery(url: url)
-        let isHttpScheme = scheme == "http" || scheme == "https"
-
-        if isHttpScheme {
-            if application.applicationState == .active {
-                // If we are active then we can ask the BVC to open the new tab right away.
-                // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-                browserViewController.submit(url: url)
-            } else {
-                queuedUrl = url
-            }
-        } else if host == "open-url" {
-            let urlString = unescape(string: query["url"]) ?? ""
-            guard let url = URL(string: urlString) else { return false }
-
-            if application.applicationState == .active {
-                // If we are active then we can ask the BVC to open the new tab right away.
-                // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-                browserViewController.submit(url: url)
-            } else {
-                queuedUrl = url
-            }
-        } else if host == "open-text" || isHttpScheme {
-            let text = unescape(string: query["text"]) ?? ""
-
-            // If we are active then we can ask the BVC to open the new tab right away.
-            // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-            if application.applicationState == .active {
-                if let fixedUrl = URIFixup.getURL(entry: text) {
-                    browserViewController.submit(url: fixedUrl)
-                } else {
-                    browserViewController.submit(text: text)
-                }
-            } else {
-                queuedString = text
-            }
-        } else if host == "glean" {
-            Glean.shared.handleCustomUrl(url: url)
+        else if case .url = navigation {
+            queuedUrl = navigationHandler as? URL
         }
 
         return true
@@ -253,32 +207,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             browserViewController.resetBrowser(hidePreviousSession: true)
         }
         return true
-    }
-
-    public func getQuery(url: URL) -> [String: String] {
-        var results = [String: String]()
-        let keyValues =  url.query?.components(separatedBy: "&")
-
-        if keyValues?.count ?? 0 > 0 {
-            for pair in keyValues! {
-                let kv = pair.components(separatedBy: "=")
-                if kv.count > 1 {
-                    results[kv[0]] = kv[1]
-                }
-            }
-        }
-
-        return results
-    }
-
-    public func unescape(string: String?) -> String? {
-        guard let string = string else {
-            return nil
-        }
-        return CFURLCreateStringByReplacingPercentEscapes(
-            kCFAllocatorDefault,
-            string as CFString,
-            "" as CFString) as String
     }
 
     private func authenticateWithBiometrics() {
