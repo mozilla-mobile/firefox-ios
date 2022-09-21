@@ -143,7 +143,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         // Can be removed once underlying problem is solved (FXIOS-4904)
         if let presentedViewController = presentedViewController,
            presentedViewController.isKind(of: BottomSheetViewController.self) {
-            print("Laurie - Homepage - Dismiss keyboard viewDidLayoutSubviews")
             self.dismissKeyboard()
         }
     }
@@ -252,7 +251,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     /// since it's `.regular` on both. We reloadOnRotation from viewWillTransition in that case.
     private func reloadOnRotation() {
         if let _ = presentedViewController as? PhotonActionSheet {
-            print("Laurie - Homepage - Dismiss presentedViewController reloadOnRotation")
             presentedViewController?.dismiss(animated: false, completion: nil)
         }
 
@@ -673,8 +671,8 @@ extension HomepageViewController: UIPopoverPresentationControllerDelegate {
         in view: AutoreleasingUnsafeMutablePointer<UIView>
     ) {
         // Do not dismiss if the popover is a CFR
-        if jumpBackInContextualHintViewController.isPresenting,
-            syncTabContextualHintViewController.isPresenting { return }
+        guard !jumpBackInContextualHintViewController.isPresenting &&
+                !syncTabContextualHintViewController.isPresenting else { return }
         popoverPresentationController.presentedViewController.dismiss(animated: false, completion: nil)
     }
 
