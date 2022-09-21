@@ -8297,7 +8297,6 @@
 				TargetAttributes = {
 					047F9B2624E1FE1C00CD7DF7 = {
 						CreatedOnToolsVersion = 12.0;
-						DevelopmentTeam = 43AQ936H96;
 					};
 					288A2D851AB8B3260023ABC3 = {
 						CreatedOnToolsVersion = 6.2;
@@ -12308,7 +12307,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		288A2DA01AB8B3260023ABC3 /* EcosiaDebug */ = {
+		288A2DA01AB8B3260023ABC3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12331,9 +12330,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		2FCAE2341ABB51F900877008 /* EcosiaDebug */ = {
+		2FCAE2341ABB51F900877008 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEFINES_MODULE = YES;
@@ -12343,9 +12342,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				VALIDATE_WORKSPACE = YES;
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		2FCAE2381ABB51F900877008 /* EcosiaDebug */ = {
+		2FCAE2381ABB51F900877008 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -12354,9 +12353,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		3B43E3D71D95C48E00BBA9DB /* EcosiaDebug */ = {
+		3B43E3D71D95C48E00BBA9DB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -12365,27 +12364,27 @@
 				INFOPLIST_FILE = Tests/StoragePerfTests/Info.plist;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		3B43E3D81D95C48E00BBA9DB /* Firefox */ = {
+		3B43E3D81D95C48E00BBA9DB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/StoragePerfTests/Info.plist;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = Firefox;
+			name = Release;
 		};
-		3B43E3D91D95C48E00BBA9DB /* FirefoxBeta */ = {
+		3B43E3D91D95C48E00BBA9DB /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/StoragePerfTests/Info.plist;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		3BFE4B0E1D342FB900DDF53F /* EcosiaDebug */ = {
+		3BFE4B0E1D342FB900DDF53F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -12398,9 +12397,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Tests/XCUITests/XCUITests-Bridging-Header.h";
 				TEST_TARGET_NAME = Client;
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		3BFE4B0F1D342FB900DDF53F /* Firefox */ = {
+		3BFE4B0F1D342FB900DDF53F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -12411,9 +12410,9 @@
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.XCUITests";
 				TEST_TARGET_NAME = Client;
 			};
-			name = Firefox;
+			name = Release;
 		};
-		3BFE4B101D342FB900DDF53F /* FirefoxBeta */ = {
+		3BFE4B101D342FB900DDF53F /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -12424,9 +12423,9 @@
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.XCUITests";
 				TEST_TARGET_NAME = Client;
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		4302EDB72819D6250070D373 /* EcosiaDebug */ = {
+		4302EDB72819D6250070D373 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12450,9 +12449,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		4302EDB92819D6250070D373 /* Firefox */ = {
+		4302EDB92819D6250070D373 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12475,9 +12474,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = Firefox;
+			name = Release;
 		};
-		4302EDBA2819D6250070D373 /* FirefoxBeta */ = {
+		4302EDBA2819D6250070D373 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12499,9 +12498,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		4326A3B92849B49800550F73 /* EcosiaDebug */ = {
+		4326A3B92849B49800550F73 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12524,9 +12523,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		4326A3BB2849B49800550F73 /* Firefox */ = {
+		4326A3BB2849B49800550F73 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12548,9 +12547,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = Firefox;
+			name = Release;
 		};
-		4326A3BC2849B49800550F73 /* FirefoxBeta */ = {
+		4326A3BC2849B49800550F73 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12571,58 +12570,58 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		4354D3E124EEEEC5001184F6 /* EcosiaDebug */ = {
+		4354D3E124EEEEC5001184F6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/Fennec.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/Ecosia.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 33YMRSYD2L;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = WidgetKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = "${inherited}";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.ecosia.ecosiaapp.WidgetKit";
 				SKIP_INSTALL = NO;
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		4354D3E324EEEEC5001184F6 /* Firefox */ = {
+		4354D3E324EEEEC5001184F6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/Firefox.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/Ecosia.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = 33YMRSYD2L;
 				INFOPLIST_FILE = WidgetKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = "${inherited}";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
-				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Firefox.WidgetKit";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.ecosia.ecosiaapp.WidgetKit";
 				SKIP_INSTALL = NO;
 			};
-			name = Firefox;
+			name = Release;
 		};
-		4354D3E424EEEEC5001184F6 /* FirefoxBeta */ = {
+		4354D3E424EEEEC5001184F6 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/FirefoxBeta.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/EcosiaBeta.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = 33YMRSYD2L;
 				INFOPLIST_FILE = WidgetKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = "${inherited}";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
-				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.FirefoxBeta.WidgetKit";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.ecosia.ecosiaapp.firefox.WidgetKit";
 				SKIP_INSTALL = NO;
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		4368F846279669740013419B /* EcosiaDebug */ = {
+		4368F846279669740013419B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12646,9 +12645,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		4368F848279669740013419B /* Firefox */ = {
+		4368F848279669740013419B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12671,9 +12670,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = Firefox;
+			name = Release;
 		};
-		4368F849279669740013419B /* FirefoxBeta */ = {
+		4368F849279669740013419B /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12695,9 +12694,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		4368F87727966E810013419B /* EcosiaDebug */ = {
+		4368F87727966E810013419B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12721,9 +12720,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		4368F87927966E810013419B /* Firefox */ = {
+		4368F87927966E810013419B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12746,9 +12745,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = Firefox;
+			name = Release;
 		};
-		4368F87A27966E810013419B /* FirefoxBeta */ = {
+		4368F87A27966E810013419B /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12770,9 +12769,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		43AFC0D5279678920039DDF4 /* EcosiaDebug */ = {
+		43AFC0D5279678920039DDF4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12796,9 +12795,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		43AFC0D7279678920039DDF4 /* Firefox */ = {
+		43AFC0D7279678920039DDF4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12821,9 +12820,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = Firefox;
+			name = Release;
 		};
-		43AFC0D8279678920039DDF4 /* FirefoxBeta */ = {
+		43AFC0D8279678920039DDF4 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12845,9 +12844,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		43AFC0EB27967C000039DDF4 /* EcosiaDebug */ = {
+		43AFC0EB27967C000039DDF4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12871,9 +12870,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		43AFC0ED27967C000039DDF4 /* Firefox */ = {
+		43AFC0ED27967C000039DDF4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12896,9 +12895,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = Firefox;
+			name = Release;
 		};
-		43AFC0EE27967C000039DDF4 /* FirefoxBeta */ = {
+		43AFC0EE27967C000039DDF4 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12920,9 +12919,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		43BE5786278BA4D900491291 /* EcosiaDebug */ = {
+		43BE5786278BA4D900491291 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12946,9 +12945,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		43BE5788278BA4D900491291 /* Firefox */ = {
+		43BE5788278BA4D900491291 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12971,9 +12970,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = Firefox;
+			name = Release;
 		};
-		43BE5789278BA4D900491291 /* FirefoxBeta */ = {
+		43BE5789278BA4D900491291 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -12995,9 +12994,357 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		D39FA1681A83E0EC00EE869C /* EcosiaDebug */ = {
+		CACF7CF728DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA8BCC4128D352630020BC50 /* EcosiaBeta.xcconfig */;
+			buildSettings = {
+				CURRENT_PROJECT_VERSION = 62;
+				MARKETING_VERSION = 8.0.0;
+				OTHER_LDFLAGS = "$(inherited)";
+				VALIDATE_WORKSPACE = YES;
+			};
+			name = AppCenter;
+		};
+		CACF7CF828DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Beta;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 33YMRSYD2L;
+				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lxml2",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
+				PRODUCT_MODULE_NAME = Client;
+				PRODUCT_NAME = Client;
+				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc com.ecosia.ecosiaapp.firefox";
+				SKIP_INSTALL = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
+				VALIDATE_WORKSPACE = YES;
+			};
+			name = AppCenter;
+		};
+		CACF7CF928DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/EcosiaBeta.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 33YMRSYD2L;
+				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_SHARETO";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc com.ecosia.ecosiaapp.firefox.ShareTo";
+				SKIP_INSTALL = NO;
+			};
+			name = AppCenter;
+		};
+		CACF7CFA28DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/EcosiaBeta.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 33YMRSYD2L;
+				INFOPLIST_FILE = WidgetKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = "${inherited}";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
+				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc com.ecosia.ecosiaapp.firefox.WidgetKit";
+				SKIP_INSTALL = NO;
+			};
+			name = AppCenter;
+		};
+		CACF7CFB28DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				INFOPLIST_FILE = Storage/Info.plist;
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
+			};
+			name = AppCenter;
+		};
+		CACF7CFC28DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				INFOPLIST_FILE = Tests/ClientTests/Info.plist;
+				PRODUCT_NAME = ClientTests;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+			};
+			name = AppCenter;
+		};
+		CACF7CFD28DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				INFOPLIST_FILE = Tests/StoragePerfTests/Info.plist;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+			};
+			name = AppCenter;
+		};
+		CACF7CFE28DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = Tests/StorageTests/Info.plist;
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+			};
+			name = AppCenter;
+		};
+		CACF7CFF28DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				INFOPLIST_FILE = Tests/SharedTests/Info.plist;
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+			};
+			name = AppCenter;
+		};
+		CACF7D0028DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				VALIDATE_WORKSPACE = YES;
+			};
+			name = AppCenter;
+		};
+		CACF7D0128DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				PRODUCT_NAME = L10nSnapshotTests;
+				TEST_TARGET_NAME = Client;
+				USES_XCTRUNNER = YES;
+			};
+			name = AppCenter;
+		};
+		CACF7D0228DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				PRODUCT_NAME = MarketingUITests;
+			};
+			name = AppCenter;
+		};
+		CACF7D0328DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.XCUITests";
+				TEST_TARGET_NAME = Client;
+			};
+			name = AppCenter;
+		};
+		CACF7D0428DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				INFOPLIST_FILE = "DynamicSwiftyJson-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = AppCenter;
+		};
+		CACF7D0528DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				INFOPLIST_FILE = "Fuzi-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = AppCenter;
+		};
+		CACF7D0628DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "KingfisherDynamic-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = AppCenter;
+		};
+		CACF7D0728DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = AppCenter;
+		};
+		CACF7D0828DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				INFOPLIST_FILE = "SDWebImage-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = AppCenter;
+		};
+		CACF7D0928DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = AppCenter;
+		};
+		CACF7D0A28DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				INFOPLIST_FILE = "Snapkit-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = AppCenter;
+		};
+		CACF7D0B28DB0D4700A996A4 /* AppCenter */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				INFOPLIST_FILE = "XCGLogger-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = AppCenter;
+		};
+		D39FA1681A83E0EC00EE869C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -13007,7 +13354,7 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 				VALIDATE_WORKSPACE = YES;
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
 		D39FA1691A83E0EC00EE869C /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -13018,25 +13365,25 @@
 			};
 			name = Release;
 		};
-		E448FC9D1AEE7A6000869B6C /* Firefox */ = {
+		E448FC9D1AEE7A6000869B6C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E60961891B62B8C800DD640F /* Firefox.xcconfig */;
+			baseConfigurationReference = CA8BCC4228D352640020BC50 /* Ecosia.xcconfig */;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 62;
 				MARKETING_VERSION = 8.0.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
-			name = Firefox;
+			name = Release;
 		};
-		E448FC9E1AEE7A6000869B6C /* Firefox */ = {
+		E448FC9E1AEE7A6000869B6C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = 33YMRSYD2L;
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -13050,14 +13397,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
-				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Firefox";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.ecosia.ecosiaapp";
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
 				VALIDATE_WORKSPACE = YES;
 			};
-			name = Firefox;
+			name = Release;
 		};
-		E448FC9F1AEE7A6000869B6C /* Firefox */ = {
+		E448FC9F1AEE7A6000869B6C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -13065,32 +13412,32 @@
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = Firefox;
+			name = Release;
 		};
-		E448FCA01AEE7A6000869B6C /* Firefox */ = {
+		E448FCA01AEE7A6000869B6C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/Firefox.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/Ecosia.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = 33YMRSYD2L;
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Firefox.ShareTo";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.ecosia.ecosiaapp.ShareTo";
 				SKIP_INSTALL = NO;
 			};
-			name = Firefox;
+			name = Release;
 		};
-		E448FCA21AEE7A6000869B6C /* Firefox */ = {
+		E448FCA21AEE7A6000869B6C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				VALIDATE_WORKSPACE = YES;
 			};
-			name = Firefox;
+			name = Release;
 		};
-		E448FCA31AEE7A6000869B6C /* Firefox */ = {
+		E448FCA31AEE7A6000869B6C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -13112,9 +13459,9 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = Firefox;
+			name = Release;
 		};
-		E448FCA41AEE7A6000869B6C /* Firefox */ = {
+		E448FCA41AEE7A6000869B6C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEFINES_MODULE = YES;
@@ -13122,9 +13469,9 @@
 				INFOPLIST_FILE = Storage/Info.plist;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 			};
-			name = Firefox;
+			name = Release;
 		};
-		E448FCA51AEE7A6000869B6C /* Firefox */ = {
+		E448FCA51AEE7A6000869B6C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -13133,9 +13480,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = Firefox;
+			name = Release;
 		};
-		E601384C1C89EAE600DF9756 /* EcosiaDebug */ = {
+		E601384C1C89EAE600DF9756 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -13144,9 +13491,9 @@
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		E601384D1C89EAE600DF9756 /* Firefox */ = {
+		E601384D1C89EAE600DF9756 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -13154,9 +13501,9 @@
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
 			};
-			name = Firefox;
+			name = Release;
 		};
-		E601384E1C89EAE600DF9756 /* FirefoxBeta */ = {
+		E601384E1C89EAE600DF9756 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -13164,34 +13511,34 @@
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		E60138511C89EAE600DF9756 /* EcosiaDebug */ = {
+		E60138511C89EAE600DF9756 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				PRODUCT_NAME = MarketingUITests;
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		E60138521C89EAE600DF9756 /* Firefox */ = {
+		E60138521C89EAE600DF9756 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				PRODUCT_NAME = MarketingUITests;
 			};
-			name = Firefox;
+			name = Release;
 		};
-		E60138531C89EAE600DF9756 /* FirefoxBeta */ = {
+		E60138531C89EAE600DF9756 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				PRODUCT_NAME = MarketingUITests;
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		E6F965151B2F1CF20034B023 /* EcosiaDebug */ = {
+		E6F965151B2F1CF20034B023 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -13200,9 +13547,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		E6F965171B2F1CF20034B023 /* Firefox */ = {
+		E6F965171B2F1CF20034B023 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -13210,27 +13557,27 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = Firefox;
+			name = Release;
 		};
-		E6FCC4291C40562400DF6113 /* FirefoxBeta */ = {
+		E6FCC4291C40562400DF6113 /* Beta */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */;
+			baseConfigurationReference = CA8BCC4128D352630020BC50 /* EcosiaBeta.xcconfig */;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 62;
 				MARKETING_VERSION = 8.0.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		E6FCC42A1C40562400DF6113 /* FirefoxBeta */ = {
+		E6FCC42A1C40562400DF6113 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Beta;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = 33YMRSYD2L;
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -13244,14 +13591,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
-				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.FirefoxBeta";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.ecosia.ecosiaapp.firefox";
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
 				VALIDATE_WORKSPACE = YES;
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		E6FCC42B1C40562400DF6113 /* FirefoxBeta */ = {
+		E6FCC42B1C40562400DF6113 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -13259,32 +13606,32 @@
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		E6FCC42D1C40562400DF6113 /* FirefoxBeta */ = {
+		E6FCC42D1C40562400DF6113 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/FirefoxBeta.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/EcosiaBeta.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = 33YMRSYD2L;
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.FirefoxBeta.ShareTo";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.ecosia.ecosiaapp.firefox.ShareTo";
 				SKIP_INSTALL = NO;
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		E6FCC42F1C40562400DF6113 /* FirefoxBeta */ = {
+		E6FCC42F1C40562400DF6113 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				VALIDATE_WORKSPACE = YES;
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		E6FCC4311C40562400DF6113 /* FirefoxBeta */ = {
+		E6FCC4311C40562400DF6113 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -13305,18 +13652,18 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		E6FCC4321C40562400DF6113 /* FirefoxBeta */ = {
+		E6FCC4321C40562400DF6113 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = Storage/Info.plist;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		E6FCC4331C40562400DF6113 /* FirefoxBeta */ = {
+		E6FCC4331C40562400DF6113 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -13325,9 +13672,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		E6FCC43A1C40562400DF6113 /* FirefoxBeta */ = {
+		E6FCC43A1C40562400DF6113 /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -13335,9 +13682,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = FirefoxBeta;
+			name = Beta;
 		};
-		F84B21DB1A090F8100AAB793 /* EcosiaDebug */ = {
+		F84B21DB1A090F8100AAB793 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CA8BCC4328D352640020BC50 /* EcosiaDebug.xcconfig */;
 			buildSettings = {
@@ -13346,9 +13693,9 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		F84B21DE1A090F8100AAB793 /* EcosiaDebug */ = {
+		F84B21DE1A090F8100AAB793 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -13376,9 +13723,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
 				VALIDATE_WORKSPACE = YES;
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		F84B21E11A090F8100AAB793 /* EcosiaDebug */ = {
+		F84B21E11A090F8100AAB793 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -13387,23 +13734,23 @@
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
-		F84B22561A0920C600AAB793 /* EcosiaDebug */ = {
+		F84B22561A0920C600AAB793 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/Fennec.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/Ecosia.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 33YMRSYD2L;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.ecosia.ecosiaapp.ShareTo";
 				SKIP_INSTALL = NO;
 			};
-			name = EcosiaDebug;
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
@@ -13411,213 +13758,234 @@
 		047F9B3824E1FE1F00CD7DF7 /* Build configuration list for PBXNativeTarget "WidgetKitExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4354D3E124EEEEC5001184F6 /* EcosiaDebug */,
-				4354D3E324EEEEC5001184F6 /* Firefox */,
-				4354D3E424EEEEC5001184F6 /* FirefoxBeta */,
+				4354D3E124EEEEC5001184F6 /* Debug */,
+				4354D3E324EEEEC5001184F6 /* Release */,
+				4354D3E424EEEEC5001184F6 /* Beta */,
+				CACF7CFA28DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		288A2D9F1AB8B3260023ABC3 /* Build configuration list for PBXNativeTarget "Shared" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				288A2DA01AB8B3260023ABC3 /* EcosiaDebug */,
-				E448FCA31AEE7A6000869B6C /* Firefox */,
-				E6FCC4311C40562400DF6113 /* FirefoxBeta */,
+				288A2DA01AB8B3260023ABC3 /* Debug */,
+				E448FCA31AEE7A6000869B6C /* Release */,
+				E6FCC4311C40562400DF6113 /* Beta */,
+				CACF7D0928DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		2FCAE2331ABB51F900877008 /* Build configuration list for PBXNativeTarget "Storage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2FCAE2341ABB51F900877008 /* EcosiaDebug */,
-				E448FCA41AEE7A6000869B6C /* Firefox */,
-				E6FCC4321C40562400DF6113 /* FirefoxBeta */,
+				2FCAE2341ABB51F900877008 /* Debug */,
+				E448FCA41AEE7A6000869B6C /* Release */,
+				E6FCC4321C40562400DF6113 /* Beta */,
+				CACF7CFB28DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		2FCAE2371ABB51F900877008 /* Build configuration list for PBXNativeTarget "StorageTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2FCAE2381ABB51F900877008 /* EcosiaDebug */,
-				E448FCA51AEE7A6000869B6C /* Firefox */,
-				E6FCC4331C40562400DF6113 /* FirefoxBeta */,
+				2FCAE2381ABB51F900877008 /* Debug */,
+				E448FCA51AEE7A6000869B6C /* Release */,
+				E6FCC4331C40562400DF6113 /* Beta */,
+				CACF7CFE28DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		3B43E3E91D95C48E00BBA9DB /* Build configuration list for PBXNativeTarget "StoragePerfTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3B43E3D71D95C48E00BBA9DB /* EcosiaDebug */,
-				3B43E3D81D95C48E00BBA9DB /* Firefox */,
-				3B43E3D91D95C48E00BBA9DB /* FirefoxBeta */,
+				3B43E3D71D95C48E00BBA9DB /* Debug */,
+				3B43E3D81D95C48E00BBA9DB /* Release */,
+				3B43E3D91D95C48E00BBA9DB /* Beta */,
+				CACF7CFD28DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		3BFE4B201D342FB900DDF53F /* Build configuration list for PBXNativeTarget "XCUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3BFE4B0E1D342FB900DDF53F /* EcosiaDebug */,
-				3BFE4B0F1D342FB900DDF53F /* Firefox */,
-				3BFE4B101D342FB900DDF53F /* FirefoxBeta */,
+				3BFE4B0E1D342FB900DDF53F /* Debug */,
+				3BFE4B0F1D342FB900DDF53F /* Release */,
+				3BFE4B101D342FB900DDF53F /* Beta */,
+				CACF7D0328DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		4302EDB62819D6250070D373 /* Build configuration list for PBXNativeTarget "DynamicSwiftyJson" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4302EDB72819D6250070D373 /* EcosiaDebug */,
-				4302EDB92819D6250070D373 /* Firefox */,
-				4302EDBA2819D6250070D373 /* FirefoxBeta */,
+				4302EDB72819D6250070D373 /* Debug */,
+				4302EDB92819D6250070D373 /* Release */,
+				4302EDBA2819D6250070D373 /* Beta */,
+				CACF7D0428DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		4326A3B82849B49800550F73 /* Build configuration list for PBXNativeTarget "KingfisherDynamic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4326A3B92849B49800550F73 /* EcosiaDebug */,
-				4326A3BB2849B49800550F73 /* Firefox */,
-				4326A3BC2849B49800550F73 /* FirefoxBeta */,
+				4326A3B92849B49800550F73 /* Debug */,
+				4326A3BB2849B49800550F73 /* Release */,
+				4326A3BC2849B49800550F73 /* Beta */,
+				CACF7D0628DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		4368F845279669740013419B /* Build configuration list for PBXNativeTarget "Snapkit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4368F846279669740013419B /* EcosiaDebug */,
-				4368F848279669740013419B /* Firefox */,
-				4368F849279669740013419B /* FirefoxBeta */,
+				4368F846279669740013419B /* Debug */,
+				4368F848279669740013419B /* Release */,
+				4368F849279669740013419B /* Beta */,
+				CACF7D0A28DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		4368F87627966E810013419B /* Build configuration list for PBXNativeTarget "SDWebImage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4368F87727966E810013419B /* EcosiaDebug */,
-				4368F87927966E810013419B /* Firefox */,
-				4368F87A27966E810013419B /* FirefoxBeta */,
+				4368F87727966E810013419B /* Debug */,
+				4368F87927966E810013419B /* Release */,
+				4368F87A27966E810013419B /* Beta */,
+				CACF7D0828DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		43AFC0D4279678920039DDF4 /* Build configuration list for PBXNativeTarget "XCGLogger" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				43AFC0D5279678920039DDF4 /* EcosiaDebug */,
-				43AFC0D7279678920039DDF4 /* Firefox */,
-				43AFC0D8279678920039DDF4 /* FirefoxBeta */,
+				43AFC0D5279678920039DDF4 /* Debug */,
+				43AFC0D7279678920039DDF4 /* Release */,
+				43AFC0D8279678920039DDF4 /* Beta */,
+				CACF7D0B28DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		43AFC0EA27967C000039DDF4 /* Build configuration list for PBXNativeTarget "Fuzi" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				43AFC0EB27967C000039DDF4 /* EcosiaDebug */,
-				43AFC0ED27967C000039DDF4 /* Firefox */,
-				43AFC0EE27967C000039DDF4 /* FirefoxBeta */,
+				43AFC0EB27967C000039DDF4 /* Debug */,
+				43AFC0ED27967C000039DDF4 /* Release */,
+				43AFC0EE27967C000039DDF4 /* Beta */,
+				CACF7D0528DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "RustMozillaAppServices" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				43BE5786278BA4D900491291 /* EcosiaDebug */,
-				43BE5788278BA4D900491291 /* Firefox */,
-				43BE5789278BA4D900491291 /* FirefoxBeta */,
+				43BE5786278BA4D900491291 /* Debug */,
+				43BE5788278BA4D900491291 /* Release */,
+				43BE5789278BA4D900491291 /* Beta */,
+				CACF7D0728DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		D39FA1671A83E0EC00EE869C /* Build configuration list for PBXNativeTarget "UITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D39FA1681A83E0EC00EE869C /* EcosiaDebug */,
+				D39FA1681A83E0EC00EE869C /* Debug */,
 				D39FA1691A83E0EC00EE869C /* Release */,
-				E448FCA21AEE7A6000869B6C /* Firefox */,
-				E6FCC42F1C40562400DF6113 /* FirefoxBeta */,
+				E448FCA21AEE7A6000869B6C /* Release */,
+				E6FCC42F1C40562400DF6113 /* Beta */,
+				CACF7D0028DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		E60138631C89EAE700DF9756 /* Build configuration list for PBXNativeTarget "L10nSnapshotTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E601384C1C89EAE600DF9756 /* EcosiaDebug */,
-				E601384D1C89EAE600DF9756 /* Firefox */,
-				E601384E1C89EAE600DF9756 /* FirefoxBeta */,
+				E601384C1C89EAE600DF9756 /* Debug */,
+				E601384D1C89EAE600DF9756 /* Release */,
+				E601384E1C89EAE600DF9756 /* Beta */,
+				CACF7D0128DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		E60138641C89EAE700DF9756 /* Build configuration list for PBXNativeTarget "MarketingUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E60138511C89EAE600DF9756 /* EcosiaDebug */,
-				E60138521C89EAE600DF9756 /* Firefox */,
-				E60138531C89EAE600DF9756 /* FirefoxBeta */,
+				E60138511C89EAE600DF9756 /* Debug */,
+				E60138521C89EAE600DF9756 /* Release */,
+				E60138531C89EAE600DF9756 /* Beta */,
+				CACF7D0228DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		E6F965381B2F1CF20034B023 /* Build configuration list for PBXNativeTarget "SharedTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E6F965151B2F1CF20034B023 /* EcosiaDebug */,
-				E6F965171B2F1CF20034B023 /* Firefox */,
-				E6FCC43A1C40562400DF6113 /* FirefoxBeta */,
+				E6F965151B2F1CF20034B023 /* Debug */,
+				E6F965171B2F1CF20034B023 /* Release */,
+				E6FCC43A1C40562400DF6113 /* Beta */,
+				CACF7CFF28DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		F84B21B91A090F8100AAB793 /* Build configuration list for PBXProject "Client" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F84B21DB1A090F8100AAB793 /* EcosiaDebug */,
-				E448FC9D1AEE7A6000869B6C /* Firefox */,
-				E6FCC4291C40562400DF6113 /* FirefoxBeta */,
+				F84B21DB1A090F8100AAB793 /* Debug */,
+				E448FC9D1AEE7A6000869B6C /* Release */,
+				E6FCC4291C40562400DF6113 /* Beta */,
+				CACF7CF728DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		F84B21DD1A090F8100AAB793 /* Build configuration list for PBXNativeTarget "Client" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F84B21DE1A090F8100AAB793 /* EcosiaDebug */,
-				E448FC9E1AEE7A6000869B6C /* Firefox */,
-				E6FCC42A1C40562400DF6113 /* FirefoxBeta */,
+				F84B21DE1A090F8100AAB793 /* Debug */,
+				E448FC9E1AEE7A6000869B6C /* Release */,
+				E6FCC42A1C40562400DF6113 /* Beta */,
+				CACF7CF828DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		F84B21E01A090F8100AAB793 /* Build configuration list for PBXNativeTarget "ClientTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F84B21E11A090F8100AAB793 /* EcosiaDebug */,
-				E448FC9F1AEE7A6000869B6C /* Firefox */,
-				E6FCC42B1C40562400DF6113 /* FirefoxBeta */,
+				F84B21E11A090F8100AAB793 /* Debug */,
+				E448FC9F1AEE7A6000869B6C /* Release */,
+				E6FCC42B1C40562400DF6113 /* Beta */,
+				CACF7CFC28DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 		F84B22551A0920C600AAB793 /* Build configuration list for PBXNativeTarget "ShareTo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F84B22561A0920C600AAB793 /* EcosiaDebug */,
-				E448FCA01AEE7A6000869B6C /* Firefox */,
-				E6FCC42D1C40562400DF6113 /* FirefoxBeta */,
+				F84B22561A0920C600AAB793 /* Debug */,
+				E448FCA01AEE7A6000869B6C /* Release */,
+				E6FCC42D1C40562400DF6113 /* Beta */,
+				CACF7CF928DB0D4700A996A4 /* AppCenter */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = EcosiaDebug;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 
