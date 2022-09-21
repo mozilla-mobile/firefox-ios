@@ -17,6 +17,10 @@ extension UIDevice {
         return UIDevice().type == .iPhoneSE
     }
 
+    var isIphoneLandscape: Bool {
+        return UIDevice().userInterfaceIdiom == .phone && UIWindow.isLandscape
+    }
+
     private var type: Model {
         var systemInfo = utsname()
         uname(&systemInfo)
