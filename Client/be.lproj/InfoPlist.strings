@@ -13,3 +13,12 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Гэта дазваляе захоўваць фота.";
 
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Прыватная картка";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Новая картка";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Сканаваць QR-код";
+

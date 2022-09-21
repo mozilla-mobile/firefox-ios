@@ -20,10 +20,25 @@
 "ActivityStream.ContextMenu.AddToShortcuts" = "Дадаць у цэтлікі";
 
 /* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Замацаваць у Папулярных сайтах";
+
+/* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "Замацаваць";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Выдаліць з цэтлікаў";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Выдаліць замацаваны сайт";
 
 /* The title for the unpinning a topsite action */
 "ActivityStream.ContextMenu.UnpinTopsite" = "Адмацаваць";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "У закладках";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "Наведанае";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "Назад да";
@@ -31,17 +46,50 @@
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Карткі: %d";
 
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "Вынік пошуку \"%@\"";
+
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "Нядаўна захаваныя";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "Нядаўнія закладкі";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "Больш";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "Тэндэнцыі ў Pocket";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "Рэкамендавана Pocket";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "Тэндэнцыі";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Нядаўна наведаныя";
 
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "Нядаўна захаваныя";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Паказаць усе";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "Выдаліць";
+
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Цэтлікі";
 
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "Радкі: %d";
+
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Колькасць радкоў";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "Папулярныя сайты";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Дадаць картку";
@@ -77,11 +125,23 @@
 /* Authentication prompt title */
 "Authentication required" = "Патрабуецца аўтэнтыфікацыя";
 
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "Пошук ў %@ наўпрост з адраснага радка";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "Пошук з дапамогай %@";
+
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Назад";
 
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "Блакаваць выплыўныя вокны";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Закладка";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Папка";
 
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "Загаловак";
@@ -91,6 +151,15 @@
 
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Закладкі";
+
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "Дадаць";
+
+/* A label indicating the action of bookmarking all currently open non private tabs. */
+"Bookmarks.Actions.BookmarkAllTabs" = "Закладкі на ўсе карткі";
+
+/* A label indicating the action of bookmarking the current tab. */
+"Bookmarks.Actions.BookmarkCurrentTab" = "Зрабіць закладку на гэту картку";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "Змяніць";
@@ -104,8 +173,17 @@
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Папка";
 
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Месцазнаходжанне";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Назва папкі";
+
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
 "Bookmarks.Menu.DesktopBookmarks" = "Закладкі працоўнага стала";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "Нядаўнія закладкі";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Дадаць закладку";
@@ -116,8 +194,17 @@
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "Новы межнік";
 
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "Шукаць у закладках";
+
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Загаловак";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "Захаваныя вамі закладкі з'явяцца тут.";
 
 /* Describes the date on which the breach occurred */
 "BreachAlerts.BreachDate" = "Гэтая ўцечка адбылася";
@@ -161,6 +248,9 @@
 /* Context menu item for bookmarking a link URL */
 "ContextMenu.BookmarkLinkButtonTitle" = "Дадаць закладку на спасылку";
 
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Перайсці";
+
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Адкрыта новая прыватная картка";
 
@@ -185,6 +275,12 @@
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Адкрыць у новай картцы";
 
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Адкрыць спасылку ў новай прыватнай картцы";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "Адкрыць спасылку ў новай картцы";
+
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Захаваць відарыс";
 
@@ -206,9 +302,6 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Адключыць у наладах";
 
-/* Accessibility label for action denoting closing contextual hint. */
-"ContextualHintsCloseButtonAccessibility.v105" = "Закрыць";
-
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Немагчыма дадаць старонку ў спіс для чытання";
 
@@ -217,6 +310,12 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Немагчыма загрузіць старонку.";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "Для карыстальнікаў iOS 13 Firefox цяпер аўтаматычна пераключаецца на цёмную тэму, калі ваш тэлефон усталяваны ў цёмны рэжым. Каб змяніць гэтыя паводзіны, перайдзіце ў Налады > Тэма.";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "Цёмная тэма цяпер уключае цёмную клавіятуру і цёмны пачатковы экран.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "Убудаваная ўзмоцненая ахова ад сачэння дапамагае спыніць рэкламу, якая вас пераследуе. Уключыце Строгую ахову каб заблакаваць яшчэ болей трэкераў, рэкламы і выплыўных вокнаў.";
@@ -271,11 +370,17 @@
 /* Alert dialog title when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Title" = "Скасаваць сцягванне";
 
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Сцягванні пакуль не падтрымліваюцца Firefox.";
+
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "Сцягванне скасавана";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "Няўдача сцягвання";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "Паўтарыць";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Сцягванні";
@@ -373,6 +478,18 @@
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Наперад";
 
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "Няправільны адрас электроннай пошты? Адлучыцеся ніжэй каб пачаць нанова.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "Патрабуецца пацверджанне ўліковага запісу";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "Вам трэба пацвердзіць %@. Пашукайце ў сваёй пошце спасылку для пацверждання, дасланую Firefox.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "Злучыць іншую прыладу";
+
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Уліковы запіс Firefox";
 
@@ -382,11 +499,32 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Няма інтэрнэт-злучэння";
 
-/* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "Гатовы да сканавання";
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Адкрыць налады сінхранізацыі";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "Выдаліць";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "Выдаліць уліковы запіс Firefox, звязаны з гэтай праладай, каб увайсці як іншы карыстальнік.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "Выдаліць уліковы запіс";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "Перадаслаць ліст";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "Увайсці ў сінхранізацыю";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "Атрымайце доступ да картак, закладак і пароляў з іншых прылад.";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Сінхранізаваць зараз";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "Вазьміце сваё Сеціва з сабой";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Сінхранізацыя Firefox злучана з %@";
@@ -412,6 +550,9 @@
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Лагатып Firefox, змяніць шпалеры.";
 
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Атрымайце доступ да адкрытых картак, закладак і пароляў з іншых прылад.";
+
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Даведка";
 
@@ -433,6 +574,9 @@
 /* Button to perform action to clear history for yesterday and today */
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "За сёння і ўчора";
 
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "Ачыстка нядаўняй гісторыі выдаліць гісторыю, кукі і іншыя даныя браўзера.";
+
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "Вэб-сайты, якія вы наведвалі нядаўна, з'явяцца тут.";
 
@@ -441,6 +585,15 @@
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Увайдзіце, каб бачыць спіс картак з вашых іншых прылад.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Ваш уліковы запіс патрабуе пацвярджэння.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Хочаце бачыць свае карткі з іншых прылад?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Уключыце сінхранізацыю картак, каб бачыць спіс картак з вашых іншых прылад.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Сінхранізацыя Firefox";
@@ -451,14 +604,35 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Нядаўна закрытыя";
 
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "Падключаныя прылады: %d";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Сінхранізаваныя прылады";
+
 /* Accessibility label for the tab toolbar indicating the Home button. */
 "Home" = "Хатняя старонка";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Скасаваць";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Вы заўсёды можаце змяніць гэта ў наладах";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Усталяваць хатнюю старонку";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Вы хочаце выкарыстоўваць гэтую старонку як хатнюю?";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Закладка";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Выдаліць з гісторыі";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Адкрыць у новай прыватнай картцы";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Адкрыць у прыватнай картцы";
@@ -511,14 +685,20 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Паказаць папярэднюю картку";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Уключыць аўтаматычнае закрыццё";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox будзе закрываць карткі, якія вы не праглядалі за апошні месяц.";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
+"InactiveTabs.TabTray.AutoClosePrompt.Title" = "Аўтаматычна закрываць праз месяц?";
+
 /* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
 "InactiveTabs.TabTray.CloseButtonTitle" = "Закрыць усе неактыўныя карткі";
 
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "Павялічыць памер тэксту";
-
-/* Relative time for a tab that was visited within the last few moments. */
-"just now" = "толькі што";
 
 /* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ActualSize" = "Сапраўдны памер";
@@ -529,17 +709,41 @@
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ClearRecentHistory" = "Ачысціць нядаўнюю гісторыю";
 
+/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.DownloadLink" = "Сцягнуць спасылку";
+
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Знайсці зноў";
 
+/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.NewNormalTab" = "Новая звычайная картка";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInBackground" = "Адкрыць спасылку ў фоне";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInNewTab" = "Адкрыць спасылку ў новай картцы";
+
+/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.SavePageAs" = "Захаваць старонку як…";
+
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "Закладкі";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Edit" = "Змяніць";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.File" = "Файл";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.History" = "Гісторыя";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Tools" = "Прылады";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.View" = "Выгляд";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Window" = "Акно";
@@ -562,6 +766,12 @@
 /* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowLastTab" = "Паказаць апошнюю картку";
 
+/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowTabNumber" = "Паказаць картку 1-9";
+
+/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.UndoCloseTab" = "Адмяніць закрыццё карткі";
+
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "Павялічыць";
 
@@ -570,6 +780,9 @@
 
 /* History tableview section header */
 "Last month" = "Апошні месяц";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Апошняя сінхранізацыя: %@";
 
 /* History tableview section header */
 "Last week" = "Апошні тыдзень";
@@ -597,6 +810,9 @@
 
 /* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
 "LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Увядзіце пошукавыя тэрміны";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
+"LibraryPanel.History.SyncedFromOtherDevices.v99" = "Сінхранавана з іншых прылад";
 
 /* Within the History Panel, users can see the option of viewing their history from synced tabs. */
 "LibraryPanel.History.SyncedHistory.v100" = "Сінхранізаваная гісторыя";
@@ -634,6 +850,9 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.Onboarding.LearnMoreButtonTitle" = "Падрабязней";
 
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Вашы лагіны і паролі цяпер абаронены Face ID, Touch ID альбо код-паролем прылады.";
+
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
 "Logins.PasscodeRequirement.Warning" = "Каб карыстацца функцыяй аўтазапаўнення Firefox, уключыце код-пароль прылады.";
 
@@ -645,6 +864,12 @@
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Уключыць аўтазапаўненне";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "Зменена";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "Лагін";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Не захоўваць";
@@ -669,6 +894,15 @@
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "Абнавіць";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "Лагін";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "Усё";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "Вэб-сайт";
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Фільтр";
@@ -717,6 +951,9 @@
 /* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
 "Menu.AddBookmark.Label.v99" = "Дадаць";
 
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "Замацавана ў Папулярных сайтах";
+
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "Дададзена ў цэтлікі";
 
@@ -744,11 +981,29 @@
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Сцягванні";
 
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Узмоцненая ахова ад сачэння выключана на гэтым сайце.";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Узмоцненая ахова ад сачэння ўключана на гэтым сайце.";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox блакуе міжсайтавыя трэкеры, трэкеры сацыяльных сетак, крыптамайнеры і чытнікі лічбавых адбіткаў.";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox блакуе міжсайтавыя трэкеры, трэкеры сацыяльных сетак, крыптамайнеры, чытнікі лічбавых адбіткаў і змесціва з элементамі сачэння.";
+
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Даведка";
 
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "Гісторыя";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "Спыніць";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "Кіраванне ўліковым запісам %@";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Новая картка";
@@ -757,7 +1012,19 @@
 "Menu.NightModeTurnOff.Label2" = "Выключыць начны рэжым";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "Уключыць начны рэжым";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "Уключыць начны рэжым";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "Блакаваць відарысы";
+
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "Паказваць відарысы";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "Дзеянні старонкі";
 
 /* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
 "Menu.Passwords.Label" = "Паролі";
@@ -786,6 +1053,9 @@
 /* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
 "Menu.RemovedFromShortcuts.v99" = "Выдаліць з цэтлікаў";
 
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "Выдалена з папулярных сайтаў";
+
 /* Toast displayed to the user after removing the item to the Shortcuts. */
 "Menu.RemovePin.Confirm2.v99" = "Выдалена з цэтлікаў";
 
@@ -813,11 +1083,20 @@
 /* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
 "Menu.Toolbar.Home.AccessibilityLabel.v99" = "Хатняя старонка";
 
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "Заблакавана";
+
 /* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
 "Menu.TrackingProtection.Details.Verifier" = "Пацверджана %@";
 
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Ніводнага трэкера, вядомага Firefox, не выяўлена на гэтай старонцы.";
+
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Налады аховы";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "Ахова для %@";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "Элементы сачэння";
@@ -825,852 +1104,24 @@
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "Трэкеры сацыяльных сетак";
 
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Firefox блакуе асобныя часткі старонкі, якія могуць адсочваць вашы дзеянні ў Інтэрнэце.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Блакаваць онлайн-трэкеры";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Кукі міжсайтавага сачэння";
+
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Міжсайтавыя трэкеры";
 
 /* The title that shows the number of cryptomining scripts blocked */
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Крыптамайнеры";
 
-/* Description of cross-site trackers. */
-"Menu.TrackingProtectionDescription.CrossSiteNew" = "Гэтыя кукі ідуць за вамі з сайта на сайт, каб сабраць звесткі пра тое, што вы робіце ў сеціве. Яны ўсталёўваюцца трэцімі бакамі, такімі як рэкламадаўцы і аналітычныя кампаніі.";
-
-/* Description of cryptominers. */
-"Menu.TrackingProtectionDescription.CryptominersNew" = "Майнеры крыптавалют таемна выкарыстоўваюць вылічальную магутнасць вашай сістэмы, каб здабываць лічбавыя грошы. Скрыпты для здабычы крыптавалют разраджаюць вашу батарэю, запавольваюць працу камп'ютара і могуць павялічыць вашы выдаткі на электраэнергію.";
-
-/* Description of social network trackers. */
-"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Сацыяльныя сеткі размяшчаюць трэкеры на іншых сайтах, каб стварыць ваш больш поўны таргетаваны профіль. Блакаванне гэтых трэкераў зменшыць колькасць звестак якія збіраюцца пра вашу дзейнасць у Інтэрнэце.";
-
-/* The title that shows the number of fingerprinting scripts blocked */
-"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Збіральнікі адбіткаў пальцаў";
-
-/* The title for the option to view the What's new page. */
-"Menu.WhatsNew.Title" = "Што новага";
-
-/* Accessibility label for Mobile Device image in remote tabs list */
-"mobile device" = "мабільнае прылада";
-
-/* Relative date for dates older than a month and less than two months. */
-"more than a month ago" = "больш за месяц таму";
-
-/* Description for a date more than a week ago, but less than a month ago. */
-"more than a week ago" = "больш за тыдзень таму";
-
-/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
-"Navigation Toolbar" = "Панэль навігацыі";
-
-/* Accessibility label for the New Tab button in the tab toolbar.
-   Accessibility Label for the tab toolbar New tab button */
-"New Tab" = "Новая картка";
-
-/* Restore Tabs Negative Action */
-"No" = "Не";
-
-/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
-"No tabs" = "Няма картак";
-
 /* OK button */
 "OK" = "OK";
 
-/* Restore Tabs Affirmative Action */
-"Okay" = "Добра";
-
-/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
-"Onboarding.IntroAction.v102" = "Пачаць";
-
-/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
-"Onboarding.IntroDescriptionPart1.v102" = "Незалежны. Некамерцыйны. Для добрых спраў.";
-
-/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
-"Onboarding.IntroDescriptionPart2.v102" = "Імкнецца стварыць лепшы Інтэрнэт для ўсіх.";
-
-/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
-"Onboarding.LaterAction.v102" = "Не зараз";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Sync.Description.v106" = "Вазьміце карткі і паролі з іншых прылад, каб працягнуць з таго месца, дзе вы спыніліся.";
-
-/* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
-"Onboarding.Sync.Skip.Action.v106" = "Прапусціць";
-
-/* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Sync.Title.v106" = "Пераходзьце з тэлефона на ноўтбук і назад";
-
-/* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
-"Onboarding.SyncAction.v102" = "Зарэгіструйцеся і ўвайдзіце";
-
-/* Description for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. */
-"Onboarding.SyncDescription.v102" = "Аўтаматычна сінхранізуйце карткі і закладкі паміж прыладамі для бесперабойнага вэб-сёрфінга.";
-
-/* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
-"Onboarding.SyncTitle.v102" = "Сінхранізуйце, каб заставацца ў курсе";
-
-/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
-"Onboarding.Wallpaper.Accessibility.Classic.v106" = "Класічныя шпалеры";
-
-/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
-"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Лімітаванае выданне шпалер";
-
-/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
-"Onboarding.Wallpaper.Action.v106" = "Прагледзець больш шпалер";
-
-/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
-"Onboarding.Wallpaper.Description.v106" = "Выберыце шпалеры, якія вам пасуюць.";
-
-/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
-"Onboarding.Wallpaper.Title.v106" = "Паспрабуйце ўсплёск колеру";
-
-/* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
-"Onboarding.WallpaperAction.v102" = "Усталюйце шпалеры";
-
-/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
-"Onboarding.WallpaperTitle.v102" = "Выберыце шпалеры Firefox";
-
-/* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Welcome.Description.v106" = "Firefox ставіць людзей вышэй за прыбытак і па змаўчанні абараняе вашу прыватнасць.";
-
-/* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Welcome.Title.v106" = "Сардэчна запрашаем у незалежны інтэрнэт";
-
-/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
-"Onboarding.WhatsNew.Button.Title" = "Пачаць агляданне";
-
-/* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Ой! Firefox пацярпеў крах";
-
-/* See http://mzl.la/1G7uHo7 */
-"Open Settings" = "Адкрыць налады";
-
-/* Toggle tabs syncing setting */
-"Open Tabs" = "Адкрытыя карткі";
-
-/* Title of the message shown when the user attempts to navigate to an invalid link. */
-"OpenURL.Error.Title" = "Немагчыма адкрыць старонку";
-
-/* Password textbox in Authentication prompt */
-"Password" = "Пароль";
-
-/* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Гэта дазваляе захаваць відарыс у сваю фотастужку.";
-
-/* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox хоча атрымаць доступ да вашых фатаграфій";
-
-/* Button for closing the menu action sheet */
-"PhotonMenu.close" = "Закрыць";
-
-/* Privacy section title */
-"Privacy" = "Прыватнасць";
-
-/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
-"Privacy Policy" = "Палітыка прыватнасці";
-
-/* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "Злучэнне не абаронена";
-
-/* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "Бяспечнае злучэнне";
-
-/* Title for quick-search engines settings section. */
-"Quick-Search Engines" = "Сістэмы хуткага пошуку";
-
-/* A label indicating the action that a user can rate the Firefox app in the App store. */
-"Ratings.Settings.RateOnAppStore" = "Ацаніце ў App Store";
-
-/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
-"read" = "прачытана";
-
-/* Accessibility label for the Reader View button */
-"Reader View" = "Рэжым чытання";
-
-/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
-"ReaderMode.Available.VoiceOverAnnouncement" = "Даступны рэжым чытання";
-
-/* Panel accessibility label */
-"Reading list" = "Спіс для чытання";
-
-/* Title for the Recently Closed Tabs Panel */
-"RecentlyClosedTabsPanel.Title" = "Нядаўна закрытыя";
-
-/* More button text for Recently Saved items at the home page. */
-"RecentlySaved.Actions.More" = "Паказаць усе";
-
-/* Accessibility Label for the tab toolbar Reload button */
-"Reload" = "Абнавіць";
-
-/* Accessibility label for the reload button */
-"Reload page" = "Перазагрузіць старонку";
-
-/* Title for the button that removes a reading list item */
-"Remove" = "Выдаліць";
-
-/* Name for button removing current article from reading list in reader mode */
-"Remove from Reading List" = "Выдаліць са спісу для чытання";
-
-/* Cancel button text shown in reopen-alert at home page. */
-"ReopenAlert.Actions.Cancel" = "Скасаваць";
-
-/* Reopen button text shown in reopen-alert at home page. */
-"ReopenAlert.Actions.Reopen" = "Адкрыць паўторна";
-
-/* Reopen alert title shown at home page. */
-"ReopenAlert.Title" = "Паўторна адкрыць апошнюю закрытую картку";
-
-/* Accessibility label for button resetting font size in display settings of reader mode */
-"Reset text size" = "Скінуць памер тэксту";
-
-/* Font type setting in the reading view settings */
-"Sans-serif" = "Без засечак";
-
-/* OK button to dismiss the error prompt. */
-"ScanQRCode.Error.OK.Button" = "OK";
-
-/* Text for the instructions label, displayed in the QR scanner view */
-"ScanQRCode.Instructions.Label" = "Размясціце QR-код унутры рамкі сканавання";
-
-/* Text of the prompt that is shown to the user when the data is invalid */
-"ScanQRCode.InvalidDataError.Message" = "Несапраўдныя звесткі";
-
-/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Прайдзіце ў ‘Налады’ прылады > ‘Firefox’. Дазвольце Firefox доступ да камеры.";
-
-/* Title for the QR code scanner view. */
-"ScanQRCode.View.Title" = "Сканаваць QR-код";
-
-/* Accessibility Label for the tab toolbar Search button
-   Navigation title for search settings.
-   Open search section of settings */
-"Search" = "Пошук";
-
-/* The text shown in the URL bar on about:home */
-"Search or enter address" = "Увядзіце запыт або адрас";
-
-/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
-"Search.Awesomebar.SwitchToTab" = "Перайсці ў картку";
-
-/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Прапановы Firefox";
-
-/* The message that asks the user to Add the search provider explaining where the search engine will appear */
-"Search.ThirdPartyEngines.AddMessage" = "Новая пошукавая сістэма з'явіцца ў панэлі хуткага пошуку.";
-
-/* The success message that appears after a user sucessfully adds a new search engine */
-"Search.ThirdPartyEngines.AddSuccess" = "Дададзены пашукавік!";
-
-/* The title that asks the user to Add the search provider */
-"Search.ThirdPartyEngines.AddTitle" = "Дадаць пашукавік?";
-
-/* The cancel button if you do not want to add a search engine. */
-"Search.ThirdPartyEngines.Cancel" = "Скасаваць";
-
-/* A title stating that we failed to add custom search engine. */
-"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Няўдача";
-
-/* A title explaining that we failed to add a search engine */
-"Search.ThirdPartyEngines.FailedMessage" = "Не ўдалося дадаць пашуковую сістэму.";
-
-/* A title explaining that we failed to add a search engine */
-"Search.ThirdPartyEngines.FailedTitle" = "Няўдача";
-
-/* A message explaining fault in custom search engine form. */
-"Search.ThirdPartyEngines.FormErrorMessage" = "Калі ласка, запоўніце ўсе палі правільна.";
-
-/* A title stating that we failed to add custom search engine. */
-"Search.ThirdPartyEngines.FormErrorTitle" = "Няўдача";
-
-/* The confirmation button */
-"Search.ThirdPartyEngines.OK" = "OK";
-
-/* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Адправіць паведамленне пра збой, каб Mozilla магла выправіць гэту праблему?";
-
-/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
-"Send Feedback" = "Даслаць водгук";
-
-/* Used as a button label for crash dialog prompt */
-"Send Report" = "Адправіць паведамленне";
-
-/* Button title for cancelling share screen
-   Close button in top navigation bar */
-"SendTo.Cancel.Button" = "Скасаваць";
-
-/* Header for the list of devices table */
-"SendTo.DeviceList.Text" = "Даступныя прылады:";
-
-/* Message in error prompt explaining why the URL is invalid. */
-"SendTo.Error.Message" = "Можна дзяліцца толькі HTTP і HTTPS спасылкамі.";
-
-/* OK button to dismiss the error prompt. */
-"SendTo.Error.OK.Button" = "OK";
-
-/* Title of error prompt displayed when an invalid URL is shared. */
-"SendTo.Error.Title" = "Нельга падзяліцца спасылкай, якой вы спрабуеце падзяліцца.";
-
-/* Title of the dialog that allows you to send a tab to a different device */
-"SendTo.NavBar.Title" = "Даслаць картку";
-
-/* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Калі ласка, адкрыйце Firefox, прайдзіце ў Налады і ўвайдзіце для працягу.";
-
-/* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Вы не увайшлі ў свой ўліковы запіс Firefox.";
-
-/* Navigation bar button to Send the current page to a device */
-"SendTo.SendAction.Text" = "Даслаць";
-
-/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
-"SentTab_TabArrivingNotification_NoDevice_body" = "Атрымана новая картка з іншай прылады.";
-
-/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
-"SentTab_TabArrivingNotification_NoDevice_title" = "Атрымана картка";
-
-/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
-"SentTab_TabArrivingNotification_WithDevice_body" = "Новая картка паступіла ў %@";
-
-/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
-"SentTab_TabArrivingNotification_WithDevice_title" = "Картка атрымана з %@";
-
-/* Body of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.body" = "Націсніце каб пачаць";
-
-/* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Сінхранізацыя Firefox";
-
-/* Label for an action used to view one or more tabs from a notification. */
-"SentTab.ViewAction.title" = "Прагледзець";
-
-/* Sepia theme setting in Reading View settings */
-"Sepia" = "Сепія";
-
-/* Font type setting in the reading view settings */
-"Serif" = "З засечкамі";
-
-/* Title in the settings view controller title bar */
-"Settings" = "Налады";
-
-/* The button text in Search Settings that opens the Custom Search Engine view. */
-"Settings.AddCustomEngine" = "Дадаць пашукавік";
-
-/* The text on the Save button when saving a custom search engine */
-"Settings.AddCustomEngine.SaveButtonText" = "Захаваць";
-
-/* The title of the  Custom Search Engine view. */
-"Settings.AddCustomEngine.Title" = "Дадаць пашукавік";
-
-/* The title for the field which sets the title for a custom search engine. */
-"Settings.AddCustomEngine.TitleLabel" = "Назва";
-
-/* The placeholder for Title Field when saving a custom search engine. */
-"Settings.AddCustomEngine.TitlePlaceholder" = "Пашукавік";
-
-/* The title for URL Field */
-"Settings.AddCustomEngine.URLLabel" = "URL";
-
-/* The placeholder for URL Field when saving a custom search engine */
-"Settings.AddCustomEngine.URLPlaceholder" = "URL (замяніце запыт на %s)";
-
-/* Button in Data Management that clears private data for the selected items. */
-"Settings.ClearAllWebsiteData.Clear.Button" = "Выдаліць усе звесткі вэб-сайта";
-
-/* Button in settings that clears private data for the selected items. */
-"Settings.ClearPrivateData.Clear.Button" = "Выдаліць асабістыя звесткі";
-
-/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
-"Settings.ClearPrivateData.SectionName" = "Выдаліць асабістыя звесткі";
-
-/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
-"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Выдаліць элементы: %1$@";
-
-/* Copy app version alert shown in settings. */
-"Settings.CopyAppVersion.Title" = "Скапіявана ў буфер абмену";
-
-/* Default text in search bar for Data Management */
-"Settings.DataManagement.SearchLabel" = "Фільтр сайтаў";
-
-/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
-"Settings.DataManagement.SectionName" = "Кіраванне дадзенымі";
-
-/* Title displayed in header of the setting panel. */
-"Settings.DataManagement.Title" = "Кіраванне дадзенымі";
-
-/* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox спыніць сінхранізацыю з вашым уліковым запісам, але не выдаліць дадзеныя аглядання на гэтай прыладзе.";
-
-/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
-"Settings.Disconnect.Button" = "Адлучыць";
-
-/* Cancel action button in alert when user is prompted for disconnect */
-"Settings.Disconnect.CancelButton" = "Скасаваць";
-
-/* Destructive action button in alert when user is prompted for disconnect */
-"Settings.Disconnect.DestructiveButton" = "Адлучыцца";
-
-/* Title of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Title" = "Адлучыць?";
-
-/* Section header for brightness slider. */
-"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Парог";
-
-/* Display (theme) settings label to show if manually switch theme is enabled. */
-"Settings.DisplayTheme.Manual.StatusLabel" = "Уручную";
-
-/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
-"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Выберыце тэму, якая вам падабаецца";
-
-/* Display (theme) setting to choose the theme manually. */
-"Settings.DisplayTheme.Manual.SwitchTitle" = "Уручную";
-
-/* Option choice in display theme settings for dark theme */
-"Settings.DisplayTheme.OptionDark" = "Цёмная";
-
-/* Option choice in display theme settings for light theme */
-"Settings.DisplayTheme.OptionLight" = "Светлая";
-
-/* Display (theme) settings footer describing how the brightness slider works. */
-"Settings.DisplayTheme.SectionFooter" = "Тэма будзе аўтаматычна змяняцца ў залежнасці ад яркасці дысплея. Вы можаце ўсталяваць парог змены тэмы, пры якім тэма будзе змяняцца. Кругавы індыкатар паказвае ваш бягучы узровень яркасці.";
-
-/* Switch mode settings section title */
-"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Рэжым пераключэння";
-
-/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
-"Settings.DisplayTheme.SwitchSubtitle" = "Пераключаць аўтаматычна ў залежнасці ад яркасці экрана";
-
-/* Display (theme) settings label to show if automatically switch theme is enabled.
-   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
-"Settings.DisplayTheme.SwitchTitle" = "Аўтаматычна";
-
-/* System theme settings section title */
-"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Сістэмная тэма";
-
-/* System theme settings switch to choose whether to use the same theme as the system */
-"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Выкарыстоўваць сістэмную светлую/цёмную тэму";
-
-/* Theme picker settings section title */
-"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Выбар тэмы";
-
-/* Title in main app settings for Theme settings */
-"Settings.DisplayTheme.Title.v2" = "Тэма";
-
-/* Label used for the device name settings section. */
-"Settings.FxA.DeviceName" = "Назва прылады";
-
-/* Label used as a section title in the Firefox Accounts Settings screen. */
-"Settings.FxA.Sync.SectionName" = "Налады сінхранізацыі";
-
-/* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Уліковы запіс Firefox";
-
-/* General settings section title */
-"Settings.General.SectionName" = "Агульныя";
-
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
-"Settings.Home.Option.JumpBackIn" = "Перайсці назад да";
-
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
-"Settings.Home.Option.Pocket" = "Рэкамендавана Pocket";
-
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
-"Settings.Home.Option.RecentlySaved" = "Нядаўна захаваныя";
-
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
-"Settings.Home.Option.RecentlyVisited" = "Нядаўна наведаныя";
-
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
-"Settings.Home.Option.Shortcuts" = "Цэтлікі";
-
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off */
-"Settings.Home.Option.SponsoredPocket.v103" = "Артыкулы ад спонсараў";
-
-/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
-"Settings.Home.Option.StartAtHome.AfterFourHours" = "Хатняя старонка пасля чатырох гадзін бяздзейнасці";
-
-/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
-"Settings.Home.Option.StartAtHome.Always" = "Хатняя старонка";
-
-/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
-"Settings.Home.Option.StartAtHome.Never" = "Апошняя картка";
-
-/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
-"Settings.Home.Option.StartAtHome.Title" = "Пачатковы экран";
-
-/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
-"Settings.Home.Option.Title.v101" = "Паказваць на хатняй старонцы";
-
-/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
-"Settings.Home.Option.Wallpaper" = "Шпалеры";
-
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Чыстыя тыповыя шпалеры.";
-
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Шпалеры Firefox, узор узыходу сонца.";
-
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
-"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Пераключальнік цыкла шпалер на хатняй старонцы";
-
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Шпалеры Firefox, узор узгоркаў у прыцемках.";
-
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
-"Settings.Home.Option.Wallpaper.CollectionTitle" = "ПАЧАТКОВЫ ЭКРАН";
-
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Змяняць шпалеры дотыкам да лагатыпа хатняй старонкі Firefox";
-
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
-"Settings.Home.Option.Wallpaper.Title" = "Шпалеры";
-
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
-"Settings.Home.Option.Wallpaper.UpdatedToast" = "Шпалеры абноўлены!";
-
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
-"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Паглядзець";
-
-/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
-"Settings.HomePage.SectionName" = "Хатняя старонка";
-
-/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
-"Settings.Homepage.Shortcuts.Rows.v100" = "Радкі";
-
-/* This string is the title of the page to customize the number of rows in the shortcuts section */
-"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Радкі";
-
-/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
-"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Цэтлікі";
-
-/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
-"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Цэтлікі";
-
-/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
-"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Спонсарскія цэтлікі";
-
-/* Toggled OFF to hide the shortcuts section */
-"Settings.Homepage.Shortcuts.ToggleOff.v100" = "Выкл.";
-
-/* Toggled ON to show the shortcuts section */
-"Settings.Homepage.Shortcuts.ToggleOn.v100" = "Укл.";
-
-/* Title of the setting section containing the URL of the current home page. */
-"Settings.HomePage.URL.Title" = "Бягучая хатняя старонка";
-
-/* Button in settings to use the current page as home page. */
-"Settings.HomePage.UseCurrent.Button" = "Ужыць цяперашнюю старонку";
-
-/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
-"Settings.LoginsAndPasswordsTitle" = "Лагіны & Паролі";
-
-/* Label used to set a custom url as the new tab option (homepage). */
-"Settings.NewTab.CustomURL" = "Свой URL-адрас";
-
-/* Option in settings to show a blank page when you open a new tab */
-"Settings.NewTab.Option.BlankPage" = "Пустая старонка";
-
-/* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Хатняя старонка Firefox";
-
-/* Option in settings to show your homepage when you open a new tab */
-"Settings.NewTab.Option.HomePage" = "Хатняя старонка";
-
-/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
-"Settings.NewTab.SectionName" = "Новая картка";
-
-/* Title displayed in header of the setting panel. */
-"Settings.NewTab.Title" = "Новая картка";
-
-/* Label at the top of the New Tab screen after entering New Tab in settings */
-"Settings.NewTab.TopSectionName" = "Паказаць";
-
-/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
-"Settings.NewTab.TopSectionNameFooter" = "Выберыце, што загружаць пры адкрыцці новай карткі";
-
-/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
-"Settings.NoImageModeBlockImages.Label.v99" = "Блакаваць відарысы";
-
-/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Пры адкрыцці Firefox";
-
-/* Title for Open With Settings */
-"Settings.OpenWith.PageTitle" = "Адкрываць паштовыя спасылкі ў";
-
-/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
-"Settings.OpenWith.SectionName" = "Праграма для пошты";
-
-/* Touch ID prompt subtitle when accessing logins and passwords */
-"Settings.Passwords.FingerPrintReason.v103" = "Выкарыстайце адбітак пальца, каб атрымаць доступ да пароляў зараз.";
-
-/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
-"Settings.Passwords.OnboardingMessage.v103" = "Вашы паролі цяпер абаронены Face ID, Touch ID альбо код-паролем прылады.";
-
-/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
-"Settings.Passwords.SavePasswords.v103" = "Захоўваць паролі";
-
-/* Title for the passwords screen. */
-"Settings.Passwords.Title.v103" = "Паролі";
-
-/* Setting to enable the built-in password manager */
-"Settings.SaveLogins.Title" = "Захоўваць лагіны";
-
-/* Button displayed at the top of the search settings. */
-"Settings.Search.Done.Button" = "Гатова";
-
-/* Button displayed at the top of the search settings. */
-"Settings.Search.Edit.Button" = "Змяніць";
-
-/* title for a link that explains how mozilla collects telemetry */
-"Settings.SendUsage.Link" = "Падрабязней.";
-
-/* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla імкнецца збіраць толькі тыя звесткі, якія патрэбны для работы і паляпшэння Firefox для ўсіх.";
-
-/* The title for the setting to send usage data. */
-"Settings.SendUsage.Title" = "Адпраўляць звесткі аб выкарыстанні";
-
-/* Description displayed under the ”Show Link Previews” option */
-"Settings.ShowLinkPreviews.Status" = "Пры працяглым націску на спасылку";
-
-/* The description of the open new tab siri shortcut */
-"Settings.Siri.OpenTabShortcut" = "Адкрыць новую картку";
-
-/* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Выкарыстоўвайце каманды Siri, каб хутка адкрыць Firefox праз Siri";
-
-/* The option that takes you to the siri shortcuts settings page */
-"Settings.Siri.SectionName" = "Каманды Siri";
-
-/* Title for a link that explains what Mozilla means by Studies */
-"Settings.Studies.Toggle.Link" = "Даведацца больш.";
-
-/* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox можа ўсталёўваць і выконваць даследаванні час ад часу.";
-
-/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
-"Settings.Studies.Toggle.Title" = "Даследаванні";
-
-/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
-"Settings.Sync.ButtonDescription.v103" = "Увайсці, каб сінхранізаваць карткі, закладкі, паролі і іншае.";
-
-/* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
-"Settings.Sync.ButtonTitle.v103" = "Сінхранізаваць і захаваць дадзеныя";
-
-/* Title for the page where the user sign in to their Firefox Sync account. */
-"Settings.Sync.SignInView.Title.v103" = "Сінхранізаваць і захаваць дадзеныя";
-
-/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
-"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Неактыўныя карткі";
-
-/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
-"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Карткі, якія вы не праглядалі на працягу двух тыдняў, будуць перанесеныя ў раздзел неактыўных.";
-
-/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
-"Settings.Tabs.CustomizeTabsSection.TabGroups" = "Групы картак";
-
-/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
-"Settings.Tabs.CustomizeTabsSection.Title" = "Уладкаваць латок картак";
-
-/* In the settings menu, this is the title for the Tabs customization section option */
-"Settings.Tabs.Title" = "Карткі";
-
-/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
-"Settings.Toolbar.Bottom" = "Унізе";
-
-/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
-"Settings.Toolbar.SettingsTitle" = "Панэль інструментаў";
-
-/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
-"Settings.Toolbar.Top" = "Уверсе";
-
-/* Dismiss button for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Button" = "OK, зразумела";
-
-/* Title for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Title" = "Увага!";
-
-/* The Title on info view which shows a list of all blocked websites */
-"Settings.TrackingProtection.Info.BlocksTitle" = "ЗАБЛАКАВАНЫ";
-
-/* 'Learn more' info link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.LearnMore" = "Падрабязней";
-
-/* Title for tracking protection options section where level can be selected. */
-"Settings.TrackingProtection.ProtectionLevelTitle" = "Узровень абароны";
-
-/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
-"Settings.TrackingProtection.SectionName" = "Ахова ад сачэння";
-
-/* Tracking protection settings option for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BasicBlockList" = "Стандартная (прадвызначана)";
-
-/* Tracking protection settings option for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrict" = "Строгая";
-
-/* Settings option to specify that Tracking Protection is on */
-"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Узмоцненая ахова ад сачэння";
-
-/* Button shows all websites on website data tableview */
-"Settings.WebsiteData.ButtonShowMore" = "Паказаць больш";
-
-/* Description of the confirmation dialog shown when a user tries to clear their private data. */
-"Settings.WebsiteData.ConfirmPrompt" = "Гэта дзеянне выдаліць усе вашы звесткі вэб-сайтаў. Дзеянне немагчыма адмяніць.";
-
-/* Action label on share extension to add page to the Firefox reading list. */
-"ShareExtension.AddToReadingListAction.Title" = "Дадаць у спіс для чытання";
-
-/* Share extension label shown after user has performed 'Add to Reading List' action. */
-"ShareExtension.AddToReadingListActionDone.Title" = "Дададзена ў спіс для чытання";
-
-/* Action label on share extension to bookmark the page in Firefox. */
-"ShareExtension.BookmarkThisPageAction.Title" = "Дадаць закладку на гэту старонкі";
-
-/* Share extension label shown after user has performed 'Bookmark this Page' action. */
-"ShareExtension.BookmarkThisPageActionDone.Title" = "У закладках";
-
-/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
-"ShareExtension.LoadInBackgroundAction.Title" = "Загрузіць у фонавым рэжыме";
-
-/* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Адкрыць у Firefox";
-
-/* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Шукаць у Firefox";
-
-/* Accessibility label for the tabs button in the (top) tab toolbar
-   Accessibility Label for the tabs button in the tab toolbar */
-"Show Tabs" = "Паказаць карткі";
-
-/* Show the on-boarding screen again from the settings */
-"Show Tour" = "Правесці тур";
-
-/* Accessibility Label for the tab toolbar Stop button */
-"Stop" = "Спыніць";
-
-/* Support section title */
-"Support" = "Падтрымка";
-
-/* Message displayed when the user's account is syncing with ellipsis at the end */
-"Sync.SyncingEllipsis.Label" = "Сінхранізацыя…";
-
-/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"Tab.ShowTabTray.KeyCodeTitle" = "Паказаць усе карткі";
-
-/* Accessibility label for the Tabs Tray view. */
-"Tabs Tray" = "Латок картак";
-
-/* The button to undo the delete all tabs */
-"Tabs.DeleteAllUndo.Button" = "Адмяніць";
-
-/* The label indicating that all the tabs were closed */
-"Tabs.DeleteAllUndo.Title" = "%d картка(ак) закрыта";
-
-/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
-"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Праглядзець неактыўныя карткі";
-
-/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
-"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Схаваць неактыўныя карткі";
-
-/* Accessibility label for the Add Tab button in the Tab Tray. */
-"TabTray.AddTab.Button" = "Дадаць картку";
-
-/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.CloseAllTabs.KeyCodeTitle" = "Закрыць усе карткі";
-
-/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
-"TabTray.Header.FilteredTabs.SectionHeader" = "Іншыя";
-
-/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
-"TabTray.InactiveTabs.SectionTitle" = "Неактыўныя карткі";
-
-/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"TabTray.OpenNewTab.KeyCodeTitle" = "Адкрыць новую картку";
-
-/* The title on the button to look at private tabs. */
-"TabTray.SegmentedControlTitles.PrivateTabs" = "Прыватныя";
-
-/* The title on the button to look at synced tabs. */
-"TabTray.SegmentedControlTitles.SyncedTabs" = "Сінхранізаваныя";
-
-/* The title on the button to look at regular tabs. */
-"TabTray.SegmentedControlTitles.Tabs" = "Карткі";
-
-/* The title for the tab tray */
-"TabTray.Title" = "Адкрытыя карткі";
-
-/* Relative date for date in past week. */
-"this week" = "гэтым тыднем";
-
-/* label for Not Now button */
-"Toasts.NotNow" = "Не зараз";
-
-/* Open App Store button */
-"Toasts.OpenAppStore" = "Адкрыць App Store";
-
-/* Label for button to undo the action just performed */
-"Toasts.Undo" = "Адмяніць";
-
-/* History tableview section header */
-"Today" = "Сёння";
-
-/* Accessibility label for the Menu button. */
-"Toolbar.Menu.AccessibilityLabel" = "Меню";
-
-/* Accessibility label for the Close All Tabs menu button. */
-"Toolbar.Menu.CloseAllTabs" = "Закрыць усе карткі";
-
-/* Button shown in editing mode to remove this site from the top sites panel. */
-"TopSites.RemovePage.Button" = "Выдаліць старонку — %@";
-
-/* Button to disallow the page to be translated to the user locale language */
-"TranslationToastHandler.PromptTranslate.Cancel" = "Не";
-
-/* Button to allow the page to be translated to the user locale language */
-"TranslationToastHandler.PromptTranslate.OK" = "Так";
-
-/* Tile title for Twitter */
-"Twitter" = "Twitter";
-
-/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
-"UIMenuItem.PasteGo" = "Уставіць і перайсці";
-
-/* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Шукаць з дапамогай Firefox";
-
-/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
-"Upgrade.SyncSign.Action.v106" = "Увайсці";
-
-/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.SyncSign.Description.v106" = "Працягвайце з таго месца, дзе спыніліся, з дапамогай картак з іншых прылад, якія зараз знаходзяцца на вашай хатняй старонцы.";
-
-/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
-"Upgrade.Welcome.Action.v106" = "Пачаць";
-
-/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.Welcome.Title.v106" = "Сардэчна запрашаем у больш асабісты Інтэрнэт";
-
-/* Username textbox in Authentication prompt */
-"Username" = "Імя карыстальніка";
-
-/* Accessibility label for the main web content view */
-"Web content" = "Сеціўнае змесціва";
-
-/* See http://mzl.la/1LXbDOL */
-"Welcome to your Reading List" = "Вітаем у вашым спісе для чытання";
-
-/* Restore Tabs Prompt Title */
-"Well, this is embarrassing." = "Нам вельмі шкада.";
-
-/* Tile title for Wikipedia */
-"Wikipedia" = "Wikipedia";
-
-/* Relative date for yesterday. */
-"yesterday" = "учора";
-
-/* History tableview section header */
-"Yesterday" = "Учора";
-
-/* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "На іншых вашых прыладах у Firefox не адкрыта ніводнай карткі.";
-
-/* Your Rights settings section title */
-"Your Rights" = "Вашы правы";
-
-/* Tile title for YouTube */
-"YouTube" = "YouTube";
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Сайты, якія вы наведваеце найчасцей, з'явяцца тут.";
 
