@@ -273,6 +273,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
     func applyTheme() {
         view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        // TODO: Remove this once the new theme system is implemented on the homepage FXIOS-4882
+        reloadView()
     }
 
     func scrollToTop(animated: Bool = false) {
