@@ -2,9 +2,9 @@ name: UnitTests
 
 on:
   push:
-    branches: [ main, main-39, main-104-no-strings ]
-  pull_request:
     branches: [ main, main-39 ]
+  pull_request:
+    branches: [ main, main-39, main-104 ]
 
 jobs:
   test:
