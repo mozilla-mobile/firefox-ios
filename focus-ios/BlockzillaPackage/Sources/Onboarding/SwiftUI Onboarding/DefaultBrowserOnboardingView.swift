@@ -68,7 +68,7 @@ struct DefaultBrowserOnboardingView: View {
         .padding([.top, .leading, .trailing], .viewPadding)
         .navigationBarHidden(true)
         .background(Color.secondOnboardingScreenBackground
-            .edgesIgnoringSafeArea(.bottom))
+            .edgesIgnoringSafeArea([.top, .bottom]))
     }
 }
 
