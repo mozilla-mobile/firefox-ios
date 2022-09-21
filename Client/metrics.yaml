@@ -2919,6 +2919,7 @@ adjust:
         type: string
     send_in_pings:
       - first-session
+      - metrics
       - events
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11089
@@ -2937,6 +2938,7 @@ adjust:
       Firefox-iOS.
     send_in_pings:
       - first-session
+      - metrics
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_reviews:
@@ -2954,6 +2956,7 @@ adjust:
       Firefox-iOS.
     send_in_pings:
       - first-session
+      - metrics
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_reviews:
@@ -2971,6 +2974,7 @@ adjust:
       Firefox-iOS.
     send_in_pings:
       - first-session
+      - metrics
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_reviews:
@@ -2988,6 +2992,7 @@ adjust:
       Firefox-iOS.
     send_in_pings:
       - first-session
+      - metrics
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11089
     data_reviews:
