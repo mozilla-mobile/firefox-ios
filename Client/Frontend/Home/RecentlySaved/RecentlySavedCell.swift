@@ -97,7 +97,7 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.generalCornerRadius).cgPath
     }
 
@@ -207,7 +207,7 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
 
     private func setupShadow() {
         rootContainer.layer.cornerRadius = UX.generalCornerRadius
-        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.generalCornerRadius).cgPath
         rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         rootContainer.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity

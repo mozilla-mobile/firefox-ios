@@ -246,7 +246,7 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
 
     private func setupShadow() {
         rootContainer.layer.cornerRadius = UX.cellCornerRadius
-        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.cellCornerRadius).cgPath
         rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         rootContainer.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
