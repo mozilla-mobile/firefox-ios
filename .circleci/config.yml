@@ -5,12 +5,9 @@ jobs:
     environment:
       CI: true
     macos:
-      xcode: "13.0.0"
+      xcode: "13.4.1"
     steps:
       - checkout
-      - run:
-          name: bootstrap MOZ App Services
-          command: ./carthage_bootstrap_moz_services.sh
       - restore_cache:
           key: 1-gems-{{ checksum "Gemfile.lock" }}
       - run: bundle check || bundle install --path vendor/bundle
@@ -25,14 +22,8 @@ jobs:
           name: clean packages
           command: xcodebuild -scheme Ecosia -project Client.xcodeproj clean
       - run:
-          name: npm install
-          command: npm install 
-      - run:
-          name: npm run build
-          command: npm run build
-      - run:
           name: setup content blocking scripts
-          command: (cd content-blocker-lib-ios/ContentBlockerGen && swift run)
+          command: ./content_blocker_update.sh
       - run:
           name: Build and deploy to Testflight
           command: bundle exec fastlane testflight_live
@@ -41,12 +32,9 @@ jobs:
     environment:
       CI: true
     macos:
-      xcode: "13.0.0"
+      xcode: "13.4.1"
     steps:
       - checkout
-      - run:
-          name: bootstrap MOZ App Services
-          command: ./carthage_bootstrap_moz_services.sh
       - restore_cache:
           key: 1-gems-{{ checksum "Gemfile.lock" }}
       - run: bundle check || bundle install --path vendor/bundle
@@ -61,14 +49,8 @@ jobs:
           name: clean packages
           command: xcodebuild -scheme Ecosia -project Client.xcodeproj clean
       - run:
-          name: npm install
-          command: npm install 
-      - run:
-          name: npm run build
-          command: npm run build
-      - run:
           name: setup content blocking scripts
-          command: (cd content-blocker-lib-ios/ContentBlockerGen && swift run)
+          command: ./content_blocker_update.sh
       - run:
           name: Build and deploy to Testflight
           command: bundle exec fastlane testflight_beta
@@ -77,12 +59,9 @@ jobs:
     environment:
       CI: true
     macos:
-      xcode: "13.0.0"
+      xcode: "13.4.1"
     steps:
       - checkout
-      - run:
-          name: bootstrap MOZ App Services
-          command: ./carthage_bootstrap_moz_services.sh
       - restore_cache:
           key: 1-gems-{{ checksum "Gemfile.lock" }}
       - run: bundle check || bundle install --path vendor/bundle
@@ -97,14 +76,8 @@ jobs:
           name: clean packages
           command: xcodebuild -scheme Ecosia -project Client.xcodeproj clean
       - run:
-          name: npm install
-          command: npm install 
-      - run:
-          name: npm run build
-          command: npm run build
-      - run:
           name: setup content blocking scripts
-          command: (cd content-blocker-lib-ios/ContentBlockerGen && swift run)
+          command: ./content_blocker_update.sh
       - run:
           name: Build and deploy to AppCenter
           command: bundle exec fastlane appcenter

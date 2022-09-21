@@ -3,7 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/. 
 opt_out_usage
 
-fastlane_version "2.178.0"
+fastlane_version "2.210.0"
 
 default_platform :ios
 
@@ -34,7 +34,7 @@ platform :ios do
   desc "Deploy to MS App-Center"
   lane :appcenter do
     match(
-      app_identifier: ['com.ecosia.ecosiaapp.firefox', 'com.ecosia.ecosiaapp.firefox.WidgetKit', 'com.ecosia.ecosiaapp.firefox.ShareTo', 'com.ecosia.ecosiaapp.firefox.CredentialProvider'], 
+      app_identifier: ['com.ecosia.ecosiaapp.firefox', 'com.ecosia.ecosiaapp.firefox.WidgetKit', 'com.ecosia.ecosiaapp.firefox.ShareTo'], 
       type: "adhoc",
       readonly: true
     )
@@ -42,7 +42,7 @@ platform :ios do
       scheme: "Ecosia",
       project: "Client.xcodeproj",
       export_method: "ad-hoc",
-      configuration: "EcosiaAppCenter",
+      configuration: "AppCenter",
       export_options: {iCloudContainerEnvironment: 'Development'}
     )
     appcenter_upload(
@@ -60,14 +60,14 @@ platform :ios do
   desc "Testflight build for Beta Channel"
   lane :testflight_beta do
     match(
-      app_identifier: ['com.ecosia.ecosiaapp.firefox', 'com.ecosia.ecosiaapp.firefox.WidgetKit', 'com.ecosia.ecosiaapp.firefox.ShareTo', 'com.ecosia.ecosiaapp.firefox.CredentialProvider'], 
+      app_identifier: ['com.ecosia.ecosiaapp.firefox', 'com.ecosia.ecosiaapp.firefox.WidgetKit', 'com.ecosia.ecosiaapp.firefox.ShareTo'], 
       type: 'appstore',
       readonly: true
     )
     gym(
       scheme: "Ecosia",
       export_method: "app-store",
-      configuration: "EcosiaBeta"
+      configuration: "Beta"
     )
     pilot(
       skip_waiting_for_build_processing: true, 
@@ -78,14 +78,14 @@ platform :ios do
   desc "Testflight build for Live Channel"
   lane :testflight_live do
     match(
-      app_identifier: ['com.ecosia.ecosiaapp', 'com.ecosia.ecosiaapp.searchWidget', 'com.ecosia.ecosiaapp.WidgetKit', 'com.ecosia.ecosiaapp.ShareTo', 'com.ecosia.ecosiaapp.CredentialProvider'], 
+      app_identifier: ['com.ecosia.ecosiaapp', 'com.ecosia.ecosiaapp.searchWidget', 'com.ecosia.ecosiaapp.WidgetKit', 'com.ecosia.ecosiaapp.ShareTo'], 
       type: 'appstore',
       readonly: true
     )
     gym(
       scheme: "Ecosia",
       export_method: "app-store",
-      configuration: "Ecosia",
+      configuration: "Release",
       include_bitcode: true
     )
     pilot(
