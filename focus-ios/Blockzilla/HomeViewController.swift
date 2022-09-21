@@ -4,7 +4,6 @@
 
 import UIKit
 import Telemetry
-import SnapKit
 import Onboarding
 
 protocol HomeViewControllerDelegate: AnyObject {
@@ -16,12 +15,17 @@ protocol HomeViewControllerDelegate: AnyObject {
 class HomeViewController: UIViewController {
 
     weak var delegate: HomeViewControllerDelegate?
-    private let tipView = UIView()
+    private lazy var tipView: UIView = {
+        let tipView = UIView()
+        tipView.translatesAutoresizingMaskIntoConstraints = false
+        return tipView
+    }()
 
     private lazy var textLogo: UIImageView = {
         let textLogo = UIImageView()
         textLogo.image = AppInfo.isKlar ? #imageLiteral(resourceName: "img_klar_wordmark") : #imageLiteral(resourceName: "img_focus_wordmark")
         textLogo.contentMode = .scaleAspectFit
+        textLogo.translatesAutoresizingMaskIntoConstraints = false
         return textLogo
     }()
 
@@ -33,7 +37,14 @@ class HomeViewController: UIViewController {
     )
 
     var onboardingEventsHandler: OnboardingEventsHandling!
-    let toolbar = HomeViewToolbar()
+    let toolbar: HomeViewToolbar = {
+        let toolbar = HomeViewToolbar()
+        toolbar.translatesAutoresizingMaskIntoConstraints = false
+        return toolbar
+    }()
+
+    var tipViewConstraints: [NSLayoutConstraint] = []
+    var textLogoTopConstraints: [NSLayoutConstraint] = []
 
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -54,23 +65,26 @@ class HomeViewController: UIViewController {
         self.view.addSubview(toolbar)
         self.view.addSubview(tipView)
 
-        textLogo.snp.makeConstraints { make in
-            make.centerX.equalTo(self.view)
-            make.top.equalTo(self.view.snp.centerY).offset(UIConstants.layout.textLogoOffset)
-            make.left.equalTo(self.view.snp.left).offset(UIConstants.layout.textLogoMargin)
-            make.right.equalTo(self.view.snp.left).offset(-UIConstants.layout.textLogoMargin)
-        }
+        NSLayoutConstraint.activate([
+            textLogo.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            textLogo.topAnchor.constraint(equalTo: self.view.centerYAnchor, constant: UIConstants.layout.textLogoOffset),
+            textLogo.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: UIConstants.layout.textLogoMargin),
+            textLogo.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -UIConstants.layout.textLogoMargin)
+        ])
 
-        tipView.snp.makeConstraints { make in
-            make.bottom.equalTo(toolbar.snp.top).inset(UIConstants.layout.tipViewBottomOffset)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(UIConstants.layout.tipViewHeight)
-        }
+        tipViewConstraints = [
+            tipView.bottomAnchor.constraint(equalTo: toolbar.topAnchor, constant: UIConstants.layout.tipViewBottomOffset),
+            tipView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            tipView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            tipView.heightAnchor.constraint(equalToConstant: UIConstants.layout.tipViewHeight)
+        ]
+        NSLayoutConstraint.activate(tipViewConstraints)
 
-        toolbar.snp.makeConstraints { make in
-            make.bottom.equalToSuperview()
-            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
-        }
+        NSLayoutConstraint.activate([
+            toolbar.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            toolbar.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            toolbar.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
+        ])
 
         refreshTipsDisplay()
         install(tipsViewController, on: tipView)
@@ -148,25 +162,27 @@ class HomeViewController: UIViewController {
     func updateUI(urlBarIsActive: Bool, isBrowsing: Bool = false) {
         toolbar.isHidden = urlBarIsActive
 
-        tipView.snp.remakeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.height.equalTo(UIConstants.layout.tipViewHeight)
-
-            if isBrowsing {
-                make.height.equalTo(0)
-            }
-            if urlBarIsActive {
-                make.bottom.equalToSuperview()
-            } else {
-                make.bottom.equalTo(toolbar.snp.top).inset(UIConstants.layout.tipViewBottomOffset)
-            }
+        NSLayoutConstraint.deactivate(tipViewConstraints)
+        tipViewConstraints = [
+            tipView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            tipView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            tipView.heightAnchor.constraint(equalToConstant: UIConstants.layout.tipViewHeight),
+            tipView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+        ]
+        if isBrowsing {
+            tipViewConstraints.append(tipView.heightAnchor.constraint(equalToConstant: 0))
         }
+        if urlBarIsActive {
+            tipViewConstraints.append(tipView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor))
+        } else {
+            tipViewConstraints.append(tipView.bottomAnchor.constraint(equalTo: toolbar.topAnchor, constant: UIConstants.layout.tipViewBottomOffset))
+        }
+        NSLayoutConstraint.activate(tipViewConstraints)
 
         if UIScreen.main.bounds.height ==  UIConstants.layout.iPhoneSEHeight {
-            textLogo.snp.updateConstraints { make in
-                make.top.equalTo(self.view.snp.centerY).offset(urlBarIsActive ?  UIConstants.layout.textLogoOffsetSmallDevice : UIConstants.layout.textLogoOffset)
-            }
+            NSLayoutConstraint.deactivate(textLogoTopConstraints)
+            textLogoTopConstraints = [self.textLogo.topAnchor.constraint(equalTo: self.view.centerYAnchor, constant: urlBarIsActive ? UIConstants.layout.textLogoOffsetSmallDevice : UIConstants.layout.textLogoOffset)]
+            NSLayoutConstraint.activate(textLogoTopConstraints)
         }
     }
 
