@@ -115,10 +115,9 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
 
         setupLayout()
-        applyTheme()
-
         setupNotifications(forObserver: self, observing: [.DisplayThemeChanged,
                                                           .WallpaperDidChange])
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -131,8 +130,8 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
+
         imageView.image = nil
-        rootContainer.backgroundColor = .clear
         titleLabel.text = nil
         sponsoredLabel.text = nil
         pinViewHolder.isHidden = true
@@ -169,6 +168,8 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
     // MARK: - Setup Helper methods
 
     private func setupLayout() {
+        rootContainer.backgroundColor = .clear
+
         titlePinWrapper.addArrangedSubview(pinViewHolder)
         titlePinWrapper.addArrangedSubview(titleLabel)
         pinViewHolder.addSubview(pinImageView)
@@ -238,7 +239,7 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
             rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             rootContainer.removeVisualEffectView()
-            rootContainer.backgroundColor = LegacyThemeManager.instance.current.homePanel.topSitesContainerView
+            rootContainer.backgroundColor = UIColor.theme.homePanel.topSitesContainerView
             setupShadow()
         }
     }
@@ -270,10 +271,9 @@ extension TopSiteItemCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
         ensureMainThread { [weak self] in
             switch notification.name {
-            case .DisplayThemeChanged:
+            case .DisplayThemeChanged,
+                    .WallpaperDidChange:
                 self?.applyTheme()
-            case .WallpaperDidChange:
-                self?.adjustLayout()
             default: break
             }
         }
