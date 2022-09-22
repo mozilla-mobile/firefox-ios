@@ -77,7 +77,6 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                                                                                           inDirectory: "test-fixtures")!)
                 try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
                 let deprecatedOutput = URL(fileURLWithPath: "\(dirForTestProfile)/\(TabManagerStoreImplementation.deprecatedStorePath)")
-                let output = URL(fileURLWithPath: "\(dirForTestProfile)/\(TabManagerStoreImplementation.storePath)")
 
                 let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
                 let filePaths = enumerator?.allObjects as! [String]
@@ -85,8 +84,10 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                     try! FileManager.default.removeItem(at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)"))
                 }
 
+                // When we remove migration code for tabs, make sure we migrate the archive test-fixtures data.
+                // See FXIOS-4913 for more details. Correct output will be:
+                // let output = URL(fileURLWithPath: "\(dirForTestProfile)/\(TabManagerStoreImplementation.storePath)")
                 try! FileManager.default.copyItem(at: input, to: deprecatedOutput)
-                try! FileManager.default.copyItem(at: input, to: output)
             }
 
         }
