@@ -92,12 +92,12 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         fallbackFaviconImage.image = nil
         itemTitle.text = nil
         setFallBackFaviconVisibility(isHidden: false)
-        applyTheme()
+
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.generalCornerRadius).cgPath
     }
 
@@ -105,7 +105,7 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         configureImages(heroImage: viewModel.heroImage, favIconImage: viewModel.favIconImage)
 
         itemTitle.text = viewModel.site.title
-        adjustLayout()
+        applyTheme()
     }
 
     private func configureImages(heroImage: UIImage?, favIconImage: UIImage?) {
@@ -189,31 +189,25 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
     func adjustLayout() {
         // If blur is disabled set background color
         if shouldApplyWallpaperBlur {
-
             rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             rootContainer.removeVisualEffectView()
-            let isDarkMode = LegacyThemeManager.instance.currentName == .dark
-                rootContainer.backgroundColor = isDarkMode ? UIColor.Photon.DarkGrey40 : .white
+            rootContainer.backgroundColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkCellBackground
             setupShadow()
         }
     }
 
     func applyTheme() {
-        if LegacyThemeManager.instance.currentName == .dark {
-            itemTitle.textColor = UIColor.Photon.LightGrey10
-            fallbackFaviconBackground.backgroundColor = UIColor.Photon.DarkGrey60
-        } else {
-            itemTitle.textColor = UIColor.Photon.DarkGrey90
-            fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey10
-        }
+        itemTitle.textColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkTitle
+        fallbackFaviconBackground.backgroundColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkImageBackground
+        fallbackFaviconBackground.layer.borderColor = LegacyThemeManager.instance.current.homePanel.topSitesBackground.cgColor
 
-        fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
+        adjustLayout()
     }
 
     private func setupShadow() {
         rootContainer.layer.cornerRadius = UX.generalCornerRadius
-        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.generalCornerRadius).cgPath
         rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         rootContainer.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
@@ -227,10 +221,9 @@ extension RecentlySavedCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
         ensureMainThread { [weak self] in
             switch notification.name {
-            case .DisplayThemeChanged:
+            case .DisplayThemeChanged,
+                    .WallpaperDidChange:
                 self?.applyTheme()
-            case .WallpaperDidChange:
-                self?.adjustLayout()
             default:
                 break
             }

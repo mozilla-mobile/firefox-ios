@@ -83,6 +83,8 @@ extension UIView {
         for subview in self.subviews {
             if subview is UIVisualEffectView { subview.removeFromSuperview() }
         }
+        // Set clipsToBounds to false to make sure shadows will be visible
+        clipsToBounds = false
     }
 
     /// Performs a deep copy of the view. Does not copy constraints.
