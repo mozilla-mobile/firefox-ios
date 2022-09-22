@@ -1,3 +1,75 @@
 {
-  "data": []
+  "data": [
+    {
+      "schemaVersion": "1.9.0",
+      "slug": "firefox-ios-mr-new-user-onboarding",
+      "id": "firefox-ios-mr-new-user-onboarding",
+      "arguments": {},
+      "application": "org.mozilla.ios.Firefox",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Firefox",
+      "channel": "release",
+      "userFacingName": "[QA] Firefox iOS MR New User Onboarding",
+      "userFacingDescription": "This is for testing.",
+      "isEnrollmentPaused": false,
+      "isRollout": false,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-mr2022-release-1",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "mr2022"
+      ],
+      "probeSets": [],
+      "outcomes": [],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "mr2022",
+            "enabled": true,
+            "value": {
+              "sections-enabled": {
+                "onboarding-first-run-flow": false,
+                "onboarding-upgrade-flow": false,
+                "sync-cfr": false,
+                "jump-back-in-cfr-update": false,
+                "toolbar-cfr-update": false,
+                "wallpaper-onboarding-sheet": false
+              }
+            }
+          }
+        },
+        {
+          "slug": "treatment-a",
+          "ratio": 1,
+          "feature": {
+            "featureId": "mr2022",
+            "enabled": true,
+            "value": {
+              "sections-enabled": {
+                "onboarding-first-run-flow": true,
+                "onboarding-upgrade-flow": true,
+                "sync-cfr": true,
+                "jump-back-in-cfr-update": true,
+                "toolbar-cfr-update": true,
+                "wallpaper-onboarding-sheet": true
+              }
+            }
+          }
+        }
+      ],
+      "targeting": "((is_already_enrolled) || ((days_since_install < 7) && (app_version|versionCompare('106.!') >= 0)))",
+      "startDate": "2022-09-21",
+      "enrollmentEndDate": "2022-09-28",
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 7,
+      "referenceBranch": "control"
+    }
+  ]
 }
