@@ -8116,8 +8116,6 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
-				8A1E3BE028CBAC1F003388C4 /* Utils */,
-				8AED868128CA3A1F00351A50 /* Library */,
 				2165B2BF2860BB41004C0786 /* AdjustTelemetryHelperTests.swift */,
 				CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */,
 				8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */,
@@ -8128,6 +8126,7 @@
 				431C0D1C25C9D76B00395CE4 /* DefaultBrowserOnboardingTests */,
 				D82ED2631FEB3C420059570B /* DefaultSearchPrefsTests.swift */,
 				8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */,
+				6ADB651A285C03B100947EA4 /* DownloadHelperTests.swift */,
 				6A3E5D89283831D0001E706E /* DownloadQueueTests.swift */,
 				43446CF12412F9A800F5C643 /* ETPCoverSheet */,
 				C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */,
@@ -8136,11 +8135,15 @@
 				E1AEC16D286E0CF500062E29 /* Frontend */,
 				8DCD3BCC1ED5B7FA00446D38 /* FxADeepLinkingTests.swift */,
 				3943A81C1E9807C700D4F6DC /* FxAPushMessageTest.swift */,
+				215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */,
+				215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */,
 				5F97DD5E27FB0FE800AD3C60 /* GleanTelemetryTests.swift */,
 				C889D7D32858CD4500121E1D /* HistoryHighlights */,
 				554867221DC3935A00183DAA /* HomePageTests.swift */,
+				43DF9D982874C0690038F33A /* ImageLoadingHandlerTests.swift */,
 				217AEF75284666D4004EED37 /* IntroViewModelTests.swift */,
 				8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */,
+				8AED868128CA3A1F00351A50 /* Library */,
 				C8445AD026443C7F00B83F53 /* LibraryPanelViewStateTests.swift */,
 				CA24B53A24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift */,
 				CA24B53824ABFE250093848C /* LoginsListSelectionHelperTests.swift */,
@@ -8149,6 +8152,7 @@
 				D8EFFA251FF702A8001D3A09 /* NavigationRouterTests.swift */,
 				C8E1BC0928085AA700C62964 /* NimbusFeatureFlagLayerTests.swift */,
 				39C137962655798A003DC662 /* NimbusIntegrationTests.swift */,
+				21371FA128A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift */,
 				2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */,
 				0BA896491A250E6500C1010C /* ProfileTest.swift */,
 				8AF0CFF427A0B0ED00C1A4A2 /* QuickActionsTests.swift */,
@@ -8179,15 +8183,11 @@
 				A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */,
 				8AE1E1D827B1BD380024C45E /* UIStackViewExtensionsTests.swift */,
 				43446CED2412DDB100F5C643 /* UpdateViewModel */,
+				8A1E3BE028CBAC1F003388C4 /* Utils */,
 				DACDE995225E537900C8F37F /* VersionSettingTests.swift */,
 				C84655ED28873C4800861B4A /* Wallpaper */,
 				E4CD9F1C1A6D9C2800318571 /* WebServerTests.swift */,
 				D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */,
-				6ADB651A285C03B100947EA4 /* DownloadHelperTests.swift */,
-				43DF9D982874C0690038F33A /* ImageLoadingHandlerTests.swift */,
-				215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */,
-				215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */,
-				21371FA128A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
