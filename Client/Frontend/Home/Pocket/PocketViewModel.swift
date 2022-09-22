@@ -208,8 +208,9 @@ extension PocketViewModel: HomepageSectionHandler {
         if isStoryCell(index: indexPath.row) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketStandardCell.cellIdentifier,
                                                           for: indexPath) as! PocketStandardCell
-            cell.configure(viewModel: pocketStoriesViewModels[indexPath.row])
-            cell.tag = indexPath.item
+            let viewModel = pocketStoriesViewModels[indexPath.row]
+            viewModel.tag = indexPath.row
+            cell.configure(viewModel: viewModel)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketDiscoverCell.cellIdentifier,

@@ -110,11 +110,14 @@ class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
         accessibilityLabel = viewModel.accessibilityLabel
+        tag = viewModel.tag
 
-        ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: viewModel.imageURL,
-                                                               limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
-            guard error == nil, let image = image else { return }
-            self.heroImageView.image = image
+        ImageLoadingHandler.shared.getImageFromCacheOrDownload(
+            with: viewModel.imageURL,
+            limit: ImageLoadingConstants.NoLimitImageSize
+        ) { [weak self] image, error in
+            guard error == nil, let image = image, self?.tag == viewModel.tag else { return }
+            self?.heroImageView.image = image
         }
 
         sponsoredStack.isHidden = viewModel.shouldHideSponsor
