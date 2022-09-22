@@ -37,14 +37,14 @@ class TableViewColor {
     // Used for table headers in Settings and Photon menus
     var headerTextLight: UIColor { return UIColor.Photon.Grey50 } // textSecondary
     // Used for table headers in home panel tables
-    var headerTextDark: UIColor { return UIColor.Photon.Grey90 } // layer4. not sure
+    var headerTextDark: UIColor { return UIColor.Photon.Grey90 }
     var rowActionAccessory: UIColor { return UIColor.Photon.Blue40 } // actionPrimary
     var controlTint: UIColor { return rowActionAccessory } // actionPrimary
     var syncText: UIColor { return defaultTextAndTint } // textPrimary
     var errorText: UIColor { return UIColor.Photon.Red50 } // textWarning
     var warningText: UIColor { return UIColor.Photon.Orange50 } // textWarning
     var accessoryViewTint: UIColor { return UIColor.Photon.Grey40 } // iconSecondary
-    var selectedBackground: UIColor { return UIColor.Custom.selectedHighlightLight } // actionSecondaryHover
+    var selectedBackground: UIColor { return UIColor.Custom.selectedHighlightLight } // layer3
 }
 
 class ActionMenuColor {

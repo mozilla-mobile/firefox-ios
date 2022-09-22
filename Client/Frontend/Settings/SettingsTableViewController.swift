@@ -107,7 +107,7 @@ class Setting: NSObject {
         cell.layoutMargins = .zero
 
         let backgroundView = UIView()
-        backgroundView.backgroundColor = theme.colors.actionSecondaryHover
+        backgroundView.backgroundColor = theme.colors.layer3
         backgroundView.bounds = cell.bounds
         cell.selectedBackgroundView = backgroundView
 
