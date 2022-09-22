@@ -21,8 +21,6 @@ public struct CardBannerView: View {
             background
 
             ZStack {
-                cardBackground
-
                 VStack(spacing: .verticalSpacing) {
                     closeButton
                     header
@@ -32,7 +30,11 @@ public struct CardBannerView: View {
                         actionButton
                     }
                 }
+                .padding(.vertical)
             }
+            .background(
+                cardBackground
+            )
             .frame(maxWidth: .width, maxHeight: .height)
             .padding(.horizontal)
         }
@@ -143,5 +145,5 @@ fileprivate extension CGFloat {
     static let searchWidgetSize: CGFloat = 135
     static let actionButtonPadding: CGFloat = 24.0
     static let width: CGFloat = 350
-    static let height: CGFloat = 400
+    static let height: CGFloat = 600
 }
