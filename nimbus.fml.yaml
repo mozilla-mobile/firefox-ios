@@ -470,7 +470,7 @@ features:
                 The migration configuration. This is either a dry-run, a real migration or
                 disabled
             type: PlacesMigrationConfiguration
-            default: disabled
+            default: dry-run
         api:
             description: |
                 The api configuration, determines whether we use the new api or the old one

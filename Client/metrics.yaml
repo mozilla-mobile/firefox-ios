@@ -3015,3 +3015,78 @@ migration:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
+
+places_history_migration:
+  duration:
+    type: timing_distribution
+    time_unit: millisecond
+    description: |
+        A time distribution of how long it took for the migration to occur
+    bugs:
+      - TODO Add bug
+    data_reviews:
+      - TODO Add data review
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - teshaq@mozilla.com
+      - sync-team@mozilla.com
+    expires: "2023-10-17"
+  num_to_migrate:
+    type: quantity
+    unit: visits
+    description: |
+       The number of visits expected to migrate to the places.db
+    bugs:
+      - TODO add bug
+    data_reviews:
+      - TODO add data review
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - teshaq@mozilla.com
+      - sync-team@mozilla.com
+    expires: "2023-10-17"
+  num_migrated:
+    type: quantity
+    unit: visits
+    description: |
+       The number of visits migrated to the places.db
+    bugs:
+      - TODO add bug
+    data_reviews:
+      - TODO add data review
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - teshaq@mozilla.com
+      - sync-team@mozilla.com
+    expires: "2023-10-17"
+  migration_ended_rate:
+    type: rate
+    description: |
+       A Rate of how often migrations end
+    bugs:
+      - TODO add bug
+    data_reviews:
+      - TODO add data review
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - teshaq@mozilla.com
+      - sync-team@mozilla.com
+    expires: "2023-10-17"
+  migration_error_rate:
+    type: rate
+    description: |
+       A Rate of how often migrations error out
+    bugs:
+      - TODO add bug
+    data_reviews:
+      - TODO add data review
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - teshaq@mozilla.com
+      - sync-team@mozilla.com
+    expires: "2023-10-17"

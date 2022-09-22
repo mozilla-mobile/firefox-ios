@@ -431,15 +431,15 @@ public class RustPlaces: BookmarksHandler {
         }
     }
 
-    private func migrateHistory(dbPath: String) -> Deferred<Maybe<HistoryMigrationResult?>> {
+    private func migrateHistory(dbPath: String, lastSyncTimestamp: Int64) -> Deferred<Maybe<HistoryMigrationResult>> {
         return withWriter { connection in
-            return try connection.migrateHistoryFromBrowserDb(path: dbPath)
+            return try connection.migrateHistoryFromBrowserDb(path: dbPath, lastSyncTimestamp: lastSyncTimestamp)
         }
     }
 
-    public func migrateHistory(dbPath: String, completion: @escaping (HistoryMigrationResult?) -> Void, errCallback: @escaping (Error?) -> Void) {
+    public func migrateHistory(dbPath: String, lastSyncTimestamp: Int64, completion: @escaping (HistoryMigrationResult) -> Void, errCallback: @escaping (Error?) -> Void) {
         _ = reopenIfClosed()
-        let deferredResponse = self.migrateHistory(dbPath: dbPath)
+        let deferredResponse = self.migrateHistory(dbPath: dbPath, lastSyncTimestamp: lastSyncTimestamp)
         deferredResponse.upon { result in
             guard result.isSuccess else {
                 errCallback(result.failureValue)
@@ -449,7 +449,10 @@ public class RustPlaces: BookmarksHandler {
                 completion(result)
                 return
             }
-            completion(nil)
+            // Should be impossible, but we report it anyways
+            // this case is only possible if for some reason we have `result.isSucess`
+            // but we don't have a value back.
+            errCallback(nil)
         }
     }
 

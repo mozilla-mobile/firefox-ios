@@ -444,7 +444,8 @@ open class BrowserProfile: Profile {
     lazy var browserDbPath =  URL(fileURLWithPath: (try! self.files.getAndEnsureDirectory())).appendingPathComponent("browser.db").path
     lazy var places: RustPlaces = RustPlaces(databasePath: self.placesDbPath)
 
-    public func migrateHistoryToPlaces(migrationConfig: HistoryMigrationConfiguration, callback: @escaping (HistoryMigrationResult?) -> Void, errCallback: @escaping (Error?) -> Void) {
+    public func migrateHistoryToPlaces(migrationConfig: HistoryMigrationConfiguration, callback: @escaping (HistoryMigrationResult) -> Void, errCallback: @escaping (Error?) -> Void) {
+        let lastSyncTimestamp = Int64(self.syncManager.lastSyncFinishTime ?? 0)
         switch migrationConfig {
         case .disabled:
             break
@@ -453,6 +454,7 @@ open class BrowserProfile: Profile {
             RustPlaces(databasePath: dryRunPath)
                 .migrateHistory(
                     dbPath: self.browserDbPath,
+                    lastSyncTimestamp: lastSyncTimestamp,
                     completion: { result in
                     do {
                         try FileManager.default.removeItem(atPath: dryRunPath)
@@ -463,7 +465,7 @@ open class BrowserProfile: Profile {
                 },
                 errCallback: errCallback)
         case .real:
-            self.places.migrateHistory(dbPath: self.browserDbPath, completion: callback, errCallback: errCallback)
+            self.places.migrateHistory(dbPath: self.browserDbPath, lastSyncTimestamp: lastSyncTimestamp, completion: callback, errCallback: errCallback)
         }
     }
 

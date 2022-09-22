@@ -6,6 +6,7 @@ import Shared
 import Storage
 import CoreSpotlight
 import SDWebImage
+import Glean
 
 let LatestAppVersionProfileKey = "latestAppVersion"
 
@@ -35,6 +36,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         log.info("startApplication begin")
 
+        NotificationCenter.default.addObserver(forName: .nimbusExperimentsApplied, object: nil, queue: nil) { _ in
+            self.runAppServicesHistoryMigration()
+        }
+
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
         appLaunchUtil = AppLaunchUtil(profile: profile)
@@ -50,7 +55,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         menuBuilderHelper = MenuBuilderHelper()
 
         setupRootViewController()
-        runAppServicesHistoryMigration()
 
         log.info("startApplication end")
 
@@ -305,26 +309,41 @@ extension PlacesMigrationConfiguration {
 extension AppDelegate {
     func runAppServicesHistoryMigration() {
         let placesHistory = FxNimbus.shared.features.placesHistory.value()
+        FxNimbus.shared.features.placesHistory.recordExposure()
+        guard placesHistory.migration != .disabled else {
+            return
+        }
         let p = self.profile as? BrowserProfile
         let migrationRanKey = "PlacesHistoryMigrationRan" + placesHistory.migration.rawValue
         let migrationRan = UserDefaults.standard.bool(forKey: migrationRanKey)
         if !migrationRan {
+            let id = GleanMetrics.PlacesHistoryMigration.duration.start()
+            // We mark that the migration started
+            // this will help us identify how often the migration starts, but never ends
+            // additionally, we have a seperate metric for error rates
+            GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToNumerator(1)
+            GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToNumerator(1)
             p?.migrateHistoryToPlaces(
             migrationConfig: placesHistory.migration.into(),
             callback: { result in
-                if let result = result {
-                    self.log.info("Successful Migration took \(result.totalDuration / 1000) seconds")
-                    // Record results to telemetry here
-                    UserDefaults.standard.setValue(true, forKey: migrationRanKey)
-                }
+                self.log.info("Successful Migration took \(result.totalDuration / 1000) seconds")
+                UserDefaults.standard.setValue(true, forKey: migrationRanKey)
+
+                // We record various success metrics here
+                GleanMetrics.PlacesHistoryMigration.duration.stopAndAccumulate(id)
+                GleanMetrics.PlacesHistoryMigration.numMigrated.set(Int64(result.numSucceeded))
+                GleanMetrics.PlacesHistoryMigration.numToMigrate.set(Int64(result.numTotal))
+                GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
             },
             errCallback: { err in
-                // record error to telemetry here
-                if let err = err {
-                    self.log.error("Error running migration: \(err as NSError)")
-                } else {
-                    self.log.error("Unknown error running migration")
-                }
+                let errMsg = err?.localizedDescription ?? "Unknown error during History migration"
+                self.log.error(errMsg)
+
+                GleanMetrics.PlacesHistoryMigration.duration.cancel(id)
+                GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
+                GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToDenominator(1)
+                // We also send the error to sentry
+                SentryIntegration.shared.sendWithStacktrace(message: errMsg, tag: SentryTag.rustPlaces, severity: .error)
             })
         } else {
             log.info("History Migration skipped, already migrated")
