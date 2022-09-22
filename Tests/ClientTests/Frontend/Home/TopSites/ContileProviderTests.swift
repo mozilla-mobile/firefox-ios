@@ -160,6 +160,27 @@ class ContileProviderTests: XCTestCase {
         waitForExpectations(timeout: 1.0, handler: nil)
     }
 
+    func testCachingExpires_failsIfCacheIsNewerThanCurrentDate() {
+        stubResponse(response: twoTilesWithOutOfOrderPositions, statusCode: 200, error: nil)
+        let provider = getProvider()
+        let expectation = expectation(description: "Wait for completion")
+        provider.fetchContiles { result in
+            self.stubResponse(response: nil, statusCode: 403, error: nil)
+
+            provider.fetchContiles(timestamp: Date.yesterday.toTimestamp()) { result in
+                switch result {
+                case let .failure(error as ContileProvider.Error):
+                    XCTAssertEqual(error, ContileProvider.Error.failure)
+                default:
+                    XCTFail("Expected failure, got \(result) instead")
+                }
+                expectation.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
+
     func testNoStubbing_doesntComplete() {
         let provider = getProvider()
         let expectation = expectation(description: "Wait for completion")
