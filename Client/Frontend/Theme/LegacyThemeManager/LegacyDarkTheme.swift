@@ -127,7 +127,9 @@ private class DarkHomePanelColor: HomePanelColor {
     override var shortcutShadowColor: CGColor { return UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.0).cgColor }
     override var shortcutShadowOpacity: Float { return 0.5 }
 
-    override var recentlySavedBookmarkCellBackground: UIColor { return UIColor.Photon.DarkGrey30 }
+    override var recentlySavedBookmarkCellBackground: UIColor { return UIColor.Photon.DarkGrey40 }
+    override var recentlySavedBookmarkImageBackground: UIColor { return UIColor.Photon.DarkGrey60 }
+    override var recentlySavedBookmarkTitle: UIColor { return UIColor.Photon.LightGrey10 }
 
     override var recentlyVisitedCellGroupImage: UIColor { return .white }
 
