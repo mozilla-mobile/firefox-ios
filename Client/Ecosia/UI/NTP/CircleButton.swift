@@ -15,7 +15,7 @@ class CircleButton: ToolbarButton {
         }
 
         static var newTab: Config {
-            return .init(hideCircle: false, image: "nav-add", margin: 8)
+            return .init(hideCircle: true, image: "nav-add", margin: 8)
         }
     }
 
@@ -39,6 +39,7 @@ class CircleButton: ToolbarButton {
     convenience init(config: Config) {
         self.init(frame: .zero)
         self.config = config
+        setup()
     }
 
     private func setup() {
@@ -60,8 +61,8 @@ class CircleButton: ToolbarButton {
 
     override func applyTheme() {
         circle.backgroundColor = UIColor.theme.ecosia.tertiaryBackground
-        tintColor = UIColor.theme.ecosia.primaryButton
+        tintColor = config.hideCircle ? .theme.ecosia.primaryText : .theme.ecosia.primaryButton
         selectedTintColor = UIColor.theme.ecosia.primaryButtonActive
-        unselectedTintColor = UIColor.theme.ecosia.primaryButton
+        unselectedTintColor = tintColor
     }
 }

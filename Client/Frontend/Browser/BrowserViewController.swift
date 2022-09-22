@@ -238,6 +238,7 @@ class BrowserViewController: UIViewController {
         toolbar.circleButton.config = isBottomSearchBar ? .newTab : .search
         toolbar.setNeedsDisplay()
         urlBar.updateConstraints()
+        applyTheme()
     }
 
     func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
@@ -2574,8 +2575,8 @@ extension BrowserViewController: NotificationThemeable {
                                             libraryDrawerViewController]
         ui.forEach { $0?.applyTheme() }
 
-        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.theme.topTabs.background : urlBar.backgroundColor
-        statusBarOverlay.backgroundColor = homepageViewController == nil || view.traitCollection.userInterfaceIdiom == .pad ? .theme.textField.background : .theme.ecosia.ntpBackground
+        statusBarOverlay.backgroundColor = !isBottomSearchBar || view.traitCollection.userInterfaceIdiom == .pad ? .theme.textField.background : .theme.ecosia.ntpBackground
+        header.backgroundColor = statusBarOverlay.backgroundColor
         keyboardBackdrop?.backgroundColor = UIColor.theme.browser.background
         setNeedsStatusBarAppearanceUpdate()
 

@@ -60,14 +60,13 @@ class TabLocationView: UIView {
         }
     }
 
-    lazy var placeholder: NSAttributedString = {
-        return NSAttributedString(string: .TabLocationURLPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.Photon.Grey50])
-    }()
+    var placeholder: NSAttributedString {
+        return NSAttributedString(string: .localized(.searchAndPlant), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.ecosia.secondaryText])
+    }
 
     lazy var urlTextField: URLTextField = .build { urlTextField in
         // Prevent the field from compressing the toolbar buttons on the 4S in landscape.
         urlTextField.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 250), for: .horizontal)
-        urlTextField.attributedPlaceholder = self.placeholder
         urlTextField.accessibilityIdentifier = "url"
         urlTextField.accessibilityActionsSource = self
         urlTextField.font = UIConstants.DefaultChromeFont
@@ -309,6 +308,7 @@ extension TabLocationView: AccessibilityActionsSource {
 extension TabLocationView: NotificationThemeable {
     func applyTheme() {
         urlTextField.textColor = UIColor.theme.textField.textAndTint
+        urlTextField.attributedPlaceholder = placeholder
         readerModeButton.applyTheme()
         trackingProtectionButton.applyTheme()
 

@@ -71,6 +71,7 @@ class TabToolbar: UIView {
         buttons.forEach { contentView.addArrangedSubview($0) }
     }
 
+    /* Ecosia: no separator
     override func draw(_ rect: CGRect) {
         if let context = UIGraphicsGetCurrentContext() {
             drawLine(context, start: .zero, end: CGPoint(x: frame.width, y: 0))
@@ -84,6 +85,7 @@ class TabToolbar: UIView {
         context.addLine(to: CGPoint(x: end.x, y: end.y))
         context.strokePath()
     }
+     */
 }
 
 extension TabToolbar: TabToolbarProtocol {

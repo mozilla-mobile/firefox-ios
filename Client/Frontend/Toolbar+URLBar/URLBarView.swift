@@ -908,11 +908,11 @@ extension URLBarView: NotificationThemeable {
         line.backgroundColor = UIColor.theme.browser.urlBarDivider
 
         locationBorderColor = UIColor.theme.ecosia.border
-        locationView.backgroundColor = inOverlayMode || isHome ? UIColor.theme.textField.backgroundInOverlay : UIColor.theme.ecosia.tertiaryBackground
+        locationView.backgroundColor = inOverlayMode ? UIColor.theme.textField.backgroundInOverlay : UIColor.theme.ecosia.tertiaryBackground
         progressBar.backgroundColor = UIColor.theme.ecosia.tertiaryBackground
         progressBar.setGradientColors(startColor: UIColor.theme.ecosia.highlightedBackground, middleColor: UIColor.theme.ecosia.highlightedBackground, endColor: UIColor.theme.ecosia.highlightedBackground)
 
-        locationContainer.backgroundColor = UIColor.theme.textField.background
+        locationContainer.backgroundColor = locationView.backgroundColor
 
         privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
         appMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
@@ -922,16 +922,7 @@ extension URLBarView: NotificationThemeable {
         locationActiveBorderColor = UIColor.theme.urlbar.activeBorder(isPrivate)
         ToolbarTextField.applyUIMode(isPrivate: isPrivate)
 
-        // shadow only for NTP light mode
-        if !LegacyThemeManager.instance.current.isDark && isHome && !inOverlayMode {
-            locationContainer.layer.shadowOpacity = 1
-            locationContainer.layer.shadowColor = UIColor(red: 0.059, green: 0.059, blue: 0.059, alpha: 0.18).cgColor
-            locationContainer.layer.shadowOpacity = 1
-            locationContainer.layer.shadowRadius = 2
-            locationContainer.layer.shadowOffset = CGSize(width: 0, height: 1)
-        } else {
-            locationContainer.layer.shadowOpacity = 0
-        }
+        locationContainer.layer.shadowOpacity = 0
 
         // Border for dark mode on home or selection state
         if inOverlayMode {
