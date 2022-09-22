@@ -16,7 +16,8 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
 
     struct UX {
         static let closeButtonSize: CGFloat = 30
-        static let closeButtonPadding: CGFloat = 24
+        static let closeHorizontalMargin: CGFloat = 24
+        static let closeVerticalMargin: CGFloat = 20
         static let pageControlHeight: CGFloat = 40
         static let pageControlBottomPadding: CGFloat = 8
     }
@@ -108,8 +109,9 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
             pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
-                                             constant: UX.closeButtonPadding),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonPadding),
+                                             constant: UX.closeVerticalMargin),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                  constant: -UX.closeHorizontalMargin),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
         ])
