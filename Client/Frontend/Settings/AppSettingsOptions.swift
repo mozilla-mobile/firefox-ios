@@ -23,7 +23,6 @@ struct SettingDisclosureUtility {
     }
 }
 
-
 // MARK: - ConnectSetting
 // Sync setting for connecting a Firefox Account. Shown when we don't have an account.
 class ConnectSetting: WithoutAccountSetting {
