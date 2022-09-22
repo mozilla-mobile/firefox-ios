@@ -192,7 +192,9 @@ class HomePanelColor {
     var shortcutShadowColor: CGColor { return UIColor(red: 0.23, green: 0.22, blue: 0.27, alpha: 1.0).cgColor }
     var shortcutShadowOpacity: Float { return 0.2 }
 
-    var recentlySavedBookmarkCellBackground: UIColor { return .white}
+    var recentlySavedBookmarkCellBackground: UIColor { return .white }
+    var recentlySavedBookmarkImageBackground: UIColor { return UIColor.Photon.LightGrey10 }
+    var recentlySavedBookmarkTitle: UIColor { return UIColor.Photon.DarkGrey90 }
 
     var recentlyVisitedCellGroupImage: UIColor { return UIColor.Photon.DarkGrey90 }
     var recentlyVisitedCellBottomLine: UIColor { return UIColor.Photon.LightGrey40 }
