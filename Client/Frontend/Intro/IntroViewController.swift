@@ -49,6 +49,11 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
         self.viewModel = viewModel
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
+
+        setupLayout()
+        setupNotifications(forObserver: self,
+                                   observing: [.DisplayThemeChanged])
+        applyTheme()
     }
 
     required init?(coder: NSCoder) {
@@ -63,10 +68,6 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
         super.viewDidLoad()
 
         setupPageController()
-        setupLayout()
-        setupNotifications(forObserver: self,
-                                   observing: [.DisplayThemeChanged])
-        applyTheme()
     }
 
     // MARK: View setup
@@ -106,7 +107,8 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
                                                 constant: -UX.pageControlBottomPadding),
             pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonPadding),
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                             constant: UX.closeButtonPadding),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonPadding),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
@@ -246,7 +248,6 @@ extension IntroViewController {
 
 // MARK: - NotificationThemeable and Notifiable
 extension IntroViewController: NotificationThemeable, Notifiable {
-
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:
@@ -261,7 +262,7 @@ extension IntroViewController: NotificationThemeable, Notifiable {
 
         let indicatorColor = theme == .dark ? UIColor.theme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
         pageControl.currentPageIndicatorTintColor = indicatorColor
-        view.backgroundColor = theme == .dark ? UIColor.Photon.DarkGrey40 : .white
+        view.backgroundColor = LegacyThemeManager.instance.current.onboarding.backgroundColor
 
         onboardingCards.forEach { cardViewController in
             cardViewController.applyTheme()
