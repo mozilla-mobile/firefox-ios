@@ -6,15 +6,6 @@ import Storage
 import Shared
 
 extension LibraryViewController: LibraryPanelDelegate {
-    func libraryPanelDidRequestToSignIn() {
-        self.dismiss(animated: false, completion: nil)
-        delegate?.libraryPanelDidRequestToSignIn()
-    }
-
-    func libraryPanelDidRequestToCreateAccount() {
-        self.dismiss(animated: false, completion: nil)
-        delegate?.libraryPanelDidRequestToCreateAccount()
-    }
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
         delegate?.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)

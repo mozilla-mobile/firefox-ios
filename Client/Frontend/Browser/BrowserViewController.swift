@@ -10,10 +10,7 @@ import Shared
 import Storage
 import SnapKit
 import XCGLogger
-// import Account
 import MobileCoreServices
-// Ecosia: import Telemetry
-// Ecosia: import Sentry
 import Core
 
 struct UrlToOpenModel {
@@ -286,7 +283,6 @@ class BrowserViewController: UIViewController {
             toolbar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             toolbar.applyTheme()
             toolbar.updateMiddleButtonState(currentMiddleButtonState ?? .search)
-            toolbar.ecosiaButton.isHidden = true
             updateTabCountUsingTabManager(self.tabManager)
         } else {
             toolbar.tabToolbarDelegate = nil
@@ -565,7 +561,6 @@ class BrowserViewController: UIViewController {
         super.viewDidAppear(animated)
 
         presentIntroViewController()
-        // presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
 
         if let toast = self.pendingToast {
@@ -1780,20 +1775,6 @@ extension BrowserViewController: TabDelegate {
 
 // MARK: - LibraryPanelDelegate
 extension BrowserViewController: LibraryPanelDelegate {
-    func libraryPanelDidRequestToSignIn() {
-        /*
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
-        presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
-         */
-    }
-
-    func libraryPanelDidRequestToCreateAccount() {
-        /*
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
-        presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
-         */
-    }
-
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
         guard let tab = tabManager.selectedTab else { return }
 
@@ -2231,9 +2212,9 @@ extension BrowserViewController {
             User.shared.migrated = true
             User.shared.hideRebrandIntro()
         } else if User.shared.migrated != true {
-            present(LoadingScreen(profile: profile, tabManager: tabManager, referrals: referrals), animated: true)
+            present(LoadingScreen(profile: profile, referrals: referrals), animated: true)
         } else if let pendingClaim = User.shared.referrals.pendingClaim {
-            present(LoadingScreen(profile: profile, tabManager: tabManager, referrals: referrals, referralCode: pendingClaim), animated: true)
+            present(LoadingScreen(profile: profile, referrals: referrals, referralCode: pendingClaim), animated: true)
         } else if User.shared.showsRebrandIntro {
             let intro = NTPIntroViewController()
             intro.modalPresentationStyle = .overFullScreen
@@ -2302,67 +2283,6 @@ extension BrowserViewController {
         present(dBOnboardingViewController, animated: true, completion: nil)
     }
 
-    /*
-    func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) {
-        let viewModel = UpdateViewModel(profile: profile)
-        if viewModel.shouldShowUpdateSheet(force: force) {
-            viewModel.hasSyncableAccount {
-                self.buildUpdateVC(viewModel: viewModel, animated: animated)
-            }
-        }
-    }
-     */
-
-    /*
-    private func buildUpdateVC(viewModel: UpdateViewModel, animated: Bool = true) {
-        let updateViewController = UpdateViewController(viewModel: viewModel)
-        updateViewController.didFinishFlow = {
-            updateViewController.dismiss(animated: true)
-        }
-
-        if topTabsVisible {
-            updateViewController.preferredContentSize = CGSize(
-                width: ViewControllerConsts.PreferredSize.UpdateViewController.width,
-                height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
-            updateViewController.modalPresentationStyle = .formSheet
-        } else {
-            updateViewController.modalPresentationStyle = .fullScreen
-        }
-
-        // On iPad we present it modally in a controller
-        present(updateViewController, animated: animated) {
-            self.setupHomepageOnBackground()
-        }
-    }
-     */
-
-    /*
-    private func showProperIntroVC() {
-        let introViewModel = IntroViewModel()
-        let introViewController = IntroViewController(viewModel: introViewModel, profile: profile)
-        introViewController.didFinishFlow = {
-            self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-            introViewController.dismiss(animated: true)
-        }
-        self.introVCPresentHelper(introViewController: introViewController)
-    }
-
-    private func introVCPresentHelper(introViewController: UIViewController) {
-        // On iPad we present it modally in a controller
-        if topTabsVisible {
-            introViewController.preferredContentSize = CGSize(
-                width: ViewControllerConsts.PreferredSize.IntroViewController.width,
-                height: ViewControllerConsts.PreferredSize.IntroViewController.height)
-            introViewController.modalPresentationStyle = .formSheet
-        } else {
-            introViewController.modalPresentationStyle = .fullScreen
-        }
-        present(introViewController, animated: true) {
-            self.setupHomepageOnBackground()
-        }
-    }
-     */
-
     // On first run (and forced) open up the homepage in the background.
     private func setupHomepageOnBackground() {
         if let homePageURL = NewTabHomePageAccessors.getHomePage(self.profile.prefs),
@@ -2370,17 +2290,6 @@ extension BrowserViewController {
             tab.loadRequest(URLRequest(url: homePageURL))
         }
     }
-
-    /*
-    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
-        let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage, profile: profile)
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
-    }
-
-    @objc func dismissSignInViewController() {
-        self.dismiss(animated: true, completion: nil)
-    }
-     */
 
 }
 
@@ -2715,35 +2624,6 @@ extension BrowserViewController: TopTabsDelegate {
         urlBar.leaveOverlayMode(didCancel: true)
     }
 }
-
-/*
-extension BrowserViewController: DevicePickerViewControllerDelegate, InstructionsViewControllerDelegate {
-    func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController) {
-        self.popToBVC()
-    }
-
-    func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
-        self.popToBVC()
-    }
-
-    func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
-        guard let tab = tabManager.selectedTab, let url = tab.canonicalURL?.displayURL?.absoluteString else { return }
-        let shareItem = ShareItem(url: url, title: tab.title, favicon: tab.displayFavicon)
-        guard shareItem.isShareable else {
-            let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.popToBVC()})
-            present(alert, animated: true, completion: nil)
-            return
-        }
-        profile.sendItem(shareItem, toDevices: devices).uponQueue(.main) { _ in
-            self.popToBVC()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuTabSentConfirmMessage, image: "check", bottomContainer: self.webViewContainer)
-            }
-        }
-    }
-}
- */
 
 // MARK: - Reopen last closed tab
 

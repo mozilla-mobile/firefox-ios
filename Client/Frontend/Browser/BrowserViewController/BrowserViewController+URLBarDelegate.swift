@@ -4,8 +4,6 @@
 
 import Shared
 import Storage
-// Ecosia: import Telemetry
-// Ecosia: import Glean
 
 protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }

@@ -20,7 +20,6 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
         button.clipsToBounds = true
         button.setTitle(.AppSettingsDone, for: .normal)
         button.titleLabel?.font = ETPMenuUX.Fonts.viewTitleLabels
-//        button.setTitleColor(.systemBlue, for: .normal)
     }
 
     private let siteInfoSection = ETPSectionView(frame: .zero)

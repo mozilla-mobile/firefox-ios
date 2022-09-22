@@ -7,8 +7,6 @@ import Shared
 import Storage
 
 protocol LibraryPanelDelegate: AnyObject {
-    func libraryPanelDidRequestToSignIn()
-    func libraryPanelDidRequestToCreateAccount()
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
     func libraryPanel(didSelectURL url: URL, visitType: VisitType)
     func libraryPanel(didSelectURLString url: String, visitType: VisitType)

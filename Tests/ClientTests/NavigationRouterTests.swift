@@ -91,13 +91,6 @@ class NavigationRouterTests: XCTestCase {
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/badbad")!), nil)
     }
 
-    func testFxALinks() {
-        XCTAssertEqual(
-            NavigationPath(url: URL(string: "\(appScheme)://fxa-signin?signin=coolcodes&user=foo&email=bar")!),
-            NavigationPath.fxa(params: FxALaunchParams(query: ["user": "foo", "email": "bar", "signin": "coolcodes"])))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://fxa-signin?user=foo&email=bar")!), nil)
-    }
-
     func testCaseInsensitivity() {
         XCTAssertEqual(NavigationPath(url: URL(string: "HtTp://www.apple.com")!), NavigationPath.url(webURL: URL(string: "http://www.apple.com")!, isPrivate: false))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme.uppercased())://Deep-Link?url=/settings/newTab")!), NavigationPath.deepLink(DeepLink.settings(.newtab)))

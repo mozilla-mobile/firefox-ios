@@ -90,9 +90,6 @@ class MockTabToolbar: TabToolbarProtocol {
         get { _tabsButton }
     }
 
-    var _ecosiaButton = MockToolbarButton()
-    var ecosiaButton: ToolbarButton { get {_ecosiaButton } }
-
     var _bookmarksButton = MockToolbarButton()
     var bookmarksButton: ToolbarButton { get { _bookmarksButton } }
     

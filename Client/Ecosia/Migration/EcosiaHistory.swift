@@ -81,7 +81,6 @@ final class EcosiaHistory {
 
             // make UI update
             history.setTopSitesNeedsInvalidation()
-            // profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: true)
 
             switch result {
             case .success:
@@ -121,7 +120,7 @@ final class EcosiaHistory {
             }
 
             // add all visits
-            let visit = SiteVisit(site: mappedSite.0, date: item.0.toMicrosecondTimestamp())
+            let visit = SiteVisit(site: mappedSite.0, date: item.0.toMicrosecondsSince1970())
             visits.append((visit, mappedSite.0.id!))
 
             // only report every 50th entry to not over-report

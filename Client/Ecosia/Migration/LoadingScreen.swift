@@ -6,7 +6,6 @@ import Core
 
 final class LoadingScreen: UIViewController {
     private weak var profile: Profile!
-    private weak var tabManager: TabManager!
     private weak var progress: UIProgressView!
     private weak var referrals: Referrals!
     private var referralCode: String?
@@ -14,9 +13,8 @@ final class LoadingScreen: UIViewController {
     let loadingGroup = DispatchGroup()
     
     required init?(coder: NSCoder) { nil }
-    init(profile: Profile, tabManager: TabManager, referrals: Referrals, referralCode: String? = nil) {
+    init(profile: Profile, referrals: Referrals, referralCode: String? = nil) {
         self.profile = profile
-        self.tabManager = tabManager
         self.referrals = referrals
         self.referralCode = referralCode
         super.init(nibName: nil, bundle: nil)
@@ -62,12 +60,12 @@ final class LoadingScreen: UIViewController {
         message.topAnchor.constraint(equalTo: progress.bottomAnchor, constant: 25).isActive = true
         message.widthAnchor.constraint(lessThanOrEqualToConstant: 280).isActive = true
 
-        /*
+
         if User.shared.migrated != true {
             loadingGroup.enter()
             migrate()
         }
-          */
+          
         if let code = referralCode {
             loadingGroup.enter()
             claimReferral(code)
@@ -79,7 +77,7 @@ final class LoadingScreen: UIViewController {
     }
 
     // MARK: migration
-    /*
+
     private var backgroundTaskID: UIBackgroundTaskIdentifier?
     private func migrate() {
         guard !skip() else { return }
@@ -122,9 +120,9 @@ final class LoadingScreen: UIViewController {
             }
         }
     }
-     */
 
-    /*
+
+
     private func skip() -> Bool {
         if let exception = EcosiaImport.Exception.load() {
             Analytics.shared.migrationError(in: .exception, message: exception.reason)
@@ -139,7 +137,7 @@ final class LoadingScreen: UIViewController {
         }
         return false
     }
-     */
+
     
     private func showError() {
         let alert = UIAlertController(title: .localized(.weHitAGlitch),

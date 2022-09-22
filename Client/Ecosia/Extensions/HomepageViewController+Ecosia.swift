@@ -6,9 +6,7 @@ import UIKit
 import Core
 
 protocol HomepageViewControllerDelegate: AnyObject {
-    func home(_ home: HomepageViewController, didScroll contentOffset: CGFloat, offset: CGFloat)
     func homeDidTapSearchButton(_ home: HomepageViewController)
-    func home(_ home: HomepageViewController, willBegin drag: CGPoint)
     func homeDidPressPersonalCounter(_ home: HomepageViewController, completion: (() -> Void)?)
 }
 

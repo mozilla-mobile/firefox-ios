@@ -15,7 +15,6 @@ class TabToolbar: UIView {
     let forwardButton = ToolbarButton()
     let backButton = ToolbarButton()
     let multiStateButton = ToolbarButton()
-    let ecosiaButton = ToolbarButton()
     let actionButtons: [NotificationThemeable & UIButton]
 
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
@@ -26,7 +25,7 @@ class TabToolbar: UIView {
     private let contentView = UIStackView()
 
     fileprivate override init(frame: CGRect) {
-        actionButtons = [backButton, forwardButton, ecosiaButton, circleButton, tabsButton, appMenuButton]
+        actionButtons = [backButton, forwardButton, circleButton, tabsButton, appMenuButton]
         super.init(frame: frame)
         setupAccessibility()
 
@@ -57,7 +56,6 @@ class TabToolbar: UIView {
     private func setupAccessibility() {
         backButton.accessibilityIdentifier = "TabToolbar.backButton"
         forwardButton.accessibilityIdentifier = "TabToolbar.forwardButton"
-        ecosiaButton.accessibilityIdentifier = "TabToolbar.ecosiaButton"
         tabsButton.accessibilityIdentifier = "TabToolbar.tabsButton"
         circleButton.accessibilityIdentifier = "TabToolbar.circleButton"
         appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"

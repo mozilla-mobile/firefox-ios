@@ -61,23 +61,12 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     private let siteDomainLabel: UILabel = .build { label in
-//        label.font = ETPMenuUX.Fonts.websiteTitle
         label.numberOfLines = 2
     }
 
     private var closeButton: UIButton = .build { button in
-        /*
-        button.layer.cornerRadius = 0.5 * ETPMenuUX.UX.closeButtonSize
-        button.clipsToBounds = true*/
         button.setImage(UIImage(named: "xmark"), for: .normal)
-//        button.imageView?.contentMode = .scaleAspectFit
     }
-
-    /*
-    private let horizontalLine: UIView = .build { line in
-        line.backgroundColor = UIColor.theme.etpMenu.horizontalLine
-    }
-     */
 
     // Connection Info view
     private let connectionView = ETPSectionView(frame: .zero)
