@@ -384,7 +384,7 @@ class BrowserViewController: UIViewController {
 
         case .widget:
             urlBar.dismiss()
-            let cardBanner = UIHostingController(
+            let cardBanner = PortraitHostingController(
                 rootView: CardBannerView(
                     config: .init(
                         title: UIConstants.strings.widgetOnboardingCardTitle,
@@ -413,8 +413,7 @@ class BrowserViewController: UIViewController {
                 dismiss: { self.onboardingEventsHandler.route = nil }
             )
         case .widgetTutorial:
-            let controller = UINavigationController(
-                rootViewController: UIHostingController(
+            let controller = PortraitHostingController(
                 rootView: ShowMeHowOnboardingView(
                     config: .init(
                         title: UIConstants.strings.titleShowMeHowOnboardingV2,
@@ -423,8 +422,8 @@ class BrowserViewController: UIViewController {
                         subtitleStep3: UIConstants.strings.subtitleStepThreeShowMeHowOnboardingV2,
                         buttonText: UIConstants.strings.buttonTextShowMeHowOnboardingV2,
                         widgetText: UIConstants.strings.searchInApp),
-                    dismissAction: { self.onboardingEventsHandler.route = nil })))
-            controller.modalPresentationStyle = .formSheet
+                    dismissAction: { self.onboardingEventsHandler.route = nil }))
+            controller.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .overFullScreen : .formSheet
             controller.isModalInPresentation = true
             return controller
         }

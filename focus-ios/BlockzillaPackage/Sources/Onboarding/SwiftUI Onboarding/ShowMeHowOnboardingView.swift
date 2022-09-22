@@ -15,61 +15,63 @@ public struct ShowMeHowOnboardingView: View {
     }
 
     public var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: .verticalSpacing) {
-                HStack(alignment: .top, spacing: .horizontalSpacing) {
-                    Image.stepOneImage
-                        .resizable()
-                        .frame(width: .iconSize, height: .iconSize)
-                        .foregroundColor(.gray)
-                    Text(config.subtitleStep1)
-                        .font(.body16)
-                        .multilineTextAlignment(.leading)
-                }
-                VStack(alignment: .leading, spacing: .horizontalSpacing) {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: .verticalSpacing) {
                     HStack(alignment: .top, spacing: .horizontalSpacing) {
-                        Image.stepTwoImage
+                        Image.stepOneImage
                             .resizable()
                             .frame(width: .iconSize, height: .iconSize)
                             .foregroundColor(.gray)
-                        Text(config.subtitleStep2)
+                        Text(config.subtitleStep1)
                             .font(.body16)
                             .multilineTextAlignment(.leading)
                     }
-                    HStack {
-                        Spacer()
-                        Image.jiggleModeImage
-                        Spacer()
+                    VStack(alignment: .leading, spacing: .horizontalSpacing) {
+                        HStack(alignment: .top, spacing: .horizontalSpacing) {
+                            Image.stepTwoImage
+                                .resizable()
+                                .frame(width: .iconSize, height: .iconSize)
+                                .foregroundColor(.gray)
+                            Text(config.subtitleStep2)
+                                .font(.body16)
+                                .multilineTextAlignment(.leading)
+                        }
+                        HStack {
+                            Spacer()
+                            Image.jiggleModeImage
+                            Spacer()
+                        }
                     }
-                }
-                VStack(alignment: .leading, spacing: .horizontalSpacing) {
-                    HStack(alignment: .top, spacing: .horizontalSpacing) {
-                        Image.stepThreeImage
-                            .resizable()
-                            .frame(width: .iconSize, height: .iconSize)
-                            .foregroundColor(.gray)
-                        Text(config.subtitleStep3)
-                            .font(.body16)
-                            .multilineTextAlignment(.leading)
+                    VStack(alignment: .leading, spacing: .horizontalSpacing) {
+                        HStack(alignment: .top, spacing: .horizontalSpacing) {
+                            Image.stepThreeImage
+                                .resizable()
+                                .frame(width: .iconSize, height: .iconSize)
+                                .foregroundColor(.gray)
+                            Text(config.subtitleStep3)
+                                .font(.body16)
+                                .multilineTextAlignment(.leading)
+                        }
+                        HStack {
+                            Spacer()
+                            SearchWidgetView(title: config.widgetText).frame(width: .searchWidgetSize, height: .searchWidgetSize)
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                            Spacer()
+                        }
                     }
-                    HStack {
-                        Spacer()
-                        SearchWidgetView(title: config.widgetText).frame(width: .searchWidgetSize, height: .searchWidgetSize)
-                            .clipShape(RoundedRectangle(cornerRadius: 20))
-                        Spacer()
+                    Spacer()
+                }.padding(EdgeInsets(top: .topBottomPadding, leading: .leadingTrailingPadding, bottom: .topBottomPadding, trailing: .leadingTrailingPadding))
+                    .navigationTitle(config.title)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        Button(config.buttonText) {
+                            dismissAction()
+                        }
                     }
-                }
-                Spacer()
-            }.padding(EdgeInsets(top: .topBottomPadding, leading: .leadingTrailingPadding, bottom: .topBottomPadding, trailing: .leadingTrailingPadding))
-                .navigationTitle(config.title)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    Button(config.buttonText) {
-                        dismissAction()
-                    }
-                }
+            }
+            .navigationBarBackButtonHidden(true)
         }
-        .navigationBarBackButtonHidden(true)
     }
 }
 

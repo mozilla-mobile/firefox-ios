@@ -44,7 +44,7 @@ class OnboardingFactory {
     static func make(onboardingType: OnboardingVersion, dismissAction: @escaping () -> Void) -> UIViewController {
         switch onboardingType {
         case .v2:
-            let controller = OnboardingHostingControllerV2(rootView: GetStartedOnboardingView(
+            let controller = PortraitHostingController(rootView: GetStartedOnboardingView(
                 config: .init(title: .onboardingTitle, subtitle: .onboardingSubtitleV2, buttonTitle: .onboardingButtonTitleV2),
                 defaultBrowserConfig: .init(
                     title: .defaultBrowserOnboardingViewTitleV2,
@@ -54,7 +54,7 @@ class OnboardingFactory {
                     bottomButtonTitle: .defaultBrowserOnboardingViewBottomButtonTitleV2),
                 dismissAction: dismissAction))
 
-            controller.modalPresentationStyle = .fullScreen
+            controller.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .overFullScreen : .formSheet
             return controller
 
         case .v1:

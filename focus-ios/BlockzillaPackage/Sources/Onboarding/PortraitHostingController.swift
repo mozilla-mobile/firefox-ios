@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-public class OnboardingHostingControllerV2<Content>: UIHostingController<Content> where Content : View {
+public class PortraitHostingController<Content>: UIHostingController<Content> where Content : View {
 
     public override var shouldAutorotate: Bool { return false }
 
