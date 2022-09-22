@@ -94,16 +94,15 @@ class HistoryHighlightsViewModel {
     /// Group weight used to create collection view compositional layout
     /// Case 1: For compact and a single column use 0.9 to occupy must of the width of the parent
     /// Case 2: For compact and multiple columns 0.8 to show part of the next column
-    /// Case 3: For ipad we use 1/3 of the available width
+    /// Case 3: For ipad and iphone landscape we use 1/3 of the available width
     var groupWidthWeight: NSCollectionLayoutDimension {
-        let groupWidth: NSCollectionLayoutDimension
-        if UIScreen.main.traitCollection.horizontalSizeClass == .compact {
-            let weight = numberOfColumns == 1 ? 0.9 : 0.8
-            groupWidth = NSCollectionLayoutDimension.fractionalWidth(weight)
-        } else {
-            groupWidth = NSCollectionLayoutDimension.fractionalWidth(1/3)
+        guard !UIDevice().isIphoneLandscape,
+              UIDevice.current.userInterfaceIdiom != .pad else {
+            return NSCollectionLayoutDimension.fractionalWidth(1/3)
         }
-        return groupWidth
+
+        let weight = numberOfColumns == 1 ? 0.9 : 0.8
+        return NSCollectionLayoutDimension.fractionalWidth(weight)
     }
 
     // MARK: - Inits
