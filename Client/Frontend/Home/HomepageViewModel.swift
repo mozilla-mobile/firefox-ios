@@ -70,14 +70,9 @@ class HomepageViewModel: FeatureFlaggable {
     // Child View models
     private var childViewModels: [HomepageViewModelProtocol]
     var headerViewModel: HomeLogoHeaderViewModel
-    // Ecosia // var messageCardViewModel: HomepageMessageCardViewModel
+    var libraryViewModel: NTPLibraryViewModel
     var topSiteViewModel: TopSitesViewModel
     var impactViewModel: NTPImpactViewModel
-    // Ecosia // var recentlySavedViewModel: RecentlySavedCellViewModel
-    // Ecosia // var jumpBackInViewModel: JumpBackInViewModel
-    // Ecosia // var historyHighlightsViewModel: HistoryHighlightsViewModel
-    // Ecosia // var pocketViewModel: PocketViewModel
-    // Ecosia // var customizeButtonViewModel: CustomizeHomepageSectionViewModel
 
     var shouldDisplayHomeTabBanner: Bool {
         return false // Ecoaia: return messageCardViewModel.shouldDisplayMessageCard
@@ -94,63 +89,15 @@ class HomepageViewModel: FeatureFlaggable {
         self.isZeroSearch = isZeroSearch
 
         self.headerViewModel = .init()
-        /* Ecosia
-        let messageCardAdaptor = MessageCardDataAdaptorImplementation()
-        self.messageCardViewModel = HomepageMessageCardViewModel(dataAdaptor: messageCardAdaptor)
-        messageCardAdaptor.delegate = messageCardViewModel
-         */
+        self.libraryViewModel = NTPLibraryViewModel()
         self.topSiteViewModel = TopSitesViewModel(profile: profile)
         self.impactViewModel = NTPImpactViewModel(personalCounter: personalCounter)
-
-        /* Ecosia
-        let siteImageHelper = SiteImageHelper(profile: profile)
-        let adaptor = JumpBackInDataAdaptorImplementation(profile: profile,
-                                                          tabManager: tabManager,
-                                                          siteImageHelper: siteImageHelper)
-        self.jumpBackInViewModel = JumpBackInViewModel(
-            profile: profile,
-            isPrivate: isPrivate,
-            tabManager: tabManager,
-            adaptor: adaptor)
-        adaptor.delegate = jumpBackInViewModel
-
-        self.recentlySavedViewModel = RecentlySavedCellViewModel(
-            profile: profile)
-        let deletionUtility = HistoryDeletionUtility(with: profile)
-        let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
-            profile: profile,
-            tabManager: tabManager,
-            deletionUtility: deletionUtility)
-        self.historyHighlightsViewModel = HistoryHighlightsViewModel(
-            with: profile,
-            isPrivate: isPrivate,
-            tabManager: tabManager,
-            urlBar: urlBar,
-            historyHighlightsDataAdaptor: historyDataAdaptor)
-
-        let pocketDataAdaptor = PocketDataAdaptorImplementation(
-            pocketAPI: PocketProvider(),
-            pocketSponsoredAPI: MockPocketSponsoredStoriesProvider())
-        self.pocketViewModel = PocketViewModel(pocketDataAdaptor: pocketDataAdaptor)
-        pocketDataAdaptor.delegate = pocketViewModel
-
-        self.customizeButtonViewModel = CustomizeHomepageSectionViewModel()
-         */
         self.childViewModels = [headerViewModel,
+                                libraryViewModel,
                                 topSiteViewModel,
                                 impactViewModel]
         self.isPrivate = isPrivate
-
-        //Ecosia: self.nimbus = nimbus
         topSiteViewModel.delegate = self
-        /* Ecosia
-        historyHighlightsViewModel.delegate = self
-        recentlySavedViewModel.delegate = self
-        pocketViewModel.delegate = self
-        jumpBackInViewModel.delegate = self
-        messageCardViewModel.delegate = self
-         */
-
         updateEnabledSections()
     }
 

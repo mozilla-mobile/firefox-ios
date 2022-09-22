@@ -9,7 +9,7 @@ protocol NTPTooltipDelegate: AnyObject {
 }
 
 final class NTPTooltip: UICollectionReusableView, NotificationThemeable {
-    static let key = String(describing: self)
+    static let key = String(describing: NTPTooltip.self)
     static let margin = CGFloat(16)
     static let containerMargin = CGFloat(12)
     private weak var textLabel: UILabel!

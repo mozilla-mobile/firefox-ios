@@ -597,11 +597,9 @@
 		CA4D9CE628C8D801006AFB5D /* EcosiaTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C8D28C8D801006AFB5D /* EcosiaTheme.swift */; };
 		CA4D9CE728C8D801006AFB5D /* EmptyHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C8E28C8D801006AFB5D /* EmptyHeader.swift */; };
 		CA4D9CE828C8D801006AFB5D /* NTPLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C9028C8D801006AFB5D /* NTPLayout.swift */; };
-		CA4D9CE928C8D801006AFB5D /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C9128C8D801006AFB5D /* EmptyCell.swift */; };
 		CA4D9CEA28C8D801006AFB5D /* DefaultBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C9228C8D801006AFB5D /* DefaultBrowser.swift */; };
 		CA4D9CEC28C8D801006AFB5D /* NTPIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C9428C8D801006AFB5D /* NTPIntroViewController.swift */; };
 		CA4D9CED28C8D801006AFB5D /* NTPImpactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C9528C8D801006AFB5D /* NTPImpactCell.swift */; };
-		CA4D9CEE28C8D801006AFB5D /* SearchbarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C9628C8D801006AFB5D /* SearchbarCell.swift */; };
 		CA4D9CEF28C8D801006AFB5D /* NTPTooltip.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C9728C8D801006AFB5D /* NTPTooltip.swift */; };
 		CA4D9CF028C8D801006AFB5D /* NTPTooltip.Highlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C9828C8D801006AFB5D /* NTPTooltip.Highlight.swift */; };
 		CA4D9CF128C8D801006AFB5D /* NTPLogoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C9928C8D801006AFB5D /* NTPLogoCell.swift */; };
@@ -644,7 +642,7 @@
 		CA4D9D1E28C8D801006AFB5D /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CDF28C8D801006AFB5D /* Analytics.swift */; };
 		CA4D9D1F28C8D801006AFB5D /* Analytics.Values.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CE028C8D801006AFB5D /* Analytics.Values.swift */; };
 		CA506BAA28D1E96E0064072B /* NTPLibraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA506BA928D1E96E0064072B /* NTPLibraryCell.swift */; };
-		CA506BAE28D1EA080064072B /* LibraryShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA506BAD28D1EA080064072B /* LibraryShortcutView.swift */; };
+		CA506BAE28D1EA080064072B /* NTPLibraryShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA506BAD28D1EA080064072B /* NTPLibraryShortcutView.swift */; };
 		CA506BAF28D1EBAB0064072B /* HomeLogoHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8573627D951640075C173 /* HomeLogoHeaderViewModel.swift */; };
 		CA520E7A24913C1B00CCAB48 /* LoginListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */; };
 		CA77ABFD24773C92005079F9 /* BreachAlertsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */; };
@@ -670,6 +668,7 @@
 		CACF7D0D28DB3D5D00A996A4 /* EcosiaImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CDB28C8D801006AFB5D /* EcosiaImport.swift */; };
 		CACF7D0E28DB3E0000A996A4 /* EcosiaHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CDD28C8D801006AFB5D /* EcosiaHistory.swift */; };
 		CACF7D0F28DB3E6D00A996A4 /* EcosiaFavourites.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CDA28C8D801006AFB5D /* EcosiaFavourites.swift */; };
+		CACF7D1128DC553B00A996A4 /* NTPLibaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACF7D1028DC553B00A996A4 /* NTPLibaryViewModel.swift */; };
 		CAEB316528D0B00900ADC9DB /* TabManagerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D422110B3CD00F25400 /* TabManagerStore.swift */; };
 		CAEB316728D0B38900ADC9DB /* HomepageViewController+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAEB316628D0B38900ADC9DB /* HomepageViewController+Ecosia.swift */; };
 		CD1CE85F24EDE66A00006DFB /* WKWebViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1CE85E24EDE66A00006DFB /* WKWebViewExtensions.swift */; };
@@ -3511,11 +3510,9 @@
 		CA4D9C8D28C8D801006AFB5D /* EcosiaTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EcosiaTheme.swift; sourceTree = "<group>"; };
 		CA4D9C8E28C8D801006AFB5D /* EmptyHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyHeader.swift; sourceTree = "<group>"; };
 		CA4D9C9028C8D801006AFB5D /* NTPLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPLayout.swift; sourceTree = "<group>"; };
-		CA4D9C9128C8D801006AFB5D /* EmptyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyCell.swift; sourceTree = "<group>"; };
 		CA4D9C9228C8D801006AFB5D /* DefaultBrowser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultBrowser.swift; sourceTree = "<group>"; };
 		CA4D9C9428C8D801006AFB5D /* NTPIntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPIntroViewController.swift; sourceTree = "<group>"; };
 		CA4D9C9528C8D801006AFB5D /* NTPImpactCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPImpactCell.swift; sourceTree = "<group>"; };
-		CA4D9C9628C8D801006AFB5D /* SearchbarCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchbarCell.swift; sourceTree = "<group>"; };
 		CA4D9C9728C8D801006AFB5D /* NTPTooltip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPTooltip.swift; sourceTree = "<group>"; };
 		CA4D9C9828C8D801006AFB5D /* NTPTooltip.Highlight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPTooltip.Highlight.swift; sourceTree = "<group>"; };
 		CA4D9C9928C8D801006AFB5D /* NTPLogoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPLogoCell.swift; sourceTree = "<group>"; };
@@ -3580,7 +3577,7 @@
 		CA4D9CDF28C8D801006AFB5D /* Analytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		CA4D9CE028C8D801006AFB5D /* Analytics.Values.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.Values.swift; sourceTree = "<group>"; };
 		CA506BA928D1E96E0064072B /* NTPLibraryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPLibraryCell.swift; sourceTree = "<group>"; };
-		CA506BAD28D1EA080064072B /* LibraryShortcutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibraryShortcutView.swift; sourceTree = "<group>"; };
+		CA506BAD28D1EA080064072B /* NTPLibraryShortcutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPLibraryShortcutView.swift; sourceTree = "<group>"; };
 		CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewModel.swift; sourceTree = "<group>"; };
 		CA734AC9B9629155033B810B /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Search.strings; sourceTree = "<group>"; };
 		CA774043B34B7F86DA31B93A /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -3600,6 +3597,7 @@
 		CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDataSource.swift; sourceTree = "<group>"; };
 		CAB7414DA1BA84F4CD08A8F8 /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		CAC458F0249429C20042561A /* LoginListSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListSelectionHelper.swift; sourceTree = "<group>"; };
+		CACF7D1028DC553B00A996A4 /* NTPLibaryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPLibaryViewModel.swift; sourceTree = "<group>"; };
 		CAEB316628D0B38900ADC9DB /* HomepageViewController+Ecosia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomepageViewController+Ecosia.swift"; sourceTree = "<group>"; };
 		CB664443A893E97243385395 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		CBA242528C97816D5BCF4473 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
@@ -6359,12 +6357,13 @@
 			isa = PBXGroup;
 			children = (
 				CA8BCC3C28D308E30020BC50 /* Cells */,
-				CA506BAD28D1EA080064072B /* LibraryShortcutView.swift */,
+				CA506BAD28D1EA080064072B /* NTPLibraryShortcutView.swift */,
 				CA103C7F28C8F78E00F7170A /* CircleButton.swift */,
 				CA4D9C9028C8D801006AFB5D /* NTPLayout.swift */,
 				CA4D9C9228C8D801006AFB5D /* DefaultBrowser.swift */,
 				CA4D9C9428C8D801006AFB5D /* NTPIntroViewController.swift */,
 				CA8BCC3A28D218830020BC50 /* NTPImpactViewModel.swift */,
+				CACF7D1028DC553B00A996A4 /* NTPLibaryViewModel.swift */,
 				CA4D9C9728C8D801006AFB5D /* NTPTooltip.swift */,
 				CA4D9C9828C8D801006AFB5D /* NTPTooltip.Highlight.swift */,
 			);
@@ -6469,8 +6468,6 @@
 				CA506BA928D1E96E0064072B /* NTPLibraryCell.swift */,
 				CA4D9C9528C8D801006AFB5D /* NTPImpactCell.swift */,
 				CA8BCC3D28D30A070020BC50 /* NTPImpactCell.Model.swift */,
-				CA4D9C9128C8D801006AFB5D /* EmptyCell.swift */,
-				CA4D9C9628C8D801006AFB5D /* SearchbarCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -9035,7 +9032,6 @@
 				5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */,
 				D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */,
 				EB9A179F20E6C1A200B12184 /* ThemedWidgets.swift in Sources */,
-				CA4D9CEE28C8D801006AFB5D /* SearchbarCell.swift in Sources */,
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
 				CA220A6F28D0723F000E66E6 /* NimbusManager.swift in Sources */,
 				F85C7F0F271DD154004BDBA4 /* AppAuthenticator.swift in Sources */,
@@ -9145,9 +9141,9 @@
 				D81E45131F82C56D004EFFBA /* NewTabContentSettingsViewController.swift in Sources */,
 				E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */,
 				96A562A327D7B32A0045144A /* Contile.swift in Sources */,
+				CACF7D1128DC553B00A996A4 /* NTPLibaryViewModel.swift in Sources */,
 				962F394A2672D57A006BDA2A /* RecentItemsHelper.swift in Sources */,
 				21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */,
-				CA4D9CE928C8D801006AFB5D /* EmptyCell.swift in Sources */,
 				C869912C28917688007ACC5C /* WallpaperNetworkModule.swift in Sources */,
 				8AB8573F27D961200075C173 /* DataObserver.swift in Sources */,
 				8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */,
@@ -9358,7 +9354,7 @@
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
 				C84655E8288739CB00861B4A /* WallpaperCollectionAvailability.swift in Sources */,
 				C834330026BAD32800ABAAA6 /* EnhancedTrackingProtectionDetailsVM.swift in Sources */,
-				CA506BAE28D1EA080064072B /* LibraryShortcutView.swift in Sources */,
+				CA506BAE28D1EA080064072B /* NTPLibraryShortcutView.swift in Sources */,
 				8AB5958A284145B30090F4AE /* HomepageSectionHandler.swift in Sources */,
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
 				4331A9BB27193DF0005E8080 /* ContextualHintViewController.swift in Sources */,

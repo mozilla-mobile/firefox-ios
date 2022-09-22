@@ -574,8 +574,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func prepareURLOnboardingContextualHint() {
-        guard contextHintVC.shouldPresentHint(),
-              featureFlags.isFeatureEnabled(.contextualHintForToolbar, checking: .buildOnly)
+        guard contextHintVC.shouldPresentHint()
         else { return }
 
         contextHintVC.configure(
@@ -588,7 +587,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func presentContextualHint() {
-        if shouldShowIntroScreen { return }
+        if User.shared.firstTime { return }
         present(contextHintVC, animated: true)
 
         UIAccessibility.post(notification: .layoutChanged, argument: contextHintVC)

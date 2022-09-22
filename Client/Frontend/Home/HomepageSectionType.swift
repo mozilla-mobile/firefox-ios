@@ -6,18 +6,10 @@ import Foundation
 
 enum HomepageSectionType: Int, CaseIterable {
     case logoHeader
-    //case messageCard
+    case libraryShortcuts
     case topSites
     case impact
-    case libraryShortcuts
-    case emptySpace
-    /* Ecosia
-    case jumpBackIn
-    case recentlySaved
-    case historyHighlights
-    case pocket
-    case customizeHome
-     */
+
     var title: String? {
         switch self {
         case .topSites: return .ASShortcutsTitle
@@ -28,12 +20,9 @@ enum HomepageSectionType: Int, CaseIterable {
     var cellIdentifier: String {
         switch self {
         case .logoHeader: return NTPLogoCell.cellIdentifier
-        case .topSites: return "" // Top sites has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .libraryShortcuts: return NTPLibraryCell.cellIdentifier
+        case .topSites: return "" // Top sites has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .impact: return NTPImpactCell.cellIdentifier
-        case .emptySpace: return NTPImpactCell.cellIdentifier
-
-
          }
     }
 

@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import Shared
 
-class ContextualHintViewController: UIViewController, OnViewDismissable {
+class ContextualHintViewController: UIViewController, OnViewDismissable, NotificationThemeable {
 
     struct UX {
         static let closeButtonSize = CGSize(width: 35, height: 35)
@@ -27,7 +27,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     private lazy var closeButton: UIButton = .build { [weak self] button in
         button.setImage(UIImage(named: ImageIdentifiers.contextualHintClose)?.withRenderingMode(.alwaysTemplate),
                         for: .normal)
-        button.tintColor = .white
         button.addTarget(self,
                          action: #selector(self?.dismissAnimated),
                          for: .touchUpInside)
@@ -43,7 +42,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
             withTextStyle: .body,
             maxSize: 28)
         label.textAlignment = .left
-        label.textColor = .white
         label.numberOfLines = 0
     }
 
@@ -62,6 +60,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         stack.axis = .vertical
     }
 
+    /*
     private lazy var gradient: CAGradientLayer = {
         let gradient = CAGradientLayer()
         gradient.type = .axial
@@ -74,6 +73,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         gradient.locations = [0, 0.63]
         return gradient
     }()
+     */
 
     // MARK: - Properties
     private var viewModel: ContextualHintViewModel
@@ -162,11 +162,15 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
     private func commonInit() {
         setupView()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(displayThemeChanged),
+            name: .DisplayThemeChanged,
+            object: nil)
+
     }
 
     private func setupView() {
-        gradient.frame = view.bounds
-        view.layer.addSublayer(gradient)
 
         stackView.addArrangedSubview(descriptionLabel)
         if viewModel.isActionType() { stackView.addArrangedSubview(actionButton) }
@@ -177,6 +181,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
         setupConstraints()
         toggleArrowBasedConstraints()
+        applyTheme()
     }
 
     private func setupConstraints() {
@@ -225,7 +230,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
             let textAttributes: [NSAttributedString.Key: Any] = [
                 .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                      maxSize: 28),
-                .foregroundColor: UIColor.white,
+                .foregroundColor: UIColor.theme.ecosia.primaryTextInverted,
                 .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
 
@@ -294,5 +299,16 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
     public func startTimer() {
         viewModel.startTimer()
+    }
+
+    @objc func displayThemeChanged() {
+        applyTheme()
+        setupContent()
+    }
+
+    func applyTheme() {
+        view.backgroundColor = .theme.ecosia.quarternaryBackground
+        descriptionLabel.textColor = .theme.ecosia.primaryTextInverted
+        closeButton.tintColor = .theme.ecosia.primaryTextInverted
     }
 }

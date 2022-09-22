@@ -7,10 +7,9 @@ import UIKit
 import Storage
 import SDWebImage
 import XCGLogger
-// Ecosia // import SyncTelemetry
 import SnapKit
 
-class LibraryShortcutView: UIView {
+class NTPLibraryShortcutView: UIView {
     static let spacing: CGFloat = 14
     static let iconSize: CGFloat = 52
 
@@ -24,8 +23,8 @@ class LibraryShortcutView: UIView {
         button.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
             make.centerX.equalToSuperview()
-            make.width.equalTo(LibraryShortcutView.iconSize)
-            make.height.equalTo(LibraryShortcutView.iconSize)
+            make.width.equalTo(NTPLibraryShortcutView.iconSize)
+            make.height.equalTo(NTPLibraryShortcutView.iconSize)
         }
         title.allowsDefaultTighteningForTruncation = true
         title.lineBreakMode = .byTruncatingTail

@@ -10,12 +10,6 @@ protocol HomepageViewControllerDelegate: AnyObject {
     func homeDidPressPersonalCounter(_ home: HomepageViewController, completion: (() -> Void)?)
 }
 
-extension HomepageViewController: SearchbarCellDelegate {
-    func searchbarCellPressed(_ cell: SearchbarCell) {
-        delegate?.homeDidTapSearchButton(self)
-    }
-}
-
 extension HomepageViewController {
     func configureEcosiaSetup() {
         personalCounter.subscribe(self) { [weak self] _ in
@@ -94,5 +88,23 @@ extension HomepageViewController: NTPTooltipDelegate {
                 User.shared.hideReferralSpotlight()
             }
         }
+    }
+}
+
+extension HomepageViewController: NTPLibraryDelegate {
+    func libraryCellOpenBookmarks() {
+        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
+    }
+
+    func libraryCellOpenHistory() {
+        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .history)
+    }
+
+    func libraryCellOpenReadlist() {
+        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .readingList)
+    }
+
+    func libraryCellOpenDownloads() {
+        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .downloads)
     }
 }

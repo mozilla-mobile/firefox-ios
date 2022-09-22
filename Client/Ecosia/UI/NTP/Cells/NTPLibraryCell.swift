@@ -3,26 +3,27 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
-import SnapKit
+import UIKit
 
 class NTPLibraryCell: UICollectionViewCell, NotificationThemeable, ReusableCell {
 
     var mainView = UIStackView()
     weak var widthConstraint: NSLayoutConstraint!
     weak var heightConstraint: NSLayoutConstraint!
+    weak var delegate: NTPLibraryDelegate?
 
-    struct LibraryPanel {
+    struct Panel {
         let title: String
         let image: UIImage?
-        let color: UIColor
+        let tag: Int
     }
 
-    var libraryButtons: [LibraryShortcutView] = []
+    var shortcuts: [NTPLibraryShortcutView] = []
 
-    let bookmarks = LibraryPanel(title: .AppMenu.AppMenuBookmarksTitleString, image: UIImage(named: "libraryFavorites"), color: UIColor.Photon.Yellow60)
-    let history = LibraryPanel(title: .AppMenu.AppMenuHistoryTitleString, image: UIImage(named: "libraryHistory"), color: UIColor.Photon.Teal60)
-    let readingList = LibraryPanel(title: .AppMenu.AppMenuReadingListTitleString, image: UIImage(named: "libraryReading"), color: UIColor.Photon.Blue60)
-    let downloads = LibraryPanel(title: .AppMenu.AppMenuDownloadsTitleString, image: UIImage(named: "libraryDownloads"), color: UIColor.Photon.Purple60)
+    let bookmarks = Panel(title: .AppMenu.AppMenuBookmarksTitleString, image: UIImage(named: "libraryFavorites"), tag: 0)
+    let history = Panel(title: .AppMenu.AppMenuHistoryTitleString, image: UIImage(named: "libraryHistory"), tag: 1)
+    let readingList = Panel(title: .AppMenu.AppMenuReadingListTitleString, image: UIImage(named: "libraryReading"), tag: 2)
+    let downloads = Panel(title: .AppMenu.AppMenuDownloadsTitleString, image: UIImage(named: "libraryDownloads"), tag: 3)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -48,16 +49,18 @@ class NTPLibraryCell: UICollectionViewCell, NotificationThemeable, ReusableCell 
 
         // Ecosia: Show history instead of synced tabs
         [bookmarks, history, readingList, downloads].forEach { item in
-            let view = LibraryShortcutView()
+            let view = NTPLibraryShortcutView()
             view.button.setImage(item.image, for: .normal)
+            view.button.tag = item.tag
+            view.button.addTarget(self, action: #selector(tapped), for: .primaryActionTriggered)
             view.title.text = item.title
             let words = view.title.text?.components(separatedBy: NSCharacterSet.whitespacesAndNewlines).count
             view.title.numberOfLines = words == 1 ? 1 : 2
-            // view.button.backgroundColor = item.color
             view.accessibilityLabel = item.title
             mainView.addArrangedSubview(view)
-            libraryButtons.append(view)
+            shortcuts.append(view)
         }
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -65,7 +68,7 @@ class NTPLibraryCell: UICollectionViewCell, NotificationThemeable, ReusableCell 
     }
 
     func applyTheme() {
-        libraryButtons.forEach { item in
+        shortcuts.forEach { item in
             item.title.textColor = .theme.ecosia.primaryText
             item.button.tintColor = .theme.ecosia.primaryButton
             item.button.backgroundColor = .theme.ecosia.secondaryButton
@@ -75,5 +78,20 @@ class NTPLibraryCell: UICollectionViewCell, NotificationThemeable, ReusableCell 
     override func prepareForReuse() {
         super.prepareForReuse()
         applyTheme()
+    }
+
+    @objc func tapped(_ sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            delegate?.libraryCellOpenBookmarks()
+        case 1:
+            delegate?.libraryCellOpenHistory()
+        case 2:
+            delegate?.libraryCellOpenReadlist()
+        case 3:
+            delegate?.libraryCellOpenDownloads()
+        default:
+            break
+        }
     }
 }

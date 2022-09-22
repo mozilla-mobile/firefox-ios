@@ -98,7 +98,7 @@ class PersonalSearchSettings: BoolSetting {
     }
 
     override func displayBool(_ control: UISwitch) {
-        control.isOn = User.shared.personalized ?? false
+        control.isOn = User.shared.personalized
     }
 
     override func writeBool(_ control: UISwitch) {
