@@ -140,9 +140,10 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         super.viewDidLayoutSubviews()
 
         // make sure the keyboard is dismissed when wallpaper onboarding is shown
+        // or is StartAtHome case
         // Can be removed once underlying problem is solved (FXIOS-4904)
         if let presentedViewController = presentedViewController,
-           presentedViewController.isKind(of: BottomSheetViewController.self) {
+           presentedViewController.isKind(of: BottomSheetViewController.self) || tabManager.isStartingAtHome {
             self.dismissKeyboard()
         }
     }
@@ -235,6 +236,10 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     func homepageDidAppear() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
             self?.displayWallpaperSelector()
+            if self?.tabManager.isStartingAtHome ?? false {
+                self?.dismissKeyboard()
+                self?.tabManager.isStartingAtHome = false
+            }
         }
     }
 

@@ -38,6 +38,7 @@ protocol TabManagerProtocol {
     var recentlyAccessedNormalTabs: [Tab] { get }
     var tabs: [Tab] { get }
     var selectedTab: Tab? { get }
+    var isStartingAtHome: Bool { get set }
 
     func selectTab(_ tab: Tab?, previous: Tab?)
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab
@@ -59,6 +60,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     var didAddNewTab: Bool = true
     var tabDisplayType: TabDisplayType = .TabGrid
     let delaySelectingNewPopupTab: TimeInterval = 0.1
+    var isStartingAtHome = false
 
     // Enables undo of recently closed tabs
     var recentlyClosedForUndo = [SavedTab]()
@@ -823,6 +825,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         guard !startAtHomeManager.shouldSkipStartHome else { return }
 
         if startAtHomeManager.shouldStartAtHome() {
+            isStartingAtHome = true
             let wasLastSessionPrivate = selectedTab?.isPrivate ?? false
             let scannableTabs = wasLastSessionPrivate ? privateTabs : normalTabs
             let existingHomeTab = startAtHomeManager.scanForExistingHomeTab(in: scannableTabs,
