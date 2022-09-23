@@ -81,6 +81,8 @@ public struct ImageIdentifiers {
     public static let stackedTabsIcon = "recently_closed"
     public static let sync = "menu-sync"
     public static let syncedDevicesIcon = "synced_devices"
+    public static let tabTrayDelete = "action_delete"
+    public static let tabTrayNewTab = "menu-NewTab"
     public static let trashIcon = "forget"
     public static let trashIconMonocrome = "trash-icon"
     public static let upgradeBackground = "onboardingBackground"

@@ -39,7 +39,7 @@ class TabTrayViewController: UIViewController, Themeable {
     // MARK: - UI Elements
     // Buttons & Menus
     private lazy var deleteButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"),
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.tabTrayDelete),
                                      style: .plain,
                                      target: self,
                                      action: #selector(didTapDeleteTabs(_:)))
@@ -49,7 +49,7 @@ class TabTrayViewController: UIViewController, Themeable {
     }()
 
     private lazy var newTabButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed("menu-NewTab"),
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.tabTrayNewTab),
                                      style: .plain,
                                      target: self,
                                      action: #selector(didTapAddTab(_:)))
@@ -279,7 +279,11 @@ class TabTrayViewController: UIViewController, Themeable {
         case .privateTabs:
             switchBetweenLocalPanels(withPrivateMode: true)
         case .syncedTabs:
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .syncPanel, extras: nil)
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .libraryPanel,
+                                         value: .syncPanel,
+                                         extras: nil)
             if children.first == viewModel.tabTrayView {
                 hideCurrentPanel()
                 updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
@@ -394,7 +398,9 @@ extension TabTrayViewController: Notifiable {
             case .UpdateLabelOnTabClosed:
                 guard let label = self?.countLabel else { return }
                 self?.countLabel.text = self?.viewModel.normalTabsCount
-                self?.iPhoneNavigationMenuIdentifiers.setImage(UIImage(named: ImageIdentifiers.navTabCounter)!.overlayWith(image: label), forSegmentAt: 0)
+                self?.iPhoneNavigationMenuIdentifiers.setImage(
+                    UIImage(named: ImageIdentifiers.navTabCounter)!.overlayWith(image: label),
+                    forSegmentAt: 0)
             default: break
             }
         }
@@ -412,7 +418,8 @@ extension TabTrayViewController: UIToolbarDelegate {
 extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPopoverPresentationControllerDelegate {
     // Returning None here, for the iPhone makes sure that the Popover is actually presented as a
     // Popover and not as a full-screen modal, which is the default on compact device classes.
-    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+    func adaptivePresentationStyle(for controller: UIPresentationController,
+                                   traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         if shouldUseiPadSetup() {
             return .overFullScreen
         }
@@ -470,10 +477,16 @@ extension TabTrayViewController: RemotePanelDelegate {
     // Sign In and Create Account Helper
     func fxaSignInOrCreateAccountHelper() {
         let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
-        let controller = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaParams, flowType: .emailLoginFlow, referringPage: .tabTray, profile: viewModel.profile)
+        let controller = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaParams,
+                                                                                     flowType: .emailLoginFlow,
+                                                                                     referringPage: .tabTray,
+                                                                                     profile: viewModel.profile)
         (controller as? FirefoxAccountSignInViewController)?.shouldReload = { [weak self] in
             self?.viewModel.reloadRemoteTabs()
         }
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: controller, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
+        presentThemedViewController(navItemLocation: .Left,
+                                    navItemText: .Close,
+                                    vcBeingPresented: controller,
+                                    topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 }
