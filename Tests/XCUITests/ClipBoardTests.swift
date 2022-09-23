@@ -26,9 +26,7 @@ class ClipBoardTests: BaseTestCase {
 
     // Check copied url is same as in browser
     func checkCopiedUrl() {
-        if #available(iOS 16.0, *){
-            // Skipping this check as per Allow/Deny pop up issue
-        } else {
+        if #unavailable(iOS 16.0) {
             if let myString = UIPasteboard.general.string {
                 let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
                 let allowBtn = springboard.buttons["Allow Paste"]

@@ -321,9 +321,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         let menu = app.tables["Context Menu"].firstMatch
 
         if !(processIsTranslatedStr() == m1Rosetta) {
-            if #available(iOS 16, *) {
-                // Skip
-            } else {
+            if #unavailable(iOS 16) {
                 screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
                     UIPasteboard.general.string = userState.url ?? defaultURL
                     menu.otherElements[ImageIdentifiers.pasteAndGo].firstMatch.tap()
