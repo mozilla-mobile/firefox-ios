@@ -10,6 +10,7 @@ protocol Themeable: UIViewController {
     var notificationCenter: NotificationProtocol { get set }
     func listenForThemeChange()
     func applyTheme()
+    func updateThemeApplicableSubviews()
 }
 
 extension Themeable {
