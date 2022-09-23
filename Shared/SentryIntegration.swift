@@ -90,6 +90,12 @@ public class SentryIntegration: SentryProtocol {
 
                 return event
             }
+            options.beforeBreadcrumb = { crumb in
+                if crumb.type == "http" || crumb.category == "http" {
+                    return nil
+                }
+                return crumb
+            }
         }
         enabled = true
 
