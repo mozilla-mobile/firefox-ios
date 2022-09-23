@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import SnapKit
 import Shared
 import Storage
 import Foundation
@@ -39,8 +38,8 @@ class TabTrayViewController: UIViewController, Themeable {
 
     // MARK: - UI Elements
     // Buttons & Menus
-    lazy var deleteButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"),
+    private lazy var deleteButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.tabTrayDelete),
                                      style: .plain,
                                      target: self,
                                      action: #selector(didTapDeleteTabs(_:)))
@@ -49,20 +48,23 @@ class TabTrayViewController: UIViewController, Themeable {
         return button
     }()
 
-    lazy var newTabButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapAddTab(_:))))
+    private lazy var newTabButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.tabTrayNewTab),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(didTapAddTab(_:)))
         button.accessibilityIdentifier = "newTabButtonTabTray"
         button.accessibilityLabel = .TabTrayAddTabAccessibilityLabel
         return button
     }()
 
-    lazy var doneButton: UIBarButtonItem = {
+    private lazy var doneButton: UIBarButtonItem = {
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapDone))
         button.accessibilityIdentifier = "doneButtonTabTray"
         return button
     }()
 
-    lazy var syncTabButton: UIBarButtonItem = {
+    private lazy var syncTabButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: .FxASyncNow,
                                      style: .plain,
                                      target: self,
@@ -72,7 +74,7 @@ class TabTrayViewController: UIViewController, Themeable {
         return button
     }()
 
-    lazy var syncLoadingView: UIStackView = {
+    private lazy var syncLoadingView: UIStackView = {
         let syncingLabel = UILabel()
         syncingLabel.text = .SyncingMessageWithEllipsis
         syncingLabel.textColor = themeManager.currentTheme.colors.textPrimary
@@ -86,13 +88,13 @@ class TabTrayViewController: UIViewController, Themeable {
         return stackView
     }()
 
-    lazy var flexibleSpace: UIBarButtonItem = {
+    private lazy var flexibleSpace: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
                                target: nil,
                                action: nil)
     }()
 
-    lazy var fixedSpace: UIBarButtonItem = {
+    private lazy var fixedSpace: UIBarButtonItem = {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
                                target: nil,
                                action: nil)
@@ -109,15 +111,15 @@ class TabTrayViewController: UIViewController, Themeable {
         return label
     }()
 
-    lazy var bottomToolbarItems: [UIBarButtonItem] = {
+    private lazy var bottomToolbarItems: [UIBarButtonItem] = {
         return [deleteButton, flexibleSpace, newTabButton]
     }()
 
-    lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
+    private lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
         return [flexibleSpace, syncTabButton]
     }()
 
-    lazy var navigationMenu: UISegmentedControl = {
+    private lazy var navigationMenu: UISegmentedControl = {
         var navigationMenu: UISegmentedControl
         if shouldUseiPadSetup() {
             navigationMenu = iPadNavigationMenuIdentifiers
@@ -136,11 +138,11 @@ class TabTrayViewController: UIViewController, Themeable {
         return navigationMenu
     }()
 
-    lazy var iPadNavigationMenuIdentifiers: UISegmentedControl = {
+    private lazy var iPadNavigationMenuIdentifiers: UISegmentedControl = {
         return UISegmentedControl(items: TabTrayViewModel.Segment.allCases.map { $0.label })
     }()
 
-    lazy var iPhoneNavigationMenuIdentifiers: UISegmentedControl = {
+    private lazy var iPhoneNavigationMenuIdentifiers: UISegmentedControl = {
         return UISegmentedControl(items: [
             TabTrayViewModel.Segment.tabs.image!.overlayWith(image: countLabel),
             TabTrayViewModel.Segment.privateTabs.image!,
@@ -148,7 +150,7 @@ class TabTrayViewController: UIViewController, Themeable {
     }()
 
     // Toolbars
-    lazy var navigationToolbar: UIToolbar = {
+    private lazy var navigationToolbar: UIToolbar = {
         let toolbar = UIToolbar()
         toolbar.delegate = self
         toolbar.setItems([UIBarButtonItem(customView: navigationMenu)], animated: false)
@@ -277,7 +279,11 @@ class TabTrayViewController: UIViewController, Themeable {
         case .privateTabs:
             switchBetweenLocalPanels(withPrivateMode: true)
         case .syncedTabs:
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .syncPanel, extras: nil)
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .libraryPanel,
+                                         value: .syncPanel,
+                                         extras: nil)
             if children.first == viewModel.tabTrayView {
                 hideCurrentPanel()
                 updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
@@ -309,9 +315,14 @@ class TabTrayViewController: UIViewController, Themeable {
         let topEdgeInset = shouldUseiPadSetup() ? 0 : GridTabTrayControllerUX.NavigationToolbarHeight
         panel.additionalSafeAreaInsets = UIEdgeInsets(top: topEdgeInset, left: 0, bottom: 0, right: 0)
         panel.endAppearanceTransition()
-        panel.view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+
+        NSLayoutConstraint.activate([
+            panel.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            panel.view.topAnchor.constraint(equalTo: view.topAnchor),
+            panel.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            panel.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+
         panel.didMove(toParent: self)
         updateTitle()
     }
@@ -387,7 +398,9 @@ extension TabTrayViewController: Notifiable {
             case .UpdateLabelOnTabClosed:
                 guard let label = self?.countLabel else { return }
                 self?.countLabel.text = self?.viewModel.normalTabsCount
-                self?.iPhoneNavigationMenuIdentifiers.setImage(UIImage(named: ImageIdentifiers.navTabCounter)!.overlayWith(image: label), forSegmentAt: 0)
+                self?.iPhoneNavigationMenuIdentifiers.setImage(
+                    UIImage(named: ImageIdentifiers.navTabCounter)!.overlayWith(image: label),
+                    forSegmentAt: 0)
             default: break
             }
         }
@@ -405,7 +418,8 @@ extension TabTrayViewController: UIToolbarDelegate {
 extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPopoverPresentationControllerDelegate {
     // Returning None here, for the iPhone makes sure that the Popover is actually presented as a
     // Popover and not as a full-screen modal, which is the default on compact device classes.
-    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+    func adaptivePresentationStyle(for controller: UIPresentationController,
+                                   traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         if shouldUseiPadSetup() {
             return .overFullScreen
         }
@@ -463,10 +477,16 @@ extension TabTrayViewController: RemotePanelDelegate {
     // Sign In and Create Account Helper
     func fxaSignInOrCreateAccountHelper() {
         let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
-        let controller = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaParams, flowType: .emailLoginFlow, referringPage: .tabTray, profile: viewModel.profile)
+        let controller = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaParams,
+                                                                                     flowType: .emailLoginFlow,
+                                                                                     referringPage: .tabTray,
+                                                                                     profile: viewModel.profile)
         (controller as? FirefoxAccountSignInViewController)?.shouldReload = { [weak self] in
             self?.viewModel.reloadRemoteTabs()
         }
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: controller, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
+        presentThemedViewController(navItemLocation: .Left,
+                                    navItemText: .Close,
+                                    vcBeingPresented: controller,
+                                    topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 }
