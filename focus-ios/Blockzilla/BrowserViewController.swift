@@ -850,6 +850,7 @@ class BrowserViewController: UIViewController {
     func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.
         guard isViewLoaded else { initialUrl = url; return }
+        GleanMetrics.BrowserSearch.searchCount["action"].add()
         shortcutsPresenter.shortcutsState = .none
 
         if isIPadRegularDimensions {

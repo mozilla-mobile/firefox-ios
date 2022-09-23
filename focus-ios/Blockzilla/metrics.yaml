@@ -535,3 +535,24 @@ browser_search:
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: "2023-08-20"
+  search_count:
+    type: labeled_counter
+    description: |
+      The labels for this counter are `<search-engine-name>.<source>`.
+      If the search engine is bundled with Focus `search-engine-name` will be
+      the name of the search engine. If it's a custom search engine (defined:
+      https://github.com/mozilla-mobile/fenix/issues/1607) the value will be
+      `custom`.
+      `source` will be: `action`, `suggestion`.
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3479
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3483
+    data_sensitivity:
+      - technical
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-09-22"
