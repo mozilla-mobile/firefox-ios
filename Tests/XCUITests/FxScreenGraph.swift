@@ -321,9 +321,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         let menu = app.tables["Context Menu"].firstMatch
 
         if !(processIsTranslatedStr() == m1Rosetta) {
-            screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
-                UIPasteboard.general.string = userState.url ?? defaultURL
-                menu.otherElements[ImageIdentifiers.pasteAndGo].firstMatch.tap()
+            if #available(iOS 16, *) {
+                // Skip
+            } else {
+                screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
+                    UIPasteboard.general.string = userState.url ?? defaultURL
+                    menu.otherElements[ImageIdentifiers.pasteAndGo].firstMatch.tap()
+                }
             }
         }
 
@@ -989,7 +993,10 @@ extension MMNavigator where T == FxUserState {
         UIPasteboard.general.string = urlString
         userState.url = urlString
         userState.waitForLoading = waitForLoading
+        // Using LoadURLByTyping for Intel too on Xcode14
         if processIsTranslatedStr() == m1Rosetta {
+            performAction(Action.LoadURLByTyping)
+        } else if #available (iOS 16, *) {
             performAction(Action.LoadURLByTyping)
         } else {
             performAction(Action.LoadURL)
