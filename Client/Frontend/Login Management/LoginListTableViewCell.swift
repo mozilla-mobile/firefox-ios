@@ -4,6 +4,7 @@
 
 import UIKit
 
+// TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
 class LoginListTableViewSettingsCell: ThemedTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -14,6 +15,7 @@ class LoginListTableViewSettingsCell: ThemedTableViewCell {
     }
 }
 
+// TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
 class LoginListTableViewCell: ThemedTableViewCell {
     private let breachAlertSize: CGFloat = 24
     lazy var breachAlertImageView: UIImageView = .build { imageView in
@@ -75,7 +77,6 @@ class LoginListTableViewCell: ThemedTableViewCell {
         contentView.addSubview(contentStack)
         // Need to override the default background multi-select color to support theming
         multipleSelectionBackgroundView = UIView()
-        applyTheme()
         setConstraints()
     }
 

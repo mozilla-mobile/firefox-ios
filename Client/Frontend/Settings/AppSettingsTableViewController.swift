@@ -80,7 +80,9 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         case .wallpaper:
             let wallpaperManager = WallpaperManager()
             if wallpaperManager.canSettingsBeShown {
-                let viewModel = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager, tabManager: tabManager)
+                let viewModel = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager,
+                                                           tabManager: tabManager,
+                                                           theme: themeManager.currentTheme)
                 let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
                 navigationController?.pushViewController(wallpaperVC, animated: true)
             }
@@ -109,6 +111,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             SiriPageSetting(settings: self),
             BoolSetting(
                 prefs: prefs,
+                theme: themeManager.currentTheme,
                 prefKey: PrefsKeys.KeyBlockPopups,
                 defaultValue: true,
                 titleText: .AppSettingsBlockPopups),
@@ -122,7 +125,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         let tabTrayGroupsAreBuildActive = featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly)
         let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
         if tabTrayGroupsAreBuildActive || inactiveTabsAreBuildActive {
-            generalSettings.insert(TabsSetting(), at: 3)
+            generalSettings.insert(TabsSetting(theme: themeManager.currentTheme), at: 3)
         }
 
         let accountChinaSyncSetting: [Setting]
@@ -141,12 +144,14 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         generalSettings += [
             BoolSetting(
                 prefs: prefs,
+                theme: themeManager.currentTheme,
                 prefKey: "showClipboardBar",
                 defaultValue: false,
                 titleText: .SettingsOfferClipboardBarTitle,
                 statusText: .SettingsOfferClipboardBarStatus),
             BoolSetting(
                 prefs: prefs,
+                theme: themeManager.currentTheme,
                 prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
                 defaultValue: true,
                 titleText: .SettingsShowLinkPreviewsTitle,
@@ -156,7 +161,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         if #available(iOS 14.0, *) {
             settings += [
                 SettingSection(footerTitle: NSAttributedString(string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription),
-                               children: [DefaultBrowserSetting()])
+                               children: [DefaultBrowserSetting(theme: themeManager.currentTheme)])
             ]
         }
 
@@ -182,10 +187,11 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
 
         privacySettings += [
             BoolSetting(prefs: prefs,
-                prefKey: "settings.closePrivateTabs",
-                defaultValue: false,
-                titleText: .AppSettingsClosePrivateTabsTitle,
-                statusText: .AppSettingsClosePrivateTabsDescription)
+                        theme: themeManager.currentTheme,
+                        prefKey: "settings.closePrivateTabs",
+                        defaultValue: false,
+                        titleText: .AppSettingsClosePrivateTabsTitle,
+                        statusText: .AppSettingsClosePrivateTabsDescription)
         ]
 
         privacySettings.append(ContentBlockerSetting(settings: self))
@@ -199,9 +205,9 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             SettingSection(title: NSAttributedString(string: .AppSettingsSupport), children: [
                 ShowIntroductionSetting(settings: self),
                 SendFeedbackSetting(),
-                SendAnonymousUsageDataSetting(prefs: prefs, delegate: settingsDelegate),
-                StudiesToggleSetting(prefs: prefs, delegate: settingsDelegate),
-                OpenSupportPageSetting(delegate: settingsDelegate),
+                SendAnonymousUsageDataSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),
+                StudiesToggleSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),
+                OpenSupportPageSetting(delegate: settingsDelegate, theme: themeManager.currentTheme),
             ]),
             SettingSection(title: NSAttributedString(string: .AppSettingsAbout), children: [
                 AppStoreReviewSetting(),

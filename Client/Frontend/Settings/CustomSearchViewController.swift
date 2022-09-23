@@ -32,7 +32,7 @@ class CustomSearchViewController: SettingsTableViewController {
     fileprivate var engineTitle = ""
     fileprivate lazy var spinnerView: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .medium)
-        spinner.color = .systemGray
+        spinner.color = themeManager.currentTheme.colors.iconSpinnerDefault
         spinner.hidesWhenStopped = true
         return spinner
     }()
@@ -218,14 +218,14 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         super.init(cellHeight: TextFieldHeight)
     }
 
-    override func onConfigureCell(_ cell: UITableViewCell) {
-        super.onConfigureCell(cell)
+    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
+        super.onConfigureCell(cell, theme: theme)
         if let id = accessibilityIdentifier {
             textField.accessibilityIdentifier = id + "TextField"
         }
 
         placeholderLabel.adjustsFontSizeToFitWidth = true
-        placeholderLabel.textColor = UIColor.theme.general.settingsTextPlaceholder
+        placeholderLabel.textColor = theme.colors.textSecondary
         placeholderLabel.text = placeholder
         placeholderLabel.isHidden = !textField.text.isEmpty
         placeholderLabel.frame = CGRect(width: TextLabelWidth, height: TextLabelHeight)
@@ -238,8 +238,8 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         }
         textField.autocorrectionType = .no
         textField.delegate = self
-        textField.backgroundColor = UIColor.theme.tableView.rowBackground
-        textField.textColor = UIColor.theme.tableView.rowText
+        textField.backgroundColor = theme.colors.layer2
+        textField.textColor = theme.colors.textPrimary
         cell.isUserInteractionEnabled = true
         cell.accessibilityTraits = UIAccessibilityTraits.none
         cell.contentView.addSubview(textField)
@@ -273,7 +273,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         placeholderLabel.isHidden = !textField.text.isEmpty
         settingDidChange?(textView.text)
-        let color = isValid(textField.text) ? UIColor.theme.tableView.rowText : UIColor.theme.general.destructiveRed
+        let color = isValid(textField.text) ? theme.colors.textPrimary : theme.colors.textWarning
         textField.textColor = color
     }
 

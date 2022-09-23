@@ -4,7 +4,7 @@
 
 import UIKit
 
-class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable {
+class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable, Themeable {
 
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
@@ -16,6 +16,8 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable {
 
     private var viewModel: WallpaperSettingsViewModel
     var notificationCenter: NotificationProtocol
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
 
     // Views
     private lazy var contentView: UIView = .build { _ in }
@@ -45,9 +47,11 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable {
 
     // MARK: - Initializers
     init(viewModel: WallpaperSettingsViewModel,
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -61,7 +65,8 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable {
         setupView()
         applyTheme()
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged, UIContentSizeCategory.didChangeNotification])
+                           observing: [UIContentSizeCategory.didChangeNotification])
+        listenForThemeChange()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -85,6 +90,10 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable {
 
     override func updateOnRotation() {
         configureCollectionView()
+    }
+
+    func applyTheme() {
+        contentView.backgroundColor = themeManager.currentTheme.colors.layer5
     }
 }
 
@@ -267,25 +276,14 @@ private extension WallpaperSettingsViewController {
     }
 }
 
-// MARK: - Themable & Notifiable
-extension WallpaperSettingsViewController: NotificationThemeable, Notifiable {
+// MARK: - Notifiable
+extension WallpaperSettingsViewController: Notifiable {
 
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
         case UIContentSizeCategory.didChangeNotification:
             preferredContentSizeChanged(notification)
         default: break
-        }
-    }
-
-    func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        if theme == .dark {
-            contentView.backgroundColor = UIColor.Photon.DarkGrey40
-        } else {
-            contentView.backgroundColor = UIColor.Photon.LightGrey10
         }
     }
 }

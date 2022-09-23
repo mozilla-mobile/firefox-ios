@@ -94,6 +94,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         cell.textLabel?.attributedText = NSAttributedString.tableRowTitle(option.name, enabled: option.enabled)
         cell.accessoryType = (currentChoice == option.scheme && option.enabled) ? .checkmark : .none
         cell.isUserInteractionEnabled = option.enabled
+        cell.applyTheme(theme: themeManager.currentTheme)
 
         return cell
     }

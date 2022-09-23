@@ -105,7 +105,9 @@ class WallpaperSettingsViewModelTests: XCTestCase {
 //    }
 
     func createSubject() -> WallpaperSettingsViewModel {
-        let subject = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager, tabManager: MockTabManager())
+        let subject = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager,
+                                                 tabManager: MockTabManager(),
+                                                 theme: LightTheme())
         trackForMemoryLeaks(subject)
         return subject
     }
