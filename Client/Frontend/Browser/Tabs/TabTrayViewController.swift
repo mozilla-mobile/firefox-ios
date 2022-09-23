@@ -50,7 +50,10 @@ class TabTrayViewController: UIViewController, Themeable {
     }()
 
     lazy var newTabButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapAddTab(_:))))
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed("menu-NewTab"),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(didTapAddTab(_:)))
         button.accessibilityIdentifier = "newTabButtonTabTray"
         button.accessibilityLabel = .TabTrayAddTabAccessibilityLabel
         return button
