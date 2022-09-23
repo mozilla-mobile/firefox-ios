@@ -103,7 +103,7 @@ class TabsButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func clone() -> UIView {
+    func createTabsButton() -> TabsButton {
         let button = TabsButton()
 
         button.accessibilityLabel = accessibilityLabel
@@ -145,8 +145,7 @@ class TabsButton: UIButton {
             insideButton.layer.removeAllAnimations()
         }
 
-        // make a 'clone' of the tabs button
-        let newTabsButton = clone() as! TabsButton
+        let newTabsButton = createTabsButton()
 
         self.clonedTabsButton = newTabsButton
         newTabsButton.frame = self.bounds
