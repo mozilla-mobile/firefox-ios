@@ -1223,7 +1223,6 @@
 		EB7FFFC820A9D38D003E1E34 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7FFFBF20A9D38C003E1E34 /* AlertController.swift */; };
 		EB84945722D4FA8A0004C2E2 /* disconnect-block-fingerprinting.json in Resources */ = {isa = PBXBuildFile; fileRef = EB84945522D4FA8A0004C2E2 /* disconnect-block-fingerprinting.json */; };
 		EB84945822D4FA8A0004C2E2 /* disconnect-block-cryptomining.json in Resources */ = {isa = PBXBuildFile; fileRef = EB84945622D4FA8A0004C2E2 /* disconnect-block-cryptomining.json */; };
-		EB8A0A77206ABCE000A9859A /* WebPagesForTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7A651020699BD200B52A5F /* WebPagesForTesting.swift */; };
 		EB912B9A22722B5F00DF585A /* Deferred.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB912B8E22722A7800DF585A /* Deferred.swift */; };
 		EB912B9B22722B6300DF585A /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB912B9022722A7800DF585A /* ReadWriteLock.swift */; };
 		EB912B9C22722B6800DF585A /* LockProtected.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB912B9122722A7800DF585A /* LockProtected.swift */; };
@@ -10765,7 +10764,6 @@
 				D3BE7B261B054D4400641031 /* main.swift in Sources */,
 				21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */,
 				E1FF93E228A2E55700E6360E /* WallpaperSelectorViewController.swift in Sources */,
-				EB8A0A77206ABCE000A9859A /* WebPagesForTesting.swift in Sources */,
 				D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */,
 				E6CF28E71CB43B7900151AB3 /* SensitiveViewController.swift in Sources */,
 				43AB6FA225DC53D30016B015 /* GoogleTopSiteManager.swift in Sources */,
