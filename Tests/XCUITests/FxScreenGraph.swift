@@ -767,7 +767,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.buttons["newTabButtonTabTray"],
                         forAction: Action.OpenNewTabFromTabTray,
                         transitionTo: NewTabScreen)
-        screenState.tap(app.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
+        screenState.tap(app.toolbars.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
 //        screenState.tap(app.buttons["syncNowButtonTabsButtonTabTray"], to: CloseTabMenu)
 
         var regularModeSelector: XCUIElement
@@ -814,7 +814,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(CloseTabMenu) { screenState in
-        screenState.tap(app.sheets.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton], forAction: Action.AcceptRemovingAllTabs, transitionTo: HomePanelsScreen)
+        screenState.tap(app.scrollViews.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton], forAction: Action.AcceptRemovingAllTabs, transitionTo: HomePanelsScreen)
         screenState.backAction = cancelBackAction
     }
 
