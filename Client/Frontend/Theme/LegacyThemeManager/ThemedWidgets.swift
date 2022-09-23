@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 import UIKit
 
-class ThemedTableViewCell: UITableViewCell {
+class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -55,7 +55,7 @@ class ThemedTableViewController: UITableViewController, Themeable {
     }
 }
 
-class ThemedHeaderFooterViewBordersHelper: NotificationThemeable {
+class ThemedHeaderFooterViewBordersHelper: NotificationThemeable, ThemeApplicable {
     enum BorderLocation {
         case top
         case bottom
@@ -95,8 +95,15 @@ class ThemedHeaderFooterViewBordersHelper: NotificationThemeable {
         }
     }
 
+    // TODO: FXIOS-4884 - Remove NotificationThemeable applyTheme
+    // to remove in favor of applyTheme(theme: Theme) and updateThemeApplicableSubviews
     func applyTheme() {
         topBorder.backgroundColor = UIColor.theme.tableView.separator
         bottomBorder.backgroundColor = UIColor.theme.tableView.separator
+    }
+
+    func applyTheme(theme: Theme) {
+        topBorder.backgroundColor = theme.colors.layer4
+        bottomBorder.backgroundColor = theme.colors.layer4
     }
 }

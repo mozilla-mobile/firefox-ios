@@ -8,8 +8,8 @@ import Shared
 /// Data source for handling LoginData objects from a Cursor
 class LoginDataSource: NSObject, UITableViewDataSource {
     // in case there are no items to run cellForRowAt on, use an empty state view
-    fileprivate let emptyStateView = NoLoginsView()
-    fileprivate var viewModel: LoginListViewModel
+    private let emptyStateView = NoLoginsView()
+    var viewModel: LoginListViewModel
 
     let boolSettings: (BoolSetting, BoolSetting)
 
@@ -66,12 +66,14 @@ class LoginDataSource: NSObject, UITableViewDataSource {
                 }
             }
             return cell
+
         } else {
             let cell = LoginListTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier, inset: tableView.separatorInset)
             guard let login = viewModel.loginAtIndexPath(indexPath) else { return cell }
             let username = login.decryptedUsername
             cell.hostnameLabel.text = login.hostname
             cell.usernameLabel.text = username.isEmpty ? "(no username)" : username
+            // TODO: FXIOS-4995 - BreachAlertsManager theming
             if NightModeHelper.hasEnabledDarkTheme(viewModel.profile.prefs) {
                 cell.breachAlertImageView.tintColor = BreachAlertsManager.darkMode
             } else {
@@ -80,7 +82,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             if let breaches = viewModel.userBreaches, breaches.contains(login) {
                 cell.breachAlertImageView.isHidden = false
             }
-        return cell
+            return cell
         }
     }
 }

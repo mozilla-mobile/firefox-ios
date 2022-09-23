@@ -4,7 +4,7 @@
 
 import UIKit
 
-class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableCell, NotificationThemeable {
+class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableCell, NotificationThemeable, ThemeApplicable {
 
     private struct UX {
         static let titleHorizontalPadding: CGFloat = 15
@@ -63,7 +63,15 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
         fatalError("init(coder:) has not been implemented")
     }
 
+    // TODO: FXIOS-4884 - NotificationThemeable applyTheme
+    // to remove in favor of applyTheme(theme: Theme) and updateThemeApplicableSubviews
     func applyTheme() {
+        bordersHelper.applyTheme()
+        contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+        titleLabel.textColor = UIColor.theme.tableView.headerTextLight
+    }
+
+    func applyTheme(theme: Theme) {
         bordersHelper.applyTheme()
         contentView.backgroundColor = UIColor.theme.tableView.headerBackground
         titleLabel.textColor = UIColor.theme.tableView.headerTextLight

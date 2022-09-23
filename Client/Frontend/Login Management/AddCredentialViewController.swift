@@ -16,13 +16,14 @@ enum AddCredentialField: Int {
     }
 }
 
-class AddCredentialViewController: UIViewController {
+class AddCredentialViewController: UIViewController, Themeable {
+
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
 
     lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
-
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.accessibilityIdentifier = "Add Credential"
         tableView.delegate = self
         tableView.dataSource = self
@@ -43,14 +44,19 @@ class AddCredentialViewController: UIViewController {
         return button
     }()
 
-    init(didSaveAction: @escaping (LoginEntry) -> Void) {
+    init(didSaveAction: @escaping (LoginEntry) -> Void,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.didSaveAction = didSaveAction
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -162,6 +168,14 @@ extension AddCredentialViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
+    }
+
+    func applyTheme() {
+        let theme = themeManager.currentTheme
+        tableView.separatorColor = theme.colors.layer4
+        tableView.backgroundColor = theme.colors.layer1
+
+        updateThemeApplicableSubviews()
     }
 }
 

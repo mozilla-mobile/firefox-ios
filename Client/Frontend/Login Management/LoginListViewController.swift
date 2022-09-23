@@ -91,7 +91,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
         self.viewModel = LoginListViewModel(profile: profile,
                                             searchController: searchController,
                                             theme: themeManager.currentTheme)
-        self.loginDataSource = LoginDataSource(viewModel: self.viewModel)
+        self.loginDataSource = LoginDataSource(viewModel: viewModel)
         self.webpageNavigationHandler = webpageNavigationHandler
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -182,54 +182,62 @@ class LoginListViewController: SensitiveViewController, Themeable {
     }
 
     func applyTheme() {
-        view.backgroundColor = UIColor.theme.tableView.headerBackground
+        let theme = themeManager.currentTheme
+        viewModel.theme = theme
+        loginDataSource.viewModel = viewModel
 
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
-        tableView.reloadData()
+        view.backgroundColor = theme.colors.layer1
+        tableView.separatorColor = theme.colors.layer4
+        tableView.backgroundColor = theme.colors.layer1
 
-        // TODO: Remove with legacy theme clean up FXIOS-3960
-        (tableView.tableHeaderView as? NotificationThemeable)?.applyTheme()
+        selectionButton.setTitleColor(theme.colors.layer2, for: [])
+        selectionButton.backgroundColor = theme.colors.actionPrimary
+        deleteButton.tintColor = theme.colors.textWarning
 
-        selectionButton.setTitleColor(UIColor.theme.tableView.rowBackground, for: [])
-        selectionButton.backgroundColor = UIColor.theme.general.highlightBlue
-
-        let isDarkTheme = LegacyThemeManager.instance.currentName == .dark
         let searchTextField = searchController.searchBar.searchTextField
+        searchTextField.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = theme.colors.textPrimary
 
-        // Theme the search text field (Dark / Light)
-        if isDarkTheme {
-            searchTextField.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = UIColor.white
-        } else {
-            searchTextField.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = UIColor.black
-        }
         // Theme the glass icon next to the search text field
         if let glassIconView = searchTextField.leftView as? UIImageView {
             // Magnifying glass
             glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
-            glassIconView.tintColor = UIColor.theme.tableView.headerTextLight
+            glassIconView.tintColor = theme.colors.textSecondary
         }
 
-        loadingView.configure(theme: themeManager.currentTheme)
+        updateThemeApplicableSubviews()
     }
 
     @objc func dismissLogins() {
         dismiss(animated: true)
     }
-    lazy var editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
-    lazy var addCredentialButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddCredential))
+
+    lazy var editButton = UIBarButtonItem(barButtonSystemItem: .edit,
+                                          target: self,
+                                          action: #selector(beginEditing))
+
+    lazy var addCredentialButton = UIBarButtonItem(barButtonSystemItem: .add,
+                                                   target: self,
+                                                   action: #selector(presentAddCredential))
+
     lazy var deleteButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: .LoginListDelete, style: .plain, target: self, action: #selector(tappedDelete))
-        button.tintColor = UIColor.Photon.Red50
+        let button = UIBarButtonItem(title: .LoginListDelete,
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(tappedDelete))
         return button
     }()
-    lazy var cancelSelectionButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelSelection))
+
+    lazy var cancelSelectionButton = UIBarButtonItem(barButtonSystemItem: .cancel,
+                                                     target: self,
+                                                     action: #selector(cancelSelection))
 
     fileprivate func setupDefaultNavButtons() {
          navigationItem.rightBarButtonItems = [editButton, addCredentialButton]
 
         if shownFromAppMenu {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissLogins))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
+                                                               target: self,
+                                                               action: #selector(dismissLogins))
         } else {
             navigationItem.leftBarButtonItem = nil
         }
@@ -284,7 +292,7 @@ private extension LoginListViewController {
 
     func loadLogins(_ query: String? = nil) {
         loadingView.isHidden = false
-        loadingView.configure(theme: themeManager.currentTheme)
+        loadingView.applyTheme(theme: themeManager.currentTheme)
         viewModel.loadLogins(query, loginDataSource: self.loginDataSource)
     }
 

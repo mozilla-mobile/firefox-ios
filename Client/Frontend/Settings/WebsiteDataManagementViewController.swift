@@ -135,7 +135,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
         view.addSubview(tableView)
         view.addSubview(loadingView)
-        loadingView.configure(theme: themeManager.currentTheme)
+        loadingView.applyTheme(theme: themeManager.currentTheme)
 
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(view)
@@ -332,6 +332,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     }
 
     func applyTheme() {
-        loadingView.configure(theme: themeManager.currentTheme)
+        loadingView.applyTheme(theme: themeManager.currentTheme)
+        // TODO: FXIOS-4884 Update loading view through updateThemeApplicableSubviews
     }
 }

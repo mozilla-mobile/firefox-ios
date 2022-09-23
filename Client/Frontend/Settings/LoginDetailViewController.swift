@@ -25,7 +25,6 @@ struct LoginDetailUX {
     static let SeparatorHeight: CGFloat = 84
 }
 
-// TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
 private class CenteredDetailCell: ThemedTableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -33,16 +32,23 @@ private class CenteredDetailCell: ThemedTableViewCell {
         f.center = CGPoint(x: frame.center.x - safeAreaInsets.right, y: frame.center.y)
         detailTextLabel?.frame = f
     }
+
+    override func applyTheme(theme: Theme) {
+        super.applyTheme(theme: theme)
+        backgroundColor = theme.colors.layer1
+    }
 }
 
-class LoginDetailViewController: SensitiveViewController {
+class LoginDetailViewController: SensitiveViewController, Themeable {
+
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
+
     private let profile: Profile
 
     private lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
-
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.accessibilityIdentifier = "Login Detail List"
         tableView.delegate = self
         tableView.dataSource = self
@@ -74,10 +80,16 @@ class LoginDetailViewController: SensitiveViewController {
         }
     }
 
-    init(profile: Profile, login: LoginRecord, webpageNavigationHandler: ((_ url: URL?) -> Void)?) {
+    init(profile: Profile,
+         login: LoginRecord,
+         webpageNavigationHandler: ((_ url: URL?) -> Void)?,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.login = login
         self.profile = profile
         self.webpageNavigationHandler = webpageNavigationHandler
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -113,6 +125,14 @@ class LoginDetailViewController: SensitiveViewController {
         // Normally UITableViewControllers handle responding to content inset changes from keyboard events when editing
         // but since we don't use the tableView's editing flag for editing we handle this ourselves.
         KeyboardHelper.defaultHelper.addDelegate(self)
+    }
+
+    func applyTheme() {
+        let theme = themeManager.currentTheme
+        tableView.separatorColor = theme.colors.layer4
+        tableView.backgroundColor = theme.colors.layer1
+
+        updateThemeApplicableSubviews()
     }
 }
 
@@ -192,7 +212,6 @@ extension LoginDetailViewController: UITableViewDataSource {
             cell.detailTextLabel?.text = createdFormatted + "\n" + lastModifiedFormatted
             cell.detailTextLabel?.numberOfLines = 2
             cell.detailTextLabel?.textAlignment = .center
-            cell.backgroundColor = view.backgroundColor
             setCellSeparatorHidden(cell)
             return cell
 
@@ -200,9 +219,9 @@ extension LoginDetailViewController: UITableViewDataSource {
             let deleteCell = cell(forIndexPath: indexPath)
             deleteCell.textLabel?.text = .LoginDetailDelete
             deleteCell.textLabel?.textAlignment = .center
-            deleteCell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraits.button
-            deleteCell.backgroundColor = UIColor.theme.tableView.rowBackground
+            deleteCell.configure(type: .delete)
+
             setCellSeparatorFullWidth(deleteCell)
             return deleteCell
         }

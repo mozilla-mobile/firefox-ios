@@ -126,9 +126,9 @@ private extension WallpaperSettingsHeaderView {
 }
 
 // MARK: - Themable
-extension WallpaperSettingsHeaderView {
+extension WallpaperSettingsHeaderView: ThemeApplicable {
 
-    private func applyTheme(theme: Theme) {
+    func applyTheme(theme: Theme) {
         contentStackView.backgroundColor = theme.colors.layer5
         titleLabel.textColor = theme.colors.textSecondary
         descriptionLabel.textColor = theme.colors.textSecondary
