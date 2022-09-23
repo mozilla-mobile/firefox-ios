@@ -40,9 +40,12 @@ final class LoginListViewModel {
         }
     }
     var hasLoadedBreaches: Bool = false
-    init(profile: Profile, searchController: UISearchController) {
+    var theme: Theme
+
+    init(profile: Profile, searchController: UISearchController, theme: Theme) {
         self.profile = profile
         self.searchController = searchController
+        self.theme = theme
     }
 
     func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) {

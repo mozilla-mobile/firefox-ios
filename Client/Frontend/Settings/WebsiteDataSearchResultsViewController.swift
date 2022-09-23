@@ -7,7 +7,12 @@ import SnapKit
 import Shared
 import WebKit
 
-class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, Themeable {
+
+    var themeManager: ThemeManager = AppContainer.shared.resolve()
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
     private enum Section: Int {
         case sites = 0
         case clearButton = 1
@@ -36,8 +41,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         tableView = UITableView()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: "Cell")
@@ -53,6 +57,9 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
             make.edges.equalTo(view)
         }
         KeyboardHelper.defaultHelper.addDelegate(self)
+
+        listenForThemeChange()
+        applyTheme()
     }
 
     func reloadData() {
@@ -74,6 +81,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
         let cell = ThemedTableViewCell(style: .default, reuseIdentifier: nil)
         let section = Section(rawValue: indexPath.section)!
         switch section {
@@ -89,7 +97,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         case .clearButton:
             cell.textLabel?.text = viewModel.clearButtonTitle
             cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
+            cell.textLabel?.textColor = themeManager.currentTheme.colors.textWarning
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ClearAllWebsiteData"
         }
@@ -168,6 +176,11 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         })
 
         tableView.reloadData()
+    }
+
+    func applyTheme() {
+        tableView.separatorColor = themeManager.currentTheme.colors.layer4
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }
 

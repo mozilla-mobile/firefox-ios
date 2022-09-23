@@ -3,27 +3,30 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 import UIKit
 
-class ThemedTableViewCell: UITableViewCell, NotificationThemeable {
-    var detailTextColor = UIColor.theme.tableView.disabledRowText
+class ThemedTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func applyTheme() {
-        textLabel?.textColor = UIColor.theme.tableView.rowText
-        detailTextLabel?.textColor = detailTextColor
-        backgroundColor = UIColor.theme.tableView.rowBackground
-        tintColor = UIColor.theme.general.controlTint
+    func applyTheme(theme: Theme) {
+        textLabel?.textColor = theme.colors.textPrimary
+        detailTextLabel?.textColor = theme.colors.textSecondary
+        backgroundColor = theme.colors.layer2
+        tintColor = theme.colors.actionPrimary
     }
 }
 
-class ThemedTableViewController: UITableViewController, NotificationThemeable {
+class ThemedTableViewController: UITableViewController, Themeable {
+
+    var themeManager: ThemeManager = AppContainer.shared.resolve()
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var themeObserver: NSObjectProtocol?
+
     override init(style: UITableView.Style = .grouped) {
         super.init(style: style)
     }
@@ -33,20 +36,21 @@ class ThemedTableViewController: UITableViewController, NotificationThemeable {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
-        return cell
+        return ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         applyTheme()
+        listenForThemeChange()
     }
 
     func applyTheme() {
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+        tableView.separatorColor = themeManager.currentTheme.colors.layer4
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
         tableView.reloadData()
 
+        // TODO: Remove with legacy theme clean up FXIOS-3960
         (tableView.tableHeaderView as? NotificationThemeable)?.applyTheme()
     }
 }

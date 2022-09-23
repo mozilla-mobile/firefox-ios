@@ -74,6 +74,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
         let cell = ThemedTableViewCell()
         var engine: OpenSearchEngine!
 
@@ -91,7 +92,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             case ItemDefaultSuggestions:
                 cell.textLabel?.text = .SearchSettingsShowSearchSuggestions
                 let toggle = UISwitchThemed()
-                toggle.onTintColor = UIColor.theme.tableView.controlTint
+                toggle.onTintColor = themeManager.currentTheme.colors.actionPrimary
                 toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
                 toggle.isOn = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
@@ -108,7 +109,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 cell.showsReorderControl = true
 
                 let toggle = UISwitchThemed()
-                toggle.onTintColor = UIColor.theme.tableView.controlTint
+                toggle.onTintColor = themeManager.currentTheme.colors.actionPrimary
                 // This is an easy way to get from the toggle control to the corresponding index.
                 toggle.tag = index
                 toggle.addTarget(self, action: #selector(didToggleEngine), for: .valueChanged)
@@ -200,7 +201,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             for subViewB in subViewA.subviews {
                 if let imageView = subViewB as? UIImageView {
                     imageView.image = imageView.image?.withRenderingMode(.alwaysTemplate)
-                    imageView.tintColor = UIColor.theme.tableView.accessoryViewTint
+                    imageView.tintColor = themeManager.currentTheme.colors.iconSecondary
                 }
             }
         }
