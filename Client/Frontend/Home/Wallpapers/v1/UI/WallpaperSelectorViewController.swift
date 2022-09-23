@@ -63,11 +63,6 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Loggable {
         button.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.settingsButton
     }
 
-    private lazy var activityIndicatorView: UIActivityIndicatorView = .build { view in
-        view.style = .large
-        view.isHidden = true
-    }
-
     // MARK: - Initializers
     init(viewModel: WallpaperSelectorViewModel,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
@@ -137,7 +132,7 @@ private extension WallpaperSelectorViewController {
     func setupView() {
         configureCollectionView()
 
-        contentView.addSubviews(headerLabel, instructionLabel, collectionView, settingsButton, activityIndicatorView)
+        contentView.addSubviews(headerLabel, instructionLabel, collectionView, settingsButton)
         view.addSubview(contentView)
 
         collectionViewHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 300)
@@ -166,9 +161,6 @@ private extension WallpaperSelectorViewController {
             settingsButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 34),
             settingsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -43),
             settingsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -34),
-
-            activityIndicatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            activityIndicatorView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
     }
 
@@ -214,10 +206,14 @@ private extension WallpaperSelectorViewController {
     }
 
     func downloadAndSetWallpaper(at indexPath: IndexPath) {
-        activityIndicatorView.startAnimating()
+        guard let cell = collectionView.cellForItem(at: indexPath) as? WallpaperCollectionViewCell
+            else { return }
+
+        cell.showDownloading(true)
+
         viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
             ensureMainThread {
-                self?.activityIndicatorView.stopAnimating()
+                cell.showDownloading(false)
 
                 guard case .failure(let error) = result else { return }
 
