@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import SnapKit
 import Shared
 import Storage
 import Foundation
@@ -312,9 +311,14 @@ class TabTrayViewController: UIViewController, Themeable {
         let topEdgeInset = shouldUseiPadSetup() ? 0 : GridTabTrayControllerUX.NavigationToolbarHeight
         panel.additionalSafeAreaInsets = UIEdgeInsets(top: topEdgeInset, left: 0, bottom: 0, right: 0)
         panel.endAppearanceTransition()
-        panel.view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+
+        NSLayoutConstraint.activate([
+            panel.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            panel.view.topAnchor.constraint(equalTo: view.topAnchor),
+            panel.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            panel.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+
         panel.didMove(toParent: self)
         updateTitle()
     }
