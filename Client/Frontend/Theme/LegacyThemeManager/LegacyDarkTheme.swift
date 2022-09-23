@@ -166,7 +166,7 @@ class DarkHomeTabBannerColor: HomeTabBannerColor {
 }
 
 class DarkOnboardingColor: OnboardingColor {
-    override var backgroundColor: UIColor { return UIColor.Photon.Grey90 }
+    override var backgroundColor: UIColor { return UIColor.Photon.DarkGrey40 }
 }
 
 class DarkRemoteTabTrayColor: RemoteTabTrayColor {

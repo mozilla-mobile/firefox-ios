@@ -71,7 +71,7 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
 
         setupNotifications(forObserver: self,
                            observing: [UIScreen.brightnessDidChangeNotification,
-                                       UIApplication.willEnterForegroundNotification])
+                                       UIApplication.didBecomeActiveNotification])
     }
 
     // MARK: - ThemeManager
@@ -97,6 +97,11 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
               let nightModeIsOn = userDefaults.object(forKey: ThemeKeys.NightMode.isOn) as? NSNumber,
               nightModeIsOn.boolValue == false
         else { return }
+
+        // TODO: This is hack because the notification is not arriving all the time
+        // Should be removed once the ThemeManager is done. 
+        let userInterfaceStyle = UIScreen.main.traitCollection.userInterfaceStyle
+        LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
         changeCurrentTheme(getSystemThemeType())
     }
 
@@ -174,7 +179,7 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
         switch notification.name {
         case UIScreen.brightnessDidChangeNotification:
             brightnessChanged()
-        case UIApplication.willEnterForegroundNotification:
+        case UIApplication.didBecomeActiveNotification:
             // It seems this notification is fired before the UI is informed of any changes to dark mode
             // So dispatching to the end of the main queue will ensure it's always got the latest info
             DispatchQueue.main.async {
