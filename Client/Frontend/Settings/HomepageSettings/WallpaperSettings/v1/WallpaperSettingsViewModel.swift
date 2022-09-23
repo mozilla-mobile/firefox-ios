@@ -169,7 +169,7 @@ private extension WallpaperSettingsViewModel {
 
         switch collectionType {
         case .classic:
-            a11yLabel = "\(stringIds.ClassicWallpaper) \(indexPath.row + 1)"
+            a11yLabel = "\(String(format: stringIds.ClassicWallpaper, AppName.shortName.rawValue)) \(indexPath.row + 1)"
         case .limitedEdition:
             a11yLabel = "\(stringIds.LimitedEditionWallpaper) \(indexPath.row + 1)"
         }
