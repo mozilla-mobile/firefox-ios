@@ -17,15 +17,6 @@ enum ThemeType: String {
             return .dark
         }
     }
-
-    func getBarStyle() -> UIBarStyle {
-        switch self {
-        case .light:
-            return .default
-        case .dark:
-            return .black
-        }
-    }
 }
 
 protocol ThemeManager {

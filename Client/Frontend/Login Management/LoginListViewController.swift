@@ -19,11 +19,7 @@ private extension UITableView {
 let CellReuseIdentifier = "cell-reuse-id"
 let LoginsSettingsSection = 0
 
-class LoginListViewController: SensitiveViewController, Themeable {
-
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol
+class LoginListViewController: SensitiveViewController {
 
     private let viewModel: LoginListViewModel
 
@@ -84,19 +80,11 @@ class LoginListViewController: SensitiveViewController, Themeable {
         return deferred
     }
 
-    private init(profile: Profile,
-                 webpageNavigationHandler: ((_ url: URL?) -> Void)?,
-                 themeManager: ThemeManager = AppContainer.shared.resolve(),
-                 notificationCenter: NotificationCenter = NotificationCenter.default) {
-        self.viewModel = LoginListViewModel(profile: profile,
-                                            searchController: searchController,
-                                            theme: themeManager.currentTheme)
+    private init(profile: Profile, webpageNavigationHandler: ((_ url: URL?) -> Void)?) {
+        self.viewModel = LoginListViewModel(profile: profile, searchController: searchController)
         self.loginDataSource = LoginDataSource(viewModel: self.viewModel)
         self.webpageNavigationHandler = webpageNavigationHandler
-        self.themeManager = themeManager
-        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
-        listenForThemeChange()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -118,8 +106,8 @@ class LoginListViewController: SensitiveViewController, Themeable {
         tableView.tableFooterView = UIView()
 
         if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
+             tableView.sectionHeaderTopPadding = 0
+         }
 
         // Setup the Search Controller
         searchController.searchBar.autocapitalizationType = .none
@@ -188,7 +176,6 @@ class LoginListViewController: SensitiveViewController, Themeable {
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.reloadData()
 
-        // TODO: Remove with legacy theme clean up FXIOS-3960
         (tableView.tableHeaderView as? NotificationThemeable)?.applyTheme()
 
         selectionButton.setTitleColor(UIColor.theme.tableView.rowBackground, for: [])
@@ -209,8 +196,6 @@ class LoginListViewController: SensitiveViewController, Themeable {
             glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
             glassIconView.tintColor = UIColor.theme.tableView.headerTextLight
         }
-
-        loadingView.configure(theme: themeManager.currentTheme)
     }
 
     @objc func dismissLogins() {
@@ -284,7 +269,6 @@ private extension LoginListViewController {
 
     func loadLogins(_ query: String? = nil) {
         loadingView.isHidden = false
-        loadingView.configure(theme: themeManager.currentTheme)
         viewModel.loadLogins(query, loginDataSource: self.loginDataSource)
     }
 

@@ -70,8 +70,5 @@ protocol ThemeColourPalette {
     var borderAccentPrivate: UIColor { get }
 
     // MARK: - Shadow
-    var shadowDefault: UIColor { get }
-
-    // MARK: - Icon Spinner
-    var iconSpinnerDefault: UIColor { get }
+    var shadow: UIColor { get }
 }
