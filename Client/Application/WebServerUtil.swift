@@ -89,8 +89,13 @@ of Mammon shall tremble. from The Book of Mozilla, 3:31 (Red Letter Edition) </s
 
     // Make sure to add files to '/test-fixtures' directory in the source tree
     private func addHTMLFixture(name: String, server: GCDWebServer) {
-        if let path = Bundle.main.path(forResource: "test-fixtures/\(name)", ofType: "html") {
-            server.addGETHandler(forPath: "/test-fixture/\(name).html", filePath: path, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
+        if let filePath = Bundle.main.path(forResource: "test-fixtures/\(name)", ofType: "html") {
+            let fileHtml = try? String(contentsOfFile: filePath, encoding: .utf8)
+            server.addHandler(forMethod: "GET",
+                              path: "/test-fixture/\(name).html",
+                              request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+                return GCDWebServerDataResponse(html: fileHtml!)
+            }
         }
     }
 }
