@@ -102,7 +102,7 @@ class TabTrayViewController: UIViewController, Themeable {
         return fixedSpace
     }()
 
-    private lazy var countLabel: UILabel = {
+    lazy var countLabel: UILabel = {
         let label = UILabel(frame: CGRect(width: 24, height: 24))
         label.font = TabsButtonUX.TitleFont
         label.layer.cornerRadius = TabsButtonUX.CornerRadius
