@@ -175,8 +175,20 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "关闭";
 
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "开始使用";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "开始浏览";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "跳过";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ 与其他浏览器不同";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "设为默认浏览器";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "一按即可清除您的浏览历史、密码、Cookie，并阻止被烦人的广告跟踪！";
@@ -442,6 +454,9 @@
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "取消";
 
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "完成";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "添加";
 
@@ -517,14 +532,29 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "网站内容缺失或交互异常？";
 
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "快捷操作";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "前往“设置”管理各种隐私与安全选项。";
+
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "默认设置已提供足够强大的保护。如您有特殊需求，也可方便地调整这些设置。";
 
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "进入隐私浏览模式，我们会在您上网时拦截跟踪器和其他脏东西。";
 
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ 已阻止此网站跟踪您，点按盾牌可了解已拦截的内容。";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "抓到了！我们已阻止此网站的跟踪，您可随时点按盾牌了解已拦截哪些内容。";
+
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "随时点按垃圾桶，清除当前会话的全部痕迹。";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "点按此处即可删除浏览记录、Cookie 等所有数据，并新建一个全新标签页。";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "保护您是我的首要职责";
@@ -579,4 +609,7 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "跟踪器已阻止";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "浏览历史已清除！🎉";
 

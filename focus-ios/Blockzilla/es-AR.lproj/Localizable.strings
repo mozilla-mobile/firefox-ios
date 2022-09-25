@@ -175,8 +175,29 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Cerrar";
 
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Empezar";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Rápido. Privado. Sin distracciones.";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Empezar a navegar";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Omitir";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Borramos tu historial cuando cerrás la aplicación para mayor privacidad.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Poné a %@ como predeterminado para proteger tus datos con cada enlace que abrás.";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ no es como los otros navegadores";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Establecer como navegador predeterminado";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "¡Eliminá tu historial de navegación, contraseñas, cookies y evitá que los anuncios no deseados te sigan con un simple clic!";
@@ -442,6 +463,21 @@
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "Cancelar";
 
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Listo";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Mantener presionada la pantalla de inicio hasta que los íconos comiencen a moverse.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Buscar %@. Después elegir un widget.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Tocar el ícono más.";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "Agregar un Widget de %@";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Agregar";
 
@@ -517,14 +553,38 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "¿Al sitio le falta contenido o actúa de forma extraña?";
 
+/* No comment provided by engineer. */
+"To show the old version of onboarding disable first the Nimbus experiment, then turn on the option." = "Para mostrar la versión anterior de la introducción deshabilitar primero el experimento Nimbus y luego habilitar la opción.";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Agregar un atajo de %@ a la pantalla de inicio. Después de agregar el widget, tocar y mantener presionado para editarlo y seleccionar un atajo diferente.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Acciones rápidas";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "Buscar en %@";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Mirá los ajustes para administrar opciones específicas de privacidad y seguridad.";
+
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Esta configuración predeterminada ofrece una protección fuerte. Pero es fácil ajustar la configuración para satisfacer tus necesidades específicas.";
 
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Iniciá tu sesión de navegación privada y bloquearemos rastreadores y otras amenazas mientras navegás.";
 
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ impidió que este sitio te espiara. Presioná el escudo para obtener información sobre lo que bloqueamos.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "¡Excelente! Evitamos que esta página web te espíe. Presioná el escudo para ver lo que estamos bloqueando.";
+
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Presioná la papelera en cualquier momento para eliminar todos los rastros de tu sesión actual.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Tocá aquí para eliminarlo todo: historial, cookies, absolutamente todo y empezá de cero en una nueva pestaña.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "¡Estás protegido!";
@@ -579,4 +639,13 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Rastreadores bloqueados";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "Mostrarme cómo";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Te dejaremos con tu navegación privada, pero podés conseguir un inicio más rápido la próxima vez con el widget de %@ en la pantalla de inicio.";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "¡Historial de navegación borrado! 🎉";
 

@@ -175,8 +175,20 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Κλείσιμο";
 
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Έναρξη";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Γρήγορο. Ιδιωτικό. Χωρίς περισπασμούς.";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Έναρξη περιήγησης";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Παράλειψη";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Ορισμός ως προεπιλογή";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "Διαγράψτε το ιστορικό περιήγησης, τους κωδικούς πρόσβασης, τα cookies σας και αποτρέψτε την καταγραφή από ανεπιθύμητες διαφημίσεις με ένα μόνο πάτημα!";
@@ -442,6 +454,12 @@
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "Ακύρωση";
 
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Τέλος";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Πατήστε το εικονίδιο «συν».";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Προσθήκη";
 
@@ -517,6 +535,9 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Απώλεια περιεχομένου ή περίεργη συμπεριφορά;";
 
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "Αναζήτηση στο %@";
+
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Αυτές οι προεπιλεγμένες ρυθμίσεις προσφέρουν ισχυρή προστασία. Αλλά μπορείτε εύκολα να τις προσαρμόσετε για να ταιριάξουν με τις δικές σας ανάγκες.";
 
@@ -579,4 +600,7 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Αποκλεισμένοι ιχνηλάτες";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "Το ιστορικό περιήγησης διαγράφηκε! 🎉";
 

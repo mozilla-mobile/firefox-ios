@@ -175,8 +175,29 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Đóng";
 
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Bắt đầu";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Nhanh. Riêng tư. Không có phiền nhiễu.";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Bắt đầu duyệt web";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Bỏ qua";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Để tôn trọng quyền riêng tư của bạn, lịch sử truy cập sẽ xóa mỗi khi đóng ứng dụng.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Đặt %@ làm mặc định giúp đảm bảo sự riêng tư của bạn trên Internet.";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ không giống như các trình duyệt khác";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Đặt làm trình duyệt mặc định";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "Xóa lịch sử duyệt web, mật khẩu, cookie và ngăn các quảng cáo không mong muốn theo dõi bạn chỉ bằng một lần nhấn đơn giản!";
@@ -442,6 +463,21 @@
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "Hủy bỏ";
 
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Xong";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Nhấn và giữ biểu tượng ứng dụng đến khi nó rung rinh.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Tìm kiếm %@. Sau đó chọn tiện ích hiển thị.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Nhấn vào nút dấu cộng.";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "Hiển thị thêm %@";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Thêm";
 
@@ -517,14 +553,38 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Trang web thiếu nội dung hoặc hoạt động không đúng?";
 
+/* No comment provided by engineer. */
+"To show the old version of onboarding disable first the Nimbus experiment, then turn on the option." = "Để hiển thị phiên bản ứng dụng cũ, trước tiên hãy tắt thử nghiệm Nimbus, sau đó bật tùy chọn.";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Thêm lối tắt %@ vào màn hình chính của bạn. Sau khi thêm tiện ích, hãy nhấn và giữ để chỉnh sửa tiện ích và chọn một lối tắt khác.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Hành động nhanh";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "Tìm kiếm trong %@";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Đi đến Cài đặt để quản lý các tùy chọn quyền riêng tư và bảo mật cụ thể.";
+
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Các cài đặt mặc định này cung cấp khả năng bảo vệ mạnh mẽ. Tuy nhiên, thật dễ dàng để điều chỉnh cài đặt để đáp ứng các nhu cầu cụ thể của bạn.";
 
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Bắt đầu phiên duyệt web riêng tư của bạn và chúng tôi sẽ chặn trình theo dõi và các nội dung xấu khác khi bạn di chuyển.";
 
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ đã ngăn trang web này theo dõi bạn. Nhấn vào tấm khiên để biết thông tin về những gì chúng tôi đã chặn.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Bắt được rồi! Chúng tôi đã ngăn trang web này theo dõi bạn. Nhấn vào tấm khiên bất kỳ lúc nào để xem những gì chúng tôi đang chặn.";
+
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Nhấn vào thùng rác bất cứ lúc nào để xóa tất cả dấu vết của phiên hiện tại của bạn.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Nhấn vào đây để xóa tất cả — lịch sử, cookie, mọi thứ — và bắt đầu làm mới trên một thẻ mới.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Bạn đã được bảo vệ!";
@@ -579,4 +639,13 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Theo dõi bị chặn";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "Hướng dẫn tôi";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Chúng tôi sẽ để bạn ở chế độ duyệt web riêng tư, nhưng hãy bắt đầu nhanh hơn vào lần sau với tiện ích %@ trên màn hình chính của bạn.";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "Đã xóa lịch sử duyệt web! 🎉";
 

@@ -175,8 +175,23 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Zapri";
 
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Začnite";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Hitro. Zasebno. Brez motenj.";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Začnite z brskanjem";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Preskoči";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ ni kot drugi brskalniki";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Nastavi kot privzeti brskalnik";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "Z enim samim klikom izbrišite zgodovino brskanja, gesla in piškotke ter preprečite, da bi vas spremljali neželeni oglasi.";
@@ -442,6 +457,9 @@
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "Prekliči";
 
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Končano";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Dodaj";
 
@@ -517,14 +535,32 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Spletnemu mestu manjka vsebina ali deluje nenavadno?";
 
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Hitra dejanja";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "Išči v %@u";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Določene možnosti zasebnosti in varnosti lahko upravljate v nastavitvah.";
+
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Te privzete nastavitve nudijo močno zaščito. Preprosto pa jih lahko prilagodite tako, da ustrezajo vašim potrebam.";
 
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Začnite zasebno sejo brskanja in sproti bomo zavračali sledilce ter druge škodljive elemente.";
 
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ je temu spletnemu mestu preprečil, da bi vohunilo za vami. Dotaknite se ščita za podatke o tem, kaj je zavrnjeno.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Imamo jih! Temu spletnemu mestu smo preprečili vohunjenje za vami. Če želite videti, kaj blokiramo, tapnite ščit.";
+
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Z dotikom ikone koša lahko kadarkoli odstranite vse sledove trenutne seje.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Tapnite tukaj, da vse vržete v smeti – zgodovino, piškotke, vse – in začnete na novo v novem zavihku.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Zaščiteni ste!";
@@ -579,4 +615,10 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Zavrnjeni sledilci";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "Pokaži, kako";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "Zgodovina brskanja izbrisana! 🎉";
 

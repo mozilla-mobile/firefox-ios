@@ -175,8 +175,29 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Жабу";
 
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Бастау";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Жылдам. Жеке. Ешқандай алаңдаушылығы жоқ.";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Шолуды бастау";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Аттап кету";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Қосымша жекелік үшін сіз қолданбаны жапқан кезде тарихыңызды тазартамыз.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Әрбір ашылған сілтеме кезінде деректеріңізді қорғау үшін %@ өнімін негізгі етіп орнатыңыз.";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ басқа браузерлер сияқты емес";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Негізгі браузер қылу";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "Қарапайым шерту арқылы шолу тарихын, парольдер, cookie файлдарын өшіріңіз және қажетсіз жарнамалардың сіздің соңыңыздан еруін болдырмаңыз!";
@@ -442,6 +463,21 @@
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "Бас тарту";
 
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Дайын";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Басты экранда таңбашалар дірілдей бастағанша ұзақ басып тұрыңыз.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "%@ іздеңіз. Содан кейін виджетті таңдаңыз.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Плюс таңбашасына шертіңіз.";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "%@ виджетін қосу";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Қосу";
 
@@ -517,14 +553,38 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Сайттың мазмұны жоқ, немесе мінез-құлығы біртүрлі ме?";
 
+/* No comment provided by engineer. */
+"To show the old version of onboarding disable first the Nimbus experiment, then turn on the option." = "Жұмысқа кірісудің ескі нұсқасын көрсету үшін алдымен Nimbus экспериментін өшіріңіз, содан кейін опцияны іске қосыңыз.";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "%@ жарлығын үй экранына қосыңыз. Виджетті қосқаннан кейін, оны түзету үшін тиіп, басулы ұстаңыз және басқа жарлықты таңдаңыз.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Жылдам әрекеттер";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "%@ көмегімен іздеу";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Арнайы жекелік пен қауіпсіздік опцияларын басқару үшін \"Баптаулар\" бөліміне өтіңіз.";
+
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Бұл бастапқы баптаулар қатаң қорғаныс ұсынады. Бірақ нақты қажеттіліктеріңізді қанағаттандыру үшін баптауларды өзгерту оңай.";
 
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Жекелік шолу сеансын бастаңыз, сонда біз трекерлерді және басқа да жаман нәрселерді бұғаттаймыз.";
 
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ бұл сайттың сізге тыңшылық жасауын тоқтатты. Біз блоктаған нәрселер туралы ақпарат алу үшін қалқанды шертіңіз.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Ұстадық! Біз бұл сайттың сізге тыңшылық жасауын тоқтаттық. Біз блоктаған нәрселер туралы ақпарат алу үшін қалқанды шертіңіз.";
+
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Ағымдағы сессияның барлық іздерін кетіру үшін кез келген уақытта себетті шертіңіз.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Барлығын қоқысқа тастау үшін осында шертіңіз — тарих, cookie файлдары, барлығы — және жаңа беттен жаңадан бастаңыз.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Сіз қорғалғансыз!";
@@ -579,4 +639,13 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Блокталған трекерлер";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "Қалай жасау керектігін көрсету";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Біз сізді жеке шолуға қалдырамыз, бірақ келесі жолы негізгі экрандағы %@ виджетімен жылдамырақ бастауға болады.";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "Шолу тарихы тазартылды! 🎉";
 

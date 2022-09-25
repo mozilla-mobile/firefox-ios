@@ -175,8 +175,17 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "ปิด";
 
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "เริ่มต้นใช้งาน";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "เริ่มการเรียกดู";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "ข้าม";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "ตั้งเป็นเบราว์เซอร์เริ่มต้น";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "ลบประวัติการเรียกดู รหัสผ่าน คุกกี้ และป้องกันไม่ให้โฆษณาที่ไม่ต้องการติดตามคุณในคลิกเดียว!";
@@ -442,6 +451,9 @@
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "ยกเลิก";
 
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "เสร็จสิ้น";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "เพิ่ม";
 
@@ -517,6 +529,15 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "ไซต์ไม่มีเนื้อหาหรือทำงานแปลก ๆ ?";
 
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "การกระทำด่วน";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "ค้นหาใน %@";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "ไปที่การตั้งค่าเพื่อจัดการตัวเลือกต่าง ๆ เกี่ยวกับความเป็นส่วนตัวและความปลอดภัย";
+
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "การตั้งค่าเริ่มต้นเหล่านี้ให้การปกป้องที่แข็งแกร่ง แต่คุณสามารถปรับแต่งการตั้งค่าให้ตรงกับความต้องการของคุณได้อย่างง่ายดาย";
 
@@ -576,4 +597,7 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "ตัวติดตามที่ปิดกั้น";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "ล้างประวัติการท่องเว็บแล้ว! 🎉";
 
