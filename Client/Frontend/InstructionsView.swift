@@ -6,6 +6,10 @@ import SwiftUI
 import UIKit
 import Shared
 
+protocol InstructionsViewDelegate: AnyObject {
+    func dismissInstructionsView()
+}
+
 struct InstructionsView: View {
 
     private struct UX {

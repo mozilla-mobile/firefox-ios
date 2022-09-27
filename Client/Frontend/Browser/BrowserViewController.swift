@@ -2613,7 +2613,13 @@ extension BrowserViewController: TopTabsDelegate {
     }
 }
 
-extension BrowserViewController: DevicePickerViewControllerDelegate, InstructionsViewControllerDelegate {
+extension BrowserViewController: DevicePickerViewControllerDelegate, InstructionsViewControllerDelegate, InstructionsViewDelegate {
+
+    func dismissInstructionsView() {
+        self.navigationController?.presentedViewController?.dismiss(animated: true)
+        self.popToBVC()
+    }
+
     func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController) {
         self.popToBVC()
     }
