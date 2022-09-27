@@ -1076,6 +1076,7 @@
 		E1AF3565286DE5F800960045 /* UnitTest.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355D286DE5F700960045 /* UnitTest.xctestplan */; };
 		E1AF3566286DE5F800960045 /* SmokeXCUITests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355E286DE5F700960045 /* SmokeXCUITests.xctestplan */; };
 		E1AF3567286DE5F800960045 /* PerformanceTestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355F286DE5F700960045 /* PerformanceTestPlan.xctestplan */; };
+		E1D6F2D928E32A5300B2C8CC /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */; };
 		E1FF93E228A2E55700E6360E /* WallpaperSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FF93E128A2E55700E6360E /* WallpaperSelectorViewController.swift */; };
 		E1FF93E428A2E74600E6360E /* WallpaperSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FF93E328A2E74600E6360E /* WallpaperSelectorViewModel.swift */; };
@@ -10993,6 +10994,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA6B2AC41D41F02D00429414 /* Punycode.swift in Sources */,
+				E1D6F2D928E32A5300B2C8CC /* ImageIdentifiers.swift in Sources */,
 				D38B2D8A1A8D98D00040E6B5 /* SearchEngines.swift in Sources */,
 				EB6E0C60207E6C3100FBFF7E /* SendToDevice.swift in Sources */,
 				D3C744CF1A687D6C004CE85D /* URIFixup.swift in Sources */,
