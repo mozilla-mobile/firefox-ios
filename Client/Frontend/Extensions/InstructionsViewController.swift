@@ -88,8 +88,4 @@ class InstructionsViewController: UIViewController {
     @objc func close() {
         delegate?.instructionsViewControllerDidClose(self)
     }
-
-    func showMeHow() {
-        print("Show me how") // TODO Not sure what to do or if to keep this. Waiting for UX feedback.
-    }
 }
