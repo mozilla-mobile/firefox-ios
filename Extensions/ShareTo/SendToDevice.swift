@@ -5,15 +5,22 @@
 import UIKit
 import Shared
 import Storage
+import SwiftUI
 
-class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewControllerDelegate {
+class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewControllerDelegate, InstructionsViewDelegate {
+
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
 
     func initialViewController() -> UIViewController {
         if !hasAccount() {
-            let instructionsViewController = InstructionsViewController()
-            instructionsViewController.delegate = self
+            let instructionsView = InstructionsView(backgroundColor: .white,
+                                                    textColor: UIColor.Photon.LightGrey30,
+                                                    imageColor: UIColor.Photon.LightGrey30,
+                                                    dismissAction: { [weak self] in
+                self?.dismissInstructionsView()
+            })
+            let instructionsViewController = UIHostingController(rootView: instructionsView)
             return instructionsViewController
         }
         let devicePickerViewController = DevicePickerViewController()
@@ -45,6 +52,10 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewControll
     }
 
     func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController) {
+        finish()
+    }
+
+    func dismissInstructionsView() {
         finish()
     }
 
