@@ -11,7 +11,7 @@ struct InternalOnboardingSettingsView {
 extension InternalOnboardingSettingsView: View {
     var body: some View {
         Form {
-            Section(footer: Text("To show the old version of onboarding disable first the Nimbus experiment, then turn on the option.")) {
+            Section(footer: Text(verbatim: "To show the old version of onboarding disable first the Nimbus experiment, then turn on the option.")) {
                 Toggle(isOn: $internalSettings.ignoreOnboardingExperiment) {
                     Text(verbatim: "Ignore Onboarding Experiment")
                 }
@@ -21,9 +21,11 @@ extension InternalOnboardingSettingsView: View {
             }
 
             Section {
-                Button("Clear cached shown tips") {
+                Button {
                     UserDefaults.standard.removeObject(forKey: OnboardingConstants.shownTips)
                     Toast(text: "Cache cleared").show()
+                } label: {
+                    Text(verbatim: "Clear cached shown tips")
                 }
             }
         }.navigationBarTitle(Text(verbatim: "Onboarding Settings"))
