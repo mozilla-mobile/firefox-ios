@@ -21,6 +21,8 @@ class NTPImpactViewModel {
         let trees = Referrals.isEnabled ? User.shared.impact : User.shared.searchImpact
         return .init(trees: trees, searches: personalCounter.state!, style: .ntp)
     }
+
+    weak var cell: NTPImpactCell?
 }
 
 // MARK: HomeViewModelProtocol
@@ -52,6 +54,16 @@ extension NTPImpactViewModel: HomepageViewModelProtocol {
             bottom: UX.bottomSpacing,
             trailing: insets)
 
+        // Adding a header if needed
+        if ntpLayoutHighlightText() != nil {
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                          heightDimension: .absolute(1.0))
+            let header = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: headerSize,
+                elementKind: UICollectionView.elementKindSectionHeader,
+                alignment: .top)
+            section.boundarySupplementaryItems = [header]
+        }
         return section
     }
 
@@ -72,12 +84,43 @@ extension NTPImpactViewModel: HomepageViewModelProtocol {
 extension NTPImpactViewModel: HomepageSectionHandler {
 
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let treesCell = cell as? NTPImpactCell else { return UICollectionViewCell() }
-        treesCell.display(treesCellModel)
-        return treesCell
+        guard let cell = cell as? NTPImpactCell else { return UICollectionViewCell() }
+        cell.display(treesCellModel)
+        self.cell = cell
+        return cell
     }
 
     func didSelectItem(at indexPath: IndexPath, homePanelDelegate: HomePanelDelegate?, libraryPanelDelegate: LibraryPanelDelegate?) {
         homePanelDelegate?.homePanelDidRequestToOpenImpact()
     }
 }
+
+extension NTPImpactViewModel: NTPLayoutHighlightDataSource {
+    var ntpHighlight: NTPTooltip.Highlight? {
+        guard !User.shared.firstTime else { return nil }
+
+        if User.shared.referrals.isNewClaim {
+            return .gotClaimed
+        }
+
+        if User.shared.referrals.newClaims > 0 {
+            return .successfulInvite
+        }
+
+        if User.shared.showsReferralSpotlight {
+            return .referralSpotlight
+        }
+
+        if User.shared.showsCounterIntro {
+            return .counterIntro
+        }
+
+        return nil
+    }
+
+    func ntpLayoutHighlightText() -> String? {
+        return ntpHighlight?.text
+    }
+
+}
+

@@ -6,6 +6,7 @@ import UIKit
 
 protocol NTPTooltipDelegate: AnyObject {
     func ntpTooltipTapped(_ tooltip: NTPTooltip?)
+    func reloadTooltip()
 }
 
 final class NTPTooltip: UICollectionReusableView, NotificationThemeable {
@@ -86,6 +87,8 @@ final class NTPTooltip: UICollectionReusableView, NotificationThemeable {
 
         applyTheme()
         addShadows()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(applyTheme), name: .DisplayThemeChanged, object: nil)
     }
 
     func setText(_ text: String) {
@@ -105,7 +108,7 @@ final class NTPTooltip: UICollectionReusableView, NotificationThemeable {
         }
     }
 
-    func applyTheme() {
+    @objc func applyTheme() {
         tail.tintColor = UIColor.theme.ecosia.quarternaryBackground
         background.backgroundColor = UIColor.theme.ecosia.quarternaryBackground
         textLabel.textColor = .theme.ecosia.primaryTextInverted

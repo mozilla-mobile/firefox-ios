@@ -39,22 +39,32 @@ enum HomepageSectionType: Int, CaseIterable {
         self.init(rawValue: section)!
     }
 
+}
+
+// Ecosia
+private let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 16)
+private let MinimumInsets: CGFloat = 16
+
+extension HomepageSectionType {
     func sectionInsets(_ traits: UITraitCollection) -> CGFloat {
         var currentTraits = traits
-        if (traits.horizontalSizeClass == .regular && UIApplication.shared.statusBarOrientation.isPortrait) || UIDevice.current.userInterfaceIdiom == .phone {
+        let orientation: UIInterfaceOrientation = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.windowScene?.interfaceOrientation ?? .portrait
+
+        if (traits.horizontalSizeClass == .regular && orientation.isPortrait) || UIDevice.current.userInterfaceIdiom == .phone {
             currentTraits = UITraitCollection(horizontalSizeClass: .compact)
         }
-        // TODO: move FirefoxHomeUX
-        var insets = FirefoxHomeUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
+
+        var insets = sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
 
         switch self {
         case .libraryShortcuts, .topSites, .impact:
-            let window = UIApplication.shared.keyWindow
+            let window = UIApplication.shared.windows.first(where: \.isKeyWindow)
             let safeAreaInsets = window?.safeAreaInsets.left ?? 0
-            insets += FirefoxHomeUX.MinimumInsets + safeAreaInsets
+            insets += MinimumInsets + safeAreaInsets
 
             /* Ecosia: center layout in landscape for iPhone */
-            if UIApplication.shared.statusBarOrientation.isLandscape, UIDevice.current.userInterfaceIdiom == .phone {
+            if orientation.isLandscape,
+               UIDevice.current.userInterfaceIdiom == .phone {
                 insets = UIScreen.main.bounds.width / 4
             }
 

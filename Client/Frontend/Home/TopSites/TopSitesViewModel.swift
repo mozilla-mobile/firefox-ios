@@ -161,7 +161,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         let insets = sectionType.sectionInsets(traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                         leading: insets,
-                                                        bottom: HomepageViewModel.UX.spacingBetweenSections - TopSiteItemCell.UX.bottomSpace,
+                                                        bottom: TopSiteItemCell.UX.bottomSpace,
                                                         trailing: insets)
 
         return section

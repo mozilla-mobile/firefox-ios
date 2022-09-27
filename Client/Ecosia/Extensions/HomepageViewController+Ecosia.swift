@@ -24,9 +24,9 @@ extension HomepageViewController {
     }
 
     func updateTreesCell() {
-        guard let impactCell = impactCell else { return }
+        guard let impactCell = viewModel.impactViewModel.cell else { return }
         impactCell.display(treesCellModel)
-        flowLayout.invalidateLayout()
+        (collectionView.collectionViewLayout as? NTPLayout)?.invalidateLayout()
     }
 
     var treesCellModel: NTPImpactCell.Model {
@@ -36,43 +36,10 @@ extension HomepageViewController {
 
 }
 
-extension HomepageViewController: NTPLayoutHighlightDataSource {
-    var ntpHighlight: NTPTooltip.Highlight? {
-        guard !User.shared.firstTime else { return nil }
-
-        if User.shared.showsCounterIntro {
-            return .counterIntro
-        }
-
-        guard Referrals.isEnabled else { return nil }
-        if User.shared.referrals.isNewClaim {
-            return .gotClaimed
-        }
-
-        if User.shared.referrals.newClaims > 0 {
-            return .successfulInvite
-        }
-
-        if User.shared.showsReferralSpotlight {
-            return .referralSpotlight
-        }
-        return nil
-    }
-
-    func ntpLayoutHighlightText() -> String? {
-        return ntpHighlight?.text
-    }
-
-    func reloadTooltip() {
-        collectionView.collectionViewLayout.invalidateLayout()
-    }
-
-}
-
 extension HomepageViewController: NTPTooltipDelegate {
     func ntpTooltipTapped(_ tooltip: NTPTooltip?) {
 
-        guard let ntpHighlight = ntpHighlight else { return }
+        guard let ntpHighlight = viewModel.impactViewModel.ntpHighlight else { return }
 
         UIView.animate(withDuration: 0.3) {
             tooltip?.alpha = 0
@@ -88,6 +55,10 @@ extension HomepageViewController: NTPTooltipDelegate {
                 User.shared.hideReferralSpotlight()
             }
         }
+    }
+
+    func reloadTooltip() {
+        collectionView.collectionViewLayout.invalidateLayout()
     }
 }
 

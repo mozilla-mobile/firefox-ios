@@ -25,19 +25,11 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    private var viewModel: HomepageViewModel
+    private (set) var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManagerProtocol
     private var urlBar: URLBarViewProtocol
-    private var wallpaperManager: LegacyWallpaperManager
-    private lazy var wallpaperView: LegacyWallpaperBackgroundView = .build { _ in }
     var collectionView: UICollectionView! = nil
-
-    // Content stack views contains collection view.
-    lazy var contentStackView: UIStackView = .build { stackView in
-        stackView.backgroundColor = .clear
-        stackView.axis = .vertical
-    }
 
     var currentTab: Tab? {
         return tabManager.selectedTab
@@ -47,13 +39,11 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     init(profile: Profile,
          tabManager: TabManagerProtocol,
          urlBar: URLBarViewProtocol,
-         wallpaperManager: LegacyWallpaperManager = LegacyWallpaperManager(),
          delegate: HomepageViewControllerDelegate?,
          referrals: Referrals) {
 
         self.urlBar = urlBar
         self.tabManager = tabManager
-        self.wallpaperManager = wallpaperManager
         let isPrivate = tabManager.selectedTab?.isPrivate ?? true
         self.viewModel = HomepageViewModel(profile: profile,
                                            isPrivate: isPrivate,
@@ -88,8 +78,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        configureWallpaperView()
-        configureContentStackView()
         configureCollectionView()
         configureEcosiaSetup()
 
@@ -105,19 +93,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         reloadView()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            // display wallpaper UI for now (temporary)
-            self?.displayWallpaperSelector()
-        }
-    }
-
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-
-        wallpaperView.updateImageForOrientationChange()
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             reloadOnRotation()
@@ -140,13 +117,23 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         collectionView = UICollectionView(frame: view.bounds,
                                           collectionViewLayout: createLayout())
 
+        view.addSubview(collectionView)
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+
         HomepageSectionType.cellTypes.forEach {
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
         }
         collectionView.register(LabelButtonHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: LabelButtonHeaderView.cellIdentifier)
-
+        collectionView.register(NTPTooltip.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: NTPTooltip.key)
         collectionView.keyboardDismissMode = .onDrag
         collectionView.addGestureRecognizer(longPressRecognizer)
         collectionView.delegate = self
@@ -155,38 +142,14 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = a11y.collectionView
-        contentStackView.addArrangedSubview(collectionView)
 
-        // Ecosia: TODO
         (collectionView?.collectionViewLayout as? UICollectionViewFlowLayout)?.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         collectionView?.backgroundColor = .clear
 
     }
 
-    func configureContentStackView() {
-        view.addSubview(contentStackView)
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: view.topAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-    }
-
-    func configureWallpaperView() {
-        view.addSubview(wallpaperView)
-        NSLayoutConstraint.activate([
-            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor),
-            wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            wallpaperView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-
-        view.sendSubviewToBack(wallpaperView)
-    }
-
     func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { [weak self]
+        let layout = NTPLayout { [weak self]
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
             guard let self = self,
@@ -195,6 +158,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
             else { return nil }
             return viewModel.section(for: layoutEnvironment.traitCollection)
         }
+        layout.highlightDataSource = viewModel.impactViewModel
         return layout
     }
 
@@ -304,27 +268,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
     }
 
-    private func displayWallpaperSelector() {
-        guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-              wallpaperVersion == .v2,
-              featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet, checking: .buildOnly)
-        else { return }
-
-        self.dismissKeyboard()
-
-        let viewModel = WallpaperSelectorViewModel(wallpaperManager: WallpaperManager(), openSettingsAction: {
-            self.homePanelDidRequestToOpenSettings(at: .wallpaper)
-        })
-        let viewController = WallpaperSelectorViewController(viewModel: viewModel)
-        let bottomSheetViewModel = BottomSheetViewModel()
-        let bottomSheetVC = BottomSheetViewController(
-            viewModel: bottomSheetViewModel,
-            childViewController: viewController
-        )
-
-        self.present(bottomSheetVC, animated: false, completion: nil)
-    }
-
     // MARK: Ecosia
     weak var delegate: HomepageViewControllerDelegate?
     var inOverlayMode = false {
@@ -344,9 +287,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
     let personalCounter = PersonalCounter()
     weak var referrals: Referrals!
-    let flowLayout = NTPLayout()
-    weak var searchbarCell: UICollectionViewCell?
-    weak var impactCell: NTPImpactCell?
 }
 
 // MARK: - CollectionView Data Source
@@ -354,21 +294,24 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 extension HomepageViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+
         guard kind == UICollectionView.elementKindSectionHeader,
-              let headerView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: LabelButtonHeaderView.cellIdentifier,
-                for: indexPath) as? LabelButtonHeaderView,
               let sectionViewModel = viewModel.getSectionViewModel(shownSection: indexPath.section)
         else { return UICollectionReusableView() }
 
-        /* Ecosia
-        // Jump back in header specific setup
-        if sectionViewModel.sectionType == .jumpBackIn {
-            viewModel.jumpBackInViewModel.sendImpressionTelemetry()
-            prepareJumpBackInContextualHint(onView: headerView)
+        if sectionViewModel.sectionType == .impact, let text = viewModel.impactViewModel.ntpLayoutHighlightText()  {
+
+            let tooltip = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NTPTooltip.key, for: indexPath) as! NTPTooltip
+            tooltip.setText(text)
+            tooltip.delegate = self
+            return tooltip
         }
-         */
+
+        guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: LabelButtonHeaderView.cellIdentifier,
+                for: indexPath) as? LabelButtonHeaderView
+        else { return UICollectionReusableView() }
 
         // Configure header only if section is shown
         let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : LabelButtonHeaderViewModel.emptyHeader

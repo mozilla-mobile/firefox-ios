@@ -7,7 +7,7 @@ import Core
 
 final class NTPImpactCell: UICollectionViewCell, NotificationThemeable, ReusableCell {
 
-    static let topMargin = CGFloat(40)
+    static let topMargin = CGFloat(10)
 
     private(set) var model: Model?
     lazy var formatter: NumberFormatter = {

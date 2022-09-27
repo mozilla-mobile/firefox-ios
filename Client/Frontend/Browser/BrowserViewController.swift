@@ -1421,6 +1421,9 @@ class BrowserViewController: UIViewController {
     // Ecosia: Handle Referral
     func openBlankNewTabAndClaimReferral(code: String) {
         User.shared.referrals.pendingClaim = code
+
+        // on first start, browser is not in view hierarchy yet
+        guard !User.shared.firstTime else { return }
         popToBVC()
         openURLInNewTab(nil, isPrivate: false)
         // Intro logic will trigger claiming referral
@@ -1899,8 +1902,10 @@ extension BrowserViewController: HomePanelDelegate {
 
     func homePanelDidRequestToOpenImpact() {
         presentEcosiaWorld { [weak self] in
-            self?.homepageViewController?.updateTreesCell()
+            self?.homepageViewController?.reloadView()
         }
+        homepageViewController?.ntpTooltipTapped(nil)
+        Analytics.shared.clickYourImpact(on: .ntp)
     }
 }
 
@@ -2200,8 +2205,10 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 
 extension BrowserViewController {
     func presentIntroViewController(_ alwaysShow: Bool = false) {
-		// Ecosia: custom intro handling
-        if User.shared.firstTime {
+        if (User.shared.migrated != true && !User.shared.firstTime)
+            || User.shared.referrals.pendingClaim != nil {
+            present(LoadingScreen(profile: profile, referrals: referrals, referralCode: User.shared.referrals.pendingClaim), animated: true)
+        } else if User.shared.firstTime {
             if #available(iOS 14, *) {
                 let defaultPromo = DefaultBrowser(delegate: self)
                 present(defaultPromo, animated: true)
@@ -2211,10 +2218,6 @@ extension BrowserViewController {
             profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
             User.shared.migrated = true
             User.shared.hideRebrandIntro()
-        } else if User.shared.migrated != true {
-            present(LoadingScreen(profile: profile, referrals: referrals), animated: true)
-        } else if let pendingClaim = User.shared.referrals.pendingClaim {
-            present(LoadingScreen(profile: profile, referrals: referrals, referralCode: pendingClaim), animated: true)
         } else if User.shared.showsRebrandIntro {
             let intro = NTPIntroViewController()
             intro.modalPresentationStyle = .overFullScreen
