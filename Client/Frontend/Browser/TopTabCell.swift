@@ -7,6 +7,13 @@ import Shared
 
 class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, ReusableCell {
 
+    struct UX {
+        static let faviconSize: CGFloat = 20
+        static let tabCornerRadius: CGFloat = 8
+        static let tabNudge: CGFloat = 1 // Nudge the favicon and close button by 1px
+        static let tabTitlePadding: CGFloat = 10
+    }
+
     // MARK: - Properties
     var isSelectedTab = false {
         didSet {
@@ -25,7 +32,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
     let selectedBackground: UIView = .build { view in
         view.clipsToBounds = false
         view.backgroundColor = UIColor.theme.topTabs.tabBackgroundSelected
-        view.layer.cornerRadius = TopTabsUX.TabCornerRadius
+        view.layer.cornerRadius = UX.tabCornerRadius
         view.layer.shadowColor = UIColor(rgb: 0x3a3944).cgColor
         view.layer.shadowRadius = 2
         view.layer.shadowOpacity = 0.1
@@ -53,12 +60,12 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.closeTap), for: [])
         button.tintColor = UIColor.Photon.Grey40
         button.imageEdgeInsets = UIEdgeInsets(top: 15,
-                                              left: TopTabsUX.TabTitlePadding,
+                                              left: UX.tabTitlePadding,
                                               bottom: 15,
-                                              right: TopTabsUX.TabTitlePadding)
+                                              right: UX.tabTitlePadding)
         button.layer.shadowOpacity = 0.8
         button.layer.masksToBounds = false
-        button.layer.shadowOffset = CGSize(width: -TopTabsUX.TabTitlePadding, height: 0)
+        button.layer.shadowOffset = CGSize(width: -UX.tabTitlePadding, height: 0)
         button.semanticContentAttribute = .forceLeftToRight
     }
 
@@ -123,19 +130,19 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
             selectedBackground.centerXAnchor.constraint(equalTo: centerXAnchor),
             selectedBackground.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            favicon.centerYAnchor.constraint(equalTo: centerYAnchor, constant: TopTabsUX.TabNudge),
-            favicon.widthAnchor.constraint(equalToConstant: GridTabTrayControllerUX.FaviconSize),
-            favicon.heightAnchor.constraint(equalToConstant: GridTabTrayControllerUX.FaviconSize),
-            favicon.leadingAnchor.constraint(equalTo: leadingAnchor, constant: TopTabsUX.TabTitlePadding),
+            favicon.centerYAnchor.constraint(equalTo: centerYAnchor, constant: UX.tabNudge),
+            favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize),
+            favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize),
+            favicon.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.tabTitlePadding),
 
             titleText.centerYAnchor.constraint(equalTo: centerYAnchor),
             titleText.heightAnchor.constraint(equalTo: heightAnchor),
-            titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor, constant: TopTabsUX.TabTitlePadding),
+            titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor, constant: UX.tabTitlePadding),
             titleText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
-                                                constant: TopTabsUX.TabTitlePadding),
+                                                constant: UX.tabTitlePadding),
 
-            closeButton.centerYAnchor.constraint(equalTo: centerYAnchor, constant: TopTabsUX.TabNudge),
-            closeButton.widthAnchor.constraint(equalTo: heightAnchor, constant: -TopTabsUX.TabTitlePadding),
+            closeButton.centerYAnchor.constraint(equalTo: centerYAnchor, constant: UX.tabNudge),
+            closeButton.widthAnchor.constraint(equalTo: heightAnchor, constant: -UX.tabTitlePadding),
             closeButton.heightAnchor.constraint(equalTo: heightAnchor),
             closeButton.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
