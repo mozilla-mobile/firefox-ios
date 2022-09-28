@@ -144,13 +144,3 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         selectedBackground.backgroundColor = UIColor.theme.topTabs.tabBackgroundSelected
     }
 }
-
-class TopTabsViewLayoutAttributes: UICollectionViewLayoutAttributes {
-
-    override func isEqual(_ object: Any?) -> Bool {
-        guard let object = object as? TopTabsViewLayoutAttributes else {
-            return false
-        }
-        return super.isEqual(object)
-    }
-}
