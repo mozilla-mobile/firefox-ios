@@ -50,7 +50,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
     }
 
     let closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed("menu-CloseTabs"), for: []) // image identifier
+        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.closeTap), for: [])
         button.tintColor = UIColor.Photon.Grey40
         button.imageEdgeInsets = UIEdgeInsets(top: 15,
                                               left: TopTabsUX.TabTitlePadding,
@@ -83,7 +83,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         let hideCloseButton = frame.width < 148 && !selected
         closeButton.isHidden = hideCloseButton
 
-        favicon.image = UIImage(named: "defaultFavicon")
+        favicon.image = UIImage(named: ImageIdentifiers.defaultFavicon)
         favicon.tintColor = UIColor.theme.tabTray.faviconTint
         favicon.contentMode = .scaleAspectFit
         favicon.backgroundColor = .clear

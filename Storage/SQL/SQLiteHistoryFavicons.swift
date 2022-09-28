@@ -17,7 +17,7 @@ private var urlSession: URLSession = makeURLSession(userAgent: UserAgent.desktop
 
 // If all else fails, this is the default "default" icon.
 private var defaultFavicon: UIImage = {
-    return UIImage(named: "defaultFavicon")!
+    return UIImage(named: ImageIdentifiers.defaultFavicon)!
 }()
 
 // An in-memory cache of "default" favicons keyed by the

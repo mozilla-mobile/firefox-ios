@@ -112,7 +112,7 @@ class SnackBar: UIView {
     init(text: String, img: UIImage?, snackbarClassIdentifier: String? = nil) {
         self.snackbarClassIdentifier = snackbarClassIdentifier ?? text
         super.init(frame: .zero)
-        imageView.image = img ?? UIImage(named: "defaultFavicon")?.withRenderingMode(.alwaysOriginal)
+        imageView.image = img ?? UIImage(named: ImageIdentifiers.defaultFavicon)?.withRenderingMode(.alwaysOriginal)
         textLabel.text = text
         setup()
     }
@@ -222,7 +222,9 @@ class TimerSnackBar: SnackBar {
     }
 
     static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL, completion: @escaping (Bool) -> Void) {
-        let bar = TimerSnackBar(text: .ExternalLinkAppStoreConfirmationTitle, img: UIImage(named: "defaultFavicon")?.withRenderingMode(.alwaysOriginal))
+        let bar = TimerSnackBar(
+            text: .ExternalLinkAppStoreConfirmationTitle,
+            img: UIImage(named: ImageIdentifiers.defaultFavicon)?.withRenderingMode(.alwaysOriginal))
         let openAppStore = SnackButton(title: .AppStoreString, accessibilityIdentifier: "ConfirmOpenInAppStore", bold: true) { bar in
             tab.removeSnackbar(bar)
             UIApplication.shared.open(appStoreURL, options: [:])
