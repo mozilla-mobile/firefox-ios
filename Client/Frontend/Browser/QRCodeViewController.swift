@@ -303,11 +303,13 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
         if metadataObjects.isEmpty {
             self.captureSession.stopRunning()
             let alert = AlertController(title: "", message: .ScanQRCodeInvalidDataErrorMessage, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: .ScanQRCodeErrorOKButton,
-                                          style: .default,
-                                          handler: { (UIAlertAction) in
+            alert.addAction(
+                UIAlertAction(title: .ScanQRCodeErrorOKButton,
+                              style: .default,
+                              handler: { (UIAlertAction) in
                 self.captureSession.startRunning()
-            }), accessibilityIdentifier:AccessibilityIdentifiers.Settings.FirefoxAccount.qrScanFailedAlertOkButton)
+            }),
+                accessibilityIdentifier: AccessibilityIdentifiers.Settings.FirefoxAccount.qrScanFailedAlertOkButton)
             self.present(alert, animated: true, completion: nil)
         } else {
             self.captureSession.stopRunning()
