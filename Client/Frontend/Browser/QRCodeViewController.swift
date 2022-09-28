@@ -307,7 +307,7 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                                           style: .default,
                                           handler: { (UIAlertAction) in
                 self.captureSession.startRunning()
-            }), accessibilityIdentifier: "qrCodeAlert.okButton")
+            }), accessibilityIdentifier:AccessibilityIdentifiers.Settings.FirefoxAccount.qrScanFailedAlertOkButton)
             self.present(alert, animated: true, completion: nil)
         } else {
             self.captureSession.stopRunning()
