@@ -67,33 +67,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         super.init(frame: frame)
 
         closeButton.addTarget(self, action: #selector(closeTab), for: .touchUpInside)
-        [selectedBackground, titleText, closeButton, favicon].forEach(addSubview)
-
-        selectedBackground.snp.makeConstraints { make in
-            make.width.equalTo(self)
-            make.height.equalTo(self).multipliedBy(0.82)
-            make.center.equalTo(self)
-        }
-
-        favicon.snp.makeConstraints { make in
-            make.centerY.equalTo(self).offset(TopTabsUX.TabNudge)
-            make.size.equalTo(GridTabTrayControllerUX.FaviconSize)
-            make.leading.equalTo(self).offset(TopTabsUX.TabTitlePadding)
-        }
-        titleText.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
-            make.height.equalTo(self)
-            make.trailing.equalTo(closeButton.snp.leading).offset(TopTabsUX.TabTitlePadding)
-            make.leading.equalTo(favicon.snp.trailing).offset(TopTabsUX.TabTitlePadding)
-        }
-        closeButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self).offset(TopTabsUX.TabNudge)
-            make.height.equalTo(self)
-            make.width.equalTo(self.snp.height).offset(-TopTabsUX.TabTitlePadding)
-            make.trailing.equalTo(self.snp.trailing)
-        }
-
-        self.clipsToBounds = false
+        setupLayout()
     }
 
     func configureWith(tab: Tab, isSelected selected: Bool) {
@@ -138,5 +112,34 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
 
     func applyTheme() {
         selectedBackground.backgroundColor = UIColor.theme.topTabs.tabBackgroundSelected
+    }
+
+    private func setupLayout() {
+        addSubviews(selectedBackground, titleText, closeButton, favicon)
+
+        NSLayoutConstraint.activate([
+            selectedBackground.widthAnchor.constraint(equalTo: widthAnchor),
+            selectedBackground.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.82),
+            selectedBackground.centerXAnchor.constraint(equalTo: centerXAnchor),
+            selectedBackground.centerYAnchor.constraint(equalTo: centerYAnchor),
+
+            favicon.centerYAnchor.constraint(equalTo: centerYAnchor, constant: TopTabsUX.TabNudge),
+            favicon.widthAnchor.constraint(equalToConstant: GridTabTrayControllerUX.FaviconSize),
+            favicon.heightAnchor.constraint(equalToConstant: GridTabTrayControllerUX.FaviconSize),
+            favicon.leadingAnchor.constraint(equalTo: leadingAnchor, constant: TopTabsUX.TabTitlePadding),
+
+            titleText.centerYAnchor.constraint(equalTo: centerYAnchor),
+            titleText.heightAnchor.constraint(equalTo: heightAnchor),
+            titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor, constant: TopTabsUX.TabTitlePadding),
+            titleText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
+                                                constant: TopTabsUX.TabTitlePadding),
+
+            closeButton.centerYAnchor.constraint(equalTo: centerYAnchor, constant: TopTabsUX.TabNudge),
+            closeButton.widthAnchor.constraint(equalTo: heightAnchor, constant: -TopTabsUX.TabTitlePadding),
+            closeButton.heightAnchor.constraint(equalTo: heightAnchor),
+            closeButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
+
+        self.clipsToBounds = false
     }
 }
