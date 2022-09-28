@@ -19,6 +19,7 @@ class QRCodeViewController: UIViewController {
         static let maskViewBackgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
         static let isLightingNavigationItemColor = UIColor(red: 0.45, green: 0.67, blue: 0.84, alpha: 1)
         static let viewBackgroundDeniedColor = UIColor.black
+        static let scanLineHeight: CGFloat = 6
     }
 
     var qrCodeDelegate: QRCodeViewControllerDelegate?
@@ -112,7 +113,9 @@ class QRCodeViewController: UIViewController {
             self.navigationItem.rightBarButtonItem?.isEnabled = false
 
             let alert = UIAlertController(title: "", message: .ScanQRCodePermissionErrorMessage, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: .ScanQRCodeErrorOKButton, style: .default, handler: { (action) -> Void in
+            alert.addAction(UIAlertAction(title: .ScanQRCodeErrorOKButton,
+                                          style: .default,
+                                          handler: { (action) -> Void in
                 self.dismiss(animated: true)
             }))
             self.present(alert, animated: true, completion: nil)
@@ -146,7 +149,6 @@ class QRCodeViewController: UIViewController {
         view.layoutIfNeeded()
         shapeLayer.removeFromSuperlayer()
         let rectPath = UIBezierPath(rect: view.bounds)
-        print("WT: \(scanBorder.frame)")
         rectPath.append(UIBezierPath(rect: scanBorder.frame).reversing())
         shapeLayer.path = rectPath.cgPath
         maskView.layer.mask = shapeLayer
@@ -158,7 +160,8 @@ class QRCodeViewController: UIViewController {
         view.addSubview(scanLine)
         view.addSubview(instructionsLabel)
 
-        scanLineTopConstraint = scanLine.topAnchor.constraint(equalTo: scanBorder.topAnchor, constant: 6)
+        scanLineTopConstraint = scanLine.topAnchor.constraint(equalTo: scanBorder.topAnchor,
+                                                              constant: UX.scanLineHeight)
         scanBorderWidthConstraint = scanBorder.widthAnchor.constraint(equalToConstant: scanBorderSize)
 
         NSLayoutConstraint.activate([
@@ -175,7 +178,7 @@ class QRCodeViewController: UIViewController {
             scanLineTopConstraint,
             scanLine.leadingAnchor.constraint(equalTo: scanBorder.leadingAnchor),
             scanLine.widthAnchor.constraint(equalTo: scanBorder.widthAnchor),
-            scanLine.heightAnchor.constraint(equalToConstant: 6),
+            scanLine.heightAnchor.constraint(equalToConstant: UX.scanLineHeight),
 
             instructionsLabel.topAnchor.constraint(equalTo: scanBorder.bottomAnchor, constant: 30),
             instructionsLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
@@ -214,10 +217,10 @@ class QRCodeViewController: UIViewController {
                        delay: 0,
                        options: [.repeat],
                        animations: {
-            self.scanLineTopConstraint.constant = self.scanBorder.frame.size.height - 6
+            self.scanLineTopConstraint.constant = self.scanBorder.frame.size.height - UX.scanLineHeight
             self.view.layoutIfNeeded()
         }) { (value: Bool) in
-            self.scanLineTopConstraint.constant = 6
+            self.scanLineTopConstraint.constant = UX.scanLineHeight
             self.perform(#selector(self.startScanLineAnimation), with: nil, afterDelay: 0)
         }
     }
@@ -294,11 +297,15 @@ class QRCodeViewController: UIViewController {
 }
 
 extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
-    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+    func metadataOutput(_ output: AVCaptureMetadataOutput,
+                        didOutput metadataObjects: [AVMetadataObject],
+                        from connection: AVCaptureConnection) {
         if metadataObjects.isEmpty {
             self.captureSession.stopRunning()
             let alert = AlertController(title: "", message: .ScanQRCodeInvalidDataErrorMessage, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: .ScanQRCodeErrorOKButton, style: .default, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: .ScanQRCodeErrorOKButton,
+                                          style: .default,
+                                          handler: { (UIAlertAction) in
                 self.captureSession.startRunning()
             }), accessibilityIdentifier: "qrCodeAlert.okButton")
             self.present(alert, animated: true, completion: nil)
