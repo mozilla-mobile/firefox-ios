@@ -22,8 +22,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
     weak var delegate: TopTabCellDelegate?
 
     // MARK: - UI Elements
-    let selectedBackground: UIView = {
-        let view = UIView()
+    let selectedBackground: UIView = .build { view in
         view.clipsToBounds = false
         view.backgroundColor = UIColor.theme.topTabs.tabBackgroundSelected
         view.layer.cornerRadius = TopTabsUX.TabCornerRadius
@@ -32,41 +31,36 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         view.layer.shadowOpacity = 0.1
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
         view.layer.masksToBounds = false
+    }
 
-        return view
-    }()
+    let titleText: UILabel = .build { label in
+        label.textAlignment = .natural
+        label.isUserInteractionEnabled = false
+        label.numberOfLines = 1
+        label.lineBreakMode = .byCharWrapping
+        label.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
+        label.semanticContentAttribute = .forceLeftToRight
+        label.isAccessibilityElement = false
+    }
 
-    let titleText: UILabel = {
-        let titleText = UILabel()
-        titleText.textAlignment = .natural
-        titleText.isUserInteractionEnabled = false
-        titleText.numberOfLines = 1
-        titleText.lineBreakMode = .byCharWrapping
-        titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
-        titleText.semanticContentAttribute = .forceLeftToRight
-        titleText.isAccessibilityElement = false
-        return titleText
-    }()
+    let favicon: UIImageView = .build { imageView in
+        imageView.layer.cornerRadius = 2.0
+        imageView.layer.masksToBounds = true
+        imageView.semanticContentAttribute = .forceLeftToRight
+    }
 
-    let favicon: UIImageView = {
-        let favicon = UIImageView()
-        favicon.layer.cornerRadius = 2.0
-        favicon.layer.masksToBounds = true
-        favicon.semanticContentAttribute = .forceLeftToRight
-        return favicon
-    }()
-
-    let closeButton: UIButton = {
-        let closeButton = UIButton()
-        closeButton.setImage(UIImage.templateImageNamed("menu-CloseTabs"), for: [])
-        closeButton.tintColor = UIColor.Photon.Grey40
-        closeButton.imageEdgeInsets = UIEdgeInsets(top: 15, left: TopTabsUX.TabTitlePadding, bottom: 15, right: TopTabsUX.TabTitlePadding)
-        closeButton.layer.shadowOpacity = 0.8
-        closeButton.layer.masksToBounds = false
-        closeButton.layer.shadowOffset = CGSize(width: -TopTabsUX.TabTitlePadding, height: 0)
-        closeButton.semanticContentAttribute = .forceLeftToRight
-        return closeButton
-    }()
+    let closeButton: UIButton = .build { button in
+        button.setImage(UIImage.templateImageNamed("menu-CloseTabs"), for: []) // image identifier
+        button.tintColor = UIColor.Photon.Grey40
+        button.imageEdgeInsets = UIEdgeInsets(top: 15,
+                                              left: TopTabsUX.TabTitlePadding,
+                                              bottom: 15,
+                                              right: TopTabsUX.TabTitlePadding)
+        button.layer.shadowOpacity = 0.8
+        button.layer.masksToBounds = false
+        button.layer.shadowOffset = CGSize(width: -TopTabsUX.TabTitlePadding, height: 0)
+        button.semanticContentAttribute = .forceLeftToRight
+    }
 
     // MARK: - Inits
     override init(frame: CGRect) {
@@ -109,7 +103,8 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         accessibilityLabel = getA11yTitleLabel(tab: tab)
         isAccessibilityElement = true
 
-        closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
+        closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel,
+                                                self.titleText.text ?? "")
 
         let hideCloseButton = frame.width < 148 && !selected
         closeButton.isHidden = hideCloseButton
@@ -120,8 +115,9 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         favicon.backgroundColor = .clear
 
         if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
-            ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
-                                                                   limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+            ImageLoadingHandler.shared.getImageFromCacheOrDownload(
+                with: url,
+                limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
                 guard error == nil, let image = image else { return }
                 self.favicon.image = image
             }
