@@ -60,6 +60,16 @@ class QRCodeViewController: UIViewController {
     private var scanLineTopConstraint: NSLayoutConstraint!
     private var scanBorderWidthConstraint: NSLayoutConstraint!
 
+    private var scanBorderSize: CGFloat {
+        let minSize = min(view.frame.width, view.frame.height)
+        var scanBorderSize = minSize / 3 * 2
+
+        if UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.orientation.isLandscape {
+            scanBorderSize = minSize / 2
+        }
+        return scanBorderSize
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -148,13 +158,6 @@ class QRCodeViewController: UIViewController {
         view.addSubview(scanLine)
         view.addSubview(instructionsLabel)
 
-        let minSize = min(view.frame.width, view.frame.height)
-        var scanBorderSize = minSize / 3 * 2
-
-        if UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.orientation.isLandscape {
-            scanBorderSize = minSize / 2
-        }
-
         scanLineTopConstraint = scanLine.topAnchor.constraint(equalTo: scanBorder.topAnchor, constant: 6)
         scanBorderWidthConstraint = scanBorder.widthAnchor.constraint(equalToConstant: scanBorderSize)
 
@@ -181,12 +184,6 @@ class QRCodeViewController: UIViewController {
     }
 
     private func updateContraintsAfterTransition() {
-        let minSize = min(view.frame.width, view.frame.height)
-        var scanBorderSize = minSize / 3 * 2
-
-        if UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.orientation.isLandscape {
-            scanBorderSize = minSize / 2
-        }
         scanBorderWidthConstraint.constant = scanBorderSize
     }
 
