@@ -109,7 +109,6 @@ class TabLocationView: UIView {
         reloadButton.addTarget(self, action: #selector(tapReloadButton), for: .touchUpInside)
         reloadButton.addGestureRecognizer(
             UILongPressGestureRecognizer(target: self, action: #selector(longPressReloadButton)))
-        reloadButton.tintColor = UIColor.Photon.Grey50
         reloadButton.imageView?.contentMode = .scaleAspectFit
         reloadButton.contentHorizontalAlignment = .left
         reloadButton.accessibilityLabel = .TabLocationReloadAccessibilityLabel
@@ -311,6 +310,7 @@ extension TabLocationView: NotificationThemeable {
         urlTextField.attributedPlaceholder = placeholder
         readerModeButton.applyTheme()
         trackingProtectionButton.applyTheme()
+        reloadButton.tintColor = .theme.ecosia.secondaryText
 
         let color = LegacyThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.theme.textField.background
         menuBadge.badge.tintBackground(color: color)

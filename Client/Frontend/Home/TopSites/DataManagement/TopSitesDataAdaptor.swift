@@ -87,9 +87,8 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
 
     func recalculateTopSiteData(for numberOfTilesPerRow: Int) {
         var sites = historySites
-        let availableSpaceCount = getAvailableSpaceCount(numberOfTilesPerRow: numberOfTilesPerRow)
-
         /* Ecosia: remove sponsored tiles
+        let availableSpaceCount = getAvailableSpaceCount(numberOfTilesPerRow: numberOfTilesPerRow)
         let shouldAddGoogle = shouldAddGoogle(availableSpaceCount: availableSpaceCount)
 
         // Add Sponsored tile

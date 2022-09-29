@@ -58,7 +58,8 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(SiteTableViewControllerUX.HeaderTextMargin)),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
 
             collapsibleImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             collapsibleImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
@@ -82,7 +83,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
     func applyTheme() {
         titleLabel.textColor = UIColor.theme.ecosia.secondaryText
-        contentView.backgroundColor = UIColor.theme.homePanel.panelBackground
+        contentView.backgroundColor = .clear
         bordersHelper.applyTheme()
     }
 
@@ -148,7 +149,6 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.profile = profile
         self.style = style
         super.init(nibName: nil, bundle: nil)
-        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -192,6 +192,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        applyTheme()
     }
 
     func reloadData() {
@@ -222,7 +223,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
             header.textLabel?.textColor = UIColor.theme.ecosia.secondaryText
-            header.contentView.backgroundColor = UIColor.theme.homePanel.panelBackground
+            header.contentView.backgroundColor = .clear
         }
     }
 
@@ -246,11 +247,13 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
         tableView.separatorColor = UIColor.theme.ecosia.border
-        tableView.visibleCells.forEach({ ($0 as? NotificationThemeable)?.applyTheme() })
         if let rows = tableView.indexPathsForVisibleRows {
             IndexSet(rows.map { $0.section }).forEach {
                 (tableView.headerView(forSection: $0) as? NotificationThemeable)?.applyTheme()
                 (tableView.footerView(forSection: $0) as? NotificationThemeable)?.applyTheme()
+            }
+            rows.forEach {
+                (tableView.cellForRow(at: $0) as? NotificationThemeable)?.applyTheme()
             }
         }
     }

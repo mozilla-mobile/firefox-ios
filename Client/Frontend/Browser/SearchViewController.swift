@@ -100,6 +100,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             || !searchHighlights.isEmpty
     }
 
+    var hasAutocompleteSuggestions: Bool {
+        let count = suggestions?.count ?? 0
+        return count != 0
+    }
+
     init(profile: Profile,
          viewModel: SearchViewModel,
          tabManager: TabManager,
@@ -390,8 +395,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     private func animateSearchEnginesWithKeyboard(_ keyboardState: KeyboardState) {
-        // Ecosia: remove search customization
-        // layoutSearchEngineScrollView()
+        /* Ecosia: remove search customization
+        layoutSearchEngineScrollView()
 
         UIView.animate(
             withDuration: keyboardState.animationDuration,
@@ -400,6 +405,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             animations: {
                 self.view.layoutIfNeeded()
             })
+         */
     }
 
     private func getCachedTabs() {
@@ -548,37 +554,24 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:
-            recordSearchListSelectionTelemetry(type: .searchSuggestions)
             // Assume that only the default search engine can provide search suggestions.
             let engine = searchEngines.defaultEngine
             guard let suggestions = suggestions else { return }
             guard let suggestion = suggestions[safe: indexPath.row] else { return }
             if let url = engine.searchURLForQuery(suggestion) {
-                Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
-                GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
             }
         case .openedTabs:
-            recordSearchListSelectionTelemetry(type: .openedTabs)
             let tab = self.filteredOpenedTabs[indexPath.row]
             searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
-        /* Ecosia:
-        case .remoteTabs:
-            recordSearchListSelectionTelemetry(type: .remoteTabs)
-            let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
-            searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL, searchTerm: nil)
-         */
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
-                recordSearchListSelectionTelemetry(type: .bookmarksAndHistory,
-                                                   isBookmark: site.bookmarked ?? false)
                 if let url = URL(string: site.url) {
                     searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
                 }
             }
         case .searchHighlights:
             if let url = searchHighlights[indexPath.row].siteUrl {
-                recordSearchListSelectionTelemetry(type: .searchHighlights)
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
         }
@@ -589,28 +582,22 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        /* Ecosia
-        guard section == SearchListSection.remoteTabs.rawValue,
-              hasFirefoxSuggestions else { return 0 }
-
+        guard section == SearchListSection.searchSuggestions.rawValue,
+              hasAutocompleteSuggestions else { return 0 }
         return UITableView.automaticDimension
-         */
-        return 0
     }
 
-    /* Ecosia: deactivate headers
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section == SearchListSection.remoteTabs.rawValue,
-              hasFirefoxSuggestions,
+        guard section == SearchListSection.searchSuggestions.rawValue,
+              hasAutocompleteSuggestions,
               let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderIdentifier) as?
                 SiteTableViewHeader
         else { return nil }
 
-        headerView.titleLabel.text = .Search.SuggestSectionTitle
-
+        headerView.titleLabel.text = "Ecosia search".uppercased()
         return headerView
     }
-     */
+
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let twoLineImageOverlayCell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath) as! TwoLineImageOverlayCell
@@ -629,8 +616,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return count < 4 ? count : 4
         case .openedTabs:
             return filteredOpenedTabs.count
-        /* Ecosia: case .remoteTabs:
-            return filteredRemoteClientTabs.count */
         case .bookmarksAndHistory:
             return data.count
         case .searchHighlights:
@@ -655,7 +640,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         super.applyTheme()
         view.backgroundColor = .theme.ecosia.ntpBackground
         tableView.backgroundColor = .theme.ecosia.ntpBackground
-        //Ecosia: searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
         reloadData()
     }
 
@@ -703,40 +687,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 twoLineCell.descriptionLabel.isHidden = false
                 twoLineCell.titleLabel.text = openedTab.title ?? openedTab.lastTitle
                 twoLineCell.descriptionLabel.text = String.SearchSuggestionCellSwitchToTabLabel
-                /* Ecosia:
-                twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
-                twoLineCell.leftImageView.layer.borderColor = UIColor.theme.ecosia.border.cgColor
-                twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                twoLineCell.leftImageView.contentMode = .center
-                twoLineCell.leftImageView.setImageAndBackground(forIcon: openedTab.displayFavicon, website: openedTab.url) { [weak twoLineCell] in
-                    twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
-                }
-                twoLineCell.accessoryView = nil
-                 */
                 twoLineCell.leftImageView.contentMode = .center
                 twoLineCell.leftImageView.image = .init(named: "switchTab")
                 twoLineCell.leftImageView.tintColor = .theme.ecosia.secondaryText
                 twoLineCell.backgroundColor = UIColor.theme.ecosia.autocompleteBackground
                 cell = twoLineCell
             }
-        /* Ecosia: case .remoteTabs:
-            if self.filteredRemoteClientTabs.count > indexPath.row {
-                let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
-                let remoteClient = self.filteredRemoteClientTabs[indexPath.row].client
-                twoLineCell.descriptionLabel.isHidden = false
-                twoLineCell.titleLabel.text = remoteTab.title
-                twoLineCell.descriptionLabel.text = remoteClient.name
-                twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
-                twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-                twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                twoLineCell.leftImageView.contentMode = .center
-                twoLineCell.leftImageView.setImageAndBackground(forIcon: nil, website: remoteTab.URL) { [weak twoLineCell] in
-                    twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
-                }
-                twoLineCell.backgroundColor = UIColor.theme.ecosia.autocompleteBackground
-                twoLineCell.accessoryView = nil
-                cell = twoLineCell
-            } */
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
                 let isBookmark = site.bookmarked ?? false
@@ -744,15 +700,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 twoLineCell.descriptionLabel.isHidden = false
                 twoLineCell.titleLabel.text = site.title
                 twoLineCell.descriptionLabel.text = site.url
-                /* Ecosia:
-                twoLineCell.leftOverlayImageView.image = isBookmark ? self.bookmarkedBadge : nil
-                twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-                twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                twoLineCell.leftImageView.contentMode = .center
-                twoLineCell.leftImageView.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak twoLineCell] in
-                    twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
-                }
-                 */
                 twoLineCell.backgroundColor = UIColor.theme.ecosia.autocompleteBackground
                 twoLineCell.accessoryView = nil
                 let imageName = isBookmark ? "bookmarksEmpty" : "libraryHistory"
@@ -769,8 +716,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             twoLineCell.descriptionLabel.isHidden = false
             twoLineCell.titleLabel.text = highlightItem.displayTitle
             twoLineCell.descriptionLabel.text = urlString
-            twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-            twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
             twoLineCell.leftImageView.contentMode = .center
             profile.favicons.getFaviconImage(forSite: site).uponQueue(.main) {
                 [weak twoLineCell] result in
@@ -795,8 +740,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     private var searchAppendImage: UIImage? {
-        var searchAppendImage = UIImage(named: SearchViewControllerUX.SearchAppendImage)
+        let searchAppendImage = UIImage(named: SearchViewControllerUX.SearchAppendImage)
 
+        /* Ecosia: always point arrow up
         if viewModel.isBottomSearchBar, let image = searchAppendImage, let cgImage = image.cgImage {
             searchAppendImage = UIImage(
                 cgImage: cgImage,
@@ -804,36 +750,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 orientation: .downMirrored
             )
         }
-        return searchAppendImage
-    }
-}
-
-// MARK: - Telemetry
-private extension SearchViewController {
-    func recordSearchListSelectionTelemetry(type: SearchListSection, isBookmark: Bool = false) {
-
-        let key = TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue
-        var extra: String
-        switch type {
-        case .searchSuggestions:
-            extra = TelemetryWrapper.EventValue.searchSuggestion.rawValue
-        /* Ecosia
-        case .remoteTabs:
-            extra = TelemetryWrapper.EventValue.remoteTab.rawValue
          */
-        case .openedTabs:
-            extra = TelemetryWrapper.EventValue.openedTab.rawValue
-        case .bookmarksAndHistory:
-            extra = isBookmark ? TelemetryWrapper.EventValue.bookmarkItem.rawValue :
-                        TelemetryWrapper.EventValue.historyItem.rawValue
-        case .searchHighlights:
-            extra = TelemetryWrapper.EventValue.searchHighlights.rawValue
-        }
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .awesomebarResults,
-                                     extras: [key: extra])
+        return searchAppendImage
     }
 }
 
