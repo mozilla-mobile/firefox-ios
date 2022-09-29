@@ -9,7 +9,7 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
 
     // MARK: - Initializers
     init() {
-        super.init(style: .grouped)
+        super.init(style: .insetGrouped)
 
         self.title = .Settings.Homepage.Shortcuts.ShortcutsPageTitle
         self.navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage

@@ -305,7 +305,12 @@ class BoolSetting: Setting, FeatureFlaggable {
         if let featureFlagName = featureFlagName {
             control.isOn = featureFlags.isFeatureEnabled(featureFlagName, checking: .userOnly)
         } else {
-            guard let key = prefKey, let defaultValue = defaultValue else { return }
+            guard let key = prefKey, let defaultValue = defaultValue else {
+                if let defaultValue = defaultValue {
+                    control.isOn = defaultValue
+                }
+                return
+            }
             control.isOn = prefs?.boolForKey(key) ?? defaultValue
         }
     }

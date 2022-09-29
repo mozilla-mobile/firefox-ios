@@ -166,5 +166,6 @@ extension String {
         case discoverWhereWe = "Discover where we plant trees, and find out how our tree planting projects across the globe are doing."
         case learnHowWe = "Learn how we protect your privacy by not creating a profile of you, never selling your data to advertisers and more."
         case findAnswersTo = "Find answers to popular questions like how Ecosia neutralizes CO2 emissions and what it means to be a social business."
+        case customization = "Customization"
     }
 }

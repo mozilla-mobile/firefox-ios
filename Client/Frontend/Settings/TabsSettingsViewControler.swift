@@ -8,7 +8,7 @@ import Shared
 class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
 
     init() {
-        super.init(style: .grouped)
+        super.init(style: .insetGrouped)
 
         self.title = .Settings.SectionTitles.TabsTitle
     }

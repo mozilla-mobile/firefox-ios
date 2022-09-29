@@ -108,21 +108,11 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                 prefKey: PrefsKeys.KeyBlockPopups,
                 defaultValue: true,
                 titleText: .AppSettingsBlockPopups),
-            BoolSetting(prefs: prefs, prefKey: "", defaultValue: Core.User.shared.topSites ?? true, titleText: .localized(.showTopSites)) {
-                Core.User.shared.topSites = $0
-            },
             NoImageModeSetting(settings: self)
            ]
 
-        if SearchBarSettingsViewModel.isEnabled {
-            generalSettings.insert(SearchBarSetting(settings: self), at: 5)
-        }
-
         let tabTrayGroupsAreBuildActive = featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly)
         let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
-        if tabTrayGroupsAreBuildActive || inactiveTabsAreBuildActive {
-            generalSettings.insert(TabsSetting(), at: 3)
-        }
 
         /* Ecosia: deactivate china settings
         let accountChinaSyncSetting: [Setting]
@@ -154,7 +144,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                 statusText: .SettingsShowLinkPreviewsStatus)
         ]
 
-
         if #available(iOS 14.0, *) {
             settings += [
                 SettingSection(footerTitle: .init(string: .localized(.linksFromWebsites)), children: [DefaultBrowserSetting()])
@@ -182,10 +171,20 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             PersonalSearchSettings(prefs: prefs)
         ]
         
-        settings += [ SettingSection(title: NSAttributedString(string: .localized(.search)), footerTitle: nil, children: searchSettings)]
-
-        settings += [ SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle), children: generalSettings)]
-
+        var customization: [Setting] = [HomePageSettingViewController.TopSitesSettings(settings: self)]
+        
+        if tabTrayGroupsAreBuildActive || inactiveTabsAreBuildActive {
+            customization += [TabsSetting()]
+        }
+        
+        if SearchBarSettingsViewModel.isEnabled {
+            customization += [SearchBarSetting(settings: self)]
+        }
+        
+        settings += [.init(title: .init(string: .localized(.search)), children: searchSettings),
+                     .init(title: .init(string: .localized(.customization)), children: customization),
+                     .init(title: .init(string: .SettingsGeneralSectionTitle), children: generalSettings)]
+        
         var privacySettings = [Setting]()
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
 

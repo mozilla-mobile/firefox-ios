@@ -11,7 +11,7 @@ class SearchBarSettingsViewController: SettingsTableViewController {
 
     init(viewModel: SearchBarSettingsViewModel) {
         self.viewModel = viewModel
-        super.init(style: .grouped)
+        super.init(style: .insetGrouped)
 
         title = viewModel.title
         viewModel.delegate = self
