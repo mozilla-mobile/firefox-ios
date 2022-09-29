@@ -47,7 +47,7 @@ class TopTabsViewController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
         collectionView.clipsToBounds = true
-        collectionView.accessibilityIdentifier = "Top Tabs View"
+        collectionView.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.collectionView
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -55,20 +55,20 @@ class TopTabsViewController: UIViewController {
     fileprivate lazy var tabsButton: TabsButton = .build { button in
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
-        button.accessibilityIdentifier = "TopTabsViewController.tabsButton" // A11y id
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.tabsButton
         button.inTopTabs = true
     }
 
     fileprivate lazy var newTab: UIButton = .build { button in
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
-        button.accessibilityIdentifier = "TopTabsViewController.newTabButton" // A11y id
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.newTabButton
     }
 
     lazy var privateModeButton: PrivateModeButton = {
         let privateModeButton = PrivateModeButton()
         privateModeButton.semanticContentAttribute = .forceLeftToRight
-        privateModeButton.accessibilityIdentifier = "TopTabsViewController.privateModeButton"
+        privateModeButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.privateModeButton
         privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: .touchUpInside)
         privateModeButton.translatesAutoresizingMaskIntoConstraints = false
         return privateModeButton
@@ -138,7 +138,7 @@ class TopTabsViewController: UIViewController {
         // links onto the "New Tab" button.
         let dropInteraction = UIDropInteraction(delegate: topTabDisplayManager)
         newTab.addInteraction(dropInteraction)
-        
+
         tabsButton.applyTheme()
         applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
 
