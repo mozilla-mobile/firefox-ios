@@ -8,9 +8,9 @@ import Foundation
 import Storage
 import Core
 
-class TestHistoryMigration: TestHistory {
+class EcosiaHistoryMigrationTests: TestHistory {
 
-    func testEcosiaImportHistory() {
+    func testImportHistory() {
         let url = URL(string:"https://ecosia.org")!
 
         withTestProfile { profile in
@@ -20,7 +20,7 @@ class TestHistoryMigration: TestHistory {
         }
     }
 
-    func testEcosiaHistoryPrepare() {
+    func testHistoryPrepare() {
         let urls = [URL(string:"https://apple.com")!,
                     URL(string:"https://ecosia.org")!,
                     URL(string:"https://ecosia.org/blog")!,
@@ -57,7 +57,7 @@ class TestHistoryMigration: TestHistory {
     }
 
 
-    func testEcosiaHistoryCap() {
+    func testHistoryCap() {
         let urls = [URL(string:"https://apple.com")!,
                     URL(string:"https://ecosia.org")!,
                     URL(string:"https://ecosia.org/blog")!,

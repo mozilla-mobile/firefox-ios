@@ -131,6 +131,9 @@
                   Identifier = "DefaultSearchPrefsTests">
                </Test>
                <Test
+                  Identifier = "EcosiaBookmarkMigrationTests">
+               </Test>
+               <Test
                   Identifier = "EcosiaBookmarkTests/testEcosiaImportBookmarks()">
                </Test>
                <Test
@@ -156,6 +159,9 @@
                </Test>
                <Test
                   Identifier = "TabManagerTests/testPrivatePreference_togglePBMDeletesPrivate()">
+               </Test>
+               <Test
+                  Identifier = "TabTrayViewControllerTests">
                </Test>
                <Test
                   Identifier = "TestFavicons/testFaviconFetcherParse()">

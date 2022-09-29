@@ -87,7 +87,7 @@ class TabManagerStoreTests: XCTestCase {
 }
 
 // MARK: - Helper methods
-private extension TabManagerStoreTests {
+extension TabManagerStoreTests {
 
     func createManager(file: StaticString = #file, line: UInt = #line) -> TabManager {
         let manager = TabManager(profile: profile, imageStore: nil)

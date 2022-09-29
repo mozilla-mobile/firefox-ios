@@ -33,4 +33,26 @@ extension NTPTooltip {
         }
 
     }
+
+    class func highlight(for user: Core.User) -> NTPTooltip.Highlight? {
+        guard !user.firstTime else { return nil }
+
+        if user.referrals.isNewClaim {
+            return .gotClaimed
+        }
+
+        if user.referrals.newClaims > 0 {
+            return .successfulInvite
+        }
+
+        if user.showsReferralSpotlight {
+            return .referralSpotlight
+        }
+
+        if user.showsCounterIntro {
+            return .counterIntro
+        }
+
+        return nil
+    }
 }

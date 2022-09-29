@@ -8,8 +8,8 @@ import XCTest
 import Shared
 import Storage
 
-final class EcosiaBookmarkTests: ProfileTest {
-    func testEcosiaImportBookmarks() {
+final class EcosiaBookmarkMigrationTests: ProfileTest {
+    func testImportBookmarks() {
         try? FileManager.default.removeItem(at: FileManager.pages)
         Core.User.shared.migrated = false
         Core.Favourites().items = ["https://ecosia.org",
@@ -30,9 +30,9 @@ final class EcosiaBookmarkTests: ProfileTest {
                     let ecosia = EcosiaImport(profile: profile)
                     ecosia.migrate { _ in
                         DispatchQueue.main.async {
-                            profile.places.getBookmarksTree(rootGUID: "mobile______", recursive: true) >>== { folder in
-                                guard let folder = folder as? BookmarkFolder else { return }
-                                XCTAssertEqual(3, folder.children!.count)
+                            profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: true) >>== { result in
+                                guard let bookmarkFolder = result as? BookmarkFolderData else { return }
+                                XCTAssertEqual(3, bookmarkFolder.children!.count)
                                 try? FileManager.default.removeItem(at: FileManager.favourites)
                                 expect.fulfill()
                             }

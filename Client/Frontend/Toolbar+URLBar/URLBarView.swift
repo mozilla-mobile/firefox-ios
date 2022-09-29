@@ -414,14 +414,14 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
             // In overlay mode, we always show the location view full width
             self.locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidthSelected
             self.locationContainer.snp.remakeConstraints { make in
-                let heightMin = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
-                make.height.greaterThanOrEqualTo(heightMin)
+                let height = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
+                make.height.equalTo(height)
                 make.trailing.equalTo(self.showQRScannerButton.snp.leading).offset(-URLBarViewUX.Padding)
                 make.leading.equalTo(self.cancelButton.snp.trailing)
                 make.centerY.equalTo(self)
             }
             self.locationView.snp.remakeConstraints { make in
-                make.top.bottom.right.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidthSelected))
+                make.top.bottom.right.equalTo(self.locationContainer)
                 make.leading.equalTo(searchIconImageView.snp.trailing).offset(8)
             }
             self.locationTextField?.snp.remakeConstraints { make in
@@ -443,13 +443,13 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
                     let rightPadding = toolbarIsShowing ? URLBarViewUX.ButtonHeight : 16
                     make.leading.trailing.equalTo(self).inset(UIEdgeInsets(top: 0, left: 16, bottom: 0, right: rightPadding))
                 }
-                make.height.greaterThanOrEqualTo(URLBarViewUX.LocationHeight+2)
+                make.height.equalTo(URLBarViewUX.LocationHeight+URLBarViewUX.TextFieldBorderWidthSelected * 2)
                 make.centerY.equalTo(self)
             }
             self.locationContainer.layer.borderWidth = isHome ? URLBarViewUX.TextFieldBorderWidth : 0
 
             self.locationView.snp.remakeConstraints { make in
-                make.top.bottom.trailing.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidth))
+                make.top.bottom.trailing.equalTo(self.locationContainer)
                 if isHome {
                     make.leading.equalTo(searchIconImageView.snp.trailing).offset(8)
                 } else {
@@ -658,7 +658,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
                 make.edges.equalTo(self.locationView.urlTextField)
             }
         }
-        line.isHidden = inOverlayMode
+        line.isHidden = inOverlayMode || isBottomSearchBar()
     }
 
     func updateViewsForOverlayModeAndToolbarChanges() {

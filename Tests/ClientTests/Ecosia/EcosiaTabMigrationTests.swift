@@ -11,6 +11,8 @@ final class EcosiaTabMigrationTests: TabManagerStoreTests {
         try? FileManager.default.removeItem(at: FileManager.pages)
         Core.User.shared.migrated = false
 
+        let manager = createManager()
+
         let urls = [URL(string: "https://ecosia.org")!,
                     URL(string: "https://guacamole.com")!]
 
@@ -20,7 +22,7 @@ final class EcosiaTabMigrationTests: TabManagerStoreTests {
         let expectation = XCTestExpectation()
         PageStore.queue.async {
             DispatchQueue.main.async {
-                XCTAssertEqual(self.manager.testCountRestoredTabs(), 2)
+                XCTAssertEqual(manager.testCountRestoredTabs(), 2)
                 // clean up
                 try? FileManager.default.removeItem(at: FileManager.pages)
                 expectation.fulfill()

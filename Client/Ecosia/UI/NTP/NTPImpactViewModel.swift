@@ -96,31 +96,7 @@ extension NTPImpactViewModel: HomepageSectionHandler {
 }
 
 extension NTPImpactViewModel: NTPLayoutHighlightDataSource {
-    var ntpHighlight: NTPTooltip.Highlight? {
-        guard !User.shared.firstTime else { return nil }
-
-        if User.shared.referrals.isNewClaim {
-            return .gotClaimed
-        }
-
-        if User.shared.referrals.newClaims > 0 {
-            return .successfulInvite
-        }
-
-        if User.shared.showsReferralSpotlight {
-            return .referralSpotlight
-        }
-
-        if User.shared.showsCounterIntro {
-            return .counterIntro
-        }
-
-        return nil
-    }
-
     func ntpLayoutHighlightText() -> String? {
-        return ntpHighlight?.text
+        return NTPTooltip.highlight(for: User.shared)?.text
     }
-
 }
-
