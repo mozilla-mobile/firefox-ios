@@ -40,11 +40,6 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable, Th
         return collectionView
     }()
 
-    private lazy var activityIndicatorView: UIActivityIndicatorView = .build { view in
-        view.style = .large
-        view.isHidden = true
-    }
-
     // MARK: - Initializers
     init(viewModel: WallpaperSettingsViewModel,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -151,7 +146,6 @@ private extension WallpaperSettingsViewController {
         configureCollectionView()
 
         contentView.addSubview(collectionView)
-        contentView.addSubview(activityIndicatorView)
         view.addSubview(contentView)
 
         NSLayoutConstraint.activate([
@@ -164,9 +158,6 @@ private extension WallpaperSettingsViewController {
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-
-            activityIndicatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            activityIndicatorView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
     }
 
@@ -258,7 +249,11 @@ private extension WallpaperSettingsViewController {
     }
 
     func downloadAndSetWallpaper(at indexPath: IndexPath) {
-        activityIndicatorView.startAnimating()
+        guard let cell = collectionView.cellForItem(at: indexPath) as? WallpaperCollectionViewCell
+            else { return }
+
+        cell.showDownloading(true)
+
         viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
             ensureMainThread {
                 switch result {
@@ -270,7 +265,7 @@ private extension WallpaperSettingsViewController {
                         self?.downloadAndSetWallpaper(at: indexPath)
                     }
                 }
-                self?.activityIndicatorView.stopAnimating()
+                cell.showDownloading(false)
             }
         }
     }
