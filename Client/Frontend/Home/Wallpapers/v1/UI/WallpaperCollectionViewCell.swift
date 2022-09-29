@@ -34,6 +34,11 @@ class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
         selectedView.alpha = 0.0
     }
 
+    private lazy var activityIndicatorView: UIActivityIndicatorView = .build { view in
+        view.style = .large
+        view.isHidden = true
+    }
+
     // MARK: - Variables
     var viewModel: WallpaperCellViewModel? {
         didSet {
@@ -86,6 +91,14 @@ class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
             roundedRect: self.bounds,
             cornerRadius: WallpaperCollectionViewCell.UX.cornerRadius).cgPath
     }
+
+    func showDownloading(_ isDownloading: Bool) {
+        if isDownloading {
+            activityIndicatorView.startAnimating()
+        } else {
+            activityIndicatorView.stopAnimating()
+        }
+    }
 }
 
 // MARK: - Private
@@ -103,6 +116,7 @@ private extension WallpaperCollectionViewCell {
         contentView.addSubview(borderView)
         contentView.addSubview(imageView)
         contentView.addSubview(selectedView)
+        contentView.addSubview(activityIndicatorView)
         contentView.layer.cornerRadius = WallpaperCollectionViewCell.UX.cornerRadius
         contentView.clipsToBounds = true
 
@@ -121,6 +135,9 @@ private extension WallpaperCollectionViewCell {
             selectedView.topAnchor.constraint(equalTo: contentView.topAnchor),
             selectedView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             selectedView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            activityIndicatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
     }
 }
