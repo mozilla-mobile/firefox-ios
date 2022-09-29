@@ -17,6 +17,8 @@ class LibraryViewController: UIViewController {
         struct NavigationMenu {
             static let height: CGFloat = 32
             static let width: CGFloat = 343
+            static let margin: CGFloat = 16
+            static let bottom: CGFloat = 32
         }
     }
 
@@ -36,23 +38,13 @@ class LibraryViewController: UIViewController {
     // UI Elements
     private lazy var librarySegmentControl: UISegmentedControl = {
         var librarySegmentControl: UISegmentedControl
-        librarySegmentControl = UISegmentedControl(items: [UIImage(named: "library-bookmark")!,
-                                                           UIImage(named: "library-history")!,
-                                                           UIImage(named: "library-readinglist")!,
-                                                           UIImage(named: "library-downloads")!])
+        librarySegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
         librarySegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
-        //Ecosia TODO: librarySegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
         librarySegmentControl.selectedSegmentIndex = 1
         librarySegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         librarySegmentControl.translatesAutoresizingMaskIntoConstraints = false
         return librarySegmentControl
     }()
-
-    private lazy var segmentControlToolbar: UIToolbar = .build { [weak self] toolbar in
-        guard let self = self else { return }
-        toolbar.delegate = self
-        toolbar.setItems([UIBarButtonItem(customView: self.librarySegmentControl)], animated: false)
-    }
 
     private lazy var topLeftButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed("goBack")?.imageFlippedForRightToLeftLayoutDirection(),
@@ -106,25 +98,15 @@ class LibraryViewController: UIViewController {
     }
 
     private func viewSetup() {
-        /* Ecosia
-        if let appWindow = (UIApplication.shared.delegate?.window),
-           let window = appWindow as UIWindow? {
-            window.backgroundColor = .black
-        }
-         */
-
         navigationItem.rightBarButtonItem = topRightButton
-        view.addSubviews(controllerContainerView, segmentControlToolbar)
+        view.addSubviews(controllerContainerView, librarySegmentControl)
 
         NSLayoutConstraint.activate([
-            segmentControlToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            segmentControlToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            segmentControlToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            librarySegmentControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            librarySegmentControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.NavigationMenu.margin),
+            librarySegmentControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.NavigationMenu.margin),
 
-            librarySegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
-            librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
-
-            controllerContainerView.topAnchor.constraint(equalTo: segmentControlToolbar.bottomAnchor),
+            controllerContainerView.topAnchor.constraint(equalTo: librarySegmentControl.bottomAnchor, constant: UX.NavigationMenu.bottom),
             controllerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             controllerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             controllerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -188,7 +170,6 @@ class LibraryViewController: UIViewController {
         }
 
         setupOpenPanel(panelType: selectedPanel)
-        // Ecosia // TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: eventValue)
     }
 
     func setupOpenPanel(panelType: LibraryPanelType) {
@@ -232,12 +213,12 @@ class LibraryViewController: UIViewController {
         addChild(libraryPanel)
         libraryPanel.beginAppearanceTransition(true, animated: false)
         controllerContainerView.addSubview(libraryPanel.view)
-        view.bringSubviewToFront(segmentControlToolbar)
+        view.bringSubviewToFront(librarySegmentControl)
         libraryPanel.endAppearanceTransition()
 
         libraryPanel.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            libraryPanel.view.topAnchor.constraint(equalTo: segmentControlToolbar.bottomAnchor),
+            libraryPanel.view.topAnchor.constraint(equalTo: controllerContainerView.topAnchor),
             libraryPanel.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             libraryPanel.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             libraryPanel.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -288,24 +269,6 @@ class LibraryViewController: UIViewController {
         setToolbarItems(panel.bottomToolbarItems, animated: true)
     }
 
-    private func setupToolBarAppearance() {
-        let standardAppearance = UIToolbarAppearance()
-        standardAppearance.configureWithDefaultBackground()
-
-        let backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
-                                UIColor.Photon.DarkGrey30 : UIColor.Photon.LightGrey10
-        standardAppearance.backgroundColor = backgroundColor
-
-        navigationController?.toolbar.standardAppearance = standardAppearance
-        navigationController?.toolbar.compactAppearance = standardAppearance
-        if #available(iOS 15.0, *) {
-            navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
-            navigationController?.toolbar.compactScrollEdgeAppearance = standardAppearance
-        }
-        let tintColor = LegacyThemeManager.instance.currentName == .dark ?
-                            UIColor.Photon.Blue20 : UIColor.Photon.Blue50
-        navigationController?.toolbar.tintColor = tintColor
-    }
 }
 
 // MARK: Notifiable
@@ -351,17 +314,11 @@ extension LibraryViewController: NotificationThemeable, Notifiable {
         }
         navigationController?.toolbar.tintColor = UIColor.theme.ecosia.primaryButton
 
-        segmentControlToolbar.barTintColor = UIColor.theme.homePanel.panelBackground
-        segmentControlToolbar.tintColor = UIColor.theme.ecosia.primaryButton
-        segmentControlToolbar.isTranslucent = false
-        segmentControlToolbar.setShadowImage(UIImage(), forToolbarPosition: .any)
-
         librarySegmentControl.setTitleTextAttributes([.foregroundColor: UIColor.theme.ecosia.primaryText], for: .normal)
         librarySegmentControl.setTitleTextAttributes([.foregroundColor: UIColor.Light.Text.primary], for: .selected)
         librarySegmentControl.selectedSegmentTintColor = .Light.Background.primary
         librarySegmentControl.backgroundColor = UIColor.theme.ecosia.segmentBackground
 
         setNeedsStatusBarAppearanceUpdate()
-        setupToolBarAppearance()
     }
 }

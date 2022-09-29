@@ -8,7 +8,7 @@ import Storage
 struct SiteTableViewControllerUX {
     static let HeaderHeight = CGFloat(32)
     static let RowHeight = CGFloat(44)
-    static let HeaderFont = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium)
+    static let HeaderFont = UIFont.preferredFont(forTextStyle: .caption1)
     static let HeaderTextMargin = CGFloat(16)
 }
 
@@ -16,7 +16,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
     var collapsibleState: ExpandButtonState? {
         willSet(state) {
-            collapsibleImageView.image = state?.image?.tinted(withColor: UIColor.Photon.Blue50)
+            collapsibleImageView.image = state?.image
         }
     }
 
@@ -34,7 +34,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
     }
 
     let collapsibleImageView: UIImageView = .build { imageView in
-        imageView.image = ExpandButtonState.down.image?.tinted(withColor: UIColor.Photon.Blue50)
+        imageView.image = ExpandButtonState.down.image
         imageView.isHidden = true
     }
 
@@ -47,7 +47,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
 
-        translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubviews(titleLabel, headerActionButton)
         contentView.addSubviews(titleLabel, collapsibleImageView)
 
@@ -59,7 +58,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(SiteTableViewControllerUX.HeaderTextMargin)),
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8, priority: .defaultHigh),
 
             collapsibleImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             collapsibleImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),

@@ -51,7 +51,8 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
     var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .natural
         label.numberOfLines = 1
         return label

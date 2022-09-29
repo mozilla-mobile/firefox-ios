@@ -5,15 +5,15 @@
 import Foundation
 
 enum ExpandButtonState {
-    case right
+    case up
     case down
 
     var image: UIImage? {
         switch self {
-        case .right:
-            return UIImage(named: ImageIdentifiers.menuChevron)?.imageFlippedForRightToLeftLayoutDirection()
+        case .up:
+            return UIImage(systemName: "chevron.up")
         case .down:
-            return UIImage(named: ImageIdentifiers.findNext)
+            return UIImage(systemName: "chevron.down")
         }
     }
 }

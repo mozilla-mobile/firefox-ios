@@ -45,7 +45,8 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
     var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .natural
         label.numberOfLines = 1
         return label
@@ -54,7 +55,8 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
     var descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.Photon.Grey40
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.font = .preferredFont(forTextStyle: .footnote)
+        label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .natural
         label.numberOfLines = 1
         return label

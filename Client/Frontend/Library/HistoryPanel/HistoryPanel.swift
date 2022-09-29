@@ -76,7 +76,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
             return [bottomDeleteButton, flexibleSpace]
         }
 
-        return [bottomDeleteButton, flexibleSpace, bottomSearchButton, flexibleSpace]
+        return [flexibleSpace, bottomSearchButton, flexibleSpace, bottomDeleteButton]
     }
 
     // UI
@@ -90,7 +90,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     }()
 
     private lazy var bottomDeleteButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.libraryPanelDelete),
+        let button = UIBarButtonItem(title: .localized(.clearAll),
                                      style: .plain,
                                      target: self,
                                      action: #selector(bottomDeleteButtonAction))
@@ -106,8 +106,9 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         searchbar.delegate = self
     }
 
-    lazy private var tableView: UITableView = .build { [weak self] tableView in
-        guard let self = self else { return }
+    lazy private var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self.diffableDatasource
         tableView.addGestureRecognizer(self.longPressRecognizer)
         tableView.accessibilityIdentifier = a11yIds.tableView
@@ -121,7 +122,8 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
         }
-    }
+        return tableView
+    }()
 
     lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         UILongPressGestureRecognizer(target: self, action: #selector(onLongPressGestureRecognized))
@@ -539,16 +541,9 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         searchbar.setImage(searchBarImage, for: .search, state: .normal)
         searchbar.tintColor = UIColor.theme.textField.textAndTint
 
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        if theme == .dark {
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-            bottomSearchButton.tintColor = .white
-            bottomDeleteButton.tintColor = .white
-        } else {
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-            bottomSearchButton.tintColor = .black
-            bottomDeleteButton.tintColor = .black
-        }
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.theme.ecosia.primaryText]
+        bottomSearchButton.tintColor = .theme.ecosia.primaryText
+        bottomDeleteButton.tintColor = .theme.ecosia.warning
 
         tableView.reloadData()
     }
@@ -636,12 +631,13 @@ extension HistoryPanel: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? SiteTableViewHeader, let actualSection = viewModel.visibleSections[safe: section - 1] {
 
-            header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
-            header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
-            header.textLabel?.text = actualSection.title // At worst, we have a header with no text.
+            header.textLabel?.textColor = .theme.ecosia.secondaryText
+            header.contentView.backgroundColor = .clear
+            header.textLabel?.text = actualSection.title?.uppercased()
             header.collapsibleImageView.isHidden = false
+            header.collapsibleImageView.tintColor = .theme.ecosia.secondaryText
             let isCollapsed = viewModel.isSectionCollapsed(sectionIndex: section - 1)
-            header.collapsibleState = isCollapsed ? ExpandButtonState.right : ExpandButtonState.down
+            header.collapsibleState = isCollapsed ? ExpandButtonState.up : ExpandButtonState.down
 
             // Configure tap to collapse/expand section
             header.tag = section

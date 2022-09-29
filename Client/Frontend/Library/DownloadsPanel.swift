@@ -52,20 +52,22 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     var state: LibraryPanelMainState
     var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
 
-    lazy var tableView: UITableView = .build { [weak self] tableView in
-        guard let self = self else { return }
+    lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: view.bounds, style: .insetGrouped)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: self.TwoLineImageOverlayCellIdentifier)
         tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: self.SiteTableViewHeaderIdentifier)
-        tableView.layoutMargins = .zero
+        //tableView.layoutMargins = .zero
         tableView.keyboardDismissMode = .onDrag
         tableView.accessibilityIdentifier = "DownloadsTable"
         tableView.cellLayoutMarginsFollowReadableWidth = false
 
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
-    }
+        return tableView
+    }()
 
     private let events: [Notification.Name] = [.FileDidDownload, .PrivateDataClearedDownloadedFiles, .DynamicFontChanged]
 

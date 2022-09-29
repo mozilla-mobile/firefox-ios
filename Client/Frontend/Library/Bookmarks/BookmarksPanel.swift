@@ -69,6 +69,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         return button
     }()
 
+    private lazy var emptyHeader = EmptyHeader(icon: "bookmarksEmpty", title: .localized(.noBookmarksYet), subtitle: .localized(.AddYourFavoritePages))
+
     // MARK: - Init
 
     init(viewModel: BookmarksPanelViewModel,
@@ -104,6 +106,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
         tableView.allowsSelectionDuringEditing = true
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
+        tableView.contentInset.top = 0
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -116,6 +119,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     override func applyTheme() {
         super.applyTheme()
+        emptyHeader.applyTheme()
 
         if let current = navigationController?.visibleViewController as? NotificationThemeable, current !== self {
             current.applyTheme()
@@ -130,6 +134,15 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
             if self?.viewModel.shouldFlashRow ?? false {
                 self?.flashRow()
+            }
+
+            // Ecosia: add empty state
+            guard let self = self else { return }
+            if self.viewModel.bookmarkNodes.isEmpty {
+                self.tableView.tableHeaderView = self.emptyHeader
+                self.emptyHeader.applyTheme()
+            } else {
+                self.tableView.tableHeaderView = nil
             }
         }
     }
