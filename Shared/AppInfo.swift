@@ -33,7 +33,7 @@ open class AppInfo {
         /* Ecosia: hardcode FX version, needs to change with every upgrade
         return applicationBundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         */
-        return "39.0"
+        return "104.0"
     }
 
     public static var ecosiaAppVersion: String {
@@ -114,6 +114,6 @@ open class AppInfo {
         return Locale.current.identifier == "zh_CN"
     }()
 
-    // The App Store page identifier for the Firefox iOS application
-    public static var appStoreId = "id989804926"
+    // The App Store page identifier for the Ecosia iOS application
+    public static var appStoreId = "id670881887"
 }
