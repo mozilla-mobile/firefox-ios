@@ -48,31 +48,29 @@ class TopTabsViewController: UIViewController {
         collectionView.bounces = false
         collectionView.clipsToBounds = true
         collectionView.accessibilityIdentifier = "Top Tabs View"
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
 
-    fileprivate lazy var tabsButton: TabsButton = {
-        let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.semanticContentAttribute = .forceLeftToRight
-        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
-        tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
-        tabsButton.inTopTabs = true
-        return tabsButton
-    }()
+    fileprivate lazy var tabsButton: TabsButton = .build { button in
+        button.semanticContentAttribute = .forceLeftToRight
+        button.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
+        button.accessibilityIdentifier = "TopTabsViewController.tabsButton" // A11y id
+        button.inTopTabs = true
+    }
 
-    fileprivate lazy var newTab: UIButton = {
-        let newTab = UIButton.newTabButton()
-        newTab.semanticContentAttribute = .forceLeftToRight
-        newTab.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
-        newTab.accessibilityIdentifier = "TopTabsViewController.newTabButton"
-        return newTab
-    }()
+    fileprivate lazy var newTab: UIButton = .build { button in
+        button.semanticContentAttribute = .forceLeftToRight
+        button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
+        button.accessibilityIdentifier = "TopTabsViewController.newTabButton" // A11y id
+    }
 
     lazy var privateModeButton: PrivateModeButton = {
         let privateModeButton = PrivateModeButton()
         privateModeButton.semanticContentAttribute = .forceLeftToRight
         privateModeButton.accessibilityIdentifier = "TopTabsViewController.privateModeButton"
         privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: .touchUpInside)
+        privateModeButton.translatesAutoresizingMaskIntoConstraints = false
         return privateModeButton
     }()
 
@@ -86,6 +84,7 @@ class TopTabsViewController: UIViewController {
     private lazy var topTabFader: TopTabFader = {
         let fader = TopTabFader()
         fader.semanticContentAttribute = .forceLeftToRight
+        fader.translatesAutoresizingMaskIntoConstraints = false
 
         return fader
     }()
@@ -133,45 +132,13 @@ class TopTabsViewController: UIViewController {
         collectionView.dragDelegate = topTabDisplayManager
         collectionView.dropDelegate = topTabDisplayManager
 
-        view.addSubview(topTabFader)
-        topTabFader.addSubview(collectionView)
-        view.addSubview(tabsButton)
-        view.addSubview(newTab)
-        view.addSubview(privateModeButton)
+        setupLayout()
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links onto the "New Tab" button.
         let dropInteraction = UIDropInteraction(delegate: topTabDisplayManager)
         newTab.addInteraction(dropInteraction)
-
-        view.snp.makeConstraints { make in
-            make.height.equalTo(TopTabsUX.TopTabsViewHeight)
-        }
-
-        newTab.snp.makeConstraints { make in
-            make.centerY.equalTo(view)
-            make.trailing.equalTo(tabsButton.snp.leading)
-            make.size.equalTo(view.snp.height)
-        }
-        tabsButton.snp.makeConstraints { make in
-            make.centerY.equalTo(view)
-            make.trailing.equalTo(view).offset(-10)
-            make.size.equalTo(view.snp.height)
-        }
-        privateModeButton.snp.makeConstraints { make in
-            make.centerY.equalTo(view)
-            make.leading.equalTo(view).offset(10)
-            make.size.equalTo(view.snp.height)
-        }
-        topTabFader.snp.makeConstraints { make in
-            make.top.bottom.equalTo(view)
-            make.leading.equalTo(privateModeButton.snp.trailing)
-            make.trailing.equalTo(newTab.snp.leading)
-        }
-        collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(topTabFader)
-        }
-
+        
         tabsButton.applyTheme()
         applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
 
@@ -238,6 +205,43 @@ class TopTabsViewController: UIViewController {
                 }
             }
         }
+    }
+
+    private func setupLayout() {
+        view.addSubview(topTabFader)
+        topTabFader.addSubview(collectionView)
+        view.addSubview(tabsButton)
+        view.addSubview(newTab)
+        view.addSubview(privateModeButton)
+
+        NSLayoutConstraint.activate([
+            view.heightAnchor.constraint(equalToConstant: TopTabsUX.TopTabsViewHeight),
+
+            newTab.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            newTab.trailingAnchor.constraint(equalTo: tabsButton.leadingAnchor),
+            newTab.widthAnchor.constraint(equalTo: view.heightAnchor),
+            newTab.heightAnchor.constraint(equalTo: view.heightAnchor),
+
+            tabsButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            tabsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            tabsButton.widthAnchor.constraint(equalTo: view.heightAnchor),
+            tabsButton.heightAnchor.constraint(equalTo: view.heightAnchor),
+
+            privateModeButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            privateModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            privateModeButton.widthAnchor.constraint(equalTo: view.heightAnchor),
+            privateModeButton.heightAnchor.constraint(equalTo: view.heightAnchor),
+
+            topTabFader.topAnchor.constraint(equalTo: view.topAnchor),
+            topTabFader.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            topTabFader.leadingAnchor.constraint(equalTo: privateModeButton.trailingAnchor),
+            topTabFader.trailingAnchor.constraint(equalTo: newTab.leadingAnchor),
+
+            collectionView.topAnchor.constraint(equalTo: topTabFader.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: topTabFader.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: topTabFader.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: topTabFader.trailingAnchor),
+        ])
     }
 
     private func handleFadeOutAfterTabSelection() {
