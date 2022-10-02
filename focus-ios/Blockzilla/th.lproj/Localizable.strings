@@ -178,6 +178,9 @@
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "เริ่มต้นใช้งาน";
 
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "เร็ว ส่วนตัว ไม่มีการรบกวน";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "เริ่มการเรียกดู";
 
@@ -454,6 +457,9 @@
 /* This is the button text that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.ButtonText.V2" = "เสร็จสิ้น";
 
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "แตะที่ไอคอนบวก";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "เพิ่ม";
 
@@ -597,6 +603,9 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "ตัวติดตามที่ปิดกั้น";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "แสดงวิธีให้ฉันดู";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "ล้างประวัติการท่องเว็บแล้ว! 🎉";

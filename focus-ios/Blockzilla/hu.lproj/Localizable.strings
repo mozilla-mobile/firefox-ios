@@ -553,6 +553,9 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Hiányzik a webhely tartalma, vagy furcsán viselkedik?";
 
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Adjon egy %@ ikont a kezdőképernyőhöz. A widget hozzáadása után érintse meg és tartsa lenyomva a szerkesztéshez, majd válasszon egy másik ikont.";
+
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Gyors műveletek";
 
@@ -636,6 +639,9 @@
 
 /* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
 "WidgetOnboardingCard.ActionButton" = "Mutassa meg hogyan";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Hagyjuk, hogy elkezdje a privát böngészést, de legközelebb gyorsabban nekiláthat a kezdőképernyőn található %@ widgettel.";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "A böngészési előzmények törölve! 🎉";

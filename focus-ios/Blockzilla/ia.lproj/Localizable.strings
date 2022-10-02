@@ -553,9 +553,6 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Le sito ha contento mancante o se comporta estraniemente?";
 
-/* No comment provided by engineer. */
-"To show the old version of onboarding disable first the Nimbus experiment, then turn on the option." = "Pro monstrar le vetere version del introduction, primo disactiva le experimento Nimbus, postea activa le option.";
-
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
 "TodayWidget.QuickActionGalleryDescription" = "Adde un via-breve pro %@ a tu Pagina initial. Post le addition del widget, tocca e retene pro modificar lo e elige un differente via-breve.";
 

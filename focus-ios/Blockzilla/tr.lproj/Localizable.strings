@@ -469,6 +469,9 @@
 /* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.SubtitleStepOne.V2" = "Simgeler titremeye başlayana kadar ana ekrana basılı tutun.";
 
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "%@ uygulamasını bulun. Ardından bir araç takımı seçin.";
+
 /* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Artı simgesine dokunun.";
 
@@ -549,9 +552,6 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Sitenin içeriği eksik veya site çalışmıyor mu?";
-
-/* No comment provided by engineer. */
-"To show the old version of onboarding disable first the Nimbus experiment, then turn on the option." = "Tanıtımın eski sürümünü göstermek için önce Nimbus deneyini devre dışı bırakın, ardından seçeneği açın.";
 
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
 "TodayWidget.QuickActionGalleryDescription" = "Ana ekranınıza %@ kısayolu ekleyin. Araç takımını ekledikten sonra düzenlemek isterseniz basılı tutup farklı bir kısayol seçebilirsiniz.";

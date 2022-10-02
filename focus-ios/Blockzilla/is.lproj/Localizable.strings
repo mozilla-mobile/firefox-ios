@@ -175,8 +175,23 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Loka";
 
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Hefjast handa";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Hraðvirkt. Einkamál. Engar truflanir.";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Byrjaðu að vafra";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Sleppa";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ er ekki eins og aðrir vafrar";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Setja sem sjálfgefinn vafra";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "Eyddu vafraferli þínum, lykilorðum, vafrakökum og komdu í veg fyrir að óæskilegar auglýsingar fylgi þér, allt með einum smelli!";
@@ -442,6 +457,12 @@
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "Hætta við";
 
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Lokið";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Ýttu á plús-táknið.";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Bæta við";
 
@@ -517,6 +538,12 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Vantar efni á vefsvæðið eða hegðar það sér undarlega?";
 
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Flýtiaðgerðir";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "Leita í %@";
+
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Þessar sjálfgefnu stillingar bjóða upp á öfluga vernd. En það er auðvelt að laga til stillingarnar til að mæta sérþörfum þínum.";
 
@@ -579,4 +606,10 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Lokað á rekjara";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "Sýna mér hvernig";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "Vafraferill hreinsaður! 🎉";
 

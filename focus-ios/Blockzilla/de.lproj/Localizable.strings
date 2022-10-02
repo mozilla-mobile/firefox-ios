@@ -553,9 +553,6 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Die Website verhält sich komisch oder es fehlen Inhalte?";
 
-/* No comment provided by engineer. */
-"To show the old version of onboarding disable first the Nimbus experiment, then turn on the option." = "Um die alte Version des Onboarding zu zeigen, deaktivieren Sie zuerst das Nimbus-Experiment und schalten Sie dann die Option ein.";
-
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
 "TodayWidget.QuickActionGalleryDescription" = "Fügen Sie Ihrem Startbildschirm eine %@-Verknüpfung hinzu. Nachdem Sie das Widget hinzugefügt haben, berühren und halten Sie es, um es zu bearbeiten und eine andere Verknüpfung auszuwählen.";
 

@@ -187,6 +187,15 @@
 /* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Παράλειψη";
 
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Διαγράφουμε το ιστορικό σας όταν κλείνετε την εφαρμογή για επιπλέον ιδιωτικότητα.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Ορίστε το %@ ως προεπιλογή για να προστατεύσετε τα δεδομένα σας με κάθε σύνδεσμο που ανοίγετε.";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "Το %@ δεν είναι σαν τα άλλα προγράμματα περιήγησης";
+
 /* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Ορισμός ως προεπιλογή";
 
@@ -457,8 +466,17 @@
 /* This is the button text that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.ButtonText.V2" = "Τέλος";
 
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Πατήστε παρατεταμένα στην αρχική οθόνη μέχρι τα εικονίδια να αρχίσουν να ανακινούνται.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Αναζητήστε το %@ και επιλέξτε ένα widget.";
+
 /* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Πατήστε το εικονίδιο «συν».";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "Προσθήκη widget %@";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Προσθήκη";
@@ -535,8 +553,17 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Απώλεια περιεχομένου ή περίεργη συμπεριφορά;";
 
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Προσθέστε μια συντόμευση %@ στην αρχική οθόνη. Αφού προσθέσετε το widget, πατήστε παρατεταμένα για επεξεργασία και επιλογή διαφορετικής συντόμευσης.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Γρήγορες ενέργειες";
+
 /* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
 "TodayWidget.SearchInApp" = "Αναζήτηση στο %@";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Μεταβείτε στις ρυθμίσεις για να διαχειριστείτε συγκεκριμένες επιλογές απορρήτου και ασφάλειας.";
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Αυτές οι προεπιλεγμένες ρυθμίσεις προσφέρουν ισχυρή προστασία. Αλλά μπορείτε εύκολα να τις προσαρμόσετε για να ταιριάξουν με τις δικές σας ανάγκες.";
@@ -544,8 +571,17 @@
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Ξεκινήστε τη συνεδρία ιδιωτικής περιήγησής σας και θα αποκλείσουμε τους ιχνηλάτες και άλλα επιβλαβή στοιχεία.";
 
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "Το %@ εμπόδισε την παρακολούθησή σας από αυτόν τον ιστότοπο. Πατήστε την ασπίδα για πληροφορίες σχετικά με το τι αποκλείσαμε.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Εμποδίσαμε την παρακολούθησή σας από αυτόν τον ιστότοπο. Πατήστε την ασπίδα ανά πάσα στιγμή για να δείτε τι αποκλείουμε.";
+
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Πατήστε τον κάδο απορριμμάτων ανά πάσα στιγμή για να αφαιρέσετε όλα τα ίχνη της τρέχουσας συνεδρίας σας.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Πατήστε εδώ για να τα διαγράψετε όλα — ιστορικό, cookies, τα πάντα — και ξεκινήστε από την αρχή σε μια νέα καρτέλα.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Προστατεύεστε!";
@@ -600,6 +636,12 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Αποκλεισμένοι ιχνηλάτες";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "Εμφάνιση οδηγιών";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Θα σας αφήσουμε στην ιδιωτική σας περιήγηση, αλλά ξεκινήστε πιο γρήγορα την επόμενη φορά με το widget %@ στην αρχική σας οθόνη.";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "Το ιστορικό περιήγησης διαγράφηκε! 🎉";

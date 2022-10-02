@@ -175,8 +175,20 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Tutup";
 
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Memulai";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Cepat. Pribadi. Tanpa Gangguan.";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Mulai menjelajah";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Lewati";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Kami menghapus riwayat Anda saat menutup aplikasi untuk privasi tambahan.";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "Hapus riwayat penjelajahan, sandi, kuki, dan cegah iklan yang tidak diinginkan untuk mengikuti Anda dengan sekali klik!";

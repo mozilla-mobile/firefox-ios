@@ -553,9 +553,6 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "網站的內容不見了，或功能變得怪怪的嗎？";
 
-/* No comment provided by engineer. */
-"To show the old version of onboarding disable first the Nimbus experiment, then turn on the option." = "若要顯示舊版的 onboarding 訊息，請先關閉 Nimbus 實驗，再開啟選項。";
-
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
 "TodayWidget.QuickActionGalleryDescription" = "把 %@ 捷徑加到主畫面。新增小工具之後，請長按小工具選擇不同的捷徑。";
 

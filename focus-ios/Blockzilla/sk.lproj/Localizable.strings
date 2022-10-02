@@ -553,9 +553,6 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Chýba na stránke obsah alebo sa správa zvláštne?";
 
-/* No comment provided by engineer. */
-"To show the old version of onboarding disable first the Nimbus experiment, then turn on the option." = "Ak chcete zobraziť starú verziu onboardingu, najskôr vypnite experiment Nimbus a potom túto možnosť zapnite.";
-
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
 "TodayWidget.QuickActionGalleryDescription" = "Pridajte si na plochu skratku pre %@. Po pridaní miniaplikácie ju upravte ťuknutím a podržaním a vyberte inú skratku.";
 
