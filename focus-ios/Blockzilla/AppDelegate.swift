@@ -361,6 +361,8 @@ extension AppDelegate {
         let defaultSearchEngineProvider = activeSearchEngine.isCustom ? "custom" : activeSearchEngine.name
         telemetryConfig.defaultSearchEngineProvider = defaultSearchEngineProvider
 
+        GleanMetrics.Search.defaultEngine.set(defaultSearchEngineProvider)
+
         telemetryConfig.measureUserDefaultsSetting(forKey: SearchEngineManager.prefKeyEngine, withDefaultValue: defaultSearchEngineProvider)
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAds, withDefaultValue: Settings.getToggle(.blockAds))
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAnalytics, withDefaultValue: Settings.getToggle(.blockAnalytics))
