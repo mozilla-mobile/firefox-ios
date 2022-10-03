@@ -1,11 +1,11 @@
 /* (No Comment) */
-"2GqvPe" = "Go to Copied Link";
+"2GqvPe" = "Перайсці па скапіяванай спасылцы";
 
 /* (No Comment) */
-"ctDNmu" = "Quick access to various Firefox actions";
+"ctDNmu" = "Хуткі доступ да розных дзеянняў Firefox";
 
 /* (No Comment) */
-"eHmH1H" = "Clear Private Tabs";
+"eHmH1H" = "Закрыць прыватныя карткі";
 
 /* (No Comment) */
 "eqyNJg" = "Хуткае дзеянне";
@@ -14,31 +14,31 @@
 "eV8mOT" = "Тып хуткага дзеяння";
 
 /* (No Comment) */
-"fi3W24-2GqvPe" = "There are ${count} options matching ‘Go to Copied Link’.";
+"fi3W24-2GqvPe" = "Ёсць ${count} варыянтаў, якія адпавядаюць запыту \"Перайсці па скапіяванай спасылцы\".";
 
 /* (No Comment) */
-"fi3W24-eHmH1H" = "There are ${count} options matching ‘Clear Private Tabs’.";
+"fi3W24-eHmH1H" = "Ёсць ${count} варыянтаў, якія адпавядаюць запыту « Закрыць прыватныя карткі».";
 
 /* (No Comment) */
-"fi3W24-scEmjs" = "There are ${count} options matching ‘New Private Search’.";
+"fi3W24-scEmjs" = "Ёсць ${count} варыянтаў, якія адпавядаюць запыту «Новы прыватны пошук».";
 
 /* (No Comment) */
-"fi3W24-xRJbBP" = "There are ${count} options matching ‘New Search’.";
+"fi3W24-xRJbBP" = "Ёсць ${count} варыянтаў, якія адпавядаюць запыту \"Новы пошук\".";
 
 /* (No Comment) */
-"PzSrmZ-2GqvPe" = "Just to confirm, you wanted ‘Go to Copied Link’?";
+"PzSrmZ-2GqvPe" = "Вы сапраўды хочаце «Перайсці па скапіяванай спасылцы»?";
 
 /* (No Comment) */
-"PzSrmZ-eHmH1H" = "Just to confirm, you wanted ‘Clear Private Tabs’?";
+"PzSrmZ-eHmH1H" = "Вы сапраўды хочаце «Закрыць прыватныя карткі»?";
 
 /* (No Comment) */
-"PzSrmZ-scEmjs" = "Just to confirm, you wanted ‘New Private Search’?";
+"PzSrmZ-scEmjs" = "Вы сапраўды хочаце выканаць «Новы прыватны пошук»?";
 
 /* (No Comment) */
-"PzSrmZ-xRJbBP" = "Just to confirm, you wanted ‘New Search’?";
+"PzSrmZ-xRJbBP" = "Вы сапраўды хочаце выканаць «Новы пошук»?";
 
 /* (No Comment) */
-"scEmjs" = "New Private Search";
+"scEmjs" = "Новы прыватны пошук";
 
 /* (No Comment) */
 "w9jdPK" = "Хуткае дзеянне";

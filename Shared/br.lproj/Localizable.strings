@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Chomlec’h ha Klask";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Ouzhpennañ er roll lenn";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "Barrenn chomlec'hioù";
 
@@ -195,6 +198,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "Evit ma vefe aesoc’h da skrivañ titouroù ez eo bet lakaet ar varrenn-ostilhoù en traoù.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "Gant ho pajenn Firefox personelaet eo aesoc’h da adstagañ lec’h m’ho peus paouezet. Klaskit e-touez hoc’h ivinelloù nevez, sinedoù ha disoc’hoù enklask.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Arventennoù ar varrenn-ostilhoù";
@@ -354,6 +360,9 @@
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Hor c'hevelerien & Ho puhez prevez";
+
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Digeriñ an ivinell goubredet";
 
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Gwelout an holl ivinelloù goubredet";
@@ -580,6 +589,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Er sizhun tremenet";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Sinedoù";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Roll istor";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Nullañ";
 
@@ -747,6 +762,12 @@
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Pellgargadurioù";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Gwarezioù LAZHET war al lec’hienn-mañ";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Gwarezioù ENAOUET war al lec’hienn-mañ";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Skoazell";
@@ -916,11 +937,17 @@
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v106" = "Skeudenn a-dreñv boutin";
 
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Embannadur foñs-skramm berrpad";
+
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
 "Onboarding.Wallpaper.Action.v106" = "Dizoleiñ skeudennoù a-dreñv all";
 
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Description.v106" = "Dibabit ur skeudenn a-dreñv a blij deoc'h.";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Title.v106" = "Klaskit un tachad liv";
 
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "Aozañ an drekleur";
@@ -993,6 +1020,12 @@
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Mod lenn hegerz";
+
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Merkañ evel Lennet";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Merkañ evel Anlennet";
 
 /* Panel accessibility label */
 "Reading list" = "Roll lennadurioù";
@@ -1092,6 +1125,15 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Mat eo";
+
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Keflusker enklask dre ziouer";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "Keflusker enklask dre ziouer";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "Klask";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Kas un danevell sac’hadenn evit ma c’hallfe Mozilla ratreañ ar gudenn?";
@@ -1348,8 +1390,17 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Drekleur Firefox, patrom serr-noz.";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ klasel";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "SKRAMM DIGERIÑ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "Gouzout hiroc’h";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "Klaskit an dastumad nevez.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
 "Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Kemmañ an drekleur en ur stokañ arlun pennbajenn Firefox";
@@ -1654,6 +1705,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Kuzhat an ivinelloù dioberiant";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Klask";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Ouzhpennañ un ivinell";
 
@@ -1684,6 +1738,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "Ivinelloù digor";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Skrammañ an ivinelloù";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "N’haller ket skrammañ ar bajenn-mañ er mod lenn.";
 
@@ -1695,6 +1752,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "ar sizhun-mañ";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "dec’h";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "Ket bremañ";
@@ -1764,6 +1824,12 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "Anv arveriad";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "Nullañ";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Klask en-dro";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Endalc’had web";
