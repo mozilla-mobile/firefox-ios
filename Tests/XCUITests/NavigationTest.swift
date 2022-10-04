@@ -353,9 +353,10 @@ class NavigationTest: BaseTestCase {
     }
 
     // Smoketest
-     func testSSL() {
-         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-         navigator.performAction(Action.CloseURLBarOpen)
+    func testSSL() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
 
         navigator.openURL("https://expired.badssl.com/")
         waitForExistence(app.buttons["Advanced"], timeout: 10)
