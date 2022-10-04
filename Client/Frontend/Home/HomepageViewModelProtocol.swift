@@ -33,6 +33,9 @@ protocol HomepageViewModelProtocol {
 
     // Update section that are privacy sensitive, only implement when needed
     func updatePrivacyConcernedSection(isPrivate: Bool)
+
+    // Called anytime the screen is shown
+    func screenWasShown()
 }
 
 extension HomepageViewModelProtocol {
@@ -49,4 +52,6 @@ extension HomepageViewModelProtocol {
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         refreshData(for: traitCollection, isPortrait: isPortrait, device: device)
     }
+
+    func screenWasShown() {}
 }
