@@ -209,7 +209,7 @@ features:
           This property defines whether the synced tab card
           appears on the homepage in the jump back in section.
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: developer
         value: {
