@@ -357,6 +357,10 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     func updatePrivacyConcernedSection(isPrivate: Bool) {
         self.isPrivate = isPrivate
     }
+
+    func screenWasShown() {
+        hasSentJumpBackInTileEvent = false
+    }
 }
 
 // MARK: FxHomeSectionHandler

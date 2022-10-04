@@ -196,6 +196,10 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         topSites = topSitesDataAdaptor.getTopSitesData()
         numberOfItems = sectionDimension.numberOfRows * sectionDimension.numberOfTilesPerRow
     }
+
+    func screenWasShown() {
+        sentImpressionTelemetry = [String: Bool]()
+    }
 }
 
 // MARK: - FxHomeTopSitesManagerDelegate

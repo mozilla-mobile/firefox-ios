@@ -195,6 +195,10 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     func refreshData(for traitCollection: UITraitCollection,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
+
+    func screenWasShown() {
+        hasSentPocketSectionEvent = false
+    }
 }
 
 // MARK: FxHomeSectionHandler
