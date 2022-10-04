@@ -34,7 +34,7 @@ class TopTabsViewController: UIViewController {
     // MARK: - Properties
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
-    fileprivate var topTabDisplayManager: TabDisplayManager!
+    private var topTabDisplayManager: TabDisplayManager!
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.cellIdentifier
     var profile: Profile
 
@@ -52,14 +52,14 @@ class TopTabsViewController: UIViewController {
         return collectionView
     }()
 
-    fileprivate lazy var tabsButton: TabsButton = .build { button in
+    private lazy var tabsButton: TabsButton = .build { button in
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.tabsButton
         button.inTopTabs = true
     }
 
-    fileprivate lazy var newTab: UIButton = .build { button in
+    private lazy var newTab: UIButton = .build { button in
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.newTabButton
@@ -74,7 +74,7 @@ class TopTabsViewController: UIViewController {
         return privateModeButton
     }()
 
-    fileprivate lazy var tabLayoutDelegate: TopTabsLayoutDelegate = {
+    private lazy var tabLayoutDelegate: TopTabsLayoutDelegate = {
         let delegate = TopTabsLayoutDelegate()
         delegate.scrollViewDelegate = self
         delegate.tabSelectionDelegate = topTabDisplayManager
