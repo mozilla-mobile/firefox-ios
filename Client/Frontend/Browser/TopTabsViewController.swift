@@ -60,6 +60,7 @@ class TopTabsViewController: UIViewController {
     }
 
     private lazy var newTab: UIButton = .build { button in
+        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.newTab), for: .normal)
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.newTabButton
