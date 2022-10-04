@@ -4,7 +4,6 @@
 
 import Foundation
 import UIKit
-import SnapKit
 import Shared
 
 /* The layout for ETP Cover Sheet
@@ -43,62 +42,67 @@ class ETPCoverSheetViewController: UIViewController {
     // Public constants
     let viewModel = ETPViewModel()
     static let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
         return ETPCoverSheetViewController.theme == .dark ? .white : .black
     }
+
     private var fxBackgroundThemeColour: UIColor {
         return ETPCoverSheetViewController.theme == .dark ? .black : .white
     }
-    private var doneButton: UIButton = {
-        let button = UIButton()
+
+    private lazy var doneButton: UIButton = .build { button in
         button.setTitle(.SettingsSearchDoneButton, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         button.setTitleColor(UIColor.systemBlue, for: .normal)
-        return button
-    }()
-    private lazy var topImageView: UIImageView = {
-        let imgView = UIImageView(image: viewModel.etpCoverSheetmodel?.titleImage)
-        imgView.contentMode = .scaleAspectFit
-        imgView.clipsToBounds = true
-        return imgView
-    }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = viewModel.etpCoverSheetmodel?.titleText
-        label.textColor = fxTextThemeColour
+        button.addTarget(self, action: #selector(self.dismissAnimated), for: .touchUpInside)
+    }
+
+    let pairImageView: UIImageView = .build { imageView in
+        imageView.image = UIImage(named: ImageIdentifiers.signinSync)
+        imageView.contentMode = .scaleAspectFit
+    }
+
+    private lazy var topImageView: UIImageView = .build { imageView in
+        imageView.image = self.viewModel.etpCoverSheetmodel?.titleImage
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+    }
+
+    private lazy var titleLabel: UILabel = .build { label in
+        label.text = self.viewModel.etpCoverSheetmodel?.titleText
+        label.textColor = self.fxTextThemeColour
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textAlignment = .left
         label.numberOfLines = 0
-        return label
-    }()
-    private lazy var descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.text = viewModel.etpCoverSheetmodel?.descriptionText
-        label.textColor = fxTextThemeColour
+    }
+
+    private lazy var descriptionLabel: UILabel = .build { label in
+        label.text = self.viewModel.etpCoverSheetmodel?.descriptionText
+        label.textColor = self.fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: 18)
         label.textAlignment = .left
         label.numberOfLines = 0
-        return label
-    }()
-    private lazy var goToSettingsButton: UIButton = {
-        let button = UIButton()
+    }
+
+    private lazy var goToSettingsButton: UIButton = .build { button in
         button.setTitle(.CoverSheetETPSettingsButton, for: .normal)
         button.titleLabel?.font = UX.primaryButtonFont
         button.layer.cornerRadius = UX.primaryButtonCornerRadius
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UX.primaryButtonColour
-        return button
-    }()
-    private lazy var startBrowsingButton: UIButton = {
-        let button = UIButton()
+        button.addTarget(self, action: #selector(self.goToSettings), for: .touchUpInside)
+    }
+
+    private lazy var startBrowsingButton: UIButton = .build { button in
         button.setTitle(.StartBrowsingButtonTitle, for: .normal)
         button.titleLabel?.font = UX.primaryButtonFont
         button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
         button.backgroundColor = .clear
-        return button
-    }()
+        button.addTarget(self, action: #selector(self.startBrowsing), for: .touchUpInside)
+    }
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -114,75 +118,63 @@ class ETPCoverSheetViewController: UIViewController {
     }
 
     func initialViewSetup() {
-        self.view.backgroundColor = fxBackgroundThemeColour
+        view.backgroundColor = fxBackgroundThemeColour
+
+        setupLayout()
+    }
+
+    private func setupLayout() {
+        view.backgroundColor = fxBackgroundThemeColour
 
         // Initialize
-        self.view.addSubview(topImageView)
-        self.view.addSubview(doneButton)
-        self.view.addSubview(titleLabel)
-        self.view.addSubview(descriptionLabel)
-        self.view.addSubview(goToSettingsButton)
-        self.view.addSubview(startBrowsingButton)
+        view.addSubview(topImageView)
+        view.addSubview(doneButton)
+        view.addSubview(titleLabel)
+        view.addSubview(descriptionLabel)
+        view.addSubview(goToSettingsButton)
+        view.addSubview(startBrowsingButton)
 
         // Constraints
-        setupTopView()
-        setupBottomView()
-    }
+        NSLayoutConstraint.activate([
+            doneButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                             constant: UX.doneButtonPadding),
+            doneButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                  constant: -UX.doneButtonPadding),
+            doneButton.heightAnchor.constraint(equalToConstant: UX.doneButtonPadding),
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
+            topImageView.topAnchor.constraint(equalTo: doneButton.bottomAnchor, constant: 10),
+            topImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            topImageView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -48),
+            topImageView.heightAnchor.constraint(lessThanOrEqualToConstant: 300),
 
-    private func setupTopView() {
-        // Done button target setup
-        doneButton.addTarget(self, action: #selector(dismissAnimated), for: .touchUpInside)
-        // Done button constraints setup
-        // This button is located at top right hence top, right and height
-        doneButton.snp.makeConstraints { make in
-            make.top.equalTo(view.snp.topMargin).offset(UX.doneButtonPadding)
-            make.right.equalToSuperview().inset(-UX.doneButtonPadding)
-            make.height.equalTo(UX.doneButtonHeight)
-        }
-        // The top imageview constraints setup
-        topImageView.snp.makeConstraints { make in
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.top.equalTo(doneButton.snp.bottom).offset(10)
-            make.bottom.equalTo(goToSettingsButton.snp.top).offset(-200)
-            make.height.lessThanOrEqualTo(100)
-        }
-        // Top title label constraints setup
-        titleLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(descriptionLabel.snp.top).offset(-5)
-            make.left.right.equalToSuperview().inset(20)
-        }
-        // Description title label constraints setup
-        descriptionLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(goToSettingsButton.snp.top).offset(-40)
-            make.left.right.equalToSuperview().inset(20)
-        }
-    }
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            titleLabel.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor,
+                                               constant: -16),
 
-    private func setupBottomView() {
-        // Bottom start button constraints
-        goToSettingsButton.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(UX.primaryButtonEdgeInset)
-            make.bottom.equalTo(startBrowsingButton.snp.top).offset(-16)
-            make.height.equalTo(UX.primaryButtonHeight)
-        }
-        // Bottom goto settings button
-        goToSettingsButton.addTarget(self, action: #selector(goToSettings), for: .touchUpInside)
-        // Bottom start button constraints
-        startBrowsingButton.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(UX.primaryButtonEdgeInset)
-            let h = view.frame.height
-            // On large iPhone screens, bump this up from the bottom
-            let offset: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 20 : (h > 800 ? 60 : 20)
-            make.bottom.equalTo(view.safeArea.bottom).inset(offset)
-            make.height.equalTo(UX.primaryButtonHeight)
-        }
-        // Bottom start browsing target setup
-        startBrowsingButton.addTarget(self, action: #selector(startBrowsing), for: .touchUpInside)
+            descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                      constant: 16),
+            descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                       constant: -16),
+            descriptionLabel.bottomAnchor.constraint(equalTo: goToSettingsButton.topAnchor,
+                                                     constant: -48),
+
+            goToSettingsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                      constant: UX.primaryButtonEdgeInset),
+            goToSettingsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                       constant: -UX.primaryButtonEdgeInset),
+            goToSettingsButton.bottomAnchor.constraint(equalTo: startBrowsingButton.topAnchor,
+                                                     constant: -16),
+            goToSettingsButton.heightAnchor.constraint(equalToConstant: UX.primaryButtonHeight),
+
+            startBrowsingButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                      constant: UX.primaryButtonEdgeInset),
+            startBrowsingButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                       constant: -UX.primaryButtonEdgeInset),
+            startBrowsingButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                                                     constant: -16),
+            startBrowsingButton.heightAnchor.constraint(equalToConstant: UX.primaryButtonHeight),
+        ])
     }
 
     // Button Actions
