@@ -557,6 +557,113 @@ browser_search:
       - focus-ios-data-stewards@mozilla.com
     expires: "2023-09-22"
 
+onboarding:
+  card_view:
+    type: event
+    description: |
+      Records when an onboarding card is shown
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card (welcome / default browser / widget)
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3487
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-09-26"
+  primary_button_tap:
+    type: event
+    description: |
+      Records when the primary button is tap during the onboarding
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card (welcome / default browser / widget)
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3487
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-09-26"
+  secondary_button_tap:
+    type: event
+    description: |
+      Records when the secondary button is tap during the onboarding
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card (welcome / default browser / widget)
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3487
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-09-26"
+  close_tap:
+    type: event
+    description: |
+      Records when the user closes the onboarding.
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          The card presented when the onboarding was closed
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3487
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-09-26"
+
+default_browser_onboarding:
+  dismiss_pressed:
+    type: counter
+    description: |
+      Counts the number of times default browser onboarding is dismissed.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3487
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-09-26"
+  go_to_settings_pressed:
+    type: counter
+    description: |
+      Counts the number of times the Go To Settings button on
+      default browser onboarding is clicked.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3487
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-09-26"
+  skip_button_tapped:
+    type: event
+    description: The user has tapped to skip onboarding.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3487
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-09-26"
+    extra_keys:
+      current_item:
+        description: The curent displayed item position.
+        type: quantity
+
 search:
   default_engine:
     type: string

@@ -5,20 +5,14 @@
 import SwiftUI
 
 struct DefaultBrowserOnboardingView: View {
-    private let config: DefaultBrowserViewConfig
-    private let dismiss: () -> Void
-
-    init(config: DefaultBrowserViewConfig, dismiss: @escaping () -> Void) {
-        self.dismiss = dismiss
-        self.config = config
-    }
+    @ObservedObject var viewModel: OnboardingViewModel
 
     var body: some View {
         VStack {
             HStack {
                 Spacer()
                 Button(action: {
-                    dismiss()
+                    viewModel.send(.defaultBrowserCloseTapped)
                 }, label: {
                     Image.close
                 })
@@ -28,23 +22,23 @@ struct DefaultBrowserOnboardingView: View {
                 .scaledToFit()
                 .frame(maxHeight: .imageMaxHeight)
             VStack {
-                Text(config.title)
+                Text(viewModel.defaultBrowserConfig.title)
                     .bold()
                     .font(.system(size: .titleSize))
                     .multilineTextAlignment(.center)
                     .padding(.bottom, .titleBottomPadding)
                 VStack(alignment: .leading) {
-                    Text(config.firstSubtitle)
+                    Text(viewModel.defaultBrowserConfig.firstSubtitle)
                         .padding(.bottom, .firstSubtitleBottomPadding)
-                    Text(config.secondSubtitle)
+                    Text(viewModel.defaultBrowserConfig.secondSubtitle)
                 }
             }
             .foregroundColor(.secondOnboardingScreenText)
             Spacer()
             Button(action: {
-                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                viewModel.send(.defaultBrowserSettingsTapped)
             }, label: {
-                Text(config.topButtonTitle)
+                Text(viewModel.defaultBrowserConfig.topButtonTitle)
                     .foregroundColor(.systemBackground)
                     .font(.body16Bold)
                     .frame(maxWidth: .infinity)
@@ -53,9 +47,9 @@ struct DefaultBrowserOnboardingView: View {
                     .cornerRadius(.radius)
             })
             Button(action: {
-                dismiss()
+                viewModel.send(.defaultBrowserSkip)
             }, label: {
-                Text(config.bottomButtonTitle)
+                Text(viewModel.defaultBrowserConfig.bottomButtonTitle)
                     .foregroundColor(.black)
                     .font(.body16Bold)
                     .frame(maxWidth: .infinity)
@@ -68,7 +62,10 @@ struct DefaultBrowserOnboardingView: View {
         .padding([.top, .leading, .trailing], .viewPadding)
         .navigationBarHidden(true)
         .background(Color.secondOnboardingScreenBackground
-            .edgesIgnoringSafeArea([.top, .bottom]))
+        .edgesIgnoringSafeArea([.top, .bottom]))
+        .onAppear {
+            viewModel.send(.defaultBrowserAppeared)
+        }
     }
 }
 
@@ -102,12 +99,6 @@ public struct DefaultBrowserViewConfig {
 
 struct SecondOnboardingView_Previews: PreviewProvider {
     static var previews: some View {
-        DefaultBrowserOnboardingView(config: DefaultBrowserViewConfig(
-            title: "Focus isn't like other browsers",
-            firstSubtitle: "We clear your history when you close the app for extra privacy",
-            secondSubtitle: "Make Focus your default to protect your data with every link you open.",
-            topButtonTitle: "Set as Default Browser",
-            bottomButtonTitle: "Skip"),
-            dismiss: {})
+        DefaultBrowserOnboardingView(viewModel: .dummy)
     }
 }

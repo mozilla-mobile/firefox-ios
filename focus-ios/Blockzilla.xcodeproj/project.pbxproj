@@ -56,6 +56,7 @@
 		745DC5E41F39221100661635 /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 745DC5DA1F39221100661635 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460BD661F58B1B10096B745 /* GradientProgressBar.swift */; };
 		748BCE7728ACC981005BC0CF /* TrackingAdsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748BCE7628ACC981005BC0CF /* TrackingAdsTests.swift */; };
+		7497BE6728DB2E68002E33AF /* OnboardingTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497BE6628DB2E68002E33AF /* OnboardingTelemetryHelper.swift */; };
 		74ACC3B02875A0CC00A9AC3E /* TrackingProtectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ACC3AF2875A0CC00A9AC3E /* TrackingProtectionManager.swift */; };
 		74ACC3D0288E750700A9AC3E /* AdsTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ACC3CF288E750700A9AC3E /* AdsTelemetryHelper.swift */; };
 		74ACC3D2289CF85C00A9AC3E /* Ads.js in Resources */ = {isa = PBXBuildFile; fileRef = 74ACC3D1289CF85A00A9AC3E /* Ads.js */; };
@@ -501,6 +502,7 @@
 		745DC5E11F39221100661635 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7460BD661F58B1B10096B745 /* GradientProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientProgressBar.swift; sourceTree = "<group>"; };
 		748BCE7628ACC981005BC0CF /* TrackingAdsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingAdsTests.swift; sourceTree = "<group>"; };
+		7497BE6628DB2E68002E33AF /* OnboardingTelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTelemetryHelper.swift; sourceTree = "<group>"; };
 		74ACC3AF2875A0CC00A9AC3E /* TrackingProtectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionManager.swift; sourceTree = "<group>"; };
 		74ACC3CF288E750700A9AC3E /* AdsTelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsTelemetryHelper.swift; sourceTree = "<group>"; };
 		74ACC3D1289CF85A00A9AC3E /* Ads.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Ads.js; sourceTree = "<group>"; };
@@ -1454,6 +1456,7 @@
 				D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */,
 				31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */,
 				74ACC3CF288E750700A9AC3E /* AdsTelemetryHelper.swift */,
+				7497BE6628DB2E68002E33AF /* OnboardingTelemetryHelper.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -2386,6 +2389,7 @@
 				C8337DF52710898800093D42 /* ToggleItem.swift in Sources */,
 				F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */,
 				8400575A27353B1800E48144 /* UIPasteBoardExtensions.swift in Sources */,
+				7497BE6728DB2E68002E33AF /* OnboardingTelemetryHelper.swift in Sources */,
 				C8958C51280D84EE0064BDF8 /* AutocompleteTextField.swift in Sources */,
 				C8EADCD22742A00300E76AE6 /* MenuActionable.swift in Sources */,
 				1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */,

@@ -52,6 +52,7 @@ class BrowserViewController: UIViewController {
     private var onboardingEventsHandler: OnboardingEventsHandling
     private var themeManager: ThemeManager
     private let shortcutsPresenter = ShortcutsPresenter()
+    private let onboardingTelemetry = OnboardingTelemetryHelper()
 
     private enum URLBarScrollState {
         case collapsed
@@ -377,7 +378,7 @@ class BrowserViewController: UIViewController {
                 onboardingEventsHandler.route = nil
                 onboardingEventsHandler.send(.enterHome)
             }
-            return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding)
+                return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding, telemetry: onboardingTelemetry.handle(event:))
 
         case .trackingProtection:
             return nil
@@ -396,10 +397,12 @@ class BrowserViewController: UIViewController {
                     primaryAction: { [weak self] in
                         self?.onboardingEventsHandler.route = nil
                         self?.onboardingEventsHandler.send(.widgetDismissed)
+                        self?.onboardingTelemetry.handle(event: .widgetPrimaryButtonTapped)
                     },
                     dismiss: { [weak self] in
                         self?.onboardingEventsHandler.route = nil
                         self?.urlBar.activateTextField()
+                        self?.onboardingTelemetry.handle(event: .widgetCloseTapped)
                     }))
             cardBanner.view.backgroundColor = .clear
             cardBanner.modalPresentationStyle = .overFullScreen
@@ -443,6 +446,15 @@ class BrowserViewController: UIViewController {
                     if let controller = controller(for: route) {
                         self.present(controller, animated: true)
                         presentedController = controller
+                        switch route {
+                        case .onboarding(let onboardingType):
+                            if onboardingType == .v2 {
+                                onboardingTelemetry.handle(event: .getStartedAppeared)
+                            }
+                        case .widget:
+                            onboardingTelemetry.handle(event: .widgetCardAppeared)
+                        default: break
+                        }
                     }
                 }
             }
