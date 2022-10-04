@@ -21,6 +21,16 @@ public struct AccessibilityIdentifiers {
         static let reloadButton = "TabLocationView.reloadButton"
     }
 
+    struct Browser {
+
+        struct TopTabs {
+            static let collectionView = "Top Tabs View"
+            static let tabsButton = "TopTabsViewController.tabsButton"
+            static let newTabButton = "TopTabsViewController.newTabButton"
+            static let privateModeButton = "TopTabsViewController.privateModeButton"
+        }
+    }
+
     struct FirefoxHomepage {
 
         static let collectionView = "FxCollectionView"
