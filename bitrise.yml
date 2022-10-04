@@ -46,7 +46,7 @@ workflows:
             echo "-- build-for-testing --"
             mkdir DerivedData
 
-            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec_Enterprise_XCUITests" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 11,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
+            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec_Enterprise_XCUITests" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
     - script@1.1:
         title: Detect number of warnings
         is_always_run: true
@@ -141,7 +141,7 @@ workflows:
             ls -la
             echo "-- test-without-building --"
 
-            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" test-without-building
+            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
@@ -179,7 +179,7 @@ workflows:
             ls -la
 
             echo "-- test-without-building --"
-            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "SmokeXCUITests" "test-without-building"
+            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" -testPlan "SmokeXCUITests" "test-without-building"
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
@@ -216,7 +216,7 @@ workflows:
             ls -la
 
             echo "-- test-without-building --"
-            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "Smoketest3" "test-without-building"
+            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" -testPlan "Smoketest3" "test-without-building"
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
@@ -254,7 +254,7 @@ workflows:
             ls -la
 
             echo "-- test-without-building --"
-            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "Smoketest4" "test-without-building"
+            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" -testPlan "Smoketest4" "test-without-building"
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
@@ -295,7 +295,7 @@ workflows:
             pwd
             echo "-- test-without-building --"
 
-            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "UnitTest" "test-without-building"
+            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "UnitTest" "test-without-building"
     - script@1.1:
         title: Compress Result Bundle
         is_always_run: true
@@ -316,7 +316,7 @@ workflows:
     - deploy-to-bitrise-io@2.0: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-13.4.x
+        stack: osx-xcode-14.0.x
         machine_type_id: g2.8core
   just_build_fennec_to_get_warnings:
     before_run:
@@ -334,7 +334,7 @@ workflows:
             echo "-- build-for-testing --"
             mkdir DerivedData2
 
-            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 11,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" | xcpretty | tee xcodebuild_fennec.log
+            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" | xcpretty | tee xcodebuild_fennec.log
             echo "show files"
             ls
     - script@1.1:
@@ -380,7 +380,7 @@ workflows:
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
     meta:
       bitrise.io:
-        stack: osx-xcode-13.4.x
+        stack: osx-xcode-14.0.x
         machine_type_id: g2.4core
   send_slack_notification:
     steps:
@@ -1016,7 +1016,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-13.4.x
+        stack: osx-xcode-14.0.x
         machine_type_id: g2.8core
     before_run:
     - 1_git_clone_and_post_clone
@@ -1397,7 +1397,7 @@ app:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-13.4.x
+    stack: osx-xcode-14.0.x
     machine_type_id: g2.4core
 
 trigger_map:

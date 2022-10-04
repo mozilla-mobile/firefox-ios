@@ -122,8 +122,10 @@ class DownloadFilesTests: BaseTestCase {
     private func downloadFile(fileName: String, numberOfDownlowds: Int) {
         navigator.openURL(testURL)
         waitUntilPageLoad()
+        app.webViews.firstMatch.swipeLeft()
         for _ in 0..<numberOfDownlowds {
             waitForExistence(app.webViews.links[testFileName], timeout: 5)
+
             app.webViews.links[testFileName].firstMatch.tap()
 
             waitForExistence(app.tables["Context Menu"].otherElements["download"], timeout: 5)
