@@ -4,14 +4,12 @@
 
 import SwiftUI
 
-public class OnboardingViewModel: ObservableObject {
-    public init(config: GetStartedOnboardingViewConfig, defaultBrowserConfig: DefaultBrowserViewConfig, dismissAction: @escaping () -> Void, telemetry: @escaping (OnboardingViewModel.Action) -> Void) {
-        self.config = config
-        self.defaultBrowserConfig = defaultBrowserConfig
-        self.dismissAction = dismissAction
-        self.telemetry = telemetry
-    }
+enum Screen: CaseIterable {
+    case getStarted
+    case `default`
+}
 
+public class OnboardingViewModel: ObservableObject {
     public enum Action {
         case getStartedAppeared
         case getStartedCloseTapped
@@ -26,6 +24,19 @@ public class OnboardingViewModel: ObservableObject {
     public let defaultBrowserConfig: DefaultBrowserViewConfig
     public let dismissAction: () -> Void
     public let telemetry: (Action) -> Void
+
+    @Published var activeScreen = Screen.getStarted
+
+    public init(config: GetStartedOnboardingViewConfig, defaultBrowserConfig: DefaultBrowserViewConfig, dismissAction: @escaping () -> Void, telemetry: @escaping (OnboardingViewModel.Action) -> Void) {
+        self.config = config
+        self.defaultBrowserConfig = defaultBrowserConfig
+        self.dismissAction = dismissAction
+        self.telemetry = telemetry
+    }
+
+    func open(_ screen: Screen) {
+        activeScreen = screen
+    }
 
     public func send(_ action: Action) {
         telemetry(action)

@@ -44,36 +44,37 @@ class OnboardingFactory {
     static func make(onboardingType: OnboardingVersion, dismissAction: @escaping () -> Void, telemetry: @escaping (OnboardingTelemetryHelper.Event) -> Void) -> UIViewController {
         switch onboardingType {
             case .v2:
-                let controller = PortraitHostingController(rootView: GetStartedOnboardingView(viewModel: OnboardingViewModel(
-                    config: .init(title: .onboardingTitle, subtitle: .onboardingSubtitleV2, buttonTitle: .onboardingButtonTitleV2),
-                    defaultBrowserConfig: .init(
-                        title: .defaultBrowserOnboardingViewTitleV2,
-                        firstSubtitle: .defaultBrowserOnboardingViewFirstSubtitleV2,
-                        secondSubtitle: .defaultBrowserOnboardingViewSecondSubtitleV2,
-                        topButtonTitle: .defaultBrowserOnboardingViewTopButtonTitleV2,
-                        bottomButtonTitle: .defaultBrowserOnboardingViewBottomButtonTitleV2),
-                    dismissAction: dismissAction,
-                    telemetry: { action in
-                        switch action {
-                            case .getStartedAppeared:
-                                telemetry(.getStartedAppeared)
-                            case .getStartedCloseTapped:
-                                telemetry(.getStartedCloseTapped)
-                            case .getStartedButtonTapped:
-                                telemetry(.getStartedButtonTapped)
-                            case .defaultBrowserCloseTapped:
-                                telemetry(.defaultBrowserCloseTapped)
-                            case .defaultBrowserSettingsTapped:
-                                telemetry(.defaultBrowserSettingsTapped)
-                            case .defaultBrowserSkip:
-                                telemetry(.defaultBrowserSkip)
-                            case .defaultBrowserAppeared:
-                                telemetry(.defaultBrowserAppeared)
-                        }
-                    })))
-                controller.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .overFullScreen : .formSheet
-                controller.isModalInPresentation = true
-                return controller
+            let onboardingViewModel = OnboardingViewModel(
+                config: .init(title: .onboardingTitle, subtitle: .onboardingSubtitleV2, buttonTitle: .onboardingButtonTitleV2),
+                defaultBrowserConfig: .init(
+                    title: .defaultBrowserOnboardingViewTitleV2,
+                    firstSubtitle: .defaultBrowserOnboardingViewFirstSubtitleV2,
+                    secondSubtitle: .defaultBrowserOnboardingViewSecondSubtitleV2,
+                    topButtonTitle: .defaultBrowserOnboardingViewTopButtonTitleV2,
+                    bottomButtonTitle: .defaultBrowserOnboardingViewBottomButtonTitleV2),
+                dismissAction: dismissAction,
+                telemetry: { action in
+                    switch action {
+                    case .getStartedAppeared:
+                        telemetry(.getStartedAppeared)
+                    case .getStartedCloseTapped:
+                        telemetry(.getStartedCloseTapped)
+                    case .getStartedButtonTapped:
+                        telemetry(.getStartedButtonTapped)
+                    case .defaultBrowserCloseTapped:
+                        telemetry(.defaultBrowserCloseTapped)
+                    case .defaultBrowserSettingsTapped:
+                        telemetry(.defaultBrowserSettingsTapped)
+                    case .defaultBrowserSkip:
+                        telemetry(.defaultBrowserSkip)
+                    case .defaultBrowserAppeared:
+                        telemetry(.defaultBrowserAppeared)
+                    }
+                })
+            let controller = PortraitHostingController(rootView: OnboardingView(viewModel: onboardingViewModel))
+            controller.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .overFullScreen : .formSheet
+            controller.isModalInPresentation = true
+            return controller
 
             case .v1:
                 let controller = OnboardingViewController(

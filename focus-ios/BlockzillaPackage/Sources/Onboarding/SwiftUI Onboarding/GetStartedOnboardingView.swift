@@ -4,21 +4,22 @@
 
 import SwiftUI
 
-public struct GetStartedOnboardingView: View {
+struct GetStartedOnboardingView: View {
+    @ObservedObject var viewModel: OnboardingViewModel
+
     public init(viewModel: OnboardingViewModel) {
         self.viewModel = viewModel
     }
 
-    @ObservedObject var viewModel: OnboardingViewModel
-
-    public var body: some View {
-        NavigationView {
-
+    var body: some View {
             VStack {
                 HStack {
                     Spacer()
                     Button { viewModel.send(.getStartedCloseTapped) } label: { Image.close }
-                    .padding(Constants.buttonPadding)
+                    .padding(EdgeInsets(top: 0,
+                                        leading: Constants.buttonPadding,
+                                        bottom: Constants.buttonPadding,
+                                        trailing: Constants.buttonPadding))
                 }
 
                 Spacer()
@@ -36,8 +37,8 @@ public struct GetStartedOnboardingView: View {
                         .multilineTextAlignment(.center)
                         .padding(Constants.subtitlePadding)
 
-                    NavigationLink {
-                        DefaultBrowserOnboardingView(viewModel: viewModel)
+                    Button {
+                        withAnimation { viewModel.open(.default) }
                     } label: {
                         Text(viewModel.config.buttonTitle)
                             .font(.body16Bold)
@@ -62,11 +63,9 @@ public struct GetStartedOnboardingView: View {
                     .edgesIgnoringSafeArea(.all)
             )
             .navigationBarHidden(true)
-        }
-        .onAppear {
-            viewModel.send(.getStartedAppeared)
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+            .onAppear {
+                viewModel.send(.getStartedAppeared)
+            }
     }
 
     private struct Constants {
