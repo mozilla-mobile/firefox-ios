@@ -169,6 +169,7 @@ class HomepageViewModel: FeatureFlaggable {
                                      object: .firefoxHomepage,
                                      value: trackingValue,
                                      extras: nil)
+        childViewModels.forEach { $0.screenWasShown() }
     }
 
     func recordViewDisappeared() {
