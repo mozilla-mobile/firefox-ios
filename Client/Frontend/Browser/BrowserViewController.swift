@@ -1017,7 +1017,7 @@ class BrowserViewController: UIViewController {
                     self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                 }
             }
-        } else if presentedViewController is IntroViewController {
+        } else if presentedViewController is OnboardingViewControllerProtocol {
             // leave from overlay mode while in onboarding is displayed on iPad
             self.urlBar.leaveOverlayMode()
         } else {
