@@ -467,7 +467,6 @@
 		744B0FFE1B4F172E00100422 /* ToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B0FFD1B4F172E00100422 /* ToolbarTests.swift */; };
 		744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744ED5601DBFEB8D00A2B5BE /* MailtoLinkHandler.swift */; };
 		745DAB301CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745DAB2F1CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift */; };
-		745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745DAB3E1CDAB09E00D44181 /* HistoryBackButton.swift */; };
 		7479B4EF1C5306A200DF000B /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479B4ED1C5306A200DF000B /* Reachability.swift */; };
 		74821FC51DB56A2500EEEA72 /* OpenWithSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74821FC41DB56A2500EEEA72 /* OpenWithSettingsViewController.swift */; };
 		74821FFE1DB6D3AC00EEEA72 /* MailSchemes.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74821FFD1DB6D3AC00EEEA72 /* MailSchemes.plist */; };
@@ -3020,7 +3019,6 @@
 		744B0FFD1B4F172E00100422 /* ToolbarTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTests.swift; sourceTree = "<group>"; };
 		744ED5601DBFEB8D00A2B5BE /* MailtoLinkHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailtoLinkHandler.swift; sourceTree = "<group>"; };
 		745DAB2F1CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentlyClosedTabsPanel.swift; sourceTree = "<group>"; };
-		745DAB3E1CDAB09E00D44181 /* HistoryBackButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryBackButton.swift; sourceTree = "<group>"; };
 		746A4ABB9E5EC9BCACD9A3BB /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		7479B4ED1C5306A200DF000B /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = ThirdParty/Reachability.swift; sourceTree = "<group>"; };
 		74821FC41DB56A2500EEEA72 /* OpenWithSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenWithSettingsViewController.swift; sourceTree = "<group>"; };
@@ -7262,7 +7260,6 @@
 				D0EAE0E1228B3762001C875A /* DrawerViewController.swift */,
 				E6927EBF1C7B6FB800D03F75 /* ErrorToast.swift */,
 				D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */,
-				745DAB3E1CDAB09E00D44181 /* HistoryBackButton.swift */,
 				E660BE051BB0666D009AC090 /* InnerStrokedView.swift */,
 				0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */,
 				D0152244229855A8009DE753 /* OneLineCellAndFooter.swift */,
@@ -10368,7 +10365,6 @@
 				8AD40FCF27BADC6B00672675 /* URLTextField.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
 				8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */,
-				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* LegacyTheme.swift in Sources */,
 				8A6B77CE2811CD11001110D2 /* URLCaching.swift in Sources */,
 				C825E9832832A425006CB811 /* NimbusSearchBarLayer.swift in Sources */,
