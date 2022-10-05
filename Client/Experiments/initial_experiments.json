@@ -2,29 +2,34 @@
   "data": [
     {
       "schemaVersion": "1.9.0",
-      "slug": "firefox-ios-mr-new-user-onboarding",
-      "id": "firefox-ios-mr-new-user-onboarding",
+      "slug": "release-firefox-ios-mr-new-user-onboarding",
+      "id": "release-firefox-ios-mr-new-user-onboarding",
       "arguments": {},
       "application": "org.mozilla.ios.Firefox",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.Firefox",
       "channel": "release",
-      "userFacingName": "[QA] Firefox iOS MR New User Onboarding",
-      "userFacingDescription": "This is for testing.",
+      "userFacingName": "[Release] Firefox iOS MR New User Onboarding",
+      "userFacingDescription": "New onboarding for v106.",
       "isEnrollmentPaused": false,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
-        "namespace": "ios-mr2022-release-1",
+        "namespace": "ios-mr2022-release-2",
         "start": 0,
-        "count": 10000,
+        "count": 1500,
         "total": 10000
       },
       "featureIds": [
         "mr2022"
       ],
       "probeSets": [],
-      "outcomes": [],
+      "outcomes": [
+        {
+          "slug": "mr_2022",
+          "priority": "primary"
+        }
+      ],
       "branches": [
         {
           "slug": "control",
@@ -64,11 +69,11 @@
         }
       ],
       "targeting": "((is_already_enrolled) || ((days_since_install < 7) && (app_version|versionCompare('106.!') >= 0)))",
-      "startDate": "2022-09-21",
-      "enrollmentEndDate": "2022-09-28",
+      "startDate": "2022-10-05",
+      "enrollmentEndDate": "2022-10-29",
       "endDate": null,
-      "proposedDuration": 28,
-      "proposedEnrollment": 7,
+      "proposedDuration": 73,
+      "proposedEnrollment": 24,
       "referenceBranch": "control"
     }
   ]
