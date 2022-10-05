@@ -388,8 +388,17 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Няма інтэрнэт-злучэння";
 
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Увайдзіце з дапамогай камеры";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Адкрыйце Firefox на сваім камп’ютары і перайдзіце на firefox.com/pair";
+
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Гатовы да сканавання";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Выкарыстаць электронную пошту";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Сінхранізаваць зараз";
@@ -967,6 +976,9 @@
 /* Toggle tabs syncing setting */
 "Open Tabs" = "Адкрытыя карткі";
 
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox не можа адкрыць старонку, бо яе адрас несапраўдны.";
+
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Немагчыма адкрыць старонку";
 
@@ -1051,6 +1063,9 @@
 /* Font type setting in the reading view settings */
 "Sans-serif" = "Без засечак";
 
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Захоўвайце старонкі ў спісе для чытання, націснуўшы на значок кнігі з плюсам у элементах кіравання рэжымам чытання.";
+
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "OK";
 
@@ -1089,6 +1104,9 @@
 
 /* The cancel button if you do not want to add a search engine. */
 "Search.ThirdPartyEngines.Cancel" = "Скасаваць";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Пошукавая сістэма з такой назвай або URL ужо была дададзена.";
 
 /* A title stating that we failed to add custom search engine. */
 "Search.ThirdPartyEngines.DuplicateErrorTitle" = "Няўдача";
@@ -1372,6 +1390,9 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Шпалеры Firefox, узор узгоркаў у прыцемках.";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Класічны %@";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "ПАЧАТКОВЫ ЭКРАН";
 
@@ -1564,6 +1585,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, зразумела";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Калі сайт не працуе належным чынам, краніце значок шчыта ў адрасным радку і адключыце ўзмоцненую ахову ад сачэння на гэтай старонцы.";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Увага!";
 
@@ -1572,6 +1596,18 @@
 
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "Падрабязней";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Змяншае колькасць мэтавай рэкламы і дапамагае спыніць асочванне вашага вэб-сёрфінгу рэкламадаўцамі.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Калі сайт не працуе належным чынам, краніце значок шчыта ў адрасным радку і адключыце ўзмоцненую ахову ад сачэння на гэтай старонцы.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Дазваляе некаторыя трэкеры для карэктнай працы вэб-сайтаў.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Блакуе больш трэкераў, рэкламы і выплыўных вокнаў. Старонкі загружаюцца хутчэй, але некаторыя функцыі могуць не працаваць.";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "Узровень абароны";
@@ -1642,8 +1678,17 @@
 /* Support section title */
 "Support" = "Падтрымка";
 
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Правядзіце трыма пальцамі ўправа або ўлева, каб закрыць картку.";
+
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Сінхранізацыя…";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Сінхранізацыя недаступная";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Картка %1$@ з %2$@";
 
 /* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "Паказаць усе карткі";
@@ -1702,6 +1747,15 @@
 /* Accessibility Label for the tabs button in the tab toolbar */
 "TabTrayButtons.Accessibility.ShowTabs.v106" = "Паказаць карткі";
 
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Не атрымалася адлюстраваць гэту старонку ў рэжыме чытання.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Узнікла праблема пры атрыманні доступу да картак з вашых іншых прылад. Паўтарыце спробу пазней.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Пры пераўтварэнні старонкі адбылася памылка";
+
 /* Relative date for date in past week. */
 "this week" = "гэтым тыднем";
 
@@ -1738,6 +1792,9 @@
 /* Button to allow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.OK" = "Так";
 
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Здаецца, мова гэтай старонкі %1$@. Перакласці на %2$@ з дапамогай %3$@?";
+
 /* Tile title for Twitter */
 "Twitter" = "Twitter";
 
@@ -1756,8 +1813,14 @@
 /* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.SyncSign.Description.v106" = "Працягвайце з таго месца, дзе спыніліся, з дапамогай картак з іншых прылад, якія зараз знаходзяцца на вашай хатняй старонцы.";
 
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "Пераключаць экраны цяпер прасцей, чым калі-небудзь";
+
 /* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
 "Upgrade.Welcome.Action.v106" = "Пачаць";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "Новыя колеры. Новыя зручнасці. Тая ж адданасць людзям, а не прыбытку.";
 
 /* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.Welcome.Title.v106" = "Сардэчна запрашаем у больш асабісты Інтэрнэт";
@@ -1767,6 +1830,18 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "Імя карыстальніка";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "Нешта пайшло не так з гэтымі шпалерамі.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "Не ўдалося змяніць шпалеры";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "Падчас сцягвання нешта пайшло не так.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "Не ўдалося сцягнуць шпалеры";
 
 /* An action for the error displayed to a user when they trying to change a wallpaper failed. */
 "Wallpaper.Error.Dismiss.v106" = "Скасаваць";

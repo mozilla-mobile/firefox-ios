@@ -944,7 +944,7 @@
 "Onboarding.Wallpaper.Action.v106" = "探索更多壁纸";
 
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
-"Onboarding.Wallpaper.Description.v106" = "选择适合您的壁纸。";
+"Onboarding.Wallpaper.Description.v106" = "选择合您心意的壁纸。";
 
 /* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Title.v106" = "试用新色彩";
@@ -1415,7 +1415,7 @@
 "Settings.Home.Option.Wallpaper.Title" = "壁纸";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
-"Settings.Home.Option.Wallpaper.UpdatedToast" = "已更换壁纸！";
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "壁纸已更换！";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
 "Settings.Home.Option.Wallpaper.UpdatedToastButton" = "查看";

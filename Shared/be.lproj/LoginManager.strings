@@ -19,8 +19,17 @@
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Зняць выбар з усіх";
 
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Увайсці ў рэжым пошуку";
+
 /* Hide password text selection menu item */
 "Hide" = "Схаваць";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Лагіны будуць выдалены назаўсёды.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Лагіны будуць выдалены з усіх падключаных прылад.";
 
 /* Label describing when the current login was last modified with the timestamp as the parameter. */
 "Modified %@" = "Зменена %@";

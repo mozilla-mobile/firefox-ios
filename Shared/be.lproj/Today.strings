@@ -49,6 +49,9 @@
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Шукаць у\nпрыватнай картцы";
 
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "Дадайце цэтлікі на сайты, якія часта наведваюцца і на нядаўна наведаныя сайты.";
+
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Папулярныя сайты";
 
