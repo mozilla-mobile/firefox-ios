@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "隐私搜索";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "将 Firefox 快捷指令添加至主屏幕。小组件添加后，轻触并按住即可进行编辑，或选择其他快捷指令。";
+"TodayWidget.QuickActionGalleryDescription" = "将 Firefox 快捷指令添加至主屏幕。添加后按住小组件进行编辑，可选择其他快捷指令。";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "快捷操作";

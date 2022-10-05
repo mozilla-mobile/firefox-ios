@@ -923,7 +923,7 @@
 "Onboarding.Sync.Skip.Action.v106" = "Spring over";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Sync.Title.v106" = "Hop fra telefonen til computeren og tilbage";
+"Onboarding.Sync.Title.v106" = "Fra telefon til computer og tilbage";
 
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "Tilmeld og log ind";
@@ -1390,8 +1390,8 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox-baggrund, skumringsbakker-mønster.";
 
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. */
-"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Klassisk Firefox";
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Klassisk %@";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "FØRSTE SKÆRMBILLEDE";
@@ -1830,6 +1830,24 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "Brugernavn";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "Noget gik galt med denne baggrund.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "Kunne ikke ændre baggrund";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "Noget gik galt med din filhentning.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "Kunne ikke hente baggrund";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "Annuller";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Prøv igen";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Webindhold";

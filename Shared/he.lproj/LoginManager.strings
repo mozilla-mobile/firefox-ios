@@ -17,7 +17,7 @@
 "Delete" = "מחיקה";
 
 /* Label for the button used to deselect all logins. */
-"Deselect All" = "ביטול בחירת הכל";
+"Deselect All" = "ביטול בחירה מהכול";
 
 /* Accessibility label for entering search mode for logins */
 "Enter Search Mode" = "כניסה למצב חיפוש";
@@ -56,7 +56,7 @@
 "SearchInput.Title.Search.v106" = "חיפוש";
 
 /* Label for the button used to select all logins. */
-"Select All" = "בחירת הכל";
+"Select All" = "בחירת הכול";
 
 /* Label displayed above the username row in Login Detail View. */
 "Username" = "שם משתמש";

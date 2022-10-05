@@ -1390,8 +1390,8 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Fond d’écran Firefox, motif collines au crépuscule.";
 
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. */
-"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Firefox classique";
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ classique";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "ÉCRAN À L’OUVERTURE";
@@ -1403,7 +1403,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "Essayez la nouvelle collection.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
-"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "La nouvelle collection Voix Indépendantes.";
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "La nouvelle collection Voix indépendantes.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Édition limitée";
@@ -1830,6 +1830,24 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "Nom d’utilisateur";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "Quelque chose s’est mal passé avec ce fond d’écran.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "Impossible de changer le fond d’écran";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "Quelque chose s’est mal passé avec votre téléchargement.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "Impossible de télécharger le fond d’écran";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "Annuler";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Réessayer";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Contenu web";

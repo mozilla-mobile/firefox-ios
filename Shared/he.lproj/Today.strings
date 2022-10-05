@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "חיפוש פרטי";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "ניתן להוסיף קיצור דרך ל־Firefox למסך הבית שלך. לאחר הוספת הווידג’ט, יש ללחוץ ולהחזיק כדי לערוך אותו לבחור בקיצור דרך שונה.";
+"TodayWidget.QuickActionGalleryDescription" = "ניתן להוסיף קיצור דרך ל־Firefox למסך הבית שלך. לאחר הוספת הוידג’ט, יש ללחוץ ולהחזיק כדי לערוך אותו ולבחור בקיצור דרך שונה.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "פעולות מהירות";

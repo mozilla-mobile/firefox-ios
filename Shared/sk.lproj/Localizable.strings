@@ -1361,7 +1361,7 @@
 "Settings.Home.Option.StartAtHome.Never" = "Posledná karta";
 
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
-"Settings.Home.Option.StartAtHome.Title" = "Otváracia obrazovka";
+"Settings.Home.Option.StartAtHome.Title" = "Úvodná obrazovka";
 
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
 "Settings.Home.Option.Title.v101" = "Zahrnúť na domovskú stránku";
@@ -1390,8 +1390,8 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Tapeta Firefoxu, vzor Twilight Hills";
 
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. */
-"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Klasický Firefox";
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Klasický %@";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "ÚVODNÁ OBRAZOVKA";

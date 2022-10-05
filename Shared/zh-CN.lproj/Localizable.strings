@@ -938,13 +938,13 @@
 "Onboarding.Wallpaper.Accessibility.Classic.v106" = "经典壁纸";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
-"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "限量版壁纸";
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "限定版壁纸";
 
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
 "Onboarding.Wallpaper.Action.v106" = "探索更多壁纸";
 
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
-"Onboarding.Wallpaper.Description.v106" = "选择适合您的壁纸。";
+"Onboarding.Wallpaper.Description.v106" = "选择合您心意的壁纸。";
 
 /* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Title.v106" = "试用新色彩";
@@ -1390,8 +1390,8 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox 壁纸，暮光山丘图案。";
 
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. */
-"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Firefox 经典";
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ 经典";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "启动页";
@@ -1406,7 +1406,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "全新“凡人之声”壁纸集。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
-"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "季节限定";
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "限定版";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
 "Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "点按 Firefox 主页徽标以更换壁纸";
@@ -1415,7 +1415,7 @@
 "Settings.Home.Option.Wallpaper.Title" = "壁纸";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
-"Settings.Home.Option.Wallpaper.UpdatedToast" = "已更换壁纸！";
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "壁纸已更换！";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
 "Settings.Home.Option.Wallpaper.UpdatedToastButton" = "查看";

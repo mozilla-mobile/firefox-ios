@@ -388,6 +388,18 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Няма інтэрнэт-злучэння";
 
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Увайдзіце з дапамогай камеры";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Адкрыйце Firefox на сваім камп’ютары і перайдзіце на firefox.com/pair";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Гатовы да сканавання";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Выкарыстаць электронную пошту";
+
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Сінхранізаваць зараз";
 
@@ -844,11 +856,17 @@
 /* The title that shows the number of cryptomining scripts blocked */
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Крыптамайнеры";
 
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Вэб-сайты могуць загружаць вонкавую рэкламу, відэа і іншае змесціва, якое змяшчае схаваныя трэкеры. Блакіроўка такога змесціва можа дапамагчы сайтам хутчэй загружацца, але некаторыя кнопкі, формы і палі ўваходу могуць не працаваць.";
+
 /* Description of cross-site trackers. */
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "Гэтыя кукі ідуць за вамі з сайта на сайт, каб сабраць звесткі пра тое, што вы робіце ў сеціве. Яны ўсталёўваюцца трэцімі бакамі, такімі як рэкламадаўцы і аналітычныя кампаніі.";
 
 /* Description of cryptominers. */
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Майнеры крыптавалют таемна выкарыстоўваюць вылічальную магутнасць вашай сістэмы, каб здабываць лічбавыя грошы. Скрыпты для здабычы крыптавалют разраджаюць вашу батарэю, запавольваюць працу камп'ютара і могуць павялічыць вашы выдаткі на электраэнергію.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Налады вашага браўзера і камп'ютара унікальныя. Збіральнікі лічбавых адбіткаў выкарыстоўваюць набор гэтых унікальных параметраў, каб стварыць ваш профіль, які можна будзе скарыстаць для асочвання вас пры вэб-сёрфінгу.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Сацыяльныя сеткі размяшчаюць трэкеры на іншых сайтах, каб стварыць ваш больш поўны таргетаваны профіль. Блакаванне гэтых трэкераў зменшыць колькасць звестак якія збіраюцца пра вашу дзейнасць у Інтэрнэце.";
@@ -949,11 +967,17 @@
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Ой! Firefox пацярпеў крах";
 
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Адкрывайце артыкулы ў рэжыме чытання дотыкам да значку кнігі, калі ён з'явіцца ў адрасным радку.";
+
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "Адкрыць налады";
 
 /* Toggle tabs syncing setting */
 "Open Tabs" = "Адкрытыя карткі";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox не можа адкрыць старонку, бо яе адрас несапраўдны.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Немагчыма адкрыць старонку";
@@ -987,6 +1011,9 @@
 
 /* A label indicating the action that a user can rate the Firefox app in the App store. */
 "Ratings.Settings.RateOnAppStore" = "Ацаніце ў App Store";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "прачытана";
 
 /* Accessibility label for the Reader View button */
 "Reader View" = "Рэжым чытання";
@@ -1036,8 +1063,14 @@
 /* Font type setting in the reading view settings */
 "Sans-serif" = "Без засечак";
 
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Захоўвайце старонкі ў спісе для чытання, націснуўшы на значок кнігі з плюсам у элементах кіравання рэжымам чытання.";
+
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "OK";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "Размясціце QR-код унутры рамкі сканавання";
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Несапраўдныя звесткі";
@@ -1060,6 +1093,9 @@
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
 "Search.SuggestSectionTitle.v102" = "Прапановы Firefox";
 
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Новая пошукавая сістэма з'явіцца ў панэлі хуткага пошуку.";
+
 /* The success message that appears after a user sucessfully adds a new search engine */
 "Search.ThirdPartyEngines.AddSuccess" = "Дададзены пашукавік!";
 
@@ -1069,8 +1105,14 @@
 /* The cancel button if you do not want to add a search engine. */
 "Search.ThirdPartyEngines.Cancel" = "Скасаваць";
 
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Пошукавая сістэма з такой назвай або URL ужо была дададзена.";
+
 /* A title stating that we failed to add custom search engine. */
 "Search.ThirdPartyEngines.DuplicateErrorTitle" = "Няўдача";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Не ўдалося дадаць пашуковую сістэму.";
 
 /* A title explaining that we failed to add a search engine */
 "Search.ThirdPartyEngines.FailedTitle" = "Няўдача";
@@ -1111,11 +1153,20 @@
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "Даступныя прылады:";
 
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Можна дзяліцца толькі HTTP і HTTPS спасылкамі.";
+
 /* OK button to dismiss the error prompt. */
 "SendTo.Error.OK.Button" = "OK";
 
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Нельга падзяліцца спасылкай, якой вы спрабуеце падзяліцца.";
+
 /* Title of the dialog that allows you to send a tab to a different device */
 "SendTo.NavBar.Title" = "Даслаць картку";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "У вас няма ніводнай прылады, злучанай з гэтым уліковым запісам Firefox і даступнай для сінхранізацыі.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Message" = "Калі ласка, адкрыйце Firefox, прайдзіце ў Налады і ўвайдзіце для працягу.";
@@ -1186,6 +1237,9 @@
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Выдаліць асабістыя звесткі";
 
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Выдаліць элементы: %1$@";
+
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Скапіявана ў буфер абмену";
 
@@ -1213,6 +1267,9 @@
 /* Title of the alert when prompting the user asking to disconnect. */
 "Settings.Disconnect.Title" = "Адлучыць?";
 
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Парог";
+
 /* Display (theme) settings label to show if manually switch theme is enabled. */
 "Settings.DisplayTheme.Manual.StatusLabel" = "Уручную";
 
@@ -1228,17 +1285,26 @@
 /* Option choice in display theme settings for light theme */
 "Settings.DisplayTheme.OptionLight" = "Светлая";
 
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "Тэма будзе аўтаматычна змяняцца ў залежнасці ад яркасці дысплея. Вы можаце ўсталяваць парог змены тэмы, пры якім тэма будзе змяняцца. Кругавы індыкатар паказвае ваш бягучы узровень яркасці.";
+
 /* Display (theme) settings label to show if automatically switch theme is enabled. */
 "Settings.DisplayTheme.StatusTitle" = "Аўтаматычна";
 
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "Рэжым пераключэння";
 
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "Пераключаць аўтаматычна ў залежнасці ад яркасці экрана";
+
 /* Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
 "Settings.DisplayTheme.SwitchTitle" = "Аўтаматычна";
 
 /* System theme settings section title */
 "Settings.DisplayTheme.SystemTheme.SectionHeader" = "Сістэмная тэма";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Выкарыстоўваць сістэмную светлую/цёмную тэму";
 
 /* Theme picker settings section title */
 "Settings.DisplayTheme.ThemePicker.SectionHeader" = "Выбар тэмы";
@@ -1258,6 +1324,12 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Агульныя";
 
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "Выберыце, што паказваць у якасці хатняй старонкі.";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description.v101" = "Выберыце, што будзе паказвацца на хатняй старонцы Firefox.";
+
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Перайсці назад да";
 
@@ -1270,6 +1342,9 @@
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
 "Settings.Home.Option.RecentlyVisited" = "Нядаўна наведаныя";
 
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "Цэтлікі";
+
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off */
 "Settings.Home.Option.SponsoredPocket.v103" = "Артыкулы ад спонсараў";
 
@@ -1279,17 +1354,47 @@
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Always" = "Хатняя старонка";
 
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "Выберыце, што паказваць, калі вы вернецеся ў Firefox.";
+
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Апошняя картка";
 
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
 "Settings.Home.Option.StartAtHome.Title" = "Пачатковы экран";
 
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title.v101" = "Паказваць на хатняй старонцы";
+
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "Шпалеры";
 
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. */
-"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Класічны Firefox";
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Шпалеры Firefox, аметыставы ўзор.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Шпалеры Firefox, узор пляжных узгоркаў.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Шпалеры Firefox, васільковы узор.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Чыстыя тыповыя шпалеры.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Шпалеры Firefox, узор узыходу сонца.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Пераключальнік цыкла шпалер на хатняй старонцы";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Шпалеры Firefox, узор узгоркаў у прыцемках.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Класічны %@";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "ПАЧАТКОВЫ ЭКРАН";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
 "Settings.Home.Option.Wallpaper.LearnMore.v106" = "Падрабязней";
@@ -1297,11 +1402,23 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
 "Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "Паспрабуйце новую калекцыю.";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "Новая калекцыя «Незалежныя галасы».";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Лімітаванае выданне";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
 "Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Змяняць шпалеры дотыкам да лагатыпа хатняй старонкі Firefox";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Шпалеры";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "Шпалеры абноўлены!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Паглядзець";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Хатняя старонка";
@@ -1312,17 +1429,32 @@
 /* This string is the title of the page to customize the number of rows in the shortcuts section */
 "Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Радкі";
 
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Цэтлікі";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Цэтлікі";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Спонсарскія цэтлікі";
+
 /* Toggled OFF to hide the shortcuts section */
 "Settings.Homepage.Shortcuts.ToggleOff.v100" = "Выкл.";
 
 /* Toggled ON to show the shortcuts section */
 "Settings.Homepage.Shortcuts.ToggleOn.v100" = "Укл.";
 
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Бягучая хатняя старонка";
+
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Ужыць цяперашнюю старонку";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "Лагіны & Паролі";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "Свой URL-адрас";
 
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Пустая старонка";
@@ -1342,14 +1474,38 @@
 /* Label at the top of the New Tab screen after entering New Tab in settings */
 "Settings.NewTab.TopSectionName" = "Паказаць";
 
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "Выберыце, што загружаць пры адкрыцці новай карткі";
+
 /* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
 "Settings.NoImageModeBlockImages.Label.v99" = "Блакаваць відарысы";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Пры адкрыцці Firefox";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "Прапаноўваць адкрыццё скапіяваных спасылак";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "Адкрываць паштовыя спасылкі ў";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "Праграма для пошты";
+
+/* Touch ID prompt subtitle when accessing logins and passwords */
+"Settings.Passwords.FingerPrintReason.v103" = "Выкарыстайце адбітак пальца, каб атрымаць доступ да пароляў зараз.";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "Вашы паролі цяпер абаронены Face ID, Touch ID альбо код-паролем прылады.";
 
 /* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
 "Settings.Passwords.SavePasswords.v103" = "Захоўваць паролі";
 
 /* Title for the passwords screen. */
 "Settings.Passwords.Title.v103" = "Паролі";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "Захоўваць лагіны";
 
 /* Button displayed at the top of the search settings. */
 "Settings.Search.Done.Button" = "Гатова";
@@ -1359,6 +1515,30 @@
 
 /* title for a link that explains how mozilla collects telemetry */
 "Settings.SendUsage.Link" = "Падрабязней.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla імкнецца збіраць толькі тыя звесткі, якія патрэбны для работы і паляпшэння Firefox для ўсіх.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "Адпраўляць звесткі аб выкарыстанні";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "Пры працяглым націску на спасылку";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Папярэдні прагляд спасылак";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Паказваць у меню праграмы";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "Адкрыць новую картку";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "Выкарыстоўвайце каманды Siri, каб хутка адкрыць Firefox праз Siri";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "Каманды Siri";
 
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Toggle.Link" = "Даведацца больш.";
@@ -1384,11 +1564,20 @@
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Карткі, якія вы не праглядалі на працягу двух тыдняў, будуць перанесеныя ў раздзел неактыўных.";
 
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "Групы картак";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "Уладкаваць латок картак";
+
 /* In the settings menu, this is the title for the Tabs customization section option */
 "Settings.Tabs.Title" = "Карткі";
 
 /* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
 "Settings.Toolbar.Bottom" = "Унізе";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "Панэль інструментаў";
 
 /* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
 "Settings.Toolbar.Top" = "Уверсе";
@@ -1396,11 +1585,29 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, зразумела";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Калі сайт не працуе належным чынам, краніце значок шчыта ў адрасным радку і адключыце ўзмоцненую ахову ад сачэння на гэтай старонцы.";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Увага!";
 
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "ЗАБЛАКАВАНЫ";
+
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "Падрабязней";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Змяншае колькасць мэтавай рэкламы і дапамагае спыніць асочванне вашага вэб-сёрфінгу рэкламадаўцамі.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Калі сайт не працуе належным чынам, краніце значок шчыта ў адрасным радку і адключыце ўзмоцненую ахову ад сачэння на гэтай старонцы.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Дазваляе некаторыя трэкеры для карэктнай працы вэб-сайтаў.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Блакуе больш трэкераў, рэкламы і выплыўных вокнаў. Старонкі загружаюцца хутчэй, але некаторыя функцыі могуць не працаваць.";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "Узровень абароны";
@@ -1417,14 +1624,26 @@
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Узмоцненая ахова ад сачэння";
 
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Вырашэнне праблем";
+
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Паказаць больш";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "Гэта дзеянне выдаліць усе вашы звесткі вэб-сайтаў. Дзеянне немагчыма адмяніць.";
 
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Гэта дзеянне выдаліць выбраныя элементы. Дзеянне немагчыма адмяніць.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "Звесткі вэб-сайтаў";
+
 /* Action label on share extension to add page to the Firefox reading list. */
 "ShareExtension.AddToReadingListAction.Title" = "Дадаць у спіс для чытання";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "Дададзена ў спіс для чытання";
 
 /* Action label on share extension to bookmark the page in Firefox. */
 "ShareExtension.BookmarkThisPageAction.Title" = "Дадаць закладку на гэту старонкі";
@@ -1432,11 +1651,23 @@
 /* Share extension label shown after user has performed 'Bookmark this Page' action. */
 "ShareExtension.BookmarkThisPageActionDone.Title" = "У закладках";
 
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "Загрузіць у фонавым рэжыме";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Загрузка ў Firefox";
+
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Адкрыць у Firefox";
 
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Шукаць у Firefox";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Паказваць прапановы пошуку";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar */
+"Show Tabs" = "Паказаць карткі";
 
 /* Show the on-boarding screen again from the settings */
 "Show Tour" = "Правесці тур";
@@ -1447,17 +1678,38 @@
 /* Support section title */
 "Support" = "Падтрымка";
 
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Правядзіце трыма пальцамі ўправа або ўлева, каб закрыць картку.";
+
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Сінхранізацыя…";
 
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Сінхранізацыя недаступная";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Картка %1$@ з %2$@";
+
 /* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "Паказаць усе карткі";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Карткі ад %1$@ да %2$@ з %3$@";
 
 /* Accessibility label for the Tabs Tray view. */
 "Tabs Tray" = "Латок картак";
 
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "Адмяніць";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d картка(ак) закрыта";
+
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Праглядзець неактыўныя карткі";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Схаваць неактыўныя карткі";
 
 /* Accessibility Label for the tab toolbar Search button */
 "TabToolbar.Accessibility.Search.v106" = "Пошук";
@@ -1468,11 +1720,17 @@
 /* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Закрыць усе карткі";
 
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "Выбраная картка.";
+
 /* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
 "TabTray.Header.FilteredTabs.SectionHeader" = "Іншыя";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Неактыўныя карткі";
+
+/* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Адкрыць новую картку";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Прыватныя";
@@ -1486,11 +1744,29 @@
 /* The title for the tab tray */
 "TabTray.Title" = "Адкрытыя карткі";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Паказаць карткі";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Не атрымалася адлюстраваць гэту старонку ў рэжыме чытання.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Узнікла праблема пры атрыманні доступу да картак з вашых іншых прылад. Паўтарыце спробу пазней.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Пры пераўтварэнні старонкі адбылася памылка";
+
+/* Relative date for date in past week. */
+"this week" = "гэтым тыднем";
+
 /* Relative date for yesterday. */
 "TimeConstants.Yesterday.v106" = "учора";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "Не зараз";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "Адкрыць App Store";
 
 /* Label for button to undo the action just performed */
 "Toasts.Undo" = "Адмяніць";
@@ -1498,11 +1774,17 @@
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "Сёння";
 
+/* Relative date for date older than a minute. */
+"today at %@" = "сёння ў %@";
+
 /* Accessibility label for the Menu button. */
 "Toolbar.Menu.AccessibilityLabel" = "Меню";
 
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Закрыць усе карткі";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Выдаліць старонку — %@";
 
 /* Button to disallow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.Cancel" = "Не";
@@ -1510,11 +1792,20 @@
 /* Button to allow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.OK" = "Так";
 
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Здаецца, мова гэтай старонкі %1$@. Перакласці на %2$@ з дапамогай %3$@?";
+
 /* Tile title for Twitter */
 "Twitter" = "Twitter";
 
 /* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
 "UIMenuItem.PasteGo" = "Уставіць і перайсці";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Шукаць з дапамогай Firefox";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "непрачытана";
 
 /* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
 "Upgrade.SyncSign.Action.v106" = "Увайсці";
@@ -1522,20 +1813,50 @@
 /* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.SyncSign.Description.v106" = "Працягвайце з таго месца, дзе спыніліся, з дапамогай картак з іншых прылад, якія зараз знаходзяцца на вашай хатняй старонцы.";
 
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "Пераключаць экраны цяпер прасцей, чым калі-небудзь";
+
 /* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
 "Upgrade.Welcome.Action.v106" = "Пачаць";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "Новыя колеры. Новыя зручнасці. Тая ж адданасць людзям, а не прыбытку.";
 
 /* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.Welcome.Title.v106" = "Сардэчна запрашаем у больш асабісты Інтэрнэт";
 
+/* Debug option */
+"Use stage servers" = "Выкарыстоўваць тэставыя серверы";
+
 /* Username textbox in Authentication prompt */
 "Username" = "Імя карыстальніка";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "Нешта пайшло не так з гэтымі шпалерамі.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "Не ўдалося змяніць шпалеры";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "Падчас сцягвання нешта пайшло не так.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "Не ўдалося сцягнуць шпалеры";
 
 /* An action for the error displayed to a user when they trying to change a wallpaper failed. */
 "Wallpaper.Error.Dismiss.v106" = "Скасаваць";
 
 /* Action displayed when changing wallpaper fails. */
 "Wallpaper.Error.TryAgain.v106" = "Паспрабаваць зноў";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Сеціўнае змесціва";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Вітаем у вашым спісе для чытання";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Нам вельмі шкада.";
 
 /* Tile title for Wikipedia */
 "Wikipedia" = "Wikipedia";
