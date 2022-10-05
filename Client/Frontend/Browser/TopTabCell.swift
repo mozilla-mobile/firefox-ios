@@ -33,6 +33,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         view.clipsToBounds = false
         view.backgroundColor = UIColor.theme.topTabs.tabBackgroundSelected
         view.layer.cornerRadius = UX.tabCornerRadius
+        // UIColor.Photon.DarkGrey40 = 0x3a3944
         view.layer.shadowColor = UIColor(rgb: 0x3a3944).cgColor
         view.layer.shadowRadius = 2
         view.layer.shadowOpacity = 0.1
@@ -43,7 +44,6 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
     let titleText: UILabel = .build { label in
         label.textAlignment = .natural
         label.isUserInteractionEnabled = false
-        label.numberOfLines = 1
         label.lineBreakMode = .byCharWrapping
         label.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
         label.semanticContentAttribute = .forceLeftToRight
@@ -147,6 +147,6 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
             closeButton.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
 
-        self.clipsToBounds = false
+        clipsToBounds = false
     }
 }

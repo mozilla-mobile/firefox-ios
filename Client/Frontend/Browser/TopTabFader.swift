@@ -39,7 +39,7 @@ class TopTabFader: UIView {
         }
     }
 
-    internal override func layoutSubviews() {
+    override func layoutSubviews() {
         super.layoutSubviews()
 
         let widthA = NSNumber(value: Float(CGFloat(8) / frame.width))
@@ -48,16 +48,16 @@ class TopTabFader: UIView {
         // decide on which side the fader should be applied
         switch activeSide {
         case .left:
-            hMaskLayer.locations = [0.00, widthA, 1.0, 1.0]
+            hMaskLayer.locations = [0.0, widthA, 1.0, 1.0]
 
         case .right:
-            hMaskLayer.locations = [0.00, 0.00, widthB, 1.0]
+            hMaskLayer.locations = [0.0, 0.0, widthB, 1.0]
 
         case .both:
-            hMaskLayer.locations = [0.00, widthA, widthB, 1.0]
+            hMaskLayer.locations = [0.0, widthA, widthB, 1.0]
 
         case .none:
-            hMaskLayer.locations = [0.00, 0.00, 1.0, 1.0]
+            hMaskLayer.locations = [0.0, 0.0, 1.0, 1.0]
         }
 
         hMaskLayer.frame = CGRect(width: frame.width, height: frame.height)
