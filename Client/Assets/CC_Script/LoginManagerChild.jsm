@@ -36,15 +36,18 @@ const { AppConstants } = ChromeUtils.import(
 const { PrivateBrowsingUtils } = ChromeUtils.import(
   "resource://gre/modules/PrivateBrowsingUtils.jsm"
 );
-const { CreditCard } = ChromeUtils.import(
-  "resource://gre/modules/CreditCard.jsm"
+const { CreditCard } = ChromeUtils.importESModule(
+  "resource://gre/modules/CreditCard.sys.mjs"
 );
 
 const lazy = {};
 
+ChromeUtils.defineESModuleGetters(lazy, {
+  FormLikeFactory: "resource://gre/modules/FormLikeFactory.sys.mjs",
+});
+
 XPCOMUtils.defineLazyModuleGetters(lazy, {
   DeferredTask: "resource://gre/modules/DeferredTask.jsm",
-  FormLikeFactory: "resource://gre/modules/FormLikeFactory.jsm",
   LoginFormFactory: "resource://gre/modules/LoginFormFactory.jsm",
   LoginRecipesContent: "resource://gre/modules/LoginRecipes.jsm",
   LoginHelper: "resource://gre/modules/LoginHelper.jsm",
