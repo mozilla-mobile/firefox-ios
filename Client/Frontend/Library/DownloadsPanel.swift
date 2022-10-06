@@ -66,6 +66,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
+        tableView.contentInset.top = 32
         return tableView
     }()
 
@@ -250,15 +251,15 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     // MARK: - Empty State
     private func updateEmptyPanelState() {
         if groupedDownloadedFiles.isEmpty {
-            if emptyStateOverlayView.superview == nil {
-                tableView.tableHeaderView = emptyStateOverlayView
-                emptyStateOverlayView.applyTheme()
-            }
+            emptyStateOverlayView.frame.size.height = view.bounds.height
+            tableView.tableHeaderView = emptyStateOverlayView
+            emptyStateOverlayView.applyTheme()
         } else {
             tableView.tableHeaderView = nil
         }
     }
 
+    /* Ecosia
     fileprivate func createEmptyStateOverlayView() -> UIView {
         let overlayView: UIView = .build { view in
             view.backgroundColor = UIColor.theme.homePanel.panelBackground
@@ -293,6 +294,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         return overlayView
     }
+     */
 
     fileprivate func downloadedFileForIndexPath(_ indexPath: IndexPath) -> DownloadedFile? {
         let downloadedFilesInSection = groupedDownloadedFiles.itemsForSection(indexPath.section)

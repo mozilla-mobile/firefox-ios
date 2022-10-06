@@ -18,7 +18,7 @@ class LibraryViewController: UIViewController {
             static let height: CGFloat = 32
             static let width: CGFloat = 343
             static let margin: CGFloat = 16
-            static let bottom: CGFloat = 32
+            static let bottom: CGFloat = 0
         }
     }
 

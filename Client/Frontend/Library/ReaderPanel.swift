@@ -436,11 +436,14 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .readingListPanel)
             profile.readingList.deleteRecord(record, completion: { success in
                 guard success else { return }
-                self.records?.remove(at: indexPath.row)
-                self.tableView.deleteRows(at: [indexPath], with: .automatic)
-                // reshow empty state if no records left
-                if let records = self.records, records.isEmpty {
-                    self.refreshReadingList()
+
+                DispatchQueue.main.async {
+                    self.records?.remove(at: indexPath.row)
+                    self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                    // reshow empty state if no records left
+                    if let records = self.records, records.isEmpty {
+                        self.refreshReadingList()
+                    }
                 }
             })
         }

@@ -156,7 +156,7 @@ class TextFieldColor {
     var background: UIColor { return .Light.Background.primary }
     var backgroundInOverlay: UIColor { return .Light.Background.primary }
     var backgroundInCell: UIColor { return .Light.Background.primary }
-    var textAndTint: UIColor { return defaultTextAndTint }
+    var textAndTint: UIColor { return .Light.Text.primary }
     var separator: UIColor { return .white }
 }
 

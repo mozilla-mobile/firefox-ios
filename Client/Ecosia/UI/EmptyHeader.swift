@@ -28,7 +28,7 @@ final class EmptyHeader: UITableViewHeaderFooterView, NotificationThemeable {
         labelTitle.translatesAutoresizingMaskIntoConstraints = false
         labelTitle.numberOfLines = 0
         labelTitle.text = title
-        labelTitle.font = .systemFont(ofSize: UIFont.preferredFont(forTextStyle: .subheadline).pointSize, weight: .semibold)
+        labelTitle.font = .preferredFont(forTextStyle: .subheadline).bold()
         labelTitle.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         labelTitle.adjustsFontForContentSizeCategory = true
         labelTitle.textAlignment = .center
@@ -39,7 +39,7 @@ final class EmptyHeader: UITableViewHeaderFooterView, NotificationThemeable {
         labelSubtitle.translatesAutoresizingMaskIntoConstraints = false
         labelSubtitle.numberOfLines = 0
         labelSubtitle.text = subtitle
-        labelSubtitle.font = .systemFont(ofSize: UIFont.preferredFont(forTextStyle: .subheadline).pointSize, weight: .regular)
+        labelSubtitle.font = .preferredFont(forTextStyle: .subheadline)
         labelSubtitle.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         labelSubtitle.adjustsFontForContentSizeCategory = true
         labelSubtitle.textAlignment = .center

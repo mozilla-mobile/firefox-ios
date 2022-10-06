@@ -106,7 +106,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
         tableView.allowsSelectionDuringEditing = true
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
-        tableView.contentInset.top = 0
+        tableView.contentInset.top = 32
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -137,13 +137,16 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             }
 
             // Ecosia: add empty state
-            guard let self = self else { return }
-            if self.viewModel.bookmarkNodes.isEmpty {
-                self.tableView.tableHeaderView = self.emptyHeader
-                self.emptyHeader.applyTheme()
-            } else {
-                self.tableView.tableHeaderView = nil
-            }
+            self?.updateEmptyView()
+        }
+    }
+
+    private func updateEmptyView() {
+        if viewModel.bookmarkNodes.isEmpty {
+            tableView.tableHeaderView = emptyHeader
+            emptyHeader.applyTheme()
+        } else {
+            tableView.tableHeaderView = nil
         }
     }
 
@@ -261,6 +264,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
         removeBookmarkShortcut()
+        updateEmptyView()
     }
 
     // MARK: Button Actions helpers

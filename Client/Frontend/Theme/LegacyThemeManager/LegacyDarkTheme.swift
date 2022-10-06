@@ -90,7 +90,7 @@ private class DarkTextFieldColor: TextFieldColor {
     override var backgroundInOverlay: UIColor { return .Dark.Background.secondary }
     override var backgroundInCell: UIColor { return .Dark.Background.secondary }
 
-    override var textAndTint: UIColor { return defaultTextAndTint }
+    override var textAndTint: UIColor { return .Dark.Text.primary }
     override var separator: UIColor { return super.separator.withAlphaComponent(0.3) }
 }
 
