@@ -34,6 +34,8 @@ private struct SearchViewControllerUX {
     static let FaviconSize: CGFloat = 29
     static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
     static let IconBorderWidth: CGFloat = 0.5
+
+    static let HeaderHeight: CGFloat = 16
 }
 
 protocol SearchViewControllerDelegate: AnyObject {
@@ -115,10 +117,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         // Ecosia // self.searchFeature = featureConfig
         self.highlightManager = highlightManager
         super.init(profile: profile, style: .insetGrouped)
-
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -152,6 +150,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         */
 
         layoutTable()
+
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
+        tableView.sectionFooterHeight = 0
+        
         /* Ecosia: deactivate search engine customization
         layoutSearchEngineScrollView()
         layoutSearchEngineScrollViewContent()
@@ -582,9 +586,16 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard section == SearchListSection.searchSuggestions.rawValue,
-              hasAutocompleteSuggestions else { return 0 }
-        return UITableView.automaticDimension
+        switch SearchListSection(rawValue: section)! {
+        case .searchSuggestions:
+            return hasAutocompleteSuggestions ? UITableView.automaticDimension : 0
+        case .openedTabs:
+            return filteredOpenedTabs.isEmpty ? 0 : SearchViewControllerUX.HeaderHeight
+        case .bookmarksAndHistory:
+            return data.count == 0 ? 0 : SearchViewControllerUX.HeaderHeight
+        case .searchHighlights:
+            return searchHighlights.isEmpty ? 0 : SearchViewControllerUX.HeaderHeight
+        }
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
