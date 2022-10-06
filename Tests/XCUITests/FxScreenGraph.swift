@@ -322,17 +322,23 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         if !(processIsTranslatedStr() == m1Rosetta) {
             if #unavailable(iOS 16) {
+                // Remove Action.LoadURLByPasting
+                /*
                 screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
                     UIPasteboard.general.string = userState.url ?? defaultURL
                     menu.otherElements[ImageIdentifiers.pasteAndGo].firstMatch.tap()
                 }
+                */
             }
         }
 
+        // Remove Action.SetURLByPasting
+        /*
         screenState.gesture(forAction: Action.SetURLByPasting) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
             menu.cells[ImageIdentifiers.paste].firstMatch.tap()
         }
+        */
 
         screenState.backAction = {
             if isTablet {
@@ -351,10 +357,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
         }
 
+        // Remove Action.OpenSettingsFromTPMenu
+        /*
         screenState.gesture(forAction: Action.OpenSettingsFromTPMenu, transitionTo: TrackingProtectionSettings) { userState in
             app.cells["settings"].tap()
         }
+        */
 
+        // Remove Action.CloseTPContextMenu
+        /*
         screenState.gesture(forAction: Action.CloseTPContextMenu) { userState in
             if isTablet {
                 // There is no Cancel option in iPad.
@@ -363,6 +374,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 app.buttons["PhotonMenu.close"].tap()
             }
         }
+        */
     }
 
     // URLBarOpen is dismissOnUse, which ScreenGraph interprets as "now we've done this action, then go back to the one before it"
@@ -432,7 +444,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 userState.isPrivate = !userState.isPrivate
             }
         }
-
+ 
         // Workaround to bug Bug 1417522
         if isTablet {
             screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
@@ -466,9 +478,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(MobileBookmarks) { screenState in
         let bookmarksMenuNavigationBar = app.navigationBars["Mobile Bookmarks"]
         let bookmarksButton = bookmarksMenuNavigationBar.buttons["Bookmarks"]
+        // Remove Action.ExitMobileBookmarksFolder
+        /*
         screenState.gesture(forAction: Action.ExitMobileBookmarksFolder, transitionTo: LibraryPanel_Bookmarks) { userState in
                 bookmarksButton.tap()
         }
+        */
         screenState.tap(app.buttons["Edit"], to: MobileBookmarksEdit)
     }
 
@@ -516,23 +531,32 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 .element(boundBy: 0)
                 .tap()
         }
+        // Remove Action.CloseHistoryListPanel
+        /*
         screenState.gesture(forAction: Action.CloseHistoryListPanel, transitionTo: HomePanelsScreen) { userState in
                 app.buttons["Done"].tap()
         }
+        */
     }
 
     map.addScreenState(LibraryPanel_ReadingList) { screenState in
         screenState.dismissOnUse = true
+        // Remove Action.CloseReadingListPanel
+        /*
         screenState.gesture(forAction: Action.CloseReadingListPanel, transitionTo: HomePanelsScreen) { userState in
                 app.buttons["Done"].tap()
         }
+        */
     }
 
     map.addScreenState(LibraryPanel_Downloads) { screenState in
         screenState.dismissOnUse = true
+        // Remove Action.CloseDownloadsPanel
+        /*
         screenState.gesture(forAction: Action.CloseDownloadsPanel, transitionTo: HomePanelsScreen) { userState in
             app.buttons["Done"].tap()
         }
+        */
     }
 
     map.addScreenState(HistoryRecentlyClosed) { screenState in
@@ -700,11 +724,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.switches["ASPocketStoriesVisible"].tap()
         }
 
+        // Remove Action.SelectTopSitesRows
+        /*
         screenState.gesture(forAction: Action.SelectTopSitesRows) { userState in
             app.tables.cells["TopSitesRows"].tap()
             select(rows: userState.numTopSitesRows)
             app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
         }
+        */
 
         screenState.backAction = navigationControllerBackAction
     }
@@ -767,7 +794,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                         forAction: Action.OpenNewTabFromTabTray,
                         transitionTo: NewTabScreen)
         screenState.tap(app.toolbars.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
-//        screenState.tap(app.buttons["syncNowButtonTabsButtonTabTray"], to: CloseTabMenu)
 
         var regularModeSelector: XCUIElement
         var privateModeSelector: XCUIElement
