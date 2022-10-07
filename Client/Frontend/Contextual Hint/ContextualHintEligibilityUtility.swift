@@ -44,16 +44,22 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         !UIWindow.isLandscape || UIDevice.current.userInterfaceIdiom == .pad
     }
 
+    /// If device is iPhone we present JumpBackIn and SyncTab CFRs only after Toolbar CFR has been presented
+    /// The toolbar CFR is not presented on iPad so we bypass it
+    private var shouldCheckToolbarHasShown: Bool {
+        guard UIDevice.current.userInterfaceIdiom != .pad else { return true }
+
+        return profile.prefs.boolForKey(CFRPrefsKeys.toolbarOnboardingKey.rawValue) ?? false
+    }
+
     /// Determine if the CFR for Jump Back In is presentable.
     ///
     /// It's presentable on these conditions:
-    /// - this CFR should not be presented on iPad
     /// - the Toolbar CFR has already been presented
     /// - the JumpBackInSyncedTab CFR has NOT been presented already
     /// - the JumpBackIn CFR has NOT been presented yet
     private var canJumpBackInBePresented: Bool {
-        guard let hasPresentedToolbarCFR = profile.prefs.boolForKey(CFRPrefsKeys.toolbarOnboardingKey.rawValue),
-              hasPresentedToolbarCFR,
+        guard shouldCheckToolbarHasShown,
               !hasHintBeenConfigured(.jumpBackInSyncedTab),
               !hasAlreadyBeenPresented(.jumpBackInSyncedTab)
         else { return false }
@@ -69,10 +75,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     /// - This CFR hasn't already been presented
     /// - The Home Tab Banner isn't being displayed (not specified by Product, but the CFR might show when the anchor point isn't on screen)
     private var canPresentJumpBackInSyncedTab: Bool {
-        guard let hasPresentedToolbarCFR = profile.prefs.boolForKey(CFRPrefsKeys.toolbarOnboardingKey.rawValue),
-              hasPresentedToolbarCFR else { return false }
-
-        return true
+        return shouldCheckToolbarHasShown
     }
 
     private func hasAlreadyBeenPresented(_ hintType: ContextualHintType) -> Bool {
