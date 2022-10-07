@@ -18,11 +18,12 @@ class WallpaperManagerMock: WallpaperManagerInterface {
         return mockAvailableCollections
     }
 
-    var canOnboardingBeShown: Bool = true
     var canSettingsBeShown: Bool = true
 
     var setCurrentWallpaperCallCount = 0
     var setCurrentWallpaperResult: Result<Void, Error> = .success(())
+
+    func canOnboardingBeShown(using: Profile) -> Bool { return true }
 
     func setCurrentWallpaper(
         to wallpaper: Wallpaper,
