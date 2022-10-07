@@ -68,6 +68,7 @@ extension UIView {
         let blurEffect = UIBlurEffect(style: style)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.clipsToBounds = true
+        blurEffectView.isUserInteractionEnabled = false
         blurEffectView.translatesAutoresizingMaskIntoConstraints = false
         insertSubview(blurEffectView, at: 0)
 
