@@ -144,8 +144,8 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
             return .dark
         }
         var themeType = getSystemThemeType()
-        if let savedThemeDescription = userDefaults.string(forKey: ThemeKeys.themeName),
-           let savedTheme = ThemeType(rawValue: savedThemeDescription) {
+        if let savedThemeDescription = UserDefaults.standard.string(forKey: ThemeKeys.themeName),
+           let savedTheme = ThemeType(rawValue: savedThemeDescription) { 
             themeType = savedTheme
         }
         return themeType
