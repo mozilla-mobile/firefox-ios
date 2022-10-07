@@ -91,7 +91,9 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage, bottomContainer: wself.view)
             })
         }
-        actions.append(UIAction(title: .TabPeekCloseTab, image: UIImage.templateImageNamed("menu-CloseTabs"), identifier: nil) { [weak self] _ in
+        actions.append(UIAction(title: .TabPeekCloseTab,
+                                image: UIImage.templateImageNamed(ImageIdentifiers.closeTap),
+                                identifier: nil) { [weak self] _ in
             guard let wself = self, let tab = wself.tab else { return }
             wself.delegate?.tabPeekDidCloseTab(tab)
         })
