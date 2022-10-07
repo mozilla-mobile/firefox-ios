@@ -33,7 +33,7 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
 
     let itemDescription: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   size: 13)
+                                                                   size: 12)
         label.adjustsFontForContentSizeCategory = true
     }
 
@@ -126,20 +126,12 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
             heroImage.heightAnchor.constraint(equalToConstant: UX.heroImageDimension),
             heroImage.widthAnchor.constraint(equalToConstant: UX.heroImageDimension),
             heroImage.centerYAnchor.constraint(equalTo: textStack.centerYAnchor),
-            heroImage.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor,
-                                           constant: UX.verticalSpacing),
-            heroImage.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor,
-                                              constant: -UX.verticalSpacing),
 
             textStack.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor,
                                                constant: UX.horizontalSpacing),
             textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                 constant: -UX.horizontalSpacing),
             textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            textStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor,
-                                           constant: UX.verticalSpacing),
-            textStack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor,
-                                              constant: -UX.verticalSpacing),
 
             bottomLine.heightAnchor.constraint(equalToConstant: 0.5),
             bottomLine.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
