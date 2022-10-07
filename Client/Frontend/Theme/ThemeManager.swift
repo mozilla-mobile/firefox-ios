@@ -76,7 +76,7 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
         self.userDefaults.register(defaults: [ThemeKeys.systemThemeIsOn: true,
                                               ThemeKeys.NightMode.isOn: NSNumber(value: false)])
 
-        self.currentTheme = generateInitialTheme()
+        changeCurrentTheme(loadInitialThemeType())
 
         setupNotifications(forObserver: self,
                            observing: [UIScreen.brightnessDidChangeNotification,
@@ -91,7 +91,6 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
 
     func changeCurrentTheme(_ newTheme: ThemeType) {
         guard currentTheme.type != newTheme else { return }
-        // TODO: Check for nightmode FXIOS-4910
         currentTheme = newThemeForType(newTheme)
         appDelegate?.window??.overrideUserInterfaceStyle = currentTheme.type.getInterfaceStyle()
 
@@ -139,13 +138,19 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Private methods
 
-    private func generateInitialTheme() -> Theme {
+    private func loadInitialThemeType() -> ThemeType {
+        if let nightModeIsOn = userDefaults.object(forKey: ThemeKeys.NightMode.isOn) as? NSNumber,
+           nightModeIsOn.boolValue == true {
+            return .dark
+        }
         var themeType = getSystemThemeType()
-        if let savedThemeDescription = userDefaults.string(forKey: ThemeKeys.themeName),
+
+        // TODO: Temporarily use user defaults directly until we figure out how to manage these values FXIOS-5058
+        if let savedThemeDescription = UserDefaults.standard.string(forKey: ThemeKeys.themeName),
            let savedTheme = ThemeType(rawValue: savedThemeDescription) {
             themeType = savedTheme
         }
-        return newThemeForType(themeType)
+        return themeType
     }
 
     private func getSystemThemeType() -> ThemeType {
