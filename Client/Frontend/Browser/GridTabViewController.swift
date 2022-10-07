@@ -187,12 +187,16 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         flowlayout.invalidateLayout()
     }
 
-    deinit {
+    private func tabManagerTeardown() {
         tabManager.removeDelegate(self.tabDisplayManager)
         tabManager.removeDelegate(self)
         tabDisplayManager = nil
         contextualHintViewController.stopTimer()
         notificationCenter.removeObserver(self)
+    }
+
+    deinit {
+        tabManagerTeardown()
     }
 
     required init?(coder aDecoder: NSCoder) {
