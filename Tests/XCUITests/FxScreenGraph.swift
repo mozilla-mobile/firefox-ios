@@ -405,7 +405,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 userState.isPrivate = !userState.isPrivate
             }
         }
- 
+
         // Workaround to bug Bug 1417522
         if isTablet {
             screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
