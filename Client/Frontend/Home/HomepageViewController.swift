@@ -328,9 +328,9 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
     func displayWallpaperSelector() {
         let wallpaperManager = WallpaperManager(userDefaults: userDefaults)
-        guard wallpaperManager.canOnboardingBeShown, canModalBePresented else {
-            return
-        }
+        guard wallpaperManager.canOnboardingBeShown(using: viewModel.profile),
+              canModalBePresented
+        else { return }
 
         self.dismissKeyboard()
 
