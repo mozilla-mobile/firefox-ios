@@ -29,7 +29,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
     private static var characterToFaviconCache = [String: UIImage]()
     static var defaultFavicon: UIImage = {
-        return UIImage(named: "defaultFavicon")!
+        return UIImage(named: ImageIdentifiers.defaultFavicon)!
     }()
 
     typealias BundledIconType = (bgcolor: UIColor, filePath: String)

@@ -333,7 +333,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     private func updateViewDetails() {
-        heroImage.image = UIImage(named: "defaultFavicon")
+        heroImage.image = UIImage(named: ImageIdentifiers.defaultFavicon)
         heroImage.tintColor = UIColor.theme.etpMenu.defaultImageTints
         if let favIconURL = viewModel.favIcon {
             ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: favIconURL,

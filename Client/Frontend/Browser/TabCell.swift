@@ -176,7 +176,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         isAccessibilityElement = true
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
 
-        favicon.image = UIImage(named: "defaultFavicon")
+        favicon.image = UIImage(named: ImageIdentifiers.defaultFavicon)
         favicon.tintColor = UIColor.theme.tabTray.faviconTint
         if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
             ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
