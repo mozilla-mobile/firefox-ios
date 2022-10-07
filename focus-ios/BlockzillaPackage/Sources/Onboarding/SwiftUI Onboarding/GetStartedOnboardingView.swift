@@ -41,10 +41,10 @@ struct GetStartedOnboardingView: View {
                         withAnimation { viewModel.open(.default) }
                     } label: {
                         Text(viewModel.config.buttonTitle)
+                            .foregroundColor(.systemBackground)
                             .font(.body16Bold)
                             .frame(maxWidth: .infinity)
                             .frame(height: Constants.navigationLinkViewHeight)
-                            .foregroundColor(.white)
                             .background(Color.actionButton)
                             .cornerRadius(Constants.navigationLinkViewCornerRadius)
                             .padding(Constants.buttonPadding)

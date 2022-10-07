@@ -47,7 +47,7 @@ struct DefaultBrowserOnboardingView: View {
                     .font(.body16Bold)
                     .frame(maxWidth: .infinity)
                     .frame(height: .buttonHeight)
-                    .background(Color.secondOnboardingScreenTopButton)
+                    .background(Color.actionButton)
                     .cornerRadius(.radius)
             })
             Button(action: {
