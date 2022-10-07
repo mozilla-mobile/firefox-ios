@@ -46,7 +46,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
 
     /// If device is iPhone we present JumpBackIn and SyncTab CFRs only after Toolbar CFR has been presented
     /// The toolbar CFR is not presented on iPad so we bypass it
-    var shouldCheckToolbarHasShown: Bool {
+    private var shouldCheckToolbarHasShown: Bool {
         guard UIDevice.current.userInterfaceIdiom != .pad else { return true }
 
         return profile.prefs.boolForKey(CFRPrefsKeys.toolbarOnboardingKey.rawValue) ?? false
