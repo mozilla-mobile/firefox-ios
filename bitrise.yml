@@ -1405,7 +1405,7 @@ trigger_map:
   pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
-- push_branch: v106.0
+- push_branch: release/v106.0
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
   pipeline: pipeline_multiple_shards
