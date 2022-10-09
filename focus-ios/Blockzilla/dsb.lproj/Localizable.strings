@@ -175,8 +175,23 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Zacyniś";
 
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Prědne kšace";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Malsny. Priwatny. Žedne wótchylenja.";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Pśeglědowanje zachopiś";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Pśeskócyś";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ njejo ako druge wobglědowaki";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Ako standardny wobglědowak nastajiś";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "Lašujśo swóju pśeglědowańsku historiju, gronidła, cookieje, a zajźujśo z jadnym kliknjenim tomu, až wam njewitane wabjenje slědujo!";
@@ -442,6 +457,18 @@
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "Pśetergnuś";
 
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Gótowo";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Pytanje za %@. Wubjeŕśo pón asistent.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Pótusniśo plusowy symbol.";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "Asistent %@ pśidaś";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Pśidaś";
 
@@ -517,14 +544,35 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Sedło se źiwnje zaźaržujo abo wopśimjeśe felujo?";
 
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Pśidajśo startowej wobrazowce zwězanje %@. Za tym až sćo pśidał asistent, pótusniśo asistent a źaržćo jen, aby wobźěłował a wubjeŕśo druge zwězanje.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Malsne akcije";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "W %@ pytaś";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Wócyńśo nastajenja, aby wěste nastajenja priwatnosći a wěstoty zastojał.";
+
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Toś te standardne nastajenja mócny šćit póbituju. Ale jo lažko, nastajenja wašym specifiskim pótrjebam pśiměriś.";
 
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Zachopśo swóje priwatne pśeglědowańske pósejźenje a my buźomy pśeslědowaki a druge škódne elementy pśi toś tej góźbje blokěrowaś.";
 
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ jo sedłoju zajźował was wusnuchliś. Pótusniśo šćit, aby informacije wó tom dostał, což smy zablokěrowali.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Załapjone! Smy zajźowali sedłoju was wusnuchliś. Pótusniśo kuždy cas šćita, aby wiźeł, což my blokěrujomy.";
+
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Pótusniśo kuždy cas papjernik, aby wšykne slědy swójogo pósejźenja wótwónoźeł.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Pótusniśo how, aby wšykno do papjernika pśesunuł – historiju, cookieje, wšykno – a startujśo znowego na nowem rejtariku.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Sćo šćitany!";
@@ -579,4 +627,10 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Pśeslědowaki blokěrowane";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "Pokažćo mě kak";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "Pśeglědowańska historija jo se wulašowała! 🎉";
 

@@ -187,6 +187,12 @@
 /* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Sleppa";
 
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Við hreinsum vafurferilinn þegar þú lokar forritinu til að auka persónuvernd.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Gerðu %@ sjálfgefið til að vernda gögnin þín við hvern tengil sem þú opnar.";
+
 /* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
 "Onboarding.DefaultBrowser.Title.V2" = "%@ er ekki eins og aðrir vafrar";
 
@@ -460,8 +466,17 @@
 /* This is the button text that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.ButtonText.V2" = "Lokið";
 
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Ýttu lengi á heimaskjáinn þar til táknmyndirnar byrja að vagga.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Leitaðu að %@. Veldu síðan viðmótshluta.";
+
 /* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Ýttu á plús-táknið.";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "Bættu við %@ viðmótshluta";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Bæta við";
@@ -538,11 +553,17 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Vantar efni á vefsvæðið eða hegðar það sér undarlega?";
 
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Bættu %@-flýtileið við upphafsskjáinn þinn. Eftir að græjunni hefur verið bætt við skaltu ýta og halda inni til að breyta henni og velja aðra flýtileið.";
+
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Flýtiaðgerðir";
 
 /* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
 "TodayWidget.SearchInApp" = "Leita í %@";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Farðu í Stillingar til að stjórna sértækum persónuverndar- og öryggisvalkostum.";
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Þessar sjálfgefnu stillingar bjóða upp á öfluga vernd. En það er auðvelt að laga til stillingarnar til að mæta sérþörfum þínum.";
@@ -550,8 +571,17 @@
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Byrjaðu einkavafralotuna þína og við lokum á rakningar og annað vont dót á meðan þú vafrar.";
 
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ kom í veg fyrir að þetta vefsvæði njósnaði um þig. Ýttu á skjöldinn til að fá upplýsingar um það sem við lokuðum á.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Náðonum! Við komum í veg fyrir að þetta vefsvæði njósnaði um þig. Ýttu á skjöldinn til að fá upplýsingar um það sem við lokuðum á.";
+
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Pikkaðu á ruslið hvenær sem er til að fjarlægja öll ummerki um núverandi lotu.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Ýttu hér til að henda öllu - ferli, vefkökum, öllu - og byrjaðu upp á nýtt á nýjum flipa.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Þú ert varin/n!";
@@ -609,6 +639,9 @@
 
 /* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
 "WidgetOnboardingCard.ActionButton" = "Sýna mér hvernig";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Við látum þig vera í einkavafrinu þínu, en byrjum hraðar næst með %@ viðmótshlutanum á upphafsskjánum þínum.";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "Vafraferill hreinsaður! 🎉";
