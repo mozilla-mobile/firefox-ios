@@ -1,8 +1,8 @@
 /* Close Private Tabs button label */
-"TodayWidget.ClosePrivateTabsButton" = "ਪ੍ਰਾਈਵੇਟ ਟੈਬਾਂ ਨੂੰ ਬੰਦ ਕਰੋ";
+"TodayWidget.ClosePrivateTabsButton" = "ਨਿੱਜੀ ਟੈਬਾਂ ਨੂੰ ਬੰਦ ਕਰੋ";
 
 /* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV2" = "ਪ੍ਰਾਈਵੇਟ ਟੈਬਾਂ ਨੂੰ ਬੰਦ ਕਰੋ";
+"TodayWidget.ClosePrivateTabsLabelV2" = "ਨਿੱਜੀ ਟੈਬਾਂ\nਨੂੰ ਬੰਦ ਕਰੋ";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
 "TodayWidget.FirefoxShortcutGalleryDescription" = "ਫਾਇਰਫਾਕਸ ਸ਼ਾਰਟਕੱਟ ਨੂੰ ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਉੱਤੇ ਜੋੜੋ";
@@ -26,7 +26,7 @@
 "TodayWidget.OpenFirefoxLabel" = "ਫਾਇਰਫਾਕਸ ਖੋਲ੍ਹੋ";
 
 /* Open New Private Tab button label */
-"TodayWidget.PrivateTabButtonLabelV1" = "ਪ੍ਰਾਈਵੇਟ ਖੋਜ";
+"TodayWidget.PrivateTabButtonLabelV1" = "ਨਿੱਜੀ ਖੋਜ";
 
 /* Description for small size widget to add it to home screen */
 "TodayWidget.QuickActionGalleryDescription" = "ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਉੱਤੇ Firefox ਜੋੜੋ। ਵਿਜੈਟ ਜੋੜਨ ਦੇ ਬਾਅਦ ਇਸ ਨੂੰ ਸੋਧਣ ਲਈ ਛੂਹ ਕੇ ਰੱਖੋ ਅਤੇ ਵੱਖਰਾ ਸ਼ਾਰਟਕੱਟ ਚੁਣੋ।";
@@ -47,7 +47,7 @@
 "TodayWidget.SearchInFirefoxV2" = "ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਖੋਜੋ";
 
 /* Search in private tab */
-"TodayWidget.SearchInPrivateTabLabelV2" = "ਪ੍ਰਾਈਵੇਟ ਟੈਬ ਵਿੱਚ ਖੋਜੋ";
+"TodayWidget.SearchInPrivateTabLabelV2" = "ਨਿੱਜੀ ਟੈਬ\nਵਿੱਚ ਖੋਜੋ";
 
 /* Description for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryDescription" = "ਅਕਸਰ ਅਤੇ ਤਾਜ਼ਾ ਵੇਖੀਆਂ ਵੈੱਬਸਾਈਟਾਂ ਲਈ ਸ਼ਾਰਟਕੱਟ ਜੋੜੋ।";

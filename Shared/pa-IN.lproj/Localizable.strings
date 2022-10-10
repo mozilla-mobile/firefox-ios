@@ -164,7 +164,7 @@
 "ContextMenu.BookmarkLinkButtonTitle" = "ਲਿੰਕ ਬੁੱਕਮਾਰਕ ਕਰੋ";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਟੈਬ ਖੋਲ੍ਹੀ ਗਈ";
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "ਨਵੀਂ ਨਿੱਜੀ ਟੈਬ ਖੋਲ੍ਹੀ ਗਈ";
 
 /* The button text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "ਜਾਓ";
@@ -476,7 +476,7 @@
 "HomePanel.ContextMenu.DeleteFromHistory" = "ਅਤੀਤ 'ਚੋਂ ਹਟਾਓ";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "ਪ੍ਰਾਈਵੇਟ ਟੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "ਨਿੱਜੀ ਟੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "ਨਵੀਂ ਟੈਬ 'ਚ ਖੋਲ੍ਹੋ";
@@ -503,7 +503,7 @@
 "Hotkeys.Forward.DiscoveryTitle" = "ਅੱਗੇ";
 
 /* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.NewPrivateTab.DiscoveryTitle" = "ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਟੈਬ";
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "ਨਵੀਂ ਨਿੱਜੀ ਟੈਬ";
 
 /* A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NewTab.DiscoveryTitle" = "ਨਵੀਂ ਟੈਬ";
@@ -1232,10 +1232,10 @@
 "Settings.ClearAllWebsiteData.Clear.Button" = "ਸਾਰੇ ਵੈੱਬਸਾਈਟ ਡਾਟੇ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
 
 /* Button in settings that clears private data for the selected items. */
-"Settings.ClearPrivateData.Clear.Button" = "ਪ੍ਰਾਈਵੇਟ ਡਾਟੇ ਨੂੰ ਮਿਟਾਓ";
+"Settings.ClearPrivateData.Clear.Button" = "ਨਿੱਜੀ ਡਾਟੇ ਨੂੰ ਮਿਟਾਓ";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
-"Settings.ClearPrivateData.SectionName" = "ਪ੍ਰਾਈਵੇਟ ਡਾਟੇ ਨੂੰ ਮਿਟਾਓ";
+"Settings.ClearPrivateData.SectionName" = "ਨਿੱਜੀ ਡਾਟੇ ਨੂੰ ਮਿਟਾਓ";
 
 /* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
 "Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "ਚੀਜ਼ਾਂ ਮਿਟਾਓ: %1$@";
@@ -1733,7 +1733,7 @@
 "TabTray.OpenNewTab.KeyCodeTitle" = "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹੋ";
 
 /* The title on the button to look at private tabs. */
-"TabTray.SegmentedControlTitles.PrivateTabs" = "ਪ੍ਰਾਈਵੇਟ";
+"TabTray.SegmentedControlTitles.PrivateTabs" = "ਨਿੱਜੀ";
 
 /* The title on the button to look at synced tabs. */
 "TabTray.SegmentedControlTitles.SyncedTabs" = "ਸਿੰਕ ਕੀਤੀਆਂ";
