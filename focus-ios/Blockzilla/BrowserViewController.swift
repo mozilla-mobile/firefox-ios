@@ -864,7 +864,7 @@ class BrowserViewController: UIViewController {
         guard isViewLoaded else { initialUrl = url; return }
         GleanMetrics.BrowserSearch.searchCount["action"].add()
         shortcutsPresenter.shortcutsState = .none
-
+        SearchInContentTelemetry.shouldSetUrlTypeSearch = true
         if isIPadRegularDimensions {
             urlBar.snp.makeConstraints { make in
                 make.width.equalTo(view)

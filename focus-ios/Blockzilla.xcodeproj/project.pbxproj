@@ -16,6 +16,7 @@
 		0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */; };
 		1215EC0928D316B500AECC75 /* NavigationPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1215EC0828D316B500AECC75 /* NavigationPath.swift */; };
 		122D19F328D870E800B884E7 /* NavigationPathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122D19F128D86B5100B884E7 /* NavigationPathTests.swift */; };
+		122D19F728E1B29000B884E7 /* SearchInContentTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122D19F628E1B29000B884E7 /* SearchInContentTelemetry.swift */; };
 		16074B6D2114364C003B671F /* PhotonActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16074B6C2114364C003B671F /* PhotonActionSheet.swift */; };
 		16180DBB212F563800AFE3C2 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 16180DBA212F563800AFE3C2 /* Intents.intentdefinition */; };
 		161D90312108085F00C2A74A /* HomeViewToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161D90302108085F00C2A74A /* HomeViewToolbar.swift */; };
@@ -328,6 +329,7 @@
 		0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsianLocaleTest.swift; sourceTree = "<group>"; };
 		1215EC0828D316B500AECC75 /* NavigationPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationPath.swift; sourceTree = "<group>"; };
 		122D19F128D86B5100B884E7 /* NavigationPathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationPathTests.swift; sourceTree = "<group>"; };
+		122D19F628E1B29000B884E7 /* SearchInContentTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInContentTelemetry.swift; sourceTree = "<group>"; };
 		16074B6C2114364C003B671F /* PhotonActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotonActionSheet.swift; sourceTree = "<group>"; };
 		16180DBA212F563800AFE3C2 /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
 		161D90302108085F00C2A74A /* HomeViewToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewToolbar.swift; sourceTree = "<group>"; };
@@ -1494,6 +1496,7 @@
 				D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */,
 				31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */,
 				74ACC3CF288E750700A9AC3E /* AdsTelemetryHelper.swift */,
+				122D19F628E1B29000B884E7 /* SearchInContentTelemetry.swift */,
 				7497BE6628DB2E68002E33AF /* OnboardingTelemetryHelper.swift */,
 			);
 			path = Utilities;
@@ -2421,6 +2424,7 @@
 				B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */,
 				D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */,
 				D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */,
+				122D19F728E1B29000B884E7 /* SearchInContentTelemetry.swift in Sources */,
 				C8337DFF2710898800093D42 /* SheetModalViewController.swift in Sources */,
 				D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */,
 				D5D2F02B252FA6AE00761DC8 /* Metrics.swift in Sources */,

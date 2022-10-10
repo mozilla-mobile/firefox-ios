@@ -556,6 +556,17 @@ browser_search:
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: "2023-09-22"
+  in_content:
+    type: labeled_counter
+    description: |
+      Records the type of interaction a user has on SERP pages.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3478
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3492
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-10-06"
 
 onboarding:
   card_view:

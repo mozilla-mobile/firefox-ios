@@ -84,6 +84,7 @@ class WebViewController: UIViewController, WebController {
     var scrollView: UIScrollView { return browserView.scrollView }
 
     var adsTelemetryHelper = AdsTelemetryHelper()
+    var searchInContentTelemetry: SearchInContentTelemetry?
 
     init(trackingProtectionManager: TrackingProtectionManager) {
         self.trackingProtectionManager = trackingProtectionManager
@@ -298,6 +299,7 @@ class WebViewController: UIViewController, WebController {
 
     override func viewDidLoad() {
         self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
+        searchInContentTelemetry = SearchInContentTelemetry()
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -343,6 +345,7 @@ extension WebViewController: WKNavigationDelegate {
         delegate?.webControllerDidStartNavigation(self)
         trackingProtectionManager.trackingProtectionStatus.trackingInformation = TPPageStats()
         currentContentMode = navigation?.effectiveContentMode
+        searchInContentTelemetry?.setSearchType(webView: webView)
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
