@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
-import WidgetKit
 
 public struct SearchWidgetView: View {
     let title: String
@@ -51,6 +50,7 @@ public struct SearchWidgetView: View {
 struct SearchWidgetView_Previews: PreviewProvider {
     static var previews: some View {
         SearchWidgetView(title: "Search in Focus")
+            .previewLayout(.sizeThatFits)
             .frame(width: 135, height: 135)
             .clipShape(RoundedRectangle(cornerRadius: 20))
     }

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
+import Widget
 
 @available(iOS 14.0, *)
 public struct ShowMeHowOnboardingView: View {
@@ -55,8 +56,10 @@ public struct ShowMeHowOnboardingView: View {
                         }
                         HStack {
                             Spacer()
-                            SearchWidgetView(title: config.widgetText).frame(width: .searchWidgetSize, height: .searchWidgetSize)
+                            SearchWidgetView(title: config.widgetText)
+                                .frame(width: .searchWidgetSize, height: .searchWidgetSize)
                                 .clipShape(RoundedRectangle(cornerRadius: 20))
+                                .colorScheme(.light)
                             Spacer()
                         }
                     }

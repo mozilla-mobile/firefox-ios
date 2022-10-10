@@ -5,7 +5,7 @@
 import WidgetKit
 import SwiftUI
 import Intents
-import Onboarding
+import Widget
 
 struct Provider: TimelineProvider {
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> Void) {
@@ -36,8 +36,8 @@ struct FocusWidgetsEntryView : View {
 }
 
 @main
-struct FocusWidgets: Widget {
-    let kind: String = "FocusWidgets"
+struct Widgets: Widget {
+    let kind: String = "Widgets"
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in

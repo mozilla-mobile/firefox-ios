@@ -21,7 +21,10 @@ let package = Package(
             targets: ["AppShortcuts"]),
         .library(
             name: "UIComponents",
-            targets: ["UIComponents"])
+            targets: ["UIComponents"]),
+        .library(
+            name: "Widget",
+            targets: ["Widget"])
     ],
     dependencies: [
         .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.0.1")
@@ -42,6 +45,7 @@ let package = Package(
         .target(
             name: "Onboarding",
             dependencies: [
+                "Widget",
                 "DesignSystem",
                 .product(name: "SnapKit", package: "SnapKit")
             ]
@@ -52,6 +56,9 @@ let package = Package(
                 "UIComponents",
                 "DesignSystem"
             ]
+        ),
+        .target(
+            name: "Widget"
         ),
         .testTarget(
             name: "BlockzillaPackageTests",

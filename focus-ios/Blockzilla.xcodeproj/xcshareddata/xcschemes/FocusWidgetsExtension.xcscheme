@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1340"
+   LastUpgradeVersion = "1400"
    wasCreatedForAppExtension = "YES"
    version = "2.0">
    <BuildAction
@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E56FB76B28C0DF96005CF1B9"
-               BuildableName = "FocusWidgetsExtension.appex"
-               BlueprintName = "FocusWidgetsExtension"
+               BlueprintIdentifier = "C824D2D428EEBF9000DEA5DE"
+               BuildableName = "WidgetsExtension.appex"
+               BlueprintName = "WidgetsExtension"
                ReferencedContainer = "container:Blockzilla.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -62,9 +62,9 @@
          BundleIdentifier = "com.apple.springboard">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E56FB76B28C0DF96005CF1B9"
-            BuildableName = "FocusWidgetsExtension.appex"
-            BlueprintName = "FocusWidgetsExtension"
+            BlueprintIdentifier = "C824D2D428EEBF9000DEA5DE"
+            BuildableName = "WidgetsExtension.appex"
+            BlueprintName = "WidgetsExtension"
             ReferencedContainer = "container:Blockzilla.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>
@@ -96,12 +96,11 @@
       </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "FocusDebug"
+      buildConfiguration = "FocusRelease"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES"
-      askForAppToLaunch = "Yes"
       launchAutomaticallySubstyle = "2">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
@@ -115,7 +114,7 @@
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "FocusDebug">
+      buildConfiguration = "FocusRelease">
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "FocusRelease"
