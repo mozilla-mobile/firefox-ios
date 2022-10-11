@@ -3023,9 +3023,9 @@ places_history_migration:
     description: |
         A time distribution of how long it took for the migration to occur
     bugs:
-      - TODO Add bug
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
     data_reviews:
-      - TODO Add data review
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
     data_sensitivity:
       - technical
     notification_emails:
@@ -3038,9 +3038,9 @@ places_history_migration:
     description: |
        The number of visits expected to migrate to the places.db
     bugs:
-      - TODO add bug
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
     data_reviews:
-      - TODO add data review
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
     data_sensitivity:
       - technical
     notification_emails:
@@ -3053,9 +3053,9 @@ places_history_migration:
     description: |
        The number of visits migrated to the places.db
     bugs:
-      - TODO add bug
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
     data_reviews:
-      - TODO add data review
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
     data_sensitivity:
       - technical
     notification_emails:
@@ -3067,9 +3067,9 @@ places_history_migration:
     description: |
        A Rate of how often migrations end
     bugs:
-      - TODO add bug
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
     data_reviews:
-      - TODO add data review
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
     data_sensitivity:
       - technical
     notification_emails:
@@ -3081,9 +3081,9 @@ places_history_migration:
     description: |
        A Rate of how often migrations error out
     bugs:
-      - TODO add bug
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
     data_reviews:
-      - TODO add data review
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
     data_sensitivity:
       - technical
     notification_emails:
