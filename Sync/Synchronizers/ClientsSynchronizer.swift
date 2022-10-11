@@ -111,6 +111,8 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     }
 
     var localClients: RemoteClientsAndTabs?
+    // Indicates whether the local client record has been updated to used the
+    // FxA Device ID rather than the native client GUID
     var clientGuidIsMigrated: Bool = false
 
     override var storageVersion: Int {
@@ -319,6 +321,10 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         var toInsert = [RemoteClient]()
         var ours: Record<ClientPayload>?
 
+        // Indicates whether the local client records include a record with an ID
+        // matching the FxA Device ID
+        var ourClientRecordExists: Bool = false
+
         for (rec) in records {
             guard rec.payload.isValid() else {
                 log.warning("Client record \(rec.id) is invalid. Skipping.")
@@ -332,6 +338,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
                     SentryIntegration.shared.send(message: "An unmigrated client record was found with a GUID for an ID", tag: SentryTag.clientSynchronizer, severity: .error)
                 }
             } else if rec.id == ourFxaDeviceId {
+                ourClientRecordExists = true
                 if rec.modified == self.clientRecordLastUpload {
                     log.debug("Skipping our own unmodified record.")
                 } else {
@@ -358,7 +365,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             >>== { self.processCommandsFromRecord(ours, withServer: storageClient) }
             >>== { (shouldUpload, commands) in
                 let ourRecordDidChange = self.why == .didLogin || self.why == .clientNameChanged
-                return self.maybeUploadOurRecord(shouldUpload || ourRecordDidChange || self.clientGuidIsMigrated, ifUnmodifiedSince: ours?.modified, toServer: storageClient)
+                return self.maybeUploadOurRecord(shouldUpload || ourRecordDidChange || self.clientGuidIsMigrated || !ourClientRecordExists, ifUnmodifiedSince: ours?.modified, toServer: storageClient)
                     >>> { self.uploadClientCommands(toLocalClients: localClients, withServer: storageClient) }
                     >>> {
                         log.debug("Running \(commands.count) commands.")
