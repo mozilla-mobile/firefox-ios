@@ -32,31 +32,23 @@ class ETPCoverSheetViewController: UIViewController {
     struct UX {
         static let doneButtonPadding: CGFloat = 20
         static let doneButtonHeight: CGFloat = 20
-        static let primaryButtonColour = UIColor.Photon.Blue50
         static let primaryButtonCornerRadius: CGFloat = 10
-        static let primaryButtonFont = UIFont.systemFont(ofSize: 18, weight: .semibold)
         static let primaryButtonHeight: CGFloat = 46
         static let primaryButtonEdgeInset: CGFloat = 18
+        static let primaryButtonFontSize: CGFloat = 18
+        static let horizontalMargin: CGFloat = 16
+        static let largeVerticalMargin: CGFloat = 48
+        static let imageHeight: CGFloat = 260
     }
 
     // Public constants
     let viewModel = ETPViewModel()
-    static let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-
-    // Private vars
-    private var fxTextThemeColour: UIColor {
-        // For dark theme we want to show light colours and for light we want to show dark colours
-        return ETPCoverSheetViewController.theme == .dark ? .white : .black
-    }
-
-    private var fxBackgroundThemeColour: UIColor {
-        return ETPCoverSheetViewController.theme == .dark ? .black : .white
-    }
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     private lazy var doneButton: UIButton = .build { button in
         button.setTitle(.SettingsSearchDoneButton, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        button.setTitleColor(UIColor.systemBlue, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: UX.primaryButtonFontSize,
+                                                    weight: .regular)
         button.addTarget(self, action: #selector(self.dismissAnimated), for: .touchUpInside)
     }
 
@@ -73,15 +65,13 @@ class ETPCoverSheetViewController: UIViewController {
 
     private lazy var titleLabel: UILabel = .build { label in
         label.text = self.viewModel.etpCoverSheetmodel?.titleText
-        label.textColor = self.fxTextThemeColour
-        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.font = UIFont.boldSystemFont(ofSize: UX.primaryButtonFontSize)
         label.textAlignment = .left
         label.numberOfLines = 0
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
         label.text = self.viewModel.etpCoverSheetmodel?.descriptionText
-        label.textColor = self.fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: 18)
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -89,16 +79,15 @@ class ETPCoverSheetViewController: UIViewController {
 
     private lazy var goToSettingsButton: UIButton = .build { button in
         button.setTitle(.CoverSheetETPSettingsButton, for: .normal)
-        button.titleLabel?.font = UX.primaryButtonFont
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: UX.primaryButtonFontSize)
         button.layer.cornerRadius = UX.primaryButtonCornerRadius
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UX.primaryButtonColour
         button.addTarget(self, action: #selector(self.goToSettings), for: .touchUpInside)
     }
 
     private lazy var startBrowsingButton: UIButton = .build { button in
         button.setTitle(.StartBrowsingButtonTitle, for: .normal)
-        button.titleLabel?.font = UX.primaryButtonFont
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: UX.primaryButtonFontSize)
         button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(self.startBrowsing), for: .touchUpInside)
@@ -118,21 +107,20 @@ class ETPCoverSheetViewController: UIViewController {
     }
 
     func initialViewSetup() {
-        view.backgroundColor = fxBackgroundThemeColour
-
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
         setupLayout()
+        applyTheme()
     }
 
     private func setupLayout() {
-        view.backgroundColor = fxBackgroundThemeColour
-
         // Initialize
-        view.addSubview(topImageView)
-        view.addSubview(doneButton)
-        view.addSubview(titleLabel)
-        view.addSubview(descriptionLabel)
-        view.addSubview(goToSettingsButton)
-        view.addSubview(startBrowsingButton)
+        view.addSubviews(topImageView,
+                         doneButton,
+                         titleLabel,
+                         descriptionLabel,
+                         goToSettingsButton,
+                         startBrowsingButton)
 
         // Constraints
         NSLayoutConstraint.activate([
@@ -144,27 +132,30 @@ class ETPCoverSheetViewController: UIViewController {
 
             topImageView.topAnchor.constraint(equalTo: doneButton.bottomAnchor, constant: 10),
             topImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            topImageView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -48),
-            topImageView.heightAnchor.constraint(lessThanOrEqualToConstant: 300),
+            topImageView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor,
+                                                 constant: -UX.largeVerticalMargin),
+            topImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.imageHeight),
 
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                constant: UX.horizontalMargin),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                 constant: -UX.horizontalMargin),
             titleLabel.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor,
-                                               constant: -16),
+                                               constant: -UX.horizontalMargin),
 
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                      constant: 16),
+                                                      constant: UX.horizontalMargin),
             descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                       constant: -16),
+                                                       constant: -UX.horizontalMargin),
             descriptionLabel.bottomAnchor.constraint(equalTo: goToSettingsButton.topAnchor,
-                                                     constant: -48),
+                                                     constant: -UX.largeVerticalMargin),
 
             goToSettingsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
                                                       constant: UX.primaryButtonEdgeInset),
             goToSettingsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                                        constant: -UX.primaryButtonEdgeInset),
             goToSettingsButton.bottomAnchor.constraint(equalTo: startBrowsingButton.topAnchor,
-                                                     constant: -16),
+                                                     constant: -UX.horizontalMargin),
             goToSettingsButton.heightAnchor.constraint(equalToConstant: UX.primaryButtonHeight),
 
             startBrowsingButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
@@ -172,7 +163,7 @@ class ETPCoverSheetViewController: UIViewController {
             startBrowsingButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                                        constant: -UX.primaryButtonEdgeInset),
             startBrowsingButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                                                     constant: -16),
+                                                     constant: -UX.horizontalMargin),
             startBrowsingButton.heightAnchor.constraint(equalToConstant: UX.primaryButtonHeight),
         ])
     }
@@ -191,6 +182,28 @@ class ETPCoverSheetViewController: UIViewController {
     @objc private func startBrowsing() {
         viewModel.startBrowsing?()
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissUpdateCoverSheetAndStartBrowsing)
+    }
+}
+
+// MARK: - Notifiable
+extension ETPCoverSheetViewController: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default:
+            break
+        }
+    }
+
+    func applyTheme() {
+        titleLabel.textColor = LegacyThemeManager.instance.current.onboarding.etpTextColor
+        descriptionLabel.textColor = LegacyThemeManager.instance.current.onboarding.etpTextColor
+        view.backgroundColor = LegacyThemeManager.instance.current.onboarding.etpBackgroundColor
+        doneButton.setTitleColor(LegacyThemeManager.instance.current.onboarding.etpButtonColor, for: [])
+        startBrowsingButton.setTitleColor(LegacyThemeManager.instance.current.onboarding.etpButtonColor, for: [])
+        goToSettingsButton.setTitleColor(.black, for: [])
+        goToSettingsButton.backgroundColor = LegacyThemeManager.instance.current.onboarding.etpButtonColor
     }
 }
 
