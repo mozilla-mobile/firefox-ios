@@ -57,7 +57,7 @@ extension CustomizeHomepageSectionViewModel: HomepageSectionHandler {
 
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let customizeHomeCell = cell as? CustomizeHomepageSectionView else { return UICollectionViewCell() }
+        guard let customizeHomeCell = cell as? CustomizeHomepageSectionCell else { return UICollectionViewCell() }
         customizeHomeCell.configure(onTapAction: onTapAction)
         return customizeHomeCell
     }

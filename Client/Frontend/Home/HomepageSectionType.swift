@@ -34,7 +34,7 @@ enum HomepageSectionType: Int, CaseIterable {
         case .jumpBackIn: return "" // JumpBackIn has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .recentlySaved: return RecentlySavedCell.cellIdentifier
         case .historyHighlights: return HistoryHighlightsCell.cellIdentifier
-        case .customizeHome: return CustomizeHomepageSectionView.cellIdentifier
+        case .customizeHome: return CustomizeHomepageSectionCell.cellIdentifier
         }
     }
 
@@ -48,7 +48,7 @@ enum HomepageSectionType: Int, CaseIterable {
                 PocketStandardCell.self,
                 RecentlySavedCell.self,
                 HistoryHighlightsCell.self,
-                CustomizeHomepageSectionView.self,
+                CustomizeHomepageSectionCell.self,
                 SyncedTabCell.self
         ]
     }
