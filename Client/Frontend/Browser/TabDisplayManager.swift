@@ -81,6 +81,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     var cfrDelegate: InactiveTabsCFRProtocol?
     private var nimbus: FxNimbus?
     var notificationCenter: NotificationProtocol
+    var theme: Theme
 
     lazy var filteredTabs = [Tab]()
     var tabDisplayOrder: TabDisplayOrder = TabDisplayOrder()
@@ -179,7 +180,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
          tabDisplayType: TabDisplayType,
          profile: Profile,
          cfrDelegate: InactiveTabsCFRProtocol? = nil,
-         nimbus: FxNimbus = FxNimbus.shared
+         nimbus: FxNimbus = FxNimbus.shared,
+         theme: Theme
     ) {
         self.collectionView = collectionView
         self.tabDisplayer = tabDisplayer
@@ -191,7 +193,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         self.cfrDelegate = cfrDelegate
         self.nimbus = nimbus
         self.notificationCenter = NotificationCenter.default
-
+        self.theme = theme
+        
         super.init()
         setupNotifications(forObserver: self, observing: [.DidTapUndoCloseAllTabToast])
         self.inactiveViewModel = InactiveTabViewModel()
@@ -569,6 +572,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
 
         case .groupedTabs:
             if let groupedCell = collectionView.dequeueReusableCell(withReuseIdentifier: GroupedTabCell.cellIdentifier, for: indexPath) as? GroupedTabCell {
+                groupedCell.theme = theme
                 groupedCell.tabDisplayManagerDelegate = self
                 groupedCell.tabGroups = self.tabGroups
                 groupedCell.hasExpanded = true
@@ -903,7 +907,9 @@ extension TabDisplayManager: TabEventHandler {
         guard forceUpdate || cell.isSelectedTab else { return }
 
         let isSelected = tab == tabManager.selectedTab
-        cell.configureWith(tab: tab, isSelected: isSelected)
+        cell.configureWith(tab: tab,
+                           isSelected: isSelected,
+                           theme: theme)
     }
 
     func removeAllTabsFromView() {

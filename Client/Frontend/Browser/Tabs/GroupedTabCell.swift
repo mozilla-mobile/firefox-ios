@@ -41,6 +41,7 @@ class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDa
     let GroupedTabsHeaderIdentifier = "GroupedTabsHeaderIdentifier"
     let GroupedTabCellIdentifier = "GroupedTabCellIdentifier"
     var hasExpanded = true
+    var theme: Theme = LightTheme()
 
     // Views
     lazy var tableView: UITableView = {
@@ -92,6 +93,7 @@ class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: GroupedTabCellIdentifier, for: indexPath) as! GroupedTabContainerCell
         cell.delegate = self
+        cell.theme = theme
         cell.tabs = tabGroups?.map { $0.groupedItems }[indexPath.item]
         cell.titleLabel.text = tabGroups?.map { $0.searchTerm }[indexPath.item] ?? ""
         cell.collectionView.reloadData()
@@ -200,8 +202,8 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     var tabs: [Tab]?
     var selectedTab: Tab?
     var searchGroupName: String = ""
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-
+    var theme: Theme = LightTheme()
+    
     lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -224,7 +226,6 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initialViewSetup()
-        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
     }
 
     required init?(coder: NSCoder) {
@@ -349,7 +350,9 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         else { return cell }
 
         tabCell.delegate = self
-        tabCell.configureWith(tab: tab, isSelected: selectedTab == tab)
+        tabCell.configureWith(tab: tab,
+                              isSelected: selectedTab == tab,
+                              theme: theme)
         tabCell.animator = nil
         return tabCell
     }
@@ -357,17 +360,6 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     func tabCellDidClose(_ cell: TabCell) {
         if let indexPath = collectionView.indexPath(for: cell), let tab = tabs?[indexPath.item] {
             delegate?.closeTab(tab: tab)
-        }
-    }
-}
-
-// MARK: - Notifiable
-extension GroupedTabContainerCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
         }
     }
 }

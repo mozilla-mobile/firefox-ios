@@ -12,7 +12,7 @@ protocol TabTrayCell where Self: UICollectionViewCell {
     var isSelectedTab: Bool { get }
 
     /// Configure a tab cell using a Tab object, setting it's selected state at the same time
-    func configureWith(tab: Tab, isSelected selected: Bool)
+    func configureWith(tab: Tab, isSelected selected: Bool, theme: Theme)
 }
 
 // MARK: - Tab Cell
@@ -29,7 +29,6 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
     lazy var backgroundHolder: UIView = .build { view in
         view.layer.cornerRadius = GridTabTrayControllerUX.CornerRadius
         view.clipsToBounds = true
-        view.backgroundColor = UIColor.theme.tabTray.cellBackground
     }
 
     lazy private var faviconBG: UIView = .build { view in
@@ -37,17 +36,12 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
         view.layer.shadowRadius = TopSiteItemCell.UX.shadowRadius
-        view.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-        view.layer.borderColor = TopSiteItemCell.UX.borderColor.cgColor
-        view.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        view.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
     }
 
     lazy var screenshotView: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         view.isUserInteractionEnabled = false
-        view.backgroundColor = UIColor.theme.tabTray.screenshotBackground
     }
 
     lazy var smallFaviconView: UIImageView = .build { view in
@@ -63,7 +57,6 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         label.isUserInteractionEnabled = false
         label.numberOfLines = 1
         label.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
-        label.textColor = UIColor.theme.tabTray.tabTitleText
     }
 
     lazy var favicon: UIImageView = .build { favicon in
@@ -76,10 +69,10 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         button.setImage(UIImage.templateImageNamed("tab_close"), for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
-        button.tintColor = UIColor.theme.tabTray.cellCloseButton
         button.imageEdgeInsets = UIEdgeInsets(equalInset: GridTabTrayControllerUX.CloseButtonEdgeInset)
     }
 
+    // TODO: Handle visual effects theming FXIOS-5064
     var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.theme.tabTray.tabTitleBlur))
     var animator: SwipeAnimator?
     var isSelectedTab = false
@@ -168,8 +161,10 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
     }
 
     // MARK: - Configure tab cell with a Tab
-    func configureWith(tab: Tab, isSelected selected: Bool) {
+    func configureWith(tab: Tab, isSelected selected: Bool, theme: Theme) {
         isSelectedTab = selected
+
+        applyColors(theme)
 
         titleText.text = tab.getTabTrayTitle()
         accessibilityLabel = getA11yTitleLabel(tab: tab)
@@ -177,7 +172,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
 
         favicon.image = UIImage(named: ImageIdentifiers.defaultFavicon)
-        favicon.tintColor = UIColor.theme.tabTray.faviconTint
+
         if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
             ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
                                                                    limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
@@ -187,7 +182,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         }
 
         if selected {
-            setTabSelected(tab.isPrivate)
+            setTabSelected(tab.isPrivate, theme: theme)
         } else {
             layer.shadowOffset = .zero
             layer.shadowPath = nil
@@ -214,6 +209,14 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         } else {
             setFaviconImage(for: tab, with: smallFaviconView)
         }
+    }
+
+    private func applyColors(_ theme: Theme) {
+        backgroundHolder.backgroundColor = theme.colors.layer1
+        closeButton.tintColor = theme.colors.indicatorActive
+        titleText.textColor = theme.colors.textPrimary
+        screenshotView.backgroundColor = theme.colors.layer1
+        favicon.tintColor = theme.colors.textPrimary
     }
 
     override func prepareForReuse() {
@@ -247,9 +250,9 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         delegate?.tabCellDidClose(self)
     }
 
-    private func setTabSelected(_ isPrivate: Bool) {
+    private func setTabSelected(_ isPrivate: Bool, theme: Theme) {
         // This creates a border around a tabcell. Using the shadow creates a border _outside_ of the tab frame.
-        layer.shadowColor = (isPrivate ? UIColor.theme.tabTray.privateModePurple : UIConstants.SystemBlueColor).cgColor
+        layer.shadowColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
         layer.shadowOpacity = 1
         layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur
         layer.masksToBounds = false

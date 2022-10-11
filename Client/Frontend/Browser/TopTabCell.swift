@@ -77,7 +77,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         setupLayout()
     }
 
-    func configureWith(tab: Tab, isSelected selected: Bool) {
+    func configureWith(tab: Tab, isSelected selected: Bool, theme: Theme) {
         isSelectedTab = selected
 
         titleText.text = tab.getTabTrayTitle()

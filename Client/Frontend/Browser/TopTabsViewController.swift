@@ -94,12 +94,14 @@ class TopTabsViewController: UIViewController {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
 
+        // TODO: Update to use real theme
         topTabDisplayManager = TabDisplayManager(collectionView: self.collectionView,
                                                  tabManager: self.tabManager,
                                                  tabDisplayer: self,
                                                  reuseID: TopTabCell.cellIdentifier,
                                                  tabDisplayType: .TopTabTray,
-                                                 profile: profile)
+                                                 profile: profile,
+                                                 theme: LightTheme())
         tabManager.tabDisplayType = .TopTabTray
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
@@ -273,7 +275,8 @@ extension TopTabsViewController: TabDisplayer {
         guard let tabCell = cell as? TopTabCell else { return UICollectionViewCell() }
         tabCell.delegate = self
         let isSelected = (tab == tabManager.selectedTab)
-        tabCell.configureWith(tab: tab, isSelected: isSelected)
+        // TODO: Update to pass in the theme
+        tabCell.configureWith(tab: tab, isSelected: isSelected, theme: LightTheme())
         // Not all cells are visible when the appearance changes. Let's make sure
         // the cell has the proper theme when recycled.
         tabCell.applyTheme()
