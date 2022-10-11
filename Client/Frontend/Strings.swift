@@ -148,7 +148,7 @@ extension String {
                 lastUpdated: .v98)
             public static let SearchBarPlacementForExistingUsers = MZLocalizedString(
                 "ContextualHint.SearchBarPlacement.ExistingUsers",
-                value: "Now you can move the toolbar to the bottom, so it’s easier to enter info.",
+                value: "Now you can move the toolbar to the bottom, so it’s easier to enter info",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen.",
                 lastUpdated: .v98)
             public static let SearchBarPlacementButtonText = MZLocalizedString(
@@ -160,7 +160,7 @@ extension String {
                 "ContextualHints.Toolbar.Top.Description.v106",
                 tableName: "ToolbarLocation",
                 value: "Move the toolbar to the bottom in settings if that’s more your style.",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the settings page to move the search bar to the bottom.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. ",
                 lastUpdated: .v106)
             public static let SearchBarBottomPlacement = MZLocalizedString(
                 "ContextualHints.Toolbar.Bottom.Description.v107",
